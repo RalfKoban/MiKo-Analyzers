@@ -9277,9 +9277,12 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ArgumentNullExceptions should not be thrown for values of properties that are returned by parameters.
-        ///If you want to indicate a problem for the parameter, throw an ArgumentException instead.
-        ///If it&apos;s no issue of the parameter itself, throw an InvalidOperationException instead..
+        ///   Looks up a localized string similar to ArgumentNullExceptions should not be thrown for values of properties returned by parameters.
+        ///
+        ///- If there&apos;s an issue with the parameter, throw an ArgumentException.
+        ///- If the problem isn&apos;t with the parameter itself, throw an InvalidOperationException instead.
+        ///
+        ///This approach ensures that the exception thrown accurately reflects the nature of the issue, making your code more robust and understandable..
         /// </summary>
         internal static string MiKo_3016_Description {
             get {
@@ -9324,7 +9327,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If an exception gets caught and a new exception gets thrown, it&apos;s much easier if the new exception contains the caught one as inner exception..
+        ///   Looks up a localized string similar to When catching an exception and throwing a new one, include the caught exception as an inner exception. This approach makes debugging easier by preserving the original exception, helping to trace the root cause efficiently..
         /// </summary>
         internal static string MiKo_3017_Description {
             get {
@@ -9351,7 +9354,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Already disposed instances of disposable types should indicate that they are disposed when invoking methods on them. That makes it easier to spot bugs because the user code should never access already disposed types..
+        ///   Looks up a localized string similar to Already disposed instances of disposable types should throw ObjectDisposedExceptions when methods are invoked on them. This practice makes it easier to identify bugs, as user code should never access already disposed types. Ensuring this indication helps maintain code integrity and prevents unintended errors..
         /// </summary>
         internal static string MiKo_3018_Description {
             get {
@@ -9396,7 +9399,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For performance reasons it&apos;s better to use &apos;Task.CompletedTask&apos; instead of &apos;Task.FromResult()&apos; as the returned task is internally cached..
+        ///   Looks up a localized string similar to For better performance, use &apos;Task.CompletedTask&apos; instead of &apos;Task.FromResult()&apos;, as the returned task is internally cached. This helps improve efficiency in your code..
         /// </summary>
         internal static string MiKo_3020_Description {
             get {
@@ -9423,7 +9426,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you use &apos;Task.Run&apos; to return a Task because a method is a long-running operation, then this most probably means that you&apos;ve doing something wrong. If you have a long-running operation, use &apos;Task.Run&apos; to call it..
+        ///   Looks up a localized string similar to If you&apos;re using &apos;Task.Run&apos; to return a Task for a long-running operation, you&apos;re likely making a mistake. Instead, use &apos;Task.Run&apos; to actually call the long-running operation. This approach aligns better with proper asynchronous programming practices and keeps your code efficient and manageable..
         /// </summary>
         internal static string MiKo_3021_Description {
             get {
@@ -9459,8 +9462,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If a method returns Task&lt;IEnumerable&gt; or Task&lt;IEnumerable&lt;T&gt;&gt;, then it is likely that the enumerable is not evaluated until it is accessed in a foreach or Linq call.
-        ///That accessor likely is another thread (e.g. the main thread) which contradicts the whole idea of returning a dedicated task..
+        ///   Looks up a localized string similar to If a method returns &apos;Task&lt;IEnumerable&gt;&apos; or &apos;Task&lt;IEnumerable&lt;T&gt;&gt;&apos;, the enumerable is likely not evaluated until accessed in a foreach or LINQ call. This evaluation likely occurs on another thread (e.g., the main thread), which contradicts the idea of returning a dedicated task..
         /// </summary>
         internal static string MiKo_3022_Description {
             get {
@@ -9487,7 +9489,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A &apos;CancellationTokenSource&apos; should not be passed around. Instead, the &apos;CancellationToken&apos; should be passed around to propagate notifications that operations should be canceled..
+        ///   Looks up a localized string similar to Avoid passing around a &apos;CancellationTokenSource&apos;. Instead, pass the &apos;CancellationToken&apos; to propagate notifications for canceling operations. This approach keeps the code cleaner and maintains proper encapsulation, ensuring more manageable and readable code..
         /// </summary>
         internal static string MiKo_3023_Description {
             get {
@@ -9514,10 +9516,10 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [ref] allows to change the storage location of the variable it is declared on. This allows to re-assign values to an already existing variable and therefore altering it.
-        ///In case of reference types the altered variable is an altered object reference, thus all callees that access the altered variable later on get the changed one (very similar to an out parameter).
+        ///   Looks up a localized string similar to The [ref] keyword allows changing the storage location of a variable, enabling re-assignment of values and altering the variable.
+        ///For reference types, this means the object reference is changed. Consequently, all subsequent access to the variable gets the updated reference, similar to using an [out] parameter.
         ///
-        ///In most cases this is not wanted. The object reference shall be the same, only the object shall be altered..
+        ///Generally, this behavior is not desirable. The object reference should remain the same, with only the object itself being altered..
         /// </summary>
         internal static string MiKo_3024_Description {
             get {
@@ -9544,7 +9546,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method parameters should be considered as read-only. They should not be re-assigned to other values. If you need them to have another value, use a local variable instead..
+        ///   Looks up a localized string similar to Treat method parameters as read-only. Avoid re-assigning them to other values. If another value is needed, use a local variable instead. This approach keeps the method clean and predictable..
         /// </summary>
         internal static string MiKo_3025_Description {
             get {
@@ -9571,7 +9573,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unused parameters are not needed and should be removed as they solely clutter the code base without providing any benefit at all..
+        ///   Looks up a localized string similar to Unused parameters clutter the codebase and provide no benefit. They should be removed to keep the code clean and efficient. This ensures the code remains easy to read and maintain, enhancing overall quality and performance. Keeps everything lean and purposeful..
         /// </summary>
         internal static string MiKo_3026_Description {
             get {
@@ -9598,7 +9600,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Marking parameters for future usage leads to a bad design. It is unclear whether the parameter will ever be used. It is also unclear whether the type of the parameter will match future needs. In future, you can always override methods and add new parameters..
+        ///   Looks up a localized string similar to Marking parameters for future use results in poor design. It&apos;s uncertain if the parameter will ever be used or if its type will fit future needs. Instead, override methods and add new parameters as needed. This approach maintains clarity and adaptability in your code, avoiding unnecessary clutter and potential issues. Keeps your codebase clean and efficient..
         /// </summary>
         internal static string MiKo_3027_Description {
             get {
@@ -9634,7 +9636,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If a collection shall be cleared, then &apos;Clear()&apos; should be invoked. Assigning &apos;null&apos; to a parameter will not do anything here because the parameter is only a copy (reference) of the original parameter..
+        ///   Looks up a localized string similar to To clear a collection, use &apos;Clear()&apos;. Assigning &apos;null&apos; to a parameter will not work because the parameter is just a copy (reference) of the original. &apos;Clear()&apos; effectively empties the collection, maintaining clarity and correct functionality. Keeps everything working as expected..
         /// </summary>
         internal static string MiKo_3028_Description {
             get {
@@ -9661,7 +9663,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you register for an event but forget to unregister, a memory leak may occur. This especially happens in case the event (which is registered on) is static or belongs to an object having a long lifetime..
+        ///   Looks up a localized string similar to Forgetting to unregister from an event can lead to memory leaks, especially when the event is static or belongs to an object with a long lifetime. Always ensure you unregister from events to prevent these issues. Proper event handling maintains memory efficiency and keeps your applications running smoothly..
         /// </summary>
         internal static string MiKo_3029_Description {
             get {
@@ -9688,7 +9690,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, methods assume as little as possible about the structure or properties of objects they use. They should only work with objects they get directly, but they should not reach through them to access other objects and their services..
+        ///   Looks up a localized string similar to To ease maintenance, methods should make minimal assumptions about the structure or properties of the objects they use. They should work only with objects they receive directly and avoid reaching through these objects to access other objects or their services. This practice keeps methods focused, modular, and easier to maintain..
         /// </summary>
         internal static string MiKo_3030_Description {
             get {
@@ -9724,9 +9726,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The ICloneable.Clone() method does not define whether a deep or a swallow copy shall be returned.
-        ///
-        ///As that is not defined, there is no guarantee how it gets implemented, and - because of that - it simply cannot be used as there is a huge difference between a deep and a swallow copy..
+        ///   Looks up a localized string similar to Avoid implementing &apos;ICloneable.Clone()&apos; because the method does not specify whether it returns a deep or shallow copy, leading to potential inconsistencies. This ambiguity makes it unreliable, as there&apos;s a significant difference between deep and shallow copies. Ensuring clear, predictable behavior in your code is crucial..
         /// </summary>
         internal static string MiKo_3031_Description {
             get {
@@ -9762,7 +9762,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Property names that are passed into the &apos;PropertyChangedEventArgs&apos; constructors shall be provided via the &apos;nameof&apos; operator. This eases refactorings..
+        ///   Looks up a localized string similar to Use the &apos;nameof&apos; operator for property names passed into &apos;PropertyChangedEventArgs&apos; constructors, instead of strings. This avoids typos and invalid names and makes refactoring easier, as &apos;nameof&apos; ensures property names are automatically updated during renames, unlike strings..
         /// </summary>
         internal static string MiKo_3032_Description {
             get {
@@ -9798,7 +9798,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Property names that are passed into the &apos;PropertyChangingEventArgs&apos; and &apos;PropertyChangedEventArgs&apos; constructors shall be provided via the &apos;nameof&apos; operator. This prevents typos or non-existing invalid names and eases refactorings..
+        ///   Looks up a localized string similar to Use the &apos;nameof&apos; operator for property names passed into &apos;PropertyChangingEventArgs&apos; and &apos;PropertyChangedEventArgs&apos; constructors, instead of strings. This avoids typos and invalid names and makes refactoring easier, as &apos;nameof&apos; ensures property names are automatically updated during renames, unlike strings..
         /// </summary>
         internal static string MiKo_3033_Description {
             get {
@@ -9834,7 +9834,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A method that raises the PropertyChanging or PropertyChanged events should use the [CallerMemberNameAttribute] to specify the name of the property automatically..
+        ///   Looks up a localized string similar to When raising &apos;PropertyChanging&apos; or &apos;PropertyChanged&apos; events, use the [CallerMemberNameAttribute] to automatically specify the property name. This avoids using string arguments and ensures that the rename refactoring will update the property names correctly. This technique prevents errors and makes the code more maintainable and robust..
         /// </summary>
         internal static string MiKo_3034_Description {
             get {
@@ -9861,7 +9861,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;WaitOne&apos; methods are normally invoked to wait for a specific situation to occur. If the wait is forever, deadlocks or livelocks can occur. To avoid that, allow the wait to time out b providing a &apos;TimeSpan&apos; to &apos;WaitOne&apos;..
+        ///   Looks up a localized string similar to &apos;WaitOne&apos; methods are used to wait for a specific situation to occur. Waiting indefinitely can lead to deadlocks or livelocks. To prevent this, provide a TimeSpan to &apos;WaitOne&apos; to allow the wait to time out. This ensures better control and avoids potential blocking issues, keeping the system responsive and efficient..
         /// </summary>
         internal static string MiKo_3035_Description {
             get {
@@ -9897,10 +9897,10 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &apos;TimeSpan&apos; .NET struct contains a lot of constructors having different amounts of parameters. Those constructor invocations are hard to read. As the struct also provides static factory methods such as &apos;FromMinutes&apos; or &apos;FromDays&apos;, these should be preferred. They are much easier to read and more explicit.
+        ///   Looks up a localized string similar to The &apos;TimeSpan&apos; .NET struct has many constructors with varying parameters, making its invocations hard to read. Instead, prefer static factory methods like &apos;FromMinutes&apos; or &apos;FromDays&apos;. These are more explicit and easier to understand.
         ///
         ///Please note:
-        ///It would be even better to use extension methods such as &apos;Minutes()&apos; or &apos;Days()&apos; that would allow a more natural usage, such as &apos; var x = 5.Days(); &apos;..
+        ///It would be even better to use extension methods like &apos;Minutes()&apos; or &apos;Days()&apos;. This approach allows for more natural usage, such as &apos; var x = 5.Days(); &apos;..
         /// </summary>
         internal static string MiKo_3036_Description {
             get {
@@ -9927,12 +9927,10 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Classes may provide methods such as WaitForExit, WaitOne, ... that have a parameter that is of type int. That parameter is used to specify a timeout, but - as it is a &apos;magic&apos; number - it is hard to find out the exact amount of time just from reading the number (is it milliseconds, seconds, ... ?)
-        ///So to ease maintenance, the number should not be hard-coded. Most times a TimeSpan an be used instead that eases reading a lot.
-        ///
+        ///   Looks up a localized string similar to Classes often have methods like &apos;WaitForExit&apos; or &apos;WaitOne&apos; that use an &apos;int&apos; parameter for timeouts. This &apos;magic&apos; number makes it unclear if the value is in milliseconds, seconds, etc. To improve readability and maintenance, avoid hard-coding these numbers. Instead, use a &apos;TimeSpan&apos;, which clarifies the duration and is easier to read.
         ///
         ///Please note:
-        ///It would be even better to use extension methods such as &apos;Minutes( [rest of string was truncated]&quot;;.
+        ///It would be even better to use extension methods like &apos;Minutes()&apos; or &apos;Days()&apos;. This approach allows for more natural usage, such as &apos; xyz.WaitForExit(5.Days() [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MiKo_3037_Description {
             get {
@@ -9959,8 +9957,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hard-coded numbers are difficult to understand why they are exactly as they are. So they are kind of &apos;magic&apos; numbers.
-        ///To ease maintenance, such numbers should not be hard-coded - instead they should be defined as constants..
+        ///   Looks up a localized string similar to Hard-coded numbers, often called &apos;magic&apos; numbers, can be unclear. To improve maintenance, avoid them. Instead, define these numbers as constants with meaningful names.
+        ///This approach makes the code easier to read and understand, helping developers grasp the numbers&apos; purpose and context..
         /// </summary>
         internal static string MiKo_3038_Description {
             get {
@@ -9987,8 +9985,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Properties that use Linq internally most probably behave differently when being accessed later on or multiple times. As the idea of properties is to be able to access fields (with some safety checks in place), that contradicts the intention of being a property and lead to all sorts of unwanted side-effects.
-        ///Such properties should be methods instead to make it clear that they behave differently between calls..
+        ///   Looks up a localized string similar to Properties using LINQ internally can behave unpredictably when accessed multiple times. Properties are meant to access fields with some safety checks, so this behavior contradicts their purpose and can cause unwanted side effects.
+        ///Instead, use methods to make it clear that the behavior might differ between calls. This keeps your code predictable and maintains the intended functionality..
         /// </summary>
         internal static string MiKo_3039_Description {
             get {
@@ -10015,7 +10013,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance and increase readability, do not use Booleans unless you are absolutely sure there will never be a need for more than two values. Instead, use an Enum..
+        ///   Looks up a localized string similar to To ease maintenance and improve readability, avoid using Booleans as parameters unless absolutely sure the value will never exceed two options. Instead, use an Enum. This practice ensures the code remains clear, flexible, and easier to maintain..
         /// </summary>
         internal static string MiKo_3040_Description {
             get {
@@ -10051,8 +10049,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to EventArgs should not use delegates such as &apos;Action&apos; or &apos;Func&apos; because the callee needs to know exactly how the delegate behaves.
-        ///Failures inside the delegate(s) are really hard to tackle down because an exception gets thrown at a completely unrelated area..
+        ///   Looks up a localized string similar to Avoid using delegates like &apos;Action&apos; or &apos;Func&apos; in &apos;EventArgs&apos;. The callee must understand exactly how the delegate behaves. Failures within the delegate are difficult to debug, as exceptions are thrown in unrelated areas..
         /// </summary>
         internal static string MiKo_3041_Description {
             get {
@@ -10079,7 +10076,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to EventArgs are by themselves contracts. Therefore, they should not implement any additional interface..
+        ///   Looks up a localized string similar to EventArgs are standalone contracts. They should not implement any additional interfaces. This keeps their purpose clear and their usage straightforward, avoiding unnecessary complexity. Keeps the code clean and maintains the integrity of the event handling mechanism..
         /// </summary>
         internal static string MiKo_3042_Description {
             get {
@@ -10115,7 +10112,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The names of events that are (de-)registered on the WeakEventManager shall be provided via &apos;nameof&apos; operator. This prevents typos or non-existing invalid names and eases refactorings..
+        ///   Looks up a localized string similar to Use the &apos;nameof&apos; operator for event names registered on the &apos;WeakEventManager&apos; instead of strings. This prevents typos, ensures valid names, and makes rename refactoring much easier, as &apos;nameof&apos; ensures property names are automatically updated during renames, unlike strings..
         /// </summary>
         internal static string MiKo_3043_Description {
             get {
@@ -10151,7 +10148,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Property names that are provided by the &apos;PropertyChangingEventArgs&apos; and &apos;PropertyChangedEventArgs&apos; shall be compared via the &apos;nameof&apos; operator. This prevents typos or non-existing invalid names and eases refactorings..
+        ///   Looks up a localized string similar to Use the &apos;nameof&apos; operator to compare property names provided by &apos;PropertyChangingEventArgs&apos; and &apos;PropertyChangedEventArgs&apos;. This avoids typos and invalid names and makes refactoring easier, as &apos;nameof&apos; ensures property names are automatically updated during renames, unlike strings..
         /// </summary>
         internal static string MiKo_3044_Description {
             get {
@@ -10187,7 +10184,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The names of events that are registered on the EventManager shall be provided via &apos;nameof&apos; operator. This prevents typos or non-existing invalid names and eases refactorings..
+        ///   Looks up a localized string similar to Use the &apos;nameof&apos; operator for event names registered on the &apos;EventManager&apos; instead of strings. This prevents typos, ensures valid names, and makes rename refactoring much easier, as &apos;nameof&apos; ensures property names are automatically updated during renames, unlike strings..
         /// </summary>
         internal static string MiKo_3045_Description {
             get {
@@ -10223,7 +10220,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To prevent typos, any property raising method like &apos;OnPropertyChanged&apos; shall use &apos;nameof&apos; to define the property..
+        ///   Looks up a localized string similar to Use the &apos;nameof&apos; operator instead of strings to define the properties for event raising methods like &apos;OnPropertyChanged&apos;. This prevents typos, ensures valid names, and makes rename refactoring much easier, as &apos;nameof&apos; ensures property names are automatically updated during renames, unlike strings..
         /// </summary>
         internal static string MiKo_3046_Description {
             get {
@@ -10259,7 +10256,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To prevent typos, any applied [ContentProperty] attribute shall use &apos;nameof&apos; to define the property..
+        ///   Looks up a localized string similar to Use the &apos;nameof&apos; operator instead of strings to define the properties for any applied [ContentProperty] attribute. This prevents typos, ensures valid names, and makes rename refactoring much easier, as &apos;nameof&apos; ensures property names are automatically updated during renames, unlike strings..
         /// </summary>
         internal static string MiKo_3047_Description {
             get {
@@ -10286,7 +10283,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To indicate to development tools the data types involved in a conversion, it is a good practice to decorate implementations of the IValueConverter interface with the ValueConversionAttribute attribute..
+        ///   Looks up a localized string similar to Decorate implementations of the IValueConverter interface with the [ValueConversion] attribute to signal to development tools the data types involved in a conversion. This practice enhances clarity and improves tool support, making the code easier to work with and maintain..
         /// </summary>
         internal static string MiKo_3048_Description {
             get {
@@ -10313,7 +10310,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When working with enums in C#, it is sometimes necessary to get a string description of the value associated with the enum. To achieve that, the &apos;System.ComponentModel.DescriptionAttribute&apos; can be used..
+        ///   Looks up a localized string similar to In C#, you might need a string description for an enum value. Achieve this by using the &apos;System.ComponentModel.DescriptionAttribute&apos; to decorate the enum member. This method associates descriptive text with enum values, enhancing both readability and usability..
         /// </summary>
         internal static string MiKo_3049_Description {
             get {

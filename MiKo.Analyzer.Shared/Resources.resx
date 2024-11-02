@@ -3266,9 +3266,12 @@ This practice ensures that developers understand why the exception was thrown an
     <value>Change to 'ArgumentException' or 'InvalidOperationException'</value>
   </data>
   <data name="MiKo_3016_Description" xml:space="preserve">
-    <value>ArgumentNullExceptions should not be thrown for values of properties that are returned by parameters.
-If you want to indicate a problem for the parameter, throw an ArgumentException instead.
-If it's no issue of the parameter itself, throw an InvalidOperationException instead.</value>
+    <value>ArgumentNullExceptions should not be thrown for values of properties returned by parameters.
+
+- If there's an issue with the parameter, throw an ArgumentException.
+- If the problem isn't with the parameter itself, throw an InvalidOperationException instead.
+
+This approach ensures that the exception thrown accurately reflects the nature of the issue, making your code more robust and understandable.</value>
   </data>
   <data name="MiKo_3016_HelpLinkUri" xml:space="preserve">
     <value>https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/using-standard-exception-types</value>
@@ -3283,7 +3286,7 @@ If it's no issue of the parameter itself, throw an InvalidOperationException ins
     <value>Add inner exception</value>
   </data>
   <data name="MiKo_3017_Description" xml:space="preserve">
-    <value>If an exception gets caught and a new exception gets thrown, it's much easier if the new exception contains the caught one as inner exception.</value>
+    <value>When catching an exception and throwing a new one, include the caught exception as an inner exception. This approach makes debugging easier by preserving the original exception, helping to trace the root cause efficiently.</value>
   </data>
   <data name="MiKo_3017_MessageFormat" xml:space="preserve">
     <value>Provide exception as inner exception</value>
@@ -3292,7 +3295,7 @@ If it's no issue of the parameter itself, throw an InvalidOperationException ins
     <value>Do not swallow exceptions when throwing new exceptions</value>
   </data>
   <data name="MiKo_3018_Description" xml:space="preserve">
-    <value>Already disposed instances of disposable types should indicate that they are disposed when invoking methods on them. That makes it easier to spot bugs because the user code should never access already disposed types.</value>
+    <value>Already disposed instances of disposable types should throw ObjectDisposedExceptions when methods are invoked on them. This practice makes it easier to identify bugs, as user code should never access already disposed types. Ensuring this indication helps maintain code integrity and prevents unintended errors.</value>
   </data>
   <data name="MiKo_3018_HelpLinkUri" xml:space="preserve">
     <value>https://learn.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-dispose</value>
@@ -3307,7 +3310,7 @@ If it's no issue of the parameter itself, throw an InvalidOperationException ins
     <value>Use 'Task.CompletedTask'</value>
   </data>
   <data name="MiKo_3020_Description" xml:space="preserve">
-    <value>For performance reasons it's better to use 'Task.CompletedTask' instead of 'Task.FromResult()' as the returned task is internally cached.</value>
+    <value>For better performance, use 'Task.CompletedTask' instead of 'Task.FromResult()', as the returned task is internally cached. This helps improve efficiency in your code.</value>
   </data>
   <data name="MiKo_3020_MessageFormat" xml:space="preserve">
     <value>Use 'Task.CompletedTask' instead</value>
@@ -3316,7 +3319,7 @@ If it's no issue of the parameter itself, throw an InvalidOperationException ins
     <value>Use 'Task.CompletedTask' instead of 'Task.FromResult'</value>
   </data>
   <data name="MiKo_3021_Description" xml:space="preserve">
-    <value>If you use 'Task.Run' to return a Task because a method is a long-running operation, then this most probably means that you've doing something wrong. If you have a long-running operation, use 'Task.Run' to call it.</value>
+    <value>If you're using 'Task.Run' to return a Task for a long-running operation, you're likely making a mistake. Instead, use 'Task.Run' to actually call the long-running operation. This approach aligns better with proper asynchronous programming practices and keeps your code efficient and manageable.</value>
   </data>
   <data name="MiKo_3021_HelpLinkUri" xml:space="preserve">
     <value>https://blog.stephencleary.com/2013/11/taskrun-etiquette-examples-dont-use.html</value>
@@ -3328,8 +3331,7 @@ If it's no issue of the parameter itself, throw an InvalidOperationException ins
     <value>Do not use 'Task.Run' in the implementation</value>
   </data>
   <data name="MiKo_3022_Description" xml:space="preserve">
-    <value>If a method returns Task&lt;IEnumerable&gt; or Task&lt;IEnumerable&lt;T&gt;&gt;, then it is likely that the enumerable is not evaluated until it is accessed in a foreach or Linq call.
-That accessor likely is another thread (e.g. the main thread) which contradicts the whole idea of returning a dedicated task.</value>
+    <value>If a method returns 'Task&lt;IEnumerable&gt;' or 'Task&lt;IEnumerable&lt;T&gt;&gt;', the enumerable is likely not evaluated until accessed in a foreach or LINQ call. This evaluation likely occurs on another thread (e.g., the main thread), which contradicts the idea of returning a dedicated task.</value>
   </data>
   <data name="MiKo_3022_MessageFormat" xml:space="preserve">
     <value>Do not return '{1}'</value>
@@ -3338,7 +3340,7 @@ That accessor likely is another thread (e.g. the main thread) which contradicts 
     <value>Do not return Task&lt;IEnumerable&gt; or Task&lt;IEnumerable&lt;T&gt;&gt;</value>
   </data>
   <data name="MiKo_3023_Description" xml:space="preserve">
-    <value>A 'CancellationTokenSource' should not be passed around. Instead, the 'CancellationToken' should be passed around to propagate notifications that operations should be canceled.</value>
+    <value>Avoid passing around a 'CancellationTokenSource'. Instead, pass the 'CancellationToken' to propagate notifications for canceling operations. This approach keeps the code cleaner and maintains proper encapsulation, ensuring more manageable and readable code.</value>
   </data>
   <data name="MiKo_3023_MessageFormat" xml:space="preserve">
     <value>Use a '{1}' instead</value>
@@ -3347,10 +3349,10 @@ That accessor likely is another thread (e.g. the main thread) which contradicts 
     <value>Do not use 'CancellationTokenSource' as parameter</value>
   </data>
   <data name="MiKo_3024_Description" xml:space="preserve">
-    <value>[ref] allows to change the storage location of the variable it is declared on. This allows to re-assign values to an already existing variable and therefore altering it.
-In case of reference types the altered variable is an altered object reference, thus all callees that access the altered variable later on get the changed one (very similar to an out parameter).
+    <value>The [ref] keyword allows changing the storage location of a variable, enabling re-assignment of values and altering the variable.
+For reference types, this means the object reference is changed. Consequently, all subsequent access to the variable gets the updated reference, similar to using an [out] parameter.
 
-In most cases this is not wanted. The object reference shall be the same, only the object shall be altered.</value>
+Generally, this behavior is not desirable. The object reference should remain the same, with only the object itself being altered.</value>
   </data>
   <data name="MiKo_3024_MessageFormat" xml:space="preserve">
     <value>Do not use 'ref'</value>
@@ -3359,7 +3361,7 @@ In most cases this is not wanted. The object reference shall be the same, only t
     <value>Do not use the [ref] keyword on reference parameters</value>
   </data>
   <data name="MiKo_3025_Description" xml:space="preserve">
-    <value>Method parameters should be considered as read-only. They should not be re-assigned to other values. If you need them to have another value, use a local variable instead.</value>
+    <value>Treat method parameters as read-only. Avoid re-assigning them to other values. If another value is needed, use a local variable instead. This approach keeps the method clean and predictable.</value>
   </data>
   <data name="MiKo_3025_MessageFormat" xml:space="preserve">
     <value>Do not re-assign '{0}'</value>
@@ -3368,7 +3370,7 @@ In most cases this is not wanted. The object reference shall be the same, only t
     <value>Do not re-assign method parameters</value>
   </data>
   <data name="MiKo_3026_Description" xml:space="preserve">
-    <value>Unused parameters are not needed and should be removed as they solely clutter the code base without providing any benefit at all.</value>
+    <value>Unused parameters clutter the codebase and provide no benefit. They should be removed to keep the code clean and efficient. This ensures the code remains easy to read and maintain, enhancing overall quality and performance. Keeps everything lean and purposeful.</value>
   </data>
   <data name="MiKo_3026_MessageFormat" xml:space="preserve">
     <value>Parameter is not used and can be safely removed</value>
@@ -3377,7 +3379,7 @@ In most cases this is not wanted. The object reference shall be the same, only t
     <value>Unused parameters should be removed</value>
   </data>
   <data name="MiKo_3027_Description" xml:space="preserve">
-    <value>Marking parameters for future usage leads to a bad design. It is unclear whether the parameter will ever be used. It is also unclear whether the type of the parameter will match future needs. In future, you can always override methods and add new parameters.</value>
+    <value>Marking parameters for future use results in poor design. It's uncertain if the parameter will ever be used or if its type will fit future needs. Instead, override methods and add new parameters as needed. This approach maintains clarity and adaptability in your code, avoiding unnecessary clutter and potential issues. Keeps your codebase clean and efficient.</value>
   </data>
   <data name="MiKo_3027_HelpLinkUri" xml:space="preserve">
     <value>https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/parameter-design</value>
@@ -3389,7 +3391,7 @@ In most cases this is not wanted. The object reference shall be the same, only t
     <value>Parameters should not be marked to be reserved for future usage</value>
   </data>
   <data name="MiKo_3028_Description" xml:space="preserve">
-    <value>If a collection shall be cleared, then 'Clear()' should be invoked. Assigning 'null' to a parameter will not do anything here because the parameter is only a copy (reference) of the original parameter.</value>
+    <value>To clear a collection, use 'Clear()'. Assigning 'null' to a parameter will not work because the parameter is just a copy (reference) of the original. 'Clear()' effectively empties the collection, maintaining clarity and correct functionality. Keeps everything working as expected.</value>
   </data>
   <data name="MiKo_3028_MessageFormat" xml:space="preserve">
     <value>Do not assign null (is cleanup wanted here?)</value>
@@ -3398,7 +3400,7 @@ In most cases this is not wanted. The object reference shall be the same, only t
     <value>Do not assign null to lambda parameters</value>
   </data>
   <data name="MiKo_3029_Description" xml:space="preserve">
-    <value>If you register for an event but forget to unregister, a memory leak may occur. This especially happens in case the event (which is registered on) is static or belongs to an object having a long lifetime.</value>
+    <value>Forgetting to unregister from an event can lead to memory leaks, especially when the event is static or belongs to an object with a long lifetime. Always ensure you unregister from events to prevent these issues. Proper event handling maintains memory efficiency and keeps your applications running smoothly.</value>
   </data>
   <data name="MiKo_3029_MessageFormat" xml:space="preserve">
     <value>Assignment causes potential memory leak</value>
@@ -3407,7 +3409,7 @@ In most cases this is not wanted. The object reference shall be the same, only t
     <value>Event registrations should not cause memory leaks</value>
   </data>
   <data name="MiKo_3030_Description" xml:space="preserve">
-    <value>To ease maintenance, methods assume as little as possible about the structure or properties of objects they use. They should only work with objects they get directly, but they should not reach through them to access other objects and their services.</value>
+    <value>To ease maintenance, methods should make minimal assumptions about the structure or properties of the objects they use. They should work only with objects they receive directly and avoid reaching through these objects to access other objects or their services. This practice keeps methods focused, modular, and easier to maintain.</value>
   </data>
   <data name="MiKo_3030_HelpLinkUri" xml:space="preserve">
     <value>https://en.wikipedia.org/wiki/Law_of_Demeter</value>
@@ -3419,9 +3421,7 @@ In most cases this is not wanted. The object reference shall be the same, only t
     <value>Methods should follow the Law of Demeter</value>
   </data>
   <data name="MiKo_3031_Description" xml:space="preserve">
-    <value>The ICloneable.Clone() method does not define whether a deep or a swallow copy shall be returned.
-
-As that is not defined, there is no guarantee how it gets implemented, and - because of that - it simply cannot be used as there is a huge difference between a deep and a swallow copy.</value>
+    <value>Avoid implementing 'ICloneable.Clone()' because the method does not specify whether it returns a deep or shallow copy, leading to potential inconsistencies. This ambiguity makes it unreliable, as there's a significant difference between deep and shallow copies. Ensuring clear, predictable behavior in your code is crucial.</value>
   </data>
   <data name="MiKo_3031_MessageFormat" xml:space="preserve">
     <value>Do not implement 'ICloneable.Clone()'</value>
@@ -3433,7 +3433,7 @@ As that is not defined, there is no guarantee how it gets implemented, and - bec
     <value>Use 'nameof'</value>
   </data>
   <data name="MiKo_3032_Description" xml:space="preserve">
-    <value>Property names that are passed into the 'PropertyChangedEventArgs' constructors shall be provided via the 'nameof' operator. This eases refactorings.</value>
+    <value>Use the 'nameof' operator for property names passed into 'PropertyChangedEventArgs' constructors, instead of strings. This avoids typos and invalid names and makes refactoring easier, as 'nameof' ensures property names are automatically updated during renames, unlike strings.</value>
   </data>
   <data name="MiKo_3032_MessageFormat" xml:space="preserve">
     <value>Use '{1}' instead</value>
@@ -3445,7 +3445,7 @@ As that is not defined, there is no guarantee how it gets implemented, and - bec
     <value>Use 'nameof'</value>
   </data>
   <data name="MiKo_3033_Description" xml:space="preserve">
-    <value>Property names that are passed into the 'PropertyChangingEventArgs' and 'PropertyChangedEventArgs' constructors shall be provided via the 'nameof' operator. This prevents typos or non-existing invalid names and eases refactorings.</value>
+    <value>Use the 'nameof' operator for property names passed into 'PropertyChangingEventArgs' and 'PropertyChangedEventArgs' constructors, instead of strings. This avoids typos and invalid names and makes refactoring easier, as 'nameof' ensures property names are automatically updated during renames, unlike strings.</value>
   </data>
   <data name="MiKo_3033_MessageFormat" xml:space="preserve">
     <value>Use 'nameof'</value>
@@ -3457,7 +3457,7 @@ As that is not defined, there is no guarantee how it gets implemented, and - bec
     <value>Apply [CallerMemberName]</value>
   </data>
   <data name="MiKo_3034_Description" xml:space="preserve">
-    <value>A method that raises the PropertyChanging or PropertyChanged events should use the [CallerMemberNameAttribute] to specify the name of the property automatically.</value>
+    <value>When raising 'PropertyChanging' or 'PropertyChanged' events, use the [CallerMemberNameAttribute] to automatically specify the property name. This avoids using string arguments and ensures that the rename refactoring will update the property names correctly. This technique prevents errors and makes the code more maintainable and robust.</value>
   </data>
   <data name="MiKo_3034_MessageFormat" xml:space="preserve">
     <value>Apply [CallerMemberName] attribute</value>
@@ -3466,7 +3466,7 @@ As that is not defined, there is no guarantee how it gets implemented, and - bec
     <value>PropertyChanged event raiser shall use [CallerMemberName] attribute</value>
   </data>
   <data name="MiKo_3035_Description" xml:space="preserve">
-    <value>'WaitOne' methods are normally invoked to wait for a specific situation to occur. If the wait is forever, deadlocks or livelocks can occur. To avoid that, allow the wait to time out b providing a 'TimeSpan' to 'WaitOne'.</value>
+    <value>'WaitOne' methods are used to wait for a specific situation to occur. Waiting indefinitely can lead to deadlocks or livelocks. To prevent this, provide a TimeSpan to 'WaitOne' to allow the wait to time out. This ensures better control and avoids potential blocking issues, keeping the system responsive and efficient.</value>
   </data>
   <data name="MiKo_3035_MessageFormat" xml:space="preserve">
     <value>Provide a timeout value</value>
@@ -3478,10 +3478,10 @@ As that is not defined, there is no guarantee how it gets implemented, and - bec
     <value>Use factory method</value>
   </data>
   <data name="MiKo_3036_Description" xml:space="preserve">
-    <value>The 'TimeSpan' .NET struct contains a lot of constructors having different amounts of parameters. Those constructor invocations are hard to read. As the struct also provides static factory methods such as 'FromMinutes' or 'FromDays', these should be preferred. They are much easier to read and more explicit.
+    <value>The 'TimeSpan' .NET struct has many constructors with varying parameters, making its invocations hard to read. Instead, prefer static factory methods like 'FromMinutes' or 'FromDays'. These are more explicit and easier to understand.
 
 Please note:
-It would be even better to use extension methods such as 'Minutes()' or 'Days()' that would allow a more natural usage, such as ' var x = 5.Days(); '.</value>
+It would be even better to use extension methods like 'Minutes()' or 'Days()'. This approach allows for more natural usage, such as ' var x = 5.Days(); '.</value>
   </data>
   <data name="MiKo_3036_MessageFormat" xml:space="preserve">
     <value>Use factory or extension method instead</value>
@@ -3490,12 +3490,10 @@ It would be even better to use extension methods such as 'Minutes()' or 'Days()'
     <value>Prefer to use 'TimeSpan' factory methods instead of constructors</value>
   </data>
   <data name="MiKo_3037_Description" xml:space="preserve">
-    <value>Classes may provide methods such as WaitForExit, WaitOne, ... that have a parameter that is of type int. That parameter is used to specify a timeout, but - as it is a 'magic' number - it is hard to find out the exact amount of time just from reading the number (is it milliseconds, seconds, ... ?)
-So to ease maintenance, the number should not be hard-coded. Most times a TimeSpan an be used instead that eases reading a lot.
-
+    <value>Classes often have methods like 'WaitForExit' or 'WaitOne' that use an 'int' parameter for timeouts. This 'magic' number makes it unclear if the value is in milliseconds, seconds, etc. To improve readability and maintenance, avoid hard-coding these numbers. Instead, use a 'TimeSpan', which clarifies the duration and is easier to read.
 
 Please note:
-It would be even better to use extension methods such as 'Minutes()' or 'Days()' that would allow a more natural usage, such as ' xyz.WaitForExit(5.Days()); '.</value>
+It would be even better to use extension methods like 'Minutes()' or 'Days()'. This approach allows for more natural usage, such as ' xyz.WaitForExit(5.Days()); '.</value>
   </data>
   <data name="MiKo_3037_MessageFormat" xml:space="preserve">
     <value>Do not use magic number</value>
@@ -3504,8 +3502,8 @@ It would be even better to use extension methods such as 'Minutes()' or 'Days()'
     <value>Do not use magic numbers for timeouts</value>
   </data>
   <data name="MiKo_3038_Description" xml:space="preserve">
-    <value>Hard-coded numbers are difficult to understand why they are exactly as they are. So they are kind of 'magic' numbers.
-To ease maintenance, such numbers should not be hard-coded - instead they should be defined as constants.</value>
+    <value>Hard-coded numbers, often called 'magic' numbers, can be unclear. To improve maintenance, avoid them. Instead, define these numbers as constants with meaningful names.
+This approach makes the code easier to read and understand, helping developers grasp the numbers' purpose and context.</value>
   </data>
   <data name="MiKo_3038_MessageFormat" xml:space="preserve">
     <value>Introduce constant for magic number {1}</value>
@@ -3514,8 +3512,8 @@ To ease maintenance, such numbers should not be hard-coded - instead they should
     <value>Do not use magic numbers</value>
   </data>
   <data name="MiKo_3039_Description" xml:space="preserve">
-    <value>Properties that use Linq internally most probably behave differently when being accessed later on or multiple times. As the idea of properties is to be able to access fields (with some safety checks in place), that contradicts the intention of being a property and lead to all sorts of unwanted side-effects.
-Such properties should be methods instead to make it clear that they behave differently between calls.</value>
+    <value>Properties using LINQ internally can behave unpredictably when accessed multiple times. Properties are meant to access fields with some safety checks, so this behavior contradicts their purpose and can cause unwanted side effects.
+Instead, use methods to make it clear that the behavior might differ between calls. This keeps your code predictable and maintains the intended functionality.</value>
   </data>
   <data name="MiKo_3039_MessageFormat" xml:space="preserve">
     <value>Do not use '{1}' inside property</value>
@@ -3524,7 +3522,7 @@ Such properties should be methods instead to make it clear that they behave diff
     <value>Properties should not use Linq or yield</value>
   </data>
   <data name="MiKo_3040_Description" xml:space="preserve">
-    <value>To ease maintenance and increase readability, do not use Booleans unless you are absolutely sure there will never be a need for more than two values. Instead, use an Enum.</value>
+    <value>To ease maintenance and improve readability, avoid using Booleans as parameters unless absolutely sure the value will never exceed two options. Instead, use an Enum. This practice ensures the code remains clear, flexible, and easier to maintain.</value>
   </data>
   <data name="MiKo_3040_HelpLinkUri" xml:space="preserve">
     <value>https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/parameter-design</value>
@@ -3536,8 +3534,7 @@ Such properties should be methods instead to make it clear that they behave diff
     <value>Do not use Booleans unless you are absolutely sure that you will never ever need more than 2 values</value>
   </data>
   <data name="MiKo_3041_Description" xml:space="preserve">
-    <value>EventArgs should not use delegates such as 'Action' or 'Func' because the callee needs to know exactly how the delegate behaves.
-Failures inside the delegate(s) are really hard to tackle down because an exception gets thrown at a completely unrelated area.</value>
+    <value>Avoid using delegates like 'Action' or 'Func' in 'EventArgs'. The callee must understand exactly how the delegate behaves. Failures within the delegate are difficult to debug, as exceptions are thrown in unrelated areas.</value>
   </data>
   <data name="MiKo_3041_MessageFormat" xml:space="preserve">
     <value>Do not use a delegate</value>
@@ -3546,7 +3543,7 @@ Failures inside the delegate(s) are really hard to tackle down because an except
     <value>EventArgs shall not use delegates</value>
   </data>
   <data name="MiKo_3042_Description" xml:space="preserve">
-    <value>EventArgs are by themselves contracts. Therefore, they should not implement any additional interface.</value>
+    <value>EventArgs are standalone contracts. They should not implement any additional interfaces. This keeps their purpose clear and their usage straightforward, avoiding unnecessary complexity. Keeps the code clean and maintains the integrity of the event handling mechanism.</value>
   </data>
   <data name="MiKo_3042_MessageFormat" xml:space="preserve">
     <value>Do not implement interface</value>
@@ -3558,7 +3555,7 @@ Failures inside the delegate(s) are really hard to tackle down because an except
     <value>Use 'nameof'</value>
   </data>
   <data name="MiKo_3043_Description" xml:space="preserve">
-    <value>The names of events that are (de-)registered on the WeakEventManager shall be provided via 'nameof' operator. This prevents typos or non-existing invalid names and eases refactorings.</value>
+    <value>Use the 'nameof' operator for event names registered on the 'WeakEventManager' instead of strings. This prevents typos, ensures valid names, and makes rename refactoring much easier, as 'nameof' ensures property names are automatically updated during renames, unlike strings.</value>
   </data>
   <data name="MiKo_3043_MessageFormat" xml:space="preserve">
     <value>Use 'nameof'</value>
@@ -3570,7 +3567,7 @@ Failures inside the delegate(s) are really hard to tackle down because an except
     <value>Use 'nameof'</value>
   </data>
   <data name="MiKo_3044_Description" xml:space="preserve">
-    <value>Property names that are provided by the 'PropertyChangingEventArgs' and 'PropertyChangedEventArgs' shall be compared via the 'nameof' operator. This prevents typos or non-existing invalid names and eases refactorings.</value>
+    <value>Use the 'nameof' operator to compare property names provided by 'PropertyChangingEventArgs' and 'PropertyChangedEventArgs'. This avoids typos and invalid names and makes refactoring easier, as 'nameof' ensures property names are automatically updated during renames, unlike strings.</value>
   </data>
   <data name="MiKo_3044_MessageFormat" xml:space="preserve">
     <value>Use 'nameof'</value>
@@ -3582,7 +3579,7 @@ Failures inside the delegate(s) are really hard to tackle down because an except
     <value>Use 'nameof'</value>
   </data>
   <data name="MiKo_3045_Description" xml:space="preserve">
-    <value>The names of events that are registered on the EventManager shall be provided via 'nameof' operator. This prevents typos or non-existing invalid names and eases refactorings.</value>
+    <value>Use the 'nameof' operator for event names registered on the 'EventManager' instead of strings. This prevents typos, ensures valid names, and makes rename refactoring much easier, as 'nameof' ensures property names are automatically updated during renames, unlike strings.</value>
   </data>
   <data name="MiKo_3045_MessageFormat" xml:space="preserve">
     <value>Use 'nameof'</value>
@@ -3594,7 +3591,7 @@ Failures inside the delegate(s) are really hard to tackle down because an except
     <value>Use 'nameof'</value>
   </data>
   <data name="MiKo_3046_Description" xml:space="preserve">
-    <value>To prevent typos, any property raising method like 'OnPropertyChanged' shall use 'nameof' to define the property.</value>
+    <value>Use the 'nameof' operator instead of strings to define the properties for event raising methods like 'OnPropertyChanged'. This prevents typos, ensures valid names, and makes rename refactoring much easier, as 'nameof' ensures property names are automatically updated during renames, unlike strings.</value>
   </data>
   <data name="MiKo_3046_MessageFormat" xml:space="preserve">
     <value>Use 'nameof'</value>
@@ -3606,7 +3603,7 @@ Failures inside the delegate(s) are really hard to tackle down because an except
     <value>Use 'nameof'</value>
   </data>
   <data name="MiKo_3047_Description" xml:space="preserve">
-    <value>To prevent typos, any applied [ContentProperty] attribute shall use 'nameof' to define the property.</value>
+    <value>Use the 'nameof' operator instead of strings to define the properties for any applied [ContentProperty] attribute. This prevents typos, ensures valid names, and makes rename refactoring much easier, as 'nameof' ensures property names are automatically updated during renames, unlike strings.</value>
   </data>
   <data name="MiKo_3047_MessageFormat" xml:space="preserve">
     <value>Use 'nameof'</value>
@@ -3615,7 +3612,7 @@ Failures inside the delegate(s) are really hard to tackle down because an except
     <value>Use 'nameof' for applied [ContentProperty] attributes</value>
   </data>
   <data name="MiKo_3048_Description" xml:space="preserve">
-    <value>To indicate to development tools the data types involved in a conversion, it is a good practice to decorate implementations of the IValueConverter interface with the ValueConversionAttribute attribute.</value>
+    <value>Decorate implementations of the IValueConverter interface with the [ValueConversion] attribute to signal to development tools the data types involved in a conversion. This practice enhances clarity and improves tool support, making the code easier to work with and maintain.</value>
   </data>
   <data name="MiKo_3048_MessageFormat" xml:space="preserve">
     <value>Apply the [ValueConversion] attribute</value>
@@ -3624,7 +3621,7 @@ Failures inside the delegate(s) are really hard to tackle down because an except
     <value>ValueConverters shall have the [ValueConversion] attribute applied</value>
   </data>
   <data name="MiKo_3049_Description" xml:space="preserve">
-    <value>When working with enums in C#, it is sometimes necessary to get a string description of the value associated with the enum. To achieve that, the 'System.ComponentModel.DescriptionAttribute' can be used.</value>
+    <value>In C#, you might need a string description for an enum value. Achieve this by using the 'System.ComponentModel.DescriptionAttribute' to decorate the enum member. This method associates descriptive text with enum values, enhancing both readability and usability.</value>
   </data>
   <data name="MiKo_3049_MessageFormat" xml:space="preserve">
     <value>Apply a [Description] attribute with a proper description</value>
