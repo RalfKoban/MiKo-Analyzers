@@ -633,7 +633,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods are meant to run code, so adding words like &apos;CanExecute&apos; or &apos;Execute&apos; to their names is unnecessary and repetitive. It&apos;s like saying &apos;executeExecute&apos; - it doesn&apos;t add any useful information..
+        ///   Looks up a localized string similar to Methods are meant to run code, so adding words like &apos;CanExecute&apos; or &apos;Execute&apos; to their names is unnecessary and repetitive. It&apos;s like saying &apos;executeExecute&apos; - it does not add any useful information..
         /// </summary>
         internal static string MiKo_1010_Description {
             get {
@@ -5742,7 +5742,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The documentation of Boolean or Enum properties shall end with a phrase that describes the value that is returned per default..
+        ///   Looks up a localized string similar to Boolean or Enum property documentation should conclude with a phrase detailing the default return value. This helps developers quickly understand the property&apos;s typical output..
         /// </summary>
         internal static string MiKo_2036_Description {
             get {
@@ -5779,7 +5779,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The documentation of a property that returns a command should start with a specific phrase that describes what command the property returns..
+        ///   Looks up a localized string similar to The documentation for a property that returns a command should begin with a phrase that clearly describes what the command does, making the documentation more helpful and precise for developers..
         /// </summary>
         internal static string MiKo_2037_Description {
             get {
@@ -5815,7 +5815,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The documentation of a command should start with a specific phrase that describes what the command does..
+        ///   Looks up a localized string similar to The documentation for a command should start with a standard phrase such as &apos;Represents a command that can...&apos;. This clearly describes the command&apos;s functionality and ensures consistency and clarity for developers..
         /// </summary>
         internal static string MiKo_2038_Description {
             get {
@@ -5851,7 +5851,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The documentation of a class that contains extension methods should start with a specific phrase that describes what the class provides..
+        ///   Looks up a localized string similar to The documentation for a class that contains extension methods should begin with the phrase &apos;Provides a set of &lt;see langword=&quot;static&quot;/&gt; methods for...&apos;
+        ///This format clearly describes the purpose of the class and its functionality, making the documentation straightforward and helpful for developers..
         /// </summary>
         internal static string MiKo_2039_Description {
             get {
@@ -5887,7 +5888,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To support other languages than C#, use &apos;&lt;see langword=&quot;...&quot;/&gt;&apos; instead of &apos;&lt;c&gt;...&lt;/c&gt;&apos;..
+        ///   Looks up a localized string similar to To support other .NET languages beyond C#, documentation should use &apos;&lt;see langword=&quot;...&quot;/&gt;&apos; instead of &apos;&lt;c&gt;...&lt;/c&gt;&apos;. This ensures that language-specific terms are accurately translated into the correct terminology for each language, making the codebase more inclusive and accessible to non-C# developers..
         /// </summary>
         internal static string MiKo_2040_Description {
             get {
@@ -5923,7 +5924,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &lt;summary&gt; documentation should only contain a short summary description. Other documentation should be provided by the other XML tags in parallel to the &lt;summary&gt;..
+        ///   Looks up a localized string similar to The &lt;summary&gt; documentation should be concise and only contain a brief summary description. Other information should be included in the appropriate XML tags alongside the &lt;summary&gt;. This ensures clarity and organization in the documentation..
         /// </summary>
         internal static string MiKo_2041_Description {
             get {
@@ -5968,7 +5969,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The documentation should use the &apos;&lt;para/&gt;&apos; XML tags instead of &apos;&lt;br/&gt;&apos; or &apos;&lt;p/&gt;&apos; HTML tags..
+        ///   Looks up a localized string similar to Documentation should use the &apos;&lt;para/&gt;&apos; XML tags instead of &apos;&lt;br/&gt;&apos; or &apos;&lt;p/&gt;&apos; HTML tags. This ensures a consistent format, suitable for XML-based documentation tools and frameworks..
         /// </summary>
         internal static string MiKo_2042_Description {
             get {
@@ -6013,7 +6014,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The documentation of a custom delegate should have a default starting phrase to indicate what the delegate encapsulates..
+        ///   Looks up a localized string similar to Custom delegate type documentation should start with &apos;Encapsulates a method that...&apos;. This phrase is crucial because a delegate refers to either a static method or an instance method of a class.
+        ///Declaring a delegate type sets a contract specifying the method signatures it can encapsulate, clarifying its purpose and usage for developers..
         /// </summary>
         internal static string MiKo_2043_Description {
             get {
@@ -6049,7 +6051,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method parameters should be referenced via &lt;paramref name=&quot;...&quot;/&gt; inside the documentation..
+        ///   Looks up a localized string similar to Method parameters should be referenced using &lt;paramref name=&quot;...&quot;/&gt; in the documentation, not &lt;param name=&quot;...&quot;/&gt; or plain text. This allows the documentation to update automatically if the parameter is renamed or deleted..
         /// </summary>
         internal static string MiKo_2044_Description {
             get {
@@ -6085,7 +6087,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &lt;summary&gt; documentation should not reference method parameters as its only purpose is to give a brief description..
+        ///   Looks up a localized string similar to The &lt;summary&gt; documentation should not reference method parameters. Its sole purpose is to provide a brief overview. Including parameter details would be too specific for this high-level summary..
         /// </summary>
         internal static string MiKo_2045_Description {
             get {
@@ -6220,7 +6222,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The term &apos;will be&apos; is not explicit enough and it uses the wrong tense. Instead, a term such as &apos;is&apos; gets to the point and uses present tense..
+        ///   Looks up a localized string similar to The term &apos;will be&apos; is not specific enough and it uses the future tense, which is not accurate for describing the current behavior or state of the code. Using &apos;is&apos; instead gets straight to the point and employs the present tense, accurately reflecting the current behavior.
+        ///This practice ensures clarity and precision, making your code&apos;s behavior easier to understand..
         /// </summary>
         internal static string MiKo_2049_Description {
             get {
@@ -6256,7 +6259,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The documentation of exceptions should follow the .NET Framework documentation..
+        ///   Looks up a localized string similar to Documentation for exceptions should follow the .NET Framework guidelines. This consistency ensures that the information is clear, precise, and familiar to developers, making it easier to understand and maintain..
         /// </summary>
         internal static string MiKo_2050_Description {
             get {
@@ -6292,7 +6295,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The documentation of a thrown exception should be a simple condition phrase, such as: &apos;The item is not available&apos;..
+        ///   Looks up a localized string similar to When documenting a thrown exception, use a simple condition phrase like: &apos;The item is not available.&apos; Avoid phrases like &apos;Thrown if&apos; or &apos;throws if&apos; since it&apos;s already clear that the exception is thrown under those conditions. This keeps the documentation concise and to the point..
         /// </summary>
         internal static string MiKo_2051_Description {
             get {
@@ -6328,7 +6331,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The documentation of an ArgumentNullException being thrown should be a specific phrase..
+        ///   Looks up a localized string similar to When documenting an ArgumentNullException, use the specific phrase: &apos;&lt;paramref name=&quot;value&quot;/&gt; is &lt;see langword=&quot;null&quot;/&gt;.&apos;
+        ///This approach ensures clarity and consistency, helping developers understand the condition under which the exception is thrown..
         /// </summary>
         internal static string MiKo_2052_Description {
             get {
@@ -6357,7 +6361,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The documentation of an ArgumentNullException should not refer to a value type parameter as that can never be null..
+        ///   Looks up a localized string similar to An ArgumentNullException should not be documented for value-type parameters as value types inherently cannot have a null value..
         /// </summary>
         internal static string MiKo_2053_Description {
             get {
@@ -6393,7 +6397,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The documentation of an ArgumentException being thrown should have a specific starting phrase..
+        ///   Looks up a localized string similar to When documenting an ArgumentException being thrown, the documentation should start with the specific phrase: &apos;&lt;paramref name=&quot;value&quot;/&gt; is ...&apos;.
+        ///This approach ensures clarity and consistency, helping developers understand the condition under which the exception is thrown..
         /// </summary>
         internal static string MiKo_2054_Description {
             get {
@@ -6430,7 +6435,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The documentation of an ArgumentOutOfRangeException being thrown should have a specific starting phrase..
+        ///   Looks up a localized string similar to When documenting an ArgumentOutOfRangeException being thrown, the documentation should start with the specific phrase: &apos;&lt;paramref name=&quot;value&quot;/&gt; is ...&apos;.
+        ///This approach ensures clarity and consistency, helping developers understand under what condition the argument is considered out of range..
         /// </summary>
         internal static string MiKo_2055_Description {
             get {
@@ -6467,7 +6473,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The documentation of an ObjectDisposedException being thrown should have a specific ending phrase..
+        ///   Looks up a localized string similar to When documenting an ObjectDisposedException being thrown, the documentation should end with the specific phrase &quot;... has been disposed.&quot; If the class includes a &apos;Close&apos; method, it should end with &quot;... has been closed.&quot;
+        ///This distinction clearly indicates the reason for the exception and helps developers understand the status of the object..
         /// </summary>
         internal static string MiKo_2056_Description {
             get {
@@ -6503,7 +6510,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Types that do not inherit from &apos;IDisposable&apos; cannot be disposed. Hence they shall not throw an ObjectDisposedException..
+        ///   Looks up a localized string similar to Types that do not inherit from &apos;IDisposable&apos; cannot be disposed. Therefore, they should not document throwing an &apos;ObjectDisposedException&apos;. This keeps the documentation accurate and logical..
         /// </summary>
         internal static string MiKo_2057_Description {
             get {
@@ -6539,7 +6546,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease reading, thrown exceptions should be documented only once and not multiple times. So the documentation of those exceptions should be consolidated..
+        ///   Looks up a localized string similar to To improve readability and maintenance, document thrown exceptions only once, consolidating them instead of listing multiple separate instances. This approach helps developers find specific information more easily and keeps the documentation clean and efficient..
         /// </summary>
         internal static string MiKo_2059_Description {
             get {
@@ -6611,8 +6618,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If a method comment starts with &apos;Returns&apos;, then it focuses on the return value but not on the purpose (responsibility) of the method.
-        ///Instead, the documentation should describe what the method is intended to do..
+        ///   Looks up a localized string similar to If method documentation starts with &apos;Returns&apos;, it shifts focus to the return value rather than the method&apos;s purpose. Instead, describe the method&apos;s intended function, not what it returns. This ensures clarity about the method&apos;s primary responsibility..
         /// </summary>
         internal static string MiKo_2070_Description {
             get {
@@ -6639,7 +6645,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enum types are no boolean values. Hence the documentation should not contain any phrase that would handle enums as if they were booleans (such as it would be the case in phrase &apos;indicates whether&apos;)..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation for methods returning Enum types should avoid phrases meant for boolean types. Enum values are not booleans, so the documentation should not use terms like &apos;indicates whether&apos;, which imply a boolean context. This ensures the documentation accurately reflects the nature of the Enum type..
         /// </summary>
         internal static string MiKo_2071_Description {
             get {
@@ -6675,7 +6681,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;Try&apos; methods attempt to achieve something. So their &lt;summary&gt; documentation should start with the phrase &apos;Attempts to &apos;..
+        ///   Looks up a localized string similar to &apos;Try&apos; methods attempt to achieve something. Therefore, their &lt;summary&gt; documentation should start with &apos;Attempts to...&apos; This clearly indicates the method&apos;s purpose and conveys its intent..
         /// </summary>
         internal static string MiKo_2072_Description {
             get {
@@ -6711,7 +6717,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;Contain&apos; methods attempt to determine if something exists inside something else. So their &lt;summary&gt; documentation should start with the phrase &apos;Determines whether &apos;..
+        ///   Looks up a localized string similar to The &lt;summary&gt; documentation of &apos;Contain&apos; methods should start with the phrase &apos;Determines whether...&apos;. This is because they attempt to determine if something exists within something else. This phrase sets a clear expectation for the method&apos;s functionality..
         /// </summary>
         internal static string MiKo_2073_Description {
             get {
@@ -6747,7 +6753,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;Contain&apos; methods attempt to determine if the value of a given parameter exists inside something. So the &lt;param&gt; documentation of the given parameter should end with the phrase &apos; to seek.&apos;..
+        ///   Looks up a localized string similar to The &lt;summary&gt; documentation of &apos;Contain&apos; methods should end with the phrase &apos; to seek.&apos;. This is because they attempt to determine if a given parameter&apos;s value exists within something. This phrasing clearly communicates the intent and functionality of the parameter within the method..
         /// </summary>
         internal static string MiKo_2074_Description {
             get {
@@ -6846,7 +6852,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The summary documentation should be short. Code snippets most often act as examples, so they should be places in &lt;example&gt; instead of &lt;summary&gt;..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation should not include &lt;code&gt; snippets. The summary should be brief. Code snippets, which typically serve as examples, should be placed in the &lt;example&gt; section instead..
         /// </summary>
         internal static string MiKo_2077_Description {
             get {
@@ -6873,7 +6879,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Code snippets most often act as examples, so they normally contain source code. However, in case they contain plain XML, then they will not be converted into documentation so that the resulting online help (or IntelliSense) information will not show them at all..
+        ///   Looks up a localized string similar to &lt;code&gt; documentation should not include XML tags. Code snippets usually serve as examples and typically contain source code. If they contain plain XML, the XML won&apos;t be converted into documentation. Consequently, the resulting online help or IntelliSense will not display them..
         /// </summary>
         internal static string MiKo_2078_Description {
             get {
@@ -6909,7 +6915,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A comment simply stating the name of the property and that is get or set provides no value. Such obvious comments should be removed..
+        ///   Looks up a localized string similar to Comments that merely state the name of a property and that it gets or sets provide no meaningful information. Such redundant comments should be removed to keep the code clean and focused on more valuable insights. Clear and concise documentation improves overall readability and maintenance..
         /// </summary>
         internal static string MiKo_2079_Description {
             get {
@@ -6981,7 +6987,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The documentation of a public-visible read-only field should indicate that it is read-only..
+        ///   Looks up a localized string similar to For public-visible read-only fields, the documentation should clearly state that the field is read-only. This detail informs developers about the field&apos;s immutability and intended usage..
         /// </summary>
         internal static string MiKo_2081_Description {
             get {
@@ -7017,8 +7023,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The summary of an Enum member should not use any phrase that belongs to the summary of the Enum itself.
-        ///Such phrases are for example &apos;Defines&apos;, &apos;Indicates&apos; or &apos;Specifies&apos;. Instead, the Enum member summary should describe the meaning of the member itself..
+        ///   Looks up a localized string similar to The &lt;summary&gt; documentation of an Enum member should avoid phrases used in the Enum&apos;s own summary - like &apos;Defines&apos;, &apos;Indicates&apos;, or &apos;Specifies.&apos; Instead, it should focus on describing the meaning and purpose of the individual member, providing clear and specific details.
+        ///This ensures the documentation is precise and informative, helping developers understand each member’s role and functionality..
         /// </summary>
         internal static string MiKo_2082_Description {
             get {
@@ -7054,7 +7060,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease development and usage, the XML documentation for equality operators shall have a common default phrase..
+        ///   Looks up a localized string similar to For smoother development and usage, XML documentation for equality operators should use a standard default phrase, like in the .NET framework. This keeps things consistent and makes it easier for developers to understand and implement these operators correctly..
         /// </summary>
         internal static string MiKo_2090_Description {
             get {
@@ -7090,7 +7096,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease development and usage, the XML documentation for inequality operators shall have a common default phrase..
+        ///   Looks up a localized string similar to For smoother development and usage, XML documentation for inequality operators should use a standard default phrase, like in the .NET framework. This keeps things consistent and makes it easier for developers to understand and implement these operators correctly..
         /// </summary>
         internal static string MiKo_2091_Description {
             get {
@@ -7126,7 +7132,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease usage, the example documentation should start with a phrase that shortly describes what the given example demonstrates..
+        ///   Looks up a localized string similar to To make example documentation more user-friendly, it should begin with a brief phrase that explains what the example demonstrates. This provides clarity and helps developers quickly understand the purpose of the example..
         /// </summary>
         internal static string MiKo_2100_Description {
             get {
@@ -7162,7 +7168,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease reading, example documentation should place code samples inside &lt;code&gt; tags so that IntelliSense or any XML documentation tool can format them in a special way..
+        ///   Looks up a localized string similar to For better readability, example documentation should enclose code samples within &lt;code&gt; tags. This allows IntelliSense or any XML documentation tool to format them properly, making the examples easier to understand and visually distinct..
         /// </summary>
         internal static string MiKo_2101_Description {
             get {
@@ -7198,7 +7204,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should start with a capitalized letter to have a full sentence..
+        ///   Looks up a localized string similar to Documentation should always start with a capitalized letter to form a complete sentence. This ensures clarity and professionalism, making the documentation easy to read and understand. Full sentences convey complete thoughts, which is essential for accurate and effective communication..
         /// </summary>
         internal static string MiKo_2200_Description {
             get {
@@ -7225,7 +7231,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation sentences should start with a capitalized letter to have a full sentence..
+        ///   Looks up a localized string similar to Sentences within documentation should always begin with a capitalized letter to form a complete sentence. This ensures clarity, readability, and professionalism, making the documentation easier to understand and more effective. Full sentences convey clear, complete thoughts, which is essential for precise communication..
         /// </summary>
         internal static string MiKo_2201_Description {
             get {
@@ -7261,7 +7267,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The XML documentation should not use the abbreviation &apos;id&apos;. Instead, it should clearly document that this is an identifier. Hence, it should use the term &apos;identifier&apos; instead..
+        ///   Looks up a localized string similar to XML documentation should avoid using the abbreviation &apos;id&apos; and instead clearly state &apos;identifier&apos; as they actually are identifiers. This ensures clarity and precision, making the documentation more understandable and accessible for developers..
         /// </summary>
         internal static string MiKo_2202_Description {
             get {
@@ -7297,7 +7303,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The XML documentation should not use the abbreviation &apos;guid&apos;. Instead, it should clearly document that this is an unique identifier. Hence, it should use the term &apos;unique identifier&apos; instead..
+        ///   Looks up a localized string similar to XML documentation should avoid using the abbreviation &apos;guid&apos; and instead clearly state &apos;unique identifier&apos; as they actually are globally unique identifiers. This ensures clarity and precision, making the documentation more understandable and accessible for developers..
         /// </summary>
         internal static string MiKo_2203_Description {
             get {
@@ -7333,8 +7339,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The XML documentation should use the &lt;list&gt; tag if items get enumerated. It should not use terms such as 1.), 2.) etc. directly.
-        ///This is because IntelliSense or any XML documentation tool are not aware of such terms and therefore the comment will become strangely formatted and hard to read..
+        ///   Looks up a localized string similar to XML documentation should use the &lt;list&gt; tag for enumerating items. Avoid using terms like 1.), 2.), etc., directly because IntelliSense and XML documentation tools cannot recognize these and may format comments awkwardly.
+        ///Using &lt;list&gt; allows IntelliSense to format content as tables, numbered lists, ordered lists, etc., making documentation clear and easy to read..
         /// </summary>
         internal static string MiKo_2204_Description {
             get {
@@ -7370,8 +7376,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The XML documentation should use the &lt;note&gt; tag to mark important information. It should not use terms such as &apos;Important&apos; or &apos;Attention&apos; directly.
-        ///This is because XML documentation tools are aware of &lt;note&gt; and can format the information in a special way..
+        ///   Looks up a localized string similar to XML documentation should utilize the &lt;note&gt; tag for important information. Avoid using terms like &apos;Important&apos; or &apos;Attention&apos; directly. This approach allows XML documentation tools to recognize and format the information in a distinct and noticeable way, ensuring clarity and emphasis..
         /// </summary>
         internal static string MiKo_2205_Description {
             get {
@@ -7398,7 +7403,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The documentation should not use the term &apos;flag&apos; which is often used to describe a boolean value. Instead, the documentation should be re-phrased so that the term is no longer necessary..
+        ///   Looks up a localized string similar to Documentation should avoid using the term &apos;flag&apos; for boolean values. Instead, rephrase the documentation to eliminate the need for this term. This ensures clarity and precision, making it easier for developers to understand the context and purpose of the boolean value..
         /// </summary>
         internal static string MiKo_2206_Description {
             get {
@@ -7425,8 +7430,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &lt;summary&gt; documentation shall be descriptive and short as its intent is to give a short overview about a functionality.
-        ///More detailed information should be placed inside a &lt;remarks&gt; section..
+        ///   Looks up a localized string similar to The &lt;summary&gt; documentation should be brief and descriptive, providing an overview of the functionality. For more detailed information, use the &lt;remarks&gt; section. This keeps the summary concise and the documentation well-organized, making it easier for developers to understand..
         /// </summary>
         internal static string MiKo_2207_Description {
             get {
@@ -7462,8 +7466,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The documentation should use a more meaningful description than the phrase &apos;an instance of&apos;.
-        ///By having a more concrete description it makes it easier for a developer to understand the meaning..
+        ///   Looks up a localized string similar to Documentation should use a more meaningful description than &apos;an instance of&apos;. A concrete description helps developers better understand the meaning. Clear and specific language enhances comprehension and usability..
         /// </summary>
         internal static string MiKo_2208_Description {
             get {
@@ -7535,7 +7538,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The XML documentation should not use the abbreviation &apos;info&apos;. Instead, it should clearly document that this is an information. Hence, it should use the term &apos;information&apos; instead..
+        ///   Looks up a localized string similar to XML documentation should avoid the abbreviation &apos;info&apos; and instead use &apos;information&apos;. This practice ensures clarity and professionalism in documentation, making it easier for developers to understand and follow..
         /// </summary>
         internal static string MiKo_2210_Description {
             get {
@@ -7571,11 +7574,9 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unfortunately, tools such as Sandcastle cannot handle &lt;remarks&gt; sections on enum members. The resulting output (CHM, HTML, ...) does not contain any Remarks section.
+        ///   Looks up a localized string similar to Tools like Sandcastle cannot process &lt;remarks&gt; sections on enum members, meaning the resulting output (CHM, HTML, etc.) will not include these sections. Since developers often use HTML/CHM documentation when working with third-party frameworks, crucial information in the &lt;remarks&gt; section may be inaccessible.
         ///
-        ///As developers may use the HTML/CHM version only when working with 3rd party frameworks, the information of the &lt;remarks&gt; section is typically not available to them.
-        ///
-        ///Hence, to provide them with all the information they need, the information should be placed inside the &lt;summary&gt; section..
+        ///To ensure developers have all the necessary information, it&apos;s best to place this information inside the &lt;summary&gt; section instead. This guarantees that all essential details are included in the outp [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MiKo_2211_Description {
             get {
@@ -7611,7 +7612,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To shorten documentation - and still be to the point - the documentation should use the phrase &apos;failed&apos; instead of &apos;was not succesful&apos;..
+        ///   Looks up a localized string similar to To make documentation concise and precise, use &apos;failed&apos; instead of &apos;was not successful&apos;. This keeps it brief and straight to the point, making it easier for developers to understand quickly..
         /// </summary>
         internal static string MiKo_2212_Description {
             get {
@@ -7683,9 +7684,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The documentation should not contain empty lines. Developers tend to use them when they write paragraphs.
-        ///However, in the generated documentation (e.g. for IntelliSense) those empty lines are simply ignored, get removed and the text becomes quite dense.
-        ///In contrast, using the &lt;para&gt; tags avoids that situation as the &lt;para&gt; tag is intended to be used to mark paragraphs..
+        ///   Looks up a localized string similar to To avoid dense text in generated documentation (e.g., IntelliSense), empty lines should not be used. Developers often insert them to create paragraphs, but they get ignored and removed.
+        ///Instead, use &lt;para&gt; tags, which are designed to mark paragraphs properly, ensuring the generated documentation remains clear and well-structured..
         /// </summary>
         internal static string MiKo_2214_Description {
             get {
@@ -7712,7 +7712,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sentences containing up to 15 words are most effective in terms of content and descriptiveness. Longer sentences are hard to read any may boring out readers..
+        ///   Looks up a localized string similar to Keep documentation sentences up to 15 words. Shorter sentences are clearer and more descriptive. Longer sentences can be hard to read and may bore readers. This approach ensures effective communication..
         /// </summary>
         internal static string MiKo_2215_Description {
             get {
@@ -7748,8 +7748,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &lt;param&gt; tag is used to describe parameters while the &lt;paramref&gt; tag gives you a way to indicate that a word in the code comments refers to a parameter.
-        ///So if you want to reference a parameter inside e.g. the &lt;summary&gt; or &lt;remarks&gt; section, you should use the &lt;paramref&gt; tag..
+        ///   Looks up a localized string similar to The &lt;param&gt; tag is for describing parameters, whereas the &lt;paramref&gt; tag is used to indicate that a word in the code comments refers to a parameter. When referencing a parameter in sections like &lt;remarks&gt;, use the &lt;paramref&gt; tag to maintain clarity and proper documentation standards..
         /// </summary>
         internal static string MiKo_2216_Description {
             get {
@@ -7785,11 +7784,13 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The documentation of a &lt;list&gt; is a little bit ambiguous.
-        ///There are 3 types of lists: &apos;number&apos;, &apos;bullet&apos; and &apos;table&apos;. Only the &apos;table&apos; can have a single &lt;listheader&gt; and multiple &lt;item&gt; entries, the others have only &lt;item&gt; entries.
+        ///   Looks up a localized string similar to The documentation of a &lt;list&gt; can be ambiguous, as there are three types: &apos;number&apos;, &apos;bullet&apos;, and &apos;table&apos;.
         ///
-        ///For a &apos;table&apos;, each &lt;listheader&gt; and &lt;item&gt;s can contain either a single but optional &lt;term&gt; and a single required &lt;description&gt;, or multiple &lt;term&gt; entries.
-        ///For a &apos;bullet&apos; or &apos;number&apos; list, each &lt;item&gt; can contain a single but optional &lt;term&gt; and a single required &lt;descripti [rest of string was truncated]&quot;;.
+        ///- Only &apos;table&apos; lists can have a single &lt;listheader&gt; and multiple &lt;item&gt; entries. &apos;Number&apos; and &apos;bullet&apos; lists only have &lt;item&gt; entries.
+        ///
+        ///- For &apos;table&apos; lists, each &lt;listheader&gt; and &lt;item&gt; can contain either a single, optional &lt;term&gt; and a single, required &lt;description&gt;, or multiple &lt;term&gt; entries.
+        ///
+        ///- For &apos;bullet&apos; or &apos;number&apos; lists, each &lt;item&gt; can contain a single, optional &lt;term&gt; and a single, re [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MiKo_2217_Description {
             get {
@@ -7888,7 +7889,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Terms such as &apos;that is used to&apos; or &apos;which shall be used to&apos; are simply bloated and should be shortened to the equivalent term &apos;to&apos;..
+        ///   Looks up a localized string similar to Phrases like &apos;that is used to&apos; or &apos;which shall be used to&apos; are unnecessarily wordy. They should be shortened to the more concise term &apos;to&apos;. This enhances readability and streamlines documentation, making it clearer and more direct for developers..
         /// </summary>
         internal static string MiKo_2218_Description {
             get {
@@ -7915,11 +7916,13 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation is intended for other developers. It shall contain all the information that is important for them in a way that they can easily read and understand.
-        ///- Ending a text with an exclamation mark is more difficult to spot than e.g. placing the text inside a &lt;note type=&quot;important&quot;&gt; tag.
-        ///   So ending texts with exclamation marks should be avoided.
-        ///- Ending a text with a question mark shows that the whole sentence is a question.
-        ///   However, documention should state and not question things - so  [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to XML documentation should be clear and comprehensive for developers. It must contain all important information in an easily readable and understandable format.
+        ///
+        ///- Avoid ending texts with exclamation marks; instead, use tags like &lt;note type=&quot;important&quot;&gt; for emphasis.
+        ///
+        ///- Documentation should state facts, not question them. Therefore, avoid ending sentences with question marks.
+        ///
+        ///This ensures clarity and usability in your documentation, making it straightforward for developers to follow..
         /// </summary>
         internal static string MiKo_2219_Description {
             get {
@@ -7955,7 +7958,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Terms such as &apos;to look for&apos;, &apos;to inspect for&apos; or &apos;to test for&apos; all mean the same - to seek for something. Hence, they should be changed to the equivalent term &apos;to seek&apos;..
+        ///   Looks up a localized string similar to Phrases like &apos;to look for&apos;, &apos;to inspect for&apos;, or &apos;to test for&apos; all convey the same idea: to seek something. Therefore, they should be replaced with the term &apos;to seek&apos;. This streamlines documentation, making it clearer and more concise for developers..
         /// </summary>
         internal static string MiKo_2220_Description {
             get {
@@ -7982,7 +7985,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An empty documentation is a code smell. The developer created the empty XML documentation tag by intent but did not provide any documentation at all..
+        ///   Looks up a localized string similar to An empty documentation is a code smell. It indicates that the developer created the XML documentation tag intentionally but failed to provide any actual content. This suggests a potential oversight or lack of attention to detail. Proper documentation is crucial for code clarity and maintenance..
         /// </summary>
         internal static string MiKo_2221_Description {
             get {
@@ -8018,7 +8021,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The XML documentation should not use the abbreviation &apos;ident&apos;. Instead, it should clearly document that this is an identification. Hence, it should use the term &apos;identification&apos; instead..
+        ///   Looks up a localized string similar to XML documentation should avoid the abbreviation &apos;ident&apos; and instead use the term &apos;identification&apos;. This ensures clarity and precision, making the documentation more understandable and professional. Clear terminology helps prevent confusion and enhances readability for developers..
         /// </summary>
         internal static string MiKo_2222_Description {
             get {
@@ -8045,7 +8048,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The XML documentation should link references (such as methods or types) via &lt;see cref=&quot;...&quot;/&gt; instead of just having them as plain text. Doing so allows refactoring tools to adjust also those references during renames, thus preventing the documentation from mentioning no-longer-existing code..
+        ///   Looks up a localized string similar to XML documentation should link references like methods or types using &lt;see cref=&quot;...&quot;/&gt; instead of plain text. This approach ensures refactoring tools can update these references during renames, preventing the documentation from pointing to non-existent code..
         /// </summary>
         internal static string MiKo_2223_Description {
             get {
@@ -8081,7 +8084,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease usage, XML documentation should have its XML tags and texts placed on separate lines..
+        ///   Looks up a localized string similar to To improve usability and readability, place XML tags and their corresponding texts on separate lines in your documentation. This formatting makes it easier for developers to read and navigate the documentation, ensuring clarity and better organization..
         /// </summary>
         internal static string MiKo_2224_Description {
             get {
@@ -8117,7 +8120,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &lt;c&gt; tag allows developers to indicate that text within a description should be marked as code. However, the text should be a single line. To indicate multiple lines as code, the &lt;code&gt; tag has to be used..
+        ///   Looks up a localized string similar to Use the &lt;c&gt; tag to mark text within a description as code, but only for single lines. For multiple lines of code, you should use the &lt;code&gt; tag. This ensures the formatting is clear and the documentation remains organized and readable..
         /// </summary>
         internal static string MiKo_2225_Description {
             get {
@@ -8153,8 +8156,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Instead of stating *that* the intention exists, documentation should better explain *what* the intention behind actually is.
-        ///So developers have more background information at hand, allowing them to make better decisions based on that information..
+        ///   Looks up a localized string similar to Instead of simply stating *that* an intention exists, documentation should clearly explain *what* the intention actually is. This provides developers with valuable background information, enabling them to make more informed decisions based on that context.
+        ///Clear intentions help convey the purpose and reasoning behind code, which is crucial for effective collaboration and maintenance..
         /// </summary>
         internal static string MiKo_2226_Description {
             get {
@@ -8181,8 +8184,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ReSharper allows to suppress some rules by applying an inline comment &apos;// ReSharper disable&apos; or &apos;// ReSharper disable once&apos;.
-        ///When defined, ReSharper disables the specific rule once or until the document end is reached or the rule is re-enabled. However, those suppressions should be defined as inline comments and should not be accidentally part of any&quot;official&quot; documentation..
+        ///   Looks up a localized string similar to ReSharper allows you to suppress certain rules using inline comments like // ReSharper disable or // ReSharper disable once. These suppressions can apply either once or until the document&apos;s end, or until the rule is re-enabled.
+        ///However, these suppressions should remain inline comments and must not be part of the XML documentation. This keeps your documentation clean and professional, ensuring it&apos;s not cluttered with tool-specific directives..
         /// </summary>
         internal static string MiKo_2227_Description {
             get {
@@ -8209,8 +8212,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Negative wording is difficult to understand, especially when being combined (e.g. &quot;You cannot do this if it is not empty&quot;).
-        ///Positive wording is much easier to understand as it is straight forward and comes to the point..
+        ///   Looks up a localized string similar to Negative wording can be confusing, especially when combined with other negative terms (e.g., &quot;You cannot do this if it is not empty&quot;). Positive wording is clearer and more direct, making the documentation straightforward and to the point. This approach enhances readability and comprehension, helping developers easily grasp the information..
         /// </summary>
         internal static string MiKo_2228_Description {
             get {
@@ -8246,7 +8248,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML fragments in XML documentation are a left over and were not recognized by the developer. However, they may end up in documentation that is available to everybody and therefore should be avoided..
+        ///   Looks up a localized string similar to XML fragments in documentation often go unnoticed by developers but can end up in publicly available documentation. Therefore, it&apos;s best to avoid them to ensure clean, professional, and comprehensible documentation. This approach keeps the documentation neat and free from unwanted remnants..
         /// </summary>
         internal static string MiKo_2229_Description {
             get {
@@ -8282,7 +8284,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The very-special purpose of overridden &apos;GetHashCode()&apos; methods is to provide a hash code. So there is no need to write an own documentation for those. Instead, the &apos;&lt;inheritdoc/&gt;&apos; marker should be used here..
+        ///   Looks up a localized string similar to The main role of overridden &apos;GetHashCode()&apos; methods is to provide a hash code. Therefore, there&apos;s no need to create separate documentation for them. Instead, use the &apos;&lt;inheritdoc/&gt;&apos; marker to keep it simple and clean. This ensures the method inherits the documentation from its base class, maintaining consistency and clarity..
         /// </summary>
         internal static string MiKo_2231_Description {
             get {
@@ -8318,7 +8320,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Empty &lt;summary&gt; documentation do not provide any value to developers and can be removed..
+        ///   Looks up a localized string similar to Empty &lt;summary&gt; documentation adds no value and should be removed. It creates clutter and does not aid developers in understanding the code. Proper documentation should always provide meaningful and useful information..
         /// </summary>
         internal static string MiKo_2232_Description {
             get {
@@ -8345,8 +8347,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
-        ///They should not describe how it is achieved because that&apos;s what the code is for..
+        ///   Looks up a localized string similar to Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works—let the code itself do that.
+        ///This approach ensures comments are insightful and add real value by giving context and rationale, helping developers understand the reasoning behind the implementation..
         /// </summary>
         internal static string MiKo_2300_Description {
             get {
@@ -8382,7 +8384,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Inside tests that follow the Arrange/Act/Assert style, the comments &apos;// arrange&apos;, &apos;// act&apos; and &apos;// assert&apos; are obvious and provide no benefit. Therefore, they can be removed..
+        ///   Looks up a localized string similar to In test code following the Arrange/Act/Assert style, comments like &apos;// arrange&apos;, &apos;// act&apos;, and &apos;// assert&apos; are redundant. They do not add any value since the structure is already clear. Removing them keeps your code clean and focused on the actual logic, enhancing readability and maintainability..
         /// </summary>
         internal static string MiKo_2301_Description {
             get {
@@ -8409,8 +8411,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The longer code is kept that is commented out, the much likelier the code cannot compile anymore.
-        ///As code should be commited in to Source Control Systems, developers can use the SCS&apos;s history and go back to an older version that still contains the code. So there is no need to keep the code commented out..
+        ///   Looks up a localized string similar to The longer code remains commented out, the more likely it becomes outdated and un-compilable. Since code should be committed to Source Control Systems, developers can rely on the SCS history to retrieve older versions if needed.
+        ///Therefore, there&apos;s no need to keep commented-out code in the codebase, keeping the code clean and maintainable..
         /// </summary>
         internal static string MiKo_2302_Description {
             get {
@@ -8446,9 +8448,9 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to In contrast to API documentation inline comments are intended to team members. They should contain the important information in a short way, so they should not be complete sentences.
+        ///   Looks up a localized string similar to Inline comments are meant for team members, unlike API documentation. They should be concise and to the point, not full sentences or paragraphs. This emphasis on brevity helps maintain clarity within the team, keeping communication streamlined and effective.
         ///
-        ///This rule contradicts rule MiKo_2306..
+        ///This rule contradicts MiKo_2306..
         /// </summary>
         internal static string MiKo_2303_Description {
             get {
@@ -8475,8 +8477,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Comments should explain the code and the reasons behind, they should not question things.
-        ///If it question things, then the reasons behind are still unclear. This makes it (in the long run) hard to maintain because such questions don&apos;t get answered (otherwise, the comment would have been gone meanwhile)..
+        ///   Looks up a localized string similar to Comments should clarify the code and the reasoning behind it, never posing questions. If questions appear in comments, it signals unresolved issues and makes the code hard to maintain over time, as these questions often remain unanswered. Proper documentation ensures long-term clarity and maintainability..
         /// </summary>
         internal static string MiKo_2304_Description {
             get {
@@ -8512,7 +8513,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to In contrast to API documentation inline comments are intended for team members. They should contain the important information in a short way, so they should not be complete sentences..
+        ///   Looks up a localized string similar to Inline comments are meant for team members, unlike API documentation. They should be concise and contain important information, avoiding double dots at the end. This keeps the communication clear and efficient for quick understanding within the team..
         /// </summary>
         internal static string MiKo_2305_Description {
             get {
@@ -8539,9 +8540,9 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to In contrast to API documentation inline comments are intended to team members. They should contain the important information in a short way, so they should be complete sentences.
+        ///   Looks up a localized string similar to Inline comments are meant for team members, not for API documentation. They should deliver important information concisely but still be complete sentences. This helps maintain clarity and effective communication within the team. 
         ///
-        ///This rule contradicts rule MiKo_2303..
+        ///This rule contradicts MiKo_2303..
         /// </summary>
         internal static string MiKo_2306_Description {
             get {
@@ -8577,7 +8578,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To shorten comments - and still be to the point - comments should use the phrase &apos;failed&apos; instead of &apos;was not successful&apos;..
+        ///   Looks up a localized string similar to To make comments concise and precise, use &apos;failed&apos; instead of &apos;was not successful&apos;. This keeps it brief and straight to the point, making it easier for developers to understand quickly..
         /// </summary>
         internal static string MiKo_2307_Description {
             get {
@@ -8613,8 +8614,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Most times, a comment describes something that is related to an operation.
-        ///That&apos;s why the comment should not be placed after the operation, but before. So the reader can easily associate the comment with the operation and does not need to guess if both are related or not..
+        ///   Looks up a localized string similar to Comments typically describe something related to an operation. Therefore, they should be placed before the operation, not after. This placement ensures that the reader can easily associate the comment with the corresponding operation, eliminating any guesswork about their relation and keeping everything clear and straightforward..
         /// </summary>
         internal static string MiKo_2308_Description {
             get {
@@ -8677,8 +8677,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Instead of stating *that* the intention exists, comments should better explain *what* the intention behind actually is.
-        ///So developers have more background information at hand, allowing them to make better decisions based on that information..
+        ///   Looks up a localized string similar to Instead of simply stating *that* an intention exists, documentation should clearly explain *what* the intention actually is. This provides developers with valuable background information, enabling them to make more informed decisions based on that context.
+        ///Clear intentions help convey the purpose and reasoning behind code, which is crucial for effective collaboration and maintenance..
         /// </summary>
         internal static string MiKo_2310_Description {
             get {
@@ -8714,8 +8714,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
-        ///They should not be used to separate code..
+        ///   Looks up a localized string similar to Comments should provide insight into the rationale behind the code, explaining why it is written that way. Using comments to separate code is not their intended purpose.
+        ///Instead, comments should enhance understanding, giving context and reasoning for better comprehension and maintainability and keeping everything focused and informative..
         /// </summary>
         internal static string MiKo_2311_Description {
             get {
@@ -8742,8 +8742,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If #region shall be used, then any empty #region shall be avoided.
-        ///Such empty regions solely clutter the code without providing any benefit at all..
+        ///   Looks up a localized string similar to If #region directives are used, avoid any empty #region. They just clutter the code without adding any value. When regions are truly needed, keep them meaningful and populated to ensure the code remains clean and efficient. This approach maintains clarity and organization in the codebase..
         /// </summary>
         internal static string MiKo_3000_Description {
             get {
@@ -8806,7 +8805,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If a class has too many dependencies, that class is doing too much and does not follow the SRP..
+        ///   Looks up a localized string similar to If a class has too many dependencies, it&apos;s taking on too many responsibilities and violating the Single Responsibility Principle (SRP). This indicates a need for refactoring the class into smaller, more focused units, ensuring the codebase remains clean and manageable..
         /// </summary>
         internal static string MiKo_3002_Description {
             get {
@@ -8869,10 +8868,9 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to EventArgs exist only to raise events and to pass some data that to the listening event handlers.
-        ///If the carried event data now changes between the different handlers, the behavior gets unpredictable and a race condition occurs.
+        ///   Looks up a localized string similar to EventArgs are meant solely for raising events and passing data to event handlers. If the event data changes between handlers, it leads to unpredictable behavior and potential race conditions.
         ///
-        ///To avoid that situation, the properties of EventArgs shall be read-only or only privately settable. If you have to set the event data, provide a method to do so and ensure that the method acts as circuit breaker (that is you can set the data exactly once)..
+        ///To prevent this, make EventArgs properties read-only or only privately settable. If you need to set the event data, provide a method that acts as a circuit breaker, allowing the data to be set only once. This approach ensures consistent and reliable behavior..
         /// </summary>
         internal static string MiKo_3004_Description {
             get {
@@ -8899,9 +8897,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, methods that are named &apos;Try&apos; should follow the Trier-Doer-Pattern.
-        ///
-        ///That is they should return a Boolean and have the last parameter as [out] parameter for the result. In the success case the method should return &apos;true&apos; and provide valid out data; in all other cases the method should return &apos;false&apos;..
+        ///   Looks up a localized string similar to &apos;Try&apos; methods should follow the Try-Doer pattern to ease maintenance. They should return a Boolean and use the last parameter as an [out] parameter for the result. If successful, the method returns &apos;true&apos; and provides valid output; otherwise, it returns &apos;false&apos;.
+        ///This pattern keeps methods consistent and predictable, enhancing readability and reliability..
         /// </summary>
         internal static string MiKo_3005_Description {
             get {
@@ -8928,7 +8925,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, and being consistent with the .NET Framework classes, &apos;CancellationToken&apos; parameters should come after all the other parameters of a method..
+        ///   Looks up a localized string similar to To ensure consistency with .NET Framework classes and ease maintenance, place &apos;CancellationToken&apos; parameters after all other method parameters. This practice keeps your codebase predictable and aligned with established conventions, making it easier for developers to understand and maintain..
         /// </summary>
         internal static string MiKo_3006_Description {
             get {
@@ -8955,7 +8952,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintainability and readability, methods should be written using only one single language. Hence LINQ method syntax and declarative query syntax should not be used within the same method..
+        ///   Looks up a localized string similar to To improve maintainability and readability, stick to a single language when writing methods. Avoid mixing LINQ method syntax with declarative query syntax within the same method. This practice ensures consistency, making the code clean, easier to read, and more straightforward to maintain..
         /// </summary>
         internal static string MiKo_3007_Description {
             get {
@@ -8982,7 +8979,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods should not return changeable collections such as &apos;ICollection&lt;T&gt;&apos; because those can be changed from outside. Instead they should return the read-only variants (e.g. &apos;IReadOnlyCollection&lt;T&gt;&apos;)..
+        ///   Looks up a localized string similar to Methods should avoid returning mutable collections like &apos;ICollection&lt;T&gt;&apos; since these can be modified from outside the method. Instead, they should return read-only variants like &apos;IReadOnlyCollection&lt;T&gt;&apos;. This practice ensures data integrity and encapsulation, making the code more secure and predictable..
         /// </summary>
         internal static string MiKo_3008_Description {
             get {
@@ -9009,7 +9006,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods that are invoked by commands should not be lambda expressions as that makes them hard to read, understand and maintain. Instead they should be named methods that have a meaningful name..
+        ///   Looks up a localized string similar to Avoid using anonymous lambdas for methods invoked by commands. They can be hard to read, understand, and maintain. Instead, use named methods with meaningful names. This practice enhances code readability and maintainability, making the code clear and straightforward for developers..
         /// </summary>
         internal static string MiKo_3009_Description {
             get {
@@ -9036,7 +9033,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Specific kinds of exceptions are reserved and thrown by the execution engine (CLR) and in most cases indicate a bug..
+        ///   Looks up a localized string similar to Certain exceptions are reserved for and thrown by the Common Language Runtime (CLR) and often signal bugs. Developers should not throw these exceptions themselves to maintain code cleanliness and avoid confusion. Following this principle ensures clear and robust code management..
         /// </summary>
         internal static string MiKo_3010_Description {
             get {
@@ -9081,7 +9078,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Thrown ArgumentExceptions (or its subtypes) should contain the name of the parameter that caused the exception to be thrown..
+        ///   Looks up a localized string similar to Thrown ArgumentExceptions (or its subtypes) should always include the name of the parameter that caused the exception. This practice helps other developers quickly identify the problematic argument, facilitating easier debugging and improving overall code maintainability..
         /// </summary>
         internal static string MiKo_3011_Description {
             get {
@@ -9126,7 +9123,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Thrown ArgumentOutOfRangeExceptions (or its subtypes) should contain the actual value of the parameter that caused the exception to be thrown..
+        ///   Looks up a localized string similar to Thrown ArgumentOutOfRangeExceptions (or its subtypes) should always include the actual value of the parameter that caused the exception. This practice helps other developers quickly identify the problematic argument, facilitating easier debugging and improving overall code maintainability..
         /// </summary>
         internal static string MiKo_3012_Description {
             get {
@@ -9162,7 +9159,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &apos;default&apos; clause in &apos;switch&apos; statements should throw an ArgumentOutOfRangeException (or subtype) to indicate that the given argument is out of range, but no ArgumentException..
+        ///   Looks up a localized string similar to In &apos;switch&apos; statements, the &apos;default&apos; clause should throw an ArgumentOutOfRangeException (or subtype) instead of an ArgumentException. This indicates that the argument provided is outside the expected range, ensuring error handling is clear and accurate. Keeps the code precise and informative for developers..
         /// </summary>
         internal static string MiKo_3013_Description {
             get {
@@ -9198,7 +9195,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, a thrown InvalidOperationException, NotImplementedException or NotSupportedException should have a reason that explains the circumstances why the exception has been thrown and - ideally - how to solve the situation..
+        ///   Looks up a localized string similar to For easier maintenance, include a reason when throwing an InvalidOperationException, NotImplementedException, or NotSupportedException. This reason should explain the circumstances of the exception and ideally provide guidance on how to resolve it.
+        ///This practice ensures that developers understand why the exception was thrown and how to address it, making the code easier to maintain and debug..
         /// </summary>
         internal static string MiKo_3014_Description {
             get {
@@ -9234,8 +9232,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ArgumentExceptions (or its subtypes) should not be thrown by parameterless methods.
-        ///If the method call does not have any argument or if the failure does not involve the arguments themselves, then InvalidOperationException should be used..
+        ///   Looks up a localized string similar to Avoid throwing ArgumentException (or its subtypes) in parameterless methods. If a method does not take any arguments, or if the failure is not related to the arguments themselves, use InvalidOperationException instead. This keeps exception handling logical and context-appropriate, making the code cleaner and easier to maintain..
         /// </summary>
         internal static string MiKo_3015_Description {
             get {
@@ -9280,9 +9277,12 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ArgumentNullExceptions should not be thrown for values of properties that are returned by parameters.
-        ///If you want to indicate a problem for the parameter, throw an ArgumentException instead.
-        ///If it&apos;s no issue of the parameter itself, throw an InvalidOperationException instead..
+        ///   Looks up a localized string similar to ArgumentNullExceptions should not be thrown for values of properties returned by parameters.
+        ///
+        ///- If there&apos;s an issue with the parameter, throw an ArgumentException.
+        ///- If the problem isn&apos;t with the parameter itself, throw an InvalidOperationException instead.
+        ///
+        ///This approach ensures that the exception thrown accurately reflects the nature of the issue, making your code more robust and understandable..
         /// </summary>
         internal static string MiKo_3016_Description {
             get {
@@ -9327,7 +9327,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If an exception gets caught and a new exception gets thrown, it&apos;s much easier if the new exception contains the caught one as inner exception..
+        ///   Looks up a localized string similar to When catching an exception and throwing a new one, include the caught exception as an inner exception. This approach makes debugging easier by preserving the original exception, helping to trace the root cause efficiently..
         /// </summary>
         internal static string MiKo_3017_Description {
             get {
@@ -9354,7 +9354,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Already disposed instances of disposable types should indicate that they are disposed when invoking methods on them. That makes it easier to spot bugs because the user code should never access already disposed types..
+        ///   Looks up a localized string similar to Already disposed instances of disposable types should throw ObjectDisposedExceptions when methods are invoked on them. This practice makes it easier to identify bugs, as user code should never access already disposed types. Ensuring this indication helps maintain code integrity and prevents unintended errors..
         /// </summary>
         internal static string MiKo_3018_Description {
             get {
@@ -9399,7 +9399,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For performance reasons it&apos;s better to use &apos;Task.CompletedTask&apos; instead of &apos;Task.FromResult()&apos; as the returned task is internally cached..
+        ///   Looks up a localized string similar to For better performance, use &apos;Task.CompletedTask&apos; instead of &apos;Task.FromResult()&apos;, as the returned task is internally cached. This helps improve efficiency in your code..
         /// </summary>
         internal static string MiKo_3020_Description {
             get {
@@ -9426,7 +9426,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you use &apos;Task.Run&apos; to return a Task because a method is a long-running operation, then this most probably means that you&apos;ve doing something wrong. If you have a long-running operation, use &apos;Task.Run&apos; to call it..
+        ///   Looks up a localized string similar to If you&apos;re using &apos;Task.Run&apos; to return a Task for a long-running operation, you&apos;re likely making a mistake. Instead, use &apos;Task.Run&apos; to actually call the long-running operation. This approach aligns better with proper asynchronous programming practices and keeps your code efficient and manageable..
         /// </summary>
         internal static string MiKo_3021_Description {
             get {
@@ -9462,8 +9462,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If a method returns Task&lt;IEnumerable&gt; or Task&lt;IEnumerable&lt;T&gt;&gt;, then it is likely that the enumerable is not evaluated until it is accessed in a foreach or Linq call.
-        ///That accessor likely is another thread (e.g. the main thread) which contradicts the whole idea of returning a dedicated task..
+        ///   Looks up a localized string similar to If a method returns &apos;Task&lt;IEnumerable&gt;&apos; or &apos;Task&lt;IEnumerable&lt;T&gt;&gt;&apos;, the enumerable is likely not evaluated until accessed in a foreach or LINQ call. This evaluation likely occurs on another thread (e.g., the main thread), which contradicts the idea of returning a dedicated task..
         /// </summary>
         internal static string MiKo_3022_Description {
             get {
@@ -9490,7 +9489,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A &apos;CancellationTokenSource&apos; should not be passed around. Instead, the &apos;CancellationToken&apos; should be passed around to propagate notifications that operations should be canceled..
+        ///   Looks up a localized string similar to Avoid passing around a &apos;CancellationTokenSource&apos;. Instead, pass the &apos;CancellationToken&apos; to propagate notifications for canceling operations. This approach keeps the code cleaner and maintains proper encapsulation, ensuring more manageable and readable code..
         /// </summary>
         internal static string MiKo_3023_Description {
             get {
@@ -9517,10 +9516,10 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [ref] allows to change the storage location of the variable it is declared on. This allows to re-assign values to an already existing variable and therefore altering it.
-        ///In case of reference types the altered variable is an altered object reference, thus all callees that access the altered variable later on get the changed one (very similar to an out parameter).
+        ///   Looks up a localized string similar to The [ref] keyword allows changing the storage location of a variable, enabling re-assignment of values and altering the variable.
+        ///For reference types, this means the object reference is changed. Consequently, all subsequent access to the variable gets the updated reference, similar to using an [out] parameter.
         ///
-        ///In most cases this is not wanted. The object reference shall be the same, only the object shall be altered..
+        ///Generally, this behavior is not desirable. The object reference should remain the same, with only the object itself being altered..
         /// </summary>
         internal static string MiKo_3024_Description {
             get {
@@ -9547,7 +9546,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method parameters should be considered as read-only. They should not be re-assigned to other values. If you need them to have another value, use a local variable instead..
+        ///   Looks up a localized string similar to Treat method parameters as read-only. Avoid re-assigning them to other values. If another value is needed, use a local variable instead. This approach keeps the method clean and predictable..
         /// </summary>
         internal static string MiKo_3025_Description {
             get {
@@ -9574,7 +9573,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unused parameters are not needed and should be removed as they solely clutter the code base without providing any benefit at all..
+        ///   Looks up a localized string similar to Unused parameters clutter the codebase and provide no benefit. They should be removed to keep the code clean and efficient. This ensures the code remains easy to read and maintain, enhancing overall quality and performance. Keeps everything lean and purposeful..
         /// </summary>
         internal static string MiKo_3026_Description {
             get {
@@ -9601,7 +9600,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Marking parameters for future usage leads to a bad design. It is unclear whether the parameter will ever be used. It is also unclear whether the type of the parameter will match future needs. In future, you can always override methods and add new parameters..
+        ///   Looks up a localized string similar to Marking parameters for future use results in poor design. It&apos;s uncertain if the parameter will ever be used or if its type will fit future needs. Instead, override methods and add new parameters as needed. This approach maintains clarity and adaptability in your code, avoiding unnecessary clutter and potential issues. Keeps your codebase clean and efficient..
         /// </summary>
         internal static string MiKo_3027_Description {
             get {
@@ -9637,7 +9636,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If a collection shall be cleared, then &apos;Clear()&apos; should be invoked. Assigning &apos;null&apos; to a parameter will not do anything here because the parameter is only a copy (reference) of the original parameter..
+        ///   Looks up a localized string similar to To clear a collection, use &apos;Clear()&apos;. Assigning &apos;null&apos; to a parameter will not work because the parameter is just a copy (reference) of the original. &apos;Clear()&apos; effectively empties the collection, maintaining clarity and correct functionality. Keeps everything working as expected..
         /// </summary>
         internal static string MiKo_3028_Description {
             get {
@@ -9664,7 +9663,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you register for an event but forget to unregister, a memory leak may occur. This especially happens in case the event (which is registered on) is static or belongs to an object having a long lifetime..
+        ///   Looks up a localized string similar to Forgetting to unregister from an event can lead to memory leaks, especially when the event is static or belongs to an object with a long lifetime. Always ensure you unregister from events to prevent these issues. Proper event handling maintains memory efficiency and keeps your applications running smoothly..
         /// </summary>
         internal static string MiKo_3029_Description {
             get {
@@ -9691,7 +9690,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, methods assume as little as possible about the structure or properties of objects they use. They should only work with objects they get directly, but they should not reach through them to access other objects and their services..
+        ///   Looks up a localized string similar to To ease maintenance, methods should make minimal assumptions about the structure or properties of the objects they use. They should work only with objects they receive directly and avoid reaching through these objects to access other objects or their services. This practice keeps methods focused, modular, and easier to maintain..
         /// </summary>
         internal static string MiKo_3030_Description {
             get {
@@ -9727,9 +9726,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The ICloneable.Clone() method does not define whether a deep or a swallow copy shall be returned.
-        ///
-        ///As that is not defined, there is no guarantee how it gets implemented, and - because of that - it simply cannot be used as there is a huge difference between a deep and a swallow copy..
+        ///   Looks up a localized string similar to Avoid implementing &apos;ICloneable.Clone()&apos; because the method does not specify whether it returns a deep or shallow copy, leading to potential inconsistencies. This ambiguity makes it unreliable, as there&apos;s a significant difference between deep and shallow copies. Ensuring clear, predictable behavior in your code is crucial..
         /// </summary>
         internal static string MiKo_3031_Description {
             get {
@@ -9765,7 +9762,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Property names that are passed into the &apos;PropertyChangedEventArgs&apos; constructors shall be provided via the &apos;nameof&apos; operator. This eases refactorings..
+        ///   Looks up a localized string similar to Use the &apos;nameof&apos; operator for property names passed into &apos;PropertyChangedEventArgs&apos; constructors, instead of strings. This avoids typos and invalid names and makes refactoring easier, as &apos;nameof&apos; ensures property names are automatically updated during renames, unlike strings..
         /// </summary>
         internal static string MiKo_3032_Description {
             get {
@@ -9801,7 +9798,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Property names that are passed into the &apos;PropertyChangingEventArgs&apos; and &apos;PropertyChangedEventArgs&apos; constructors shall be provided via the &apos;nameof&apos; operator. This prevents typos or non-existing invalid names and eases refactorings..
+        ///   Looks up a localized string similar to Use the &apos;nameof&apos; operator for property names passed into &apos;PropertyChangingEventArgs&apos; and &apos;PropertyChangedEventArgs&apos; constructors, instead of strings. This avoids typos and invalid names and makes refactoring easier, as &apos;nameof&apos; ensures property names are automatically updated during renames, unlike strings..
         /// </summary>
         internal static string MiKo_3033_Description {
             get {
@@ -9837,7 +9834,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A method that raises the PropertyChanging or PropertyChanged events should use the [CallerMemberNameAttribute] to specify the name of the property automatically..
+        ///   Looks up a localized string similar to When raising &apos;PropertyChanging&apos; or &apos;PropertyChanged&apos; events, use the [CallerMemberNameAttribute] to automatically specify the property name. This avoids using string arguments and ensures that the rename refactoring will update the property names correctly. This technique prevents errors and makes the code more maintainable and robust..
         /// </summary>
         internal static string MiKo_3034_Description {
             get {
@@ -9864,7 +9861,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;WaitOne&apos; methods are normally invoked to wait for a specific situation to occur. If the wait is forever, deadlocks or livelocks can occur. To avoid that, allow the wait to time out b providing a &apos;TimeSpan&apos; to &apos;WaitOne&apos;..
+        ///   Looks up a localized string similar to &apos;WaitOne&apos; methods are used to wait for a specific situation to occur. Waiting indefinitely can lead to deadlocks or livelocks. To prevent this, provide a TimeSpan to &apos;WaitOne&apos; to allow the wait to time out. This ensures better control and avoids potential blocking issues, keeping the system responsive and efficient..
         /// </summary>
         internal static string MiKo_3035_Description {
             get {
@@ -9900,10 +9897,10 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &apos;TimeSpan&apos; .NET struct contains a lot of constructors having different amounts of parameters. Those constructor invocations are hard to read. As the struct also provides static factory methods such as &apos;FromMinutes&apos; or &apos;FromDays&apos;, these should be preferred. They are much easier to read and more explicit.
+        ///   Looks up a localized string similar to The &apos;TimeSpan&apos; .NET struct has many constructors with varying parameters, making its invocations hard to read. Instead, prefer static factory methods like &apos;FromMinutes&apos; or &apos;FromDays&apos;. These are more explicit and easier to understand.
         ///
         ///Please note:
-        ///It would be even better to use extension methods such as &apos;Minutes()&apos; or &apos;Days()&apos; that would allow a more natural usage, such as &apos; var x = 5.Days(); &apos;..
+        ///It would be even better to use extension methods like &apos;Minutes()&apos; or &apos;Days()&apos;. This approach allows for more natural usage, such as &apos; var x = 5.Days(); &apos;..
         /// </summary>
         internal static string MiKo_3036_Description {
             get {
@@ -9930,12 +9927,10 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Classes may provide methods such as WaitForExit, WaitOne, ... that have a parameter that is of type int. That parameter is used to specify a timeout, but - as it is a &apos;magic&apos; number - it is hard to find out the exact amount of time just from reading the number (is it milliseconds, seconds, ... ?)
-        ///So to ease maintenance, the number should not be hard-coded. Most times a TimeSpan an be used instead that eases reading a lot.
-        ///
+        ///   Looks up a localized string similar to Classes often have methods like &apos;WaitForExit&apos; or &apos;WaitOne&apos; that use an &apos;int&apos; parameter for timeouts. This &apos;magic&apos; number makes it unclear if the value is in milliseconds, seconds, etc. To improve readability and maintenance, avoid hard-coding these numbers. Instead, use a &apos;TimeSpan&apos;, which clarifies the duration and is easier to read.
         ///
         ///Please note:
-        ///It would be even better to use extension methods such as &apos;Minutes( [rest of string was truncated]&quot;;.
+        ///It would be even better to use extension methods like &apos;Minutes()&apos; or &apos;Days()&apos;. This approach allows for more natural usage, such as &apos; xyz.WaitForExit(5.Days() [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MiKo_3037_Description {
             get {
@@ -9962,8 +9957,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hard-coded numbers are difficult to understand why they are exactly as they are. So they are kind of &apos;magic&apos; numbers.
-        ///To ease maintenance, such numbers should not be hard-coded - instead they should be defined as constants..
+        ///   Looks up a localized string similar to Hard-coded numbers, often called &apos;magic&apos; numbers, can be unclear. To improve maintenance, avoid them. Instead, define these numbers as constants with meaningful names.
+        ///This approach makes the code easier to read and understand, helping developers grasp the numbers&apos; purpose and context..
         /// </summary>
         internal static string MiKo_3038_Description {
             get {
@@ -9990,8 +9985,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Properties that use Linq internally most probably behave differently when being accessed later on or multiple times. As the idea of properties is to be able to access fields (with some safety checks in place), that contradicts the intention of being a property and lead to all sorts of unwanted side-effects.
-        ///Such properties should be methods instead to make it clear that they behave differently between calls..
+        ///   Looks up a localized string similar to Properties using LINQ internally can behave unpredictably when accessed multiple times. Properties are meant to access fields with some safety checks, so this behavior contradicts their purpose and can cause unwanted side effects.
+        ///Instead, use methods to make it clear that the behavior might differ between calls. This keeps your code predictable and maintains the intended functionality..
         /// </summary>
         internal static string MiKo_3039_Description {
             get {
@@ -10018,7 +10013,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance and increase readability, do not use Booleans unless you are absolutely sure there will never be a need for more than two values. Instead, use an Enum..
+        ///   Looks up a localized string similar to To ease maintenance and improve readability, avoid using Booleans as parameters unless absolutely sure the value will never exceed two options. Instead, use an Enum. This practice ensures the code remains clear, flexible, and easier to maintain..
         /// </summary>
         internal static string MiKo_3040_Description {
             get {
@@ -10054,8 +10049,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to EventArgs should not use delegates such as &apos;Action&apos; or &apos;Func&apos; because the callee needs to know exactly how the delegate behaves.
-        ///Failures inside the delegate(s) are really hard to tackle down because an exception gets thrown at a completely unrelated area..
+        ///   Looks up a localized string similar to Avoid using delegates like &apos;Action&apos; or &apos;Func&apos; in &apos;EventArgs&apos;. The callee must understand exactly how the delegate behaves. Failures within the delegate are difficult to debug, as exceptions are thrown in unrelated areas..
         /// </summary>
         internal static string MiKo_3041_Description {
             get {
@@ -10082,7 +10076,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to EventArgs are by themselves contracts. Therefore, they should not implement any additional interface..
+        ///   Looks up a localized string similar to EventArgs are standalone contracts. They should not implement any additional interfaces. This keeps their purpose clear and their usage straightforward, avoiding unnecessary complexity. Keeps the code clean and maintains the integrity of the event handling mechanism..
         /// </summary>
         internal static string MiKo_3042_Description {
             get {
@@ -10118,7 +10112,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The names of events that are (de-)registered on the WeakEventManager shall be provided via &apos;nameof&apos; operator. This prevents typos or non-existing invalid names and eases refactorings..
+        ///   Looks up a localized string similar to Use the &apos;nameof&apos; operator for event names registered on the &apos;WeakEventManager&apos; instead of strings. This prevents typos, ensures valid names, and makes rename refactoring much easier, as &apos;nameof&apos; ensures property names are automatically updated during renames, unlike strings..
         /// </summary>
         internal static string MiKo_3043_Description {
             get {
@@ -10154,7 +10148,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Property names that are provided by the &apos;PropertyChangingEventArgs&apos; and &apos;PropertyChangedEventArgs&apos; shall be compared via the &apos;nameof&apos; operator. This prevents typos or non-existing invalid names and eases refactorings..
+        ///   Looks up a localized string similar to Use the &apos;nameof&apos; operator to compare property names provided by &apos;PropertyChangingEventArgs&apos; and &apos;PropertyChangedEventArgs&apos;. This avoids typos and invalid names and makes refactoring easier, as &apos;nameof&apos; ensures property names are automatically updated during renames, unlike strings..
         /// </summary>
         internal static string MiKo_3044_Description {
             get {
@@ -10190,7 +10184,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The names of events that are registered on the EventManager shall be provided via &apos;nameof&apos; operator. This prevents typos or non-existing invalid names and eases refactorings..
+        ///   Looks up a localized string similar to Use the &apos;nameof&apos; operator for event names registered on the &apos;EventManager&apos; instead of strings. This prevents typos, ensures valid names, and makes rename refactoring much easier, as &apos;nameof&apos; ensures property names are automatically updated during renames, unlike strings..
         /// </summary>
         internal static string MiKo_3045_Description {
             get {
@@ -10226,7 +10220,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To prevent typos, any property raising method like &apos;OnPropertyChanged&apos; shall use &apos;nameof&apos; to define the property..
+        ///   Looks up a localized string similar to Use the &apos;nameof&apos; operator instead of strings to define the properties for event raising methods like &apos;OnPropertyChanged&apos;. This prevents typos, ensures valid names, and makes rename refactoring much easier, as &apos;nameof&apos; ensures property names are automatically updated during renames, unlike strings..
         /// </summary>
         internal static string MiKo_3046_Description {
             get {
@@ -10262,7 +10256,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To prevent typos, any applied [ContentProperty] attribute shall use &apos;nameof&apos; to define the property..
+        ///   Looks up a localized string similar to Use the &apos;nameof&apos; operator instead of strings to define the properties for any applied [ContentProperty] attribute. This prevents typos, ensures valid names, and makes rename refactoring much easier, as &apos;nameof&apos; ensures property names are automatically updated during renames, unlike strings..
         /// </summary>
         internal static string MiKo_3047_Description {
             get {
@@ -10289,7 +10283,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To indicate to development tools the data types involved in a conversion, it is a good practice to decorate implementations of the IValueConverter interface with the ValueConversionAttribute attribute..
+        ///   Looks up a localized string similar to Decorate implementations of the IValueConverter interface with the [ValueConversion] attribute to signal to development tools the data types involved in a conversion. This practice enhances clarity and improves tool support, making the code easier to work with and maintain..
         /// </summary>
         internal static string MiKo_3048_Description {
             get {
@@ -10316,7 +10310,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When working with enums in C#, it is sometimes necessary to get a string description of the value associated with the enum. To achieve that, the &apos;System.ComponentModel.DescriptionAttribute&apos; can be used..
+        ///   Looks up a localized string similar to In C#, you might need a string description for an enum value. Achieve this by using the &apos;System.ComponentModel.DescriptionAttribute&apos; to decorate the enum member. This method associates descriptive text with enum values, enhancing both readability and usability..
         /// </summary>
         internal static string MiKo_3049_Description {
             get {
