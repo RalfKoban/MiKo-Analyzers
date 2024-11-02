@@ -633,7 +633,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods are meant to run code, so adding words like &apos;CanExecute&apos; or &apos;Execute&apos; to their names is unnecessary and repetitive. It&apos;s like saying &apos;executeExecute&apos; - it doesn&apos;t add any useful information..
+        ///   Looks up a localized string similar to Methods are meant to run code, so adding words like &apos;CanExecute&apos; or &apos;Execute&apos; to their names is unnecessary and repetitive. It&apos;s like saying &apos;executeExecute&apos; - it does not add any useful information..
         /// </summary>
         internal static string MiKo_1010_Description {
             get {
@@ -8156,8 +8156,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Instead of stating *that* the intention exists, documentation should better explain *what* the intention behind actually is.
-        ///So developers have more background information at hand, allowing them to make better decisions based on that information..
+        ///   Looks up a localized string similar to Instead of simply stating *that* an intention exists, documentation should clearly explain *what* the intention actually is. This provides developers with valuable background information, enabling them to make more informed decisions based on that context.
+        ///Clear intentions help convey the purpose and reasoning behind code, which is crucial for effective collaboration and maintenance..
         /// </summary>
         internal static string MiKo_2226_Description {
             get {
@@ -8184,8 +8184,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ReSharper allows to suppress some rules by applying an inline comment &apos;// ReSharper disable&apos; or &apos;// ReSharper disable once&apos;.
-        ///When defined, ReSharper disables the specific rule once or until the document end is reached or the rule is re-enabled. However, those suppressions should be defined as inline comments and should not be accidentally part of any&quot;official&quot; documentation..
+        ///   Looks up a localized string similar to ReSharper allows you to suppress certain rules using inline comments like // ReSharper disable or // ReSharper disable once. These suppressions can apply either once or until the document&apos;s end, or until the rule is re-enabled.
+        ///However, these suppressions should remain inline comments and must not be part of the XML documentation. This keeps your documentation clean and professional, ensuring it&apos;s not cluttered with tool-specific directives..
         /// </summary>
         internal static string MiKo_2227_Description {
             get {
@@ -8212,8 +8212,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Negative wording is difficult to understand, especially when being combined (e.g. &quot;You cannot do this if it is not empty&quot;).
-        ///Positive wording is much easier to understand as it is straight forward and comes to the point..
+        ///   Looks up a localized string similar to Negative wording can be confusing, especially when combined with other negative terms (e.g., &quot;You cannot do this if it is not empty&quot;). Positive wording is clearer and more direct, making the documentation straightforward and to the point. This approach enhances readability and comprehension, helping developers easily grasp the information..
         /// </summary>
         internal static string MiKo_2228_Description {
             get {
@@ -8249,7 +8248,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML fragments in XML documentation are a left over and were not recognized by the developer. However, they may end up in documentation that is available to everybody and therefore should be avoided..
+        ///   Looks up a localized string similar to XML fragments in documentation often go unnoticed by developers but can end up in publicly available documentation. Therefore, it&apos;s best to avoid them to ensure clean, professional, and comprehensible documentation. This approach keeps the documentation neat and free from unwanted remnants..
         /// </summary>
         internal static string MiKo_2229_Description {
             get {
@@ -8285,7 +8284,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The very-special purpose of overridden &apos;GetHashCode()&apos; methods is to provide a hash code. So there is no need to write an own documentation for those. Instead, the &apos;&lt;inheritdoc/&gt;&apos; marker should be used here..
+        ///   Looks up a localized string similar to The main role of overridden &apos;GetHashCode()&apos; methods is to provide a hash code. Therefore, there&apos;s no need to create separate documentation for them. Instead, use the &apos;&lt;inheritdoc/&gt;&apos; marker to keep it simple and clean. This ensures the method inherits the documentation from its base class, maintaining consistency and clarity..
         /// </summary>
         internal static string MiKo_2231_Description {
             get {
@@ -8321,7 +8320,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Empty &lt;summary&gt; documentation do not provide any value to developers and can be removed..
+        ///   Looks up a localized string similar to Empty &lt;summary&gt; documentation adds no value and should be removed. It creates clutter and does not aid developers in understanding the code. Proper documentation should always provide meaningful and useful information..
         /// </summary>
         internal static string MiKo_2232_Description {
             get {
@@ -8348,8 +8347,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
-        ///They should not describe how it is achieved because that&apos;s what the code is for..
+        ///   Looks up a localized string similar to Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works—let the code itself do that.
+        ///This approach ensures comments are insightful and add real value by giving context and rationale, helping developers understand the reasoning behind the implementation..
         /// </summary>
         internal static string MiKo_2300_Description {
             get {
@@ -8385,7 +8384,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Inside tests that follow the Arrange/Act/Assert style, the comments &apos;// arrange&apos;, &apos;// act&apos; and &apos;// assert&apos; are obvious and provide no benefit. Therefore, they can be removed..
+        ///   Looks up a localized string similar to In test code following the Arrange/Act/Assert style, comments like &apos;// arrange&apos;, &apos;// act&apos;, and &apos;// assert&apos; are redundant. They do not add any value since the structure is already clear. Removing them keeps your code clean and focused on the actual logic, enhancing readability and maintainability..
         /// </summary>
         internal static string MiKo_2301_Description {
             get {
@@ -8412,8 +8411,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The longer code is kept that is commented out, the much likelier the code cannot compile anymore.
-        ///As code should be commited in to Source Control Systems, developers can use the SCS&apos;s history and go back to an older version that still contains the code. So there is no need to keep the code commented out..
+        ///   Looks up a localized string similar to The longer code remains commented out, the more likely it becomes outdated and un-compilable. Since code should be committed to Source Control Systems, developers can rely on the SCS history to retrieve older versions if needed.
+        ///Therefore, there&apos;s no need to keep commented-out code in the codebase, keeping the code clean and maintainable..
         /// </summary>
         internal static string MiKo_2302_Description {
             get {
@@ -8449,9 +8448,9 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to In contrast to API documentation inline comments are intended to team members. They should contain the important information in a short way, so they should not be complete sentences.
+        ///   Looks up a localized string similar to Inline comments are meant for team members, unlike API documentation. They should be concise and to the point, not full sentences or paragraphs. This emphasis on brevity helps maintain clarity within the team, keeping communication streamlined and effective.
         ///
-        ///This rule contradicts rule MiKo_2306..
+        ///This rule contradicts MiKo_2306..
         /// </summary>
         internal static string MiKo_2303_Description {
             get {
@@ -8478,8 +8477,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Comments should explain the code and the reasons behind, they should not question things.
-        ///If it question things, then the reasons behind are still unclear. This makes it (in the long run) hard to maintain because such questions don&apos;t get answered (otherwise, the comment would have been gone meanwhile)..
+        ///   Looks up a localized string similar to Comments should clarify the code and the reasoning behind it, never posing questions. If questions appear in comments, it signals unresolved issues and makes the code hard to maintain over time, as these questions often remain unanswered. Proper documentation ensures long-term clarity and maintainability..
         /// </summary>
         internal static string MiKo_2304_Description {
             get {
@@ -8515,7 +8513,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to In contrast to API documentation inline comments are intended for team members. They should contain the important information in a short way, so they should not be complete sentences..
+        ///   Looks up a localized string similar to Inline comments are meant for team members, unlike API documentation. They should be concise and contain important information, avoiding double dots at the end. This keeps the communication clear and efficient for quick understanding within the team..
         /// </summary>
         internal static string MiKo_2305_Description {
             get {
@@ -8542,9 +8540,9 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to In contrast to API documentation inline comments are intended to team members. They should contain the important information in a short way, so they should be complete sentences.
+        ///   Looks up a localized string similar to Inline comments are meant for team members, not for API documentation. They should deliver important information concisely but still be complete sentences. This helps maintain clarity and effective communication within the team. 
         ///
-        ///This rule contradicts rule MiKo_2303..
+        ///This rule contradicts MiKo_2303..
         /// </summary>
         internal static string MiKo_2306_Description {
             get {
@@ -8580,7 +8578,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To shorten comments - and still be to the point - comments should use the phrase &apos;failed&apos; instead of &apos;was not successful&apos;..
+        ///   Looks up a localized string similar to To make comments concise and precise, use &apos;failed&apos; instead of &apos;was not successful&apos;. This keeps it brief and straight to the point, making it easier for developers to understand quickly..
         /// </summary>
         internal static string MiKo_2307_Description {
             get {
@@ -8616,8 +8614,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Most times, a comment describes something that is related to an operation.
-        ///That&apos;s why the comment should not be placed after the operation, but before. So the reader can easily associate the comment with the operation and does not need to guess if both are related or not..
+        ///   Looks up a localized string similar to Comments typically describe something related to an operation. Therefore, they should be placed before the operation, not after. This placement ensures that the reader can easily associate the comment with the corresponding operation, eliminating any guesswork about their relation and keeping everything clear and straightforward..
         /// </summary>
         internal static string MiKo_2308_Description {
             get {
@@ -8680,8 +8677,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Instead of stating *that* the intention exists, comments should better explain *what* the intention behind actually is.
-        ///So developers have more background information at hand, allowing them to make better decisions based on that information..
+        ///   Looks up a localized string similar to Instead of simply stating *that* an intention exists, documentation should clearly explain *what* the intention actually is. This provides developers with valuable background information, enabling them to make more informed decisions based on that context.
+        ///Clear intentions help convey the purpose and reasoning behind code, which is crucial for effective collaboration and maintenance..
         /// </summary>
         internal static string MiKo_2310_Description {
             get {
@@ -8717,8 +8714,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
-        ///They should not be used to separate code..
+        ///   Looks up a localized string similar to Comments should provide insight into the rationale behind the code, explaining why it is written that way. Using comments to separate code is not their intended purpose.
+        ///Instead, comments should enhance understanding, giving context and reasoning for better comprehension and maintainability and keeping everything focused and informative..
         /// </summary>
         internal static string MiKo_2311_Description {
             get {
@@ -8745,8 +8742,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If #region shall be used, then any empty #region shall be avoided.
-        ///Such empty regions solely clutter the code without providing any benefit at all..
+        ///   Looks up a localized string similar to If #region directives are used, avoid any empty #region. They just clutter the code without adding any value. When regions are truly needed, keep them meaningful and populated to ensure the code remains clean and efficient. This approach maintains clarity and organization in the codebase..
         /// </summary>
         internal static string MiKo_3000_Description {
             get {
@@ -8809,7 +8805,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If a class has too many dependencies, that class is doing too much and does not follow the SRP..
+        ///   Looks up a localized string similar to If a class has too many dependencies, it&apos;s taking on too many responsibilities and violating the Single Responsibility Principle (SRP). This indicates a need for refactoring the class into smaller, more focused units, ensuring the codebase remains clean and manageable..
         /// </summary>
         internal static string MiKo_3002_Description {
             get {
@@ -8872,10 +8868,9 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to EventArgs exist only to raise events and to pass some data that to the listening event handlers.
-        ///If the carried event data now changes between the different handlers, the behavior gets unpredictable and a race condition occurs.
+        ///   Looks up a localized string similar to EventArgs are meant solely for raising events and passing data to event handlers. If the event data changes between handlers, it leads to unpredictable behavior and potential race conditions.
         ///
-        ///To avoid that situation, the properties of EventArgs shall be read-only or only privately settable. If you have to set the event data, provide a method to do so and ensure that the method acts as circuit breaker (that is you can set the data exactly once)..
+        ///To prevent this, make EventArgs properties read-only or only privately settable. If you need to set the event data, provide a method that acts as a circuit breaker, allowing the data to be set only once. This approach ensures consistent and reliable behavior..
         /// </summary>
         internal static string MiKo_3004_Description {
             get {
@@ -8902,9 +8897,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, methods that are named &apos;Try&apos; should follow the Trier-Doer-Pattern.
-        ///
-        ///That is they should return a Boolean and have the last parameter as [out] parameter for the result. In the success case the method should return &apos;true&apos; and provide valid out data; in all other cases the method should return &apos;false&apos;..
+        ///   Looks up a localized string similar to &apos;Try&apos; methods should follow the Try-Doer pattern to ease maintenance. They should return a Boolean and use the last parameter as an [out] parameter for the result. If successful, the method returns &apos;true&apos; and provides valid output; otherwise, it returns &apos;false&apos;.
+        ///This pattern keeps methods consistent and predictable, enhancing readability and reliability..
         /// </summary>
         internal static string MiKo_3005_Description {
             get {
@@ -8931,7 +8925,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, and being consistent with the .NET Framework classes, &apos;CancellationToken&apos; parameters should come after all the other parameters of a method..
+        ///   Looks up a localized string similar to To ensure consistency with .NET Framework classes and ease maintenance, place &apos;CancellationToken&apos; parameters after all other method parameters. This practice keeps your codebase predictable and aligned with established conventions, making it easier for developers to understand and maintain..
         /// </summary>
         internal static string MiKo_3006_Description {
             get {
@@ -8958,7 +8952,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintainability and readability, methods should be written using only one single language. Hence LINQ method syntax and declarative query syntax should not be used within the same method..
+        ///   Looks up a localized string similar to To improve maintainability and readability, stick to a single language when writing methods. Avoid mixing LINQ method syntax with declarative query syntax within the same method. This practice ensures consistency, making the code clean, easier to read, and more straightforward to maintain..
         /// </summary>
         internal static string MiKo_3007_Description {
             get {
@@ -8985,7 +8979,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods should not return changeable collections such as &apos;ICollection&lt;T&gt;&apos; because those can be changed from outside. Instead they should return the read-only variants (e.g. &apos;IReadOnlyCollection&lt;T&gt;&apos;)..
+        ///   Looks up a localized string similar to Methods should avoid returning mutable collections like &apos;ICollection&lt;T&gt;&apos; since these can be modified from outside the method. Instead, they should return read-only variants like &apos;IReadOnlyCollection&lt;T&gt;&apos;. This practice ensures data integrity and encapsulation, making the code more secure and predictable..
         /// </summary>
         internal static string MiKo_3008_Description {
             get {
@@ -9012,7 +9006,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods that are invoked by commands should not be lambda expressions as that makes them hard to read, understand and maintain. Instead they should be named methods that have a meaningful name..
+        ///   Looks up a localized string similar to Avoid using anonymous lambdas for methods invoked by commands. They can be hard to read, understand, and maintain. Instead, use named methods with meaningful names. This practice enhances code readability and maintainability, making the code clear and straightforward for developers..
         /// </summary>
         internal static string MiKo_3009_Description {
             get {
@@ -9039,7 +9033,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Specific kinds of exceptions are reserved and thrown by the execution engine (CLR) and in most cases indicate a bug..
+        ///   Looks up a localized string similar to Certain exceptions are reserved for and thrown by the Common Language Runtime (CLR) and often signal bugs. Developers should not throw these exceptions themselves to maintain code cleanliness and avoid confusion. Following this principle ensures clear and robust code management..
         /// </summary>
         internal static string MiKo_3010_Description {
             get {
@@ -9084,7 +9078,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Thrown ArgumentExceptions (or its subtypes) should contain the name of the parameter that caused the exception to be thrown..
+        ///   Looks up a localized string similar to Thrown ArgumentExceptions (or its subtypes) should always include the name of the parameter that caused the exception. This practice helps other developers quickly identify the problematic argument, facilitating easier debugging and improving overall code maintainability..
         /// </summary>
         internal static string MiKo_3011_Description {
             get {
@@ -9129,7 +9123,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Thrown ArgumentOutOfRangeExceptions (or its subtypes) should contain the actual value of the parameter that caused the exception to be thrown..
+        ///   Looks up a localized string similar to Thrown ArgumentOutOfRangeExceptions (or its subtypes) should always include the actual value of the parameter that caused the exception. This practice helps other developers quickly identify the problematic argument, facilitating easier debugging and improving overall code maintainability..
         /// </summary>
         internal static string MiKo_3012_Description {
             get {
@@ -9165,7 +9159,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &apos;default&apos; clause in &apos;switch&apos; statements should throw an ArgumentOutOfRangeException (or subtype) to indicate that the given argument is out of range, but no ArgumentException..
+        ///   Looks up a localized string similar to In &apos;switch&apos; statements, the &apos;default&apos; clause should throw an ArgumentOutOfRangeException (or subtype) instead of an ArgumentException. This indicates that the argument provided is outside the expected range, ensuring error handling is clear and accurate. Keeps the code precise and informative for developers..
         /// </summary>
         internal static string MiKo_3013_Description {
             get {
@@ -9201,7 +9195,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, a thrown InvalidOperationException, NotImplementedException or NotSupportedException should have a reason that explains the circumstances why the exception has been thrown and - ideally - how to solve the situation..
+        ///   Looks up a localized string similar to For easier maintenance, include a reason when throwing an InvalidOperationException, NotImplementedException, or NotSupportedException. This reason should explain the circumstances of the exception and ideally provide guidance on how to resolve it.
+        ///This practice ensures that developers understand why the exception was thrown and how to address it, making the code easier to maintain and debug..
         /// </summary>
         internal static string MiKo_3014_Description {
             get {
@@ -9237,8 +9232,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ArgumentExceptions (or its subtypes) should not be thrown by parameterless methods.
-        ///If the method call does not have any argument or if the failure does not involve the arguments themselves, then InvalidOperationException should be used..
+        ///   Looks up a localized string similar to Avoid throwing ArgumentException (or its subtypes) in parameterless methods. If a method does not take any arguments, or if the failure is not related to the arguments themselves, use InvalidOperationException instead. This keeps exception handling logical and context-appropriate, making the code cleaner and easier to maintain..
         /// </summary>
         internal static string MiKo_3015_Description {
             get {
