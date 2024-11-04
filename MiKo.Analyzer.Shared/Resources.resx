@@ -4659,7 +4659,7 @@ Instead, use non-generic types as type arguments. This approach makes the code's
     <value>Place and order method side-by-side with overloads</value>
   </data>
   <data name="MiKo_4001_Description" xml:space="preserve">
-    <value>Methods that have the same name but a different number of parameters should be ordered in a way so that each method with fewer parameters is ordered before a method with more parameters.</value>
+    <value>Order methods with the same name but different parameters so that those with fewer parameters come first. This shows all overloads in logical order and improves readability, making the code easier to understand and maintain.</value>
   </data>
   <data name="MiKo_4001_MessageFormat" xml:space="preserve">
     <value>Order methods in following way:
@@ -4673,7 +4673,7 @@ Instead, use non-generic types as type arguments. This approach makes the code's
     <value>Place method side-by-side with overloads</value>
   </data>
   <data name="MiKo_4002_Description" xml:space="preserve">
-    <value>Methods that have the same name should be placed side-by-side so that those methods can be easily found together.</value>
+    <value>Place methods with the same name and accessibility side-by-side. This keeps them grouped together, making the code easier to find, understand, and maintain.</value>
   </data>
   <data name="MiKo_4002_MessageFormat" xml:space="preserve">
     <value>Place method '{0}' side-by-side with following other methods:
@@ -4687,7 +4687,8 @@ Instead, use non-generic types as type arguments. This approach makes the code's
     <value>Place 'Dispose' directly after all ctors and finalizers</value>
   </data>
   <data name="MiKo_4003_Description" xml:space="preserve">
-    <value>Ctors, finalizers and Dispose methods are all directly related to the lifetime of an object. Therefore, they belong together and should be placed side by side.</value>
+    <value>Constructors, finalizers, and Dispose methods are all tied to an object's lifetime. They should be placed side by side to keep related code together.
+This organization ensures clarity and makes the code easier to find, understand and maintain.</value>
   </data>
   <data name="MiKo_4003_MessageFormat" xml:space="preserve">
     <value>Place 'Dispose' directly after all ctors and finalizers</value>
@@ -4699,7 +4700,8 @@ Instead, use non-generic types as type arguments. This approach makes the code's
     <value>Place 'Dispose' method first</value>
   </data>
   <data name="MiKo_4004_Description" xml:space="preserve">
-    <value>Dispose methods are all directly related to the lifetime of an object. Therefore, they should be placed before all other methods of the same accessibility.</value>
+    <value>Dispose methods are tied to the object's lifetime. Therefore, place them before all other methods of the same accessibility to keep related code together.
+This organization ensures clarity and makes the code easier to find, understand and maintain.</value>
   </data>
   <data name="MiKo_4004_MessageFormat" xml:space="preserve">
     <value>Place 'Dispose' method first</value>
@@ -4711,7 +4713,7 @@ Instead, use non-generic types as type arguments. This approach makes the code's
     <value>Place interface directly after type declaration</value>
   </data>
   <data name="MiKo_4005_Description" xml:space="preserve">
-    <value>To ease reading, the interface that gives the type its name should be listed as first interface. All the other implemented interfaces should be placed behind.</value>
+    <value>List the interface that gives the type its name first, followed by all other implemented interfaces. This organization ensures clarity and makes the code easier to understand.</value>
   </data>
   <data name="MiKo_4005_MessageFormat" xml:space="preserve">
     <value>Place '{1}' as first interface directly after type declaration</value>
@@ -4723,7 +4725,7 @@ Instead, use non-generic types as type arguments. This approach makes the code's
     <value>Place operator before methods</value>
   </data>
   <data name="MiKo_4007_Description" xml:space="preserve">
-    <value>Operators are a very special kind of methods. As they are static, they should be placed before all other methods.</value>
+    <value>Operators are special static methods. They should be placed before all other methods and grouped together. This ensures clarity and makes the code easier to understand.</value>
   </data>
   <data name="MiKo_4007_MessageFormat" xml:space="preserve">
     <value>Place operator before methods</value>
@@ -4735,7 +4737,7 @@ Instead, use non-generic types as type arguments. This approach makes the code's
     <value>Place 'GetHashCode' after 'Equals'</value>
   </data>
   <data name="MiKo_4008_Description" xml:space="preserve">
-    <value>The methods 'GetHashCode' and 'Equals' are used in conjunction to place instances based on their hashes inside dictionaries or hashsets. 'GetHashCode' is used to calculate a hash and in case of a hash collision, 'Equals' is used to identify the instance. So both methods are strongly related and therefore should be located nearby.</value>
+    <value>'GetHashCode' and 'Equals' are used together to manage instances in dictionaries or hashsets. 'GetHashCode' computes a hash, and if a collision occurs, 'Equals' identifies the instance. Because they are closely related, they should be located near each other in your code.</value>
   </data>
   <data name="MiKo_4008_MessageFormat" xml:space="preserve">
     <value>Place 'GetHashCode' after 'Equals'</value>
@@ -4747,7 +4749,7 @@ Instead, use non-generic types as type arguments. This approach makes the code's
     <value>Place method after one-time methods and before test cleanup and all other test methods</value>
   </data>
   <data name="MiKo_4101_Description" xml:space="preserve">
-    <value>Test initialization method define the most common parts that tests shall contain. So to ease their finding they should be ordered directly after all one-time methods and before all other methods.</value>
+    <value>Test initialization methods define the common parts of tests. To make them easy to find, place them directly after all one-time test initialization/cleanup methods and before all test methods.</value>
   </data>
   <data name="MiKo_4101_MessageFormat" xml:space="preserve">
     <value>Place test initialization method after [OneTimeSetUp] / [OneTimeTearDown] methods and before test cleanup and all other test methods</value>
@@ -4759,7 +4761,7 @@ Instead, use non-generic types as type arguments. This approach makes the code's
     <value>Place method after test initialization methods and before all test methods</value>
   </data>
   <data name="MiKo_4102_Description" xml:space="preserve">
-    <value>Test cleanup methods define the common parts that shall be executed after any test has been finished. So to ease their finding they should be ordered before the test methods.</value>
+    <value>Test cleanup methods define common tasks to be executed after any test finishes. To make them easy to find, place them directly after any test initialization method and before all test methods.</value>
   </data>
   <data name="MiKo_4102_MessageFormat" xml:space="preserve">
     <value>Place test cleanup method after test initialization methods and before all test methods</value>
@@ -4771,7 +4773,7 @@ Instead, use non-generic types as type arguments. This approach makes the code's
     <value>Place method before all other methods</value>
   </data>
   <data name="MiKo_4103_Description" xml:space="preserve">
-    <value>One-Time test initialization method define the most common parts that the test environment shall have. So to ease their finding they should be ordered first.</value>
+    <value>One-time test initialization methods set up the key parts of the test environment. To make them easy to find, place these methods first.</value>
   </data>
   <data name="MiKo_4103_MessageFormat" xml:space="preserve">
     <value>Place [OneTimeSetUp] method before all other methods</value>
@@ -4783,7 +4785,7 @@ Instead, use non-generic types as type arguments. This approach makes the code's
     <value>Place method directly after [OneTimeSetUp] method and before all other methods</value>
   </data>
   <data name="MiKo_4104_Description" xml:space="preserve">
-    <value>One-Time test cleanup methods define the common parts that shall be executed after all tests have been finished, to clean up the test environment. So to ease their finding they should be ordered directly after the One-Time test initialization methods.</value>
+    <value>One-time test cleanup methods handle the common tasks that must be executed after all tests are done to clean up the test environment. To make them easy to find, place them directly after the one-time test initialization methods.</value>
   </data>
   <data name="MiKo_4104_MessageFormat" xml:space="preserve">
     <value>Place [OneTimeTearDown] method directly after [OneTimeSetUp] method and before all other methods</value>
@@ -4795,7 +4797,7 @@ Instead, use non-generic types as type arguments. This approach makes the code's
     <value>Place inside 'if'</value>
   </data>
   <data name="MiKo_5001_Description" xml:space="preserve">
-    <value>For performance reasons, 'IsDebugEnabled' should be invoked before the 'Debug' or 'DebugFormat' methods get invoked as those require messages to be created. That creation (and the garbage collection of them as well) is not needed if the 'Debug' log level is not set.</value>
+    <value>To improve performance, call 'IsDebugEnabled' before invoking 'Debug' or 'DebugFormat'. This prevents creating unnecessary messages and garbage collection if the 'Debug' log level isn't set.</value>
   </data>
   <data name="MiKo_5001_MessageFormat" xml:space="preserve">
     <value>Invoke '{2}' before invoking '{1}'</value>
@@ -4807,7 +4809,7 @@ Instead, use non-generic types as type arguments. This approach makes the code's
     <value>Replace with non-'Format' method</value>
   </data>
   <data name="MiKo_5002_Description" xml:space="preserve">
-    <value>For performance reasons, 'xxxFormat' methods (such as 'DebugFormat') should be invoked only with arguments to format the string. Otherwise, the corresponding non-formatting methods (such as 'Debug') should be invoked.</value>
+    <value>To improve performance, use 'xxxFormat' methods (like 'DebugFormat') only with arguments for formatting the string. Otherwise, use the non-formatting methods (like 'Debug'). This approach avoids unnecessary overhead and keeps your code efficient.</value>
   </data>
   <data name="MiKo_5002_MessageFormat" xml:space="preserve">
     <value>Invoke '{2}' instead</value>
@@ -4816,8 +4818,7 @@ Instead, use non-generic types as type arguments. This approach makes the code's
     <value>'xxxFormat' methods should be invoked with multiple arguments only</value>
   </data>
   <data name="MiKo_5003_Description" xml:space="preserve">
-    <value>Log methods (such as 'Debug', 'Info', 'Warn', ...) provide an overload that takes an Exception. In case an Exception shall be logged, those Log methods should be invoked instead of those without Exception parameter.
-That allows the Log framework to log not only the name of the exception but also additional information (such as it's stack trace).</value>
+    <value>When logging exceptions, use Log methods that accept an exception parameter (like 'Debug', 'Info', 'Warn', etc.). This allows the Log framework to capture not just the exception name but also additional details like the stack trace, keeping your logs detailed and informative.</value>
   </data>
   <data name="MiKo_5003_MessageFormat" xml:space="preserve">
     <value>Invoke '{1}' overload with exception parameter</value>
@@ -4829,9 +4830,7 @@ That allows the Log framework to log not only the name of the exception but also
     <value>Replace 'Equals' by '=='</value>
   </data>
   <data name="MiKo_5010_Description" xml:space="preserve">
-    <value>For performance reasons, it makes no sense to use 'object.Equals()' on value types. Value types get boxed and unboxed when being casted to objects. That puts unnecessary pressure on the garbage collector as temporary objects are created and immediately get garbage collected.
-
-Instead the equality operator should be used to compare value types.</value>
+    <value>Using 'object.Equals()' on value types causes unnecessary boxing and unboxing, which pressures the garbage collector. Instead, use the equality operator for comparing value types. This improves performance by avoiding temporary object creation and garbage collection.</value>
   </data>
   <data name="MiKo_5010_MessageFormat" xml:space="preserve">
     <value>Use '==' operator instead of '{1}'</value>
@@ -4840,7 +4839,7 @@ Instead the equality operator should be used to compare value types.</value>
     <value>Do not use 'object.Equals()' on value types</value>
   </data>
   <data name="MiKo_5011_Description" xml:space="preserve">
-    <value>For performance reasons (and to avoid large pressure on the garbage collector) strings should be concatenated with 'string.Concat()', 'string.Join()' or by using a 'StringBuilder'.</value>
+    <value>Do not use += for string concatenation. It creates unnecessary string allocations, putting pressure on the garbage collector. Instead, use 'string.Concat()', 'string.Join()', or 'StringBuilder' to boost performance and reduce garbage collector load.</value>
   </data>
   <data name="MiKo_5011_MessageFormat" xml:space="preserve">
     <value>Use 'string.Concat()' or 'string.Join()' instead</value>
@@ -4849,7 +4848,7 @@ Instead the equality operator should be used to compare value types.</value>
     <value>Do not concatenate strings with += operator</value>
   </data>
   <data name="MiKo_5012_Description" xml:space="preserve">
-    <value>From performance point of view it is a bad idea to let methods that use yield invoke themselves recursively. The underlying iterators are called much more times than intended, thus leading to an unexpectedly bad performance.</value>
+    <value>To improve performance, avoid letting methods with yield call themselves recursively. This causes the underlying iterators to be called more times than expected, resulting in poor runtime performance.</value>
   </data>
   <data name="MiKo_5012_HelpLinkUri" xml:space="preserve">
     <value>https://stackoverflow.com/questions/3969963/when-not-to-use-yield-return</value>
@@ -4864,7 +4863,7 @@ Instead the equality operator should be used to compare value types.</value>
     <value>Use 'Array.Empty&lt;&gt;()'</value>
   </data>
   <data name="MiKo_5013_Description" xml:space="preserve">
-    <value>To avoid unnecessary memory consumption and pressure on the garbage collector, empty arrays should not be created manually. Instead, the method 'Array.Empty&lt;T&gt;()' should be used.</value>
+    <value>Avoid creating empty arrays manually to prevent unnecessary memory consumption and garbage collector pressure. Use 'Array.Empty&lt;T&gt;()' or '[]' instead. This approach is more efficient.</value>
   </data>
   <data name="MiKo_5013_MessageFormat" xml:space="preserve">
     <value>Do not create empty array</value>
@@ -4876,7 +4875,7 @@ Instead the equality operator should be used to compare value types.</value>
     <value>Use 'Array.Empty&lt;&gt;()'</value>
   </data>
   <data name="MiKo_5014_Description" xml:space="preserve">
-    <value>To avoid unnecessary memory consumption and pressure on the garbage collector, empty lists should not be created manually. Instead, the method 'Array.Empty&lt;T&gt;()' should be used.</value>
+    <value>Avoid creating empty lists manually to prevent unnecessary memory consumption and garbage collector pressure. Use 'Array.Empty&lt;T&gt;()' or '[]' instead. This approach is more efficient.</value>
   </data>
   <data name="MiKo_5014_MessageFormat" xml:space="preserve">
     <value>Do not create empty lists</value>
@@ -4888,7 +4887,7 @@ Instead the equality operator should be used to compare value types.</value>
     <value>Remove unneeded call to string.Intern()</value>
   </data>
   <data name="MiKo_5015_Description" xml:space="preserve">
-    <value>Interning string literals does not make sense as these literals are already interned.</value>
+    <value>Do not intern string literals. They're already interned, so doing it again does not add any value.</value>
   </data>
   <data name="MiKo_5015_MessageFormat" xml:space="preserve">
     <value>Do not intern string literal</value>
@@ -4897,8 +4896,7 @@ Instead the equality operator should be used to compare value types.</value>
     <value>Do not intern string literals</value>
   </data>
   <data name="MiKo_5016_Description" xml:space="preserve">
-    <value>For performance reasons, when using a '.Contains()' call inside an call of 'List.RemoveAll(...)', that 'Contains' call should be done on a HashSet. This is because that call has a complexity of O(1) for the lookup.
-When used e.g. on a list, that 'Contains' call has to loop over that list again and again for each single element to look up, leading to a much worse runtime experience.</value>
+    <value>To improve performance, use 'Contains()' on a 'HashSet' inside 'List.RemoveAll(...)' calls. HashSet lookup is O(1) while list lookup is O(n), which leads to better runtime performance. Using '.Contains()' on a list requires looping over it repeatedly, slowing things down.</value>
   </data>
   <data name="MiKo_5016_MessageFormat" xml:space="preserve">
     <value>Use a HashSet for the lookup</value>
@@ -4910,7 +4908,7 @@ When used e.g. on a list, that 'Contains' call has to loop over that list again 
     <value>Convert to constant</value>
   </data>
   <data name="MiKo_5017_Description" xml:space="preserve">
-    <value>To avoid unnecessary memory consumptions, string literals that are used as field or variable values should be constant.</value>
+    <value>To avoid unnecessary memory consumption, make string literals used as field or variable values constant. This keeps memory usage efficient and ensures better performance.</value>
   </data>
   <data name="MiKo_5017_MessageFormat" xml:space="preserve">
     <value>Convert to constant</value>
