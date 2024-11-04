@@ -7024,7 +7024,7 @@ namespace MiKoSolutions.Analyzers {
         
         /// <summary>
         ///   Looks up a localized string similar to The &lt;summary&gt; documentation of an Enum member should avoid phrases used in the Enum&apos;s own summary - like &apos;Defines&apos;, &apos;Indicates&apos;, or &apos;Specifies.&apos; Instead, it should focus on describing the meaning and purpose of the individual member, providing clear and specific details.
-        ///This ensures the documentation is precise and informative, helping developers understand each member’s role and functionality..
+        ///This ensures the documentation is precise and informative, helping developers understand each member&apos;s role and functionality..
         /// </summary>
         internal static string MiKo_2082_Description {
             get {
@@ -10391,8 +10391,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To avoid typos, fields that are the back of a DependencyProperty should be registered via &apos;DependencyProperty.Register()&apos; and the &apos;nameof&apos; operator.
-        ///In addition, the correct property names, property types and owing types should be provided..
+        ///   Looks up a localized string similar to To avoid typos, register fields backing a DependencyProperty using &apos;DependencyProperty.Register()&apos; and the &apos;nameof&apos; operator. Ensure you provide the correct property names, property types, and owning types..
         /// </summary>
         internal static string MiKo_3051_Description {
             get {
@@ -10437,7 +10436,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fields that are the back of a DependencyPropertyKey should be made non-public, &apos;static readonly&apos; to prevent clients to find and access those fields..
+        ///   Looks up a localized string similar to Make fields backing a DependencyPropertyKey non-public, static, and readonly. This prevents clients from finding and accessing these fields, ensuring your code stays secure and well-encapsulated..
         /// </summary>
         internal static string MiKo_3052_Description {
             get {
@@ -10473,8 +10472,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To avoid typos, fields that are the Key of a DependencyProperty should be registered via &apos;DependencyProperty.RegisterReadOnly()&apos; and the &apos;nameof&apos; operator.
-        ///In addition, the correct property names, property types and owing types should be provided..
+        ///   Looks up a localized string similar to To prevent typos, register fields that are the key of a DependencyProperty using &apos;DependencyProperty.RegisterReadOnly()&apos; and the &apos;nameof&apos; operator. Also, ensure you provide the correct property names, property types, and owning types..
         /// </summary>
         internal static string MiKo_3053_Description {
             get {
@@ -10519,9 +10517,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Read-only dependency properties are defined by &apos;DependencyPropertyKey&apos; fields and should not be visible to the public.
-        ///To made them available, it is recommended to expose a dependency property identifier for such read-only dependency property.
-        ///That can be done by exposing the value of &apos;DependencyPropertyKey.DependencyProperty&apos; as a &apos;public static readonly&apos; field on the specific class..
+        ///   Looks up a localized string similar to Read-only dependency properties are defined by DependencyPropertyKey fields and should remain non-public. To make them accessible, expose a dependency property identifier for the read-only property. Do this by exposing the value of &apos;DependencyPropertyKey.DependencyProperty&apos; as a &apos;public static readonly&apos; field in the specific class.
+        ///This maintains encapsulation while allowing access to the property..
         /// </summary>
         internal static string MiKo_3054_Description {
             get {
@@ -10557,8 +10554,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to In WPF view models are used for bindings. In case a view model does not implement the INotifyPropertyChanged interface, the binding is created via reflection. This is done by WPF to be able to detect changes of property values. But due to that a memory leak occurs as the binding instance (called descriptor) is hold in a static hash table for as long as the application runs.
-        ///To avoid that &quot;by design&quot; memory leak in WPF, types should implement INotifyPropertyChanged and raise the corresponding events wheneve [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to In WPF, view models use bindings. If a view model does not implement &apos;INotifyPropertyChanged&apos;, WPF uses reflection to detect changes, causing a memory leak. The binding instance (descriptor) stays in a static hash table for the app&apos;s lifetime.
+        ///To avoid this, make sure types implement &apos;INotifyPropertyChanged&apos; and raise the corresponding events when changes occur..
         /// </summary>
         internal static string MiKo_3055_Description {
             get {
@@ -10594,13 +10591,17 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you use Debug.Assert() or Trace.Assert(), then you want to ensure something. Nevertheless, this has several drawbacks:
-        ///1. Debug.Assert() does not work in Release mode (whereas Trace.Assert() does).
-        ///2. You cannot do anything here except to confirm the situation.
-        ///3. There is no failure handling available.
-        ///4. Calling code is not informed about the code and cannot handle the situation properly.
+        ///   Looks up a localized string similar to Using &apos;Debug.Assert()&apos; or &apos;Trace.Assert()&apos; to ensure something has several drawbacks:
         ///
-        ///So instead of using Debug.Assert() or Trace.Assert() throw an exception, such as an InvalidOperationExceptio [rest of string was truncated]&quot;;.
+        ///1. &apos;Debug.Assert()&apos; does not work in Release mode, while &apos;Trace.Assert()&apos; does.
+        ///
+        ///2. These assertions only confirm the situation; no action can be taken.
+        ///
+        ///3. There is no failure handling mechanism.
+        ///
+        ///4. Calling code is unaware of the issue and cannot handle it properly.
+        ///
+        ///Instead of using &apos;Debug.Assert()&apos; or &apos;Trace.Assert()&apos;, throw an exception like &apos;InvalidOperationException&apos;. This provides proper failure handling [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MiKo_3060_Description {
             get {
@@ -10627,10 +10628,9 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Often, loggers are requested via a type. Unfortunately, that most likely results in the situation that the logs contain no useful categories. Even worse, developers try to control the log output via the different severities (Debug, Info, ...).
-        ///As a result, the logs contain a lot of garbage. So, while analyzing log files it is unclear which log statement belongs into which category.
+        ///   Looks up a localized string similar to Loggers are often requested via a type, which results in logs lacking useful categories. Developers might control log output using different severities (Debug, Info, etc.), leading to cluttered logs. This makes it unclear which log statement belongs to which category.
         ///
-        ///Therefore, the logger should be requested via a string that acts as category..
+        ///Instead, request the logger via a string as the category. This approach ensures clear and organized logs, making analysis easier and more effective..
         /// </summary>
         internal static string MiKo_3061_Description {
             get {
@@ -10666,7 +10666,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log messages that log exceptions should end with a colon, to indicate that there is an exception..
+        ///   Looks up a localized string similar to End log messages that log exceptions with a colon. This clearly indicates that an exception follows, making it easier for developers to identify and understand the context..
         /// </summary>
         internal static string MiKo_3062_Description {
             get {
@@ -10702,7 +10702,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log messages that do not log exceptions should end with a dot because there is no exception to focus on..
+        ///   Looks up a localized string similar to End log messages that do not include exceptions with a dot. This keeps the focus clear and consistent, ensuring that logs are easy to read and understand. It helps distinguish between general log messages and those that include exception details, maintaining clarity in your logging practices..
         /// </summary>
         internal static string MiKo_3063_Description {
             get {
@@ -10774,11 +10774,11 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Microsoft Logging API supports Semantic or Structured Logging via message templates. These message template can contain placeholders for which arguments are provided.
+        ///   Looks up a localized string similar to The Microsoft Logging API supports Semantic or Structured Logging via message templates, which include named placeholders for arguments. These templates look like interpolated strings but without the &apos;$&apos; and with added arguments, which can be confusing.
         ///
-        ///Although these placeholders are names (not numbers) and require arguments, the message template looks almost identical to an interpolated string (except of the &apos;$&apos; and the additional arguments) which can be confusing.
+        ///The arguments are passed to the logging system, not just the formatted message. This allows logging providers to store parameter values as fields for filtering.
         ///
-        ///The arguments themselves are passed to the logging system, not just the formatted message template. This enables logg [rest of string was truncated]&quot;;.
+        ///Using interpolated strings instead of message templates prevents this filtering and contrad [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MiKo_3065_Description {
             get {
@@ -10805,8 +10805,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods that return IEnumerable are expected to be used in foreach loops or Linq queries.
-        ///It is unexpected that such places throw a NullReferenceException or ArgumentNullException, so these methods should never return null..
+        ///   Looks up a localized string similar to Methods returning &apos;IEnumerable&apos; are meant for foreach loops or LINQ queries. These methods should never return null, as it could lead to NullReferenceException or ArgumentNullException. Ensuring they do not return null keeps your code predictable and safe from unexpected runtime errors..
         /// </summary>
         internal static string MiKo_3070_Description {
             get {
@@ -10833,8 +10832,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods that return Task are expected to be used for async calls.
-        ///It is unexpected that when calling such methods you get a NullReferenceException thrown, so these methods should never return null..
+        ///   Looks up a localized string similar to Methods that return &apos;Task&apos; are intended for async calls. These methods should never return null, as this could lead to a NullReferenceException. Ensuring they do not return null keeps your code predictable and safe from unexpected runtime errors, maintaining reliability and smooth functionality..
         /// </summary>
         internal static string MiKo_3071_Description {
             get {
@@ -10861,8 +10859,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods that are visible to the public should not return a List&lt;&gt; or Dictionary&lt;&gt;. Instead, they should return the interfaces IList&lt;&gt; or IDictionary&lt;&gt;.
-        ///Doing so allows to change the implementation of the return value whenever it&apos;s needed. Otherwise, the method is bound to always and forever return a List&lt;&gt; or Dictionary&lt;&gt;..
+        ///   Looks up a localized string similar to Public methods should return interfaces like &apos;IList&lt;&gt;&apos; or &apos;IDictionary&lt;&gt;&apos; instead of concrete types like &apos;List&lt;&gt;&apos; or &apos;Dictionary&lt;&gt;&apos;. This approach provides flexibility, allowing you to change the implementation of the return value without affecting the method&apos;s signature, keeping your code adaptable and maintainable..
         /// </summary>
         internal static string MiKo_3072_Description {
             get {
@@ -10889,7 +10886,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Constructors should run completely. They should not partially initialize the objects..
+        ///   Looks up a localized string similar to Avoid returning from within a constructor. Constructors should execute fully, ensuring the objects are completely initialized. Partial initialization can lead to unpredictable behavior and inconsistencies..
         /// </summary>
         internal static string MiKo_3073_Description {
             get {
@@ -10916,8 +10913,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The idea of a constructor is to create an initialized instance of that specific type. Its responsibility is not to create instances of other types.
-        ///So, having &apos;ref&apos; or &apos;out&apos; parameters on a constructor contradicts the complete concept of the constructor as these parameters solely exist to provide instances of (other types) out of that constructor in addition to the instance that is created and initialized by the constructor..
+        ///   Looks up a localized string similar to A constructor&apos;s main purpose is to create an initialized instance of its specific type. It should not be used to create instances of other types.
+        ///Therefore, including [ref] or [out] parameters in a constructor contradicts this concept. These parameters should not exist to provide instances of other types, in addition to the instance created and initialized by the constructor..
         /// </summary>
         internal static string MiKo_3074_Description {
             get {
@@ -10953,9 +10950,9 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, internal and private types should be either static or sealed unless derivation from them is required.
+        ///   Looks up a localized string similar to To ease maintenance, internal and private types should be either &apos;static&apos; or &apos;sealed&apos; unless there&apos;s a need for derivation.
         ///
-        ///As with any implementation detail, they can be easily changed if/when derivation is required in the future..
+        ///These types can be modified later if derivation becomes necessary. Keeping them static or sealed by default ensures clearer and more manageable code, still being adaptable for future changes..
         /// </summary>
         internal static string MiKo_3075_Description {
             get {
@@ -10982,9 +10979,9 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If a static member initializer uses another member that is defined below or in another type part, then the chance is high that during runtime the static member gets initialized with the wrong value. That&apos;s because the member gets initialized before the other referenced member gets initialized.
+        ///   Looks up a localized string similar to If a static member initializer uses another member defined below or in another type part, it might get initialized with the wrong value at runtime. This happens because the static member initializes before the other referenced member.
         ///
-        ///This leads to subtle bugs, such as TypeInitializerExceptions or incorrect values..
+        ///This can cause subtle bugs like &apos;TypeInitializerException&apos;s or incorrect values..
         /// </summary>
         internal static string MiKo_3076_Description {
             get {
@@ -11020,8 +11017,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Explicitly setting values for properties that return an &apos;Enum&apos; allows to easily spot the (default) value and detect any change.
-        ///So it assists in thinking about whether the value is the intended one..
+        ///   Looks up a localized string similar to Explicitly setting values for properties that return an Enum helps easily identify the default value and any changes.
+        ///This practice aids in ensuring the value is the intended one, keeping the code clear and helping to spot unintended changes quickly..
         /// </summary>
         internal static string MiKo_3077_Description {
             get {
@@ -11057,7 +11054,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Explicitly setting values for &apos;Enum&apos; members prevents change of meanings when the Enum gets modified, may it be by adding, removing, renaming or resorting different values..
+        ///   Looks up a localized string similar to Explicitly setting values for &apos;Enum&apos; members prevents changes in meaning when the Enum is modified, whether by adding, removing, renaming, or reordering values.
+        ///This approach ensures stability and clarity, keeping the Enum&apos;s behavior consistent as it evolves. It makes everything reliable and easy to understand..
         /// </summary>
         internal static string MiKo_3078_Description {
             get {
@@ -11093,7 +11091,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to HResults should be written in hexadecimal and not as negative integers. That makes them much easier to recognize, such as &apos;0x80070005&apos; instead of &apos;-2147024891&apos;..
+        ///   Looks up a localized string similar to Write HResults in hexadecimal, not as negative integers. It&apos;s much easier to recognize and search for &apos;0x80070005&apos; than &apos;-2147024891&apos;. Keeps the code clean and user-friendly..
         /// </summary>
         internal static string MiKo_3079_Description {
             get {
@@ -11120,8 +11118,9 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Code that assigns variables defined inside methods by using switch statements makes the method more complex and difficult to read.
-        ///Most times, such code can be simplified by refactoring the complete switch statement into an own method where the different switch sections simply returning the values instead of assigning them to a &apos;shared&apos; variable and do a break afterwards..
+        ///   Looks up a localized string similar to Using switch statements to assign variables within methods increases complexity and reduces readability. Simplify this by refactoring the switch statement into its own method.
+        ///Let each section of the switch return values directly, instead of assigning them to a shared variable and using break statements.
+        ///This approach enhances clarity and maintainability..
         /// </summary>
         internal static string MiKo_3080_Description {
             get {
@@ -11157,7 +11156,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Logical NOT conditions are hard to recognize if they are coded using the &apos;!&apos; character. Code that uses &apos;is false&apos; is much easier to read and understand..
+        ///   Looks up a localized string similar to Logical NOT conditions using &apos;!&apos; can be hard to recognize. Use is false instead; it&apos;s easier to read and understand..
         /// </summary>
         internal static string MiKo_3081_Description {
             get {
@@ -11193,7 +11192,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Logical comparisons using the &apos;is&apos; pattern matching are more natural and therefore easier to read and understand than using the &apos;==&apos; equality operator..
+        ///   Looks up a localized string similar to Using the &apos;is&apos; pattern matching for logical comparisons is more natural and easier to read than the &apos;==&apos; equality operator. This approach enhances code clarity and comprehension, making your code cleaner and more intuitive..
         /// </summary>
         internal static string MiKo_3082_Description {
             get {
@@ -11229,7 +11228,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Null checks using the &apos;is&apos; pattern matching are more natural and therefore easier to read and understand than using the &apos;==&apos; equality operator..
+        ///   Looks up a localized string similar to Using &apos;is&apos; pattern matching for null checks is more natural and easier to read than the &apos;==&apos; equality operator. This approach enhances code clarity and comprehension, making your code cleaner and more intuitive..
         /// </summary>
         internal static string MiKo_3083_Description {
             get {
@@ -11265,7 +11264,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To increase readability, do not place constants on the left side of an operator. Instead, place it on the right side. This makes the code look more natural..
+        ///   Looks up a localized string similar to To increase readability, place constants on the right side of an operator, not the left. This makes the code look more intuitive and easier to understand..
         /// </summary>
         internal static string MiKo_3084_Description {
             get {
@@ -11292,8 +11291,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Conditional statements which span a lot of characters are hard to read. That makes them harder to maintain.
-        ///They should be either short (to see at a glance what&apos;s going on) or refactored into if-else statements..
+        ///   Looks up a localized string similar to Long conditional statements are hard to read and maintain. Keep them short for easy understanding at a glance, or refactor into if-else statements for clarity. This approach keeps your code clean and maintainable..
         /// </summary>
         internal static string MiKo_3085_Description {
             get {
@@ -11320,7 +11318,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nested conditional (or coalesce) statements are hard to read and understand. Therefore such statements should not be nested. Instead, if-else statements should be used..
+        ///   Looks up a localized string similar to Nested conditional or coalesce statements are difficult to read and understand. Avoid nesting them. Instead, use if-else statements to improve clarity. This approach keeps your code clean and maintainable..
         /// </summary>
         internal static string MiKo_3086_Description {
             get {
@@ -11347,7 +11345,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Complex conditions that use negative logic are difficult to understand. Therefore, these should be changed into positiv logic to ease reading..
+        ///   Looks up a localized string similar to Complex conditions with negative logic are difficult to understand, cumbersome, and error-prone. Change them to positive logic to improve readability, simplify the code, and reduce errors. This approach ensures your code is clear and easier to maintain..
         /// </summary>
         internal static string MiKo_3087_Description {
             get {
@@ -11383,7 +11381,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Null checks using the &apos;is not&apos; pattern matching are more natural and therefore easier to read and understand than using the &apos;!=&apos; inequality operator..
+        ///   Looks up a localized string similar to Null checks using &apos;is not&apos; pattern matching are more intuitive and easier to read than the &apos;!=&apos; inequality operator. This makes them the preferred choice for clarity and comprehension..
         /// </summary>
         internal static string MiKo_3088_Description {
             get {
@@ -11419,7 +11417,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Normal conditions are easier to understand than simple property pattern conditions that use constants. Hence, such property conditions should be converted into normal ones..
+        ///   Looks up a localized string similar to Normal conditions are easier to understand than property pattern conditions with constants. Therefore, convert these property conditions into normal ones. This approach keeps your code clear and readable..
         /// </summary>
         internal static string MiKo_3089_Description {
             get {
@@ -11446,8 +11444,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Exceptions should be thrown inside of try or catch blocks (or normal code blocks), but not inside of finally blocks.
-        ///Those finally blocks are intended for cleaning stuff up; or to ensure that some code runs in all (except a few) situations..
+        ///   Looks up a localized string similar to Throw exceptions inside try or catch blocks, not within finally blocks. Finally blocks are meant for cleanup or to ensure certain code runs regardless of other factors. This maintains their intended purpose and keeps your code clear..
         /// </summary>
         internal static string MiKo_3090_Description {
             get {
@@ -11474,8 +11471,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Events should be raised inside of try or catch blocks (or normal code blocks), but not inside of finally blocks.
-        ///Those finally blocks are intended for cleaning stuff up..
+        ///   Looks up a localized string similar to Raise events within try or catch blocks, not finally blocks. Finally blocks are meant for cleanup, ensuring certain code always runs. This maintains their intended purpose and keeps your code clear..
         /// </summary>
         internal static string MiKo_3091_Description {
             get {
@@ -11502,7 +11498,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To avoid deadlocks, events should never be raised inside of lock statements. Instead, the event handlers should be collected and the event should be raised outside the lock..
+        ///   Looks up a localized string similar to To avoid deadlocks, do not raise events inside lock statements. Instead, collect the event handlers and raise the event outside the lock. This practice ensures smooth and efficient code execution while avoiding potential deadlocks..
         /// </summary>
         internal static string MiKo_3092_Description {
             get {
@@ -11529,7 +11525,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To avoid deadlocks, delegates should never be invoked inside of lock statements. Instead, the information needed should be collected inside the lock and the delegate should be invoked outside the lock..
+        ///   Looks up a localized string similar to To avoid deadlocks, do not invoke delegates within lock statements. Collect the necessary information inside the lock, then invoke the delegate outside the lock. This practice ensures smooth and efficient code execution while avoiding potential deadlocks..
         /// </summary>
         internal static string MiKo_3093_Description {
             get {
@@ -11556,7 +11552,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To avoid deadlocks, methods or properties of parameters should never be invoked inside of lock statements..
+        ///   Looks up a localized string similar to To avoid deadlocks, do not invoke methods or properties of parameters within lock statements. This practice ensures smooth and efficient code execution while avoiding potential deadlocks..
         /// </summary>
         internal static string MiKo_3094_Description {
             get {
@@ -11583,7 +11579,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Empty code blocks should contain at least a reasoning comment why the block is empty. This helps developers to understand the reasoning behind and they know for sure that the block is not just accidentally empty..
+        ///   Looks up a localized string similar to Empty code blocks should include a comment explaining why they are empty. This helps developers understand the reason and ensures the block is not empty by mistake..
         /// </summary>
         internal static string MiKo_3095_Description {
             get {
@@ -11610,7 +11606,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to In case switch statements with a lot of cases simply perform a mapping from one value to the other, the code is easier to read and maintain when a dictionary is used instead of the switch..
+        ///   Looks up a localized string similar to For switch statements with many cases that map values, use a dictionary instead. This approach makes the code easier to read and maintain..
         /// </summary>
         internal static string MiKo_3096_Description {
             get {
@@ -11637,7 +11633,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is no benefit in casting a value to a specific type and returning that cast value when the return type is of type object..
+        ///   Looks up a localized string similar to Casting a value to a specific type and returning it when the return type is &apos;object&apos; offers no benefit. The cast is unnecessary and adds complexity without any gain..
         /// </summary>
         internal static string MiKo_3097_Description {
             get {
@@ -11664,7 +11660,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If messages get suppressed via the [SuppressMessage] attribute, a justification has to be given. That justification has to explain why the message got suppressed so that later on developers have a chance to understand the reasoning behind the suppression..
+        ///   Looks up a localized string similar to When suppressing messages with the [SuppressMessage] attribute, a justification must be provided. This justification should explain why the message was suppressed, helping future developers understand the reasoning. Just writing &quot;Reviewed.&quot; or providing no explanation is not sufficient.
+        ///This practice ensures clarity and transparency in your codebase..
         /// </summary>
         internal static string MiKo_3098_Description {
             get {
@@ -11700,7 +11697,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enum values are never null in case the enum type is a value type. So comparing them with null will always fail..
+        ///   Looks up a localized string similar to Comparing enum values to &apos;null&apos; is pointless because enums are value types and can never be &apos;null&apos;. Such comparisons will always fail..
         /// </summary>
         internal static string MiKo_3099_Description {
             get {
@@ -11727,8 +11724,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, test classes should be in the exact same namespace as the type they test.
-        ///This allows easy usage without any arbitrary using directives. It also mimics the project structure and allows to discover the tests much easier..
+        ///   Looks up a localized string similar to To ease maintenance, place test classes in the same namespace as the type they test. This approach eliminates arbitrary &apos;using&apos; directives, mirrors the project structure, and makes discovering tests much easier..
         /// </summary>
         internal static string MiKo_3100_Description {
             get {
@@ -11755,7 +11751,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A class that is marked as a unit test class should contain unit tests..
+        ///   Looks up a localized string similar to A unit test class should contain unit tests. This ensures the class fulfills its purpose and maintains clarity in your codebase..
         /// </summary>
         internal static string MiKo_3101_Description {
             get {
@@ -11782,8 +11778,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tests should test a very specific scenario. Therefore there is no need to have a condition, because in that situation a test tests more than one scenario.
-        ///So having a condition inside a test is a huge code smell..
+        ///   Looks up a localized string similar to Tests should focus on a specific scenario. Including a condition in a test means it&apos;s testing more than one scenario, which is a code smell. Keep tests simple and specific to ensure clarity and maintainability..
         /// </summary>
         internal static string MiKo_3102_Description {
             get {
@@ -11819,8 +11814,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tests should be specific to make them reproducible and easy to maintain. A GUID that is generated is not reproducible at all and cannot be easily found in case a test fails.
-        ///Therefore, a hard-coded GUID should be used instead..
+        ///   Looks up a localized string similar to Tests should be specific to be reproducible and easy to maintain. Generated GUIDs are not reproducible and hard to track if a test fails. Instead, use a hard-coded GUID for consistency. This ensures tests are clear and reliable..
         /// </summary>
         internal static string MiKo_3103_Description {
             get {
@@ -11856,7 +11850,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to NUnit&apos;s [Combinatorial] attribute shall be used only if there is a test method that has at least 2 parameters to create the combinatorial. Otherwise there is no reason to mark a test with that attribute..
+        ///   Looks up a localized string similar to Use NUnit&apos;s [Combinatorial] attribute only when a test method has at least two parameters for combinatorial testing. If there&apos;s only one parameter, this attribute is unnecessary and adds no value..
         /// </summary>
         internal static string MiKo_3104_Description {
             get {
@@ -11892,7 +11886,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to NUnit&apos;s fluent Assert approach is easier to understand. Following that approach, developers will most times not make the common mistake to mix up the &apos;actual&apos; and &apos;expected&apos; values..
+        ///   Looks up a localized string similar to NUnit&apos;s constraint-based Assert model uses a single &apos;Assert.That&apos; method for all assertions, making it easier to understand. This helps developers avoid mixing up &apos;actual&apos; and &apos;expected&apos; values and makes the code more readable and intuitive..
         /// </summary>
         internal static string MiKo_3105_Description {
             get {
@@ -11901,7 +11895,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://github.com/nunit/docs/wiki/Constraint-Model.
+        ///   Looks up a localized string similar to https://docs.nunit.org/articles/nunit/writing-tests/assertions/assertion-models/constraint.html.
         /// </summary>
         internal static string MiKo_3105_HelpLinkUri {
             get {
@@ -11928,11 +11922,11 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assertions such as Assert.That(...) that contain operators such as ==, !=, &lt;=, &lt;, &gt;=, &gt; assert for booleans.
-        ///The same is valid for patterns such as &apos;is true&apos; or type checks via &apos;is&apos; or the Equals() method.
+        ///   Looks up a localized string similar to Assertions like &apos;Assert.That(...)&apos; with operators (==, !=, &lt;=, &lt;, &gt;=, &gt;) assert for booleans. Patterns like &apos;is true&apos;, type checks via &apos;is&apos;, or &apos;Equals()&apos; method also do the same.
         ///
-        ///If such a test fails it is difficult to understand why it failed. The failure reason gives no useful hint (e.g. &apos;true&apos; expected but &apos;false&apos; received), so the failure needs to be carefully inspected.
-        ///At worst the test needs to be debugged to find out what went wrong. That is annoying and becomes even  [rest of string was truncated]&quot;;.
+        ///When such a test fails, it&apos;s hard to understand why. The failure message doesn&apos;t help much (e.g., &apos;true&apos; expected but &apos;false&apos; received), requiring careful inspection or even debugging, which is frustrating, especially with unstable tests.
+        ///
+        ///Instead, tests should immediately state the expected value (e.g., &apos;5&apos; was expected but  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MiKo_3106_Description {
             get {
@@ -11968,7 +11962,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is troublesome to have code that attemps to use Moq mocks but actually does not use them properly. So condition matchers should be used on mocks to setup or verify conditions. Such matchers should not be used on constructors or methods of non-mocks as they don&apos;t make sense there..
+        ///   Looks up a localized string similar to Using Moq mocks improperly can cause issues. Use condition matchers on mocks to set up or verify conditions. Avoid using them on constructors or methods of non-mocks, as they don&apos;t make sense there. This ensures your mocking is effective and your code stays clear and accurate..
         /// </summary>
         internal static string MiKo_3107_Description {
             get {
@@ -11995,7 +11989,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tests should use assertions to check the behavior of the code for correctness. A missing assertion indicates a test that does not check anything and is therefore not meaningful..
+        ///   Looks up a localized string similar to Tests need assertions to verify code behavior. Without an assertion, the test does not check anything and is not useful. This ensures tests are effective and your code works as expected..
         /// </summary>
         internal static string MiKo_3108_Description {
             get {
@@ -12031,7 +12025,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assertions should contain messages that tell the reason(s) why something was expected but failed. This makes it easier to understand why a test failed in particular..
+        ///   Looks up a localized string similar to Assertions should include messages explaining why something was expected but failed. This makes it easier to understand why a test failed, helping you quickly identify the issue..
         /// </summary>
         internal static string MiKo_3109_Description {
             get {
@@ -12067,13 +12061,11 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assertions such as Assert.That(...) using &apos;Count&apos; or &apos;Length&apos; assert for exact values.
-        ///If such a test fails it is difficult to find out why it exactly failed as the failure reason gives no useful hint (e.g. &apos;5&apos; expected but &apos;3&apos; received).
+        ///   Looks up a localized string similar to Assertions using &apos;Assert.That(...)&apos; with &apos;Count&apos; or &apos;Length&apos; check for exact values. When such a test fails, the error message is not very helpful (e.g., &apos;5&apos; expected but &apos;3&apos; received).
         ///
-        ///So the failure needs to be carefully inspected. At worst the test needs to be debugged to find out what went wrong.
-        ///That is annoying and becomes even more annoying if the test itself is a shaky one.
+        ///This means you need to inspect the failure closely. Debugging might even be necessary, which is frustrating, especially if the test is unreliable.
         ///
-        ///In contrast, the failure would be much easier to understand if the [rest of string was truncated]&quot;;.
+        ///In contrast, tests should state exactly what was expected and found (e.g., &apos;Expected items A, B, and C but found B and D&apos;). This approach makes failures much easier to under [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MiKo_3110_Description {
             get {
@@ -12109,7 +12101,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For clarity, tests that assert for zero should use &apos;Is.Zero&apos; instead of &apos;Is.EqualTo(0)&apos;..
+        ///   Looks up a localized string similar to To improve clarity, use &apos;Is.Zero&apos; instead of &apos;Is.EqualTo(0)&apos; when asserting for zero in tests. This makes the code easier to read and understand..
         /// </summary>
         internal static string MiKo_3111_Description {
             get {
@@ -12145,7 +12137,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For clarity, tests that assert on collections for emptiness should use &apos;Is.Empty&apos; instead of &apos;Has.Count.Zero&apos;..
+        ///   Looks up a localized string similar to To improve clarity, use &apos;Is.Empty&apos; instead of &apos;Has.Count.Zero&apos; when asserting on collections for emptiness in tests. This makes the code easier to read and understand..
         /// </summary>
         internal static string MiKo_3112_Description {
             get {
@@ -12181,7 +12173,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to FluentAssertions uses an approach where you define a &apos;Should&apos; method, followed by the assertion. That makes those assertions more difficult to read and spot. In contrast, NUnit&apos;s fluent assertion approach via &apos;Assert.That&apos; is much easier to spot..
+        ///   Looks up a localized string similar to FluentAssertions uses a &apos;Should&apos; method followed by the assertion, which can make assertions harder to read and spot. In contrast, NUnit&apos;s fluent assertion approach using &apos;Assert.That&apos; is easier to spot and read. This makes NUnit&apos;s approach more user-friendly and accessible..
         /// </summary>
         internal static string MiKo_3113_Description {
             get {
@@ -12217,7 +12209,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance and increase readability, &apos;Mock.Of&lt;T&gt;()&apos; is easier to identify as some necessary but unimportant mock than &apos;new Mock&lt;T&gt;().Object&apos;..
+        ///   Looks up a localized string similar to Use &apos;Mock.Of&lt;T&gt;()&apos; in tests instead of &apos;new Mock&lt;T&gt;().Object&apos;. This makes it easier to spot necessary but unimportant mocks and keeps the code cleaner and easier to read..
         /// </summary>
         internal static string MiKo_3114_Description {
             get {
@@ -12244,10 +12236,9 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods that are marked as tests but are empty are considered to be kidding developers.
-        ///People may think that such methods test something but instead they do not test anything at all. This tricks them into a wrong feeling of &quot;having it tested&quot;.
+        ///   Looks up a localized string similar to Empty test methods mislead developers into thinking they test something. In reality, they don&apos;t test anything, giving a false sense of &quot;having it tested&quot;.
         ///
-        ///It may even be that the contained code is commented out, leading to the question why it is commented out at all. If that code would lead to a failing test, then either the test code is wrong or it would actually have found a bug that should to be adressed..
+        ///Commented-out code within these methods raises questions. If uncommented, it might cause the test to fail, indicating either a problem with the test code or an uncovered bug that needs addressing..
         /// </summary>
         internal static string MiKo_3115_Description {
             get {
@@ -12274,7 +12265,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods that are marked as unit test initialization methods but are empty are not needed and clutter only the code base. Hence such methods can be removed without fear..
+        ///   Looks up a localized string similar to Empty unit test initialization methods clutter the codebase and serve no purpose. They can be safely removed to keep the code clean and maintainable..
         /// </summary>
         internal static string MiKo_3116_Description {
             get {
@@ -12301,7 +12292,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods that are marked as unit test cleanup methods but are empty are not needed and clutter only the code base. Hence such methods can be removed without fear..
+        ///   Looks up a localized string similar to Empty unit test cleanup methods clutter the codebase and serve no purpose. They can be safely removed to keep the code clean and maintainable..
         /// </summary>
         internal static string MiKo_3117_Description {
             get {
@@ -12328,9 +12319,9 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tests should be as explicit as possible.
-        ///Different Linq calls such as &apos;Skip&apos; or &apos;Take&apos; or &apos;FirstOrDefault&apos; help in production code but are not clear enough when used inside a tests.
-        ///For example, if the test uses &apos;Skip&apos;, it is unclear for the reader why the code should skip some values. Hence the reader needs to find out, which costs some time and could be easily avoided when the test would be more explicit here about the outcome..
+        ///   Looks up a localized string similar to Make tests as explicit as possible.
+        ///LINQ calls like &apos;Skip&apos;, &apos;Take&apos;, or &apos;FirstOrDefault&apos; are useful in production but can be unclear in tests. Using &apos;Skip&apos; in a test, for example, can confuse readers about why values are being skipped. This ambiguity requires extra effort to understand.
+        ///Avoid this by being more explicit about the expected outcome..
         /// </summary>
         internal static string MiKo_3118_Description {
             get {
@@ -12366,7 +12357,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test methods that return non-generic tasks are doing so for testing asynchronous behavior. Therefore they should not simply return &apos;Task.CompletedTask&apos;. Such methods should instead simply return &apos;void&apos;..
+        ///   Looks up a localized string similar to Test methods returning non-generic tasks are meant to test asynchronous behavior. They should not return &apos;Task.CompletedTask&apos;. If they do, simply have them return void instead..
         /// </summary>
         internal static string MiKo_3119_Description {
             get {
@@ -12402,7 +12393,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Moq provides condition matchers to verify calls with given arguments. Those condition matchers exist to verify that parts of the argument match a specific criteria. They should not be used to test whether they match the exact value. For such cases the exact values should be provided instead of the condition matcher..
+        ///   Looks up a localized string similar to Moq&apos;s condition matchers are meant to verify that parts of an argument meet specific criteria. However, they should not be used to test for exact value matches. In those cases, provide the exact values instead of using a condition matcher.
+        ///This ensures precision in your tests and maintains clear expectations..
         /// </summary>
         internal static string MiKo_3120_Description {
             get {
@@ -12429,8 +12421,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease development and to be able to jump directly into code, an object under test should be a concrete type and no interface.
-        ///Otherwise, when attempting to jump into the code, developers just end up at the interface and have to find out which implementation they actually want to inspect / test..
+        ///   Looks up a localized string similar to For easier development and direct code access, use a concrete type for the object under test, not an interface. Otherwise, developers end up at the interface and have to find the actual implementation..
         /// </summary>
         internal static string MiKo_3121_Description {
             get {
@@ -12457,7 +12448,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test methods using more than 2 parameters most likely are combined tests. Such test are hard to read. Hence, to ease reading, these tests should be split into separate ones..
+        ///   Looks up a localized string similar to Test methods with more than 2 parameters are often combined tests and can be hard to read. To improve readability, split these tests into separate ones. This makes them easier to understand and maintain..
         /// </summary>
         internal static string MiKo_3122_Description {
             get {
@@ -12493,7 +12484,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to In case a method contains only a few statements and an if statement simply returns, that if statement can be inverted. Doing so makes the method easier to read..
+        ///   Looks up a localized string similar to If a method has just a few statements and an &apos;if&apos; statement that returns, invert the &apos;if&apos; statement. This makes the method easier to read and understand..
         /// </summary>
         internal static string MiKo_3201_Description {
             get {
@@ -12529,7 +12520,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The code is much easier to read in case it contains an if statement or conditional that has a positive condition and the code returns in all paths..
+        ///   Looks up a localized string similar to Code is easier to read when using &apos;if&apos; statements or conditionals with positive conditions. This approach enhances readability and clarity..
         /// </summary>
         internal static string MiKo_3202_Description {
             get {
@@ -12565,7 +12556,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to In case an if statement contains only a continue statement and is followed also by a single code line, that if statement can be inverted. Doing so makes the method easier to read..
+        ///   Looks up a localized string similar to If an &apos;if&apos; statement contains only a &apos;continue&apos; statement and is followed by a single line of code, invert the &apos;if&apos; statement. This makes the method easier to read and understand..
         /// </summary>
         internal static string MiKo_3203_Description {
             get {
@@ -12601,7 +12592,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to In case an if statement has a negative condition but also an else clause, that if statement can be inverted into a positive one. Doing so makes the method easier to read and understand..
+        ///   Looks up a localized string similar to If an &apos;if&apos; statement has a negative condition and an &apos;else&apos; clause, invert it into a positive condition. This makes the method easier to read and understand..
         /// </summary>
         internal static string MiKo_3204_Description {
             get {
@@ -12628,9 +12619,9 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods that share the same name within a type are called overloads. In general, overloads with fewer parameters call the ones with more parameters and provide some default values - that&apos;s why they have fewer parameters.
-        ///So, when inheriting is needed and such overload method needs to be overridden by an inherited class, then the overload to override should be the one with the most parameters.
-        ///Same applies to abstract methods..
+        ///   Looks up a localized string similar to Overloads are methods with the same name within a type. Generally, those with fewer parameters call the ones with more parameters, providing default values.
+        ///
+        ///When inheritance requires overriding such methods, override the overload with the most parameters. The same rule applies to abstract methods. This approach maintains consistency and clarity in your code..
         /// </summary>
         internal static string MiKo_3210_Description {
             get {
@@ -12657,9 +12648,9 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to In case a public type contains a finalizable resource, that type should instead have a private nested type (or an internal type when used in multiple classes) that acts as finalizable resource holder.
+        ///   Looks up a localized string similar to If a public type contains a finalizable resource, use a private nested type (or an internal type for multiple classes) as the finalizable resource holder.
         ///
-        ///The reason is that finalizers are notoriously difficult to implement correctly because they cannot make assumptions about the state of the system during their execution..
+        ///Finalizers are challenging to implement correctly because they can&apos;t assume the state of the system during execution. This approach ensures proper management of finalizable resources..
         /// </summary>
         internal static string MiKo_3211_Description {
             get {
@@ -12686,9 +12677,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Keep the basic Dispose pattern consistent and do not confuse developers by providing other &quot;Dispose&quot; methods. The only methods called &quot;Dispose&quot; should be the &quot;void IDisposable.Dispose()&quot; and the &quot;void Dispose(bool disposing)&quot; methods.
-        ///
-        ///All other methods would vary from the Dispose pattern and lead to confusion..
+        ///   Looks up a localized string similar to Stick to the basic Dispose pattern to avoid confusing developers. The only methods named &apos;Dispose&apos; should be void &apos;IDisposable.Dispose()&apos; and &apos;void Dispose(bool disposing)&apos;. Any other methods would deviate from the Dispose pattern and cause confusion..
         /// </summary>
         internal static string MiKo_3212_Description {
             get {
@@ -12715,8 +12704,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The public &apos;Dispose()&apos; method should invoke the &apos;Dispose(bool disposing)&apos; method with &apos;disposing&apos; set to &apos;true&apos; as the only call.
-        ///All the other calls should be invoked from the &apos;Dispose(bool disposing)&apos; method..
+        ///   Looks up a localized string similar to The public &apos;Dispose()&apos; method should only call &apos;Dispose(bool disposing)&apos; with &apos;disposing&apos; set to &apos;true&apos;. All other disposal logic should reside in the &apos;Dispose(bool disposing)&apos; method. This keeps the Dispose pattern consistent and clear..
         /// </summary>
         internal static string MiKo_3213_Description {
             get {
@@ -12743,9 +12731,9 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If methods start with &apos;Begin&apos; or &apos;Enter&apos; they probably have counterparts that start with &apos;End&apos; or &apos;Exit&apos;. Such methods are considered to define some kind of scope (for example, &apos;BeginUpdate&apos; and &apos;EndUpdate&apos; defines a scope for an update operation).
-        ///As it is prone to errors to forget or not correctly invoke the &apos;End&apos; methods (e.g. due to exceptions being thrown), those methods should not be made available to the public.
-        ///Instead, a method should be made available that returns an &apos;IDisposable&apos; to define that [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to Methods starting with &apos;Begin&apos; or &apos;Enter&apos; often have counterparts like &apos;End&apos; or &apos;Exit&apos;, defining a scope (e.g., &apos;BeginUpdate&apos; and &apos;EndUpdate&apos;). Public access to these methods can lead to errors if &apos;End&apos; methods are not correctly invoked.
+        ///
+        ///Instead, provide a method that returns an &apos;IDisposable&apos;. This way, developers can use a &apos;using&apos; statement to ensure the &apos;End&apos; method is always called, keeping everything clean and error-free..
         /// </summary>
         internal static string MiKo_3214_Description {
             get {
@@ -12781,7 +12769,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To standardize delegates and follow the .NET Framework Design Guidelines for callbacks, callbacks of type &apos;Predicate&lt;T&gt;&apos; should be of type &apos;Func&lt;T, bool&gt;&apos; instead..
+        ///   Looks up a localized string similar to To standardize delegates and adhere to .NET Framework Design Guidelines, use &apos;Func&lt;T, bool&gt;&apos; for callbacks instead of &apos;Predicate&lt;T&gt;&apos;. This approach ensures consistency and aligns with best practices..
         /// </summary>
         internal static string MiKo_3215_Description {
             get {
@@ -12826,7 +12814,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Static fields that get their values pre-assigned are most probably meant to solely have those values. Therefore such fields should be read-only..
+        ///   Looks up a localized string similar to Static fields with pre-assigned values are likely meant to remain unchanged. Therefore, make these fields &apos;readonly&apos;. This ensures their values remain constant and clearly communicates their intended use..
         /// </summary>
         internal static string MiKo_3216_Description {
             get {
@@ -12853,9 +12841,9 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Generic types that have other generic types as type arguments are hard to understand and maintain.
-        ///This is because it&apos;s hard to find out what&apos;s meant, in addition it seems like there is some type information hiding within the generics due to primitive obsession.
-        ///Instead, it would be much easier to see what is meant if non-generic types would be used as type arguments..
+        ///   Looks up a localized string similar to Generic types with other generic types as type arguments are hard to understand and maintain. This complexity makes it difficult to interpret their purpose and suggests hidden type information due to primitive obsession.
+        ///
+        ///Instead, use non-generic types as type arguments. This approach makes the code&apos;s intent clearer and easier to follow..
         /// </summary>
         internal static string MiKo_3217_Description {
             get {
@@ -12882,7 +12870,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Extension methods are a great way to extend types with additional functionality. Such extension methods are defined in static types specifically designed for that. However, other types that are not intended to contain extension methods should not unexpectedly contain them..
+        ///   Looks up a localized string similar to Extension methods should only be in static types designed for that purpose. Avoid placing them in other types, as this can cause confusion. Keeping extension methods where they belong ensures clarity and consistency in your code..
         /// </summary>
         internal static string MiKo_3218_Description {
             get {
@@ -12909,7 +12897,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Public members should provide the right set of functionality for direct consumers of a class. In case extensibility is needed, they should call into a protected virtual member of the same name but suffixed with &apos;Core&apos; which then act as extensibility points and are easy to spot..
+        ///   Looks up a localized string similar to Public members should offer the correct functionality for class consumers. If extensibility is needed, they should call a &apos;protected virtual&apos; member with the same name suffixed by &apos;Core&apos;. These serve as clear, easily identifiable extensibility points..
         /// </summary>
         internal static string MiKo_3219_Description {
             get {
@@ -12945,7 +12933,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Logical &apos;&amp;&amp;&apos; or &apos;||&apos; conditions using &apos;true&apos; or &apos;false&apos; can be simplified to not use &apos;true&apos; or &apos;false&apos; directly..
+        ///   Looks up a localized string similar to Simplify logical &apos;&amp;&amp;&apos; or &apos;||&apos; conditions by removing direct uses of &apos;true&apos; or &apos;false&apos;. This makes your code cleaner and easier to read..
         /// </summary>
         internal static string MiKo_3220_Description {
             get {
@@ -12981,7 +12969,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To improve the quality of the hash code returned by &apos;GetHashCode&apos;, developers should use &apos;HashCode.Combine&apos; (when the underlying data type is simple, for example, an integer value)..
+        ///   Looks up a localized string similar to To improve the quality of the hash code returned by &apos;GetHashCode&apos;, use the &apos;HashCode.Combine&apos; method. This is especially useful when dealing with simple underlying data types like integers and keeps your hash codes robust and efficient..
         /// </summary>
         internal static string MiKo_3221_Description {
             get {
@@ -13017,7 +13005,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to String comparisons for equality can be simplified by using the specific methods provided by the .NET framework. This makes the code easier to read and understand..
+        ///   Looks up a localized string similar to Simplify string comparisons for equality by using specific methods from the .NET framework. This makes your code more readable and easier to understand..
         /// </summary>
         internal static string MiKo_3222_Description {
             get {
@@ -13053,7 +13041,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Comparisons for equality on reference types can be simplified by using the specific methods provided by the .NET framework. This makes the code easier to read and understand..
+        ///   Looks up a localized string similar to Simplify equality comparisons on reference types by using specific .NET framework methods. This approach makes the code easier to read and understand..
         /// </summary>
         internal static string MiKo_3223_Description {
             get {
@@ -13089,7 +13077,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Comparisons for equality on value types can be simplified by using the specific equality operators. This makes the code easier to read and understand..
+        ///   Looks up a localized string similar to Simplify equality comparisons on value types by using specific .NET framework methods. This approach makes the code easier to read and understand..
         /// </summary>
         internal static string MiKo_3224_Description {
             get {
@@ -13125,7 +13113,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Boolean comparisons comparing the same values on both sides are redundant and can be simplified by using only one of those sides. This makes the code easier to read and understand..
+        ///   Looks up a localized string similar to Boolean comparisons that check the same values on both sides are redundant. Simplify them by using just one side. This makes the code easier to read and understand..
         /// </summary>
         internal static string MiKo_3225_Description {
             get {
@@ -13161,7 +13149,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Using parenthesized lambda expressions with blocks that contain a single statement leads to some noise caused by the braces. Lambda expressions with expression bodies avoid that noise. So they should be used instead..
+        ///   Looks up a localized string similar to For single-statement blocks, use lambda expressions with expression bodies instead of parenthesized ones. This avoids the noise of parentheses, making your code cleaner and easier to read..
         /// </summary>
         internal static string MiKo_3301_Description {
             get {
@@ -13197,7 +13185,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Using parenthesized lambda expressions with a single parameter leads to some noise caused by the braces. Simple lambda expressions with expression bodies avoid that noise. So they should be used instead..
+        ///   Looks up a localized string similar to For single-parameter lambda expressions, avoid using parentheses. Use simple lambda expressions with expression bodies instead. This keeps your code cleaner and easier to read..
         /// </summary>
         internal static string MiKo_3302_Description {
             get {
@@ -13224,8 +13212,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Namespaces should have only a limited depth. If a namespace hierarchy becomes too deep, then the namespaces are probably too concrete or special to make sense.
-        ///Such namespaces should be flattened..
+        ///   Looks up a localized string similar to Keep namespace hierarchies shallow. If a namespace hierarchy becomes too deep, it likely means the namespaces are too specific or specialized. Flatten such namespaces to keep your codebase understandable and manageable..
         /// </summary>
         internal static string MiKo_3401_Description {
             get {
@@ -13261,7 +13248,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Suppressing nullable warnings on Null-conditional operators is confusing to developers. Either something can be null or it cannot be null; but it cannot be both null and not null..
+        ///   Looks up a localized string similar to Suppressing nullable warnings on null-conditional operators confuses developers. A value is either nullable or it&apos;s not; it can&apos;t be both..
         /// </summary>
         internal static string MiKo_3501_Description {
             get {
@@ -13297,7 +13284,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Suppressing nullable warnings on Linq calls that can return &apos;null&apos; is confusing to developers. Either something can be null or it cannot be null; but it cannot be both null and not null..
+        ///   Looks up a localized string similar to Suppressing nullable warnings on LINQ calls that can return &apos;null&apos; confuses developers. A value is either nullable or it&apos;s not; it can&apos;t be both..
         /// </summary>
         internal static string MiKo_3502_Description {
             get {

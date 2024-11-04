@@ -2491,7 +2491,7 @@ This distinction clearly indicates the reason for the exception and helps develo
   </data>
   <data name="MiKo_2082_Description" xml:space="preserve">
     <value>The &lt;summary&gt; documentation of an Enum member should avoid phrases used in the Enum's own summary - like 'Defines', 'Indicates', or 'Specifies.' Instead, it should focus on describing the meaning and purpose of the individual member, providing clear and specific details.
-This ensures the documentation is precise and informative, helping developers understand each member’s role and functionality.</value>
+This ensures the documentation is precise and informative, helping developers understand each member's role and functionality.</value>
   </data>
   <data name="MiKo_2082_MessageFormat" xml:space="preserve">
     <value>Do not start &lt;summary&gt; with: '{0}'</value>
@@ -3648,8 +3648,7 @@ Instead, use methods to make it clear that the behavior might differ between cal
     <value>Use 'nameof'</value>
   </data>
   <data name="MiKo_3051_Description" xml:space="preserve">
-    <value>To avoid typos, fields that are the back of a DependencyProperty should be registered via 'DependencyProperty.Register()' and the 'nameof' operator.
-In addition, the correct property names, property types and owing types should be provided.</value>
+    <value>To avoid typos, register fields backing a DependencyProperty using 'DependencyProperty.Register()' and the 'nameof' operator. Ensure you provide the correct property names, property types, and owning types.</value>
   </data>
   <data name="MiKo_3051_HelpLinkUri" xml:space="preserve">
     <value>https://learn.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property</value>
@@ -3664,7 +3663,7 @@ In addition, the correct property names, property types and owing types should b
     <value>Make DependencyPropertyKey 'private static readonly'</value>
   </data>
   <data name="MiKo_3052_Description" xml:space="preserve">
-    <value>Fields that are the back of a DependencyPropertyKey should be made non-public, 'static readonly' to prevent clients to find and access those fields.</value>
+    <value>Make fields backing a DependencyPropertyKey non-public, static, and readonly. This prevents clients from finding and accessing these fields, ensuring your code stays secure and well-encapsulated.</value>
   </data>
   <data name="MiKo_3052_HelpLinkUri" xml:space="preserve">
     <value>https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertykey</value>
@@ -3676,8 +3675,7 @@ In addition, the correct property names, property types and owing types should b
     <value>DependencyPropertyKey fields should be non-public 'static readonly'</value>
   </data>
   <data name="MiKo_3053_Description" xml:space="preserve">
-    <value>To avoid typos, fields that are the Key of a DependencyProperty should be registered via 'DependencyProperty.RegisterReadOnly()' and the 'nameof' operator.
-In addition, the correct property names, property types and owing types should be provided.</value>
+    <value>To prevent typos, register fields that are the key of a DependencyProperty using 'DependencyProperty.RegisterReadOnly()' and the 'nameof' operator. Also, ensure you provide the correct property names, property types, and owning types.</value>
   </data>
   <data name="MiKo_3053_HelpLinkUri" xml:space="preserve">
     <value>https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencyproperty.registerreadonly</value>
@@ -3692,9 +3690,8 @@ In addition, the correct property names, property types and owing types should b
     <value>Expose DependencyProperty identifier</value>
   </data>
   <data name="MiKo_3054_Description" xml:space="preserve">
-    <value>Read-only dependency properties are defined by 'DependencyPropertyKey' fields and should not be visible to the public.
-To made them available, it is recommended to expose a dependency property identifier for such read-only dependency property.
-That can be done by exposing the value of 'DependencyPropertyKey.DependencyProperty' as a 'public static readonly' field on the specific class.</value>
+    <value>Read-only dependency properties are defined by DependencyPropertyKey fields and should remain non-public. To make them accessible, expose a dependency property identifier for the read-only property. Do this by exposing the value of 'DependencyPropertyKey.DependencyProperty' as a 'public static readonly' field in the specific class.
+This maintains encapsulation while allowing access to the property.</value>
   </data>
   <data name="MiKo_3054_HelpLinkUri" xml:space="preserve">
     <value>https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencyproperty.registerreadonly</value>
@@ -3706,8 +3703,8 @@ That can be done by exposing the value of 'DependencyPropertyKey.DependencyPrope
     <value>A read-only DependencyProperty should have an exposed DependencyProperty identifier</value>
   </data>
   <data name="MiKo_3055_Description" xml:space="preserve">
-    <value>In WPF view models are used for bindings. In case a view model does not implement the INotifyPropertyChanged interface, the binding is created via reflection. This is done by WPF to be able to detect changes of property values. But due to that a memory leak occurs as the binding instance (called descriptor) is hold in a static hash table for as long as the application runs.
-To avoid that "by design" memory leak in WPF, types should implement INotifyPropertyChanged and raise the corresponding events whenever changes occur.</value>
+    <value>In WPF, view models use bindings. If a view model does not implement 'INotifyPropertyChanged', WPF uses reflection to detect changes, causing a memory leak. The binding instance (descriptor) stays in a static hash table for the app's lifetime.
+To avoid this, make sure types implement 'INotifyPropertyChanged' and raise the corresponding events when changes occur.</value>
   </data>
   <data name="MiKo_3055_MessageFormat" xml:space="preserve">
     <value>Implement INotifyPropertyChanged to avoid WPF binding memory leaks</value>
@@ -3719,15 +3716,19 @@ To avoid that "by design" memory leak in WPF, types should implement INotifyProp
     <value>Remove Assert call</value>
   </data>
   <data name="MiKo_3060_Description" xml:space="preserve">
-    <value>If you use Debug.Assert() or Trace.Assert(), then you want to ensure something. Nevertheless, this has several drawbacks:
-1. Debug.Assert() does not work in Release mode (whereas Trace.Assert() does).
-2. You cannot do anything here except to confirm the situation.
-3. There is no failure handling available.
-4. Calling code is not informed about the code and cannot handle the situation properly.
+    <value>Using 'Debug.Assert()' or 'Trace.Assert()' to ensure something has several drawbacks:
 
-So instead of using Debug.Assert() or Trace.Assert() throw an exception, such as an InvalidOperationException.
+1. 'Debug.Assert()' does not work in Release mode, while 'Trace.Assert()' does.
 
-Especially never use Debug.Assert() or Trace.Assert() in (unit) test code. That's why the test code is there. Let the test fail in a case were Debug.Assert() or Trace.Assert() would apply.</value>
+2. These assertions only confirm the situation; no action can be taken.
+
+3. There is no failure handling mechanism.
+
+4. Calling code is unaware of the issue and cannot handle it properly.
+
+Instead of using 'Debug.Assert()' or 'Trace.Assert()', throw an exception like 'InvalidOperationException'. This provides proper failure handling and informs the calling code.
+
+Never use 'Debug.Assert()' or 'Trace.Assert()' in (unit) test code. Let the test fail naturally in cases where these assertions would apply, as that's the purpose of test code.</value>
   </data>
   <data name="MiKo_3060_MessageFormat" xml:space="preserve">
     <value>Do not use '{1}'</value>
@@ -3736,10 +3737,9 @@ Especially never use Debug.Assert() or Trace.Assert() in (unit) test code. That'
     <value>Debug.Assert or Trace.Assert shall not be used</value>
   </data>
   <data name="MiKo_3061_Description" xml:space="preserve">
-    <value>Often, loggers are requested via a type. Unfortunately, that most likely results in the situation that the logs contain no useful categories. Even worse, developers try to control the log output via the different severities (Debug, Info, ...).
-As a result, the logs contain a lot of garbage. So, while analyzing log files it is unclear which log statement belongs into which category.
+    <value>Loggers are often requested via a type, which results in logs lacking useful categories. Developers might control log output using different severities (Debug, Info, etc.), leading to cluttered logs. This makes it unclear which log statement belongs to which category.
 
-Therefore, the logger should be requested via a string that acts as category.</value>
+Instead, request the logger via a string as the category. This approach ensures clear and organized logs, making analysis easier and more effective.</value>
   </data>
   <data name="MiKo_3061_MessageFormat" xml:space="preserve">
     <value>Use a string as category instead</value>
@@ -3751,7 +3751,7 @@ Therefore, the logger should be requested via a string that acts as category.</v
     <value>End log message with colon</value>
   </data>
   <data name="MiKo_3062_Description" xml:space="preserve">
-    <value>Log messages that log exceptions should end with a colon, to indicate that there is an exception.</value>
+    <value>End log messages that log exceptions with a colon. This clearly indicates that an exception follows, making it easier for developers to identify and understand the context.</value>
   </data>
   <data name="MiKo_3062_MessageFormat" xml:space="preserve">
     <value>End log message with colon</value>
@@ -3763,7 +3763,7 @@ Therefore, the logger should be requested via a string that acts as category.</v
     <value>End log message with dot</value>
   </data>
   <data name="MiKo_3063_Description" xml:space="preserve">
-    <value>Log messages that do not log exceptions should end with a dot because there is no exception to focus on.</value>
+    <value>End log messages that do not include exceptions with a dot. This keeps the focus clear and consistent, ensuring that logs are easy to read and understand. It helps distinguish between general log messages and those that include exception details, maintaining clarity in your logging practices.</value>
   </data>
   <data name="MiKo_3063_MessageFormat" xml:space="preserve">
     <value>End log message with dot</value>
@@ -3787,13 +3787,11 @@ Therefore, the logger should be requested via a string that acts as category.</v
     <value>Change interpolated string into normal string</value>
   </data>
   <data name="MiKo_3065_Description" xml:space="preserve">
-    <value>The Microsoft Logging API supports Semantic or Structured Logging via message templates. These message template can contain placeholders for which arguments are provided.
+    <value>The Microsoft Logging API supports Semantic or Structured Logging via message templates, which include named placeholders for arguments. These templates look like interpolated strings but without the '$' and with added arguments, which can be confusing.
 
-Although these placeholders are names (not numbers) and require arguments, the message template looks almost identical to an interpolated string (except of the '$' and the additional arguments) which can be confusing.
+The arguments are passed to the logging system, not just the formatted message. This allows logging providers to store parameter values as fields for filtering.
 
-The arguments themselves are passed to the logging system, not just the formatted message template. This enables logging providers to store the parameter values as fields which can be filtered on.
-
-Providing interpolated strings instead of message templates would prevent that filtering and contradict the intended Semantic or Structured Logging approach.</value>
+Using interpolated strings instead of message templates prevents this filtering and contradicts the Semantic or Structured Logging approach.</value>
   </data>
   <data name="MiKo_3065_MessageFormat" xml:space="preserve">
     <value>Do not use interpolated string</value>
@@ -3802,8 +3800,7 @@ Providing interpolated strings instead of message templates would prevent that f
     <value>Microsoft Logging calls should not use interpolated strings</value>
   </data>
   <data name="MiKo_3070_Description" xml:space="preserve">
-    <value>Methods that return IEnumerable are expected to be used in foreach loops or Linq queries.
-It is unexpected that such places throw a NullReferenceException or ArgumentNullException, so these methods should never return null.</value>
+    <value>Methods returning 'IEnumerable' are meant for foreach loops or LINQ queries. These methods should never return null, as it could lead to NullReferenceException or ArgumentNullException. Ensuring they do not return null keeps your code predictable and safe from unexpected runtime errors.</value>
   </data>
   <data name="MiKo_3070_MessageFormat" xml:space="preserve">
     <value>Do not return null</value>
@@ -3812,8 +3809,7 @@ It is unexpected that such places throw a NullReferenceException or ArgumentNull
     <value>Do not return null for an IEnumerable</value>
   </data>
   <data name="MiKo_3071_Description" xml:space="preserve">
-    <value>Methods that return Task are expected to be used for async calls.
-It is unexpected that when calling such methods you get a NullReferenceException thrown, so these methods should never return null.</value>
+    <value>Methods that return 'Task' are intended for async calls. These methods should never return null, as this could lead to a NullReferenceException. Ensuring they do not return null keeps your code predictable and safe from unexpected runtime errors, maintaining reliability and smooth functionality.</value>
   </data>
   <data name="MiKo_3071_MessageFormat" xml:space="preserve">
     <value>Do not return null</value>
@@ -3822,8 +3818,7 @@ It is unexpected that when calling such methods you get a NullReferenceException
     <value>Do not return null for a Task</value>
   </data>
   <data name="MiKo_3072_Description" xml:space="preserve">
-    <value>Methods that are visible to the public should not return a List&lt;&gt; or Dictionary&lt;&gt;. Instead, they should return the interfaces IList&lt;&gt; or IDictionary&lt;&gt;.
-Doing so allows to change the implementation of the return value whenever it's needed. Otherwise, the method is bound to always and forever return a List&lt;&gt; or Dictionary&lt;&gt;.</value>
+    <value>Public methods should return interfaces like 'IList&lt;&gt;' or 'IDictionary&lt;&gt;' instead of concrete types like 'List&lt;&gt;' or 'Dictionary&lt;&gt;'. This approach provides flexibility, allowing you to change the implementation of the return value without affecting the method's signature, keeping your code adaptable and maintainable.</value>
   </data>
   <data name="MiKo_3072_MessageFormat" xml:space="preserve">
     <value>Do not return {1}&lt;&gt;</value>
@@ -3832,7 +3827,7 @@ Doing so allows to change the implementation of the return value whenever it's n
     <value>Non-private methods should not return 'List&lt;&gt;' or 'Dictionary&lt;&gt;'</value>
   </data>
   <data name="MiKo_3073_Description" xml:space="preserve">
-    <value>Constructors should run completely. They should not partially initialize the objects.</value>
+    <value>Avoid returning from within a constructor. Constructors should execute fully, ensuring the objects are completely initialized. Partial initialization can lead to unpredictable behavior and inconsistencies.</value>
   </data>
   <data name="MiKo_3073_MessageFormat" xml:space="preserve">
     <value>Do not return inside constructor</value>
@@ -3841,8 +3836,8 @@ Doing so allows to change the implementation of the return value whenever it's n
     <value>Do not leave objects partially initialized</value>
   </data>
   <data name="MiKo_3074_Description" xml:space="preserve">
-    <value>The idea of a constructor is to create an initialized instance of that specific type. Its responsibility is not to create instances of other types.
-So, having 'ref' or 'out' parameters on a constructor contradicts the complete concept of the constructor as these parameters solely exist to provide instances of (other types) out of that constructor in addition to the instance that is created and initialized by the constructor.</value>
+    <value>A constructor's main purpose is to create an initialized instance of its specific type. It should not be used to create instances of other types.
+Therefore, including [ref] or [out] parameters in a constructor contradicts this concept. These parameters should not exist to provide instances of other types, in addition to the instance created and initialized by the constructor.</value>
   </data>
   <data name="MiKo_3074_MessageFormat" xml:space="preserve">
     <value>Do not use '{0}'</value>
@@ -3854,9 +3849,9 @@ So, having 'ref' or 'out' parameters on a constructor contradicts the complete c
     <value>Seal class or make it static</value>
   </data>
   <data name="MiKo_3075_Description" xml:space="preserve">
-    <value>To ease maintenance, internal and private types should be either static or sealed unless derivation from them is required.
+    <value>To ease maintenance, internal and private types should be either 'static' or 'sealed' unless there's a need for derivation.
 
-As with any implementation detail, they can be easily changed if/when derivation is required in the future.</value>
+These types can be modified later if derivation becomes necessary. Keeping them static or sealed by default ensures clearer and more manageable code, still being adaptable for future changes.</value>
   </data>
   <data name="MiKo_3075_MessageFormat" xml:space="preserve">
     <value>Seal class or make it static</value>
@@ -3865,9 +3860,9 @@ As with any implementation detail, they can be easily changed if/when derivation
     <value>Internal and private types should be either static or sealed unless derivation from them is required</value>
   </data>
   <data name="MiKo_3076_Description" xml:space="preserve">
-    <value>If a static member initializer uses another member that is defined below or in another type part, then the chance is high that during runtime the static member gets initialized with the wrong value. That's because the member gets initialized before the other referenced member gets initialized.
+    <value>If a static member initializer uses another member defined below or in another type part, it might get initialized with the wrong value at runtime. This happens because the static member initializes before the other referenced member.
 
-This leads to subtle bugs, such as TypeInitializerExceptions or incorrect values.</value>
+This can cause subtle bugs like 'TypeInitializerException's or incorrect values.</value>
   </data>
   <data name="MiKo_3076_MessageFormat" xml:space="preserve">
     <value>Static member initializer refers to static member(s) {1} below or in other type part</value>
@@ -3879,8 +3874,8 @@ This leads to subtle bugs, such as TypeInitializerExceptions or incorrect values
     <value>Apply a default value</value>
   </data>
   <data name="MiKo_3077_Description" xml:space="preserve">
-    <value>Explicitly setting values for properties that return an 'Enum' allows to easily spot the (default) value and detect any change.
-So it assists in thinking about whether the value is the intended one.</value>
+    <value>Explicitly setting values for properties that return an Enum helps easily identify the default value and any changes.
+This practice aids in ensuring the value is the intended one, keeping the code clear and helping to spot unintended changes quickly.</value>
   </data>
   <data name="MiKo_3077_MessageFormat" xml:space="preserve">
     <value>Set a default value</value>
@@ -3892,7 +3887,8 @@ So it assists in thinking about whether the value is the intended one.</value>
     <value>Apply a default value</value>
   </data>
   <data name="MiKo_3078_Description" xml:space="preserve">
-    <value>Explicitly setting values for 'Enum' members prevents change of meanings when the Enum gets modified, may it be by adding, removing, renaming or resorting different values.</value>
+    <value>Explicitly setting values for 'Enum' members prevents changes in meaning when the Enum is modified, whether by adding, removing, renaming, or reordering values.
+This approach ensures stability and clarity, keeping the Enum's behavior consistent as it evolves. It makes everything reliable and easy to understand.</value>
   </data>
   <data name="MiKo_3078_MessageFormat" xml:space="preserve">
     <value>Set a default value</value>
@@ -3904,7 +3900,7 @@ So it assists in thinking about whether the value is the intended one.</value>
     <value>Replace with hex value</value>
   </data>
   <data name="MiKo_3079_Description" xml:space="preserve">
-    <value>HResults should be written in hexadecimal and not as negative integers. That makes them much easier to recognize, such as '0x80070005' instead of '-2147024891'.</value>
+    <value>Write HResults in hexadecimal, not as negative integers. It's much easier to recognize and search for '0x80070005' than '-2147024891'. Keeps the code clean and user-friendly.</value>
   </data>
   <data name="MiKo_3079_MessageFormat" xml:space="preserve">
     <value>Use 'unchecked((int)0x{1})' instead for HResult</value>
@@ -3913,8 +3909,9 @@ So it assists in thinking about whether the value is the intended one.</value>
     <value>HResults should be written in hexadecimal</value>
   </data>
   <data name="MiKo_3080_Description" xml:space="preserve">
-    <value>Code that assigns variables defined inside methods by using switch statements makes the method more complex and difficult to read.
-Most times, such code can be simplified by refactoring the complete switch statement into an own method where the different switch sections simply returning the values instead of assigning them to a 'shared' variable and do a break afterwards.</value>
+    <value>Using switch statements to assign variables within methods increases complexity and reduces readability. Simplify this by refactoring the switch statement into its own method.
+Let each section of the switch return values directly, instead of assigning them to a shared variable and using break statements.
+This approach enhances clarity and maintainability.</value>
   </data>
   <data name="MiKo_3080_MessageFormat" xml:space="preserve">
     <value>Place switch statement in separate method and return value within case blocks</value>
@@ -3926,7 +3923,7 @@ Most times, such code can be simplified by refactoring the complete switch state
     <value>Apply 'is false' pattern</value>
   </data>
   <data name="MiKo_3081_Description" xml:space="preserve">
-    <value>Logical NOT conditions are hard to recognize if they are coded using the '!' character. Code that uses 'is false' is much easier to read and understand.</value>
+    <value>Logical NOT conditions using '!' can be hard to recognize. Use is false instead; it's easier to read and understand.</value>
   </data>
   <data name="MiKo_3081_MessageFormat" xml:space="preserve">
     <value>Use pattern 'is false' instead of ' ! '</value>
@@ -3938,7 +3935,7 @@ Most times, such code can be simplified by refactoring the complete switch state
     <value>Apply 'is' pattern</value>
   </data>
   <data name="MiKo_3082_Description" xml:space="preserve">
-    <value>Logical comparisons using the 'is' pattern matching are more natural and therefore easier to read and understand than using the '==' equality operator.</value>
+    <value>Using the 'is' pattern matching for logical comparisons is more natural and easier to read than the '==' equality operator. This approach enhances code clarity and comprehension, making your code cleaner and more intuitive.</value>
   </data>
   <data name="MiKo_3082_MessageFormat" xml:space="preserve">
     <value>Use 'is' instead of '=='</value>
@@ -3950,7 +3947,7 @@ Most times, such code can be simplified by refactoring the complete switch state
     <value>Apply 'is null' pattern</value>
   </data>
   <data name="MiKo_3083_Description" xml:space="preserve">
-    <value>Null checks using the 'is' pattern matching are more natural and therefore easier to read and understand than using the '==' equality operator.</value>
+    <value>Using 'is' pattern matching for null checks is more natural and easier to read than the '==' equality operator. This approach enhances code clarity and comprehension, making your code cleaner and more intuitive.</value>
   </data>
   <data name="MiKo_3083_MessageFormat" xml:space="preserve">
     <value>Use 'is' instead of '=='</value>
@@ -3962,7 +3959,7 @@ Most times, such code can be simplified by refactoring the complete switch state
     <value>Place constant value on right side</value>
   </data>
   <data name="MiKo_3084_Description" xml:space="preserve">
-    <value>To increase readability, do not place constants on the left side of an operator. Instead, place it on the right side. This makes the code look more natural.</value>
+    <value>To increase readability, place constants on the right side of an operator, not the left. This makes the code look more intuitive and easier to understand.</value>
   </data>
   <data name="MiKo_3084_MessageFormat" xml:space="preserve">
     <value>Place it on right side of '{1}'</value>
@@ -3971,8 +3968,7 @@ Most times, such code can be simplified by refactoring the complete switch state
     <value>Do not place constants on the left side for comparisons</value>
   </data>
   <data name="MiKo_3085_Description" xml:space="preserve">
-    <value>Conditional statements which span a lot of characters are hard to read. That makes them harder to maintain.
-They should be either short (to see at a glance what's going on) or refactored into if-else statements.</value>
+    <value>Long conditional statements are hard to read and maintain. Keep them short for easy understanding at a glance, or refactor into if-else statements for clarity. This approach keeps your code clean and maintainable.</value>
   </data>
   <data name="MiKo_3085_MessageFormat" xml:space="preserve">
     <value>Shorten conditional or use 'if ... else ...' instead</value>
@@ -3981,7 +3977,7 @@ They should be either short (to see at a glance what's going on) or refactored i
     <value>Conditional statements should be short</value>
   </data>
   <data name="MiKo_3086_Description" xml:space="preserve">
-    <value>Nested conditional (or coalesce) statements are hard to read and understand. Therefore such statements should not be nested. Instead, if-else statements should be used.</value>
+    <value>Nested conditional or coalesce statements are difficult to read and understand. Avoid nesting them. Instead, use if-else statements to improve clarity. This approach keeps your code clean and maintainable.</value>
   </data>
   <data name="MiKo_3086_MessageFormat" xml:space="preserve">
     <value>Do not nest conditional</value>
@@ -3990,7 +3986,7 @@ They should be either short (to see at a glance what's going on) or refactored i
     <value>Do not nest conditional statements</value>
   </data>
   <data name="MiKo_3087_Description" xml:space="preserve">
-    <value>Complex conditions that use negative logic are difficult to understand. Therefore, these should be changed into positiv logic to ease reading.</value>
+    <value>Complex conditions with negative logic are difficult to understand, cumbersome, and error-prone. Change them to positive logic to improve readability, simplify the code, and reduce errors. This approach ensures your code is clear and easier to maintain.</value>
   </data>
   <data name="MiKo_3087_MessageFormat" xml:space="preserve">
     <value>Condition is difficult to understand, simplify or convert to positive logic</value>
@@ -4002,7 +3998,7 @@ They should be either short (to see at a glance what's going on) or refactored i
     <value>Apply 'is not null' pattern</value>
   </data>
   <data name="MiKo_3088_Description" xml:space="preserve">
-    <value>Null checks using the 'is not' pattern matching are more natural and therefore easier to read and understand than using the '!=' inequality operator.</value>
+    <value>Null checks using 'is not' pattern matching are more intuitive and easier to read than the '!=' inequality operator. This makes them the preferred choice for clarity and comprehension.</value>
   </data>
   <data name="MiKo_3088_MessageFormat" xml:space="preserve">
     <value>Use 'is not' instead of '!='</value>
@@ -4014,7 +4010,7 @@ They should be either short (to see at a glance what's going on) or refactored i
     <value>Convert property pattern condition into normal condition</value>
   </data>
   <data name="MiKo_3089_Description" xml:space="preserve">
-    <value>Normal conditions are easier to understand than simple property pattern conditions that use constants. Hence, such property conditions should be converted into normal ones.</value>
+    <value>Normal conditions are easier to understand than property pattern conditions with constants. Therefore, convert these property conditions into normal ones. This approach keeps your code clear and readable.</value>
   </data>
   <data name="MiKo_3089_MessageFormat" xml:space="preserve">
     <value>Convert property pattern condition into normal condition</value>
@@ -4023,8 +4019,7 @@ They should be either short (to see at a glance what's going on) or refactored i
     <value>Do not use simple constant property patterns as conditions of 'if' statements</value>
   </data>
   <data name="MiKo_3090_Description" xml:space="preserve">
-    <value>Exceptions should be thrown inside of try or catch blocks (or normal code blocks), but not inside of finally blocks.
-Those finally blocks are intended for cleaning stuff up; or to ensure that some code runs in all (except a few) situations.</value>
+    <value>Throw exceptions inside try or catch blocks, not within finally blocks. Finally blocks are meant for cleanup or to ensure certain code runs regardless of other factors. This maintains their intended purpose and keeps your code clear.</value>
   </data>
   <data name="MiKo_3090_MessageFormat" xml:space="preserve">
     <value>Do not throw from finally block</value>
@@ -4033,8 +4028,7 @@ Those finally blocks are intended for cleaning stuff up; or to ensure that some 
     <value>Do not throw exceptions in finally blocks</value>
   </data>
   <data name="MiKo_3091_Description" xml:space="preserve">
-    <value>Events should be raised inside of try or catch blocks (or normal code blocks), but not inside of finally blocks.
-Those finally blocks are intended for cleaning stuff up.</value>
+    <value>Raise events within try or catch blocks, not finally blocks. Finally blocks are meant for cleanup, ensuring certain code always runs. This maintains their intended purpose and keeps your code clear.</value>
   </data>
   <data name="MiKo_3091_MessageFormat" xml:space="preserve">
     <value>Do not raise '{1}' from finally block</value>
@@ -4043,7 +4037,7 @@ Those finally blocks are intended for cleaning stuff up.</value>
     <value>Do not raise events in finally blocks</value>
   </data>
   <data name="MiKo_3092_Description" xml:space="preserve">
-    <value>To avoid deadlocks, events should never be raised inside of lock statements. Instead, the event handlers should be collected and the event should be raised outside the lock.</value>
+    <value>To avoid deadlocks, do not raise events inside lock statements. Instead, collect the event handlers and raise the event outside the lock. This practice ensures smooth and efficient code execution while avoiding potential deadlocks.</value>
   </data>
   <data name="MiKo_3092_MessageFormat" xml:space="preserve">
     <value>Do not raise event inside lock</value>
@@ -4052,7 +4046,7 @@ Those finally blocks are intended for cleaning stuff up.</value>
     <value>Do not raise events in locks</value>
   </data>
   <data name="MiKo_3093_Description" xml:space="preserve">
-    <value>To avoid deadlocks, delegates should never be invoked inside of lock statements. Instead, the information needed should be collected inside the lock and the delegate should be invoked outside the lock.</value>
+    <value>To avoid deadlocks, do not invoke delegates within lock statements. Collect the necessary information inside the lock, then invoke the delegate outside the lock. This practice ensures smooth and efficient code execution while avoiding potential deadlocks.</value>
   </data>
   <data name="MiKo_3093_MessageFormat" xml:space="preserve">
     <value>Do not invoke delegate inside lock</value>
@@ -4061,7 +4055,7 @@ Those finally blocks are intended for cleaning stuff up.</value>
     <value>Do not invoke delegates inside locks</value>
   </data>
   <data name="MiKo_3094_Description" xml:space="preserve">
-    <value>To avoid deadlocks, methods or properties of parameters should never be invoked inside of lock statements.</value>
+    <value>To avoid deadlocks, do not invoke methods or properties of parameters within lock statements. This practice ensures smooth and efficient code execution while avoiding potential deadlocks.</value>
   </data>
   <data name="MiKo_3094_MessageFormat" xml:space="preserve">
     <value>Do not invoke method or property inside lock</value>
@@ -4070,7 +4064,7 @@ Those finally blocks are intended for cleaning stuff up.</value>
     <value>Do not invoke methods or properties of parameters inside locks</value>
   </data>
   <data name="MiKo_3095_Description" xml:space="preserve">
-    <value>Empty code blocks should contain at least a reasoning comment why the block is empty. This helps developers to understand the reasoning behind and they know for sure that the block is not just accidentally empty.</value>
+    <value>Empty code blocks should include a comment explaining why they are empty. This helps developers understand the reason and ensures the block is not empty by mistake.</value>
   </data>
   <data name="MiKo_3095_MessageFormat" xml:space="preserve">
     <value>Provide a comment that reasons why the block is empty</value>
@@ -4079,7 +4073,7 @@ Those finally blocks are intended for cleaning stuff up.</value>
     <value>Code blocks should not be empty</value>
   </data>
   <data name="MiKo_3096_Description" xml:space="preserve">
-    <value>In case switch statements with a lot of cases simply perform a mapping from one value to the other, the code is easier to read and maintain when a dictionary is used instead of the switch.</value>
+    <value>For switch statements with many cases that map values, use a dictionary instead. This approach makes the code easier to read and maintain.</value>
   </data>
   <data name="MiKo_3096_MessageFormat" xml:space="preserve">
     <value>Use dictionary as map instead of switch</value>
@@ -4088,7 +4082,7 @@ Those finally blocks are intended for cleaning stuff up.</value>
     <value>Use dictionaries instead of large switch statements</value>
   </data>
   <data name="MiKo_3097_Description" xml:space="preserve">
-    <value>There is no benefit in casting a value to a specific type and returning that cast value when the return type is of type object.</value>
+    <value>Casting a value to a specific type and returning it when the return type is 'object' offers no benefit. The cast is unnecessary and adds complexity without any gain.</value>
   </data>
   <data name="MiKo_3097_MessageFormat" xml:space="preserve">
     <value>Do not cast to type when returning object</value>
@@ -4097,7 +4091,8 @@ Those finally blocks are intended for cleaning stuff up.</value>
     <value>Do not cast to type and return object</value>
   </data>
   <data name="MiKo_3098_Description" xml:space="preserve">
-    <value>If messages get suppressed via the [SuppressMessage] attribute, a justification has to be given. That justification has to explain why the message got suppressed so that later on developers have a chance to understand the reasoning behind the suppression.</value>
+    <value>When suppressing messages with the [SuppressMessage] attribute, a justification must be provided. This justification should explain why the message was suppressed, helping future developers understand the reasoning. Just writing "Reviewed." or providing no explanation is not sufficient.
+This practice ensures clarity and transparency in your codebase.</value>
   </data>
   <data name="MiKo_3098_MessageFormat" xml:space="preserve">
     <value>Explain the reason why the message is suppressed</value>
@@ -4109,7 +4104,7 @@ Those finally blocks are intended for cleaning stuff up.</value>
     <value>Fix comparison to null</value>
   </data>
   <data name="MiKo_3099_Description" xml:space="preserve">
-    <value>Enum values are never null in case the enum type is a value type. So comparing them with null will always fail.</value>
+    <value>Comparing enum values to 'null' is pointless because enums are value types and can never be 'null'. Such comparisons will always fail.</value>
   </data>
   <data name="MiKo_3099_MessageFormat" xml:space="preserve">
     <value>Enum can never be null</value>
@@ -4118,8 +4113,7 @@ Those finally blocks are intended for cleaning stuff up.</value>
     <value>Do not compare enum values with null</value>
   </data>
   <data name="MiKo_3100_Description" xml:space="preserve">
-    <value>To ease maintenance, test classes should be in the exact same namespace as the type they test.
-This allows easy usage without any arbitrary using directives. It also mimics the project structure and allows to discover the tests much easier.</value>
+    <value>To ease maintenance, place test classes in the same namespace as the type they test. This approach eliminates arbitrary 'using' directives, mirrors the project structure, and makes discovering tests much easier.</value>
   </data>
   <data name="MiKo_3100_MessageFormat" xml:space="preserve">
     <value>Place test class in namespace '{1}'</value>
@@ -4128,7 +4122,7 @@ This allows easy usage without any arbitrary using directives. It also mimics th
     <value>Test classes and types under test belong in same namespace</value>
   </data>
   <data name="MiKo_3101_Description" xml:space="preserve">
-    <value>A class that is marked as a unit test class should contain unit tests.</value>
+    <value>A unit test class should contain unit tests. This ensures the class fulfills its purpose and maintains clarity in your codebase.</value>
   </data>
   <data name="MiKo_3101_MessageFormat" xml:space="preserve">
     <value>Test class should contain tests</value>
@@ -4137,8 +4131,7 @@ This allows easy usage without any arbitrary using directives. It also mimics th
     <value>Test classes should contain tests</value>
   </data>
   <data name="MiKo_3102_Description" xml:space="preserve">
-    <value>Tests should test a very specific scenario. Therefore there is no need to have a condition, because in that situation a test tests more than one scenario.
-So having a condition inside a test is a huge code smell.</value>
+    <value>Tests should focus on a specific scenario. Including a condition in a test means it's testing more than one scenario, which is a code smell. Keep tests simple and specific to ensure clarity and maintainability.</value>
   </data>
   <data name="MiKo_3102_MessageFormat" xml:space="preserve">
     <value>Refactor test to remove condition</value>
@@ -4150,8 +4143,7 @@ So having a condition inside a test is a huge code smell.</value>
     <value>Use hard-coded GUID</value>
   </data>
   <data name="MiKo_3103_Description" xml:space="preserve">
-    <value>Tests should be specific to make them reproducible and easy to maintain. A GUID that is generated is not reproducible at all and cannot be easily found in case a test fails.
-Therefore, a hard-coded GUID should be used instead.</value>
+    <value>Tests should be specific to be reproducible and easy to maintain. Generated GUIDs are not reproducible and hard to track if a test fails. Instead, use a hard-coded GUID for consistency. This ensures tests are clear and reliable.</value>
   </data>
   <data name="MiKo_3103_MessageFormat" xml:space="preserve">
     <value>Use a hard-coded GUID instead</value>
@@ -4163,7 +4155,7 @@ Therefore, a hard-coded GUID should be used instead.</value>
     <value>Remove [Combinatorial] attribute</value>
   </data>
   <data name="MiKo_3104_Description" xml:space="preserve">
-    <value>NUnit's [Combinatorial] attribute shall be used only if there is a test method that has at least 2 parameters to create the combinatorial. Otherwise there is no reason to mark a test with that attribute.</value>
+    <value>Use NUnit's [Combinatorial] attribute only when a test method has at least two parameters for combinatorial testing. If there's only one parameter, this attribute is unnecessary and adds no value.</value>
   </data>
   <data name="MiKo_3104_MessageFormat" xml:space="preserve">
     <value>Wrong usage of [Combinatorial]</value>
@@ -4175,10 +4167,10 @@ Therefore, a hard-coded GUID should be used instead.</value>
     <value>Use 'Assert.That'</value>
   </data>
   <data name="MiKo_3105_Description" xml:space="preserve">
-    <value>NUnit's fluent Assert approach is easier to understand. Following that approach, developers will most times not make the common mistake to mix up the 'actual' and 'expected' values.</value>
+    <value>NUnit's constraint-based Assert model uses a single 'Assert.That' method for all assertions, making it easier to understand. This helps developers avoid mixing up 'actual' and 'expected' values and makes the code more readable and intuitive.</value>
   </data>
   <data name="MiKo_3105_HelpLinkUri" xml:space="preserve">
-    <value>https://github.com/nunit/docs/wiki/Constraint-Model</value>
+    <value>https://docs.nunit.org/articles/nunit/writing-tests/assertions/assertion-models/constraint.html</value>
   </data>
   <data name="MiKo_3105_MessageFormat" xml:space="preserve">
     <value>Use 'Assert.That' instead</value>
@@ -4187,13 +4179,11 @@ Therefore, a hard-coded GUID should be used instead.</value>
     <value>Test methods should use NUnit's fluent Assert approach</value>
   </data>
   <data name="MiKo_3106_Description" xml:space="preserve">
-    <value>Assertions such as Assert.That(...) that contain operators such as ==, !=, &lt;=, &lt;, &gt;=, &gt; assert for booleans.
-The same is valid for patterns such as 'is true' or type checks via 'is' or the Equals() method.
+    <value>Assertions like 'Assert.That(...)' with operators (==, !=, &lt;=, &lt;, &gt;=, &gt;) assert for booleans. Patterns like 'is true', type checks via 'is', or 'Equals()' method also do the same.
 
-If such a test fails it is difficult to understand why it failed. The failure reason gives no useful hint (e.g. 'true' expected but 'false' received), so the failure needs to be carefully inspected.
-At worst the test needs to be debugged to find out what went wrong. That is annoying and becomes even more annoying if the test itself is a shaky one.
+When such a test fails, it's hard to understand why. The failure message doesn't help much (e.g., 'true' expected but 'false' received), requiring careful inspection or even debugging, which is frustrating, especially with unstable tests.
 
-In contrast, the failure would be much easier to understand if the test would immediately state what was expected (e.g. '5' was expected but '12' was received).</value>
+Instead, tests should immediately state the expected value (e.g., '5' was expected but '12' was received) for clarity and easier troubleshooting.</value>
   </data>
   <data name="MiKo_3106_MessageFormat" xml:space="preserve">
     <value>Do not use '{1}' in assertion</value>
@@ -4205,7 +4195,7 @@ In contrast, the failure would be much easier to understand if the test would im
     <value>Change Moq call to default value</value>
   </data>
   <data name="MiKo_3107_Description" xml:space="preserve">
-    <value>It is troublesome to have code that attemps to use Moq mocks but actually does not use them properly. So condition matchers should be used on mocks to setup or verify conditions. Such matchers should not be used on constructors or methods of non-mocks as they don't make sense there.</value>
+    <value>Using Moq mocks improperly can cause issues. Use condition matchers on mocks to set up or verify conditions. Avoid using them on constructors or methods of non-mocks, as they don't make sense there. This ensures your mocking is effective and your code stays clear and accurate.</value>
   </data>
   <data name="MiKo_3107_MessageFormat" xml:space="preserve">
     <value>Use a mock instead</value>
@@ -4214,7 +4204,7 @@ In contrast, the failure would be much easier to understand if the test would im
     <value>Moq Mock condition matchers should be used on mocks only</value>
   </data>
   <data name="MiKo_3108_Description" xml:space="preserve">
-    <value>Tests should use assertions to check the behavior of the code for correctness. A missing assertion indicates a test that does not check anything and is therefore not meaningful.</value>
+    <value>Tests need assertions to verify code behavior. Without an assertion, the test does not check anything and is not useful. This ensures tests are effective and your code works as expected.</value>
   </data>
   <data name="MiKo_3108_MessageFormat" xml:space="preserve">
     <value>Add assertion to test</value>
@@ -4226,7 +4216,7 @@ In contrast, the failure would be much easier to understand if the test would im
     <value>Add default assertion message</value>
   </data>
   <data name="MiKo_3109_Description" xml:space="preserve">
-    <value>Assertions should contain messages that tell the reason(s) why something was expected but failed. This makes it easier to understand why a test failed in particular.</value>
+    <value>Assertions should include messages explaining why something was expected but failed. This makes it easier to understand why a test failed, helping you quickly identify the issue.</value>
   </data>
   <data name="MiKo_3109_MessageFormat" xml:space="preserve">
     <value>Provide an assertion message</value>
@@ -4238,13 +4228,11 @@ In contrast, the failure would be much easier to understand if the test would im
     <value>Use 'Assert.That(..., Has...)'</value>
   </data>
   <data name="MiKo_3110_Description" xml:space="preserve">
-    <value>Assertions such as Assert.That(...) using 'Count' or 'Length' assert for exact values.
-If such a test fails it is difficult to find out why it exactly failed as the failure reason gives no useful hint (e.g. '5' expected but '3' received).
+    <value>Assertions using 'Assert.That(...)' with 'Count' or 'Length' check for exact values. When such a test fails, the error message is not very helpful (e.g., '5' expected but '3' received).
 
-So the failure needs to be carefully inspected. At worst the test needs to be debugged to find out what went wrong.
-That is annoying and becomes even more annoying if the test itself is a shaky one.
+This means you need to inspect the failure closely. Debugging might even be necessary, which is frustrating, especially if the test is unreliable.
 
-In contrast, the failure would be much easier to understand if the test would immediately state what was expected (e.g. Expected items 'A', 'B' and 'C' but found 'B' and 'D').</value>
+In contrast, tests should state exactly what was expected and found (e.g., 'Expected items A, B, and C but found B and D'). This approach makes failures much easier to understand and fix.</value>
   </data>
   <data name="MiKo_3110_MessageFormat" xml:space="preserve">
     <value>Do not use '{0}' in assertion</value>
@@ -4256,7 +4244,7 @@ In contrast, the failure would be much easier to understand if the test would im
     <value>Use 'Zero'</value>
   </data>
   <data name="MiKo_3111_Description" xml:space="preserve">
-    <value>For clarity, tests that assert for zero should use 'Is.Zero' instead of 'Is.EqualTo(0)'.</value>
+    <value>To improve clarity, use 'Is.Zero' instead of 'Is.EqualTo(0)' when asserting for zero in tests. This makes the code easier to read and understand.</value>
   </data>
   <data name="MiKo_3111_MessageFormat" xml:space="preserve">
     <value>Use 'Zero' instead</value>
@@ -4268,7 +4256,7 @@ In contrast, the failure would be much easier to understand if the test would im
     <value>Use 'Is.Empty'</value>
   </data>
   <data name="MiKo_3112_Description" xml:space="preserve">
-    <value>For clarity, tests that assert on collections for emptiness should use 'Is.Empty' instead of 'Has.Count.Zero'.</value>
+    <value>To improve clarity, use 'Is.Empty' instead of 'Has.Count.Zero' when asserting on collections for emptiness in tests. This makes the code easier to read and understand.</value>
   </data>
   <data name="MiKo_3112_MessageFormat" xml:space="preserve">
     <value>Use 'Is.Empty' instead</value>
@@ -4280,7 +4268,7 @@ In contrast, the failure would be much easier to understand if the test would im
     <value>Use 'Assert.That'</value>
   </data>
   <data name="MiKo_3113_Description" xml:space="preserve">
-    <value>FluentAssertions uses an approach where you define a 'Should' method, followed by the assertion. That makes those assertions more difficult to read and spot. In contrast, NUnit's fluent assertion approach via 'Assert.That' is much easier to spot.</value>
+    <value>FluentAssertions uses a 'Should' method followed by the assertion, which can make assertions harder to read and spot. In contrast, NUnit's fluent assertion approach using 'Assert.That' is easier to spot and read. This makes NUnit's approach more user-friendly and accessible.</value>
   </data>
   <data name="MiKo_3113_MessageFormat" xml:space="preserve">
     <value>Use 'Assert.That' instead of 'Should'</value>
@@ -4292,7 +4280,7 @@ In contrast, the failure would be much easier to understand if the test would im
     <value>Use 'Mock.Of&lt;T&gt;()'</value>
   </data>
   <data name="MiKo_3114_Description" xml:space="preserve">
-    <value>To ease maintenance and increase readability, 'Mock.Of&lt;T&gt;()' is easier to identify as some necessary but unimportant mock than 'new Mock&lt;T&gt;().Object'.</value>
+    <value>Use 'Mock.Of&lt;T&gt;()' in tests instead of 'new Mock&lt;T&gt;().Object'. This makes it easier to spot necessary but unimportant mocks and keeps the code cleaner and easier to read.</value>
   </data>
   <data name="MiKo_3114_MessageFormat" xml:space="preserve">
     <value>Use 'Mock.Of&lt;T&gt;()' instead</value>
@@ -4301,10 +4289,9 @@ In contrast, the failure would be much easier to understand if the test would im
     <value>Use 'Mock.Of&lt;T&gt;()' instead of 'new Mock&lt;T&gt;().Object'</value>
   </data>
   <data name="MiKo_3115_Description" xml:space="preserve">
-    <value>Methods that are marked as tests but are empty are considered to be kidding developers.
-People may think that such methods test something but instead they do not test anything at all. This tricks them into a wrong feeling of "having it tested".
+    <value>Empty test methods mislead developers into thinking they test something. In reality, they don't test anything, giving a false sense of "having it tested".
 
-It may even be that the contained code is commented out, leading to the question why it is commented out at all. If that code would lead to a failing test, then either the test code is wrong or it would actually have found a bug that should to be adressed.</value>
+Commented-out code within these methods raises questions. If uncommented, it might cause the test to fail, indicating either a problem with the test code or an uncovered bug that needs addressing.</value>
   </data>
   <data name="MiKo_3115_MessageFormat" xml:space="preserve">
     <value>Delete empty test method or implement a test</value>
@@ -4313,7 +4300,7 @@ It may even be that the contained code is commented out, leading to the question
     <value>Test methods should contain code</value>
   </data>
   <data name="MiKo_3116_Description" xml:space="preserve">
-    <value>Methods that are marked as unit test initialization methods but are empty are not needed and clutter only the code base. Hence such methods can be removed without fear.</value>
+    <value>Empty unit test initialization methods clutter the codebase and serve no purpose. They can be safely removed to keep the code clean and maintainable.</value>
   </data>
   <data name="MiKo_3116_MessageFormat" xml:space="preserve">
     <value>Delete empty test initialization method</value>
@@ -4322,7 +4309,7 @@ It may even be that the contained code is commented out, leading to the question
     <value>Test initialization methods should contain code</value>
   </data>
   <data name="MiKo_3117_Description" xml:space="preserve">
-    <value>Methods that are marked as unit test cleanup methods but are empty are not needed and clutter only the code base. Hence such methods can be removed without fear.</value>
+    <value>Empty unit test cleanup methods clutter the codebase and serve no purpose. They can be safely removed to keep the code clean and maintainable.</value>
   </data>
   <data name="MiKo_3117_MessageFormat" xml:space="preserve">
     <value>Delete empty test cleanup method</value>
@@ -4331,9 +4318,9 @@ It may even be that the contained code is commented out, leading to the question
     <value>Test cleanup methods should contain code</value>
   </data>
   <data name="MiKo_3118_Description" xml:space="preserve">
-    <value>Tests should be as explicit as possible.
-Different Linq calls such as 'Skip' or 'Take' or 'FirstOrDefault' help in production code but are not clear enough when used inside a tests.
-For example, if the test uses 'Skip', it is unclear for the reader why the code should skip some values. Hence the reader needs to find out, which costs some time and could be easily avoided when the test would be more explicit here about the outcome.</value>
+    <value>Make tests as explicit as possible.
+LINQ calls like 'Skip', 'Take', or 'FirstOrDefault' are useful in production but can be unclear in tests. Using 'Skip' in a test, for example, can confuse readers about why values are being skipped. This ambiguity requires extra effort to understand.
+Avoid this by being more explicit about the expected outcome.</value>
   </data>
   <data name="MiKo_3118_MessageFormat" xml:space="preserve">
     <value>Do not use ambiguous Linq call '{0}'</value>
@@ -4345,7 +4332,7 @@ For example, if the test uses 'Skip', it is unclear for the reader why the code 
     <value>Change return type of test method to 'void'</value>
   </data>
   <data name="MiKo_3119_Description" xml:space="preserve">
-    <value>Test methods that return non-generic tasks are doing so for testing asynchronous behavior. Therefore they should not simply return 'Task.CompletedTask'. Such methods should instead simply return 'void'.</value>
+    <value>Test methods returning non-generic tasks are meant to test asynchronous behavior. They should not return 'Task.CompletedTask'. If they do, simply have them return void instead.</value>
   </data>
   <data name="MiKo_3119_MessageFormat" xml:space="preserve">
     <value>Return void instead of Task</value>
@@ -4357,7 +4344,8 @@ For example, if the test uses 'Skip', it is unclear for the reader why the code 
     <value>Use value directly instead of condition matcher</value>
   </data>
   <data name="MiKo_3120_Description" xml:space="preserve">
-    <value>Moq provides condition matchers to verify calls with given arguments. Those condition matchers exist to verify that parts of the argument match a specific criteria. They should not be used to test whether they match the exact value. For such cases the exact values should be provided instead of the condition matcher.</value>
+    <value>Moq's condition matchers are meant to verify that parts of an argument meet specific criteria. However, they should not be used to test for exact value matches. In those cases, provide the exact values instead of using a condition matcher.
+This ensures precision in your tests and maintains clear expectations.</value>
   </data>
   <data name="MiKo_3120_MessageFormat" xml:space="preserve">
     <value>Use value directly instead of condition matcher</value>
@@ -4366,8 +4354,7 @@ For example, if the test uses 'Skip', it is unclear for the reader why the code 
     <value>Moq mocks should use values instead of 'It.Is&lt;&gt;(...)' condition matcher to verify exact values</value>
   </data>
   <data name="MiKo_3121_Description" xml:space="preserve">
-    <value>To ease development and to be able to jump directly into code, an object under test should be a concrete type and no interface.
-Otherwise, when attempting to jump into the code, developers just end up at the interface and have to find out which implementation they actually want to inspect / test.</value>
+    <value>For easier development and direct code access, use a concrete type for the object under test, not an interface. Otherwise, developers end up at the interface and have to find the actual implementation.</value>
   </data>
   <data name="MiKo_3121_MessageFormat" xml:space="preserve">
     <value>Test concrete type instead of interface</value>
@@ -4376,7 +4363,7 @@ Otherwise, when attempting to jump into the code, developers just end up at the 
     <value>Tests should test concrete implementations and no interfaces</value>
   </data>
   <data name="MiKo_3122_Description" xml:space="preserve">
-    <value>Test methods using more than 2 parameters most likely are combined tests. Such test are hard to read. Hence, to ease reading, these tests should be split into separate ones.</value>
+    <value>Test methods with more than 2 parameters are often combined tests and can be hard to read. To improve readability, split these tests into separate ones. This makes them easier to understand and maintain.</value>
   </data>
   <data name="MiKo_3122_MessageFormat" xml:space="preserve">
     <value>Split into multiple tests so that you do not need more than 2 parameters</value>
@@ -4388,7 +4375,7 @@ Otherwise, when attempting to jump into the code, developers just end up at the 
     <value>Invert if to simplify</value>
   </data>
   <data name="MiKo_3201_Description" xml:space="preserve">
-    <value>In case a method contains only a few statements and an if statement simply returns, that if statement can be inverted. Doing so makes the method easier to read.</value>
+    <value>If a method has just a few statements and an 'if' statement that returns, invert the 'if' statement. This makes the method easier to read and understand.</value>
   </data>
   <data name="MiKo_3201_MessageFormat" xml:space="preserve">
     <value>Invert if to simplify</value>
@@ -4400,7 +4387,7 @@ Otherwise, when attempting to jump into the code, developers just end up at the 
     <value>Invert condition into positive</value>
   </data>
   <data name="MiKo_3202_Description" xml:space="preserve">
-    <value>The code is much easier to read in case it contains an if statement or conditional that has a positive condition and the code returns in all paths.</value>
+    <value>Code is easier to read when using 'if' statements or conditionals with positive conditions. This approach enhances readability and clarity.</value>
   </data>
   <data name="MiKo_3202_MessageFormat" xml:space="preserve">
     <value>Invert condition into positive</value>
@@ -4412,7 +4399,7 @@ Otherwise, when attempting to jump into the code, developers just end up at the 
     <value>Invert if to simplify</value>
   </data>
   <data name="MiKo_3203_Description" xml:space="preserve">
-    <value>In case an if statement contains only a continue statement and is followed also by a single code line, that if statement can be inverted. Doing so makes the method easier to read.</value>
+    <value>If an 'if' statement contains only a 'continue' statement and is followed by a single line of code, invert the 'if' statement. This makes the method easier to read and understand.</value>
   </data>
   <data name="MiKo_3203_MessageFormat" xml:space="preserve">
     <value>Invert if to simplify</value>
@@ -4424,7 +4411,7 @@ Otherwise, when attempting to jump into the code, developers just end up at the 
     <value>Invert if to simplify</value>
   </data>
   <data name="MiKo_3204_Description" xml:space="preserve">
-    <value>In case an if statement has a negative condition but also an else clause, that if statement can be inverted into a positive one. Doing so makes the method easier to read and understand.</value>
+    <value>If an 'if' statement has a negative condition and an 'else' clause, invert it into a positive condition. This makes the method easier to read and understand.</value>
   </data>
   <data name="MiKo_3204_MessageFormat" xml:space="preserve">
     <value>Invert if to simplify</value>
@@ -4433,9 +4420,9 @@ Otherwise, when attempting to jump into the code, developers just end up at the 
     <value>Negative If statements can be inverted when they have an else clause</value>
   </data>
   <data name="MiKo_3210_Description" xml:space="preserve">
-    <value>Methods that share the same name within a type are called overloads. In general, overloads with fewer parameters call the ones with more parameters and provide some default values - that's why they have fewer parameters.
-So, when inheriting is needed and such overload method needs to be overridden by an inherited class, then the overload to override should be the one with the most parameters.
-Same applies to abstract methods.</value>
+    <value>Overloads are methods with the same name within a type. Generally, those with fewer parameters call the ones with more parameters, providing default values.
+
+When inheritance requires overriding such methods, override the overload with the most parameters. The same rule applies to abstract methods. This approach maintains consistency and clarity in your code.</value>
   </data>
   <data name="MiKo_3210_MessageFormat" xml:space="preserve">
     <value>Do not make method '{0}'</value>
@@ -4444,9 +4431,9 @@ Same applies to abstract methods.</value>
     <value>Only the longest overloads should be virtual or abstract</value>
   </data>
   <data name="MiKo_3211_Description" xml:space="preserve">
-    <value>In case a public type contains a finalizable resource, that type should instead have a private nested type (or an internal type when used in multiple classes) that acts as finalizable resource holder.
+    <value>If a public type contains a finalizable resource, use a private nested type (or an internal type for multiple classes) as the finalizable resource holder.
 
-The reason is that finalizers are notoriously difficult to implement correctly because they cannot make assumptions about the state of the system during their execution.</value>
+Finalizers are challenging to implement correctly because they can't assume the state of the system during execution. This approach ensures proper management of finalizable resources.</value>
   </data>
   <data name="MiKo_3211_MessageFormat" xml:space="preserve">
     <value>Do not use a finalizer</value>
@@ -4455,9 +4442,7 @@ The reason is that finalizers are notoriously difficult to implement correctly b
     <value>Public types should not have finalizers</value>
   </data>
   <data name="MiKo_3212_Description" xml:space="preserve">
-    <value>Keep the basic Dispose pattern consistent and do not confuse developers by providing other "Dispose" methods. The only methods called "Dispose" should be the "void IDisposable.Dispose()" and the "void Dispose(bool disposing)" methods.
-
-All other methods would vary from the Dispose pattern and lead to confusion.</value>
+    <value>Stick to the basic Dispose pattern to avoid confusing developers. The only methods named 'Dispose' should be void 'IDisposable.Dispose()' and 'void Dispose(bool disposing)'. Any other methods would deviate from the Dispose pattern and cause confusion.</value>
   </data>
   <data name="MiKo_3212_MessageFormat" xml:space="preserve">
     <value>Do not provide such Dispose method</value>
@@ -4466,8 +4451,7 @@ All other methods would vary from the Dispose pattern and lead to confusion.</va
     <value>Do not confuse developers by providing other Dispose methods</value>
   </data>
   <data name="MiKo_3213_Description" xml:space="preserve">
-    <value>The public 'Dispose()' method should invoke the 'Dispose(bool disposing)' method with 'disposing' set to 'true' as the only call.
-All the other calls should be invoked from the 'Dispose(bool disposing)' method.</value>
+    <value>The public 'Dispose()' method should only call 'Dispose(bool disposing)' with 'disposing' set to 'true'. All other disposal logic should reside in the 'Dispose(bool disposing)' method. This keeps the Dispose pattern consistent and clear.</value>
   </data>
   <data name="MiKo_3213_MessageFormat" xml:space="preserve">
     <value>Only invoke 'Dispose(false)' but nothing more</value>
@@ -4476,10 +4460,9 @@ All the other calls should be invoked from the 'Dispose(bool disposing)' method.
     <value>Parameterless Dispose method follows Basic Dispose pattern</value>
   </data>
   <data name="MiKo_3214_Description" xml:space="preserve">
-    <value>If methods start with 'Begin' or 'Enter' they probably have counterparts that start with 'End' or 'Exit'. Such methods are considered to define some kind of scope (for example, 'BeginUpdate' and 'EndUpdate' defines a scope for an update operation).
-As it is prone to errors to forget or not correctly invoke the 'End' methods (e.g. due to exceptions being thrown), those methods should not be made available to the public.
-Instead, a method should be made available that returns an 'IDisposable' to define that scope.
-By doing so developers can simply place the call inside a 'using' to guarantee that the 'End' method is invoked in all cases.</value>
+    <value>Methods starting with 'Begin' or 'Enter' often have counterparts like 'End' or 'Exit', defining a scope (e.g., 'BeginUpdate' and 'EndUpdate'). Public access to these methods can lead to errors if 'End' methods are not correctly invoked.
+
+Instead, provide a method that returns an 'IDisposable'. This way, developers can use a 'using' statement to ensure the 'End' method is always called, keeping everything clean and error-free.</value>
   </data>
   <data name="MiKo_3214_MessageFormat" xml:space="preserve">
     <value>Rename scope-defining method to not start with '{1}'</value>
@@ -4491,7 +4474,7 @@ By doing so developers can simply place the call inside a 'using' to guarantee t
     <value>Convert 'Predicate' into 'Func'</value>
   </data>
   <data name="MiKo_3215_Description" xml:space="preserve">
-    <value>To standardize delegates and follow the .NET Framework Design Guidelines for callbacks, callbacks of type 'Predicate&lt;T&gt;' should be of type 'Func&lt;T, bool&gt;' instead.</value>
+    <value>To standardize delegates and adhere to .NET Framework Design Guidelines, use 'Func&lt;T, bool&gt;' for callbacks instead of 'Predicate&lt;T&gt;'. This approach ensures consistency and aligns with best practices.</value>
   </data>
   <data name="MiKo_3215_HelpLinkUri" xml:space="preserve">
     <value>https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/events-and-callbacks</value>
@@ -4506,7 +4489,7 @@ By doing so developers can simply place the call inside a 'using' to guarantee t
     <value>Make field read-only</value>
   </data>
   <data name="MiKo_3216_Description" xml:space="preserve">
-    <value>Static fields that get their values pre-assigned are most probably meant to solely have those values. Therefore such fields should be read-only.</value>
+    <value>Static fields with pre-assigned values are likely meant to remain unchanged. Therefore, make these fields 'readonly'. This ensures their values remain constant and clearly communicates their intended use.</value>
   </data>
   <data name="MiKo_3216_MessageFormat" xml:space="preserve">
     <value>Make field read-only</value>
@@ -4515,9 +4498,9 @@ By doing so developers can simply place the call inside a 'using' to guarantee t
     <value>Static fields with initializers should be read-only</value>
   </data>
   <data name="MiKo_3217_Description" xml:space="preserve">
-    <value>Generic types that have other generic types as type arguments are hard to understand and maintain.
-This is because it's hard to find out what's meant, in addition it seems like there is some type information hiding within the generics due to primitive obsession.
-Instead, it would be much easier to see what is meant if non-generic types would be used as type arguments.</value>
+    <value>Generic types with other generic types as type arguments are hard to understand and maintain. This complexity makes it difficult to interpret their purpose and suggests hidden type information due to primitive obsession.
+
+Instead, use non-generic types as type arguments. This approach makes the code's intent clearer and easier to follow.</value>
   </data>
   <data name="MiKo_3217_MessageFormat" xml:space="preserve">
     <value>Do not use generic type with generic type arguments</value>
@@ -4526,7 +4509,7 @@ Instead, it would be much easier to see what is meant if non-generic types would
     <value>Do not use generic types that have other generic types as type arguments</value>
   </data>
   <data name="MiKo_3218_Description" xml:space="preserve">
-    <value>Extension methods are a great way to extend types with additional functionality. Such extension methods are defined in static types specifically designed for that. However, other types that are not intended to contain extension methods should not unexpectedly contain them.</value>
+    <value>Extension methods should only be in static types designed for that purpose. Avoid placing them in other types, as this can cause confusion. Keeping extension methods where they belong ensures clarity and consistency in your code.</value>
   </data>
   <data name="MiKo_3218_MessageFormat" xml:space="preserve">
     <value>Change from extension method into normal static method</value>
@@ -4535,7 +4518,7 @@ Instead, it would be much easier to see what is meant if non-generic types would
     <value>Do not define extension methods in unexpected places</value>
   </data>
   <data name="MiKo_3219_Description" xml:space="preserve">
-    <value>Public members should provide the right set of functionality for direct consumers of a class. In case extensibility is needed, they should call into a protected virtual member of the same name but suffixed with 'Core' which then act as extensibility points and are easy to spot.</value>
+    <value>Public members should offer the correct functionality for class consumers. If extensibility is needed, they should call a 'protected virtual' member with the same name suffixed by 'Core'. These serve as clear, easily identifiable extensibility points.</value>
   </data>
   <data name="MiKo_3219_MessageFormat" xml:space="preserve">
     <value>Remove 'virtual' and provide a 'protected virtual {0}' member instead</value>
@@ -4547,7 +4530,7 @@ Instead, it would be much easier to see what is meant if non-generic types would
     <value>Simplify condition</value>
   </data>
   <data name="MiKo_3220_Description" xml:space="preserve">
-    <value>Logical '&amp;&amp;' or '||' conditions using 'true' or 'false' can be simplified to not use 'true' or 'false' directly.</value>
+    <value>Simplify logical '&amp;&amp;' or '||' conditions by removing direct uses of 'true' or 'false'. This makes your code cleaner and easier to read.</value>
   </data>
   <data name="MiKo_3220_MessageFormat" xml:space="preserve">
     <value>Simplify condition</value>
@@ -4559,7 +4542,7 @@ Instead, it would be much easier to see what is meant if non-generic types would
     <value>Use 'HashCode.Combine'</value>
   </data>
   <data name="MiKo_3221_Description" xml:space="preserve">
-    <value>To improve the quality of the hash code returned by 'GetHashCode', developers should use 'HashCode.Combine' (when the underlying data type is simple, for example, an integer value).</value>
+    <value>To improve the quality of the hash code returned by 'GetHashCode', use the 'HashCode.Combine' method. This is especially useful when dealing with simple underlying data types like integers and keeps your hash codes robust and efficient.</value>
   </data>
   <data name="MiKo_3221_MessageFormat" xml:space="preserve">
     <value>Use 'HashCode.Combine' instead</value>
@@ -4571,7 +4554,7 @@ Instead, it would be much easier to see what is meant if non-generic types would
     <value>Simplify comparison</value>
   </data>
   <data name="MiKo_3222_Description" xml:space="preserve">
-    <value>String comparisons for equality can be simplified by using the specific methods provided by the .NET framework. This makes the code easier to read and understand.</value>
+    <value>Simplify string comparisons for equality by using specific methods from the .NET framework. This makes your code more readable and easier to understand.</value>
   </data>
   <data name="MiKo_3222_MessageFormat" xml:space="preserve">
     <value>String comparison can be simplified</value>
@@ -4583,7 +4566,7 @@ Instead, it would be much easier to see what is meant if non-generic types would
     <value>Simplify comparison</value>
   </data>
   <data name="MiKo_3223_Description" xml:space="preserve">
-    <value>Comparisons for equality on reference types can be simplified by using the specific methods provided by the .NET framework. This makes the code easier to read and understand.</value>
+    <value>Simplify equality comparisons on reference types by using specific .NET framework methods. This approach makes the code easier to read and understand.</value>
   </data>
   <data name="MiKo_3223_MessageFormat" xml:space="preserve">
     <value>Comparison can be simplified</value>
@@ -4595,7 +4578,7 @@ Instead, it would be much easier to see what is meant if non-generic types would
     <value>Simplify comparison</value>
   </data>
   <data name="MiKo_3224_Description" xml:space="preserve">
-    <value>Comparisons for equality on value types can be simplified by using the specific equality operators. This makes the code easier to read and understand.</value>
+    <value>Simplify equality comparisons on value types by using specific .NET framework methods. This approach makes the code easier to read and understand.</value>
   </data>
   <data name="MiKo_3224_MessageFormat" xml:space="preserve">
     <value>Comparison can be simplified</value>
@@ -4607,7 +4590,7 @@ Instead, it would be much easier to see what is meant if non-generic types would
     <value>Simplify redundant comparison</value>
   </data>
   <data name="MiKo_3225_Description" xml:space="preserve">
-    <value>Boolean comparisons comparing the same values on both sides are redundant and can be simplified by using only one of those sides. This makes the code easier to read and understand.</value>
+    <value>Boolean comparisons that check the same values on both sides are redundant. Simplify them by using just one side. This makes the code easier to read and understand.</value>
   </data>
   <data name="MiKo_3225_MessageFormat" xml:space="preserve">
     <value>Redundant comparison can be simplified</value>
@@ -4619,7 +4602,7 @@ Instead, it would be much easier to see what is meant if non-generic types would
     <value>Use lambda expression body</value>
   </data>
   <data name="MiKo_3301_Description" xml:space="preserve">
-    <value>Using parenthesized lambda expressions with blocks that contain a single statement leads to some noise caused by the braces. Lambda expressions with expression bodies avoid that noise. So they should be used instead.</value>
+    <value>For single-statement blocks, use lambda expressions with expression bodies instead of parenthesized ones. This avoids the noise of parentheses, making your code cleaner and easier to read.</value>
   </data>
   <data name="MiKo_3301_MessageFormat" xml:space="preserve">
     <value>Use lambda expression body instead</value>
@@ -4631,7 +4614,7 @@ Instead, it would be much easier to see what is meant if non-generic types would
     <value>Remove braces around parameter</value>
   </data>
   <data name="MiKo_3302_Description" xml:space="preserve">
-    <value>Using parenthesized lambda expressions with a single parameter leads to some noise caused by the braces. Simple lambda expressions with expression bodies avoid that noise. So they should be used instead.</value>
+    <value>For single-parameter lambda expressions, avoid using parentheses. Use simple lambda expressions with expression bodies instead. This keeps your code cleaner and easier to read.</value>
   </data>
   <data name="MiKo_3302_MessageFormat" xml:space="preserve">
     <value>Use simple lambda expression body instead</value>
@@ -4640,8 +4623,7 @@ Instead, it would be much easier to see what is meant if non-generic types would
     <value>Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters</value>
   </data>
   <data name="MiKo_3401_Description" xml:space="preserve">
-    <value>Namespaces should have only a limited depth. If a namespace hierarchy becomes too deep, then the namespaces are probably too concrete or special to make sense.
-Such namespaces should be flattened.</value>
+    <value>Keep namespace hierarchies shallow. If a namespace hierarchy becomes too deep, it likely means the namespaces are too specific or specialized. Flatten such namespaces to keep your codebase understandable and manageable.</value>
   </data>
   <data name="MiKo_3401_MessageFormat" xml:space="preserve">
     <value>Namespace hierarchy too deep: {1,4} (max. {2})</value>
@@ -4653,7 +4635,7 @@ Such namespaces should be flattened.</value>
     <value>Remove suppressed nullable warning</value>
   </data>
   <data name="MiKo_3501_Description" xml:space="preserve">
-    <value>Suppressing nullable warnings on Null-conditional operators is confusing to developers. Either something can be null or it cannot be null; but it cannot be both null and not null.</value>
+    <value>Suppressing nullable warnings on null-conditional operators confuses developers. A value is either nullable or it's not; it can't be both.</value>
   </data>
   <data name="MiKo_3501_MessageFormat" xml:space="preserve">
     <value>Do not suppress nullable warning</value>
@@ -4665,7 +4647,7 @@ Such namespaces should be flattened.</value>
     <value>Remove suppressed nullable warning</value>
   </data>
   <data name="MiKo_3502_Description" xml:space="preserve">
-    <value>Suppressing nullable warnings on Linq calls that can return 'null' is confusing to developers. Either something can be null or it cannot be null; but it cannot be both null and not null.</value>
+    <value>Suppressing nullable warnings on LINQ calls that can return 'null' confuses developers. A value is either nullable or it's not; it can't be both.</value>
   </data>
   <data name="MiKo_3502_MessageFormat" xml:space="preserve">
     <value>Do not suppress nullable warning</value>
