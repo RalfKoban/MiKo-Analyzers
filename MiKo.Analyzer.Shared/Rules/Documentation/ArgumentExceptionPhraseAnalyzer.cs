@@ -32,14 +32,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected virtual IEnumerable<Diagnostic> AnalyzeException(ISymbol owningSymbol, IReadOnlyCollection<IParameterSymbol> parameters, XmlElementSyntax exceptionComment)
         {
             // get rid of the para tags as we are not interested into them
-            var comment = exceptionComment.GetTextTrimmed().ToString();
+            var comment = exceptionComment.GetTextTrimmed();
 
             // remove -or- separators and split comment into parts to inspect individually
             var parts = comment.SplitBy(Constants.Comments.ExceptionSplittingPhrase);
 
             // create default proposal for parameter names
             var proposal = parameters
-                           .Select(_ => m_exceptionPhrases[0].FormatWith(_.Name) + (m_addDotsToProposal ? "..." : string.Empty) + Constants.EnvironmentNewLine)
+                           .Select(_ => m_exceptionPhrases[0].FormatWith(_.Name) + (m_addDotsToProposal ? "..." + Constants.EnvironmentNewLine : string.Empty + Constants.EnvironmentNewLine))
                            .ConcatenatedWith(Constants.Comments.ExceptionSplittingParaPhrase + Constants.EnvironmentNewLine);
 
             var parameterIndicators = parameters.ToDictionary<IParameterSymbol, IParameterSymbol, string>(_ => _, _ => Constants.Comments.ParamRefBeginningPhrase.FormatWith(_.Name), SymbolEqualityComparer.Default);
