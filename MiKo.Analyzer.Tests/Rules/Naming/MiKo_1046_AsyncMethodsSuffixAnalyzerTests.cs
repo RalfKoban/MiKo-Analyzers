@@ -37,16 +37,6 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_non_static_async_Main_method() => An_issue_is_reported_for(@"
-using System;
-
-public class TestMe
-{
-    public async Task Main() { }
-}
-");
-
-        [Test]
         public void No_issue_is_reported_for_correctly_named_async_void_method() => No_issue_is_reported_for(@"
 using System;
 
@@ -67,16 +57,6 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_async_void_method() => An_issue_is_reported_for(@"
-using System;
-
-public class TestMe
-{
-    public async void DoSomething() { }
-}
-");
-
-        [Test]
         public void No_issue_is_reported_for_correctly_named_Task_method() => No_issue_is_reported_for(@"
 using System.Threading.Tasks;
 
@@ -93,16 +73,6 @@ using System.Threading.Tasks;
 public class TestMe
 {
     protected Task DoSomethingAsyncCore() { }
-}
-");
-
-        [Test]
-        public void An_issue_is_reported_for_incorrectly_named_Task_method() => An_issue_is_reported_for(@"
-using System.Threading.Tasks;
-
-public class TestMe
-{
-    public Task DoSomething() { }
 }
 ");
 
@@ -155,19 +125,6 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_async_void_local_function() => An_issue_is_reported_for(@"
-using System;
-
-public class TestMe
-{
-    public async void DoSomethingAsync()
-    {
-        async void DoSomethingCore() { }
-    }
-}
-");
-
-        [Test]
         public void No_issue_is_reported_for_correctly_named_Task_local_function() => No_issue_is_reported_for(@"
 using System.Threading.Tasks;
 
@@ -176,19 +133,6 @@ public class TestMe
     public Task DoSomethingAsync()
     {
         async Task DoSomethingCoreAsync() { }
-    }
-}
-");
-
-        [Test]
-        public void An_issue_is_reported_for_incorrectly_named_Task_local_function() => An_issue_is_reported_for(@"
-using System.Threading.Tasks;
-
-public class TestMe
-{
-    public Task DoSomethingAsync()
-    {
-        async Task DoSomethingCore() { }
     }
 }
 ");
@@ -206,6 +150,69 @@ public class TestMe
     public Task DoSomething()
     {
         Task DoSomethingCoreAsync() => Task.CompletedTask;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_global_statement() => No_issue_is_reported_for(@"
+using System.Threading.Tasks;
+
+await Task.CompletedTask;
+");
+
+        [Test]
+        public void An_issue_is_reported_for_non_static_async_Main_method() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public async Task Main() { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_named_async_void_method() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public async void DoSomething() { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_named_Task_method() => An_issue_is_reported_for(@"
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething() { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_named_async_void_local_function() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public async void DoSomethingAsync()
+    {
+        async void DoSomethingCore() { }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_named_Task_local_function() => An_issue_is_reported_for(@"
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomethingAsync()
+    {
+        async Task DoSomethingCore() { }
     }
 }
 ");
