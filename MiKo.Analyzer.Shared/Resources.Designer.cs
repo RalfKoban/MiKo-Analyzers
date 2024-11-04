@@ -13077,7 +13077,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Simplify equality comparisons on value types by using specific .NET framework methods. This approach makes the code easier to read and understand. .
+        ///   Looks up a localized string similar to Simplify equality comparisons on value types by using specific .NET framework methods. This approach makes the code easier to read and understand..
         /// </summary>
         internal static string MiKo_3224_Description {
             get {

@@ -4578,7 +4578,7 @@ Instead, use non-generic types as type arguments. This approach makes the code's
     <value>Simplify comparison</value>
   </data>
   <data name="MiKo_3224_Description" xml:space="preserve">
-    <value>Simplify equality comparisons on value types by using specific .NET framework methods. This approach makes the code easier to read and understand. </value>
+    <value>Simplify equality comparisons on value types by using specific .NET framework methods. This approach makes the code easier to read and understand.</value>
   </data>
   <data name="MiKo_3224_MessageFormat" xml:space="preserve">
     <value>Comparison can be simplified</value>
