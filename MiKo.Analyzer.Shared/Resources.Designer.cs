@@ -13320,7 +13320,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods that have the same name but a different number of parameters should be ordered in a way so that each method with fewer parameters is ordered before a method with more parameters..
+        ///   Looks up a localized string similar to Order methods with the same name but different parameters so that those with fewer parameters come first. This shows all overloads in logical order and improves readability, making the code easier to understand and maintain..
         /// </summary>
         internal static string MiKo_4001_Description {
             get {
@@ -13358,7 +13358,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods that have the same name should be placed side-by-side so that those methods can be easily found together..
+        ///   Looks up a localized string similar to Place methods with the same name and accessibility side-by-side. This keeps them grouped together, making the code easier to find, understand, and maintain..
         /// </summary>
         internal static string MiKo_4002_Description {
             get {
@@ -13396,7 +13396,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ctors, finalizers and Dispose methods are all directly related to the lifetime of an object. Therefore, they belong together and should be placed side by side..
+        ///   Looks up a localized string similar to Constructors, finalizers, and Dispose methods are all tied to an object&apos;s lifetime. They should be placed side by side to keep related code together.
+        ///This organization ensures clarity and makes the code easier to find, understand and maintain..
         /// </summary>
         internal static string MiKo_4003_Description {
             get {
@@ -13432,7 +13433,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dispose methods are all directly related to the lifetime of an object. Therefore, they should be placed before all other methods of the same accessibility..
+        ///   Looks up a localized string similar to Dispose methods are tied to the object&apos;s lifetime. Therefore, place them before all other methods of the same accessibility to keep related code together.
+        ///This organization ensures clarity and makes the code easier to find, understand and maintain..
         /// </summary>
         internal static string MiKo_4004_Description {
             get {
@@ -13468,7 +13470,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease reading, the interface that gives the type its name should be listed as first interface. All the other implemented interfaces should be placed behind..
+        ///   Looks up a localized string similar to List the interface that gives the type its name first, followed by all other implemented interfaces. This organization ensures clarity and makes the code easier to understand..
         /// </summary>
         internal static string MiKo_4005_Description {
             get {
@@ -13504,7 +13506,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Operators are a very special kind of methods. As they are static, they should be placed before all other methods..
+        ///   Looks up a localized string similar to Operators are special static methods. They should be placed before all other methods and grouped together. This ensures clarity and makes the code easier to understand..
         /// </summary>
         internal static string MiKo_4007_Description {
             get {
@@ -13540,7 +13542,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The methods &apos;GetHashCode&apos; and &apos;Equals&apos; are used in conjunction to place instances based on their hashes inside dictionaries or hashsets. &apos;GetHashCode&apos; is used to calculate a hash and in case of a hash collision, &apos;Equals&apos; is used to identify the instance. So both methods are strongly related and therefore should be located nearby..
+        ///   Looks up a localized string similar to &apos;GetHashCode&apos; and &apos;Equals&apos; are used together to manage instances in dictionaries or hashsets. &apos;GetHashCode&apos; computes a hash, and if a collision occurs, &apos;Equals&apos; identifies the instance. Because they are closely related, they should be located near each other in your code..
         /// </summary>
         internal static string MiKo_4008_Description {
             get {
@@ -13576,7 +13578,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test initialization method define the most common parts that tests shall contain. So to ease their finding they should be ordered directly after all one-time methods and before all other methods..
+        ///   Looks up a localized string similar to Test initialization methods define the common parts of tests. To make them easy to find, place them directly after all one-time test initialization/cleanup methods and before all test methods..
         /// </summary>
         internal static string MiKo_4101_Description {
             get {
@@ -13612,7 +13614,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test cleanup methods define the common parts that shall be executed after any test has been finished. So to ease their finding they should be ordered before the test methods..
+        ///   Looks up a localized string similar to Test cleanup methods define common tasks to be executed after any test finishes. To make them easy to find, place them directly after any test initialization method and before all test methods..
         /// </summary>
         internal static string MiKo_4102_Description {
             get {
@@ -13648,7 +13650,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to One-Time test initialization method define the most common parts that the test environment shall have. So to ease their finding they should be ordered first..
+        ///   Looks up a localized string similar to One-time test initialization methods set up the key parts of the test environment. To make them easy to find, place these methods first..
         /// </summary>
         internal static string MiKo_4103_Description {
             get {
@@ -13684,7 +13686,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to One-Time test cleanup methods define the common parts that shall be executed after all tests have been finished, to clean up the test environment. So to ease their finding they should be ordered directly after the One-Time test initialization methods..
+        ///   Looks up a localized string similar to One-time test cleanup methods handle the common tasks that must be executed after all tests are done to clean up the test environment. To make them easy to find, place them directly after the one-time test initialization methods..
         /// </summary>
         internal static string MiKo_4104_Description {
             get {
@@ -13720,7 +13722,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For performance reasons, &apos;IsDebugEnabled&apos; should be invoked before the &apos;Debug&apos; or &apos;DebugFormat&apos; methods get invoked as those require messages to be created. That creation (and the garbage collection of them as well) is not needed if the &apos;Debug&apos; log level is not set..
+        ///   Looks up a localized string similar to To improve performance, call &apos;IsDebugEnabled&apos; before invoking &apos;Debug&apos; or &apos;DebugFormat&apos;. This prevents creating unnecessary messages and garbage collection if the &apos;Debug&apos; log level isn&apos;t set..
         /// </summary>
         internal static string MiKo_5001_Description {
             get {
@@ -13756,7 +13758,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For performance reasons, &apos;xxxFormat&apos; methods (such as &apos;DebugFormat&apos;) should be invoked only with arguments to format the string. Otherwise, the corresponding non-formatting methods (such as &apos;Debug&apos;) should be invoked..
+        ///   Looks up a localized string similar to To improve performance, use &apos;xxxFormat&apos; methods (like &apos;DebugFormat&apos;) only with arguments for formatting the string. Otherwise, use the non-formatting methods (like &apos;Debug&apos;). This approach avoids unnecessary overhead and keeps your code efficient..
         /// </summary>
         internal static string MiKo_5002_Description {
             get {
@@ -13783,8 +13785,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log methods (such as &apos;Debug&apos;, &apos;Info&apos;, &apos;Warn&apos;, ...) provide an overload that takes an Exception. In case an Exception shall be logged, those Log methods should be invoked instead of those without Exception parameter.
-        ///That allows the Log framework to log not only the name of the exception but also additional information (such as it&apos;s stack trace)..
+        ///   Looks up a localized string similar to When logging exceptions, use Log methods that accept an exception parameter (like &apos;Debug&apos;, &apos;Info&apos;, &apos;Warn&apos;, etc.). This allows the Log framework to capture not just the exception name but also additional details like the stack trace, keeping your logs detailed and informative..
         /// </summary>
         internal static string MiKo_5003_Description {
             get {
@@ -13820,9 +13821,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For performance reasons, it makes no sense to use &apos;object.Equals()&apos; on value types. Value types get boxed and unboxed when being casted to objects. That puts unnecessary pressure on the garbage collector as temporary objects are created and immediately get garbage collected.
-        ///
-        ///Instead the equality operator should be used to compare value types..
+        ///   Looks up a localized string similar to Using &apos;object.Equals()&apos; on value types causes unnecessary boxing and unboxing, which pressures the garbage collector. Instead, use the equality operator for comparing value types. This improves performance by avoiding temporary object creation and garbage collection..
         /// </summary>
         internal static string MiKo_5010_Description {
             get {
@@ -13849,7 +13848,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For performance reasons (and to avoid large pressure on the garbage collector) strings should be concatenated with &apos;string.Concat()&apos;, &apos;string.Join()&apos; or by using a &apos;StringBuilder&apos;..
+        ///   Looks up a localized string similar to Do not use += for string concatenation. It creates unnecessary string allocations, putting pressure on the garbage collector. Instead, use &apos;string.Concat()&apos;, &apos;string.Join()&apos;, or &apos;StringBuilder&apos; to boost performance and reduce garbage collector load..
         /// </summary>
         internal static string MiKo_5011_Description {
             get {
@@ -13876,7 +13875,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to From performance point of view it is a bad idea to let methods that use yield invoke themselves recursively. The underlying iterators are called much more times than intended, thus leading to an unexpectedly bad performance..
+        ///   Looks up a localized string similar to To improve performance, avoid letting methods with yield call themselves recursively. This causes the underlying iterators to be called more times than expected, resulting in poor runtime performance..
         /// </summary>
         internal static string MiKo_5012_Description {
             get {
@@ -13921,7 +13920,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To avoid unnecessary memory consumption and pressure on the garbage collector, empty arrays should not be created manually. Instead, the method &apos;Array.Empty&lt;T&gt;()&apos; should be used..
+        ///   Looks up a localized string similar to Avoid creating empty arrays manually to prevent unnecessary memory consumption and garbage collector pressure. Use &apos;Array.Empty&lt;T&gt;()&apos; or &apos;[]&apos; instead. This approach is more efficient..
         /// </summary>
         internal static string MiKo_5013_Description {
             get {
@@ -13957,7 +13956,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To avoid unnecessary memory consumption and pressure on the garbage collector, empty lists should not be created manually. Instead, the method &apos;Array.Empty&lt;T&gt;()&apos; should be used..
+        ///   Looks up a localized string similar to Avoid creating empty lists manually to prevent unnecessary memory consumption and garbage collector pressure. Use &apos;Array.Empty&lt;T&gt;()&apos; or &apos;[]&apos; instead. This approach is more efficient..
         /// </summary>
         internal static string MiKo_5014_Description {
             get {
@@ -13993,7 +13992,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interning string literals does not make sense as these literals are already interned..
+        ///   Looks up a localized string similar to Do not intern string literals. They&apos;re already interned, so doing it again does not add any value..
         /// </summary>
         internal static string MiKo_5015_Description {
             get {
@@ -14020,8 +14019,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For performance reasons, when using a &apos;.Contains()&apos; call inside an call of &apos;List.RemoveAll(...)&apos;, that &apos;Contains&apos; call should be done on a HashSet. This is because that call has a complexity of O(1) for the lookup.
-        ///When used e.g. on a list, that &apos;Contains&apos; call has to loop over that list again and again for each single element to look up, leading to a much worse runtime experience..
+        ///   Looks up a localized string similar to To improve performance, use &apos;Contains()&apos; on a &apos;HashSet&apos; inside &apos;List.RemoveAll(...)&apos; calls. HashSet lookup is O(1) while list lookup is O(n), which leads to better runtime performance. Using &apos;.Contains()&apos; on a list requires looping over it repeatedly, slowing things down..
         /// </summary>
         internal static string MiKo_5016_Description {
             get {
@@ -14057,7 +14055,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To avoid unnecessary memory consumptions, string literals that are used as field or variable values should be constant..
+        ///   Looks up a localized string similar to To avoid unnecessary memory consumption, make string literals used as field or variable values constant. This keeps memory usage efficient and ensures better performance..
         /// </summary>
         internal static string MiKo_5017_Description {
             get {
