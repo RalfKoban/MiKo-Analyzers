@@ -7024,7 +7024,7 @@ namespace MiKoSolutions.Analyzers {
         
         /// <summary>
         ///   Looks up a localized string similar to The &lt;summary&gt; documentation of an Enum member should avoid phrases used in the Enum&apos;s own summary - like &apos;Defines&apos;, &apos;Indicates&apos;, or &apos;Specifies.&apos; Instead, it should focus on describing the meaning and purpose of the individual member, providing clear and specific details.
-        ///This ensures the documentation is precise and informative, helping developers understand each member’s role and functionality..
+        ///This ensures the documentation is precise and informative, helping developers understand each member&apos;s role and functionality..
         /// </summary>
         internal static string MiKo_2082_Description {
             get {
@@ -10391,8 +10391,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To avoid typos, fields that are the back of a DependencyProperty should be registered via &apos;DependencyProperty.Register()&apos; and the &apos;nameof&apos; operator.
-        ///In addition, the correct property names, property types and owing types should be provided..
+        ///   Looks up a localized string similar to To avoid typos, register fields backing a DependencyProperty using &apos;DependencyProperty.Register()&apos; and the &apos;nameof&apos; operator. Ensure you provide the correct property names, property types, and owning types..
         /// </summary>
         internal static string MiKo_3051_Description {
             get {
@@ -10437,7 +10436,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fields that are the back of a DependencyPropertyKey should be made non-public, &apos;static readonly&apos; to prevent clients to find and access those fields..
+        ///   Looks up a localized string similar to Make fields backing a DependencyPropertyKey non-public, static, and readonly. This prevents clients from finding and accessing these fields, ensuring your code stays secure and well-encapsulated..
         /// </summary>
         internal static string MiKo_3052_Description {
             get {
@@ -10473,8 +10472,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To avoid typos, fields that are the Key of a DependencyProperty should be registered via &apos;DependencyProperty.RegisterReadOnly()&apos; and the &apos;nameof&apos; operator.
-        ///In addition, the correct property names, property types and owing types should be provided..
+        ///   Looks up a localized string similar to To prevent typos, register fields that are the key of a DependencyProperty using &apos;DependencyProperty.RegisterReadOnly()&apos; and the &apos;nameof&apos; operator. Also, ensure you provide the correct property names, property types, and owning types..
         /// </summary>
         internal static string MiKo_3053_Description {
             get {
@@ -10519,9 +10517,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Read-only dependency properties are defined by &apos;DependencyPropertyKey&apos; fields and should not be visible to the public.
-        ///To made them available, it is recommended to expose a dependency property identifier for such read-only dependency property.
-        ///That can be done by exposing the value of &apos;DependencyPropertyKey.DependencyProperty&apos; as a &apos;public static readonly&apos; field on the specific class..
+        ///   Looks up a localized string similar to Read-only dependency properties are defined by DependencyPropertyKey fields and should remain non-public. To make them accessible, expose a dependency property identifier for the read-only property. Do this by exposing the value of &apos;DependencyPropertyKey.DependencyProperty&apos; as a &apos;public static readonly&apos; field in the specific class.
+        ///This maintains encapsulation while allowing access to the property..
         /// </summary>
         internal static string MiKo_3054_Description {
             get {
@@ -10557,8 +10554,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to In WPF view models are used for bindings. In case a view model does not implement the INotifyPropertyChanged interface, the binding is created via reflection. This is done by WPF to be able to detect changes of property values. But due to that a memory leak occurs as the binding instance (called descriptor) is hold in a static hash table for as long as the application runs.
-        ///To avoid that &quot;by design&quot; memory leak in WPF, types should implement INotifyPropertyChanged and raise the corresponding events wheneve [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to In WPF, view models use bindings. If a view model does not implement &apos;INotifyPropertyChanged&apos;, WPF uses reflection to detect changes, causing a memory leak. The binding instance (descriptor) stays in a static hash table for the app&apos;s lifetime.
+        ///To avoid this, make sure types implement &apos;INotifyPropertyChanged&apos; and raise the corresponding events when changes occur..
         /// </summary>
         internal static string MiKo_3055_Description {
             get {
@@ -10594,13 +10591,17 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you use Debug.Assert() or Trace.Assert(), then you want to ensure something. Nevertheless, this has several drawbacks:
-        ///1. Debug.Assert() does not work in Release mode (whereas Trace.Assert() does).
-        ///2. You cannot do anything here except to confirm the situation.
-        ///3. There is no failure handling available.
-        ///4. Calling code is not informed about the code and cannot handle the situation properly.
+        ///   Looks up a localized string similar to Using &apos;Debug.Assert()&apos; or &apos;Trace.Assert()&apos; to ensure something has several drawbacks:
         ///
-        ///So instead of using Debug.Assert() or Trace.Assert() throw an exception, such as an InvalidOperationExceptio [rest of string was truncated]&quot;;.
+        ///1. &apos;Debug.Assert()&apos; does not work in Release mode, while &apos;Trace.Assert()&apos; does.
+        ///
+        ///2. These assertions only confirm the situation; no action can be taken.
+        ///
+        ///3. There is no failure handling mechanism.
+        ///
+        ///4. Calling code is unaware of the issue and cannot handle it properly.
+        ///
+        ///Instead of using &apos;Debug.Assert()&apos; or &apos;Trace.Assert()&apos;, throw an exception like &apos;InvalidOperationException&apos;. This provides proper failure handling [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MiKo_3060_Description {
             get {
@@ -10627,10 +10628,9 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Often, loggers are requested via a type. Unfortunately, that most likely results in the situation that the logs contain no useful categories. Even worse, developers try to control the log output via the different severities (Debug, Info, ...).
-        ///As a result, the logs contain a lot of garbage. So, while analyzing log files it is unclear which log statement belongs into which category.
+        ///   Looks up a localized string similar to Loggers are often requested via a type, which results in logs lacking useful categories. Developers might control log output using different severities (Debug, Info, etc.), leading to cluttered logs. This makes it unclear which log statement belongs to which category.
         ///
-        ///Therefore, the logger should be requested via a string that acts as category..
+        ///Instead, request the logger via a string as the category. This approach ensures clear and organized logs, making analysis easier and more effective..
         /// </summary>
         internal static string MiKo_3061_Description {
             get {
@@ -10666,7 +10666,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log messages that log exceptions should end with a colon, to indicate that there is an exception..
+        ///   Looks up a localized string similar to End log messages that log exceptions with a colon. This clearly indicates that an exception follows, making it easier for developers to identify and understand the context..
         /// </summary>
         internal static string MiKo_3062_Description {
             get {
@@ -10702,7 +10702,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log messages that do not log exceptions should end with a dot because there is no exception to focus on..
+        ///   Looks up a localized string similar to End log messages that do not include exceptions with a dot. This keeps the focus clear and consistent, ensuring that logs are easy to read and understand. It helps distinguish between general log messages and those that include exception details, maintaining clarity in your logging practices..
         /// </summary>
         internal static string MiKo_3063_Description {
             get {
@@ -10774,11 +10774,11 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Microsoft Logging API supports Semantic or Structured Logging via message templates. These message template can contain placeholders for which arguments are provided.
+        ///   Looks up a localized string similar to The Microsoft Logging API supports Semantic or Structured Logging via message templates, which include named placeholders for arguments. These templates look like interpolated strings but without the &apos;$&apos; and with added arguments, which can be confusing.
         ///
-        ///Although these placeholders are names (not numbers) and require arguments, the message template looks almost identical to an interpolated string (except of the &apos;$&apos; and the additional arguments) which can be confusing.
+        ///The arguments are passed to the logging system, not just the formatted message. This allows logging providers to store parameter values as fields for filtering.
         ///
-        ///The arguments themselves are passed to the logging system, not just the formatted message template. This enables logg [rest of string was truncated]&quot;;.
+        ///Using interpolated strings instead of message templates prevents this filtering and contrad [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MiKo_3065_Description {
             get {
@@ -10805,8 +10805,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods that return IEnumerable are expected to be used in foreach loops or Linq queries.
-        ///It is unexpected that such places throw a NullReferenceException or ArgumentNullException, so these methods should never return null..
+        ///   Looks up a localized string similar to Methods returning &apos;IEnumerable&apos; are meant for foreach loops or LINQ queries. These methods should never return null, as it could lead to NullReferenceException or ArgumentNullException. Ensuring they do not return null keeps your code predictable and safe from unexpected runtime errors..
         /// </summary>
         internal static string MiKo_3070_Description {
             get {
@@ -10833,8 +10832,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods that return Task are expected to be used for async calls.
-        ///It is unexpected that when calling such methods you get a NullReferenceException thrown, so these methods should never return null..
+        ///   Looks up a localized string similar to Methods that return &apos;Task&apos; are intended for async calls. These methods should never return null, as this could lead to a NullReferenceException. Ensuring they do not return null keeps your code predictable and safe from unexpected runtime errors, maintaining reliability and smooth functionality..
         /// </summary>
         internal static string MiKo_3071_Description {
             get {
@@ -10861,8 +10859,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods that are visible to the public should not return a List&lt;&gt; or Dictionary&lt;&gt;. Instead, they should return the interfaces IList&lt;&gt; or IDictionary&lt;&gt;.
-        ///Doing so allows to change the implementation of the return value whenever it&apos;s needed. Otherwise, the method is bound to always and forever return a List&lt;&gt; or Dictionary&lt;&gt;..
+        ///   Looks up a localized string similar to Public methods should return interfaces like &apos;IList&lt;&gt;&apos; or &apos;IDictionary&lt;&gt;&apos; instead of concrete types like &apos;List&lt;&gt;&apos; or &apos;Dictionary&lt;&gt;&apos;. This approach provides flexibility, allowing you to change the implementation of the return value without affecting the method&apos;s signature, keeping your code adaptable and maintainable..
         /// </summary>
         internal static string MiKo_3072_Description {
             get {
@@ -10889,7 +10886,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Constructors should run completely. They should not partially initialize the objects..
+        ///   Looks up a localized string similar to Avoid returning from within a constructor. Constructors should execute fully, ensuring the objects are completely initialized. Partial initialization can lead to unpredictable behavior and inconsistencies..
         /// </summary>
         internal static string MiKo_3073_Description {
             get {
@@ -10916,8 +10913,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The idea of a constructor is to create an initialized instance of that specific type. Its responsibility is not to create instances of other types.
-        ///So, having &apos;ref&apos; or &apos;out&apos; parameters on a constructor contradicts the complete concept of the constructor as these parameters solely exist to provide instances of (other types) out of that constructor in addition to the instance that is created and initialized by the constructor..
+        ///   Looks up a localized string similar to A constructor&apos;s main purpose is to create an initialized instance of its specific type. It should not be used to create instances of other types.
+        ///Therefore, including [ref] or [out] parameters in a constructor contradicts this concept. These parameters should not exist to provide instances of other types, in addition to the instance created and initialized by the constructor..
         /// </summary>
         internal static string MiKo_3074_Description {
             get {
@@ -10953,9 +10950,9 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, internal and private types should be either static or sealed unless derivation from them is required.
+        ///   Looks up a localized string similar to To ease maintenance, internal and private types should be either &apos;static&apos; or &apos;sealed&apos; unless there&apos;s a need for derivation.
         ///
-        ///As with any implementation detail, they can be easily changed if/when derivation is required in the future..
+        ///These types can be modified later if derivation becomes necessary. Keeping them static or sealed by default ensures clearer and more manageable code, still being adaptable for future changes..
         /// </summary>
         internal static string MiKo_3075_Description {
             get {
@@ -10982,9 +10979,9 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If a static member initializer uses another member that is defined below or in another type part, then the chance is high that during runtime the static member gets initialized with the wrong value. That&apos;s because the member gets initialized before the other referenced member gets initialized.
+        ///   Looks up a localized string similar to If a static member initializer uses another member defined below or in another type part, it might get initialized with the wrong value at runtime. This happens because the static member initializes before the other referenced member.
         ///
-        ///This leads to subtle bugs, such as TypeInitializerExceptions or incorrect values..
+        ///This can cause subtle bugs like &apos;TypeInitializerException&apos;s or incorrect values..
         /// </summary>
         internal static string MiKo_3076_Description {
             get {
@@ -11020,8 +11017,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Explicitly setting values for properties that return an &apos;Enum&apos; allows to easily spot the (default) value and detect any change.
-        ///So it assists in thinking about whether the value is the intended one..
+        ///   Looks up a localized string similar to Explicitly setting values for properties that return an Enum helps easily identify the default value and any changes.
+        ///This practice aids in ensuring the value is the intended one, keeping the code clear and helping to spot unintended changes quickly..
         /// </summary>
         internal static string MiKo_3077_Description {
             get {
@@ -11057,7 +11054,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Explicitly setting values for &apos;Enum&apos; members prevents change of meanings when the Enum gets modified, may it be by adding, removing, renaming or resorting different values..
+        ///   Looks up a localized string similar to Explicitly setting values for &apos;Enum&apos; members prevents changes in meaning when the Enum is modified, whether by adding, removing, renaming, or reordering values.
+        ///This approach ensures stability and clarity, keeping the Enum&apos;s behavior consistent as it evolves. It makes everything reliable and easy to understand..
         /// </summary>
         internal static string MiKo_3078_Description {
             get {
@@ -11093,7 +11091,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to HResults should be written in hexadecimal and not as negative integers. That makes them much easier to recognize, such as &apos;0x80070005&apos; instead of &apos;-2147024891&apos;..
+        ///   Looks up a localized string similar to Write HResults in hexadecimal, not as negative integers. It&apos;s much easier to recognize and search for &apos;0x80070005&apos; than &apos;-2147024891&apos;. Keeps the code clean and user-friendly..
         /// </summary>
         internal static string MiKo_3079_Description {
             get {
@@ -11120,8 +11118,9 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Code that assigns variables defined inside methods by using switch statements makes the method more complex and difficult to read.
-        ///Most times, such code can be simplified by refactoring the complete switch statement into an own method where the different switch sections simply returning the values instead of assigning them to a &apos;shared&apos; variable and do a break afterwards..
+        ///   Looks up a localized string similar to Using switch statements to assign variables within methods increases complexity and reduces readability. Simplify this by refactoring the switch statement into its own method.
+        ///Let each section of the switch return values directly, instead of assigning them to a shared variable and using break statements.
+        ///This approach enhances clarity and maintainability..
         /// </summary>
         internal static string MiKo_3080_Description {
             get {
@@ -11157,7 +11156,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Logical NOT conditions are hard to recognize if they are coded using the &apos;!&apos; character. Code that uses &apos;is false&apos; is much easier to read and understand..
+        ///   Looks up a localized string similar to Logical NOT conditions using &apos;!&apos; can be hard to recognize. Use is false instead; it&apos;s easier to read and understand..
         /// </summary>
         internal static string MiKo_3081_Description {
             get {
@@ -11193,7 +11192,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Logical comparisons using the &apos;is&apos; pattern matching are more natural and therefore easier to read and understand than using the &apos;==&apos; equality operator..
+        ///   Looks up a localized string similar to Using the &apos;is&apos; pattern matching for logical comparisons is more natural and easier to read than the &apos;==&apos; equality operator. This approach enhances code clarity and comprehension, making your code cleaner and more intuitive..
         /// </summary>
         internal static string MiKo_3082_Description {
             get {
@@ -11229,7 +11228,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Null checks using the &apos;is&apos; pattern matching are more natural and therefore easier to read and understand than using the &apos;==&apos; equality operator..
+        ///   Looks up a localized string similar to Using &apos;is&apos; pattern matching for null checks is more natural and easier to read than the &apos;==&apos; equality operator. This approach enhances code clarity and comprehension, making your code cleaner and more intuitive..
         /// </summary>
         internal static string MiKo_3083_Description {
             get {
@@ -11265,7 +11264,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To increase readability, do not place constants on the left side of an operator. Instead, place it on the right side. This makes the code look more natural..
+        ///   Looks up a localized string similar to To increase readability, place constants on the right side of an operator, not the left. This makes the code look more intuitive and easier to understand..
         /// </summary>
         internal static string MiKo_3084_Description {
             get {
@@ -11292,8 +11291,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Conditional statements which span a lot of characters are hard to read. That makes them harder to maintain.
-        ///They should be either short (to see at a glance what&apos;s going on) or refactored into if-else statements..
+        ///   Looks up a localized string similar to Long conditional statements are hard to read and maintain. Keep them short for easy understanding at a glance, or refactor into if-else statements for clarity. This approach keeps your code clean and maintainable..
         /// </summary>
         internal static string MiKo_3085_Description {
             get {
@@ -11320,7 +11318,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nested conditional (or coalesce) statements are hard to read and understand. Therefore such statements should not be nested. Instead, if-else statements should be used..
+        ///   Looks up a localized string similar to Nested conditional or coalesce statements are difficult to read and understand. Avoid nesting them. Instead, use if-else statements to improve clarity. This approach keeps your code clean and maintainable..
         /// </summary>
         internal static string MiKo_3086_Description {
             get {
@@ -11347,7 +11345,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Complex conditions that use negative logic are difficult to understand. Therefore, these should be changed into positiv logic to ease reading..
+        ///   Looks up a localized string similar to Complex conditions with negative logic are difficult to understand, cumbersome, and error-prone. Change them to positive logic to improve readability, simplify the code, and reduce errors. This approach ensures your code is clear and easier to maintain..
         /// </summary>
         internal static string MiKo_3087_Description {
             get {
@@ -11383,7 +11381,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Null checks using the &apos;is not&apos; pattern matching are more natural and therefore easier to read and understand than using the &apos;!=&apos; inequality operator..
+        ///   Looks up a localized string similar to Null checks using &apos;is not&apos; pattern matching are more intuitive and easier to read than the &apos;!=&apos; inequality operator. This makes them the preferred choice for clarity and comprehension..
         /// </summary>
         internal static string MiKo_3088_Description {
             get {
@@ -11419,7 +11417,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Normal conditions are easier to understand than simple property pattern conditions that use constants. Hence, such property conditions should be converted into normal ones..
+        ///   Looks up a localized string similar to Normal conditions are easier to understand than property pattern conditions with constants. Therefore, convert these property conditions into normal ones. This approach keeps your code clear and readable..
         /// </summary>
         internal static string MiKo_3089_Description {
             get {
