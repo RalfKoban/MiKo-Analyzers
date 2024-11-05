@@ -16,6 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         private static readonly string[] BadPrefixes =
                                                        [
+                                                           "alt",
                                                            "app",
                                                            "apps",
                                                            "assoc",
@@ -114,6 +115,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly string[] BadMidTerms =
                                                        [
+                                                           "Alt",
                                                            "App",
                                                            "Apps",
                                                            "Assoc",
@@ -288,6 +290,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "prompt",
                                                             "requestTime",
                                                             "responseTime",
+                                                            "saltIsUsed",
+                                                            "SomeSaltIsUsed",
                                                             "script",
                                                             "scripts",
                                                             "signCertificate",
@@ -328,7 +332,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_well_known_abbreviation_([Values("MEF")] string abbreviation) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_prefix_well_known_abbreviation_([Values("MEF", "ALT")] string abbreviation) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -336,6 +340,42 @@ namespace Bla
     public class TestMe
     {
         public static int " + abbreviation + @"DoSomething();
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_postfix_well_known_abbreviation_([Values("MEF", "ALT")] string abbreviation) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static int DoSomething" + abbreviation + @"();
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_underscore_separated_prefix_well_known_abbreviation_([Values("MEF", "ALT")] string abbreviation) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static int " + abbreviation + @"_DoSomething();
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_underscore_separated_postfix_well_known_abbreviation_([Values("MEF", "ALT")] string abbreviation) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static int DoSomething_" + abbreviation + @"();
     }
 }");
 
