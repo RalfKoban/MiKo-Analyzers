@@ -27,44 +27,32 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             ];
 
         [Test]
-        public void No_issue_is_reported_for_test_method_with_correct_name_([ValueSource(nameof(AcceptedMethodNames))] string methodName)
-            => Assert.Multiple(() =>
-                                    {
-                                        foreach (var testFixture in TestFixtures)
-                                        {
-                                            foreach (var test in Tests)
-                                            {
-                                                No_issue_is_reported_for(@"
-[" + testFixture + @"]
+        public void No_issue_is_reported_for_test_method_with_correct_name_(
+                                                                        [ValueSource(nameof(AcceptedMethodNames))] string methodName,
+                                                                        [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                        [ValueSource(nameof(Tests))] string test)
+            => No_issue_is_reported_for(@"
+[" + fixture + @"]
 public class TestMe
 {
     [" + test + @"]
     public void " + methodName + @"() { }
 }
 ");
-                                            }
-                                        }
-                                    });
 
         [Test]
-        public void An_issue_is_reported_for_test_method_with_wrong_name_([ValueSource(nameof(WrongMethodNames))] string methodName)
-            => Assert.Multiple(() =>
-                                    {
-                                        foreach (var testFixture in TestFixtures)
-                                        {
-                                            foreach (var test in Tests)
-                                            {
-                                                An_issue_is_reported_for(@"
-[" + testFixture + @"]
+        public void An_issue_is_reported_for_test_method_with_wrong_name_(
+                                                                      [ValueSource(nameof(WrongMethodNames))] string methodName,
+                                                                      [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                      [ValueSource(nameof(Tests))] string test)
+            => An_issue_is_reported_for(@"
+[" + fixture + @"]
 public class TestMe
 {
     [" + test + @"]
     public void " + methodName + @"() { }
 }
 ");
-                                            }
-                                        }
-                                    });
 
         protected override string GetDiagnosticId() => MiKo_1113_TestMethodsShouldNotBeNamedGivenWhenThenAnalyzer.Id;
 

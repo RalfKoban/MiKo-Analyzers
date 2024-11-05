@@ -668,12 +668,11 @@ namespace MiKoSolutions.Analyzers
         {
             switch (value)
             {
-                case IdentifierNameSyntax i: return i.GetName();
                 case MemberAccessExpressionSyntax m: return m.GetName();
                 case MemberBindingExpressionSyntax b: return b.GetName();
                 case InvocationExpressionSyntax i: return i.GetName();
-                case SimpleNameSyntax s: return s.GetName();
                 case LiteralExpressionSyntax l: return l.GetName();
+                case TypeSyntax t: return t.GetName();
                 default: return string.Empty;
             }
         }
@@ -770,6 +769,18 @@ namespace MiKoSolutions.Analyzers
                 case StructDeclarationSyntax s: return s.GetName();
                 default:
                     return string.Empty;
+            }
+        }
+
+        internal static string GetName(this TypeSyntax value)
+        {
+            switch (value)
+            {
+                case null: return string.Empty;
+                case IdentifierNameSyntax i: return i.GetName();
+                case SimpleNameSyntax s: return s.GetName();
+                default:
+                    return value.ToString();
             }
         }
 
@@ -1022,8 +1033,13 @@ namespace MiKoSolutions.Analyzers
 
                 if (token.HasStructuredTrivia)
                 {
-                    foreach (var trivia in token.LeadingTrivia)
+                    var leadingTrivia = token.LeadingTrivia;
+                    var count = leadingTrivia.Count;
+
+                    for (var index = 0; index < count; index++)
                     {
+                        var trivia = leadingTrivia[index];
+
                         if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
                         {
                             if (trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
@@ -1036,14 +1052,14 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static ReadOnlySpan<char> GetTextTrimmed(this XmlElementSyntax value)
+        internal static string GetTextTrimmed(this XmlElementSyntax value)
         {
             if (value is null)
             {
-                return ReadOnlySpan<char>.Empty;
+                return string.Empty;
             }
 
-            return value.GetTextWithoutTrivia().Without(Constants.EnvironmentNewLine).WithoutParaTags().Trim().AsSpan();
+            return value.GetTextWithoutTrivia().Without(Constants.EnvironmentNewLine).WithoutParaTags().Trim();
         }
 
         internal static string GetTextWithoutTrivia(this XmlTextAttributeSyntax value)
@@ -3141,8 +3157,14 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxList<XmlNodeSyntax> WithoutText(this SyntaxList<XmlNodeSyntax> values, params string[] texts)
         {
-            var result = values;
             var length = texts.Length;
+
+            if (length <= 0)
+            {
+                return values;
+            }
+
+            var result = values;
 
             for (var index = 0; index < length; index++)
             {
@@ -3464,6 +3486,75 @@ namespace MiKoSolutions.Analyzers
             }
 
             return XmlText(startText);
+        }
+
+        internal static XmlElementSyntax WithTagsOnSeparateLines(this XmlElementSyntax value)
+        {
+            var contents = value.Content;
+
+            var updateStartTag = true;
+            var updateEndTag = true;
+
+            if (contents.FirstOrDefault() is XmlTextSyntax firstText)
+            {
+                if (firstText.HasLeadingTrivia)
+                {
+                    updateStartTag = false;
+                }
+                else
+                {
+                    var textTokens = firstText.TextTokens;
+                    var length = textTokens.Count;
+
+                    if (length >= 2)
+                    {
+                        var firstToken = textTokens[0];
+                        var nextToken = textTokens[1];
+
+                        if (firstToken.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                        {
+                            updateStartTag = false;
+                        }
+                        else if (nextToken.IsKind(SyntaxKind.XmlTextLiteralNewLineToken) && firstToken.ValueText.IsNullOrWhiteSpace())
+                        {
+                            updateStartTag = false;
+                        }
+                    }
+                }
+            }
+
+            if (contents.LastOrDefault() is XmlTextSyntax lastText)
+            {
+                var textTokens = lastText.TextTokens;
+                var length = textTokens.Count;
+
+                if (length >= 2)
+                {
+                    var lastToken = textTokens[length - 1];
+                    var secondLastToken = textTokens[length - 2];
+
+                    if (lastToken.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                    {
+                        updateEndTag = false;
+                    }
+                    else if (secondLastToken.IsKind(SyntaxKind.XmlTextLiteralNewLineToken) && lastToken.ValueText.IsNullOrWhiteSpace())
+                    {
+                        updateEndTag = false;
+                    }
+                }
+            }
+
+            if (updateStartTag)
+            {
+                value = value.WithStartTag(value.StartTag.WithTrailingXmlComment());
+            }
+
+            if (updateEndTag)
+            {
+                value = value.WithEndTag(value.EndTag.WithLeadingXmlComment());
+            }
+
+            return value;
         }
 
         internal static T WithTrailingEmptyLine<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed, SyntaxFactory.CarriageReturnLineFeed);

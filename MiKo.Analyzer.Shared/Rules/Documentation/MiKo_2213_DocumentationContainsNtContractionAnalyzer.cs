@@ -8,11 +8,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2213_DocumentationContainsNtContradictionAnalyzer : OverallDocumentationAnalyzer
+    public sealed class MiKo_2213_DocumentationContainsNtContractionAnalyzer : OverallDocumentationAnalyzer
     {
         public const string Id = "MiKo_2213";
 
-        public MiKo_2213_DocumentationContainsNtContradictionAnalyzer() : base(Id)
+        public MiKo_2213_DocumentationContainsNtContractionAnalyzer() : base(Id)
         {
         }
 
@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             foreach (var token in comment.GetXmlTextTokens())
             {
-                foreach (var location in GetAllLocations(token, Constants.Comments.NotContradictionPhrase, StringComparison.OrdinalIgnoreCase))
+                foreach (var location in GetAllLocations(token, Constants.Comments.NotContractionPhrase, StringComparison.OrdinalIgnoreCase))
                 {
                     yield return Issue(symbol.Name, location);
                 }

@@ -45,12 +45,12 @@ namespace Bla
 }");
 
         [Test]
-        public void No_issue_is_reported_for_preferred_usage_in_a_non_test_method_inside_a_test_([ValueSource(nameof(TestFixtures))] string testFixture) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_preferred_usage_in_a_non_test_method_inside_a_test_([ValueSource(nameof(TestFixtures))] string fixture) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla
 {
-    [" + testFixture + @"]
+    [" + fixture + @"]
     public class TestMe
     {
         public void DoSomething()
@@ -95,12 +95,12 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_a_non_test_method_inside_a_test_([ValueSource(nameof(TestFixtures))] string testFixture) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_a_non_test_method_inside_a_test_([ValueSource(nameof(TestFixtures))] string fixture) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla
 {
-    [" + testFixture + @"]
+    [" + fixture + @"]
     public class TestMe
     {
         public void DoSomething()

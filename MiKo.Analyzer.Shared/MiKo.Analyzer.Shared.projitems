@@ -130,7 +130,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2210_DocumentationUsesInformationInsteadOfInfoAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2211_EnumerationMemberDocumentationHasNoRemarksAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2212_DocumentationContainsWasNotSuccessfulAnalyzer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2213_DocumentationContainsNtContradictionAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2213_DocumentationContainsNtContractionAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2214_DocumentationContainsEmptyLinesAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2215_SentencesShallBeShortAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2216_ParamInsteadOfParamRefAnalyzer.cs" />
@@ -158,7 +158,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2306_CommentEndsWithPeriodAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2307_CommentContainsWasNotSuccessfulAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2308_CommentPlacedAfterCodeAnalyzer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2309_CommentContainsNtContradictionAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2309_CommentContainsNtContractionAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2310_CommentContainsIntentionallyAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2311_CommentIsSeparatorAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MultiLineCommentAnalyzer.cs" />
@@ -234,7 +234,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3061_LoggerHasCategoryAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3062_ExceptionLogMessageEndsWithColonAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3063_NonExceptionLogMessageEndsWithDotAnalyzer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3064_LogMessagesContainsNtContradictionAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3064_LogMessagesContainsNtContractionAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3065_MicrosoftLoggingMessagesDoNotUseInterpolatedStringsAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3070_EnumerableMethodReturnsNullAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3071_TaskMethodReturnsNullAnalyzer.cs" />

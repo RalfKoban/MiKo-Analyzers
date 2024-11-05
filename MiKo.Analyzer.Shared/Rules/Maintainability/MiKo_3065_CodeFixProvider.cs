@@ -101,8 +101,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var clause = syntax.FormatClause;
 
             return clause is null
-                       ? syntax.Expression
-                       : Invocation(SimpleMemberAccess(syntax.Expression, nameof(ToString)), Argument(StringLiteral(clause.FormatStringToken.ValueText)));
+                   ? syntax.Expression
+                   : Invocation(SimpleMemberAccess(syntax.Expression, nameof(ToString)), Argument(StringLiteral(clause.FormatStringToken.ValueText)));
         }
     }
 }

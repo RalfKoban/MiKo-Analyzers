@@ -149,7 +149,7 @@ The following tables lists all the 470 rules that are currently provided by the 
 |MiKo_1300|Unimportant identifiers in lambda statements should be named '_'|&#x2713;|&#x2713;|
 |MiKo_1400|Namespace names should be in plural|&#x2713;|\-|
 |MiKo_1401|Namespaces should not contain technical language names|&#x2713;|\-|
-|MiKo_1402|Namespaces should not be named after WPF specific design patterns|&#x2713;|\-|
+|MiKo_1402|Namespaces should not be named after WPF-specific design patterns|&#x2713;|\-|
 |MiKo_1403|Namespaces should not be named after any of their parent namespaces|&#x2713;|\-|
 |MiKo_1404|Namespaces should not contain unspecific names|&#x2713;|\-|
 |MiKo_1405|Namespaces should not contain 'Lib'|&#x2713;|\-|
@@ -248,7 +248,7 @@ The following tables lists all the 470 rules that are currently provided by the 
 |MiKo_2210|Documentation should use the term 'information' instead of 'info'|&#x2713;|&#x2713;|
 |MiKo_2211|Enum members should not have &lt;remarks&gt; sections|&#x2713;|&#x2713;|
 |MiKo_2212|Documentation should use the phrase 'failed' instead of 'was not successful'|&#x2713;|&#x2713;|
-|MiKo_2213|Documentation should not use the contradiction "n't"|&#x2713;|&#x2713;|
+|MiKo_2213|Documentation should not use the contraction "n't"|&#x2713;|&#x2713;|
 |MiKo_2214|Documentation should not contain empty lines|&#x2713;|&#x2713;|
 |MiKo_2215|Sentences in documentation shall be short|&#x2713;|\-|
 |MiKo_2216|Use &lt;paramref&gt; instead of &lt;param&gt; to reference parameters|&#x2713;|&#x2713;|
@@ -276,7 +276,7 @@ The following tables lists all the 470 rules that are currently provided by the 
 |MiKo_2306|End comments with a period|\-|\-|
 |MiKo_2307|Comments should use the phrase 'failed' instead of 'was not successful'|&#x2713;|&#x2713;|
 |MiKo_2308|Do not place comment on single line before closing brace but after code|&#x2713;|&#x2713;|
-|MiKo_2309|Comments should not use the contradiction "n't"|&#x2713;|&#x2713;|
+|MiKo_2309|Comments should not use the contraction "n't"|&#x2713;|&#x2713;|
 |MiKo_2310|Comments should explain the 'Why' and not the 'That'|&#x2713;|\-|
 |MiKo_2311|Do not use separator comments|&#x2713;|&#x2713;|
 
@@ -342,7 +342,7 @@ The following tables lists all the 470 rules that are currently provided by the 
 |MiKo_3061|Loggers shall use a proper log category|&#x2713;|\-|
 |MiKo_3062|End log messages for exceptions with a colon|&#x2713;|&#x2713;|
 |MiKo_3063|End non-exceptional log messages with a dot|&#x2713;|&#x2713;|
-|MiKo_3064|Log messages should not use the contradiction "n't"|&#x2713;|&#x2713;|
+|MiKo_3064|Log messages should not use the contraction "n't"|&#x2713;|&#x2713;|
 |MiKo_3065|Microsoft Logging calls should not use interpolated strings|&#x2713;|&#x2713;|
 |MiKo_3070|Do not return null for an IEnumerable|&#x2713;|\-|
 |MiKo_3071|Do not return null for a Task|&#x2713;|\-|

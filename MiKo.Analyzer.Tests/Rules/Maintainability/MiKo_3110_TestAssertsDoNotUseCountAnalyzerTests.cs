@@ -156,11 +156,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_Count_property_in_an_Assert_test_method() => Assert.Multiple(() =>
-                                                                                                               {
-                                                                                                                   foreach (var assertion in AssertionMethods)
-                                                                                                                   {
-                                                                                                                       An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Count_property_in_an_Assert_test_method_([ValueSource(nameof(AssertionMethods))] string assertion) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla
@@ -175,15 +171,9 @@ namespace Bla
     }
 }
 ");
-                                                                                                                   }
-                                                                                                               });
 
         [Test]
-        public void An_issue_is_reported_for_Length_property_in_an_Assert_test_method() => Assert.Multiple(() =>
-                                                                                                                {
-                                                                                                                    foreach (var assertion in AssertionMethods)
-                                                                                                                    {
-                                                                                                                        An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Length_property_in_an_Assert_test_method_([ValueSource(nameof(AssertionMethods))] string assertion) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla
@@ -198,8 +188,6 @@ namespace Bla
     }
 }
 ");
-                                                                                                                    }
-                                                                                                                });
 
         [TestCase("Assert.That(values.Count, Is.Zero)", "Assert.That(values, Is.Empty)")]
         [TestCase("Assert.That(values.Count, Is.EqualTo(0))", "Assert.That(values, Is.Empty)")]

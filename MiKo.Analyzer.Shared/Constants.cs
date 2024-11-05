@@ -174,6 +174,10 @@ namespace MiKoSolutions.Analyzers
         internal static class Comments
         {
             internal const string AlternativeStringReturnTypeStartingPhraseTemplate = "An interned copy of the {0} {1} ";
+            internal const string ArrayReturnTypeStartingPhraseA = "An array of ";
+            internal const string ArrayReturnTypeStartingPhraseALowerCase = "an array of ";
+            internal const string ByteArrayReturnTypeStartingPhraseA = "A byte array containing ";
+            internal const string ByteArrayReturnTypeStartingPhraseALowerCase = "a byte array containing ";
             internal const string Asynchronously = "Asynchronously";
             internal const string AsynchronouslyStartingPhrase = Asynchronously + " ";
             internal const string BooleanParameterEndingPhraseTemplate = "; otherwise, {0}.";
@@ -183,6 +187,8 @@ namespace MiKoSolutions.Analyzers
             internal const string BooleanTaskReturnTypeEndingPhraseTemplate = ", otherwise with a result of {0}.";
             internal const string BooleanTaskReturnTypeStartingPhraseTemplate = "A task that will complete with a result of {0} if ";
             internal const string CallbackTerm = "callback";
+            internal const string CollectionReturnTypeStartingPhrase = "A collection of ";
+            internal const string CollectionReturnTypeStartingPhraseLowerCase = "a collection of ";
             internal const string CommandPropertyGetterOnlySummaryStartingPhraseTemplate = "Gets the {0} that can ";
             internal const string CommandPropertyGetterSetterSummaryStartingPhraseTemplate = "Gets or sets the {0} that can ";
             internal const string CommandPropertySetterOnlySummaryStartingPhraseTemplate = "Sets the {0} that can ";
@@ -239,6 +245,7 @@ namespace MiKoSolutions.Analyzers
             internal const string SpecialOrPhrase = "-or-";
             internal const string StringReturnTypeStartingPhraseTemplate = "A {0} {1} ";
             internal const string ValueConverterSummaryStartingPhrase = "Represents a converter that converts ";
+            internal const string ThatContainsTerm = "that contains";
             internal const string ToSeekTerm = "to seek";
             internal const string TryStartingPhrase = "Attempts to";
             internal const string WasNotSuccessfulPhrase = "was not successful";
@@ -443,10 +450,10 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] StringReturnTypeStartingPhrase =
                                                                                {
-                                                                                   StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\"/>", "that contains"), // this is just to have a proposal how to optimize
-                                                                                   StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\" />", "that contains"),
-                                                                                   StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\"/>", "that contains"),
-                                                                                   StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\" />", "that contains"),
+                                                                                   StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\"/>", ThatContainsTerm), // this is just to have a proposal how to optimize
+                                                                                   StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\" />", ThatContainsTerm),
+                                                                                   StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\"/>", ThatContainsTerm),
+                                                                                   StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\" />", ThatContainsTerm),
                                                                                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\"/>", "containing"),
                                                                                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\" />", "containing"),
                                                                                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\"/>", "containing"),
@@ -463,10 +470,10 @@ namespace MiKoSolutions.Analyzers
                                                                                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\" />", "where"),
                                                                                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\"/>", "where"),
                                                                                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\" />", "where"),
-                                                                                   AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\"/>", "that contains"),
-                                                                                   AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\" />", "that contains"),
-                                                                                   AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\"/>", "that contains"),
-                                                                                   AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\" />", "that contains"),
+                                                                                   AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\"/>", ThatContainsTerm),
+                                                                                   AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\" />", ThatContainsTerm),
+                                                                                   AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\"/>", ThatContainsTerm),
+                                                                                   AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\" />", ThatContainsTerm),
                                                                                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\"/>", "containing"),
                                                                                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\" />", "containing"),
                                                                                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\"/>", "containing"),
@@ -503,22 +510,22 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] EnumerableReturnTypeStartingPhrase =
                                                                                    {
-                                                                                       "A collection of ",
+                                                                                       CollectionReturnTypeStartingPhrase,
                                                                                        "A <see cref=\"{0}\"/> that contains ",
                                                                                        "A <see cref=\"{0}\" /> that contains ",
                                                                                        "An <see cref=\"{0}\"/> that contains ",
                                                                                        "An <see cref=\"{0}\" /> that contains ",
                                                                                    };
 
-            internal static readonly string[] EnumerableTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.ToArray(_ => _ + "a collection of ");
+            internal static readonly string[] EnumerableTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.ToArray(_ => _ + CollectionReturnTypeStartingPhraseLowerCase);
 
-            internal static readonly string[] ArrayReturnTypeStartingPhrase = { "An array of ", "The array of " };
+            internal static readonly string[] ArrayReturnTypeStartingPhrase = { ArrayReturnTypeStartingPhraseA, "The array of " };
 
-            internal static readonly string[] ByteArrayReturnTypeStartingPhrase = { "A byte array containing ", "The byte array containing " };
+            internal static readonly string[] ByteArrayReturnTypeStartingPhrase = { ByteArrayReturnTypeStartingPhraseA, "The byte array containing " };
 
-            internal static readonly string[] ArrayTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.ToArray(_ => _ + "an array of ");
+            internal static readonly string[] ArrayTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.ToArray(_ => _ + ArrayReturnTypeStartingPhraseALowerCase);
 
-            internal static readonly string[] ByteArrayTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.ToArray(_ => _ + "a byte array containing ");
+            internal static readonly string[] ByteArrayTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.ToArray(_ => _ + ByteArrayReturnTypeStartingPhraseALowerCase);
 
             internal static readonly string[] DependencyPropertyFieldSummaryPhrase =
                                                                                      {
@@ -700,51 +707,51 @@ namespace MiKoSolutions.Analyzers
                                                                                    "Marks ",
                                                                                };
 
-            internal static readonly string[] NotContradictionPhrase =
-                                                                       {
-                                                                           "n't",
-                                                                           "cant",
-                                                                           "dont",
-                                                                           "wont",
-                                                                           "couldnt",
-                                                                           "shouldnt",
-                                                                           "wouldnt",
-                                                                           "doesnt",
-                                                                           "didnt",
-                                                                           "isnt",
-                                                                           "hasnt",
-                                                                           "havent",
-                                                                           "hadnt",
-                                                                           "wasnt",
-                                                                           "werent",
-                                                                           "darent",
-                                                                           "neednt",
-                                                                       };
+            internal static readonly string[] NotContractionPhrase =
+                                                                     {
+                                                                         "n't",
+                                                                         "cant",
+                                                                         "dont",
+                                                                         "wont",
+                                                                         "couldnt",
+                                                                         "shouldnt",
+                                                                         "wouldnt",
+                                                                         "doesnt",
+                                                                         "didnt",
+                                                                         "isnt",
+                                                                         "hasnt",
+                                                                         "havent",
+                                                                         "hadnt",
+                                                                         "wasnt",
+                                                                         "werent",
+                                                                         "darent",
+                                                                         "neednt",
+                                                                     };
 
-            internal static readonly Pair[] NotContradictionReplacementMap =
-                                                                             {
-                                                                                 new Pair("adnt", "ad not"),
-                                                                                 new Pair("an't", "annot"),
-                                                                                 new Pair("arent", "are not"),
-                                                                                 new Pair("Arent", "Are not"),
-                                                                                 new Pair("asnt", "as not"),
-                                                                                 new Pair("avent", "ave not"),
-                                                                                 new Pair("cant", "cannot"),
-                                                                                 new Pair("Cant", "Cannot"),
-                                                                                 new Pair("dont", "do not"),
-                                                                                 new Pair("Dont", "Do not"),
-                                                                                 new Pair("eednt", "eed not"),
-                                                                                 new Pair("erent", "ere not"),
-                                                                                 new Pair("idnt", "id not"),
-                                                                                 new Pair("oesnt", "oes not"),
-                                                                                 new Pair("ouldnt", "ould not"),
-                                                                                 new Pair("snt", "s not"),
-                                                                                 new Pair("wont", "will not"),
-                                                                                 new Pair("won't", "will not"),
-                                                                                 new Pair("Wont", "Will not"),
-                                                                                 new Pair("Won't", "Will not"),
-                                                                                 new Pair("n't", " not"),
-                                                                             };
+            internal static readonly Pair[] NotContractionReplacementMap =
+                                                                           {
+                                                                               new Pair("adnt", "ad not"),
+                                                                               new Pair("an't", "annot"),
+                                                                               new Pair("arent", "are not"),
+                                                                               new Pair("Arent", "Are not"),
+                                                                               new Pair("asnt", "as not"),
+                                                                               new Pair("avent", "ave not"),
+                                                                               new Pair("cant", "cannot"),
+                                                                               new Pair("Cant", "Cannot"),
+                                                                               new Pair("dont", "do not"),
+                                                                               new Pair("Dont", "Do not"),
+                                                                               new Pair("eednt", "eed not"),
+                                                                               new Pair("erent", "ere not"),
+                                                                               new Pair("idnt", "id not"),
+                                                                               new Pair("oesnt", "oes not"),
+                                                                               new Pair("ouldnt", "ould not"),
+                                                                               new Pair("snt", "s not"),
+                                                                               new Pair("wont", "will not"),
+                                                                               new Pair("won't", "will not"),
+                                                                               new Pair("Wont", "Will not"),
+                                                                               new Pair("Won't", "Will not"),
+                                                                               new Pair("n't", " not"),
+                                                                           };
 
             internal static readonly string[] IntentionallyPhrase =
                                                                     {

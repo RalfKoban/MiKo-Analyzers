@@ -64,13 +64,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_test_methods()
-        {
-            Assert.Multiple(() =>
-                                 {
-                                     foreach (var test in Tests)
-                                     {
-                                         No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_test_methods_([ValueSource(nameof(Tests))] string test) => No_issue_is_reported_for(@"
 using System;
 using NUnit.Framework;
 
@@ -87,9 +81,6 @@ public class TestMe
     }
 }
 ");
-                                     }
-                                 });
-        }
 
         [Test]
         public void No_issue_is_reported_for_Clears_method_with_parameters() => No_issue_is_reported_for(@"
@@ -178,13 +169,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_local_functions_in_test_methods()
-        {
-            Assert.Multiple(() =>
-                                 {
-                                     foreach (var test in Tests)
-                                     {
-                                         No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_local_functions_in_test_methods_([ValueSource(nameof(Tests))] string test) => No_issue_is_reported_for(@"
 using System;
 using NUnit.Framework;
 
@@ -207,9 +192,6 @@ public class TestMe
     }
 }
 ");
-                                     }
-                                 });
-        }
 
         [Test]
         public void No_issue_is_reported_for_Clears_local_function_with_parameters() => No_issue_is_reported_for(@"

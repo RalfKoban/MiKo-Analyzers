@@ -34,8 +34,6 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_parenthesized_lambda_expression_body_that_returns_no_value() => No_issue_is_reported_for(@"
-namespace Bla
-{
 using System;
 
 namespace Bla
@@ -53,7 +51,7 @@ namespace Bla
         {
         }
     }
-}}
+}
 ");
 
         [Test]
@@ -142,8 +140,6 @@ namespace Bla
 
         [Test]
         public void An_issue_is_reported_for_parenthesized_lambda_expression_that_consists_of_a_single_line_and_returns_a_value() => An_issue_is_reported_for(@"
-namespace Bla
-{
 using System;
 
 namespace Bla
@@ -160,13 +156,11 @@ namespace Bla
             return callback();
         }
     }
-}}
+}
 ");
 
         [Test]
         public void An_issue_is_reported_for_parenthesized_lambda_expression_that_consists_of_a_single_line_and_returns_no_value() => An_issue_is_reported_for(@"
-namespace Bla
-{
 using System;
 
 namespace Bla
@@ -184,13 +178,11 @@ namespace Bla
         {
         }
     }
-}}
+}
 ");
 
         [Test]
         public void An_issue_is_reported_for_parenthesized_lambda_expression_with_single_parameter_that_consists_of_a_single_line_and_returns_no_value() => An_issue_is_reported_for(@"
-namespace Bla
-{
 using System;
 
 namespace Bla
@@ -206,15 +198,13 @@ namespace Bla
         {
         }
     }
-}}
+}
 ");
 
         [Test]
         public void Code_gets_fixed_for_parenthesized_lambda_expression_that_consists_of_a_single_line_and_returns_a_value()
         {
             const string OriginalCode = @"
-namespace Bla
-{
 using System;
 
 namespace Bla
@@ -231,12 +221,10 @@ namespace Bla
             return callback();
         }
     }
-}}
+}
 ";
 
             const string FixedCode = @"
-namespace Bla
-{
 using System;
 
 namespace Bla
@@ -253,7 +241,7 @@ namespace Bla
             return callback();
         }
     }
-}}
+}
 ";
 
             VerifyCSharpFix(OriginalCode, FixedCode);
@@ -263,8 +251,6 @@ namespace Bla
         public void Code_gets_fixed_for_parenthesized_lambda_expression_that_consists_of_a_single_line_and_returns_no_value()
         {
             const string OriginalCode = @"
-namespace Bla
-{
 using System;
 
 namespace Bla
@@ -282,12 +268,10 @@ namespace Bla
         {
         }
     }
-}}
+}
 ";
 
             const string FixedCode = @"
-namespace Bla
-{
 using System;
 
 namespace Bla
@@ -305,7 +289,7 @@ namespace Bla
         {
         }
     }
-}}
+}
 ";
 
             VerifyCSharpFix(OriginalCode, FixedCode);
@@ -315,8 +299,6 @@ namespace Bla
         public void Code_gets_fixed_for_parenthesized_lambda_expression_with_single_parameter_that_consists_of_a_single_line_and_returns_no_value()
         {
             const string OriginalCode = @"
-namespace Bla
-{
 using System;
 
 namespace Bla
@@ -332,12 +314,10 @@ namespace Bla
         {
         }
     }
-}}
+}
 ";
 
             const string FixedCode = @"
-namespace Bla
-{
 using System;
 
 namespace Bla
@@ -353,7 +333,7 @@ namespace Bla
         {
         }
     }
-}}
+}
 ";
 
             VerifyCSharpFix(OriginalCode, FixedCode);
@@ -363,8 +343,6 @@ namespace Bla
         public void Code_gets_fixed_for_parenthesized_lambda_expression_with_multiple_parameters_that_consists_of_a_single_line_and_returns_no_value()
         {
             const string OriginalCode = @"
-namespace Bla
-{
 using System;
 
 namespace Bla
@@ -380,12 +358,10 @@ namespace Bla
         {
         }
     }
-}}
+}
 ";
 
             const string FixedCode = @"
-namespace Bla
-{
 using System;
 
 namespace Bla
@@ -401,7 +377,7 @@ namespace Bla
         {
         }
     }
-}}
+}
 ";
 
             VerifyCSharpFix(OriginalCode, FixedCode);
@@ -411,8 +387,6 @@ namespace Bla
         public void Code_gets_fixed_for_parenthesized_lambda_expression_with_throw_statement()
         {
             const string OriginalCode = @"
-namespace Bla
-{
 using System;
 
 namespace Bla
@@ -428,12 +402,10 @@ namespace Bla
         {
         }
     }
-}}
+}
 ";
 
             const string FixedCode = @"
-namespace Bla
-{
 using System;
 
 namespace Bla
@@ -449,7 +421,93 @@ namespace Bla
         {
         }
     }
-}}
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_async_parenthesized_lambda_expression()
+        {
+            const string OriginalCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public async void DoSomething()
+        {
+            var result = async () =>
+                            {
+                                await Task.CompletedTask;
+                            };
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public async void DoSomething()
+        {
+            var result = async () => await Task.CompletedTask;
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_async_parenthesized_lambda_expression_with_single_parameter()
+        {
+            const string OriginalCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public async void DoSomething()
+        {
+            DoSomethingCore(async (i) =>
+                            {
+                                return await Task.FromResult(i);
+                            });
+        }
+
+        private void DoSomethingCore(Func<int, Task<int>> callback)
+        {
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public async void DoSomething()
+        {
+            DoSomethingCore(async i => await Task.FromResult(i));
+        }
+
+        private void DoSomethingCore(Func<int, Task<int>> callback)
+        {
+        }
+    }
+}
 ";
 
             VerifyCSharpFix(OriginalCode, FixedCode);

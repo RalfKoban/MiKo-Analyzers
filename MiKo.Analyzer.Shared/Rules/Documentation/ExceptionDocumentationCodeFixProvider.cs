@@ -164,28 +164,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static IEnumerable<string> SplitCommentsOnParametersInText(string comment, string[] parametersAsTextReferences)
         {
+            var parametersAsTextReferencesLength = parametersAsTextReferences.Length;
+
             // split into parts, so that we can easily detect which part is a parameter and which is some normal text
             var parts = comment.SplitBy(parametersAsTextReferences).ToArray();
+            var partsLength = parts.Length;
 
             // now correct the parameters back
-            for (var i = 0; i < parts.Length; i++)
+            for (var i = 0; i < partsLength; i++)
             {
                 var part = parts[i];
 
-                foreach (var textRef in parametersAsTextReferences)
+                for (var index = 0; index < parametersAsTextReferencesLength; index++)
                 {
-                    if (part == textRef)
+                    if (part == parametersAsTextReferences[index])
                     {
                         if (i > 0)
                         {
                             // that's text before the parameter, so add the missing character afterward
-                            parts[i - 1] = parts[i - 1] + part.First();
+                            parts[i - 1] = parts[i - 1].ConcatenatedWith(part.First());
                         }
 
-                        if (i < parts.Length - 1)
+                        if (i < partsLength - 1)
                         {
                             // that's text after the parameter, so add the missing character before
-                            parts[i + 1] = part.Last() + parts[i + 1];
+                            parts[i + 1] = part.Last().ConcatenatedWith(parts[i + 1]);
                         }
                     }
                 }

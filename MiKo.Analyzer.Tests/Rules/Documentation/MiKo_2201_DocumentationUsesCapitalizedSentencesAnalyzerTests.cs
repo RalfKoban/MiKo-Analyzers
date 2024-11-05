@@ -26,6 +26,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                        "value",
                                                    ];
 
+        private static readonly string[] CodeBlocks = ["c", "code"];
+
         private static readonly string[] WellknownFileExtensions =
                                                                    [
                                                                        ".bmp",
@@ -47,51 +49,36 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly char[] LowerCaseLetters = "abcdefghijklmnopqrstuvwxyz".ToCharArray();
 
-        private static readonly char[] UpperCaseLetters = "abcdefghijklmnopqrstuvwxyz".ToUpperInvariant().ToCharArray();
+        private static readonly char[] UpperCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
 
         [Test]
-        public void No_issue_is_reported_for_documentation_starting_with_upper_case_after_dot() => Assert.Multiple(() =>
-                                                                                                                        {
-                                                                                                                            foreach (var xmlTag in XmlTags)
-                                                                                                                            {
-                                                                                                                                foreach (var startingChar in UpperCaseLetters)
-                                                                                                                                {
-                                                                                                                                    No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_documentation_starting_with_upper_case_after_dot_(
+                                                                                           [ValueSource(nameof(XmlTags))] string xmlTag,
+                                                                                           [ValueSource(nameof(UpperCaseLetters))] char startingChar)
+            => No_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// Documentation. " + startingChar + @" something.
 /// </" + xmlTag + @">
 public sealed class TestMe { }
 ");
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        });
 
         [Test]
-        public void No_issue_is_reported_for_documentation_starting_with_upper_case_after_dot_in_para() => Assert.Multiple(() =>
-                                                                                                                                {
-                                                                                                                                    foreach (var xmlTag in XmlTags)
-                                                                                                                                    {
-                                                                                                                                        foreach (var startingChar in UpperCaseLetters)
-                                                                                                                                        {
-                                                                                                                                            No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_documentation_starting_with_upper_case_after_dot_in_para_(
+                                                                                                   [ValueSource(nameof(XmlTags))] string xmlTag,
+                                                                                                   [ValueSource(nameof(UpperCaseLetters))] char startingChar)
+            => No_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// Documentation.
 /// <para>" + startingChar + @" something.</para>
 /// </" + xmlTag + @">
 public sealed class TestMe { }
 ");
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                });
 
         [Test]
-        public void No_issue_is_reported_for_documentation_starting_with_upper_case_after_dot_in_para_with_line_break() => Assert.Multiple(() =>
-                                                                                                                                                {
-                                                                                                                                                    foreach (var xmlTag in XmlTags)
-                                                                                                                                                    {
-                                                                                                                                                        foreach (var startingChar in UpperCaseLetters)
-                                                                                                                                                        {
-                                                                                                                                                            No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_documentation_starting_with_upper_case_after_dot_in_para_with_line_break_(
+                                                                                                                   [ValueSource(nameof(XmlTags))] string xmlTag,
+                                                                                                                   [ValueSource(nameof(UpperCaseLetters))] char startingChar)
+            => No_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// Documentation.
 /// <para>
@@ -100,53 +87,35 @@ public sealed class TestMe { }
 /// </" + xmlTag + @">
 public sealed class TestMe { }
 ");
-                                                                                                                                                        }
-                                                                                                                                                    }
-                                                                                                                                                });
 
         [Test]
-        public void An_issue_is_reported_for_documentation_starting_with_lower_case_after_dot() => Assert.Multiple(() =>
-                                                                                                                        {
-                                                                                                                            foreach (var xmlTag in XmlTags)
-                                                                                                                            {
-                                                                                                                                foreach (var startingChar in LowerCaseLetters)
-                                                                                                                                {
-                                                                                                                                    An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_documentation_starting_with_lower_case_after_dot_(
+                                                                                           [ValueSource(nameof(XmlTags))] string xmlTag,
+                                                                                           [ValueSource(nameof(LowerCaseLetters))] char startingChar)
+            => An_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// Documentation. " + startingChar + @" something.
 /// </" + xmlTag + @">
 public sealed class TestMe { }
 ");
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        });
 
         [Test]
-        public void An_issue_is_reported_for_documentation_starting_with_lower_case_after_dot_in_para() => Assert.Multiple(() =>
-                                                                                                                                {
-                                                                                                                                    foreach (var xmlTag in XmlTags)
-                                                                                                                                    {
-                                                                                                                                        foreach (var startingChar in LowerCaseLetters)
-                                                                                                                                        {
-                                                                                                                                            An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_documentation_starting_with_lower_case_after_dot_in_para_(
+                                                                                                   [ValueSource(nameof(XmlTags))] string xmlTag,
+                                                                                                   [ValueSource(nameof(LowerCaseLetters))] char startingChar)
+            => An_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// Documentation.
 /// <para>" + startingChar + @" something.</para>
 /// </" + xmlTag + @">
 public sealed class TestMe { }
 ");
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                });
 
         [Test]
-        public void An_issue_is_reported_for_documentation_starting_with_lower_case_after_dot_in_para_with_line_break() => Assert.Multiple(() =>
-                                                                                                                                                {
-                                                                                                                                                    foreach (var xmlTag in XmlTags)
-                                                                                                                                                    {
-                                                                                                                                                        foreach (var startingChar in LowerCaseLetters)
-                                                                                                                                                        {
-                                                                                                                                                            An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_documentation_starting_with_lower_case_after_dot_in_para_with_line_break_(
+                                                                                                                   [ValueSource(nameof(XmlTags))] string xmlTag,
+                                                                                                                   [ValueSource(nameof(LowerCaseLetters))] char startingChar)
+            => An_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// Documentation.
 /// <para>
@@ -155,9 +124,6 @@ public sealed class TestMe { }
 /// </" + xmlTag + @">
 public sealed class TestMe { }
 ");
-                                                                                                                                                        }
-                                                                                                                                                    }
-                                                                                                                                                });
 
         [Test]
         public void No_issue_is_reported_for_empty_documentation_([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
@@ -196,7 +162,10 @@ public sealed class TestMe { }
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_well_known_abbreviation_in_XML_documentation_([ValueSource(nameof(XmlTags))] string xmlTag, [Values("i.e.", "e.g.", "a.k.a.")] string abbreviation) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_well_known_abbreviation_in_XML_documentation_(
+                                                                                       [ValueSource(nameof(XmlTags))] string xmlTag,
+                                                                                       [Values("i.e.", "e.g.", "a.k.a.")] string abbreviation)
+            => No_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// Something " + abbreviation + @" whatever.
 /// </" + xmlTag + @">
@@ -204,50 +173,30 @@ public sealed class TestMe { }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_well_known_file_extension_in_code_block_in_XML_documentation() => Assert.Multiple(() =>
-                                                                                                                                    {
-                                                                                                                                        string[] codeBlocks = ["c", "code"];
-
-                                                                                                                                        foreach (var xmlTag in XmlTags)
-                                                                                                                                        {
-                                                                                                                                            foreach (var fileExtension in WellknownFileExtensions)
-                                                                                                                                            {
-                                                                                                                                                foreach (var codeBlock in codeBlocks)
-                                                                                                                                                {
-                                                                                                                                                    No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_well_known_file_extension_in_code_block_in_XML_documentation_(
+                                                                                                       [ValueSource(nameof(XmlTags))] string xmlTag,
+                                                                                                       [ValueSource(nameof(WellknownFileExtensions))] string fileExtension,
+                                                                                                       [ValueSource(nameof(CodeBlocks))] string codeBlock)
+            => No_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// Some <" + codeBlock + ">file" + fileExtension + "</" + codeBlock + @"> extension.
 /// </" + xmlTag + @">
 public sealed class TestMe { }
 ");
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    });
 
         [Test]
-        public void No_issue_is_reported_for_well_known_file_extension_not_within_code_block_in_XML_documentation() => Assert.Multiple(() =>
-                                                                                                                                            {
-                                                                                                                                                foreach (var xmlTag in XmlTags)
-                                                                                                                                                {
-                                                                                                                                                    foreach (var fileExtension in WellknownFileExtensions)
-                                                                                                                                                    {
-                                                                                                                                                        No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_well_known_file_extension_not_within_code_block_in_XML_documentation_(
+                                                                                                               [ValueSource(nameof(XmlTags))] string xmlTag,
+                                                                                                               [ValueSource(nameof(WellknownFileExtensions))] string fileExtension)
+            => No_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// Some file" + fileExtension + @" extension.
 /// </" + xmlTag + @">
 public sealed class TestMe { }
 ");
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                            });
 
         [Test]
-        public void No_issue_is_reported_for_code_in_code_block_para_tag_in_XML_documentation() => Assert.Multiple(() =>
-                                                                                                                        {
-                                                                                                                            foreach (var xmlTag in XmlTags)
-                                                                                                                            {
-                                                                                                                                No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_code_in_code_block_para_tag_in_XML_documentation_([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// <para>
 /// Some example:
@@ -259,8 +208,6 @@ public sealed class TestMe { }
 /// </" + xmlTag + @">
 public sealed class TestMe { }
 ");
-                                                                                                                            }
-                                                                                                                        });
 
         [Test]
         public void No_issue_is_reported_for_code_in_code_block_in_list_description_in_XML_documentation() => No_issue_is_reported_for(@"
@@ -285,18 +232,12 @@ public sealed class TestMe { }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_nested_HTML_tag_in_XML_documentation() => Assert.Multiple(() =>
-                                                                                                            {
-                                                                                                                foreach (var xmlTag in XmlTags)
-                                                                                                                {
-                                                                                                                    No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_nested_HTML_tag_in_XML_documentation_([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// Some <b>not</b> so important text.
 /// </" + xmlTag + @">
 public sealed class TestMe { }
 ");
-                                                                                                                }
-                                                                                                            });
 
         protected override string GetDiagnosticId() => MiKo_2201_DocumentationUsesCapitalizedSentencesAnalyzer.Id;
 

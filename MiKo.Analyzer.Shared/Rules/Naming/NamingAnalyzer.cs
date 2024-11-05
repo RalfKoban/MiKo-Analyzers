@@ -92,12 +92,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                  .SelectMany(_ => AnalyzeName(_, compilation));
         }
 
-        protected virtual bool ShallAnalyze(INamespaceSymbol symbol) => symbol.IsGlobalNamespace is false;
+        protected virtual bool ShallAnalyze(INamespaceSymbol symbol) => symbol.CanBeReferencedByName && symbol.IsGlobalNamespace is false;
 
-        protected virtual bool ShallAnalyze(ITypeSymbol symbol) => true;
+        protected virtual bool ShallAnalyze(ITypeSymbol symbol) => symbol.CanBeReferencedByName;
 
         protected virtual bool ShallAnalyze(IMethodSymbol symbol)
         {
+            if (symbol.CanBeReferencedByName is false)
+            {
+                return false;
+            }
+
             if (symbol.IsOverride)
             {
                 return false;
@@ -116,14 +121,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        protected virtual bool ShallAnalyze(IPropertySymbol symbol) => symbol.IsOverride is false && symbol.IsInterfaceImplementation() is false;
+        protected virtual bool ShallAnalyze(IPropertySymbol symbol) => symbol.CanBeReferencedByName && symbol.IsOverride is false && symbol.IsInterfaceImplementation() is false;
 
-        protected virtual bool ShallAnalyze(IEventSymbol symbol) => symbol.IsOverride is false && symbol.IsInterfaceImplementation() is false;
+        protected virtual bool ShallAnalyze(IEventSymbol symbol) => symbol.CanBeReferencedByName && symbol.IsOverride is false && symbol.IsInterfaceImplementation() is false;
 
-        protected virtual bool ShallAnalyze(IFieldSymbol symbol) => symbol.IsOverride is false;
+        protected virtual bool ShallAnalyze(IFieldSymbol symbol) => symbol.CanBeReferencedByName && symbol.IsOverride is false;
 
         protected virtual bool ShallAnalyze(IParameterSymbol symbol)
         {
+            if (symbol.CanBeReferencedByName is false)
+            {
+                return false;
+            }
+
             if (symbol.IsOverride)
             {
                 return false;

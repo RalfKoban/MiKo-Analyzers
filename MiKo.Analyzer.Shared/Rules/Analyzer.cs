@@ -117,6 +117,11 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected static void ReportDiagnostics(CodeBlockAnalysisContext context, IEnumerable<Diagnostic> issues)
         {
+            if (issues is IReadOnlyCollection<Diagnostic> collection && collection.Count == 0)
+            {
+                return;
+            }
+
             if (context.CancellationToken.IsCancellationRequested)
             {
                 // seems that we should cancel and not report further issues
@@ -148,6 +153,11 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected static void ReportDiagnostics(SymbolAnalysisContext context, IEnumerable<Diagnostic> issues)
         {
+            if (issues is IReadOnlyCollection<Diagnostic> collection && collection.Count == 0)
+            {
+                return;
+            }
+
             if (context.CancellationToken.IsCancellationRequested)
             {
                 // seems that we should cancel and not report further issues
@@ -179,6 +189,12 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected static void ReportDiagnostics(SyntaxNodeAnalysisContext context, IEnumerable<Diagnostic> issues)
         {
+            if (issues is IReadOnlyCollection<Diagnostic> collection && collection.Count == 0)
+            {
+                // nothing to report
+                return;
+            }
+
             if (context.CancellationToken.IsCancellationRequested)
             {
                 // seems that we should cancel and not report further issues
@@ -317,7 +333,14 @@ namespace MiKoSolutions.Analyzers.Rules
             var symbol = context.Symbol;
             var compilation = context.Compilation;
 
-            ReportDiagnostics(context, analyzer((T)symbol, compilation));
+            var issues = analyzer((T)symbol, compilation);
+
+            if (issues is IReadOnlyCollection<Diagnostic> collection && collection.Count == 0)
+            {
+                return;
+            }
+
+            ReportDiagnostics(context, issues);
         }
 
         private static string GetSymbolName(ISymbol symbol)

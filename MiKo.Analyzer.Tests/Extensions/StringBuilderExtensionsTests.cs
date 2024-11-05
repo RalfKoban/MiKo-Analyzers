@@ -11,6 +11,27 @@ namespace MiKoSolutions.Analyzers.Extensions
     [TestFixture]
     public static class StringBuilderExtensionsTests
     {
+        [TestCase("", null, StringComparison.Ordinal, ExpectedResult = false)]
+        [TestCase("", "test", StringComparison.Ordinal, ExpectedResult = false)]
+        [TestCase("Something", "test", StringComparison.Ordinal, ExpectedResult = false)]
+        [TestCase("test", " test", StringComparison.Ordinal, ExpectedResult = false)]
+        [TestCase("test", "test", StringComparison.Ordinal, ExpectedResult = true)]
+        [TestCase(" test", "test", StringComparison.Ordinal, ExpectedResult = true)]
+        [TestCase("Some_test", "test", StringComparison.Ordinal, ExpectedResult = true)]
+        public static bool EndsWith_detects_ending_(string builderValue, string ending, StringComparison comparison) => new StringBuilder(builderValue).EndsWith(ending, comparison);
+
+        [TestCase("", -1)]
+        [TestCase("", 1)]
+        public static void TrimEndBy_throws_ArgumentOutOfRangeException_for_(string s, int count) => Assert.That(() => new StringBuilder(s).TrimEndBy(count), Throws.Exception.TypeOf<ArgumentOutOfRangeException>());
+
+        [TestCase("", 0, ExpectedResult = "")]
+        [TestCase("test", 0, ExpectedResult = "test")]
+        [TestCase("test", 1, ExpectedResult = "tes")]
+        [TestCase("test", 2, ExpectedResult = "te")]
+        [TestCase("test", 3, ExpectedResult = "t")]
+        [TestCase("test", 4, ExpectedResult = "")]
+        public static string TrimEndBy_trims_string_(string s, int count) => new StringBuilder(s).TrimEndBy(count).ToString();
+
         [TestCase("", ExpectedResult = "")]
         [TestCase(" ", ExpectedResult = "")]
         [TestCase("  ", ExpectedResult = "")]

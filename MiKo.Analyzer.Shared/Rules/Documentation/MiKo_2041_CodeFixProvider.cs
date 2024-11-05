@@ -1,4 +1,5 @@
-﻿using System.Composition;
+﻿using System;
+using System.Composition;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -15,11 +16,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
             var syntaxNodes = syntax.GetSummaryXmls(Constants.Comments.InvalidSummaryCrefXmlTags).ToList();
-            var replacements = syntaxNodes.ToArray(_ => _.WithLeadingXmlCommentExterior().WithEndOfLine());
 
-            var updatedSyntax = syntax.Without(syntaxNodes).AddContent(replacements);
+            var updatedSyntax = syntax.Without(syntaxNodes);
 
-            return updatedSyntax;
+            // identify the now-empty summaries and remove those
+            var emptySummaries = updatedSyntax.GetSummaryXmls().Where(_ => _.GetTextTrimmed().IsNullOrEmpty()).ToList();
+
+            if (emptySummaries.Count == 0)
+            {
+                return updatedSyntax.AddContent(syntaxNodes.ToArray(_ => _.WithLeadingXmlCommentExterior().WithEndOfLine()));
+            }
+
+            return updatedSyntax.ReplaceNodes(emptySummaries, _ => syntaxNodes);
         }
     }
 }

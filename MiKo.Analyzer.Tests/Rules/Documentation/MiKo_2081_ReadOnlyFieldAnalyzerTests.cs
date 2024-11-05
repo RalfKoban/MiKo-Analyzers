@@ -63,11 +63,11 @@ public class TestMe
         [Test, Combinatorial]
         public void No_issue_is_reported_for_incorrectly_commented_readonly_TestClass_field_with_visibility_(
                                                                                                          [Values("protected", "public")] string visibility,
-                                                                                                         [ValueSource(nameof(TestFixtures))] string testFixture)
+                                                                                                         [ValueSource(nameof(TestFixtures))] string fixture)
             => No_issue_is_reported_for(@"
 using System;
 
-[ " + testFixture + @"]
+[ " + fixture + @"]
 public class TestMe
 {
     /// <summary>

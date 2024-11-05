@@ -32,7 +32,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_overridden_method_with_CancellationToken_parameter_having_wrong_name() => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_overridden_method_with_CancellationToken_parameter_having_wrong_name() => No_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
