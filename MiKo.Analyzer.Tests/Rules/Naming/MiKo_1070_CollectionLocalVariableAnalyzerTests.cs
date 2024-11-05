@@ -275,9 +275,65 @@ public class TestMe
 {
     public void DoSomething()
     {
-		XmlDocument document = null;
+        XmlDocument document = null;
         XmlNode xmlNode = document.SelectSingleNode("""");
         XmlNode node = xmlNode.SelectSingleNode("""");
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_XML_Linq_node() => No_issue_is_reported_for(@"
+using System;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.XPath;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        XDocument document = null;
+        XElement element = document.XPathSelectElement("""");
+        XNode node = element.FirstNode;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_document_node() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class Document : IEnumerable<int>
+{
+}
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        Document document = new Document();
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_document_variable_in_foreach() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class Document : IEnumerable<int>
+{
+}
+
+public class TestMe
+{
+    public void DoSomething(IEnumerable<Document> documents)
+    {
+        foreach (var document in documents)
+        {
+        }
     }
 }
 ");

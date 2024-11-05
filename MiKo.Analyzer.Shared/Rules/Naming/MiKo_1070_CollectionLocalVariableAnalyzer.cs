@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Xml;
 
 using Microsoft.CodeAnalysis;
@@ -22,13 +23,30 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(ITypeSymbol symbol)
         {
-            if (symbol.Name == "AssemblyCatalog")
+            var symbolName = symbol.Name;
+
+            if (IsMefAggregateCatalog(symbolName))
             {
                 // ignore MEF aggregate catalog
                 return false;
             }
 
-            return symbol.IsEnumerable() && IsXmlNode(symbol) is false;
+            if (symbol.IsEnumerable())
+            {
+                if (IsDocument(symbolName))
+                {
+                    return false;
+                }
+
+                if (IsXmlNode(symbolName))
+                {
+                    return false;
+                }
+
+                return true;
+            }
+
+            return false;
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers)
@@ -130,9 +148,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return false;
         }
 
-        private static bool IsXmlNode(ITypeSymbol type)
+        private static bool IsXmlNode(string typeName)
         {
-            switch (type?.Name)
+            switch (typeName)
             {
                 case nameof(XmlDocument):
                 case nameof(XmlElement):
@@ -147,6 +165,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 }
             }
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool IsDocument(string typeName) => typeName.EndsWith("Document", StringComparison.Ordinal);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool IsMefAggregateCatalog(string typeName) => typeName == "AssemblyCatalog";
 
         private static string GetPluralName(ReadOnlySpan<char> originalName, out string name)
         {
