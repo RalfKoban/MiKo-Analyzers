@@ -4920,7 +4920,7 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Surround with blank lines</value>
   </data>
   <data name="MiKo_6001_Description" xml:space="preserve">
-    <value>To separate Logging visually from the business code, they should be surrounded by blank lines. That makes them easier to spot and ignore.</value>
+    <value>Surround logging calls with blank lines to visually separate them from business code. This improves readability and makes the code easier to follow.</value>
   </data>
   <data name="MiKo_6001_MessageFormat" xml:space="preserve">
     <value>Surround log statement(s) with blank lines</value>
@@ -4932,7 +4932,7 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Surround with blank lines</value>
   </data>
   <data name="MiKo_6002_Description" xml:space="preserve">
-    <value>To separate Assertions visually from the test code, they should be surrounded by blank lines. That makes them easier to spot and ignore.</value>
+    <value>Surround assertions with blank lines to visually separate them from the test code. This improves readability and makes the code easier to follow.</value>
   </data>
   <data name="MiKo_6002_MessageFormat" xml:space="preserve">
     <value>Surround assertion statement(s) with blank lines</value>
@@ -4944,7 +4944,7 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Precede with blank line</value>
   </data>
   <data name="MiKo_6003_Description" xml:space="preserve">
-    <value>To separate local variables visually from executing code, they should be preceded by blank lines. That makes them easier to spot.</value>
+    <value>Precede local variables with blank lines to visually separate them from executing code. This improves readability and makes the code easier to follow.</value>
   </data>
   <data name="MiKo_6003_MessageFormat" xml:space="preserve">
     <value>Precede local variable with a blank line</value>
@@ -4956,7 +4956,7 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Precede with blank line</value>
   </data>
   <data name="MiKo_6004_Description" xml:space="preserve">
-    <value>To separate variable assignments visually from executing code, they should be preceded by blank lines. That makes them easier to spot.</value>
+    <value>Precede variable assignments with blank lines to visually separate them from executing code. This improves readability and makes the code easier to follow.</value>
   </data>
   <data name="MiKo_6004_MessageFormat" xml:space="preserve">
     <value>Precede variable assignment with a blank line</value>
@@ -4968,7 +4968,7 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Precede with blank line</value>
   </data>
   <data name="MiKo_6005_Description" xml:space="preserve">
-    <value>To separate method returns visually from executing code, they should be preceded by blank lines. That makes them easier to spot.</value>
+    <value>Precede 'return' statements with blank lines to visually separate them from the executing code. This improves readability and makes the code easier to follow.</value>
   </data>
   <data name="MiKo_6005_MessageFormat" xml:space="preserve">
     <value>Precede return statement with a blank line</value>
@@ -4980,7 +4980,7 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Surround with blank lines</value>
   </data>
   <data name="MiKo_6006_Description" xml:space="preserve">
-    <value>To separate awaited statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+    <value>Surround awaited statements with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow.</value>
   </data>
   <data name="MiKo_6006_MessageFormat" xml:space="preserve">
     <value>Surround awaited statement with a blank line</value>
@@ -4992,7 +4992,7 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Surround with blank lines</value>
   </data>
   <data name="MiKo_6007_Description" xml:space="preserve">
-    <value>To separate test statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+    <value>Surround test statements with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow.</value>
   </data>
   <data name="MiKo_6007_MessageFormat" xml:space="preserve">
     <value>Surround test statement with a blank line</value>
@@ -5004,7 +5004,7 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Precede with blank line</value>
   </data>
   <data name="MiKo_6008_Description" xml:space="preserve">
-    <value>To separate using directives for a specific namespace visually from other using directives for other namespaces, they should be preceded by blank lines. That makes them easier to spot.</value>
+    <value>Precede using directives for a specific namespace with blank lines to visually separate them from using directives for other namespaces. This improves readability and makes the code easier to follow.</value>
   </data>
   <data name="MiKo_6008_MessageFormat" xml:space="preserve">
     <value>Precede using directive with a blank line</value>
@@ -5016,7 +5016,7 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Surround with blank lines</value>
   </data>
   <data name="MiKo_6009_Description" xml:space="preserve">
-    <value>To separate try statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+    <value>Surround 'try' statements with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow.</value>
   </data>
   <data name="MiKo_6009_MessageFormat" xml:space="preserve">
     <value>Surround 'try' statement with a blank line</value>
@@ -5028,7 +5028,7 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Surround with blank lines</value>
   </data>
   <data name="MiKo_6010_Description" xml:space="preserve">
-    <value>To separate if statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+    <value>Surround 'if' statements with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow.</value>
   </data>
   <data name="MiKo_6010_MessageFormat" xml:space="preserve">
     <value>Surround 'if' statement with a blank line</value>
@@ -5040,7 +5040,7 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Surround with blank lines</value>
   </data>
   <data name="MiKo_6011_Description" xml:space="preserve">
-    <value>To separate lock statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+    <value>Surround 'lock' statements with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow.</value>
   </data>
   <data name="MiKo_6011_MessageFormat" xml:space="preserve">
     <value>Surround 'lock' statement with a blank line</value>
@@ -5052,7 +5052,7 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Surround with blank lines</value>
   </data>
   <data name="MiKo_6012_Description" xml:space="preserve">
-    <value>To separate foreach loops visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+    <value>Surround 'foreach' loops with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow.</value>
   </data>
   <data name="MiKo_6012_MessageFormat" xml:space="preserve">
     <value>Surround 'foreach' loop with a blank line</value>
@@ -5064,7 +5064,7 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Surround with blank lines</value>
   </data>
   <data name="MiKo_6013_Description" xml:space="preserve">
-    <value>To separate for loops visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+    <value>Surround loops with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow.</value>
   </data>
   <data name="MiKo_6013_MessageFormat" xml:space="preserve">
     <value>Surround 'for' loop with a blank line</value>
@@ -5076,7 +5076,7 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Surround with blank lines</value>
   </data>
   <data name="MiKo_6014_Description" xml:space="preserve">
-    <value>To separate while loops visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+    <value>Surround 'while' loops with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow.</value>
   </data>
   <data name="MiKo_6014_MessageFormat" xml:space="preserve">
     <value>Surround 'while' loop with a blank line</value>
@@ -5088,7 +5088,7 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Surround with blank lines</value>
   </data>
   <data name="MiKo_6015_Description" xml:space="preserve">
-    <value>To separate do/while loops visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+    <value>Surround 'do while' loops with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow.</value>
   </data>
   <data name="MiKo_6015_MessageFormat" xml:space="preserve">
     <value>Surround 'do/while' loop with a blank line</value>
@@ -5100,7 +5100,7 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Surround with blank lines</value>
   </data>
   <data name="MiKo_6016_Description" xml:space="preserve">
-    <value>To separate using statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+    <value>Surround 'using' statements with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow.</value>
   </data>
   <data name="MiKo_6016_MessageFormat" xml:space="preserve">
     <value>Surround 'using' with a blank line</value>
@@ -5112,7 +5112,7 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Surround with blank lines</value>
   </data>
   <data name="MiKo_6017_Description" xml:space="preserve">
-    <value>To separate switch statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+    <value>Surround 'switch' statements with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow.</value>
   </data>
   <data name="MiKo_6017_MessageFormat" xml:space="preserve">
     <value>Surround 'switch' with a blank line</value>
@@ -5124,7 +5124,7 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Surround with blank lines</value>
   </data>
   <data name="MiKo_6018_Description" xml:space="preserve">
-    <value>To separate break statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+    <value>Surround 'break' statements with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow.</value>
   </data>
   <data name="MiKo_6018_MessageFormat" xml:space="preserve">
     <value>Surround 'break' with a blank line</value>
@@ -5136,7 +5136,7 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Surround with blank lines</value>
   </data>
   <data name="MiKo_6019_Description" xml:space="preserve">
-    <value>To separate continue statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+    <value>Surround 'continue' statements with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow.</value>
   </data>
   <data name="MiKo_6019_MessageFormat" xml:space="preserve">
     <value>Surround 'continue' with a blank line</value>
@@ -5148,7 +5148,7 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Surround with blank lines</value>
   </data>
   <data name="MiKo_6020_Description" xml:space="preserve">
-    <value>To separate throw statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+    <value>Surround 'throw' statements with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow.</value>
   </data>
   <data name="MiKo_6020_MessageFormat" xml:space="preserve">
     <value>Surround 'throw' with a blank line</value>
@@ -5160,7 +5160,7 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Surround with blank lines</value>
   </data>
   <data name="MiKo_6021_Description" xml:space="preserve">
-    <value>To separate ThrowIfNull statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+    <value>Surround 'ArgumentNullException.ThrowIfNull' statements with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow.</value>
   </data>
   <data name="MiKo_6021_MessageFormat" xml:space="preserve">
     <value>Surround 'ThrowIfNull' with a blank line</value>
@@ -5172,7 +5172,7 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Surround with blank lines</value>
   </data>
   <data name="MiKo_6022_Description" xml:space="preserve">
-    <value>To separate ThrowIfNullOrEmpty statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+    <value>Surround 'ArgumentException.ThrowIfNullOrEmpty' statements with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow.</value>
   </data>
   <data name="MiKo_6022_MessageFormat" xml:space="preserve">
     <value>Surround 'ThrowIfNullOrEmpty' with a blank line</value>
@@ -5184,7 +5184,7 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Surround with blank lines</value>
   </data>
   <data name="MiKo_6023_Description" xml:space="preserve">
-    <value>To separate ThrowIf statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+    <value>Surround 'ArgumentOutOfRangeException.ThrowIf' statements with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow.</value>
   </data>
   <data name="MiKo_6023_MessageFormat" xml:space="preserve">
     <value>Surround 'ThrowIf' with a blank line</value>
@@ -5196,7 +5196,7 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Surround with blank lines</value>
   </data>
   <data name="MiKo_6024_Description" xml:space="preserve">
-    <value>To separate ThrowIf statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+    <value>Surround 'ObjectDisposedException.ThrowIf' statements with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow.</value>
   </data>
   <data name="MiKo_6024_MessageFormat" xml:space="preserve">
     <value>Surround 'ThrowIf' with a blank line</value>
@@ -5208,7 +5208,7 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Align open brace directly below type</value>
   </data>
   <data name="MiKo_6030_Description" xml:space="preserve">
-    <value>To indicate the initializations and to distinguish them from blocks (such as if blocks), the open brace of the initializer should be positioned directly below the corresponding type definition.</value>
+    <value>Place the open brace of an initializer directly below the type definition. This makes initializations clear, distinguishes them from other blocks like 'if' blocks, and improves readability, making the code easier to follow.</value>
   </data>
   <data name="MiKo_6030_MessageFormat" xml:space="preserve">
     <value>Align open brace directly below type</value>
@@ -5220,7 +5220,7 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Align ternary operator directly below condition</value>
   </data>
   <data name="MiKo_6031_Description" xml:space="preserve">
-    <value>To easily spot the 2 possibilities of ternary operators based on their conditions, the question and colon tokens should be positioned directly below the corresponding condition.</value>
+    <value>Place the question and colon tokens directly below the condition in ternary operators. This makes the two possibilities easy to spot, improves readability, and makes the code easier to follow.</value>
   </data>
   <data name="MiKo_6031_MessageFormat" xml:space="preserve">
     <value>Align ternary operator directly below condition</value>
@@ -5232,7 +5232,7 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Align parameter outdented below method</value>
   </data>
   <data name="MiKo_6032_Description" xml:space="preserve">
-    <value>To easily spot the multi-line parameters of a method, those parameters should be positioned outdented below the corresponding method declaration.</value>
+    <value>Outdent multi-line parameters below the method declaration to easily spot them. This improves readability and makes the code easier to follow.</value>
   </data>
   <data name="MiKo_6032_MessageFormat" xml:space="preserve">
     <value>Align parameter '{0}' outdented below method</value>
@@ -5244,8 +5244,7 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Align open brace directly below case</value>
   </data>
   <data name="MiKo_6033_Description" xml:space="preserve">
-    <value>Similar to if statements case sections within a switch statement represent conditions to check. In case such a condition matches, the corresponding block gets executed.
-Hence, as it is a block similar to the if block(s), the open brace of the block should be positioned directly below the corresponding case keyword.</value>
+    <value>Case sections in a switch statement are like conditions in 'if' statements. When a condition matches, the corresponding block gets executed. Therefore, place the open brace of the block directly below the 'case' keyword, just like 'if' blocks.</value>
   </data>
   <data name="MiKo_6033_MessageFormat" xml:space="preserve">
     <value>Align open brace directly below case</value>
@@ -5257,7 +5256,7 @@ Hence, as it is a block similar to the if block(s), the open brace of the block 
     <value>Place dot on same line</value>
   </data>
   <data name="MiKo_6034_Description" xml:space="preserve">
-    <value>The code is easier to read if the dots are placed on the same line(s) as the invoked members.</value>
+    <value>Code readability improves when dots are placed on the same lines as the invoked members. This makes the code easier to follow and understand.</value>
   </data>
   <data name="MiKo_6034_MessageFormat" xml:space="preserve">
     <value>Place dot on same line as member</value>
@@ -5269,7 +5268,7 @@ Hence, as it is a block similar to the if block(s), the open brace of the block 
     <value>Place parenthesis on same line</value>
   </data>
   <data name="MiKo_6035_Description" xml:space="preserve">
-    <value>The code is easier to read if the open parenthesis are placed on the same line(s) as the invoked methods.</value>
+    <value>Code readability improves when the open parenthesis are placed on the same lines as the invoked methods. This makes the code easier to follow and understand.</value>
   </data>
   <data name="MiKo_6035_MessageFormat" xml:space="preserve">
     <value>Place open parenthesis on same line as invocation</value>
@@ -5281,7 +5280,7 @@ Hence, as it is a block similar to the if block(s), the open brace of the block 
     <value>Align block directly below arrow</value>
   </data>
   <data name="MiKo_6036_Description" xml:space="preserve">
-    <value>To easily distinguish lambda blocks from other code blocks, these blocks should be positioned either in line with or directly below the corresponding arrow.</value>
+    <value>To easily distinguish lambda blocks from other code blocks, position them either in line with or directly below the corresponding arrow. This makes the code clearer and easier to follow.</value>
   </data>
   <data name="MiKo_6036_MessageFormat" xml:space="preserve">
     <value>Align lambda block directly below arrow</value>
@@ -5293,7 +5292,7 @@ Hence, as it is a block similar to the if block(s), the open brace of the block 
     <value>Place argument on same line as invocation</value>
   </data>
   <data name="MiKo_6037_Description" xml:space="preserve">
-    <value>The code is easier to read if single arguments are placed on the same line(s) as the invoked methods.</value>
+    <value>Code readability improves when single arguments are placed on the same lines as the invoked methods. This makes the code clearer and easier to follow.</value>
   </data>
   <data name="MiKo_6037_MessageFormat" xml:space="preserve">
     <value>Place argument on same line as invocation</value>
@@ -5305,7 +5304,7 @@ Hence, as it is a block similar to the if block(s), the open brace of the block 
     <value>Place cast on same line</value>
   </data>
   <data name="MiKo_6038_Description" xml:space="preserve">
-    <value>The code is easier to read if casts are placed on the same line(s).</value>
+    <value>Code readability improves when casts are placed on the same lines. This makes the code clearer and easier to follow.</value>
   </data>
   <data name="MiKo_6038_MessageFormat" xml:space="preserve">
     <value>Place cast on same line</value>
@@ -5317,7 +5316,7 @@ Hence, as it is a block similar to the if block(s), the open brace of the block 
     <value>Place return value on same line as return keyword</value>
   </data>
   <data name="MiKo_6039_Description" xml:space="preserve">
-    <value>The code is easier to read if return keywords and return values are placed on the same line(s).</value>
+    <value>Code readability improves when return keywords and return values are placed on the same lines. This makes the code clearer and easier to follow.</value>
   </data>
   <data name="MiKo_6039_MessageFormat" xml:space="preserve">
     <value>Place return value on same line as return keyword</value>
@@ -5329,7 +5328,7 @@ Hence, as it is a block similar to the if block(s), the open brace of the block 
     <value>Indent dots</value>
   </data>
   <data name="MiKo_6040_Description" xml:space="preserve">
-    <value>The code is easier to read if consecutive invocations that span multiple lines are aligned by their dots.</value>
+    <value>Code readability improves when consecutive invocations spanning multiple lines are vertically aligned by their dots. This makes the code clearer and easier to follow.</value>
   </data>
   <data name="MiKo_6040_MessageFormat" xml:space="preserve">
     <value>Indent dots</value>
@@ -5341,7 +5340,7 @@ Hence, as it is a block similar to the if block(s), the open brace of the block 
     <value>Place assignment on same line</value>
   </data>
   <data name="MiKo_6041_Description" xml:space="preserve">
-    <value>The code is easier to read if assignments are placed on the same line(s).</value>
+    <value>Code readability improves when assignments are placed on the same lines. This makes the code clearer and easier to follow.</value>
   </data>
   <data name="MiKo_6041_MessageFormat" xml:space="preserve">
     <value>Place assignment on same line</value>
@@ -5353,7 +5352,7 @@ Hence, as it is a block similar to the if block(s), the open brace of the block 
     <value>Place new keyword on same line as type</value>
   </data>
   <data name="MiKo_6042_Description" xml:space="preserve">
-    <value>The code is easier to read if object creations are placed on the same line(s).</value>
+    <value>Code readability improves when object creations are placed on the same lines. This makes the code clearer and easier to follow.</value>
   </data>
   <data name="MiKo_6042_MessageFormat" xml:space="preserve">
     <value>Place new keyword on same line as type</value>
@@ -5365,7 +5364,7 @@ Hence, as it is a block similar to the if block(s), the open brace of the block 
     <value>Place lambda on single line</value>
   </data>
   <data name="MiKo_6043_Description" xml:space="preserve">
-    <value>To ease maintenance and code reading, lambdas with expression bodies should be placed on a single line. The code is harder to read when placed on different lines.</value>
+    <value>Code readability improves when lambdas with expression bodies are placed on a single line. This makes the code clearer and easier to follow.</value>
   </data>
   <data name="MiKo_6043_MessageFormat" xml:space="preserve">
     <value>Place lambda on single line</value>
@@ -5377,7 +5376,7 @@ Hence, as it is a block similar to the if block(s), the open brace of the block 
     <value>Place operator on same line as right operand</value>
   </data>
   <data name="MiKo_6044_Description" xml:space="preserve">
-    <value>The code is easier to read if binary operators such as '&amp;&amp;' or '||' are placed on the same line(s) as their operands on the right side.</value>
+    <value>Code readability improves when binary operators like '&amp;&amp;' or '||' are placed on the same lines as their right-hand operands. This makes the code clearer and easier to follow.</value>
   </data>
   <data name="MiKo_6044_MessageFormat" xml:space="preserve">
     <value>Place operator on same line as right operand</value>
@@ -5389,7 +5388,7 @@ Hence, as it is a block similar to the if block(s), the open brace of the block 
     <value>Place comparison on same line</value>
   </data>
   <data name="MiKo_6045_Description" xml:space="preserve">
-    <value>The code is easier to read if comparison operators such as '==' or '!=' are placed on the same line(s) as their operands.</value>
+    <value>Code readability improves when comparison operators such as '==' or '!=' are placed on the same lines as their operands. This makes the code clearer and easier to follow.</value>
   </data>
   <data name="MiKo_6045_MessageFormat" xml:space="preserve">
     <value>Place comparison on same line</value>
@@ -5401,7 +5400,7 @@ Hence, as it is a block similar to the if block(s), the open brace of the block 
     <value>Place calculation on same line</value>
   </data>
   <data name="MiKo_6046_Description" xml:space="preserve">
-    <value>The code is easier to read if calculations operators such as '+' or '%' are placed on the same line(s) as their operands.</value>
+    <value>Code readability improves when calculations operators such as '+' or '%' are placed on the same lines as their operands. This makes the code clearer and easier to follow.</value>
   </data>
   <data name="MiKo_6046_MessageFormat" xml:space="preserve">
     <value>Place calculation on same line</value>
@@ -5413,8 +5412,7 @@ Hence, as it is a block similar to the if block(s), the open brace of the block 
     <value>Align open brace directly below switch</value>
   </data>
   <data name="MiKo_6047_Description" xml:space="preserve">
-    <value>Switch expressions are very similar to switch statements.
-Hence, the open brace of the expression should be positioned directly below the corresponding switch keyword.</value>
+    <value>Switch expressions are similar to switch statements. Therefore, the open brace of the expression should be placed directly below the 'switch' keyword. This makes the code clearer and easier to follow.</value>
   </data>
   <data name="MiKo_6047_MessageFormat" xml:space="preserve">
     <value>Align open brace directly below switch</value>
@@ -5426,7 +5424,7 @@ Hence, the open brace of the expression should be positioned directly below the 
     <value>Place condition on single line</value>
   </data>
   <data name="MiKo_6048_Description" xml:space="preserve">
-    <value>Logical conditions that span multiple lines are hard to read and understand. To be easier to understand they should span a single line only.</value>
+    <value>Logical conditions that span multiple lines are hard to read and understand. To improve readability, they should span a single line only. This makes the code clearer and easier to follow.</value>
   </data>
   <data name="MiKo_6048_MessageFormat" xml:space="preserve">
     <value>Place condition on single line</value>
@@ -5438,7 +5436,7 @@ Hence, the open brace of the expression should be positioned directly below the 
     <value>Surround with blank lines</value>
   </data>
   <data name="MiKo_6049_Description" xml:space="preserve">
-    <value>To separate event (un-)registrations visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+    <value>Surround event registrations and un-registrations with blank lines to visually separate them from other code. This makes the code clearer and easier to follow.</value>
   </data>
   <data name="MiKo_6049_MessageFormat" xml:space="preserve">
     <value>Surround event (un-)registration with a blank line</value>
@@ -5450,7 +5448,7 @@ Hence, the open brace of the expression should be positioned directly below the 
     <value>Align argument outdented below method call</value>
   </data>
   <data name="MiKo_6050_Description" xml:space="preserve">
-    <value>To easily spot the multi-line arguments of a method call, those arguments should be positioned outdented below the corresponding method call.</value>
+    <value>Outdent multi-line arguments below the corresponding method call to easily spot them. This improves readability and makes the code easier to follow.</value>
   </data>
   <data name="MiKo_6050_MessageFormat" xml:space="preserve">
     <value>Align argument '{0}' outdented below method call</value>
@@ -5462,7 +5460,7 @@ Hence, the open brace of the expression should be positioned directly below the 
     <value>Place colon on same line as constructor call</value>
   </data>
   <data name="MiKo_6051_Description" xml:space="preserve">
-    <value>The code is easier to read if the colons leading the calls of other constructors are placed on the same line as the calls themselves.</value>
+    <value>Code readability improves when colons leading constructor calls are placed on the same lines as the calls themselves. This makes the code clearer and easier to follow.</value>
   </data>
   <data name="MiKo_6051_MessageFormat" xml:space="preserve">
     <value>Place colon on same line as constructor call</value>
@@ -5474,7 +5472,7 @@ Hence, the open brace of the expression should be positioned directly below the 
     <value>Place colon on same line as first base type</value>
   </data>
   <data name="MiKo_6052_Description" xml:space="preserve">
-    <value>The code is easier to read if the colons leading the list of base types are placed on the same line as the first base types.</value>
+    <value>Code readability improves when the colons leading the list of base types are on the same line as the first base types. This makes the code clearer and easier to follow.</value>
   </data>
   <data name="MiKo_6052_MessageFormat" xml:space="preserve">
     <value>Place colon on same line as first base type</value>
@@ -5486,7 +5484,7 @@ Hence, the open brace of the expression should be positioned directly below the 
     <value>Place argument on single line</value>
   </data>
   <data name="MiKo_6053_Description" xml:space="preserve">
-    <value>The code is easier to read if 'single-line' arguments are placed on a single line instead of splitting them over multiple lines.</value>
+    <value>Code readability improves when single-line arguments are kept on a single line instead of splitting them over multiple lines. This makes the code clearer and easier to follow.</value>
   </data>
   <data name="MiKo_6053_MessageFormat" xml:space="preserve">
     <value>Place argument on single line</value>
@@ -5498,7 +5496,7 @@ Hence, the open brace of the expression should be positioned directly below the 
     <value>Place lambda arrow on same line as its parameter(s)</value>
   </data>
   <data name="MiKo_6054_Description" xml:space="preserve">
-    <value>The code is easier to read if the arrow of lambdas are placed on a the same line as the parameters or their expression bodies, instead of splitting them all over multiple lines.</value>
+    <value>Code readability improves when the arrow of lambda expressions is on the same line as the parameters or their expression bodies. Avoid splitting them over multiple lines. This makes the code clearer and easier to follow.</value>
   </data>
   <data name="MiKo_6054_MessageFormat" xml:space="preserve">
     <value>Place lambda arrow on same line as its parameter(s)</value>
@@ -5510,7 +5508,7 @@ Hence, the open brace of the expression should be positioned directly below the 
     <value>Surround with blank lines</value>
   </data>
   <data name="MiKo_6055_Description" xml:space="preserve">
-    <value>To separate assignments visually from invocations, they should be surrounded by blank lines. That makes them easier to spot.</value>
+    <value>Surround assignments with blank lines to visually separate them from invocations. This makes the code clearer and easier to follow.</value>
   </data>
   <data name="MiKo_6055_MessageFormat" xml:space="preserve">
     <value>Surround assignment with a blank line</value>
@@ -5522,8 +5520,7 @@ Hence, the open brace of the expression should be positioned directly below the 
     <value>Align collection expression brackets</value>
   </data>
   <data name="MiKo_6056_Description" xml:space="preserve">
-    <value>Collection expressions are very similar to collection initializers from the code reading point of view.
-Hence, their open brackets should be positioned at the same position where the collection initializer braces would be positioned.</value>
+    <value>Collection expressions are similar to collection initializers in terms of readability. Therefore, place their open brackets in the same position as the collection initializer braces. This makes the code clearer and easier to follow.</value>
   </data>
   <data name="MiKo_6056_MessageFormat" xml:space="preserve">
     <value>Align collection expression brackets</value>
@@ -5535,7 +5532,7 @@ Hence, their open brackets should be positioned at the same position where the c
     <value>Align type parameter constraint vertically along with others</value>
   </data>
   <data name="MiKo_6057_Description" xml:space="preserve">
-    <value>The code is easier to read if type parameter constraint clauses are aligned vertically.</value>
+    <value>Code readability improves when type parameter constraint clauses are aligned vertically. This makes the code clearer and easier to follow.</value>
   </data>
   <data name="MiKo_6057_MessageFormat" xml:space="preserve">
     <value>Align type parameter constraint vertically along with others</value>
@@ -5547,7 +5544,7 @@ Hence, their open brackets should be positioned at the same position where the c
     <value>Align type parameter constraint indented below parameter list</value>
   </data>
   <data name="MiKo_6058_Description" xml:space="preserve">
-    <value>The code is easier to read if type parameter constraint clauses are aligned indented below the parameter list.</value>
+    <value>Code readability improves when type parameter constraint clauses are indented below the parameter list. This makes the code clearer and easier to follow.</value>
   </data>
   <data name="MiKo_6058_MessageFormat" xml:space="preserve">
     <value>Align type parameter constraint indented below parameter list</value>
@@ -5559,7 +5556,7 @@ Hence, their open brackets should be positioned at the same position where the c
     <value>Align condition outdented</value>
   </data>
   <data name="MiKo_6059_Description" xml:space="preserve">
-    <value>To easily read the multi-line conditions, those conditions should be positioned outdented below the corresponding call.</value>
+    <value>Outdent multi-line conditions below the corresponding call to make them easier to read. This makes the code clearer and easier to follow.</value>
   </data>
   <data name="MiKo_6059_MessageFormat" xml:space="preserve">
     <value>Align condition outdented</value>
@@ -5571,7 +5568,7 @@ Hence, their open brackets should be positioned at the same position where the c
     <value>Place switch case label on single line</value>
   </data>
   <data name="MiKo_6060_Description" xml:space="preserve">
-    <value>To ease reading, switch case labels should span a single line.</value>
+    <value>Code readability improves when switch case labels span a single line. This makes the code clearer and easier to follow.</value>
   </data>
   <data name="MiKo_6060_MessageFormat" xml:space="preserve">
     <value>Place switch case label on single line</value>
@@ -5583,7 +5580,7 @@ Hence, their open brackets should be positioned at the same position where the c
     <value>Place switch expression arm on single line</value>
   </data>
   <data name="MiKo_6061_Description" xml:space="preserve">
-    <value>To ease reading, switch expression arms should span a single line.</value>
+    <value>Code readability improves when switch expression arms span a single line. This makes the code clearer and easier to follow.</value>
   </data>
   <data name="MiKo_6061_MessageFormat" xml:space="preserve">
     <value>Place switch expression arm on single line</value>
@@ -5595,7 +5592,7 @@ Hence, their open brackets should be positioned at the same position where the c
     <value>Surround with blank lines</value>
   </data>
   <data name="MiKo_6070_Description" xml:space="preserve">
-    <value>To separate Console in/output visually from the business code, they should be surrounded by blank lines. That makes them easier to spot and ignore.</value>
+    <value>Surround Console input/output with blank lines to visually separate them from business code. This makes the code clearer and easier to follow.</value>
   </data>
   <data name="MiKo_6070_MessageFormat" xml:space="preserve">
     <value>Surround Console statement(s) with blank lines</value>

@@ -14091,7 +14091,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To separate Logging visually from the business code, they should be surrounded by blank lines. That makes them easier to spot and ignore..
+        ///   Looks up a localized string similar to Surround logging calls with blank lines to visually separate them from business code. This improves readability and makes the code easier to follow..
         /// </summary>
         internal static string MiKo_6001_Description {
             get {
@@ -14127,7 +14127,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To separate Assertions visually from the test code, they should be surrounded by blank lines. That makes them easier to spot and ignore..
+        ///   Looks up a localized string similar to Surround assertions with blank lines to visually separate them from the test code. This improves readability and makes the code easier to follow..
         /// </summary>
         internal static string MiKo_6002_Description {
             get {
@@ -14163,7 +14163,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To separate local variables visually from executing code, they should be preceded by blank lines. That makes them easier to spot..
+        ///   Looks up a localized string similar to Precede local variables with blank lines to visually separate them from executing code. This improves readability and makes the code easier to follow..
         /// </summary>
         internal static string MiKo_6003_Description {
             get {
@@ -14199,7 +14199,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To separate variable assignments visually from executing code, they should be preceded by blank lines. That makes them easier to spot..
+        ///   Looks up a localized string similar to Precede variable assignments with blank lines to visually separate them from executing code. This improves readability and makes the code easier to follow..
         /// </summary>
         internal static string MiKo_6004_Description {
             get {
@@ -14235,7 +14235,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To separate method returns visually from executing code, they should be preceded by blank lines. That makes them easier to spot..
+        ///   Looks up a localized string similar to Precede &apos;return&apos; statements with blank lines to visually separate them from the executing code. This improves readability and makes the code easier to follow..
         /// </summary>
         internal static string MiKo_6005_Description {
             get {
@@ -14271,7 +14271,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To separate awaited statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        ///   Looks up a localized string similar to Surround awaited statements with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow..
         /// </summary>
         internal static string MiKo_6006_Description {
             get {
@@ -14307,7 +14307,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To separate test statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        ///   Looks up a localized string similar to Surround test statements with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow..
         /// </summary>
         internal static string MiKo_6007_Description {
             get {
@@ -14343,7 +14343,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To separate using directives for a specific namespace visually from other using directives for other namespaces, they should be preceded by blank lines. That makes them easier to spot..
+        ///   Looks up a localized string similar to Precede using directives for a specific namespace with blank lines to visually separate them from using directives for other namespaces. This improves readability and makes the code easier to follow..
         /// </summary>
         internal static string MiKo_6008_Description {
             get {
@@ -14379,7 +14379,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To separate try statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        ///   Looks up a localized string similar to Surround &apos;try&apos; statements with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow..
         /// </summary>
         internal static string MiKo_6009_Description {
             get {
@@ -14415,7 +14415,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To separate if statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        ///   Looks up a localized string similar to Surround &apos;if&apos; statements with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow..
         /// </summary>
         internal static string MiKo_6010_Description {
             get {
@@ -14451,7 +14451,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To separate lock statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        ///   Looks up a localized string similar to Surround &apos;lock&apos; statements with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow..
         /// </summary>
         internal static string MiKo_6011_Description {
             get {
@@ -14487,7 +14487,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To separate foreach loops visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        ///   Looks up a localized string similar to Surround &apos;foreach&apos; loops with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow..
         /// </summary>
         internal static string MiKo_6012_Description {
             get {
@@ -14523,7 +14523,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To separate for loops visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        ///   Looks up a localized string similar to Surround loops with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow..
         /// </summary>
         internal static string MiKo_6013_Description {
             get {
@@ -14559,7 +14559,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To separate while loops visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        ///   Looks up a localized string similar to Surround &apos;while&apos; loops with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow..
         /// </summary>
         internal static string MiKo_6014_Description {
             get {
@@ -14595,7 +14595,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To separate do/while loops visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        ///   Looks up a localized string similar to Surround &apos;do while&apos; loops with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow..
         /// </summary>
         internal static string MiKo_6015_Description {
             get {
@@ -14631,7 +14631,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To separate using statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        ///   Looks up a localized string similar to Surround &apos;using&apos; statements with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow..
         /// </summary>
         internal static string MiKo_6016_Description {
             get {
@@ -14667,7 +14667,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To separate switch statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        ///   Looks up a localized string similar to Surround &apos;switch&apos; statements with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow..
         /// </summary>
         internal static string MiKo_6017_Description {
             get {
@@ -14703,7 +14703,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To separate break statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        ///   Looks up a localized string similar to Surround &apos;break&apos; statements with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow..
         /// </summary>
         internal static string MiKo_6018_Description {
             get {
@@ -14739,7 +14739,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To separate continue statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        ///   Looks up a localized string similar to Surround &apos;continue&apos; statements with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow..
         /// </summary>
         internal static string MiKo_6019_Description {
             get {
@@ -14775,7 +14775,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To separate throw statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        ///   Looks up a localized string similar to Surround &apos;throw&apos; statements with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow..
         /// </summary>
         internal static string MiKo_6020_Description {
             get {
@@ -14811,7 +14811,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To separate ThrowIfNull statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        ///   Looks up a localized string similar to Surround &apos;ArgumentNullException.ThrowIfNull&apos; statements with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow..
         /// </summary>
         internal static string MiKo_6021_Description {
             get {
@@ -14847,7 +14847,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To separate ThrowIfNullOrEmpty statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        ///   Looks up a localized string similar to Surround &apos;ArgumentException.ThrowIfNullOrEmpty&apos; statements with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow..
         /// </summary>
         internal static string MiKo_6022_Description {
             get {
@@ -14883,7 +14883,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To separate ThrowIf statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        ///   Looks up a localized string similar to Surround &apos;ArgumentOutOfRangeException.ThrowIf&apos; statements with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow..
         /// </summary>
         internal static string MiKo_6023_Description {
             get {
@@ -14919,7 +14919,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To separate ThrowIf statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        ///   Looks up a localized string similar to Surround &apos;ObjectDisposedException.ThrowIf&apos; statements with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow..
         /// </summary>
         internal static string MiKo_6024_Description {
             get {
@@ -14955,7 +14955,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To indicate the initializations and to distinguish them from blocks (such as if blocks), the open brace of the initializer should be positioned directly below the corresponding type definition..
+        ///   Looks up a localized string similar to Place the open brace of an initializer directly below the type definition. This makes initializations clear, distinguishes them from other blocks like &apos;if&apos; blocks, and improves readability, making the code easier to follow..
         /// </summary>
         internal static string MiKo_6030_Description {
             get {
@@ -14991,7 +14991,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To easily spot the 2 possibilities of ternary operators based on their conditions, the question and colon tokens should be positioned directly below the corresponding condition..
+        ///   Looks up a localized string similar to Place the question and colon tokens directly below the condition in ternary operators. This makes the two possibilities easy to spot, improves readability, and makes the code easier to follow..
         /// </summary>
         internal static string MiKo_6031_Description {
             get {
@@ -15027,7 +15027,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To easily spot the multi-line parameters of a method, those parameters should be positioned outdented below the corresponding method declaration..
+        ///   Looks up a localized string similar to Outdent multi-line parameters below the method declaration to easily spot them. This improves readability and makes the code easier to follow..
         /// </summary>
         internal static string MiKo_6032_Description {
             get {
@@ -15063,8 +15063,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Similar to if statements case sections within a switch statement represent conditions to check. In case such a condition matches, the corresponding block gets executed.
-        ///Hence, as it is a block similar to the if block(s), the open brace of the block should be positioned directly below the corresponding case keyword..
+        ///   Looks up a localized string similar to Case sections in a switch statement are like conditions in &apos;if&apos; statements. When a condition matches, the corresponding block gets executed. Therefore, place the open brace of the block directly below the &apos;case&apos; keyword, just like &apos;if&apos; blocks..
         /// </summary>
         internal static string MiKo_6033_Description {
             get {
@@ -15100,7 +15099,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The code is easier to read if the dots are placed on the same line(s) as the invoked members..
+        ///   Looks up a localized string similar to Code readability improves when dots are placed on the same lines as the invoked members. This makes the code easier to follow and understand..
         /// </summary>
         internal static string MiKo_6034_Description {
             get {
@@ -15136,7 +15135,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The code is easier to read if the open parenthesis are placed on the same line(s) as the invoked methods..
+        ///   Looks up a localized string similar to Code readability improves when the open parenthesis are placed on the same lines as the invoked methods. This makes the code easier to follow and understand..
         /// </summary>
         internal static string MiKo_6035_Description {
             get {
@@ -15172,7 +15171,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To easily distinguish lambda blocks from other code blocks, these blocks should be positioned either in line with or directly below the corresponding arrow..
+        ///   Looks up a localized string similar to To easily distinguish lambda blocks from other code blocks, position them either in line with or directly below the corresponding arrow. This makes the code clearer and easier to follow..
         /// </summary>
         internal static string MiKo_6036_Description {
             get {
@@ -15208,7 +15207,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The code is easier to read if single arguments are placed on the same line(s) as the invoked methods..
+        ///   Looks up a localized string similar to Code readability improves when single arguments are placed on the same lines as the invoked methods. This makes the code clearer and easier to follow..
         /// </summary>
         internal static string MiKo_6037_Description {
             get {
@@ -15244,7 +15243,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The code is easier to read if casts are placed on the same line(s)..
+        ///   Looks up a localized string similar to Code readability improves when casts are placed on the same lines. This makes the code clearer and easier to follow..
         /// </summary>
         internal static string MiKo_6038_Description {
             get {
@@ -15280,7 +15279,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The code is easier to read if return keywords and return values are placed on the same line(s)..
+        ///   Looks up a localized string similar to Code readability improves when return keywords and return values are placed on the same lines. This makes the code clearer and easier to follow..
         /// </summary>
         internal static string MiKo_6039_Description {
             get {
@@ -15316,7 +15315,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The code is easier to read if consecutive invocations that span multiple lines are aligned by their dots..
+        ///   Looks up a localized string similar to Code readability improves when consecutive invocations spanning multiple lines are vertically aligned by their dots. This makes the code clearer and easier to follow..
         /// </summary>
         internal static string MiKo_6040_Description {
             get {
@@ -15352,7 +15351,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The code is easier to read if assignments are placed on the same line(s)..
+        ///   Looks up a localized string similar to Code readability improves when assignments are placed on the same lines. This makes the code clearer and easier to follow..
         /// </summary>
         internal static string MiKo_6041_Description {
             get {
@@ -15388,7 +15387,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The code is easier to read if object creations are placed on the same line(s)..
+        ///   Looks up a localized string similar to Code readability improves when object creations are placed on the same lines. This makes the code clearer and easier to follow..
         /// </summary>
         internal static string MiKo_6042_Description {
             get {
@@ -15424,7 +15423,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance and code reading, lambdas with expression bodies should be placed on a single line. The code is harder to read when placed on different lines..
+        ///   Looks up a localized string similar to Code readability improves when lambdas with expression bodies are placed on a single line. This makes the code clearer and easier to follow..
         /// </summary>
         internal static string MiKo_6043_Description {
             get {
@@ -15460,7 +15459,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The code is easier to read if binary operators such as &apos;&amp;&amp;&apos; or &apos;||&apos; are placed on the same line(s) as their operands on the right side..
+        ///   Looks up a localized string similar to Code readability improves when binary operators like &apos;&amp;&amp;&apos; or &apos;||&apos; are placed on the same lines as their right-hand operands. This makes the code clearer and easier to follow..
         /// </summary>
         internal static string MiKo_6044_Description {
             get {
@@ -15496,7 +15495,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The code is easier to read if comparison operators such as &apos;==&apos; or &apos;!=&apos; are placed on the same line(s) as their operands..
+        ///   Looks up a localized string similar to Code readability improves when comparison operators such as &apos;==&apos; or &apos;!=&apos; are placed on the same lines as their operands. This makes the code clearer and easier to follow..
         /// </summary>
         internal static string MiKo_6045_Description {
             get {
@@ -15532,7 +15531,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The code is easier to read if calculations operators such as &apos;+&apos; or &apos;%&apos; are placed on the same line(s) as their operands..
+        ///   Looks up a localized string similar to Code readability improves when calculations operators such as &apos;+&apos; or &apos;%&apos; are placed on the same lines as their operands. This makes the code clearer and easier to follow..
         /// </summary>
         internal static string MiKo_6046_Description {
             get {
@@ -15568,8 +15567,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Switch expressions are very similar to switch statements.
-        ///Hence, the open brace of the expression should be positioned directly below the corresponding switch keyword..
+        ///   Looks up a localized string similar to Switch expressions are similar to switch statements. Therefore, the open brace of the expression should be placed directly below the &apos;switch&apos; keyword. This makes the code clearer and easier to follow..
         /// </summary>
         internal static string MiKo_6047_Description {
             get {
@@ -15605,7 +15603,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Logical conditions that span multiple lines are hard to read and understand. To be easier to understand they should span a single line only..
+        ///   Looks up a localized string similar to Logical conditions that span multiple lines are hard to read and understand. To improve readability, they should span a single line only. This makes the code clearer and easier to follow..
         /// </summary>
         internal static string MiKo_6048_Description {
             get {
@@ -15641,7 +15639,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To separate event (un-)registrations visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        ///   Looks up a localized string similar to Surround event registrations and un-registrations with blank lines to visually separate them from other code. This makes the code clearer and easier to follow..
         /// </summary>
         internal static string MiKo_6049_Description {
             get {
@@ -15677,7 +15675,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To easily spot the multi-line arguments of a method call, those arguments should be positioned outdented below the corresponding method call..
+        ///   Looks up a localized string similar to Outdent multi-line arguments below the corresponding method call to easily spot them. This improves readability and makes the code easier to follow..
         /// </summary>
         internal static string MiKo_6050_Description {
             get {
@@ -15713,7 +15711,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The code is easier to read if the colons leading the calls of other constructors are placed on the same line as the calls themselves..
+        ///   Looks up a localized string similar to Code readability improves when colons leading constructor calls are placed on the same lines as the calls themselves. This makes the code clearer and easier to follow..
         /// </summary>
         internal static string MiKo_6051_Description {
             get {
@@ -15749,7 +15747,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The code is easier to read if the colons leading the list of base types are placed on the same line as the first base types..
+        ///   Looks up a localized string similar to Code readability improves when the colons leading the list of base types are on the same line as the first base types. This makes the code clearer and easier to follow..
         /// </summary>
         internal static string MiKo_6052_Description {
             get {
@@ -15785,7 +15783,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The code is easier to read if &apos;single-line&apos; arguments are placed on a single line instead of splitting them over multiple lines..
+        ///   Looks up a localized string similar to Code readability improves when single-line arguments are kept on a single line instead of splitting them over multiple lines. This makes the code clearer and easier to follow..
         /// </summary>
         internal static string MiKo_6053_Description {
             get {
@@ -15821,7 +15819,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The code is easier to read if the arrow of lambdas are placed on a the same line as the parameters or their expression bodies, instead of splitting them all over multiple lines..
+        ///   Looks up a localized string similar to Code readability improves when the arrow of lambda expressions is on the same line as the parameters or their expression bodies. Avoid splitting them over multiple lines. This makes the code clearer and easier to follow..
         /// </summary>
         internal static string MiKo_6054_Description {
             get {
@@ -15857,7 +15855,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To separate assignments visually from invocations, they should be surrounded by blank lines. That makes them easier to spot..
+        ///   Looks up a localized string similar to Surround assignments with blank lines to visually separate them from invocations. This makes the code clearer and easier to follow..
         /// </summary>
         internal static string MiKo_6055_Description {
             get {
@@ -15893,8 +15891,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Collection expressions are very similar to collection initializers from the code reading point of view.
-        ///Hence, their open brackets should be positioned at the same position where the collection initializer braces would be positioned..
+        ///   Looks up a localized string similar to Collection expressions are similar to collection initializers in terms of readability. Therefore, place their open brackets in the same position as the collection initializer braces. This makes the code clearer and easier to follow..
         /// </summary>
         internal static string MiKo_6056_Description {
             get {
@@ -15930,7 +15927,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The code is easier to read if type parameter constraint clauses are aligned vertically..
+        ///   Looks up a localized string similar to Code readability improves when type parameter constraint clauses are aligned vertically. This makes the code clearer and easier to follow..
         /// </summary>
         internal static string MiKo_6057_Description {
             get {
@@ -15966,7 +15963,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The code is easier to read if type parameter constraint clauses are aligned indented below the parameter list..
+        ///   Looks up a localized string similar to Code readability improves when type parameter constraint clauses are indented below the parameter list. This makes the code clearer and easier to follow..
         /// </summary>
         internal static string MiKo_6058_Description {
             get {
@@ -16002,7 +15999,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To easily read the multi-line conditions, those conditions should be positioned outdented below the corresponding call..
+        ///   Looks up a localized string similar to Outdent multi-line conditions below the corresponding call to make them easier to read. This makes the code clearer and easier to follow..
         /// </summary>
         internal static string MiKo_6059_Description {
             get {
@@ -16038,7 +16035,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease reading, switch case labels should span a single line..
+        ///   Looks up a localized string similar to Code readability improves when switch case labels span a single line. This makes the code clearer and easier to follow..
         /// </summary>
         internal static string MiKo_6060_Description {
             get {
@@ -16074,7 +16071,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease reading, switch expression arms should span a single line..
+        ///   Looks up a localized string similar to Code readability improves when switch expression arms span a single line. This makes the code clearer and easier to follow..
         /// </summary>
         internal static string MiKo_6061_Description {
             get {
@@ -16110,7 +16107,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To separate Console in/output visually from the business code, they should be surrounded by blank lines. That makes them easier to spot and ignore..
+        ///   Looks up a localized string similar to Surround Console input/output with blank lines to visually separate them from business code. This makes the code clearer and easier to follow..
         /// </summary>
         internal static string MiKo_6070_Description {
             get {
