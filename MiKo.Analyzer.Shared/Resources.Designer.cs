@@ -14091,7 +14091,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Comparisons on simple values are faster than comparisons on complex references such as collections. Hence, the value comparisons should be placed before the reference comparisons..
+        ///   Looks up a localized string similar to Place value comparisons before reference comparisons. Simple value comparisons are faster than complex reference comparisons, like those involving collections. This approach improves performance..
         /// </summary>
         internal static string MiKo_5018_Description {
             get {

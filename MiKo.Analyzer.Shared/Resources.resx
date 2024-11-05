@@ -4920,7 +4920,7 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Move value comparison before reference comparison</value>
   </data>
   <data name="MiKo_5018_Description" xml:space="preserve">
-    <value>Comparisons on simple values are faster than comparisons on complex references such as collections. Hence, the value comparisons should be placed before the reference comparisons.</value>
+    <value>Place value comparisons before reference comparisons. Simple value comparisons are faster than complex reference comparisons, like those involving collections. This approach improves performance.</value>
   </data>
   <data name="MiKo_5018_MessageFormat" xml:space="preserve">
     <value>Place value comparison before reference comparison</value>
