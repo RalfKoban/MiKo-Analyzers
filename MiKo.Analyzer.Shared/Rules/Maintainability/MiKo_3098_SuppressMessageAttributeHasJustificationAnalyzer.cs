@@ -16,7 +16,25 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private const int MinimumJustificationLength = 10;
         private const string BadJustificationGapFillers = " .<>-*";
 
-        private static readonly string[] BadJustificationMarkers = { "as design", "by design", "suppress", "pending", "review", "temp", "temporarily", "intent", "intend", "todo", "to do", "fixme", "fix me" };
+        private static readonly string[] BadJustificationMarkers =
+                                                                   {
+                                                                       "as design",
+                                                                       "by design",
+                                                                       "fix me",
+                                                                       "fixme",
+                                                                       "for reason",
+                                                                       "future",
+                                                                       "intend",
+                                                                       "intent",
+                                                                       "just because",
+                                                                       "later",
+                                                                       "pending",
+                                                                       "review",
+                                                                       "suppress",
+                                                                       "temp", // includes "temporarily"
+                                                                       "to do",
+                                                                       "todo",
+                                                                   };
 
         public MiKo_3098_SuppressMessageAttributeHasJustificationAnalyzer() : base(Id, (SymbolKind)(-1))
         {
@@ -36,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return true; // justification is too short
             }
 
-            if (text.ToString().ContainsAny(BadJustificationMarkers, StringComparison.OrdinalIgnoreCase))
+            if (text.ToString().Replace("emplate", "#").ContainsAny(BadJustificationMarkers, StringComparison.OrdinalIgnoreCase))
             {
                 return true; // no justification that explains
             }
@@ -57,11 +75,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     case "SuppressMessage":
                     case nameof(SuppressMessageAttribute):
                     {
-                        if (argument.NameEquals.GetName() == nameof(SuppressMessageAttribute.Justification)
-                         && argument.Expression is LiteralExpressionSyntax literal
-                         && HasIssue(literal.Token.ValueText.AsSpan().Trim(BadJustificationGapFillers.AsSpan())))
+                        if (argument.NameEquals.GetName() == nameof(SuppressMessageAttribute.Justification) && argument.Expression is LiteralExpressionSyntax literal)
                         {
-                            ReportDiagnostics(context, Issue(literal));
+                            var justification = literal.Token.ValueText.AsSpan().Trim(BadJustificationGapFillers.AsSpan());
+
+                            if (HasIssue(justification))
+                            {
+                                ReportDiagnostics(context, Issue(literal));
+                            }
                         }
 
                         break;
