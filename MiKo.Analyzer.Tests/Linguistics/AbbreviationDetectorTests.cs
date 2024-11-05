@@ -5,6 +5,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
     [TestFixture]
     public static class AbbreviationDetectorTests
     {
+        [TestCase("alt", ExpectedResult = "alternative")]
         [TestCase("app", ExpectedResult = "application")]
         [TestCase("apps", ExpectedResult = "applications")]
         [TestCase("assoc", ExpectedResult = "association")]
@@ -121,6 +122,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return findings[0].Value;
         }
 
+        [TestCase("Alt", ExpectedResult = "Alternative")]
         [TestCase("App", ExpectedResult = "Application")]
         [TestCase("Apps", ExpectedResult = "Applications")]
         [TestCase("Assoc", ExpectedResult = "Association")]
