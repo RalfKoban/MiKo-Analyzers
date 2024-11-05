@@ -54,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return true; // justification is too short
             }
 
-            if (text.ToString().Without("emplate").ContainsAny(BadJustificationMarkers, StringComparison.OrdinalIgnoreCase))
+            if (text.ToString().Replace("emplate", "#").ContainsAny(BadJustificationMarkers, StringComparison.OrdinalIgnoreCase))
             {
                 return true; // no justification that explains
             }
