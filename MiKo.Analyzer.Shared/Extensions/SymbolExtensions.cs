@@ -1153,7 +1153,9 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsEnumerable(this ITypeSymbol value)
         {
-            switch (value.SpecialType)
+            var specialType = value.SpecialType;
+
+            switch (specialType)
             {
                 case SpecialType.System_Void:
                 case SpecialType.System_Boolean:
@@ -1176,7 +1178,8 @@ namespace MiKoSolutions.Analyzers
                     return false;
 
                 default:
-                    if (IsEnumerable(value.SpecialType))
+                {
+                    if (IsEnumerable(specialType))
                     {
                         return true;
                     }
@@ -1198,6 +1201,7 @@ namespace MiKoSolutions.Analyzers
                     }
 
                     return value.Implements<IEnumerable>();
+                }
             }
         }
 
