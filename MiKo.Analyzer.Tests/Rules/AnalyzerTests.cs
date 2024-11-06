@@ -29,31 +29,15 @@ namespace MiKoSolutions.Analyzers.Rules
         [TestCase("TODO"), Timeout(4 * 60 * 60 * 1000)] // 4h
         public static void Performance_(string path)
         {
-            // ncrunch: no coverage start
-            var files = GetDocuments(path).ToList();
-            var sources = files.Select(File.ReadAllText).ToArray();
+//// ncrunch: no coverage start
+            var files = Directory.EnumerateFiles(path, "*.cs", SearchOption.AllDirectories)
+                                 .Where(_ => _.EndsWithAny(Constants.GeneratedCSharpFileExtensions, StringComparison.OrdinalIgnoreCase) is false);
+            var sources = files.ToHashSet(File.ReadAllText).ToArray();
 
             var results = DiagnosticVerifier.GetDiagnostics(sources, LanguageVersion.LatestMajor, AllAnalyzers.Cast<DiagnosticAnalyzer>().ToArray(), true);
 
             Assert.That(results.Length, Is.Zero);
-
-            static IEnumerable<string> GetDocuments(string path)
-            {
-                foreach (var directory in Directory.EnumerateDirectories(path))
-                {
-                    foreach (var document in GetDocuments(directory))
-                    {
-                        yield return document;
-                    }
-                }
-
-                foreach (var file in Directory.EnumerateFiles(path, "*.cs"))
-                {
-                    yield return file;
-                }
-            }
-
-            // ncrunch: no coverage end
+//// ncrunch: no coverage end
         }
 
         [Test]

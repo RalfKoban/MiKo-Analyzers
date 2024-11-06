@@ -33,13 +33,6 @@ namespace MiKoSolutions.Analyzers
                                                                                                                   SymbolDisplayGenericsOptions.IncludeTypeParameters,
                                                                                                                   miscellaneousOptions: SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers);
 
-        private static readonly string[] GeneratedCSharpFileExtensions =
-                                                                         {
-                                                                             ".g.cs",
-                                                                             ".generated.cs",
-                                                                             ".Designer.cs",
-                                                                         };
-
         private static readonly SyntaxKind[] LocalFunctionContainerSyntaxKinds =
                                                                                  {
                                                                                      SyntaxKind.MethodDeclaration,
@@ -506,9 +499,9 @@ namespace MiKoSolutions.Analyzers
                     var filePath = sourceTree.FilePath;
 
                     // ignore non C# code (might be part of partial classes, e.g. for XAML)
-                    if (filePath.EndsWith(".cs", StringComparison.OrdinalIgnoreCase))
+                    if (filePath.EndsWith(Constants.CSharpFileExtension, StringComparison.OrdinalIgnoreCase))
                     {
-                        if (filePath.EndsWithAny(GeneratedCSharpFileExtensions, StringComparison.OrdinalIgnoreCase))
+                        if (filePath.EndsWithAny(Constants.GeneratedCSharpFileExtensions, StringComparison.OrdinalIgnoreCase))
                         {
                             // ignore generated code (might be part of partial classes)
                             continue;

@@ -39,6 +39,8 @@ namespace MiKoSolutions.Analyzers
 
         internal const char Underscore = '_';
 
+        internal const string CSharpFileExtension = ".cs";
+
         internal static readonly char[] SentenceMarkers = ".?!;:".ToCharArray();
         internal static readonly char[] SentenceClauseMarkers = ",;".ToCharArray();
         internal static readonly char[] TrailingSentenceMarkers = " \t.?!;:,".ToCharArray();
@@ -49,6 +51,15 @@ namespace MiKoSolutions.Analyzers
         internal static readonly string[] ParaTags = { "<para>", "<para />", "<para/>", "</para>" };
 
         internal static readonly char[] Underscores = { Underscore };
+
+        internal static readonly string[] GeneratedCSharpFileExtensions =
+                                                                          {
+                                                                              ".g.cs",
+                                                                              ".g.i.cs",
+                                                                              ".generated.cs",
+                                                                              ".Designer.cs",
+                                                                              ".feature.cs", // SpecFlow generated code
+                                                                          };
 
         internal static class ILog
         {
@@ -153,7 +164,7 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] Models = { "Model", "Models", "model", "models" };
             internal static readonly string[] ViewModels = { "ViewModel", "ViewModels", "viewModel", "viewModels" };
             internal static readonly string[] SpecialModels = { "Modeless", "modeless", "ModeLess", "modeLess", "semanticModel", "SemanticModel" };
-            internal static readonly string[] Collections = { "List", "Dictionary", "ObservableCollection", "Collection", "Array", "HashSet", "Stack", "list", "dictionary", "observableCollection", "collection", "array", "hashSet", "stack" };
+            internal static readonly string[] Collections = { "List", "Dictionary", "ObservableCollection", "Collection", "Array", "HashSet", "Stack", "Queue", "list", "dictionary", "observableCollection", "collection", "array", "hashSet", "stack", "queue" };
             internal static readonly string[] Symbols = { "T:", "P:", "M:", "F:", "E:", "!:" };
             internal static readonly string[] SymbolsAndLineBreaks = Symbols.Append(EnvironmentNewLine).ToArray();
             internal static readonly string[] Requirements = { "Must", "Need", "Shall", "Should", "Will", "Would" };
