@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment)
         {
-            if (parameterComment.GetTextTrimmed().ToString().ContainsAny(Phrases, StringComparison.OrdinalIgnoreCase))
+            if (parameterComment.GetTextTrimmed().ContainsAny(Phrases, StringComparison.OrdinalIgnoreCase))
             {
                 // seems like there is a default parameter mentioned
                 return Enumerable.Empty<Diagnostic>();
@@ -128,28 +128,39 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return new Pair(Constants.AnalyzerCodeFixSharedData.DefaultCodeValue, "0");
 
                 default:
+                    return CreatePropertyDataForDefaultNonSpecial(parameterType);
+            }
+        }
+
+        private static Pair CreatePropertyDataForDefaultNonSpecial(ITypeSymbol parameterType)
+        {
+            switch (parameterType.TypeKind)
+            {
+                case TypeKind.Struct:
                 {
-                    var defaultValue = parameterType.Name;
+                    var defaultStructValue = parameterType.GetProperties().FirstOrDefault(_ => _.IsStatic)?.Name
+                                             ?? parameterType.GetFields().FirstOrDefault(_ => _.IsStatic)?.Name;
 
-                    if (parameterType.TypeKind == TypeKind.Struct)
-                    {
-                        return new Pair(Constants.AnalyzerCodeFixSharedData.DefaultSeeCrefValue, defaultValue);
-                    }
+                    var defaultValue = defaultStructValue != null
+                                       ? parameterType.Name + "." + defaultStructValue
+                                       : parameterType.Name;
 
-                    if (parameterType.IsEnum())
-                    {
-                        var defaultFieldValue = parameterType.GetFields().FirstOrDefault(_ => _.ConstantValue?.ToString() == "0");
-
-                        if (defaultFieldValue != null)
-                        {
-                            defaultValue = defaultValue + "." + defaultFieldValue.Name;
-                        }
-
-                        return new Pair(Constants.AnalyzerCodeFixSharedData.DefaultSeeCrefValue, defaultValue);
-                    }
-
-                    return new Pair(Constants.AnalyzerCodeFixSharedData.DefaultSeeLangwordValue, "null");
+                    return new Pair(Constants.AnalyzerCodeFixSharedData.DefaultSeeCrefValue, defaultValue);
                 }
+
+                case TypeKind.Enum:
+                {
+                    var defaultFieldValue = parameterType.GetFields().FirstOrDefault(_ => _.ConstantValue is null || _.ConstantValue.ToString() == "0")?.Name;
+
+                    var defaultValue = defaultFieldValue != null
+                                       ? parameterType.Name + "." + defaultFieldValue
+                                       : parameterType.Name;
+
+                    return new Pair(Constants.AnalyzerCodeFixSharedData.DefaultSeeCrefValue, defaultValue);
+                }
+
+                default:
+                    return new Pair(Constants.AnalyzerCodeFixSharedData.DefaultSeeLangwordValue, "null");
             }
         }
     }

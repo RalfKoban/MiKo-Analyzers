@@ -48,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var summary in summaries)
             {
-                var trimmed = summary.GetTextTrimmed().ToString();
+                var trimmed = summary.GetTextTrimmed();
 
                 if (obviousComments.Contains(trimmed))
                 {
