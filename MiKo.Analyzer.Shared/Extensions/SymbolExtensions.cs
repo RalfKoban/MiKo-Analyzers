@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers
                           ? value.GetNamedMethods()
                           : value.GetMethods();
 
-            // ReSharper disable once LoopCanBePartlyConvertedToQuery
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery, so there is no need for a Where clause
             foreach (var method in methods)
             {
                 if (method.MethodKind == kind)

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -58,12 +57,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 var propertyName = property.GetName();
 
-                var properties = new Dictionary<string, string>
-                                     {
-                                         { issueId, string.Empty },
-                                         { Constants.AnalyzerCodeFixSharedData.PropertyName, propertyName },
-                                     };
-
                 var semanticModel = context.SemanticModel;
 
                 var t = descendantNodes.OfType<TypeArgumentListSyntax>().First();
@@ -73,14 +66,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var symbol = node.GetEnclosingSymbol(semanticModel);
 
                 // TODO: RKN return type as well "A.PropertyName" if the containing type does not inherit from the type or implement the interface
-                if (symbol.ContainingType.IsRelated(propertyType) is false)
-                {
-                    properties.Add(Constants.AnalyzerCodeFixSharedData.PropertyTypeName, type.GetNameOnlyPart());
-                }
+                var properties = symbol.ContainingType.IsRelated(propertyType)
+                                 ? new[] { new Pair(issueId, string.Empty), new Pair(Constants.AnalyzerCodeFixSharedData.PropertyName, propertyName) }
+                                 : new[] { new Pair(issueId, string.Empty), new Pair(Constants.AnalyzerCodeFixSharedData.PropertyName, propertyName), new Pair(Constants.AnalyzerCodeFixSharedData.PropertyTypeName, type.GetNameOnlyPart()) };
 
-                var issue = Issue(symbol.Name, node, issueTemplate.FormatWith(propertyName), properties);
-
-                ReportDiagnostics(context, issue);
+                ReportDiagnostics(context, Issue(symbol.Name, node, issueTemplate.FormatWith(propertyName), properties));
             }
         }
     }

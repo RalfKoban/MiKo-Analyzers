@@ -19,13 +19,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeNamespaceName(IEnumerable<SyntaxToken> names)
         {
+            var libraryNamespacesLength = LibraryNamespaces.Length;
+
             foreach (var name in names)
             {
                 var namespaceName = name.ValueText;
 
-                // ReSharper disable once LoopCanBePartlyConvertedToQuery
-                foreach (var libraryNamespace in LibraryNamespaces)
+                for (var index = 0; index < libraryNamespacesLength; index++)
                 {
+                    var libraryNamespace = LibraryNamespaces[index];
+
                     if (namespaceName.EndsWith(libraryNamespace, StringComparison.Ordinal))
                     {
                         yield return Issue(namespaceName, name, libraryNamespace);

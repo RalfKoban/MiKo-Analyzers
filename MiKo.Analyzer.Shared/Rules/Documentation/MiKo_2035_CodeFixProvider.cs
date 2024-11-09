@@ -192,7 +192,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                            .Concat(phrases)
                                                                            .OrderByDescending(_ => _.Length)
                                                                            .ThenBy(_ => _)
-                                                                           .ToArray(_ => new Pair(_, string.Empty));
+                                                                           .ToArray(_ => new Pair(_));
 
                 ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap.ToArray(_ => _.Key));
 
@@ -227,7 +227,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                 })
                                                                                     .OrderByDescending(_ => _.Length)
                                                                                     .ThenBy(_ => _)
-                                                                                    .ToArray(_ => new Pair(_, string.Empty));
+                                                                                    .ToArray(_ => new Pair(_));
 
                 ByteArrayReplacementMapKeys = GetTermsForQuickLookup(ByteArrayReplacementMap.ToArray(_ => _.Key));
 

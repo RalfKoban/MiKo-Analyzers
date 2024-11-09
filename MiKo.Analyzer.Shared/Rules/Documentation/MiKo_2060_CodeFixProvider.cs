@@ -253,7 +253,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     var key = methodKeys[i];
 
-                    methodReplacementMap[i] = new Pair(key, string.Empty);
+                    methodReplacementMap[i] = new Pair(key);
                     instancesReplacementMap[i] = new Pair(key, "instances of the ");
                 }
 
@@ -281,9 +281,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     for (var i = 0; i < length; i++)
                     {
-                        var key = keys[i];
-
-                        pairs[i] = new Pair(key, string.Empty);
+                        pairs[i] = new Pair(keys[i]);
                     }
 
                     return pairs;

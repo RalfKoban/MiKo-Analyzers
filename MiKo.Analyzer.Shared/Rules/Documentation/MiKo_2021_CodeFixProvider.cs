@@ -13,10 +13,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly Pair[] ReplacementMap =
                                                         {
-                                                            new Pair("Reference to a ", string.Empty),
-                                                            new Pair("Reference to an ", string.Empty),
-                                                            new Pair("Reference to the ", string.Empty),
-                                                            new Pair("Determines the ", string.Empty),
+                                                            new Pair("Reference to a "),
+                                                            new Pair("Reference to an "),
+                                                            new Pair("Reference to the "),
+                                                            new Pair("Determines the "),
                                                             new Pair("Determines to ", "value to "), // TODO RKN: new Pair("Determines to ", "value to "),
                                                         };
 

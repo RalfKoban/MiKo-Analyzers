@@ -322,10 +322,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 replacement = replacement.ToUpperCaseAt(0);
             }
 
-            var properties = new Dictionary<string, string>
+            var properties = new[]
                                  {
-                                     { Constants.AnalyzerCodeFixSharedData.TextKey, text },
-                                     { Constants.AnalyzerCodeFixSharedData.TextReplacementKey, replacement },
+                                     new Pair(Constants.AnalyzerCodeFixSharedData.TextKey, text),
+                                     new Pair(Constants.AnalyzerCodeFixSharedData.TextReplacementKey, replacement),
                                  };
 
             return Issue(location, replacement, properties);
