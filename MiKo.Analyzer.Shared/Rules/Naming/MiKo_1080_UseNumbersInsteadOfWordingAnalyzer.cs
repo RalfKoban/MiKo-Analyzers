@@ -155,14 +155,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var length = identifiers.Length;
 
-            for (var index = 0; index < length; index++)
+            if (length > 0)
             {
-                var identifier = identifiers[index];
-                var name = identifier.Text;
-
-                if (HasIssue(name))
+                for (var index = 0; index < length; index++)
                 {
-                    yield return Issue(name, identifier);
+                    var identifier = identifiers[index];
+                    var name = identifier.Text;
+
+                    if (HasIssue(name))
+                    {
+                        yield return Issue(name, identifier);
+                    }
                 }
             }
         }
