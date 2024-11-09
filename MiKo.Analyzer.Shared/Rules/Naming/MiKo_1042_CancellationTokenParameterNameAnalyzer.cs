@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -19,8 +18,23 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.Parameters.Length > 0 && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation) => from parameter in symbol.Parameters
-                                                                                                                 where parameter.Type.IsCancellationToken() && parameter.Name != ExpectedName
-                                                                                                                 select Issue(parameter, ExpectedName, CreateBetterNameProposal(ExpectedName));
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
+        {
+            var parameters = symbol.Parameters;
+            var length = parameters.Length;
+
+            if (length > 0)
+            {
+                for (var index = 0; index < length; index++)
+                {
+                    var parameter = parameters[index];
+
+                    if (parameter.Type.IsCancellationToken() && parameter.Name != ExpectedName)
+                    {
+                        yield return Issue(parameter, ExpectedName, CreateBetterNameProposal(ExpectedName));
+                    }
+                }
+            }
+        }
     }
 }
