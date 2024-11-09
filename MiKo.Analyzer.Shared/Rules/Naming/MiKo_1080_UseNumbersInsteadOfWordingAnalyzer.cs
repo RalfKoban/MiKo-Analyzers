@@ -151,10 +151,24 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation) => AnalyzeName(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers) => from identifier in identifiers
-                                                                                                                                                          let name = identifier.Text
-                                                                                                                                                          where HasIssue(name)
-                                                                                                                                                          select Issue(name, identifier);
+        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers)
+        {
+            var length = identifiers.Length;
+
+            if (length > 0)
+            {
+                for (var index = 0; index < length; index++)
+                {
+                    var identifier = identifiers[index];
+                    var name = identifier.Text;
+
+                    if (HasIssue(name))
+                    {
+                        yield return Issue(name, identifier);
+                    }
+                }
+            }
+        }
 
         private static bool HasIssue(string name)
         {

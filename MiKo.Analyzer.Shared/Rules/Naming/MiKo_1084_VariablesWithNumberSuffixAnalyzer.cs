@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -18,9 +17,23 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.Name.EndsWithNumber();
 
-        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers) => from identifier in identifiers
-                                                                                                                                                          let name = identifier.ValueText
-                                                                                                                                                          where name.EndsWithCommonNumber()
-                                                                                                                                                          select Issue(name, identifier, CreateBetterNameProposal(name.WithoutNumberSuffix()));
+        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers)
+        {
+            var length = identifiers.Length;
+
+            if (length > 0)
+            {
+                for (var index = 0; index < length; index++)
+                {
+                    var identifier = identifiers[index];
+                    var name = identifier.ValueText;
+
+                    if (name.EndsWithCommonNumber())
+                    {
+                        yield return Issue(name, identifier, CreateBetterNameProposal(name.WithoutNumberSuffix()));
+                    }
+                }
+            }
+        }
     }
 }
