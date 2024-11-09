@@ -37,7 +37,6 @@
 
   <!-- Required by NCrunch on remote machines as those machines do not have the package installed -->
   <ItemGroup Condition="'$(NCrunch)' != '1'">
-    <PackageReference Include="Codecov" Version="1.10.0" PrivateAssets="all" />
     <PackageReference Include="coverlet.collector" Version="6.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -46,8 +45,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="OpenCover" Version="4.7.1221" PrivateAssets="all" />
-    <PackageReference Include="ReportGenerator" Version="5.3.10" />
+    <PackageReference Include="ReportGenerator" Version="5.3.11" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
