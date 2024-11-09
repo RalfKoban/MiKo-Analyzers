@@ -155,17 +155,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var count = triviaToAnalyze.Count;
 
-            for (var index = 0; index < count; index++)
+            if (count > 0)
             {
-                var trivia = triviaToAnalyze[index];
-
-                var hasIssue = AnalyzeComment(trivia, semanticModel);
-
-                if (hasIssue)
+                for (var index = 0; index < count; index++)
                 {
-                    foreach (var issue in CollectIssues(name, trivia))
+                    var trivia = triviaToAnalyze[index];
+
+                    var hasIssue = AnalyzeComment(trivia, semanticModel);
+
+                    if (hasIssue)
                     {
-                        yield return issue;
+                        foreach (var issue in CollectIssues(name, trivia))
+                        {
+                            yield return issue;
+                        }
                     }
                 }
             }
@@ -175,7 +178,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             List<SyntaxTrivia> triviaToAnalyze = null;
 
-            // ReSharper disable once LoopCanBePartlyConvertedToQuery : foreach loop is used intentionally for performance gains
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery : foreach loop is used intentionally for performance gains, so there is no need for a Where clause
             foreach (var trivia in node.DescendantTrivia())
             {
                 if (ShallAnalyze(trivia))

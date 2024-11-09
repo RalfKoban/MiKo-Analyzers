@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly Pair[] SpecialTermReplacementMap = { new Pair(SpecialTerm, "Occurs when ") };
 
-        private static readonly Pair[] ReplacementMap = CreatePhrases().Select(_ => new Pair(_, string.Empty))
+        private static readonly Pair[] ReplacementMap = CreatePhrases().Select(_ => new Pair(_))
                                                                        .Append(new Pair("Invoked if ", "when "))
                                                                        .Append(new Pair("Invoked when ", "when "))
                                                                        .OrderByDescending(_ => _.Key.Length)

@@ -10,7 +10,7 @@ namespace System
         public readonly string Key; // made as field instead of property for performance reasons
         public readonly string Value; // made as field instead of property for performance reasons
 
-        public Pair(string key, string value)
+        public Pair(string key, string value = "")
         {
             Key = key;
             Value = value;

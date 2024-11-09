@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected static Dictionary<string, string> CreateBetterNameProposal(string betterName) => new Dictionary<string, string> { { Constants.AnalyzerCodeFixSharedData.BetterName, betterName } };
+        protected static Pair[] CreateBetterNameProposal(string betterName) => new[] { new Pair(Constants.AnalyzerCodeFixSharedData.BetterName, betterName) };
 
         protected static string FindBetterNameForEntityMarker(string symbolName)
         {
@@ -316,8 +316,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 {
                     var index = 0;
 
-                    foreach (var prefix in Constants.Markers.FieldPrefixes)
+                    var fieldPrefixes = Constants.Markers.FieldPrefixes;
+                    var length = fieldPrefixes.Length;
+
+                    for (var i = 0; i < length; i++)
                     {
+                        var prefix = fieldPrefixes[i];
+
                         if (symbolName.StartsWith(prefix, StringComparison.Ordinal))
                         {
                             index = prefix.Length;

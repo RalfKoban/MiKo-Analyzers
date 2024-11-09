@@ -856,7 +856,7 @@ namespace System.Linq
 
         internal static IEnumerable<SyntaxToken> SelectMany<T>(this IEnumerable<T> source, Func<T, SyntaxTokenList> selector) where T : SyntaxNode
         {
-            // ReSharper disable once LoopCanBePartlyConvertedToQuery
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery, so there is no need for a Select clause
             foreach (var value in source)
             {
                 var list = selector(value);
@@ -877,7 +877,7 @@ namespace System.Linq
         internal static IEnumerable<TResult> SelectMany<T, TResult>(this IEnumerable<T> source, Func<T, SeparatedSyntaxList<TResult>> selector) where T : SyntaxNode
                                                                                                                                                 where TResult : SyntaxNode
         {
-            // ReSharper disable once LoopCanBePartlyConvertedToQuery
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery, so there is no need for a Select clause
             foreach (var value in source)
             {
                 var list = selector(value);
@@ -958,7 +958,7 @@ namespace System.Linq
         internal static IEnumerable<TResult> SelectMany<T, TResult>(this IEnumerable<T> source, Func<T, ImmutableArray<TResult>> selector) where T : ISymbol
                                                                                                                                            where TResult : ISymbol
         {
-            // ReSharper disable once LoopCanBePartlyConvertedToQuery
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery, so there is no need for a Select clause
             foreach (var value in source)
             {
                 var array = selector(value);

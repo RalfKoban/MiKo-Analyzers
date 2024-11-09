@@ -47,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var data = CreatePropertyData(parameter);
 
-            return new[] { Issue(parameter.Name, parameterComment.GetContentsLocation(), Phrase, new Dictionary<string, string> { { data.Key, data.Value } }) };
+            return new[] { Issue(parameter.Name, parameterComment.GetContentsLocation(), Phrase, new[] { data }) };
         }
 
         private static Pair CreatePropertyData(IParameterSymbol parameter)

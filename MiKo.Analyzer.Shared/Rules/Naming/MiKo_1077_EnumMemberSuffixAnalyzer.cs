@@ -33,14 +33,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private IEnumerable<Diagnostic> AnalyzeEnumDeclaration(SeparatedSyntaxList<EnumMemberDeclarationSyntax> members)
         {
+            var wrongSuffixesLength = WrongSuffixes.Length;
+
             foreach (var member in members)
             {
                 var identifier = member.Identifier;
                 var name = identifier.ValueText;
 
-                // ReSharper disable once LoopCanBePartlyConvertedToQuery
-                foreach (var suffix in WrongSuffixes)
+                for (var index = 0; index < wrongSuffixesLength; index++)
                 {
+                    var suffix = WrongSuffixes[index];
+
                     if (name.EndsWith(suffix, StringComparison.Ordinal))
                     {
                         var proposal = name.WithoutSuffix(suffix);

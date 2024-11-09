@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -148,6 +149,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return null;
         }
 
-        private Diagnostic Issue(SyntaxToken token) => Issue(token, token.ValueText, new Dictionary<string, string> { { Constants.AnalyzerCodeFixSharedData.Marker, token.ValueText } });
+        private Diagnostic Issue(SyntaxToken token) => Issue(token, token.ValueText, new[] { new Pair(Constants.AnalyzerCodeFixSharedData.Marker, token.ValueText) });
     }
 }
