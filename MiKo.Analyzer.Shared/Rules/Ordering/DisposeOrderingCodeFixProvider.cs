@@ -77,7 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                         }
 
                         return modifiedTypeSyntax.ReplaceNodes(
-                                                           new[] { parent, disposeMethod }.Where(_ => _ != null),
+                                                           new[] { parent, disposeMethod }.WhereNotNull(),
                                                            (original, rewritten) =>
                                                                                    {
                                                                                        if (rewritten.IsEquivalentTo(parent))

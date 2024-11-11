@@ -1360,7 +1360,38 @@ namespace System.Linq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool TrueForAll<T>(this T[] source, Predicate<T> match) => Array.TrueForAll(source, match);
 
+        internal static IEnumerable<TSource> WhereNotNull<TSource>(this IEnumerable<TSource> source) where TSource : class
+        {
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var item in source)
+            {
+                if (item != null)
+                {
+                    yield return item;
+                }
+            }
+        }
+
         internal static IEnumerable<SyntaxToken> Where(this SyntaxTokenList source, Func<SyntaxToken, bool> predicate)
+        {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
+            if (sourceCount > 0)
+            {
+                for (var index = 0; index < sourceCount; index++)
+                {
+                    var value = source[index];
+
+                    if (predicate(value))
+                    {
+                        yield return value;
+                    }
+                }
+            }
+        }
+
+        internal static IEnumerable<SyntaxTrivia> Where(this SyntaxTriviaList source, Func<SyntaxTrivia, bool> predicate)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;

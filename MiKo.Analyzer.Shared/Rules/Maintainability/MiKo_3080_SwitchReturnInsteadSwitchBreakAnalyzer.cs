@@ -68,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var candidates = node.DescendantNodes<AssignmentExpressionSyntax>(_ => _.IsKind(SyntaxKind.SimpleAssignmentExpression))
                                  .Select(_ => _.FirstChild<IdentifierNameSyntax>())
-                                 .Where(_ => _ != null)
+                                 .WhereNotNull()
                                  .Select(_ => _.GetName());
 
             return candidates;

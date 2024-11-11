@@ -102,14 +102,14 @@ namespace MiKoSolutions.Analyzers
             return FlattenComment(GetExceptionCommentElements(commentXml).Where(_ => _.Attribute(Constants.XmlTag.Attribute.Cref)?.Value == exceptionTypeFullName));
         }
 
-        internal static IEnumerable<string> GetExceptionComments(string commentXml) => Cleaned(GetExceptionCommentElements(commentXml)).Where(_ => _ != null);
+        internal static IEnumerable<string> GetExceptionComments(string commentXml) => Cleaned(GetExceptionCommentElements(commentXml)).WhereNotNull();
 
         internal static IEnumerable<string> GetExceptionsOfExceptionComments(string commentXml)
         {
-            return GetExceptionCommentElements(commentXml).Select(_ => _.Attribute(Constants.XmlTag.Attribute.Cref)?.Value).Where(_ => _ != null);
+            return GetExceptionCommentElements(commentXml).Select(_ => _.Attribute(Constants.XmlTag.Attribute.Cref)?.Value).WhereNotNull();
         }
 
-        internal static IReadOnlyCollection<string> Cleaned(IEnumerable<string> comments) => comments.Where(_ => _ != null).WithoutParaTags().ToHashSet(_ => _.Trim());
+        internal static IReadOnlyCollection<string> Cleaned(IEnumerable<string> comments) => comments.WhereNotNull().WithoutParaTags().ToHashSet(_ => _.Trim());
 
         internal static string Cleaned(XElement element)
         {

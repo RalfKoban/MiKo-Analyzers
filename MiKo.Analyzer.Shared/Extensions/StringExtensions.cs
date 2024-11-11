@@ -209,7 +209,7 @@ namespace System
         public static InterpolatedStringTextSyntax AsInterpolatedString(this string value) => SyntaxFactory.InterpolatedStringText(value.AsToken(SyntaxKind.InterpolatedStringTextToken));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string ConcatenatedWith(this IEnumerable<string> values) => string.Concat(values.Where(_ => _ != null));
+        public static string ConcatenatedWith(this IEnumerable<string> values) => string.Concat(values.WhereNotNull());
 
         public static StringBuilder ConcatenatedWith<T>(this IEnumerable<T> values) where T : class
         {
