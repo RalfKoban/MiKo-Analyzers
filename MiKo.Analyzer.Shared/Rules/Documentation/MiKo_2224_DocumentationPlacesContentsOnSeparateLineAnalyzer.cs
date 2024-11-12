@@ -36,6 +36,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                     Constants.XmlTag.Para,
                                                                 };
 
+        private static readonly Pair[] AddSpacesBoth = { new Pair(Constants.AnalyzerCodeFixSharedData.AddSpaceBefore), new Pair(Constants.AnalyzerCodeFixSharedData.AddSpaceAfter) };
+        private static readonly Pair[] AddSpacesBefore = { new Pair(Constants.AnalyzerCodeFixSharedData.AddSpaceBefore, string.Empty) };
+        private static readonly Pair[] AddSpacesAfter = { new Pair(Constants.AnalyzerCodeFixSharedData.AddSpaceAfter) };
+
         private static readonly SyntaxKind[] ProblematicSiblingKinds = { SyntaxKind.XmlElementStartTag, SyntaxKind.XmlElementEndTag, SyntaxKind.XmlEmptyElement };
 
         public MiKo_2224_DocumentationPlacesContentsOnSeparateLineAnalyzer() : base(Id)
@@ -107,21 +111,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static bool IsOnSameLine(SyntaxList<XmlNodeSyntax> contents, params int[] lines) => IsOnSameLine(contents, (ICollection<int>)lines);
 
-        private static Dictionary<string, string> CreateProperties(bool onSameLineAsTextBefore, bool onSameLineAsTextAfter)
+        private static Pair[] CreateProperties(bool onSameLineAsTextBefore, bool onSameLineAsTextAfter)
         {
-            var properties = new Dictionary<string, string>();
-
             if (onSameLineAsTextBefore)
             {
-                properties.Add(Constants.AnalyzerCodeFixSharedData.AddSpaceBefore, string.Empty);
+                return onSameLineAsTextAfter ? AddSpacesBoth : AddSpacesBefore;
             }
 
-            if (onSameLineAsTextAfter)
-            {
-                properties.Add(Constants.AnalyzerCodeFixSharedData.AddSpaceAfter, string.Empty);
-            }
-
-            return properties;
+            return onSameLineAsTextAfter ? AddSpacesAfter : Array.Empty<Pair>();
         }
 
         private IEnumerable<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment)

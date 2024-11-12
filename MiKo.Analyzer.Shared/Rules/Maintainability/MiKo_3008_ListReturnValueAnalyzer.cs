@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.TypeKind == TypeKind.Interface;
 
-        protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol, Compilation compilation) => symbol.GetMethods(MethodKind.Ordinary).Select(AnalyzeOrdinaryMethod).Where(_ => _ != null);
+        protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol, Compilation compilation) => symbol.GetMethods(MethodKind.Ordinary).Select(AnalyzeOrdinaryMethod).WhereNotNull();
 
         private Diagnostic AnalyzeOrdinaryMethod(IMethodSymbol method)
         {

@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] ReplacementMapKeys = CreatePhrases().ToArray();
 
-        private static readonly Pair[] ReplacementMap = ReplacementMapKeys.ToArray(_ => new Pair(_, string.Empty));
+        private static readonly Pair[] ReplacementMap = ReplacementMapKeys.ToArray(_ => new Pair(_));
 
         public override string FixableDiagnosticId => "MiKo_2022";
 

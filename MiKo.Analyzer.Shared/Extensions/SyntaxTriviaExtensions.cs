@@ -61,11 +61,14 @@ namespace MiKoSolutions.Analyzers
             // for performance reasons we use indexing instead of an enumerator
             var length = kinds.Length;
 
-            for (var index = 0; index < length; index++)
+            if (length > 0)
             {
-                if (kinds[index] == valueKind)
+                for (var index = 0; index < length; index++)
                 {
-                    return true;
+                    if (kinds[index] == valueKind)
+                    {
+                        return true;
+                    }
                 }
             }
 
@@ -101,13 +104,16 @@ namespace MiKoSolutions.Analyzers
                 // keep in local variable to avoid multiple requests (see Roslyn implementation)
                 var tokensCount = textTokens.Count;
 
-                for (var index = 0; index < tokensCount; index++)
+                if (tokensCount > 0)
                 {
-                    var token = textTokens[index];
-
-                    if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
+                    for (var index = 0; index < tokensCount; index++)
                     {
-                        yield return token;
+                        var token = textTokens[index];
+
+                        if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
+                        {
+                            yield return token;
+                        }
                     }
                 }
             }

@@ -91,14 +91,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 foreach (var middle in middleParts)
                 {
-                    results.Add(new Pair(string.Concat(start, " ", middle, " "), string.Empty));
+                    results.Add(new Pair(string.Concat(start, " ", middle, " ")));
                 }
 
-                results.Add(new Pair(string.Concat(start, " "), string.Empty));
+                results.Add(new Pair(string.Concat(start, " ")));
             }
 
-            results.Add(new Pair(string.Concat("Offers to", " "), string.Empty));
-            results.Add(new Pair(string.Concat("Tries to", " "), string.Empty));
+            results.Add(new Pair(string.Concat("Offers to", " ")));
+            results.Add(new Pair(string.Concat("Tries to", " ")));
 
             return results;
         }

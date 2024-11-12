@@ -47,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                      .ThenBy(_ => _)
                                                      .ToArray();
 
-                ReplacementMap = keys.ToArray(_ => new Pair(_, string.Empty));
+                ReplacementMap = keys.ToArray(_ => new Pair(_));
 
                 ReplacementMapKeys = GetTermsForQuickLookup(keys);
 

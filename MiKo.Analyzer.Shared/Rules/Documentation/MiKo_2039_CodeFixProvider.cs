@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] ReplacementMapKeys = CreateReplacementMapKeys().ToArray();
 
-        private static readonly Pair[] ReplacementMap = ReplacementMapKeys.ToArray(_ => new Pair(_, string.Empty));
+        private static readonly Pair[] ReplacementMap = ReplacementMapKeys.ToArray(_ => new Pair(_));
 
 //// ncrunch: rdi default
 

@@ -33,13 +33,6 @@ namespace MiKoSolutions.Analyzers
                                                                                                                   SymbolDisplayGenericsOptions.IncludeTypeParameters,
                                                                                                                   miscellaneousOptions: SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers);
 
-        private static readonly string[] GeneratedCSharpFileExtensions =
-                                                                         {
-                                                                             ".g.cs",
-                                                                             ".generated.cs",
-                                                                             ".Designer.cs",
-                                                                         };
-
         private static readonly SyntaxKind[] LocalFunctionContainerSyntaxKinds =
                                                                                  {
                                                                                      SyntaxKind.MethodDeclaration,
@@ -59,7 +52,7 @@ namespace MiKoSolutions.Analyzers
                           ? value.GetNamedMethods()
                           : value.GetMethods();
 
-            // ReSharper disable once LoopCanBePartlyConvertedToQuery
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery, so there is no need for a Where clause
             foreach (var method in methods)
             {
                 if (method.MethodKind == kind)
@@ -506,9 +499,9 @@ namespace MiKoSolutions.Analyzers
                     var filePath = sourceTree.FilePath;
 
                     // ignore non C# code (might be part of partial classes, e.g. for XAML)
-                    if (filePath.EndsWith(".cs", StringComparison.OrdinalIgnoreCase))
+                    if (filePath.EndsWith(Constants.CSharpFileExtension, StringComparison.OrdinalIgnoreCase))
                     {
-                        if (filePath.EndsWithAny(GeneratedCSharpFileExtensions, StringComparison.OrdinalIgnoreCase))
+                        if (filePath.EndsWithAny(Constants.GeneratedCSharpFileExtensions, StringComparison.OrdinalIgnoreCase))
                         {
                             // ignore generated code (might be part of partial classes)
                             continue;
@@ -587,7 +580,7 @@ namespace MiKoSolutions.Analyzers
             var propertyTypes = members.OfType<IPropertySymbol>().Where(_ => Constants.Names.TypeUnderTestPropertyNames.Contains(_.Name));
             var fieldTypes = members.OfType<IFieldSymbol>().Where(_ => Constants.Names.TypeUnderTestFieldNames.Contains(_.Name));
 
-            return Enumerable.Empty<ISymbol>().Concat(propertyTypes).Concat(fieldTypes).Concat(methodTypes).Where(_ => _ != null).ToHashSet(SymbolEqualityComparer.Default);
+            return Enumerable.Empty<ISymbol>().Concat(propertyTypes).Concat(fieldTypes).Concat(methodTypes).WhereNotNull().ToHashSet(SymbolEqualityComparer.Default);
 
             IEnumerable<IMethodSymbol> GetTestCreationMethods()
             {
@@ -604,7 +597,7 @@ namespace MiKoSolutions.Analyzers
         internal static IReadOnlyCollection<ITypeSymbol> GetTypeUnderTestTypes(this ITypeSymbol value)
         {
             // TODO: RKN what about base types?
-            return value.GetTypeUnderTestMembers().Select(_ => _.GetReturnTypeSymbol()).Where(_ => _ != null).ToHashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
+            return value.GetTypeUnderTestMembers().Select(_ => _.GetReturnTypeSymbol()).WhereNotNull().ToHashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
         }
 
         internal static bool HasAttribute(this ISymbol value, ISet<string> attributeNames)

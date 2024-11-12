@@ -43,34 +43,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            var properties = new Dictionary<string, string>();
+            var isBoolean = returnType.IsBoolean();
 
-            string proposedEndingPhrase;
-            string[] endingPhrases;
-
-            if (returnType.IsBoolean())
-            {
-                properties.Add(Constants.AnalyzerCodeFixSharedData.IsBoolean, string.Empty);
-
-                proposedEndingPhrase = Constants.Comments.DefaultLangwordPhrase.FormatWith("...");
-
-                endingPhrases = Constants.Comments.DefaultBooleanLangwordPhrases;
-            }
-            else
-            {
-                proposedEndingPhrase = Constants.Comments.DefaultCrefPhrase.FormatWith("...");
-
-                endingPhrases = returnType.GetFields()
-                                          .SelectMany(_ => Constants.Comments.DefaultCrefPhrases, (symbol, phrase) => phrase.FormatWith(symbol))
-                                          .ToArray();
-            }
+            var endingPhrases = isBoolean
+                                ? Constants.Comments.DefaultBooleanLangwordPhrases
+                                : returnType.GetFields()
+                                            .SelectMany(_ => Constants.Comments.DefaultCrefPhrases, (symbol, phrase) => phrase.FormatWith(symbol))
+                                            .ToArray();
 
             if (commentXml.EndsWithAny(endingPhrases, StringComparison.Ordinal))
             {
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            return new[] { Issue(owningSymbol, xmlTag, proposedEndingPhrase, Constants.Comments.NoDefaultPhrase, properties) };
+            var properties = isBoolean
+                             ? new[] { new Pair(Constants.AnalyzerCodeFixSharedData.IsBoolean) }
+                             : Array.Empty<Pair>();
+
+            var proposedEndingPhrase = isBoolean ? Constants.Comments.DefaultLangwordPhrase : Constants.Comments.DefaultCrefPhrase;
+
+            return new[] { Issue(owningSymbol, xmlTag, proposedEndingPhrase.FormatWith("..."), Constants.Comments.NoDefaultPhrase, properties) };
         }
     }
 }

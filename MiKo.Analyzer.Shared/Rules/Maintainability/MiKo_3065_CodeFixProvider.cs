@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var interpolations = interpolated.Contents.OfType<InterpolationSyntax>().ToList();
 
             // filter for format clauses as they are not needed inside the resulting text
-            var formatClauses = interpolations.Select(_ => _.FormatClause).Where(_ => _ != null);
+            var formatClauses = interpolations.Select(_ => _.FormatClause).WhereNotNull();
 
             var text = interpolated.Without(formatClauses).Contents.ToString();
 

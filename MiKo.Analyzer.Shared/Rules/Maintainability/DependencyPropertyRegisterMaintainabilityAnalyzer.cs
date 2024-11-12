@@ -99,7 +99,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private Diagnostic ReportIssue(IFieldSymbol symbol, ArgumentSyntax argument, string parameter)
         {
-            return Issue(symbol.Name, argument, parameter, new Dictionary<string, string> { { Constants.AnalyzerCodeFixSharedData.ParameterValue, parameter } });
+            return Issue(symbol.Name, argument, parameter, new[] { new Pair(Constants.AnalyzerCodeFixSharedData.ParameterValue, parameter) });
         }
     }
 }

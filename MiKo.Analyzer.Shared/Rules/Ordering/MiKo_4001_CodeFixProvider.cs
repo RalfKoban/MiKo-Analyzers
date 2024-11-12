@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             // handle each accessibility separately, to avoid situations such as that private methods suddenly get sorted before other public methods
             foreach (var nodes in methodsOrderedByParameters.GroupBy(_ => _.DeclaredAccessibility))
             {
-                var methodNodes = nodes.Select(_ => _.GetSyntax()).Where(_ => _ != null).ToList();
+                var methodNodes = nodes.Select(_ => _.GetSyntax()).WhereNotNull().ToList();
 
                 if (methodNodes.Count <= 1)
                 {
