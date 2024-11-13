@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
@@ -69,7 +70,7 @@ namespace TestHelper
         /// <returns>
         /// A list of Diagnostics that only surfaced in the code after the CodeFix was applied.
         /// </returns>
-        private static IEnumerable<Diagnostic> GetNewDiagnostics(IEnumerable<Diagnostic> diagnostics, IEnumerable<Diagnostic> newDiagnostics)
+        private static IEnumerable<Diagnostic> GetNewDiagnostics(ImmutableArray<Diagnostic> diagnostics, ImmutableArray<Diagnostic> newDiagnostics)
         {
             var oldArray = diagnostics.OrderBy(_ => _.Location.SourceSpan.Start).ToArray();
             var newArray = newDiagnostics.OrderBy(_ => _.Location.SourceSpan.Start).ToArray();
@@ -100,7 +101,7 @@ namespace TestHelper
         /// <returns>
         /// The compiler diagnostics that were found in the code.
         /// </returns>
-        private static IEnumerable<Diagnostic> GetCompilerDiagnostics(Document document)
+        private static ImmutableArray<Diagnostic> GetCompilerDiagnostics(Document document)
         {
             return document.GetSemanticModelAsync().Result.GetDiagnostics();
         }
