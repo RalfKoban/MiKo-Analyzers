@@ -280,9 +280,11 @@ namespace MiKoSolutions.Analyzers
 
         internal static ExpressionSyntax GetPropertyExpression(this PropertyDeclarationSyntax value)
         {
-            if (value.ExpressionBody != null)
+            var expression = value.ExpressionBody?.Expression;
+
+            if (expression != null)
             {
-                return value.ExpressionBody.Expression;
+                return expression;
             }
 
             var accessorList = value.AccessorList;
@@ -291,9 +293,11 @@ namespace MiKoSolutions.Analyzers
             {
                 var getter = accessorList.Accessors[0];
 
-                if (getter.ExpressionBody != null)
+                expression = getter.ExpressionBody?.Expression;
+
+                if (expression != null)
                 {
-                    return getter.ExpressionBody.Expression;
+                    return expression;
                 }
 
                 if (getter.Body?.Statements.FirstOrDefault() is ReturnStatementSyntax r)

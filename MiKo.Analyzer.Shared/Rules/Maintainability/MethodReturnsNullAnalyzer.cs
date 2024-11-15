@@ -25,14 +25,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeMethod, SyntaxKind.MethodDeclaration);
 
-        private static IEnumerable<ExpressionSyntax> GetCandidates(SyntaxNode node, IEnumerable<string> names)
+        private static IEnumerable<ExpressionSyntax> GetCandidates(SyntaxNode node, ICollection<string> names)
         {
             var descendantNodes = node.DescendantNodes();
 
             return descendantNodes.SelectMany(_ => GetSpecificCandidates(_, names));
         }
 
-        private static IEnumerable<ExpressionSyntax> GetSpecificCandidates(SyntaxNode descendant, IEnumerable<string> names)
+        private static IEnumerable<ExpressionSyntax> GetSpecificCandidates(SyntaxNode descendant, ICollection<string> names)
         {
             switch (descendant)
             {
@@ -146,19 +146,26 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var method = (MethodDeclarationSyntax)context.Node;
 
-            if (method.Body != null)
+            var body = method.Body;
+
+            if (body != null)
             {
-                AnalyzeMethodBody(context, method);
+                AnalyzeMethodBody(context, method, body);
+
+                return;
             }
-            else if (method.ExpressionBody != null)
+
+            var expressionBody = method.ExpressionBody;
+
+            if (expressionBody != null)
             {
-                AnalyzeMethodExpressionBody(context, method);
+                AnalyzeMethodExpressionBody(context, method, expressionBody.Expression);
             }
         }
 
-        private void AnalyzeMethodBody(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax method)
+        private void AnalyzeMethodBody(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax method, BlockSyntax methodBody)
         {
-            var controlFlow = context.SemanticModel.AnalyzeControlFlow(method.Body);
+            var controlFlow = context.SemanticModel.AnalyzeControlFlow(methodBody);
 
             foreach (var returnStatement in controlFlow.ReturnStatements.OfType<ReturnStatementSyntax>())
             {
@@ -166,10 +173,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private void AnalyzeMethodExpressionBody(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax method)
+        private void AnalyzeMethodExpressionBody(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax method, ExpressionSyntax expression)
         {
-            var expression = method.ExpressionBody.Expression;
-
             switch (expression)
             {
                 case ConditionalExpressionSyntax conditional:
