@@ -174,21 +174,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private sealed class MapData
         {
+#pragma warning disable CA1861
             public MapData()
             {
-                var taskPhrases = new[]
-                                      {
-                                          "A task that can be used to await.",
-                                          "A task that can be used to await",
-                                          "A task to await.",
-                                          "A task to await",
-                                          "An awaitable task.",
-                                          "An awaitable task",
-                                      };
-
                 var phrases = CreatePhrases().ToHashSet(_ => _ + " "); // TODO RKN: Order by 'A', 'An ' and 'The '
 
-                ReplacementMap = AlmostCorrectTaskReturnTypeStartingPhrases.Concat(taskPhrases)
+                ReplacementMap = AlmostCorrectTaskReturnTypeStartingPhrases.Concat(new[]
+                                                                                       {
+                                                                                           "A task that can be used to await.",
+                                                                                           "A task that can be used to await",
+                                                                                           "A task to await.",
+                                                                                           "A task to await",
+                                                                                           "An awaitable task.",
+                                                                                           "An awaitable task",
+                                                                                       })
                                                                            .Concat(phrases)
                                                                            .OrderByDescending(_ => _.Length)
                                                                            .ThenBy(_ => _)
@@ -196,37 +195,35 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap.ToArray(_ => _.Key));
 
-                var arrayStartingPhrases = new[]
-                                               {
-                                                   "A array of byte containing ",
-                                                   "A array of byte that contains ",
-                                                   "A array of byte which contains ",
-                                                   "A array of bytes containing ",
-                                                   "A array of bytes that contains ",
-                                                   "A array of bytes which contains ",
-                                                   "A array of ",
-                                                   "A array with ",
-                                                   "An array of byte containing ",
-                                                   "An array of byte that contains ",
-                                                   "An array of byte which contains ",
-                                                   "An array of bytes containing ",
-                                                   "An array of bytes that contains ",
-                                                   "An array of bytes which contains ",
-                                                   "An array of ",
-                                                   "An array with ",
-                                                   "Array of ",
-                                                   "Array with ",
-                                                   "The array of byte containing ",
-                                                   "The array of byte that contains ",
-                                                   "The array of byte which contains ",
-                                                   "The array of bytes containing ",
-                                                   "The array of bytes that contains ",
-                                                   "The array of bytes which contains ",
-                                                   "The array of ",
-                                                   "The array with ",
-                                               };
-
-                ByteArrayReplacementMap = AlmostCorrectTaskReturnTypeStartingPhrases.Concat(arrayStartingPhrases)
+                ByteArrayReplacementMap = AlmostCorrectTaskReturnTypeStartingPhrases.Concat(new[]
+                                                                                                {
+                                                                                                    "A array of byte containing ",
+                                                                                                    "A array of byte that contains ",
+                                                                                                    "A array of byte which contains ",
+                                                                                                    "A array of bytes containing ",
+                                                                                                    "A array of bytes that contains ",
+                                                                                                    "A array of bytes which contains ",
+                                                                                                    "A array of ",
+                                                                                                    "A array with ",
+                                                                                                    "An array of byte containing ",
+                                                                                                    "An array of byte that contains ",
+                                                                                                    "An array of byte which contains ",
+                                                                                                    "An array of bytes containing ",
+                                                                                                    "An array of bytes that contains ",
+                                                                                                    "An array of bytes which contains ",
+                                                                                                    "An array of ",
+                                                                                                    "An array with ",
+                                                                                                    "Array of ",
+                                                                                                    "Array with ",
+                                                                                                    "The array of byte containing ",
+                                                                                                    "The array of byte that contains ",
+                                                                                                    "The array of byte which contains ",
+                                                                                                    "The array of bytes containing ",
+                                                                                                    "The array of bytes that contains ",
+                                                                                                    "The array of bytes which contains ",
+                                                                                                    "The array of ",
+                                                                                                    "The array with ",
+                                                                                                })
                                                                                     .OrderByDescending(_ => _.Length)
                                                                                     .ThenBy(_ => _)
                                                                                     .ToArray(_ => new Pair(_));
@@ -243,6 +240,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                  " which contains ",
                                              };
             }
+#pragma warning restore CA1861
 
             public Pair[] ReplacementMap { get; }
 

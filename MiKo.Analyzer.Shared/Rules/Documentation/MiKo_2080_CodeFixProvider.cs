@@ -41,6 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private sealed class MapData
         {
+#pragma warning disable CA1861
             public MapData()
             {
                 var keys = CreateReplacementMapKeys().OrderByDescending(_ => _.Length) // get longest items first as shorter items may be part of the longer ones and would cause problems
@@ -83,6 +84,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 CleanupMap = CleanupMapKeys.ToArray(_ => new Pair(_, " the "));
             }
+#pragma warning restore CA1861
 
             public Pair[] ReplacementMap { get; }
 

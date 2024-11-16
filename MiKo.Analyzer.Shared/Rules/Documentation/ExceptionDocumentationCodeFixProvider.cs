@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public abstract class ExceptionDocumentationCodeFixProvider : OverallDocumentationCodeFixProvider
     {
 //// ncrunch: rdi off
-        private static readonly string[] Phrases = CreatePhrases().Distinct().ToArray();
+        private static readonly string[] Phrases = CreatePhrases().ToHashSet().ToArray();
 //// ncrunch: rdi default
 
         protected static XmlElementSyntax GetFixedExceptionCommentForArgumentNullException(XmlElementSyntax exceptionComment)
@@ -199,6 +199,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
 //// ncrunch: rdi off
 
+#pragma warning disable CA1861
         // TODO RKN: see Constants.Comments.ExceptionForbiddenStartingPhrase
         private static IEnumerable<string> CreatePhrases()
         {
@@ -285,7 +286,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 yield return upperCasePhrase;
             }
         }
+#pragma warning restore CA1861
 
-//// ncrunch: rdi default
+        //// ncrunch: rdi default
     }
 }
