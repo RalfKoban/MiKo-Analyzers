@@ -349,6 +349,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return null;
         }
 
+#pragma warning disable CA1021
         protected virtual bool AnalyzeTextStart(ISymbol symbol, string valueText, out string problematicText, out StringComparison comparison)
         {
             problematicText = null;
@@ -356,6 +357,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return false;
         }
+#pragma warning restore CA1021
 
         protected virtual bool ConsiderEmptyTextAsIssue(ISymbol symbol) => true;
 

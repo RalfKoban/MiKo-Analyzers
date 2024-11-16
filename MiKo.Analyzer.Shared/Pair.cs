@@ -7,8 +7,10 @@ namespace System
 {
     public readonly struct Pair : IEquatable<Pair>
     {
+#pragma warning disable CA1051 // made as field instead of property for performance reasons
         public readonly string Key; // made as field instead of property for performance reasons
         public readonly string Value; // made as field instead of property for performance reasons
+#pragma warning restore CA1051
 
         public Pair(string key, string value = "")
         {

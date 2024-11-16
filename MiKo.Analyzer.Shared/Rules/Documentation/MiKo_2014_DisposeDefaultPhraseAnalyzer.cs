@@ -58,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var trimmed = syntax.GetTextTrimmed();
 
-            return trimmed.Equals(text);
+            return trimmed.Equals(text, StringComparison.Ordinal);
         }
     }
 }
