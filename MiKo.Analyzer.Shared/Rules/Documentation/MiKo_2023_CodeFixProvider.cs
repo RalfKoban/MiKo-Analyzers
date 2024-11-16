@@ -591,7 +591,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return replacements;
             }
 
-            // ReSharper disable once ReturnTypeCanBeEnumerable.Local Violates CA1859
             private static HashSet<string> CreateStartTerms()
             {
                 var startTerms = new[] { "A", "An", "The", string.Empty };

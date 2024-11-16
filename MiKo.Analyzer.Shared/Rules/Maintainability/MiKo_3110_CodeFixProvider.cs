@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return original;
         }
 
-        private static ExpressionSyntax UpdatedSyntax(MemberAccessExpressionSyntax syntax, SeparatedSyntaxList<ArgumentSyntax> args, string text)
+        private static InvocationExpressionSyntax UpdatedSyntax(MemberAccessExpressionSyntax syntax, SeparatedSyntaxList<ArgumentSyntax> args, string text)
         {
             var methodName = syntax.GetName();
 

@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var typesUnderTest = symbol.GetTypeUnderTestTypes();
 
-            if (typesUnderTest.Any())
+            if (typesUnderTest.Count != 0)
             {
                 var typeUnderTestNames = typesUnderTest.Select(_ => GetTypeUnderTestName(symbol, _))
                                                        .WhereNotNull() // ignore generic class or struct constraint
@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     return Enumerable.Empty<Diagnostic>();
                 }
 
-                if (typeUnderTestNames.Any())
+                if (typeUnderTestNames.Count != 0)
                 {
                     // non-matching types, maybe we have some base types and have to investigate the creation methods
                     if (TestClassIsNamedAfterCreatedTypeUnderTest(symbol))

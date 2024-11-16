@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var propertyNames = symbol.ContainingType.GetProperties().ToHashSet(_ => _.Name);
 
-                if (propertyNames.Any())
+                if (propertyNames.Count != 0)
                 {
                     var parameterNames = symbol.Parameters.ToDictionary(_ => _.Name, _ => _);
 

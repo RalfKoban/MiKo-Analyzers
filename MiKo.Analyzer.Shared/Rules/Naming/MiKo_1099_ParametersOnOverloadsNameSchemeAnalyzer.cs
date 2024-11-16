@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        private static void FilterIdenticalParameters(IList<IParameterSymbol> referenceParameters, IList<IParameterSymbol> otherParameters)
+        private static void FilterIdenticalParameters(List<IParameterSymbol> referenceParameters, List<IParameterSymbol> otherParameters)
         {
             var otherIndex = 0;
             var referenceIndex = 0;
@@ -70,7 +70,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeMethods(IReadOnlyList<IMethodSymbol> methods)
+        private IEnumerable<Diagnostic> AnalyzeMethods(List<IMethodSymbol> methods)
         {
             var referenceMethod = methods[0];
 

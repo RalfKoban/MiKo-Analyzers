@@ -48,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(comment);
 
-        private static bool IsOnSameLine(XmlTextSyntax text, ICollection<int> lines)
+        private static bool IsOnSameLine(XmlTextSyntax text, params int[] lines)
         {
             var textTokens = text.TextTokens;
 
@@ -77,7 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return false;
         }
 
-        private static bool IsOnSameLine(SyntaxList<XmlNodeSyntax> contents, ICollection<int> lines)
+        private static bool IsOnSameLine(SyntaxList<XmlNodeSyntax> contents, params int[] lines)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var contentsCount = contents.Count;
@@ -106,10 +106,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return false;
         }
-
-        private static bool IsOnSameLine(XmlTextSyntax text, params int[] lines) => IsOnSameLine(text, (ICollection<int>)lines);
-
-        private static bool IsOnSameLine(SyntaxList<XmlNodeSyntax> contents, params int[] lines) => IsOnSameLine(contents, (ICollection<int>)lines);
 
         private static Pair[] CreateProperties(bool onSameLineAsTextBefore, bool onSameLineAsTextAfter)
         {
@@ -150,7 +146,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                              .Concat(emptyElements.Select(_ => AnalyzeEmptyXmlElement(_, lines)));
         }
 
-        private IEnumerable<Diagnostic> AnalyzeXmlElement(XmlElementSyntax element, ISet<int> lines)
+        private IEnumerable<Diagnostic> AnalyzeXmlElement(XmlElementSyntax element, HashSet<int> lines)
         {
             var elementName = element.GetName();
 
@@ -197,7 +193,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private Diagnostic AnalyzeEmptyXmlElement(XmlEmptyElementSyntax element, ISet<int> lines)
+        private Diagnostic AnalyzeEmptyXmlElement(XmlEmptyElementSyntax element, HashSet<int> lines)
         {
             if (EmptyTags.Contains(element.GetName()))
             {

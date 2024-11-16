@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             var methods = GetMethodsOrderedByLocation(symbol);
             var methodsAndCtors = ctors.Concat(methods).ToList();
 
-            return methodsAndCtors.Any()
+            return methodsAndCtors.Count != 0
                    ? AnalyzeMethods(methodsAndCtors)
                    : Enumerable.Empty<Diagnostic>();
         }

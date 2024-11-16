@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 tokensToReplace[token] = token.WithText(text.Replace(textToReplace, textToReplaceWith));
             }
 
-            if (tokensToReplace.Any())
+            if (tokensToReplace.Count != 0)
             {
                 return node.ReplaceTokens(tokensToReplace.Keys, (original, rewritten) => tokensToReplace[rewritten]);
             }

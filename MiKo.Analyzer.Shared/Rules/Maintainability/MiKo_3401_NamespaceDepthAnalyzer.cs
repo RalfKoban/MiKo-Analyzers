@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var parentNamespaces = declaration.Ancestors<NamespaceDeclarationSyntax>().ToList();
 
-            if (parentNamespaces.Any())
+            if (parentNamespaces.Count != 0)
             {
                 return parentNamespaces.Sum(CountNamespaces) + 1;
             }

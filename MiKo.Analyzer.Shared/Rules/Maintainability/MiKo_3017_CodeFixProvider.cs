@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var replacements = CreateReplacements(o.ArgumentList, problematicNode);
 
-            if (replacements.Any())
+            if (replacements.Count != 0)
             {
                 return root.ReplaceNodes(replacements.Keys, (original, rewritten) => replacements[rewritten]);
             }

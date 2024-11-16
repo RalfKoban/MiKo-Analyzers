@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var summaries = CommentExtensions.GetSummaries(commentXml);
 
-            return summaries.Any()
+            return summaries.Count != 0
                    ? AnalyzeSummary(symbol, compilation, summaries, comment)
                    : Enumerable.Empty<Diagnostic>();
         }

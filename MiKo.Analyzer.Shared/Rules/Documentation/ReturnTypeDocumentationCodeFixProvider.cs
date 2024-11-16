@@ -140,8 +140,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 //// ncrunch: rdi default
 
-        private SyntaxNode Comment(Document document, XmlElementSyntax comment, string memberName, TypeSyntax returnType) => returnType is GenericNameSyntax genericReturnType
-                                                                                                                             ? GenericComment(document, comment, memberName, genericReturnType)
-                                                                                                                             : NonGenericComment(document, comment, memberName, returnType);
+        private XmlElementSyntax Comment(Document document, XmlElementSyntax comment, string memberName, TypeSyntax returnType) => returnType is GenericNameSyntax genericReturnType
+                                                                                                                                   ? GenericComment(document, comment, memberName, genericReturnType)
+                                                                                                                                   : NonGenericComment(document, comment, memberName, returnType);
     }
 }

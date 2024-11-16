@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return GetUpdatedSyntax(creation.ArgumentList) ?? syntax;
         }
 
-        private static SyntaxNode GetUpdatedSyntax(ArgumentListSyntax argumentList)
+        private static InvocationExpressionSyntax GetUpdatedSyntax(ArgumentListSyntax argumentList)
         {
             if (argumentList is null)
             {
@@ -55,9 +55,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static SyntaxNode GetUpdatedSyntax(ArgumentSyntax ticks) => FromTicks(ticks);
+        private static InvocationExpressionSyntax GetUpdatedSyntax(ArgumentSyntax ticks) => FromTicks(ticks);
 
-        private static SyntaxNode GetUpdatedSyntax(ArgumentSyntax hours, ArgumentSyntax minutes, ArgumentSyntax seconds)
+        private static InvocationExpressionSyntax GetUpdatedSyntax(ArgumentSyntax hours, ArgumentSyntax minutes, ArgumentSyntax seconds)
         {
             var zeroHours = IsZero(hours);
             var zeroMinutes = IsZero(minutes);
@@ -76,7 +76,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static SyntaxNode GetUpdatedSyntax(ArgumentSyntax days, ArgumentSyntax hours, ArgumentSyntax minutes, ArgumentSyntax seconds)
+        private static InvocationExpressionSyntax GetUpdatedSyntax(ArgumentSyntax days, ArgumentSyntax hours, ArgumentSyntax minutes, ArgumentSyntax seconds)
         {
             var zeroDays = IsZero(days);
             var zeroHours = IsZero(hours);
@@ -97,7 +97,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static SyntaxNode GetUpdatedSyntax(ArgumentSyntax days, ArgumentSyntax hours, ArgumentSyntax minutes, ArgumentSyntax seconds, ArgumentSyntax milliseconds)
+        private static InvocationExpressionSyntax GetUpdatedSyntax(ArgumentSyntax days, ArgumentSyntax hours, ArgumentSyntax minutes, ArgumentSyntax seconds, ArgumentSyntax milliseconds)
         {
             var zeroDays = IsZero(days);
             var zeroHours = IsZero(hours);
@@ -120,7 +120,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static SyntaxNode GetUpdatedSyntax(ArgumentSyntax days, ArgumentSyntax hours, ArgumentSyntax minutes, ArgumentSyntax seconds, ArgumentSyntax milliseconds, ArgumentSyntax microseconds)
+        private static InvocationExpressionSyntax GetUpdatedSyntax(ArgumentSyntax days, ArgumentSyntax hours, ArgumentSyntax minutes, ArgumentSyntax seconds, ArgumentSyntax milliseconds, ArgumentSyntax microseconds)
         {
             var zeroDays = IsZero(days);
             var zeroHours = IsZero(hours);

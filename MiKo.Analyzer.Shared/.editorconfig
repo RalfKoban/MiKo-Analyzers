@@ -154,6 +154,7 @@ dotnet_diagnostic.CA1800.severity = error
 dotnet_diagnostic.CA1801.severity = error
 dotnet_diagnostic.CA1802.severity = error
 dotnet_diagnostic.CA1804.severity = error
+dotnet_diagnostic.CA1805.severity = none    #  Do not initialize unnecessarily (CA1805)
 dotnet_diagnostic.CA1806.severity = error
 dotnet_diagnostic.CA1809.severity = error
 dotnet_diagnostic.CA1810.severity = error

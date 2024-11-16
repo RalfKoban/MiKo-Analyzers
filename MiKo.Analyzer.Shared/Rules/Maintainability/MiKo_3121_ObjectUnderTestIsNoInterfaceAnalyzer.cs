@@ -48,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static SyntaxNode GetTypeSyntax(ISymbol symbol)
+        private static TypeSyntax GetTypeSyntax(ISymbol symbol)
         {
             switch (symbol)
             {

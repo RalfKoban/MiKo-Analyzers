@@ -114,9 +114,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static IReadOnlyCollection<MemberAccessExpressionSyntax> GetAllAssertions(SyntaxNode methodSyntax) => methodSyntax.DescendantNodes<MemberAccessExpressionSyntax>(SyntaxKind.SimpleMemberAccessExpression)
-                                                                                                                                  .Where(IsAssertionMethod)
-                                                                                                                                  .ToList();
+        private static List<MemberAccessExpressionSyntax> GetAllAssertions(SyntaxNode methodSyntax) => methodSyntax.DescendantNodes<MemberAccessExpressionSyntax>(SyntaxKind.SimpleMemberAccessExpression)
+                                                                                                                   .Where(IsAssertionMethod)
+                                                                                                                   .ToList();
 
         private static bool IsAssertionMethod(MemberAccessExpressionSyntax node) => node.Expression is IdentifierNameSyntax invokedType && Constants.Names.AssertionTypes.Contains(invokedType.GetName()) && node.GetName() != "Multiple";
 
@@ -141,11 +141,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return false;
         }
 
-        private static bool HasMessageParameter(SeparatedSyntaxList<ArgumentSyntax> arguments, IReadOnlyList<int> expectedArgumentIndices, Compilation compilation)
+        private static bool HasMessageParameter(SeparatedSyntaxList<ArgumentSyntax> arguments, int[] expectedArgumentIndices, Compilation compilation)
         {
             var count = arguments.Count;
 
-            if (expectedArgumentIndices.Count == 1)
+            if (expectedArgumentIndices.Length == 1)
             {
                 var expectedArgumentIndex = expectedArgumentIndices[0];
 

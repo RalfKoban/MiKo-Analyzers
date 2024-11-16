@@ -101,7 +101,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static IEnumerable<ExpressionSyntax> GetIssues(SyntaxNodeAnalysisContext context, ConditionalExpressionSyntax conditional)
+        private static List<ExpressionSyntax> GetIssues(SyntaxNodeAnalysisContext context, ConditionalExpressionSyntax conditional)
         {
             var results = new List<ExpressionSyntax>();
             GetIssues(context, conditional.WhenTrue, results);
@@ -212,7 +212,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 var candidates = GetCandidates(method, localVariableNames).ToHashSet();
 
-                if (candidates.Any())
+                if (candidates.Count != 0)
                 {
                     AnalyzeAssignments(context, candidates);
                 }

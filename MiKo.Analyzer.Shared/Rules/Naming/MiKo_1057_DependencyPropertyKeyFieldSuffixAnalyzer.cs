@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             var propertyNames = NamesFinder.FindPropertyNames(symbol, Constants.DependencyPropertyKey.FieldSuffix, Constants.DependencyProperty.RegisterReadOnly);
-            var name = propertyNames.Any() ? propertyNames.First() : symbolName;
+            var name = propertyNames.Count != 0 ? propertyNames.First() : symbolName;
             var betterName = name + Constants.DependencyPropertyKey.FieldSuffix;
 
             return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };

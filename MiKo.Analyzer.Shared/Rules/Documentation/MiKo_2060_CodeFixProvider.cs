@@ -320,7 +320,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             public string[] CleanupReplacementMapKeys { get; }
 
-            // ReSharper disable once ReturnTypeCanBeEnumerable.Local Violates CA1859
             private static string[] CreateTypeReplacementMapKeys()
             {
                 var results = new HashSet<string> // avoid duplicates
@@ -622,7 +621,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return results.ToArray();
             }
 
-            // ReSharper disable once ReturnTypeCanBeEnumerable.Local Violates CA1859
             private static string[] CreateMethodReplacementMapKeys()
             {
                 var results = new HashSet<string> // avoid duplicates

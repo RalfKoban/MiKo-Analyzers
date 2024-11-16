@@ -888,7 +888,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlTextSyntax XmlText(IEnumerable<SyntaxToken> textTokens) => XmlText(textTokens.ToTokenList());
 
-        private static IEnumerable<XmlNodeSyntax> CommentEnd(string commentEnd, params XmlNodeSyntax[] commendEndNodes)
+        private static List<XmlNodeSyntax> CommentEnd(string commentEnd, params XmlNodeSyntax[] commendEndNodes)
         {
             var skip = 0;
             XmlTextSyntax textCommentEnd;

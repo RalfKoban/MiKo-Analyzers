@@ -48,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var foundReturn = switchStatement.DescendantNodes<ReturnStatementSyntax>().Any();
 
-            return variableUsages.Any() && foundReturn is false;
+            return variableUsages.Count != 0 && foundReturn is false;
         }
 
         private static IEnumerable<string> GetVariableNamesUntilHere(SwitchStatementSyntax switchStatement)
