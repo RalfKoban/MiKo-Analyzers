@@ -63,7 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected Diagnostic IssueOnType(ITypeSymbol type, ISymbol container)
         {
             // detect for same assembly to avoid AD0001 (which reports that the return type is in a different compilation than the method/property)
-            if (type.Locations.IsEmpty || container.ContainingAssembly != type.ContainingAssembly)
+            if (type.Locations.IsEmpty || SymbolEqualityComparer.Default.Equals(container.ContainingAssembly, type.ContainingAssembly) is false)
             {
                 switch (container.GetSyntax())
                 {
