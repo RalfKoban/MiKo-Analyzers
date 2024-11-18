@@ -79,7 +79,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             endIndex = startIndex;
 
-            var foundUpperCaseLetters = 0;
+            var findings = 0;
 
             // now find next white-space and count upper cases in between
             for (; endIndex < text.Length; endIndex++)
@@ -89,7 +89,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 if (c.IsUpperCaseLetter())
                 {
                     // we found an upper case
-                    foundUpperCaseLetters++;
+                    findings++;
+
+                    continue;
+                }
+
+                if (c == '.')
+                {
+                    // we found a dot which symbols a method or property call
+                    findings++;
 
                     continue;
                 }
@@ -101,8 +109,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            // we found an compound word
-            return foundUpperCaseLetters > 1;
+            // we found a compound word
+            return findings > 1;
         }
 
         private static bool IsCompoundWord(ReadOnlySpan<char> trimmed)

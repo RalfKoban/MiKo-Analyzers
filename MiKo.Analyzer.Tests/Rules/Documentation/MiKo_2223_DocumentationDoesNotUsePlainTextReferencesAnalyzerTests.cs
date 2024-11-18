@@ -574,6 +574,20 @@ public interface TestMe
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_method_with_parameter() => An_issue_is_reported_for(@"
+using System;
+using System.IO;
+
+public class TestMe
+{
+    /// <summary>
+    /// You may want to call stream.Seek() before.
+    /// </summary>
+    void DoSomething(Stream stream);
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_2223_DocumentationDoesNotUsePlainTextReferencesAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2223_DocumentationDoesNotUsePlainTextReferencesAnalyzer();
