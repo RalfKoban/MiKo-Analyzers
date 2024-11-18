@@ -17,6 +17,7 @@ using MiKoSolutions.Analyzers.Linguistics;
 // ncrunch: rdi off
 // ReSharper disable once CheckNamespace
 #pragma warning disable IDE0130
+#pragma warning disable CA1506
 namespace MiKoSolutions.Analyzers
 {
     internal static class SyntaxNodeExtensions
@@ -280,9 +281,11 @@ namespace MiKoSolutions.Analyzers
 
         internal static ExpressionSyntax GetPropertyExpression(this PropertyDeclarationSyntax value)
         {
-            if (value.ExpressionBody != null)
+            var expression = value.ExpressionBody?.Expression;
+
+            if (expression != null)
             {
-                return value.ExpressionBody.Expression;
+                return expression;
             }
 
             var accessorList = value.AccessorList;
@@ -291,9 +294,11 @@ namespace MiKoSolutions.Analyzers
             {
                 var getter = accessorList.Accessors[0];
 
-                if (getter.ExpressionBody != null)
+                expression = getter.ExpressionBody?.Expression;
+
+                if (expression != null)
                 {
-                    return getter.ExpressionBody.Expression;
+                    return expression;
                 }
 
                 if (getter.Body?.Statements.FirstOrDefault() is ReturnStatementSyntax r)

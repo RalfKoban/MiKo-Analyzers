@@ -57,7 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => CommentWithStartingPhrase((XmlElementSyntax)syntax, Phrase);
 
-        private static SyntaxNode CommentWithStartingPhrase(XmlElementSyntax comment, string startingPhrase)
+        private static XmlElementSyntax CommentWithStartingPhrase(XmlElementSyntax comment, string startingPhrase)
         {
             var originalContent = comment.Content;
 
@@ -82,17 +82,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return CommentWithContent(comment, originalContent.Insert(0, XmlText(startingPhrase).WithLeadingXmlComment()));
         }
 
-        private static XmlNodeSyntax NewXmlComment(XmlTextSyntax text, string startingPhrase)
+        private static XmlTextSyntax NewXmlComment(XmlTextSyntax text, string startingPhrase)
         {
             var textTokens = text.TextTokens.ToList();
 
             // get rid of all empty tokens at the beginning
-            while (textTokens.Any() && textTokens[0].ValueText.IsNullOrWhiteSpace())
+            while (textTokens.Count != 0 && textTokens[0].ValueText.IsNullOrWhiteSpace())
             {
                 textTokens.RemoveAt(0);
             }
 
-            if (textTokens.Any())
+            if (textTokens.Count != 0)
             {
                 // fix starting text
                 var existingText = textTokens[0].WithoutTrivia().ValueText.AsSpan();
@@ -166,7 +166,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return WithoutEmptyTextAtEnd(text, textTokens);
         }
 
-        private static XmlNodeSyntax WithoutEmptyTextAtEnd(XmlTextSyntax comment, IList<SyntaxToken> textTokens)
+        private static XmlTextSyntax WithoutEmptyTextAtEnd(XmlTextSyntax comment, List<SyntaxToken> textTokens)
         {
             // get rid of all empty tokens at the end as we re-add some
             while (textTokens.Count > 0 && textTokens[textTokens.Count - 1].ValueText.IsNullOrWhiteSpace())

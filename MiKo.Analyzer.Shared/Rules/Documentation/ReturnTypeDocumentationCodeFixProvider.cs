@@ -98,9 +98,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual SyntaxNode Comment(Document document, XmlElementSyntax comment, MethodDeclarationSyntax method) => Comment(document, comment, method.GetName(), method.ReturnType);
 
+#pragma warning disable CA1716
         protected virtual SyntaxNode Comment(Document document, XmlElementSyntax comment, PropertyDeclarationSyntax property) => Comment(document, comment, property.GetName(), property.Type);
+#pragma warning restore CA1716
 
-//// ncrunch: rdi off
+        //// ncrunch: rdi off
         private static IEnumerable<string> CreateAlmostCorrectTaskReturnTypeStartingPhrases()
         {
             var starts = new[] { "a task", "an task" };
@@ -138,8 +140,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 //// ncrunch: rdi default
 
-        private SyntaxNode Comment(Document document, XmlElementSyntax comment, string memberName, TypeSyntax returnType) => returnType is GenericNameSyntax genericReturnType
-                                                                                                                             ? GenericComment(document, comment, memberName, genericReturnType)
-                                                                                                                             : NonGenericComment(document, comment, memberName, returnType);
+        private XmlElementSyntax Comment(Document document, XmlElementSyntax comment, string memberName, TypeSyntax returnType) => returnType is GenericNameSyntax genericReturnType
+                                                                                                                                   ? GenericComment(document, comment, memberName, genericReturnType)
+                                                                                                                                   : NonGenericComment(document, comment, memberName, returnType);
     }
 }

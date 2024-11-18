@@ -470,7 +470,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var replacementMapKeysForLowerCaseTheHashSet = replacementMapKeysForLowerCaseThe.ToHashSet();
                 var replacementMapKeysForParenthesisHashSet = replacementMapKeysForParenthesis.ToHashSet();
                 var replacementMapKeysForOthersHashSet = replacementMapKeysCommon.ToHashSet();
-                replacementMapKeysForOthersHashSet.AddRange(replacementMapKeys.Except(replacementMapKeysForAHashSet)
+                replacementMapKeysForOthersHashSet.AddRange(replacementMapKeys.ToHashSet()
+                                                                              .Except(replacementMapKeysForAHashSet)
                                                                               .Except(replacementMapKeysForAnHashSet)
                                                                               .Except(replacementMapKeysForTheHashSet)
                                                                               .Except(replacementMapKeysForLowerCaseAHashSet)
@@ -487,11 +488,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 ReplacementMapForParenthesis = ToMapArray(replacementMap, replacementMapKeysForParenthesisHashSet, replacementMapCommon);
                 ReplacementMapForOthers = ToMapArray(replacementMap, replacementMapKeysForOthersHashSet, replacementMapCommon);
 
-                ReplacementMapKeysInUpperCaseForA = ToUpper(replacementMapKeysForA);
-                ReplacementMapKeysInUpperCaseForAn = ToUpper(replacementMapKeysForAn);
-                ReplacementMapKeysInUpperCaseForThe = ToUpper(replacementMapKeysForThe);
-                ReplacementMapKeysInUpperCaseForParenthesis = ToUpper(replacementMapKeysForParenthesis);
-                ReplacementMapKeysInUpperCaseForOthers = ToUpper(replacementMapKeysForOthersHashSet);
+                ReplacementMapKeysInUpperCaseForA = ToIgnoreCase(replacementMapKeysForA);
+                ReplacementMapKeysInUpperCaseForAn = ToIgnoreCase(replacementMapKeysForAn);
+                ReplacementMapKeysInUpperCaseForThe = ToIgnoreCase(replacementMapKeysForThe);
+                ReplacementMapKeysInUpperCaseForParenthesis = ToIgnoreCase(replacementMapKeysForParenthesis);
+                ReplacementMapKeysInUpperCaseForOthers = ToIgnoreCase(replacementMapKeysForOthersHashSet);
 
                 // now set keys here at the end as we want these keys sorted based on string contents (and only contain the smallest sub-sequences)
                 ReplacementMapKeysForA = GetTermsForQuickLookup(ReplacementMapKeysInUpperCaseForA);
@@ -529,7 +530,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return results;
                 }
 
-                string[] ToUpper(IEnumerable<string> strings) => new HashSet<string>(strings, StringComparer.OrdinalIgnoreCase).ToArray();
+                string[] ToIgnoreCase(IEnumerable<string> strings) => new HashSet<string>(strings, StringComparer.OrdinalIgnoreCase).ToArray();
             }
 
             public Pair[] ReplacementMapForA { get; }
@@ -591,7 +592,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return replacements;
             }
 
-            // ReSharper disable once ReturnTypeCanBeEnumerable.Local Violates CA1859
             private static HashSet<string> CreateStartTerms()
             {
                 var startTerms = new[] { "A", "An", "The", string.Empty };

@@ -117,7 +117,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return result;
         }
 
-        private static void AddXmlText(ICollection<SyntaxNode> result, ICollection<SyntaxToken> text)
+        private static void AddXmlText(List<SyntaxNode> result, List<SyntaxToken> text)
         {
             if (text.Any(_ => _.ValueText.IsNullOrWhiteSpace() is false))
             {
@@ -136,7 +136,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private static void AddCode(ICollection<SyntaxNode> result, ICollection<SyntaxToken> commentedOutCode)
+        private static void AddCode(List<SyntaxNode> result, List<SyntaxToken> commentedOutCode)
         {
             if (commentedOutCode.Count > 0)
             {

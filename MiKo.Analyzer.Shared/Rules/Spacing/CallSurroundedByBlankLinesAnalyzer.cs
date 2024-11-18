@@ -17,14 +17,14 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected abstract bool IsCall(ITypeSymbol type);
 
-        protected virtual bool IsCall(MemberAccessExpressionSyntax call, SemanticModel semanticModel)
+        protected virtual bool IsCall(MemberAccessExpressionSyntax syntax, SemanticModel semanticModel)
         {
-            var type = call.GetTypeSymbol(semanticModel);
+            var type = syntax.GetTypeSymbol(semanticModel);
 
             return type != null && IsCall(type);
         }
 
-        protected virtual bool IsAlsoCall(MemberAccessExpressionSyntax call, SemanticModel semanticModel) => IsCall(call, semanticModel);
+        protected virtual bool IsAlsoCall(MemberAccessExpressionSyntax syntax, SemanticModel semanticModel) => IsCall(syntax, semanticModel);
 
         private bool IsAlsoCall(StatementSyntax statement, SemanticModel semanticModel) => statement is ExpressionStatementSyntax e && IsAlsoCall(e, semanticModel);
 
@@ -40,25 +40,25 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             ReportDiagnostics(context, issue);
         }
 
-        private Diagnostic AnalyzeSimpleMemberAccessExpression(MemberAccessExpressionSyntax call, SemanticModel semanticModel)
+        private Diagnostic AnalyzeSimpleMemberAccessExpression(MemberAccessExpressionSyntax syntax, SemanticModel semanticModel)
         {
-            if (IsCall(call, semanticModel))
+            if (IsCall(syntax, semanticModel))
             {
-                foreach (var ancestor in call.Ancestors())
+                foreach (var ancestor in syntax.Ancestors())
                 {
                     switch (ancestor.Kind())
                     {
                         case SyntaxKind.Block:
-                            return AnalyzeSimpleMemberAccessExpression(((BlockSyntax)ancestor).Statements, call, semanticModel);
+                            return AnalyzeSimpleMemberAccessExpression(((BlockSyntax)ancestor).Statements, syntax, semanticModel);
 
                         case SyntaxKind.SwitchSection:
-                            return AnalyzeSimpleMemberAccessExpression(((SwitchSectionSyntax)ancestor).Statements, call, semanticModel);
+                            return AnalyzeSimpleMemberAccessExpression(((SwitchSectionSyntax)ancestor).Statements, syntax, semanticModel);
 
                         case SyntaxKind.IfStatement:
                         {
                             var statement = (IfStatementSyntax)ancestor;
 
-                            if (statement == call.Parent)
+                            if (statement == syntax.Parent)
                             {
                                 continue; // let's look into the surrounding block because the call is the condition of the 'if' statement
                             }

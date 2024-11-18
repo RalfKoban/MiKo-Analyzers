@@ -141,6 +141,11 @@ namespace TestHelper
             var compilerDiagnostics = GetCompilerDiagnostics(document);
             var attempts = analyzerDiagnostics.Length;
 
+            for (var i = 0; i < attempts; i++)
+            {
+                Assert.That(analyzerDiagnostics[i].Id, Is.Not.EqualTo("AD0001"));
+            }
+
             for (var i = 0; i < attempts; ++i)
             {
                 var actions = new List<CodeAction>();

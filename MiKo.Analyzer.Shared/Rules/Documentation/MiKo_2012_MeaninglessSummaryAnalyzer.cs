@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return AnalyzeSummaryPhrases(symbol, summaries, symbolNames.Concat(phrases));
         }
 
-        private static IEnumerable<string> GetPhrases(ISymbol symbol)
+        private static string[] GetPhrases(ISymbol symbol)
         {
             switch (symbol.Kind)
             {
@@ -44,7 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private static IEnumerable<string> GetSelfSymbolNames(ISymbol symbol)
+        private static HashSet<string> GetSelfSymbolNames(ISymbol symbol)
         {
             var names = new List<string> { symbol.Name };
 
@@ -80,7 +80,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return names.ToHashSet(_ => _ + " ");
         }
 
-        private IEnumerable<Diagnostic> AnalyzeSummaryPhrases(ISymbol symbol, IEnumerable<string> summaries, IEnumerable<string> phrases)
+        private Diagnostic[] AnalyzeSummaryPhrases(ISymbol symbol, IEnumerable<string> summaries, IEnumerable<string> phrases)
         {
             const StringComparison Comparison = StringComparison.OrdinalIgnoreCase;
 
@@ -105,11 +105,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
 
-        private IEnumerable<Diagnostic> ReportIssueContainsPhrase(ISymbol symbol, ReadOnlySpan<char> phrase) => new[] { Issue(symbol, "contain", phrase.HumanizedTakeFirst(200)) };
+        private Diagnostic[] ReportIssueContainsPhrase(ISymbol symbol, ReadOnlySpan<char> phrase) => new[] { Issue(symbol, "contain", phrase.HumanizedTakeFirst(200)) };
 
-        private IEnumerable<Diagnostic> ReportIssueStartingPhrase(ISymbol symbol, ReadOnlySpan<char> phrase) => new[] { Issue(symbol, "start with", phrase.HumanizedTakeFirst(200)) };
+        private Diagnostic[] ReportIssueStartingPhrase(ISymbol symbol, ReadOnlySpan<char> phrase) => new[] { Issue(symbol, "start with", phrase.HumanizedTakeFirst(200)) };
     }
 }

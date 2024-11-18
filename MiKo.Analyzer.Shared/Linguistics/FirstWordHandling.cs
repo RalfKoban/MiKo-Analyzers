@@ -6,7 +6,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
     /// Defines values that specify how to handle the first word of a comment.
     /// </summary>
     [Flags]
-    public enum FirstWordHandling : ushort
+    public enum FirstWordHandling
     {
         /// <summary>
         /// Keep it, do NOT touch it.

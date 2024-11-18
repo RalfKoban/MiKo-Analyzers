@@ -101,7 +101,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             return typeSyntax;
         }
 
-        private static BaseTypeDeclarationSyntax MoveRegion(BaseTypeDeclarationSyntax typeSyntax, IStructuredTriviaSyntax regionDirective, SyntaxNode method, SyntaxNode disposeMethod)
+        private static BaseTypeDeclarationSyntax MoveRegion(BaseTypeDeclarationSyntax typeSyntax, DirectiveTriviaSyntax regionDirective, SyntaxNode method, SyntaxNode disposeMethod)
         {
             var triviaToRemove = GetTriviaToRemove(regionDirective.ParentTrivia);
 

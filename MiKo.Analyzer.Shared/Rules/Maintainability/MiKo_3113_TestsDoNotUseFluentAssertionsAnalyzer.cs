@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeExpressionStatementSyntax, SyntaxKind.ExpressionStatement);
 
-        private static SyntaxNode FindProblematicNode(ExpressionStatementSyntax node)
+        private static ExpressionSyntax FindProblematicNode(ExpressionStatementSyntax node)
         {
             var problematicNode = node.GetFluentAssertionShouldNode();
             var root = problematicNode?.FirstAncestor<SyntaxNode>(_ => _.IsAnyKind(Ancestors));

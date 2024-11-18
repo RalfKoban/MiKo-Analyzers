@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var fieldSyntax = symbol.GetSyntax<FieldDeclarationSyntax>();
             var identifierNames = fieldSyntax.DescendantNodes<IdentifierNameSyntax>().ToList();
 
-            if (identifierNames.Any())
+            if (identifierNames.Count != 0)
             {
                 var fieldLocation = fieldSyntax.GetLocation().GetLineSpan();
 

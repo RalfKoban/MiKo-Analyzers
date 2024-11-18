@@ -192,7 +192,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                            .AdjustFirstWord(firstWordHandling)
                                                            .ToString();
 
-                            if (originalText.Equals(replacedText))
+                            if (originalText.Equals(replacedText, StringComparison.Ordinal))
                             {
                                 // replacement with itself does not make any sense
                                 continue;
@@ -772,7 +772,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlEmptyElementSyntax SeeLangword_True() => SeeLangword("true");
 
+#pragma warning disable CA1021
         protected static XmlElementSyntax SplitCommentAfterFirstSentence(XmlElementSyntax comment, out SyntaxList<XmlNodeSyntax> partsAfterSentence)
+#pragma warning restore CA1021
         {
             var partsForFirstSentence = new List<XmlNodeSyntax>();
             var partsForOtherSentences = new List<XmlNodeSyntax>();
@@ -823,12 +825,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             tokensAfterDot.Add(token.WithText(lastText));
                         }
 
-                        if (tokensBeforeDot.Any())
+                        if (tokensBeforeDot.Count > 0)
                         {
                             partsForFirstSentence.Add(XmlText(tokensBeforeDot).WithLeadingTriviaFrom(text));
                         }
 
-                        if (tokensAfterDot.Any())
+                        if (tokensAfterDot.Count > 0)
                         {
                             partsForOtherSentences.Add(XmlText(tokensAfterDot));
                         }
@@ -886,7 +888,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlTextSyntax XmlText(IEnumerable<SyntaxToken> textTokens) => XmlText(textTokens.ToTokenList());
 
-        private static IEnumerable<XmlNodeSyntax> CommentEnd(string commentEnd, params XmlNodeSyntax[] commendEndNodes)
+        private static List<XmlNodeSyntax> CommentEnd(string commentEnd, params XmlNodeSyntax[] commendEndNodes)
         {
             var skip = 0;
             XmlTextSyntax textCommentEnd;

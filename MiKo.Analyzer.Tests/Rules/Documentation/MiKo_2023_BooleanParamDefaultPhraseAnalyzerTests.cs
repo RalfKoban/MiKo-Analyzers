@@ -765,7 +765,7 @@ public class TestMe
             VerifyCSharpFix(originalCode, fixedCode);
         }
 
-        [Ignore("Just for now")]
+        [Ignore("TODO: RKN Fix when you know how to fix it.")]
         [Test]
         public void Code_gets_fixed_on_multi_line_for_phrase()
         {

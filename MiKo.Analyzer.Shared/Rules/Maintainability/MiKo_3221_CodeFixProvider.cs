@@ -57,7 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return syntax;
         }
 
-        private static SyntaxNode GetUpdatedSyntaxWithHashCodeCreation(IEnumerable<SyntaxNode> nodes, MethodDeclarationSyntax method)
+        private static MethodDeclarationSyntax GetUpdatedSyntaxWithHashCodeCreation(IEnumerable<SyntaxNode> nodes, MethodDeclarationSyntax method)
         {
             var statements = nodes.Select(_ => SyntaxFactory.ParseStatement("hash.Add(" + _ + ");")).ToList();
             statements.Insert(0, SyntaxFactory.ParseStatement("var hash = default(HashCode);"));
@@ -68,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                          .WithSemicolonToken(default);
         }
 
-        private static SyntaxNode GetUpdatedSyntaxWithHashCodeCombine(IEnumerable<SyntaxNode> nodes, MethodDeclarationSyntax method)
+        private static MethodDeclarationSyntax GetUpdatedSyntaxWithHashCodeCombine(IEnumerable<SyntaxNode> nodes, MethodDeclarationSyntax method)
         {
             var arguments = nodes.ToArray(_ => Argument(_.ToString()));
             var invocation = Invocation("HashCode", "Combine", arguments);

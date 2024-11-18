@@ -55,7 +55,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
 //// ncrunch: rdi off
 
-        // ReSharper disable once ReturnTypeCanBeEnumerable.Local Violates CA1859
         private static HashSet<string> CreatePhrases()
         {
             var starts = new[] { "Event", "This event", "The event", "An event", "A event" };

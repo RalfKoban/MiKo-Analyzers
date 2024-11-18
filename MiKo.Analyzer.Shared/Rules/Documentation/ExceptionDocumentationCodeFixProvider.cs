@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public abstract class ExceptionDocumentationCodeFixProvider : OverallDocumentationCodeFixProvider
     {
 //// ncrunch: rdi off
-        private static readonly string[] Phrases = CreatePhrases().Distinct().ToArray();
+        private static readonly string[] Phrases = CreatePhrases().ToHashSet().ToArray();
 //// ncrunch: rdi default
 
         protected static XmlElementSyntax GetFixedExceptionCommentForArgumentNullException(XmlElementSyntax exceptionComment)
@@ -53,7 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // seems we found the reference in text, so we have to split the text into 2 separate ones and place a <paramref/> between
             var textNodes = exceptionComment.DescendantNodes<XmlTextSyntax>(_ => _.GetTextWithoutTriviaLazy().Any(__ => __.ContainsAny(parametersAsTextReferences))).ToList();
 
-            if (textNodes.Any())
+            if (textNodes.Count != 0)
             {
                 // seems we found the reference in text, so we have to split the text into 2 separate ones and place a <paramref/> between
                 exceptionComment = exceptionComment.ReplaceNodes(textNodes, text => ReplaceTextWithParamRefs(text, parametersAsTextReferences));
@@ -162,7 +162,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private static IEnumerable<string> SplitCommentsOnParametersInText(string comment, string[] parametersAsTextReferences)
+        private static string[] SplitCommentsOnParametersInText(string comment, string[] parametersAsTextReferences)
         {
             var parametersAsTextReferencesLength = parametersAsTextReferences.Length;
 
@@ -199,6 +199,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
 //// ncrunch: rdi off
 
+#pragma warning disable CA1861
         // TODO RKN: see Constants.Comments.ExceptionForbiddenStartingPhrase
         private static IEnumerable<string> CreatePhrases()
         {
@@ -285,7 +286,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 yield return upperCasePhrase;
             }
         }
+#pragma warning restore CA1861
 
-//// ncrunch: rdi default
+        //// ncrunch: rdi default
     }
 }
