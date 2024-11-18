@@ -1528,11 +1528,12 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string SurroundedWithDoubleQuote(this string value) => value?.SurroundedWith('\"');
 
+#pragma warning disable CA1308
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string ToLowerCase(this string source) => source?.ToLower(CultureInfo.InvariantCulture);
+        public static string ToLowerCase(this string source) => source?.ToLowerInvariant();
+#pragma warning restore CA1308
 
-//// ncrunch: no coverage start
-
+        //// ncrunch: no coverage start
         public static char ToLowerCase(this char source)
         {
             if ((uint)(source - 'A') <= 'Z' - 'A')
@@ -1574,10 +1575,14 @@ namespace System
 
             var character = source[index];
 
+#pragma warning disable CA1308
+
             if (character.IsLowerCase())
             {
                 return source;
             }
+
+#pragma warning restore CA1308
 
             return MakeLowerCaseAt(source.AsSpan(), index);
         }
@@ -1618,6 +1623,9 @@ namespace System
 
             return char.ToUpperInvariant(source);
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string ToUpperCase(this string source) => source?.ToUpper(CultureInfo.InvariantCulture);
 
         /// <summary>
         /// Gets a <see cref="string"/> where the specified character is upper-case.

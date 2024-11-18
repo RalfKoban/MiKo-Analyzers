@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return syntax;
         }
 
-        private static SyntaxNode GetUpdatedSyntax(InterpolatedStringExpressionSyntax interpolated, ArgumentSyntax argument, ArgumentListSyntax argumentList)
+        private static ArgumentListSyntax GetUpdatedSyntax(InterpolatedStringExpressionSyntax interpolated, ArgumentSyntax argument, ArgumentListSyntax argumentList)
         {
             var interpolations = interpolated.Contents.OfType<InterpolationSyntax>().ToList();
 
@@ -57,7 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                .AddArguments(argumentsFromInterpolation);
         }
 
-        private static SyntaxNode GetUpdatedSyntax(InvocationExpressionSyntax invocation, ArgumentSyntax argument, ArgumentListSyntax argumentList)
+        private static ArgumentListSyntax GetUpdatedSyntax(InvocationExpressionSyntax invocation, ArgumentSyntax argument, ArgumentListSyntax argumentList)
         {
             var invocationArguments = invocation.ArgumentList.Arguments;
 
@@ -74,7 +74,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return argumentList;
         }
 
-        private static ExpressionSyntax UpdateStringFormatLiteral(LiteralExpressionSyntax literal, ArgumentSyntax[] arguments)
+        private static LiteralExpressionSyntax UpdateStringFormatLiteral(LiteralExpressionSyntax literal, ArgumentSyntax[] arguments)
         {
             var token = literal.Token;
 
@@ -100,9 +100,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var clause = syntax.FormatClause;
 
-            return clause is null
-                   ? syntax.Expression
-                   : Invocation(SimpleMemberAccess(syntax.Expression, nameof(ToString)), Argument(StringLiteral(clause.FormatStringToken.ValueText)));
+            if (clause is null)
+            {
+                return syntax.Expression;
+            }
+
+            return Invocation(SimpleMemberAccess(syntax.Expression, nameof(ToString)), Argument(StringLiteral(clause.FormatStringToken.ValueText)));
         }
     }
 }

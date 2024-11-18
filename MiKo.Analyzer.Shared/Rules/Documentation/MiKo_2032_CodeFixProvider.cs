@@ -190,7 +190,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                                                                         : comment;
 
         // introduced as workaround for issue #399
-        private static bool CommentCanBeFixed(SyntaxNode syntax)
+        private static bool CommentCanBeFixed(XmlElementSyntax syntax)
         {
             var comment = syntax.ToString();
 

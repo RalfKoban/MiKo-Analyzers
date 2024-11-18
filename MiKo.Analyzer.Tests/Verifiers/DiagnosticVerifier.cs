@@ -53,6 +53,7 @@ namespace TestHelper
                                      foreach (var result in results)
                                      {
                                          Assert.That(result.Id, Is.EqualTo(GetDiagnosticId()));
+                                         Assert.That(result.Id, Is.Not.EqualTo("AD0001")); // This is a programming error
 
                                          var message = result.GetMessage(null);
 

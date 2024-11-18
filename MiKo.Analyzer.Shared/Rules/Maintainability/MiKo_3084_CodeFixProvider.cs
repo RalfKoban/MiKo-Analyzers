@@ -13,15 +13,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3084_CodeFixProvider)), Shared]
     public sealed class MiKo_3084_CodeFixProvider : MaintainabilityCodeFixProvider
     {
-        private static readonly IDictionary<SyntaxKind, SyntaxKind> Expressions = new ConcurrentDictionary<SyntaxKind, SyntaxKind>(new Dictionary<SyntaxKind, SyntaxKind>
-                                                                                                                                       {
-                                                                                                                                           { SyntaxKind.EqualsExpression, SyntaxKind.EqualsExpression },
-                                                                                                                                           { SyntaxKind.NotEqualsExpression, SyntaxKind.NotEqualsExpression },
-                                                                                                                                           { SyntaxKind.LessThanExpression, SyntaxKind.GreaterThanExpression },
-                                                                                                                                           { SyntaxKind.LessThanOrEqualExpression, SyntaxKind.GreaterThanOrEqualExpression },
-                                                                                                                                           { SyntaxKind.GreaterThanExpression, SyntaxKind.LessThanExpression },
-                                                                                                                                           { SyntaxKind.GreaterThanOrEqualExpression, SyntaxKind.LessThanOrEqualExpression },
-                                                                                                                                       });
+        private static readonly Dictionary<SyntaxKind, SyntaxKind> Expressions = new Dictionary<SyntaxKind, SyntaxKind>
+                                                                                     {
+                                                                                         { SyntaxKind.EqualsExpression, SyntaxKind.EqualsExpression },
+                                                                                         { SyntaxKind.NotEqualsExpression, SyntaxKind.NotEqualsExpression },
+                                                                                         { SyntaxKind.LessThanExpression, SyntaxKind.GreaterThanExpression },
+                                                                                         { SyntaxKind.LessThanOrEqualExpression, SyntaxKind.GreaterThanOrEqualExpression },
+                                                                                         { SyntaxKind.GreaterThanExpression, SyntaxKind.LessThanExpression },
+                                                                                         { SyntaxKind.GreaterThanOrEqualExpression, SyntaxKind.LessThanOrEqualExpression },
+                                                                                     };
 
         public override string FixableDiagnosticId => "MiKo_3084";
 

@@ -174,21 +174,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private sealed class MapData
         {
+#pragma warning disable CA1861
             public MapData()
             {
-                var taskPhrases = new[]
-                                      {
-                                          "A task that can be used to await.",
-                                          "A task that can be used to await",
-                                          "A task to await.",
-                                          "A task to await",
-                                          "An awaitable task.",
-                                          "An awaitable task",
-                                      };
-
                 var phrases = CreatePhrases().ToHashSet(_ => _ + " "); // TODO RKN: Order by 'A', 'An ' and 'The '
 
-                ReplacementMap = AlmostCorrectTaskReturnTypeStartingPhrases.Concat(taskPhrases)
+                ReplacementMap = AlmostCorrectTaskReturnTypeStartingPhrases.Concat(new[]
+                                                                                       {
+                                                                                           "A task that can be used to await.",
+                                                                                           "A task that can be used to await",
+                                                                                           "A task to await.",
+                                                                                           "A task to await",
+                                                                                           "An awaitable task.",
+                                                                                           "An awaitable task",
+                                                                                       })
                                                                            .Concat(phrases)
                                                                            .OrderByDescending(_ => _.Length)
                                                                            .ThenBy(_ => _)
@@ -241,6 +240,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                  " which contains ",
                                              };
             }
+#pragma warning restore CA1861
 
             public Pair[] ReplacementMap { get; }
 

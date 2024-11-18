@@ -60,7 +60,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
 //// ncrunch: rdi off
 
-        private static IEnumerable<Pair> CreateCommandReplacementMapEntries()
+        private static List<Pair> CreateCommandReplacementMapEntries()
         {
             var middleParts = new[]
                                   {

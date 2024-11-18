@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     // loop over phrases for summaries and values
                     var summaries = CommentExtensions.GetSummaries(commentXml);
 
-                    if (summaries.Any())
+                    if (summaries.Count != 0)
                     {
                         var summaryPhrases = Phrases(Constants.Comments.DependencyPropertyFieldSummaryPhrase, containingTypeFullName, propertyName);
 
@@ -51,7 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     var values = CommentExtensions.GetValue(commentXml);
 
-                    if (values.Any())
+                    if (values.Count != 0)
                     {
                         var valuePhrases = Phrases(Constants.Comments.DependencyPropertyFieldValuePhrase, containingTypeFullName, propertyName);
 

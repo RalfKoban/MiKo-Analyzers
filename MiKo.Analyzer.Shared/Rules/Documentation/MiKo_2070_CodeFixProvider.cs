@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         // introduced as workaround for issue #399
-        private static bool CommentCanBeFixed(SyntaxNode syntax)
+        private static bool CommentCanBeFixed(XmlElementSyntax syntax)
         {
             var comment = syntax.ToString();
 
@@ -240,7 +240,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return string.Empty;
         }
 
-        private static string GetCorrectStartText(BasePropertyDeclarationSyntax property)
+        private static string GetCorrectStartText(PropertyDeclarationSyntax property)
         {
             var isBool = property.Type.IsBoolean();
             var isAsync = property.IsAsync();

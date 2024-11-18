@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules
         private static readonly Analyzer[] AllAnalyzers = CreateAllAnalyzers();
         private static readonly CodeFixProvider[] AllCodeFixProviders = CreateAllCodeFixProviders();
 
-        [Ignore("Just for now")]
+        [Ignore("Shall be run manually")]
         [Explicit]
         [TestCase("TODO"), Timeout(4 * 60 * 60 * 1000)] // 4h
         public static void Performance_(string path)

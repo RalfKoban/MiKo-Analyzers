@@ -98,7 +98,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 foreach (var location in GetAllLocations(token, Phrases, StringComparison.OrdinalIgnoreCase, Offset, Offset))
                 {
-                    var text = location.GetText().ToLowerInvariant();
+                    var text = location.GetText().ToLowerCase();
 
                     if (PhrasesMap.TryGetValue(text, out var replacement))
                     {
@@ -108,7 +108,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 foreach (var issue in AnalyzeForSpecialPhrase(token, WillPhraseStartUpperCase, _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)))
                 {
-                    var text = issue.Location.GetText().ToLowerInvariant();
+                    var text = issue.Location.GetText().ToLowerCase();
 
                     if (text.Contains(AcceptedPhrase) is false)
                     {
@@ -118,7 +118,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 foreach (var issue in AnalyzeForSpecialPhrase(token, WillPhrase, Verbalizer.MakeThirdPersonSingularVerb))
                 {
-                    var text = issue.Location.GetText().ToLowerInvariant();
+                    var text = issue.Location.GetText().ToLowerCase();
 
                     if (text.Contains(AcceptedPhrase) is false && text.ContainsAny(PhrasesMapKeys) is false)
                     {

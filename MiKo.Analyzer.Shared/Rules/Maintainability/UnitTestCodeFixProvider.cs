@@ -165,7 +165,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return Array.Empty<TypeSyntax>();
         }
 
-        private static ArgumentSyntax ConvertToInterpolatedStringArgument(IReadOnlyList<ArgumentSyntax> otherArguments)
+        private static ArgumentSyntax ConvertToInterpolatedStringArgument(List<ArgumentSyntax> otherArguments)
         {
             var argument = otherArguments[0];
 
@@ -182,7 +182,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return argument;
         }
 
-        private static InterpolatedStringExpressionSyntax ConvertToInterpolatedString(ReadOnlySpan<char> formatMessage, IReadOnlyList<ArgumentSyntax> otherArguments)
+        private static InterpolatedStringExpressionSyntax ConvertToInterpolatedString(ReadOnlySpan<char> formatMessage, List<ArgumentSyntax> otherArguments)
         {
             var contents = new List<InterpolatedStringContentSyntax>();
 

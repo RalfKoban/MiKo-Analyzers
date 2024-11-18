@@ -54,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var lockIdentifiers = CollectLockIdentifiers(context.Node);
 
-            if (lockIdentifiers.Any() && context.ContainingSymbol is ITypeSymbol type)
+            if (lockIdentifiers.Count != 0 && context.ContainingSymbol is ITypeSymbol type)
             {
                 var fields = new Dictionary<string, IFieldSymbol>();
 

@@ -32,6 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                                                                                    ? int.Parse(s)
                                                                                    : 0;
 
+#pragma warning disable CA1002
         protected static List<SyntaxNodeOrToken> SelfAndDescendantsOnSeparateLines(SyntaxNode node)
         {
             var lines = new HashSet<int>();
@@ -39,6 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             return descendants;
         }
+#pragma warning restore CA1002
 
         protected static SeparatedSyntaxList<TSyntaxNode> GetUpdatedSyntax<TSyntaxNode>(SeparatedSyntaxList<TSyntaxNode> expressions, int leadingSpaces) where TSyntaxNode : SyntaxNode
         {

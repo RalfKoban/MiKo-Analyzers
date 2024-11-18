@@ -41,6 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private sealed class MapData
         {
+#pragma warning disable CA1861
             public MapData()
             {
                 var keys = CreateReplacementMapKeys().OrderByDescending(_ => _.Length) // get longest items first as shorter items may be part of the longer ones and would cause problems
@@ -83,6 +84,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 CleanupMap = CleanupMapKeys.ToArray(_ => new Pair(_, " the "));
             }
+#pragma warning restore CA1861
 
             public Pair[] ReplacementMap { get; }
 
@@ -96,7 +98,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             public Pair[] CleanupMap { get; }
 
-            // ReSharper disable once ReturnTypeCanBeEnumerable.Local Violates CA1859
             private static HashSet<string> CreateReplacementMapKeys()
             {
                 var keys = Enumerable.Empty<string>()
@@ -117,7 +118,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return results;
             }
 
-            private static IEnumerable<string> CreateBooleanReplacementMapKeys()
+            private static HashSet<string> CreateBooleanReplacementMapKeys()
             {
                 string[] booleans =
                                     {
@@ -208,7 +209,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return results;
             }
 
-            private static IEnumerable<string> CreateGuidReplacementMapKeys()
+            private static List<string> CreateGuidReplacementMapKeys()
             {
                 string[] starts = { string.Empty, "A ", "The " };
                 string[] types = { "GUID", "Guid", "guid", "TypeGuid", "Guids" };
@@ -236,11 +237,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return results;
             }
 
-            private static IEnumerable<string> CreateCollectionReplacementMapKeys() => new[] { "A list of ", "List of ", "A cache for ", "A Cache for ", "Cache for ", "Stores " };
+            private static string[] CreateCollectionReplacementMapKeys() => new[] { "A list of ", "List of ", "A cache for ", "A Cache for ", "Cache for ", "Stores " };
 
-            private static IEnumerable<string> CreateGetReplacementMapKeys() => new[] { "Gets ", "Get " };
+            private static string[] CreateGetReplacementMapKeys() => new[] { "Gets ", "Get " };
 
-            private static IEnumerable<string> CreateOtherReplacementMapKeys() => new[] { "Specifies the ", "Specifies an ", "Specifies a " };
+            private static string[] CreateOtherReplacementMapKeys() => new[] { "Specifies the ", "Specifies an ", "Specifies a " };
         }
 
         //// ncrunch: rdi default

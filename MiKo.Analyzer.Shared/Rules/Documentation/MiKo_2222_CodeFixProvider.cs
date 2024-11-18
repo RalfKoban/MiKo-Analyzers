@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 result[resultIndex++] = new Pair(term.Replace('i', 'I'), replacement);
 
                 // alternative 2
-                result[resultIndex++] = new Pair(term.ToUpper(), replacement);
+                result[resultIndex++] = new Pair(term.ToUpperCase(), replacement);
             }
 
             return result;

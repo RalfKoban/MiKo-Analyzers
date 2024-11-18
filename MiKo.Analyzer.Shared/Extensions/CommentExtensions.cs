@@ -120,7 +120,11 @@ namespace MiKoSolutions.Analyzers
 
             // remove all code elements
             var codeElements = element.Descendants(Constants.XmlTag.Code).ToList();
-            codeElements.ForEach(_ => _.Remove());
+
+            if (codeElements.Count > 0)
+            {
+                codeElements.ForEach(_ => _.Remove());
+            }
 
             return Cleaned(element.Nodes().ConcatenatedWith());
         }

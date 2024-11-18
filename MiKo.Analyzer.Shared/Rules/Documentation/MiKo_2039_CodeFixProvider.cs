@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
 //// ncrunch: rdi off
 
-        private static IEnumerable<string> CreateReplacementMapKeys()
+        private static HashSet<string> CreateReplacementMapKeys()
         {
             var starts = new[]
                              {

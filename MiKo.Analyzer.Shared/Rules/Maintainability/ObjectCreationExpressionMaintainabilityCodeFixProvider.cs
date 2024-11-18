@@ -45,7 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected abstract ArgumentListSyntax GetUpdatedArgumentListSyntax(ObjectCreationExpressionSyntax syntax);
 
-        private SyntaxNode GetUpdatedSyntax(ObjectCreationExpressionSyntax syntax)
+        private ObjectCreationExpressionSyntax GetUpdatedSyntax(ObjectCreationExpressionSyntax syntax)
         {
             var originalArguments = syntax.ArgumentList;
 

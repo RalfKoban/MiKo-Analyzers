@@ -78,7 +78,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             return SyntaxFactory.IfStatement(condition, block);
         }
 
-        private static ExpressionSyntax CreateCondition(MemberAccessExpressionSyntax expression)
+        private static MemberAccessExpressionSyntax CreateCondition(MemberAccessExpressionSyntax expression)
         {
             var identifier = GetIdentifier(expression);
             var method = SyntaxFactory.IdentifierName(Constants.ILog.IsDebugEnabled);

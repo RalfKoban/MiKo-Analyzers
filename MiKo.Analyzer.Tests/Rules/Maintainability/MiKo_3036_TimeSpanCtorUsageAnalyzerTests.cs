@@ -65,6 +65,7 @@ namespace Bla
         [TestCase("1, 2, 3")]
         [TestCase("1, 2, 3, 4")]
         [TestCase("1, 2, 3, 4, 5")]
+        [TestCase("1, 2, 3, 4, 5, 6")]
         public void An_issue_is_reported_for_method_body_with_wrong_TimeSpan_usage_(string parameters) => An_issue_is_reported_for(@"
 using System;
 
@@ -95,7 +96,7 @@ namespace Bla
         [TestCase("new TimeSpan(0, 0, 42, 0, 0, 0)", "TimeSpan.FromMinutes(42)")]
         [TestCase("new TimeSpan(0, 0, 0, 42, 0, 0)", "TimeSpan.FromSeconds(42)")]
         [TestCase("new TimeSpan(0, 0, 0, 0, 42, 0)", "TimeSpan.FromMilliseconds(42)")]
-        [TestCase("new TimeSpan(0, 0, 0, 0, 0, 42)", "TimeSpan.FromMicroseconds(42)", IgnoreReason = "Cannot test as this method is part of .NET 7")]
+        [TestCase("new TimeSpan(0, 0, 0, 0, 0, 42)", "TimeSpan.FromMicroseconds(42)")]
         public void Code_gets_fixed_(string originalCode, string fixedCode)
         {
             const string Template = @"

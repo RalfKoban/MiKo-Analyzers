@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             var propertyNames = NamesFinder.FindPropertyNames(symbol, Suffix, Constants.DependencyProperty.Register);
-            var name = propertyNames.Any() ? propertyNames.First() : symbolName;
+            var name = propertyNames.Count != 0 ? propertyNames.First() : symbolName;
             var betterName = name + Suffix;
 
             return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };

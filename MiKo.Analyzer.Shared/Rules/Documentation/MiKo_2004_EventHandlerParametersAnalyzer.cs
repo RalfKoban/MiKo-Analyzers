@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static string GetDefaultStartingPhrase(string name) => ArticleProvider.GetArticleFor(name);
 
-        private static IEnumerable<string> CreatePhrases(IMethodSymbol method)
+        private static string[] CreatePhrases(IMethodSymbol method)
         {
             var type = method.Parameters[1].Type;
             var typeName = type.Name;

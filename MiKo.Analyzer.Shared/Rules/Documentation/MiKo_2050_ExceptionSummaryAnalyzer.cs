@@ -138,7 +138,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var summaries = symbol.GetOverloadSummaries();
 
-            return summaries.Any()
+            return summaries.Count != 0
                    ? AnalyzeSummaryPhrase(symbol, summaries, comment, defaultPhrases)
                    : Enumerable.Empty<Diagnostic>();
         }
@@ -147,7 +147,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comments = symbol.GetRemarks();
 
-            return comments.Any()
+            return comments.Count != 0
                    ? AnalyzeStartingPhrase(symbol, Constants.XmlTag.Remarks, comments, comment, defaultPhrases)
                    : Enumerable.Empty<Diagnostic>();
         }
@@ -181,7 +181,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                    : AnalyzeParameter(symbol, commentXml, comment, phrases);
         }
 
-        private IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol symbol, string commentXml, DocumentationCommentTriviaSyntax comment, IReadOnlyList<string> phrase)
+        private IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol symbol, string commentXml, DocumentationCommentTriviaSyntax comment, string[] phrase)
         {
             var parameterCommentXml = symbol.GetComment(commentXml);
 

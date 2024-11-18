@@ -68,7 +68,7 @@ namespace Something.Interop
 }
 ");
 
-        [Test, Ignore("Roslyn attribute issue: Detection of attribute's ctor currently does not work within test, but works in production code.")]
+        [Test]
         public void No_issue_is_reported_for_documented_enum_type_with_description() => No_issue_is_reported_for(@"
 using System;
 using System.ComponentModel;

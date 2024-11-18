@@ -120,7 +120,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var names = CollectNames(directlyImplementedInterfaces);
 
-                if (names.Any() && symbol.Name.EndsWithAny(names, StringComparison.Ordinal) is false)
+                if (names.Count != 0 && symbol.Name.EndsWithAny(names, StringComparison.Ordinal) is false)
                 {
                     return new[] { Issue(symbol, names.HumanizedConcatenated()) };
                 }

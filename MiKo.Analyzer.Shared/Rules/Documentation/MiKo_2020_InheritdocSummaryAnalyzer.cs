@@ -17,9 +17,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly HashSet<string> Tags = new HashSet<string>
                                                            {
                                                                Constants.XmlTag.See,
-                                                               Constants.XmlTag.See.ToUpperInvariant(),
+                                                               "SEE",
                                                                Constants.XmlTag.SeeAlso,
-                                                               Constants.XmlTag.SeeAlso.ToUpperInvariant(),
+                                                               "SEEALSO",
                                                            };
 
         public MiKo_2020_InheritdocSummaryAnalyzer() : base(Id, (SymbolKind)(-1))
@@ -41,7 +41,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (xmlTag.Parent is XmlElementSyntax e)
                 {
-                    var index = e.Content.IndexOf(xmlTag);
+                    var content = e.Content;
+
+                    var index = content.IndexOf(xmlTag);
 
                     if (index == 0)
                     {
@@ -51,7 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             yield return Issue(xmlTag);
                         }
                     }
-                    else if (index > 0 && e.Content[index - 1] is XmlTextSyntax t) // there might be multiple <see/> in a comment, so consider all of them
+                    else if (index > 0 && content[index - 1] is XmlTextSyntax t) // there might be multiple <see/> in a comment, so consider all of them
                     {
                         // we seem to have an issue here, so inspect the code
                         if (HasIssue(symbol, compilation, cref))
