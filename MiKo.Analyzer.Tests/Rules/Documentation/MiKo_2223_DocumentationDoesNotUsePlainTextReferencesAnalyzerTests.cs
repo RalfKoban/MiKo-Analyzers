@@ -342,6 +342,35 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_para_phrase() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// <para>
+    ///   This option affects the way the generated SFX runs. By default it is
+    ///   false.  When you set it to true,...
+    /// </para>
+    /// </summary>
+    void DoSomething();
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_file_with_extension_([Values("zip", "exe", "pdf", "docx")] string extension) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Can be SomeFile." + extension + @"
+    /// </summary>
+    void DoSomething();
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_incorrectly_documented_method() => An_issue_is_reported_for(@"
 using System;
 
@@ -585,22 +614,6 @@ public class TestMe
     /// You may want to call stream.Seek() before.
     /// </summary>
     void DoSomething(Stream stream);
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_para_phrase() => No_issue_is_reported_for(@"
-using System;
-
-public class TestMe
-{
-    /// <summary>
-    /// <para>
-    ///   This option affects the way the generated SFX runs. By default it is
-    ///   false.  When you set it to true,...
-    /// </para>
-    /// </summary>
-    void DoSomething();
 }
 ");
 

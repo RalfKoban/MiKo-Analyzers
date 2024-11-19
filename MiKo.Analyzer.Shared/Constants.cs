@@ -61,6 +61,39 @@ namespace MiKoSolutions.Analyzers
                                                                               ".feature.cs", // SpecFlow generated code
                                                                           };
 
+        internal static readonly string[] WellknownFileExtensions =
+                                                                    {
+                                                                        ".bmp",
+                                                                        ".cert",
+                                                                        ".config",
+                                                                        ".cs",
+                                                                        ".dll",
+                                                                        ".doc",
+                                                                        ".docx",
+                                                                        ".eds",
+                                                                        ".exe",
+                                                                        ".gif",
+                                                                        ".htm",
+                                                                        ".html",
+                                                                        ".jpeg",
+                                                                        ".jpg",
+                                                                        ".js",
+                                                                        ".nupkg",
+                                                                        ".pdf",
+                                                                        ".png",
+                                                                        ".ps1",
+                                                                        ".resx",
+                                                                        ".rtf",
+                                                                        ".txt",
+                                                                        ".vb",
+                                                                        ".vbs",
+                                                                        ".yaml",
+                                                                        ".yml",
+                                                                        ".xaml",
+                                                                        ".xml",
+                                                                        ".zip",
+                                                                    };
+
         internal static class ILog
         {
             internal const string NamespaceName = "log4net";

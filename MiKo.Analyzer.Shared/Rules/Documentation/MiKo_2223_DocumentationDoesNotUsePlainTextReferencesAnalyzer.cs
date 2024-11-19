@@ -153,6 +153,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return false;
             }
 
+            if (trimmed.EndsWithAny(Constants.WellknownFileExtensions, StringComparison.OrdinalIgnoreCase))
+            {
+                // do not report files
+                return false;
+            }
+
             if (trimmed.Length > 31 && Guid.TryParse(trimmed.ToString(), out _))
             {
                 return false;
