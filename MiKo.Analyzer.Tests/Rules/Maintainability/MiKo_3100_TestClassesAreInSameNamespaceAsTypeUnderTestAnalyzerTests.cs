@@ -107,117 +107,87 @@ namespace BlaBla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_empty_test_class() => Assert.Multiple(() =>
-                                                                                        {
-                                                                                            foreach (var testFixture in TestFixtures)
-                                                                                            {
-                                                                                                No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_empty_test_class_([ValueSource(nameof(TestFixtures))] string fixture) => No_issue_is_reported_for(@"
 namespace BlaBla
 {
-    [" + testFixture + @"]
+    [" + fixture + @"]
     public class TestMe
     {
     }
 }
 ");
-                                                                                            }
-                                                                                        });
 
         [Test]
-        public void No_issue_is_reported_for_property_if_test_class_and_class_under_test_are_in_same_namespace() => Assert.Multiple(() =>
-                                                                                                                                         {
-                                                                                                                                             foreach (var testFixture in TestFixtures)
-                                                                                                                                             {
-                                                                                                                                                 foreach (var propertyName in PropertyNames)
-                                                                                                                                                 {
-                                                                                                                                                     No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_property_if_test_class_and_class_under_test_are_in_same_namespace_(
+                                                                                                            [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                            [ValueSource(nameof(PropertyNames))] string propertyName)
+            => No_issue_is_reported_for(@"
 namespace BlaBla.BlaBlubb
 {
     public class TestMe
     {
     }
 
-    [" + testFixture + @"]
+    [" + fixture + @"]
     public class TestMeTests
     {
         private TestMe " + propertyName + @" { get; set; }
     }
 }
 ");
-                                                                                                                                                 }
-                                                                                                                                             }
-                                                                                                                                         });
 
         [Test]
-        public void No_issue_is_reported_for_method_if_test_class_and_class_under_test_are_in_same_namespace() => Assert.Multiple(() =>
-                                                                                                                                       {
-                                                                                                                                           foreach (var testFixture in TestFixtures)
-                                                                                                                                           {
-                                                                                                                                               foreach (var propertyName in PropertyNames)
-                                                                                                                                               {
-                                                                                                                                                   foreach (var methodPrefix in MethodPrefixes)
-                                                                                                                                                   {
-                                                                                                                                                       No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_if_test_class_and_class_under_test_are_in_same_namespace_(
+                                                                                                          [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                          [ValueSource(nameof(PropertyNames))] string propertyName,
+                                                                                                          [ValueSource(nameof(MethodPrefixes))] string methodPrefix)
+            => No_issue_is_reported_for(@"
 namespace BlaBla.BlaBlubb
 {
     public class TestMe
     {
     }
 
-    [" + testFixture + @"]
+    [" + fixture + @"]
     public class TestMeTests
     {
         private TestMe " + methodPrefix + propertyName + @"() => null;
     }
 }
 ");
-                                                                                                                                                   }
-                                                                                                                                               }
-                                                                                                                                           }
-                                                                                                                                       });
 
         [Test]
-        public void No_issue_is_reported_for_field_if_test_class_and_class_under_test_are_in_same_namespace() => Assert.Multiple(() =>
-                                                                                                                                      {
-                                                                                                                                          foreach (var testFixture in TestFixtures)
-                                                                                                                                          {
-                                                                                                                                              foreach (var fieldName in FieldNames)
-                                                                                                                                              {
-                                                                                                                                                  No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_field_if_test_class_and_class_under_test_are_in_same_namespace_(
+                                                                                                         [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                         [ValueSource(nameof(FieldNames))] string fieldName)
+            => No_issue_is_reported_for(@"
 namespace BlaBla.BlaBlubb
 {
     public class TestMe
     {
     }
 
-    [" + testFixture + @"]
+    [" + fixture + @"]
     public class TestMeTests
     {
         private TestMe " + fieldName + @";
     }
 }
 ");
-                                                                                                                                              }
-                                                                                                                                          }
-                                                                                                                                      });
 
         [Test]
-        public void No_issue_is_reported_for_localVariable_if_test_class_and_class_under_test_are_in_same_namespace() => Assert.Multiple(() =>
-                                                                                                                                              {
-                                                                                                                                                  foreach (var testFixture in TestFixtures)
-                                                                                                                                                  {
-                                                                                                                                                      foreach (var test in Tests)
-                                                                                                                                                      {
-                                                                                                                                                          foreach (var variableName in VariableNames)
-                                                                                                                                                          {
-                                                                                                                                                              No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_localVariable_if_test_class_and_class_under_test_are_in_same_namespace_(
+                                                                                                                 [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                                 [ValueSource(nameof(Tests))] string test,
+                                                                                                                 [ValueSource(nameof(VariableNames))] string variableName)
+            => No_issue_is_reported_for(@"
 namespace BlaBla.BlaBlubb
 {
     public class TestMe
     {
     }
 
-    [" + testFixture + @"]
+    [" + fixture + @"]
     public class TestMeTests
     {
         [" + test + @"]
@@ -228,21 +198,13 @@ namespace BlaBla.BlaBlubb
     }
 }
 ");
-                                                                                                                                                          }
-                                                                                                                                                      }
-                                                                                                                                                  }
-                                                                                                                                              });
 
         [Test]
-        public void An_issue_is_reported_for_method_if_test_class_and_class_under_test_are_in_different_namespaces() => Assert.Multiple(() =>
-                                                                                                                                             {
-                                                                                                                                                 foreach (var testFixture in TestFixtures)
-                                                                                                                                                 {
-                                                                                                                                                     foreach (var propertyName in PropertyNames)
-                                                                                                                                                     {
-                                                                                                                                                         foreach (var methodPrefix in MethodPrefixes)
-                                                                                                                                                         {
-                                                                                                                                                             An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_if_test_class_and_class_under_test_are_in_different_namespaces_(
+                                                                                                                [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                                [ValueSource(nameof(PropertyNames))] string propertyName,
+                                                                                                                [ValueSource(nameof(MethodPrefixes))] string methodPrefix)
+            => An_issue_is_reported_for(@"
 namespace BlaBla
 {
     public class TestMe
@@ -254,26 +216,19 @@ namespace BlaBla.BlaBlubb
 {
     using BlaBla;
 
-    [" + testFixture + @"]
+    [" + fixture + @"]
     public class TestMeTests
     {
         private TestMe " + methodPrefix + propertyName + @"() => null;
     }
 }
 ");
-                                                                                                                                                         }
-                                                                                                                                                     }
-                                                                                                                                                 }
-                                                                                                                                             });
 
         [Test]
-        public void An_issue_is_reported_for_property_if_test_class_and_class_under_test_are_in_different_namespaces() => Assert.Multiple(() =>
-                                                                                                                                               {
-                                                                                                                                                   foreach (var testFixture in TestFixtures)
-                                                                                                                                                   {
-                                                                                                                                                       foreach (var propertyName in PropertyNames)
-                                                                                                                                                       {
-                                                                                                                                                           An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_property_if_test_class_and_class_under_test_are_in_different_namespaces_(
+                                                                                                                  [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                                  [ValueSource(nameof(PropertyNames))] string propertyName)
+            => An_issue_is_reported_for(@"
 namespace BlaBla
 {
     public class TestMe
@@ -285,25 +240,19 @@ namespace BlaBla.BlaBlubb
 {
     using BlaBla;
 
-    [" + testFixture + @"]
+    [" + fixture + @"]
     public class TestMeTests
     {
         private TestMe " + propertyName + @" { get; set; }
     }
 }
 ");
-                                                                                                                                                       }
-                                                                                                                                                   }
-                                                                                                                                               });
 
         [Test]
-        public void An_issue_is_reported_for_field_if_test_class_and_class_under_test_are_in_different_namespaces() => Assert.Multiple(() =>
-                                                                                                                                            {
-                                                                                                                                                foreach (var testFixture in TestFixtures)
-                                                                                                                                                {
-                                                                                                                                                    foreach (var fieldName in FieldNames)
-                                                                                                                                                    {
-                                                                                                                                                        An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_field_if_test_class_and_class_under_test_are_in_different_namespaces_(
+                                                                                                               [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                               [ValueSource(nameof(FieldNames))] string fieldName)
+            => An_issue_is_reported_for(@"
 namespace BlaBla
 {
     public class TestMe
@@ -315,27 +264,20 @@ namespace BlaBla.BlaBlubb
 {
     using BlaBla;
 
-    [" + testFixture + @"]
+    [" + fixture + @"]
     public class TestMeTests
     {
         private TestMe " + fieldName + @";
     }
 }
 ");
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                            });
 
         [Test]
-        public void An_issue_is_reported_for_local_variable_if_test_class_and_class_under_test_are_in_different_namespaces() => Assert.Multiple(() =>
-                                                                                                                                                     {
-                                                                                                                                                         foreach (var testFixture in TestFixtures)
-                                                                                                                                                         {
-                                                                                                                                                             foreach (var test in Tests)
-                                                                                                                                                             {
-                                                                                                                                                                 foreach (var variableName in VariableNames)
-                                                                                                                                                                 {
-                                                                                                                                                                     An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_local_variable_if_test_class_and_class_under_test_are_in_different_namespaces_(
+                                                                                                                        [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                                        [ValueSource(nameof(Tests))] string test,
+                                                                                                                        [ValueSource(nameof(VariableNames))] string variableName)
+            => An_issue_is_reported_for(@"
 namespace BlaBla
 {
     public class TestMe
@@ -347,7 +289,7 @@ namespace BlaBla.BlaBlubb
 {
     using BlaBla;
 
-    [" + testFixture + @"]
+    [" + fixture + @"]
     public class TestMeTests
     {
         [" + test + @"]
@@ -358,21 +300,13 @@ namespace BlaBla.BlaBlubb
     }
 }
 ");
-                                                                                                                                                                 }
-                                                                                                                                                             }
-                                                                                                                                                         }
-                                                                                                                                                     });
 
         [Test]
-        public void No_issue_is_reported_for_method_if_test_class_and_returned_class_under_test_are_in_same_namespace() => Assert.Multiple(() =>
-                                                                                                                                                {
-                                                                                                                                                    foreach (var testFixture in TestFixtures)
-                                                                                                                                                    {
-                                                                                                                                                        foreach (var propertyName in PropertyNames)
-                                                                                                                                                        {
-                                                                                                                                                            foreach (var methodPrefix in MethodPrefixes)
-                                                                                                                                                            {
-                                                                                                                                                                No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_if_test_class_and_returned_class_under_test_are_in_same_namespace_(
+                                                                                                                   [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                                   [ValueSource(nameof(PropertyNames))] string propertyName,
+                                                                                                                   [ValueSource(nameof(MethodPrefixes))] string methodPrefix)
+            => No_issue_is_reported_for(@"
 namespace BlaBla
 {
     public class BaseTestMe
@@ -386,28 +320,20 @@ namespace BlaBla.BlaBlubb
     {
     }
 
-    [" + testFixture + @"]
+    [" + fixture + @"]
     public class TestMeTests
     {
         private BaseTestMe " + methodPrefix + propertyName + @"() => new TestMe();
     }
 }
 ");
-                                                                                                                                                            }
-                                                                                                                                                        }
-                                                                                                                                                    }
-                                                                                                                                                });
 
         [Test]
-        public void An_issue_is_reported_for_method_if_test_class_and_returned_class_under_test_are_in_different_namespace() => Assert.Multiple(() =>
-                                                                                                                                                     {
-                                                                                                                                                         foreach (var testFixture in TestFixtures)
-                                                                                                                                                         {
-                                                                                                                                                             foreach (var propertyName in PropertyNames)
-                                                                                                                                                             {
-                                                                                                                                                                 foreach (var methodPrefix in MethodPrefixes)
-                                                                                                                                                                 {
-                                                                                                                                                                     An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_if_test_class_and_returned_class_under_test_are_in_different_namespace_(
+                                                                                                                        [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                                        [ValueSource(nameof(PropertyNames))] string propertyName,
+                                                                                                                        [ValueSource(nameof(MethodPrefixes))] string methodPrefix)
+            => An_issue_is_reported_for(@"
 namespace BlaBla
 {
     public class BaseTestMe
@@ -425,28 +351,20 @@ namespace BlaBla.BlaBlubb
 
 namespace BlaBla.BlaBlubb.Tests
 {
-    [" + testFixture + @"]
+    [" + fixture + @"]
     public class TestMeTests
     {
         private BaseTestMe " + methodPrefix + propertyName + @"() => new TestMe();
     }
 }
 ");
-                                                                                                                                                                 }
-                                                                                                                                                             }
-                                                                                                                                                         }
-                                                                                                                                                     });
 
         [Test]
-        public void No_issue_is_reported_for_method_if_variable_that_is_test_class_and_returned_class_under_test_are_in_same_namespace() => Assert.Multiple(() =>
-                                                                                                                                                                 {
-                                                                                                                                                                     foreach (var testFixture in TestFixtures)
-                                                                                                                                                                     {
-                                                                                                                                                                         foreach (var propertyName in PropertyNames)
-                                                                                                                                                                         {
-                                                                                                                                                                             foreach (var methodPrefix in MethodPrefixes)
-                                                                                                                                                                             {
-                                                                                                                                                                                 No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_if_variable_that_is_test_class_and_returned_class_under_test_are_in_same_namespace_(
+                                                                                                                                    [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                                                    [ValueSource(nameof(PropertyNames))] string propertyName,
+                                                                                                                                    [ValueSource(nameof(MethodPrefixes))] string methodPrefix)
+            => No_issue_is_reported_for(@"
 namespace BlaBla
 {
     public class BaseTestMe
@@ -460,7 +378,7 @@ namespace BlaBla.BlaBlubb
     {
     }
 
-    [" + testFixture + @"]
+    [" + fixture + @"]
     public class TestMeTests
     {
         private BaseTestMe " + methodPrefix + propertyName + @"()
@@ -471,21 +389,13 @@ namespace BlaBla.BlaBlubb
     }
 }
 ");
-                                                                                                                                                                             }
-                                                                                                                                                                         }
-                                                                                                                                                                     }
-                                                                                                                                                                 });
 
         [Test]
-        public void An_issue_is_reported_for_method_if_variable_that_is_test_class_and_returned_class_under_test_are_in_different_namespace() => Assert.Multiple(() =>
-                                                                                                                                                                      {
-                                                                                                                                                                          foreach (var testFixture in TestFixtures)
-                                                                                                                                                                          {
-                                                                                                                                                                              foreach (var propertyName in PropertyNames)
-                                                                                                                                                                              {
-                                                                                                                                                                                  foreach (var methodPrefix in MethodPrefixes)
-                                                                                                                                                                                  {
-                                                                                                                                                                                      An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_if_variable_that_is_test_class_and_returned_class_under_test_are_in_different_namespace_(
+                                                                                                                                         [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                                                         [ValueSource(nameof(PropertyNames))] string propertyName,
+                                                                                                                                         [ValueSource(nameof(MethodPrefixes))] string methodPrefix)
+            => An_issue_is_reported_for(@"
 namespace BlaBla
 {
     public class BaseTestMe
@@ -503,7 +413,7 @@ namespace BlaBla.BlaBlubb
 
 namespace BlaBla.BlaBlubb.Tests
 {
-    [" + testFixture + @"]
+    [" + fixture + @"]
     public class TestMeTests
     {
         private BaseTestMe " + methodPrefix + propertyName + @"()
@@ -514,10 +424,6 @@ namespace BlaBla.BlaBlubb.Tests
     }
 }
 ");
-                                                                                                                                                                                  }
-                                                                                                                                                                              }
-                                                                                                                                                                          }
-                                                                                                                                                                      });
 
         protected override string GetDiagnosticId() => MiKo_3100_TestClassesAreInSameNamespaceAsTypeUnderTestAnalyzer.Id;
 

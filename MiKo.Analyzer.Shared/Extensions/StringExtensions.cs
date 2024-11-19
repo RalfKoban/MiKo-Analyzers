@@ -15,16 +15,27 @@ using MiKoSolutions.Analyzers.Linguistics;
 
 //// ncrunch: rdi off
 // ReSharper disable once CheckNamespace
+#pragma warning disable IDE0130
 namespace System
 {
     internal static class StringExtensions
     {
+        private const int QuickCompareLengthThreshold = 4;
+
+        private const int DifferenceBetweenUpperAndLowerCaseAscii = 0x20; // valid for Roman ASCII characters ('A' ... 'Z')
+
         private static readonly char[] GenericTypeArgumentSeparator = { ',' };
+
+        private static readonly Regex HyperlinkRegex = new Regex(@"(www|ftp:|ftps:|http:|https:)+[^\s]+[\w]", RegexOptions.Compiled, 100.Milliseconds());
+
+        private static readonly Regex PascalCasingRegex = new Regex("[a-z]+[A-Z]+", RegexOptions.Compiled, 100.Milliseconds());
+
+//// ncrunch: no coverage start
+
+        public static bool HasFlag(FirstWordHandling value, FirstWordHandling flag) => (value & flag) == flag;
 
         public static string AdjustFirstWord(this string value, FirstWordHandling handling)
         {
-            bool HasFlag(FirstWordHandling flag) => (handling & flag) == flag;
-
             if (value.StartsWith('<'))
             {
                 return value;
@@ -34,11 +45,11 @@ namespace System
 
             string word;
 
-            if (HasFlag(FirstWordHandling.MakeLowerCase))
+            if (HasFlag(handling, FirstWordHandling.MakeLowerCase))
             {
                 word = valueSpan.FirstWord().ToLowerCaseAt(0);
             }
-            else if (HasFlag(FirstWordHandling.MakeUpperCase))
+            else if (HasFlag(handling, FirstWordHandling.MakeUpperCase))
             {
                 word = valueSpan.FirstWord().ToUpperCaseAt(0);
             }
@@ -50,21 +61,31 @@ namespace System
             // build continuation here because the word length may change based on the infinite term
             var continuation = valueSpan.TrimStart().Slice(word.Length);
 
-            if (HasFlag(FirstWordHandling.MakeInfinite))
+            if (HasFlag(handling, FirstWordHandling.MakeInfinite))
             {
                 word = Verbalizer.MakeInfiniteVerb(word);
             }
 
-            if (HasFlag(FirstWordHandling.KeepLeadingSpace))
+            if (HasFlag(handling, FirstWordHandling.MakePlural))
+            {
+                word = Pluralizer.MakePluralName(word);
+            }
+
+            if (HasFlag(handling, FirstWordHandling.MakeThirdPersonSingular))
+            {
+                word = Verbalizer.MakeThirdPersonSingularVerb(word);
+            }
+
+            if (HasFlag(handling, FirstWordHandling.KeepLeadingSpace))
             {
                 // only keep it if there is already a leading space (otherwise it may be on the same line without any leading space, and we would fix it in a wrong way)
                 if (value.StartsWith(' '))
                 {
-                    return " " + word + continuation.ToString();
+                    return ' '.ConcatenatedWith(word, continuation);
                 }
             }
 
-            return word + continuation.ToString();
+            return word.ConcatenatedWith(continuation);
         }
 
         public static IReadOnlyList<int> AllIndicesOf(this string value, string finding, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
@@ -109,6 +130,8 @@ namespace System
 
             return indices;
         }
+
+//// ncrunch: no coverage end
 
         public static IReadOnlyList<int> AllIndicesOf(this ReadOnlySpan<char> value, string finding, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
@@ -165,16 +188,20 @@ namespace System
             }
         }
 
+//// ncrunch: no coverage start
+
+        public static StringBuilder AsBuilder(this ReadOnlySpan<char> value) => new StringBuilder(value.ToString());
+
+        public static StringBuilder AsBuilder(this string value) => new StringBuilder(value);
+
         public static SyntaxToken AsToken(this string source, SyntaxKind kind = SyntaxKind.StringLiteralToken)
         {
-            switch (kind)
+            if (kind == SyntaxKind.IdentifierToken)
             {
-                case SyntaxKind.IdentifierToken:
-                    return SyntaxFactory.Identifier(source);
-
-                default:
-                    return SyntaxFactory.Token(default, kind, source, source, default);
+                return SyntaxFactory.Identifier(source);
             }
+
+            return SyntaxFactory.Token(default, kind, source, source, default);
         }
 
         public static InterpolatedStringTextSyntax AsInterpolatedString(this ReadOnlySpan<char> value) => value.ToString().AsInterpolatedString();
@@ -182,7 +209,7 @@ namespace System
         public static InterpolatedStringTextSyntax AsInterpolatedString(this string value) => SyntaxFactory.InterpolatedStringText(value.AsToken(SyntaxKind.InterpolatedStringTextToken));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string ConcatenatedWith(this IEnumerable<string> values) => string.Concat(values.Where(_ => _ != null));
+        public static string ConcatenatedWith(this IEnumerable<string> values) => string.Concat(values.WhereNotNull());
 
         public static StringBuilder ConcatenatedWith<T>(this IEnumerable<T> values) where T : class
         {
@@ -202,6 +229,48 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatenatedWith(this IEnumerable<string> values, string separator) => string.Join(separator, values);
 
+        public static string ConcatenatedWith(this char value, string arg0)
+        {
+            var arg0Length = arg0?.Length ?? 0;
+            var length = arg0Length + 1;
+
+            unsafe
+            {
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
+
+                buffer[0] = value;
+
+                if (arg0Length > 0)
+                {
+                    arg0.AsSpan().CopyTo(bufferSpan.Slice(1));
+                }
+
+                return new string(buffer, 0, length);
+            }
+        }
+
+        public static string ConcatenatedWith(this char value, ReadOnlySpan<char> arg0)
+        {
+            var arg0Length = arg0.Length;
+            var length = arg0Length + 1;
+
+            unsafe
+            {
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
+
+                buffer[0] = value;
+
+                if (arg0Length > 0)
+                {
+                    arg0.CopyTo(bufferSpan.Slice(1));
+                }
+
+                return new string(buffer, 0, length);
+            }
+        }
+
         public static string ConcatenatedWith(this string value, ReadOnlySpan<char> span)
         {
             var spanLength = span.Length;
@@ -211,78 +280,334 @@ namespace System
                 return value;
             }
 
-            var valueLength = value.Length;
+            var valueLength = value?.Length ?? 0;
 
             if (valueLength == 0)
             {
                 return span.ToString();
             }
 
-            var chars = new char[valueLength + spanLength];
+            var length = valueLength + spanLength;
 
-            span.CopyTo(chars.AsSpan(valueLength, spanLength));
-            value.CopyTo(0, chars, 0, valueLength);
+            unsafe
+            {
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
 
-            return new string(chars);
+                span.CopyTo(bufferSpan.Slice(valueLength, spanLength));
+                value.AsSpan().CopyTo(bufferSpan);
+
+                return new string(buffer, 0, length);
+            }
         }
 
-        public static string ConcatenatedWith(this ReadOnlySpan<char> span, string value)
+        public static string ConcatenatedWith(this string value, char arg0)
         {
-            var spanLength = span.Length;
+            var valueLength = value?.Length ?? 0;
+            var length = valueLength + 1;
+
+            unsafe
+            {
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
+
+                if (valueLength > 0)
+                {
+                    value.AsSpan().CopyTo(bufferSpan);
+                }
+
+                buffer[valueLength] = arg0;
+
+                return new string(buffer, 0, length);
+            }
+        }
+
+        public static string ConcatenatedWith(this ReadOnlySpan<char> value, char arg0)
+        {
+            var valueLength = value.Length;
+            var length = valueLength + 1;
+
+            unsafe
+            {
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
+
+                if (valueLength > 0)
+                {
+                    value.CopyTo(bufferSpan);
+                }
+
+                buffer[valueLength] = arg0;
+
+                return new string(buffer, 0, length);
+            }
+        }
+
+        public static string ConcatenatedWith(this ReadOnlySpan<char> value, string arg0)
+        {
+            var spanLength = value.Length;
 
             if (spanLength == 0)
             {
-                return value;
+                return arg0;
             }
 
+            var arg0Length = arg0?.Length ?? 0;
+
+            if (arg0Length == 0)
+            {
+                return value.ToString();
+            }
+
+            var length = spanLength + arg0Length;
+
+            unsafe
+            {
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
+
+                value.CopyTo(bufferSpan);
+                arg0.AsSpan().CopyTo(bufferSpan.Slice(spanLength, arg0Length));
+
+                return new string(buffer, 0, length);
+            }
+        }
+
+        public static string ConcatenatedWith(this char value, string arg0, char arg1)
+        {
+            var arg0Length = arg0?.Length ?? 0;
+
+            var length = arg0Length + 2;
+
+            unsafe
+            {
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
+
+                buffer[0] = value;
+
+                if (arg0Length > 0)
+                {
+                    arg0.AsSpan().CopyTo(bufferSpan.Slice(1));
+                }
+
+                buffer[arg0Length + 1] = arg1;
+
+                return new string(buffer, 0, length);
+            }
+        }
+
+        public static string ConcatenatedWith(this char value, ReadOnlySpan<char> arg0, char arg1)
+        {
+            var arg0Length = arg0.Length;
+
+            var length = arg0Length + 2;
+
+            unsafe
+            {
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
+
+                buffer[0] = value;
+
+                if (arg0Length > 0)
+                {
+                    arg0.CopyTo(bufferSpan.Slice(1));
+                }
+
+                buffer[arg0Length + 1] = arg1;
+
+                return new string(buffer, 0, length);
+            }
+        }
+
+        public static string ConcatenatedWith(this char value, string arg0, ReadOnlySpan<char> arg1)
+        {
+            var arg0Length = arg0?.Length ?? 0;
+            var arg1Length = arg1.Length;
+
+            var length = 1 + arg0Length + arg1Length;
+
+            unsafe
+            {
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
+
+                buffer[0] = value;
+
+                arg0.AsSpan().CopyTo(bufferSpan.Slice(1));
+                arg1.CopyTo(bufferSpan.Slice(1 + arg0Length, arg1Length));
+
+                return new string(buffer, 0, length);
+            }
+        }
+
+        public static string ConcatenatedWith(this ReadOnlySpan<char> value, string arg0, string arg1)
+        {
             var valueLength = value.Length;
 
             if (valueLength == 0)
             {
-                return span.ToString();
+                return string.Concat(arg0, arg1);
             }
 
-            var chars = new char[spanLength + valueLength];
+            var arg0Length = arg0?.Length ?? 0;
+            var arg1Length = arg1?.Length ?? 0;
 
-            span.CopyTo(chars);
-            value.CopyTo(0, chars, spanLength, valueLength);
+            var length = valueLength + arg0Length + arg1Length;
 
-            return new string(chars);
+            unsafe
+            {
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
+
+                value.CopyTo(bufferSpan);
+                arg0.AsSpan().CopyTo(bufferSpan.Slice(valueLength));
+                arg1.AsSpan().CopyTo(bufferSpan.Slice(valueLength + arg0Length));
+
+                return new string(buffer, 0, length);
+            }
         }
 
-        public static string ConcatenatedWith(this ReadOnlySpan<char> span, string value1, string value2)
+        public static string ConcatenatedWith(this ReadOnlySpan<char> value, string arg0, ReadOnlySpan<char> arg1)
         {
-            var spanLength = span.Length;
+            var valueLength = value.Length;
 
-            if (spanLength == 0)
+            if (valueLength == 0)
             {
-                return string.Concat(value1, value2);
+                return arg0.ConcatenatedWith(arg1);
             }
 
-            var value1Length = value1.Length;
-            var value2Length = value2.Length;
+            var arg0Length = arg0?.Length ?? 0;
+            var arg1Length = arg1.Length;
 
-            var chars = new char[spanLength + value1Length + value2Length];
+            var length = valueLength + arg0Length + arg1Length;
 
-            span.CopyTo(chars);
-            value1.CopyTo(0, chars, spanLength, value1Length);
-            value2.CopyTo(0, chars, spanLength + value1Length, value2Length);
+            unsafe
+            {
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
 
-            return new string(chars);
+                value.CopyTo(bufferSpan);
+                arg0.AsSpan().CopyTo(bufferSpan.Slice(valueLength));
+                arg1.CopyTo(bufferSpan.Slice(valueLength + arg0Length, arg1Length));
+
+                return new string(buffer, 0, length);
+            }
+        }
+
+        public static string ConcatenatedWith(this string value, string arg0, ReadOnlySpan<char> arg1)
+        {
+            if (value is null)
+            {
+                return arg0.ConcatenatedWith(arg1);
+            }
+
+            var valueLength = value.Length;
+
+            if (value.Length == 0)
+            {
+                return arg0.ConcatenatedWith(arg1);
+            }
+
+            var arg0Length = arg0?.Length ?? 0;
+            var arg1Length = arg1.Length;
+
+            var length = valueLength + arg0Length + arg1Length;
+
+            unsafe
+            {
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
+
+                value.AsSpan().CopyTo(bufferSpan);
+                arg0.AsSpan().CopyTo(bufferSpan.Slice(valueLength));
+                arg1.CopyTo(bufferSpan.Slice(valueLength + arg0Length));
+
+                return new string(buffer, 0, length);
+            }
+        }
+
+        public static string ConcatenatedWith(this string value, ReadOnlySpan<char> arg0, string arg1)
+        {
+            if (value is null)
+            {
+                return arg0.ConcatenatedWith(arg1);
+            }
+
+            var valueLength = value.Length;
+
+            if (value.Length == 0)
+            {
+                return arg0.ConcatenatedWith(arg1);
+            }
+
+            var arg0Length = arg0.Length;
+            var arg1Length = arg1?.Length ?? 0;
+
+            var length = valueLength + arg0Length + arg1Length;
+
+            unsafe
+            {
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
+
+                value.AsSpan().CopyTo(bufferSpan);
+                arg0.CopyTo(bufferSpan.Slice(valueLength));
+                arg1.AsSpan().CopyTo(bufferSpan.Slice(valueLength + arg0Length));
+
+                return new string(buffer, 0, length);
+            }
+        }
+
+        public static string ConcatenatedWith(this ReadOnlySpan<char> value, char arg0, string arg1, char arg2)
+        {
+            var valueLength = value.Length;
+            var arg1Length = arg1?.Length ?? 0;
+
+            var length = valueLength + arg1Length + 2;
+
+            unsafe
+            {
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
+
+                if (valueLength > 0)
+                {
+                    value.CopyTo(bufferSpan);
+                }
+
+                buffer[valueLength + 1] = arg0;
+                buffer[valueLength + 1 + arg1Length] = arg2;
+
+                arg1.AsSpan().CopyTo(bufferSpan.Slice(valueLength + 2));
+
+                return new string(buffer, 0, length);
+            }
         }
 
         public static bool Contains(this string value, char c) => value?.IndexOf(c) >= 0;
 
         public static bool Contains(this ReadOnlySpan<char> value, char c) => value.Length > 0 && value.IndexOf(c) >= 0;
 
-        public static bool Contains(this ReadOnlySpan<char> value, string finding)
+        public static bool Contains(this ReadOnlySpan<char> value, ReadOnlySpan<char> finding)
         {
             if (finding.Length > value.Length)
             {
                 return false;
             }
 
-            return value.IndexOf(finding.AsSpan()) >= 0;
+            return value.IndexOf(finding) >= 0;
+        }
+
+        public static bool Contains(this ReadOnlySpan<char> value, string finding)
+        {
+            if (finding is null)
+            {
+                return false;
+            }
+
+            return value.Contains(finding.AsSpan());
         }
 
         public static bool Contains(this string value, string finding, StringComparison comparison)
@@ -291,6 +616,11 @@ namespace System
             var findingLength = finding.Length;
 
             var difference = findingLength - valueLength;
+
+            if (difference < 0)
+            {
+                return value.IndexOf(finding, comparison) >= 0;
+            }
 
             if (difference == 0)
             {
@@ -315,35 +645,18 @@ namespace System
                 }
             }
 
-            if (difference > 0)
+            switch (comparison)
             {
-                switch (comparison)
-                {
-                    case StringComparison.Ordinal:
-                    case StringComparison.OrdinalIgnoreCase:
-                        // cannot be contained as the item is longer than the string to search in
-                        return false;
-                }
+                case StringComparison.Ordinal:
+                case StringComparison.OrdinalIgnoreCase:
+                    // cannot be contained as the item is longer than the string to search in
+                    return false;
             }
 
             return value.IndexOf(finding, comparison) >= 0;
         }
 
-        public static bool Contains(this ReadOnlySpan<char> value, string finding, StringComparison comparison)
-        {
-            if (finding.Length > value.Length)
-            {
-                switch (comparison)
-                {
-                    case StringComparison.Ordinal:
-                    case StringComparison.OrdinalIgnoreCase:
-                        // cannot be contained as the item is longer than the string to search in
-                        return false;
-                }
-            }
-
-            return value.IndexOf(finding.AsSpan(), comparison) >= 0;
-        }
+//// ncrunch: no coverage end
 
         public static bool Contains(this ReadOnlySpan<char> value, string finding, Func<char, bool> nextCharValidationCallback, StringComparison comparison) => value.Contains(finding.AsSpan(), nextCharValidationCallback, comparison);
 
@@ -395,143 +708,59 @@ namespace System
 
         public static bool ContainsAny(this string value, char[] characters) => value?.IndexOfAny(characters) >= 0;
 
-        public static bool ContainsAny(this ReadOnlySpan<char> value, char[] characters) => value.Length > 0 && value.IndexOfAny(characters) >= 0;
+        public static bool ContainsAny(this ReadOnlySpan<char> value, ReadOnlySpan<char> characters) => value.Length > 0 && value.IndexOfAny(characters) >= 0;
 
-        public static bool ContainsAny(this string value, IList<string> phrases) => value.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase);
+        public static bool ContainsAny(this string value, string[] phrases) => value.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase); // ncrunch: no coverage
 
-        public static bool ContainsAny(this ReadOnlySpan<char> value, IList<string> phrases) => value.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase);
+        //// ncrunch: no coverage start
 
-        public static bool ContainsAny(this string value, IEnumerable<string> phrases) => value.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase);
-
-        public static bool ContainsAny(this ReadOnlySpan<char> value, IEnumerable<string> phrases) => value.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase);
-
-        public static bool ContainsAny(this string value, IList<string> phrases, StringComparison comparison)
+        public static bool ContainsAny(this string value, string[] phrases, StringComparison comparison)
         {
-//// ncrunch: no coverage start
-
             if (value.HasCharacters())
             {
                 var valueSpan = value.AsSpan();
-                var phrasesLength = phrases.Count;
+                var phrasesLength = phrases.Length;
 
-                // ReSharper disable once ForCanBeConvertedToForeach
-                // ReSharper disable once LoopCanBeConvertedToQuery
                 for (var index = 0; index < phrasesLength; index++)
                 {
                     var phrase = phrases[index];
+                    var phraseSpan = phrase.AsSpan();
 
-                    if (QuickCompare(valueSpan, phrase.AsSpan(), comparison) is false)
+                    // no separate handling for StringComparison.Ordinal here as that happens around 30 times out of 90_000_000 times; so almost never
+                    if (QuickCompare(valueSpan, phraseSpan, comparison))
                     {
-                        continue;
-                    }
-
-                    if (value.Contains(phrase, comparison))
-                    {
-                        return true;
+                        if (value.Contains(phrase, comparison))
+                        {
+                            return true;
+                        }
                     }
                 }
             }
 
             return false;
+        }
 
 //// ncrunch: no coverage end
-        }
-
-        public static bool ContainsAny(this ReadOnlySpan<char> value, IList<string> phrases, StringComparison comparison)
-        {
-            if (value.Length > 0)
-            {
-                // use 'ToString' here for performance reasons
-                // because 'IndexOf' on 'ReadOnlySpan<char>' converts the text into a string anyway
-                return value.ToString().ContainsAny(phrases, comparison);
-            }
-
-            return false;
-        }
-
-        public static bool ContainsAny(this string value, IEnumerable<string> phrases, StringComparison comparison)
-        {
-            if (phrases is IList<string> list)
-            {
-                return value.ContainsAny(list, comparison);
-            }
-
-            if (value.HasCharacters())
-            {
-                var valueSpan = value.AsSpan();
-
-                foreach (var phrase in phrases)
-                {
-                    if (QuickCompare(valueSpan, phrase.AsSpan(), comparison) is false)
-                    {
-                        continue;
-                    }
-
-                    if (value.Contains(phrase, comparison))
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        public static bool ContainsAny(this ReadOnlySpan<char> value, IEnumerable<string> phrases, StringComparison comparison)
-        {
-            if (value.Length > 0)
-            {
-                // use 'ToString' here for performance reasons
-                // because 'IndexOf' on 'ReadOnlySpan<char>' converts the text into a string anyway
-                return value.ToString().ContainsAny(phrases, comparison);
-            }
-
-            return false;
-        }
 
         public static bool EndsWith(this string value, char character) => value.HasCharacters() && value[value.Length - 1] == character;
 
         public static bool EndsWith(this ReadOnlySpan<char> value, char character) => value.Length > 0 && value[value.Length - 1] == character;
 
-        public static bool EndsWith(this ReadOnlySpan<char> value, string characters) => characters.HasCharacters() && value.EndsWith(characters.AsSpan());
+        public static bool EndsWith(this ReadOnlySpan<char> value, string characters, StringComparison comparison) => characters.HasCharacters() && value.EndsWith(characters.AsSpan(), comparison); // ncrunch: no coverage
 
-        public static bool EndsWith(this ReadOnlySpan<char> value, string characters, StringComparison comparison) => characters.HasCharacters() && value.EndsWith(characters.AsSpan(), comparison);
+        public static bool EndsWithAny(this string value, ReadOnlySpan<char> suffixCharacters) => value.HasCharacters() && suffixCharacters.Contains(value[value.Length - 1]);
 
-        public static bool EndsWithAny(this string value, string suffixCharacters) => value.HasCharacters() && suffixCharacters.Contains(value[value.Length - 1]);
+        public static bool EndsWithAny(this string value, string[] suffixes) => value.EndsWithAny(suffixes, StringComparison.OrdinalIgnoreCase);
 
-        public static bool EndsWithAny(this string value, char[] suffixCharacters) => value.HasCharacters() && suffixCharacters.Contains(value[value.Length - 1]);
-
-        public static bool EndsWithAny(this string value, IEnumerable<string> suffixes) => value.EndsWithAny(suffixes, StringComparison.OrdinalIgnoreCase);
-
-        public static bool EndsWithAny(this ReadOnlySpan<char> value, string suffixCharacters)
+        public static bool EndsWithAny(this ReadOnlySpan<char> value, ReadOnlySpan<char> suffixCharacters)
         {
             if (value.Length > 0)
             {
                 var lastChar = value[value.Length - 1];
 
-                // ReSharper disable once ForCanBeConvertedToForeach
-                // ReSharper disable once LoopCanBeConvertedToQuery
-                for (var index = 0; index < suffixCharacters.Length; index++)
-                {
-                    if (lastChar == suffixCharacters[index])
-                    {
-                        return true;
-                    }
-                }
-            }
+                var length = suffixCharacters.Length;
 
-            return false;
-        }
-
-        public static bool EndsWithAny(this ReadOnlySpan<char> value, char[] suffixCharacters)
-        {
-            if (value.Length > 0)
-            {
-                var lastChar = value[value.Length - 1];
-
-                // ReSharper disable once ForCanBeConvertedToForeach
-                // ReSharper disable once LoopCanBeConvertedToQuery
-                for (var index = 0; index < suffixCharacters.Length; index++)
+                for (var index = 0; index < length; index++)
                 {
                     if (lastChar == suffixCharacters[index])
                     {
@@ -545,17 +774,15 @@ namespace System
 
         public static bool EndsWithAny(this ReadOnlySpan<char> value, string[] suffixes) => value.EndsWithAny(suffixes, StringComparison.OrdinalIgnoreCase);
 
-        public static bool EndsWithAny(this string value, string[] suffixes, StringComparison comparison)
-        {
 //// ncrunch: no coverage start
 
+        public static bool EndsWithAny(this string value, string[] suffixes, StringComparison comparison)
+        {
             if (value.HasCharacters())
             {
                 var valueLength = value.Length;
                 var suffixesLength = suffixes.Length;
 
-                // ReSharper disable once ForCanBeConvertedToForeach
-                // ReSharper disable once LoopCanBeConvertedToQuery
                 for (var index = 0; index < suffixesLength; index++)
                 {
                     var suffix = suffixes[index];
@@ -573,23 +800,21 @@ namespace System
             }
 
             return false;
-
-//// ncrunch: no coverage end
         }
 
-        public static bool EndsWithAny(this string value, IEnumerable<string> suffixes, StringComparison comparison)
-        {
-            if (suffixes is string[] array)
-            {
-                return value.EndsWithAny(array, comparison);
-            }
+//// ncrunch: no coverage end
 
+        public static bool EndsWithAny(this string value, List<string> suffixes, StringComparison comparison)
+        {
             if (value.HasCharacters())
             {
                 var valueLength = value.Length;
+                var suffixesLength = suffixes.Count;
 
-                foreach (var suffix in suffixes)
+                for (var index = 0; index < suffixesLength; index++)
                 {
+                    var suffix = suffixes[index];
+
                     if (suffix.Length > valueLength)
                     {
                         continue;
@@ -647,14 +872,14 @@ namespace System
 
         public static bool EqualsAny(this ReadOnlySpan<char> value, string[] phrases) => EqualsAny(value, phrases, StringComparison.OrdinalIgnoreCase);
 
+//// ncrunch: no coverage start
+
         public static bool EqualsAny(this string value, string[] phrases, StringComparison comparison)
         {
             if (value.HasCharacters())
             {
                 var phrasesLength = phrases.Length;
 
-                // ReSharper disable once ForCanBeConvertedToForeach
-                // ReSharper disable once LoopCanBeConvertedToQuery
                 for (var index = 0; index < phrasesLength; index++)
                 {
                     var phrase = phrases[index];
@@ -668,6 +893,8 @@ namespace System
 
             return false;
         }
+
+//// ncrunch: no coverage end
 
         public static bool EqualsAny(this string value, IEnumerable<string> phrases, StringComparison comparison)
         {
@@ -725,33 +952,41 @@ namespace System
                    : value;
         }
 
+//// ncrunch: no coverage start
+
         public static ReadOnlySpan<char> FirstWord(this ReadOnlySpan<char> value)
         {
             var text = value.TrimStart();
+            var textLength = text.Length;
 
-            var firstSpace = text.IndexOfAny(Constants.WhiteSpaceCharacters);
-
-            if (firstSpace != -1)
+            if (textLength > 0)
             {
-                // we found a whitespace
-                return text.Slice(0, firstSpace);
-            }
-
-            // start at index 1 to skip first upper case character (and avoid return of empty word)
-            for (var index = 1; index < text.Length; index++)
-            {
-                var c = text[index];
-
-                if (c.IsUpperCase())
+                for (var index = 0; index < textLength; index++)
                 {
-                    var firstWord = text.Slice(0, index);
+                    var c = text[index];
 
-                    return firstWord;
+                    if (c.IsWhiteSpace() || c.IsSentenceEnding())
+                    {
+                        return text.Slice(0, index);
+                    }
+                }
+
+                // start at index 1 to skip first upper case character (and avoid return of empty word)
+                for (var index = 1; index < textLength; index++)
+                {
+                    var c = text[index];
+
+                    if (c.IsUpperCase())
+                    {
+                        return text.Slice(0, index);
+                    }
                 }
             }
 
             return text;
         }
+
+//// ncrunch: no coverage end
 
         public static string SecondWord(this string value) => SecondWord(value.AsSpan()).ToString();
 
@@ -872,18 +1107,22 @@ namespace System
 
         public static bool HasCollectionMarker(this string value) => value.EndsWithAny(Constants.Markers.Collections);
 
-        public static bool HasEntityMarker(this string value)
+        public static bool HasEntityMarker(this string value) => HasEntityMarker(value.AsSpan());
+
+        public static bool HasEntityMarker(this ReadOnlySpan<char> value)
         {
-            var hasMarker = value.ContainsAny(Constants.Markers.Models);
+            var s = value.ToString();
+
+            var hasMarker = s.ContainsAny(Constants.Markers.Models);
 
             if (hasMarker)
             {
-                if (value.ContainsAny(Constants.Markers.ViewModels))
+                if (s.ContainsAny(Constants.Markers.ViewModels))
                 {
                     return false;
                 }
 
-                if (value.ContainsAny(Constants.Markers.SpecialModels))
+                if (s.ContainsAny(Constants.Markers.SpecialModels))
                 {
                     return false;
                 }
@@ -893,15 +1132,16 @@ namespace System
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool HasCharacters(this string value) => string.IsNullOrEmpty(value) is false;
+        public static bool HasCharacters(this string value) => value.IsNullOrEmpty() is false; // ncrunch: no coverage
 
         public static bool HasUpperCaseLettersAbove(this string value, ushort limit) => value != null && HasUpperCaseLettersAbove(value.AsSpan(), limit);
 
         public static bool HasUpperCaseLettersAbove(this ReadOnlySpan<char> value, ushort limit)
         {
             var count = 0;
+            var length = value.Length;
 
-            for (var index = 0; index < value.Length; index++)
+            for (var index = 0; index < length; index++)
             {
                 if (value[index].IsUpperCase())
                 {
@@ -919,7 +1159,7 @@ namespace System
 
         public static string HumanizedConcatenated(this IEnumerable<string> values, string lastSeparator = "or")
         {
-            var items = values.Select(_ => _.SurroundedWithApostrophe()).ToArray();
+            var items = values.ToArray(_ => _.SurroundedWithApostrophe());
 
             var count = items.Length;
 
@@ -931,37 +1171,44 @@ namespace System
 
             const string Separator = ", ";
 
-            var separatorForLast = " " + lastSeparator + " ";
+            var separatorForLast = ' '.ConcatenatedWith(lastSeparator, ' ');
 
             switch (count)
             {
                 case 2: return string.Concat(items[0], separatorForLast, items[1]);
-                case 3: return new StringBuilder(items[0]).Append(Separator).Append(items[1]).Append(separatorForLast).Append(items[2]).ToString();
-                case 4: return new StringBuilder(items[0]).Append(Separator).Append(items[1]).Append(Separator).Append(items[2]).Append(separatorForLast).Append(items[3]).ToString();
+                case 3: return items[0].AsBuilder().Append(Separator).Append(items[1]).Append(separatorForLast).Append(items[2]).ToString();
+                case 4: return items[0].AsBuilder().Append(Separator).Append(items[1]).Append(Separator).Append(items[2]).Append(separatorForLast).Append(items[3]).ToString();
                 default: return string.Concat(items.Take(count - 1).ConcatenatedWith(Separator), separatorForLast, items[count - 1]);
             }
         }
 
         public static string HumanizedTakeFirst(this ReadOnlySpan<char> value, int max)
         {
-            var length = Math.Min(max, value.Length);
+            var minimumLength = Math.Min(max, value.Length);
 
-            if (length <= 0 || length == value.Length)
+            if (minimumLength <= 0 || minimumLength == value.Length)
             {
                 return value.TrimEnd().ToString();
             }
 
-            var span = value.Slice(0, length).TrimEnd();
-            length = span.Length;
+            var span = value.Slice(0, minimumLength).TrimEnd();
+            minimumLength = span.Length;
 
-            var chars = new char[length + 3];
-            chars[length] = '.';
-            chars[length + 1] = '.';
-            chars[length + 2] = '.';
+            var length = minimumLength + 3;
 
-            span.CopyTo(chars);
+            unsafe
+            {
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
 
-            return new string(chars);
+                span.CopyTo(bufferSpan);
+
+                buffer[minimumLength] = '.';
+                buffer[minimumLength + 1] = '.';
+                buffer[minimumLength + 2] = '.';
+
+                return new string(buffer, 0, length);
+            }
         }
 
         public static int IndexOfAny(this ReadOnlySpan<char> value, string[] phrases, StringComparison comparison)
@@ -971,12 +1218,13 @@ namespace System
                 // performance optimization to avoid unnecessary 'ToString' calls on 'ReadOnlySpan' (see implementation inside MemoryExtensions)
                 if (comparison == StringComparison.Ordinal)
                 {
-                    // ReSharper disable once ForCanBeConvertedToForeach
-                    for (var i = 0; i < phrases.Length; i++)
+                    var phrasesLength = phrases.Length;
+
+                    for (var i = 0; i < phrasesLength; i++)
                     {
                         var phrase = phrases[i];
 
-                        var index = value.IndexOf(phrase.AsSpan(), comparison);
+                        var index = value.IndexOf(phrase.AsSpan(), StringComparison.Ordinal);
 
                         if (index > -1)
                         {
@@ -1003,8 +1251,9 @@ namespace System
                     return IndexOfAny(value.AsSpan(), phrases, comparison);
                 }
 
-                // ReSharper disable once ForCanBeConvertedToForeach
-                for (var i = 0; i < phrases.Length; i++)
+                var phrasesLength = phrases.Length;
+
+                for (var i = 0; i < phrasesLength; i++)
                 {
                     var phrase = phrases[i];
 
@@ -1029,8 +1278,9 @@ namespace System
 
             if (value.Length > 0)
             {
-                // ReSharper disable once ForCanBeConvertedToForeach
-                for (var i = 0; i < phrases.Length; i++)
+                var phrasesLength = phrases.Length;
+
+                for (var i = 0; i < phrasesLength; i++)
                 {
                     var phrase = phrases[i];
 
@@ -1057,7 +1307,7 @@ namespace System
 
             try
             {
-                return Regex.IsMatch(value, @"(www|ftp:|ftps:|http:|https:)+[^\s]+[\w]", RegexOptions.Compiled, 100.Milliseconds());
+                return HyperlinkRegex.IsMatch(value);
             }
             catch (RegexMatchTimeoutException)
             {
@@ -1077,6 +1327,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsNullOrEmpty(this string value) => string.IsNullOrEmpty(value); // ncrunch: no coverage
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsNullOrEmpty(this ReadOnlySpan<char> value) => value.IsEmpty; // ncrunch: no coverage
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1109,7 +1360,7 @@ namespace System
         {
             try
             {
-                return Regex.IsMatch(value, "[a-z]+[A-Z]+", RegexOptions.Compiled, 100.Milliseconds());
+                return PascalCasingRegex.IsMatch(value);
             }
             catch (RegexMatchTimeoutException)
             {
@@ -1132,7 +1383,11 @@ namespace System
             }
         }
 
-//// ncrunch: no coverage start
+        public static bool IsSingleWord(this string value) => value != null && IsSingleWord(value.AsSpan());
+
+        public static bool IsSingleWord(this ReadOnlySpan<char> value) => value.HasWhitespaces() is false;
+
+        //// ncrunch: no coverage start
 
         public static bool IsUpperCase(this char value)
         {
@@ -1174,11 +1429,15 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWith(this string value, char character) => value.HasCharacters() && value[0] == character;
 
+        public static bool StartsWith(this string value, ReadOnlySpan<char> characters) => value.HasCharacters() && value.AsSpan().StartsWith(characters);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWith(this ReadOnlySpan<char> value, char character) => value.Length > 0 && value[0] == character;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWith(this ReadOnlySpan<char> value, string characters) => characters.HasCharacters() && value.StartsWith(characters.AsSpan());
+
+        public static bool StartsWith(this string value, ReadOnlySpan<char> characters, StringComparison comparison) => value.HasCharacters() && value.AsSpan().StartsWith(characters, comparison);
 
         public static bool StartsWith(this ReadOnlySpan<char> value, string characters, StringComparison comparison)
         {
@@ -1210,15 +1469,13 @@ namespace System
 
 //// ncrunch: no coverage start
 
-        public static bool StartsWithAny(this string value, IList<string> prefixes, StringComparison comparison)
+        public static bool StartsWithAny(this string value, string[] prefixes, StringComparison comparison)
         {
             if (value.HasCharacters())
             {
                 var valueSpan = value.AsSpan();
-                var prefixesCount = prefixes.Count;
+                var prefixesCount = prefixes.Length;
 
-                // ReSharper disable once ForCanBeConvertedToForeach
-                // ReSharper disable once LoopCanBeConvertedToQuery
                 for (var index = 0; index < prefixesCount; index++)
                 {
                     var prefix = prefixes[index];
@@ -1236,20 +1493,17 @@ namespace System
             return false;
         }
 
-//// ncrunch: no coverage end
-
         public static bool StartsWithAny(this ReadOnlySpan<char> value, string[] prefixes, StringComparison comparison)
         {
             if (value.Length > 0)
             {
                 var prefixesLength = prefixes.Length;
 
-                // ReSharper disable once ForCanBeConvertedToForeach
-                // ReSharper disable once LoopCanBeConvertedToQuery
                 for (var index = 0; index < prefixesLength; index++)
                 {
                     var prefix = prefixes[index];
 
+                    // TODO RKN: Add Quick compare ?
                     if (value.StartsWith(prefix, comparison))
                     {
                         return true;
@@ -1260,49 +1514,40 @@ namespace System
             return false;
         }
 
+//// ncrunch: no coverage end
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWithNumber(this string value) => value.HasCharacters() && value[0].IsNumber();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string SurroundedWith(this string value, char surrounding) => value?.SurroundedWith(surrounding.ToString());
+        public static string SurroundedWith(this string value, char surrounding) => surrounding.ConcatenatedWith(value, surrounding);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string SurroundedWith(this string value, string surrounding) => string.Concat(surrounding, value, surrounding);
+        public static string SurroundedWithApostrophe(this string value) => value?.SurroundedWith('\'');
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string SurroundedWithApostrophe(this string value) => value?.SurroundedWith("\'");
+        public static string SurroundedWithDoubleQuote(this string value) => value?.SurroundedWith('\"');
 
+#pragma warning disable CA1308
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string SurroundedWithDoubleQuote(this string value) => value?.SurroundedWith("\"");
+        public static string ToLowerCase(this string source) => source?.ToLowerInvariant();
+#pragma warning restore CA1308
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string ToLowerCase(this string source) => source?.ToLower(CultureInfo.InvariantCulture);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static char ToLowerCase(this char source) => char.ToLowerInvariant(source); // ncrunch: no coverage
-
-        /// <summary>
-        /// Gets a <see cref="string"/> where the characters are lower-case.
-        /// </summary>
-        /// <param name="source">
-        /// The original text.
-        /// </param>
-        /// <returns>
-        /// A <see cref="string"/> where the character are lower-case.
-        /// </returns>
-        public static string ToLowerCase(this ReadOnlySpan<char> source)
+        //// ncrunch: no coverage start
+        public static char ToLowerCase(this char source)
         {
-            var characters = source.ToArray();
-
-            for (var index = 0; index < characters.Length; index++)
+            if ((uint)(source - 'A') <= 'Z' - 'A')
             {
-                characters[index] = source[index].ToLowerCase();
+                return (char)(source + DifferenceBetweenUpperAndLowerCaseAscii);
             }
 
-            return new string(characters);
-        }
+            if ((uint)(source - 'a') <= 'z' - 'a')
+            {
+                return source;
+            }
 
-//// ncrunch: no coverage start
+            return char.ToLowerInvariant(source);
+        }
 
         /// <summary>
         /// Gets a <see cref="string"/> where the specified character is lower-case.
@@ -1330,12 +1575,16 @@ namespace System
 
             var character = source[index];
 
+#pragma warning disable CA1308
+
             if (character.IsLowerCase())
             {
                 return source;
             }
 
-            return MakeLowerCaseAt(source, index);
+#pragma warning restore CA1308
+
+            return MakeLowerCaseAt(source.AsSpan(), index);
         }
 
         /// <summary>
@@ -1352,14 +1601,7 @@ namespace System
         /// </returns>
         public static string ToLowerCaseAt(this ReadOnlySpan<char> source, int index)
         {
-            if (index >= source.Length)
-            {
-                return source.ToString();
-            }
-
-            var character = source[index];
-
-            if (character.IsLowerCase())
+            if (index >= source.Length || source[index].IsLowerCase())
             {
                 return source.ToString();
             }
@@ -1367,8 +1609,23 @@ namespace System
             return MakeLowerCaseAt(source, index);
         }
 
+        public static char ToUpperCase(this char source)
+        {
+            if ((uint)(source - 'a') <= 'z' - 'a')
+            {
+                return (char)(source - DifferenceBetweenUpperAndLowerCaseAscii);
+            }
+
+            if ((uint)(source - 'A') <= 'Z' - 'A')
+            {
+                return source;
+            }
+
+            return char.ToUpperInvariant(source);
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static char ToUpperCase(this char source) => char.ToUpperInvariant(source);
+        public static string ToUpperCase(this string source) => source?.ToUpper(CultureInfo.InvariantCulture);
 
         /// <summary>
         /// Gets a <see cref="string"/> where the specified character is upper-case.
@@ -1401,10 +1658,10 @@ namespace System
                 return source;
             }
 
-            return MakeUpperCaseAt(source, index);
+            return MakeUpperCaseAt(source.AsSpan(), index);
         }
 
-//// ncrunch: no coverage end
+        //// ncrunch: no coverage end
 
         /// <summary>
         /// Gets a <see cref="string"/> where the specified character is upper-case.
@@ -1420,14 +1677,7 @@ namespace System
         /// </returns>
         public static string ToUpperCaseAt(this ReadOnlySpan<char> source, int index)
         {
-            if (index >= source.Length)
-            {
-                return source.ToString();
-            }
-
-            var character = source[index];
-
-            if (character.IsUpperCase())
+            if (index >= source.Length || source[index].IsUpperCase())
             {
                 return source.ToString();
             }
@@ -1457,18 +1707,28 @@ namespace System
         /// </returns>
         public static string[] WithDelimiters(this string[] values)
         {
-            var result = new List<string>();
+            var delimiters = Constants.Comments.Delimiters;
+            var result = new string[2 * delimiters.Length * values.Length];
 
-            foreach (var delimiter in Constants.Comments.Delimiters)
+            var resultIndex = 0;
+
+            var delimitersLength = delimiters.Length;
+            var valuesLength = values.Length;
+
+            for (var delimitersIndex = 0; delimitersIndex < delimitersLength; delimitersIndex++)
             {
-                foreach (var phrase in values)
+                var delimiter = delimiters[delimitersIndex];
+
+                for (var valuesIndex = 0; valuesIndex < valuesLength; valuesIndex++)
                 {
-                    result.Add(' ' + phrase + delimiter);
-                    result.Add('(' + phrase + delimiter);
+                    var value = values[valuesIndex];
+
+                    result[resultIndex++] = ' '.ConcatenatedWith(value, delimiter);
+                    result[resultIndex++] = '('.ConcatenatedWith(value, delimiter);
                 }
             }
 
-            return result.ToArray();
+            return result;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1477,11 +1737,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string Without(this string value, string phrase) => value.Replace(phrase, string.Empty);
 
-        public static string Without(this string value, string[] phrases) => new StringBuilder(value).Without(phrases).Trim();
-
-        public static StringBuilder Without(this StringBuilder value, string phrase) => value.ReplaceWithCheck(phrase, string.Empty);
-
-        public static StringBuilder Without(this StringBuilder value, string[] phrases) => value.ReplaceAllWithCheck(phrases, string.Empty); // ncrunch: no coverage
+        public static string Without(this string value, string[] phrases) => value.AsBuilder().Without(phrases).Trim(); // ncrunch: no coverage
 
         public static string WithoutFirstWord(this string value) => WithoutFirstWord(value.AsSpan()).ToString();
 
@@ -1500,14 +1756,15 @@ namespace System
             return text.Slice(firstSpace);
         }
 
-        public static string WithoutFirstWords(this string value, params string[] words) => WithoutFirstWords(value.AsSpan(), words).ToString();
+        public static ReadOnlySpan<char> WithoutFirstWords(this string value, params string[] words) => WithoutFirstWords(value.AsSpan(), words);
 
         public static ReadOnlySpan<char> WithoutFirstWords(this ReadOnlySpan<char> value, params string[] words)
         {
             var text = value.TrimStart();
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            for (var index = 0; index < words.Length; index++)
+            var wordsLength = words.Length;
+
+            for (var index = 0; index < wordsLength; index++)
             {
                 var word = words[index];
 
@@ -1549,35 +1806,85 @@ namespace System
                    : value;
         }
 
+        public static ReadOnlySpan<char> WithoutNumberSuffix(this ReadOnlySpan<char> value)
+        {
+            if (value.Length == 0)
+            {
+                return ReadOnlySpan<char>.Empty;
+            }
+
+            var totalLength = value.Length - 1;
+            var end = totalLength;
+
+            while (end >= 0)
+            {
+                if (value[end].IsNumber())
+                {
+                    end--;
+                }
+                else
+                {
+                    end++; // fix last character
+
+                    break;
+                }
+            }
+
+            return end >= 0 && end <= totalLength
+                   ? value.Slice(0, end)
+                   : value;
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string WithoutQuotes(this string value) => value.Without(@"""");
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static StringBuilder WithoutParaTags(this StringBuilder value) => value.Without(Constants.ParaTags);
+        public static IEnumerable<StringBuilder> WithoutParaTags(this IEnumerable<string> values) => values.Select(_ => _.AsBuilder().WithoutParaTags()); // ncrunch: no coverage
 
-        public static IEnumerable<StringBuilder> WithoutParaTags(this IEnumerable<string> values) => values.Select(_ => new StringBuilder(_).WithoutParaTags());
+//// ncrunch: no coverage start
 
-        public static string WithoutSuffix(this ReadOnlySpan<char> value, char suffix)
+        public static string WithoutSuffix(this string value, string suffix)
+        {
+            if (value is null)
+            {
+                return null;
+            }
+
+            if (value.EndsWith(suffix, StringComparison.Ordinal))
+            {
+                var length = value.Length - suffix.Length;
+
+                if (length <= 0)
+                {
+                    return string.Empty;
+                }
+
+                return value.Substring(0, length);
+            }
+
+            return value;
+        }
+
+        public static ReadOnlySpan<char> WithoutSuffix(this ReadOnlySpan<char> value, char suffix)
         {
             if (value.EndsWith(suffix))
             {
                 var length = value.Length - 1;
 
                 return length <= 0
-                       ? string.Empty
-                       : value.Slice(0, length).ToString();
+                       ? ReadOnlySpan<char>.Empty
+                       : value.Slice(0, length);
             }
 
-            return value.ToString();
+            return value;
         }
 
-        public static ReadOnlySpan<char> WithoutSuffix(this ReadOnlySpan<char> value, string suffix)
+        public static ReadOnlySpan<char> WithoutSuffix(this ReadOnlySpan<char> value, string suffix, StringComparison comparison = StringComparison.Ordinal)
         {
             if (suffix != null)
             {
                 var length = value.Length - suffix.Length;
 
-                if (length >= 0 && value.EndsWith(suffix, StringComparison.Ordinal))
+                if (length >= 0 && value.EndsWith(suffix, comparison))
                 {
                     return length > 0
                            ? value.Slice(0, length)
@@ -1588,19 +1895,7 @@ namespace System
             return value;
         }
 
-        public static string WithoutSuffix(this string value, string suffix)
-        {
-            if (value is null)
-            {
-                return null;
-            }
-
-            var length = value.Length - suffix.Length;
-
-            return length <= 0
-                   ? string.Empty
-                   : value.Substring(0, length);
-        }
+//// ncrunch: no coverage end
 
         public static ReadOnlySpan<char> WithoutSuffixes(this ReadOnlySpan<char> value, string[] suffixes)
         {
@@ -1613,9 +1908,9 @@ namespace System
                 // ReSharper disable once ForCanBeConvertedToForeach
                 for (var index = 0; index < suffixesLength; index++)
                 {
-                    var suffix = suffixes[index];
+                    var suffix = suffixes[index].AsSpan();
 
-                    if (suffix != null && slice.EndsWith(suffix))
+                    if (slice.EndsWith(suffix))
                     {
                         var length = slice.Length - suffix.Length;
 
@@ -1636,36 +1931,53 @@ namespace System
 
 //// ncrunch: no coverage start
 
-        private static string MakeUpperCaseAt(string source, int index)
+        private static bool HasWhitespaces(this ReadOnlySpan<char> value, int start = 0)
         {
-            var characters = source.ToCharArray();
-            characters[index] = characters[index].ToUpperCase();
+            var valueLength = value.Length;
 
-            return new string(characters);
+            for (; start < valueLength; start++)
+            {
+                if (value[start].IsWhiteSpace())
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private static string MakeUpperCaseAt(ReadOnlySpan<char> source, int index)
         {
-            var characters = source.ToArray();
-            characters[index] = characters[index].ToUpperCase();
+            unsafe
+            {
+                var length = source.Length;
 
-            return new string(characters);
-        }
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
 
-        private static string MakeLowerCaseAt(string source, int index)
-        {
-            var characters = source.ToCharArray();
-            characters[index] = characters[index].ToLowerCase();
+                source.CopyTo(bufferSpan);
 
-            return new string(characters);
+                buffer[index] = buffer[index].ToUpperCase();
+
+                return new string(buffer, 0, length);
+            }
         }
 
         private static string MakeLowerCaseAt(ReadOnlySpan<char> source, int index)
         {
-            var characters = source.ToArray();
-            characters[index] = source[index].ToLowerCase();
+            unsafe
+            {
+                var length = source.Length;
 
-            return new string(characters);
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
+
+                source.CopyTo(bufferSpan);
+
+                buffer[index] = buffer[index].ToLowerCase();
+
+                return new string(buffer, 0, length);
+            }
         }
 
         private static bool QuickCompare(ReadOnlySpan<char> value, ReadOnlySpan<char> others, StringComparison comparison)
@@ -1686,7 +1998,7 @@ namespace System
             }
 
             // both are same length, so perform a quick compare first
-            if (valueLength > 4)
+            if (valueLength > QuickCompareLengthThreshold)
             {
                 switch (comparison)
                 {
@@ -1733,7 +2045,7 @@ namespace System
         {
             var length = value.Length;
 
-            if (length != others.Length && length < 4)
+            if (length != others.Length && length < QuickCompareLengthThreshold)
             {
                 return true;
             }
@@ -1752,12 +2064,12 @@ namespace System
                     // uppercase both chars - notice that we need just one compare per char
                     if ((uint)(charA - 'a') <= 'z' - 'a')
                     {
-                        charA -= 0x20;
+                        charA -= DifferenceBetweenUpperAndLowerCaseAscii;
                     }
 
                     if ((uint)(charB - 'a') <= 'z' - 'a')
                     {
-                        charB -= 0x20;
+                        charB -= DifferenceBetweenUpperAndLowerCaseAscii;
                     }
 
                     if (charA != charB)
@@ -1773,12 +2085,12 @@ namespace System
                     // uppercase both chars - notice that we need just one compare per char
                     if ((uint)(charA - 'a') <= 'z' - 'a')
                     {
-                        charA -= 0x20;
+                        charA -= DifferenceBetweenUpperAndLowerCaseAscii;
                     }
 
                     if ((uint)(charB - 'a') <= 'z' - 'a')
                     {
-                        charB -= 0x20;
+                        charB -= DifferenceBetweenUpperAndLowerCaseAscii;
                     }
 
                     if (charA != charB)
@@ -1794,12 +2106,12 @@ namespace System
                     // uppercase both chars - notice that we need just one compare per char
                     if ((uint)(charA - 'a') <= 'z' - 'a')
                     {
-                        charA -= 0x20;
+                        charA -= DifferenceBetweenUpperAndLowerCaseAscii;
                     }
 
                     if ((uint)(charB - 'a') <= 'z' - 'a')
                     {
-                        charB -= 0x20;
+                        charB -= DifferenceBetweenUpperAndLowerCaseAscii;
                     }
 
                     if (charA != charB)
@@ -1815,12 +2127,12 @@ namespace System
                     // uppercase both chars - notice that we need just one compare per char
                     if ((uint)(charA - 'a') <= 'z' - 'a')
                     {
-                        charA -= 0x20;
+                        charA -= DifferenceBetweenUpperAndLowerCaseAscii;
                     }
 
                     if ((uint)(charB - 'a') <= 'z' - 'a')
                     {
-                        charB -= 0x20;
+                        charB -= DifferenceBetweenUpperAndLowerCaseAscii;
                     }
 
                     if (charA != charB)
@@ -1836,12 +2148,12 @@ namespace System
                     // uppercase both chars - notice that we need just one compare per char
                     if ((uint)(charA - 'a') <= 'z' - 'a')
                     {
-                        charA -= 0x20;
+                        charA -= DifferenceBetweenUpperAndLowerCaseAscii;
                     }
 
                     if ((uint)(charB - 'a') <= 'z' - 'a')
                     {
-                        charB -= 0x20;
+                        charB -= DifferenceBetweenUpperAndLowerCaseAscii;
                     }
 
                     if (charA != charB)
@@ -1856,6 +2168,6 @@ namespace System
             return true;
         }
 
-        //// ncrunch: no coverage end
+//// ncrunch: no coverage end
     }
 }

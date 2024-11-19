@@ -5,6 +5,8 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
+using MiKoSolutions.Analyzers.Linguistics;
+
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2016_CodeFixProvider)), Shared]
@@ -16,6 +18,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => Resources.MiKo_2016_CodeFixTitle.FormatWith(Phrase);
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => CommentStartingWith((XmlElementSyntax)syntax, Phrase);
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => CommentStartingWith((XmlElementSyntax)syntax, Phrase, FirstWordHandling.MakeLowerCase | FirstWordHandling.MakeThirdPersonSingular);
     }
 }

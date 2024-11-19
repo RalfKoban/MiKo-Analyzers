@@ -77,7 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                         }
 
                         return modifiedTypeSyntax.ReplaceNodes(
-                                                           new[] { parent, disposeMethod }.Where(_ => _ != null),
+                                                           new[] { parent, disposeMethod }.WhereNotNull(),
                                                            (original, rewritten) =>
                                                                                    {
                                                                                        if (rewritten.IsEquivalentTo(parent))
@@ -101,7 +101,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             return typeSyntax;
         }
 
-        private static BaseTypeDeclarationSyntax MoveRegion(BaseTypeDeclarationSyntax typeSyntax, IStructuredTriviaSyntax regionDirective, SyntaxNode method, SyntaxNode disposeMethod)
+        private static BaseTypeDeclarationSyntax MoveRegion(BaseTypeDeclarationSyntax typeSyntax, DirectiveTriviaSyntax regionDirective, SyntaxNode method, SyntaxNode disposeMethod)
         {
             var triviaToRemove = GetTriviaToRemove(regionDirective.ParentTrivia);
 

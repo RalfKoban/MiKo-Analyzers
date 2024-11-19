@@ -45,8 +45,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 #endif
         }
 
-        protected string GetNewName(Diagnostic diagnostic, ISymbol symbol) => diagnostic.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.BetterName, out var betterName) ? betterName : symbol.Name;
-
         protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => throw new NotSupportedException("This code fix provider does not modify the syntax");
+
+        private static string GetNewName(Diagnostic diagnostic, ISymbol symbol) => diagnostic.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.BetterName, out var betterName) ? betterName : symbol.Name;
     }
 }

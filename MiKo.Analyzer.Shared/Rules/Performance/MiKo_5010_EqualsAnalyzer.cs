@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -171,7 +172,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                     // let's see who this method is that invokes Equals
                     if (containingSymbol is IMethodSymbol enclosingMethod && enclosingMethod.MethodKind == MethodKind.UserDefinedOperator)
                     {
-                        return Issue(nodeSymbol.Name, node.Expression, "object.Equals", new Dictionary<string, string> { { "dummy", "dummy" } }); // marker to see that we have to handle an operator
+                        return Issue(nodeSymbol.Name, node.Expression, "object.Equals", new[] { new Pair("dummy", "dummy") }); // marker to see that we have to handle an operator
                     }
 
                     return Issue(nodeSymbol.Name, node.Expression, "object.Equals");

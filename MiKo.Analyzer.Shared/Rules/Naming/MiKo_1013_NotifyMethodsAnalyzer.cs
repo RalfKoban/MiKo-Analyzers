@@ -28,14 +28,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
-            if (symbol.Name.StartsWithAny(StartingPhrases))
+            var symbolName = symbol.Name;
+
+            if (symbolName.StartsWithAny(StartingPhrases))
             {
                 // avoid situation that method has no name
-                if (symbol.Name.Without(StartingPhrase).Length != 0)
+                if (symbolName.Without(StartingPhrase).Length != 0)
                 {
-                    var proposal = new StringBuilder(symbol.Name).ReplaceWithCheck(StartingPhrase, CorrectStartingPhrase)
-                                                                 .ReplaceWithCheck(CorrectStartingPhrase + CorrectStartingPhrase, CorrectStartingPhrase) // may happen for "OnNotifyXyz"
-                                                                 .ToString();
+                    var proposal = symbolName.AsBuilder()
+                                             .ReplaceWithCheck(StartingPhrase, CorrectStartingPhrase)
+                                             .ReplaceWithCheck(CorrectStartingPhrase + CorrectStartingPhrase, CorrectStartingPhrase) // may happen for "OnNotifyXyz"
+                                             .ToString();
 
                     return new[] { Issue(symbol, CreateBetterNameProposal(proposal)) };
                 }

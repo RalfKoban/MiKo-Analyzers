@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 
 using Microsoft.CodeAnalysis;
 
@@ -6,6 +6,10 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     public abstract class SurroundedByBlankLinesAnalyzer : SpacingAnalyzer
     {
+        private static readonly Pair[] NoLineBoth = { new Pair(Constants.AnalyzerCodeFixSharedData.NoLineBefore), new Pair(Constants.AnalyzerCodeFixSharedData.NoLineAfter) };
+        private static readonly Pair[] NoLineBefore = { new Pair(Constants.AnalyzerCodeFixSharedData.NoLineBefore) };
+        private static readonly Pair[] NoLineAfter = { new Pair(Constants.AnalyzerCodeFixSharedData.NoLineAfter) };
+
         protected SurroundedByBlankLinesAnalyzer(string id) : base(id, (SymbolKind)(-1))
         {
         }
@@ -87,20 +91,19 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected Diagnostic Issue(Location location, bool noBlankLinesBefore, bool noBlankLinesAfter)
         {
-            // prepare additional data so that code fix can benefit from information
-            var dictionary = new Dictionary<string, string>();
+            var pairs = CreateProperties(noBlankLinesBefore, noBlankLinesAfter);
 
+            return Issue(location, properties: pairs);
+        }
+
+        private static Pair[] CreateProperties(bool noBlankLinesBefore, bool noBlankLinesAfter)
+        {
             if (noBlankLinesBefore)
             {
-                dictionary.Add(Constants.AnalyzerCodeFixSharedData.NoLineBefore, string.Empty);
+                return noBlankLinesAfter ? NoLineBoth : NoLineBefore;
             }
 
-            if (noBlankLinesAfter)
-            {
-                dictionary.Add(Constants.AnalyzerCodeFixSharedData.NoLineAfter, string.Empty);
-            }
-
-            return Issue(location, dictionary);
+            return noBlankLinesAfter ? NoLineAfter : Array.Empty<Pair>();
         }
     }
 }

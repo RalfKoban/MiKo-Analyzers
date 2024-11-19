@@ -18,11 +18,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] Phrases = Constants.Comments.LangwordReferences;
 
-        private static readonly KeyValuePair<string, string>[] StartParts = CreateStartParts();
+        private static readonly Pair[] StartParts = CreateStartParts();
 
-        private static readonly KeyValuePair<string, string>[] MiddleParts = CreateMiddleParts();
+        private static readonly Pair[] MiddleParts = CreateMiddleParts();
 
-        private static readonly KeyValuePair<string, string>[] EndParts = CreateEndParts();
+        private static readonly Pair[] EndParts = CreateEndParts();
 
         public MiKo_2040_LangwordAnalyzer() : base(Id)
         {
@@ -36,64 +36,74 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
 //// ncrunch: rdi off
-        private static KeyValuePair<string, string>[] CreateStartParts()
-        {
-            var results = new Dictionary<string, string>();
 
-            foreach (var phrase in Phrases)
+        private static Pair[] CreateStartParts()
+        {
+            var phrasesLength = Phrases.Length;
+
+            var results = new List<Pair>(6 * phrasesLength);
+
+            for (var i = 0; i < phrasesLength; i++)
             {
+                var phrase = Phrases[i];
                 var proposal = Proposal(phrase);
 
-                results.Add($"{phrase}.", $"{proposal}.");
-                results.Add($"{phrase}?", $"{proposal}?");
-                results.Add($"{phrase}!", $"{proposal}!");
-                results.Add($"{phrase},", $"{proposal},");
-                results.Add($"{phrase};", $"{proposal};");
-                results.Add($"{phrase}:", $"{proposal}:");
+                results.Add(new Pair(phrase.ConcatenatedWith('.'), proposal.ConcatenatedWith('.')));
+                results.Add(new Pair(phrase.ConcatenatedWith('?'), proposal.ConcatenatedWith('?')));
+                results.Add(new Pair(phrase.ConcatenatedWith('!'), proposal.ConcatenatedWith('!')));
+                results.Add(new Pair(phrase.ConcatenatedWith(','), proposal.ConcatenatedWith(',')));
+                results.Add(new Pair(phrase.ConcatenatedWith(';'), proposal.ConcatenatedWith(';')));
+                results.Add(new Pair(phrase.ConcatenatedWith(':'), proposal.ConcatenatedWith(':')));
             }
 
             return results.ToArray();
         }
 
-        private static KeyValuePair<string, string>[] CreateMiddleParts()
+        private static Pair[] CreateMiddleParts()
         {
-            var results = new Dictionary<string, string>();
+            var phrasesLength = Phrases.Length;
 
-            foreach (var phrase in Phrases)
+            var results = new List<Pair>(11 * phrasesLength);
+
+            for (var i = 0; i < phrasesLength; i++)
             {
+                var phrase = Phrases[i];
                 var proposal = Proposal(phrase);
 
-                results.Add($"({phrase} ", $"({proposal} ");
-                results.Add($"({phrase})", $"({proposal})");
-                results.Add($" {phrase})", $" {proposal})");
-                results.Add($" {phrase} ", $" {proposal} ");
-                results.Add($" {phrase}.", $" {proposal}.");
-                results.Add($" {phrase}?", $" {proposal}?");
-                results.Add($" {phrase}!", $" {proposal}!");
-                results.Add($" {phrase},", $" {proposal},");
-                results.Add($" {phrase};", $" {proposal};");
-                results.Add($" {phrase}:", $" {proposal}:");
-                results.Add($"'{phrase}'", $"{proposal}");
+                results.Add(new Pair('('.ConcatenatedWith(phrase, ' '), '('.ConcatenatedWith(proposal, ' ')));
+                results.Add(new Pair('('.ConcatenatedWith(phrase, ')'), '('.ConcatenatedWith(proposal, ')')));
+                results.Add(new Pair(' '.ConcatenatedWith(phrase, ')'), ' '.ConcatenatedWith(proposal, ')')));
+                results.Add(new Pair(' '.ConcatenatedWith(phrase, ' '), ' '.ConcatenatedWith(proposal, ' ')));
+                results.Add(new Pair(' '.ConcatenatedWith(phrase, '.'), ' '.ConcatenatedWith(proposal, '.')));
+                results.Add(new Pair(' '.ConcatenatedWith(phrase, '?'), ' '.ConcatenatedWith(proposal, '?')));
+                results.Add(new Pair(' '.ConcatenatedWith(phrase, '!'), ' '.ConcatenatedWith(proposal, '!')));
+                results.Add(new Pair(' '.ConcatenatedWith(phrase, ','), ' '.ConcatenatedWith(proposal, ',')));
+                results.Add(new Pair(' '.ConcatenatedWith(phrase, ';'), ' '.ConcatenatedWith(proposal, ';')));
+                results.Add(new Pair(' '.ConcatenatedWith(phrase, ':'), ' '.ConcatenatedWith(proposal, ':')));
+                results.Add(new Pair('\''.ConcatenatedWith(phrase, '\''), proposal));
             }
 
             return results.ToArray();
         }
 
-        private static KeyValuePair<string, string>[] CreateEndParts()
+        private static Pair[] CreateEndParts()
         {
-            var results = new Dictionary<string, string>();
+            var phrasesLength = Phrases.Length;
 
-            foreach (var phrase in Phrases)
+            var results = new Pair[phrasesLength];
+
+            for (var i = 0; i < phrasesLength; i++)
             {
+                var phrase = Phrases[i];
                 var proposal = Proposal(phrase);
 
-                results.Add($" {phrase}", $" {proposal}");
+                results[i] = new Pair(' '.ConcatenatedWith(phrase), ' '.ConcatenatedWith(proposal));
             }
 
-            return results.ToArray();
+            return results;
         }
 
-        private static string Proposal(string phrase) => $"<see {Constants.XmlTag.Attribute.Langword}=\"{phrase.AsSpan().Trim().ToLowerCase()}\"/>";
+        private static string Proposal(string phrase) => string.Concat("<see " + Constants.XmlTag.Attribute.Langword + "=\"", phrase, "\"/>");
 
 //// ncrunch: rdi default
 

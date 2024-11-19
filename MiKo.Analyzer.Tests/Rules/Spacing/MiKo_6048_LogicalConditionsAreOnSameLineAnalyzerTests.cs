@@ -311,7 +311,8 @@ public class TestMe : IEquatable<TestMe>
         && (
                         B == other.B
                         || (B != null
-        && B.Equals(other.B, StringComparison.Ordinal)));
+        && B.Equals(other.B, StringComparison.Ordinal)))
+        ;
     }
 }
 ";
@@ -351,7 +352,8 @@ B == other.B || (B != null && B.Equals(other.B, StringComparison.Ordinal)))
 && (
 C == other.C || (C != null && C.Equals(other.C)))
 && (
-D == other.D || (D != null && D.Equals(other.D, StringComparison.Ordinal))) && base.Equals(other);
+D == other.D || (D != null && D.Equals(other.D, StringComparison.Ordinal))) && base.Equals(other)
+;
 }
 ";
 
@@ -387,7 +389,8 @@ public class TestMe : IEquatable<TestMe>
         && (
                         B == other.B
                         || (B != null
-        && B.Equals(other.B, StringComparison.Ordinal)));
+        && B.Equals(other.B, StringComparison.Ordinal)))
+        ;
 }
 ";
 
@@ -399,6 +402,46 @@ public class TestMe : IEquatable<TestMe>
     public string A, B;
 
     public bool Equals(TestMe other) => (A == other.A || (A != null && A.Equals(other.A, StringComparison.Ordinal))) && (B == other.B || (B != null && B.Equals(other.B, StringComparison.Ordinal)));
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_parenthesized_logical_condition_parts_are_all_on_their_own_lines_and_parenthesis_are_on_separate_lines_for_arrow_clause_on_property()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    private TestMe other;
+
+    public string A, B;
+
+    public bool Equality => (
+                A == other.A
+                || (A != null
+        && A.Equals(other.A, StringComparison.Ordinal)))
+        && (
+                        B == other.B
+                        || (B != null
+        && B.Equals(other.B, StringComparison.Ordinal)))
+        ;
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    private TestMe other;
+
+    public string A, B;
+
+    public bool Equality => (A == other.A || (A != null && A.Equals(other.A, StringComparison.Ordinal))) && (B == other.B || (B != null && B.Equals(other.B, StringComparison.Ordinal)));
 }
 ";
 

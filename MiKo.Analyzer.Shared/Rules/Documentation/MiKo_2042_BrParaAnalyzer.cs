@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -22,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 if (node is XmlElementStartTagSyntax || node is XmlEmptyElementSyntax)
                 {
-                    var tag = node.GetXmlTagName().ToLowerInvariant();
+                    var tag = node.GetXmlTagName().ToLowerCase();
 
                     switch (tag)
                     {

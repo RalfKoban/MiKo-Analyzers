@@ -4,10 +4,13 @@
     <TargetFramework>net8.0</TargetFramework>
     <AssemblyName>MiKoSolutions.Analyzers.Tests</AssemblyName>
     <RootNamespace>MiKoSolutions.Analyzers</RootNamespace>
-    
+
     <!-- needed for ReSharper tests and others, see https://github.com/dotnet/sdk/issues/10506 -->
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
-    <IsTestProject>true</IsTestProject>	
+    <IsTestProject>true</IsTestProject>
+    <!-- we do not want to get informed about security vulnerabilities here because this is a test project that is not published to customers -->
+    <NuGetAudit>false</NuGetAudit>
+    <WarningsNotAsErrors>NU1901;NU1902;NU1903;NU1904</WarningsNotAsErrors>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -27,21 +30,25 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="JetBrains.Profiler.Api" Version="1.4.8" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.7.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.11.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
     <PackageReference Include="NUnit" Version="4.2.2" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
   </ItemGroup>
 
   <!-- Required by NCrunch on remote machines as those machines do not have the package installed -->
   <ItemGroup Condition="'$(NCrunch)' != '1'">
-    <PackageReference Include="Codecov" Version="1.10.0" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4">
+    <PackageReference Include="coverlet.collector" Version="6.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="OpenCover" Version="4.7.1221" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="ReportGenerator" Version="5.4.0" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -49,8 +56,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MiKo.Analyzer.2022\MiKo.Analyzer.2022.csproj" />
-    <ProjectReference Include="..\MiKo.Analyzer.Codefixes.2022\MiKo.Analyzer.CodeFixes.2022.csproj" />
+    <ProjectReference Include="..\MiKo.Analyzer.Shared\MiKo.Analyzer.Shared.ForTests.csproj" />
   </ItemGroup>
 
   <ItemGroup>

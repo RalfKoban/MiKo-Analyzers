@@ -19,12 +19,44 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
         {
-            if (syntax.Parent is IfStatementSyntax statement)
+            switch (syntax.Parent)
             {
-                var updated = statement.WithOpenParenToken(statement.OpenParenToken.WithoutTrailingTrivia())
-                                       .WithCloseParenToken(statement.CloseParenToken.WithoutLeadingTrivia());
+                case IfStatementSyntax statement:
+                {
+                    var updated = statement.WithOpenParenToken(statement.OpenParenToken.WithoutTrailingTrivia())
+                                           .WithCloseParenToken(statement.CloseParenToken.WithoutLeadingTrivia());
 
-                return root.ReplaceNode(statement, updated);
+                    return root.ReplaceNode(statement, updated);
+                }
+
+                case ArrowExpressionClauseSyntax arrowClause:
+                {
+                    switch (arrowClause.Parent)
+                    {
+                        case BaseMethodDeclarationSyntax method:
+                        {
+                            var updatedMethod = method.WithSemicolonToken(method.SemicolonToken.WithoutLeadingTrivia());
+
+                            return root.ReplaceNode(method, updatedMethod);
+                        }
+
+                        case PropertyDeclarationSyntax property:
+                        {
+                            var updatedProperty = property.WithSemicolonToken(property.SemicolonToken.WithoutLeadingTrivia());
+
+                            return root.ReplaceNode(property, updatedProperty);
+                        }
+                    }
+
+                    break;
+                }
+
+                case ReturnStatementSyntax returnStatement:
+                {
+                    var updatedReturnStatement = returnStatement.WithSemicolonToken(returnStatement.SemicolonToken.WithoutLeadingTrivia());
+
+                    return root.ReplaceNode(returnStatement, updatedReturnStatement);
+                }
             }
 
             return base.GetUpdatedSyntaxRoot(document, root, syntax, annotationOfSyntax, issue);

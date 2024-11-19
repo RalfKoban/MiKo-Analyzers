@@ -50,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                          ? HasPhrase
                          : Phrase;
 
-            return prefix + method.Name.Substring(phrase.Length);
+            return prefix.ConcatenatedWith(method.Name.AsSpan(phrase.Length));
         }
 
         private static string FindBetterPrefix(IMethodSymbol method)

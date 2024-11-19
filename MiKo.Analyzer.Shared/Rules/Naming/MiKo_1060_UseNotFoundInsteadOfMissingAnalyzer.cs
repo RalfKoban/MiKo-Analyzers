@@ -53,7 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return Issue(symbol, proposal, CreateBetterNameProposal(proposal));
             }
 
-            if (name.StartsWith("Get", StringComparison.InvariantCulture) && name.Contains("Failed"))
+            if (name.StartsWith("Get", StringComparison.Ordinal) && name.Contains("Failed"))
             {
                 var proposal = name.Substring(3).Replace("Failed", "NotFound");
 

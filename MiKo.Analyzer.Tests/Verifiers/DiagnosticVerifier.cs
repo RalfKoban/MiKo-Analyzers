@@ -11,6 +11,8 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using NUnit.Framework;
 
 //// ncrunch: rdi off
+// ncrunch: no coverage start
+// ReSharper disable once CheckNamespace
 namespace TestHelper
 {
     /// <summary>
@@ -20,7 +22,7 @@ namespace TestHelper
     {
         private static readonly string[] Placeholders = Enumerable.Range(0, 10).Select(_ => "{" + _ + "}").ToArray();
 
-        internal static Diagnostic[] GetDiagnostics(IReadOnlyCollection<string> sources, LanguageVersion languageVersion, DiagnosticAnalyzer[] analyzers) => GetSortedDiagnostics(sources, languageVersion, analyzers);
+        internal static Diagnostic[] GetDiagnostics(ReadOnlySpan<string> sources, LanguageVersion languageVersion, ReadOnlySpan<DiagnosticAnalyzer> analyzers, bool profileAnalysis) => GetSortedDiagnostics(sources, languageVersion, analyzers, profileAnalysis);
 
         /// <summary>
         /// Gets the CSharp analyzer being tested - to be implemented in non-abstract class.
@@ -51,6 +53,7 @@ namespace TestHelper
                                      foreach (var result in results)
                                      {
                                          Assert.That(result.Id, Is.EqualTo(GetDiagnosticId()));
+                                         Assert.That(result.Id, Is.Not.EqualTo("AD0001")); // This is a programming error
 
                                          var message = result.GetMessage(null);
 
@@ -187,6 +190,6 @@ namespace TestHelper
         /// <returns>
         /// An array of Diagnostics that surfaced in the source code, sorted by Location.
         /// </returns>
-        private Diagnostic[] GetDiagnostics(string[] sources, LanguageVersion languageVersion) => GetSortedDiagnostics(sources, languageVersion, GetObjectUnderTest());
+        private Diagnostic[] GetDiagnostics(ReadOnlySpan<string> sources, LanguageVersion languageVersion) => GetSortedDiagnostics(sources, languageVersion, [GetObjectUnderTest()], false);
     }
 }

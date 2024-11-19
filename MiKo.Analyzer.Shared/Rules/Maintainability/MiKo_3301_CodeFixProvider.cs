@@ -33,10 +33,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (parameters.Count == 1)
             {
-                return SyntaxFactory.SimpleLambdaExpression(parameters.First(), body);
+                return SyntaxFactory.SimpleLambdaExpression(parameters.First(), body).WithModifiers(parenthesized.Modifiers);
             }
 
-            return SyntaxFactory.ParenthesizedLambdaExpression(parameterList, body);
+            return SyntaxFactory.ParenthesizedLambdaExpression(parameterList, body).WithModifiers(parenthesized.Modifiers);
         }
 
         private static CSharpSyntaxNode GetBody(ParenthesizedLambdaExpressionSyntax node)

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -24,12 +23,25 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             context.RegisterSyntaxNodeAction(AnalyzeDeclarationPattern, SyntaxKind.DeclarationPattern);
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers) => AnalyzeIdentifiers(semanticModel, identifiers);
+        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers)
+        {
+            var length = identifiers.Length;
 
-        private IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, IEnumerable<SyntaxToken> identifiers) => from identifier in identifiers
-                                                                                                                                 let exceeding = GetExceedingCharacters(identifier.ValueText)
-                                                                                                                                 where exceeding > 0
-                                                                                                                                 let symbol = identifier.GetSymbol(semanticModel)
-                                                                                                                                 select Issue(symbol, exceeding);
+            if (length > 0)
+            {
+                for (var index = 0; index < length; index++)
+                {
+                    var identifier = identifiers[index];
+                    var exceeding = GetExceedingCharacters(identifier.ValueText);
+
+                    if (exceeding > 0)
+                    {
+                        var symbol = identifier.GetSymbol(semanticModel);
+
+                        yield return Issue(symbol, exceeding);
+                    }
+                }
+            }
+        }
     }
 }

@@ -49,7 +49,7 @@ public class TestMe
 }");
 
         [Test]
-        public void No_issue_is_reported_for_action_parameter_trigger_via_elvis_operator_in_code_block_of_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_action_parameter_trigger_via_conditional_access_operator_in_code_block_of_method() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -76,7 +76,7 @@ public class TestMe
 }");
 
         [Test]
-        public void An_issue_is_reported_for_action_parameter_trigger_via_elvis_operator_in_lock_statement_of_method() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_action_parameter_trigger_via_conditional_access_operator_in_lock_statement_of_method() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
