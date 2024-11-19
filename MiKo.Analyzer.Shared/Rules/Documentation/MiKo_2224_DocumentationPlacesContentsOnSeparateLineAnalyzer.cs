@@ -36,6 +36,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                     Constants.XmlTag.Para,
                                                                 };
 
+        private static readonly Pair[] AddSpacesBoth = { new Pair(Constants.AnalyzerCodeFixSharedData.AddSpaceBefore), new Pair(Constants.AnalyzerCodeFixSharedData.AddSpaceAfter) };
+        private static readonly Pair[] AddSpacesBefore = { new Pair(Constants.AnalyzerCodeFixSharedData.AddSpaceBefore, string.Empty) };
+        private static readonly Pair[] AddSpacesAfter = { new Pair(Constants.AnalyzerCodeFixSharedData.AddSpaceAfter) };
+
         private static readonly SyntaxKind[] ProblematicSiblingKinds = { SyntaxKind.XmlElementStartTag, SyntaxKind.XmlElementEndTag, SyntaxKind.XmlEmptyElement };
 
         public MiKo_2224_DocumentationPlacesContentsOnSeparateLineAnalyzer() : base(Id)
@@ -44,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(comment);
 
-        private static bool IsOnSameLine(XmlTextSyntax text, ICollection<int> lines)
+        private static bool IsOnSameLine(XmlTextSyntax text, params int[] lines)
         {
             var textTokens = text.TextTokens;
 
@@ -73,7 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return false;
         }
 
-        private static bool IsOnSameLine(SyntaxList<XmlNodeSyntax> contents, ICollection<int> lines)
+        private static bool IsOnSameLine(SyntaxList<XmlNodeSyntax> contents, params int[] lines)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var contentsCount = contents.Count;
@@ -103,25 +107,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return false;
         }
 
-        private static bool IsOnSameLine(XmlTextSyntax text, params int[] lines) => IsOnSameLine(text, (ICollection<int>)lines);
-
-        private static bool IsOnSameLine(SyntaxList<XmlNodeSyntax> contents, params int[] lines) => IsOnSameLine(contents, (ICollection<int>)lines);
-
-        private static Dictionary<string, string> CreateProperties(bool onSameLineAsTextBefore, bool onSameLineAsTextAfter)
+        private static Pair[] CreateProperties(bool onSameLineAsTextBefore, bool onSameLineAsTextAfter)
         {
-            var properties = new Dictionary<string, string>();
-
             if (onSameLineAsTextBefore)
             {
-                properties.Add(Constants.AnalyzerCodeFixSharedData.AddSpaceBefore, string.Empty);
+                return onSameLineAsTextAfter ? AddSpacesBoth : AddSpacesBefore;
             }
 
-            if (onSameLineAsTextAfter)
-            {
-                properties.Add(Constants.AnalyzerCodeFixSharedData.AddSpaceAfter, string.Empty);
-            }
-
-            return properties;
+            return onSameLineAsTextAfter ? AddSpacesAfter : Array.Empty<Pair>();
         }
 
         private IEnumerable<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment)
@@ -153,7 +146,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                              .Concat(emptyElements.Select(_ => AnalyzeEmptyXmlElement(_, lines)));
         }
 
-        private IEnumerable<Diagnostic> AnalyzeXmlElement(XmlElementSyntax element, ISet<int> lines)
+        private IEnumerable<Diagnostic> AnalyzeXmlElement(XmlElementSyntax element, HashSet<int> lines)
         {
             var elementName = element.GetName();
 
@@ -200,7 +193,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private Diagnostic AnalyzeEmptyXmlElement(XmlEmptyElementSyntax element, ISet<int> lines)
+        private Diagnostic AnalyzeEmptyXmlElement(XmlEmptyElementSyntax element, HashSet<int> lines)
         {
             if (EmptyTags.Contains(element.GetName()))
             {

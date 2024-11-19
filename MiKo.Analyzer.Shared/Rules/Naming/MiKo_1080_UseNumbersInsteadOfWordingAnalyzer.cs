@@ -53,6 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                          "Bone",
                                                                          "omponent", // 'component'
                                                                          "OMPONENT",
+                                                                         "ondition", // prevent stuff like 'UseCondition' which contains the term 'seCond'
                                                                          "cone",
                                                                          "Cone",
                                                                          "done",
@@ -85,6 +86,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                          "NoOne",
                                                                          "onE", // 'SetupNonExistentDevice'
                                                                          "OnE",
+                                                                         "oneTime",
                                                                          "OneTime",
                                                                          "Ones",
                                                                          "oNeeded",
@@ -116,6 +118,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                          "xponent",
                                                                      };
 
+        private static readonly IEnumerable<string> KnownEndings = new[]
+                                                                       {
+                                                                           "_one",
+                                                                           "_first",
+                                                                           "_second",
+                                                                           "_third",
+                                                                       };
+
         public MiKo_1080_UseNumbersInsteadOfWordingAnalyzer() : base(Id)
         {
         }
@@ -141,10 +151,24 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation) => AnalyzeName(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers) => from identifier in identifiers
-                                                                                                                                                          let name = identifier.Text
-                                                                                                                                                          where HasIssue(name)
-                                                                                                                                                          select Issue(name, identifier);
+        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers)
+        {
+            var length = identifiers.Length;
+
+            if (length > 0)
+            {
+                for (var index = 0; index < length; index++)
+                {
+                    var identifier = identifiers[index];
+                    var name = identifier.Text;
+
+                    if (HasIssue(name))
+                    {
+                        yield return Issue(name, identifier);
+                    }
+                }
+            }
+        }
 
         private static bool HasIssue(string name)
         {
@@ -161,11 +185,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static string HandleKnownParts(string name)
         {
-            var finalName = new StringBuilder(name);
+            var finalName = name.AsBuilder();
 
             foreach (var part in KnownParts)
             {
                 finalName.ReplaceWithCheck(part, "#");
+            }
+
+            foreach (var ending in KnownEndings)
+            {
+                if (finalName.EndsWith(ending))
+                {
+                    finalName.TrimEndBy(ending.Length);
+                }
             }
 
             return finalName.ToString();

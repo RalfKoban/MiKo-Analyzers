@@ -20,8 +20,8 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         // it may happen that in some broken code Roslyn is unable to detect a type (e.g. due to missing code paths), hence 'type' could be null here
         protected override bool IsCall(ITypeSymbol type) => type?.Name == nameof(ArgumentException);
 
-        protected override bool IsCall(MemberAccessExpressionSyntax call, SemanticModel semanticModel) => call.GetName() == "ThrowIfNullOrEmpty" && base.IsCall(call, semanticModel);
+        protected override bool IsCall(MemberAccessExpressionSyntax syntax, SemanticModel semanticModel) => syntax.GetName() == "ThrowIfNullOrEmpty" && base.IsCall(syntax, semanticModel);
 
-        protected override bool IsAlsoCall(MemberAccessExpressionSyntax call, SemanticModel semanticModel) => call.GetName()?.StartsWith("ThrowIf", StringComparison.Ordinal) is true;
+        protected override bool IsAlsoCall(MemberAccessExpressionSyntax syntax, SemanticModel semanticModel) => syntax.GetName()?.StartsWith("ThrowIf", StringComparison.Ordinal) is true;
     }
 }

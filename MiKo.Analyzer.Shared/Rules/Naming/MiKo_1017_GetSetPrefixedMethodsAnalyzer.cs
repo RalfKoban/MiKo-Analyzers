@@ -74,9 +74,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var methodName = method.Name;
 
-            if (methodName.StartsWith(prefix, StringComparison.Ordinal))
+            if (methodName.Length == prefix.Length || (methodName.Length > prefix.Length && methodName[prefix.Length].IsUpperCase()))
             {
-                if (methodName.Length == prefix.Length || (methodName.Length > prefix.Length && methodName[prefix.Length].IsUpperCase()))
+                if (methodName.StartsWith(prefix, StringComparison.Ordinal))
                 {
                     if (method.HasDependencyObjectParameter() is false)
                     {

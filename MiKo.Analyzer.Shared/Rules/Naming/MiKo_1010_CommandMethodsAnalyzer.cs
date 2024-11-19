@@ -15,18 +15,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static readonly string[] SpecialOnParts = { "OnExecuted", "OnCanExecute" };
         private static readonly string[] SpecialParts = { "Executed", "CanExecute" };
 
-        private static readonly ICollection<string> ExcludedNames = new HashSet<string>
-                                                                        {
-                                                                            nameof(ICommand.CanExecute),
-                                                                            nameof(ICommand.Execute),
-                                                                            nameof(ICommand.CanExecute) + Constants.AsyncSuffix,
-                                                                            nameof(ICommand.Execute) + Constants.AsyncSuffix,
-                                                                            nameof(ICommand.CanExecute) + Constants.AsyncCoreSuffix,
-                                                                            nameof(ICommand.Execute) + Constants.AsyncCoreSuffix,
-                                                                            nameof(ICommand.CanExecuteChanged),
-                                                                            "On" + nameof(ICommand.CanExecuteChanged),
-                                                                            "Raise" + nameof(ICommand.CanExecuteChanged),
-                                                                        };
+        private static readonly HashSet<string> ExcludedNames = new HashSet<string>
+                                                                    {
+                                                                        nameof(ICommand.CanExecute),
+                                                                        nameof(ICommand.Execute),
+                                                                        nameof(ICommand.CanExecute) + Constants.AsyncSuffix,
+                                                                        nameof(ICommand.Execute) + Constants.AsyncSuffix,
+                                                                        nameof(ICommand.CanExecute) + Constants.AsyncCoreSuffix,
+                                                                        nameof(ICommand.Execute) + Constants.AsyncCoreSuffix,
+                                                                        nameof(ICommand.CanExecuteChanged),
+                                                                        "On" + nameof(ICommand.CanExecuteChanged),
+                                                                        "Raise" + nameof(ICommand.CanExecuteChanged),
+                                                                    };
 
         public MiKo_1010_CommandMethodsAnalyzer() : base(Id)
         {

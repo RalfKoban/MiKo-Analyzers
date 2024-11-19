@@ -28,11 +28,11 @@ public class My" + suffix + @"
 ");
 
         [Test]
-        public void No_issue_is_reported_for_test_class_([ValueSource(nameof(TestFixtures))] string testFixture) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_test_class_([ValueSource(nameof(TestFixtures))] string fixture) => No_issue_is_reported_for(@"
 /// <summary>
 /// Some documentation
 /// </summary>
-[" + testFixture + @"]
+[" + fixture + @"]
 public sealed class TestManagement
 {
 }

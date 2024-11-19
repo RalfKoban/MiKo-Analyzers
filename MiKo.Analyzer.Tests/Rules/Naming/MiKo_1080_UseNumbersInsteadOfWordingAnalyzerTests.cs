@@ -48,7 +48,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "noOne",
                                                             "NoOne",
                                                             "OnEntry",
-                                                            "OneTime",
+                                                            "oneTimeSetUp",
+                                                            "OneTimeSetUp",
+                                                            "oneTimeTearDown",
+                                                            "OneTimeTearDown",
                                                             "OnExit",
                                                             "oxone",
                                                             "phone",
@@ -72,6 +75,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "exponential",
                                                             "GetDissimilarityForType",
                                                             "GetDissimilaritiesForType",
+                                                            "UseConditions",
                                                         ];
 
         private static readonly string[] WrongNames =
@@ -134,6 +138,22 @@ using System;
 public class TestMe
 {
     public void Do" + name + @"Something()
+    {
+    }
+}
+");
+
+        [TestCase("one")]
+        [TestCase("first")]
+        [TestCase("second")]
+        [TestCase("seconds")]
+        [TestCase("third")]
+        public void No_issue_is_reported_for_method_ending_with_(string name) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void Some_value_was_" + name + @"()
     {
     }
 }

@@ -165,24 +165,24 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return Array.Empty<TypeSyntax>();
         }
 
-        private static ArgumentSyntax ConvertToInterpolatedStringArgument(IReadOnlyList<ArgumentSyntax> otherArguments)
+        private static ArgumentSyntax ConvertToInterpolatedStringArgument(List<ArgumentSyntax> otherArguments)
         {
             var argument = otherArguments[0];
 
             if (argument.Expression is LiteralExpressionSyntax literal && literal.IsKind(SyntaxKind.StringLiteralExpression))
             {
-                var formatMessage = literal.Token.ValueText.AsSpan();
+                var formatMessage = literal.Token.ValueText;
 
                 if (formatMessage.ContainsAny(FormatIdentifiers))
                 {
-                    return Argument(ConvertToInterpolatedString(formatMessage, otherArguments));
+                    return Argument(ConvertToInterpolatedString(formatMessage.AsSpan(), otherArguments));
                 }
             }
 
             return argument;
         }
 
-        private static InterpolatedStringExpressionSyntax ConvertToInterpolatedString(ReadOnlySpan<char> formatMessage, IReadOnlyList<ArgumentSyntax> otherArguments)
+        private static InterpolatedStringExpressionSyntax ConvertToInterpolatedString(ReadOnlySpan<char> formatMessage, List<ArgumentSyntax> otherArguments)
         {
             var contents = new List<InterpolatedStringContentSyntax>();
 

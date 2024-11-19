@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -135,6 +137,191 @@ public enum TestMe
 ";
 
             VerifyCSharpFix(OriginalCode, OriginalCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_special_phrase_of_enum_member()
+        {
+            const string OriginalCode = @"
+using System;
+
+public enum TestMeKind
+{
+    /// <summary>
+    /// Enum WhateverIdentifierEnum for WhateverIdentifier
+    /// </summary>
+    WhateverIdentifier = 0,
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public enum TestMeKind
+{
+    /// <summary>
+    /// The test me is a whateverIdentifier.
+    /// </summary>
+    WhateverIdentifier = 0,
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_special_phrase_of_enum_member_suffixed_with_Enum()
+        {
+            const string OriginalCode = @"
+using System;
+
+public enum TestMeKind
+{
+    /// <summary>
+    /// Enum WhateverIdentifierEnum for WhateverIdentifier
+    /// </summary>
+    WhateverIdentifierEnum = 0,
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public enum TestMeKind
+{
+    /// <summary>
+    /// The test me is a whateverIdentifier.
+    /// </summary>
+    WhateverIdentifierEnum = 0,
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [TestCase("TypeEnum")]
+        [TestCase("TypesEnum")]
+        [TestCase("KindsEnum")]
+        public void Code_gets_fixed_for_special_phrase_of_enum_member_suffixed_with_Enum_and_type_suffixed_with_(string suffix)
+        {
+            var originalCode = @"
+using System;
+
+public enum TestMe" + suffix + @"
+{
+    /// <summary>
+    /// Enum WhateverIdentifierEnum for WhateverIdentifier
+    /// </summary>
+    WhateverIdentifierEnum = 0,
+}
+";
+
+            var fixedCode = @"
+using System;
+
+public enum TestMe" + suffix + @"
+{
+    /// <summary>
+    /// The test me is a whateverIdentifier.
+    /// </summary>
+    WhateverIdentifierEnum = 0,
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
+        [TestCase("On")]
+        [TestCase("Off")]
+        [TestCase("Undefined")]
+        [TestCase("None")]
+        [TestCase("Initiated")]
+        [TestCase("Running")]
+        [TestCase("Completed")]
+        [TestCase("Canceled")]
+        [TestCase("Failed")]
+        public void Code_gets_fixed_for_special_phrase_of_enum_member_(string phrase1)
+        {
+            var phrase2 = phrase1.ToLowerCaseAt(0);
+
+            const string OriginalCode = @"
+public enum MessageType
+{
+    /// <summary>
+    /// Enum #1#Enum for #2#
+    /// </summary>
+    #1#Enum = 0,
+
+";
+
+            const string FixedCode = @"
+public enum MessageType
+{
+    /// <summary>
+    /// The message is #2#.
+    /// </summary>
+    #1#Enum = 0,
+
+";
+
+            VerifyCSharpFix(OriginalCode.Replace("#1#", phrase1).Replace("#2#", phrase2), FixedCode.Replace("#1#", phrase1).Replace("#2#", phrase2));
+        }
+
+        [TestCase("Information", "an information")]
+        [TestCase("Warning", "a warning")]
+        [TestCase("Error", "an error")]
+        [TestCase("Exception", "an exception")]
+        public void Code_gets_fixed_for_special_phrase_of_enum_member_(string phrase1, string fixedPhrase2)
+        {
+            var phrase2 = phrase1.ToLowerCaseAt(0);
+
+            const string OriginalCode = @"
+public enum MessageType
+{
+    /// <summary>
+    /// Enum #1#Enum for #2#
+    /// </summary>
+    #1#Enum = 0,
+
+";
+
+            const string FixedCode = @"
+public enum MessageType
+{
+    /// <summary>
+    /// The message is #2#.
+    /// </summary>
+    #1#Enum = 0,
+
+";
+
+            VerifyCSharpFix(OriginalCode.Replace("#1#", phrase1).Replace("#2#", phrase2), FixedCode.Replace("#1#", phrase1).Replace("#2#", fixedPhrase2));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_special_plural_phrase_of_enum_member()
+        {
+            const string OriginalCode = @"
+public enum ItemsType
+{
+    /// <summary>
+    /// Enum MessagesEnum for messages
+    /// </summary>
+    MessagesEnum = 0,
+
+";
+
+            const string FixedCode = @"
+public enum ItemsType
+{
+    /// <summary>
+    /// The items are messages.
+    /// </summary>
+    MessagesEnum = 0,
+
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2082_EnumMemberAnalyzer.Id;

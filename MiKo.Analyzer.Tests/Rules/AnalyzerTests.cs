@@ -24,35 +24,20 @@ namespace MiKoSolutions.Analyzers.Rules
         private static readonly Analyzer[] AllAnalyzers = CreateAllAnalyzers();
         private static readonly CodeFixProvider[] AllCodeFixProviders = CreateAllCodeFixProviders();
 
-        [Ignore("Just for now")]
-        [TestCase("TODO"), Explicit, Timeout(4 * 60 * 60 * 1000)] // 4h
+        [Ignore("Shall be run manually")]
+        [Explicit]
+        [TestCase("TODO"), Timeout(4 * 60 * 60 * 1000)] // 4h
         public static void Performance_(string path)
         {
-            // ncrunch: no coverage start
-            var files = GetDocuments(path).ToList();
-            var sources = files.Select(File.ReadAllText).ToArray();
+//// ncrunch: no coverage start
+            var files = Directory.EnumerateFiles(path, "*.cs", SearchOption.AllDirectories)
+                                 .Where(_ => _.EndsWithAny(Constants.GeneratedCSharpFileExtensions, StringComparison.OrdinalIgnoreCase) is false);
+            var sources = files.ToHashSet(File.ReadAllText).ToArray();
 
-            var results = DiagnosticVerifier.GetDiagnostics(sources, LanguageVersion.LatestMajor, AllAnalyzers.Cast<DiagnosticAnalyzer>().ToArray());
+            var results = DiagnosticVerifier.GetDiagnostics(sources, LanguageVersion.LatestMajor, AllAnalyzers.Cast<DiagnosticAnalyzer>().ToArray(), true);
 
-            Assert.That(results.Count, Is.Zero);
-
-            static IEnumerable<string> GetDocuments(string path)
-            {
-                foreach (var directory in Directory.EnumerateDirectories(path))
-                {
-                    foreach (var document in GetDocuments(directory))
-                    {
-                        yield return document;
-                    }
-                }
-
-                foreach (var file in Directory.EnumerateFiles(path, "*.cs"))
-                {
-                    yield return file;
-                }
-            }
-
-            // ncrunch: no coverage end
+            Assert.That(results.Length, Is.Zero);
+//// ncrunch: no coverage end
         }
 
         [Test]

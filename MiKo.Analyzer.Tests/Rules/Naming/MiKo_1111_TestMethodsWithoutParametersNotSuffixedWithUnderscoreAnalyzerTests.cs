@@ -23,11 +23,11 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_parameterless_test_method_with_correct_name_(
-                                                                                      [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                                      [ValueSource(nameof(TestFixtures))] string fixture,
                                                                                       [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
 
-[" + testFixture + @"]
+[" + fixture + @"]
 public class TestMe
 {
     [" + test + @"]
@@ -37,11 +37,11 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_parameterized_test_method_with_correct_name_(
-                                                                                      [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                                      [ValueSource(nameof(TestFixtures))] string fixture,
                                                                                       [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
 
-[" + testFixture + @"]
+[" + fixture + @"]
 public class TestMe
 {
     [" + test + @"]
@@ -66,11 +66,11 @@ public class TestMe
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_test_method_with_wrong_name_(
-                                                                      [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                      [ValueSource(nameof(TestFixtures))] string fixture,
                                                                       [ValueSource(nameof(Tests))] string test)
             => An_issue_is_reported_for(@"
 
-[" + testFixture + @"]
+[" + fixture + @"]
 public class TestMe
 {
     [" + test + @"]

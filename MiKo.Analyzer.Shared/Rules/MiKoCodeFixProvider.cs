@@ -360,7 +360,7 @@ namespace MiKoSolutions.Analyzers.Rules
             {
                 var trivia = root.FindTrivia(startPosition);
 
-                return CodeAction.Create(Title, cancellationToken => ApplyDocumentCodeFixAsync(document, root, trivia, issue, cancellationToken), GetType().Name);
+                return CodeAction.Create(Title, cancellationToken => ApplyDocumentCodeFixAsync(document, root, trivia, issue, cancellationToken), GetType().Name); // ncrunch: no coverage
             }
 
             // TODO RKN
@@ -378,10 +378,10 @@ namespace MiKoSolutions.Analyzers.Rules
 
             if (IsSolutionWide)
             {
-                return CodeAction.Create(Title, cancellationToken => ApplySolutionCodeFixAsync(document, root, syntax, issue, cancellationToken), GetType().Name);
+                return CodeAction.Create(Title, cancellationToken => ApplySolutionCodeFixAsync(document, root, syntax, issue, cancellationToken), GetType().Name); // ncrunch: no coverage
             }
 
-            return CodeAction.Create(Title, cancellationToken => ApplyDocumentCodeFixAsync(document, root, syntax, issue, cancellationToken), GetType().Name);
+            return CodeAction.Create(Title, cancellationToken => ApplyDocumentCodeFixAsync(document, root, syntax, issue, cancellationToken), GetType().Name); // ncrunch: no coverage
         }
 
 //// ncrunch: rdi default

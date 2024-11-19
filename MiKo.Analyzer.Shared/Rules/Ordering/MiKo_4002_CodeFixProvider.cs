@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             return modifiedType.InsertNodesAfter(node, replacements);
         }
 
-        private static IEnumerable<SyntaxNode> CreateReplacements(IEnumerable<SyntaxNode> methodNodes)
+        private static List<SyntaxNode> CreateReplacements(IEnumerable<SyntaxNode> methodNodes)
         {
             var replacements = methodNodes.ToList();
 

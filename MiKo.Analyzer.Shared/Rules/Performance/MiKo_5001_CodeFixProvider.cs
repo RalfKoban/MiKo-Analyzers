@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_5001_CodeFixProvider)), Shared]
     public sealed class MiKo_5001_CodeFixProvider : PerformanceCodeFixProvider
     {
-        private enum MovePosition
+        private enum MovePosition : ushort
         {
             Start = 0,
             End = 1,
@@ -78,7 +78,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             return SyntaxFactory.IfStatement(condition, block);
         }
 
-        private static ExpressionSyntax CreateCondition(MemberAccessExpressionSyntax expression)
+        private static MemberAccessExpressionSyntax CreateCondition(MemberAccessExpressionSyntax expression)
         {
             var identifier = GetIdentifier(expression);
             var method = SyntaxFactory.IdentifierName(Constants.ILog.IsDebugEnabled);

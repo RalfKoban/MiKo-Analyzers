@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Text;
 
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -57,7 +58,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                            "'TRUE': if some condition. Otherwise 'FALSE'.",
                                                        ];
 
-//// ncrunch: no coverage end
+        //// ncrunch: no coverage end
+
+#if NCRUNCH
+
+        [OneTimeSetUp]
+        public static void PrepareTestEnvironment() => MiKo_2023_CodeFixProvider.LoadData();
+
+#endif
 
         [Test]
         public void No_issue_is_reported_for_undocumented_parameter() => No_issue_is_reported_for(@"
@@ -757,7 +765,7 @@ public class TestMe
             VerifyCSharpFix(originalCode, fixedCode);
         }
 
-        [Ignore("Just for now")]
+        [Ignore("TODO: RKN Fix when you know how to fix it.")]
         [Test]
         public void Code_gets_fixed_on_multi_line_for_phrase()
         {
@@ -1047,7 +1055,7 @@ public class TestMe
                                    from boolean in booleans
                                    select " " + boolean + vc into end // we have lots of loops, so cache data to avoid unnecessary calculations
                                    from start in starts
-                                   select (start + end).Replace("   ", " ").Replace("  ", " ").Trim())
+                                   select new StringBuilder(start + end).Replace("   ", " ").Replace("  ", " ").Trim())
             {
                 results.Add(phrase.ToUpperCaseAt(0));
                 results.Add(phrase.ToLowerCaseAt(0));

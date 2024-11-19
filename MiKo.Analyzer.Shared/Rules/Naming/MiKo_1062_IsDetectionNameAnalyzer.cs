@@ -28,28 +28,31 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.Type.IsBoolean();
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation) => AnalyzeCamelCase(symbol, symbol.Name, 4);
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation) => AnalyzeCamelCase(symbol, symbol.Name.AsSpan(), 4);
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IPropertySymbol symbol, Compilation compilation) => AnalyzeCamelCase(symbol, symbol.Name, 3);
+        protected override IEnumerable<Diagnostic> AnalyzeName(IPropertySymbol symbol, Compilation compilation) => AnalyzeCamelCase(symbol, symbol.Name.AsSpan(), 3);
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation)
         {
-            var symbolName = symbol.Name;
+            var symbolName = symbol.Name.AsSpan();
 
-            foreach (var prefix in Constants.Markers.FieldPrefixes.Where(_ => _.Length > 0 && symbolName.StartsWith(_, StringComparison.OrdinalIgnoreCase)))
+            foreach (var prefix in Constants.Markers.FieldPrefixes)
             {
-                symbolName = symbolName.Substring(prefix.Length);
+                if (prefix.Length > 0 && symbolName.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                {
+                    symbolName = symbolName.Slice(prefix.Length);
 
-                break;
+                    break;
+                }
             }
 
             return AnalyzeCamelCase(symbol, symbolName, 2);
         }
 
-        private static bool ViolatesLimit(string name, ushort limit) => name.StartsWithAny(Prefixes, StringComparison.OrdinalIgnoreCase) && name.HasUpperCaseLettersAbove(limit);
+        private static bool ViolatesLimit(ReadOnlySpan<char> name, ushort limit) => name.StartsWithAny(Prefixes, StringComparison.OrdinalIgnoreCase) && name.HasUpperCaseLettersAbove(limit);
 
-        private IEnumerable<Diagnostic> AnalyzeCamelCase(ISymbol symbol, string symbolName, ushort limit) => ViolatesLimit(symbolName, limit)
-                                                                                                             ? new[] { Issue(symbol, limit) }
-                                                                                                             : Enumerable.Empty<Diagnostic>();
+        private IEnumerable<Diagnostic> AnalyzeCamelCase(ISymbol symbol, ReadOnlySpan<char> symbolName, ushort limit) => ViolatesLimit(symbolName, limit)
+                                                                                                                         ? new[] { Issue(symbol, limit) }
+                                                                                                                         : Enumerable.Empty<Diagnostic>();
     }
 }

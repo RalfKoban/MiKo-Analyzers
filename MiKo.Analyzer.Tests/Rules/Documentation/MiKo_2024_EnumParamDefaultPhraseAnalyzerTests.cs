@@ -191,7 +191,9 @@ using System.Threading;
 public class TestMe
 {
     /// <summary />
-    /// <param name='o'>One of the enumeration members that specifies whatever it is.</param>
+    /// <param name='o'>
+    /// One of the enumeration members that specifies whatever it is.
+    /// </param>
     public void DoSomething(StringComparison o) { }
 }
 ";
@@ -220,7 +222,9 @@ using System.Threading;
 public class TestMe
 {
     /// <summary />
-    /// <param name='o'>One of the enumeration members that specifies whatever it is.</param>
+    /// <param name='o'>
+    /// One of the enumeration members that specifies whatever it is.
+    /// </param>
     public TestMe(StringComparison o) { }
 }
 ";

@@ -1,5 +1,5 @@
 # MiKo-Analyzers
-Provides analyzers that are based on the .NET Compiler Platform (Roslyn) and can be used inside Visual Studio 2019 (v16.11) or 2022 (v17.7).
+Provides analyzers that are based on the .NET Compiler Platform (Roslyn) and can be used inside Visual Studio 2019 (v16.11) or 2022 (v17.11).
 
 How to install an Roslyn analyzer is described [here](https://learn.microsoft.com/en-us/visualstudio/code-quality/install-roslyn-analyzers?view=vs-2022).
 
@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables lists all the 461 rules that are currently provided by the analyzer.
+The following tables lists all the 470 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -78,7 +78,7 @@ The following tables lists all the 461 rules that are currently provided by the 
 |MiKo_1045|Methods that are invoked by commands should not be suffixed with 'Command'|&#x2713;|&#x2713;|
 |MiKo_1046|Asynchronous methods should follow the Task-based Asynchronous Pattern (TAP)|&#x2713;|&#x2713;|
 |MiKo_1047|Methods not following the Task-based Asynchronous Pattern (TAP) should not lie about being asynchronous|&#x2713;|&#x2713;|
-|MiKo_1048|To ease maintenance, the names of classes that are value converters should end with the same suffix|&#x2713;|&#x2713;|
+|MiKo_1048|Classes that are value converters should end with a specific suffix|&#x2713;|&#x2713;|
 |MiKo_1049|Do not use requirement terms such as 'Shall', 'Should', 'Must' or 'Need' for names|&#x2713;|&#x2713;|
 |MiKo_1050|Return values should have descriptive names|&#x2713;|&#x2713;|
 |MiKo_1051|Do not suffix parameters with delegate types|&#x2713;|&#x2713;|
@@ -93,7 +93,7 @@ The following tables lists all the 461 rules that are currently provided by the 
 |MiKo_1060|Use '&lt;Entity&gt;NotFound' instead of 'Get&lt;Entity&gt;Failed' or '&lt;Entity&gt;Missing'|&#x2713;|&#x2713;|
 |MiKo_1061|The name of 'Try' method's [out] parameter should be specific|&#x2713;|&#x2713;|
 |MiKo_1062|'Can/Has/Contains' methods, properties or fields shall consist of only a few words|&#x2713;|\-|
-|MiKo_1063|Do not use abbreviations in names|&#x2713;|\-|
+|MiKo_1063|Do not use abbreviations in names|&#x2713;|&#x2713;|
 |MiKo_1064|Parameter names reflect their meaning and not their type|&#x2713;|\-|
 |MiKo_1065|Operator parameters should be named according the .NET Framework Design Guidelines for operator overloads|&#x2713;|&#x2713;|
 |MiKo_1066|Constructor parameters that are assigned to a property should be named after the property|&#x2713;|&#x2713;|
@@ -149,7 +149,7 @@ The following tables lists all the 461 rules that are currently provided by the 
 |MiKo_1300|Unimportant identifiers in lambda statements should be named '_'|&#x2713;|&#x2713;|
 |MiKo_1400|Namespace names should be in plural|&#x2713;|\-|
 |MiKo_1401|Namespaces should not contain technical language names|&#x2713;|\-|
-|MiKo_1402|Namespaces should not be named after WPF specific design patterns|&#x2713;|\-|
+|MiKo_1402|Namespaces should not be named after WPF-specific design patterns|&#x2713;|\-|
 |MiKo_1403|Namespaces should not be named after any of their parent namespaces|&#x2713;|\-|
 |MiKo_1404|Namespaces should not contain unspecific names|&#x2713;|\-|
 |MiKo_1405|Namespaces should not contain 'Lib'|&#x2713;|\-|
@@ -248,7 +248,7 @@ The following tables lists all the 461 rules that are currently provided by the 
 |MiKo_2210|Documentation should use the term 'information' instead of 'info'|&#x2713;|&#x2713;|
 |MiKo_2211|Enum members should not have &lt;remarks&gt; sections|&#x2713;|&#x2713;|
 |MiKo_2212|Documentation should use the phrase 'failed' instead of 'was not successful'|&#x2713;|&#x2713;|
-|MiKo_2213|Documentation should not use the contradiction "n't"|&#x2713;|&#x2713;|
+|MiKo_2213|Documentation should not use the contraction "n't"|&#x2713;|&#x2713;|
 |MiKo_2214|Documentation should not contain empty lines|&#x2713;|&#x2713;|
 |MiKo_2215|Sentences in documentation shall be short|&#x2713;|\-|
 |MiKo_2216|Use &lt;paramref&gt; instead of &lt;param&gt; to reference parameters|&#x2713;|&#x2713;|
@@ -277,7 +277,7 @@ The following tables lists all the 461 rules that are currently provided by the 
 |MiKo_2306|End comments with a period|\-|\-|
 |MiKo_2307|Comments should use the phrase 'failed' instead of 'was not successful'|&#x2713;|&#x2713;|
 |MiKo_2308|Do not place comment on single line before closing brace but after code|&#x2713;|&#x2713;|
-|MiKo_2309|Comments should not use the contradiction "n't"|&#x2713;|&#x2713;|
+|MiKo_2309|Comments should not use the contraction "n't"|&#x2713;|&#x2713;|
 |MiKo_2310|Comments should explain the 'Why' and not the 'That'|&#x2713;|\-|
 |MiKo_2311|Do not use separator comments|&#x2713;|&#x2713;|
 
@@ -343,7 +343,8 @@ The following tables lists all the 461 rules that are currently provided by the 
 |MiKo_3061|Loggers shall use a proper log category|&#x2713;|\-|
 |MiKo_3062|End log messages for exceptions with a colon|&#x2713;|&#x2713;|
 |MiKo_3063|End non-exceptional log messages with a dot|&#x2713;|&#x2713;|
-|MiKo_3064|Log messages should not use the contradiction "n't"|&#x2713;|&#x2713;|
+|MiKo_3064|Log messages should not use the contraction "n't"|&#x2713;|&#x2713;|
+|MiKo_3065|Microsoft Logging calls should not use interpolated strings|&#x2713;|&#x2713;|
 |MiKo_3070|Do not return null for an IEnumerable|&#x2713;|\-|
 |MiKo_3071|Do not return null for a Task|&#x2713;|\-|
 |MiKo_3072|Non-private methods should not return 'List&lt;&gt;' or 'Dictionary&lt;&gt;'|&#x2713;|\-|
@@ -413,6 +414,10 @@ The following tables lists all the 461 rules that are currently provided by the 
 |MiKo_3219|Public members should not be 'virtual'|&#x2713;|\-|
 |MiKo_3220|Logical '&amp;&amp;' or '&#124;&#124;' conditions using 'true' or 'false' should be simplified|&#x2713;|&#x2713;|
 |MiKo_3221|GetHashCode overrides should use 'HashCode.Combine'|&#x2713;|&#x2713;|
+|MiKo_3222|String comparisons can be simplified|&#x2713;|&#x2713;|
+|MiKo_3223|Reference comparisons can be simplified|&#x2713;|&#x2713;|
+|MiKo_3224|Value comparisons can be simplified|&#x2713;|&#x2713;|
+|MiKo_3225|Redundant comparisons can be simplified|&#x2713;|&#x2713;|
 |MiKo_3301|Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements|&#x2713;|&#x2713;|
 |MiKo_3302|Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters|&#x2713;|&#x2713;|
 |MiKo_3401|Namespace hierarchies should not be too deep|&#x2713;|\-|
@@ -490,7 +495,7 @@ The following tables lists all the 461 rules that are currently provided by the 
 |MiKo_6041|Assignments should be placed on same line(s)|&#x2713;|&#x2713;|
 |MiKo_6042|'new' keywords should be placed on same line(s) as the types|&#x2713;|&#x2713;|
 |MiKo_6043|Expression bodies of lambdas should be placed on same line as lambda itself when fitting|&#x2713;|&#x2713;|
-|MiKo_6044|Binary operators such as '&amp;&amp;' or '&#124;&#124;' should be placed on same line(s) as their right operands|&#x2713;|&#x2713;|
+|MiKo_6044|Operators such as '&amp;&amp;' or '&#124;&#124;' should be placed on same line(s) as their (right) operands|&#x2713;|&#x2713;|
 |MiKo_6045|Comparisons using operators such as '==' or '!=' should be placed on same line(s)|&#x2713;|&#x2713;|
 |MiKo_6046|Calculations using operators such as '+' or '%' should be placed on same line(s)|&#x2713;|&#x2713;|
 |MiKo_6047|Braces of switch expressions should be placed directly below the corresponding switch keyword|&#x2713;|&#x2713;|
@@ -505,3 +510,7 @@ The following tables lists all the 461 rules that are currently provided by the 
 |MiKo_6056|Brackets of collection expressions should be placed directly at the same place collection initializer braces would be positioned|&#x2713;|&#x2713;|
 |MiKo_6057|Type parameter constraint clauses should be aligned vertically|&#x2713;|&#x2713;|
 |MiKo_6058|Type parameter constraint clauses should be indented below parameter list|&#x2713;|&#x2713;|
+|MiKo_6059|Multi-line conditions are positioned outdented below associated calls|&#x2713;|&#x2713;|
+|MiKo_6060|Switch case labels should be placed on same line|&#x2713;|&#x2713;|
+|MiKo_6061|Switch expression arms should be placed on same line|&#x2713;|&#x2713;|
+|MiKo_6070|Console statements should be surrounded by blank lines|&#x2713;|&#x2713;|

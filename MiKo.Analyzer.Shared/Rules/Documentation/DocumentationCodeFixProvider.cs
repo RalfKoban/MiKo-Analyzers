@@ -22,25 +22,45 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 //// ncrunch: rdi off
 //// ncrunch: no coverage start
 
-        protected static string[] GetTermsForQuickLookup(IEnumerable<string> terms)
+        protected static string[] GetTermsForQuickLookup(IReadOnlyCollection<string> terms)
         {
-            var hashedTerms = terms.ToHashSet(_ => _.ToUpperInvariant());
-            var orderedTerms = hashedTerms.OrderBy(_ => _.Length).ThenBy(_ => _);
+            var result = new string[terms.Count];
 
-            var result = new List<string>(hashedTerms.Count);
+            var resultIndex = 0;
 
-            // ReSharper disable once LoopCanBePartlyConvertedToQuery
-            foreach (var term in orderedTerms)
+            // ReSharper disable once TooWideLocalVariableScope : it's done to have less memory pressure on garbage collector
+            bool found;
+
+            foreach (var term in terms.OrderBy(_ => _.Length).ThenBy(_ => _))
             {
-                if (term.StartsWithAny(result, StringComparison.OrdinalIgnoreCase))
+                var span = term.AsSpan();
+
+                found = false;
+
+                for (var index = 0; index < resultIndex; index++)
+                {
+                    var item = result[index];
+
+                    if (span.StartsWith(item.AsSpan()))
+                    {
+                        found = true;
+
+                        break;
+                    }
+                }
+
+                if (found)
                 {
                     continue;
                 }
 
-                result.Add(term);
+                result[resultIndex] = term;
+                resultIndex++;
             }
 
-            return result.ToArray();
+            Array.Resize(ref result, resultIndex);
+
+            return result;
         }
 
 //// ncrunch: no coverage end
@@ -53,9 +73,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, SyntaxList<XmlNodeSyntax> content)
         {
-            var result = comment.WithStartTag(comment.StartTag.WithoutTrivia().WithTrailingXmlComment())
+            var result = comment.WithStartTag(comment.StartTag.WithoutLeadingTrivia().WithTrailingXmlComment())
                                 .WithContent(content)
-                                .WithEndTag(comment.EndTag.WithoutTrivia().WithLeadingXmlComment());
+                                .WithEndTag(comment.EndTag.WithoutTrailingTrivia().WithLeadingXmlComment());
 
             return CombineTexts(result);
         }
@@ -86,18 +106,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, XmlText(text + additionalComment));
         }
 
-        protected static XmlElementSyntax Comment(XmlElementSyntax syntax, IReadOnlyCollection<string> terms, IEnumerable<KeyValuePair<string, string>> replacementMap, FirstWordHandling firstWordHandling = FirstWordHandling.KeepLeadingSpace)
+        protected static XmlElementSyntax Comment(XmlElementSyntax syntax, string[] terms, ReadOnlySpan<Pair> replacementMap, FirstWordHandling firstWordHandling = FirstWordHandling.KeepLeadingSpace)
         {
             var result = Comment<XmlElementSyntax>(syntax, terms, replacementMap, firstWordHandling);
 
             return CombineTexts(result);
         }
 
-        protected static T Comment<T>(T syntax, IReadOnlyCollection<string> terms, IEnumerable<KeyValuePair<string, string>> replacementMap, FirstWordHandling firstWordHandling = FirstWordHandling.KeepLeadingSpace) where T : SyntaxNode
+        protected static T Comment<T>(T syntax, string[] terms, ReadOnlySpan<Pair> replacementMap, FirstWordHandling firstWordHandling = FirstWordHandling.KeepLeadingSpace) where T : SyntaxNode
         {
-            var minimumLength = terms.Min(_ => _.Length);
+            var minimumLength = MinLength(terms);
 
-            var textMap = CreateReplacementTextMap(minimumLength);
+            var textMap = CreateReplacementTextMap(minimumLength, terms, replacementMap);
 
             if (textMap is null)
             {
@@ -105,13 +125,38 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return syntax;
             }
 
-            var result = syntax.ReplaceNodes(textMap.Keys, (_, __) => textMap[_]);
+            return syntax.ReplaceNodes(textMap.Keys, (_, __) => textMap[_]);
 
-            return result;
-
-            Dictionary<XmlTextSyntax, XmlTextSyntax> CreateReplacementTextMap(int minLength)
+//// ncrunch: no coverage start
+            int MinLength(string[] source)
             {
-                Dictionary<XmlTextSyntax, XmlTextSyntax> map = null;
+                var sourceLength = source.Length;
+
+                if (sourceLength <= 0)
+                {
+                    return 0;
+                }
+
+                var minimum = int.MaxValue;
+
+                for (var index = 0; index < sourceLength; index++)
+                {
+                    var value = source[index];
+
+                    var length = value.Length;
+
+                    if (length < minimum)
+                    {
+                        minimum = length;
+                    }
+                }
+
+                return minimum;
+            }
+
+            Dictionary<XmlTextSyntax, XmlTextSyntax> CreateReplacementTextMap(int minLength, string[] phrases, ReadOnlySpan<Pair> map)
+            {
+                Dictionary<XmlTextSyntax, XmlTextSyntax> result = null;
 
                 foreach (var text in syntax.DescendantNodes<XmlTextSyntax>())
                 {
@@ -140,13 +185,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             continue;
                         }
 
-                        if (originalText.ContainsAny(terms, StringComparison.OrdinalIgnoreCase))
+                        if (originalText.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase))
                         {
-                            var replacedText = new StringBuilder(originalText).ReplaceAllWithCheck(replacementMap)
-                                                                              .ToString()
-                                                                              .AdjustFirstWord(firstWordHandling);
+                            var replacedText = originalText.AsBuilder()
+                                                           .ReplaceAllWithCheck(map)
+                                                           .AdjustFirstWord(firstWordHandling)
+                                                           .ToString();
 
-                            if (originalText.Equals(replacedText))
+                            if (originalText.Equals(replacedText, StringComparison.Ordinal))
                             {
                                 // replacement with itself does not make any sense
                                 continue;
@@ -169,20 +215,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         continue;
                     }
 
-                    if (map is null)
+                    if (result is null)
                     {
-                        map = new Dictionary<XmlTextSyntax, XmlTextSyntax>();
+                        result = new Dictionary<XmlTextSyntax, XmlTextSyntax>(1);
                     }
 
                     var newText = text.ReplaceTokens(tokenMap.Keys, (_, __) => tokenMap[_]);
 
-                    map.Add(text, newText);
+                    result.Add(text, newText);
                 }
 
-                return map;
+                return result;
             }
         }
 
+//// ncrunch: no coverage end
 //// ncrunch: rdi default
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string commentStart, TypeSyntax type, string commentEnd)
@@ -316,7 +363,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
 
                     return comment.ReplaceNode(t, XmlText(text))
-                                  .AddContent(seeCref, XmlText(commentContinue).WithTrailingXmlComment());
+                                  .AddContent(seeCref, XmlText(commentContinue))
+                                  .WithTagsOnSeparateLines();
                 }
 
                 default:
@@ -336,7 +384,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var content = CommentStartingWith(comment.Content, phrase, firstWordHandling);
 
-            return SyntaxFactory.XmlElement(comment.StartTag, content, comment.EndTag);
+            return CommentWithContent(comment, content);
         }
 
         protected static SyntaxList<XmlNodeSyntax> CommentStartingWith(SyntaxList<XmlNodeSyntax> content, string phrase, FirstWordHandling firstWordHandling = FirstWordHandling.MakeLowerCase)
@@ -381,7 +429,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return comment;
             }
 
-            var startText = XmlText(commentStart).WithLeadingXmlComment();
+            var startText = XmlText(commentStart);
 
             XmlTextSyntax continueText;
             var syntax = content[index];
@@ -420,8 +468,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                     .Insert(index + 1, seeCref)
                                     .Insert(index + 2, continueText);
 
-            return SyntaxFactory.XmlElement(comment.StartTag, newContent, comment.EndTag);
+            return CommentWithContent(comment, newContent);
         }
+
+        protected static XmlElementSyntax CommentWithContent(XmlElementSyntax value, SyntaxList<XmlNodeSyntax> content) => SyntaxFactory.XmlElement(value.StartTag, content, value.EndTag).WithTagsOnSeparateLines();
 
         protected static XmlEmptyElementSyntax Cref(string tag, TypeSyntax type)
         {
@@ -446,7 +496,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static IEnumerable<XmlElementSyntax> GetXmlSyntax(string startTag, IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.SelectMany(_ => _.GetXmlSyntax(startTag));
 
-        protected static XmlEmptyElementSyntax Inheritdoc() => SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Inheritdoc);
+        protected static XmlEmptyElementSyntax Inheritdoc() => XmlEmptyElement(Constants.XmlTag.Inheritdoc);
 
         protected static XmlEmptyElementSyntax Inheritdoc(XmlCrefAttributeSyntax cref) => Inheritdoc().WithAttributes(cref.ToSyntaxList<XmlAttributeSyntax>());
 
@@ -663,7 +713,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected static XmlEmptyElementSyntax Para() => SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Para);
+        protected static XmlEmptyElementSyntax Para() => XmlEmptyElement(Constants.XmlTag.Para);
 
         protected static XmlElementSyntax Para(string text) => SyntaxFactory.XmlParaElement(XmlText(text));
 
@@ -679,7 +729,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var name = SyntaxFactory.XmlNameAttribute(parameterName);
 
-            return SyntaxFactory.XmlEmptyElement(Constants.XmlTag.ParamRef).WithAttribute(name);
+            return XmlEmptyElement(Constants.XmlTag.ParamRef).WithAttribute(name);
         }
 
         protected static XmlElementSyntax ParaOr() => Para(Constants.Comments.SpecialOrPhrase);
@@ -711,10 +761,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlEmptyElementSyntax SeeLangword(string text)
         {
-            var token = text.AsToken();
-            var attribute = SyntaxFactory.XmlTextAttribute(Constants.XmlTag.Attribute.Langword, token);
+            var attribute = XmlAttribute(Constants.XmlTag.Attribute.Langword, text);
 
-            return SyntaxFactory.XmlEmptyElement(Constants.XmlTag.See).WithAttribute(attribute);
+            return XmlEmptyElement(Constants.XmlTag.See).WithAttribute(attribute);
         }
 
         protected static XmlEmptyElementSyntax SeeLangword_False() => SeeLangword("false");
@@ -723,7 +772,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlEmptyElementSyntax SeeLangword_True() => SeeLangword("true");
 
+#pragma warning disable CA1021
         protected static XmlElementSyntax SplitCommentAfterFirstSentence(XmlElementSyntax comment, out SyntaxList<XmlNodeSyntax> partsAfterSentence)
+#pragma warning restore CA1021
         {
             var partsForFirstSentence = new List<XmlNodeSyntax>();
             var partsForOtherSentences = new List<XmlNodeSyntax>();
@@ -764,8 +815,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         var valueText = token.ValueText;
                         var dotPos = valueText.IndexOf('.') + 1;
 
-                        var firstText = valueText.Substring(0, dotPos);
-                        var lastText = valueText.AsSpan(dotPos).TrimStart().ToString();
+                        var firstText = valueText.AsSpan(0, dotPos);
+                        var lastText = valueText.AsSpan(dotPos).TrimStart();
 
                         tokensBeforeDot.Add(token.WithText(firstText));
 
@@ -774,12 +825,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             tokensAfterDot.Add(token.WithText(lastText));
                         }
 
-                        if (tokensBeforeDot.Any())
+                        if (tokensBeforeDot.Count > 0)
                         {
                             partsForFirstSentence.Add(XmlText(tokensBeforeDot).WithLeadingTriviaFrom(text));
                         }
 
-                        if (tokensAfterDot.Any())
+                        if (tokensAfterDot.Count > 0)
                         {
                             partsForOtherSentences.Add(XmlText(tokensAfterDot));
                         }
@@ -802,11 +853,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlEmptyElementSyntax TypeParamRef(string name)
         {
-            var token = name.AsToken();
-            var attribute = SyntaxFactory.XmlTextAttribute(Constants.XmlTag.Attribute.Name, token);
+            var attribute = XmlAttribute(Constants.XmlTag.Attribute.Name, name);
 
-            return SyntaxFactory.XmlEmptyElement(Constants.XmlTag.TypeParamRef).WithAttribute(attribute);
+            return XmlEmptyElement(Constants.XmlTag.TypeParamRef).WithAttribute(attribute);
         }
+
+        protected static XmlTextAttributeSyntax XmlAttribute(string tag, string text) => SyntaxFactory.XmlTextAttribute(tag, text.AsToken());
 
         /// <summary>
         /// Creates an XML list of given list type.
@@ -845,6 +897,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlElementSyntax XmlElement(string tag, IEnumerable<XmlNodeSyntax> contents) => SyntaxFactory.XmlElement(tag, contents.ToSyntaxList());
 
+        protected static XmlEmptyElementSyntax XmlEmptyElement(string tag) => SyntaxFactory.XmlEmptyElement(tag);
+
         protected static XmlTextSyntax NewLineXmlText() => XmlText(string.Empty).WithLeadingXmlComment();
 
         protected static XmlTextSyntax TrailingNewLineXmlText() => XmlText(string.Empty).WithTrailingXmlComment();
@@ -865,7 +919,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlTextSyntax XmlText(IEnumerable<SyntaxToken> textTokens) => XmlText(textTokens.ToTokenList());
 
-        private static IEnumerable<XmlNodeSyntax> CommentEnd(string commentEnd, params XmlNodeSyntax[] commendEndNodes)
+        private static List<XmlNodeSyntax> CommentEnd(string commentEnd, params XmlNodeSyntax[] commendEndNodes)
         {
             var skip = 0;
             XmlTextSyntax textCommentEnd;
@@ -911,7 +965,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return result;
         }
 
-        private static XmlEmptyElementSyntax Cref(string tag, CrefSyntax syntax) => SyntaxFactory.XmlEmptyElement(tag).WithAttribute(SyntaxFactory.XmlCrefAttribute(syntax));
+        private static XmlEmptyElementSyntax Cref(string tag, CrefSyntax syntax) => XmlEmptyElement(tag).WithAttribute(SyntaxFactory.XmlCrefAttribute(syntax));
 
         private static int GetIndex(SyntaxList<XmlNodeSyntax> content)
         {

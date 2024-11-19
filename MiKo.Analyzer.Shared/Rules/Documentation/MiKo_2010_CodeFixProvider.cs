@@ -2,7 +2,6 @@
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -16,12 +15,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comment = (XmlElementSyntax)syntax;
 
-            const string SealedText = Constants.Comments.SealedClassPhrase;
+            const string Text = Constants.Comments.SealedClassPhrase;
 
-            return SyntaxFactory.XmlElement(
-                                        comment.StartTag,
-                                        comment.WithoutText(SealedText).Add(XmlText(SealedText)),
-                                        comment.EndTag.WithLeadingXmlComment()); // place on new line
+            return CommentWithContent(comment, comment.WithoutText(Text).Add(XmlText(Text)));
         }
     }
 }

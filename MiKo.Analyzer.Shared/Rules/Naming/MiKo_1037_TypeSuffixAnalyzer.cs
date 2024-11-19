@@ -60,9 +60,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var symbolName = symbol.Name;
 
-            var betterName = new StringBuilder(symbolName).ReplaceWithCheck("TypeEnum", "Kind")
-                                                          .Without(WrongSuffixes)
-                                                          .ToString();
+            var betterName = symbolName.AsBuilder()
+                                       .ReplaceWithCheck("TypeEnum", "Kind")
+                                       .Without(WrongSuffixes)
+                                       .ToString();
 
             if (betterName.IsNullOrWhiteSpace())
             {
