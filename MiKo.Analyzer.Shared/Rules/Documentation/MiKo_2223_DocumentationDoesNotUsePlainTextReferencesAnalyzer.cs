@@ -27,6 +27,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                '#',
                                                            };
 
+        private static readonly string[] LangwordCandidates = { "true", "false", "null" };
+
         private static readonly string[] HyperlinkIndicators = { "http:", "https:", "ftp:", "ftps:" };
 
         private static readonly string[] CompilerWarningIndicators = { "CS", "CA", "SA" };
@@ -135,6 +137,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return false;
             }
 
+            if (trimmed.EqualsAny(LangwordCandidates, StringComparison.OrdinalIgnoreCase))
+            {
+                // do not report stuff like 'true' as that is a langword which gets reported by MiKo_2040
+                return false;
+            }
+
             if (trimmed.StartsWithAny(HyperlinkIndicators, StringComparison.OrdinalIgnoreCase))
             {
                 return false;
@@ -233,6 +241,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     start += span.Length - trimmedStart.Length;
                     end -= span.Length - trimmedEnd.Length;
+
+                    if (start > end)
+                    {
+                        // we are at the end, so nothing more to report
+                        break;
+                    }
 
                     var trimmed = text.AsSpan(start, end - start);
 
