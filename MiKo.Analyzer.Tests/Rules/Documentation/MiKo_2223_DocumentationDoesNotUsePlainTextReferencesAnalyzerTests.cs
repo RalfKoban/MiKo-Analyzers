@@ -10,6 +10,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2223_DocumentationDoesNotUsePlainTextReferencesAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] WellknownWords =
+                                                          [
+                                                              "IntelliSense",
+                                                              "FxCop",
+                                                              "StyleCop",
+                                                              "SonarCube",
+                                                              "SonarQube",
+                                                              "CSharp",
+                                                              "VisualBasic",
+                                                              "NCrunch",
+                                                              "NCrunch's",
+                                                              "NCover",
+                                                              "PostSharp",
+                                                              "SonarLint",
+                                                              "ReSharper",
+                                                              "ASP.NET",
+                                                              "Microsoft",
+                                                              "Outlook",
+                                                          ];
+
         [Test]
         public void No_issue_is_reported_for_undocumented_method() => No_issue_is_reported_for(@"
 using System;
@@ -236,8 +256,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_known_text_([Values("IntelliSense", "FxCop", "StyleCop", "SonarCube", "SonarQube", "CSharp", "VisualBasic", "NCrunch", "NCrunch's", "NCover", "PostSharp", "SonarLint", "ReSharper", "ASP.NET")] string text)
-            => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_documented_method_with_known_text_([ValueSource(nameof(WellknownWords))] string text) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe

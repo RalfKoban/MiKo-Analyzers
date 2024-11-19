@@ -44,11 +44,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly HashSet<string> WellKnownWords = new HashSet<string>
                                                                      {
+                                                                         "ASP.NET",
                                                                          "CSharp",
                                                                          "FxCop",
                                                                          "IntelliSense",
+                                                                         "Microsoft",
                                                                          "NCover",
                                                                          "NCrunch",
+                                                                         "Outlook",
                                                                          "PostSharp",
                                                                          "ReSharper",
                                                                          "SonarCube",
@@ -56,7 +59,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                          "SonarQube",
                                                                          "StyleCop",
                                                                          "VisualBasic",
-                                                                         "ASP.NET",
                                                                      };
 
         public MiKo_2223_DocumentationDoesNotUsePlainTextReferencesAnalyzer() : base(Id)
