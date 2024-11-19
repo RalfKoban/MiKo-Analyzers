@@ -4363,7 +4363,7 @@ This ensures precision in your tests and maintains clear expectations.</value>
     <value>Tests should test concrete implementations and no interfaces</value>
   </data>
   <data name="MiKo_3122_Description" xml:space="preserve">
-    <value>Test methods using more than 3 parameters most likely are combined tests. Such test are hard to read. Hence, to ease reading, these tests should be split into separate ones.</value>
+    <value>Test methods with more than 3 parameters are often combined tests and can be hard to read. To improve readability, split these tests into separate ones. This makes them easier to understand and maintain.</value>
   </data>
   <data name="MiKo_3122_MessageFormat" xml:space="preserve">
     <value>Split into multiple tests so that you do not need more than 3 parameters</value>

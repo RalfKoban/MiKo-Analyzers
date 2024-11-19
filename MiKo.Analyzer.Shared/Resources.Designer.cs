@@ -12448,7 +12448,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test methods using more than 3 parameters most likely are combined tests. Such test are hard to read. Hence, to ease reading, these tests should be split into separate ones..
+        ///   Looks up a localized string similar to Test methods with more than 3 parameters are often combined tests and can be hard to read. To improve readability, split these tests into separate ones. This makes them easier to understand and maintain..
         /// </summary>
         internal static string MiKo_3122_Description {
             get {
