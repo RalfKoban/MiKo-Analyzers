@@ -10,6 +10,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2223_DocumentationDoesNotUsePlainTextReferencesAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] WellknownWords =
+                                                          [
+                                                              "IntelliSense",
+                                                              "FxCop",
+                                                              "StyleCop",
+                                                              "SonarCube",
+                                                              "SonarQube",
+                                                              "CSharp",
+                                                              "VisualBasic",
+                                                              "NCrunch",
+                                                              "NCrunch's",
+                                                              "NCover",
+                                                              "PostSharp",
+                                                              "SonarLint",
+                                                              "ReSharper",
+                                                              "ASP.NET",
+                                                              "Microsoft",
+                                                              "Outlook",
+                                                          ];
+
         [Test]
         public void No_issue_is_reported_for_undocumented_method() => No_issue_is_reported_for(@"
 using System;
@@ -236,8 +256,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_known_text_([Values("IntelliSense", "FxCop", "StyleCop", "SonarCube", "SonarQube", "CSharp", "VisualBasic", "NCrunch", "NCrunch's", "NCover", "PostSharp", "SonarLint", "ReSharper", "ASP.NET")] string text)
-            => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_documented_method_with_known_text_([ValueSource(nameof(WellknownWords))] string text) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -282,13 +301,28 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_file_extension() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_documented_method_with_file_extension_in_quotes() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
     /// <summary>
     /// Does something regarding '*.ZipFile' that is very important.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_correctly_documented_method_with_file_extension_not_in_quotes() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something regarding *.txt that is very important.
     /// </summary>
     public void DoSomething()
     {
@@ -338,6 +372,35 @@ public class TestMe
     public void DoSomething()
     {
     }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_para_phrase() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// <para>
+    ///   This option affects the way the generated SFX runs. By default it is
+    ///   false.  When you set it to true,...
+    /// </para>
+    /// </summary>
+    void DoSomething();
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_file_with_extension_([Values("zip", "exe", "pdf", "docx")] string extension) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Can be SomeFile." + extension + @"
+    /// </summary>
+    void DoSomething();
 }
 ");
 
