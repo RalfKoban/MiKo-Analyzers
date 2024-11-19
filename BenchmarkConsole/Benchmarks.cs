@@ -32,11 +32,11 @@ namespace BenchmarkConsole
         // [Benchmark(Baseline = true)]
         // public void MiKo_2023_Original() => GC.KeepAlive(new MiKoSolutions.Analyzers.Rules.Documentation.MiKo_2023_CodeFixProvider.MapData());
 
-        //[Benchmark(Baseline = true)]
+        // [Benchmark(Baseline = true)]
         // [Benchmark]
         // public void MiKo_2035_Original() => GC.KeepAlive(new MiKoSolutions.Analyzers.Rules.Documentation.MiKo_2035_CodeFixProvider.MapData());
 
-        //[Benchmark(Baseline = true)]
+        // [Benchmark(Baseline = true)]
         // [Benchmark]
         // public void MiKo_2060_Original() => GC.KeepAlive(new MiKoSolutions.Analyzers.Rules.Documentation.MiKo_2060_CodeFixProvider.MapData());
 
@@ -49,6 +49,7 @@ namespace BenchmarkConsole
         {
             GC.KeepAlive(new int[Times]);
         }
+
         [Benchmark]
         public void SharedArrayPool()
         {

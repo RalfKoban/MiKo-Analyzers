@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2060_CodeFixProvider)), Shared]
     public sealed class MiKo_2060_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
-        internal static readonly Lazy<MapData> MappedData = new Lazy<MapData>();
+        private static readonly Lazy<MapData> MappedData = new Lazy<MapData>();
 
 #if !NCRUNCH // do not define a static ctor to speed up tests in NCrunch
         static MiKo_2060_CodeFixProvider() => LoadData(); // ensure that we have the object available
@@ -171,7 +171,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 //// ncrunch: rdi off
 //// ncrunch: no coverage start
 
-        internal sealed class MapData
+        private sealed class MapData
         {
             public MapData()
             {
@@ -180,11 +180,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 //// Array.Sort(typeKeys, AscendingStringComparer.Default);
 
-                var typeKeysWithA = new List<string>(76298); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysWithCD = new List<string>(40477); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysWithThe = new List<string>(72645); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysWithThis = new List<string>(22210); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysOther = new List<string>(63372); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysWithA = new List<string>(57228); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysWithCD = new List<string>(30362); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysWithThe = new List<string>(54490); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysWithThis = new List<string>(16660); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysOther = new List<string>(47532); // TODO RKN: Adjust number as soon as there are other texts
 
                 for (var index = 0; index < typeKeysLength; index++)
                 {
@@ -322,6 +322,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             private static string[] CreateTypeReplacementMapKeys()
             {
+                var allPhrases = CreateAllPhrases();
+                var allContinuations = new HashSet<string>(CreateAllContinuations());
+
                 var results = new HashSet<string> // avoid duplicates
                                   {
                                       "Implementations construct ",
@@ -330,277 +333,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                       "Implementations provide ",
                                   };
 
-                var phrases = new[]
-                                  {
-                                      "A class containing factory methods",
-                                      "A class containing methods",
-                                      "A class providing factory methods",
-                                      "A class providing methods",
-                                      "A class that contains factory methods",
-                                      "A class that contains methods",
-                                      "A class that provides factory methods",
-                                      "A class that provides methods",
-                                      "A class which contains factory methods",
-                                      "A class which contains methods",
-                                      "A class which provides factory methods",
-                                      "A class which provides methods",
-                                      "A factory that provides methods",
-                                      "A factory that provides",
-                                      "A factory to provide methods",
-                                      "A factory to provide",
-                                      "A factory which provides methods",
-                                      "A factory which provides",
-                                      "A factory",
-                                      "A implementation of the abstract factory pattern",
-                                      "A implementation of the factory pattern",
-                                      "A interface for factories",
-                                      "A interface implemented by factories",
-                                      "A interface of a factory",
-                                      "A interface that is implemented by factories",
-                                      "A interface which is implemented by factories",
-                                      "A interface",
-                                      "An implementation of the abstract factory pattern",
-                                      "An implementation of the factory pattern",
-                                      "An interface for factories",
-                                      "An interface implemented by factories",
-                                      "An interface of a factory",
-                                      "An interface that is implemented by factories",
-                                      "An interface which is implemented by factories",
-                                      "An interface",
-                                      "Class for factory methods",
-                                      "Class for methods",
-                                      "Class containing factory methods",
-                                      "Class containing methods",
-                                      "Class providing factory methods",
-                                      "Class providing methods",
-                                      "Class that contains factory methods",
-                                      "Class that contains methods",
-                                      "Class that provides factory methods",
-                                      "Class that provides methods",
-                                      "Class which contains factory methods",
-                                      "Class which contains methods",
-                                      "Class which provides factory methods",
-                                      "Class which provides methods",
-                                      "Class to provide factory methods",
-                                      "Class to provide methods",
-                                      "Class",
-                                      "Defines a factory",
-                                      "Defines a method",
-                                      "Defines methods",
-                                      "Defines the factory",
-                                      "Defines factories",
-                                      "Factory that provides methods",
-                                      "Factory that provides",
-                                      "Factory to provide methods",
-                                      "Factory to provide",
-                                      "Factory which provides methods",
-                                      "Factory which provides",
-                                      "Factory",
-                                      "Implementation of the abstract factory pattern",
-                                      "Implementation of the factory pattern",
-                                      "Interface for factories",
-                                      "Interface of a factory",
-                                      "Interface of factories",
-                                      "Interface",
-                                      "Provides a factory",
-                                      "Provides a method",
-                                      "Provides methods",
-                                      "Provides the factory",
-                                      "Provides factories",
-                                      "Provides",
-                                      "Represents a factory",
-                                      "Represents the factory",
-                                      "Represents factories",
-                                      "Represents a method",
-                                      "Represents the method",
-                                      "Represents methods",
-                                      "The class containing factory methods",
-                                      "The class containing methods",
-                                      "The class contains factory methods",
-                                      "The class contains methods",
-                                      "The class provides factory methods",
-                                      "The class provides methods",
-                                      "The class providing factory methods",
-                                      "The class providing methods",
-                                      "The class that contains factory methods",
-                                      "The class that contains methods",
-                                      "The class which contains factory methods",
-                                      "The class which contains methods",
-                                      "The class that provides factory methods",
-                                      "The class that provides methods",
-                                      "The class which provides factory methods",
-                                      "The class which provides methods",
-                                      "The factory that provides methods",
-                                      "The factory that provides",
-                                      "The factory to provide methods",
-                                      "The factory to provide",
-                                      "The factory which provides methods",
-                                      "The factory which provides",
-                                      "The factory providing factory methods",
-                                      "The factory providing methods",
-                                      "The factory",
-                                      "The implementation of the abstract factory pattern",
-                                      "The implementation of the factory pattern",
-                                      "The interface for factories",
-                                      "The interface implemented by factories",
-                                      "The interface of a factory",
-                                      "The interface that is implemented by factories",
-                                      "The interface which is implemented by factories",
-                                      "The interface",
-                                      "This class containing factory methods",
-                                      "This class containing methods",
-                                      "This class contains factory methods",
-                                      "This class contains methods",
-                                      "This class provides factory methods",
-                                      "This class provides methods",
-                                      "This class providing factory methods",
-                                      "This class providing methods",
-                                      "This factory provides methods",
-                                      "This factory",
-                                      "This interface is implemented by factories",
-                                      "Used",
-                                      "Uses", // typo in 'Used'
-                                  };
-
-                var articles = new[]
-                                   {
-                                       "a ",
-                                       "an ",
-                                       "the ",
-                                       string.Empty,
-                                   };
-
-                var instances = new[]
-                                    {
-                                        "instance of ",
-                                        "instances of ",
-                                        "new instance of ",
-                                        "new instances of ",
-                                    };
-
-                var continuations = new HashSet<string>();
-
-                foreach (var article in articles)
-                {
-                    foreach (var instance in instances)
-                    {
-                        continuations.Add(article + instance + article);
-                    }
-
-                    continuations.Add(article);
-                }
-
-                continuations.Add(string.Empty);
-
-                var allPhrases = new HashSet<string>();
-
-                foreach (var phrase in phrases)
-                {
-                    allPhrases.Add(phrase);
-                    allPhrases.Add(phrase.Replace("actory", "actory class"));
-                }
-
                 foreach (var phrase in allPhrases)
                 {
-                    foreach (var continuation in continuations)
+                    foreach (var continuation in allContinuations)
                     {
-                        results.Add(phrase + " that can build " + continuation);
-                        results.Add(phrase + " that build " + continuation);
-                        results.Add(phrase + " that builds " + continuation);
-                        results.Add(phrase + " that can construct " + continuation);
-                        results.Add(phrase + " that construct " + continuation);
-                        results.Add(phrase + " that constructs " + continuation);
-                        results.Add(phrase + " that can create " + continuation);
-                        results.Add(phrase + " that create " + continuation);
-                        results.Add(phrase + " that creates " + continuation);
-                        results.Add(phrase + " that can provide " + continuation);
-                        results.Add(phrase + " that provide " + continuation);
-                        results.Add(phrase + " that provides " + continuation);
-                        results.Add(phrase + " that " + continuation);
-
-                        results.Add(phrase + " which can build " + continuation);
-                        results.Add(phrase + " which build " + continuation);
-                        results.Add(phrase + " which builds " + continuation);
-                        results.Add(phrase + " which can construct " + continuation);
-                        results.Add(phrase + " which construct " + continuation);
-                        results.Add(phrase + " which constructs " + continuation);
-                        results.Add(phrase + " which can create " + continuation);
-                        results.Add(phrase + " which create " + continuation);
-                        results.Add(phrase + " which creates " + continuation);
-                        results.Add(phrase + " which can provide " + continuation);
-                        results.Add(phrase + " which provide " + continuation);
-                        results.Add(phrase + " which provides " + continuation);
-                        results.Add(phrase + " which " + continuation);
-
-                        results.Add(phrase + " for building of " + continuation);
-                        results.Add(phrase + " for building " + continuation);
-                        results.Add(phrase + " for the building of " + continuation);
-                        results.Add(phrase + " for constructing " + continuation);
-                        results.Add(phrase + " for construction of " + continuation);
-                        results.Add(phrase + " for the construction of " + continuation);
-                        results.Add(phrase + " for creating " + continuation);
-                        results.Add(phrase + " for creation of " + continuation);
-                        results.Add(phrase + " for the creation of " + continuation);
-                        results.Add(phrase + " for providing of " + continuation);
-                        results.Add(phrase + " for providing " + continuation);
-                        results.Add(phrase + " for " + continuation);
-
-                        results.Add(phrase + " building " + continuation);
-                        results.Add(phrase + " builds " + continuation);
-                        results.Add(phrase + " constructing " + continuation);
-                        results.Add(phrase + " constructs " + continuation);
-                        results.Add(phrase + " creating " + continuation);
-                        results.Add(phrase + " creates " + continuation);
-                        results.Add(phrase + " providing " + continuation);
-                        results.Add(phrase + " provides " + continuation);
-
-                        results.Add(phrase + " that is able to build " + continuation);
-                        results.Add(phrase + " which is able to build " + continuation);
-                        results.Add(phrase + " that is capable to build " + continuation);
-                        results.Add(phrase + " which is capable to build " + continuation);
-                        results.Add(phrase + " that is able to construct " + continuation);
-                        results.Add(phrase + " which is able to construct " + continuation);
-                        results.Add(phrase + " that is capable to construct " + continuation);
-                        results.Add(phrase + " which is capable to construct " + continuation);
-                        results.Add(phrase + " that is able to create " + continuation);
-                        results.Add(phrase + " which is able to create " + continuation);
-                        results.Add(phrase + " that is capable to create " + continuation);
-                        results.Add(phrase + " which is capable to create " + continuation);
-                        results.Add(phrase + " that is able to provide " + continuation);
-                        results.Add(phrase + " which is able to provide " + continuation);
-                        results.Add(phrase + " that is capable to provide " + continuation);
-                        results.Add(phrase + " which is capable to provide " + continuation);
-
-                        results.Add(phrase + " that are able to build " + continuation);
-                        results.Add(phrase + " which are able to build " + continuation);
-                        results.Add(phrase + " that are capable to build " + continuation);
-                        results.Add(phrase + " which are capable to build " + continuation);
-                        results.Add(phrase + " that are able to construct " + continuation);
-                        results.Add(phrase + " which are able to construct " + continuation);
-                        results.Add(phrase + " that are capable to construct " + continuation);
-                        results.Add(phrase + " which are capable to construct " + continuation);
-                        results.Add(phrase + " that are able to create " + continuation);
-                        results.Add(phrase + " which are able to create " + continuation);
-                        results.Add(phrase + " that are capable to create " + continuation);
-                        results.Add(phrase + " which are capable to create " + continuation);
-                        results.Add(phrase + " that are able to provide " + continuation);
-                        results.Add(phrase + " which are able to provide " + continuation);
-                        results.Add(phrase + " that are capable to provide " + continuation);
-                        results.Add(phrase + " which are capable to provide " + continuation);
-
-                        results.Add(phrase + " to build " + continuation);
-                        results.Add(phrase + " to construct " + continuation);
-                        results.Add(phrase + " to create " + continuation);
-                        results.Add(phrase + " to provide factory methods to build " + continuation);
-                        results.Add(phrase + " to provide factory methods to construct " + continuation);
-                        results.Add(phrase + " to provide factory methods to create " + continuation);
-                        results.Add(phrase + " to provide methods to build " + continuation);
-                        results.Add(phrase + " to provide methods to construct " + continuation);
-                        results.Add(phrase + " to provide methods to create " + continuation);
-                        results.Add(phrase + " to provide " + continuation);
-                        results.Add(phrase + " to " + continuation);
-
-                        results.Add(phrase + " " + continuation);
+                        results.Add(phrase + continuation);
                     }
                 }
 
@@ -752,6 +489,278 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 results.CopyTo(resultsArray);
 
                 return resultsArray;
+            }
+
+            private static HashSet<string> CreateAllPhrases()
+            {
+                var phrases = new[]
+                                  {
+                                      "A class containing factory methods",
+                                      "A class containing methods",
+                                      "A class providing factory methods",
+                                      "A class providing methods",
+                                      "A class that contains factory methods",
+                                      "A class that contains methods",
+                                      "A class that provides factory methods",
+                                      "A class that provides methods",
+                                      "A class which contains factory methods",
+                                      "A class which contains methods",
+                                      "A class which provides factory methods",
+                                      "A class which provides methods",
+                                      "A factory that provides methods",
+                                      "A factory that provides",
+                                      "A factory to provide methods",
+                                      "A factory to provide",
+                                      "A factory which provides methods",
+                                      "A factory which provides",
+                                      "A factory",
+                                      "A implementation of the abstract factory pattern",
+                                      "A implementation of the factory pattern",
+                                      "A interface for factories",
+                                      "A interface implemented by factories",
+                                      "A interface of a factory",
+                                      "A interface that is implemented by factories",
+                                      "A interface which is implemented by factories",
+                                      "A interface",
+                                      "An implementation of the abstract factory pattern",
+                                      "An implementation of the factory pattern",
+                                      "An interface for factories",
+                                      "An interface implemented by factories",
+                                      "An interface of a factory",
+                                      "An interface that is implemented by factories",
+                                      "An interface which is implemented by factories",
+                                      "An interface",
+                                      "Class for factory methods",
+                                      "Class for methods",
+                                      "Class containing factory methods",
+                                      "Class containing methods",
+                                      "Class providing factory methods",
+                                      "Class providing methods",
+                                      "Class that contains factory methods",
+                                      "Class that contains methods",
+                                      "Class that provides factory methods",
+                                      "Class that provides methods",
+                                      "Class which contains factory methods",
+                                      "Class which contains methods",
+                                      "Class which provides factory methods",
+                                      "Class which provides methods",
+                                      "Class to provide factory methods",
+                                      "Class to provide methods",
+                                      "Class",
+                                      "Defines a factory",
+                                      "Defines a method",
+                                      "Defines methods",
+                                      "Defines the factory",
+                                      "Defines factories",
+                                      "Factory that provides methods",
+                                      "Factory that provides",
+                                      "Factory to provide methods",
+                                      "Factory to provide",
+                                      "Factory which provides methods",
+                                      "Factory which provides",
+                                      "Factory",
+                                      "Implementation of the abstract factory pattern",
+                                      "Implementation of the factory pattern",
+                                      "Interface for factories",
+                                      "Interface of a factory",
+                                      "Interface of factories",
+                                      "Interface",
+                                      "Provides a factory",
+                                      "Provides a method",
+                                      "Provides methods",
+                                      "Provides the factory",
+                                      "Provides factories",
+                                      "Provides",
+                                      "Represents a factory",
+                                      "Represents the factory",
+                                      "Represents factories",
+                                      "Represents a method",
+                                      "Represents the method",
+                                      "Represents methods",
+                                      "The class containing factory methods",
+                                      "The class containing methods",
+                                      "The class contains factory methods",
+                                      "The class contains methods",
+                                      "The class provides factory methods",
+                                      "The class provides methods",
+                                      "The class providing factory methods",
+                                      "The class providing methods",
+                                      "The class that contains factory methods",
+                                      "The class that contains methods",
+                                      "The class which contains factory methods",
+                                      "The class which contains methods",
+                                      "The class that provides factory methods",
+                                      "The class that provides methods",
+                                      "The class which provides factory methods",
+                                      "The class which provides methods",
+                                      "The factory that provides methods",
+                                      "The factory that provides",
+                                      "The factory to provide methods",
+                                      "The factory to provide",
+                                      "The factory which provides methods",
+                                      "The factory which provides",
+                                      "The factory providing factory methods",
+                                      "The factory providing methods",
+                                      "The factory",
+                                      "The implementation of the abstract factory pattern",
+                                      "The implementation of the factory pattern",
+                                      "The interface for factories",
+                                      "The interface implemented by factories",
+                                      "The interface of a factory",
+                                      "The interface that is implemented by factories",
+                                      "The interface which is implemented by factories",
+                                      "The interface",
+                                      "This class containing factory methods",
+                                      "This class containing methods",
+                                      "This class contains factory methods",
+                                      "This class contains methods",
+                                      "This class provides factory methods",
+                                      "This class provides methods",
+                                      "This class providing factory methods",
+                                      "This class providing methods",
+                                      "This factory provides methods",
+                                      "This factory",
+                                      "This interface is implemented by factories",
+                                      "Used",
+                                      "Uses", // typo in 'Used'
+                                  };
+
+                var results = new HashSet<string>(phrases);
+
+                foreach (var phrase in phrases)
+                {
+                    results.Add(phrase.Replace("actory", "actory class"));
+                }
+
+                return results;
+            }
+
+            private static IEnumerable<string> CreateAllContinuations()
+            {
+                var continuations = new[]
+                                        {
+                                            string.Empty,
+                                            "a ",
+                                            "a instance of a ",
+                                            //// "a instances of a ", // currently ignored as this contains typos which we did not see in the wild
+                                            "a new instance of a ",
+                                            //// "a new instances of a ", // currently ignored as this contains typos which we did not see in the wild
+                                            "an ",
+                                            "an instance of an ",
+                                            //// "an instances of an ", // currently ignored as this contains typos which we did not see in the wild
+                                            //// "an new instance of an ", // currently ignored as this contains typos which we did not see in the wild
+                                            //// "an new instances of an ", // currently ignored as this contains typos which we did not see in the wild
+                                            "instance of ",
+                                            "instances of ",
+                                            "new instance of ",
+                                            "new instances of ",
+                                            "the ",
+                                            "the instance of the ",
+                                            "the instances of the ",
+                                            "the new instance of the ",
+                                            "the new instances of the ",
+                                        };
+
+                foreach (var continuation in continuations)
+                {
+                    yield return " that can build " + continuation;
+                    yield return " that build " + continuation;
+                    yield return " that builds " + continuation;
+                    yield return " that can construct " + continuation;
+                    yield return " that construct " + continuation;
+                    yield return " that constructs " + continuation;
+                    yield return " that can create " + continuation;
+                    yield return " that create " + continuation;
+                    yield return " that creates " + continuation;
+                    yield return " that can provide " + continuation;
+                    yield return " that provide " + continuation;
+                    yield return " that provides " + continuation;
+                    yield return " that " + continuation;
+
+                    yield return " which can build " + continuation;
+                    yield return " which build " + continuation;
+                    yield return " which builds " + continuation;
+                    yield return " which can construct " + continuation;
+                    yield return " which construct " + continuation;
+                    yield return " which constructs " + continuation;
+                    yield return " which can create " + continuation;
+                    yield return " which create " + continuation;
+                    yield return " which creates " + continuation;
+                    yield return " which can provide " + continuation;
+                    yield return " which provide " + continuation;
+                    yield return " which provides " + continuation;
+                    yield return " which " + continuation;
+
+                    yield return " for building of " + continuation;
+                    yield return " for building " + continuation;
+                    yield return " for the building of " + continuation;
+                    yield return " for constructing " + continuation;
+                    yield return " for construction of " + continuation;
+                    yield return " for the construction of " + continuation;
+                    yield return " for creating " + continuation;
+                    yield return " for creation of " + continuation;
+                    yield return " for the creation of " + continuation;
+                    yield return " for providing of " + continuation;
+                    yield return " for providing " + continuation;
+                    yield return " for " + continuation;
+
+                    yield return " building " + continuation;
+                    yield return " builds " + continuation;
+                    yield return " constructing " + continuation;
+                    yield return " constructs " + continuation;
+                    yield return " creating " + continuation;
+                    yield return " creates " + continuation;
+                    yield return " providing " + continuation;
+                    yield return " provides " + continuation;
+
+                    yield return " that is able to build " + continuation;
+                    yield return " which is able to build " + continuation;
+                    yield return " that is capable to build " + continuation;
+                    yield return " which is capable to build " + continuation;
+                    yield return " that is able to construct " + continuation;
+                    yield return " which is able to construct " + continuation;
+                    yield return " that is capable to construct " + continuation;
+                    yield return " which is capable to construct " + continuation;
+                    yield return " that is able to create " + continuation;
+                    yield return " which is able to create " + continuation;
+                    yield return " that is capable to create " + continuation;
+                    yield return " which is capable to create " + continuation;
+                    yield return " that is able to provide " + continuation;
+                    yield return " which is able to provide " + continuation;
+                    yield return " that is capable to provide " + continuation;
+                    yield return " which is capable to provide " + continuation;
+
+                    yield return " that are able to build " + continuation;
+                    yield return " which are able to build " + continuation;
+                    yield return " that are capable to build " + continuation;
+                    yield return " which are capable to build " + continuation;
+                    yield return " that are able to construct " + continuation;
+                    yield return " which are able to construct " + continuation;
+                    yield return " that are capable to construct " + continuation;
+                    yield return " which are capable to construct " + continuation;
+                    yield return " that are able to create " + continuation;
+                    yield return " which are able to create " + continuation;
+                    yield return " that are capable to create " + continuation;
+                    yield return " which are capable to create " + continuation;
+                    yield return " that are able to provide " + continuation;
+                    yield return " which are able to provide " + continuation;
+                    yield return " that are capable to provide " + continuation;
+                    yield return " which are capable to provide " + continuation;
+
+                    yield return " to build " + continuation;
+                    yield return " to construct " + continuation;
+                    yield return " to create " + continuation;
+                    yield return " to provide factory methods to build " + continuation;
+                    yield return " to provide factory methods to construct " + continuation;
+                    yield return " to provide factory methods to create " + continuation;
+                    yield return " to provide methods to build " + continuation;
+                    yield return " to provide methods to construct " + continuation;
+                    yield return " to provide methods to create " + continuation;
+                    yield return " to provide " + continuation;
+                    yield return " to " + continuation;
+
+                    yield return " " + continuation;
+                }
             }
         }
 //// ncrunch: no coverage end

@@ -868,7 +868,7 @@ internal interface IFactory
                                           "for the providing",
                                       ];
 
-            results.RemoveWhere(_ => _.ContainsAny(strangePhrases));
+            results.RemoveWhere(_ => _.ContainsAny(strangePhrases, StringComparison.Ordinal));
 
             results.Add("Implementations create ");
             results.Add("Implementations construct ");
