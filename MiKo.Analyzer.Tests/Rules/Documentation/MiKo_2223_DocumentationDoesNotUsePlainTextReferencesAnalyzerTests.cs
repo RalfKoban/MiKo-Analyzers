@@ -301,13 +301,28 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_file_extension() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_documented_method_with_file_extension_in_quotes() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
     /// <summary>
     /// Does something regarding '*.ZipFile' that is very important.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_correctly_documented_method_with_file_extension_not_in_quotes() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something regarding *.txt that is very important.
     /// </summary>
     public void DoSomething()
     {

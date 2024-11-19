@@ -78,6 +78,7 @@ namespace MiKoSolutions.Analyzers
                                                                         ".jpeg",
                                                                         ".jpg",
                                                                         ".js",
+                                                                        ".mp3",
                                                                         ".nupkg",
                                                                         ".pdf",
                                                                         ".png",
