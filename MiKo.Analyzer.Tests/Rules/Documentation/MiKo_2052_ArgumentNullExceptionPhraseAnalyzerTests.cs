@@ -592,6 +592,68 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_empty_exception()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <exception cref=""ArgumentNullException""></exception>
+    public void DoSomething(object o) { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <exception cref=""ArgumentNullException"">
+    /// <paramref name=""o""/> is <see langword=""null""/>.
+    /// </exception>
+    public void DoSomething(object o) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_empty_exception_on_for_method_with_multiple_parameters_and_additional_struct_parameter_set_to_default()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <exception cref=""ArgumentNullException""></exception>
+    public Task<int> DoSomething(object o1, object o2, CancellationToken token = default) { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <exception cref=""ArgumentNullException"">
+    /// <paramref name=""o1""/> is <see langword=""null""/>.
+    /// <para>-or-</para>
+    /// <paramref name=""o2""/> is <see langword=""null""/>.
+    /// </exception>
+    public Task<int> DoSomething(object o1, object o2, CancellationToken token = default) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2052_ArgumentNullExceptionPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2052_ArgumentNullExceptionPhraseAnalyzer();
