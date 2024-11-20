@@ -10,14 +10,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         public int Compare(string x, string y)
         {
-            if (x is null && y is null)
-            {
-                return 0;
-            }
-
             if (x is null)
             {
-                return -1;
+                return y is null ? 0 : -1;
             }
 
             if (y is null)

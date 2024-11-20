@@ -61,6 +61,40 @@ namespace MiKoSolutions.Analyzers
                                                                               ".feature.cs", // SpecFlow generated code
                                                                           };
 
+        internal static readonly string[] WellknownFileExtensions =
+                                                                    {
+                                                                        ".bmp",
+                                                                        ".cert",
+                                                                        ".config",
+                                                                        ".cs",
+                                                                        ".dll",
+                                                                        ".doc",
+                                                                        ".docx",
+                                                                        ".eds",
+                                                                        ".exe",
+                                                                        ".gif",
+                                                                        ".htm",
+                                                                        ".html",
+                                                                        ".jpeg",
+                                                                        ".jpg",
+                                                                        ".js",
+                                                                        ".mp3",
+                                                                        ".nupkg",
+                                                                        ".pdf",
+                                                                        ".png",
+                                                                        ".ps1",
+                                                                        ".resx",
+                                                                        ".rtf",
+                                                                        ".txt",
+                                                                        ".vb",
+                                                                        ".vbs",
+                                                                        ".yaml",
+                                                                        ".yml",
+                                                                        ".xaml",
+                                                                        ".xml",
+                                                                        ".zip",
+                                                                    };
+
         internal static class ILog
         {
             internal const string NamespaceName = "log4net";
@@ -255,10 +289,10 @@ namespace MiKoSolutions.Analyzers
             internal const string SealedClassPhrase = "This class cannot be inherited.";
             internal const string SpecialOrPhrase = "-or-";
             internal const string StringReturnTypeStartingPhraseTemplate = "A {0} {1} ";
-            internal const string ValueConverterSummaryStartingPhrase = "Represents a converter that converts ";
             internal const string ThatContainsTerm = "that contains";
             internal const string ToSeekTerm = "to seek";
             internal const string TryStartingPhrase = "Attempts to";
+            internal const string ValueConverterSummaryStartingPhrase = "Represents a converter that converts ";
             internal const string WasNotSuccessfulPhrase = "was not successful";
             internal const string WhenAllTaskReturnTypeStartingPhrase = "A task that represents the completion of all of the supplied tasks.";
             internal const string WhenAnyTaskReturnTypeStartingPhraseTemplate = "A {0} that represents the completion of one of the supplied tasks. Its {1} is the task that completed first.";

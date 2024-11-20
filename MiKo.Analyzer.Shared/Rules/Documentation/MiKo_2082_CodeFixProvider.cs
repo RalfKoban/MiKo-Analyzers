@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var text = txt.GetTextWithoutTrivia();
 
-                if (text.StartsWith("Enum"))
+                if (text.StartsWith("Enum", StringComparison.Ordinal))
                 {
                     var enumMember = txt.FirstAncestor<EnumMemberDeclarationSyntax>();
 
