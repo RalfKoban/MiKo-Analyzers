@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2233_EmptyXmlTagIsOnSameLineAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_on_documentation_with_no_empty_XML_tag() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_on_documentation_with_XML_start_and_end_tags_on_single_lines() => No_issue_is_reported_for(@"
 /// <summary>
 /// Does something.
 /// </summary>
@@ -115,6 +115,106 @@ public sealed class TestMe
     /// </summary>
     public void DoSomething(object o)
     { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_documentation_with_LessThan_token_of_start_XML_tag_on_different_line()
+        {
+            const string OriginalCode = @"
+/// <
+/// summary>
+/// Does something.
+/// </summary>
+public sealed class TestMe
+{
+}
+";
+
+            const string FixedCode = @"
+/// <summary>
+/// Does something.
+/// </summary>
+public sealed class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_documentation_with_GreaterThan_token_of_start_XML_tag_on_different_line()
+        {
+            const string OriginalCode = @"
+/// <summary
+/// >
+/// Does something.
+/// </summary>
+public sealed class TestMe
+{
+}
+";
+
+            const string FixedCode = @"
+/// <summary>
+/// Does something.
+/// </summary>
+public sealed class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_documentation_with_LessThanSlash_token_of_end_XML_tag_on_different_line()
+        {
+            const string OriginalCode = @"
+/// <summary>
+/// Does something.
+/// </
+/// summary>
+public sealed class TestMe
+{
+}
+";
+
+            const string FixedCode = @"
+/// <summary>
+/// Does something.
+/// </summary>
+public sealed class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_documentation_with_GreaterThan_token_of_end_XML_tag_on_different_line()
+        {
+            const string OriginalCode = @"
+/// <summary>
+/// Does something.
+/// </summary
+/// >
+public sealed class TestMe
+{
+}
+";
+
+            const string FixedCode = @"
+/// <summary>
+/// Does something.
+/// </summary>
+public sealed class TestMe
+{
 }
 ";
 
