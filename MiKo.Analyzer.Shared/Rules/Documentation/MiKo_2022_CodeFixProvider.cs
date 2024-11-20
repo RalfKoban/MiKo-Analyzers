@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 case 0:
                     return CommentStartingWith(preparedComment, phrase + Constants.TODO + ".");
 
-                case 1 when contents[0] is XmlTextSyntax text && text.GetTextWithoutTrivia().IsEmpty:
+                case 1 when contents[0] is XmlTextSyntax text && text.GetTextWithoutTrivia().IsNullOrEmpty():
                     return comment.ReplaceNode(text, XmlText(phrase + Constants.TODO + ".").WithLeadingXmlComment().WithTrailingXmlComment());
 
                 default:

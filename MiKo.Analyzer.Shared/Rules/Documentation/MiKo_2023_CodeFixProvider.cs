@@ -136,7 +136,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 case 1 when contents[0] is XmlTextSyntax t:
                 {
-                    var text = t.GetTextWithoutTrivia();
+                    var text = t.GetTextWithoutTrivia().AsSpan();
 
                     if (text.IsEmpty)
                     {

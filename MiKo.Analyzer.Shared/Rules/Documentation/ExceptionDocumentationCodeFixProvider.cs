@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] Phrases = CreatePhrases().ToHashSet().ToArray();
 //// ncrunch: rdi default
 
-        protected static XmlElementSyntax GetFixedExceptionCommentForArgumentNullException(XmlElementSyntax exceptionComment)
+        protected static XmlElementSyntax GetFixedExceptionCommentForArgumentNullException(Document document, XmlElementSyntax exceptionComment)
         {
             var parameters = exceptionComment.GetParameterNames();
 
@@ -23,18 +23,45 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return exceptionComment;
 
                 case 1:
-                {
-                    // seems like we have only a single parameter, so place it on a single line
-                    return exceptionComment.WithContent(ParameterIsNull(parameters[0]));
-                }
+                    return exceptionComment.WithContent(ParameterIsNull(parameters[0])); // seems like we have only a single parameter, so place it on a single line
 
                 default:
-                {
-                    // more than 1 parameter, so pick the referenced ones
-                    var comment = exceptionComment.ToString();
-                    var ps = parameters.Where(_ => comment.ContainsAny(GetParameterReferences(_).ToArray())).ToArray();
+                    return exceptionComment.WithContent(ParameterIsNull(GetParameterNames())); // more than 1 parameter, so pick the referenced ones
+            }
 
-                    return exceptionComment.WithContent(ParameterIsNull(ps));
+            string[] GetParameterNames()
+            {
+                var comment = exceptionComment.ToString();
+
+                var ps = parameters.Where(_ => comment.ContainsAny(GetParameterReferences(_).ToArray())).ToArray();
+
+                if (ps.Length != 0)
+                {
+                    return ps;
+                }
+
+                // seems none is referenced, so pick up all parameters
+                switch (exceptionComment.FirstAncestor<MemberDeclarationSyntax>())
+                {
+                    case BaseMethodDeclarationSyntax method:
+                    {
+                        var symbol = GetSymbol(document, method);
+
+                        if (symbol is IMethodSymbol methodSymbol)
+                        {
+                            return methodSymbol.Parameters.Where(_ => _.Type.IsValueType is false).ToArray(_ => _.Name);
+                        }
+
+                        return method.ParameterList.Parameters.ToArray(_ => _.Identifier.ValueText);
+                    }
+
+                    case BasePropertyDeclarationSyntax _:
+                    {
+                        return new[] { Constants.Names.DefaultPropertyParameterName };
+                    }
+
+                    default:
+                        return Array.Empty<string>();
                 }
             }
         }
