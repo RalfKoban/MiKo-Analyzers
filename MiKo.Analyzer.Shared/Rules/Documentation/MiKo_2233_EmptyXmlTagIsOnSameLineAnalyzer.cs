@@ -9,13 +9,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2233";
 
+        private static readonly SyntaxKind[] XmlTags = { SyntaxKind.XmlEmptyElement, SyntaxKind.XmlElementStartTag, SyntaxKind.XmlElementEndTag };
+
         public MiKo_2233_EmptyXmlTagIsOnSameLineAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeXmlEmptyElement, SyntaxKind.XmlEmptyElement);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeXmlTags, XmlTags);
 
-        private void AnalyzeXmlEmptyElement(SyntaxNodeAnalysisContext context)
+        private void AnalyzeXmlTags(SyntaxNodeAnalysisContext context)
         {
             var node = context.Node;
 
