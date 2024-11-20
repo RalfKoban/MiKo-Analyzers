@@ -1103,7 +1103,7 @@ namespace MiKoSolutions.Analyzers
             return result;
         }
 
-        internal static ReadOnlySpan<char> GetTextWithoutTrivia(this XmlTextSyntax value)
+        internal static string GetTextWithoutTrivia(this XmlTextSyntax value)
         {
             if (value is null)
             {
@@ -1119,7 +1119,7 @@ namespace MiKoSolutions.Analyzers
 
             var result = builder.Trim();
 
-            return result.AsSpan();
+            return result;
         }
 
         internal static StringBuilder GetTextWithoutTrivia(this XmlElementSyntax value) => value?.GetTextWithoutTrivia(new StringBuilder());

@@ -88,7 +88,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         if (text.StartsWithAny(ContinueTextParts))
                         {
-                            var newText = text.ToString().Without(ContinueTextParts);
+                            var newText = text.Without(ContinueTextParts);
 
                             if (newText.EndsWith('.') is false)
                             {

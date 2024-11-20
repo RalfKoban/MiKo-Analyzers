@@ -137,7 +137,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (content.FirstOrDefault() is XmlTextSyntax t)
             {
-                var text = t.GetTextWithoutTrivia();
+                var text = t.GetTextWithoutTrivia().AsSpan();
 
                 if (text.StartsWith("Interaction logic for", StringComparison.Ordinal))
                 {

@@ -67,7 +67,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             else
                             {
                                 // inspect first and last word
-                                var words = text.WordsAsSpan();
+                                var words = text.AsSpan().WordsAsSpan();
 
                                 if (words.First().Text.StartsWithAny(InheritMarkerTexts, StringComparison.OrdinalIgnoreCase)
                                  || words.Last().Text.ToString().ContainsAny(InheritMarkerTexts, StringComparison.OrdinalIgnoreCase))
