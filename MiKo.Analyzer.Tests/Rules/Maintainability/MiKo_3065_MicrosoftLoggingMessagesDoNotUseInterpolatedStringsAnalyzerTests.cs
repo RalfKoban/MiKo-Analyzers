@@ -96,7 +96,7 @@ namespace log4net
 ");
 
         [Test]
-        public void No_issue_is_reported_for_Microsoft_logging_call_without_interpolation_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Microsoft_logging_call_without_interpolation_and_simple_text_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
 using System;
 using Microsoft.Extensions.Logging;
 
@@ -120,7 +120,7 @@ namespace Microsoft.Extensions.Logging
 ");
 
         [Test]
-        public void No_issue_is_reported_for_Microsoft_logging_call_with_interpolation_as_argument_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Microsoft_logging_call_without_interpolation_and_template_placeholder_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
 using System;
 using Microsoft.Extensions.Logging;
 
@@ -135,9 +135,9 @@ namespace Microsoft.Extensions.Logging
     {
         private ILogger _logger;
 
-        public void DoSomething(int i)
+        public void DoSomething()
         {
-            _logger." + method + @"(""some text for {i}"", $""some text for {i}"");
+            _logger." + method + @"(""some {text} here"", 42.ToString());
         }
     }
 }
@@ -162,6 +162,30 @@ namespace Microsoft.Extensions.Logging
         public void DoSomething(int i)
         {
             _logger." + method + @"($""some text for {i}"");
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_Microsoft_logging_call_with_interpolation_as_argument_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
+using System;
+using Microsoft.Extensions.Logging;
+
+namespace Microsoft.Extensions.Logging
+{
+    public interface ILogger
+    {
+        public void " + method + @"(string message, params object[] args);
+    }
+
+    public class TestMe
+    {
+        private ILogger _logger;
+
+        public void DoSomething(int i)
+        {
+            _logger." + method + @"(""some text for {i}"", $""some text for {i}"");
         }
     }
 }
