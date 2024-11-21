@@ -72,7 +72,7 @@ public sealed class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_documentation_with_parameter_token_of_empty_XML_tag_on_different_line()
+        public void Code_gets_fixed_for_documentation_with_attribute_of_empty_XML_tag_on_different_line()
         {
             const string OriginalCode = @"
 /// <inheritdoc
@@ -93,7 +93,7 @@ public sealed class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_documentation_with_attribute_of_empty_XML_tag_on_different_line()
+        public void Code_gets_fixed_for_documentation_with_parameter_token_of_empty_XML_tag_on_different_line()
         {
             const string OriginalCode = @"
 public sealed class TestMe
@@ -115,6 +115,63 @@ public sealed class TestMe
     /// </summary>
     public void DoSomething(object o)
     { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_documentation_with_attribute_of_empty_XML_tag_spanning_multiple_lines()
+        {
+            const string OriginalCode = @"
+public sealed class TestMe
+{
+    public void DoSomething(object o, bool b) { }
+
+    /// <see
+    /// cref=""DoSomething(object,
+    /// bool)"" />
+    public void DoSomething(object o) { }
+}
+";
+
+            const string FixedCode = @"
+public sealed class TestMe
+{
+    public void DoSomething(object o, bool b) { }
+
+    /// <see cref=""DoSomething(object,bool)""/>
+    public void DoSomething(object o) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_documentation_with_contents_of_attribute_of_empty_XML_tag_spanning_multiple_lines()
+        {
+            const string OriginalCode = @"
+public sealed class TestMe
+{
+    public void DoSomething(object o, bool b) { }
+
+    /// <see cref=""
+    ///    DoSomething(
+    ///    object,
+    ///    bool)"" />
+    public void DoSomething(object o) { }
+}
+";
+
+            const string FixedCode = @"
+public sealed class TestMe
+{
+    public void DoSomething(object o, bool b) { }
+
+    /// <see cref=""DoSomething(object,bool)""/>
+    public void DoSomething(object o) { }
 }
 ";
 
