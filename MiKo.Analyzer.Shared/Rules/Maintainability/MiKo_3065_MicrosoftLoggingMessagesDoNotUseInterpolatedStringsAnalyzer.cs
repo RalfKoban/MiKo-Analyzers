@@ -66,7 +66,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private void AnalyzeInvocation(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is InvocationExpressionSyntax node && IsLoggingCall(node, context.SemanticModel))
+            if (context.Node is InvocationExpressionSyntax node && node.IsStringFormat() && IsLoggingCall(node, context.SemanticModel))
             {
                 ReportDiagnostics(context, Issue(node));
             }
