@@ -41,11 +41,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                        .WithAttributes(element.Attributes.Select(GetUpdatedSyntax).ToSyntaxList())
                                                                                                        .WithSlashGreaterThanToken(element.SlashGreaterThanToken.WithoutTrivia());
 
-        private static XmlAttributeSyntax GetUpdatedSyntax(XmlAttributeSyntax attribute) => attribute.WithoutTrivia()
-                                                                                                     .WithName(attribute.Name.WithoutTrivia())
-                                                                                                     .WithEqualsToken(attribute.EqualsToken.WithoutTrivia())
-                                                                                                     .WithStartQuoteToken(attribute.StartQuoteToken.WithoutTrivia())
-                                                                                                     .WithEndQuoteToken(attribute.EndQuoteToken.WithoutTrivia())
-                                                                                                     .WithLeadingSpace();
+        private static XmlAttributeSyntax GetUpdatedSyntax(XmlAttributeSyntax attribute) => attribute.Without(attribute.DescendantTrivia()).WithLeadingSpace();
     }
 }
