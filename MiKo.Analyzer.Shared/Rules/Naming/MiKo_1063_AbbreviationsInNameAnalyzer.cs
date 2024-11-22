@@ -58,58 +58,69 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 case "paramName": // used in exceptions
                 case "lParam": // used by Windows C++ API
                 case "wParam": // used by Windows C++ API
-                    return Enumerable.Empty<Diagnostic>();
+                    return Array.Empty<Diagnostic>();
 
                 default:
                     return AnalyzeName(symbol);
             }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol) => AnalyzeName(symbol.Name, symbol);
+        private Diagnostic[] AnalyzeName(ISymbol symbol) => AnalyzeName(symbol.Name, symbol);
 
-        private IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol)
+        private Diagnostic[] AnalyzeName(IFieldSymbol symbol)
         {
-            var symbolName = GetFieldNameWithoutPrefix(symbol.Name);
+            var symbolName = symbol.Name;
 
-            return AnalyzeName(symbolName, symbol);
+            // remove any field marker
+            var fieldPrefix = GetFieldPrefix(symbolName);
+            var prefixLength = fieldPrefix.Length;
 
-            string GetFieldNameWithoutPrefix(string fieldName)
+            return prefixLength > 0
+                   ? AnalyzeName(symbolName.Substring(prefixLength), symbol, fieldPrefix)
+                   : AnalyzeName(symbolName, symbol);
+
+            string GetFieldPrefix(string fieldName)
             {
-                // remove any field marker
-                foreach (var fieldMarker in Constants.Markers.FieldPrefixes)
+                var fieldPrefixes = Constants.Markers.FieldPrefixes;
+                var prefixesLength = fieldPrefixes.Length;
+
+                for (var index = 0; index < prefixesLength; index++)
                 {
-                    if (fieldMarker.Length > 0 && fieldName.StartsWith(fieldMarker, StringComparison.Ordinal))
+                    var prefix = fieldPrefixes[index];
+
+                    if (prefix.Length > 0 && fieldName.StartsWith(prefix, StringComparison.Ordinal))
                     {
-                        return fieldName.Substring(fieldMarker.Length);
+                        return prefix;
                     }
                 }
 
-                return fieldName;
+                return string.Empty;
             }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeName(string symbolName, ISymbol symbol)
+        private Diagnostic[] AnalyzeName(string symbolName, ISymbol symbol, string prefix = "")
         {
             var findings = AbbreviationDetector.Find(symbolName);
             var findingsLength = findings.Length;
 
-            if (findingsLength != 0)
+            if (findingsLength == 0)
             {
-                var betterName = AbbreviationDetector.ReplaceAllAbbreviations(symbolName, findings);
-
-                var issues = new Diagnostic[findingsLength];
-
-                for (var index = 0; index < findingsLength; index++)
-                {
-                    var pair = findings[index];
-
-                    issues[index] = Issue(symbol, pair.Key, pair.Value, CreateBetterNameProposal(betterName));
-                }
-
-                return issues;
+                return Array.Empty<Diagnostic>();
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            var betterName = AbbreviationDetector.ReplaceAllAbbreviations(symbolName, findings);
+            var betterNameProposal = CreateBetterNameProposal(prefix.Length > 0 ? prefix + betterName : betterName);
+
+            var issues = new Diagnostic[findingsLength];
+
+            for (var index = 0; index < findingsLength; index++)
+            {
+                var pair = findings[index];
+
+                issues[index] = Issue(symbol, pair.Key, pair.Value, betterNameProposal);
+            }
+
+            return issues;
         }
     }
 }

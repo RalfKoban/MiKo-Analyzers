@@ -15,23 +15,19 @@ namespace MiKoSolutions.Analyzers.Extensions
         private const string Text = $"{Line1}\r\n{Line2}";
 
         [Test]
-        public static void SplitBy_splits_text_by_lines_and_removes_empty_lines()
+        public static void SplitBy_splits_text_by_words()
         {
-            var lines = Text.AsSpan().SplitBy(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
-            var count = lines.Count();
+            var words = new List<string>();
 
-            Assert.That(count, Is.EqualTo(2));
-
-            var foundLines = new List<string>();
-
-            foreach (var line in lines)
+            foreach (ReadOnlySpan<char> line in Text.AsSpan().SplitBy(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
             {
-                foundLines.Add(line.ToString());
+                foreach (var item in line.SplitBy(" "))
+                {
+                    words.Add(item.ToString());
+                }
             }
 
-            Assert.That(foundLines.Count, Is.EqualTo(2));
-            Assert.That(foundLines[0], Is.EqualTo(Line1));
-            Assert.That(foundLines[1], Is.EqualTo(Line2));
+            Assert.That(words, Is.EqualTo(new[] { "This", "is", "a", "test", "to", "see", "if", "everything", "is", "working", "Another", "line.", "Some", "more", "text." }));
         }
 
         [Test]
@@ -56,19 +52,33 @@ namespace MiKoSolutions.Analyzers.Extensions
         }
 
         [Test]
-        public static void SplitBy_splits_text_by_words()
+        public static void SplitBy_splits_text_by_lines_and_removes_empty_lines()
         {
-            var words = new List<string>();
+            var lines = Text.AsSpan().SplitBy(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+            var count = lines.Count();
 
-            foreach (ReadOnlySpan<char> line in Text.AsSpan().SplitBy(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
+            Assert.That(count, Is.EqualTo(2));
+
+            var foundLines = new List<string>();
+
+            foreach (var line in lines)
             {
-                foreach (var item in line.SplitBy(" "))
-                {
-                    words.Add(item.ToString());
-                }
+                foundLines.Add(line.ToString());
             }
 
-            Assert.That(words, Is.EqualTo(new[] { "This", "is", "a", "test", "to", "see", "if", "everything", "is", "working", "Another", "line.", "Some", "more", "text." }));
+            Assert.That(foundLines.Count, Is.EqualTo(2));
+            Assert.That(foundLines[0], Is.EqualTo(Line1));
+            Assert.That(foundLines[1], Is.EqualTo(Line2));
+        }
+
+        [Test]
+        public static void SplitBy_splits_text_by_lines_and_removes_empty_lines_MultiFindings()
+        {
+            var lines = "something text to split".AsSpan().SplitBy([" text "], options: StringSplitOptions.RemoveEmptyEntries);
+
+            Assert.That(lines.Count, Is.EqualTo(2));
+            Assert.That(lines[0], Is.EqualTo("something"));
+            Assert.That(lines[1], Is.EqualTo("to split"));
         }
     }
 }

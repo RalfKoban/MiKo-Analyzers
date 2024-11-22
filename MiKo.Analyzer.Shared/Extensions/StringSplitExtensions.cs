@@ -10,7 +10,7 @@ namespace System
     {
         public static SplitReadOnlySpanEnumerator SplitBy(this ReadOnlySpan<char> value, ReadOnlySpan<char> separatorChars) => SplitBy(value, separatorChars, StringSplitOptions.None);
 
-        public static IReadOnlyList<string> SplitBy(this ReadOnlySpan<char> value, string[] findings, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        public static IReadOnlyList<string> SplitBy(this ReadOnlySpan<char> value, string[] findings, StringComparison comparison = StringComparison.OrdinalIgnoreCase, StringSplitOptions options = StringSplitOptions.None)
         {
             if (value.IsNullOrWhiteSpace())
             {
@@ -49,7 +49,11 @@ namespace System
                 var lastPart = remainingString.Slice(index + finding.Length).ToString();
 
                 results.Add(lastPart);
-                results.Add(finding);
+
+                if (options != StringSplitOptions.RemoveEmptyEntries)
+                {
+                    results.Add(finding);
+                }
 
                 remainingString = remainingString.Slice(0, index);
             }
@@ -67,14 +71,14 @@ namespace System
 
         public static SplitReadOnlySpanEnumerator SplitBy(this ReadOnlySpan<char> value, char[] separatorChars, StringSplitOptions options) => SplitBy(value, separatorChars.AsSpan(), options);
 
-        public static IReadOnlyList<string> SplitBy(this string value, string[] findings, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        public static IReadOnlyList<string> SplitBy(this string value, string[] findings, StringComparison comparison = StringComparison.OrdinalIgnoreCase, StringSplitOptions options = StringSplitOptions.None)
         {
             if (value is null)
             {
                 return Array.Empty<string>();
             }
 
-            return SplitBy(value.AsSpan(), findings, comparison);
+            return SplitBy(value.AsSpan(), findings, comparison, options);
         }
     }
 }

@@ -249,7 +249,9 @@ namespace MiKoSolutions.Analyzers
             internal const string DisposeParameterPhrase = "Indicates whether unmanaged resources shall be freed.";
             internal const string DisposeSummaryPhrase = "Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.";
             internal const string EnumStartingPhrase = "Defines values that specify ";
-            internal const string EnumTaskReturnTypeStartingPhraseTemplate = GenericTaskReturnTypeStartingPhraseTemplate + "the enumerated constant that is the ";
+            internal const string EnumReturnTypeStartingPhraseTemplate = "The enumerated constant that is the ";
+            internal const string EnumTaskReturnTypeContinuePhraseTemplate = "the enumerated constant that is the ";
+            internal const string EnumTaskReturnTypeStartingPhraseTemplate = GenericTaskReturnTypeStartingPhraseTemplate + EnumTaskReturnTypeContinuePhraseTemplate;
             internal const string EventArgsSummaryStartingPhrase = "Provides data for the ";
             internal const string EventHandlerSummaryStartingPhrase = "Handles the ";
             internal const string EventSummaryStartingPhrase = "Occurs ";
@@ -552,9 +554,9 @@ namespace MiKoSolutions.Analyzers
                                                                                        StringTaskReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.Threading.Tasks.Task`1.Result\"/>", "<see cref=\"System.String\" />", "consists of"),
                                                                                    };
 
-            internal static readonly string[] EnumReturnTypeStartingPhrase = { "The enumerated constant that is the ", };
+            internal static readonly string[] EnumReturnTypeStartingPhrase = { EnumReturnTypeStartingPhraseTemplate, };
 
-            internal static readonly string[] EnumTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.ToArray(_ => _ + "the enumerated constant that is the ");
+            internal static readonly string[] EnumTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.ToArray(_ => _ + EnumTaskReturnTypeContinuePhraseTemplate + "the ");
 
             internal static readonly string[] EnumerableReturnTypeStartingPhrase =
                                                                                    {
