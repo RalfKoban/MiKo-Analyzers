@@ -746,6 +746,194 @@ namespace Bla
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_awaited_call_not_preceded_by_blank_line_with_single_line_comment()
+        {
+            const string OriginalCode = @"
+using System.Threading.Tasks;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public async Task DoSomething()
+        {
+            DoSomethingElse();
+            await Task.CompletedTask; // some comment
+        }
+
+        private void DoSomethingElse()
+        {
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System.Threading.Tasks;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public async Task DoSomething()
+        {
+            DoSomethingElse();
+
+            await Task.CompletedTask; // some comment
+        }
+
+        private void DoSomethingElse()
+        {
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_awaited_call_not_followed_by_blank_line_with_single_line_comment()
+        {
+            const string OriginalCode = @"
+using System.Threading.Tasks;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public async Task DoSomething()
+        {
+            await Task.CompletedTask; // some comment
+            DoSomethingElse();
+        }
+
+        private void DoSomethingElse()
+        {
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System.Threading.Tasks;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public async Task DoSomething()
+        {
+            await Task.CompletedTask; // some comment
+
+            DoSomethingElse();
+        }
+
+        private void DoSomethingElse()
+        {
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_awaited_call_not_preceded_by_blank_line_with_multi_line_comment()
+        {
+            const string OriginalCode = @"
+using System.Threading.Tasks;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public async Task DoSomething()
+        {
+            DoSomethingElse();
+            await Task.CompletedTask; /* some comment */
+        }
+
+        private void DoSomethingElse()
+        {
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System.Threading.Tasks;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public async Task DoSomething()
+        {
+            DoSomethingElse();
+
+            await Task.CompletedTask; /* some comment */
+        }
+
+        private void DoSomethingElse()
+        {
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_awaited_call_not_followed_by_blank_line_with_multi_line_comment()
+        {
+            const string OriginalCode = @"
+using System.Threading.Tasks;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public async Task DoSomething()
+        {
+            await Task.CompletedTask; /* some comment */
+            DoSomethingElse();
+        }
+
+        private void DoSomethingElse()
+        {
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System.Threading.Tasks;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public async Task DoSomething()
+        {
+            await Task.CompletedTask; /* some comment */
+
+            DoSomethingElse();
+        }
+
+        private void DoSomethingElse()
+        {
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6006_AwaitStatementSurroundedByBlankLinesAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6006_AwaitStatementSurroundedByBlankLinesAnalyzer();
