@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables lists all the 469 rules that are currently provided by the analyzer.
+The following tables lists all the 471 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -267,6 +267,7 @@ The following tables lists all the 469 rules that are currently provided by the 
 |MiKo_2229|Documentation should not contain left-over XML fragments|&#x2713;|&#x2713;|
 |MiKo_2231|Documentation of overridden 'GetHashCode()' methods shall use '&lt;inheritdoc /&gt;' marker|&#x2713;|&#x2713;|
 |MiKo_2232|&lt;summary&gt; documentation should not be empty|&#x2713;|&#x2713;|
+|MiKo_2233|XML tags should be placed on single line|&#x2713;|&#x2713;|
 |MiKo_2300|Comments should explain the 'Why' and not the 'How'|&#x2713;|\-|
 |MiKo_2301|Do not use obvious comments in AAA-Tests|&#x2713;|&#x2713;|
 |MiKo_2302|Do not keep code that is commented out|&#x2713;|\-|
@@ -513,3 +514,4 @@ The following tables lists all the 469 rules that are currently provided by the 
 |MiKo_6060|Switch case labels should be placed on same line|&#x2713;|&#x2713;|
 |MiKo_6061|Switch expression arms should be placed on same line|&#x2713;|&#x2713;|
 |MiKo_6070|Console statements should be surrounded by blank lines|&#x2713;|&#x2713;|
+|MiKo_6071|Local using statements should be surrounded by blank lines|&#x2713;|&#x2713;|

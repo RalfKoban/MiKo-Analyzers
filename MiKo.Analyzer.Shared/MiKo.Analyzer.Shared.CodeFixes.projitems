@@ -130,6 +130,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2229_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2231_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2232_CodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2233_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2301_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2303_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2305_CodeFixProvider.cs" />
@@ -379,6 +380,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6060_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6061_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6070_CodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6071_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\SpacingCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\SurroundedByBlankLinesCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TypeNames.cs" />

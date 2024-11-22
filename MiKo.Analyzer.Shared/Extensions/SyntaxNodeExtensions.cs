@@ -2091,6 +2091,12 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        internal static bool IsStringFormat(this InvocationExpressionSyntax value) => value.Expression is MemberAccessExpressionSyntax maes
+                                                                                   && maes.IsKind(SyntaxKind.SimpleMemberAccessExpression)
+                                                                                   && maes.Expression is TypeSyntax invokedType
+                                                                                   && invokedType.IsString()
+                                                                                   && maes.GetName() == nameof(string.Format);
+
         internal static bool IsStruct(this ExpressionSyntax value, SemanticModel semanticModel)
         {
             var type = value.GetTypeSymbol(semanticModel);
@@ -3561,6 +3567,8 @@ namespace MiKoSolutions.Analyzers
 
             return value;
         }
+
+        internal static T WithAdditionalTrailingEmptyLine<T>(this T value) where T : SyntaxNode => value.WithAdditionalTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed);
 
         internal static T WithTrailingEmptyLine<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed, SyntaxFactory.CarriageReturnLineFeed);
 
