@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     // loop over phrases for summaries and values
                     var summaries = CommentExtensions.GetSummaries(commentXml);
 
-                    if (summaries.Any())
+                    if (summaries.Count != 0)
                     {
                         var summaryPhrases = Phrases(Constants.Comments.RoutedEventFieldSummaryPhrase, containingTypeFullName, eventName);
 
@@ -47,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     var values = CommentExtensions.GetValue(commentXml);
 
-                    if (values.Any())
+                    if (values.Count != 0)
                     {
                         var valuePhrases = Phrases(Constants.Comments.RoutedEventFieldValuePhrase, containingTypeFullName, eventName);
 
@@ -66,9 +66,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static List<string> Phrases(string[] phrases, string typeName, string eventName)
         {
+            var eventFullName = typeName + "." + eventName;
+
             var results = new List<string>(2 * phrases.Length);
             results.AddRange(phrases.Select(_ => _.FormatWith(eventName))); // output as message to user
-            results.AddRange(phrases.Select(_ => _.FormatWith(typeName + "." + eventName)));
+            results.AddRange(phrases.Select(_ => _.FormatWith(eventFullName)));
 
             return results;
         }

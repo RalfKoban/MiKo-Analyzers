@@ -46,14 +46,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            var proposal = GetNameWithoutSuffix(symbol.Name) + CorrectSuffix;
+            var proposal = GetNameWithoutSuffix(symbol.Name.AsSpan()).ConcatenatedWith(CorrectSuffix);
 
             return new[] { Issue(symbol, proposal, CreateBetterNameProposal(proposal)) };
         }
 
         private static bool IsProperlyNamed(ISymbol symbol) => symbol.Name.EndsWith(CorrectSuffix, StringComparison.Ordinal);
 
-        private static string GetNameWithoutSuffix(string name)
+        private static ReadOnlySpan<char> GetNameWithoutSuffix(ReadOnlySpan<char> name)
         {
             if (name.EndsWith(Arg, StringComparison.Ordinal))
             {
@@ -78,7 +78,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return name;
         }
 
-        private static string GetNameWithoutSuffixes(string name, params string[] phrases)
+        private static ReadOnlySpan<char> GetNameWithoutSuffixes(ReadOnlySpan<char> name, params string[] phrases)
         {
             foreach (var phrase in phrases)
             {

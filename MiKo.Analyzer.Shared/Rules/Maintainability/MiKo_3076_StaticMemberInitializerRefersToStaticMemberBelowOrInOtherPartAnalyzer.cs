@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var fieldSyntax = symbol.GetSyntax<FieldDeclarationSyntax>();
             var identifierNames = fieldSyntax.DescendantNodes<IdentifierNameSyntax>().ToList();
 
-            if (identifierNames.Any())
+            if (identifierNames.Count != 0)
             {
                 var fieldLocation = fieldSyntax.GetLocation().GetLineSpan();
 
@@ -40,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                     if (problematicFieldNames.Contains(name) && identifier.GetSymbol(compilation) is IFieldSymbol f && f.ContainingType.Equals(symbol.ContainingType, SymbolEqualityComparer.Default))
                     {
-                        if (wrongReferences == null)
+                        if (wrongReferences is null)
                         {
                             wrongReferences = new List<string>();
                         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -15,6 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         private static readonly string[] BadPrefixes =
                                                        [
+                                                           "alt",
                                                            "app",
                                                            "apps",
                                                            "assoc",
@@ -30,13 +32,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "config",
                                                            "configs",
                                                            "conn",
+                                                           "ctg",
                                                            "ctl",
+                                                           "ctlg",
                                                            "ctrl",
                                                            "ctx",
                                                            "db",
                                                            "ddl",
                                                            "decl",
                                                            "decr",
+                                                           "def",
                                                            "desc",
                                                            "dest",
                                                            "diag",
@@ -67,6 +72,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "lv",
                                                            "max",
                                                            "methName",
+                                                           "mgmt",
                                                            "mgr",
                                                            "min",
                                                            "mngr",
@@ -80,11 +86,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "perf",
                                                            "phys",
                                                            "pos",
+                                                           "pow",
                                                            "proc",
                                                            "procs",
                                                            "propName",
                                                            "pt",
                                                            "pts",
+                                                           "qty",
                                                            "ref",
                                                            "repo",
                                                            "req",
@@ -100,12 +108,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "tm",
                                                            "tmp",
                                                            "txt",
+                                                           "var",
                                                            "ver",
                                                            "vol",
                                                        ];
 
         private static readonly string[] BadMidTerms =
                                                        [
+                                                           "Alt",
                                                            "App",
                                                            "Apps",
                                                            "Assoc",
@@ -122,11 +132,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "Config",
                                                            "Configs",
                                                            "Conn",
+                                                           "Ctg",
                                                            "Ctl",
+                                                           "Ctlg",
                                                            "Ctrl",
                                                            "Ctx",
                                                            "Db",
                                                            "Ddl",
+                                                           "Def",
                                                            "Decl",
                                                            "Decr",
                                                            "Desc",
@@ -159,6 +172,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "Lv",
                                                            "Max",
                                                            "MethName",
+                                                           "Mgmt",
                                                            "Mgr",
                                                            "Min",
                                                            "Mngr",
@@ -172,11 +186,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "Perf",
                                                            "Phys",
                                                            "Pos",
+                                                           "Pow",
                                                            "Proc",
                                                            "Procs",
                                                            "PropName",
                                                            "Pt",
                                                            "Pts",
+                                                           "Qty",
                                                            "Repo",
                                                            "Ref",
                                                            "Req",
@@ -191,6 +207,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "Tm",
                                                            "Tmp",
                                                            "Txt",
+                                                           "Var",
                                                            "Ver",
                                                            "Vol",
                                                        ];
@@ -273,6 +290,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "prompt",
                                                             "requestTime",
                                                             "responseTime",
+                                                            "saltIsUsed",
+                                                            "SomeSaltIsUsed",
                                                             "script",
                                                             "scripts",
                                                             "signCertificate",
@@ -280,7 +299,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "tires",
                                                         ];
 
-        private static readonly string[] AllowedWords = [.. AllowedTerms, "obj"];
+        private static readonly string[] AllowedWords = [.. AllowedTerms, "obj", "href", "cref"];
 
         private static readonly string[] WrongWords = BadPrefixes.Except(AllowedWords).ToArray();
 
@@ -313,7 +332,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_well_known_abbreviation_([Values("MEF")] string abbreviation) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_prefix_well_known_abbreviation_([Values("MEF", "ALT")] string abbreviation) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -321,6 +340,42 @@ namespace Bla
     public class TestMe
     {
         public static int " + abbreviation + @"DoSomething();
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_postfix_well_known_abbreviation_([Values("MEF", "ALT")] string abbreviation) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static int DoSomething" + abbreviation + @"();
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_underscore_separated_prefix_well_known_abbreviation_([Values("MEF", "ALT")] string abbreviation) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static int " + abbreviation + @"_DoSomething();
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_underscore_separated_postfix_well_known_abbreviation_([Values("MEF", "ALT")] string abbreviation) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static int DoSomething_" + abbreviation + @"();
     }
 }");
 
@@ -449,8 +504,73 @@ namespace Bla
     }
 }");
 
+        [TestCase("Min", "Minimum")]
+        [TestCase("MinLength", "MinimumLength")]
+        [TestCase("MaxVer", "MaximumVersion")]
+        public void Code_gets_fixed_for_incorrectly_named_property_(string originalName, string fixedName)
+        {
+            const string Template = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int ### { get; set; }
+    }
+}
+}";
+
+            VerifyCSharpFix(Template.Replace("###", originalName), Template.Replace("###", fixedName));
+        }
+
+        [TestCase("app", "application")]
+        [TestCase("appVariable", "applicationVariable")]
+        [TestCase("appVar", "applicationVariable")]
+        public void Code_gets_fixed_for_incorrectly_named_foreach_variable_(string originalName, string fixedName)
+        {
+            const string Template = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int DoSomething(int[] variables)
+        {
+            foreach (var ### in variables)
+            {
+                return ###;
+            }
+        }
+    }
+}";
+
+            VerifyCSharpFix(Template.Replace("###", originalName), Template.Replace("###", fixedName));
+        }
+
+        [TestCase("config", "configuration")]
+        public void Code_gets_fixed_for_incorrectly_named_field_(string originalName, string fixedName)
+        {
+            const string Template = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private int _###;
+    }
+}
+}";
+
+            VerifyCSharpFix(Template.Replace("###", originalName), Template.Replace("###", fixedName));
+        }
+
         protected override string GetDiagnosticId() => MiKo_1063_AbbreviationsInNameAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1063_AbbreviationsInNameAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1063_CodeFixProvider();
     }
 }

@@ -22,9 +22,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static bool CommentHasIssue(ReadOnlySpan<char> comment)
         {
-            if (comment.ContainsAny(Constants.Comments.IntentionallyPhrase, StringComparison.OrdinalIgnoreCase))
+            var c = comment.ToString();
+
+            if (c.ContainsAny(Constants.Comments.IntentionallyPhrase, StringComparison.OrdinalIgnoreCase))
             {
-                return comment.ContainsAny(Constants.Comments.ReasoningPhrases, StringComparison.OrdinalIgnoreCase) is false;
+                return c.ContainsAny(Constants.Comments.ReasoningPhrases, StringComparison.OrdinalIgnoreCase) is false;
             }
 
             return false;

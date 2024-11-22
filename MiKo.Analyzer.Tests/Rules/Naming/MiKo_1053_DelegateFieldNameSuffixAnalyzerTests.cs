@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-
-using Microsoft.CodeAnalysis.CodeFixes;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -33,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                     "predicate",
                                                                 ];
 
-        private static readonly string[] WrongDelegateNames = CreateWrongDelegateNames();
+        private static readonly string[] WrongDelegateNames = ["@delegate", "action", "func"];
 
         [TestCase("string s")]
         [TestCase("int i")]
@@ -88,30 +84,14 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed() => VerifyCSharpFix(
-                                                     "using System; class TestMe { Action _action; }",
-                                                     "using System; class TestMe { Action _callback; }");
+        public void Code_gets_fixed_on_field_([ValueSource(nameof(WrongDelegateNames))] string name) => VerifyCSharpFix(
+                                                                                                                    "using System; class TestMe { Action " + name + "; }",
+                                                                                                                    "using System; class TestMe { Action callback; }");
 
         protected override string GetDiagnosticId() => MiKo_1053_DelegateFieldNameSuffixAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1053_DelegateFieldNameSuffixAnalyzer();
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1053_CodeFixProvider();
-
-        [ExcludeFromCodeCoverage]
-        private static string[] CreateWrongDelegateNames()
-        {
-            string[] names = ["@delegate", "action", "func"];
-
-            var allNames = new HashSet<string>(names);
-
-            foreach (var name in names)
-            {
-                allNames.Add(name.ToLowerInvariant());
-                allNames.Add(name.ToUpperInvariant());
-            }
-
-            return [.. allNames.OrderBy(_ => _)];
-        }
     }
 }

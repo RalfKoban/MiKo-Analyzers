@@ -35,12 +35,12 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_test_class_with_tests_(
-                                                                [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                [ValueSource(nameof(TestFixtures))] string fixture,
                                                                 [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
-[" + testFixture + @"]
+[" + fixture + @"]
 public class TestMe
 {
     [" + test + @"]
@@ -53,7 +53,7 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_partial_test_class_with_tests_(
-                                                                        [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                        [ValueSource(nameof(TestFixtures))] string fixture,
                                                                         [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
 using NUnit.Framework;
@@ -67,7 +67,7 @@ public partial class TestMe
     }
 }
 
-[" + testFixture + @"]
+[" + fixture + @"]
 public partial class TestMe
 {
     private void DoSomethingElse() { }
@@ -76,12 +76,12 @@ public partial class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_test_class_with_multiple_base_classes_with_tests_(
-                                                                                           [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                                           [ValueSource(nameof(TestFixtures))] string fixture,
                                                                                            [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
-[" + testFixture + @"]
+[" + fixture + @"]
 public class TestMe3 : TestMe2
 {
     [" + test + @"]
@@ -112,12 +112,12 @@ public class TestMe1
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_test_class_with_tests_that_have_conditions_(
-                                                                                     [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                                     [ValueSource(nameof(TestFixtures))] string fixture,
                                                                                      [ValueSource(nameof(Tests))] string test)
             => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
-[" + testFixture + @"]
+[" + fixture + @"]
 public class TestMe
 {
     [" + test + @"]
@@ -131,12 +131,12 @@ public class TestMe
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_test_class_with_multiple_base_classes_with_tests_that_have_conditions_(
-                                                                                                                [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                                                                [ValueSource(nameof(TestFixtures))] string fixture,
                                                                                                                 [ValueSource(nameof(Tests))] string test)
             => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
-[" + testFixture + @"]
+[" + fixture + @"]
 public class TestMe3 : TestMe2
 {
     [" + test + @"]
@@ -168,12 +168,12 @@ public class TestMe1
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_test_class_with_tests_that_have_a_coalesce_condition_(
-                                                                                               [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                                               [ValueSource(nameof(TestFixtures))] string fixture,
                                                                                                [ValueSource(nameof(Tests))] string test)
             => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
-[" + testFixture + @"]
+[" + fixture + @"]
 public class TestMe
 {
     [" + test + @"]
@@ -188,12 +188,12 @@ public class TestMe
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_test_class_with_tests_that_have_a_coalesce_assignment_condition_(
-                                                                                                          [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                                                          [ValueSource(nameof(TestFixtures))] string fixture,
                                                                                                           [ValueSource(nameof(Tests))] string test)
             => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
-[" + testFixture + @"]
+[" + fixture + @"]
 public class TestMe
 {
     [" + test + @"]
@@ -208,14 +208,14 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_Nullable_object_creation_(
-                                                                   [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                   [ValueSource(nameof(TestFixtures))] string fixture,
                                                                    [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 using System.Threading;
 
-[" + testFixture + @"]
+[" + fixture + @"]
 public class TestMe
 {
     [" + test + @"]

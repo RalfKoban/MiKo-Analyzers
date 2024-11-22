@@ -260,7 +260,9 @@ using System.Windows;
 public class TestMe
 {
     /// <summary />
-    /// <param name='o'>On successful return, indicates the something.</param>
+    /// <param name='o'>
+    /// On successful return, indicates the something.
+    /// </param>
     public void DoSomething(out bool o) { }
 }";
 
@@ -401,7 +403,9 @@ using System.Windows;
 public class TestMe
 {
     /// <summary />
-    /// <param name='o'>On successful return, contains the object.</param>
+    /// <param name='o'>
+    /// On successful return, contains the object.
+    /// </param>
     public void DoSomething(out object o) { }
 }";
 
@@ -427,7 +431,9 @@ using System.Windows;
 public class TestMe
 {
     /// <summary />
-    /// <param name='o'>On successful return, contains TODO.</param>
+    /// <param name='o'>
+    /// On successful return, contains TODO.
+    /// </param>
     public void DoSomething(out object o) { }
 }";
 

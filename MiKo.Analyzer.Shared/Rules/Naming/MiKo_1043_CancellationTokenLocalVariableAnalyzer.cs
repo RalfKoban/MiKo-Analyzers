@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -19,9 +18,24 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol?.IsCancellationToken() is true;
 
-        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers) => from identifier in identifiers
-                                                                                                                                                          where identifier.ValueText != ExpectedName
-                                                                                                                                                          select identifier.GetSymbol(semanticModel) into symbol
-                                                                                                                                                          select Issue(symbol, ExpectedName, CreateBetterNameProposal(ExpectedName));
+        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers)
+        {
+            var length = identifiers.Length;
+
+            if (length > 0)
+            {
+                for (var index = 0; index < length; index++)
+                {
+                    var identifier = identifiers[index];
+
+                    if (identifier.ValueText != ExpectedName)
+                    {
+                        var symbol = identifier.GetSymbol(semanticModel);
+
+                        yield return Issue(symbol, ExpectedName, CreateBetterNameProposal(ExpectedName));
+                    }
+                }
+            }
+        }
     }
 }

@@ -98,13 +98,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual SyntaxNode Comment(Document document, XmlElementSyntax comment, MethodDeclarationSyntax method) => Comment(document, comment, method.GetName(), method.ReturnType);
 
+#pragma warning disable CA1716
         protected virtual SyntaxNode Comment(Document document, XmlElementSyntax comment, PropertyDeclarationSyntax property) => Comment(document, comment, property.GetName(), property.Type);
+#pragma warning restore CA1716
 
-//// ncrunch: rdi off
+        //// ncrunch: rdi off
         private static IEnumerable<string> CreateAlmostCorrectTaskReturnTypeStartingPhrases()
         {
-            const string Result = "result";
-
             var starts = new[] { "a task", "an task" };
             var continuations = new[] { "that represents", "which represents", "representing" };
             var operations = new[] { "the operation", "the asynchronous operation" };
@@ -116,15 +116,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     foreach (var operation in operations)
                     {
+                        var middle = string.Concat(" ", continuation, " ", operation);
+
+                        var middleLowerCase = middle + ". The result ";
+                        var middleUpperCase = middle + ". The Result ";
+
                         foreach (var verb in finalVerbs)
                         {
-                            yield return $"{start} {continuation} {operation}. The {Result} {verb} ";
-                            yield return $"{start} {continuation} {operation}. The {Result.ToUpperCaseAt(0)} {verb} ";
-                            yield return $"{start.ToUpperCaseAt(0)} {continuation} {operation}. The {Result} {verb} ";
-                            yield return $"{start.ToUpperCaseAt(0)} {continuation} {operation}. The {Result.ToUpperCaseAt(0)} {verb} ";
+                            var endingLowerCase = middleLowerCase + verb + " ";
+                            var endingUpperCase = middleUpperCase + verb + " ";
 
-                            yield return $"Returns {start} {continuation} {operation}. The {Result} {verb} ";
-                            yield return $"Returns {start} {continuation} {operation}. The {Result.ToUpperCaseAt(0)} {verb} ";
+                            yield return start + endingLowerCase;
+                            yield return start + endingUpperCase;
+                            yield return start.ToUpperCaseAt(0) + endingLowerCase;
+                            yield return start.ToUpperCaseAt(0) + endingUpperCase;
+
+                            yield return "Returns " + start + endingLowerCase;
+                            yield return "Returns " + start + endingUpperCase;
                         }
                     }
                 }
@@ -132,8 +140,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 //// ncrunch: rdi default
 
-        private SyntaxNode Comment(Document document, XmlElementSyntax comment, string memberName, TypeSyntax returnType) => returnType is GenericNameSyntax genericReturnType
-                                                                                                                             ? GenericComment(document, comment, memberName, genericReturnType)
-                                                                                                                             : NonGenericComment(document, comment, memberName, returnType);
+        private XmlElementSyntax Comment(Document document, XmlElementSyntax comment, string memberName, TypeSyntax returnType) => returnType is GenericNameSyntax genericReturnType
+                                                                                                                                   ? GenericComment(document, comment, memberName, genericReturnType)
+                                                                                                                                   : NonGenericComment(document, comment, memberName, returnType);
     }
 }

@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var siblings = method.Siblings();
 
-                var nodesToUpdate = new List<SyntaxNode>();
+                var nodesToUpdate = new List<SyntaxNode>(2);
 
                 if (siblings.Count > 1 && method.Equals(siblings[0]))
                 {

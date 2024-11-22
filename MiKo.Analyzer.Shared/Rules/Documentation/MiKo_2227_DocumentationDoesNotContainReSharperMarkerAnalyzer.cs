@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -16,8 +15,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => from token in comment.GetXmlTextTokens()
-                                                                                                                                                                           from location in GetAllLocations(token, Constants.Markers.ReSharper)
-                                                                                                                                                                           select Issue(location);
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        {
+            foreach (var token in comment.GetXmlTextTokens())
+            {
+                foreach (var location in GetAllLocations(token, Constants.Markers.ReSharper))
+                {
+                    yield return Issue(location);
+                }
+            }
+        }
     }
 }

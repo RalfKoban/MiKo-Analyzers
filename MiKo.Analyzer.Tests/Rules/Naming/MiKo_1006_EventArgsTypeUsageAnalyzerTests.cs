@@ -241,7 +241,7 @@ public class TestMe
 }
 ");
 
-        [Test, Ignore("Currently cannot be tested")]
+        [Test]
         public void No_issue_is_reported_for_interface_implementation() => No_issue_is_reported_for(@"
 using System;
 using System.ComponentModel;

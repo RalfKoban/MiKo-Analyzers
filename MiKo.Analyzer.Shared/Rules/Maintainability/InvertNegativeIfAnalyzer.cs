@@ -34,14 +34,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 case SyntaxKind.IsPatternExpression:
                 {
-                    var pattern = ((IsPatternExpressionSyntax)node).Pattern;
+                    var syntax = (IsPatternExpressionSyntax)node;
+                    var pattern = syntax.Pattern;
 
                     if (pattern.IsKind(SyntaxKind.NotPattern))
                     {
                         return true;
                     }
 
-                    return pattern is ConstantPatternSyntax c && c.Expression.IsKind(SyntaxKind.FalseLiteralExpression);
+                    return pattern.IsPatternCheckFor(SyntaxKind.FalseLiteralExpression);
                 }
 
                 default:
@@ -90,7 +91,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                     case ParenthesizedExpressionSyntax parenthesized:
                     {
-                        condition = parenthesized.Expression;
+                        condition = parenthesized.WithoutParenthesis();
 
                         continue;
                     }

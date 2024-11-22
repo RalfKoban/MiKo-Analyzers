@@ -16,18 +16,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected static Dictionary<string, string> CreateBetterNameProposal(string betterName) => new Dictionary<string, string> { { Constants.AnalyzerCodeFixSharedData.BetterName, betterName } };
+        protected static Pair[] CreateBetterNameProposal(string betterName) => new[] { new Pair(Constants.AnalyzerCodeFixSharedData.BetterName, betterName) };
 
-        protected static string FindBetterNameForEntityMarker(ISymbol symbol)
+        protected static string FindBetterNameForEntityMarker(string symbolName)
         {
-            var expected = HandleSpecialEntityMarkerSituations(symbol.Name);
+            var expected = HandleSpecialEntityMarkerSituations(symbolName);
 
             if (expected.HasCollectionMarker())
             {
                 var plural = Pluralizer.GetPluralName(expected, StringComparison.OrdinalIgnoreCase, Constants.Markers.Collections);
 
                 // symbol may have both Entity and Collection marker, such as 'ModelCollection', so 'plural' may be null
-                expected = plural ?? (symbol.Name[0].IsUpperCase() ? Constants.Entities : Constants.entities);
+                expected = plural ?? (symbolName[0].IsUpperCase() ? Constants.Entities : Constants.entities);
             }
 
             return expected;
@@ -92,12 +92,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                  .SelectMany(_ => AnalyzeName(_, compilation));
         }
 
-        protected virtual bool ShallAnalyze(INamespaceSymbol symbol) => symbol.IsGlobalNamespace is false;
+        protected virtual bool ShallAnalyze(INamespaceSymbol symbol) => symbol.CanBeReferencedByName && symbol.IsGlobalNamespace is false;
 
-        protected virtual bool ShallAnalyze(ITypeSymbol symbol) => true;
+        protected virtual bool ShallAnalyze(ITypeSymbol symbol) => symbol.CanBeReferencedByName;
 
         protected virtual bool ShallAnalyze(IMethodSymbol symbol)
         {
+            if (symbol.CanBeReferencedByName is false)
+            {
+                return false;
+            }
+
             if (symbol.IsOverride)
             {
                 return false;
@@ -116,14 +121,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        protected virtual bool ShallAnalyze(IPropertySymbol symbol) => symbol.IsOverride is false && symbol.IsInterfaceImplementation() is false;
+        protected virtual bool ShallAnalyze(IPropertySymbol symbol) => symbol.CanBeReferencedByName && symbol.IsOverride is false && symbol.IsInterfaceImplementation() is false;
 
-        protected virtual bool ShallAnalyze(IEventSymbol symbol) => symbol.IsOverride is false && symbol.IsInterfaceImplementation() is false;
+        protected virtual bool ShallAnalyze(IEventSymbol symbol) => symbol.CanBeReferencedByName && symbol.IsOverride is false && symbol.IsInterfaceImplementation() is false;
 
-        protected virtual bool ShallAnalyze(IFieldSymbol symbol) => symbol.IsOverride is false;
+        protected virtual bool ShallAnalyze(IFieldSymbol symbol) => symbol.CanBeReferencedByName && symbol.IsOverride is false;
 
         protected virtual bool ShallAnalyze(IParameterSymbol symbol)
         {
+            if (symbol.CanBeReferencedByName is false)
+            {
+                return false;
+            }
+
             if (symbol.IsOverride)
             {
                 return false;
@@ -162,9 +172,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected IEnumerable<Diagnostic> AnalyzeEntityMarkers(ISymbol symbol)
         {
-            if (symbol.Name.HasEntityMarker())
+            var symbolName = symbol.Name;
+
+            if (symbolName.HasEntityMarker())
             {
-                var betterName = FindBetterNameForEntityMarker(symbol);
+                var betterName = FindBetterNameForEntityMarker(symbolName);
 
                 return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
             }
@@ -209,7 +221,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return;
             }
 
-            var issues = AnalyzeIdentifiers(semanticModel, type, node.Declaration.Variables.Select(_ => _.Identifier).ToArray());
+            var issues = AnalyzeIdentifiers(semanticModel, type, node.Declaration.Variables.ToArray(_ => _.Identifier));
 
             ReportDiagnostics(context, issues);
         }
@@ -267,7 +279,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return;
             }
 
-            var issues = AnalyzeIdentifiers(semanticModel, type, variableDeclaration.Variables.Select(_ => _.Identifier).ToArray());
+            var issues = AnalyzeIdentifiers(semanticModel, type, variableDeclaration.Variables.ToArray(_ => _.Identifier));
 
             ReportDiagnostics(context, issues);
         }
@@ -304,8 +316,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 {
                     var index = 0;
 
-                    foreach (var prefix in Constants.Markers.FieldPrefixes)
+                    var fieldPrefixes = Constants.Markers.FieldPrefixes;
+                    var length = fieldPrefixes.Length;
+
+                    for (var i = 0; i < length; i++)
                     {
+                        var prefix = fieldPrefixes[i];
+
                         if (symbolName.StartsWith(prefix, StringComparison.Ordinal))
                         {
                             index = prefix.Length;

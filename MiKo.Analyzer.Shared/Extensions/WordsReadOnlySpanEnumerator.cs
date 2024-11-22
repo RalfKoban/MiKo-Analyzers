@@ -3,6 +3,7 @@
 // ncrunch: rdi off
 // ncrunch: no coverage start
 // ReSharper disable once CheckNamespace
+#pragma warning disable IDE0130
 namespace System
 {
     // Must be a ref struct as it contains a ReadOnlySpan<char>
@@ -55,7 +56,7 @@ namespace System
         public ReadOnlySpanEnumeratorEntry Current { get; private set; }
 
         /// <summary>
-        /// Returns the numbers of elements within the enumerator.
+        /// Gets the numbers of elements within the enumerator.
         /// </summary>
         /// <returns>
         /// The numbers of elements within the enumerator.

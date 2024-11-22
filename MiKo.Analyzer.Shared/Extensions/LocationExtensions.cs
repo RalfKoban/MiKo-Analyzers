@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis.Text;
 
 // ncrunch: rdi off
 // ReSharper disable once CheckNamespace
+#pragma warning disable IDE0130
 namespace MiKoSolutions.Analyzers
 {
     internal static class LocationExtensions
@@ -21,6 +22,8 @@ namespace MiKoSolutions.Analyzers
         internal static LinePosition GetEndPosition(this Location value) => value.GetLineSpan().EndLinePosition;
 
         internal static int GetPositionWithinStartLine(this Location value) => value.GetStartPosition().Character;
+
+        internal static int GetPositionWithinEndLine(this Location value) => value.GetEndPosition().Character;
 
         internal static int GetStartingLine(this Location value) => value.GetStartPosition().Line;
 

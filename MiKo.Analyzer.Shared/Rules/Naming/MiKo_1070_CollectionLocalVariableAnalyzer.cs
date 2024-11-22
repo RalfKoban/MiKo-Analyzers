@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Xml;
 
 using Microsoft.CodeAnalysis;
@@ -22,13 +23,30 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(ITypeSymbol symbol)
         {
-            if (symbol.Name == "AssemblyCatalog")
+            var symbolName = symbol.Name;
+
+            if (IsMefAggregateCatalog(symbolName))
             {
                 // ignore MEF aggregate catalog
                 return false;
             }
 
-            return symbol.IsEnumerable() && IsXmlNode(symbol) is false;
+            if (symbol.IsEnumerable())
+            {
+                if (IsDocument(symbolName))
+                {
+                    return false;
+                }
+
+                if (IsXmlNode(symbolName))
+                {
+                    return false;
+                }
+
+                return true;
+            }
+
+            return false;
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers)
@@ -58,7 +76,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     continue;
                 }
 
-                var pluralName = GetPluralName(originalName, out var name);
+                var name = originalName;
+                var span = originalName.AsSpan();
+                var pluralName = span.EndsWith('s')
+                                 ? originalName
+                                 : GetPluralName(span, out name);  // might return null in case there is none
 
                 if (pluralName is null)
                 {
@@ -88,9 +110,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 case Constants.LambdaIdentifiers.Fallback3:
                 case Constants.LambdaIdentifiers.Fallback4:
                 case Constants.LambdaIdentifiers.Fallback5:
-                case Constants.LambdaIdentifiers.Fallback2Underscores:
-                case Constants.LambdaIdentifiers.Fallback3Underscores:
-                case Constants.LambdaIdentifiers.Fallback4Underscores:
+                case Constants.LambdaIdentifiers.FallbackUnderscores2:
+                case Constants.LambdaIdentifiers.FallbackUnderscores3:
+                case Constants.LambdaIdentifiers.FallbackUnderscores4:
                 case "map":
                 case "set":
                 case "list":
@@ -126,9 +148,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return false;
         }
 
-        private static bool IsXmlNode(ITypeSymbol type)
+        private static bool IsXmlNode(string typeName)
         {
-            switch (type?.Name)
+            switch (typeName)
             {
                 case nameof(XmlDocument):
                 case nameof(XmlElement):
@@ -144,37 +166,49 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        private static string GetPluralName(string originalName, out string name)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool IsDocument(string typeName) => typeName.EndsWith("Document", StringComparison.Ordinal);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool IsMefAggregateCatalog(string typeName) => typeName == "AssemblyCatalog";
+
+        private static string GetPluralName(ReadOnlySpan<char> originalName, out string name)
         {
             if (originalName.EndsWith('s'))
             {
-                name = originalName;
+                name = originalName.ToString();
 
-                return originalName;
+                return name;
             }
 
             var index = originalName.IndexOfAny(Splitters, StringComparison.Ordinal);
 
             if (index > 0)
             {
-                var nameToInspect = originalName.Substring(0, index);
-                var remainingPart = originalName.Substring(index);
+                var nameToInspect = originalName.Slice(0, index);
+                var remainingPart = originalName.Slice(index);
 
                 var pluralName = GetPluralName(nameToInspect, out name);
 
-                name = string.Concat(name, remainingPart);
+                name = name.ConcatenatedWith(remainingPart);
 
-                return pluralName + remainingPart;
+                return pluralName.ConcatenatedWith(remainingPart);
             }
-
-            name = originalName.EndsWithNumber() ? originalName.WithoutNumberSuffix() : originalName;
-
-            if (name.EndsWithAny(Constants.Markers.Collections))
+            else
             {
-                return Pluralizer.GetPluralName(name, StringComparison.OrdinalIgnoreCase, Constants.Markers.Collections);
-            }
+                var pluralName = originalName.EndsWithNumber()
+                                 ? originalName.WithoutNumberSuffix()
+                                 : originalName;
 
-            return Pluralizer.GetPluralName(name);
+                name = pluralName.ToString();
+
+                if (pluralName.EndsWithAny(Constants.Markers.Collections))
+                {
+                    return Pluralizer.GetPluralName(name, StringComparison.OrdinalIgnoreCase, Constants.Markers.Collections);
+                }
+
+                return Pluralizer.GetPluralName(name);
+            }
         }
     }
 }

@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
         }
 
-        private static bool IsLocalSymbol(SimpleNameSyntax syntax, SemanticModel semanticModel)
+        private static bool IsLocalSymbol(IdentifierNameSyntax syntax, SemanticModel semanticModel)
         {
             var symbol = syntax.Identifier.GetSymbol(semanticModel);
 

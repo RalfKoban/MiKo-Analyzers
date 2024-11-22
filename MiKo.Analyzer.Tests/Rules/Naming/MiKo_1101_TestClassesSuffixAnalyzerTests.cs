@@ -19,8 +19,8 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_test_class_with_correct_suffix_([ValueSource(nameof(TestFixtures))]string testFixture) => No_issue_is_reported_for(@"
-[" + testFixture + @"]
+        public void No_issue_is_reported_for_test_class_with_correct_suffix_([ValueSource(nameof(TestFixtures))]string fixture) => No_issue_is_reported_for(@"
+[" + fixture + @"]
 public class TestMeTests
 {
     public void DoSomething() { }
@@ -28,8 +28,8 @@ public class TestMeTests
 ");
 
         [Test]
-        public void An_issue_is_reported_for_test_class_with_wrong_suffix_([ValueSource(nameof(TestFixtures))] string testFixture) => An_issue_is_reported_for(@"
-[" + testFixture + @"]
+        public void An_issue_is_reported_for_test_class_with_wrong_suffix_([ValueSource(nameof(TestFixtures))] string fixture) => An_issue_is_reported_for(@"
+[" + fixture + @"]
 public class TestMe
 {
     private void DoSomething() { }
