@@ -549,6 +549,24 @@ namespace Bla
             VerifyCSharpFix(Template.Replace("###", originalName), Template.Replace("###", fixedName));
         }
 
+        [TestCase("config", "configuration")]
+        public void Code_gets_fixed_for_incorrectly_named_field_(string originalName, string fixedName)
+        {
+            const string Template = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private int _###;
+    }
+}
+}";
+
+            VerifyCSharpFix(Template.Replace("###", originalName), Template.Replace("###", fixedName));
+        }
+
         protected override string GetDiagnosticId() => MiKo_1063_AbbreviationsInNameAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1063_AbbreviationsInNameAnalyzer();

@@ -8347,6 +8347,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Place on same line.
+        /// </summary>
+        internal static string MiKo_2233_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2233_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code readability improves when XML tags span a single line. This makes the code clearer and easier to follow..
+        /// </summary>
+        internal static string MiKo_2233_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2233_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place XML tag on single line.
+        /// </summary>
+        internal static string MiKo_2233_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2233_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML tags should be placed on single line.
+        /// </summary>
+        internal static string MiKo_2233_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2233_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works—let the code itself do that.
         ///This approach ensures comments are insightful and add real value by giving context and rationale, helping developers understand the reasoning behind the implementation..
         /// </summary>
@@ -16166,6 +16202,42 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_6070_Title {
             get {
                 return ResourceManager.GetString("MiKo_6070_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        internal static string MiKo_6071_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6071_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround local &apos;using&apos; statements with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow..
+        /// </summary>
+        internal static string MiKo_6071_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6071_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround local &apos;using&apos; with a blank line.
+        /// </summary>
+        internal static string MiKo_6071_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6071_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local using statements should be surrounded by blank lines.
+        /// </summary>
+        internal static string MiKo_6071_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6071_Title", resourceCulture);
             }
         }
     }
