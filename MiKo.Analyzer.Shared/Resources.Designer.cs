@@ -16168,5 +16168,41 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6070_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        internal static string MiKo_6071_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6071_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround local &apos;using&apos; statements with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow..
+        /// </summary>
+        internal static string MiKo_6071_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6071_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround local &apos;using&apos; with a blank line.
+        /// </summary>
+        internal static string MiKo_6071_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6071_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local using statements should be surrounded by blank lines.
+        /// </summary>
+        internal static string MiKo_6071_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6071_Title", resourceCulture);
+            }
+        }
     }
 }
