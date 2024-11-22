@@ -11,6 +11,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1115_TestMethodsShouldNotBeNamedScenarioExpectedOutcomeAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] CorrectMethodNames =
+                                                              [
+                                                                  "DoSomething_does_something",
+                                                                  "Returns_null_if_load_fails",
+                                                                  "Throws_ArgumentNullException_under_some_conditions",
+                                                                  "Method_name_returns_false_if_load_fails_and_some_condition",
+                                                              ];
+
         private static readonly string[] WrongMethodNames =
                                                             [
                                                                 "MethodName_Scenario_ExpectedOutcome",
@@ -28,48 +36,33 @@ public class TestMe
 }
 ");
 
-        [TestCase("DoSomething_does_something")]
-        [TestCase("Returns_null_if_load_fails")]
-        [TestCase("Throws_ArgumentNullException_under_some_conditions")]
-        [TestCase("Method_name_returns_false_if_load_fails_and_some_condition")]
-        public void No_issue_is_reported_for_test_method_with_correct_name_(string methodName)
-            => Assert.Multiple(() =>
-                                    {
-                                        foreach (var testFixture in TestFixtures)
-                                        {
-                                            foreach (var test in Tests)
-                                            {
-                                                No_issue_is_reported_for(@"
-[" + testFixture + @"]
+        [Test]
+        public void No_issue_is_reported_for_test_method_with_correct_name_(
+                                                                        [ValueSource(nameof(CorrectMethodNames))] string methodName,
+                                                                        [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                        [ValueSource(nameof(Tests))] string test)
+        => No_issue_is_reported_for(@"
+[" + fixture + @"]
 public class TestMe
 {
     [" + test + @"]
     public void " + methodName + @"() { }
 }
 ");
-                                            }
-                                        }
-                                    });
 
         [Test]
-        public void An_issue_is_reported_for_test_method_with_wrong_name_([ValueSource(nameof(WrongMethodNames))] string methodName)
-            => Assert.Multiple(() =>
-                                    {
-                                        foreach (var testFixture in TestFixtures)
-                                        {
-                                            foreach (var test in Tests)
-                                            {
-                                                An_issue_is_reported_for(@"
-[" + testFixture + @"]
+        public void An_issue_is_reported_for_test_method_with_wrong_name_(
+                                                                      [ValueSource(nameof(WrongMethodNames))] string methodName,
+                                                                      [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                      [ValueSource(nameof(Tests))] string test)
+            => An_issue_is_reported_for(@"
+[" + fixture + @"]
 public class TestMe
 {
     [" + test + @"]
     public void " + methodName + @"() { }
 }
 ");
-                                            }
-                                        }
-                                    });
 
         [TestCase("DoesSomething_IsExceptional", "Throws_exception_if_it_does_something")]
         [TestCase("IfLoadFails_ReturnNull", "Returns_null_if_load_fails")]
@@ -151,6 +144,10 @@ public class TestMe
         [TestCase("MethodName_NoLongerThrows_NullReferenceException", "Method_name_throws_no_NullReferenceException")]
         [TestCase("MethodName_NotThrow_NullReferenceException", "Method_name_throws_no_NullReferenceException")]
         [TestCase("MethodName_NotThrows_NullReferenceException", "Method_name_throws_no_NullReferenceException")]
+        [TestCase("MethodName_ConsumedMessage_Publish", "Method_name_publish_consumed_message")]
+        [TestCase("MethodName_ConsumedMessage_Publishes", "Method_name_publishes_consumed_message")]
+        [TestCase("MethodName_RejectedConsumedMessage_LogsWhenAboveCriticalThreshold", "Method_name_logs_if_above_critical_threshold_if_consumed_message_is_rejected")]
+        [TestCase("MethodName_RejectedConsumedMessage_RejectsMessage", "Method_name_rejects_message_if_consumed_message_is_rejected")]
         public void Code_gets_fixed_for_2_slashes_in_(string originalName, string fixedName) => VerifyCSharpFix(
                                                                                                             "class TestMe { [Test] public void " + originalName + "() { } }",
                                                                                                             "class TestMe { [Test] public void " + fixedName + "() { } }");

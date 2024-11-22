@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool HasIssueInIsPattern(IsPatternExpressionSyntax pattern)
         {
-            if (pattern.Pattern is ConstantPatternSyntax c && c.Expression.IsKind(SyntaxKind.FalseLiteralExpression))
+            if (pattern.IsPatternCheckFor(SyntaxKind.FalseLiteralExpression))
             {
                 switch (pattern.Expression)
                 {
@@ -62,7 +62,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 case ParenthesizedExpressionSyntax parenthesizedExpression:
                 {
-                    if (parenthesizedExpression.Expression is IdentifierNameSyntax)
+                    if (parenthesizedExpression.WithoutParenthesis() is IdentifierNameSyntax)
                     {
                         // we have a (!(xyz)) condition
                         return false;

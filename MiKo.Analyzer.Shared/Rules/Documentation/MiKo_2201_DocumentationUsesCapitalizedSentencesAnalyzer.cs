@@ -30,24 +30,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                        Constants.XmlTag.Permission,
                                                    };
 
-        private static readonly string[] WellknownFileExtensions =
-                                                                   {
-                                                                       ".bmp",
-                                                                       ".config",
-                                                                       ".cs",
-                                                                       ".dll",
-                                                                       ".eds",
-                                                                       ".gif",
-                                                                       ".htm",
-                                                                       ".jpeg",
-                                                                       ".jpg",
-                                                                       ".png",
-                                                                       ".resx",
-                                                                       ".txt",
-                                                                       ".xaml",
-                                                                       ".xml",
-                                                                   };
-
         public MiKo_2201_DocumentationUsesCapitalizedSentencesAnalyzer() : base(Id)
         {
         }
@@ -156,6 +138,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private static bool IsWellknownFileExtension(ReadOnlySpan<char> comment, int startIndex) => comment.Slice(startIndex).StartsWithAny(WellknownFileExtensions);
+        private static bool IsWellknownFileExtension(ReadOnlySpan<char> comment, int startIndex) => comment.Slice(startIndex).StartsWithAny(Constants.WellknownFileExtensions);
     }
 }

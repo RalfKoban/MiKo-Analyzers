@@ -59,7 +59,8 @@ namespace Bla
 }
 ");
 
-        [TestCase("There is a reason for the suppression.")]
+        [TestCase("We do not want to have that method.")]
+        [TestCase("This is a template.")]
         public void No_issue_is_reported_for_SuppressMessage_attribute_with_proper_justification_(string justification) => No_issue_is_reported_for(@"
 using System;
 using System.Diagnostics.CodeAnalysis;
@@ -68,7 +69,7 @@ namespace Bla
 {
     public class TestMe
     {
-        [SuppressMessage(""category"", ""checkId"", Justification = " + justification + @")]
+        [SuppressMessage(""category"", ""checkId"", Justification = """ + justification + @""")]
         public void DoSomething()
         {
         }
@@ -83,6 +84,8 @@ namespace Bla
         [TestCase("To do")]
         [TestCase("FIXME")]
         [TestCase("Fix me")]
+        [TestCase("Fix it later")]
+        [TestCase("Fix it in future")]
         [TestCase("Pending")]
         [TestCase("<Pending>")]
         [TestCase("Reviewed")]
@@ -114,6 +117,8 @@ namespace Bla
         [TestCase("<------------->")] // some placeholders to attempt to avoid match
         [TestCase("<- ->")] // some placeholders to attempt to avoid match
         [TestCase("<- whatever ->")] // no explanation that would explain
+        [TestCase("for reason")] // no explanation that would explain
+        [TestCase("just because")] // no explanation that would explain
         public void An_issue_is_reported_for_SuppressMessage_attribute_with_poor_justification_(string justification) => An_issue_is_reported_for(@"
 using System;
 using System.Diagnostics.CodeAnalysis;

@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static string FindBetterName(IMethodSymbol symbol)
         {
             var methodName = symbol.Name;
-            var escapedMethod = new StringBuilder(methodName);
+            var escapedMethod = methodName.AsBuilder();
 
             var found = ContainsPhrase(methodName);
 

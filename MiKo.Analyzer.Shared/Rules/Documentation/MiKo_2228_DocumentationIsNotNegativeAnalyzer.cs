@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var text = xml.GetTextTrimmed();
 
-            foreach (var sentence in text.SplitBy(Constants.SentenceMarkers))
+            foreach (var sentence in text.AsSpan().SplitBy(Constants.SentenceMarkers))
             {
                 var indices = new HashSet<int>();
 

@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly string[] Prefixes = Constants.Markers.FieldPrefixes.SelectMany(_ => RawPrefixes, (prefix, name) => prefix + name).ToArray();
 
-        private static readonly string[] AllowedPrefixes = Constants.Markers.FieldPrefixes.Select(_ => _ + "IsInDesign").ToArray();
+        private static readonly string[] AllowedPrefixes = Constants.Markers.FieldPrefixes.ToArray(_ => _ + "IsInDesign");
 
         public MiKo_1073_BooleanFieldNamedAsQuestionAnalyzer() : base(Id, SymbolKind.Field)
         {

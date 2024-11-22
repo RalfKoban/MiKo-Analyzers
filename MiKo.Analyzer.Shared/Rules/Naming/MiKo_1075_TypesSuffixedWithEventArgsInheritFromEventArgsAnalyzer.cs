@@ -17,13 +17,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private const string EventsArg = nameof(EventsArg);
         private const string EventsArgs = nameof(EventsArgs);
 
-        private static readonly ISet<string> EventArgSuffixes = new HashSet<string>
-                                                                    {
-                                                                        EventArgs,
-                                                                        EventArg,
-                                                                        EventsArgs,
-                                                                        EventsArg,
-                                                                    };
+        private static readonly string[] EventArgSuffixes = // order is important here
+                                                            {
+                                                                EventArgs,
+                                                                EventArg,
+                                                                EventsArgs,
+                                                                EventsArg,
+                                                            };
 
         public MiKo_1075_TypesSuffixedWithEventArgsInheritFromEventArgsAnalyzer() : base(Id, SymbolKind.NamedType)
         {
@@ -45,11 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static string FindBetterName(INamedTypeSymbol symbol)
         {
-            var betterName = symbol.Name
-                                   .Without(EventArgs)
-                                   .Without(EventArg)
-                                   .Without(EventsArgs)
-                                   .Without(EventsArg);
+            var betterName = symbol.Name.Without(EventArgSuffixes);
 
             return symbol.IsPrismEvent()
                    ? betterName + "Event" // prism events should be suffixed with 'Event'

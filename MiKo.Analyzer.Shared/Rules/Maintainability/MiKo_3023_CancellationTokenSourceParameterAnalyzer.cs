@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 
 using Microsoft.CodeAnalysis;
@@ -16,9 +15,24 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation) => from parameter in symbol.Parameters
-                                                                                                             let parameterType = parameter.Type
-                                                                                                             where parameterType.TypeKind == TypeKind.Class && parameterType.ToString() == TypeNames.CancellationTokenSource
-                                                                                                             select Issue(parameter, nameof(CancellationToken));
+        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
+        {
+            var parameters = symbol.Parameters;
+            var length = parameters.Length;
+
+            if (length > 0)
+            {
+                for (var index = 0; index < length; index++)
+                {
+                    var parameter = parameters[index];
+                    var parameterType = parameter.Type;
+
+                    if (parameterType.TypeKind == TypeKind.Class && parameterType.ToString() == TypeNames.CancellationTokenSource)
+                    {
+                        yield return Issue(parameter, nameof(CancellationToken));
+                    }
+                }
+            }
+        }
     }
 }

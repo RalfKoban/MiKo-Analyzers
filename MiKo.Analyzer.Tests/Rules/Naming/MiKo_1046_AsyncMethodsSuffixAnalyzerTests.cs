@@ -37,16 +37,6 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_non_static_async_Main_method() => An_issue_is_reported_for(@"
-using System;
-
-public class TestMe
-{
-    public async Task Main() { }
-}
-");
-
-        [Test]
         public void No_issue_is_reported_for_correctly_named_async_void_method() => No_issue_is_reported_for(@"
 using System;
 
@@ -63,16 +53,6 @@ using System;
 public class TestMe
 {
     protected async void DoSomethingAsyncCore() { }
-}
-");
-
-        [Test]
-        public void An_issue_is_reported_for_incorrectly_named_async_void_method() => An_issue_is_reported_for(@"
-using System;
-
-public class TestMe
-{
-    public async void DoSomething() { }
 }
 ");
 
@@ -97,37 +77,18 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_Task_method() => An_issue_is_reported_for(@"
-using System.Threading.Tasks;
-
-public class TestMe
-{
-    public Task DoSomething() { }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_test_method()
-            => Assert.Multiple(() =>
-                                    {
-                                        foreach (var testFixture in TestFixtures)
-                                        {
-                                            foreach (var test in Tests)
-                                            {
-                                                No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_test_method_([ValueSource(nameof(TestFixtures))] string fixture, [ValueSource(nameof(Tests))] string test)
+            => No_issue_is_reported_for(@"
 using NUnit;
 using System.Threading.Tasks;
 
-[" + testFixture + @"]
+[" + fixture + @"]
 public class TestMe
 {
     [" + test + @"]
     public Task DoSomething() => Task.CompletedTask;
 }
 ");
-                                            }
-                                        }
-                                    });
 
         [Test]
         public void No_issue_is_reported_for_TaskFactory_method_([ValueSource(nameof(TaskFactoryMethods))] string methodName) => No_issue_is_reported_for(@"
@@ -164,19 +125,6 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_async_void_local_function() => An_issue_is_reported_for(@"
-using System;
-
-public class TestMe
-{
-    public async void DoSomethingAsync()
-    {
-        async void DoSomethingCore() { }
-    }
-}
-");
-
-        [Test]
         public void No_issue_is_reported_for_correctly_named_Task_local_function() => No_issue_is_reported_for(@"
 using System.Threading.Tasks;
 
@@ -185,6 +133,73 @@ public class TestMe
     public Task DoSomethingAsync()
     {
         async Task DoSomethingCoreAsync() { }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_correctly_named_local_function_inside_test_method_([ValueSource(nameof(TestFixtures))] string fixture, [ValueSource(nameof(Tests))] string test)
+            => No_issue_is_reported_for(@"
+using NUnit;
+using System.Threading.Tasks;
+
+[" + fixture + @"]
+public class TestMe
+{
+    [" + test + @"]
+    public Task DoSomething()
+    {
+        Task DoSomethingCoreAsync() => Task.CompletedTask;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_global_statement() => No_issue_is_reported_for(@"
+using System.Threading.Tasks;
+
+await Task.CompletedTask;
+");
+
+        [Test]
+        public void An_issue_is_reported_for_non_static_async_Main_method() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public async Task Main() { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_named_async_void_method() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public async void DoSomething() { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_named_Task_method() => An_issue_is_reported_for(@"
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething() { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_named_async_void_local_function() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public async void DoSomethingAsync()
+    {
+        async void DoSomethingCore() { }
     }
 }
 ");
@@ -203,44 +218,12 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_local_function_inside_test_method()
-            => Assert.Multiple(() =>
-                                    {
-                                        foreach (var testFixture in TestFixtures)
-                                        {
-                                            foreach (var test in Tests)
-                                            {
-                                                No_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_correctly_named_local_function_inside_test_method_([ValueSource(nameof(TestFixtures))] string fixture, [ValueSource(nameof(Tests))] string test)
+            => An_issue_is_reported_for(@"
 using NUnit;
 using System.Threading.Tasks;
 
-[" + testFixture + @"]
-public class TestMe
-{
-    [" + test + @"]
-    public Task DoSomething()
-    {
-        Task DoSomethingCoreAsync() => Task.CompletedTask;
-    }
-}
-");
-                                            }
-                                        }
-                                    });
-
-        [Test]
-        public void An_issue_is_reported_for_correctly_named_local_function_inside_test_method()
-            => Assert.Multiple(() =>
-                                    {
-                                        foreach (var testFixture in TestFixtures)
-                                        {
-                                            foreach (var test in Tests)
-                                            {
-                                                An_issue_is_reported_for(@"
-using NUnit;
-using System.Threading.Tasks;
-
-[" + testFixture + @"]
+[" + fixture + @"]
 public class TestMe
 {
     [" + test + @"]
@@ -250,9 +233,6 @@ public class TestMe
     }
 }
 ");
-                                            }
-                                        }
-                                    });
 
         [Test]
         public void Code_gets_fixed_for_method() => VerifyCSharpFix(

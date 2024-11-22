@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] BeginningConditions = { "true", "if", "whether" };
         private static readonly string[] MiddleConditions = { "if", "whether" };
 
-        private static readonly string[] TrailingSentenceMarkers = Constants.TrailingSentenceMarkers.SelectMany(marker => new[] { $"{marker}.", $"{marker} ." }).ToArray();
+        private static readonly string[] TrailingSentenceMarkers = Constants.TrailingSentenceMarkers.SelectMany(marker => new[] { marker + ".", marker + " ." }).ToArray();
 
         public override string FixableDiagnosticId => "MiKo_2070";
 
@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         // introduced as workaround for issue #399
-        private static bool CommentCanBeFixed(SyntaxNode syntax)
+        private static bool CommentCanBeFixed(XmlElementSyntax syntax)
         {
             var comment = syntax.ToString();
 
@@ -88,7 +88,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     if (valueText.StartsWithAny(Constants.Comments.ReturnWords))
                     {
                         var startText = GetCorrectStartText(summary);
-                        var remainingText = valueText.WithoutFirstWord().WithoutFirstWords(BeginningConditions).ToString();
+                        var remainingText = valueText.WithoutFirstWord().WithoutFirstWords(BeginningConditions).ToString(); // TODO RKN: Use Span and create a ConcatenatedWith
 
                         var newText = string.Concat(" ", startText, " ", remainingText);
 
@@ -121,7 +121,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     // remove the '<see langword="true"/>'
                     summary = summary.Without(element);
 
-                    // remove follow up contents ' if ' or ' whether '
+                    // remove follow-up contents ' if ' or ' whether '
                     if (summary.Content.Count > 1 && summary.Content[1] is XmlTextSyntax followUpText)
                     {
                         var textTokens = followUpText.TextTokens;
@@ -209,13 +209,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         continue;
                     }
 
-                    var newText = new StringBuilder(valueText).Without("otherwise").Without("false").ReplaceWithCheck("; , .", ".");
+                    var newText = valueText.AsBuilder().Without("otherwise").Without("false").ReplaceWithCheck("; , .", ".");
 
                     if (valueText.Length > newText.Length)
                     {
                         newText = newText.ReplaceAllWithCheck(TrailingSentenceMarkers, ".");
 
-                        summary = summary.ReplaceToken(token, token.WithText(newText.ToString()));
+                        summary = summary.ReplaceToken(token, token.WithText(newText));
                     }
                 }
             }
@@ -240,7 +240,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return string.Empty;
         }
 
-        private static string GetCorrectStartText(BasePropertyDeclarationSyntax property)
+        private static string GetCorrectStartText(PropertyDeclarationSyntax property)
         {
             var isBool = property.Type.IsBoolean();
             var isAsync = property.IsAsync();

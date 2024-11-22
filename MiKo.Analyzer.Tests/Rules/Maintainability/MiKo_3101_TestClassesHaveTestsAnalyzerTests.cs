@@ -19,10 +19,10 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_test_class_with_tests_(
-                                                                [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                [ValueSource(nameof(TestFixtures))] string fixture,
                                                                 [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
-[" + testFixture + @"]
+[" + fixture + @"]
 public class TestMe
 {
     [" + test + @"]
@@ -32,10 +32,10 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_test_class_with_nested_tests_(
-                                                                       [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                       [ValueSource(nameof(TestFixtures))] string fixture,
                                                                        [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
-[" + testFixture + @"]
+[" + fixture + @"]
 public class TestMe
 {
     public class Nested
@@ -48,7 +48,7 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_partial_test_class_with_tests_(
-                                                                        [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                        [ValueSource(nameof(TestFixtures))] string fixture,
                                                                         [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
 public partial class TestMe
@@ -57,7 +57,7 @@ public partial class TestMe
     public void DoSomething() { }
 }
 
-[" + testFixture + @"]
+[" + fixture + @"]
 public partial class TestMe
 {
     private void DoSomethingElse() { }
@@ -65,14 +65,14 @@ public partial class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_partial_test_class_without_tests_([ValueSource(nameof(TestFixtures))] string testFixture)
+        public void No_issue_is_reported_for_partial_test_class_without_tests_([ValueSource(nameof(TestFixtures))] string fixture)
             => No_issue_is_reported_for(@"
 public partial class TestMe
 {
     public void DoSomething() { }
 }
 
-[" + testFixture + @"]
+[" + fixture + @"]
 public partial class TestMe
 {
     private void DoSomethingElse() { }
@@ -81,10 +81,10 @@ public partial class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_test_class_with_multiple_base_classes_with_tests_(
-                                                                                           [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                                           [ValueSource(nameof(TestFixtures))] string fixture,
                                                                                            [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
-[" + testFixture + @"]
+[" + fixture + @"]
 public class TestMe3 : TestMe2
 {
     private void DoSomething3() { }
@@ -104,8 +104,8 @@ public class TestMe1
 ");
 
         [Test]
-        public void An_issue_is_reported_for_test_class_without_tests_([ValueSource(nameof(TestFixtures))] string testFixture) => An_issue_is_reported_for(@"
-[" + testFixture + @"]
+        public void An_issue_is_reported_for_test_class_without_tests_([ValueSource(nameof(TestFixtures))] string fixture) => An_issue_is_reported_for(@"
+[" + fixture + @"]
 public class TestMe
 {
     private void DoSomethingElse() { }
@@ -113,8 +113,8 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_test_class_with_multiple_base_classes_without_tests_([ValueSource(nameof(TestFixtures))] string testFixture) => An_issue_is_reported_for(@"
-[" + testFixture + @"]
+        public void An_issue_is_reported_for_test_class_with_multiple_base_classes_without_tests_([ValueSource(nameof(TestFixtures))] string fixture) => An_issue_is_reported_for(@"
+[" + fixture + @"]
 public class TestMe3 : TestMe2
 {
     private void DoSomething3() { }

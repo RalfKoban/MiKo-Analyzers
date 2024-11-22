@@ -54,17 +54,23 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (name is null)
             {
-                name = method.Name.StartsWith(Prefix, StringComparison.Ordinal)
-                       ? method.Name.Substring(Prefix.Length)
-                       : method.Name;
+                var methodName = method.Name;
 
-                if (name.EndsWith(OnCanExecuteSuffix, StringComparison.Ordinal))
+                var adjustedName = methodName.StartsWith(Prefix, StringComparison.Ordinal)
+                                   ? methodName.AsSpan(Prefix.Length)
+                                   : methodName.AsSpan();
+
+                if (adjustedName.EndsWith(OnCanExecuteSuffix, StringComparison.Ordinal))
                 {
-                    name = "CanExecute" + name.Substring(0, name.Length - OnCanExecuteSuffix.Length);
+                    name = "CanExecute".ConcatenatedWith(adjustedName.Slice(0, adjustedName.Length - OnCanExecuteSuffix.Length));
                 }
-                else if (name.EndsWith(OnExecutedSuffix, StringComparison.Ordinal))
+                else if (adjustedName.EndsWith(OnExecutedSuffix, StringComparison.Ordinal))
                 {
-                    name = "Executed" + name.Substring(0, name.Length - OnExecutedSuffix.Length);
+                    name = "Executed".ConcatenatedWith(adjustedName.Slice(0, adjustedName.Length - OnExecutedSuffix.Length));
+                }
+                else
+                {
+                    name = adjustedName.ToString();
                 }
             }
 

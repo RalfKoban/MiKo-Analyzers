@@ -479,7 +479,8 @@ public namespace Bla
 
         [TestCase("bool", "<see langword=\"false\"/>")]
         [TestCase("byte", "<c>0</c>")]
-        [TestCase("CancellationToken", "<see cref=\"CancellationToken\"/>")]
+        [TestCase("CancellationToken", "<see cref=\"CancellationToken.None\"/>")]
+        [TestCase("GCCollectionMode", "<see cref=\"GCCollectionMode.Default\"/>")]
         [TestCase("char", "<c>'\\0' (U+0000)</c>")]
         [TestCase("DateTime", "<see cref=\"DateTime.MinValue\"/>")]
         [TestCase("double", "<c>0</c>")]
@@ -529,7 +530,8 @@ public namespace Bla
 
         [TestCase("bool", "<see langword=\"false\"/>")]
         [TestCase("byte", "<c>0</c>")]
-        [TestCase("CancellationToken", "<see cref=\"CancellationToken\"/>")]
+        [TestCase("CancellationToken", "<see cref=\"CancellationToken.None\"/>")]
+        [TestCase("GCCollectionMode", "<see cref=\"GCCollectionMode.Default\"/>")]
         [TestCase("char", "<c>'\\0' (U+0000)</c>")]
         [TestCase("DateTime", "<see cref=\"DateTime.MinValue\"/>")]
         [TestCase("double", "<c>0</c>")]

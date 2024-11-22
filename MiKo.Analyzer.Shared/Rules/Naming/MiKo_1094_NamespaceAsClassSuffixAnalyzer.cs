@@ -32,9 +32,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 if (symbolName.EndsWith(pair.Key, StringComparison.OrdinalIgnoreCase))
                 {
-                    var shortened = symbolName.WithoutSuffix(pair.Key);
+                    var shortened = symbolName.AsSpan().WithoutSuffix(pair.Key);
 
-                    yield return Issue(symbol, shortened + pair.Value);
+                    yield return Issue(symbol, shortened.ConcatenatedWith(pair.Value));
                 }
             }
         }

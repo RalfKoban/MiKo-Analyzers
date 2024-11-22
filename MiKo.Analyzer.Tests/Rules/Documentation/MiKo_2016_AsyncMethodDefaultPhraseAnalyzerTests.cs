@@ -91,7 +91,9 @@ public class TestMe
             const string FixedCode = @"
 public class TestMe
 {
-    /// <summary>Asynchronously does something.</summary>
+    /// <summary>
+    /// Asynchronously does something.
+    /// </summary>
     public async void DoSomething() { }
 }";
 
@@ -111,7 +113,9 @@ public class TestMe
             const string FixedCode = @"
 public class TestMe
 {
-    /// <summary>Asynchronously does something.</summary>
+    /// <summary>
+    /// Asynchronously does something.
+    /// </summary>
     public async void DoSomething() { }
 }";
 
@@ -131,7 +135,9 @@ public class TestMe
             const string FixedCode = @"
 public class TestMe
 {
-    /// <summary>Asynchronously does something.</summary>
+    /// <summary>
+    /// Asynchronously does something.
+    /// </summary>
     public async void DoSomething() { }
 }";
 
@@ -151,7 +157,9 @@ public class TestMe
             const string FixedCode = @"
 public class TestMe
 {
-    /// <summary>Asynchronously <see cref=""string""/></summary>
+    /// <summary>
+    /// Asynchronously <see cref=""string""/>
+    /// </summary>
     public async void DoSomething() { }
 }";
 
@@ -199,6 +207,30 @@ public class TestMe
 {
     /// <summary>
     /// Asynchronously <see cref=""string""/>
+    /// </summary>
+    public async void DoSomething() { }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_and_upper_case_text_adjusted_when_infinite_and_on_different_lines()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Do something.
+    /// </summary>
+    public async void DoSomething() { }
+}";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Asynchronously does something.
     /// </summary>
     public async void DoSomething() { }
 }";

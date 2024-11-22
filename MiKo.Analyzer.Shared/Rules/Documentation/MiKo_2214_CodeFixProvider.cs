@@ -160,7 +160,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return replacements;
         }
 
-        private static XmlTextSyntax XmlTextWithoutLastNewLine(ICollection<SyntaxToken> tokens)
+        private static XmlTextSyntax XmlTextWithoutLastNewLine(List<SyntaxToken> tokens)
         {
             var last = tokens.Last();
 

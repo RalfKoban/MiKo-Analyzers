@@ -50,15 +50,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 if (name.EndsWith(Constants.Entity, Comparison))
                 {
-                    var betterName = name.WithoutSuffix(Constants.Entity);
+                    var proposal = name.WithoutSuffix(Constants.Entity);
 
-                    yield return Issue(name, location, betterName, CreateBetterNameProposal(betterName));
+                    yield return Issue(name, location, proposal, CreateBetterNameProposal(proposal));
                 }
                 else if (name.EndsWith(Constants.Element, Comparison))
                 {
-                    var betterName = name == Constants.frameworkElement ? Constants.element : name.WithoutSuffix(Constants.Element);
+                    var proposal = name == Constants.frameworkElement ? Constants.element : name.WithoutSuffix(Constants.Element);
 
-                    yield return Issue(name, location, betterName, CreateBetterNameProposal(betterName));
+                    yield return Issue(name, location, proposal, CreateBetterNameProposal(proposal));
                 }
                 else
                 {

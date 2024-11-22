@@ -226,6 +226,36 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_empty_P_tag_on_method()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// <p/>
+    /// Something more.
+    /// </summary>
+    void DoSomething() { }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// <para/>
+    /// Something more.
+    /// </summary>
+    void DoSomething() { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_P_tag_on_type()
         {
             const string OriginalCode = @"
@@ -334,7 +364,7 @@ public class TestMe
         [ExcludeFromCodeCoverage]
         private static string[] CreateWrongItems()
         {
-            string[] tokens = ["<br/>", "<br />", "<p>Whatever.</p>"];
+            string[] tokens = ["<br/>", "<br />", "<p>Whatever.</p>", "<p/>", "<p />"];
 
             var results = new HashSet<string>(2 * tokens.Length);
 

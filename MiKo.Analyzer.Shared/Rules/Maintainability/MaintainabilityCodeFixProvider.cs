@@ -204,7 +204,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             // remove parenthesis when possible
             if (operand is ParenthesizedExpressionSyntax syntax)
             {
-                var expression = syntax.Expression;
+                var expression = syntax.WithoutParenthesis();
 
                 switch (expression.Kind())
                 {
@@ -287,7 +287,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     if (pattern.IsKind(SyntaxKind.NotPattern))
                     {
-                        if (pattern.Pattern is ConstantPatternSyntax c && c.Expression.IsKind(SyntaxKind.TrueLiteralExpression))
+                        if (pattern.IsPatternCheckFor(SyntaxKind.TrueLiteralExpression))
                         {
                             var expression = condition.Expression;
 

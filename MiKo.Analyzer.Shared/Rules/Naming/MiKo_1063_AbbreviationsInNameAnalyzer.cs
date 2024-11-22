@@ -5,260 +5,14 @@ using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
+using MiKoSolutions.Analyzers.Linguistics;
+
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class MiKo_1063_AbbreviationsInNameAnalyzer : NamingLocalVariableAnalyzer
     {
         public const string Id = "MiKo_1063";
-
-        private static readonly IReadOnlyDictionary<string, string> Prefixes = new Dictionary<string, string>
-                                                                                   {
-                                                                                       { "app", "application" },
-                                                                                       { "apps", "applications" },
-                                                                                       { "assoc", "association" },
-                                                                                       { "auth", "authorization" },
-                                                                                       { "btn", "button" },
-                                                                                       { "cb", "checkBox" },
-                                                                                       { "cert", "certificate" },
-                                                                                       { "chk", "checkBox" },
-                                                                                       { "cls", "class" },
-                                                                                       { "cmb", "comboBox" },
-                                                                                       { "cmd", "command" },
-                                                                                       { "conf", "configuration" },
-                                                                                       { "config", "configuration" },
-                                                                                       { "configs", "configurations" },
-                                                                                       { "conn", "connection" },
-                                                                                       { "ctl", "control" },
-                                                                                       { "ctrl", "control" },
-                                                                                       { "ctx", "context" },
-                                                                                       { "db", "database" },
-                                                                                       { "ddl", "dropDownList" },
-                                                                                       { "decl", "declaration" },
-                                                                                       { "decr", "decrypt" },
-                                                                                       { "desc", "description" },
-                                                                                       { "dest", "destination" },
-                                                                                       { "diag", "diagnostic" },
-                                                                                       { "diags", "diagnostics" },
-                                                                                       { "dict", "dictionary" },
-                                                                                       { "diff", "difference" },
-                                                                                       { "diffs", "differences" },
-                                                                                       { "dir", "directory" },
-                                                                                       { "dlg", "dialog" },
-                                                                                       { "doc", "document" },
-                                                                                       { "dst", "destination" },
-                                                                                       { "dto", string.Empty },
-                                                                                       { "env", "environment" },
-                                                                                       { "encr", "encrypt" },
-                                                                                       { "environ", "environment" },
-                                                                                       { "err", "error" },
-                                                                                       { "ext", "extension" },
-                                                                                       { "frm", "form" },
-                                                                                       { "hdls", "headless" },
-                                                                                       { "ident", "identification" },
-                                                                                       { "idx", "index" },
-                                                                                       { "init", "initialize" },
-                                                                                       { "itf", "interface" },
-                                                                                       { "lang", "language" },
-                                                                                       { "lbl", "label" },
-                                                                                       { "lib", "library" },
-                                                                                       { "libs", "libraries" },
-                                                                                       { "lv", "listView" },
-                                                                                       { "max", "maximum" },
-                                                                                       { "meth", "method" },
-                                                                                       { "mgr", "manager" },
-                                                                                       { "min", "minimum" },
-                                                                                       { "mngr", "manager" },
-                                                                                       { "mnu", "menuItem" },
-                                                                                       { "msg", "message" },
-                                                                                       { "num", "number" },
-                                                                                       { "obj", "object" },
-                                                                                       { "param", "parameter" },
-                                                                                       { "params", "parameters" },
-                                                                                       { "perc", "percentage" },
-                                                                                       { "perf", "performance" },
-                                                                                       { "phys", "physical" },
-                                                                                       { "pos", "position" },
-                                                                                       { "proc", "process" },
-                                                                                       { "procs", "processes" },
-                                                                                       { "prop", "property" },
-                                                                                       { "pt", "point" },
-                                                                                       { "pts", "points" },
-                                                                                       { "ref", "reference" },
-                                                                                       { "repo", "repository" },
-                                                                                       { "req", "request" },
-                                                                                       { "res", "result" },
-                                                                                       { "resp", "response" },
-                                                                                       { "sem", "semantic" },
-                                                                                       { "spec", "specification" },
-                                                                                       { "src", "source" },
-                                                                                       { "std", "standard" },
-                                                                                       { "str", "string" },
-                                                                                       { "sync", "synchronization" },
-                                                                                       { "svc", "service" },
-                                                                                       { "tm", "time" },
-                                                                                       { "tmp", "temp" },
-                                                                                       { "txt", "text" },
-                                                                                       { "ver", "version" },
-                                                                                       { "vol", "volume" },
-                                                                                   };
-
-        private static readonly IReadOnlyDictionary<string, string> MidTerms = new Dictionary<string, string>((IDictionary<string, string>)Prefixes)
-                                                                                   {
-                                                                                       { "App", "Application" },
-                                                                                       { "Apps", "Applications" },
-                                                                                       { "Assoc", "Association" },
-                                                                                       { "Auth", "Authorization" },
-                                                                                       { "Btn", "Button" },
-                                                                                       { "Cb", "CheckBox" },
-                                                                                       { "Cert", "Certificate" },
-                                                                                       { "Chk", "CheckBox" },
-                                                                                       { "Cli", "CommandLineInterface" },
-                                                                                       { "CLI", "CommandLineInterface" },
-                                                                                       { "Cls", "Class" },
-                                                                                       { "Cmb", "ComboBox" },
-                                                                                       { "Cmd", "Command" },
-                                                                                       { "Conf", "Configuration" },
-                                                                                       { "Config", "Configuration" },
-                                                                                       { "Configs", "Configurations" },
-                                                                                       { "Conn", "Connection" },
-                                                                                       { "Ctl", "Control" },
-                                                                                       { "Ctrl", "Control" },
-                                                                                       { "Ctx", "Context" },
-                                                                                       { "Db", "Database" },
-                                                                                       { "Ddl", "DropDownList" },
-                                                                                       { "Decl", "Declaration" },
-                                                                                       { "Decr", "Decrypt" },
-                                                                                       { "Desc", "Description" },
-                                                                                       { "Dest", "Destination" },
-                                                                                       { "Diag", "Diagnostic" },
-                                                                                       { "Diags", "Diagnostics" },
-                                                                                       { "Dict", "Dictionary" },
-                                                                                       { "Diff", "Difference" },
-                                                                                       { "Diffs", "Differences" },
-                                                                                       { "Dir", "Directory" },
-                                                                                       { "Dlg", "Dialog" },
-                                                                                       { "Doc", "Document" },
-                                                                                       { "Dst", "Destination" },
-                                                                                       { "Dto", string.Empty },
-                                                                                       { "DTO", string.Empty },
-                                                                                       { "Ef", "EntityFramework" },
-                                                                                       { "EF", "EntityFramework" },
-                                                                                       { "Encr", "Encrypt" },
-                                                                                       { "Env", "Environment" },
-                                                                                       { "Environ", "Environment" },
-                                                                                       { "Err", "Error" },
-                                                                                       { "Ext", "Extension" },
-                                                                                       { "Frm", "Form" },
-                                                                                       { "Hdls", "Headless" },
-                                                                                       { "Ident", "Identification" },
-                                                                                       { "Idx", "Index" },
-                                                                                       { "Init", "Initialize" },
-                                                                                       { "Itf", "Interface" },
-                                                                                       { "Lang", "Language" },
-                                                                                       { "Lbl", "Label" },
-                                                                                       { "Lib", "Library" },
-                                                                                       { "Libs", "Libraries" },
-                                                                                       { "Lv", "ListView" },
-                                                                                       { "Max", "Maximum" },
-                                                                                       { "Meth", "Method" },
-                                                                                       { "Mgr", "Manager" },
-                                                                                       { "Min", "Minimum" },
-                                                                                       { "Mngr", "Manager" },
-                                                                                       { "Mnu", "MenuItem" },
-                                                                                       { "Msg", "Message" },
-                                                                                       { "Num", "Number" },
-                                                                                       { "Obj", "Object" },
-                                                                                       { "Op", "Operation" },
-                                                                                       { "Param", "Parameter" },
-                                                                                       { "Params", "Parameters" },
-                                                                                       { "Perc", "Percentage" },
-                                                                                       { "Perf", "Performance" },
-                                                                                       { "Phys", "Physical" },
-                                                                                       { "Pos", "Position" },
-                                                                                       { "Proc", "Process" },
-                                                                                       { "Procs", "Processes" },
-                                                                                       { "Prop", "Property" },
-                                                                                       { "Props", "Properties" },
-                                                                                       { "Pt", "Point" },
-                                                                                       { "Pts", "Points" },
-                                                                                       { "Ref", "Reference" },
-                                                                                       { "Repo", "Repository" },
-                                                                                       { "Req", "Request" },
-                                                                                       { "Res", "Result" },
-                                                                                       { "Resp", "Response" },
-                                                                                       { "Sem", "Semantic" },
-                                                                                       { "Spec", "Specification" },
-                                                                                       { "Src", "Source" },
-                                                                                       { "Std", "Standard" },
-                                                                                       { "Str", "String" },
-                                                                                       { "Sync", "Synchronization" },
-                                                                                       { "Svc", "Service" },
-                                                                                       { "Tm", "Time" },
-                                                                                       { "Tmp", "Temp" },
-                                                                                       { "Txt", "Text" },
-                                                                                       { "Ver", "Version" },
-                                                                                       { "Vol", "Volume" },
-                                                                                   };
-
-        private static readonly IReadOnlyDictionary<string, string> Postfixes = new Dictionary<string, string>((IDictionary<string, string>)MidTerms)
-                                                                                    {
-                                                                                        { "BL", "BusinessLogic" },
-                                                                                        { "Bl", "BusinessLogic" },
-                                                                                        { "VM", "ViewModel" },
-                                                                                        { "Vm", "ViewModel" },
-                                                                                    };
-
-        private static readonly string[] AllowedPostFixTerms =
-                                                               {
-                                                                   "cept", // accept
-                                                                   "cepts", // accepts
-                                                                   "crypt", // decrypt/encrypt
-                                                                   "dopt", // adopt
-                                                                   "dopts", // adopts
-                                                                   "enum",
-                                                                   "ires",
-                                                                   "idst", // midst
-                                                                   "ixtures",
-                                                                   "kept",
-                                                                   "Kept",
-                                                                   "mpt", // prompt
-                                                                   "mpts", // attempts
-                                                                   "cript", // script
-                                                                   "cripts", // scripts
-                                                                   "rupt",
-                                                                   "rupts",
-                                                                   "ures",
-                                                                   "wares",
-                                                               };
-
-        private static readonly string[] AllowedParts =
-                                                        {
-                                                            "Async",
-                                                            "Enumerable",
-                                                            "Enumeration",
-                                                            "Enum", // must be after the others so that those get properly replaced
-                                                            "ever",
-                                                            "Ever",
-                                                            "Identifiable",
-                                                            "Identification",
-                                                            "Identifier",
-                                                            "Identity",
-                                                            "Identities",
-                                                            "next",
-                                                            "Next",
-                                                            "oAuth",
-                                                            "OAuth",
-                                                            "text",
-                                                            "Text",
-                                                            "MEF",
-                                                        };
-
-        private static readonly string[] AllowedNames =
-                                                        {
-                                                            "obj",
-                                                            "next",
-                                                        };
 
         public MiKo_1063_AbbreviationsInNameAnalyzer() : base(Id)
         {
@@ -304,118 +58,69 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 case "paramName": // used in exceptions
                 case "lParam": // used by Windows C++ API
                 case "wParam": // used by Windows C++ API
-                    return Enumerable.Empty<Diagnostic>();
+                    return Array.Empty<Diagnostic>();
 
                 default:
                     return AnalyzeName(symbol);
             }
         }
 
-        private static bool IndicatesNewWord(char c) => c == '_' || c.IsUpperCase();
+        private Diagnostic[] AnalyzeName(ISymbol symbol) => AnalyzeName(symbol.Name, symbol);
 
-        private static bool PrefixHasIssue(string key, string symbolName) => symbolName.Length > key.Length && IndicatesNewWord(symbolName[key.Length]) && symbolName.StartsWith(key, StringComparison.Ordinal);
-
-        private static bool PostFixHasIssue(string key, string symbolName) => symbolName.EndsWith(key, StringComparison.Ordinal) && symbolName.EndsWithAny(AllowedPostFixTerms, StringComparison.Ordinal) is false;
-
-        private static bool MidTermHasIssue(string key, string symbolName)
+        private Diagnostic[] AnalyzeName(IFieldSymbol symbol)
         {
-            var index = 0;
-            var keyLength = key.Length;
-            var symbolNameLength = symbolName.Length;
+            var symbolName = symbol.Name;
 
-            var keyStartsUpperCase = key[0].IsUpperCase();
+            // remove any field marker
+            var fieldPrefix = GetFieldPrefix(symbolName);
+            var prefixLength = fieldPrefix.Length;
 
-            while (true)
+            return prefixLength > 0
+                   ? AnalyzeName(symbolName.Substring(prefixLength), symbol, fieldPrefix)
+                   : AnalyzeName(symbolName, symbol);
+
+            string GetFieldPrefix(string fieldName)
             {
-                index = symbolName.IndexOf(key, index, StringComparison.Ordinal);
+                var fieldPrefixes = Constants.Markers.FieldPrefixes;
+                var prefixesLength = fieldPrefixes.Length;
 
-                if (index <= -1)
+                for (var index = 0; index < prefixesLength; index++)
                 {
-                    return false;
-                }
+                    var prefix = fieldPrefixes[index];
 
-                var positionAfterCharacter = index + keyLength;
-
-                if (positionAfterCharacter < symbolNameLength && IndicatesNewWord(symbolName[positionAfterCharacter]))
-                {
-                    if (keyStartsUpperCase)
+                    if (prefix.Length > 0 && fieldName.StartsWith(prefix, StringComparison.Ordinal))
                     {
-                        return true;
-                    }
-
-                    var positionBeforeText = index - 1;
-
-                    if (positionBeforeText >= 0 && IndicatesNewWord(symbolName[positionBeforeText]))
-                    {
-                        return true;
+                        return prefix;
                     }
                 }
 
-                index = positionAfterCharacter;
+                return string.Empty;
             }
         }
 
-        private static bool CompleteTermHasIssue(string key, string symbolName) => string.Equals(symbolName, key, StringComparison.Ordinal);
-
-        private static IEnumerable<KeyValuePair<string, string>> AnalyzeName(string symbolName)
+        private Diagnostic[] AnalyzeName(string symbolName, ISymbol symbol, string prefix = "")
         {
-            if (symbolName.EqualsAny(AllowedNames))
+            var findings = AbbreviationDetector.Find(symbolName);
+            var findingsLength = findings.Length;
+
+            if (findingsLength == 0)
             {
-                return Enumerable.Empty<KeyValuePair<string, string>>();
+                return Array.Empty<Diagnostic>();
             }
 
-            symbolName = symbolName.Without(AllowedParts);
+            var betterName = AbbreviationDetector.ReplaceAllAbbreviations(symbolName, findings);
+            var betterNameProposal = CreateBetterNameProposal(prefix.Length > 0 ? prefix + betterName : betterName);
 
-//// ncrunch: rdi off
-            var prefixesWithIssues = Prefixes.Where(_ => PrefixHasIssue(_.Key, symbolName));
-            var postFixesWithIssues = Postfixes.Where(_ => PostFixHasIssue(_.Key, symbolName));
-            var midTermsWithIssues = MidTerms.Where(_ => MidTermHasIssue(_.Key, symbolName));
-            var completeTermsWithIssues = Prefixes.Where(_ => CompleteTermHasIssue(_.Key, symbolName));
-//// ncrunch: rdi default
+            var issues = new Diagnostic[findingsLength];
 
-            return Enumerable.Empty<KeyValuePair<string, string>>()
-                             .Union(prefixesWithIssues, KeyComparer.Instance)
-                             .Union(postFixesWithIssues, KeyComparer.Instance)
-                             .Union(midTermsWithIssues, KeyComparer.Instance)
-                             .Union(completeTermsWithIssues, KeyComparer.Instance);
-        }
-
-        private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol)
-        {
-            foreach (var pair in AnalyzeName(symbol.Name))
+            for (var index = 0; index < findingsLength; index++)
             {
-                yield return Issue(symbol, pair.Key, pair.Value);
-            }
-        }
+                var pair = findings[index];
 
-        private IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol)
-        {
-            var symbolName = GetFieldNameWithoutPrefix(symbol.Name);
-
-            foreach (var pair in AnalyzeName(symbolName))
-            {
-                yield return Issue(symbol, pair.Key, pair.Value);
+                issues[index] = Issue(symbol, pair.Key, pair.Value, betterNameProposal);
             }
 
-            string GetFieldNameWithoutPrefix(string fieldName)
-            {
-                // remove any field marker
-                foreach (var fieldMarker in Constants.Markers.FieldPrefixes.Where(_ => _.Length > 0 && fieldName.StartsWith(_, StringComparison.Ordinal)))
-                {
-                    return fieldName.Substring(fieldMarker.Length);
-                }
-
-                return fieldName;
-            }
-        }
-
-        private sealed class KeyComparer : IEqualityComparer<KeyValuePair<string, string>>
-        {
-            internal static readonly KeyComparer Instance = new KeyComparer();
-
-            public bool Equals(KeyValuePair<string, string> x, KeyValuePair<string, string> y) => string.Equals(x.Key, y.Key, StringComparison.Ordinal);
-
-            public int GetHashCode(KeyValuePair<string, string> obj) => obj.Key.GetHashCode();
+            return issues;
         }
     }
 }

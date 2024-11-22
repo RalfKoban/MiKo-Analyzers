@@ -3,6 +3,7 @@
 using NUnit.Framework;
 
 //// ncrunch: rdi off
+// ReSharper disable CheckNamespace
 namespace TestHelper
 {
     public partial class CodeFixVerifier

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -27,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 switch (content.Count)
                 {
                     case 0:
-                    case 1 when content[0] is XmlTextSyntax text && text.GetTextWithoutTrivia().IsEmpty:
+                    case 1 when content[0] is XmlTextSyntax text && text.GetTextWithoutTrivia().IsNullOrEmpty():
                         return new[] { Issue(summary) };
                 }
             }

@@ -147,12 +147,8 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_test_method_with_name_([ValueSource(nameof(InvalidMethodNames))] string name)
-            => Assert.Multiple(() =>
-                                    {
-                                        foreach (var test in Tests)
-                                        {
-                                            No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_test_method_with_name_([ValueSource(nameof(InvalidMethodNames))] string name, [ValueSource(nameof(Tests))] string test)
+            => No_issue_is_reported_for(@"
 public class TestMe
 {
     [" + test + @"]
@@ -161,8 +157,6 @@ public class TestMe
     }
 }
 ");
-                                        }
-                                    });
 
         [Test]
         public void No_issue_is_reported_for_local_function_with_name_([ValueSource(nameof(ValidMethodNames))] string name) => No_issue_is_reported_for(@"
@@ -191,12 +185,8 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_test_local_function_with_name_([ValueSource(nameof(InvalidMethodNames))] string name)
-            => Assert.Multiple(() =>
-                                    {
-                                        foreach (var test in Tests)
-                                        {
-                                            No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_test_local_function_with_name_([ValueSource(nameof(InvalidMethodNames))] string name, [ValueSource(nameof(Tests))] string test)
+            => No_issue_is_reported_for(@"
 public class TestMe
 {
     [" + test + @"]
@@ -208,8 +198,6 @@ public class TestMe
     }
 }
 ");
-                                        }
-                                    });
 
         [Test]
         public void Code_gets_fixed()
