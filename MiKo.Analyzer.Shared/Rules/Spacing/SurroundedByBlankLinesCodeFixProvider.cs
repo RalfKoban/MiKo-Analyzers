@@ -33,7 +33,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             if (issue.Properties.ContainsKey(Constants.AnalyzerCodeFixSharedData.NoLineAfter))
             {
-                result = result.WithTrailingEmptyLine();
+                result = result.HasTrailingComment()
+                         ? result.WithAdditionalTrailingEmptyLine()
+                         : result.WithTrailingEmptyLine();
             }
 
             return result;

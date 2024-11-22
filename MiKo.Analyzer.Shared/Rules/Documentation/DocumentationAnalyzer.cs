@@ -16,17 +16,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected static Dictionary<string, string> CreateStartingPhraseProposal(string phrase) => new Dictionary<string, string> { { Constants.AnalyzerCodeFixSharedData.StartingPhrase, phrase } };
+        protected static Pair[] CreateStartingPhraseProposal(string phrase) => new[] { new Pair(Constants.AnalyzerCodeFixSharedData.StartingPhrase, phrase) };
 
-        protected static Dictionary<string, string> CreateStartingEndingPhraseProposal(string startPhrase, string endingPhrase) => new Dictionary<string, string>
-                                                                                                                                       {
-                                                                                                                                           { Constants.AnalyzerCodeFixSharedData.StartingPhrase, startPhrase },
-                                                                                                                                           { Constants.AnalyzerCodeFixSharedData.EndingPhrase, endingPhrase },
-                                                                                                                                       };
+        protected static Pair[] CreateStartingEndingPhraseProposal(string startPhrase, string endingPhrase) => new[]
+                                                                                                                   {
+                                                                                                                       new Pair(Constants.AnalyzerCodeFixSharedData.StartingPhrase, startPhrase),
+                                                                                                                       new Pair(Constants.AnalyzerCodeFixSharedData.EndingPhrase, endingPhrase),
+                                                                                                                   };
 
-        protected static Dictionary<string, string> CreateEndingPhraseProposal(string phrase) => new Dictionary<string, string> { { Constants.AnalyzerCodeFixSharedData.EndingPhrase, phrase } };
+        protected static Pair[] CreateEndingPhraseProposal(string phrase) => new[] { new Pair(Constants.AnalyzerCodeFixSharedData.EndingPhrase, phrase) };
 
-        protected static Dictionary<string, string> CreatePhraseProposal(string phrase) => new Dictionary<string, string> { { Constants.AnalyzerCodeFixSharedData.Phrase, phrase } };
+        protected static Pair[] CreatePhraseProposal(string phrase) => new[] { new Pair(Constants.AnalyzerCodeFixSharedData.Phrase, phrase) };
 
         protected static Location GetFirstLocation(SyntaxToken textToken, string value, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
         {
@@ -115,10 +115,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 var length = returnType.IndexOf('<'); // just until the first one
 
-                var firstPart = returnType.Substring(0, length);
+                var firstPart = returnType.AsSpan(0, length);
 
-                var returnTypeWithTs = string.Concat(firstPart, "{", ts, "}");
-                var returnTypeWithGenericCount = string.Concat(firstPart, "`", count.ToString());
+                var returnTypeWithTs = firstPart.ConcatenatedWith('{', ts, '}');
+                var returnTypeWithGenericCount = firstPart.ConcatenatedWith("`", count.ToString());
 
 //// ncrunch: rdi off
                 return Enumerable.Empty<string>()
@@ -349,6 +349,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return null;
         }
 
+#pragma warning disable CA1021
         protected virtual bool AnalyzeTextStart(ISymbol symbol, string valueText, out string problematicText, out StringComparison comparison)
         {
             problematicText = null;
@@ -356,6 +357,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return false;
         }
+#pragma warning restore CA1021
 
         protected virtual bool ConsiderEmptyTextAsIssue(ISymbol symbol) => true;
 

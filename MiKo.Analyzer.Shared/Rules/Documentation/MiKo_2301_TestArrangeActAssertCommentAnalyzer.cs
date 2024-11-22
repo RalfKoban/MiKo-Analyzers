@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(IMethodSymbol symbol)
         {
-            if (symbol == null)
+            if (symbol is null)
             {
                 // seems like fields or so, ignore those
                 return false;

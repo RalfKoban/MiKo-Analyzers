@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var summaryXml in summaryXmls)
             {
-                if (symbol is ITypeSymbol && summaryXml.GetTextTrimmed().IsEmpty)
+                if (symbol is ITypeSymbol && summaryXml.GetTextTrimmed().IsNullOrEmpty())
                 {
                     // do not report for empty types
                     continue;
@@ -52,10 +52,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             comparison = StringComparison.OrdinalIgnoreCase;
 
-            var trimmedSummary = new StringBuilder(valueText).Without(Constants.Comments.AsynchronouslyStartingPhrase) // skip over async starting phrase
-                                                             .Without(Constants.Comments.RecursivelyStartingPhrase) // skip over recursively starting phrase
-                                                             .Without(",") // skip over first comma
-                                                             .TrimStart();
+            var trimmedSummary = valueText.AsBuilder()
+                                          .Without(Constants.Comments.AsynchronouslyStartingPhrase) // skip over async starting phrase
+                                          .Without(Constants.Comments.RecursivelyStartingPhrase) // skip over recursively starting phrase
+                                          .Without(",") // skip over first comma
+                                          .TrimStart();
 
             foreach (var wrongPhrase in WrongPhrases)
             {

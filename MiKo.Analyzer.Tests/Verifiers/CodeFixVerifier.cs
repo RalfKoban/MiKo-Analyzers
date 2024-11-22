@@ -13,6 +13,8 @@ using Microsoft.CodeAnalysis.Formatting;
 using NUnit.Framework;
 
 //// ncrunch: rdi off
+//// ncrunch: no coverage start
+// ReSharper disable once CheckNamespace
 namespace TestHelper
 {
     /// <summary>
@@ -21,7 +23,24 @@ namespace TestHelper
     /// </summary>
     public abstract partial class CodeFixVerifier : DiagnosticVerifier
     {
-        protected static int TestLimit { get; } = int.MaxValue;
+        // private static int s_testLimit = -1;
+        //
+        // protected static int TestLimit
+        // {
+        //     get
+        //     {
+        //         if (s_testLimit < 0)
+        //         {
+        //             // see variable in appveyor.yml; used to limit number of tests as otherwise the test run takes too much time
+        //             var environmentVariable = Environment.GetEnvironmentVariable("APP_VEYOR", EnvironmentVariableTarget.Process);
+        //
+        //             s_testLimit = bool.TryParse(environmentVariable, out var value) && value ? 10_000 : int.MaxValue;
+        //         }
+        //
+        //         return s_testLimit;
+        //     }
+        // }
+        protected const int TestLimit = int.MaxValue;
 
         /// <summary>
         /// Returns the codefix being tested (C#) - to be implemented in non-abstract class.
@@ -122,6 +141,11 @@ namespace TestHelper
             var compilerDiagnostics = GetCompilerDiagnostics(document);
             var attempts = analyzerDiagnostics.Length;
 
+            for (var i = 0; i < attempts; i++)
+            {
+                Assert.That(analyzerDiagnostics[i].Id, Is.Not.EqualTo("AD0001"));
+            }
+
             for (var i = 0; i < attempts; ++i)
             {
                 var actions = new List<CodeAction>();
@@ -133,7 +157,7 @@ namespace TestHelper
                     break;
                 }
 
-                if (codeFixIndex != null)
+                if (codeFixIndex is not null)
                 {
                     document = ApplyFix(document, actions[(int)codeFixIndex]);
 

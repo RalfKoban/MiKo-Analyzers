@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System;
+
+using NUnit.Framework;
 
 //// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Linguistics
@@ -6,6 +8,65 @@ namespace MiKoSolutions.Analyzers.Linguistics
     [TestFixture]
     public static class VerbalizerTests
     {
+        private static readonly string[] Nouns =
+                                                 [
+                                                     "awakening",
+                                                     "awning",
+                                                     "blessing",
+                                                     "booking",
+                                                     "briefing",
+                                                     "building",
+                                                     "ceiling",
+                                                     "darling",
+                                                     "dealing",
+                                                     "drawing",
+                                                     "duckling",
+                                                     "evening",
+                                                     "feeling",
+                                                     "finding",
+                                                     "fledgling",
+                                                     "gathering",
+                                                     "guttering",
+                                                     "hireling",
+                                                     "inkling",
+                                                     "leaning",
+                                                     "meeting",
+                                                     "misgiving",
+                                                     "misunderstanding",
+                                                     "morning",
+                                                     "offering",
+                                                     "outing",
+                                                     "painting",
+                                                     "quisling",
+                                                     "reasoning",
+                                                     "recording",
+                                                     "restructuring",
+                                                     "rising",
+                                                     "roofing",
+                                                     "sapling",
+                                                     "seasoning",
+                                                     "seating",
+                                                     "setting",
+                                                     "shooting",
+                                                     "shopping",
+                                                     "sibling",
+                                                     "sitting",
+                                                     "standing",
+                                                     "tiding",
+                                                     "timing",
+                                                     "training",
+                                                     "underling",
+                                                     "understanding",
+                                                     "undertaking",
+                                                     "upbringing",
+                                                     "uprising",
+                                                     "warning",
+                                                     "wedding",
+                                                     "well-being",
+                                                     "winning",
+                                                     "wording",
+                                                 ];
+
         [TestCase(null, ExpectedResult = null, Description = "There is no verb available")]
         [TestCase("", ExpectedResult = "", Description = "There is no verb available")]
         [TestCase(" ", ExpectedResult = " ", Description = "There is no verb available")]
@@ -177,31 +238,34 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("access", ExpectedResult = false)]
         [TestCase("accesses", ExpectedResult = true)]
         [TestCase("adapts", ExpectedResult = true)]
-        [TestCase("adopts", ExpectedResult = true)]
         [TestCase("adopter", ExpectedResult = false)]
         [TestCase("adopters", ExpectedResult = false)]
-        [TestCase("catches", ExpectedResult = true)]
-        [TestCase("catchers", ExpectedResult = false)]
+        [TestCase("adopts", ExpectedResult = true)]
+        [TestCase("alters", ExpectedResult = true)]
         [TestCase("caches", ExpectedResult = true)]
+        [TestCase("catchers", ExpectedResult = false)]
+        [TestCase("catches", ExpectedResult = true)]
+        [TestCase("colors", ExpectedResult = true)]
         [TestCase("continues", ExpectedResult = true)]
         [TestCase("does", ExpectedResult = true)]
         [TestCase("hashes", ExpectedResult = true)]
         [TestCase("informs", ExpectedResult = true)]
         [TestCase("invites", ExpectedResult = true)]
-        [TestCase("pops", ExpectedResult = true)]
-        [TestCase("registers", ExpectedResult = true)]
-        [TestCase("test", ExpectedResult = false)]
-        [TestCase("tests", ExpectedResult = true)]
-        [TestCase("will", ExpectedResult = true)]
-        [TestCase("merge", ExpectedResult = false)]
-        [TestCase("merges", ExpectedResult = true)]
-        [TestCase("mergers", ExpectedResult = false)]
         [TestCase("manage", ExpectedResult = false)]
-        [TestCase("manages", ExpectedResult = true)]
         [TestCase("manager", ExpectedResult = false)]
         [TestCase("managers", ExpectedResult = false)]
-        [TestCase("transistors", ExpectedResult = false)]
+        [TestCase("manages", ExpectedResult = true)]
+        [TestCase("merge", ExpectedResult = false)]
+        [TestCase("mergers", ExpectedResult = false)]
+        [TestCase("merges", ExpectedResult = true)]
+        [TestCase("pops", ExpectedResult = true)]
+        [TestCase("registers", ExpectedResult = true)]
+        [TestCase("runs", ExpectedResult = true)]
+        [TestCase("test", ExpectedResult = false)]
+        [TestCase("tests", ExpectedResult = true)]
         [TestCase("transcriptors", ExpectedResult = false)]
+        [TestCase("transistors", ExpectedResult = false)]
+        [TestCase("will", ExpectedResult = true)]
         public static bool IsThirdPersonSingularVerb_detects_3rd_person_singular_verb_(string name) => Verbalizer.IsThirdPersonSingularVerb(name);
 
         [TestCase("act", ExpectedResult = "acting")]
@@ -277,5 +341,20 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("shutting", ExpectedResult = true)]
         [TestCase("Shutting", ExpectedResult = true)]
         public static bool IsGerundVerb_detects_gerund_verb_(string name) => Verbalizer.IsGerundVerb(name);
+
+        [Test]
+        public static void IsGerundVerb_detects_noun_([ValueSource(nameof(Nouns))] string name)
+        {
+            Assert.Multiple(() =>
+                                 {
+                                     Assert.That(Verbalizer.IsGerundVerb(name), Is.False, "lower-case not detected");
+                                     Assert.That(Verbalizer.IsGerundVerb(name.ToUpperCaseAt(0)), Is.False, "upper-case not detected");
+                                 });
+        }
+
+        [TestCase("Canceled", ExpectedResult = true)]
+        [TestCase("Cancel", ExpectedResult = false)]
+        [TestCase("Canceling", ExpectedResult = false)]
+        public static bool IsPastTense_detects_past_tensed_word_(string name) => Verbalizer.IsPastTense(name);
     }
 }

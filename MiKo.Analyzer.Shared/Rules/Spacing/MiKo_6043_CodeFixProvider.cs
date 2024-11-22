@@ -89,6 +89,12 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                                 .WithCloseBraceToken(aoces.CloseBraceToken.WithoutTrivia().WithLeadingSpace()) // remove the spaces or line breaks around the closing bracket
                                 .WithInitializers(GetUpdatedSyntax(aoces.Initializers, Constants.Indentation));
 
+                case ConditionalAccessExpressionSyntax conditional:
+                    return conditional.WithoutTrivia()
+                                      .WithOperatorToken(conditional.OperatorToken.WithoutTrivia())
+                                      .WithWhenNotNull(GetUpdatedSyntax(conditional.WhenNotNull))
+                                      .WithExpression(GetUpdatedSyntax(conditional.Expression));
+
                 case ParenthesizedLambdaExpressionSyntax p: return GetUpdatedSyntax(p);
                 case SimpleLambdaExpressionSyntax s: return GetUpdatedSyntax(s);
 

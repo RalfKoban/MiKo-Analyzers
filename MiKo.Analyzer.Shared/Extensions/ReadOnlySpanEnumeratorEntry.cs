@@ -1,6 +1,7 @@
 ﻿// ncrunch: no coverage start
 // ncrunch: rdi off
 // ReSharper disable once CheckNamespace
+#pragma warning disable IDE0130
 namespace System
 {
     internal readonly ref struct ReadOnlySpanEnumeratorEntry

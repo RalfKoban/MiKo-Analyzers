@@ -88,7 +88,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         if (text.StartsWithAny(ContinueTextParts))
                         {
-                            var newText = text.ToString().Without(ContinueTextParts);
+                            var newText = text.Without(ContinueTextParts);
 
                             if (newText.EndsWith('.') is false)
                             {
@@ -111,7 +111,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
 //// ncrunch: rdi off
 
-        private static IEnumerable<string> CreateTextParts()
+        private static HashSet<string> CreateTextParts()
         {
             var results = new HashSet<string>
                               {

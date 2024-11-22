@@ -51,7 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             // if anything is found, we only use those as those are the most concrete ones
-            if (typesUnderTest.Any())
+            if (typesUnderTest.Count != 0)
             {
                 return typesUnderTest;
             }
@@ -70,7 +70,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             // if anything is found, we only use those as those are the most concrete ones
-            if (typesUnderTest.Any())
+            if (typesUnderTest.Count != 0)
             {
                 return typesUnderTest;
             }

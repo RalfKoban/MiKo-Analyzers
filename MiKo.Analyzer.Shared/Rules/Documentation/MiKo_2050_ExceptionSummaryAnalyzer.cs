@@ -100,7 +100,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeMethodSummary(IMethodSymbol symbol, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment)
         {
-            var defaultPhrases = Constants.Comments.ExceptionCtorSummaryStartingPhrase.Select(_ => _.FormatWith(symbol.ContainingType)).ToArray();
+            var defaultPhrases = Constants.Comments.ExceptionCtorSummaryStartingPhrase.ToArray(_ => _.FormatWith(symbol.ContainingType));
 
             var findings = AnalyzeSummaryPhrase(symbol, summaries, comment, defaultPhrases);
 
@@ -116,18 +116,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (IsMessageCtor(symbol))
             {
-                return AnalyzeSummaryPhrase(symbol, summaries, comment, defaultPhrases.Select(_ => _ + Constants.Comments.ExceptionCtorMessageParamSummaryContinuingPhrase).ToArray());
+                return AnalyzeSummaryPhrase(symbol, summaries, comment, defaultPhrases.ToArray(_ => _ + Constants.Comments.ExceptionCtorMessageParamSummaryContinuingPhrase));
             }
 
             if (IsMessageExceptionCtor(symbol))
             {
-                return AnalyzeSummaryPhrase(symbol, summaries, comment, defaultPhrases.Select(_ => _ + Constants.Comments.ExceptionCtorMessageParamSummaryContinuingPhrase + Constants.Comments.ExceptionCtorExceptionParamSummaryContinuingPhrase).ToArray());
+                return AnalyzeSummaryPhrase(symbol, summaries, comment, defaultPhrases.ToArray(_ => _ + Constants.Comments.ExceptionCtorMessageParamSummaryContinuingPhrase + Constants.Comments.ExceptionCtorExceptionParamSummaryContinuingPhrase));
             }
 
             if (symbol.IsSerializationConstructor())
             {
                 return Enumerable.Empty<Diagnostic>()
-                                 .Concat(AnalyzeSummaryPhrase(symbol, summaries, comment, defaultPhrases.Select(_ => _ + Constants.Comments.ExceptionCtorSerializationParamSummaryContinuingPhrase).ToArray()))
+                                 .Concat(AnalyzeSummaryPhrase(symbol, summaries, comment, defaultPhrases.ToArray(_ => _ + Constants.Comments.ExceptionCtorSerializationParamSummaryContinuingPhrase)))
                                  .Concat(AnalyzeRemarksPhrase(symbol, comment, Constants.Comments.ExceptionCtorSerializationParamRemarksPhrase));
             }
 
@@ -138,7 +138,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var summaries = symbol.GetOverloadSummaries();
 
-            return summaries.Any()
+            return summaries.Count != 0
                    ? AnalyzeSummaryPhrase(symbol, summaries, comment, defaultPhrases)
                    : Enumerable.Empty<Diagnostic>();
         }
@@ -147,7 +147,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comments = symbol.GetRemarks();
 
-            return comments.Any()
+            return comments.Count != 0
                    ? AnalyzeStartingPhrase(symbol, Constants.XmlTag.Remarks, comments, comment, defaultPhrases)
                    : Enumerable.Empty<Diagnostic>();
         }
@@ -181,7 +181,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                    : AnalyzeParameter(symbol, commentXml, comment, phrases);
         }
 
-        private IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol symbol, string commentXml, DocumentationCommentTriviaSyntax comment, IReadOnlyList<string> phrase)
+        private IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol symbol, string commentXml, DocumentationCommentTriviaSyntax comment, string[] phrase)
         {
             var parameterCommentXml = symbol.GetComment(commentXml);
 

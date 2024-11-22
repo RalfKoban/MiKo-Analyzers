@@ -111,7 +111,9 @@ namespace MiKoSolutions.Analyzers.Rules
                 return true;
             }
 
-            if (line.ContainsAny(CodeConditionMarkers, StringComparison.Ordinal))
+            var lineString = line.ToString();
+
+            if (lineString.ContainsAny(CodeConditionMarkers, StringComparison.Ordinal))
             {
                 return true;
             }
@@ -129,7 +131,7 @@ namespace MiKoSolutions.Analyzers.Rules
                     return false; // ignore all framed comments
                 }
 
-                if (line.ContainsAny(Constants.Markers.ReSharper))
+                if (lineString.ContainsAny(Constants.Markers.ReSharper))
                 {
                     return false; // ignore '// ReSharper' comments
                 }
@@ -157,7 +159,7 @@ namespace MiKoSolutions.Analyzers.Rules
                 return true; // found a construction or initialization
             }
 
-            if (line.ContainsAny(FrameMarkers))
+            if (lineString.ContainsAny(FrameMarkers))
             {
                 return false;
             }
@@ -174,7 +176,7 @@ namespace MiKoSolutions.Analyzers.Rules
                     return true;
                 }
 
-                if (line.ContainsAny(Operators))
+                if (lineString.ContainsAny(Operators))
                 {
                     return true;
                 }
@@ -202,7 +204,7 @@ var convertedType = semanticModel.GetTypeInfo(node).ConvertedType;
                 return true;
             }
 
-            if (line.ContainsAny(LockStatements))
+            if (lineString.ContainsAny(LockStatements))
             {
                 return true;
             }

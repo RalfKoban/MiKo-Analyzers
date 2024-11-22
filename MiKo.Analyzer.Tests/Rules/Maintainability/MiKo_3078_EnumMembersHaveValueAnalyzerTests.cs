@@ -129,16 +129,13 @@ public enum TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        [Test]
-        public void Left_shifting_One_leads_to_correct_values() => Assert.Multiple(() =>
-                                                                                        {
-                                                                                            Assert.That(1 << 0, Is.EqualTo(1));
-                                                                                            Assert.That(1 << 1, Is.EqualTo(2));
-                                                                                            Assert.That(1 << 2, Is.EqualTo(4));
-                                                                                            Assert.That(1 << 3, Is.EqualTo(8));
-                                                                                            Assert.That(1 << 4, Is.EqualTo(16));
-                                                                                            Assert.That(1 << 5, Is.EqualTo(32));
-                                                                                        });
+        [TestCase(0, ExpectedResult = 1)]
+        [TestCase(1, ExpectedResult = 2)]
+        [TestCase(2, ExpectedResult = 4)]
+        [TestCase(3, ExpectedResult = 8)]
+        [TestCase(4, ExpectedResult = 16)]
+        [TestCase(5, ExpectedResult = 32)]
+        public int Left_shifting_One_leads_to_correct_value_for_(int i) => 1 << i;
 
         protected override string GetDiagnosticId() => MiKo_3078_EnumMembersHaveValueAnalyzer.Id;
 

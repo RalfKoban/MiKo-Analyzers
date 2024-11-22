@@ -32,6 +32,6 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("uninformed", ExpectedResult = "An ")]
         [TestCase("State", ExpectedResult = "A ")]
         [TestCase("state", ExpectedResult = "A ")]
-        public static string Provides_correct_indefinite_article_for_(string text) => ArticleProvider.GetIndefiniteArticleFor(text);
+        public static string Provides_correct_indefinite_article_for_(string text) => ArticleProvider.GetArticleFor(text);
     }
 }

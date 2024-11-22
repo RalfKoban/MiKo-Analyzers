@@ -72,13 +72,13 @@ namespace Bla
 }");
 
         [Test]
-        public void No_issue_is_reported_for_correct_usage_in_a_non_test_method_inside_a_test_([ValueSource(nameof(TestFixtures))] string testFixture) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correct_usage_in_a_non_test_method_inside_a_test_([ValueSource(nameof(TestFixtures))] string fixture) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 
 namespace Bla
 {
-    [" + testFixture + @"]
+    [" + fixture + @"]
     public class TestMe
     {
         public void DoSomething()
@@ -107,15 +107,11 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_an_operator_in_a_test_method() => Assert.Multiple(() =>
-                                                                                                    {
-                                                                                                        foreach (var methodName in AssertionMethods)
-                                                                                                        {
-                                                                                                            foreach (var test in Tests)
-                                                                                                            {
-                                                                                                                foreach (var @operator in Operators)
-                                                                                                                {
-                                                                                                                    An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_an_operator_in_a_test_method_(
+                                                                       [ValueSource(nameof(AssertionMethods))] string methodName,
+                                                                       [ValueSource(nameof(Tests))] string test,
+                                                                       [ValueSource(nameof(Operators))] string @operator)
+            => An_issue_is_reported_for(@"
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 
@@ -131,27 +127,19 @@ namespace Bla
     }
 }
 ");
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    });
 
         [Test]
-        public void An_issue_is_reported_for_an_operator_in_a_non_test_method_inside_a_test() => Assert.Multiple(() =>
-                                                                                                                      {
-                                                                                                                          foreach (var methodName in AssertionMethods)
-                                                                                                                          {
-                                                                                                                              foreach (var testFixture in TestFixtures)
-                                                                                                                              {
-                                                                                                                                  foreach (var @operator in Operators)
-                                                                                                                                  {
-                                                                                                                                      An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_an_operator_in_a_non_test_method_inside_a_test_(
+                                                                                         [ValueSource(nameof(AssertionMethods))] string methodName,
+                                                                                         [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                         [ValueSource(nameof(Operators))] string @operator)
+        => An_issue_is_reported_for(@"
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 
 namespace Bla
 {
-    [" + testFixture + @"]
+    [" + fixture + @"]
     public class TestMe
     {
         public void DoSomething()
@@ -161,10 +149,6 @@ namespace Bla
     }
 }
 ");
-                                                                                                                                  }
-                                                                                                                              }
-                                                                                                                          }
-                                                                                                                      });
 
         [Test]
         public void An_issue_is_reported_for_an_operator_in_a_non_test_class_([ValueSource(nameof(Operators))] string @operator) => An_issue_is_reported_for(@"

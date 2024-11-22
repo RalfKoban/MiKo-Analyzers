@@ -125,14 +125,16 @@ public class TestMe
 }
 ");
 
-        [TestCase("Something.", "something.")]
-        [TestCase(@"Something, such as <see cref=""string.Empty""/>.", @"something, such as <see cref=""string.Empty""/>.")]
-        [TestCase("The something.", "something.")]
-        [TestCase("the something.", "something.")]
-        [TestCase("A something.", "something.")]
-        [TestCase("a something.", "something.")]
-        [TestCase("An something.", "something.")]
-        [TestCase("an something.", "something.")]
+        [TestCase("Something.", "the something.")]
+        [TestCase("A something.", "the something.")]
+        [TestCase("a something.", "the something.")]
+        [TestCase("An something.", "the something.")]
+        [TestCase("an something.", "the something.")]
+        [TestCase("The something.", "the something.")]
+        [TestCase("the something.", "the something.")]
+        [TestCase("""Something, such as <see cref="string.Empty"/>.""", """the something, such as <see cref="string.Empty"/>.""")]
+        [TestCase("""If something, the result is <see cref="StringComparison.Ordinal"/>.""", """<see cref="StringComparison.Ordinal"/> if something.""")]
+        [TestCase("""If something, the result will be <see cref="StringComparison.Ordinal"/>.""", """<see cref="StringComparison.Ordinal"/> if something.""")]
         public void Code_gets_fixed_for_non_generic_method_(string originalText, string fixedText)
         {
             var originalCode = @"
@@ -157,7 +159,7 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <returns>
-    /// The enumerated constant that is the " + fixedText + @"
+    /// The enumerated constant that is " + fixedText + @"
     /// </returns>
     public StringComparison DoSomething(object o) => null;
 }
@@ -166,10 +168,18 @@ public class TestMe
             VerifyCSharpFix(originalCode, fixedCode);
         }
 
-        [TestCase("Something.", "something.")]
-        [TestCase(@"Something, such as <see cref=""string.Empty""/>.", @"something, such as <see cref=""string.Empty""/>.")]
-        [TestCase("The something.", "something.")]
-        [TestCase("the something.", "something.")]
+        [TestCase("Something.", "the something.")]
+        [TestCase("A something.", "the something.")]
+        [TestCase("a something.", "the something.")]
+        [TestCase("An something.", "the something.")]
+        [TestCase("an something.", "the something.")]
+        [TestCase("The something.", "the something.")]
+        [TestCase("the something.", "the something.")]
+        [TestCase("""Something, such as <see cref="string.Empty"/>.""", """the something, such as <see cref="string.Empty"/>.""")]
+        [TestCase("""If something, the result is <see cref="StringComparison.Ordinal"/>.""", """<see cref="StringComparison.Ordinal"/> if something.""")]
+        [TestCase("""If something, the result will be <see cref="StringComparison.Ordinal"/>.""", """<see cref="StringComparison.Ordinal"/> if something.""")]
+        [TestCase("""If something, the result is <see cref="StringComparison.Ordinal"/>""", """<see cref="StringComparison.Ordinal"/> if something""")]
+        [TestCase("""If something, the result will be <see cref="StringComparison.Ordinal"/>""", """<see cref="StringComparison.Ordinal"/> if something""")]
         public void Code_gets_fixed_for_generic_method_(string originalText, string fixedText)
         {
             var originalCode = @"
@@ -196,7 +206,7 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <returns>
-    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter contains the enumerated constant that is the " + fixedText + @"
+    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter contains the enumerated constant that is " + fixedText + @"
     /// </returns>
     public Task<StringComparison> DoSomething(object o) => null;
 }

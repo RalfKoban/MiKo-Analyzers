@@ -15,17 +15,22 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected abstract SyntaxToken GetKeyword(T node);
 
-        protected sealed override void InitializeCore(CompilationStartAnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeStatement, m_syntaxKind);
-        }
+        protected sealed override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeStatement, m_syntaxKind);
+
+        protected virtual bool ShallAnalyzeStatement(T node) => true;
+
+        protected virtual bool ShallAnalyzeOtherStatement(StatementSyntax node) => true;
 
         private void AnalyzeStatement(SyntaxNodeAnalysisContext context)
         {
             var node = (T)context.Node;
-            var issue = AnalyzeStatement(node);
 
-            ReportDiagnostics(context, issue);
+            if (ShallAnalyzeStatement(node))
+            {
+                var issue = AnalyzeStatement(node);
+
+                ReportDiagnostics(context, issue);
+            }
         }
 
         private Diagnostic AnalyzeStatement(T node)
@@ -65,14 +70,17 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             var beforePosition = GetLocationOfNodeOrLeadingComment(node).GetLineSpan();
             var afterPosition = GetLocationOfNodeOrTrailingComment(node).GetLineSpan();
 
-            var otherStatements = block.Statements.Except(node);
+            var otherStatements = block.Statements.Except(node).Where(ShallAnalyzeOtherStatement).ToList();
 
-            var noBlankLinesBefore = otherStatements.Any(_ => HasNoBlankLinesBefore(beforePosition, _));
-            var noBlankLinesAfter = otherStatements.Any(_ => HasNoBlankLinesAfter(afterPosition, _));
-
-            if (noBlankLinesBefore || noBlankLinesAfter)
+            if (otherStatements.Count > 0)
             {
-                return Issue(GetKeyword(node), noBlankLinesBefore, noBlankLinesAfter);
+                var noBlankLinesBefore = otherStatements.Any(_ => HasNoBlankLinesBefore(beforePosition, _));
+                var noBlankLinesAfter = otherStatements.Any(_ => HasNoBlankLinesAfter(afterPosition, _));
+
+                if (noBlankLinesBefore || noBlankLinesAfter)
+                {
+                    return Issue(GetKeyword(node), noBlankLinesBefore, noBlankLinesAfter);
+                }
             }
 
             return null;
@@ -84,7 +92,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             var afterPosition = GetLocationOfNodeOrTrailingComment(node).GetLineSpan();
 
             var statements = section.Statements;
-            var otherStatements = statements.Except(node);
+            var otherStatements = statements.Except(node).Where(ShallAnalyzeOtherStatement).ToList();
 
             var noBlankLinesBefore = otherStatements.Any(_ => HasNoBlankLinesBefore(beforePosition, _));
             var noBlankLinesAfter = otherStatements.Any(_ => HasNoBlankLinesAfter(afterPosition, _));

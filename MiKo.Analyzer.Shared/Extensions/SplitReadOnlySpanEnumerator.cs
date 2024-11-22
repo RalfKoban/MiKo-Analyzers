@@ -1,17 +1,18 @@
 ﻿// ncrunch: no coverage start
 // ncrunch: rdi off
 // ReSharper disable once CheckNamespace
+#pragma warning disable IDE0130
 namespace System
 {
     // Must be a ref struct as it contains a ReadOnlySpan<char>
     internal ref struct SplitReadOnlySpanEnumerator
     {
-        private readonly char[] m_separatorChars;
+        private readonly ReadOnlySpan<char> m_separatorChars;
         private readonly StringSplitOptions m_options;
         private readonly ReadOnlySpan<char> m_initialText;
         private ReadOnlySpan<char> m_spanAfterMoveNext;
 
-        public SplitReadOnlySpanEnumerator(ReadOnlySpan<char> text, char[] separatorChars, StringSplitOptions options)
+        public SplitReadOnlySpanEnumerator(ReadOnlySpan<char> text, ReadOnlySpan<char> separatorChars, StringSplitOptions options)
         {
             m_initialText = text;
             m_spanAfterMoveNext = text;
@@ -30,7 +31,7 @@ namespace System
         public ReadOnlySpanEnumeratorEntry Current { get; private set; }
 
         /// <summary>
-        /// Returns the numbers of elements within the enumerator.
+        /// Gets the numbers of elements within the enumerator.
         /// </summary>
         /// <returns>
         /// The numbers of elements within the enumerator, taking the specified <see cref="StringSplitOptions"/> into account.

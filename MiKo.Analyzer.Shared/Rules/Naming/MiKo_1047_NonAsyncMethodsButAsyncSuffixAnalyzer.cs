@@ -24,9 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
-            var symbolName = symbol.Name;
-
-            var betterName = FindBetterName(symbolName);
+            var betterName = FindBetterName(symbol.Name.AsSpan());
 
             if (betterName.IsNullOrWhiteSpace())
             {
@@ -36,16 +34,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
         }
 
-        private static string FindBetterName(string symbolName)
+        private static string FindBetterName(ReadOnlySpan<char> symbolName)
         {
             if (symbolName.EndsWith(Constants.AsyncSuffix, StringComparison.Ordinal))
             {
-                return symbolName.WithoutSuffix(Constants.AsyncSuffix);
+                return symbolName.WithoutSuffix(Constants.AsyncSuffix).ToString();
             }
 
             if (symbolName.EndsWith(Constants.AsyncCoreSuffix, StringComparison.Ordinal))
             {
-                return symbolName.WithoutSuffix(Constants.AsyncCoreSuffix) + Constants.Core;
+                return symbolName.WithoutSuffix(Constants.AsyncCoreSuffix).ConcatenatedWith(Constants.Core);
             }
 
             return null;

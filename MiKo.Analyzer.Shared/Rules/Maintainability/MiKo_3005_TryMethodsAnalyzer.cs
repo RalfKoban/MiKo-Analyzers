@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol, Compilation compilation) => symbol.GetNamedMethods()
                                                                                                                       .Where(ShallAnalyze)
                                                                                                                       .Select(AnalyzeTryMethod)
-                                                                                                                      .Where(_ => _ != null);
+                                                                                                                      .WhereNotNull();
 
         private Diagnostic AnalyzeTryMethod(IMethodSymbol method)
         {

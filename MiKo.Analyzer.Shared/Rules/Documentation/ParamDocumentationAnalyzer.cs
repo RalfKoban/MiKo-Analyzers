@@ -52,11 +52,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected IEnumerable<Diagnostic> AnalyzeParameters(IMethodSymbol symbol, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
             var parameters = symbol.Parameters;
+            var parametersLength = parameters.Length;
 
-            if (parameters.Length > 0)
+            if (parametersLength > 0)
             {
-                foreach (var parameter in parameters)
+                for (var index = 0; index < parametersLength; index++)
                 {
+                    var parameter = parameters[index];
+
                     if (ShallAnalyzeParameter(parameter))
                     {
                         var parameterComment = comment.GetParameterComment(parameter.Name);

@@ -10,10 +10,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public abstract class ExceptionDocumentationCodeFixProvider : OverallDocumentationCodeFixProvider
     {
 //// ncrunch: rdi off
-        private static readonly string[] Phrases = CreatePhrases().Distinct().ToArray();
+        private static readonly string[] Phrases = CreatePhrases().ToHashSet().ToArray();
 //// ncrunch: rdi default
 
-        protected static XmlElementSyntax GetFixedExceptionCommentForArgumentNullException(XmlElementSyntax exceptionComment)
+        protected static XmlElementSyntax GetFixedExceptionCommentForArgumentNullException(Document document, XmlElementSyntax exceptionComment)
         {
             var parameters = exceptionComment.GetParameterNames();
 
@@ -23,18 +23,45 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return exceptionComment;
 
                 case 1:
-                {
-                    // seems like we have only a single parameter, so place it on a single line
-                    return exceptionComment.WithContent(ParameterIsNull(parameters[0]));
-                }
+                    return exceptionComment.WithContent(ParameterIsNull(parameters[0])); // seems like we have only a single parameter, so place it on a single line
 
                 default:
-                {
-                    // more than 1 parameter, so pick the referenced ones
-                    var comment = exceptionComment.ToString();
-                    var ps = parameters.Where(_ => comment.ContainsAny(GetParameterReferences(_))).ToArray();
+                    return exceptionComment.WithContent(ParameterIsNull(GetParameterNames())); // more than 1 parameter, so pick the referenced ones
+            }
 
-                    return exceptionComment.WithContent(ParameterIsNull(ps));
+            string[] GetParameterNames()
+            {
+                var comment = exceptionComment.ToString();
+
+                var ps = parameters.Where(_ => comment.ContainsAny(GetParameterReferences(_).ToArray())).ToArray();
+
+                if (ps.Length != 0)
+                {
+                    return ps;
+                }
+
+                // seems none is referenced, so pick up all parameters
+                switch (exceptionComment.FirstAncestor<MemberDeclarationSyntax>())
+                {
+                    case BaseMethodDeclarationSyntax method:
+                    {
+                        var symbol = GetSymbol(document, method);
+
+                        if (symbol is IMethodSymbol methodSymbol)
+                        {
+                            return methodSymbol.Parameters.Where(_ => _.Type.IsValueType is false).ToArray(_ => _.Name);
+                        }
+
+                        return method.ParameterList.Parameters.ToArray(_ => _.Identifier.ValueText);
+                    }
+
+                    case BasePropertyDeclarationSyntax _:
+                    {
+                        return new[] { Constants.Names.DefaultPropertyParameterName };
+                    }
+
+                    default:
+                        return Array.Empty<string>();
                 }
             }
         }
@@ -53,7 +80,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // seems we found the reference in text, so we have to split the text into 2 separate ones and place a <paramref/> between
             var textNodes = exceptionComment.DescendantNodes<XmlTextSyntax>(_ => _.GetTextWithoutTriviaLazy().Any(__ => __.ContainsAny(parametersAsTextReferences))).ToList();
 
-            if (textNodes.Any())
+            if (textNodes.Count != 0)
             {
                 // seems we found the reference in text, so we have to split the text into 2 separate ones and place a <paramref/> between
                 exceptionComment = exceptionComment.ReplaceNodes(textNodes, text => ReplaceTextWithParamRefs(text, parametersAsTextReferences));
@@ -95,10 +122,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected DocumentationCommentTriviaSyntax FixComment(SyntaxNode syntax, DocumentationCommentTriviaSyntax comment, Diagnostic diagnostic)
         {
-            return comment.Content.OfType<XmlElementSyntax>()
-                          .Where(_ => _.IsException())
-                          .Select(_ => FixExceptionComment(syntax, _, comment, diagnostic))
-                          .FirstOrDefault(_ => _ != null);
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var exception in comment.Content.OfType<XmlElementSyntax>().Where(_ => _.IsException()))
+            {
+                var fixedException = FixExceptionComment(syntax, exception, comment, diagnostic);
+
+                if (fixedException != null)
+                {
+                    return fixedException;
+                }
+            }
+
+            return null;
         }
 
         protected virtual DocumentationCommentTriviaSyntax FixExceptionComment(SyntaxNode syntax, XmlElementSyntax exception, DocumentationCommentTriviaSyntax comment, Diagnostic diagnostic) => null;
@@ -113,7 +148,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private static IEnumerable<string> GetParameterAsTextReference(string parameterName) => Constants.TrailingSentenceMarkers.Select(_ => string.Concat(" ", parameterName, _.ToString()));
+        private static IEnumerable<string> GetParameterAsTextReference(string parameterName) => Constants.TrailingSentenceMarkers.Select(_ => ' '.ConcatenatedWith(parameterName, _));
 
         private static string GetParameterAsReference(string parameterName) => parameterName.SurroundedWithDoubleQuote();
 
@@ -154,30 +189,33 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private static IEnumerable<string> SplitCommentsOnParametersInText(string comment, string[] parametersAsTextReferences)
+        private static string[] SplitCommentsOnParametersInText(string comment, string[] parametersAsTextReferences)
         {
+            var parametersAsTextReferencesLength = parametersAsTextReferences.Length;
+
             // split into parts, so that we can easily detect which part is a parameter and which is some normal text
             var parts = comment.SplitBy(parametersAsTextReferences).ToArray();
+            var partsLength = parts.Length;
 
             // now correct the parameters back
-            for (var i = 0; i < parts.Length; i++)
+            for (var i = 0; i < partsLength; i++)
             {
                 var part = parts[i];
 
-                foreach (var textRef in parametersAsTextReferences)
+                for (var index = 0; index < parametersAsTextReferencesLength; index++)
                 {
-                    if (part == textRef)
+                    if (part == parametersAsTextReferences[index])
                     {
                         if (i > 0)
                         {
                             // that's text before the parameter, so add the missing character afterward
-                            parts[i - 1] = parts[i - 1] + part.First();
+                            parts[i - 1] = parts[i - 1].ConcatenatedWith(part.First());
                         }
 
-                        if (i < parts.Length - 1)
+                        if (i < partsLength - 1)
                         {
                             // that's text after the parameter, so add the missing character before
-                            parts[i + 1] = part.Last() + parts[i + 1];
+                            parts[i + 1] = part.Last().ConcatenatedWith(parts[i + 1]);
                         }
                     }
                 }
@@ -186,8 +224,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return parts;
         }
 
-        //// ncrunch: rdi off
+//// ncrunch: rdi off
 
+#pragma warning disable CA1861
         // TODO RKN: see Constants.Comments.ExceptionForbiddenStartingPhrase
         private static IEnumerable<string> CreatePhrases()
         {
@@ -274,6 +313,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 yield return upperCasePhrase;
             }
         }
+#pragma warning restore CA1861
 
         //// ncrunch: rdi default
     }

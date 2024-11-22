@@ -81,17 +81,6 @@ public class TestMe
 }
 ");
 
-        [TestCase("whatever.")]
-        [TestCase("Whatever.")]
-        public void An_issue_is_reported_for_method_with_wrong_comment_phrase_(string comment) => An_issue_is_reported_for(@"
-public class TestMe
-{
-    /// <summary />
-    /// <param name='o'>" + comment + @"</param>
-    public void DoSomething(object o) { }
-}
-");
-
         [TestCase("<summary />")]
         [TestCase("<inheritdoc />")]
         [TestCase("<exclude />")]
@@ -99,6 +88,17 @@ public class TestMe
 public class TestMe
 {
     /// " + xmlElement + @"
+    public void DoSomething(object o) { }
+}
+");
+
+        [TestCase("whatever.")]
+        [TestCase("Whatever.")]
+        public void An_issue_is_reported_for_method_with_wrong_comment_phrase_(string comment) => An_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'>" + comment + @"</param>
     public void DoSomething(object o) { }
 }
 ");
@@ -155,6 +155,34 @@ public class TestMe
 }";
 
             VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [TestCase("Determines the", "The")]
+        [TestCase("Determines to which extend", "The value to which extend")]
+        [TestCase("Determines to what extend", "The value to what extend")]
+        public void Code_gets_fixed_for_parameter_with_Determines(string originalStart, string fixedStart)
+        {
+            var originalCode = @"
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'>
+    /// " + originalStart + @" stuff.
+    /// </param>
+    public void DoSomething(object o) { }
+}";
+
+            var fixedCode = @"
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'>
+    /// " + fixedStart + @" stuff.
+    /// </param>
+    public void DoSomething(object o) { }
+}";
+
+            VerifyCSharpFix(originalCode, fixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2021_ParamDefaultPhraseAnalyzer.Id;

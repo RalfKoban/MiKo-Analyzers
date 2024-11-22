@@ -34,6 +34,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] MeaninglessFieldPhrases = MeaninglessPhrases.Except(Constants.Comments.FieldStartingPhrase).ToArray();
 
+#if NCRUNCH
+
+        [OneTimeSetUp]
+        public static void PrepareTestEnvironment() => MiKo_2060_CodeFixProvider.LoadData();
+
+#endif
+
         [Test]
         public void No_issue_is_reported_for_class_without_documentation() => No_issue_is_reported_for(@"
 public class TestMe
@@ -74,13 +81,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_class_with_meaningless_phrase()
-        {
-            Assert.Multiple(() =>
-                                 {
-                                     foreach (var phrase in MeaninglessPhrases)
-                                     {
-                                         An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_class_with_meaningless_phrase_([ValueSource(nameof(MeaninglessPhrases))] string phrase) => An_issue_is_reported_for(@"
 public interface ITestMe
 {
 }
@@ -92,9 +93,6 @@ public class TestMe : ITestMe
 {
 }
 ");
-                                     }
-                                 });
-        }
 
         [Test]
         public void An_issue_is_reported_for_class_with_meaningless_special_phrase_([Values("Contains", "Contain", "Has", "Is")] string phrase) => An_issue_is_reported_for(@"
@@ -118,13 +116,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_class_with_meaningless_phrase_in_para_tag()
-        {
-            Assert.Multiple(() =>
-                                 {
-                                     foreach (var phrase in MeaninglessPhrases)
-                                     {
-                                         An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_class_with_meaningless_phrase_in_para_tag_([ValueSource(nameof(MeaninglessPhrases))] string phrase) => An_issue_is_reported_for(@"
 public interface ITestMe
 {
 }
@@ -138,9 +130,6 @@ public class TestMe : ITestMe
 {
 }
 ");
-                                     }
-                                 });
-        }
 
         [Test]
         public void No_issue_is_reported_for_method_without_documentation() => No_issue_is_reported_for(@"
@@ -175,13 +164,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_meaningless_phrase()
-        {
-            Assert.Multiple(() =>
-                                 {
-                                     foreach (var phrase in MeaninglessPhrases)
-                                     {
-                                         An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_meaningless_phrase_([ValueSource(nameof(MeaninglessPhrases))] string phrase) => An_issue_is_reported_for(@"
 public interface ITestMe
 {
 }
@@ -194,18 +177,9 @@ public class TestMe : ITestMe
     public void DoSomething() { }
 }
 ");
-                                     }
-                                 });
-        }
 
         [Test]
-        public void An_issue_is_reported_for_method_with_meaningless_phrase_in_para_tag()
-        {
-            Assert.Multiple(() =>
-                                 {
-                                     foreach (var phrase in MeaninglessPhrases)
-                                     {
-                                         An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_meaningless_phrase_in_para_tag_([ValueSource(nameof(MeaninglessPhrases))] string phrase) => An_issue_is_reported_for(@"
 public interface ITestMe
 {
 }
@@ -220,9 +194,6 @@ public class TestMe : ITestMe
     public void DoSomething() { }
 }
 ");
-                                     }
-                                 });
-        }
 
         [Test]
         public void An_issue_is_reported_for_method_with_meaningless_phrase_in_text_([ValueSource(nameof(MeaninglessTextPhrases))] string phrase) => An_issue_is_reported_for(@"
@@ -284,13 +255,7 @@ public enum TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_field_with_meaningless_phrase()
-        {
-            Assert.Multiple(() =>
-                                 {
-                                     foreach (var phrase in MeaninglessFieldPhrases)
-                                     {
-                                         An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_field_with_meaningless_phrase_([ValueSource(nameof(MeaninglessFieldPhrases))] string phrase) => An_issue_is_reported_for(@"
 public interface ITestMe
 {
 }
@@ -303,18 +268,9 @@ public class TestMe : ITestMe
     private int DoSomething;
 }
 ");
-                                     }
-                                 });
-        }
 
         [Test]
-        public void An_issue_is_reported_for_field_with_meaningless_phrase_in_para_tag()
-        {
-            Assert.Multiple(() =>
-                                 {
-                                     foreach (var phrase in MeaninglessFieldPhrases)
-                                     {
-                                         An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_field_with_meaningless_phrase_in_para_tag_([ValueSource(nameof(MeaninglessFieldPhrases))] string phrase) => An_issue_is_reported_for(@"
 public interface ITestMe
 {
 }
@@ -329,9 +285,6 @@ public class TestMe : ITestMe
     private int DoSomething;
 }
 ");
-                                     }
-                                 });
-        }
 
         [Test]
         public void An_issue_is_reported_for_field_with_meaningless_phrase_in_text_([ValueSource(nameof(MeaninglessTextPhrases))] string phrase) => An_issue_is_reported_for(@"
@@ -348,6 +301,9 @@ public class TestMe : ITestMe
 }
 ");
 
+        [TestCase("A class that adopts", "Adopts")]
+        [TestCase("A interface that adopts", "Adopts")]
+        [TestCase("An interface that adopts", "Adopts")]
         [TestCase("Class that adopts", "Adopts")]
         [TestCase("Class that allows", "Allows")]
         [TestCase("Class that creates", "Creates")]
@@ -355,12 +311,12 @@ public class TestMe : ITestMe
         [TestCase("Class that enhances", "Enhances")]
         [TestCase("Class that extends", "Extends")]
         [TestCase("Class that represents", "Represents")]
-        [TestCase("Class that serves", "Provides")]
         [TestCase("Class that serves as", "Represents a")]
+        [TestCase("Class that serves", "Provides")]
         [TestCase("Class that will represent", "Represents")]
         [TestCase("Class to provide", "Provides")]
-        [TestCase("Class which serves", "Provides")]
         [TestCase("Class which serves as", "Represents a")]
+        [TestCase("Class which serves", "Provides")]
         [TestCase("Class which will represent", "Represents")]
         [TestCase("Classes implementing the interfaces provide", "Provides")]
         [TestCase("Classes implementing the interfaces will provide", "Provides")]
@@ -380,80 +336,70 @@ public class TestMe : ITestMe
         [TestCase("Event that is published,", "Occurs")]
         [TestCase("Event which is published", "Occurs")]
         [TestCase("Event which is published,", "Occurs")]
+        [TestCase("Every class that implements the interface can", "Allows to")]
         [TestCase("Every class that implements this interface can do", "Allows to do")]
         [TestCase("Every class that implements this interface can", "Allows to")]
-        [TestCase("Every class that implements the interface can", "Allows to")]
         [TestCase("Extension of", "Extends the")]
-        [TestCase("Factory class creating", "Provides support for creating")]
-        [TestCase("Factory class that creates", "Provides support for creating")]
-        [TestCase("Factory class to create", "Provides support for creating")]
-        [TestCase("Factory for", "Provides support for creating")]
         [TestCase("Factory method creating", "Creates")]
         [TestCase("Factory method that creates", "Creates")]
         [TestCase("Factory method to create", "Creates")]
         [TestCase("Factory method which creates", "Creates")]
-        [TestCase("Function to generate", "Generates")]
         [TestCase("Function that generates", "Generates")]
+        [TestCase("Function to generate", "Generates")]
         [TestCase("Function which generates", "Generates")]
+        [TestCase("Help function that generates", "Generates")]
+        [TestCase("Help function to generate", "Generates")]
+        [TestCase("Help function which generates", "Generates")]
+        [TestCase("Help method that generates", "Generates")]
+        [TestCase("Help method to generate", "Generates")]
+        [TestCase("Help method which generates", "Generates")]
         [TestCase("Helper class that manipulates", "Manipulates")]
         [TestCase("Helper class to manipulate", "Manipulates")]
         [TestCase("Helper class which manipulates", "Manipulates")]
-        [TestCase("Helper method to generate", "Generates")]
-        [TestCase("Helper method that generates", "Generates")]
-        [TestCase("Helper method which generates", "Generates")]
-        [TestCase("Helper function to generate", "Generates")]
         [TestCase("Helper function that generates", "Generates")]
+        [TestCase("Helper function to generate", "Generates")]
         [TestCase("Helper function which generates", "Generates")]
-        [TestCase("Help function to generate", "Generates")]
-        [TestCase("Help function that generates", "Generates")]
-        [TestCase("Help function which generates", "Generates")]
-        [TestCase("Help method to generate", "Generates")]
-        [TestCase("Help method that generates", "Generates")]
-        [TestCase("Help method which generates", "Generates")]
-        [TestCase("Interface describing", "Describes")]
-        [TestCase("Interface definition for something", "Represents something")]
+        [TestCase("Helper method that generates", "Generates")]
+        [TestCase("Helper method to generate", "Generates")]
+        [TestCase("Helper method which generates", "Generates")]
         [TestCase("Interface definition for a something", "Represents a something")]
         [TestCase("Interface definition for an something", "Represents an something")]
+        [TestCase("Interface definition for something", "Represents something")]
         [TestCase("Interface definition for the something", "Represents the something")]
-        [TestCase("Interface definition of helper which provides", "Provides")]
         [TestCase("Interface definition of a helper which provides", "Provides")]
         [TestCase("Interface definition of an helper which provides", "Provides")]
+        [TestCase("Interface definition of helper which provides", "Provides")]
         [TestCase("Interface definition of the helper which provides", "Provides")]
-        [TestCase("Interface for classes that represent", "Represents")]
-        [TestCase("Interface for classes that provide", "Provides")]
+        [TestCase("Interface describing", "Describes")]
+        [TestCase("Interface for a", "Represents a")]
+        [TestCase("Interface for an", "Represents an")]
         [TestCase("Interface for classes that can provide", "Provides")]
+        [TestCase("Interface for classes that provide", "Provides")]
+        [TestCase("Interface for classes that represent", "Represents")]
         [TestCase("Interface for classes which can provide", "Provides")]
         [TestCase("Interface for elements that provide", "Provides")]
-        [TestCase("Interface for factories creating", "Provides support for creating")]
-        [TestCase("Interface for factories that create", "Provides support for creating")]
-        [TestCase("Interface for factories which create", "Provides support for creating")]
-        [TestCase("Interface for items that represent", "Represents")]
-        [TestCase("Interface for items which represent", "Represents")]
         [TestCase("Interface for items that perform", "Performs")]
-        [TestCase("Interface for items which perform", "Performs")]
         [TestCase("Interface for items that provide", "Provides")]
+        [TestCase("Interface for items that represent", "Represents")]
+        [TestCase("Interface for items which perform", "Performs")]
         [TestCase("Interface for items which provide", "Provides")]
+        [TestCase("Interface for items which represent", "Represents")]
         [TestCase("Interface for objects that can provide", "Provides")]
-        [TestCase("Interface for objects which can provide", "Provides")]
         [TestCase("Interface for objects that provide", "Provides")]
         [TestCase("Interface for objects that represent", "Represents")]
+        [TestCase("Interface for objects which can provide", "Provides")]
         [TestCase("Interface for objects which represent", "Represents")]
         [TestCase("Interface for processing", "Processes")]
         [TestCase("Interface for storing", "Stores")]
-        [TestCase("Interface for a", "Represents a")]
-        [TestCase("Interface for an", "Represents an")]
         [TestCase("Interface for the", "Represents a")]
         [TestCase("Interface for view models describing", "Describes")]
         [TestCase("Interface for view models representing", "Represents")]
-        [TestCase("Interface for workflows that perform", "Performs")]
-        [TestCase("Interface for workflows which perform", "Performs")]
         [TestCase("Interface for work flows that perform", "Performs")]
         [TestCase("Interface for work flows which perform", "Performs")]
+        [TestCase("Interface for workflows that perform", "Performs")]
+        [TestCase("Interface for workflows which perform", "Performs")]
         [TestCase("Interface for wrapping", "Wraps")]
         [TestCase("Interface implemented to detect", "Detects")]
-        [TestCase("Interface of a factory creating", "Provides support for creating")]
-        [TestCase("Interface of a factory that creates", "Provides support for creating")]
-        [TestCase("Interface of a factory which creates", "Provides support for creating")]
         [TestCase("Interface of a view model", "Represents a view model")]
         [TestCase("Interface providing", "Provides")]
         [TestCase("Interface representing", "Represents")]
@@ -461,17 +407,23 @@ public class TestMe : ITestMe
         [TestCase("Interface to describe", "Describes")]
         [TestCase("Interface to represent", "Represents")]
         [TestCase("Interface which serves", "Provides")]
-        [TestCase("Method to generate", "Generates")]
         [TestCase("Method that generates", "Generates")]
+        [TestCase("Method to generate", "Generates")]
         [TestCase("Method which generates", "Generates")]
+        [TestCase("The class adopts", "Adopts")]
+        [TestCase("The class implementing this interface provides", "Provides")]
         [TestCase("The class offers", "Provides")]
+        [TestCase("The class that adopts", "Adopts")]
+        [TestCase("The class which adopts", "Adopts")]
         [TestCase("The interface offers", "Provides")]
+        [TestCase("The interface that adopts", "Adopts")]
+        [TestCase("The interface which adopts", "Adopts")]
+        [TestCase("This class adopts", "Adopts")]
         [TestCase("This class offers", "Provides")]
         [TestCase("This class provides", "Provides")]
         [TestCase("This class represents", "Represents")]
         [TestCase("This interface offers", "Provides")]
         [TestCase("This interface represents", "Represents")]
-        [TestCase("The class implementing this interface provides", "Provides")]
         public void Code_gets_fixed_for_term_(string originalCode, string fixedCode)
         {
             const string Template = @"
@@ -682,6 +634,34 @@ public class TestMeCommand
             VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
         }
 
+        [TestCase("A class containing factory methods for building", "Provides support for creating")]
+        [TestCase("A class containing factory methods for constructing", "Provides support for creating")]
+        [TestCase("A class containing methods for building", "Provides support for creating")]
+        [TestCase("A class containing methods for constructing", "Provides support for creating")]
+        [TestCase("Factory class building", "Provides support for creating")]
+        [TestCase("Factory class constructing", "Provides support for creating")]
+        [TestCase("Factory class creating", "Provides support for creating")]
+        [TestCase("Factory class that builds", "Provides support for creating")]
+        [TestCase("Factory class that constructs", "Provides support for creating")]
+        [TestCase("Factory class that creates", "Provides support for creating")]
+        [TestCase("Factory class to build", "Provides support for creating")]
+        [TestCase("Factory class to construct", "Provides support for creating")]
+        [TestCase("Factory class to create", "Provides support for creating")]
+        [TestCase("Factory for", "Provides support for creating")]
+        [TestCase("Interface for factories creating", "Provides support for creating")]
+        [TestCase("Interface for factories that create", "Provides support for creating")]
+        [TestCase("Interface for factories which create", "Provides support for creating")]
+        [TestCase("Interface of a factory creating", "Provides support for creating")]
+        [TestCase("Interface of a factory that creates", "Provides support for creating")]
+        [TestCase("Interface of a factory which creates", "Provides support for creating")]
+        [TestCase("The class contains factory methods for building", "Provides support for creating")]
+        [TestCase("The class contains factory methods for constructing", "Provides support for creating")]
+        [TestCase("The class contains methods for building", "Provides support for creating")]
+        [TestCase("The class contains methods for constructing", "Provides support for creating")]
+        [TestCase("This class contains factory methods for building", "Provides support for creating")]
+        [TestCase("This class contains factory methods for constructing", "Provides support for creating")]
+        [TestCase("This class contains methods for building", "Provides support for creating")]
+        [TestCase("This class contains methods for constructing", "Provides support for creating")]
         [TestCase("Used to create something", "Provides support for creating something")]
         [TestCase(@"Used to create <see cref=""string""/> instances", @"Provides support for creating <see cref=""string""/> instances")]
         [TestCase("Used for creating something", "Provides support for creating something")]
@@ -690,7 +670,7 @@ public class TestMeCommand
         {
             const string Template = @"
 /// <summary>
-/// ###
+/// ### something.
 /// </summary>
 public class TestMeFactory
 {
