@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static StringBuilder ReplaceText(string originalText)
         {
-            var result = new StringBuilder(originalText);
+            var result = originalText.AsBuilder();
 
             foreach (var pair in ReplacementMap)
             {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -30,11 +31,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (syntax.EqualsValue is null)
                 {
-                    yield return Issue(field, new Dictionary<string, string>
-                                                  {
-                                                      { Constants.AnalyzerCodeFixSharedData.Position, fields.IndexOf(field).ToString("D") },
-                                                      { Constants.AnalyzerCodeFixSharedData.IsFlagged, isFlagged.ToString() },
-                                                  });
+                    yield return Issue(
+                                   field,
+                                   new Pair(Constants.AnalyzerCodeFixSharedData.Position, fields.IndexOf(field).ToString("D")),
+                                   new Pair(Constants.AnalyzerCodeFixSharedData.IsFlagged, isFlagged.ToString()));
                 }
             }
         }

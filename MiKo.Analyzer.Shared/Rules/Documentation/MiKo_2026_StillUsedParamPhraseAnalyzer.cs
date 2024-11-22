@@ -112,7 +112,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var used = methodBody.GetAllUsedVariables(context.SemanticModel);
 
-                if (used.Any())
+                if (used.Count != 0)
                 {
                     foreach (var parameter in methodSymbol.Parameters.Where(_ => used.Contains(_.Name)))
                     {

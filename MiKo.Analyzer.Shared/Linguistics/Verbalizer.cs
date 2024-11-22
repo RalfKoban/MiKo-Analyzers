@@ -10,9 +10,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
     {
         private static readonly HashSet<char> CharsForTwoCharacterEndingsWithS = new HashSet<char> { 'a', 'h', 'i', 'o', 's', 'u', 'x', 'z' };
 
-        private static readonly string[] PluralEndings = { "gers", "tchers", "pters", "stors", "ptors" };
+        private static readonly string[] NonThirdPersonSingularEndingsWithS = { "pters", "tors", "gers", "chers" };
 
-        private static readonly string[] PastEndings = { "ated", "dled", "ced", "ged", "ied", "red", "sed", "ved" };
+        private static readonly string[] SpecialPastEndings = { "ated", "dled", "ced", "ged", "ied", "red", "sed", "ved" };
+
+        private static readonly string[] PastEndings = SpecialPastEndings.Concat(new[] { "led", "eed", "ted", "ded" }).ToArray();
 
         private static readonly string[] FourCharacterGerundEndings = { "pping", "rring", "tting" };
 
@@ -26,34 +28,57 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly ConcurrentDictionary<string, string> ThirdPersonSingularVerbs = new ConcurrentDictionary<string, string>();
 
-        private static readonly KeyValuePair<string, string>[] Endings =
-                                                                         {
-                                                                             new KeyValuePair<string, string>(nameof(Action), nameof(Action)),
-                                                                             new KeyValuePair<string, string>("Caption", "Caption"),
-                                                                             new KeyValuePair<string, string>("cution", "cute"),
-                                                                             new KeyValuePair<string, string>(nameof(Exception), nameof(Exception)),
-                                                                             new KeyValuePair<string, string>("Func", "Function"),
-                                                                             new KeyValuePair<string, string>("Function", "Function"),
-                                                                             new KeyValuePair<string, string>("estination", "estination"),
-                                                                             new KeyValuePair<string, string>("mentation", "ment"),
-                                                                             new KeyValuePair<string, string>("unction", "unction"),
-                                                                             new KeyValuePair<string, string>("ptation", "pt"),
-                                                                             new KeyValuePair<string, string>("iption", "ibe"),
-                                                                             new KeyValuePair<string, string>("rmation", "rm"),
-                                                                             new KeyValuePair<string, string>("allation", "all"),
-                                                                             new KeyValuePair<string, string>("ellation", "el"),
-                                                                             new KeyValuePair<string, string>("stration", "ster"),
-                                                                             new KeyValuePair<string, string>("ration", "re"),
-                                                                             new KeyValuePair<string, string>("isition", "ire"),
-                                                                             new KeyValuePair<string, string>("isation", "ise"),
-                                                                             new KeyValuePair<string, string>("ization", "ize"),
-                                                                             new KeyValuePair<string, string>("vocation", "voke"),
-                                                                             new KeyValuePair<string, string>("ation", "ate"),
-                                                                             new KeyValuePair<string, string>("ction", "ct"),
-                                                                             new KeyValuePair<string, string>("ption", "pt"),
-                                                                             new KeyValuePair<string, string>("rison", "re"),
-                                                                             new KeyValuePair<string, string>("sis", "ze"),
-                                                                         };
+        private static readonly string[] NounsWithGerundEnding =
+                                                                 {
+                                                                     "awakening", "awning",
+                                                                     "blessing", "booking", "briefing", "building",
+                                                                     "ceiling",
+                                                                     "darling", "dealing", "drawing", "duckling",
+                                                                     "evening",
+                                                                     "feeling", "finding", "fledgling",
+                                                                     "gathering", "guttering",
+                                                                     "hireling",
+                                                                     "inkling",
+                                                                     "leaning",
+                                                                     "meeting", "misgiving", "misunderstanding", "morning",
+                                                                     "offering", "outing",
+                                                                     "painting",
+                                                                     "quisling",
+                                                                     "reasoning", "recording", "restructuring", "rising", "roofing",
+                                                                     "sapling", "seasoning", "seating", "setting", "shooting", "shopping", "sibling", "sitting", "standing",
+                                                                     "tiding", "timing", "training",
+                                                                     "underling", "understanding", "undertaking", "upbringing", "uprising",
+                                                                     "warning", "wedding", "well-being", "winning", "wording",
+                                                                 };
+
+        private static readonly Pair[] Endings =
+                                                 {
+                                                     new Pair(nameof(Action), nameof(Action)),
+                                                     new Pair("Caption", "Caption"),
+                                                     new Pair("cution", "cute"),
+                                                     new Pair(nameof(Exception), nameof(Exception)),
+                                                     new Pair("Func", "Function"),
+                                                     new Pair("Function", "Function"),
+                                                     new Pair("estination", "estination"),
+                                                     new Pair("mentation", "ment"),
+                                                     new Pair("unction", "unction"),
+                                                     new Pair("ptation", "pt"),
+                                                     new Pair("iption", "ibe"),
+                                                     new Pair("rmation", "rm"),
+                                                     new Pair("allation", "all"),
+                                                     new Pair("ellation", "el"),
+                                                     new Pair("stration", "ster"),
+                                                     new Pair("ration", "re"),
+                                                     new Pair("isition", "ire"),
+                                                     new Pair("isation", "ise"),
+                                                     new Pair("ization", "ize"),
+                                                     new Pair("vocation", "voke"),
+                                                     new Pair("ation", "ate"),
+                                                     new Pair("ction", "ct"),
+                                                     new Pair("ption", "pt"),
+                                                     new Pair("rison", "re"),
+                                                     new Pair("sis", "ze"),
+                                                 };
 
         private static readonly string[] IsAre = { "is", "are" };
 
@@ -206,8 +231,6 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return value.EqualsAny(AdjectivesOrAdverbs, comparison);
         }
 
-        public static bool IsPlural(ReadOnlySpan<char> value) => value.EndsWith('s') && IsThirdPersonSingularVerb(value) is false;
-
         public static bool IsThirdPersonSingularVerb(ReadOnlySpan<char> value)
         {
             var length = value.Length;
@@ -227,14 +250,20 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return false;
             }
 
-            var previous = value[length - 2];
-
-            if (previous == 'r')
+            if (CharsForTwoCharacterEndingsWithS.Contains(value[length - 2]))
             {
-                return value.EndsWithAny(PluralEndings, StringComparison.OrdinalIgnoreCase) is false;
+                return false;
             }
 
-            return CharsForTwoCharacterEndingsWithS.Contains(previous) is false;
+            if (Pluralizer.IsPlural(value))
+            {
+                if (value.EndsWithAny(NonThirdPersonSingularEndingsWithS))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public static bool IsThirdPersonSingularVerb(string value) => value != null && IsThirdPersonSingularVerb(value.AsSpan());
@@ -251,13 +280,14 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return false;
         }
 
-        public static bool IsGerundVerb(string value)
-        {
-            if (value.IsNullOrWhiteSpace())
-            {
-                return false;
-            }
+        public static bool IsPastTense(string value) => value != null && IsPastTense(value.AsSpan());
 
+        public static bool IsPastTense(ReadOnlySpan<char> value) => value.EndsWithAny(PastEndings, StringComparison.Ordinal);
+
+        public static bool IsGerundVerb(string value) => value != null && IsGerundVerb(value.AsSpan());
+
+        public static bool IsGerundVerb(ReadOnlySpan<char> value)
+        {
             if (value.Length <= 4)
             {
                 return false;
@@ -265,9 +295,26 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             if (value.EndsWith("ing", StringComparison.Ordinal))
             {
+                if (value.EndsWith("ling", StringComparison.OrdinalIgnoreCase))
+                {
+                    return false;
+                }
+
                 if (value.EndsWith("thing", StringComparison.OrdinalIgnoreCase))
                 {
                     return false;
+                }
+
+                var length = NounsWithGerundEnding.Length;
+
+                for (var index = 0; index < length; index++)
+                {
+                    var noun = NounsWithGerundEnding[index];
+
+                    if (value.Equals(noun, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return false;
+                    }
                 }
 
                 return true;
@@ -320,12 +367,13 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     return word + "ing";
                 }
 
-                var gerundVerb = new StringBuilder(word).Append("ing")
-                                                        .ReplaceWithCheck("ping", "pping")
-                                                        .ReplaceWithCheck("eing", "ing")
-                                                        .ReplaceWithCheck("uring", "urring")
-                                                        .ReplaceWithCheck("uting", "utting")
-                                                        .ToString();
+                var gerundVerb = word.AsBuilder()
+                                     .Append("ing")
+                                     .ReplaceWithCheck("ping", "pping")
+                                     .ReplaceWithCheck("eing", "ing")
+                                     .ReplaceWithCheck("uring", "urring")
+                                     .ReplaceWithCheck("uting", "utting")
+                                     .ToString();
 
                 return gerundVerb;
             }
@@ -399,7 +447,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
                     if (word.EndsWithAny(ThreeCharacterGerundEndingsWithE, StringComparison.OrdinalIgnoreCase))
                     {
-                        return word.Substring(0, wordLength - 3) + "e";
+                        return word.AsSpan(0, wordLength - 3).ConcatenatedWith('e');
                     }
 
                     return word.Substring(0, wordLength - 3);
@@ -427,7 +475,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
             {
                 var word = sentenceEnding.TrimEnd(SentenceEndingMarkers);
 
-                return CreateThirdPersonSingularVerb(word) + sentenceEnding.Substring(word.Length);
+                return CreateThirdPersonSingularVerb(word).ConcatenatedWith(sentenceEnding.AsSpan(word.Length));
             }
 
             string CreateThirdPersonSingularVerb(string word)
@@ -454,10 +502,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 {
                     if (word.EndsWith("ay", StringComparison.Ordinal) || word.EndsWith("ey", StringComparison.Ordinal))
                     {
-                        return word + 's';
+                        return word.AsSpan().ConcatenatedWith('s');
                     }
 
-                    return word.Substring(0, word.Length - 1) + "ies";
+                    return word.AsSpan(0, word.Length - 1).ConcatenatedWith("ies");
                 }
 
                 if (word.EndsWith('s'))
@@ -515,25 +563,25 @@ namespace MiKoSolutions.Analyzers.Linguistics
             {
                 if (word.EndsWith("dded", StringComparison.Ordinal))
                 {
-                    return word.Substring(0, word.Length - 2) + 's';
+                    return word.AsSpan(0, word.Length - 2).ConcatenatedWith('s');
                 }
 
                 if (word.EndsWith("tted", StringComparison.Ordinal))
                 {
-                    return word.Substring(0, word.Length - 3) + 's';
+                    return word.AsSpan(0, word.Length - 3).ConcatenatedWith('s');
                 }
 
                 if (word.EndsWith("eed", StringComparison.Ordinal))
                 {
-                    return word + 's';
+                    return word.AsSpan().ConcatenatedWith('s');
                 }
 
-                if (word.EndsWithAny(PastEndings, StringComparison.Ordinal))
+                if (word.EndsWithAny(SpecialPastEndings, StringComparison.Ordinal))
                 {
-                    return word.Substring(0, word.Length - 1) + 's';
+                    return word.AsSpan(0, word.Length - 1).ConcatenatedWith('s');
                 }
 
-                return word.Substring(0, word.Length - 2) + 's';
+                return word.AsSpan(0, word.Length - 2).ConcatenatedWith('s');
             }
 
             string CreateFromGerund(string word)
@@ -551,7 +599,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             string AppendEndingS(string word)
             {
-                var result = word + 's';
+                var result = word.AsSpan().ConcatenatedWith('s');
 
                 if (IsTwoCharacterEndingsWithS(result))
                 {
@@ -571,31 +619,33 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return false;
             }
 
-            var word = value.AsSpan();
+            var span = value.AsSpan();
 
-            if (HasAcceptableStartingPhrase(word))
+            if (HasAcceptableStartingPhrase(span))
             {
                 return false;
             }
 
-            if (HasAcceptableMiddlePhrase(word))
+            if (HasAcceptableMiddlePhrase(value))
             {
                 return false;
             }
 
-            if (HasAcceptableEndingPhrase(word))
+            if (HasAcceptableEndingPhrase(span))
             {
                 return false;
             }
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            for (var index = 0; index < Endings.Length; index++)
+            var length = Endings.Length;
+
+            for (var index = 0; index < length; index++)
             {
                 var pair = Endings[index];
+                var key = pair.Key;
 
-                if (word.EndsWith(pair.Key, StringComparison.Ordinal))
+                if (span.EndsWith(key, StringComparison.Ordinal))
                 {
-                    result = word.Slice(0, word.Length - pair.Key.Length).ConcatenatedWith(pair.Value);
+                    result = span.Slice(0, span.Length - key.Length).ConcatenatedWith(pair.Value);
 
                     return result.Equals(value, StringComparison.Ordinal) is false;
                 }
@@ -606,8 +656,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static bool HasAcceptableStartingPhrase(ReadOnlySpan<char> value)
         {
-            // ReSharper disable once ForCanBeConvertedToForeach
-            for (var index = 0; index < StartingPhrases.Length; index++)
+            var length = StartingPhrases.Length;
+
+            for (var index = 0; index < length; index++)
             {
                 var phrase = StartingPhrases[index];
 
@@ -622,7 +673,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return false;
         }
 
-        private static bool HasAcceptableMiddlePhrase(ReadOnlySpan<char> value) => value.ContainsAny(MiddlePhrases);
+        private static bool HasAcceptableMiddlePhrase(string value) => value.ContainsAny(MiddlePhrases);
 
         private static bool HasAcceptableEndingPhrase(ReadOnlySpan<char> value) => value.EndsWithAny(EndingPhrases);
     }

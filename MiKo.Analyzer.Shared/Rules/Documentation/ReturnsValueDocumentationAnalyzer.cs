@@ -64,7 +64,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var foundIssues = false;
 
-                foreach (var returnComment in CommentExtensions.GetComments(commentXml, XmlTag.Returns).Where(_ => _ != null))
+                foreach (var returnComment in CommentExtensions.GetComments(commentXml, XmlTag.Returns).WhereNotNull())
                 {
                     foreach (var finding in AnalyzeReturnType(owningSymbol, returnType, comment, returnComment, XmlTag.Returns))
                     {
@@ -76,7 +76,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (foundIssues is false)
                 {
-                    foreach (var valueComment in CommentExtensions.GetComments(commentXml, XmlTag.Value).Where(_ => _ != null))
+                    foreach (var valueComment in CommentExtensions.GetComments(commentXml, XmlTag.Value).WhereNotNull())
                     {
                         foreach (var finding in AnalyzeReturnType(owningSymbol, returnType, comment, valueComment, XmlTag.Value))
                         {

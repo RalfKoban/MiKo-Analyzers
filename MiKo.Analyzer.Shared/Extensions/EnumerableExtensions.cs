@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis.CSharp;
 
 // ncrunch: rdi off
 // ReSharper disable once CheckNamespace
+#pragma warning disable IDE0130
 namespace System.Linq
 {
     internal static class EnumerableExtensions
@@ -273,16 +274,19 @@ namespace System.Linq
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceLength = source.Length;
+
+            if (sourceLength <= 0)
+            {
+                return 0;
+            }
+
             var count = 0;
 
-            if (sourceLength > 0)
+            for (var index = 0; index < sourceLength; index++)
             {
-                for (var index = 0; index < sourceLength; index++)
+                if (filter(source[index]))
                 {
-                    if (filter(source[index]))
-                    {
-                        count++;
-                    }
+                    count++;
                 }
             }
 
@@ -293,16 +297,19 @@ namespace System.Linq
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
+
+            if (valueCount <= 0)
+            {
+                return 0;
+            }
+
             var count = 0;
 
-            if (valueCount > 0)
+            for (var index = 0; index < valueCount; index++)
             {
-                for (var index = 0; index < valueCount; index++)
+                if (filter(value[index]))
                 {
-                    if (filter(value[index]))
-                    {
-                        count++;
-                    }
+                    count++;
                 }
             }
 
@@ -313,16 +320,19 @@ namespace System.Linq
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
+
+            if (valueCount <= 0)
+            {
+                return 0;
+            }
+
             var count = 0;
 
-            if (valueCount > 0)
+            for (var index = 0; index < valueCount; index++)
             {
-                for (var index = 0; index < valueCount; index++)
+                if (filter(value[index]))
                 {
-                    if (filter(value[index]))
-                    {
-                        count++;
-                    }
+                    count++;
                 }
             }
 
@@ -392,7 +402,7 @@ namespace System.Linq
             }
         }
 
-        internal static IEnumerable<T> Except<T>(this SeparatedSyntaxList<T> first, List<T> second) where T : SyntaxNode
+        internal static IEnumerable<T> Except<T>(this SeparatedSyntaxList<T> first, IReadOnlyCollection<T> second) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var firstCount = first.Count;
@@ -425,12 +435,19 @@ namespace System.Linq
 
         internal static bool Exists<T>(this IReadOnlyList<T> value, Predicate<T> match)
         {
-            if (value is List<T> list)
+            if (value.Count <= 0)
             {
-                return list.Exists(match);
+                return false;
             }
 
-            return value.Any(new Func<T, bool>(match));
+            switch (value)
+            {
+                case List<T> list: return list.Exists(match);
+                case T[] array: return array.Exists(match);
+
+                default:
+                    return value.Any(new Func<T, bool>(match));
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -441,13 +458,16 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            for (var index = 0; index < sourceCount; index++)
+            if (sourceCount > 0)
             {
-                var value = source[index];
-
-                if (predicate(value))
+                for (var index = 0; index < sourceCount; index++)
                 {
-                    return value;
+                    var value = source[index];
+
+                    if (predicate(value))
+                    {
+                        return value;
+                    }
                 }
             }
 
@@ -459,13 +479,16 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            for (var index = 0; index < sourceCount; index++)
+            if (sourceCount > 0)
             {
-                var value = source[index];
-
-                if (predicate(value))
+                for (var index = 0; index < sourceCount; index++)
                 {
-                    return value;
+                    var value = source[index];
+
+                    if (predicate(value))
+                    {
+                        return value;
+                    }
                 }
             }
 
@@ -477,13 +500,16 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            for (var index = 0; index < sourceCount; index++)
+            if (sourceCount > 0)
             {
-                var value = source[index];
-
-                if (predicate(value))
+                for (var index = 0; index < sourceCount; index++)
                 {
-                    return value;
+                    var value = source[index];
+
+                    if (predicate(value))
+                    {
+                        return value;
+                    }
                 }
             }
 
@@ -567,10 +593,20 @@ namespace System.Linq
             return default;
         }
 
-        internal static int IndexOf<T>(this T[] source, T value) => source.Length != 0 ? Array.IndexOf(source, value) : -1;
+        internal static int IndexOf<T>(this T[] source, T value) => source.Length == 0 ? -1 : Array.IndexOf(source, value);
+
+        internal static int IndexOf<T>(this T[] source, Func<T, bool> predicate) => source.Length == 0 ? -1 : source.IndexOf(new Predicate<T>(predicate));
+
+        internal static int IndexOf<T>(this T[] source, Predicate<T> predicate) => source.Length == 0 ? -1 : Array.FindIndex(source, predicate);
 
         internal static int IndexOf<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
+            switch (source)
+            {
+                case T[] array: return array.IndexOf(predicate);
+                case List<T> list: return list.FindIndex(new Predicate<T>(predicate));
+            }
+
             var index = 0;
 
             foreach (var value in source)
@@ -586,17 +622,19 @@ namespace System.Linq
             return -1;
         }
 
-        internal static bool None(this SyntaxTriviaList source) => source.Any() is false;
+        internal static bool None(this SyntaxTriviaList source) => source.Count == 0;
 
-        internal static bool None<T>(this SyntaxList<T> source) where T : SyntaxNode => source.Any() is false;
+        internal static bool None<T>(this SyntaxList<T> source) where T : SyntaxNode => source.Count == 0;
 
-        internal static bool None<T>(this SeparatedSyntaxList<T> source) where T : SyntaxNode => source.Any() is false;
+        internal static bool None<T>(this SeparatedSyntaxList<T> source) where T : SyntaxNode => source.Count == 0;
 
-        internal static bool None(this SyntaxTokenList source) => source.Any() is false;
+        internal static bool None(this SyntaxTokenList source) => source.Count == 0;
 
         internal static bool None<T>(this IEnumerable<T> source) => source.Any() is false;
 
-        internal static bool None<T>(this ImmutableArray<T> source) => source.Any() is false;
+        internal static bool None<T>(this IReadOnlyCollection<T> source) => source.Count == 0;
+
+        internal static bool None<T>(this ImmutableArray<T> source) => source.Length == 0;
 
         internal static bool None<T>(this SyntaxList<T> source, SyntaxKind kind) where T : SyntaxNode => source.IndexOf(kind) == -1;
 
@@ -818,7 +856,7 @@ namespace System.Linq
 
         internal static IEnumerable<SyntaxToken> SelectMany<T>(this IEnumerable<T> source, Func<T, SyntaxTokenList> selector) where T : SyntaxNode
         {
-            // ReSharper disable once LoopCanBePartlyConvertedToQuery
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery, so there is no need for a Select clause
             foreach (var value in source)
             {
                 var list = selector(value);
@@ -839,7 +877,7 @@ namespace System.Linq
         internal static IEnumerable<TResult> SelectMany<T, TResult>(this IEnumerable<T> source, Func<T, SeparatedSyntaxList<TResult>> selector) where T : SyntaxNode
                                                                                                                                                 where TResult : SyntaxNode
         {
-            // ReSharper disable once LoopCanBePartlyConvertedToQuery
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery, so there is no need for a Select clause
             foreach (var value in source)
             {
                 var list = selector(value);
@@ -920,7 +958,7 @@ namespace System.Linq
         internal static IEnumerable<TResult> SelectMany<T, TResult>(this IEnumerable<T> source, Func<T, ImmutableArray<TResult>> selector) where T : ISymbol
                                                                                                                                            where TResult : ISymbol
         {
-            // ReSharper disable once LoopCanBePartlyConvertedToQuery
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery, so there is no need for a Select clause
             foreach (var value in source)
             {
                 var array = selector(value);
@@ -1064,17 +1102,189 @@ namespace System.Linq
 
         internal static T[] ToArray<T>(this IEnumerable<T> source, IComparer<T> comparer) => source.ToArray(_ => _, comparer);
 
-        internal static TSource[] ToArray<TKey, TSource>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer) => source.OrderBy(keySelector, comparer).ToArray();
+        internal static TKey[] ToArray<TKey, TSource>(this SeparatedSyntaxList<TSource> source, Func<TSource, TKey> keySelector) where TSource : SyntaxNode
+        {
+            var length = source.Count;
+
+            if (length > 0)
+            {
+                var result = new TKey[length];
+
+                for (var index = 0; index < length; index++)
+                {
+                    result[index] = keySelector(source[index]);
+                }
+
+                return result;
+            }
+
+            return Array.Empty<TKey>();
+        }
+
+        internal static TKey[] ToArray<TKey, TSource>(this IReadOnlyList<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            var length = source.Count;
+
+            if (length > 0)
+            {
+                var result = new TKey[length];
+
+                for (var index = 0; index < length; index++)
+                {
+                    result[index] = keySelector(source[index]);
+                }
+
+                return result;
+            }
+
+            return Array.Empty<TKey>();
+        }
+
+        internal static TKey[] ToArray<TKey, TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            var length = source.Count;
+
+            if (length > 0)
+            {
+                var result = new TKey[length];
+                var index = 0;
+
+                foreach (var item in source)
+                {
+                    result[index++] = keySelector(item);
+                }
+
+                return result;
+            }
+
+            return Array.Empty<TKey>();
+        }
+
+        internal static TKey[] ToArray<TKey, TSource>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            switch (source)
+            {
+                case TSource[] array: return ToArray(array, keySelector);
+                case ImmutableArray<TSource> array: return ToArray(array, keySelector);
+                case IReadOnlyList<TSource> list: return ToArray(list, keySelector);
+                case IReadOnlyCollection<TSource> collection: return ToArray(collection, keySelector);
+                default:
+                    return source.Select(keySelector).ToArray();
+            }
+        }
+
+        internal static TSource[] ToArray<TKey, TSource>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer) => source.OrderBy(keySelector, comparer).ToArray(); // ncrunch: no coverage
+
+#if NETSTANDARD2_0
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static HashSet<T> ToHashSet<T>(this IEnumerable<T> source) => new HashSet<T>(source);
+        internal static HashSet<T> ToHashSet<T>(this IEnumerable<T> source) => new HashSet<T>(source); // ncrunch: no coverage
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static HashSet<T> ToHashSet<T>(this IEnumerable<T> source, IEqualityComparer<T> comparer) => new HashSet<T>(source, comparer);
 
-        internal static HashSet<TResult> ToHashSet<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> selector) => source.Select(selector).ToHashSet();
+#endif
 
-        internal static HashSet<TResult> ToHashSet<TSource, TResult>(this ImmutableArray<TSource> source, Func<TSource, TResult> selector) => source.Select(selector).ToHashSet();
+//// ncrunch: no coverage start
+
+        internal static HashSet<TResult> ToHashSet<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> selector)
+        {
+            switch (source)
+            {
+                case TSource[] array: return array.ToHashSet(selector);
+                case List<TSource> list: return list.ToHashSet(selector);
+                case ImmutableArray<TSource> array: return array.ToHashSet(selector);
+            }
+
+            var result = new HashSet<TResult>();
+
+            foreach (var item in source)
+            {
+                result.Add(selector(item));
+            }
+
+            return result;
+        }
+
+        internal static HashSet<TResult> ToHashSet<TSource, TResult>(this List<TSource> source, Func<TSource, TResult> selector)
+        {
+            var result = new HashSet<TResult>();
+            var length = source.Count;
+
+            if (length > 0)
+            {
+                for (var index = 0; index < length; index++)
+                {
+                    result.Add(selector(source[index]));
+                }
+            }
+
+            return result;
+        }
+
+        internal static HashSet<TResult> ToHashSet<TSource, TResult>(this TSource[] source, Func<TSource, TResult> selector)
+        {
+            var result = new HashSet<TResult>();
+            var length = source.Length;
+
+            if (length > 0)
+            {
+                for (var index = 0; index < length; index++)
+                {
+                    result.Add(selector(source[index]));
+                }
+            }
+
+            return result;
+        }
+
+        internal static HashSet<TResult> ToHashSet<TSource, TResult>(this SyntaxList<TSource> source, Func<TSource, TResult> selector) where TSource : SyntaxNode
+        {
+            var result = new HashSet<TResult>();
+            var length = source.Count;
+
+            if (length > 0)
+            {
+                for (var index = 0; index < length; index++)
+                {
+                    result.Add(selector(source[index]));
+                }
+            }
+
+            return result;
+        }
+
+        internal static HashSet<TResult> ToHashSet<TSource, TResult>(this SeparatedSyntaxList<TSource> source, Func<TSource, TResult> selector) where TSource : SyntaxNode
+        {
+            var result = new HashSet<TResult>();
+            var length = source.Count;
+
+            if (length > 0)
+            {
+                for (var index = 0; index < length; index++)
+                {
+                    result.Add(selector(source[index]));
+                }
+            }
+
+            return result;
+        }
+
+        internal static HashSet<TResult> ToHashSet<TSource, TResult>(this ImmutableArray<TSource> source, Func<TSource, TResult> selector)
+        {
+            var result = new HashSet<TResult>();
+            var length = source.Length;
+
+            if (length > 0)
+            {
+                for (var index = 0; index < length; index++)
+                {
+                    result.Add(selector(source[index]));
+                }
+            }
+
+            return result;
+        }
 
         internal static List<SyntaxToken> ToList(this SyntaxTokenList source)
         {
@@ -1093,6 +1303,8 @@ namespace System.Linq
 
             return target;
         }
+
+//// ncrunch: no coverage end
 
         internal static List<T> ToList<T>(this SyntaxList<T> source) where T : SyntaxNode
         {
@@ -1134,7 +1346,7 @@ namespace System.Linq
         internal static SyntaxList<T> ToSyntaxList<T>(this T source) where T : SyntaxNode => new SyntaxList<T>(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static SyntaxList<T> ToSyntaxList<T>(this IEnumerable<T> source) where T : SyntaxNode => SyntaxFactory.List(source);
+        internal static SyntaxList<T> ToSyntaxList<T>(this IEnumerable<T> source) where T : SyntaxNode => SyntaxFactory.List(source); // ncrunch: no coverage
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SeparatedSyntaxList<T> ToSeparatedSyntaxList<T>(this T value) where T : SyntaxNode => new[] { value }.ToSeparatedSyntaxList();
@@ -1143,12 +1355,43 @@ namespace System.Linq
         internal static SeparatedSyntaxList<T> ToSeparatedSyntaxList<T>(this IEnumerable<T> source) where T : SyntaxNode => SyntaxFactory.SeparatedList(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static SyntaxTokenList ToTokenList(this IEnumerable<SyntaxToken> source) => SyntaxFactory.TokenList(source);
+        internal static SyntaxTokenList ToTokenList(this IEnumerable<SyntaxToken> source) => SyntaxFactory.TokenList(source); // ncrunch: no coverage
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool TrueForAll<T>(this T[] source, Predicate<T> match) => Array.TrueForAll(source, match);
 
+        internal static IEnumerable<TSource> WhereNotNull<TSource>(this IEnumerable<TSource> source) where TSource : class
+        {
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var item in source)
+            {
+                if (item != null)
+                {
+                    yield return item;
+                }
+            }
+        }
+
         internal static IEnumerable<SyntaxToken> Where(this SyntaxTokenList source, Func<SyntaxToken, bool> predicate)
+        {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
+            if (sourceCount > 0)
+            {
+                for (var index = 0; index < sourceCount; index++)
+                {
+                    var value = source[index];
+
+                    if (predicate(value))
+                    {
+                        yield return value;
+                    }
+                }
+            }
+        }
+
+        internal static IEnumerable<SyntaxTrivia> Where(this SyntaxTriviaList source, Func<SyntaxTrivia, bool> predicate)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;

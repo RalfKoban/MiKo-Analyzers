@@ -18,13 +18,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation) => symbol.IsTestClass()
                                                                                                                     ? Enumerable.Empty<Diagnostic>() // ignore tests
-                                                                                                                    : symbol.GetNamedMethods().Select(AnalyzeTryMethod).Where(_ => _ != null);
+                                                                                                                    : symbol.GetNamedMethods().Select(AnalyzeTryMethod).WhereNotNull();
 
         private static string GetPreferredParameterName(string methodName)
         {
             if (methodName.StartsWith("TryGet", StringComparison.Ordinal))
             {
-                var parameterName = methodName.Substring(6);
+                var parameterName = methodName.AsSpan(6);
 
                 if (parameterName.Length == 0)
                 {

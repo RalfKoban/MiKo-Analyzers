@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                  {
                                                                      if (rewritten.IsExceptionCommentFor<ArgumentNullException>())
                                                                      {
-                                                                         return GetFixedExceptionCommentForArgumentNullException(rewritten);
+                                                                         return GetFixedExceptionCommentForArgumentNullException(document, rewritten);
                                                                      }
 
                                                                      if (rewritten.IsExceptionCommentFor<ObjectDisposedException>())

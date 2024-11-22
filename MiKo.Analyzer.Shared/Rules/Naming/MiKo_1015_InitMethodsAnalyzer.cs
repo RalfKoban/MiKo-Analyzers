@@ -55,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 }
             }
 
-            return i >= methodName.Length ? Name : Name + methodName.Substring(i);
+            return i >= methodName.Length ? Name : Name.ConcatenatedWith(methodName.AsSpan(i));
         }
     }
 }

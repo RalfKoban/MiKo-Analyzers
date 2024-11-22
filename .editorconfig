@@ -1,2 +1,4 @@
 [*.{cs,vb}]
 dotnet_diagnostic.IDE0100.severity = none # Remove unnecessary equality operator (IDE0100)
+
+dotnet_remove_unnecessary_suppression_exclusions = all # Remove unnecessary suppression (IDE0079)

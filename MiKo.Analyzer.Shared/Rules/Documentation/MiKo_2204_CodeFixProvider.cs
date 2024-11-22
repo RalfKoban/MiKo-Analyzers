@@ -5,7 +5,6 @@ using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -80,7 +79,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return result;
         }
 
-        private static void AddXmlText(ICollection<SyntaxNode> result, ICollection<SyntaxToken> text)
+        private static void AddXmlText(List<SyntaxNode> result, List<SyntaxToken> text)
         {
             if (text.Any(_ => _.ValueText.IsNullOrWhiteSpace() is false))
             {
@@ -88,7 +87,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private static void AddList(ICollection<SyntaxNode> result, ICollection<SyntaxToken> listItems)
+        private static void AddList(List<SyntaxNode> result, List<SyntaxToken> listItems)
         {
             if (listItems.Count > 0)
             {
@@ -96,7 +95,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private static XmlElementSyntax GetAsList(IEnumerable<SyntaxToken> listItems)
+        private static XmlElementSyntax GetAsList(List<SyntaxToken> listItems)
         {
             var items = new List<XmlElementSyntax>();
 
@@ -117,7 +116,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             var list = XmlElement(Constants.XmlTag.List, items);
-            var listType = SyntaxFactory.XmlTextAttribute(Constants.XmlTag.Attribute.Type, Constants.XmlTag.ListType.Bullet.AsToken());
+            var listType = XmlAttribute(Constants.XmlTag.Attribute.Type, Constants.XmlTag.ListType.Bullet);
 
             return list.AddStartTagAttributes(listType).WithLeadingXmlComment();
         }

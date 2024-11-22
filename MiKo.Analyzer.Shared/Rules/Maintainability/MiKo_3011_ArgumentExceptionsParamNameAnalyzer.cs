@@ -16,24 +16,24 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3011";
 
-        private static readonly IReadOnlyDictionary<string, MappingType> Mappings = new Dictionary<string, MappingType>
-                                                                                        {
-                                                                                            // ArgumentException
-                                                                                            { nameof(ArgumentException), InspectArgumentException },
-                                                                                            { TypeNames.ArgumentException, InspectArgumentException },
+        private static readonly Dictionary<string, MappingType> Mappings = new Dictionary<string, MappingType>
+                                                                               {
+                                                                                   // ArgumentException
+                                                                                   { nameof(ArgumentException), InspectArgumentException },
+                                                                                   { TypeNames.ArgumentException, InspectArgumentException },
 
-                                                                                            // ArgumentNullException
-                                                                                            { nameof(ArgumentNullException), InspectArgumentNullException },
-                                                                                            { TypeNames.ArgumentNullException, InspectArgumentNullException },
+                                                                                   // ArgumentNullException
+                                                                                   { nameof(ArgumentNullException), InspectArgumentNullException },
+                                                                                   { TypeNames.ArgumentNullException, InspectArgumentNullException },
 
-                                                                                            // ArgumentOutOfRangeException
-                                                                                            { nameof(ArgumentOutOfRangeException), InspectArgumentOutOfRangeException },
-                                                                                            { TypeNames.ArgumentOutOfRangeException, InspectArgumentOutOfRangeException },
+                                                                                   // ArgumentOutOfRangeException
+                                                                                   { nameof(ArgumentOutOfRangeException), InspectArgumentOutOfRangeException },
+                                                                                   { TypeNames.ArgumentOutOfRangeException, InspectArgumentOutOfRangeException },
 
-                                                                                            // InvalidEnumArgumentException
-                                                                                            { nameof(InvalidEnumArgumentException), InspectInvalidEnumArgumentException },
-                                                                                            { TypeNames.InvalidEnumArgumentException, InspectInvalidEnumArgumentException },
-                                                                                        };
+                                                                                   // InvalidEnumArgumentException
+                                                                                   { nameof(InvalidEnumArgumentException), InspectInvalidEnumArgumentException },
+                                                                                   { TypeNames.InvalidEnumArgumentException, InspectInvalidEnumArgumentException },
+                                                                               };
 
         public MiKo_3011_ArgumentExceptionsParamNameAnalyzer() : base(Id)
         {

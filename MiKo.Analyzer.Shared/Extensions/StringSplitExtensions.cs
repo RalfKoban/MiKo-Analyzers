@@ -3,21 +3,14 @@ using System.Linq;
 
 // ncrunch: rdi off
 // ReSharper disable once CheckNamespace
+#pragma warning disable IDE0130
 namespace System
 {
     internal static class StringSplitExtensions
     {
-        public static IReadOnlyList<string> SplitBy(this string value, string[] findings, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
-        {
-            if (value.IsNullOrWhiteSpace())
-            {
-                return Array.Empty<string>();
-            }
+        public static SplitReadOnlySpanEnumerator SplitBy(this ReadOnlySpan<char> value, ReadOnlySpan<char> separatorChars) => SplitBy(value, separatorChars, StringSplitOptions.None);
 
-            return SplitBy(value.AsSpan(), findings, comparison);
-        }
-
-        public static IReadOnlyList<string> SplitBy(this ReadOnlySpan<char> value, string[] findings, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        public static IReadOnlyList<string> SplitBy(this ReadOnlySpan<char> value, string[] findings, StringComparison comparison = StringComparison.OrdinalIgnoreCase, StringSplitOptions options = StringSplitOptions.None)
         {
             if (value.IsNullOrWhiteSpace())
             {
@@ -26,15 +19,19 @@ namespace System
 
             var tuples = new List<(int, string)>();
 
-            foreach (var finding in findings)
+            var findingsLength = findings.Length;
+
+            for (var findingsIndex = 0; findingsIndex < findingsLength; findingsIndex++)
             {
+                var finding = findings[findingsIndex];
+
                 var indices = value.AllIndicesOf(finding, comparison);
 
                 tuples.Capacity += indices.Count;
 
-                // ReSharper disable once LoopCanBeConvertedToQuery
-                // ReSharper disable once ForCanBeConvertedToForeach
-                for (var i = 0; i < indices.Count; i++)
+                var indicesCount = indices.Count;
+
+                for (var i = 0; i < indicesCount; i++)
                 {
                     var index = indices[i];
 
@@ -52,7 +49,11 @@ namespace System
                 var lastPart = remainingString.Slice(index + finding.Length).ToString();
 
                 results.Add(lastPart);
-                results.Add(finding);
+
+                if (options != StringSplitOptions.RemoveEmptyEntries)
+                {
+                    results.Add(finding);
+                }
 
                 remainingString = remainingString.Slice(0, index);
             }
@@ -66,14 +67,18 @@ namespace System
             return results;
         }
 
-        public static SplitReadOnlySpanEnumerator SplitBy(this string value, char separatorChar, StringSplitOptions options) => SplitBy(value.AsSpan(), new[] { separatorChar }, options);
+        public static SplitReadOnlySpanEnumerator SplitBy(this ReadOnlySpan<char> value, ReadOnlySpan<char> separatorChars, StringSplitOptions options) => new SplitReadOnlySpanEnumerator(value, separatorChars, options);
 
-        public static SplitReadOnlySpanEnumerator SplitBy(this string value, char[] separatorChars, StringSplitOptions options) => SplitBy(value.AsSpan(), separatorChars, options);
+        public static SplitReadOnlySpanEnumerator SplitBy(this ReadOnlySpan<char> value, char[] separatorChars, StringSplitOptions options) => SplitBy(value, separatorChars.AsSpan(), options);
 
-        public static SplitReadOnlySpanEnumerator SplitBy(this ReadOnlySpan<char> value, char[] separatorChars, StringSplitOptions options) => new SplitReadOnlySpanEnumerator(value, separatorChars, options);
+        public static IReadOnlyList<string> SplitBy(this string value, string[] findings, StringComparison comparison = StringComparison.OrdinalIgnoreCase, StringSplitOptions options = StringSplitOptions.None)
+        {
+            if (value is null)
+            {
+                return Array.Empty<string>();
+            }
 
-        public static SplitReadOnlySpanEnumerator SplitBy(this string value, params char[] separatorChars) => SplitBy(value.AsSpan(), separatorChars, StringSplitOptions.None);
-
-        public static SplitReadOnlySpanEnumerator SplitBy(this ReadOnlySpan<char> value, params char[] separatorChars) => SplitBy(value, separatorChars, StringSplitOptions.None);
+            return SplitBy(value.AsSpan(), findings, comparison, options);
+        }
     }
 }

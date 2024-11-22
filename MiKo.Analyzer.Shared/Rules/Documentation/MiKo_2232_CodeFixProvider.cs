@@ -1,4 +1,5 @@
-﻿using System.Composition;
+﻿using System;
+using System.Composition;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -93,7 +94,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             void RemoveEmptyText(int i)
             {
-                if (content.Count > i && content[i] is XmlTextSyntax text && text.GetTextWithoutTrivia().IsEmpty)
+                if (content.Count > i && content[i] is XmlTextSyntax text && text.GetTextWithoutTrivia().IsNullOrEmpty())
                 {
                     content.RemoveAt(i);
                 }

@@ -9,6 +9,7 @@ using Microsoft.CodeAnalysis;
 
 // ncrunch: rdi off
 // ReSharper disable once CheckNamespace
+#pragma warning disable IDE0130
 namespace MiKoSolutions.Analyzers
 {
     internal static class CommentExtensions
@@ -64,7 +65,7 @@ namespace MiKoSolutions.Analyzers
         internal static XElement GetCommentElement(this string value)
         {
             // just to be sure that we always have a root element (malformed XMLs are reported as comment but without a root element)
-            var xml = string.Concat("<root>", value, "</root>");
+            var xml = "<root>".ConcatenatedWith(value.AsSpan().Trim(), "</root>");
 
             try
             {
@@ -84,16 +85,13 @@ namespace MiKoSolutions.Analyzers
             return GetCommentElements(element, xmlTag);
         }
 
-        internal static IEnumerable<XElement> GetCommentElements(this XElement value, string xmlTag)
-        {
-            return value is null
-                   ? Enumerable.Empty<XElement>() // happens in case of an invalid character
-                   : value.Descendants(xmlTag);
-        }
+        internal static IEnumerable<XElement> GetCommentElements(this XElement value, string xmlTag) => value is null
+                                                                                                        ? Enumerable.Empty<XElement>() // happens in case of an invalid character
+                                                                                                        : value.Descendants(xmlTag);
 
         internal static IEnumerable<XElement> GetExceptionCommentElements(string commentXml)
         {
-            var comment = new StringBuilder(commentXml).Without(Constants.Markers.Symbols).ToString();
+            var comment = commentXml.AsBuilder().Without(Constants.Markers.Symbols).ToString();
             var commentElements = GetCommentElements(comment, Constants.XmlTag.Exception);
 
             return commentElements;
@@ -104,14 +102,14 @@ namespace MiKoSolutions.Analyzers
             return FlattenComment(GetExceptionCommentElements(commentXml).Where(_ => _.Attribute(Constants.XmlTag.Attribute.Cref)?.Value == exceptionTypeFullName));
         }
 
-        internal static IEnumerable<string> GetExceptionComments(string commentXml) => Cleaned(GetExceptionCommentElements(commentXml)).Where(_ => _ != null);
+        internal static IEnumerable<string> GetExceptionComments(string commentXml) => Cleaned(GetExceptionCommentElements(commentXml)).WhereNotNull();
 
         internal static IEnumerable<string> GetExceptionsOfExceptionComments(string commentXml)
         {
-            return GetExceptionCommentElements(commentXml).Select(_ => _.Attribute(Constants.XmlTag.Attribute.Cref)?.Value).Where(_ => _ != null);
+            return GetExceptionCommentElements(commentXml).Select(_ => _.Attribute(Constants.XmlTag.Attribute.Cref)?.Value).WhereNotNull();
         }
 
-        internal static IReadOnlyCollection<string> Cleaned(IEnumerable<string> comments) => comments.Where(_ => _ != null).WithoutParaTags().ToHashSet(_ => _.Trim());
+        internal static IReadOnlyCollection<string> Cleaned(IEnumerable<string> comments) => comments.WhereNotNull().WithoutParaTags().ToHashSet(_ => _.Trim());
 
         internal static string Cleaned(XElement element)
         {
@@ -122,12 +120,14 @@ namespace MiKoSolutions.Analyzers
 
             // remove all code elements
             var codeElements = element.Descendants(Constants.XmlTag.Code).ToList();
-            codeElements.ForEach(_ => _.Remove());
+
+            if (codeElements.Count > 0)
+            {
+                codeElements.ForEach(_ => _.Remove());
+            }
 
             return Cleaned(element.Nodes().ConcatenatedWith());
         }
-
-        internal static IEnumerable<string> Cleaned(params XElement[] elements) => Cleaned((IEnumerable<XElement>)elements);
 
         private static IEnumerable<string> Cleaned(IEnumerable<XElement> elements)
         {

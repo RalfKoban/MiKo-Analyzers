@@ -33,22 +33,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return VerifyParameterComments(symbol, commentXml, comment);
         }
 
-        private static string GetDefaultStartingPhrase(string name) => ArticleProvider.GetIndefiniteArticleFor(name);
+        private static string GetDefaultStartingPhrase(string name) => ArticleProvider.GetArticleFor(name);
 
-        private static IEnumerable<string> CreatePhrases(IMethodSymbol method)
+        private static string[] CreatePhrases(IMethodSymbol method)
         {
             var type = method.Parameters[1].Type;
             var typeName = type.Name;
+            var typeString = type.ToString();
 
             var defaultStart = GetDefaultStartingPhrase(typeName);
 
+            var variantWithSpace = string.Concat(defaultStart, "<see cref=\"", typeString, "\" />" + DefaultEnding);
+            var variantWithoutSpace = string.Concat(defaultStart, "<see cref=\"", typeString, "\"/>" + DefaultEnding);
+
             return new[]
                        {
-                           $"{defaultStart}<see cref=\"{typeName}\" />{DefaultEnding}.", // just used for the proposal
-                           $"{defaultStart}<see cref=\"{type}\" />{DefaultEnding}.",
-                           $"{defaultStart}<see cref=\"{type}\" />{DefaultEnding}",
-                           $"{defaultStart}<see cref=\"{type}\"/>{DefaultEnding}.",
-                           $"{defaultStart}<see cref=\"{type}\"/>{DefaultEnding}",
+                           string.Concat(defaultStart, "<see cref=\"", typeName, "\" />" + DefaultEnding + "."), // just used for the proposal
+                           variantWithSpace + ".",
+                           variantWithSpace,
+                           variantWithoutSpace + ".",
+                           variantWithoutSpace,
                        };
         }
 

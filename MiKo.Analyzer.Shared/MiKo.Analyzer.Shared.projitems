@@ -28,11 +28,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\TimeSpanExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\WordsReadOnlySpanEnumerator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\WordsReadOnlySpanEnumeratorSelectDelegate.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Linguistics\AbbreviationDetector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Linguistics\ArticleProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Linguistics\AscendingStringComparer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Linguistics\FirstWordHandling.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Linguistics\Pluralizer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Linguistics\Verbalizer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pair.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Resources.Designer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Analyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\CodeDetector.cs" />
@@ -128,7 +130,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2210_DocumentationUsesInformationInsteadOfInfoAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2211_EnumerationMemberDocumentationHasNoRemarksAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2212_DocumentationContainsWasNotSuccessfulAnalyzer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2213_DocumentationContainsNtContradictionAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2213_DocumentationContainsNtContractionAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2214_DocumentationContainsEmptyLinesAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2215_SentencesShallBeShortAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2216_ParamInsteadOfParamRefAnalyzer.cs" />
@@ -147,6 +149,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2229_XmlFragmentAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2231_InheritdocGetHashCodeAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2232_EmptySummaryAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2233_EmptyXmlTagIsOnSameLineAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2300_MeaninglessCommentAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2301_TestArrangeActAssertCommentAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2302_CommentedOutCodeAnalyzer.cs" />
@@ -156,7 +159,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2306_CommentEndsWithPeriodAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2307_CommentContainsWasNotSuccessfulAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2308_CommentPlacedAfterCodeAnalyzer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2309_CommentContainsNtContradictionAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2309_CommentContainsNtContractionAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2310_CommentContainsIntentionallyAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2311_CommentIsSeparatorAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MultiLineCommentAnalyzer.cs" />
@@ -170,6 +173,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\DependencyPropertyRegisterMaintainabilityAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\DoNotUseSuppressNullableWarningAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\InvertNegativeIfAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\LogicalConditionsComparisonCanBeSimplifiedMaintainabilityAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MaintainabilityAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MethodReturnsNullAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3000_EmptyRegionAnalyzer.cs" />
@@ -231,7 +235,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3061_LoggerHasCategoryAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3062_ExceptionLogMessageEndsWithColonAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3063_NonExceptionLogMessageEndsWithDotAnalyzer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3064_LogMessagesContainsNtContradictionAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3064_LogMessagesContainsNtContractionAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3065_MicrosoftLoggingMessagesDoNotUseInterpolatedStringsAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3070_EnumerableMethodReturnsNullAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3071_TaskMethodReturnsNullAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3072_MethodReturnsListAnalyzer.cs" />
@@ -301,6 +306,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3219_PublicMembersAreNotVirtualAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3220_LogicalConditionsUsingTrueFalseCanBeSimplifiedAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3221_GetHashCodeAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3222_LogicalConditionsUsingStringComparisonCanBeSimplifiedAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3223_LogicalConditionsUsingReferenceComparisonCanBeSimplifiedAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3224_LogicalConditionsUsingValueComparisonCanBeSimplifiedAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3225_LogicalConditionsAreTheSameAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3301_ParenthesizedLambdaExpressionUsesExpressionBodyAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3302_SimpleLambdaExpressionIsUsedInsteadOfParenthesizedLambdaExpressionAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3401_NamespaceDepthAnalyzer.cs" />
@@ -531,6 +540,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6056_CollectionExpressionBracesAreOnSamePositionAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6057_TypeParameterConstraintClausesVerticallyAlignedAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6058_TypeParameterConstraintClauseIndentedBelowParameterListAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6059_BooleanOperatorsAreIndentedToLeftAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6060_SwitchCasesAreOnSameLineAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6061_SwitchExpressionArmsAreOnSameLineAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6070_ConsoleStatementSurroundedByBlankLinesAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6071_UsingLocalDeclarationStatementSurroundedByBlankLinesAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\SpacingAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\StatementSurroundedByBlankLinesAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\SurroundedByBlankLinesAnalyzer.cs" />

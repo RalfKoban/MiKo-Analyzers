@@ -55,8 +55,6 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_parenthesized_lambda_expression_body_that_has_2_parameters() => No_issue_is_reported_for(@"
-namespace Bla
-{
 using System;
 
 namespace Bla
@@ -74,13 +72,11 @@ namespace Bla
         {
         }
     }
-}}
+}
 ");
 
         [Test]
         public void No_issue_is_reported_for_parenthesized_lambda_block_that_has_1_parameter() => No_issue_is_reported_for(@"
-namespace Bla
-{
 using System;
 
 namespace Bla
@@ -98,13 +94,11 @@ namespace Bla
         {
         }
     }
-}}
+}
 ");
 
         [Test]
         public void No_issue_is_reported_for_parenthesized_lambda_expression_body_that_has_1_parameter_but_an_type_information() => No_issue_is_reported_for(@"
-namespace Bla
-{
 using System;
 
 namespace Bla
@@ -122,13 +116,11 @@ namespace Bla
         {
         }
     }
-}}
+}
 ");
 
         [Test]
         public void An_issue_is_reported_for_parenthesized_lambda_expression_body_that_has_1_parameter() => An_issue_is_reported_for(@"
-namespace Bla
-{
 using System;
 
 namespace Bla
@@ -146,15 +138,13 @@ namespace Bla
         {
         }
     }
-}}
+}
 ");
 
         [Test]
         public void Code_gets_fixed()
         {
             const string OriginalCode = @"
-namespace Bla
-{
 using System;
 
 namespace Bla
@@ -172,12 +162,10 @@ namespace Bla
         {
         }
     }
-}}
+}
 ";
 
             const string FixedCode = @"
-namespace Bla
-{
 using System;
 
 namespace Bla
@@ -195,7 +183,7 @@ namespace Bla
         {
         }
     }
-}}
+}
 ";
 
             VerifyCSharpFix(OriginalCode, FixedCode);

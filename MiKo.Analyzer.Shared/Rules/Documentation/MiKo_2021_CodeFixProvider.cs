@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Composition;
 using System.Linq;
 
@@ -11,10 +11,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2021_CodeFixProvider)), Shared]
     public sealed class MiKo_2021_CodeFixProvider : ParameterDocumentationCodeFixProvider
     {
-        private static readonly string[] ReplacementMapKeys = { "Reference to the ", "Reference to a ", "Reference to an " };
+        private static readonly Pair[] ReplacementMap =
+                                                        {
+                                                            new Pair("Reference to a "),
+                                                            new Pair("Reference to an "),
+                                                            new Pair("Reference to the "),
+                                                            new Pair("Determines the "),
+                                                            new Pair("Determines to ", "value to "), // TODO RKN: new Pair("Determines to ", "value to "),
+                                                        };
 
-        private static readonly KeyValuePair<string, string>[] ReplacementMap = ReplacementMapKeys.Select(_ => new KeyValuePair<string, string>(_, string.Empty))
-                                                                                                  .ToArray();
+        private static readonly string[] ReplacementMapKeys = ReplacementMap.Select(_ => _.Key).ToArray();
 
         public override string FixableDiagnosticId => "MiKo_2021";
 

@@ -13,10 +13,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2071";
 
-        private static readonly string[] BooleanPhrases = (from term1 in new[] { " indicating ", " indicates ", " indicate " }
-                                                           from term2 in new[] { "whether ", "if " }
-                                                           select string.Concat(term1, term2))
-                                                          .ToArray();
+        private static readonly string[] ContinuationPhrases = { "whether ", "if " };
+
+        private static readonly string[] BooleanPhrases = new[] { " indicating ", " indicates ", " indicate " }.SelectMany(term1 => ContinuationPhrases, string.Concat)
+                                                                                                               .ToArray();
 
         public MiKo_2071_EnumMethodSummaryAnalyzer() : base(Id, (SymbolKind)(-1))
         {

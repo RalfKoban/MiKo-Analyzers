@@ -47,10 +47,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var data = CreatePropertyData(parameter);
 
-            return new[] { Issue(parameter.Name, parameterComment.GetContentsLocation(), Phrase, new Dictionary<string, string> { { data.Key, data.Value } }) };
+            return new[] { Issue(parameter.Name, parameterComment.GetContentsLocation(), Phrase, new[] { data }) };
         }
 
-        private static KeyValuePair<string, string> CreatePropertyData(IParameterSymbol parameter)
+        private static Pair CreatePropertyData(IParameterSymbol parameter)
         {
             var defaultValue = parameter.GetSyntax().Default?.Value;
 
@@ -59,7 +59,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             switch (defaultValue?.Kind())
             {
                 case SyntaxKind.IdentifierName:
-                    return new KeyValuePair<string, string>(Constants.AnalyzerCodeFixSharedData.DefaultSeeCrefValue, defaultValue.ToString()); // seems like some field or property, so simply use that one
+                    return new Pair(Constants.AnalyzerCodeFixSharedData.DefaultSeeCrefValue, defaultValue.ToString()); // seems like some field or property, so simply use that one
 
                 case SyntaxKind.UnaryPlusExpression:
                 case SyntaxKind.UnaryMinusExpression:
@@ -70,7 +70,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 case SyntaxKind.AddressOfExpression:
                 case SyntaxKind.PointerIndirectionExpression:
                 case SyntaxKind.IndexExpression:
-                    return new KeyValuePair<string, string>(Constants.AnalyzerCodeFixSharedData.DefaultCodeValue, defaultValue.ToString()); // seems like some hardcoded value negative value
+                    return new Pair(Constants.AnalyzerCodeFixSharedData.DefaultCodeValue, defaultValue.ToString()); // seems like some hardcoded value negative value
 
                 case SyntaxKind.DefaultExpression:
                     return CreatePropertyDataForDefault(parameterType); // seems like we have some 'default(Xyz)' value
@@ -79,40 +79,40 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 case SyntaxKind.TrueLiteralExpression:
                 case SyntaxKind.FalseLiteralExpression:
                 case SyntaxKind.NullLiteralExpression:
-                    return new KeyValuePair<string, string>(Constants.AnalyzerCodeFixSharedData.DefaultSeeLangwordValue, defaultValue.ToString());
+                    return new Pair(Constants.AnalyzerCodeFixSharedData.DefaultSeeLangwordValue, defaultValue.ToString());
 
                 case SyntaxKind.NumericLiteralExpression:
                 case SyntaxKind.StringLiteralExpression:
-                    return new KeyValuePair<string, string>(Constants.AnalyzerCodeFixSharedData.DefaultCodeValue, defaultValue.ToString());
+                    return new Pair(Constants.AnalyzerCodeFixSharedData.DefaultCodeValue, defaultValue.ToString());
 
                 case SyntaxKind.DefaultLiteralExpression:
                     return CreatePropertyDataForDefault(parameterType);
 
                 case SyntaxKind.ArgListExpression:
                 case SyntaxKind.CharacterLiteralExpression:
-                    return new KeyValuePair<string, string>(Constants.AnalyzerCodeFixSharedData.DefaultSeeCrefValue, defaultValue.ToString());
+                    return new Pair(Constants.AnalyzerCodeFixSharedData.DefaultSeeCrefValue, defaultValue.ToString());
             }
 
             if (parameterType.IsEnum())
             {
-                return new KeyValuePair<string, string>(Constants.AnalyzerCodeFixSharedData.DefaultSeeCrefValue, defaultValue?.ToString());
+                return new Pair(Constants.AnalyzerCodeFixSharedData.DefaultSeeCrefValue, defaultValue?.ToString());
             }
 
-            return new KeyValuePair<string, string>(Constants.AnalyzerCodeFixSharedData.DefaultSeeCrefValue, parameterType.MinimalTypeName());
+            return new Pair(Constants.AnalyzerCodeFixSharedData.DefaultSeeCrefValue, parameterType.MinimalTypeName());
         }
 
-        private static KeyValuePair<string, string> CreatePropertyDataForDefault(ITypeSymbol parameterType)
+        private static Pair CreatePropertyDataForDefault(ITypeSymbol parameterType)
         {
             switch (parameterType.SpecialType)
             {
                 case SpecialType.System_Boolean:
-                    return new KeyValuePair<string, string>(Constants.AnalyzerCodeFixSharedData.DefaultSeeLangwordValue, "false");
+                    return new Pair(Constants.AnalyzerCodeFixSharedData.DefaultSeeLangwordValue, "false");
 
                 case SpecialType.System_Char:
-                    return new KeyValuePair<string, string>(Constants.AnalyzerCodeFixSharedData.DefaultCodeValue, @"'\0' (U+0000)");
+                    return new Pair(Constants.AnalyzerCodeFixSharedData.DefaultCodeValue, @"'\0' (U+0000)");
 
                 case SpecialType.System_DateTime:
-                    return new KeyValuePair<string, string>(Constants.AnalyzerCodeFixSharedData.DefaultSeeCrefValue, "DateTime.MinValue");
+                    return new Pair(Constants.AnalyzerCodeFixSharedData.DefaultSeeCrefValue, "DateTime.MinValue");
 
                 case SpecialType.System_SByte:
                 case SpecialType.System_Byte:
@@ -125,31 +125,42 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 case SpecialType.System_Decimal:
                 case SpecialType.System_Single:
                 case SpecialType.System_Double:
-                    return new KeyValuePair<string, string>(Constants.AnalyzerCodeFixSharedData.DefaultCodeValue, "0");
+                    return new Pair(Constants.AnalyzerCodeFixSharedData.DefaultCodeValue, "0");
 
                 default:
+                    return CreatePropertyDataForDefaultNonSpecial(parameterType);
+            }
+        }
+
+        private static Pair CreatePropertyDataForDefaultNonSpecial(ITypeSymbol parameterType)
+        {
+            switch (parameterType.TypeKind)
+            {
+                case TypeKind.Struct:
                 {
-                    var defaultValue = parameterType.Name;
+                    var defaultStructValue = parameterType.GetProperties().FirstOrDefault(_ => _.IsStatic)?.Name
+                                             ?? parameterType.GetFields().FirstOrDefault(_ => _.IsStatic)?.Name;
 
-                    if (parameterType.TypeKind == TypeKind.Struct)
-                    {
-                        return new KeyValuePair<string, string>(Constants.AnalyzerCodeFixSharedData.DefaultSeeCrefValue, defaultValue);
-                    }
+                    var defaultValue = defaultStructValue != null
+                                       ? parameterType.Name + "." + defaultStructValue
+                                       : parameterType.Name;
 
-                    if (parameterType.IsEnum())
-                    {
-                        var defaultFieldValue = parameterType.GetFields().FirstOrDefault(_ => _.ConstantValue?.ToString() == "0");
-
-                        if (defaultFieldValue != null)
-                        {
-                            defaultValue = defaultValue + "." + defaultFieldValue.Name;
-                        }
-
-                        return new KeyValuePair<string, string>(Constants.AnalyzerCodeFixSharedData.DefaultSeeCrefValue, defaultValue);
-                    }
-
-                    return new KeyValuePair<string, string>(Constants.AnalyzerCodeFixSharedData.DefaultSeeLangwordValue, "null");
+                    return new Pair(Constants.AnalyzerCodeFixSharedData.DefaultSeeCrefValue, defaultValue);
                 }
+
+                case TypeKind.Enum:
+                {
+                    var defaultFieldValue = parameterType.GetFields().FirstOrDefault(_ => _.ConstantValue is null || _.ConstantValue.ToString() == "0")?.Name;
+
+                    var defaultValue = defaultFieldValue != null
+                                       ? parameterType.Name + "." + defaultFieldValue
+                                       : parameterType.Name;
+
+                    return new Pair(Constants.AnalyzerCodeFixSharedData.DefaultSeeCrefValue, defaultValue);
+                }
+
+                default:
+                    return new Pair(Constants.AnalyzerCodeFixSharedData.DefaultSeeLangwordValue, "null");
             }
         }
     }
