@@ -215,8 +215,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 var text = textToken.ValueText;
 
-                if (text.IsNullOrWhiteSpace())
+                if (text.Length <= 2 && text.IsNullOrWhiteSpace())
                 {
+                    // nothing to inspect as the text is too short and consists of whitespaces only
                     continue;
                 }
 
