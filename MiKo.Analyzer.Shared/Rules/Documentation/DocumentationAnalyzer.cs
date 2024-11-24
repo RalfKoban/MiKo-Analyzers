@@ -53,7 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return GetAllLocations(textToken.ValueText, textToken.SyntaxTree, textToken.SpanStart, value, comparison, startOffset, endOffset);
         }
 
-        protected static IEnumerable<Location> GetAllLocations(SyntaxToken textToken, IEnumerable<string> values, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
+        protected static IEnumerable<Location> GetAllLocations(SyntaxToken textToken, IReadOnlyList<string> values, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
         {
             return GetAllLocations(textToken.ValueText, textToken.SyntaxTree, textToken.SpanStart, values, comparison, startOffset, endOffset);
         }
@@ -63,7 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return GetAllLocations(trivia.ToFullString(), trivia.SyntaxTree, trivia.SpanStart, value, comparison, startOffset, endOffset);
         }
 
-        protected static IEnumerable<Location> GetAllLocations(SyntaxTrivia trivia, IEnumerable<string> values, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
+        protected static IEnumerable<Location> GetAllLocations(SyntaxTrivia trivia, IReadOnlyList<string> values, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
         {
             return GetAllLocations(trivia.ToFullString(), trivia.SyntaxTree, trivia.SpanStart, values, comparison, startOffset, endOffset);
         }
@@ -363,22 +363,35 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static IEnumerable<Location> GetAllLocations(string text, SyntaxTree syntaxTree, int spanStart, string value, StringComparison comparison, int startOffset, int endOffset)
         {
-            if (text.Length <= 2 && text.IsNullOrWhiteSpace())
+            var textLength = text.Length;
+
+            if (textLength <= 2 && text.IsNullOrWhiteSpace())
             {
                 // nothing to inspect as the text is too short and consists of whitespaces only
                 yield break;
             }
 
-            if (text.Length < value.Length)
+            if (textLength < value.Length)
             {
                 // nothing to inspect as the text is too short
                 yield break;
             }
 
+            var allIndices = text.AllIndicesOf(value, comparison);
+            var count = allIndices.Count;
+
+            if (count <= 0)
+            {
+                // nothing to inspect
+                yield break;
+            }
+
             List<Location> alreadyReportedLocations = null;
 
-            foreach (var position in text.AllIndicesOf(value, comparison))
+            for (var index = 0; index < count; index++)
             {
+                var position = allIndices[index];
+
                 var location = CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
 
                 if (location is null)
@@ -405,26 +418,42 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private static IEnumerable<Location> GetAllLocations(string text, SyntaxTree syntaxTree, int spanStart, IEnumerable<string> values, StringComparison comparison, int startOffset, int endOffset)
+        private static IEnumerable<Location> GetAllLocations(string text, SyntaxTree syntaxTree, int spanStart, IReadOnlyList<string> values, StringComparison comparison, int startOffset, int endOffset)
         {
-            if (text.Length <= 2 && text.IsNullOrWhiteSpace())
+            var textLength = text.Length;
+
+            if (textLength <= 2 && text.IsNullOrWhiteSpace())
             {
                 // nothing to inspect as the text is too short and consists of whitespaces only
                 yield break;
             }
 
             List<Location> alreadyReportedLocations = null;
+            var valuesCount = values.Count;
 
-            foreach (var value in values)
+            for (var valueIndex = 0; valueIndex < valuesCount; valueIndex++)
             {
-                if (text.Length < value.Length)
+                var value = values[valueIndex];
+
+                if (textLength < value.Length)
                 {
                     // nothing to inspect as the text is too short
                     continue;
                 }
 
-                foreach (var position in text.AllIndicesOf(value, comparison))
+                var allIndices = text.AllIndicesOf(value, comparison);
+                var count = allIndices.Count;
+
+                if (count <= 0)
                 {
+                    // nothing to inspect
+                    continue;
+                }
+
+                for (var index = 0; index < count; index++)
+                {
+                    var position = allIndices[index];
+
                     var location = CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
 
                     if (location is null)
@@ -454,24 +483,36 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static IEnumerable<Location> GetAllLocations(string text, SyntaxTree syntaxTree, int spanStart, string value, Func<char, bool> nextCharValidationCallback, StringComparison comparison, int startOffset, int endOffset)
         {
-            if (text.Length <= 2 && text.IsNullOrWhiteSpace())
+            var textLength = text.Length;
+
+            if (textLength <= 2 && text.IsNullOrWhiteSpace())
             {
                 // nothing to inspect as the text is too short and consists of whitespaces only
                 yield break;
             }
 
-            if (text.Length < value.Length)
+            if (textLength < value.Length)
             {
                 // nothing to inspect as the text is too short
                 yield break;
             }
 
-            var lastPosition = text.Length - 1;
+            var allIndices = text.AllIndicesOf(value, comparison);
+            var count = allIndices.Count;
+
+            if (count <= 0)
+            {
+                // nothing to inspect
+                yield break;
+            }
+
+            var lastPosition = textLength - 1;
 
             List<Location> alreadyReportedLocations = null;
 
-            foreach (var position in text.AllIndicesOf(value, comparison))
+            for (var index = 0; index < count; index++)
             {
+                var position = allIndices[index];
                 var afterPosition = position + value.Length;
 
                 if (afterPosition <= lastPosition)
