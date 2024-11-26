@@ -31,10 +31,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private const string StartWithArticleLowerCaseThe = "the ";
         private const string StartWithParenthesis = "(";
 
-        private static readonly string[] StartPhraseParts = Constants.Comments.BooleanParameterStartingPhraseTemplate.FormatWith('|').Split('|');
+        private static readonly string[] StartPhraseParts = Constants.Comments.BooleanParameterStartingPhraseTemplate.FormatWith("|").Split('|');
         private static readonly string StartPhraseParts0 = StartPhraseParts[0];
         private static readonly string StartPhraseParts1 = StartPhraseParts[1];
-        private static readonly string[] EndPhraseParts = Constants.Comments.BooleanParameterEndingPhraseTemplate.FormatWith('|').Split('|');
+        private static readonly string[] EndPhraseParts = Constants.Comments.BooleanParameterEndingPhraseTemplate.FormatWith("|").Split('|');
         private static readonly string EndPhraseParts0 = EndPhraseParts[0];
         private static readonly string EndPhraseParts1 = EndPhraseParts[1];
 

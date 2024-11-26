@@ -54,11 +54,11 @@ namespace MiKoSolutions.Analyzers
 
         internal static readonly string[] GeneratedCSharpFileExtensions =
                                                                           {
+                                                                              ".Designer.cs",
                                                                               ".g.cs",
                                                                               ".g.i.cs",
-                                                                              ".generated.cs",
-                                                                              ".Designer.cs",
                                                                               ".feature.cs", // SpecFlow generated code
+                                                                              ".generated.cs",
                                                                           };
 
         internal static readonly string[] WellknownFileExtensions =

@@ -73,7 +73,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                 returnType = g.TypeArgumentList.Arguments[0];
                             }
 
-                            var parts = template.FormatWith('|').Split('|');
+                            var parts = template.FormatWith("|").Split('|');
 
                             var fixedComment = CommentStartingWith(preparedComment, parts[0], SeeCref(returnType), parts[1]);
 

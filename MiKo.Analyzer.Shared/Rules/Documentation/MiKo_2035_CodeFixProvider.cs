@@ -50,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly Lazy<MapData> MappedData = new Lazy<MapData>();
 
-        private static readonly string[] TaskParts = Constants.Comments.GenericTaskReturnTypeStartingPhraseTemplate.FormatWith("task", '|').Split('|');
+        private static readonly string[] TaskParts = Constants.Comments.GenericTaskReturnTypeStartingPhraseTemplate.FormatWith("task", "|").Split('|');
 
 #if !NCRUNCH // do not define a static ctor to speed up tests in NCrunch
         static MiKo_2035_CodeFixProvider() => LoadData(); // ensure that we have the object available

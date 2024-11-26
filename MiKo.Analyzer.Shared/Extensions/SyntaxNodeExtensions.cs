@@ -2370,7 +2370,7 @@ namespace MiKoSolutions.Analyzers
                 return value;
             }
 
-            var map = new Dictionary<SyntaxToken, SyntaxToken>();
+            var map = new Dictionary<SyntaxToken, SyntaxToken>(1);
 
             for (var index = 0; index < textTokensCount; index++)
             {
@@ -2400,6 +2400,11 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
+            if (map.Count == 0)
+            {
+                return value;
+            }
+
             return value.ReplaceTokens(map.Keys, (original, rewritten) => map[original]);
         }
 
@@ -2415,11 +2420,13 @@ namespace MiKoSolutions.Analyzers
                 return value;
             }
 
-            var map = new Dictionary<SyntaxToken, SyntaxToken>();
+            var phrasesLength = phrases.Length;
 
-            for (var index = 0; index < textTokensCount; index++)
+            var map = new Dictionary<SyntaxToken, SyntaxToken>(1);
+
+            for (var tokenIndex = 0; tokenIndex < textTokensCount; tokenIndex++)
             {
-                var token = textTokens[index];
+                var token = textTokens[tokenIndex];
 
                 if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
                 {
@@ -2432,8 +2439,10 @@ namespace MiKoSolutions.Analyzers
 
                 var result = text.AsBuilder();
 
-                foreach (var phrase in phrases)
+                for (var phraseIndex = 0; phraseIndex < phrasesLength; phraseIndex++)
                 {
+                    var phrase = phrases[phraseIndex];
+
                     if (text.Contains(phrase))
                     {
                         result.ReplaceWithCheck(phrase, replacement);
@@ -2446,6 +2455,11 @@ namespace MiKoSolutions.Analyzers
                 {
                     map[token] = token.WithText(result);
                 }
+            }
+
+            if (map.Count == 0)
+            {
+                return value;
             }
 
             return value.ReplaceTokens(map.Keys, (original, rewritten) => map[original]);
@@ -2463,7 +2477,7 @@ namespace MiKoSolutions.Analyzers
                 return value;
             }
 
-            var map = new Dictionary<SyntaxToken, SyntaxToken>();
+            var map = new Dictionary<SyntaxToken, SyntaxToken>(1);
 
             for (var i = 0; i < textTokensCount; i++)
             {
@@ -2484,6 +2498,11 @@ namespace MiKoSolutions.Analyzers
 
                     map[token] = token.WithText(result);
                 }
+            }
+
+            if (map.Count == 0)
+            {
+                return value;
             }
 
             return value.ReplaceTokens(map.Keys, (original, rewritten) => map[original]);
@@ -2817,7 +2836,7 @@ namespace MiKoSolutions.Analyzers
 
             if (leadingTrivia.Count == 0)
             {
-                return value.WithLeadingTrivia(SyntaxFactory.Whitespace(new string(' ', count)));
+                return value.WithLeadingTrivia(WhiteSpaces(count));
             }
 
             // re-construct leading comment with correct amount of spaces but keep comments
@@ -2826,13 +2845,15 @@ namespace MiKoSolutions.Analyzers
 
             var resetFinalTrivia = false;
 
-            for (var index = 0; index < finalTrivia.Length; index++)
+            var length = finalTrivia.Length;
+
+            for (var index = 0; index < length; index++)
             {
                 var trivia = finalTrivia[index];
 
                 if (trivia.IsWhiteSpace())
                 {
-                    finalTrivia[index] = SyntaxFactory.Whitespace(new string(' ', count));
+                    finalTrivia[index] = WhiteSpaces(count);
                 }
 
                 if (trivia.IsComment())
@@ -3574,10 +3595,6 @@ namespace MiKoSolutions.Analyzers
 
         internal static T WithTrailingNewLine<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed); // do not use an elastic one to enforce the line break
 
-        // internal static T WithTrailingXmlComment<T>(this T value, int spaces) where T : SyntaxNode => value.WithTrailingTrivia(
-        //                                                                                                                    SyntaxFactory.ElasticCarriageReturnLineFeed, // use elastic one to allow formatting to be done automatically
-        //                                                                                                                    SyntaxFactory.ElasticWhitespace(new string(' ', spaces)),
-        //                                                                                                                    XmlCommentExterior);
         internal static T WithTrailingXmlComment<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(XmlCommentStart);
 
         internal static SyntaxList<XmlNodeSyntax> WithTrailingXmlComment(this SyntaxList<XmlNodeSyntax> values) => values.Replace(values.Last(), values.Last().WithoutTrailingTrivia().WithTrailingXmlComment());
@@ -3890,7 +3907,7 @@ namespace MiKoSolutions.Analyzers
                         }
                     }
 
-                    finalTrivia[index1] = SyntaxFactory.Whitespace(new string(' ', spaces));
+                    finalTrivia[index1] = WhiteSpaces(spaces);
                 }
             }
 
@@ -3901,6 +3918,8 @@ namespace MiKoSolutions.Analyzers
 
         private static XmlTextSyntax XmlText(SyntaxTokenList textTokens) => SyntaxFactory.XmlText(textTokens);
 
-        private static XmlTextSyntax XmlText(IEnumerable<SyntaxToken> textTokens) => XmlText(textTokens.ToTokenList());
+        private static XmlTextSyntax XmlText(List<SyntaxToken> textTokens) => XmlText(textTokens.ToTokenList());
+
+        private static SyntaxTrivia WhiteSpaces(int count) => SyntaxFactory.Whitespace(new string(' ', count));
     }
 }

@@ -130,16 +130,18 @@ namespace MiKoSolutions.Analyzers.Rules
 
             foreach (var issue in issues)
             {
+                if (issue is null)
+                {
+                    continue;
+                }
+
                 if (context.CancellationToken.IsCancellationRequested)
                 {
                     // seems that we should cancel and not report further issues
                     return;
                 }
 
-                if (issue != null)
-                {
-                    context.ReportDiagnostic(issue);
-                }
+                context.ReportDiagnostic(issue);
             }
         }
 
@@ -166,16 +168,18 @@ namespace MiKoSolutions.Analyzers.Rules
 
             foreach (var issue in issues)
             {
+                if (issue is null)
+                {
+                    continue;
+                }
+
                 if (context.CancellationToken.IsCancellationRequested)
                 {
                     // seems that we should cancel and not report further issues
                     return;
                 }
 
-                if (issue != null)
-                {
-                    context.ReportDiagnostic(issue);
-                }
+                context.ReportDiagnostic(issue);
             }
         }
 
@@ -203,16 +207,18 @@ namespace MiKoSolutions.Analyzers.Rules
 
             foreach (var issue in issues)
             {
+                if (issue is null)
+                {
+                    continue;
+                }
+
                 if (context.CancellationToken.IsCancellationRequested)
                 {
                     // seems that we should cancel and not report further issues
                     return;
                 }
 
-                if (issue != null)
-                {
-                    context.ReportDiagnostic(issue);
-                }
+                context.ReportDiagnostic(issue);
             }
         }
 
@@ -232,8 +238,12 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected void InitializeCore(CompilationStartAnalysisContext context, params SymbolKind[] symbolKinds)
         {
-            foreach (var symbolKind in symbolKinds)
+            var length = symbolKinds.Length;
+
+            for (var index = 0; index < length; index++)
             {
+                var symbolKind = symbolKinds[index];
+
                 InitializeCore(context, symbolKind);
             }
         }
