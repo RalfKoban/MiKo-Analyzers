@@ -481,34 +481,37 @@ namespace MiKoSolutions.Analyzers
             var references = value.DeclaringSyntaxReferences;
             var length = references.Length;
 
-            for (var index = 0; index < length; index++)
+            if (length > 0)
             {
-                var reference = references[index];
-
-                if (reference.GetSyntax() is TSyntaxNode node)
+                for (var index = 0; index < length; index++)
                 {
-                    var location = node.GetLocation();
+                    var reference = references[index];
 
-                    var sourceTree = location.SourceTree;
-
-                    // "location.IsInSource" also checks SourceTree for null but ReSharper is not aware of it
-                    if (sourceTree is null)
+                    if (reference.GetSyntax() is TSyntaxNode node)
                     {
-                        continue;
-                    }
+                        var location = node.GetLocation();
 
-                    var filePath = sourceTree.FilePath;
+                        var sourceTree = location.SourceTree;
 
-                    // ignore non C# code (might be part of partial classes, e.g. for XAML)
-                    if (filePath.EndsWith(Constants.CSharpFileExtension, StringComparison.OrdinalIgnoreCase))
-                    {
-                        if (filePath.EndsWithAny(Constants.GeneratedCSharpFileExtensions, StringComparison.OrdinalIgnoreCase))
+                        // "location.IsInSource" also checks SourceTree for null but ReSharper is not aware of it
+                        if (sourceTree is null)
                         {
-                            // ignore generated code (might be part of partial classes)
                             continue;
                         }
 
-                        return node;
+                        var filePath = sourceTree.FilePath;
+
+                        // ignore non C# code (might be part of partial classes, e.g. for XAML)
+                        if (filePath.EndsWith(Constants.CSharpFileExtension, StringComparison.OrdinalIgnoreCase))
+                        {
+                            if (filePath.EndsWithAny(Constants.GeneratedCSharpFileExtensions, StringComparison.OrdinalIgnoreCase))
+                            {
+                                // ignore generated code (might be part of partial classes)
+                                continue;
+                            }
+
+                            return node;
+                        }
                     }
                 }
             }
@@ -520,17 +523,6 @@ namespace MiKoSolutions.Analyzers
         {
             switch (value)
             {
-                case IFieldSymbol field:
-                {
-                    // maybe it is an enum member
-                    if (field.ContainingType.IsEnum())
-                    {
-                        return GetSyntax<EnumMemberDeclarationSyntax>(field);
-                    }
-
-                    return GetSyntax<FieldDeclarationSyntax>(field);
-                }
-
                 case IEventSymbol @event:
                 {
                     var eventField = GetSyntax<EventFieldDeclarationSyntax>(@event);
@@ -541,6 +533,17 @@ namespace MiKoSolutions.Analyzers
                     }
 
                     return GetSyntax<EventDeclarationSyntax>(@event);
+                }
+
+                case IFieldSymbol field:
+                {
+                    // maybe it is an enum member
+                    if (field.ContainingType.IsEnum())
+                    {
+                        return GetSyntax<EnumMemberDeclarationSyntax>(field);
+                    }
+
+                    return GetSyntax<FieldDeclarationSyntax>(field);
                 }
 
                 case IParameterSymbol parameter:
@@ -566,9 +569,9 @@ namespace MiKoSolutions.Analyzers
         {
             switch (value)
             {
+                case IFieldSymbol field: return field.Type;
                 case IMethodSymbol method: return method.ReturnType;
                 case IPropertySymbol property: return property.Type;
-                case IFieldSymbol field: return field.Type;
                 default: return null;
             }
         }

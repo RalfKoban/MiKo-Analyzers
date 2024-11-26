@@ -118,13 +118,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (type?.Name == Constants.ILog.TypeName)
             {
                 var syntaxTree = argument.SyntaxTree;
+                var phrases = Constants.Comments.NotContractionPhrase;
+                var phrasesLength = phrases.Length;
 
                 foreach (var token in GetTextTokens(argument))
                 {
                     var text = token.Text; // use 'Text' and not 'ValueText' here because otherwise the indices do not match (as 'Text' still contains the " )
 
-                    foreach (var value in Constants.Comments.NotContractionPhrase)
+                    for (var i = 0; i < phrasesLength; i++)
                     {
+                        var value = phrases[i];
+
                         foreach (var index in text.AllIndicesOf(value))
                         {
                             var location = CreateLocation(value, syntaxTree, token.SpanStart, index);
