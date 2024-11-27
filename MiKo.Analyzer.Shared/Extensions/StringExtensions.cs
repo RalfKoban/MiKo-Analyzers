@@ -1026,9 +1026,6 @@ namespace System
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string FormatWith(this string format, char arg0) => string.Format(format, arg0.ToString());
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string FormatWith(this string format, object arg0) => string.Format(format, arg0);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1410,7 +1407,7 @@ namespace System
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsUpperCaseLetter(this char value) => value.IsLetter() && value.IsUpperCase();
+        public static bool IsUpperCaseLetter(this char value) => value.IsUpperCase() && value.IsLetter();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsWhiteSpace(this char value)
@@ -2060,106 +2057,111 @@ namespace System
 
                     int charA = *a;
                     int charB = *b;
-
-                    // uppercase both chars - notice that we need just one compare per char
-                    if ((uint)(charA - 'a') <= 'z' - 'a')
                     {
-                        charA -= DifferenceBetweenUpperAndLowerCaseAscii;
-                    }
+                        // uppercase both chars - notice that we need just one compare per char
+                        if ((uint)(charA - 'a') <= 'z' - 'a')
+                        {
+                            charA -= DifferenceBetweenUpperAndLowerCaseAscii;
+                        }
 
-                    if ((uint)(charB - 'a') <= 'z' - 'a')
-                    {
-                        charB -= DifferenceBetweenUpperAndLowerCaseAscii;
-                    }
+                        if ((uint)(charB - 'a') <= 'z' - 'a')
+                        {
+                            charB -= DifferenceBetweenUpperAndLowerCaseAscii;
+                        }
 
-                    if (charA != charB)
-                    {
-                        // they do not fit as characters do not match
-                        return false;
+                        if (charA != charB)
+                        {
+                            // they do not fit as characters do not match
+                            return false;
+                        }
                     }
 
                     var lastIndex = length - 1;
                     charA = *(a + lastIndex);
                     charB = *(b + lastIndex);
-
-                    // uppercase both chars - notice that we need just one compare per char
-                    if ((uint)(charA - 'a') <= 'z' - 'a')
                     {
-                        charA -= DifferenceBetweenUpperAndLowerCaseAscii;
-                    }
+                        // uppercase both chars - notice that we need just one compare per char
+                        if ((uint)(charA - 'a') <= 'z' - 'a')
+                        {
+                            charA -= DifferenceBetweenUpperAndLowerCaseAscii;
+                        }
 
-                    if ((uint)(charB - 'a') <= 'z' - 'a')
-                    {
-                        charB -= DifferenceBetweenUpperAndLowerCaseAscii;
-                    }
+                        if ((uint)(charB - 'a') <= 'z' - 'a')
+                        {
+                            charB -= DifferenceBetweenUpperAndLowerCaseAscii;
+                        }
 
-                    if (charA != charB)
-                    {
-                        // they do not fit as characters do not match
-                        return false;
+                        if (charA != charB)
+                        {
+                            // they do not fit as characters do not match
+                            return false;
+                        }
                     }
 
                     var middleIndex = length / 2;
                     charA = *(a + middleIndex);
                     charB = *(b + middleIndex);
-
-                    // uppercase both chars - notice that we need just one compare per char
-                    if ((uint)(charA - 'a') <= 'z' - 'a')
                     {
-                        charA -= DifferenceBetweenUpperAndLowerCaseAscii;
-                    }
+                        // uppercase both chars - notice that we need just one compare per char
+                        if ((uint)(charA - 'a') <= 'z' - 'a')
+                        {
+                            charA -= DifferenceBetweenUpperAndLowerCaseAscii;
+                        }
 
-                    if ((uint)(charB - 'a') <= 'z' - 'a')
-                    {
-                        charB -= DifferenceBetweenUpperAndLowerCaseAscii;
-                    }
+                        if ((uint)(charB - 'a') <= 'z' - 'a')
+                        {
+                            charB -= DifferenceBetweenUpperAndLowerCaseAscii;
+                        }
 
-                    if (charA != charB)
-                    {
-                        // they do not fit as characters do not match
-                        return false;
+                        if (charA != charB)
+                        {
+                            // they do not fit as characters do not match
+                            return false;
+                        }
                     }
 
                     var indexPart1 = length / 3;
                     charA = *(a + indexPart1);
                     charB = *(b + indexPart1);
-
-                    // uppercase both chars - notice that we need just one compare per char
-                    if ((uint)(charA - 'a') <= 'z' - 'a')
                     {
-                        charA -= DifferenceBetweenUpperAndLowerCaseAscii;
-                    }
+                        // uppercase both chars - notice that we need just one compare per char
+                        if ((uint)(charA - 'a') <= 'z' - 'a')
+                        {
+                            charA -= DifferenceBetweenUpperAndLowerCaseAscii;
+                        }
 
-                    if ((uint)(charB - 'a') <= 'z' - 'a')
-                    {
-                        charB -= DifferenceBetweenUpperAndLowerCaseAscii;
-                    }
+                        if ((uint)(charB - 'a') <= 'z' - 'a')
+                        {
+                            charB -= DifferenceBetweenUpperAndLowerCaseAscii;
+                        }
 
-                    if (charA != charB)
-                    {
-                        // they do not fit as characters do not match
-                        return false;
+                        if (charA != charB)
+                        {
+                            // they do not fit as characters do not match
+                            return false;
+                        }
                     }
 
                     var indexPart2 = 2 * indexPart1;
                     charA = *(a + indexPart2);
                     charB = *(b + indexPart2);
-
-                    // uppercase both chars - notice that we need just one compare per char
-                    if ((uint)(charA - 'a') <= 'z' - 'a')
                     {
-                        charA -= DifferenceBetweenUpperAndLowerCaseAscii;
-                    }
+                        // uppercase both chars - notice that we need just one compare per char
+                        if ((uint)(charA - 'a') <= 'z' - 'a')
+                        {
+                            charA -= DifferenceBetweenUpperAndLowerCaseAscii;
+                        }
 
-                    if ((uint)(charB - 'a') <= 'z' - 'a')
-                    {
-                        charB -= DifferenceBetweenUpperAndLowerCaseAscii;
-                    }
+                        if ((uint)(charB - 'a') <= 'z' - 'a')
+                        {
+                            charB -= DifferenceBetweenUpperAndLowerCaseAscii;
+                        }
 
-                    if (charA != charB)
-                    {
-                        // they do not fit as characters do not match
-                        return false;
+                        if (charA != charB)
+                        {
+                            // they do not fit as characters do not match
+                            return false;
+                        }
                     }
                 }
             }
