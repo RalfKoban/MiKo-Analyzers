@@ -247,7 +247,7 @@ namespace MiKoSolutions.Analyzers
                 // we have to add the spaces after the comment, so we have to determine the additional spaces to add
                 var additionalSpaces = count - value.GetPositionWithinStartLine();
 
-                var leadingTrivia = value.LeadingTrivia;
+                var leadingTrivia = value.LeadingTrivia.ToList();
                 var triviaCount = leadingTrivia.Count;
 
                 // first collect all indices of the comments, for later reference
@@ -263,12 +263,15 @@ namespace MiKoSolutions.Analyzers
                     }
                 }
 
+                // ensure proper size to avoid multiple resizes
+                leadingTrivia.Capacity += additionalSpaces * indices.Count;
+
                 // now update the comments, but adjust the offset to remember the already added spaces (trivia indices change due to that)
                 var offset = 0;
 
                 foreach (var index in indices)
                 {
-                    leadingTrivia = leadingTrivia.InsertRange(index + offset, Spaces(additionalSpaces));
+                    leadingTrivia.InsertRange(index + offset, Spaces(additionalSpaces));
 
                     offset += additionalSpaces;
                 }
