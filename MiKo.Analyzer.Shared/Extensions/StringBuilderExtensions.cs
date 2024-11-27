@@ -520,14 +520,14 @@ namespace System.Text
 
                     var length = difference + 1; // increased by 1 to have the complete difference investigated
 
-                    if (difference < QuickCompareRentLengthThreshold)
+                    if (difference >= QuickCompareRentLengthThreshold)
                     {
-                        // could be part in the replacement only if characters match
-                        return QuickCompareAtIndices(ref current, ref otherFirst, ref otherLast, ref length, ref lastIndex);
+                        // use rented arrays here (if we have larger differences, the start and end may be in different chunks)
+                        return QuickCompareAtIndicesWithRent(ref current, ref otherFirst, ref otherLast, ref length, ref lastIndex);
                     }
 
-                    // use rented arrays here (if we have larger differences, the start and end may be in different chunks)
-                    return QuickCompareAtIndicesWithRent(ref current, ref otherFirst, ref otherLast, ref length, ref lastIndex);
+                    // could be part in the replacement only if characters match
+                    return QuickCompareAtIndices(ref current, ref otherFirst, ref otherLast, ref length, ref lastIndex);
                 }
 
                 // can be part in the replacement as other value is smaller and could fit current value
