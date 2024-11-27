@@ -214,20 +214,11 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxToken WithLeadingEndOfLine(this SyntaxToken value) => value.WithLeadingTrivia(SyntaxFactory.CarriageReturnLineFeed); // do not use elastic one to prevent formatting it away again
 
-        internal static SyntaxToken WithLeadingSpace(this SyntaxToken value) => value.WithLeadingTrivia(SyntaxFactory.ElasticSpace); // use elastic one to allow formatting to be done automatically
-
-        internal static SyntaxToken WithAdditionalLeadingSpaces(this SyntaxToken value, int additionalSpaces)
-        {
-            var currentSpaces = value.GetPositionWithinStartLine();
-
-            return value.WithLeadingSpaces(currentSpaces + additionalSpaces);
-        }
-
         internal static SyntaxToken WithAdditionalLeadingTrivia(this SyntaxToken value, SyntaxTrivia trivia) => value.WithLeadingTrivia(value.LeadingTrivia.Add(trivia));
 
         internal static SyntaxToken WithAdditionalLeadingTrivia(this SyntaxToken value, SyntaxTriviaList trivia) => value.WithLeadingTrivia(value.LeadingTrivia.AddRange(trivia));
 
-        internal static SyntaxToken WithAdditionalLeadingTrivia(this SyntaxToken value, params SyntaxTrivia[] trivia) => value.WithLeadingTrivia(value.LeadingTrivia.AddRange(trivia));
+        internal static SyntaxToken WithAdditionalLeadingTrivia(this SyntaxToken value, IEnumerable<SyntaxTrivia> trivia) => value.WithLeadingTrivia(value.LeadingTrivia.AddRange(trivia));
 
         internal static SyntaxToken WithAdditionalLeadingTriviaFrom(this SyntaxToken value, SyntaxNode node)
         {
@@ -247,7 +238,54 @@ namespace MiKoSolutions.Analyzers
                    : value;
         }
 
-        internal static SyntaxToken WithLeadingSpaces(this SyntaxToken value, int count) => value.WithLeadingTrivia(Enumerable.Repeat(SyntaxFactory.Space, count)); // use non-elastic one to prevent formatting to be done automatically
+        internal static SyntaxToken WithLeadingSpace(this SyntaxToken value) => value.WithLeadingTrivia(SyntaxFactory.ElasticSpace); // use elastic one to allow formatting to be done automatically
+
+        internal static SyntaxToken WithLeadingSpaces(this SyntaxToken value, int count)
+        {
+            if (value.HasLeadingComment())
+            {
+                // we have to add the spaces after the comment, so we have to determine the additional spaces to add
+                var additionalSpaces = count - value.GetPositionWithinStartLine();
+
+                var leadingTrivia = value.LeadingTrivia;
+                var triviaCount = leadingTrivia.Count;
+
+                // first collect all indices of the comments, for later reference
+                var indices = new List<int>(1);
+
+                for (var index = 0; index < triviaCount; index++)
+                {
+                    var trivia = leadingTrivia[index];
+
+                    if (trivia.IsComment())
+                    {
+                        indices.Add(index);
+                    }
+                }
+
+                // now update the comments, but adjust the offset to remember the already added spaces (trivia indices change due to that)
+                var offset = 0;
+
+                foreach (var index in indices)
+                {
+                    leadingTrivia = leadingTrivia.InsertRange(index + offset, Spaces(additionalSpaces));
+
+                    offset += additionalSpaces;
+                }
+
+                return value.WithLeadingTrivia(leadingTrivia)
+                            .WithAdditionalLeadingTrivia(Spaces(additionalSpaces));
+            }
+
+            return value.WithLeadingTrivia(Spaces(count));
+        }
+
+        internal static SyntaxToken WithAdditionalLeadingSpaces(this SyntaxToken value, int additionalSpaces)
+        {
+            var currentSpaces = value.GetPositionWithinStartLine();
+
+            return value.WithLeadingSpaces(currentSpaces + additionalSpaces);
+        }
 
         internal static SyntaxToken WithLeadingXmlComment(this SyntaxToken value) => value.WithLeadingTrivia(SyntaxNodeExtensions.XmlCommentStart);
 
@@ -377,5 +415,7 @@ namespace MiKoSolutions.Analyzers
         internal static SyntaxToken WithTrailingSpace(this SyntaxToken value) => value.WithTrailingTrivia(SyntaxFactory.Space); // use non-elastic one to prevent formatting to be done automatically
 
         internal static SyntaxToken WithTrailingXmlComment(this SyntaxToken value) => value.WithTrailingTrivia(SyntaxNodeExtensions.XmlCommentStart);
+
+        private static IEnumerable<SyntaxTrivia> Spaces(int count) => Enumerable.Repeat(SyntaxFactory.Space, count); // use non-elastic one to prevent formatting to be done automatically
     }
 }
