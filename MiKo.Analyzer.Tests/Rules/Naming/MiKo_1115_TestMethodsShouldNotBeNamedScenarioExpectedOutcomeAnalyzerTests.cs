@@ -172,6 +172,52 @@ public class TestMe
                                                                                                             "class TestMe { [Test] public void " + originalName + "() { } }",
                                                                                                             "class TestMe { [Test] public void " + fixedName + "() { } }");
 
+        [Test]
+        public void Code_gets_fixed_for_2_slashes_if_method_name_starts_with_called_method()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public bool DoSomething() => false;
+}
+
+public class TestMeTests
+{
+    [Test]
+    public void DoSomething_SomeSituation_ReturnsTrue()
+    {
+        var objectUnderTest = new TestMe();
+
+        var result = objectUnderTest.DoSomething();
+
+        Assert.That(result, Is.True);
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public bool DoSomething() => false;
+}
+
+public class TestMeTests
+{
+    [Test]
+    public void DoSomething_returns_true_if_some_situation()
+    {
+        var objectUnderTest = new TestMe();
+
+        var result = objectUnderTest.DoSomething();
+
+        Assert.That(result, Is.True);
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_1115_TestMethodsShouldNotBeNamedScenarioExpectedOutcomeAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1115_TestMethodsShouldNotBeNamedScenarioExpectedOutcomeAnalyzer();

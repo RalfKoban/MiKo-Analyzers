@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using MiKoSolutions.Analyzers.Linguistics;
@@ -91,7 +92,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (methodName.Length > 10 && HasIssue(methodName))
             {
-                var betterName = FindBetterName(methodName);
+                var betterName = FindBetterName(methodName, symbol);
 
                 return new[] { Issue(symbol, CreateBetterNameProposal(betterName)) };
             }
@@ -130,16 +131,35 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return false;
         }
 
-        private static string FindBetterName(string symbolName)
+        private static string FindBetterName(string symbolName, IMethodSymbol symbol)
         {
             var name = symbolName.Replace("_Expect_", "_");
 
-            if (TryGetInOrder(name, out var nameInOrder))
+            var betterName = NamesFinder.FindBetterTestName(TryGetInOrder(name, out var nameInOrder) ? nameInOrder : name);
+
+            // let's see if the test name starts with any method/property/event/field name that shall be kept
+            var index = symbolName.IndexOf(Constants.Underscore);
+
+            if (index > 0)
             {
-                return NamesFinder.FindBetterTestName(nameInOrder);
+                var methodName = symbolName.Substring(0, index);
+
+                if (symbol.GetSyntax().DescendantNodes<IdentifierNameSyntax>().Any(_ => _.GetName() == methodName))
+                {
+                    var betterNamePrefix = NamesFinder.FindBetterTestName(methodName);
+
+                    if (betterName.StartsWith(betterNamePrefix, StringComparison.Ordinal))
+                    {
+                        var fixedBetterName = betterName.AsBuilder()
+                                                        .Remove(0, betterNamePrefix.Length)
+                                                        .Insert(0, methodName)
+                                                        .ToString();
+                        return fixedBetterName;
+                    }
+                }
             }
 
-            return NamesFinder.FindBetterTestName(name);
+            return betterName;
         }
 
         private static bool TryGetInOrder(string name, out string result)
