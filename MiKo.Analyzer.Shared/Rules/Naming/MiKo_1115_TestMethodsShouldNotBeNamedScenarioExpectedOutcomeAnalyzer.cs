@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using MiKoSolutions.Analyzers.Linguistics;
@@ -135,31 +134,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var name = symbolName.Replace("_Expect_", "_");
 
-            var betterName = NamesFinder.FindBetterTestName(TryGetInOrder(name, out var nameInOrder) ? nameInOrder : name);
+            var nameToImprove = TryGetInOrder(name, out var nameInOrder)
+                                ? nameInOrder
+                                : name;
 
-            // let's see if the test name starts with any method/property/event/field name that shall be kept
-            var index = symbolName.IndexOf(Constants.Underscore);
-
-            if (index > 0)
-            {
-                var methodName = symbolName.Substring(0, index);
-
-                if (symbol.GetSyntax().DescendantNodes<IdentifierNameSyntax>().Any(_ => _.GetName() == methodName))
-                {
-                    var betterNamePrefix = NamesFinder.FindBetterTestName(methodName);
-
-                    if (betterName.StartsWith(betterNamePrefix, StringComparison.Ordinal))
-                    {
-                        var fixedBetterName = betterName.AsBuilder()
-                                                        .Remove(0, betterNamePrefix.Length)
-                                                        .Insert(0, methodName)
-                                                        .ToString();
-                        return fixedBetterName;
-                    }
-                }
-            }
-
-            return betterName;
+            return NamesFinder.FindBetterTestName(nameToImprove, symbol);
         }
 
         private static bool TryGetInOrder(string name, out string result)
