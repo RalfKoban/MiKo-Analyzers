@@ -91,7 +91,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (methodName.Length > 10 && HasIssue(methodName))
             {
-                var betterName = FindBetterName(methodName);
+                var betterName = FindBetterName(methodName, symbol);
 
                 return new[] { Issue(symbol, CreateBetterNameProposal(betterName)) };
             }
@@ -130,16 +130,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return false;
         }
 
-        private static string FindBetterName(string symbolName)
+        private static string FindBetterName(string symbolName, IMethodSymbol symbol)
         {
             var name = symbolName.Replace("_Expect_", "_");
 
-            if (TryGetInOrder(name, out var nameInOrder))
-            {
-                return NamesFinder.FindBetterTestName(nameInOrder);
-            }
+            var nameToImprove = TryGetInOrder(name, out var nameInOrder)
+                                ? nameInOrder
+                                : name;
 
-            return NamesFinder.FindBetterTestName(name);
+            return NamesFinder.FindBetterTestName(nameToImprove, symbol);
         }
 
         private static bool TryGetInOrder(string name, out string result)

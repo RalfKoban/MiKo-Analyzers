@@ -24,9 +24,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
-            if (HasIssue(symbol.Name))
+            var symbolName = symbol.Name;
+
+            if (HasIssue(symbolName))
             {
-                var betterName = NamesFinder.FindBetterTestName(symbol.Name);
+                var betterName = NamesFinder.FindBetterTestName(symbolName, symbol);
 
                 return new[] { Issue(symbol, CreateBetterNameProposal(betterName)) };
             }

@@ -5,11 +5,85 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     public static class NamesFinder
     {
+        internal static string FindBetterTestName(string name, ISymbol symbol)
+        {
+            var betterName = FindBetterTestName(name);
+
+            // let's see if the test name starts with any method/property/event/field name that shall be kept
+            var symbolName = symbol.Name;
+
+            var index = symbolName.IndexOf(Constants.Underscore);
+
+            if (index > 0)
+            {
+                var methodName = symbolName.Substring(0, index);
+
+                if (symbol.GetSyntax().DescendantNodes<IdentifierNameSyntax>().Any(_ => _.GetName() == methodName))
+                {
+                    var betterNamePrefix = FindBetterTestName(methodName);
+
+                    if (betterName.StartsWith(betterNamePrefix, StringComparison.Ordinal))
+                    {
+                        var fixedBetterName = betterName.AsBuilder()
+                                                        .Remove(0, betterNamePrefix.Length)
+                                                        .Insert(0, methodName)
+                                                        .ToString();
+                        return fixedBetterName;
+                    }
+                }
+            }
+
+            return betterName;
+        }
+
+        internal static string FindDescribingWord(char c, string defaultValue = null)
+        {
+            switch (c)
+            {
+                case '[': return "OPENING_BRACKET";
+                case ']': return "CLOSING_BRACKET";
+                case '(': return "OPENING_PARENTHESIS";
+                case ')': return "CLOSING_PARENTHESIS";
+                case '}': return "OPENING_BRACE";
+                case '{': return "CLOSING_BRACE";
+                case '<': return "OPENING_CHEVRON";
+                case '>': return "CLOSING_CHEVRON";
+                case ' ': return "SPACE";
+                case '.': return "DOT";
+                case '?': return "QUESTION_MARK";
+                case '!': return "EXCLAMATION_MARK";
+                case ',': return "COMMA";
+                case ':': return "COLON";
+                case ';': return "SEMICOLON";
+                case '/': return "SLASH";
+                case '\\': return "BACKSLASH";
+                case Constants.Underscore: return "UNDERLINE";
+                case '+': return "PLUS";
+                case '-': return "MINUS";
+                case '*': return "ASTERIX";
+                case '=': return "EQUALS";
+                case '&': return "AMPERSAND";
+                case '%': return "PERCENT";
+                case '$': return "DOLLAR";
+                case '€': return "EURO";
+                case '§': return "PARAGRAPH";
+                case '~': return "TILDE";
+                case '#': return "HASH";
+                case '@': return "AT";
+                case '"': return "QUOTATION_MARK";
+                case '\'': return "APOSTROPHE";
+
+                default:
+                    return defaultValue;
+            }
+        }
+
         internal static IReadOnlyCollection<string> FindPropertyNames(IFieldSymbol symbol, string unwantedSuffix, string invocation)
         {
             // find properties
@@ -47,7 +121,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return propertyNames;
         }
 
-        internal static string FindBetterTestName(string symbolName)
+        private static string FindBetterTestName(string symbolName)
         {
             if (symbolName.Length < 3)
             {
@@ -120,48 +194,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                    .ToString();
 
             return result;
-        }
-
-        internal static string FindDescribingWord(char c, string defaultValue = null)
-        {
-            switch (c)
-            {
-                case '[': return "OPENING_BRACKET";
-                case ']': return "CLOSING_BRACKET";
-                case '(': return "OPENING_PARENTHESIS";
-                case ')': return "CLOSING_PARENTHESIS";
-                case '}': return "OPENING_BRACE";
-                case '{': return "CLOSING_BRACE";
-                case '<': return "OPENING_CHEVRON";
-                case '>': return "CLOSING_CHEVRON";
-                case ' ': return "SPACE";
-                case '.': return "DOT";
-                case '?': return "QUESTION_MARK";
-                case '!': return "EXCLAMATION_MARK";
-                case ',': return "COMMA";
-                case ':': return "COLON";
-                case ';': return "SEMICOLON";
-                case '/': return "SLASH";
-                case '\\': return "BACKSLASH";
-                case Constants.Underscore: return "UNDERLINE";
-                case '+': return "PLUS";
-                case '-': return "MINUS";
-                case '*': return "ASTERIX";
-                case '=': return "EQUALS";
-                case '&': return "AMPERSAND";
-                case '%': return "PERCENT";
-                case '$': return "DOLLAR";
-                case '€': return "EURO";
-                case '§': return "PARAGRAPH";
-                case '~': return "TILDE";
-                case '#': return "HASH";
-                case '@': return "AT";
-                case '"': return "QUOTATION_MARK";
-                case '\'': return "APOSTROPHE";
-
-                default:
-                    return defaultValue;
-            }
         }
 
         private static string GetRegisteredName(IFieldSymbol symbol, string invocation)
