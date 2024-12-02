@@ -343,17 +343,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 var strangeTexts = new[]
                                        {
-                                           "methods a", "methods instance", "methods new", "methods the", "factory class method", "method that are", "method which are",
+                                           "ethods a", "ethods instance", "ethods new", "ethods the", "actory class method", "ethod that are", "ethod which are",
                                            "es that is capable", "es which is capable", "es that is able", "es which is able",
                                            "ss that are capable", "ss which are capable", "ss that are able", "ss which are able",
                                            "y that are capable", "y which are capable", "y that are able", "y which are able",
                                            "rn that are capable", "rn which are capable", "rn that are able", "rn which are able",
                                            "ace that are capable", "ace which are capable", "ace that are able", "ace which are able",
                                            "ies that provides", "ies which provides",
-                                           "providing provid", "provides provid", "provide provid",
+                                           "roviding provid", "rovides provid", "rovide provid",
                                        };
 
-                results.RemoveWhere(_ => _.ContainsAny(strangeTexts));
+                results.RemoveWhere(_ => _.ContainsAny(strangeTexts, StringComparison.Ordinal));
 
                 return results.ToArray();
             }
@@ -485,10 +485,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                 }
 
-                var resultsArray = new string[results.Count];
-                results.CopyTo(resultsArray);
-
-                return resultsArray;
+                return results.ToArray();
             }
 
             private static HashSet<string> CreateAllPhrases()
@@ -638,31 +635,35 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             private static IEnumerable<string> CreateAllContinuations()
             {
                 var continuations = new[]
-                                        {
-                                            string.Empty,
-                                            "a ",
-                                            "a instance of a ",
-                                            //// "a instances of a ", // currently ignored as this contains typos which we did not see in the wild
-                                            "a new instance of a ",
-                                            //// "a new instances of a ", // currently ignored as this contains typos which we did not see in the wild
-                                            "an ",
-                                            "an instance of an ",
-                                            //// "an instances of an ", // currently ignored as this contains typos which we did not see in the wild
-                                            //// "an new instance of an ", // currently ignored as this contains typos which we did not see in the wild
-                                            //// "an new instances of an ", // currently ignored as this contains typos which we did not see in the wild
-                                            "instance of ",
-                                            "instances of ",
-                                            "new instance of ",
-                                            "new instances of ",
-                                            "the ",
-                                            "the instance of the ",
-                                            "the instances of the ",
-                                            "the new instance of the ",
-                                            "the new instances of the ",
-                                        };
+                                    {
+                                        string.Empty,
+                                        "a ",
+                                        "a instance of a ",
+                                        //// "a instances of a ", // currently ignored as this contains typos which we did not see in the wild
+                                        "a new instance of a ",
+                                        //// "a new instances of a ", // currently ignored as this contains typos which we did not see in the wild
+                                        "an ",
+                                        "an instance of an ",
+                                        //// "an instances of an ", // currently ignored as this contains typos which we did not see in the wild
+                                        //// "an new instance of an ", // currently ignored as this contains typos which we did not see in the wild
+                                        //// "an new instances of an ", // currently ignored as this contains typos which we did not see in the wild
+                                        "instance of ",
+                                        "instances of ",
+                                        "new instance of ",
+                                        "new instances of ",
+                                        "the ",
+                                        "the instance of the ",
+                                        "the instances of the ",
+                                        "the new instance of the ",
+                                        "the new instances of the ",
+                                    };
 
-                foreach (var continuation in continuations)
+                var continuationsLength = continuations.Length;
+
+                for (var index = 0; index < continuationsLength; index++)
                 {
+                    var continuation = continuations[index];
+
                     yield return " that can build " + continuation;
                     yield return " that build " + continuation;
                     yield return " that builds " + continuation;

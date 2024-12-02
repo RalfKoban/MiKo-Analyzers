@@ -1099,7 +1099,7 @@ namespace MiKoSolutions.Analyzers
                                                                                               "candidateUnderTest",
                                                                                           };
 
-            internal static readonly ISet<string> TypeUnderTestFieldNames = Markers.FieldPrefixes.SelectMany(_ => TypeUnderTestRawFieldNames, (prefix, name) => prefix + name).ToHashSet();
+            internal static readonly ISet<string> TypeUnderTestFieldNames = Markers.FieldPrefixes.SelectMany(_ => TypeUnderTestRawFieldNames, string.Concat).ToHashSet();
 
             internal static readonly ISet<string> TypeUnderTestPropertyNames = new HashSet<string>
                                                                                    {
@@ -1120,7 +1120,7 @@ namespace MiKoSolutions.Analyzers
                                                                                        "Testee",
                                                                                    };
 
-            internal static readonly ISet<string> TypeUnderTestMethodNames = new[] { "Create", "Get" }.SelectMany(_ => TypeUnderTestPropertyNames, (prefix, name) => prefix + name).ToHashSet();
+            internal static readonly ISet<string> TypeUnderTestMethodNames = new[] { "Create", "Get" }.SelectMany(_ => TypeUnderTestPropertyNames, string.Concat).ToHashSet();
 
             internal static readonly ISet<string> TypeUnderTestVariableNames = new HashSet<string>
                                                                                    {

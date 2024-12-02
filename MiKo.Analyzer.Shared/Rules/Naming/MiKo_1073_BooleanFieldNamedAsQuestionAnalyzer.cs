@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "are",
                                                        };
 
-        private static readonly string[] Prefixes = Constants.Markers.FieldPrefixes.SelectMany(_ => RawPrefixes, (prefix, name) => prefix + name).ToArray();
+        private static readonly string[] Prefixes = Constants.Markers.FieldPrefixes.SelectMany(_ => RawPrefixes, string.Concat).ToArray();
 
         private static readonly string[] AllowedPrefixes = Constants.Markers.FieldPrefixes.ToArray(_ => _ + "IsInDesign");
 
