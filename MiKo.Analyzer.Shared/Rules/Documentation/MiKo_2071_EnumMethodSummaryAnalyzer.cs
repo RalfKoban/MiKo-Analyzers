@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] ContinuationPhrases = { "whether ", "if " };
 
-        private static readonly string[] BooleanPhrases = new[] { " indicating ", " indicates ", " indicate " }.SelectMany(term1 => ContinuationPhrases, string.Concat)
+        private static readonly string[] BooleanPhrases = new[] { " indicating ", " indicates ", " indicate " }.SelectMany(_ => ContinuationPhrases, string.Concat)
                                                                                                                .ToArray();
 
         public MiKo_2071_EnumMethodSummaryAnalyzer() : base(Id, (SymbolKind)(-1))

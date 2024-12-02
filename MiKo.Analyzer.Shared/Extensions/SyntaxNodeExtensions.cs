@@ -2675,7 +2675,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static T WithAdditionalLeadingTrivia<T>(this T value, SyntaxTriviaList trivia) where T : SyntaxNode
         {
-            return value.WithAdditionalLeadingTrivia(trivia.ToArray());
+            return value.WithLeadingTrivia(value.GetLeadingTrivia().AddRange(trivia));
         }
 
         internal static T WithAdditionalLeadingTrivia<T>(this T value, SyntaxTrivia trivia) where T : SyntaxNode
@@ -2690,7 +2690,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static T WithAdditionalTrailingTrivia<T>(this T value, SyntaxTriviaList trivia) where T : SyntaxNode
         {
-            return value.WithAdditionalTrailingTrivia(trivia.ToArray());
+            return value.WithTrailingTrivia(value.GetTrailingTrivia().AddRange(trivia));
         }
 
         internal static T WithAdditionalTrailingTrivia<T>(this T value, SyntaxTrivia trivia) where T : SyntaxNode

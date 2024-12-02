@@ -1007,9 +1007,9 @@ public class TestMe
 
             results.AddRange(types);
             results.AddRange(phrases);
-            results.AddRange(from type in types from phrase in phrases select type + " " + phrase);
-            results.AddRange(phrases.Select(_ => _.ToLower(CultureInfo.CurrentCulture)));
-            results.AddRange(phrases.Select(_ => _.ToUpper(CultureInfo.CurrentCulture)));
+            results.AddRange(from type in types from phrase in phrases select string.Concat(type, " ", phrase));
+            results.AddRange(phrases.Select(_ => _.ToLowerInvariant()));
+            results.AddRange(phrases.Select(_ => _.ToUpperInvariant()));
 
             results.Add("<see cref=\"ITestMe\"/>");
             results.Add("<see cref=\"ITestMe\" />");

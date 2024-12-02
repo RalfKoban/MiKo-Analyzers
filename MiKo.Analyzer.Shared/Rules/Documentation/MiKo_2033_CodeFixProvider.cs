@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                          "with",
                                                      };
 
-        private static readonly string[] ReplacementMapKeys = CreateReplacementMapKeys().Distinct().ToArray();
+        private static readonly string[] ReplacementMapKeys = CreateReplacementMapKeys().ToHashSet().ToArray();
 
         private static readonly Pair[] ReplacementMap = ReplacementMapKeys.Select(_ => new Pair(_))
                                                                           .ToArray(_ => _.Key, AscendingStringComparer.Default);

@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                            "Parameter is not used",
                                                            "Parameter is ignored",
                                                        }
-                                                   .SelectMany(_ => SentenceEndings, (phrase, end) => phrase + end)
+                                                   .SelectMany(_ => SentenceEndings, string.Concat)
                                                    .ToArray();
 
         public MiKo_2026_StillUsedParamPhraseAnalyzer() : base(Id, (SymbolKind)(-1))

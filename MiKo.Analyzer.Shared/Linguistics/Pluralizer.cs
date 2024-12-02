@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                             "dictionary",
                                                         };
 
-        private static readonly string[] AllowedListNames = Constants.Markers.FieldPrefixes.SelectMany(_ => AllowedNames, (prefix, name) => prefix + name).ToArray();
+        private static readonly string[] AllowedListNames = Constants.Markers.FieldPrefixes.SelectMany(_ => AllowedNames, string.Concat).ToArray();
 
         private static readonly string[] PluralEndings = { "gers", "tchers", "pters", "stors", "ptors", "tures", "ties", "dges", "rges", "sages" };
         private static readonly string[] NonPluralEndings = { "ges", "nues", "curs", "opts", "nforms", "ses" };
