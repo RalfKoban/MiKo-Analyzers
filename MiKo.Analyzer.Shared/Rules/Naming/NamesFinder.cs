@@ -30,10 +30,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                     if (betterName.StartsWith(betterNamePrefix, StringComparison.Ordinal))
                     {
-                        var fixedBetterName = betterName.AsBuilder()
+                        var fixedBetterName = betterName.AsCachedBuilder()
                                                         .Remove(0, betterNamePrefix.Length)
                                                         .Insert(0, methodName)
-                                                        .ToString();
+                                                        .ToStringAndRelease();
                         return fixedBetterName;
                     }
                 }
@@ -128,7 +128,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return symbolName;
             }
 
-            var result = symbolName.AsBuilder()
+            var result = symbolName.AsCachedBuilder()
                                    .ReplaceWithCheck("MustBe", "Is")
                                    .ReplaceWithCheck("MustNotBe", "IsNot")
                                    .ReplaceWithCheck("ShallBe", "Is")
@@ -191,7 +191,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                    .ReplaceWithCheck("O_bject", "_object")
                                    .ReplaceWithCheck("R_eference", "_reference")
                                    .ReplaceWithCheck("T_ype", "_type")
-                                   .ToString();
+                                   .ToStringAndRelease();
 
             return result;
         }

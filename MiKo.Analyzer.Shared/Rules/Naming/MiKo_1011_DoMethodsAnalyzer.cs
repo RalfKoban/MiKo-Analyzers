@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static string FindBetterName(IMethodSymbol symbol)
         {
             var methodName = symbol.Name;
-            var escapedMethod = methodName.AsBuilder();
+            var escapedMethod = methodName.AsCachedBuilder();
 
             var found = ContainsPhrase(methodName);
 
@@ -67,7 +67,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 UnescapeValidPhrases(escapedMethod.Without(DoPhrase));
 
-                var proposal = escapedMethod.ToString();
+                var proposal = escapedMethod.ToStringAndRelease();
 
                 switch (proposal)
                 {
@@ -78,6 +78,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     default:
                         return proposal;
                 }
+            }
+            else
+            {
+                StringBuilderCache.Release(escapedMethod);
             }
 
             return null;

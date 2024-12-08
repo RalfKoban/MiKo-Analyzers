@@ -39,11 +39,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 
         private static string FindBetterName(IMethodSymbol method) => method.Name
-                                                                            .AsBuilder()
+                                                                            .AsCachedBuilder()
                                                                             .ReplaceWithCheck("Fire", "Raise")
                                                                             .ReplaceWithCheck("_fire", "_raise")
                                                                             .ReplaceWithCheck("Firing", "Raising")
                                                                             .ReplaceWithCheck("_firing", "_raising")
-                                                                            .ToString();
+                                                                            .ToStringAndRelease();
     }
 }

@@ -83,7 +83,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (WellKnownTypeNames.Contains(typeName) is false)
                 {
-                    var text = typeName.AsBuilder().AdjustFirstWord(FirstWordHandling.MakePlural).SeparateWords(' ', FirstWordHandling.MakeLowerCase).ToString();
+                    var text = typeName.AsCachedBuilder()
+                                       .AdjustFirstWord(FirstWordHandling.MakePlural)
+                                       .SeparateWords(' ', FirstWordHandling.MakeLowerCase)
+                                       .ToStringAndRelease();
 
                     if (text.Length > 0)
                     {
@@ -157,7 +160,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (text.StartsWithAny(MappedData.Value.ByteArrayContinueTexts))
                     {
-                        var newContinueText = continueText.ReplaceToken(token, token.WithText(text.AsBuilder().Without(MappedData.Value.ByteArrayContinueTexts)));
+                        var fixedText = text.AsCachedBuilder().Without(MappedData.Value.ByteArrayContinueTexts).ToStringAndRelease();
+                        var newContinueText = continueText.ReplaceToken(token, token.WithText(fixedText));
 
                         preparedComment = preparedComment.ReplaceNode(continueText, newContinueText);
                     }

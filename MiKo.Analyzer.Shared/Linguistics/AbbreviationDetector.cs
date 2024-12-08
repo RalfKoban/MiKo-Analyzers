@@ -379,7 +379,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         {
             if (findings.Length > 0)
             {
-                return ReplaceAllAbbreviations(value.AsBuilder(), findings).ToString();
+                return ReplaceAllAbbreviations(value.AsCachedBuilder(), findings).ToStringAndRelease();
             }
 
             return value;

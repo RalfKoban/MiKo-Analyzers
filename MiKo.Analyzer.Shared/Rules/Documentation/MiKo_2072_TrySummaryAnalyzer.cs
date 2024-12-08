@@ -38,10 +38,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             comparison = StringComparison.Ordinal;
 
-            var firstWord = valueText.AsBuilder()
-                                     .Without(Constants.Comments.AsynchronouslyStartingPhrase) // skip over async starting phrase
-                                     .ToString()
-                                     .FirstWord();
+            var builder = valueText.AsCachedBuilder()
+                                   .Without(Constants.Comments.AsynchronouslyStartingPhrase); // skip over async starting phrase
+
+            var firstWord = builder.FirstWord(out _);
+
+            StringBuilderCache.Release(builder);
 
             if (firstWord.EqualsAny(Constants.Comments.TryWords))
             {

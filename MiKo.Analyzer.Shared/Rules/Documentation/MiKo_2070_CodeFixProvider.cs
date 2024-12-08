@@ -209,13 +209,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         continue;
                     }
 
-                    var newText = valueText.AsBuilder().Without("otherwise").Without("false").ReplaceWithCheck("; , .", ".");
+                    var newText = valueText.AsCachedBuilder().Without("otherwise").Without("false").ReplaceWithCheck("; , .", ".");
 
                     if (valueText.Length > newText.Length)
                     {
                         newText = newText.ReplaceAllWithCheck(TrailingSentenceMarkers, ".");
 
-                        summary = summary.ReplaceToken(token, token.WithText(newText));
+                        summary = summary.ReplaceToken(token, token.WithText(newText.ToStringAndRelease()));
+                    }
+                    else
+                    {
+                        StringBuilderCache.Release(newText);
                     }
                 }
             }

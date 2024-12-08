@@ -1055,7 +1055,7 @@ public class TestMe
                                    from boolean in booleans
                                    select " " + boolean + vc into end // we have lots of loops, so cache data to avoid unnecessary calculations
                                    from start in starts
-                                   select new StringBuilder(start + end).Replace("   ", " ").Replace("  ", " ").Trim())
+                                   select StringBuilderCache.GetStringAndRelease(StringBuilderCache.Acquire(start.Length + end.Length).Append(start).Append(end).Replace("   ", " ").Replace("  ", " ").Trimmed()))
             {
                 results.Add(phrase.ToUpperCaseAt(0));
                 results.Add(phrase.ToLowerCaseAt(0));

@@ -185,7 +185,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static string HandleKnownParts(string name)
         {
-            var finalName = name.AsBuilder();
+            var finalName = name.AsCachedBuilder();
 
             foreach (var part in KnownParts)
             {
@@ -200,7 +200,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 }
             }
 
-            return finalName.ToString();
+            return finalName.ToStringAndRelease();
         }
 
         private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol) => HasIssue(symbol.Name)

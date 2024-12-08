@@ -53,16 +53,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             foreach (var node in comment.DescendantNodes<XmlElementSyntax>().Where(_ => XmlTags.Contains(_.GetName())))
             {
-                var commentBuilder = new StringBuilder();
+                var builder = StringBuilderCache.Acquire();
 
                 foreach (var syntax in node.DescendantNodes(_ => _.IsCode() is false, true).OfType<XmlTextSyntax>())
                 {
-                    commentBuilder.Append(' ').WithoutXmlCommentExterior(syntax).Append(' ');
+                    builder.Append(' ').WithoutXmlCommentExterior(syntax).Append(' ');
                 }
 
-                var specificComment = commentBuilder.ToString();
+                var specificComment = builder.Trim();
 
-                if (HasIssue(specificComment.AsSpan().Trim()))
+                StringBuilderCache.Release(builder);
+
+                if (HasIssue(specificComment.AsSpan()))
                 {
                     return true;
                 }

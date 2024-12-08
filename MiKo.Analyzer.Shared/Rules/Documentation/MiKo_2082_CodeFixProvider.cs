@@ -90,7 +90,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             firstWordHandling |= FirstWordHandling.MakePlural;
                         }
 
-                        var replacement = enumType.AsBuilder()
+                        var replacement = enumType.AsCachedBuilder()
                                                   .Without(TypesSuffixes)
                                                   .SeparateWords(' ', firstWordHandling)
                                                   .Without(KindEndings)
@@ -99,7 +99,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                   .Append(article)
                                                   .Append(unsuffixed)
                                                   .Append('.')
-                                                  .ToString();
+                                                  .ToStringAndRelease();
 
                         return Comment(comment, replacement);
                     }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text;
 
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -750,9 +749,17 @@ internal interface IFactory
             var s = verbs.SelectMany(_ => phrases, (verb, phrase) => phrase + " " + verb).ToList();
 
             var startingPhrases = s.Concat(s.Select(_ => _.Replace("actory", "actory class"))).ToList();
-            var constructionPhrases = startingPhrases.Select(_ => new StringBuilder(_).Replace("creation", "construction").Replace("creating", "constructing").Replace("create", "construct").ToString()).ToList();
-            var buildingPhrases = startingPhrases.Select(_ => new StringBuilder(_).Replace("creation", "building").Replace("creating", "building").Replace("create", "build").ToString()).ToList();
-            var providingPhrases = startingPhrases.Select(_ => new StringBuilder(_).Replace("creation", "providing").Replace("creating", "providing").Replace("create", "provide").ToString()).ToList();
+
+            var constructionPhrases = new List<string>(startingPhrases.Count);
+            var buildingPhrases = new List<string>(startingPhrases.Count);
+            var providingPhrases = new List<string>(startingPhrases.Count);
+
+            foreach (var phrase in startingPhrases)
+            {
+                constructionPhrases.Add(phrase.AsCachedBuilder().Replace("creation", "construction").Replace("creating", "constructing").Replace("create", "construct").ToStringAndRelease());
+                buildingPhrases.Add(phrase.AsCachedBuilder().Replace("creation", "building").Replace("creating", "building").Replace("create", "build").ToStringAndRelease());
+                providingPhrases.Add(phrase.AsCachedBuilder().Replace("creation", "providing").Replace("creating", "providing").Replace("create", "provide").ToStringAndRelease());
+            }
 
             var results = new HashSet<string>();
 

@@ -407,8 +407,6 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxToken WithText(this SyntaxToken value, string text) => SyntaxFactory.Token(value.LeadingTrivia, value.Kind(), text, text, value.TrailingTrivia);
 
-        internal static SyntaxToken WithText(this SyntaxToken value, StringBuilder text) => WithText(value, text.ToString());
-
         internal static SyntaxToken WithText(this SyntaxToken value, ReadOnlySpan<char> text) => value.WithText(text.ToString());
 
         internal static SyntaxToken WithTrailingEmptyLine(this SyntaxToken value) => value.WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed, SyntaxFactory.CarriageReturnLineFeed);

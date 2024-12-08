@@ -67,9 +67,14 @@ namespace MiKoSolutions.Analyzers
         {
             var members = value.GetMembers(methodName);
 
-            if (members.Length > 0)
+            var length = members.Length;
+
+            if (length > 0)
             {
-                return members.OfType<IMethodSymbol>().ToList();
+                var result = new List<IMethodSymbol>(length);
+                result.AddRange(members.OfType<IMethodSymbol>());
+
+                return result;
             }
 
             return Array.Empty<IMethodSymbol>();
@@ -95,10 +100,25 @@ namespace MiKoSolutions.Analyzers
 
             if (methods.Count > 0)
             {
-                return methods.Where(_ => _.CanBeReferencedByName);
+                return GetMethodSymbols(methods);
             }
 
-            return Enumerable.Empty<IMethodSymbol>();
+            return Array.Empty<IMethodSymbol>();
+
+            IEnumerable<IMethodSymbol> GetMethodSymbols(IReadOnlyList<IMethodSymbol> symbols)
+            {
+                var count = methods.Count;
+
+                for (var i = 0; i < count; i++)
+                {
+                    var symbol = symbols[i];
+
+                    if (symbol.CanBeReferencedByName)
+                    {
+                        yield return symbol;
+                    }
+                }
+            }
         }
 
         internal static IEnumerable<IPropertySymbol> GetProperties(this ITypeSymbol value)
@@ -306,21 +326,39 @@ namespace MiKoSolutions.Analyzers
                                                                                                                                            .Select(_ => _.ArgumentList.Arguments)
                                                                                                                                            .FirstOrDefault(_ => _.Count > 0);
 
-        internal static IReadOnlyList<TSymbol> GetMembers<TSymbol>(this ITypeSymbol value) where TSymbol : ISymbol => value.GetMembers()
-                                                                                                                           .OfType<TSymbol>()
-                                                                                                                           .Where(_ => _.IsImplicitlyDeclared is false)
-                                                                                                                           .ToList();
+        internal static IReadOnlyList<TSymbol> GetMembers<TSymbol>(this ITypeSymbol value) where TSymbol : ISymbol
+        {
+            var members = value.GetMembers();
+            var length = members.Length;
+
+            if (length == 0)
+            {
+                return Array.Empty<TSymbol>();
+            }
+
+            var results = new List<TSymbol>(length);
+
+            for (var index = 0; index < length; index++)
+            {
+                if (members[index] is TSymbol member && member.IsImplicitlyDeclared is false)
+                {
+                    results.Add(member);
+                }
+            }
+
+            return results;
+        }
 
         internal static IEnumerable<TSymbol> GetMembersIncludingInherited<TSymbol>(this ITypeSymbol value) where TSymbol : ISymbol
         {
             foreach (var type in value.IncludingAllBaseTypes())
             {
                 var members = type.GetMembers<TSymbol>();
-                var membersCount = members.Count;
+                var count = members.Count;
 
-                if (membersCount > 0)
+                if (count > 0)
                 {
-                    for (var index = 0; index < membersCount; index++)
+                    for (var index = 0; index < count; index++)
                     {
                         var member = members[index];
 
@@ -338,12 +376,16 @@ namespace MiKoSolutions.Analyzers
             foreach (var type in value.IncludingAllBaseTypes())
             {
                 var members = type.GetMembers(name);
+                var length = members.Length;
 
-                if (members.Length > 0)
+                if (length > 0)
                 {
-                    foreach (var member in members.OfType<TSymbol>().Where(_ => _.IsImplicitlyDeclared is false))
+                    for (var index = 0; index < length; index++)
                     {
-                        yield return member;
+                        if (members[index] is TSymbol member && member.IsImplicitlyDeclared is false)
+                        {
+                            yield return member;
+                        }
                     }
                 }
             }

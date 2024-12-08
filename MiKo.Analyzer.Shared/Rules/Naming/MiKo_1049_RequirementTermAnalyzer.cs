@@ -81,26 +81,26 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static string FindBetterName(string symbolName)
         {
-            var result = symbolName.AsBuilder();
+            var result = symbolName.AsCachedBuilder();
 
             foreach (var pair in ReplacementMap)
             {
                 result.ReplaceWithCheck(pair.Key, pair.Value);
             }
 
-            return result.ToString();
+            return result.ToStringAndRelease();
         }
 
         private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol)
         {
             var symbolName = symbol.Name
-                                   .AsBuilder()
+                                   .AsCachedBuilder()
                                    .ReplaceWithCheck("efresh", "#") // filter 'refresh' and 'Refresh'
                                    .ReplaceWithCheck("hallow", "#") // filter 'shallow' and 'Shallow'
                                    .ReplaceWithCheck("icenseNeed", "#") // filter 'licenseNeed' and 'LicenseNeed'
                                    .ReplaceWithCheck("eeded", "#") // filter 'needed' and 'Needed'
                                    .ReplaceWithCheck("eeds", "#") // filter 'needs' and 'Needs'
-                                   .ToString();
+                                   .ToStringAndRelease();
 
             return Constants.Markers.Requirements
                             .Where(_ => symbolName.Contains(_, StringComparison.OrdinalIgnoreCase))

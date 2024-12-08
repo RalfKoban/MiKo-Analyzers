@@ -998,7 +998,7 @@ namespace System.Linq
             return result;
         }
 
-        internal static IEnumerable<T> Skip<T>(this SeparatedSyntaxList<T> source, int count) where T : SyntaxNode
+        internal static T[] Skip<T>(this SeparatedSyntaxList<T> source, int count) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
@@ -1007,7 +1007,7 @@ namespace System.Linq
 
             if (difference <= 0)
             {
-                return Enumerable.Empty<T>();
+                return Array.Empty<T>();
             }
 
             var result = new T[difference];
@@ -1020,7 +1020,7 @@ namespace System.Linq
             return result;
         }
 
-        internal static IEnumerable<SyntaxToken> Skip(this SyntaxTokenList source, int count)
+        internal static SyntaxToken[] Skip(this SyntaxTokenList source, int count)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
@@ -1029,7 +1029,7 @@ namespace System.Linq
 
             if (difference <= 0)
             {
-                return Enumerable.Empty<SyntaxToken>();
+                return Array.Empty<SyntaxToken>();
             }
 
             var result = new SyntaxToken[difference];
@@ -1055,6 +1055,8 @@ namespace System.Linq
                 {
                     target[index] = source[index];
                 }
+
+                return target;
             }
 
             return Array.Empty<SyntaxToken>();

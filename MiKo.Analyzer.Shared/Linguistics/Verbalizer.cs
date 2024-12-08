@@ -367,13 +367,13 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     return word + "ing";
                 }
 
-                var gerundVerb = word.AsBuilder()
+                var gerundVerb = word.AsCachedBuilder()
                                      .Append("ing")
                                      .ReplaceWithCheck("ping", "pping")
                                      .ReplaceWithCheck("eing", "ing")
                                      .ReplaceWithCheck("uring", "urring")
                                      .ReplaceWithCheck("uting", "utting")
-                                     .ToString();
+                                     .ToStringAndRelease();
 
                 return gerundVerb;
             }
