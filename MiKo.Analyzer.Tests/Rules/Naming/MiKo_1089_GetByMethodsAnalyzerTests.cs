@@ -23,6 +23,41 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_Get_only_method() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void Get()
+    {
+    }
+");
+
+        [Test]
+        public void No_issue_is_reported_for_non_repository_method() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void GetSomething()
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_extension_method() => No_issue_is_reported_for(@"
+using System;
+
+public static class TestMeExtensions
+{
+    public static void GetSomething(this object o)
+    {
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_incorrectly_named_method_test_method() => No_issue_is_reported_for(@"
 using System;
 
@@ -57,7 +92,7 @@ public class TestMeRepository
             const string Template = @"
 using System;
 
-public class TestMe
+public class TestMeRepository
 {
     public void ###()
     {
