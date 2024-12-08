@@ -51,26 +51,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (names.Count > 0)
             {
-                foreach (var node in comment.DescendantNodes(_ => true, true))
+                foreach (var node in comment.AllDescendantNodes())
                 {
-                    switch (node)
+                    if (node.IsXml())
                     {
-                        case XmlElementSyntax _:
-                        case XmlEmptyElementSyntax _:
+                        var tag = node.GetXmlTagName();
+
+                        if (Tags.Contains(tag))
                         {
-                            var tag = node.GetXmlTagName();
+                            var name = node.GetReferencedName();
 
-                            if (Tags.Contains(tag))
+                            if (names.Contains(name))
                             {
-                                var name = node.GetReferencedName();
-
-                                if (names.Contains(name))
-                                {
-                                    yield return Issue(node);
-                                }
+                                yield return Issue(node);
                             }
-
-                            break;
                         }
                     }
                 }

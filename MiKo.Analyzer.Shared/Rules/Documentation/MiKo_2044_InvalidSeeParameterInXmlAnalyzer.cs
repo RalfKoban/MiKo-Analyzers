@@ -2,7 +2,6 @@
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -30,31 +29,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (names.Count > 0)
             {
-                foreach (var node in comment.DescendantNodes(_ => true, true))
+                foreach (var node in comment.AllDescendantNodes())
                 {
-                    switch (node.Kind())
+                    if (node.IsXml())
                     {
-                        case SyntaxKind.XmlElement:
-                        case SyntaxKind.XmlEmptyElement:
+                        var tag = node.GetXmlTagName();
+
+                        if (Tags.Contains(tag))
                         {
-                            var tag = node.GetXmlTagName();
+                            var cref = node.GetCref();
 
-                            if (Tags.Contains(tag))
+                            if (cref != null)
                             {
-                                var cref = node.GetCref();
+                                var name = cref.GetCrefType().GetName();
 
-                                if (cref != null)
+                                if (names.Contains(name))
                                 {
-                                    var name = cref.GetCrefType().GetName();
-
-                                    if (names.Contains(name))
-                                    {
-                                        yield return Issue(symbol.Name, node, node.GetText());
-                                    }
+                                    yield return Issue(symbol.Name, node, node.GetText());
                                 }
                             }
-
-                            break;
                         }
                     }
                 }
