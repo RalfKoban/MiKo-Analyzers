@@ -316,7 +316,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     return proposedName.WithoutSuffix("on").ConcatenatedWith('a');
                 }
 
-                if (proposedName.EndsWith("child", comparison))
+                if (proposedName.EndsWith("hild", comparison))
                 {
                     return proposedName.ConcatenatedWith("ren");
                 }
