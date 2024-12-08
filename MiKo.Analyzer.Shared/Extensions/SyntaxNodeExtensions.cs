@@ -1038,23 +1038,11 @@ namespace MiKoSolutions.Analyzers
 
                 if (token.HasStructuredTrivia)
                 {
-                    var leadingTrivia = token.LeadingTrivia;
-                    var count = leadingTrivia.Count;
-
-                    for (var index = 0; index < count; index++)
-                    {
-                        var trivia = leadingTrivia[index];
-
-                        if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
-                        {
-                            if (trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
-                            {
-                                yield return syntax;
-                            }
-                        }
-                    }
+                    return GetDocumentationCommentTriviaSyntax(token);
                 }
             }
+
+            return Array.Empty<DocumentationCommentTriviaSyntax>();
         }
 
         internal static string GetTextTrimmed(this XmlElementSyntax value)
@@ -3936,6 +3924,25 @@ namespace MiKoSolutions.Analyzers
             }
 
             return finalTrivia;
+        }
+
+        private static IEnumerable<DocumentationCommentTriviaSyntax> GetDocumentationCommentTriviaSyntax(SyntaxToken value)
+        {
+            var leadingTrivia = value.LeadingTrivia;
+            var count = leadingTrivia.Count;
+
+            for (var index = 0; index < count; index++)
+            {
+                var trivia = leadingTrivia[index];
+
+                if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
+                {
+                    if (trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
+                    {
+                        yield return syntax;
+                    }
+                }
+            }
         }
 
         private static XmlTextSyntax XmlText(string text) => SyntaxFactory.XmlText(text);

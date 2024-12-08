@@ -45,10 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return CommentHasIssue(comment, semanticModel);
         }
 
-        protected virtual IEnumerable<Diagnostic> CollectIssues(string name, SyntaxTrivia trivia)
-        {
-            yield return Issue(name, trivia);
-        }
+        protected virtual IEnumerable<Diagnostic> CollectIssues(string name, SyntaxTrivia trivia) => new[] { Issue(name, trivia) };
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => true;
 
