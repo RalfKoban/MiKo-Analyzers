@@ -65,6 +65,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("access", ExpectedResult = "accesses")]
         [TestCase("accesses", ExpectedResult = "accesses")]
         [TestCase("aircraft", ExpectedResult = "aircraft")]
+        [TestCase("Child", ExpectedResult = "Children")]
         [TestCase("Children", ExpectedResult = "Children")]
         [TestCase("Data", ExpectedResult = "Data")]
         [TestCase("Indices", ExpectedResult = "Indices")]
