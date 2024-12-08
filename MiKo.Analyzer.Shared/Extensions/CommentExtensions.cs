@@ -8,16 +8,13 @@ using System.Xml.Linq;
 using Microsoft.CodeAnalysis;
 
 // ncrunch: rdi off
+// ncrunch: no coverage start
 // ReSharper disable once CheckNamespace
 #pragma warning disable IDE0130
 namespace MiKoSolutions.Analyzers
 {
     internal static class CommentExtensions
     {
-        private const string SingleWhitespaceString = " ";
-
-        private static readonly string[] MultiWhitespaceStrings = { "    ", "   ", "  " };
-
         internal static string GetComment(this ISymbol value)
         {
             if (value is IParameterSymbol p)
@@ -91,7 +88,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<XElement> GetExceptionCommentElements(string commentXml)
         {
-            var comment = commentXml.AsBuilder().Without(Constants.Markers.Symbols).ToString();
+            var comment = commentXml.AsCachedBuilder().Without(Constants.Markers.Symbols).ToStringAndRelease();
             var commentElements = GetCommentElements(comment, Constants.XmlTag.Exception);
 
             return commentElements;
@@ -109,7 +106,20 @@ namespace MiKoSolutions.Analyzers
             return GetExceptionCommentElements(commentXml).Select(_ => _.Attribute(Constants.XmlTag.Attribute.Cref)?.Value).WhereNotNull();
         }
 
-        internal static IReadOnlyCollection<string> Cleaned(IEnumerable<string> comments) => comments.WhereNotNull().WithoutParaTags().ToHashSet(_ => _.Trim());
+        internal static IReadOnlyCollection<string> Cleaned(IEnumerable<string> comments)
+        {
+            var cleanedComments = comments.WhereNotNull().ToList();
+
+            switch (cleanedComments.Count)
+            {
+                case 0: return Array.Empty<string>();
+                case 1: return new[] { TrimComment(cleanedComments[0]) };
+                default:
+                    return cleanedComments.ToHashSet(TrimComment);
+            }
+
+            string TrimComment(string comment) => comment.AsCachedBuilder().WithoutParaTags().Trimmed().ToStringAndRelease();
+        }
 
         internal static string Cleaned(XElement element)
         {
@@ -126,7 +136,7 @@ namespace MiKoSolutions.Analyzers
                 codeElements.ForEach(_ => _.Remove());
             }
 
-            return Cleaned(element.Nodes().ConcatenatedWith());
+            return Cleaned(element.Nodes());
         }
 
         private static IEnumerable<string> Cleaned(IEnumerable<XElement> elements)
@@ -137,24 +147,38 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        private static string Cleaned(StringBuilder builder)
+        private static string Cleaned(IEnumerable<XNode> nodes)
         {
-            if (builder.Length == 0)
+            var builder = StringBuilderCache.Acquire();
+
+            foreach (var node in nodes)
             {
-                return string.Empty;
+                if (node != null)
+                {
+                    builder.Append(node);
+                }
             }
 
-            return builder.WithoutParaTags()
-                          .Without(Constants.Markers.SymbolsAndLineBreaks)
-                          .ReplaceAllWithCheck(MultiWhitespaceStrings, SingleWhitespaceString)
-                          .Trim();
+            var cleaned = string.Empty;
+
+            if (builder.Length > 0)
+            {
+                cleaned = builder.WithoutParaTags()
+                                 .Without(Constants.Markers.SymbolsAndLineBreaks)
+                                 .ReplaceAllWithCheck(Constants.Comments.MultiWhitespaceStrings, Constants.Comments.SingleWhitespaceString)
+                                 .Trim();
+            }
+
+            StringBuilderCache.Release(builder);
+
+            return cleaned;
         }
 
         private static string FlattenComment(IEnumerable<XElement> comments)
         {
             if (comments.Any())
             {
-                var comment = Cleaned(comments.Nodes().ConcatenatedWith());
+                var comment = Cleaned(comments.Nodes());
 
                 return comment;
             }

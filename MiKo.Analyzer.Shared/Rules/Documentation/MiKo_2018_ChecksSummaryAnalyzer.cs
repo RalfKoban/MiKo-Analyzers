@@ -52,11 +52,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             comparison = StringComparison.OrdinalIgnoreCase;
 
-            var trimmedSummary = valueText.AsBuilder()
+            var trimmedSummary = valueText.AsCachedBuilder()
                                           .Without(Constants.Comments.AsynchronouslyStartingPhrase) // skip over async starting phrase
                                           .Without(Constants.Comments.RecursivelyStartingPhrase) // skip over recursively starting phrase
                                           .Without(",") // skip over first comma
-                                          .TrimStart();
+                                          .TrimmedStart()
+                                          .ToStringAndRelease();
 
             foreach (var wrongPhrase in WrongPhrases)
             {

@@ -14,7 +14,7 @@ namespace System.Text
     internal static class StringBuilderExtensions
     {
         private const int QuickCompareLengthThreshold = 4;
-        private const int QuickCompareRentLengthThreshold = 24;
+        private const int QuickCompareRentLengthThreshold = 22;
 
         public static bool IsNullOrWhiteSpace(this StringBuilder value) => value is null || value.CountLeadingWhitespaces() == value.Length;
 
@@ -419,7 +419,17 @@ namespace System.Text
             var start = value.CountLeadingWhitespaces();
             var end = value.CountTrailingWhitespaces(start);
 
-            return value.Remove(0, start).Remove(length - start - end, end);
+            if (end > 0)
+            {
+                value.Remove(length - end, end);
+            }
+
+            if (start > 0)
+            {
+                value.Remove(0, start);
+            }
+
+            return value;
         }
 
         public static string Trim(this StringBuilder value)
@@ -435,6 +445,20 @@ namespace System.Text
             var end = value.CountTrailingWhitespaces(start);
 
             return value.ToString(start, length - start - end);
+        }
+
+        public static StringBuilder TrimmedStart(this StringBuilder value)
+        {
+            var length = value.Length;
+
+            if (length == 0)
+            {
+                return value;
+            }
+
+            var start = value.CountLeadingWhitespaces();
+
+            return value.Remove(0, start);
         }
 
         public static string TrimStart(this StringBuilder value)
@@ -485,6 +509,25 @@ namespace System.Text
             }
 
             return value.Remove(length - count, count);
+        }
+
+        public static StringBuilder TrimmedEnd(this StringBuilder value)
+        {
+            var length = value.Length;
+
+            if (length == 0)
+            {
+                return value;
+            }
+
+            var end = value.CountTrailingWhitespaces();
+
+            if (end == 0)
+            {
+                return value;
+            }
+
+            return value.Remove(length - end, end);
         }
 
         public static StringBuilder Without(this StringBuilder value, string phrase) => value.ReplaceWithCheck(phrase, string.Empty); // ncrunch: no coverage

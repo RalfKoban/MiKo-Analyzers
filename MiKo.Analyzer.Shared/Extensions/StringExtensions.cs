@@ -190,9 +190,9 @@ namespace System
 
 //// ncrunch: no coverage start
 
-        public static StringBuilder AsBuilder(this ReadOnlySpan<char> value) => new StringBuilder(value.ToString());
+        public static StringBuilder AsCachedBuilder(this string value) => StringBuilderCache.Acquire(value.Length).Append(value);
 
-        public static StringBuilder AsBuilder(this string value) => new StringBuilder(value);
+        public static string ToStringAndRelease(this StringBuilder value) => StringBuilderCache.GetStringAndRelease(value);
 
         public static SyntaxToken AsToken(this string source, SyntaxKind kind = SyntaxKind.StringLiteralToken)
         {
@@ -210,21 +210,6 @@ namespace System
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatenatedWith(this IEnumerable<string> values) => string.Concat(values.WhereNotNull());
-
-        public static StringBuilder ConcatenatedWith<T>(this IEnumerable<T> values) where T : class
-        {
-            var builder = new StringBuilder();
-
-            foreach (var value in values)
-            {
-                if (value != null)
-                {
-                    builder.Append(value);
-                }
-            }
-
-            return builder;
-        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatenatedWith(this IEnumerable<string> values, string separator) => string.Join(separator, values);
@@ -1173,8 +1158,41 @@ namespace System
             switch (count)
             {
                 case 2: return string.Concat(items[0], separatorForLast, items[1]);
-                case 3: return items[0].AsBuilder().Append(Separator).Append(items[1]).Append(separatorForLast).Append(items[2]).ToString();
-                case 4: return items[0].AsBuilder().Append(Separator).Append(items[1]).Append(Separator).Append(items[2]).Append(separatorForLast).Append(items[3]).ToString();
+                case 3:
+                {
+                    var item0 = items[0];
+                    var item1 = items[1];
+                    var item2 = items[2];
+
+                    var builder = StringBuilderCache.Acquire(item0.Length + Separator.Length + item1.Length + separatorForLast.Length + item2.Length)
+                                                    .Append(item0)
+                                                    .Append(Separator)
+                                                    .Append(item1)
+                                                    .Append(separatorForLast)
+                                                    .Append(item2);
+
+                    return StringBuilderCache.GetStringAndRelease(builder);
+                }
+
+                case 4:
+                {
+                    var item0 = items[0];
+                    var item1 = items[1];
+                    var item2 = items[2];
+                    var item3 = items[3];
+
+                    var builder = StringBuilderCache.Acquire(item0.Length + Separator.Length + item1.Length + Separator.Length + item2.Length + separatorForLast.Length + item3.Length)
+                                                    .Append(item0)
+                                                    .Append(Separator)
+                                                    .Append(item1)
+                                                    .Append(Separator)
+                                                    .Append(item2)
+                                                    .Append(separatorForLast)
+                                                    .Append(item3);
+
+                    return StringBuilderCache.GetStringAndRelease(builder);
+                }
+
                 default: return string.Concat(items.Take(count - 1).ConcatenatedWith(Separator), separatorForLast, items[count - 1]);
             }
         }
@@ -1734,7 +1752,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string Without(this string value, string phrase) => value.Replace(phrase, string.Empty);
 
-        public static string Without(this string value, string[] phrases) => value.AsBuilder().Without(phrases).Trim(); // ncrunch: no coverage
+        public static string Without(this string value, string[] phrases) => value.AsCachedBuilder().Without(phrases).Trimmed().ToStringAndRelease(); // ncrunch: no coverage
 
         public static string WithoutFirstWord(this string value) => WithoutFirstWord(value.AsSpan()).ToString();
 
@@ -1834,8 +1852,6 @@ namespace System
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string WithoutQuotes(this string value) => value.Without(@"""");
-
-        public static IEnumerable<StringBuilder> WithoutParaTags(this IEnumerable<string> values) => values.Select(_ => _.AsBuilder().WithoutParaTags()); // ncrunch: no coverage
 
 //// ncrunch: no coverage start
 

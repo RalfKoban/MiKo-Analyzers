@@ -37,27 +37,30 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             foreach (var xml in comment.GetSummaryXmls())
             {
-                var summary = xml.GetTextWithoutTrivia();
-
-                if (HasIssue(summary))
+                if (HasIssue(xml))
                 {
                     yield return Issue(xml.StartTag);
                 }
             }
         }
 
-        private static bool HasIssue(StringBuilder builder)
+        private static bool HasIssue(XmlElementSyntax xml)
         {
-            var summary = builder.ReplaceWithCheck(" - ", " ")
-                                 .ReplaceWithCheck(" />", "/>")
-                                 .ReplaceWithCheck(" </", "</")
-                                 .ReplaceWithCheck("> <", "><")
-                                 .ReplaceWithCheck(" cref=", "cref=")
-                                 .ReplaceWithCheck(" href=", "href=")
-                                 .ReplaceWithCheck(" type=", "type=")
-                                 .ReplaceWithCheck(" langref=", "langref=")
-                                 .ReplaceWithCheck(" langword=", "langword=")
-                                 .Trim();
+            var builder = StringBuilderCache.Acquire();
+
+            var summary = xml.GetTextWithoutTrivia(builder)
+                             .ReplaceWithCheck(" - ", " ")
+                             .ReplaceWithCheck(" />", "/>")
+                             .ReplaceWithCheck(" </", "</")
+                             .ReplaceWithCheck("> <", "><")
+                             .ReplaceWithCheck(" cref=", "cref=")
+                             .ReplaceWithCheck(" href=", "href=")
+                             .ReplaceWithCheck(" type=", "type=")
+                             .ReplaceWithCheck(" langref=", "langref=")
+                             .ReplaceWithCheck(" langword=", "langword=")
+                             .Trim();
+
+            StringBuilderCache.Release(builder);
 
             return HasIssue(summary.AsSpan());
         }

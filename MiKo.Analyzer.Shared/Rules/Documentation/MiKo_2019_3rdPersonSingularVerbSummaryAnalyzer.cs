@@ -39,11 +39,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             comparison = StringComparison.Ordinal;
 
-            problematicText = valueText.AsBuilder()
-                                       .Without(Constants.Comments.AsynchronouslyStartingPhrase) // skip over async starting phrase
-                                       .Without(Constants.Comments.RecursivelyStartingPhrase) // skip over recursively starting phrase
-                                       .Without(",") // skip over first comma
-                                       .FirstWord(out _);
+            var builder = valueText.AsCachedBuilder()
+                                   .Without(Constants.Comments.AsynchronouslyStartingPhrase) // skip over async starting phrase
+                                   .Without(Constants.Comments.RecursivelyStartingPhrase) // skip over recursively starting phrase
+                                   .Without(","); // skip over first comma
+
+            problematicText = builder.FirstWord(out _);
+
+            StringBuilderCache.Release(builder);
 
             return Verbalizer.IsThirdPersonSingularVerb(problematicText) is false;
         }

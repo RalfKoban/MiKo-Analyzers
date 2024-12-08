@@ -35,10 +35,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 // avoid situation that method has no name
                 if (symbolName.Without(StartingPhrase).Length != 0)
                 {
-                    var proposal = symbolName.AsBuilder()
+                    var proposal = symbolName.AsCachedBuilder()
                                              .ReplaceWithCheck(StartingPhrase, CorrectStartingPhrase)
-                                             .ReplaceWithCheck(CorrectStartingPhrase + CorrectStartingPhrase, CorrectStartingPhrase) // may happen for "OnNotifyXyz"
-                                             .ToString();
+                                             .ReplaceWithCheck(CorrectStartingPhrase + CorrectStartingPhrase, CorrectStartingPhrase)
+                                             .ToStringAndRelease(); // may happen for "OnNotifyXyz"
 
                     return new[] { Issue(symbol, CreateBetterNameProposal(proposal)) };
                 }

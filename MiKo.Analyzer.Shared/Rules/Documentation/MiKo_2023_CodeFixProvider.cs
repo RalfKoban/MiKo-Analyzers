@@ -222,7 +222,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            var commentContinuation = new StringBuilder();
+            var commentContinuation = StringBuilderCache.Acquire();
 
             // be aware of a gerund verb
             if (replacement == ReplacementTo || Verbalizer.IsGerundVerb(subText.FirstWord()))
@@ -245,9 +245,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             commentContinuation.ReplaceAllWithCheck(info.Map);
 
+            var finalCommentContinuation = StringBuilderCache.GetStringAndRelease(commentContinuation);
+
             var prepared = comment.ReplaceNode(originalText, XmlText(string.Empty));
 
-            return FixComment(prepared, info.Keys, info.Map, commentContinuation.ToString());
+            return FixComment(prepared, info.Keys, info.Map, finalCommentContinuation);
         }
 
         private static XmlElementSyntax FixComment(XmlElementSyntax prepared, string[] replacementMapKeys, ReadOnlySpan<Pair> replacementMap, string commentContinue = null)
@@ -635,16 +637,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     for (var booleanIndex = 0; booleanIndex < booleansLength; booleanIndex++)
                     {
                         // we have lots of loops, so cache data to avoid unnecessary calculations
-                        var optionalBooleanStart = optionalStart.AsBuilder()
-                                                                .Append(booleans[booleanIndex])
-                                                                .Append(' ')
-                                                                .ReplaceWithCheck("   ", " ")
-                                                                .ReplaceWithCheck("  ", " ")
-                                                                .TrimStart();
+                        var boolean = booleans[booleanIndex];
+
+                        var optionalBooleanStart = StringBuilderCache.Acquire(optionalStart.Length + boolean.Length + 1)
+                                                                     .Append(optionalStart)
+                                                                     .Append(boolean)
+                                                                     .Append(' ')
+                                                                     .ReplaceAllWithCheck(Constants.Comments.MultiWhitespaceStrings, Constants.Comments.SingleWhitespaceString)
+                                                                     .TrimmedStart()
+                                                                     .ToStringAndRelease();
 
                         for (var parameterIndex = 0; parameterIndex < parametersLength; parameterIndex++)
                         {
-                            var fixedStart = optionalBooleanStart.AsBuilder().Append(parameters[parameterIndex]).TrimEnd();
+                            var fixedStart = optionalBooleanStart.AsCachedBuilder().Append(parameters[parameterIndex]).TrimmedEnd().ToStringAndRelease();
 
                             if (fixedStart.IsNullOrWhiteSpace() is false)
                             {
@@ -724,7 +729,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         // for performance reasons we use for loops here
                         for (var startIndex = 0; startIndex < startsCount; startIndex++)
                         {
-                            var text = starts[startIndex].AsBuilder().Append(middle).TrimStart();
+                            var text = starts[startIndex].AsCachedBuilder().Append(middle).TrimmedStart().ToStringAndRelease();
 
                             results.Add(text.ToUpperCaseAt(0));
                             results.Add(text.ToLowerCaseAt(0));

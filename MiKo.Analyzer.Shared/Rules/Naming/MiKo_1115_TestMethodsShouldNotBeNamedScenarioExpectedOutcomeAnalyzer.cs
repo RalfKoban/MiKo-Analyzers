@@ -180,7 +180,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 capacity += ifToAdd.Length;
             }
 
-            var builder = new StringBuilder(capacity);
+            var builder = StringBuilderCache.Acquire(capacity);
             FixPart(builder, part1);
 
             if (addIf)
@@ -192,7 +192,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             builder.ReplaceWithCheck(When, If).ReplaceWithCheck(If + If, If);
 
-            result = builder.ToString();
+            result = StringBuilderCache.GetStringAndRelease(builder);
 
             return true;
         }
@@ -217,7 +217,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 capacity += ifToAdd.Length;
             }
 
-            var builder = new StringBuilder(capacity);
+            var builder = StringBuilderCache.Acquire(capacity);
             FixPart(builder, part0);
             FixPart(builder, part2);
 
@@ -235,7 +235,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             builder.ReplaceWithCheck(When, If).ReplaceWithCheck(If + If, If);
 
-            result = builder.ToString();
+            result = StringBuilderCache.GetStringAndRelease(builder);
 
             return true;
         }
@@ -270,7 +270,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 capacity += ifToAdd.Length;
             }
 
-            var builder = new StringBuilder(capacity);
+            var builder = StringBuilderCache.Acquire(capacity);
             FixPart(builder, part0);
             FixPart(builder, part3);
 
@@ -293,7 +293,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             builder.ReplaceWithCheck(When, If).ReplaceWithCheck(If + If, If);
 
-            result = builder.ToString();
+            result = StringBuilderCache.GetStringAndRelease(builder);
 
             return true;
         }

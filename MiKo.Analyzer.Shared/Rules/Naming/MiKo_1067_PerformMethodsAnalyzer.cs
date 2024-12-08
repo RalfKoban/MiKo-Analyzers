@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var methodName = symbol.Name;
 
-            if (ContainsPhrase(methodName) && ContainsPhrase(methodName.AsBuilder().Without("Performance").Without("Performed").ToString()))
+            if (ContainsPhrase(methodName) && ContainsPhrase(methodName.AsCachedBuilder().Without("Performance").Without("Performed").ToStringAndRelease()))
             {
                 var proposal = FindBetterName(methodName);
 

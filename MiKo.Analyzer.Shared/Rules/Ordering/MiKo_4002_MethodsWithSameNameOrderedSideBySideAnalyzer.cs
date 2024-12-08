@@ -60,7 +60,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                     {
                         var method = allMethods[index];
 
-                        var builder = new StringBuilder();
+                        var builder = StringBuilderCache.Acquire();
 
                         foreach (var other in methodsWithSameName)
                         {
@@ -70,7 +70,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                             }
                         }
 
-                        var signatures = builder.ToString();
+                        var signatures = StringBuilderCache.GetStringAndRelease(builder);
 
                         yield return Issue(method, signatures);
                     }

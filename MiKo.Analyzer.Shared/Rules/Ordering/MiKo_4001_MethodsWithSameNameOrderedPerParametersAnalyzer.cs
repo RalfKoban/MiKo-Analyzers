@@ -49,14 +49,14 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                         continue;
                     }
 
-                    var builder = new StringBuilder();
+                    var builder = StringBuilderCache.Acquire();
 
                     foreach (var similarMethod in similarMethods)
                     {
                         similarMethod.GetMethodSignature(builder.Append("   ")).AppendLine();
                     }
 
-                    var order = builder.ToString();
+                    var order = StringBuilderCache.GetStringAndRelease(builder);
 
                     // check for locations
                     var lastLine = similarMethods.First().GetStartingLine();

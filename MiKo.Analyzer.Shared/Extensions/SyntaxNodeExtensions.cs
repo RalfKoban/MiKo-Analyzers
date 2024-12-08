@@ -1064,7 +1064,13 @@ namespace MiKoSolutions.Analyzers
                 return string.Empty;
             }
 
-            return value.GetTextWithoutTrivia().Without(Constants.EnvironmentNewLine).WithoutParaTags().Trim();
+            var builder = StringBuilderCache.Acquire();
+
+            var trimmed = value.GetTextWithoutTrivia(builder).Without(Constants.EnvironmentNewLine).WithoutParaTags().Trim();
+
+            StringBuilderCache.Release(builder);
+
+            return trimmed;
         }
 
         internal static string GetTextWithoutTrivia(this XmlTextAttributeSyntax value)
@@ -1084,7 +1090,7 @@ namespace MiKoSolutions.Analyzers
                 return string.Empty;
             }
 
-            var builder = new StringBuilder();
+            var builder = StringBuilderCache.Acquire();
 
             for (var index = 0; index < textTokensCount; index++)
             {
@@ -1098,9 +1104,11 @@ namespace MiKoSolutions.Analyzers
                 builder.Append(token.WithoutTrivia().ValueText);
             }
 
-            var result = builder.Trim();
+            var trimmed = builder.Trim();
 
-            return result;
+            StringBuilderCache.Release(builder);
+
+            return trimmed;
         }
 
         internal static string GetTextWithoutTrivia(this XmlTextSyntax value)
@@ -1110,19 +1118,19 @@ namespace MiKoSolutions.Analyzers
                 return null;
             }
 
-            var builder = new StringBuilder();
+            var builder = StringBuilderCache.Acquire();
 
             foreach (var valueText in value.GetTextWithoutTriviaLazy())
             {
                 builder.Append(valueText);
             }
 
-            var result = builder.Trim();
+            var trimmed = builder.Trim();
 
-            return result;
+            StringBuilderCache.Release(builder);
+
+            return trimmed;
         }
-
-        internal static StringBuilder GetTextWithoutTrivia(this XmlElementSyntax value) => value?.GetTextWithoutTrivia(new StringBuilder());
 
         internal static StringBuilder GetTextWithoutTrivia(this XmlElementSyntax value, StringBuilder builder)
         {
@@ -2385,11 +2393,11 @@ namespace MiKoSolutions.Analyzers
 
                 var replaced = false;
 
-                var result = text.AsBuilder();
+                var result = text;
 
                 if (text.Contains(phrase))
                 {
-                    result.ReplaceWithCheck(phrase, replacement);
+                    result = result.AsCachedBuilder().ReplaceWithCheck(phrase, replacement).ToStringAndRelease();
 
                     replaced = true;
                 }
@@ -2437,8 +2445,7 @@ namespace MiKoSolutions.Analyzers
 
                 var replaced = false;
 
-                var result = text.AsBuilder();
-
+                var result = text.AsCachedBuilder();
                 for (var phraseIndex = 0; phraseIndex < phrasesLength; phraseIndex++)
                 {
                     var phrase = phrases[phraseIndex];
@@ -2453,7 +2460,11 @@ namespace MiKoSolutions.Analyzers
 
                 if (replaced)
                 {
-                    map[token] = token.WithText(result);
+                    map[token] = token.WithText(result.ToStringAndRelease());
+                }
+                else
+                {
+                    StringBuilderCache.Release(result);
                 }
             }
 
@@ -3155,7 +3166,11 @@ namespace MiKoSolutions.Analyzers
                         if (token.IsKind(SyntaxKind.XmlTextLiteralToken) && token.Text.Contains(text))
                         {
                             // do not trim the end as we want to have a space before <param> or other tags
-                            var modifiedText = token.Text.AsBuilder().Without(text).ReplaceWithCheck("  ", " ");
+                            var modifiedText = token.Text
+                                                    .AsCachedBuilder()
+                                                    .Without(text)
+                                                    .ReplaceAllWithCheck(Constants.Comments.MultiWhitespaceStrings, Constants.Comments.SingleWhitespaceString)
+                                                    .ToStringAndRelease();
 
                             if (modifiedText.IsNullOrWhiteSpace())
                             {
@@ -3377,7 +3392,16 @@ namespace MiKoSolutions.Analyzers
 
         internal static StringBuilder WithoutXmlCommentExterior(this StringBuilder value) => value.Without("///");
 
-        internal static string WithoutXmlCommentExterior(this SyntaxNode value) => new StringBuilder().WithoutXmlCommentExterior(value).Trim();
+        internal static string WithoutXmlCommentExterior(this SyntaxNode value)
+        {
+            var builder = StringBuilderCache.Acquire();
+
+            var trimmed = builder.WithoutXmlCommentExterior(value).Trim();
+
+            StringBuilderCache.Release(builder);
+
+            return trimmed;
+        }
 
         internal static StringBuilder WithoutXmlCommentExterior(this StringBuilder value, SyntaxNode node) => value.Append(node).WithoutXmlCommentExterior();
 
