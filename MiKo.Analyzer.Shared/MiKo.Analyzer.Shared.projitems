@@ -415,6 +415,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1086_MethodsWithNumberSlangAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1087_CtorParameterNameAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1088_SingletonInstancesShouldBeNamedInstanceAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1089_GetByMethodsAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1090_ParametersWrongSuffixedAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1091_VariableWrongSuffixedAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1092_AbilityTypeWrongSuffixedAnalyzer.cs" />

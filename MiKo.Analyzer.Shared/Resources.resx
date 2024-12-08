@@ -1234,6 +1234,19 @@ Example:
   <data name="MiKo_1088_Title" xml:space="preserve">
     <value>Singleton instances should be named 'Instance'</value>
   </data>
+  <data name="MiKo_1089_CodeFixTitle" xml:space="preserve">
+    <value>Rename method and remove 'Get' prefix</value>
+  </data>
+  <data name="MiKo_1089_Description" xml:space="preserve">
+    <value>To ease reading, methods should not be prefixed with 'Get', especially when they are part of repositories.
+For example, 'GetUsersByCity' should be renamed to 'UsersWithCity', as the code where it is used is easier to read that way.</value>
+  </data>
+  <data name="MiKo_1089_MessageFormat" xml:space="preserve">
+    <value>Do not prefix with 'Get'</value>
+  </data>
+  <data name="MiKo_1089_Title" xml:space="preserve">
+    <value>Methods should not be prefixed with 'Get'</value>
+  </data>
   <data name="MiKo_1090_CodeFixTitle" xml:space="preserve">
     <value>Rename parameter</value>
   </data>
