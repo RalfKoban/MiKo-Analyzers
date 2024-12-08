@@ -53,7 +53,7 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", originalName), Template.Replace("###", fixedName));
         }
 
-        protected override string GetDiagnosticId() => MiKo_1079_RepositorySuffixAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_1089_GetByMethodsAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1089_GetByMethodsAnalyzer();
 
