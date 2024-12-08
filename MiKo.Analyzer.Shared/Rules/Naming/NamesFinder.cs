@@ -34,6 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                         .Remove(0, betterNamePrefix.Length)
                                                         .Insert(0, methodName)
                                                         .ToStringAndRelease();
+
                         return fixedBetterName;
                     }
                 }

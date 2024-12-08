@@ -2455,6 +2455,7 @@ namespace MiKoSolutions.Analyzers
                 var replaced = false;
 
                 var result = text.AsCachedBuilder();
+
                 for (var phraseIndex = 0; phraseIndex < phrasesLength; phraseIndex++)
                 {
                     var phrase = phrases[phraseIndex];
