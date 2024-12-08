@@ -16,6 +16,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private const string Get = nameof(Get);
 
+        private static readonly string[] Extensions = { "Extensions", "ExtensionMethods" };
+
         public MiKo_1089_GetByMethodsAnalyzer() : base(Id)
         {
         }
@@ -24,7 +26,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var symbolName = symbol.Name.AsSpan();
 
-            return symbolName.EndsWith("Repository", StringComparison.Ordinal) || Pluralizer.IsPlural(symbolName);
+            if (Pluralizer.IsPlural(symbolName))
+            {
+                return symbolName.EndsWithAny(Extensions, StringComparison.Ordinal) is false;
+            }
+
+            return symbolName.EndsWith("Repository", StringComparison.Ordinal);
         }
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol)

@@ -58,6 +58,18 @@ public static class TestMeExtensions
 ");
 
         [Test]
+        public void No_issue_is_reported_for_non_extension_method_in_extension_class() => No_issue_is_reported_for(@"
+using System;
+
+public static class TestMeExtensions
+{
+    public static void GetSomething(object o)
+    {
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_incorrectly_named_method_test_method() => No_issue_is_reported_for(@"
 using System;
 
