@@ -40,6 +40,12 @@ namespace MiKoSolutions.Analyzers
 
         private static readonly Func<SyntaxNode, bool> DescendIntoChildren = _ => true;
 
+        internal static IEnumerable<SyntaxNode> AllDescendantNodes(this SyntaxNode value) => value.DescendantNodes(DescendIntoChildren, true);
+
+        internal static IEnumerable<T> AllDescendantNodes<T>(this SyntaxNode value) where T : SyntaxNode => value.AllDescendantNodes().OfType<T>();
+
+        internal static IEnumerable<SyntaxNodeOrToken> AllDescendantNodesAndTokens(this SyntaxNode value) => value.DescendantNodesAndTokens(DescendIntoChildren);
+
         internal static IEnumerable<T> Ancestors<T>(this SyntaxNode value) where T : SyntaxNode => value.Ancestors().OfType<T>(); // value.AncestorsAndSelf().OfType<T>();
 
         internal static bool Contains(this SyntaxNode value, char c) => value?.ToString().Contains(c) ?? false;
@@ -1214,7 +1220,7 @@ namespace MiKoSolutions.Analyzers
             foreach (var summary in summaryXmls)
             {
                 // we have to delve into the trivia to find the XML syntax nodes
-                foreach (var node in summary.DescendantNodes(DescendIntoChildren, true))
+                foreach (var node in summary.AllDescendantNodes())
                 {
                     switch (node)
                     {
@@ -1257,7 +1263,7 @@ namespace MiKoSolutions.Analyzers
         {
             // we have to delve into the trivia to find the XML syntax nodes
             // ReSharper disable once LoopCanBeConvertedToQuery
-            foreach (var element in value.DescendantNodes(DescendIntoChildren, true).OfType<XmlElementSyntax>())
+            foreach (var element in value.AllDescendantNodes<XmlElementSyntax>())
             {
                 if (element.GetName() == tag)
                 {
@@ -1285,7 +1291,7 @@ namespace MiKoSolutions.Analyzers
         {
             // we have to delve into the trivia to find the XML syntax nodes
             // ReSharper disable once LoopCanBeConvertedToQuery
-            foreach (var element in value.DescendantNodes(DescendIntoChildren, true).OfType<XmlElementSyntax>())
+            foreach (var element in value.AllDescendantNodes<XmlElementSyntax>())
             {
                 if (tags.Contains(element.GetName()))
                 {
@@ -1313,7 +1319,7 @@ namespace MiKoSolutions.Analyzers
         {
             // we have to delve into the trivia to find the XML syntax nodes
             // ReSharper disable once LoopCanBeConvertedToQuery
-            foreach (var element in value.DescendantNodes(DescendIntoChildren, true).OfType<XmlEmptyElementSyntax>())
+            foreach (var element in value.AllDescendantNodes<XmlEmptyElementSyntax>())
             {
                 if (element.GetName() == tag)
                 {
@@ -1341,7 +1347,7 @@ namespace MiKoSolutions.Analyzers
         {
             // we have to delve into the trivia to find the XML syntax nodes
             // ReSharper disable once LoopCanBeConvertedToQuery
-            foreach (var element in value.DescendantNodes(DescendIntoChildren, true).OfType<XmlEmptyElementSyntax>())
+            foreach (var element in value.AllDescendantNodes<XmlEmptyElementSyntax>())
             {
                 if (tags.Contains(element.GetName()))
                 {
@@ -1901,19 +1907,6 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsReadOnly(this FieldDeclarationSyntax value) => value.Modifiers.Any(SyntaxKind.ReadOnlyKeyword);
 
-        internal static bool IsXmlTag(this SyntaxNode value, string tagName)
-        {
-            switch (value)
-            {
-                case XmlEmptyElementSyntax xees when xees.GetName() == tagName:
-                case XmlElementSyntax xes when xes.GetName() == tagName:
-                    return true;
-
-                default:
-                    return false;
-            }
-        }
-
         internal static bool IsSpanningMultipleLines(this SyntaxNode value)
         {
             var lineSpan = value.GetLocation().GetLineSpan();
@@ -2161,6 +2154,32 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsValueNull(this SyntaxNode value) => value.Is(Constants.XmlTag.Value, Nulls);
 
         internal static bool IsVoid(this TypeSyntax value) => value is PredefinedTypeSyntax p && p.Keyword.IsKind(SyntaxKind.VoidKeyword);
+
+        internal static bool IsXml(this SyntaxNode node)
+        {
+            switch (node.Kind())
+            {
+                case SyntaxKind.XmlElement:
+                case SyntaxKind.XmlEmptyElement:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        internal static bool IsXmlTag(this SyntaxNode value, string tagName)
+        {
+            switch (value)
+            {
+                case XmlEmptyElementSyntax xees when xees.GetName() == tagName:
+                case XmlElementSyntax xes when xes.GetName() == tagName:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
 
         internal static IEnumerable<InvocationExpressionSyntax> LinqExtensionMethods(this SyntaxNode value, SemanticModel semanticModel) => value.DescendantNodes<InvocationExpressionSyntax>(_ => IsLinqExtensionMethod(_, semanticModel));
 

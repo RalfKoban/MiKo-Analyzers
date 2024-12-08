@@ -298,7 +298,7 @@ namespace MiKoSolutions.Analyzers.Rules
         {
             var currentLine = startingNode.GetStartingLine();
 
-            foreach (var nodeOrToken in startingNode.DescendantNodesAndTokens(_ => true, true))
+            foreach (var nodeOrToken in startingNode.AllDescendantNodesAndTokens())
             {
                 var startingLine = nodeOrToken.GetStartingLine();
 

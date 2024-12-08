@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -24,19 +24,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 foreach (var entry in code.Content)
                 {
-                    switch (entry.Kind())
+                    if (entry.IsXml())
                     {
-                        case SyntaxKind.XmlElement:
-                        case SyntaxKind.XmlEmptyElement:
-                        {
-                            // we have an issue
-                            yield return Issue(symbol.Name, entry);
-
-                            break;
-                        }
+                        // we have an issue
+                        return new[] { Issue(symbol.Name, entry) };
                     }
                 }
             }
+
+            return Array.Empty<Diagnostic>();
         }
     }
 }
