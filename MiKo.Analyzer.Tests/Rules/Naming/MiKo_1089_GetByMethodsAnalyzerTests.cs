@@ -23,6 +23,21 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_incorrectly_named_method_test_method() => No_issue_is_reported_for(@"
+using System;
+
+using NUnit;
+
+public class TestMeRepository
+{
+    [Test]
+    public void GetSomething()
+    {
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_incorrectly_named_method() => An_issue_is_reported_for(@"
 using System;
 

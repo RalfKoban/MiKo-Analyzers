@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -17,6 +18,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod() is false;
+
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
             var symbolName = symbol.Name;
@@ -26,6 +29,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                        : Array.Empty<Diagnostic>();
         }
 
-        private static string FindBetterName(string name) => name.Substring(Get.Length).Replace("By", "With");
+        private static string FindBetterName(string name) => name.AsCachedBuilder().Remove(0, Get.Length).ReplaceWithCheck("By", "With").ToStringAndRelease();
     }
 }
