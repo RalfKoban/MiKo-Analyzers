@@ -38,6 +38,8 @@ namespace MiKoSolutions.Analyzers
 
         private static readonly SyntaxList<TypeParameterConstraintClauseSyntax> Empty = SyntaxFactory.List<TypeParameterConstraintClauseSyntax>();
 
+        private static readonly Func<SyntaxNode, bool> DescendIntoChildren = _ => true;
+
         internal static IEnumerable<T> Ancestors<T>(this SyntaxNode value) where T : SyntaxNode => value.Ancestors().OfType<T>(); // value.AncestorsAndSelf().OfType<T>();
 
         internal static bool Contains(this SyntaxNode value, char c) => value?.ToString().Contains(c) ?? false;
@@ -1212,7 +1214,7 @@ namespace MiKoSolutions.Analyzers
             foreach (var summary in summaryXmls)
             {
                 // we have to delve into the trivia to find the XML syntax nodes
-                foreach (var node in summary.DescendantNodes(_ => true, true))
+                foreach (var node in summary.DescendantNodes(DescendIntoChildren, true))
                 {
                     switch (node)
                     {
@@ -1255,7 +1257,7 @@ namespace MiKoSolutions.Analyzers
         {
             // we have to delve into the trivia to find the XML syntax nodes
             // ReSharper disable once LoopCanBeConvertedToQuery
-            foreach (var element in value.DescendantNodes(_ => true, true).OfType<XmlElementSyntax>())
+            foreach (var element in value.DescendantNodes(DescendIntoChildren, true).OfType<XmlElementSyntax>())
             {
                 if (element.GetName() == tag)
                 {
@@ -1283,7 +1285,7 @@ namespace MiKoSolutions.Analyzers
         {
             // we have to delve into the trivia to find the XML syntax nodes
             // ReSharper disable once LoopCanBeConvertedToQuery
-            foreach (var element in value.DescendantNodes(_ => true, true).OfType<XmlElementSyntax>())
+            foreach (var element in value.DescendantNodes(DescendIntoChildren, true).OfType<XmlElementSyntax>())
             {
                 if (tags.Contains(element.GetName()))
                 {
@@ -1311,7 +1313,7 @@ namespace MiKoSolutions.Analyzers
         {
             // we have to delve into the trivia to find the XML syntax nodes
             // ReSharper disable once LoopCanBeConvertedToQuery
-            foreach (var element in value.DescendantNodes(_ => true, true).OfType<XmlEmptyElementSyntax>())
+            foreach (var element in value.DescendantNodes(DescendIntoChildren, true).OfType<XmlEmptyElementSyntax>())
             {
                 if (element.GetName() == tag)
                 {
@@ -1339,7 +1341,7 @@ namespace MiKoSolutions.Analyzers
         {
             // we have to delve into the trivia to find the XML syntax nodes
             // ReSharper disable once LoopCanBeConvertedToQuery
-            foreach (var element in value.DescendantNodes(_ => true, true).OfType<XmlEmptyElementSyntax>())
+            foreach (var element in value.DescendantNodes(DescendIntoChildren, true).OfType<XmlEmptyElementSyntax>())
             {
                 if (tags.Contains(element.GetName()))
                 {
