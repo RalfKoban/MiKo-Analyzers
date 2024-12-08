@@ -635,28 +635,28 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             private static IEnumerable<string> CreateAllContinuations()
             {
                 var continuations = new[]
-                                    {
-                                        string.Empty,
-                                        "a ",
-                                        "a instance of a ",
-                                        //// "a instances of a ", // currently ignored as this contains typos which we did not see in the wild
-                                        "a new instance of a ",
-                                        //// "a new instances of a ", // currently ignored as this contains typos which we did not see in the wild
-                                        "an ",
-                                        "an instance of an ",
-                                        //// "an instances of an ", // currently ignored as this contains typos which we did not see in the wild
-                                        //// "an new instance of an ", // currently ignored as this contains typos which we did not see in the wild
-                                        //// "an new instances of an ", // currently ignored as this contains typos which we did not see in the wild
-                                        "instance of ",
-                                        "instances of ",
-                                        "new instance of ",
-                                        "new instances of ",
-                                        "the ",
-                                        "the instance of the ",
-                                        "the instances of the ",
-                                        "the new instance of the ",
-                                        "the new instances of the ",
-                                    };
+                                        {
+                                            string.Empty,
+                                            "a ",
+                                            "a instance of a ",
+                                            //// "a instances of a ", // currently ignored as this contains typos which we did not see in the wild
+                                            "a new instance of a ",
+                                            //// "a new instances of a ", // currently ignored as this contains typos which we did not see in the wild
+                                            "an ",
+                                            "an instance of an ",
+                                            //// "an instances of an ", // currently ignored as this contains typos which we did not see in the wild
+                                            //// "an new instance of an ", // currently ignored as this contains typos which we did not see in the wild
+                                            //// "an new instances of an ", // currently ignored as this contains typos which we did not see in the wild
+                                            "instance of ",
+                                            "instances of ",
+                                            "new instance of ",
+                                            "new instances of ",
+                                            "the ",
+                                            "the instance of the ",
+                                            "the instances of the ",
+                                            "the new instance of the ",
+                                            "the new instances of the ",
+                                        };
 
                 var continuationsLength = continuations.Length;
 

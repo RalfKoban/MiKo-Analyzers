@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Composition;
-using System.Linq;
+﻿using System.Composition;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -11,8 +9,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2046_CodeFixProvider : DocumentationCodeFixProvider
     {
         public override string FixableDiagnosticId => "MiKo_2046";
-
-        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.FirstOrDefault();
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
