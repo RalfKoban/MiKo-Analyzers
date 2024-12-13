@@ -131,7 +131,7 @@ namespace MiKoSolutions.Analyzers
                 return properties.Where(_ => _.CanBeReferencedByName);
             }
 
-            return Enumerable.Empty<IPropertySymbol>();
+            return Array.Empty<IPropertySymbol>();
         }
 
         internal static IEnumerable<IFieldSymbol> GetFields(this ITypeSymbol value)
@@ -143,7 +143,7 @@ namespace MiKoSolutions.Analyzers
                 return fields.Where(_ => _.CanBeReferencedByName);
             }
 
-            return Enumerable.Empty<IFieldSymbol>();
+            return Array.Empty<IFieldSymbol>();
         }
 
         internal static IEnumerable<IFieldSymbol> GetFields(this ITypeSymbol value, string fieldName)
@@ -221,7 +221,7 @@ namespace MiKoSolutions.Analyzers
 
             if (field is null)
             {
-                return Enumerable.Empty<MemberAccessExpressionSyntax>();
+                return Array.Empty<MemberAccessExpressionSyntax>();
             }
 
             return field.DescendantNodes<MemberAccessExpressionSyntax>(_ => _.ToCleanedUpString() == invocation);
@@ -633,7 +633,7 @@ namespace MiKoSolutions.Analyzers
             return node?.GetEnclosing<T>();
         }
 
-        internal static IEnumerable<DocumentationCommentTriviaSyntax> GetDocumentationCommentTriviaSyntax(this ISymbol value) => value.GetSyntax()?.GetDocumentationCommentTriviaSyntax() ?? Enumerable.Empty<DocumentationCommentTriviaSyntax>();
+        internal static IEnumerable<DocumentationCommentTriviaSyntax> GetDocumentationCommentTriviaSyntax(this ISymbol value) => value.GetSyntax()?.GetDocumentationCommentTriviaSyntax() ?? Array.Empty<DocumentationCommentTriviaSyntax>();
 
         internal static ITypeSymbol GetReturnTypeSymbol(this ISymbol value)
         {
@@ -654,7 +654,7 @@ namespace MiKoSolutions.Analyzers
             var propertyTypes = members.OfType<IPropertySymbol>().Where(_ => Constants.Names.TypeUnderTestPropertyNames.Contains(_.Name));
             var fieldTypes = members.OfType<IFieldSymbol>().Where(_ => Constants.Names.TypeUnderTestFieldNames.Contains(_.Name));
 
-            return Enumerable.Empty<ISymbol>().Concat(propertyTypes).Concat(fieldTypes).Concat(methodTypes).WhereNotNull().ToHashSet(SymbolEqualityComparer.Default);
+            return Array.Empty<ISymbol>().Concat(propertyTypes).Concat(fieldTypes).Concat(methodTypes).WhereNotNull().ToHashSet(SymbolEqualityComparer.Default);
 
             IEnumerable<IMethodSymbol> GetTestCreationMethods()
             {

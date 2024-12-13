@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return typeIssues.Concat(symbol.GetNamedMethods().SelectMany(_ => AnalyzeMethod(_, compilation)));
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment)
@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 case INamedTypeSymbol type: return AnalyzeStartingPhrase(type, summaries, comment, Constants.Comments.FactorySummaryPhrase);
                 case IMethodSymbol method: return AnalyzeStartingPhrase(symbol, summaries, comment, GetPhrases(method).ToArray());
-                default: return Enumerable.Empty<Diagnostic>();
+                default: return Array.Empty<Diagnostic>();
             }
         }
 
@@ -67,7 +67,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                    : startingPhrases.Select(_ => _.FormatWith(argumentType));
         }
 
-        private IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, IEnumerable<string> comments, DocumentationCommentTriviaSyntax comment, params string[] phrases)
+        private Diagnostic[] AnalyzeStartingPhrase(ISymbol symbol, IEnumerable<string> comments, DocumentationCommentTriviaSyntax comment, params string[] phrases)
         {
             if (comments.None(_ => phrases.Exists(__ => _.StartsWith(__, StringComparison.Ordinal))))
             {
@@ -77,7 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             // fitting comment
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 
@@ -28,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 }
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
 
         protected Diagnostic Issue(ISymbol symbol, int exceeding) => Issue(symbol, exceeding, m_limit);

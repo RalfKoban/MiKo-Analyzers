@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
             }
 
-            return Enumerable.Empty<SyntaxToken>();
+            return Array.Empty<SyntaxToken>();
         }
 
         private void AnalyzeInvocation(SyntaxNodeAnalysisContext context)
@@ -54,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (arguments.Count == 0)
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             if (node.Expression is MemberAccessExpressionSyntax methodCall)
@@ -106,7 +106,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
 
         private IEnumerable<Diagnostic> AnalyzeCall(MemberAccessExpressionSyntax methodCall, ArgumentSyntax argument, SemanticModel semanticModel)

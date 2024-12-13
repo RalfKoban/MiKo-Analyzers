@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -24,14 +25,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (argumentList is null)
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             var arguments = argumentList.Arguments;
 
             if (arguments.Count == 0)
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             return arguments.Where(_ => _.Expression is LambdaExpressionSyntax).Select(_ => Issue(_));

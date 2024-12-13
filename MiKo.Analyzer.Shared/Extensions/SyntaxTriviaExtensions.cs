@@ -80,7 +80,7 @@ namespace MiKoSolutions.Analyzers
         {
             if (value is null)
             {
-                return Enumerable.Empty<SyntaxToken>();
+                return Array.Empty<SyntaxToken>();
             }
 
             return value.ChildNodes<XmlTextSyntax>().GetXmlTextTokens();
@@ -90,7 +90,7 @@ namespace MiKoSolutions.Analyzers
         {
             if (value is null)
             {
-                return Enumerable.Empty<SyntaxToken>();
+                return Array.Empty<SyntaxToken>();
             }
 
             return value.SelectMany(_ => _.GetXmlTextTokens());
@@ -124,7 +124,7 @@ namespace MiKoSolutions.Analyzers
         {
             if (value is null)
             {
-                return Enumerable.Empty<SyntaxToken>();
+                return Array.Empty<SyntaxToken>();
             }
 
             return value.SelectMany(_ => _.GetXmlTextTokens());
@@ -137,7 +137,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<SyntaxToken> GetXmlTextTokens(this DocumentationCommentTriviaSyntax value, Func<XmlElementSyntax, bool> descendantNodesFilter)
         {
-            return value?.DescendantNodes(descendantNodesFilter).GetXmlTextTokens() ?? Enumerable.Empty<SyntaxToken>();
+            return value?.DescendantNodes(descendantNodesFilter).GetXmlTextTokens() ?? Array.Empty<SyntaxToken>();
         }
 
         internal static IEnumerable<SyntaxTrivia> NextSiblings(this SyntaxTrivia value, int count = int.MaxValue)
@@ -163,7 +163,7 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            return Enumerable.Empty<SyntaxTrivia>();
+            return Array.Empty<SyntaxTrivia>();
         }
 
         internal static IEnumerable<SyntaxTrivia> PreviousSiblings(this SyntaxTrivia value, int count = int.MaxValue)
@@ -189,7 +189,7 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            return Enumerable.Empty<SyntaxTrivia>();
+            return Array.Empty<SyntaxTrivia>();
         }
     }
 }

@@ -33,14 +33,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation) => AnalyzeName(symbol);
 
-        private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol)
+        private Diagnostic[] AnalyzeName(ISymbol symbol)
         {
             var name = symbol.Name;
 
             if (name.Length <= 5)
             {
                 // skip all short names (such as isIP)
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             if (name.StartsWithAny(Prefixes, StringComparison.Ordinal) && name.HasUpperCaseLettersAbove(2) && name.StartsWithAny(AllowedPrefixes, StringComparison.Ordinal) is false)
@@ -48,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return new[] { Issue(symbol) };
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
     }
 }

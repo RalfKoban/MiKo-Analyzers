@@ -21,9 +21,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
-            return Enumerable.Empty<Diagnostic>()
-                             .Concat(AnalyzeXml(comment.GetSummaryXmls()))
-                             .Concat(AnalyzeXml(comment.GetRemarksXmls()));
+            return Array.Empty<Diagnostic>()
+                        .Concat(AnalyzeXml(comment.GetSummaryXmls()))
+                        .Concat(AnalyzeXml(comment.GetRemarksXmls()));
         }
 
         private static bool SentenceHasIssue(XmlElementSyntax xml)

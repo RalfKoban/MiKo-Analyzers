@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -21,10 +22,10 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
             return method != null
                    ? AnalyzeTestType(symbol, method)
-                   : Enumerable.Empty<Diagnostic>();
+                   : Array.Empty<Diagnostic>();
         }
 
-        private IEnumerable<Diagnostic> AnalyzeTestType(INamedTypeSymbol symbol, IMethodSymbol method)
+        private Diagnostic[] AnalyzeTestType(INamedTypeSymbol symbol, IMethodSymbol method)
         {
             var path = method.Locations.First(_ => _.IsInSource).GetLineSpan().Path;
 
@@ -35,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             var otherMethod = methods[index];
 
             return ReferenceEquals(method, otherMethod)
-                   ? Enumerable.Empty<Diagnostic>()
+                   ? Array.Empty<Diagnostic>()
                    : new[] { Issue(method) };
         }
     }

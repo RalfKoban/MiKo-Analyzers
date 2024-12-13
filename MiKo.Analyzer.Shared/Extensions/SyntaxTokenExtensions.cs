@@ -17,7 +17,12 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxToken AsToken(this SyntaxKind value) => SyntaxFactory.Token(value);
 
-        internal static SyntaxToken First(this SyntaxTokenList value, SyntaxKind kind) => value.OfKind(kind).FirstOrDefault();
+        internal static SyntaxToken First(this SyntaxTokenList value, SyntaxKind kind)
+        {
+            var list = value.OfKind(kind);
+
+            return list.Count > 0 ? list[0] : default;
+        }
 
         internal static T GetEnclosing<T>(this SyntaxToken value) where T : SyntaxNode => value.Parent.GetEnclosing<T>();
 

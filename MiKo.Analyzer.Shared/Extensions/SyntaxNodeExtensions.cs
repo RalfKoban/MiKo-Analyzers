@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
@@ -272,9 +273,34 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static string GetParameterName(this XmlElementSyntax value) => value.GetAttributes<XmlNameAttributeSyntax>().FirstOrDefault()?.Identifier.GetName();
+        internal static string GetParameterName(this XmlElementSyntax value)
+        {
+            var list = value.GetAttributes<XmlNameAttributeSyntax>();
 
-        internal static string GetParameterName(this XmlEmptyElementSyntax value) => value.Attributes.OfType<XmlNameAttributeSyntax>().FirstOrDefault()?.Identifier.GetName();
+            return list.Count > 0
+                   ? list[0].Identifier.GetName()
+                   : null;
+        }
+
+        internal static string GetParameterName(this XmlEmptyElementSyntax value)
+        {
+            var attributes = value.Attributes;
+
+            var count = attributes.Count;
+
+            if (count > 0)
+            {
+                for (var index = 0; index < count; index++)
+                {
+                    if (attributes[index] is XmlNameAttributeSyntax syntax)
+                    {
+                        return syntax.Identifier.GetName();
+                    }
+                }
+            }
+
+            return null;
+        }
 
         internal static XmlElementSyntax GetParameterComment(this DocumentationCommentTriviaSyntax value, string parameterName) => value.FirstDescendant<XmlElementSyntax>(_ => _.GetName() == Constants.XmlTag.Param && _.GetParameterName() == parameterName);
 
@@ -425,9 +451,15 @@ namespace MiKoSolutions.Analyzers
             return result;
         }
 
-        internal static IEnumerable<T> GetAttributes<T>(this XmlEmptyElementSyntax value) where T : XmlAttributeSyntax => value?.Attributes.OfType<XmlAttributeSyntax, T>() ?? Enumerable.Empty<T>();
+        internal static IReadOnlyList<T> GetAttributes<T>(this XmlElementSyntax value) where T : XmlAttributeSyntax
+        {
+            return value?.StartTag.Attributes.OfType<XmlAttributeSyntax, T>() ?? Array.Empty<T>();
+        }
 
-        internal static IEnumerable<T> GetAttributes<T>(this XmlElementSyntax value) where T : XmlAttributeSyntax => value?.StartTag.Attributes.OfType<XmlAttributeSyntax, T>() ?? Enumerable.Empty<T>();
+        internal static IReadOnlyList<T> GetAttributes<T>(this XmlEmptyElementSyntax value) where T : XmlAttributeSyntax
+        {
+            return value?.Attributes.OfType<XmlAttributeSyntax, T>() ?? Array.Empty<T>();
+        }
 
         internal static T GetEnclosing<T>(this SyntaxNode value) where T : SyntaxNode => value.FirstAncestorOrSelf<T>();
 
@@ -820,7 +852,7 @@ namespace MiKoSolutions.Analyzers
                 case FieldDeclarationSyntax s: return s.Declaration.Variables.GetNames();
                 case EventFieldDeclarationSyntax s: return s.Declaration.Variables.GetNames();
                 default:
-                    return Enumerable.Empty<string>();
+                    return Array.Empty<string>();
             }
         }
 
@@ -1733,9 +1765,16 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsExceptionComment(this XmlElementSyntax value, Type exceptionType)
         {
-            var type = value?.StartTag.Attributes.OfType<XmlCrefAttributeSyntax>().FirstOrDefault().GetCrefType();
+            var list = value.GetAttributes<XmlCrefAttributeSyntax>();
 
-            return type != null && type.IsException(exceptionType);
+            if (list.Count > 0)
+            {
+                var type = list[0].GetCrefType();
+
+                return type != null && type.IsException(exceptionType);
+            }
+
+            return false;
         }
 
         internal static bool IsExpression(this SyntaxNode value, SemanticModel semanticModel)
@@ -2241,11 +2280,11 @@ namespace MiKoSolutions.Analyzers
                 return list.OfKind(kind);
             }
 
-            // ReSharper disable once LoopCanBeConvertedToQuery
             return OfKindLocal();
 
             IEnumerable<T> OfKindLocal()
             {
+                // ReSharper disable once LoopCanBePartlyConvertedToQuery
                 foreach (var item in source)
                 {
                     if (item.IsKind(kind))
@@ -2256,8 +2295,10 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static IReadOnlyList<TResult> OfType<TResult>(this SyntaxList<XmlNodeSyntax> source) where TResult : XmlNodeSyntax => source.OfType<XmlNodeSyntax, TResult>();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static IReadOnlyList<TResult> OfType<TResult>(this SyntaxList<XmlAttributeSyntax> source) where TResult : XmlAttributeSyntax => source.OfType<XmlAttributeSyntax, TResult>();
 
         internal static IReadOnlyList<TResult> OfType<T, TResult>(this SyntaxList<T> source) where T : SyntaxNode
@@ -2837,7 +2878,7 @@ namespace MiKoSolutions.Analyzers
                                    (original, rewritten) => rewritten.WithAdditionalLeadingSpaces(additionalSpaces),
                                    descendants.Where(_ => _.IsToken).Select(_ => _.AsToken()),
                                    (original, rewritten) => rewritten.WithAdditionalLeadingSpaces(additionalSpaces),
-                                   Enumerable.Empty<SyntaxTrivia>(),
+                                   Array.Empty<SyntaxTrivia>(),
                                    (original, rewritten) => rewritten);
         }
 

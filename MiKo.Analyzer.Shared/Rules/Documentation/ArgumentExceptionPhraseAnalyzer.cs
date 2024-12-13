@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 case IMethodSymbol method: return AnalyzeException(method, method, exceptionComment);
                 case IPropertySymbol property: return AnalyzeException(property, property.SetMethod, exceptionComment);
-                default: return Enumerable.Empty<Diagnostic>();
+                default: return Array.Empty<Diagnostic>();
             }
         }
 
@@ -84,13 +84,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (methodSymbol is null)
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             var parameters = GetMatchingParameters(methodSymbol.Parameters);
 
             return parameters.None()
-                   ? Enumerable.Empty<Diagnostic>()
+                   ? Array.Empty<Diagnostic>()
                    : AnalyzeException(owningSymbol, parameters, exceptionComment);
         }
     }

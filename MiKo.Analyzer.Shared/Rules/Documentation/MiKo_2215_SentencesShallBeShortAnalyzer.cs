@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return new[] { Issue(symbol) };
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
 
         private static bool HasIssue(DocumentationCommentTriviaSyntax comment)

@@ -40,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (commentXml.EndsWith(Constants.Comments.NoDefaultPhrase, StringComparison.Ordinal))
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             var isBoolean = returnType.IsBoolean();
@@ -53,7 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (commentXml.EndsWithAny(endingPhrases, StringComparison.Ordinal))
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             var properties = isBoolean

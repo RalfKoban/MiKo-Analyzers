@@ -436,7 +436,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     for (var continuationsIndex = 0; continuationsIndex < continuationsLength; continuationsIndex++)
                     {
                         var continuation = continuations[continuationsIndex];
-                        var start = word + continuation;
+                        var start = word + continuation; // TODO RKN: Change string creation
 
                         results.Add(start + " an new instances of the ");
                         results.Add(start + " an new instances of an ");

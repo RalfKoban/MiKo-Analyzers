@@ -38,13 +38,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
              || TaskFactoryMethods.Contains(methodName))
             {
                 // nothing to report here
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             if (symbol.IsStatic && methodName == "Main")
             {
                 // nothing to report here for the main method as that is the entry point of an application and as to be named 'Main'
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             var betterName = symbol.Name + Constants.AsyncSuffix;

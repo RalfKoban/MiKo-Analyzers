@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -22,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
             return methodNames.Contains(nameof(GetHashCode)) && methodNames.Contains(nameof(Equals))
                    ? AnalyzeMethods(methods)
-                   : Enumerable.Empty<Diagnostic>();
+                   : Array.Empty<Diagnostic>();
         }
 
         private IEnumerable<Diagnostic> AnalyzeMethods(List<IMethodSymbol> methods)

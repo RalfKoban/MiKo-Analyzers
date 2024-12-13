@@ -10,6 +10,10 @@ namespace System
     {
         public static SplitReadOnlySpanEnumerator SplitBy(this ReadOnlySpan<char> value, ReadOnlySpan<char> separatorChars) => SplitBy(value, separatorChars, StringSplitOptions.None);
 
+        public static SplitReadOnlySpanEnumerator SplitBy(this ReadOnlySpan<char> value, ReadOnlySpan<char> separatorChars, StringSplitOptions options) => new SplitReadOnlySpanEnumerator(value, separatorChars, options);
+
+        public static SplitReadOnlySpanEnumerator SplitBy(this ReadOnlySpan<char> value, char[] separatorChars, StringSplitOptions options) => SplitBy(value, separatorChars.AsSpan(), options);
+
         public static IReadOnlyList<string> SplitBy(this ReadOnlySpan<char> value, string[] findings, StringComparison comparison = StringComparison.OrdinalIgnoreCase, StringSplitOptions options = StringSplitOptions.None)
         {
             if (value.IsNullOrWhiteSpace())
@@ -66,10 +70,6 @@ namespace System
 
             return results;
         }
-
-        public static SplitReadOnlySpanEnumerator SplitBy(this ReadOnlySpan<char> value, ReadOnlySpan<char> separatorChars, StringSplitOptions options) => new SplitReadOnlySpanEnumerator(value, separatorChars, options);
-
-        public static SplitReadOnlySpanEnumerator SplitBy(this ReadOnlySpan<char> value, char[] separatorChars, StringSplitOptions options) => SplitBy(value, separatorChars.AsSpan(), options);
 
         public static IReadOnlyList<string> SplitBy(this string value, string[] findings, StringComparison comparison = StringComparison.OrdinalIgnoreCase, StringSplitOptions options = StringSplitOptions.None)
         {

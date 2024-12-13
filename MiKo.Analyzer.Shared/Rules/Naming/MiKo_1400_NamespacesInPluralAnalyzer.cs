@@ -98,7 +98,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 }
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
     }
 }

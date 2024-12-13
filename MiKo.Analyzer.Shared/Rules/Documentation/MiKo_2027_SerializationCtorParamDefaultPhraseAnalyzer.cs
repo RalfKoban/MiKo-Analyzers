@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -33,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return AnalyzeParameterComment(Constants.Comments.CtorStreamingContextParamPhrase);
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
 
             IEnumerable<Diagnostic> AnalyzeParameterComment(string[] phrases)
             {
@@ -44,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return new[] { Issue(parameter.Name, parameterComment.GetContentsLocation(), phrase, CreatePhraseProposal(phrase)) };
                 }
 
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
         }
     }

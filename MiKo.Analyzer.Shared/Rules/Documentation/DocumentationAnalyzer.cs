@@ -121,14 +121,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var returnTypeWithGenericCount = firstPart.ConcatenatedWith("`", count.ToString());
 
 //// ncrunch: rdi off
-                return Enumerable.Empty<string>()
-                                 .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeWithTs))) // for the phrases to show to the user
-                                 .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeWithGenericCount))); // for the real check
+                return Array.Empty<string>()
+                            .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeWithTs))) // for the phrases to show to the user
+                            .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeWithGenericCount))); // for the real check
             }
 
-            return Enumerable.Empty<string>()
-                             .Concat(startingPhrases.Select(_ => _.FormatWith(returnType)))
-                             .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeFullyQualified)));
+            return Array.Empty<string>()
+                        .Concat(startingPhrases.Select(_ => _.FormatWith(returnType)))
+                        .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeFullyQualified)));
 //// ncrunch: rdi default
         }
 
@@ -257,7 +257,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, compilation, commentXml, comment);
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => Array.Empty<Diagnostic>();
 
         protected virtual Diagnostic StartIssue(ISymbol symbol, SyntaxNode node) => StartIssue(symbol, node.GetLocation());
 
@@ -393,13 +393,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (textLength <= 2 && text.IsNullOrWhiteSpace())
             {
                 // nothing to inspect as the text is too short and consists of whitespaces only
-                return Enumerable.Empty<Location>();
+                return Array.Empty<Location>();
             }
 
             if (textLength < value.Length)
             {
                 // nothing to inspect as the text is too short
-                return Enumerable.Empty<Location>();
+                return Array.Empty<Location>();
             }
 
             var allIndices = text.AllIndicesOf(value, comparison);
@@ -408,7 +408,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (count <= 0)
             {
                 // nothing to inspect
-                return Enumerable.Empty<Location>();
+                return Array.Empty<Location>();
             }
 
             return GetAllLocationsWithLoop(syntaxTree, spanStart, value, startOffset, endOffset, count, allIndices);
@@ -421,7 +421,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (textLength <= 2 && text.IsNullOrWhiteSpace())
             {
                 // nothing to inspect as the text is too short and consists of whitespaces only
-                return Enumerable.Empty<Location>();
+                return Array.Empty<Location>();
             }
 
             return GetAllLocationsWithLoop(text, syntaxTree, spanStart, values, comparison, startOffset, endOffset, textLength);
@@ -434,13 +434,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (textLength <= 2 && text.IsNullOrWhiteSpace())
             {
                 // nothing to inspect as the text is too short and consists of whitespaces only
-                return Enumerable.Empty<Location>();
+                return Array.Empty<Location>();
             }
 
             if (textLength < value.Length)
             {
                 // nothing to inspect as the text is too short
-                return Enumerable.Empty<Location>();
+                return Array.Empty<Location>();
             }
 
             var allIndices = text.AllIndicesOf(value, comparison);
@@ -449,7 +449,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (count <= 0)
             {
                 // nothing to inspect
-                return Enumerable.Empty<Location>();
+                return Array.Empty<Location>();
             }
 
             return GetAllLocationsWithLoop(text, syntaxTree, spanStart, value, nextCharValidationCallback, startOffset, endOffset, textLength, count, allIndices);

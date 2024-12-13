@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod() is false;
 
-        private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol)
+        private Diagnostic[] AnalyzeName(ISymbol symbol)
         {
             var symbolName = symbol.Name;
 
@@ -43,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (containsDelete && containsRemove)
             {
                 // name contains both, such as in "DeleteRemovedStuff" or "RemoveDeletedStuff", so nothing to do
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             if (containsDelete)
@@ -56,10 +56,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return AnalyzeDocumentation(symbol, Delet);
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
 
-        private IEnumerable<Diagnostic> AnalyzeDocumentation(ISymbol symbol, string forbiddenWord)
+        private Diagnostic[] AnalyzeDocumentation(ISymbol symbol, string forbiddenWord)
         {
             var texts = symbol.GetDocumentationCommentTriviaSyntax().SelectMany(_ => _.GetXmlTextTokens()).Select(_ => _.ValueText);
 
@@ -68,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return new[] { Issue(symbol) };
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
     }
 }

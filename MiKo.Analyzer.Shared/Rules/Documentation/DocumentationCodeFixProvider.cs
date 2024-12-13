@@ -485,9 +485,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Cref(tag, SyntaxFactory.QualifiedCref(type.WithoutTrivia(), SyntaxFactory.NameMemberCref(member.WithoutTrivia())));
         }
 
-        protected static string GetParameterName(XmlElementSyntax syntax) => syntax.GetAttributes<XmlNameAttributeSyntax>().First().Identifier.GetName();
+        protected static string GetParameterName(XmlElementSyntax syntax) => syntax.GetAttributes<XmlNameAttributeSyntax>()[0].Identifier.GetName();
 
-        protected static string GetParameterName(XmlEmptyElementSyntax syntax) => syntax.Attributes.OfType<XmlAttributeSyntax, XmlNameAttributeSyntax>()[0].Identifier.GetName();
+        protected static string GetParameterName(XmlEmptyElementSyntax syntax) => syntax.GetAttributes<XmlNameAttributeSyntax>()[0].Identifier.GetName();
 
         protected static XmlCrefAttributeSyntax GetSeeCref(SyntaxNode value) => value.GetCref(Constants.XmlTag.See);
 

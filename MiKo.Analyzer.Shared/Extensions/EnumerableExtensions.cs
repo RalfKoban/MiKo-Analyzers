@@ -985,7 +985,7 @@ namespace System.Linq
 
             if (difference <= 0)
             {
-                return Enumerable.Empty<T>();
+                return Array.Empty<T>();
             }
 
             var result = new T[difference];

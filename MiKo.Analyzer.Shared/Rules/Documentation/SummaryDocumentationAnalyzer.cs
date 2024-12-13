@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -18,11 +18,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var summaries = CommentExtensions.GetSummaries(commentXml);
 
-            return summaries.Count != 0
-                   ? AnalyzeSummary(symbol, compilation, summaries, comment)
-                   : Enumerable.Empty<Diagnostic>();
+            return summaries.Count == 0
+                   ? Array.Empty<Diagnostic>()
+                   : AnalyzeSummary(symbol, compilation, summaries, comment);
         }
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment) => Array.Empty<Diagnostic>();
     }
 }

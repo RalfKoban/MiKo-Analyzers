@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -31,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (testClass.IsPartial() && allMethods.Count != methods.Count)
             {
                 // different syntax trees means that it's inside a partial part which we do not want/need to inspect (because namespaces for such parts are all the same and we only need to inspect one part)
-                return Enumerable.Empty<ITypeSymbol>();
+                return Array.Empty<ITypeSymbol>();
             }
 
             var typesUnderTest = new HashSet<ITypeSymbol>(SymbolEqualityComparer.Default);

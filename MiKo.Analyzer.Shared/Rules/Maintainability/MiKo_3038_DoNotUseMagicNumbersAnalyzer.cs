@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -260,14 +259,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var node = (LiteralExpressionSyntax)context.Node;
 
-            ReportDiagnostics(context, AnalyzeNumericLiteralExpression(node, context.ContainingSymbol));
+            var issues = AnalyzeNumericLiteralExpression(node, context.ContainingSymbol);
+
+            if (issues.Length > 0)
+            {
+                ReportDiagnostics(context, issues);
+            }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeNumericLiteralExpression(LiteralExpressionSyntax node, ISymbol symbol)
+        private Diagnostic[] AnalyzeNumericLiteralExpression(LiteralExpressionSyntax node, ISymbol symbol)
         {
             if (symbol is null)
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             if (symbol is IMethodSymbol method)
@@ -275,13 +279,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (method.Name == nameof(GetHashCode))
                 {
                     // ignore hash calculation
-                    return Enumerable.Empty<Diagnostic>();
+                    return Array.Empty<Diagnostic>();
                 }
 
                 if (method.IsTestMethod())
                 {
                     // ignore unit tests
-                    return Enumerable.Empty<Diagnostic>();
+                    return Array.Empty<Diagnostic>();
                 }
             }
 
@@ -292,13 +296,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (containingType.IsTestClass())
                 {
                     // ignore unit tests
-                    return Enumerable.Empty<Diagnostic>();
+                    return Array.Empty<Diagnostic>();
                 }
 
                 if (containingType.ContainingType?.IsTestClass() is true)
                 {
                     // ignore nested types in unit tests
-                    return Enumerable.Empty<Diagnostic>();
+                    return Array.Empty<Diagnostic>();
                 }
             }
 
@@ -306,12 +310,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (IsWellKnownNumber(number))
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             if (IgnoreBasedOnParent(node) || IgnoreBasedOnAncestor(node))
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             var issue = node.Parent is PrefixUnaryExpressionSyntax prefix && prefix.IsKind(SyntaxKind.UnaryMinusExpression)

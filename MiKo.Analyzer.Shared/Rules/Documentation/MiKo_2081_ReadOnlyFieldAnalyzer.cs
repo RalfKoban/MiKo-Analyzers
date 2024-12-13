@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return new[] { Issue(symbol, Constants.Comments.FieldIsReadOnly) };
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
     }
 }

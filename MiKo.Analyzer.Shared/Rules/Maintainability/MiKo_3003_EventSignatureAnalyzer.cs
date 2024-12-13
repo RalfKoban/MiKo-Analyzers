@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -30,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case nameof(PropertyChangingEventHandler):
                 case nameof(CancelEventHandler):
                 case "RoutedEventHandler": // System.Windows.RoutedEventHandler in assembly PresentationCore.dll
-                    return Enumerable.Empty<Diagnostic>();
+                    return Array.Empty<Diagnostic>();
 
                 default:
                     return new[] { Issue(symbol) };

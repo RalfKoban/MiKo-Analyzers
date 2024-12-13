@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            return issues ?? Enumerable.Empty<Diagnostic>();
+            return issues ?? (IEnumerable<Diagnostic>)Array.Empty<Diagnostic>();
         }
     }
 }

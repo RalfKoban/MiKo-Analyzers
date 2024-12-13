@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.Type.IsDependencyProperty();
 
         protected override IEnumerable<Diagnostic> Analyze(IFieldSymbol symbol, Compilation compilation) => symbol.IsStatic && symbol.IsReadOnly && symbol.DeclaredAccessibility == Accessibility.Public
-                                                                                                            ? Enumerable.Empty<Diagnostic>()
+                                                                                                            ? Array.Empty<Diagnostic>()
                                                                                                             : new[] { Issue(symbol) };
     }
 }

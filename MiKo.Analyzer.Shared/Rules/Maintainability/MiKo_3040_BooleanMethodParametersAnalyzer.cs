@@ -22,14 +22,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (symbol.IsInterfaceImplementation())
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             switch (symbol.Parameters.Length)
             {
                 case 1 when symbol.Name == nameof(IDisposable.Dispose) && symbol.Parameters[0].Name == "disposing":
                 case 2 when symbol.HasDependencyObjectParameter():
-                    return Enumerable.Empty<Diagnostic>();
+                    return Array.Empty<Diagnostic>();
             }
 
             return symbol.Parameters

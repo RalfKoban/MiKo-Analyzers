@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -28,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsEventArgs() && base.ShallAnalyze(symbol);
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment) => HasEventSummary(summaries)
-                                                                                                                                                                                       ? Enumerable.Empty<Diagnostic>()
+                                                                                                                                                                                       ? Array.Empty<Diagnostic>()
                                                                                                                                                                                        : new[] { Issue(symbol, StartingPhraseConcrete, "\"" + EndingPhraseConcrete) };
 
         private static bool HasEventSummary(IEnumerable<string> summaries)

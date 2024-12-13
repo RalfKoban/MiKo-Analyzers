@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsValueConverter();
 
         protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol, Compilation compilation) => symbol.HasAttributeApplied("System.Windows.Data.ValueConversionAttribute")
-                                                                                                                ? Enumerable.Empty<Diagnostic>()
+                                                                                                                ? Array.Empty<Diagnostic>()
                                                                                                                 : new[] { Issue(symbol) };
     }
 }
