@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -161,16 +162,27 @@ namespace MiKoSolutions.Analyzers
         {
             var node = value.GetSyntaxNodeInSource();
 
-            if (node != null)
+            if (node is null)
             {
-                var functions = node.DescendantNodes(_ => _.IsAnyKind(LocalFunctionContainerSyntaxKinds))
-                                    .OfType<LocalFunctionStatementSyntax>()
-                                    .ToList();
-
-                return functions;
+                return Array.Empty<LocalFunctionStatementSyntax>();
             }
 
-            return Array.Empty<LocalFunctionStatementSyntax>();
+            List<LocalFunctionStatementSyntax> functions = null;
+
+            foreach (var descendantNode in node.DescendantNodes(_ => _.IsAnyKind(LocalFunctionContainerSyntaxKinds)))
+            {
+                if (descendantNode is LocalFunctionStatementSyntax function)
+                {
+                    if (functions is null)
+                    {
+                        functions = new List<LocalFunctionStatementSyntax>(1);
+                    }
+
+                    functions.Add(function);
+                }
+            }
+
+            return functions ?? (IReadOnlyCollection<LocalFunctionStatementSyntax>)Array.Empty<LocalFunctionStatementSyntax>();
         }
 
         internal static bool ContainsExtensionMethods(this INamedTypeSymbol value) => value.TypeKind == TypeKind.Class && value.IsStatic && value.MightContainExtensionMethods && value.GetExtensionMethods().Any();
@@ -221,7 +233,7 @@ namespace MiKoSolutions.Analyzers
 
             return attributes.Length != 0
                    ? attributes.Select(_ => _.AttributeClass?.Name)
-                   : Enumerable.Empty<string>();
+                   : Array.Empty<string>();
         }
 
         internal static IEnumerable<ObjectCreationExpressionSyntax> GetCreatedObjectSyntaxReturnedByMethod(this IMethodSymbol value)
@@ -527,9 +539,7 @@ namespace MiKoSolutions.Analyzers
             {
                 for (var index = 0; index < length; index++)
                 {
-                    var reference = references[index];
-
-                    if (reference.GetSyntax() is TSyntaxNode node)
+                    if (references[index].GetSyntax() is TSyntaxNode node)
                     {
                         var location = node.GetLocation();
 
@@ -541,9 +551,27 @@ namespace MiKoSolutions.Analyzers
                             continue;
                         }
 
-                        var filePath = sourceTree.FilePath;
-
                         // ignore non C# code (might be part of partial classes, e.g. for XAML)
+                        var filePath = sourceTree.FilePath;
+                        var filePathSpan = filePath.AsSpan();
+
+                        // Perf: quick catch via span and ordinal comparison (as that is the most likely case)
+                        if (filePathSpan.EndsWith(Constants.CSharpFileExtension, StringComparison.Ordinal))
+                        {
+                            // Perf: quick catch find another dot, as we do not need to check for additional extensions in case we do not have any other dot here
+                            if (filePathSpan.Slice(0, filePathSpan.Length - Constants.CSharpFileExtension.Length).LastIndexOfAny('.', Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) >= 0)
+                            {
+                                if (filePathSpan.EndsWithAny(Constants.GeneratedCSharpFileExtensions, StringComparison.Ordinal))
+                                {
+                                    // ignore generated code (might be part of partial classes)
+                                    continue;
+                                }
+                            }
+
+                            return node;
+                        }
+
+                        // non-performant part: use string and ignore case
                         if (filePath.EndsWith(Constants.CSharpFileExtension, StringComparison.OrdinalIgnoreCase))
                         {
                             if (filePath.EndsWithAny(Constants.GeneratedCSharpFileExtensions, StringComparison.OrdinalIgnoreCase))

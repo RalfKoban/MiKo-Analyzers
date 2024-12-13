@@ -150,6 +150,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     var issues = AnalyzeType(symbol, compilation, symbol.GetDocumentationCommentXml(), comment);
 
+                    if (issues is IReadOnlyCollection<Diagnostic> collection && collection.Count == 0)
+                    {
+                        continue;
+                    }
+
                     foreach (var issue in issues)
                     {
                         yield return issue;
@@ -167,6 +172,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 foreach (var comment in symbol.GetDocumentationCommentTriviaSyntax())
                 {
                     var issues = AnalyzeMethod(symbol, compilation, symbol.GetDocumentationCommentXml(), comment);
+
+                    if (issues is IReadOnlyCollection<Diagnostic> collection && collection.Count == 0)
+                    {
+                        continue;
+                    }
 
                     foreach (var issue in issues)
                     {
@@ -186,6 +196,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     var issues = AnalyzeEvent(symbol, compilation, symbol.GetDocumentationCommentXml(), comment);
 
+                    if (issues is IReadOnlyCollection<Diagnostic> collection && collection.Count == 0)
+                    {
+                        continue;
+                    }
+
                     foreach (var issue in issues)
                     {
                         yield return issue;
@@ -204,6 +219,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     var issues = AnalyzeProperty(symbol, compilation, symbol.GetDocumentationCommentXml(), comment);
 
+                    if (issues is IReadOnlyCollection<Diagnostic> collection && collection.Count == 0)
+                    {
+                        continue;
+                    }
+
                     foreach (var issue in issues)
                     {
                         yield return issue;
@@ -221,6 +241,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 foreach (var comment in symbol.GetDocumentationCommentTriviaSyntax())
                 {
                     var issues = AnalyzeField(symbol, compilation, symbol.GetDocumentationCommentXml(), comment);
+
+                    if (issues is IReadOnlyCollection<Diagnostic> collection && collection.Count == 0)
+                    {
+                        continue;
+                    }
 
                     foreach (var issue in issues)
                     {
@@ -368,13 +393,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (textLength <= 2 && text.IsNullOrWhiteSpace())
             {
                 // nothing to inspect as the text is too short and consists of whitespaces only
-                yield break;
+                return Enumerable.Empty<Location>();
             }
 
             if (textLength < value.Length)
             {
                 // nothing to inspect as the text is too short
-                yield break;
+                return Enumerable.Empty<Location>();
             }
 
             var allIndices = text.AllIndicesOf(value, comparison);
@@ -383,9 +408,55 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (count <= 0)
             {
                 // nothing to inspect
-                yield break;
+                return Enumerable.Empty<Location>();
             }
 
+            return GetAllLocationsWithLoop(syntaxTree, spanStart, value, startOffset, endOffset, count, allIndices);
+        }
+
+        private static IEnumerable<Location> GetAllLocations(string text, SyntaxTree syntaxTree, int spanStart, IReadOnlyList<string> values, StringComparison comparison, int startOffset, int endOffset)
+        {
+            var textLength = text.Length;
+
+            if (textLength <= 2 && text.IsNullOrWhiteSpace())
+            {
+                // nothing to inspect as the text is too short and consists of whitespaces only
+                return Enumerable.Empty<Location>();
+            }
+
+            return GetAllLocationsWithLoop(text, syntaxTree, spanStart, values, comparison, startOffset, endOffset, textLength);
+        }
+
+        private static IEnumerable<Location> GetAllLocations(string text, SyntaxTree syntaxTree, int spanStart, string value, Func<char, bool> nextCharValidationCallback, StringComparison comparison, int startOffset, int endOffset)
+        {
+            var textLength = text.Length;
+
+            if (textLength <= 2 && text.IsNullOrWhiteSpace())
+            {
+                // nothing to inspect as the text is too short and consists of whitespaces only
+                return Enumerable.Empty<Location>();
+            }
+
+            if (textLength < value.Length)
+            {
+                // nothing to inspect as the text is too short
+                return Enumerable.Empty<Location>();
+            }
+
+            var allIndices = text.AllIndicesOf(value, comparison);
+            var count = allIndices.Count;
+
+            if (count <= 0)
+            {
+                // nothing to inspect
+                return Enumerable.Empty<Location>();
+            }
+
+            return GetAllLocationsWithLoop(text, syntaxTree, spanStart, value, nextCharValidationCallback, startOffset, endOffset, textLength, count, allIndices);
+        }
+
+        private static IEnumerable<Location> GetAllLocationsWithLoop(SyntaxTree syntaxTree, int spanStart, string value, int startOffset, int endOffset, int count, IReadOnlyList<int> allIndices)
+        {
             List<Location> alreadyReportedLocations = null;
 
             for (var index = 0; index < count; index++)
@@ -418,16 +489,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private static IEnumerable<Location> GetAllLocations(string text, SyntaxTree syntaxTree, int spanStart, IReadOnlyList<string> values, StringComparison comparison, int startOffset, int endOffset)
+        private static IEnumerable<Location> GetAllLocationsWithLoop(string text, SyntaxTree syntaxTree, int spanStart, IReadOnlyList<string> values, StringComparison comparison, int startOffset, int endOffset, int textLength)
         {
-            var textLength = text.Length;
-
-            if (textLength <= 2 && text.IsNullOrWhiteSpace())
-            {
-                // nothing to inspect as the text is too short and consists of whitespaces only
-                yield break;
-            }
-
             List<Location> alreadyReportedLocations = null;
             var valuesCount = values.Count;
 
@@ -481,31 +544,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private static IEnumerable<Location> GetAllLocations(string text, SyntaxTree syntaxTree, int spanStart, string value, Func<char, bool> nextCharValidationCallback, StringComparison comparison, int startOffset, int endOffset)
+        private static IEnumerable<Location> GetAllLocationsWithLoop(string text, SyntaxTree syntaxTree, int spanStart, string value, Func<char, bool> nextCharValidationCallback, int startOffset, int endOffset, int textLength, int count, IReadOnlyList<int> allIndices)
         {
-            var textLength = text.Length;
-
-            if (textLength <= 2 && text.IsNullOrWhiteSpace())
-            {
-                // nothing to inspect as the text is too short and consists of whitespaces only
-                yield break;
-            }
-
-            if (textLength < value.Length)
-            {
-                // nothing to inspect as the text is too short
-                yield break;
-            }
-
-            var allIndices = text.AllIndicesOf(value, comparison);
-            var count = allIndices.Count;
-
-            if (count <= 0)
-            {
-                // nothing to inspect
-                yield break;
-            }
-
             var lastPosition = textLength - 1;
 
             List<Location> alreadyReportedLocations = null;

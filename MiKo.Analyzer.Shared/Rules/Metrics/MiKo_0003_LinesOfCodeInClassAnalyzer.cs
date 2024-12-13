@@ -45,8 +45,13 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
         {
             var loc = 0;
 
-            foreach (var member in declaration.Members)
+            var members = declaration.Members;
+            var count = members.Count;
+
+            for (var index = 0; index < count; index++)
             {
+                var member = members[index];
+
                 switch (member)
                 {
                     case BaseMethodDeclarationSyntax _:

@@ -30,6 +30,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsComment(this SyntaxTrivia value)
         {
+            // we use 'IsKind' for performance reasons as most likely, we have single line comments
             switch (value.Kind())
             {
                 case SyntaxKind.SingleLineCommentTrivia:

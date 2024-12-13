@@ -145,7 +145,7 @@ namespace MiKoSolutions.Analyzers
                 return Array.Empty<SyntaxToken>();
             }
 
-            var results = new List<SyntaxToken>();
+            List<SyntaxToken> results = null;
 
             for (var index = 0; index < sourceCount; index++)
             {
@@ -153,11 +153,16 @@ namespace MiKoSolutions.Analyzers
 
                 if (item.IsKind(kind))
                 {
+                    if (results is null)
+                    {
+                        results = new List<SyntaxToken>(1);
+                    }
+
                     results.Add(item);
                 }
             }
 
-            return results;
+            return results ?? (IReadOnlyList<SyntaxToken>)Array.Empty<SyntaxToken>();
         }
 
         internal static IEnumerable<SyntaxToken> OfKind(this IEnumerable<SyntaxToken> source, SyntaxKind kind)

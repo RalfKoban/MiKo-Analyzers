@@ -2286,12 +2286,7 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            if (results is null)
-            {
-                return Array.Empty<TResult>();
-            }
-
-            return results;
+            return results ?? (IReadOnlyList<TResult>)Array.Empty<TResult>();
         }
 
         internal static T RemoveTrivia<T>(this T node, SyntaxTrivia trivia) where T : SyntaxNode => node.ReplaceTrivia(trivia, SyntaxFactory.ElasticMarker);
