@@ -146,18 +146,28 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (ShallAnalyze(symbol))
             {
-                foreach (var comment in symbol.GetDocumentationCommentTriviaSyntax())
+                var comments = symbol.GetDocumentationCommentTriviaSyntax();
+                var commentsLength = comments.Length;
+
+                if (commentsLength > 0)
                 {
-                    var issues = AnalyzeType(symbol, compilation, symbol.GetDocumentationCommentXml(), comment);
-
-                    if (issues is IReadOnlyCollection<Diagnostic> collection && collection.Count == 0)
+                    for (var index = 0; index < commentsLength; index++)
                     {
-                        continue;
-                    }
+                        var issues = AnalyzeType(symbol, compilation, symbol.GetDocumentationCommentXml(), comments[index]);
 
-                    foreach (var issue in issues)
-                    {
-                        yield return issue;
+                        if (issues is Diagnostic[] array && array.Length == 0)
+                        {
+                            continue;
+                        }
+
+                        // ReSharper disable once LoopCanBePartlyConvertedToQuery
+                        foreach (var issue in issues)
+                        {
+                            if (issue != null)
+                            {
+                                yield return issue;
+                            }
+                        }
                     }
                 }
             }
@@ -169,18 +179,28 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (ShallAnalyze(symbol))
             {
-                foreach (var comment in symbol.GetDocumentationCommentTriviaSyntax())
+                var comments = symbol.GetDocumentationCommentTriviaSyntax();
+                var commentsLength = comments.Length;
+
+                if (commentsLength > 0)
                 {
-                    var issues = AnalyzeMethod(symbol, compilation, symbol.GetDocumentationCommentXml(), comment);
-
-                    if (issues is IReadOnlyCollection<Diagnostic> collection && collection.Count == 0)
+                    for (var index = 0; index < commentsLength; index++)
                     {
-                        continue;
-                    }
+                        var issues = AnalyzeMethod(symbol, compilation, symbol.GetDocumentationCommentXml(), comments[index]);
 
-                    foreach (var issue in issues)
-                    {
-                        yield return issue;
+                        if (issues is Diagnostic[] array && array.Length == 0)
+                        {
+                            continue;
+                        }
+
+                        // ReSharper disable once LoopCanBePartlyConvertedToQuery
+                        foreach (var issue in issues)
+                        {
+                            if (issue != null)
+                            {
+                                yield return issue;
+                            }
+                        }
                     }
                 }
             }
@@ -192,18 +212,28 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (ShallAnalyze(symbol))
             {
-                foreach (var comment in symbol.GetDocumentationCommentTriviaSyntax())
+                var comments = symbol.GetDocumentationCommentTriviaSyntax();
+                var commentsLength = comments.Length;
+
+                if (commentsLength > 0)
                 {
-                    var issues = AnalyzeEvent(symbol, compilation, symbol.GetDocumentationCommentXml(), comment);
-
-                    if (issues is IReadOnlyCollection<Diagnostic> collection && collection.Count == 0)
+                    for (var index = 0; index < commentsLength; index++)
                     {
-                        continue;
-                    }
+                        var issues = AnalyzeEvent(symbol, compilation, symbol.GetDocumentationCommentXml(), comments[index]);
 
-                    foreach (var issue in issues)
-                    {
-                        yield return issue;
+                        if (issues is Diagnostic[] array && array.Length == 0)
+                        {
+                            continue;
+                        }
+
+                        // ReSharper disable once LoopCanBePartlyConvertedToQuery
+                        foreach (var issue in issues)
+                        {
+                            if (issue != null)
+                            {
+                                yield return issue;
+                            }
+                        }
                     }
                 }
             }
@@ -215,18 +245,28 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (ShallAnalyze(symbol))
             {
-                foreach (var comment in symbol.GetDocumentationCommentTriviaSyntax())
+                var comments = symbol.GetDocumentationCommentTriviaSyntax();
+                var commentsLength = comments.Length;
+
+                if (commentsLength > 0)
                 {
-                    var issues = AnalyzeProperty(symbol, compilation, symbol.GetDocumentationCommentXml(), comment);
-
-                    if (issues is IReadOnlyCollection<Diagnostic> collection && collection.Count == 0)
+                    for (var index = 0; index < commentsLength; index++)
                     {
-                        continue;
-                    }
+                        var issues = AnalyzeProperty(symbol, compilation, symbol.GetDocumentationCommentXml(), comments[index]);
 
-                    foreach (var issue in issues)
-                    {
-                        yield return issue;
+                        if (issues is Diagnostic[] array && array.Length == 0)
+                        {
+                            continue;
+                        }
+
+                        // ReSharper disable once LoopCanBePartlyConvertedToQuery
+                        foreach (var issue in issues)
+                        {
+                            if (issue != null)
+                            {
+                                yield return issue;
+                            }
+                        }
                     }
                 }
             }
@@ -238,18 +278,28 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (ShallAnalyze(symbol))
             {
-                foreach (var comment in symbol.GetDocumentationCommentTriviaSyntax())
+                var comments = symbol.GetDocumentationCommentTriviaSyntax();
+                var commentsLength = comments.Length;
+
+                if (commentsLength > 0)
                 {
-                    var issues = AnalyzeField(symbol, compilation, symbol.GetDocumentationCommentXml(), comment);
-
-                    if (issues is IReadOnlyCollection<Diagnostic> collection && collection.Count == 0)
+                    for (var index = 0; index < commentsLength; index++)
                     {
-                        continue;
-                    }
+                        var issues = AnalyzeField(symbol, compilation, symbol.GetDocumentationCommentXml(), comments[index]);
 
-                    foreach (var issue in issues)
-                    {
-                        yield return issue;
+                        if (issues is Diagnostic[] array && array.Length == 0)
+                        {
+                            continue;
+                        }
+
+                        // ReSharper disable once LoopCanBePartlyConvertedToQuery
+                        foreach (var issue in issues)
+                        {
+                            if (issue != null)
+                            {
+                                yield return issue;
+                            }
+                        }
                     }
                 }
             }

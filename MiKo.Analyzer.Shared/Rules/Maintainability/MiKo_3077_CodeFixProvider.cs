@@ -69,7 +69,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var type = typeSyntax.GetTypeSymbol(GetSemanticModel(document));
 
-            var memberAccess = SimpleMemberAccess(type.Name, type.GetFields().First().Name);
+            var memberAccess = SimpleMemberAccess(type.Name, type.GetFields()[0].Name);
 
             return SyntaxFactory.EqualsValueClause(memberAccess);
         }

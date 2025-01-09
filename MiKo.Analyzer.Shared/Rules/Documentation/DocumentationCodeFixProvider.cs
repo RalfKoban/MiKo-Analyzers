@@ -491,8 +491,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlCrefAttributeSyntax GetSeeCref(SyntaxNode value) => value.GetCref(Constants.XmlTag.See);
 
-        protected static DocumentationCommentTriviaSyntax GetXmlSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.SelectMany(_ => _.GetDocumentationCommentTriviaSyntax())
-                                                                                                                          .FirstOrDefault(_ => _ != null);
+        protected static DocumentationCommentTriviaSyntax GetXmlSyntax(IEnumerable<SyntaxNode> syntaxNodes)
+        {
+            foreach (var node in syntaxNodes)
+            {
+                var comments = node.GetDocumentationCommentTriviaSyntax();
+
+                if (comments.Length > 0)
+                {
+                    return comments[0];
+                }
+            }
+
+            return null;
+        }
 
         protected static IEnumerable<XmlElementSyntax> GetXmlSyntax(string startTag, IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.SelectMany(_ => _.GetXmlSyntax(startTag));
 

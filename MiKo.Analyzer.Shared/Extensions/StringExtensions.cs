@@ -108,7 +108,7 @@ namespace System
                 return AllIndicesOrdinal(value.AsSpan(), finding.AsSpan());
             }
 
-            return AllIndicesNonOrdinal(value, finding, comparison);
+            return AllIndicesNonOrdinal(value, finding, ref comparison);
         }
 
         //// ncrunch: no coverage end
@@ -1366,7 +1366,7 @@ namespace System
                 return false;
             }
 
-            return IsUpperCaseWithSwitch(value);
+            return IsUpperCaseWithSwitch(ref value);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -2133,7 +2133,7 @@ namespace System
             return true;
         }
 
-        private static bool IsUpperCaseWithSwitch(char value)
+        private static bool IsUpperCaseWithSwitch(ref char value)
         {
             switch (value)
             {
@@ -2207,7 +2207,7 @@ namespace System
             return indices ?? (IReadOnlyList<int>)Array.Empty<int>();
         }
 
-        private static IReadOnlyList<int> AllIndicesNonOrdinal(string value, string finding, StringComparison comparison)
+        private static IReadOnlyList<int> AllIndicesNonOrdinal(string value, string finding, ref StringComparison comparison)
         {
             var findingLength = finding.Length;
 

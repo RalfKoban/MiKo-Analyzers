@@ -27,9 +27,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var summaryXmls = comment.GetSummaryXmls();
 
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
             foreach (var summaryXml in summaryXmls)
             {
-                yield return AnalyzeTextStart(symbol, summaryXml);
+                var issue = AnalyzeTextStart(symbol, summaryXml);
+
+                if (issue != null)
+                {
+                    yield return issue;
+                }
             }
         }
 

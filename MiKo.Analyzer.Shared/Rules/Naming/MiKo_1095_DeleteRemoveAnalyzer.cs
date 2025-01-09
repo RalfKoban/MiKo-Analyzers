@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -61,11 +60,23 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private Diagnostic[] AnalyzeDocumentation(ISymbol symbol, string forbiddenWord)
         {
-            var texts = symbol.GetDocumentationCommentTriviaSyntax().SelectMany(_ => _.GetXmlTextTokens()).Select(_ => _.ValueText);
+            var comments = symbol.GetDocumentationCommentTriviaSyntax();
+            var commentsLength = comments.Length;
 
-            if (texts.Any(_ => _.Contains(forbiddenWord, StringComparison.OrdinalIgnoreCase)))
+            if (commentsLength > 0)
             {
-                return new[] { Issue(symbol) };
+                for (var index = 0; index < commentsLength; index++)
+                {
+                    foreach (var token in comments[index].GetXmlTextTokens())
+                    {
+                        var text = token.ValueText;
+
+                        if (text.Length >= forbiddenWord.Length && text.Contains(forbiddenWord, StringComparison.OrdinalIgnoreCase))
+                        {
+                            return new[] { Issue(symbol) };
+                        }
+                    }
+                }
             }
 
             return Array.Empty<Diagnostic>();

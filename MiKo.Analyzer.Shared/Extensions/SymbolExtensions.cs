@@ -54,12 +54,18 @@ namespace MiKoSolutions.Analyzers
                           ? value.GetNamedMethods()
                           : value.GetMethods();
 
-            // ReSharper disable once LoopCanBePartlyConvertedToQuery, so there is no need for a Where clause
-            foreach (var method in methods)
+            var count = methods.Count;
+
+            if (count > 0)
             {
-                if (method.MethodKind == kind)
+                for (var index = 0; index < count; index++)
                 {
-                    yield return method;
+                    var method = methods[index];
+
+                    if (method.MethodKind == kind)
+                    {
+                        yield return method;
+                    }
                 }
             }
         }
@@ -95,52 +101,37 @@ namespace MiKoSolutions.Analyzers
         /// Methods with <see cref="MethodKind.Constructor"/> or <see cref="MethodKind.StaticConstructor"/> cannot be referenced by name and therefore are not part of the result.
         /// </note>
         /// </remarks>
-        internal static IEnumerable<IMethodSymbol> GetNamedMethods(this ITypeSymbol value)
+        internal static IReadOnlyList<IMethodSymbol> GetNamedMethods(this ITypeSymbol value)
         {
             var methods = value.GetMethods();
 
             if (methods.Count > 0)
             {
-                return GetMethodSymbols(methods);
+                return GetNamedSymbols(methods);
             }
 
             return Array.Empty<IMethodSymbol>();
-
-            IEnumerable<IMethodSymbol> GetMethodSymbols(IReadOnlyList<IMethodSymbol> symbols)
-            {
-                var count = methods.Count;
-
-                for (var i = 0; i < count; i++)
-                {
-                    var symbol = symbols[i];
-
-                    if (symbol.CanBeReferencedByName)
-                    {
-                        yield return symbol;
-                    }
-                }
-            }
         }
 
-        internal static IEnumerable<IPropertySymbol> GetProperties(this ITypeSymbol value)
+        internal static IReadOnlyList<IPropertySymbol> GetProperties(this ITypeSymbol value)
         {
             var properties = value.GetMembers<IPropertySymbol>();
 
             if (properties.Count > 0)
             {
-                return properties.Where(_ => _.CanBeReferencedByName);
+                return GetNamedSymbols(properties);
             }
 
             return Array.Empty<IPropertySymbol>();
         }
 
-        internal static IEnumerable<IFieldSymbol> GetFields(this ITypeSymbol value)
+        internal static IReadOnlyList<IFieldSymbol> GetFields(this ITypeSymbol value)
         {
             var fields = value.GetMembers<IFieldSymbol>();
 
             if (fields.Count > 0)
             {
-                return fields.Where(_ => _.CanBeReferencedByName);
+                return GetNamedSymbols(fields);
             }
 
             return Array.Empty<IFieldSymbol>();
@@ -227,14 +218,7 @@ namespace MiKoSolutions.Analyzers
             return field.DescendantNodes<MemberAccessExpressionSyntax>(_ => _.ToCleanedUpString() == invocation);
         }
 
-        internal static IEnumerable<string> GetAttributeNames(this ISymbol value)
-        {
-            var attributes = value.GetAttributes();
-
-            return attributes.Length != 0
-                   ? attributes.Select(_ => _.AttributeClass?.Name)
-                   : Array.Empty<string>();
-        }
+        internal static string[] GetAttributeNames(this ISymbol value) => value.GetAttributes().ToArray(_ => _.AttributeClass?.Name);
 
         internal static IEnumerable<ObjectCreationExpressionSyntax> GetCreatedObjectSyntaxReturnedByMethod(this IMethodSymbol value)
         {
@@ -633,7 +617,7 @@ namespace MiKoSolutions.Analyzers
             return node?.GetEnclosing<T>();
         }
 
-        internal static IEnumerable<DocumentationCommentTriviaSyntax> GetDocumentationCommentTriviaSyntax(this ISymbol value) => value.GetSyntax()?.GetDocumentationCommentTriviaSyntax() ?? Array.Empty<DocumentationCommentTriviaSyntax>();
+        internal static DocumentationCommentTriviaSyntax[] GetDocumentationCommentTriviaSyntax(this ISymbol value) => value.GetSyntax()?.GetDocumentationCommentTriviaSyntax() ?? Array.Empty<DocumentationCommentTriviaSyntax>();
 
         internal static ITypeSymbol GetReturnTypeSymbol(this ISymbol value)
         {
@@ -650,17 +634,19 @@ namespace MiKoSolutions.Analyzers
         {
             // TODO: RKN what about base types?
             var members = value.GetMembersIncludingInherited<ISymbol>().ToList();
-            var methodTypes = GetTestCreationMethods();
+            var methodTypes = GetTestCreationMethods(members);
             var propertyTypes = members.OfType<IPropertySymbol>().Where(_ => Constants.Names.TypeUnderTestPropertyNames.Contains(_.Name));
             var fieldTypes = members.OfType<IFieldSymbol>().Where(_ => Constants.Names.TypeUnderTestFieldNames.Contains(_.Name));
 
             return Array.Empty<ISymbol>().Concat(propertyTypes).Concat(fieldTypes).Concat(methodTypes).WhereNotNull().ToHashSet(SymbolEqualityComparer.Default);
 
-            IEnumerable<IMethodSymbol> GetTestCreationMethods()
+            IEnumerable<IMethodSymbol> GetTestCreationMethods(List<ISymbol> symbols)
             {
-                foreach (var method in members.OfType<IMethodSymbol>())
+                var count = symbols.Count;
+
+                for (var index = 0; index < count; index++)
                 {
-                    if (method.IsTypeUnderTestCreationMethod())
+                    if (symbols[index] is IMethodSymbol method && method.IsTypeUnderTestCreationMethod())
                     {
                         yield return method;
                     }
@@ -678,36 +664,36 @@ namespace MiKoSolutions.Analyzers
         {
             var attributes = value.GetAttributes();
 
-            if (attributes.Length != 0)
+            if (attributes.Length == 0)
             {
-                return attributes.Any(_ => attributeNames.Contains(_.AttributeClass?.Name));
+                return false;
             }
 
-            return false;
+            return attributes.Any(_ => attributeNames.Contains(_.AttributeClass?.Name));
         }
 
         internal static bool HasAttributeApplied(this ISymbol value, string attributeName)
         {
             var attributes = value.GetAttributes();
 
-            if (attributes.Length != 0)
+            if (attributes.Length == 0)
             {
-                return attributes.Any(_ => _.AttributeClass.InheritsFrom(attributeName));
+                return false;
             }
 
-            return false;
+            return attributes.Any(_ => _.AttributeClass.InheritsFrom(attributeName));
         }
 
         internal static bool HasDependencyObjectParameter(this IMethodSymbol value)
         {
             var parameters = value.Parameters;
 
-            if (parameters.Length != 0)
+            if (parameters.Length == 0)
             {
-                return parameters.Any(_ => _.Type.IsDependencyObject());
+                return false;
             }
 
-            return false;
+            return parameters.Any(_ => _.Type.IsDependencyObject());
         }
 
         internal static bool HasModifier(this IMethodSymbol value, SyntaxKind kind) => ((BaseMethodDeclarationSyntax)value.GetSyntax()).Modifiers.Any(kind);
@@ -1753,9 +1739,14 @@ namespace MiKoSolutions.Analyzers
         {
             result = null;
 
-            if (value is INamedTypeSymbol namedType && namedType.TypeArguments.Length >= index + 1)
+            if (value is INamedTypeSymbol namedType)
             {
-                result = namedType.TypeArguments[index];
+                var typeArguments = namedType.TypeArguments;
+
+                if (typeArguments.Length >= index + 1)
+                {
+                    result = typeArguments[index];
+                }
             }
 
             return result != null;
@@ -1820,5 +1811,23 @@ namespace MiKoSolutions.Analyzers
         }
 
         private static bool IsTestSpecificMethod(this IMethodSymbol value, ISet<string> attributeNames) => value?.MethodKind == MethodKind.Ordinary && value.IsPubliclyVisible() && value.HasAttribute(attributeNames);
+
+        private static List<T> GetNamedSymbols<T>(IReadOnlyList<T> symbols) where T : ISymbol
+        {
+            var count = symbols.Count;
+            var results = new List<T>(count);
+
+            for (var i = 0; i < count; i++)
+            {
+                var symbol = symbols[i];
+
+                if (symbol.CanBeReferencedByName)
+                {
+                    results.Add(symbol);
+                }
+            }
+
+            return results;
+        }
     }
 }

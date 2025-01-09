@@ -20,7 +20,14 @@ namespace MiKoSolutions.Analyzers
             if (value is IParameterSymbol p)
             {
                 // parameter might be method or property (setter or indexer)
-                return GetComment(p, p.ContainingSymbol?.GetDocumentationCommentXml());
+                var containingSymbol = p.ContainingSymbol;
+
+                if (containingSymbol is null)
+                {
+                    return null;
+                }
+
+                return GetComment(p, containingSymbol.GetDocumentationCommentXml());
             }
 
             return Cleaned(GetCommentElement(value));
@@ -61,8 +68,15 @@ namespace MiKoSolutions.Analyzers
 
         internal static XElement GetCommentElement(this string value)
         {
+            if (value is null)
+            {
+                return null;
+            }
+
             // just to be sure that we always have a root element (malformed XMLs are reported as comment but without a root element)
-            var xml = "<root>".ConcatenatedWith(value.AsSpan().Trim(), "</root>");
+            var trimmed = value.AsSpan().Trim().ToString();
+
+            var xml = StringBuilderCache.Acquire(13 + trimmed.Length).Append("<root>").Append(trimmed).Append("</root>").ToStringAndRelease();
 
             try
             {
@@ -108,15 +122,35 @@ namespace MiKoSolutions.Analyzers
 
         internal static IReadOnlyCollection<string> Cleaned(IEnumerable<string> comments)
         {
-            var cleanedComments = comments.WhereNotNull().ToList();
+            List<string> cleanedComments = null;
 
-            switch (cleanedComments.Count)
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
+            foreach (var s in comments)
             {
-                case 0: return Array.Empty<string>();
-                case 1: return new[] { TrimComment(cleanedComments[0]) };
-                default:
-                    return cleanedComments.ToHashSet(TrimComment);
+                if (s is null)
+                {
+                    continue;
+                }
+
+                if (cleanedComments is null)
+                {
+                    cleanedComments = new List<string>(1);
+                }
+
+                cleanedComments.Add(s);
             }
+
+            if (cleanedComments is null)
+            {
+                return Array.Empty<string>();
+            }
+
+            if (cleanedComments.Count == 1)
+            {
+                return new[] { TrimComment(cleanedComments[0]) };
+            }
+
+            return cleanedComments.ToHashSet(TrimComment);
 
             string TrimComment(string comment) => comment.AsCachedBuilder().WithoutParaTags().Trimmed().ToStringAndRelease();
         }
@@ -129,9 +163,19 @@ namespace MiKoSolutions.Analyzers
             }
 
             // remove all code elements
-            var codeElements = element.Descendants(Constants.XmlTag.Code).ToList();
+            List<XElement> codeElements = null;
 
-            if (codeElements.Count > 0)
+            foreach (var descendant in element.Descendants(Constants.XmlTag.Code))
+            {
+                if (codeElements is null)
+                {
+                    codeElements = new List<XElement>(1);
+                }
+
+                codeElements.Add(descendant);
+            }
+
+            if (codeElements?.Count > 0)
             {
                 codeElements.ForEach(_ => _.Remove());
             }

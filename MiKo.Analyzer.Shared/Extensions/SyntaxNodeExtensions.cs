@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers
 
         private static readonly Func<SyntaxNode, bool> DescendIntoChildren = _ => true;
 
-        internal static IEnumerable<SyntaxNode> AllDescendantNodes(this SyntaxNode value) => value.DescendantNodes(DescendIntoChildren, true);
+        internal static IEnumerable<SyntaxNode> AllDescendantNodes(this SyntaxNode value) => value?.DescendantNodes(DescendIntoChildren, true) ?? Array.Empty<SyntaxNode>();
 
         internal static IEnumerable<T> AllDescendantNodes<T>(this SyntaxNode value) where T : SyntaxNode => value.AllDescendantNodes().OfType<T>();
 
@@ -1070,15 +1070,18 @@ namespace MiKoSolutions.Analyzers
 
         internal static LinePosition GetEndPosition(this SyntaxNode value) => value.GetLocation().GetEndPosition();
 
-        internal static IEnumerable<DocumentationCommentTriviaSyntax> GetDocumentationCommentTriviaSyntax(this SyntaxNode value)
+        internal static DocumentationCommentTriviaSyntax[] GetDocumentationCommentTriviaSyntax(this SyntaxNode value)
         {
             if (value != null)
             {
-                var token = value.FirstDescendantToken();
-
-                if (token.HasStructuredTrivia)
+                if (value.HasStructuredTrivia)
                 {
-                    return GetDocumentationCommentTriviaSyntax(token);
+                    var token = value.FirstDescendantToken();
+
+                    if (token.HasStructuredTrivia)
+                    {
+                        return GetDocumentationCommentTriviaSyntax(token);
+                    }
                 }
             }
 
@@ -3982,23 +3985,38 @@ namespace MiKoSolutions.Analyzers
             return finalTrivia;
         }
 
-        private static IEnumerable<DocumentationCommentTriviaSyntax> GetDocumentationCommentTriviaSyntax(SyntaxToken value)
+        private static DocumentationCommentTriviaSyntax[] GetDocumentationCommentTriviaSyntax(SyntaxToken value)
         {
             var leadingTrivia = value.LeadingTrivia;
             var count = leadingTrivia.Count;
+
+            var results = new DocumentationCommentTriviaSyntax[1];
+            var resultsIndex = 0;
 
             for (var index = 0; index < count; index++)
             {
                 var trivia = leadingTrivia[index];
 
-                if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
+                if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
                 {
-                    if (trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
+                    if (results[resultsIndex] is null)
                     {
-                        yield return syntax;
+                        // first comment
+                        results[resultsIndex] = syntax;
+                    }
+                    else
+                    {
+                        // seems we have more separate comments, so increase by one
+                        Array.Resize(ref results, results.Length + 1);
+
+                        resultsIndex++;
+
+                        results[resultsIndex] = syntax;
                     }
                 }
             }
+
+            return results;
         }
 
         private static XmlTextSyntax XmlText(string text) => SyntaxFactory.XmlText(text);

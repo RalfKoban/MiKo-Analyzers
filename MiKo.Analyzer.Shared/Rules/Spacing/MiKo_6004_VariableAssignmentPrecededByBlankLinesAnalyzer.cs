@@ -54,7 +54,10 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             var node = (AssignmentExpressionSyntax)context.Node;
             var issue = Analyze(node, context.SemanticModel);
 
-            ReportDiagnostics(context, issue);
+            if (issue != null)
+            {
+                ReportDiagnostics(context, issue);
+            }
         }
 
         private Diagnostic Analyze(AssignmentExpressionSyntax assignment, SemanticModel semanticModel)

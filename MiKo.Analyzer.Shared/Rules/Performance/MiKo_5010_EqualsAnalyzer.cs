@@ -86,7 +86,10 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             {
                 var issue = AnalyzeEqualsInvocation(node, context.ContainingSymbol, context.SemanticModel);
 
-                ReportDiagnostics(context, issue);
+                if (issue != null)
+                {
+                    ReportDiagnostics(context, issue);
+                }
             }
         }
 

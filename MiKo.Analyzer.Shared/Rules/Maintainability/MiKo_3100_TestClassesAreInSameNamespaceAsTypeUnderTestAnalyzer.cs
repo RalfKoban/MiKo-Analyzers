@@ -26,10 +26,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var syntaxTree = semanticModel.SyntaxTree;
 
-            var allMethods = testClass.GetNamedMethods().ToList();
+            var allMethods = testClass.GetNamedMethods();
             var methods = allMethods.Where(_ => _.GetSyntax()?.SyntaxTree == syntaxTree).ToList();
 
-            if (testClass.IsPartial() && allMethods.Count != methods.Count)
+            if (allMethods.Count != methods.Count && testClass.IsPartial())
             {
                 // different syntax trees means that it's inside a partial part which we do not want/need to inspect (because namespaces for such parts are all the same and we only need to inspect one part)
                 return Array.Empty<ITypeSymbol>();
@@ -82,7 +82,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static ITypeSymbol AnalyzeTestCreationMethod(MethodDeclarationSyntax methodDeclaration, SemanticModel semanticModel)
         {
-            if (methodDeclaration.Body is null)
+            var body = methodDeclaration.Body;
+
+            if (body is null)
             {
                 if (methodDeclaration.ExpressionBody?.Expression is ObjectCreationExpressionSyntax oces)
                 {
@@ -93,12 +95,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
             else
             {
-                var controlFlow = semanticModel.AnalyzeControlFlow(methodDeclaration.Body);
+                var controlFlow = semanticModel.AnalyzeControlFlow(body);
                 var returnStatements = controlFlow.ReturnStatements.OfType<ReturnStatementSyntax>();
 
                 foreach (var variable in methodDeclaration.DescendantNodes<VariableDeclarationSyntax>().SelectMany(_ => _.Variables))
                 {
-                    if (returnStatements.Any(_ => _.Expression is IdentifierNameSyntax ins && variable.GetName() == ins.GetName()) && variable.Initializer?.Value is ObjectCreationExpressionSyntax oces)
+                    var variableName = variable.GetName();
+
+                    if (variable.Initializer?.Value is ObjectCreationExpressionSyntax oces && returnStatements.Any(_ => _.Expression is IdentifierNameSyntax ins && variableName == ins.GetName()))
                     {
                         var typeUnderTest = oces.GetTypeSymbol(semanticModel);
 

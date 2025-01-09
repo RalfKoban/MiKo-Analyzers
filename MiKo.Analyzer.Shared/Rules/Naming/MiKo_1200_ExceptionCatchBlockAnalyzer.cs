@@ -16,17 +16,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeCatchBlock, SyntaxKind.CatchClause);
-        }
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeCatchBlock, SyntaxKind.CatchClause);
 
         private void AnalyzeCatchBlock(SyntaxNodeAnalysisContext context)
         {
             var node = (CatchClauseSyntax)context.Node;
             var issue = AnalyzeCatchClause(node);
 
-            ReportDiagnostics(context, issue);
+            if (issue != null)
+            {
+                ReportDiagnostics(context, issue);
+            }
         }
 
         private Diagnostic AnalyzeCatchClause(CatchClauseSyntax node) => AnalyzeCatchDeclaration(node.Declaration);

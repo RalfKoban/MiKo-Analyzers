@@ -85,13 +85,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return Array.Empty<Diagnostic>();
             }
 
-            foreach (var name in parameter.GetAttributeNames())
+            var names = parameter.GetAttributeNames();
+            var namesLength = names.Length;
+
+            if (namesLength > 0)
             {
-                switch (name)
+                for (var index = 0; index < namesLength; index++)
                 {
-                    case "CallerMemberName":
-                    case nameof(CallerMemberNameAttribute):
-                        return Array.Empty<Diagnostic>();
+                    switch (names[index])
+                    {
+                        case "CallerMemberName":
+                        case nameof(CallerMemberNameAttribute):
+                            return Array.Empty<Diagnostic>();
+                    }
                 }
             }
 
