@@ -617,6 +617,8 @@ namespace MiKoSolutions.Analyzers
             return node?.GetEnclosing<T>();
         }
 
+        internal static bool HasDocumentationCommentTriviaSyntax(this ISymbol value) => value.GetSyntax()?.HasDocumentationCommentTriviaSyntax() ?? false;
+
         internal static DocumentationCommentTriviaSyntax[] GetDocumentationCommentTriviaSyntax(this ISymbol value) => value.GetSyntax()?.GetDocumentationCommentTriviaSyntax() ?? Array.Empty<DocumentationCommentTriviaSyntax>();
 
         internal static ITypeSymbol GetReturnTypeSymbol(this ISymbol value)

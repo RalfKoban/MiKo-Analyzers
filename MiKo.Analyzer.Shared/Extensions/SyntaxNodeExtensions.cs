@@ -1070,6 +1070,35 @@ namespace MiKoSolutions.Analyzers
 
         internal static LinePosition GetEndPosition(this SyntaxNode value) => value.GetLocation().GetEndPosition();
 
+        internal static bool HasDocumentationCommentTriviaSyntax(this SyntaxNode value)
+        {
+            if (value != null)
+            {
+                if (value.HasStructuredTrivia)
+                {
+                    var token = value.FirstDescendantToken();
+
+                    if (token.HasStructuredTrivia)
+                    {
+                        var leadingTrivia = token.LeadingTrivia;
+                        var count = leadingTrivia.Count;
+
+                        for (var index = 0; index < count; index++)
+                        {
+                            var trivia = leadingTrivia[index];
+
+                            if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
         internal static DocumentationCommentTriviaSyntax[] GetDocumentationCommentTriviaSyntax(this SyntaxNode value)
         {
             if (value != null)
@@ -1080,7 +1109,12 @@ namespace MiKoSolutions.Analyzers
 
                     if (token.HasStructuredTrivia)
                     {
-                        return GetDocumentationCommentTriviaSyntax(token);
+                        var comment = GetDocumentationCommentTriviaSyntax(token);
+
+                        if (comment != null)
+                        {
+                            return comment;
+                        }
                     }
                 }
             }
@@ -3990,7 +4024,7 @@ namespace MiKoSolutions.Analyzers
             var leadingTrivia = value.LeadingTrivia;
             var count = leadingTrivia.Count;
 
-            var results = new DocumentationCommentTriviaSyntax[1];
+            DocumentationCommentTriviaSyntax[] results = null;
             var resultsIndex = 0;
 
             for (var index = 0; index < count; index++)
@@ -3999,20 +4033,19 @@ namespace MiKoSolutions.Analyzers
 
                 if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
                 {
-                    if (results[resultsIndex] is null)
+                    if (results is null)
                     {
-                        // first comment
-                        results[resultsIndex] = syntax;
+                        results = new DocumentationCommentTriviaSyntax[1];
                     }
                     else
                     {
                         // seems we have more separate comments, so increase by one
                         Array.Resize(ref results, results.Length + 1);
-
-                        resultsIndex++;
-
-                        results[resultsIndex] = syntax;
                     }
+
+                    results[resultsIndex] = syntax;
+
+                    resultsIndex++;
                 }
             }
 

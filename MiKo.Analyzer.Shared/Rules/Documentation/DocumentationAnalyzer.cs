@@ -132,15 +132,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 //// ncrunch: rdi default
         }
 
-        protected virtual bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.GetDocumentationCommentId() != null;
+        protected virtual bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.HasDocumentationCommentTriviaSyntax();
 
-        protected virtual bool ShallAnalyze(IMethodSymbol symbol) => symbol.GetDocumentationCommentId() != null;
+        protected virtual bool ShallAnalyze(IMethodSymbol symbol) => symbol.HasDocumentationCommentTriviaSyntax();
 
-        protected virtual bool ShallAnalyze(IEventSymbol symbol) => symbol.GetDocumentationCommentId() != null;
+        protected virtual bool ShallAnalyze(IEventSymbol symbol) => symbol.HasDocumentationCommentTriviaSyntax();
 
-        protected virtual bool ShallAnalyze(IPropertySymbol symbol) => symbol.GetDocumentationCommentId() != null;
+        protected virtual bool ShallAnalyze(IPropertySymbol symbol) => symbol.HasDocumentationCommentTriviaSyntax();
 
-        protected virtual bool ShallAnalyze(IFieldSymbol symbol) => symbol.GetDocumentationCommentId() != null;
+        protected virtual bool ShallAnalyze(IFieldSymbol symbol) => symbol.HasDocumentationCommentTriviaSyntax();
 
         protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation)
         {

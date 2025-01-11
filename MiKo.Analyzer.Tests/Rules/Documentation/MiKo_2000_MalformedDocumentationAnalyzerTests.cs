@@ -12,6 +12,39 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2000_MalformedDocumentationAnalyzerTests : CodeFixVerifier
     {
         [Test]
+        public void No_issue_is_reported_for_unavailable_XML_on_class() => No_issue_is_reported_for(@"
+public sealed class TestMe
+{
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_unavailable_XML_on_field() => No_issue_is_reported_for(@"
+/// <summary>
+/// Something valid.
+/// </summary>
+public sealed class TestMe
+{
+    private const string SomeField;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_unavailable_XML_on_field_inside_region() => No_issue_is_reported_for(@"
+/// <summary>
+/// Something valid.
+/// </summary>
+public sealed class TestMe
+{
+    #region Fields
+
+    private const string SomeField;
+
+    #endregion
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_correct_XML_on_class() => No_issue_is_reported_for(@"
 /// <summary>
 /// Something valid.
