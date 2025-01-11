@@ -406,7 +406,7 @@ namespace MiKoSolutions.Analyzers.Rules
                 return SupportsNUnit;
             }
 
-            if (compilation.GetTypeByMetadataName("Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod") != null)
+            if (compilation.GetTypeByMetadataName("Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute") != null)
             {
                 return SupportsMSTest;
             }
