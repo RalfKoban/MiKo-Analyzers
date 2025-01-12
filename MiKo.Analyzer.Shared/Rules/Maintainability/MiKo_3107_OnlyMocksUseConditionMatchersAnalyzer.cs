@@ -79,7 +79,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var argumentList = node.ArgumentList;
 
-            if (node.Ancestors<LambdaExpressionSyntax>().Any(_ => _.IsMoqCall()))
+            if (node.AncestorsWithinMethods<LambdaExpressionSyntax>().Any(_ => _.IsMoqCall()))
             {
                 return Array.Empty<Diagnostic>();
             }

@@ -49,6 +49,10 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<T> Ancestors<T>(this SyntaxNode value) where T : SyntaxNode => value.Ancestors().OfType<T>(); // value.AncestorsAndSelf().OfType<T>();
 
+        internal static IEnumerable<T> AncestorsWithinMethods<T>(this SyntaxNode value) where T : SyntaxNode => value.Ancestors().TakeWhile(_ => _ is BaseMethodDeclarationSyntax is false).OfType<T>(); // TODO RKN: Use properties, fields etc. as well?
+
+        internal static IEnumerable<T> AncestorsWithinDocumentation<T>(this SyntaxNode value) where T : XmlNodeSyntax => value.Ancestors().TakeWhile(_ => _ is DocumentationCommentTriviaSyntax is false).OfType<T>();
+
         internal static bool Contains(this SyntaxNode value, char c) => value?.ToString().Contains(c) ?? false;
 
         internal static IEnumerable<T> ChildNodes<T>(this SyntaxNode value) where T : SyntaxNode => value.ChildNodes().OfType<T>();
@@ -1816,7 +1820,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsExpression(this SyntaxNode value, SemanticModel semanticModel)
         {
-            foreach (var a in value.Ancestors<ArgumentSyntax>())
+            foreach (var a in value.AncestorsWithinMethods<ArgumentSyntax>())
             {
                 var convertedType = semanticModel.GetTypeInfo(a.Expression).ConvertedType;
                 var isExpression = convertedType?.InheritsFrom<Expression>() is true;
@@ -1846,7 +1850,7 @@ namespace MiKoSolutions.Analyzers
 
                         if (elseStatement != null && ifStatement.Equals(elseStatement.Parent))
                         {
-                            // we are in the else part, not the if part, so fail
+                            // we are in the else part, not inside the 'if' part, so we fail
                             return false;
                         }
 

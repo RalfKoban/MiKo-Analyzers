@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 // find lambda
                 var lambda = shouldNode.FirstAncestor<LambdaExpressionSyntax>();
 
-                if (lambda != null && lambda.Ancestors().Any(_ => _ == statement))
+                if (lambda != null && lambda.AncestorsWithinMethods<ExpressionStatementSyntax>().Any(_ => _ == statement))
                 {
                     // we have a lambda expression, so replace that one
                     return statement.ReplaceNode(lambda, lambda.WithExpressionBody(assertThat));

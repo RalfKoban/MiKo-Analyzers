@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                     var expectedIdentifier = Constants.ExceptionIdentifier;
 
-                    if (node.Parent.Ancestors<CatchClauseSyntax>().Any(_ => _.Declaration?.Identifier.ValueText == Constants.ExceptionIdentifier))
+                    if (node.Parent.AncestorsWithinMethods<CatchClauseSyntax>().Any(_ => _.Declaration?.Identifier.ValueText == Constants.ExceptionIdentifier))
                     {
                         if (name == Constants.InnerExceptionIdentifier)
                         {
