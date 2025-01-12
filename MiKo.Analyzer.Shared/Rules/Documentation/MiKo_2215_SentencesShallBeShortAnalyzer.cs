@@ -57,10 +57,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 foreach (var syntax in node.DescendantNodes(_ => _.IsCode() is false, true).OfType<XmlTextSyntax>())
                 {
-                    builder.Append(' ').WithoutXmlCommentExterior(syntax).Append(' ');
+                    builder.Append(' ').Append(syntax).Append(' ');
                 }
 
-                var specificComment = builder.Trim();
+                var specificComment = builder.WithoutXmlCommentExterior().Trim();
 
                 StringBuilderCache.Release(builder);
 

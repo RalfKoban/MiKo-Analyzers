@@ -3406,14 +3406,12 @@ namespace MiKoSolutions.Analyzers
         {
             var builder = StringBuilderCache.Acquire();
 
-            var trimmed = builder.WithoutXmlCommentExterior(value).Trim();
+            var trimmed = builder.Append(value).WithoutXmlCommentExterior().Trim();
 
             StringBuilderCache.Release(builder);
 
             return trimmed;
         }
-
-        internal static StringBuilder WithoutXmlCommentExterior(this StringBuilder value, SyntaxNode node) => value.Append(node).WithoutXmlCommentExterior();
 
         internal static SyntaxList<XmlNodeSyntax> WithoutStartText(this XmlElementSyntax value, params string[] startTexts) => value.Content.WithoutStartText(startTexts);
 
