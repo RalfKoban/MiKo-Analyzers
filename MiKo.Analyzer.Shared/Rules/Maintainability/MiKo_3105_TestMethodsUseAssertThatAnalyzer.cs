@@ -15,6 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static readonly HashSet<string> AllowedAssertionMethods = new HashSet<string>
                                                                               {
+                                                                                  "ThatAsync",
                                                                                   "That",
                                                                                   "Fail",
                                                                                   "Pass",
