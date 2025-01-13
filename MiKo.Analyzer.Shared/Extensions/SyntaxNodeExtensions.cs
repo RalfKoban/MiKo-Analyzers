@@ -49,9 +49,40 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<T> Ancestors<T>(this SyntaxNode value) where T : SyntaxNode => value.Ancestors().OfType<T>(); // value.AncestorsAndSelf().OfType<T>();
 
-        internal static IEnumerable<T> AncestorsWithinMethods<T>(this SyntaxNode value) where T : SyntaxNode => value.Ancestors().TakeWhile(_ => _ is BaseMethodDeclarationSyntax is false).OfType<T>(); // TODO RKN: Use properties, fields etc. as well?
+        // TODO RKN: Use properties, fields etc. as well?
+        internal static IEnumerable<T> AncestorsWithinMethods<T>(this SyntaxNode value) where T : SyntaxNode
+        {
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
+            foreach (var ancestor in value.Ancestors())
+            {
+                if (ancestor is T t)
+                {
+                    yield return t;
+                }
 
-        internal static IEnumerable<T> AncestorsWithinDocumentation<T>(this SyntaxNode value) where T : XmlNodeSyntax => value.Ancestors().TakeWhile(_ => _ is DocumentationCommentTriviaSyntax is false).OfType<T>();
+                if (ancestor is BaseMethodDeclarationSyntax)
+                {
+                    yield break;
+                }
+            }
+        }
+
+        internal static IEnumerable<T> AncestorsWithinDocumentation<T>(this SyntaxNode value) where T : XmlNodeSyntax
+        {
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
+            foreach (var ancestor in value.Ancestors())
+            {
+                if (ancestor is T t)
+                {
+                    yield return t;
+                }
+
+                if (ancestor is DocumentationCommentTriviaSyntax)
+                {
+                    yield break;
+                }
+            }
+        }
 
         internal static bool Contains(this SyntaxNode value, char c) => value?.ToString().Contains(c) ?? false;
 

@@ -79,20 +79,20 @@ namespace MiKoSolutions.Analyzers.Rules
         // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/Analyzer%20Actions%20Semantics.md for more information
         public sealed override void Initialize(AnalysisContext context)
         {
-            m_analyzeNamespaceCallback = AnalyzeNamespace;
-            m_analyzeNamespaceContextCallback = AnalyzeNamespace;
-            m_analyzeTypeCallback = AnalyzeType;
-            m_analyzeTypeContextCallback = AnalyzeType;
-            m_analyzeEventCallback = AnalyzeEvent;
-            m_analyzeEventContextCallback = AnalyzeEvent;
-            m_analyzeFieldCallback = AnalyzeField;
-            m_analyzeFieldContextCallback = AnalyzeField;
-            m_analyzeMethodCallback = AnalyzeMethod;
-            m_analyzeMethodContextCallback = AnalyzeMethod;
-            m_analyzePropertyCallback = AnalyzeProperty;
-            m_analyzePropertyContextCallback = AnalyzeProperty;
-            m_analyzeParameterCallback = AnalyzeParameter;
-            m_analyzeParameterContextCallback = AnalyzeParameter;
+            m_analyzeNamespaceCallback = m_analyzeNamespaceCallback ?? AnalyzeNamespace;
+            m_analyzeNamespaceContextCallback = m_analyzeNamespaceContextCallback ?? AnalyzeNamespace;
+            m_analyzeTypeCallback = m_analyzeTypeCallback ?? AnalyzeType;
+            m_analyzeTypeContextCallback = m_analyzeTypeContextCallback ?? AnalyzeType;
+            m_analyzeEventCallback = m_analyzeEventCallback ?? AnalyzeEvent;
+            m_analyzeEventContextCallback = m_analyzeEventContextCallback ?? AnalyzeEvent;
+            m_analyzeFieldCallback = m_analyzeFieldCallback ?? AnalyzeField;
+            m_analyzeFieldContextCallback = m_analyzeFieldContextCallback ?? AnalyzeField;
+            m_analyzeMethodCallback = m_analyzeMethodCallback ?? AnalyzeMethod;
+            m_analyzeMethodContextCallback = m_analyzeMethodContextCallback ?? AnalyzeMethod;
+            m_analyzePropertyCallback = m_analyzePropertyCallback ?? AnalyzeProperty;
+            m_analyzePropertyContextCallback = m_analyzePropertyContextCallback ?? AnalyzeProperty;
+            m_analyzeParameterCallback = m_analyzeParameterCallback ?? AnalyzeParameter;
+            m_analyzeParameterContextCallback = m_analyzeParameterContextCallback ?? AnalyzeParameter;
 
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
 
