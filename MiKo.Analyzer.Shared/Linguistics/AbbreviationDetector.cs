@@ -321,11 +321,46 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return ReadOnlySpan<Pair>.Empty;
             }
 
-            value = value.Without(AllowedParts);
+            return FindCore(value.Without(AllowedParts).AsSpan());
+        }
 
-            var valueSpan = value.AsSpan();
+        internal static string ReplaceAllAbbreviations(string value, ReadOnlySpan<Pair> findings)
+        {
+            if (findings.Length > 0)
+            {
+                return ReplaceAllAbbreviations(value.AsCachedBuilder(), findings).ToStringAndRelease();
+            }
 
-            //// ncrunch: rdi off
+            return value;
+        }
+
+        internal static StringBuilder ReplaceAllAbbreviations(StringBuilder value, ReadOnlySpan<Pair> findings)
+        {
+            if (findings.Length > 0)
+            {
+                return value.ReplaceAllWithCheck(findings);
+            }
+
+            return value;
+        }
+
+        internal static string FindAndReplaceAllAbbreviations(string value)
+        {
+            var findings = Find(value);
+
+            return ReplaceAllAbbreviations(value, findings);
+        }
+
+        internal static StringBuilder FindAndReplaceAllAbbreviations(StringBuilder value)
+        {
+            var findings = Find(value.ToString());
+
+            return ReplaceAllAbbreviations(value, findings);
+        }
+
+        //// ncrunch: rdi off
+        private static ReadOnlySpan<Pair> FindCore(ReadOnlySpan<char> valueSpan)
+        {
             var result = new HashSet<Pair>(KeyEqualityComparer.Instance);
 
             var prefixesLength = Prefixes.Length;
@@ -376,46 +411,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return result.Count > 0
                    ? result.ToArray()
                    : ReadOnlySpan<Pair>.Empty;
-
+        }
 //// ncrunch: rdi default
-        }
-
-        internal static string ReplaceAllAbbreviations(string value, ReadOnlySpan<Pair> findings)
-        {
-            if (findings.Length > 0)
-            {
-                return ReplaceAllAbbreviations(value.AsCachedBuilder(), findings).ToStringAndRelease();
-            }
-
-            return value;
-        }
-
-        internal static StringBuilder ReplaceAllAbbreviations(StringBuilder value, ReadOnlySpan<Pair> findings)
-        {
-            if (findings.Length > 0)
-            {
-                return value.ReplaceAllWithCheck(findings);
-            }
-
-            return value;
-        }
-
-        internal static string FindAndReplaceAllAbbreviations(string value)
-        {
-            var findings = Find(value);
-
-            return ReplaceAllAbbreviations(value, findings);
-        }
-
-        internal static StringBuilder FindAndReplaceAllAbbreviations(StringBuilder value)
-        {
-            var findings = Find(value.ToString());
-
-            return ReplaceAllAbbreviations(value, findings);
-        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool IndicatesNewWord(ref char c) => c == Constants.Underscore || c.IsUpperCase();
+        private static bool IndicatesNewWord(ref char c) => c.IsUpperCase() || c == Constants.Underscore;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool CompleteTermHasIssue(ReadOnlySpan<char> key, ReadOnlySpan<char> value) => key.SequenceEqual(value);
