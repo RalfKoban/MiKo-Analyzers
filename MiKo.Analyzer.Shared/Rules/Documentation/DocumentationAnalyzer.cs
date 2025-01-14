@@ -149,28 +149,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var comments = symbol.GetDocumentationCommentTriviaSyntax();
                 var commentsLength = comments.Length;
 
-                if (commentsLength > 0)
+                if (commentsLength <= 0)
                 {
-                    for (var index = 0; index < commentsLength; index++)
-                    {
-                        var issues = AnalyzeType(symbol, compilation, symbol.GetDocumentationCommentXml(), comments[index]);
-
-                        if (issues is Diagnostic[] array && array.Length == 0)
-                        {
-                            continue;
-                        }
-
-                        // ReSharper disable once LoopCanBePartlyConvertedToQuery
-                        foreach (var issue in issues)
-                        {
-                            if (issue != null)
-                            {
-                                yield return issue;
-                            }
-                        }
-                    }
+                    return Array.Empty<Diagnostic>();
                 }
+
+                var commentXml = symbol.GetDocumentationCommentXml();
+
+                if (commentsLength == 1)
+                {
+                    return AnalyzeType(symbol, compilation, commentXml, comments[0]);
+                }
+
+                return AnalyzeTypeWithLoop(symbol, compilation, commentXml, comments);
             }
+
+            return Array.Empty<Diagnostic>();
         }
 
         protected virtual IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, compilation, commentXml, comment);
@@ -182,28 +176,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var comments = symbol.GetDocumentationCommentTriviaSyntax();
                 var commentsLength = comments.Length;
 
-                if (commentsLength > 0)
+                if (commentsLength <= 0)
                 {
-                    for (var index = 0; index < commentsLength; index++)
-                    {
-                        var issues = AnalyzeMethod(symbol, compilation, symbol.GetDocumentationCommentXml(), comments[index]);
-
-                        if (issues is Diagnostic[] array && array.Length == 0)
-                        {
-                            continue;
-                        }
-
-                        // ReSharper disable once LoopCanBePartlyConvertedToQuery
-                        foreach (var issue in issues)
-                        {
-                            if (issue != null)
-                            {
-                                yield return issue;
-                            }
-                        }
-                    }
+                    return Array.Empty<Diagnostic>();
                 }
+
+                var commentXml = symbol.GetDocumentationCommentXml();
+
+                if (commentsLength == 1)
+                {
+                    return AnalyzeMethod(symbol, compilation, commentXml, comments[0]);
+                }
+
+                return AnalyzeMethodWithLoop(symbol, compilation, commentXml, comments);
             }
+
+            return Array.Empty<Diagnostic>();
         }
 
         protected virtual IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, compilation, commentXml, comment);
@@ -215,28 +203,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var comments = symbol.GetDocumentationCommentTriviaSyntax();
                 var commentsLength = comments.Length;
 
-                if (commentsLength > 0)
+                if (commentsLength <= 0)
                 {
-                    for (var index = 0; index < commentsLength; index++)
-                    {
-                        var issues = AnalyzeEvent(symbol, compilation, symbol.GetDocumentationCommentXml(), comments[index]);
-
-                        if (issues is Diagnostic[] array && array.Length == 0)
-                        {
-                            continue;
-                        }
-
-                        // ReSharper disable once LoopCanBePartlyConvertedToQuery
-                        foreach (var issue in issues)
-                        {
-                            if (issue != null)
-                            {
-                                yield return issue;
-                            }
-                        }
-                    }
+                    return Array.Empty<Diagnostic>();
                 }
+
+                var commentXml = symbol.GetDocumentationCommentXml();
+
+                if (commentsLength == 1)
+                {
+                    return AnalyzeEvent(symbol, compilation, commentXml, comments[0]);
+                }
+
+                return AnalyzeEventWithLoop(symbol, compilation, commentXml, comments);
             }
+
+            return Array.Empty<Diagnostic>();
         }
 
         protected virtual IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, compilation, commentXml, comment);
@@ -248,28 +230,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var comments = symbol.GetDocumentationCommentTriviaSyntax();
                 var commentsLength = comments.Length;
 
-                if (commentsLength > 0)
+                if (commentsLength <= 0)
                 {
-                    for (var index = 0; index < commentsLength; index++)
-                    {
-                        var issues = AnalyzeProperty(symbol, compilation, symbol.GetDocumentationCommentXml(), comments[index]);
-
-                        if (issues is Diagnostic[] array && array.Length == 0)
-                        {
-                            continue;
-                        }
-
-                        // ReSharper disable once LoopCanBePartlyConvertedToQuery
-                        foreach (var issue in issues)
-                        {
-                            if (issue != null)
-                            {
-                                yield return issue;
-                            }
-                        }
-                    }
+                    return Array.Empty<Diagnostic>();
                 }
+
+                var commentXml = symbol.GetDocumentationCommentXml();
+
+                if (commentsLength == 1)
+                {
+                    return AnalyzeProperty(symbol, compilation, commentXml, comments[0]);
+                }
+
+                return AnalyzePropertyWithLoop(symbol, compilation, commentXml, comments);
             }
+
+            return Array.Empty<Diagnostic>();
         }
 
         protected virtual IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, compilation, commentXml, comment);
@@ -281,28 +257,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var comments = symbol.GetDocumentationCommentTriviaSyntax();
                 var commentsLength = comments.Length;
 
-                if (commentsLength > 0)
+                if (commentsLength <= 0)
                 {
-                    for (var index = 0; index < commentsLength; index++)
-                    {
-                        var issues = AnalyzeField(symbol, compilation, symbol.GetDocumentationCommentXml(), comments[index]);
-
-                        if (issues is Diagnostic[] array && array.Length == 0)
-                        {
-                            continue;
-                        }
-
-                        // ReSharper disable once LoopCanBePartlyConvertedToQuery
-                        foreach (var issue in issues)
-                        {
-                            if (issue != null)
-                            {
-                                yield return issue;
-                            }
-                        }
-                    }
+                    return Array.Empty<Diagnostic>();
                 }
+
+                var commentXml = symbol.GetDocumentationCommentXml();
+
+                if (commentsLength == 1)
+                {
+                    return AnalyzeField(symbol, compilation, commentXml, comments[0]);
+                }
+
+                return AnalyzeFieldWithLoop(symbol, compilation, commentXml, comments);
             }
+
+            return Array.Empty<Diagnostic>();
         }
 
         protected virtual IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, compilation, commentXml, comment);
@@ -636,6 +606,126 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 alreadyReportedLocations.Add(location);
 
                 yield return location;
+            }
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeTypeWithLoop(INamedTypeSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax[] comments)
+        {
+            var commentsLength = comments.Length;
+
+            for (var index = 0; index < commentsLength; index++)
+            {
+                var issues = AnalyzeType(symbol, compilation, commentXml, comments[index]);
+
+                if (issues is Diagnostic[] array && array.Length == 0)
+                {
+                    continue;
+                }
+
+                // ReSharper disable once LoopCanBePartlyConvertedToQuery
+                foreach (var issue in issues)
+                {
+                    if (issue != null)
+                    {
+                        yield return issue;
+                    }
+                }
+            }
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeMethodWithLoop(IMethodSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax[] comments)
+        {
+            var commentsLength = comments.Length;
+
+            for (var index = 0; index < commentsLength; index++)
+            {
+                var issues = AnalyzeMethod(symbol, compilation, commentXml, comments[index]);
+
+                if (issues is Diagnostic[] array && array.Length == 0)
+                {
+                    continue;
+                }
+
+                // ReSharper disable once LoopCanBePartlyConvertedToQuery
+                foreach (var issue in issues)
+                {
+                    if (issue != null)
+                    {
+                        yield return issue;
+                    }
+                }
+            }
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeEventWithLoop(IEventSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax[] comments)
+        {
+            var commentsLength = comments.Length;
+
+            for (var index = 0; index < commentsLength; index++)
+            {
+                var issues = AnalyzeEvent(symbol, compilation, commentXml, comments[index]);
+
+                if (issues is Diagnostic[] array && array.Length == 0)
+                {
+                    continue;
+                }
+
+                // ReSharper disable once LoopCanBePartlyConvertedToQuery
+                foreach (var issue in issues)
+                {
+                    if (issue != null)
+                    {
+                        yield return issue;
+                    }
+                }
+            }
+        }
+
+        private IEnumerable<Diagnostic> AnalyzePropertyWithLoop(IPropertySymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax[] comments)
+        {
+            var commentsLength = comments.Length;
+
+            for (var index = 0; index < commentsLength; index++)
+            {
+                var issues = AnalyzeProperty(symbol, compilation, commentXml, comments[index]);
+
+                if (issues is Diagnostic[] array && array.Length == 0)
+                {
+                    continue;
+                }
+
+                // ReSharper disable once LoopCanBePartlyConvertedToQuery
+                foreach (var issue in issues)
+                {
+                    if (issue != null)
+                    {
+                        yield return issue;
+                    }
+                }
+            }
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeFieldWithLoop(IFieldSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax[] comments)
+        {
+            var commentsLength = comments.Length;
+
+            for (var index = 0; index < commentsLength; index++)
+            {
+                var issues = AnalyzeField(symbol, compilation, commentXml, comments[index]);
+
+                if (issues is Diagnostic[] array && array.Length == 0)
+                {
+                    continue;
+                }
+
+                // ReSharper disable once LoopCanBePartlyConvertedToQuery
+                foreach (var issue in issues)
+                {
+                    if (issue != null)
+                    {
+                        yield return issue;
+                    }
+                }
             }
         }
     }
