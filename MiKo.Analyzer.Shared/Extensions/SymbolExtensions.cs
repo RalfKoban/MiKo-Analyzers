@@ -525,18 +525,8 @@ namespace MiKoSolutions.Analyzers
                 {
                     if (references[index].GetSyntax() is TSyntaxNode node)
                     {
-                        var location = node.GetLocation();
-
-                        var sourceTree = location.SourceTree;
-
-                        // "location.IsInSource" also checks SourceTree for null but ReSharper is not aware of it
-                        if (sourceTree is null)
-                        {
-                            continue;
-                        }
-
                         // ignore non C# code (might be part of partial classes, e.g. for XAML)
-                        var filePath = sourceTree.FilePath;
+                        var filePath = node.SyntaxTree.FilePath;
                         var filePathSpan = filePath.AsSpan();
 
                         // Perf: quick catch via span and ordinal comparison (as that is the most likely case)
