@@ -149,7 +149,7 @@ namespace MiKoSolutions.Analyzers
             return Array.Empty<IFieldSymbol>();
         }
 
-        internal static IReadOnlyCollection<LocalFunctionStatementSyntax> GetLocalFunctions(this IMethodSymbol value)
+        internal static IReadOnlyList<LocalFunctionStatementSyntax> GetLocalFunctions(this IMethodSymbol value)
         {
             var node = value.GetSyntaxNodeInSource();
 
@@ -173,7 +173,7 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            return functions ?? (IReadOnlyCollection<LocalFunctionStatementSyntax>)Array.Empty<LocalFunctionStatementSyntax>();
+            return functions ?? (IReadOnlyList<LocalFunctionStatementSyntax>)Array.Empty<LocalFunctionStatementSyntax>();
         }
 
         internal static bool ContainsExtensionMethods(this INamedTypeSymbol value) => value.TypeKind == TypeKind.Class && value.IsStatic && value.MightContainExtensionMethods && value.GetExtensionMethods().Any();

@@ -43,21 +43,34 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation)
         {
+            IEnumerable<Diagnostic> namingIssues = Array.Empty<Diagnostic>();
+            IEnumerable<Diagnostic> localFunctionIssues = Array.Empty<Diagnostic>();
+
             if (ShallAnalyze(symbol))
             {
-                foreach (var issue in AnalyzeName(symbol, compilation))
-                {
-                    yield return issue;
-                }
+                namingIssues = AnalyzeName(symbol, compilation);
             }
 
             if (ShallAnalyzeLocalFunctions(symbol))
             {
-                foreach (var issue in AnalyzeLocalFunctions(symbol, compilation))
-                {
-                    yield return issue;
-                }
+                localFunctionIssues = AnalyzeLocalFunctions(symbol, compilation);
             }
+
+            var noNamingIssues = namingIssues.IsEmptyArray();
+            var noLocalFunctionIssues = localFunctionIssues.IsEmptyArray();
+
+            if (noLocalFunctionIssues)
+            {
+                if (noNamingIssues)
+                {
+                    // nothing to report here
+                    return Array.Empty<Diagnostic>();
+                }
+
+                return namingIssues;
+            }
+
+            return namingIssues.Concat(localFunctionIssues);
         }
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
@@ -85,7 +98,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return Array.Empty<Diagnostic>();
             }
 
-            var semanticModel = compilation.GetSemanticModel(symbol.GetSyntax().SyntaxTree);
+            var semanticModel = compilation.GetSemanticModel(localFunctions[0].SyntaxTree);
 
             return localFunctions.Select(_ => _.GetSymbol(semanticModel))
                                  .Where(ShallAnalyzeLocalFunction)

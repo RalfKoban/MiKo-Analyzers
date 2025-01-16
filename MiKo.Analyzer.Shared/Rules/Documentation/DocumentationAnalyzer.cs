@@ -617,7 +617,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var issues = AnalyzeType(symbol, compilation, commentXml, comments[index]);
 
-                if (issues is Diagnostic[] array && array.Length == 0)
+                if (issues.IsEmptyArray())
                 {
                     continue;
                 }
@@ -641,7 +641,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var issues = AnalyzeMethod(symbol, compilation, commentXml, comments[index]);
 
-                if (issues is Diagnostic[] array && array.Length == 0)
+                if (issues.IsEmptyArray())
                 {
                     continue;
                 }
@@ -665,7 +665,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var issues = AnalyzeEvent(symbol, compilation, commentXml, comments[index]);
 
-                if (issues is Diagnostic[] array && array.Length == 0)
+                if (issues.IsEmptyArray())
                 {
                     continue;
                 }
@@ -689,7 +689,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var issues = AnalyzeProperty(symbol, compilation, commentXml, comments[index]);
 
-                if (issues is Diagnostic[] array && array.Length == 0)
+                if (issues.IsEmptyArray())
                 {
                     continue;
                 }
@@ -713,7 +713,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var issues = AnalyzeField(symbol, compilation, commentXml, comments[index]);
 
-                if (issues is Diagnostic[] array && array.Length == 0)
+                if (issues.IsEmptyArray())
                 {
                     continue;
                 }

@@ -622,6 +622,8 @@ namespace System.Linq
             return -1;
         }
 
+        internal static bool IsEmptyArray<T>(this IEnumerable<T> source) => source is T[] array && array.Length == 0;
+
         internal static bool None(this SyntaxTriviaList source) => source.Count == 0;
 
         internal static bool None<T>(this SyntaxList<T> source) where T : SyntaxNode => source.Count == 0;
