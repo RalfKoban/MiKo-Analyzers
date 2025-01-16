@@ -74,9 +74,16 @@ namespace MiKoSolutions.Analyzers
             }
 
             // just to be sure that we always have a root element (malformed XMLs are reported as comment but without a root element)
-            var trimmed = value.AsSpan().Trim().ToString();
+            var start = value.CountLeadingWhitespaces();
+            var end = value.CountTrailingWhitespaces(start);
 
-            var xml = StringBuilderCache.Acquire(13 + trimmed.Length).Append("<root>").Append(trimmed).Append("</root>").ToStringAndRelease();
+            var count = value.Length - end - start;
+
+            var xml = StringBuilderCache.Acquire(13 + count)
+                                        .Append("<root>")
+                                        .Append(value, start, count)
+                                        .Append("</root>")
+                                        .ToStringAndRelease();
 
             try
             {

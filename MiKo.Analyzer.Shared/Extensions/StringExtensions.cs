@@ -672,6 +672,45 @@ namespace System
             return false;
         }
 
+        public static int CountLeadingWhitespaces(this string value, int start = 0)
+        {
+            var whitespaces = 0;
+            var valueLength = value.Length;
+
+            for (; start < valueLength; start++)
+            {
+                if (value[start].IsWhiteSpace())
+                {
+                    whitespaces++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return whitespaces;
+        }
+
+        public static int CountTrailingWhitespaces(this string value, int start = 0)
+        {
+            var whitespaces = 0;
+
+            for (var i = value.Length - 1; i >= start; i--)
+            {
+                if (value[i].IsWhiteSpace())
+                {
+                    whitespaces++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return whitespaces;
+        }
+
 //// ncrunch: no coverage end
 
         public static bool EndsWith(this string value, char character) => value.HasCharacters() && value[value.Length - 1] == character;
