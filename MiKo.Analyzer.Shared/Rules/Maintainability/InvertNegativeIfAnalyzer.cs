@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -114,7 +115,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var issues = AnalyzeIfStatement(node, context);
 
-            ReportDiagnostics(context, issues);
+            if (issues.IsEmptyArray() is false)
+            {
+                ReportDiagnostics(context, issues);
+            }
         }
     }
 }

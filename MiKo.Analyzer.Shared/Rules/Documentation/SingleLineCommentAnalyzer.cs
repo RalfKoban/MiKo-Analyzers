@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -79,21 +80,30 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var issues = AnalyzeCommentTrivia(node, context.SemanticModel);
 
-            ReportDiagnostics(context, issues);
+            if (issues.IsEmptyArray() is false)
+            {
+                ReportDiagnostics(context, issues);
+            }
         }
 
         private void AnalyzeComment(SyntaxNodeAnalysisContext context, BaseFieldDeclarationSyntax node)
         {
             var issues = AnalyzeCommentTrivia(node, context.SemanticModel);
 
-            ReportDiagnostics(context, issues);
+            if (issues.IsEmptyArray() is false)
+            {
+                ReportDiagnostics(context, issues);
+            }
         }
 
         private void AnalyzeComment(SyntaxNodeAnalysisContext context, AccessorDeclarationSyntax node)
         {
             var issues = AnalyzeCommentTrivia(node, context.SemanticModel);
 
-            ReportDiagnostics(context, issues);
+            if (issues.IsEmptyArray() is false)
+            {
+                ReportDiagnostics(context, issues);
+            }
         }
 
         private bool AnalyzeComment(SyntaxTrivia trivia, SemanticModel semanticModel)

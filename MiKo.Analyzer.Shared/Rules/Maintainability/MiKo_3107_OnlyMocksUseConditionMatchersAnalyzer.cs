@@ -72,7 +72,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var node = (InvocationExpressionSyntax)context.Node;
             var issues = AnalyzeNormalInvocationExpression(node, context.SemanticModel);
 
-            ReportDiagnostics(context, issues);
+            if (issues.IsEmptyArray() is false)
+            {
+                ReportDiagnostics(context, issues);
+            }
         }
 
         private IEnumerable<Diagnostic> AnalyzeNormalInvocationExpression(InvocationExpressionSyntax node, SemanticModel semanticModel)
@@ -94,7 +97,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var node = (InitializerExpressionSyntax)context.Node;
             var issues = AnalyzeInitializerExpression(node, context.SemanticModel);
 
-            ReportDiagnostics(context, issues);
+            if (issues.IsEmptyArray() is false)
+            {
+                ReportDiagnostics(context, issues);
+            }
         }
 
         private IEnumerable<Diagnostic> AnalyzeInitializerExpression(InitializerExpressionSyntax node, SemanticModel semanticModel)
