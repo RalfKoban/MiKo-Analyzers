@@ -420,6 +420,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool CompleteTermHasIssue(ReadOnlySpan<char> key, ReadOnlySpan<char> value) => key.SequenceEqual(value);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool PrefixHasIssue(ReadOnlySpan<char> key, ReadOnlySpan<char> value)
         {
             if (value.Length > key.Length)
@@ -435,6 +436,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return false;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool PostFixHasIssue(ReadOnlySpan<char> key, ReadOnlySpan<char> value) => value.EndsWith(key, StringComparison.Ordinal) && value.EndsWithAny(AllowedPostFixTerms, StringComparison.Ordinal) is false;
 
         private static bool MidTermHasIssue(ReadOnlySpan<char> key, ReadOnlySpan<char> value)

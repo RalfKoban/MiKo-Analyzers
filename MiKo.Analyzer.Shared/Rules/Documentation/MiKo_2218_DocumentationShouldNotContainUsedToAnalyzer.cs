@@ -367,6 +367,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             foreach (var token in comment.GetXmlTextTokens())
             {
+                if (token.ValueText.IsNullOrWhiteSpace())
+                {
+                    continue;
+                }
+
                 foreach (var location in GetAllLocations(token, UsedToPhrases))
                 {
                     yield return Issue(location, UsedToReplacement);

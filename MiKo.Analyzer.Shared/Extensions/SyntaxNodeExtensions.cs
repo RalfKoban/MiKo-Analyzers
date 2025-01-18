@@ -670,6 +670,7 @@ namespace MiKoSolutions.Analyzers
             return string.Empty;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this ArgumentSyntax value) => value.Expression.GetName();
 
         internal static string GetName(this AttributeSyntax value)
@@ -730,18 +731,25 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this ClassDeclarationSyntax value) => value?.Identifier.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this ConstructorDeclarationSyntax value) => value?.Identifier.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this ConversionOperatorDeclarationSyntax value) => value?.OperatorKeyword.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this DestructorDeclarationSyntax value) => value?.Identifier.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this EnumDeclarationSyntax value) => value?.Identifier.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this EnumMemberDeclarationSyntax value) => value?.Identifier.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this EventDeclarationSyntax value) => value?.Identifier.ValueText;
 
         internal static string GetName(this ExpressionSyntax value)
@@ -793,18 +801,25 @@ namespace MiKoSolutions.Analyzers
             return string.Empty;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this IdentifierNameSyntax value) => value?.Identifier.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this IndexerDeclarationSyntax value) => value?.ThisKeyword.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this InterfaceDeclarationSyntax value) => value?.Identifier.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this LiteralExpressionSyntax value) => value?.Token.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this LocalFunctionStatementSyntax value) => value?.Identifier.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this MemberAccessExpressionSyntax value) => value?.Name.GetName();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this MemberBindingExpressionSyntax value) => value?.Name.GetName();
 
         internal static string GetName(this MemberDeclarationSyntax value)
@@ -821,22 +836,31 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this MethodDeclarationSyntax value) => value?.Identifier.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this NameColonSyntax value) => value?.Name.GetName();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this NameEqualsSyntax value) => value?.Name.GetName();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this OperatorDeclarationSyntax value) => value?.OperatorToken.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this ParameterSyntax value) => value?.Identifier.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this PropertyDeclarationSyntax value) => value?.Identifier.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this RecordDeclarationSyntax value) => value?.Identifier.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this SimpleNameSyntax value) => value?.Identifier.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this StructDeclarationSyntax value) => value?.Identifier.ValueText;
 
         internal static string GetName(this TypeDeclarationSyntax value)
@@ -864,20 +888,28 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this UsingDirectiveSyntax value) => value?.Name.GetName();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this VariableDeclaratorSyntax value) => value?.Identifier.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this XmlAttributeSyntax value) => value?.Name.GetName();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this XmlElementSyntax value) => value?.StartTag.GetName();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this XmlEmptyElementSyntax value) => value?.Name.GetName();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this XmlElementStartTagSyntax value) => value?.Name.GetName();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this XmlElementEndTagSyntax value) => value?.Name.GetName();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this XmlNameSyntax value) => value?.LocalName.ValueText;
 
         internal static IEnumerable<string> GetNames(this BaseFieldDeclarationSyntax value)

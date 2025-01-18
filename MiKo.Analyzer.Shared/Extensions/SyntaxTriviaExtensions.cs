@@ -30,16 +30,9 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsComment(this SyntaxTrivia value)
         {
-            // we use 'IsKind' for performance reasons as most likely, we have single line comments
-            switch (value.Kind())
-            {
-                case SyntaxKind.SingleLineCommentTrivia:
-                case SyntaxKind.MultiLineCommentTrivia:
-                    return true;
-
-                default:
-                    return false;
-            }
+            // we use 'RawKind' for performance reasons as most likely, we have single line comments
+            // (SyntaxKind.MultiLineCommentTrivia is 1 higher than SyntaxKind.SingleLineCommentTrivia, so we include both)
+            return (uint)(value.RawKind - (int)SyntaxKind.SingleLineCommentTrivia) <= 1;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
