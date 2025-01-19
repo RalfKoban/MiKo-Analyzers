@@ -148,22 +148,25 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected static void ReportDiagnostics(SyntaxNodeAnalysisContext context, IEnumerable<Diagnostic> issues)
         {
+            if (issues is IReadOnlyList<Diagnostic> emptyList && emptyList.Count == 0)
+            {
+                return;
+            }
+
             if (context.CancellationToken.IsCancellationRequested)
             {
                 // seems that we should cancel and not report further issues
                 return;
             }
 
-            if (issues is Diagnostic[] array)
+            if (issues is IReadOnlyList<Diagnostic> list && list.Count == 1)
             {
-                switch (array.Length)
-                {
-                    case 0: return;
-                    case 1: context.ReportDiagnostic(array[0]); return;
-                }
+                ReportDiagnostics(context, list[0]);
             }
-
-            ReportDiagnosticsEnumerable(context, issues);
+            else
+            {
+                ReportDiagnosticsEnumerable(context, issues);
+            }
         }
 
         protected virtual bool IsApplicable(CompilationStartAnalysisContext context) => true;
@@ -343,22 +346,30 @@ namespace MiKoSolutions.Analyzers.Rules
 
             var issues = analyzer((T)symbol, compilation);
 
+            if (issues is IReadOnlyList<Diagnostic> emptyList && emptyList.Count == 0)
+            {
+                return;
+            }
+
             if (context.CancellationToken.IsCancellationRequested)
             {
                 // seems that we should cancel and not report further issues
                 return;
             }
 
-            if (issues is Diagnostic[] array)
+            if (issues is IReadOnlyList<Diagnostic> list && list.Count == 1)
             {
-                switch (array.Length)
+                var issue = list[0];
+
+                if (issue != null)
                 {
-                    case 0: return;
-                    case 1: context.ReportDiagnostic(array[0]); return;
+                    context.ReportDiagnostic(issue);
                 }
             }
-
-            ReportDiagnosticsEnumerable(context, issues);
+            else
+            {
+                ReportDiagnosticsEnumerable(context, issues);
+            }
         }
 
         private static void ReportDiagnosticsEnumerable(SymbolAnalysisContext context, IEnumerable<Diagnostic> issues)

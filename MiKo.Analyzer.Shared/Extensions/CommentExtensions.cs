@@ -87,7 +87,7 @@ namespace MiKoSolutions.Analyzers
 
             try
             {
-                return XElement.Parse(xml);
+                return XElement.Parse(xml, LoadOptions.None);
             }
             catch (XmlException)
             {
@@ -229,9 +229,7 @@ namespace MiKoSolutions.Analyzers
         {
             if (comments.Any())
             {
-                var comment = Cleaned(comments.Nodes());
-
-                return comment;
+                return Cleaned(comments.Nodes());
             }
 
             return null;

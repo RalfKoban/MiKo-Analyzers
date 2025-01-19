@@ -70,7 +70,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
-            var issues = AnalyzeCommentXml(comment).ToList();
+            var issues = AnalyzeCommentXml(comment);
             var count = issues.Count;
 
             switch (count)
@@ -100,10 +100,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return finalIssues;
         }
 
-        private IEnumerable<Diagnostic> AnalyzeCommentXml(DocumentationCommentTriviaSyntax comment)
+        private List<Diagnostic> AnalyzeCommentXml(DocumentationCommentTriviaSyntax comment)
         {
+            var issues = new List<Diagnostic>();
+
             foreach (var token in comment.GetXmlTextTokens())
             {
+                if (token.ValueText.IsNullOrWhiteSpace())
+                {
+                    continue;
+                }
+
                 const int Offset = 1; // we do not want to underline the first and last char
 
                 foreach (var location in GetAllLocations(token, Phrases, StringComparison.OrdinalIgnoreCase, Offset, Offset))
@@ -112,7 +119,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (PhrasesMap.TryGetValue(text, out var replacement))
                     {
-                        yield return Issue(location, replacement);
+                        issues.Add(Issue(location, replacement));
                     }
                 }
 
@@ -123,7 +130,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (text.Contains(AcceptedPhrase) is false)
                     {
-                        yield return issue;
+                        issues.Add(issue);
                     }
                 }
 
@@ -134,20 +141,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (text.Contains(AcceptedPhrase) is false && text.ContainsAny(PhrasesMapKeys) is false)
                     {
-                        yield return issue;
+                        issues.Add(issue);
                     }
                 }
 
-                foreach (var issue in AnalyzeForSpecialPhrase(token, WillNeverPhraseStartUpperCase, _ => NeverPhraseStartUpperCase + " " + Verbalizer.MakeThirdPersonSingularVerb(_)))
-                {
-                    yield return issue;
-                }
-
-                foreach (var issue in AnalyzeForSpecialPhrase(token, WillNeverPhrase, _ => NeverPhrase + " " + Verbalizer.MakeThirdPersonSingularVerb(_)))
-                {
-                    yield return issue;
-                }
+                issues.AddRange(AnalyzeForSpecialPhrase(token, WillNeverPhraseStartUpperCase, _ => NeverPhraseStartUpperCase + " " + Verbalizer.MakeThirdPersonSingularVerb(_)));
+                issues.AddRange(AnalyzeForSpecialPhrase(token, WillNeverPhrase, _ => NeverPhrase + " " + Verbalizer.MakeThirdPersonSingularVerb(_)));
             }
+
+            return issues;
         }
     }
 }

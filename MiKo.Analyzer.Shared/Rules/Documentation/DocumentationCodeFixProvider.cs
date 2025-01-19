@@ -39,9 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 for (var index = 0; index < resultIndex; index++)
                 {
-                    var item = result[index];
-
-                    if (span.StartsWith(item.AsSpan()))
+                    if (span.StartsWith(result[index].AsSpan()))
                     {
                         found = true;
 
