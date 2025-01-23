@@ -20,15 +20,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment)
         {
-            var phrases = Constants.Comments.EnumParameterStartingPhrase;
+            var parameterType = parameter.Type;
+            var qualifiedName = parameterType.FullyQualifiedName();
 
-            for (var i = 0; i < phrases.Length; i++)
+            var phrases = Constants.Comments.EnumParameterStartingPhrase;
+            var length = phrases.Length;
+
+            var finalPhrases = new string[2 * length];
+
+            for (var i = 0; i < length; i++)
             {
                 // apply full qualified name here as this is applied under the hood to the comment itself
-                phrases[i] = phrases[i].FormatWith(parameter.Type.FullyQualifiedName());
+                finalPhrases[i + length] = phrases[i].FormatWith(qualifiedName);
+
+                finalPhrases[i] = phrases[i].FormatWith(parameterType.Name);
             }
 
-            return AnalyzeStartingPhrase(parameter, parameterComment, comment, phrases);
+            return AnalyzeStartingPhrase(parameter, parameterComment, comment, finalPhrases);
         }
     }
 }
