@@ -48,27 +48,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return CreateLocation(value, trivia.SyntaxTree, trivia.SpanStart, trivia.ToFullString().LastIndexOf(value, comparison), startOffset, endOffset);
         }
 
-        protected static IEnumerable<Location> GetAllLocations(SyntaxToken textToken, string value, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
+        protected static IReadOnlyList<Location> GetAllLocations(SyntaxToken textToken, string value, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
         {
             return GetAllLocations(textToken.ValueText, textToken.SyntaxTree, textToken.SpanStart, value, comparison, startOffset, endOffset);
         }
 
-        protected static IEnumerable<Location> GetAllLocations(SyntaxToken textToken, IReadOnlyList<string> values, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
+        protected static IReadOnlyList<Location> GetAllLocations(SyntaxToken textToken, string[] values, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
         {
             return GetAllLocations(textToken.ValueText, textToken.SyntaxTree, textToken.SpanStart, values, comparison, startOffset, endOffset);
         }
 
-        protected static IEnumerable<Location> GetAllLocations(SyntaxTrivia trivia, string value, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
+        protected static IReadOnlyList<Location> GetAllLocations(SyntaxTrivia trivia, string value, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
         {
             return GetAllLocations(trivia.ToFullString(), trivia.SyntaxTree, trivia.SpanStart, value, comparison, startOffset, endOffset);
         }
 
-        protected static IEnumerable<Location> GetAllLocations(SyntaxTrivia trivia, IReadOnlyList<string> values, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
+        protected static IReadOnlyList<Location> GetAllLocations(SyntaxTrivia trivia, string[] values, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
         {
             return GetAllLocations(trivia.ToFullString(), trivia.SyntaxTree, trivia.SpanStart, values, comparison, startOffset, endOffset);
         }
 
-        protected static IEnumerable<Location> GetAllLocations(SyntaxToken textToken, string value, Func<char, bool> nextCharValidationCallback, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
+        protected static IReadOnlyList<Location> GetAllLocations(SyntaxToken textToken, string value, Func<char, bool> nextCharValidationCallback, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
         {
             return GetAllLocations(textToken.ValueText, textToken.SyntaxTree, textToken.SpanStart, value, nextCharValidationCallback, comparison, startOffset, endOffset);
         }
@@ -121,118 +121,163 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var returnTypeWithGenericCount = firstPart.ConcatenatedWith("`", count.ToString());
 
 //// ncrunch: rdi off
-                return Enumerable.Empty<string>()
-                                 .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeWithTs))) // for the phrases to show to the user
-                                 .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeWithGenericCount))); // for the real check
+                return Array.Empty<string>()
+                            .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeWithTs))) // for the phrases to show to the user
+                            .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeWithGenericCount))); // for the real check
             }
 
-            return Enumerable.Empty<string>()
-                             .Concat(startingPhrases.Select(_ => _.FormatWith(returnType)))
-                             .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeFullyQualified)));
+            return Array.Empty<string>()
+                        .Concat(startingPhrases.Select(_ => _.FormatWith(returnType)))
+                        .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeFullyQualified)));
 //// ncrunch: rdi default
         }
 
-        protected virtual bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.GetDocumentationCommentId() != null;
+        protected virtual bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.HasDocumentationCommentTriviaSyntax();
 
-        protected virtual bool ShallAnalyze(IMethodSymbol symbol) => symbol.GetDocumentationCommentId() != null;
+        protected virtual bool ShallAnalyze(IMethodSymbol symbol) => symbol.HasDocumentationCommentTriviaSyntax();
 
-        protected virtual bool ShallAnalyze(IEventSymbol symbol) => symbol.GetDocumentationCommentId() != null;
+        protected virtual bool ShallAnalyze(IEventSymbol symbol) => symbol.HasDocumentationCommentTriviaSyntax();
 
-        protected virtual bool ShallAnalyze(IPropertySymbol symbol) => symbol.GetDocumentationCommentId() != null;
+        protected virtual bool ShallAnalyze(IPropertySymbol symbol) => symbol.HasDocumentationCommentTriviaSyntax();
 
-        protected virtual bool ShallAnalyze(IFieldSymbol symbol) => symbol.GetDocumentationCommentId() != null;
+        protected virtual bool ShallAnalyze(IFieldSymbol symbol) => symbol.HasDocumentationCommentTriviaSyntax();
 
         protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation)
         {
-            if (ShallAnalyze(symbol))
+            if (ShallAnalyze(symbol) is false)
             {
-                foreach (var comment in symbol.GetDocumentationCommentTriviaSyntax())
-                {
-                    var issues = AnalyzeType(symbol, compilation, symbol.GetDocumentationCommentXml(), comment);
-
-                    foreach (var issue in issues)
-                    {
-                        yield return issue;
-                    }
-                }
+                return Array.Empty<Diagnostic>();
             }
+
+            var comments = symbol.GetDocumentationCommentTriviaSyntax();
+            var commentsLength = comments.Length;
+
+            if (commentsLength <= 0)
+            {
+                return Array.Empty<Diagnostic>();
+            }
+
+            var commentXml = symbol.GetDocumentationCommentXml();
+
+            if (commentsLength == 1)
+            {
+                return AnalyzeType(symbol, compilation, commentXml, comments[0]);
+            }
+
+            return AnalyzeTypeWithLoop(symbol, compilation, commentXml, comments);
         }
 
         protected virtual IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, compilation, commentXml, comment);
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation)
         {
-            if (ShallAnalyze(symbol))
+            if (ShallAnalyze(symbol) is false)
             {
-                foreach (var comment in symbol.GetDocumentationCommentTriviaSyntax())
-                {
-                    var issues = AnalyzeMethod(symbol, compilation, symbol.GetDocumentationCommentXml(), comment);
-
-                    foreach (var issue in issues)
-                    {
-                        yield return issue;
-                    }
-                }
+                return Array.Empty<Diagnostic>();
             }
+
+            var comments = symbol.GetDocumentationCommentTriviaSyntax();
+            var commentsLength = comments.Length;
+
+            if (commentsLength <= 0)
+            {
+                return Array.Empty<Diagnostic>();
+            }
+
+            var commentXml = symbol.GetDocumentationCommentXml();
+
+            if (commentsLength == 1)
+            {
+                return AnalyzeMethod(symbol, compilation, commentXml, comments[0]);
+            }
+
+            return AnalyzeMethodWithLoop(symbol, compilation, commentXml, comments);
         }
 
         protected virtual IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, compilation, commentXml, comment);
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol, Compilation compilation)
         {
-            if (ShallAnalyze(symbol))
+            if (ShallAnalyze(symbol) is false)
             {
-                foreach (var comment in symbol.GetDocumentationCommentTriviaSyntax())
-                {
-                    var issues = AnalyzeEvent(symbol, compilation, symbol.GetDocumentationCommentXml(), comment);
-
-                    foreach (var issue in issues)
-                    {
-                        yield return issue;
-                    }
-                }
+                return Array.Empty<Diagnostic>();
             }
+
+            var comments = symbol.GetDocumentationCommentTriviaSyntax();
+            var commentsLength = comments.Length;
+
+            if (commentsLength <= 0)
+            {
+                return Array.Empty<Diagnostic>();
+            }
+
+            var commentXml = symbol.GetDocumentationCommentXml();
+
+            if (commentsLength == 1)
+            {
+                return AnalyzeEvent(symbol, compilation, commentXml, comments[0]);
+            }
+
+            return AnalyzeEventWithLoop(symbol, compilation, commentXml, comments);
         }
 
         protected virtual IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, compilation, commentXml, comment);
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation)
         {
-            if (ShallAnalyze(symbol))
+            if (ShallAnalyze(symbol) is false)
             {
-                foreach (var comment in symbol.GetDocumentationCommentTriviaSyntax())
-                {
-                    var issues = AnalyzeProperty(symbol, compilation, symbol.GetDocumentationCommentXml(), comment);
-
-                    foreach (var issue in issues)
-                    {
-                        yield return issue;
-                    }
-                }
+                return Array.Empty<Diagnostic>();
             }
+
+            var comments = symbol.GetDocumentationCommentTriviaSyntax();
+            var commentsLength = comments.Length;
+
+            if (commentsLength <= 0)
+            {
+                return Array.Empty<Diagnostic>();
+            }
+
+            var commentXml = symbol.GetDocumentationCommentXml();
+
+            if (commentsLength == 1)
+            {
+                return AnalyzeProperty(symbol, compilation, commentXml, comments[0]);
+            }
+
+            return AnalyzePropertyWithLoop(symbol, compilation, commentXml, comments);
         }
 
         protected virtual IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, compilation, commentXml, comment);
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation)
         {
-            if (ShallAnalyze(symbol))
+            if (ShallAnalyze(symbol) is false)
             {
-                foreach (var comment in symbol.GetDocumentationCommentTriviaSyntax())
-                {
-                    var issues = AnalyzeField(symbol, compilation, symbol.GetDocumentationCommentXml(), comment);
-
-                    foreach (var issue in issues)
-                    {
-                        yield return issue;
-                    }
-                }
+                return Array.Empty<Diagnostic>();
             }
+
+            var comments = symbol.GetDocumentationCommentTriviaSyntax();
+            var commentsLength = comments.Length;
+
+            if (commentsLength <= 0)
+            {
+                return Array.Empty<Diagnostic>();
+            }
+
+            var commentXml = symbol.GetDocumentationCommentXml();
+
+            if (commentsLength == 1)
+            {
+                return AnalyzeField(symbol, compilation, commentXml, comments[0]);
+            }
+
+            return AnalyzeFieldWithLoop(symbol, compilation, commentXml, comments);
         }
 
         protected virtual IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, compilation, commentXml, comment);
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => Array.Empty<Diagnostic>();
 
         protected virtual Diagnostic StartIssue(ISymbol symbol, SyntaxNode node) => StartIssue(symbol, node.GetLocation());
 
@@ -361,32 +406,79 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual bool ConsiderEmptyTextAsIssue(ISymbol symbol) => true;
 
-        private static IEnumerable<Location> GetAllLocations(string text, SyntaxTree syntaxTree, int spanStart, string value, StringComparison comparison, int startOffset, int endOffset)
+        private static IReadOnlyList<Location> GetAllLocations(string text, SyntaxTree syntaxTree, int spanStart, string value, StringComparison comparison, int startOffset, int endOffset)
         {
             var textLength = text.Length;
 
             if (textLength <= 2 && text.IsNullOrWhiteSpace())
             {
                 // nothing to inspect as the text is too short and consists of whitespaces only
-                yield break;
+                return Array.Empty<Location>();
             }
 
             if (textLength < value.Length)
             {
                 // nothing to inspect as the text is too short
-                yield break;
+                return Array.Empty<Location>();
             }
 
             var allIndices = text.AllIndicesOf(value, comparison);
-            var count = allIndices.Count;
 
-            if (count <= 0)
+            if (allIndices.IsEmptyArray())
             {
                 // nothing to inspect
-                yield break;
+                return Array.Empty<Location>();
             }
 
+            return GetAllLocationsWithLoop(syntaxTree, spanStart, value, startOffset, endOffset, allIndices);
+        }
+
+        private static IReadOnlyList<Location> GetAllLocations(string text, SyntaxTree syntaxTree, int spanStart, string[] values, StringComparison comparison, int startOffset, int endOffset)
+        {
+            var textLength = text.Length;
+
+            if (textLength <= 2 && text.IsNullOrWhiteSpace())
+            {
+                // nothing to inspect as the text is too short and consists of whitespaces only
+                return Array.Empty<Location>();
+            }
+
+            return GetAllLocationsWithLoop(text, syntaxTree, spanStart, values, comparison, startOffset, endOffset, textLength);
+        }
+
+        private static IReadOnlyList<Location> GetAllLocations(string text, SyntaxTree syntaxTree, int spanStart, string value, Func<char, bool> nextCharValidationCallback, StringComparison comparison, int startOffset, int endOffset)
+        {
+            var textLength = text.Length;
+
+            if (textLength <= 2 && text.IsNullOrWhiteSpace())
+            {
+                // nothing to inspect as the text is too short and consists of whitespaces only
+                return Array.Empty<Location>();
+            }
+
+            if (textLength < value.Length)
+            {
+                // nothing to inspect as the text is too short
+                return Array.Empty<Location>();
+            }
+
+            var allIndices = text.AllIndicesOf(value, comparison);
+
+            if (allIndices.IsEmptyArray())
+            {
+                // nothing to inspect
+                return Array.Empty<Location>();
+            }
+
+            return GetAllLocationsWithLoop(text, syntaxTree, spanStart, value, nextCharValidationCallback, startOffset, endOffset, textLength, allIndices);
+        }
+
+        private static IReadOnlyList<Location> GetAllLocationsWithLoop(SyntaxTree syntaxTree, int spanStart, string value, int startOffset, int endOffset, IReadOnlyList<int> allIndices)
+        {
             List<Location> alreadyReportedLocations = null;
+            var count = allIndices.Count;
+
+            List<Location> results = null;
 
             for (var index = 0; index < count; index++)
             {
@@ -414,22 +506,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 alreadyReportedLocations.Add(location);
 
-                yield return location;
+                if (results is null)
+                {
+                    results = new List<Location>(1);
+                }
+
+                results.Add(location);
             }
+
+            return results ?? (IReadOnlyList<Location>)Array.Empty<Location>();
         }
 
-        private static IEnumerable<Location> GetAllLocations(string text, SyntaxTree syntaxTree, int spanStart, IReadOnlyList<string> values, StringComparison comparison, int startOffset, int endOffset)
+        private static IReadOnlyList<Location> GetAllLocationsWithLoop(string text, SyntaxTree syntaxTree, int spanStart, string[] values, StringComparison comparison, int startOffset, int endOffset, int textLength)
         {
-            var textLength = text.Length;
-
-            if (textLength <= 2 && text.IsNullOrWhiteSpace())
-            {
-                // nothing to inspect as the text is too short and consists of whitespaces only
-                yield break;
-            }
-
             List<Location> alreadyReportedLocations = null;
-            var valuesCount = values.Count;
+            var valuesCount = values.Length;
+
+            List<Location> results = null;
 
             for (var valueIndex = 0; valueIndex < valuesCount; valueIndex++)
             {
@@ -442,13 +535,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
 
                 var allIndices = text.AllIndicesOf(value, comparison);
-                var count = allIndices.Count;
 
-                if (count <= 0)
+                if (allIndices.IsEmptyArray())
                 {
                     // nothing to inspect
                     continue;
                 }
+
+                var count = allIndices.Count;
 
                 for (var index = 0; index < count; index++)
                 {
@@ -476,39 +570,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     alreadyReportedLocations.Add(location);
 
-                    yield return location;
+                    if (results is null)
+                    {
+                        results = new List<Location>(1);
+                    }
+
+                    results.Add(location);
                 }
             }
+
+            return results ?? (IReadOnlyList<Location>)Array.Empty<Location>();
         }
 
-        private static IEnumerable<Location> GetAllLocations(string text, SyntaxTree syntaxTree, int spanStart, string value, Func<char, bool> nextCharValidationCallback, StringComparison comparison, int startOffset, int endOffset)
+        private static IReadOnlyList<Location> GetAllLocationsWithLoop(string text, SyntaxTree syntaxTree, int spanStart, string value, Func<char, bool> nextCharValidationCallback, int startOffset, int endOffset, int textLength, IReadOnlyList<int> allIndices)
         {
-            var textLength = text.Length;
-
-            if (textLength <= 2 && text.IsNullOrWhiteSpace())
-            {
-                // nothing to inspect as the text is too short and consists of whitespaces only
-                yield break;
-            }
-
-            if (textLength < value.Length)
-            {
-                // nothing to inspect as the text is too short
-                yield break;
-            }
-
-            var allIndices = text.AllIndicesOf(value, comparison);
-            var count = allIndices.Count;
-
-            if (count <= 0)
-            {
-                // nothing to inspect
-                yield break;
-            }
-
             var lastPosition = textLength - 1;
 
             List<Location> alreadyReportedLocations = null;
+            var count = allIndices.Count;
+
+            List<Location> results = null;
 
             for (var index = 0; index < count; index++)
             {
@@ -545,7 +626,134 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 alreadyReportedLocations.Add(location);
 
-                yield return location;
+                if (results is null)
+                {
+                    results = new List<Location>(1);
+                }
+
+                results.Add(location);
+            }
+
+            return results ?? (IReadOnlyList<Location>)Array.Empty<Location>();
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeTypeWithLoop(INamedTypeSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax[] comments)
+        {
+            var commentsLength = comments.Length;
+
+            for (var index = 0; index < commentsLength; index++)
+            {
+                var issues = AnalyzeType(symbol, compilation, commentXml, comments[index]);
+
+                if (issues.IsEmptyArray())
+                {
+                    continue;
+                }
+
+                // ReSharper disable once LoopCanBePartlyConvertedToQuery
+                foreach (var issue in issues)
+                {
+                    if (issue != null)
+                    {
+                        yield return issue;
+                    }
+                }
+            }
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeMethodWithLoop(IMethodSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax[] comments)
+        {
+            var commentsLength = comments.Length;
+
+            for (var index = 0; index < commentsLength; index++)
+            {
+                var issues = AnalyzeMethod(symbol, compilation, commentXml, comments[index]);
+
+                if (issues.IsEmptyArray())
+                {
+                    continue;
+                }
+
+                // ReSharper disable once LoopCanBePartlyConvertedToQuery
+                foreach (var issue in issues)
+                {
+                    if (issue != null)
+                    {
+                        yield return issue;
+                    }
+                }
+            }
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeEventWithLoop(IEventSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax[] comments)
+        {
+            var commentsLength = comments.Length;
+
+            for (var index = 0; index < commentsLength; index++)
+            {
+                var issues = AnalyzeEvent(symbol, compilation, commentXml, comments[index]);
+
+                if (issues.IsEmptyArray())
+                {
+                    continue;
+                }
+
+                // ReSharper disable once LoopCanBePartlyConvertedToQuery
+                foreach (var issue in issues)
+                {
+                    if (issue != null)
+                    {
+                        yield return issue;
+                    }
+                }
+            }
+        }
+
+        private IEnumerable<Diagnostic> AnalyzePropertyWithLoop(IPropertySymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax[] comments)
+        {
+            var commentsLength = comments.Length;
+
+            for (var index = 0; index < commentsLength; index++)
+            {
+                var issues = AnalyzeProperty(symbol, compilation, commentXml, comments[index]);
+
+                if (issues.IsEmptyArray())
+                {
+                    continue;
+                }
+
+                // ReSharper disable once LoopCanBePartlyConvertedToQuery
+                foreach (var issue in issues)
+                {
+                    if (issue != null)
+                    {
+                        yield return issue;
+                    }
+                }
+            }
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeFieldWithLoop(IFieldSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax[] comments)
+        {
+            var commentsLength = comments.Length;
+
+            for (var index = 0; index < commentsLength; index++)
+            {
+                var issues = AnalyzeField(symbol, compilation, commentXml, comments[index]);
+
+                if (issues.IsEmptyArray())
+                {
+                    continue;
+                }
+
+                // ReSharper disable once LoopCanBePartlyConvertedToQuery
+                foreach (var issue in issues)
+                {
+                    if (issue != null)
+                    {
+                        yield return issue;
+                    }
+                }
             }
         }
     }

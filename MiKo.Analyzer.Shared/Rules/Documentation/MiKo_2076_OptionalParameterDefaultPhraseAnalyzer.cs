@@ -36,13 +36,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (parameterComment.GetTextTrimmed().ContainsAny(Phrases, StringComparison.OrdinalIgnoreCase))
             {
                 // seems like there is a default parameter mentioned
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             if (parameter.HasAttributeApplied("System.Runtime.CompilerServices.CallerMemberNameAttribute"))
             {
                 // nothing to report as that attribute indicates that the value gets automatically set
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             var data = CreatePropertyData(parameter);

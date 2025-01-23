@@ -55,20 +55,27 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (lockIdentifiers.Count != 0 && context.ContainingSymbol is ITypeSymbol type)
             {
-                var fields = new Dictionary<string, IFieldSymbol>();
+                var issues = AnalyzeFields(type, lockIdentifiers);
 
-                // it seems that some fields are duplicated, so avoid AD0001 due to thrown exception
-                foreach (var field in type.GetFields())
-                {
-                    fields[field.Name] = field;
-                }
+                ReportDiagnostics(context, issues);
+            }
+        }
 
-                foreach (var identifier in lockIdentifiers)
+        private IEnumerable<Diagnostic> AnalyzeFields(ITypeSymbol type, HashSet<string> lockIdentifiers)
+        {
+            var fields = new Dictionary<string, IFieldSymbol>();
+
+            // it seems that some fields are duplicated, so avoid AD0001 due to thrown exception
+            foreach (var field in type.GetFields())
+            {
+                fields[field.Name] = field;
+            }
+
+            foreach (var identifier in lockIdentifiers)
+            {
+                if (fields.TryGetValue(identifier, out var field))
                 {
-                    if (fields.TryGetValue(identifier, out var field))
-                    {
-                        context.ReportDiagnostic(Issue(field));
-                    }
+                    yield return Issue(field);
                 }
             }
         }

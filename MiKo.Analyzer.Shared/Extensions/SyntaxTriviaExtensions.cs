@@ -30,15 +30,9 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsComment(this SyntaxTrivia value)
         {
-            switch (value.Kind())
-            {
-                case SyntaxKind.SingleLineCommentTrivia:
-                case SyntaxKind.MultiLineCommentTrivia:
-                    return true;
-
-                default:
-                    return false;
-            }
+            // we use 'RawKind' for performance reasons as most likely, we have single line comments
+            // (SyntaxKind.MultiLineCommentTrivia is 1 higher than SyntaxKind.SingleLineCommentTrivia, so we include both)
+            return (uint)(value.RawKind - (int)SyntaxKind.SingleLineCommentTrivia) <= 1;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -79,7 +73,7 @@ namespace MiKoSolutions.Analyzers
         {
             if (value is null)
             {
-                return Enumerable.Empty<SyntaxToken>();
+                return Array.Empty<SyntaxToken>();
             }
 
             return value.ChildNodes<XmlTextSyntax>().GetXmlTextTokens();
@@ -89,7 +83,7 @@ namespace MiKoSolutions.Analyzers
         {
             if (value is null)
             {
-                return Enumerable.Empty<SyntaxToken>();
+                return Array.Empty<SyntaxToken>();
             }
 
             return value.SelectMany(_ => _.GetXmlTextTokens());
@@ -123,7 +117,7 @@ namespace MiKoSolutions.Analyzers
         {
             if (value is null)
             {
-                return Enumerable.Empty<SyntaxToken>();
+                return Array.Empty<SyntaxToken>();
             }
 
             return value.SelectMany(_ => _.GetXmlTextTokens());
@@ -136,7 +130,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<SyntaxToken> GetXmlTextTokens(this DocumentationCommentTriviaSyntax value, Func<XmlElementSyntax, bool> descendantNodesFilter)
         {
-            return value?.DescendantNodes(descendantNodesFilter).GetXmlTextTokens() ?? Enumerable.Empty<SyntaxToken>();
+            return value?.DescendantNodes(descendantNodesFilter).GetXmlTextTokens() ?? Array.Empty<SyntaxToken>();
         }
 
         internal static IEnumerable<SyntaxTrivia> NextSiblings(this SyntaxTrivia value, int count = int.MaxValue)
@@ -162,7 +156,7 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            return Enumerable.Empty<SyntaxTrivia>();
+            return Array.Empty<SyntaxTrivia>();
         }
 
         internal static IEnumerable<SyntaxTrivia> PreviousSiblings(this SyntaxTrivia value, int count = int.MaxValue)
@@ -188,7 +182,7 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            return Enumerable.Empty<SyntaxTrivia>();
+            return Array.Empty<SyntaxTrivia>();
         }
     }
 }

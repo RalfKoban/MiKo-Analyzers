@@ -90,48 +90,28 @@ namespace System
 
         public static IReadOnlyList<int> AllIndicesOf(this string value, string finding, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
-            if (value.IsNullOrWhiteSpace())
+            // Perf: This code sits on the hot path and is invoked quite often (several million times), so we directly use 'string.IsNullOrWhiteSpace(value)'
+            //       (otherwise, it would cost about 1/10 of the overall time here which is - given the several million times - recognizable)
+            if (string.IsNullOrWhiteSpace(value))
             {
                 return Array.Empty<int>();
             }
 
-            var valueLength = value.Length;
-            var findingLength = finding.Length;
-
-            if (findingLength > valueLength)
+            if (finding.Length > value.Length)
             {
                 return Array.Empty<int>();
             }
 
-            List<int> indices = null;
-
-            for (var index = 0; ; index += findingLength)
+            if (comparison == StringComparison.Ordinal)
             {
-                index = value.IndexOf(finding, index, comparison);
-
-                if (index == -1)
-                {
-                    // nothing more to find
-                    break;
-                }
-
-                if (indices is null)
-                {
-                    indices = new List<int>(1);
-                }
-
-                indices.Add(index);
+                // Perf: about 1/3 the times the strings are compared ordinal, so splitting this up increases the overall performance significantly
+                return AllIndicesOrdinal(value.AsSpan(), finding.AsSpan());
             }
 
-            if (indices is null)
-            {
-                return Array.Empty<int>();
-            }
-
-            return indices;
+            return AllIndicesNonOrdinal(value, finding, ref comparison);
         }
 
-//// ncrunch: no coverage end
+        //// ncrunch: no coverage end
 
         public static IReadOnlyList<int> AllIndicesOf(this ReadOnlySpan<char> value, string finding, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
@@ -152,40 +132,6 @@ namespace System
             }
 
             return AllIndicesOf(value.ToString(), finding, comparison);
-
-            IReadOnlyList<int> AllIndicesOrdinal(ReadOnlySpan<char> span, ReadOnlySpan<char> other)
-            {
-                var otherLength = other.Length;
-
-                List<int> indices = null;
-
-                for (var index = 0; ; index += otherLength)
-                {
-                    var newIndex = span.Slice(index).IndexOf(other, StringComparison.Ordinal);
-
-                    if (newIndex == -1)
-                    {
-                        // nothing more to find
-                        break;
-                    }
-
-                    index += newIndex;
-
-                    if (indices is null)
-                    {
-                        indices = new List<int>(1);
-                    }
-
-                    indices.Add(index);
-                }
-
-                if (indices is null)
-                {
-                    return Array.Empty<int>();
-                }
-
-                return indices;
-            }
         }
 
 //// ncrunch: no coverage start
@@ -662,7 +608,7 @@ namespace System
                 }
             }
 
-            while (true)
+            do
             {
                 var newIndex = value.Slice(index).IndexOf(finding, comparison);
 
@@ -689,6 +635,7 @@ namespace System
 
                 index = positionAfterCharacter;
             }
+            while (true);
         }
 
         public static bool ContainsAny(this string value, char[] characters) => value?.IndexOfAny(characters) >= 0;
@@ -697,7 +644,7 @@ namespace System
 
         public static bool ContainsAny(this string value, string[] phrases) => value.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase); // ncrunch: no coverage
 
-        //// ncrunch: no coverage start
+//// ncrunch: no coverage start
 
         public static bool ContainsAny(this string value, string[] phrases, StringComparison comparison)
         {
@@ -725,13 +672,61 @@ namespace System
             return false;
         }
 
+        public static int CountLeadingWhitespaces(this string value, int start = 0)
+        {
+            var whitespaces = 0;
+            var valueLength = value.Length;
+
+            for (; start < valueLength; start++)
+            {
+                if (value[start].IsWhiteSpace())
+                {
+                    whitespaces++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return whitespaces;
+        }
+
+        public static int CountTrailingWhitespaces(this string value, int start = 0)
+        {
+            var whitespaces = 0;
+
+            for (var i = value.Length - 1; i >= start; i--)
+            {
+                if (value[i].IsWhiteSpace())
+                {
+                    whitespaces++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return whitespaces;
+        }
+
 //// ncrunch: no coverage end
 
         public static bool EndsWith(this string value, char character) => value.HasCharacters() && value[value.Length - 1] == character;
 
         public static bool EndsWith(this ReadOnlySpan<char> value, char character) => value.Length > 0 && value[value.Length - 1] == character;
 
-        public static bool EndsWith(this ReadOnlySpan<char> value, string characters, StringComparison comparison) => characters.HasCharacters() && value.EndsWith(characters.AsSpan(), comparison); // ncrunch: no coverage
+//// ncrunch: no coverage start
+
+        public static bool EndsWith(this ReadOnlySpan<char> value, string characters, StringComparison comparison)
+        {
+            var span = characters.AsSpan();
+
+            return span.Length > 0 && value.EndsWith(span, comparison);
+        }
+
+//// ncrunch: no coverage end
 
         public static bool EndsWithAny(this string value, ReadOnlySpan<char> suffixCharacters) => value.HasCharacters() && suffixCharacters.Contains(value[value.Length - 1]);
 
@@ -1011,22 +1006,19 @@ namespace System
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string FormatWith(this string format, object arg0) => string.Format(format, arg0);
+        public static string FormatWith(this string format, ISymbol arg0) => string.Format(format, arg0);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string FormatWith(this string format, object arg0, object arg1) => string.Format(format, arg0, arg1);
+        public static string FormatWith(this string format, string arg0) => string.Format(format, arg0);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string FormatWith(this string format, string arg0, char arg1) => string.Format(format, arg0, arg1.ToString());
+        public static string FormatWith(this string format, string arg0, string arg1) => string.Format(format, arg0, arg1);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string FormatWith(this string format, object arg0, object arg1, object arg2) => string.Format(format, arg0, arg1, arg2);
+        public static string FormatWith(this string format, string arg0, string arg1, string arg2) => string.Format(format, arg0, arg1, arg2);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string FormatWith(this string format, object arg0, object arg1, object arg2, object arg3) => string.Format(format, arg0, arg1, arg2, arg3);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string FormatWith(this string format, char arg0, char arg1, char arg2, char arg3) => string.Format(format, arg0.ToString(), arg1.ToString(), arg2.ToString(), arg3.ToString());
+        public static string FormatWith(this string format, string arg0, string arg1, string arg2, string arg3) => string.Format(format, arg0, arg1, arg2, arg3);
 
         public static string GetNameOnlyPart(this string value) => GetNameOnlyPart(value.AsSpan());
 
@@ -1089,22 +1081,18 @@ namespace System
 
         public static bool HasCollectionMarker(this string value) => value.EndsWithAny(Constants.Markers.Collections);
 
-        public static bool HasEntityMarker(this string value) => HasEntityMarker(value.AsSpan());
-
-        public static bool HasEntityMarker(this ReadOnlySpan<char> value)
+        public static bool HasEntityMarker(this string value)
         {
-            var s = value.ToString();
-
-            var hasMarker = s.ContainsAny(Constants.Markers.Models);
+            var hasMarker = value.ContainsAny(Constants.Markers.Models, StringComparison.OrdinalIgnoreCase);
 
             if (hasMarker)
             {
-                if (s.ContainsAny(Constants.Markers.ViewModels))
+                if (value.ContainsAny(Constants.Markers.ViewModels, StringComparison.OrdinalIgnoreCase))
                 {
                     return false;
                 }
 
-                if (s.ContainsAny(Constants.Markers.SpecialModels))
+                if (value.ContainsAny(Constants.Markers.SpecialModels, StringComparison.OrdinalIgnoreCase))
                 {
                     return false;
                 }
@@ -1113,8 +1101,9 @@ namespace System
             return hasMarker;
         }
 
+        // Perf: As this method is invoked several million times, we directly use 'string.IsNullOrEmpty(value)' here instead of our own extension method helper
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool HasCharacters(this string value) => value.IsNullOrEmpty() is false; // ncrunch: no coverage
+        public static bool HasCharacters(this string value) => string.IsNullOrEmpty(value) is false; // ncrunch: no coverage
 
         public static bool HasUpperCaseLettersAbove(this string value, ushort limit) => value != null && HasUpperCaseLettersAbove(value.AsSpan(), limit);
 
@@ -1416,12 +1405,7 @@ namespace System
                 return false;
             }
 
-            if (value == ' ')
-            {
-                return false;
-            }
-
-            return char.IsUpper(value);
+            return IsUpperCaseWithSwitch(ref value);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1434,6 +1418,8 @@ namespace System
             {
                 case ' ':
                 case '\t':
+                case '\r':
+                case '\n':
                     return true;
 
                 default:
@@ -1456,7 +1442,7 @@ namespace System
 
         public static bool StartsWith(this ReadOnlySpan<char> value, string characters, StringComparison comparison)
         {
-            if (string.IsNullOrEmpty(characters))
+            if (characters.IsNullOrEmpty())
             {
                 return false;
             }
@@ -2186,6 +2172,107 @@ namespace System
             return true;
         }
 
-//// ncrunch: no coverage end
+        private static bool IsUpperCaseWithSwitch(ref char value)
+        {
+            switch (value)
+            {
+                case ' ':
+                case '.':
+                case ',':
+                case ';':
+                case ':':
+                case '?':
+                case '!':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                case '0':
+                case '+':
+                case '-':
+                case '*':
+                case '/':
+                case '(':
+                case ')':
+                case '[':
+                case ']':
+                case '<':
+                case '>':
+                case '\\':
+                case Constants.Underscore:
+                    return false;
+
+                case 'Ö':
+                case 'Ä':
+                case 'Ü':
+                    return true;
+
+                default:
+                    return char.IsUpper(value);
+            }
+        }
+
+        private static IReadOnlyList<int> AllIndicesOrdinal(ReadOnlySpan<char> span, ReadOnlySpan<char> other)
+        {
+            var otherLength = other.Length;
+
+            List<int> indices = null;
+
+            for (var index = 0; ; index += otherLength)
+            {
+                var newIndex = span.Slice(index).IndexOf(other, StringComparison.Ordinal);
+
+                if (newIndex == -1)
+                {
+                    // nothing more to find
+                    break;
+                }
+
+                index += newIndex;
+
+                if (indices is null)
+                {
+                    indices = new List<int>(1);
+                }
+
+                indices.Add(index);
+            }
+
+            return indices ?? (IReadOnlyList<int>)Array.Empty<int>();
+        }
+
+        private static IReadOnlyList<int> AllIndicesNonOrdinal(string value, string finding, ref StringComparison comparison)
+        {
+            var findingLength = finding.Length;
+
+            List<int> indices = null;
+
+            for (var index = 0; ; index += findingLength)
+            {
+                index = value.IndexOf(finding, index, comparison);
+
+                if (index == -1)
+                {
+                    // nothing more to find
+                    break;
+                }
+
+                if (indices is null)
+                {
+                    indices = new List<int>(1);
+                }
+
+                indices.Add(index);
+            }
+
+            return indices ?? (IReadOnlyList<int>)Array.Empty<int>();
+        }
+
+        //// ncrunch: no coverage end
     }
 }

@@ -60,7 +60,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static string FindBetterName(ReadOnlySpan<char> symbolName, string prefix) => symbolName.Slice(prefix.Length).ToLowerCaseAt(0);
 
-        private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol)
+        private Diagnostic[] AnalyzeName(ISymbol symbol)
         {
             var symbolName = symbol.Name.AsSpan();
 
@@ -73,7 +73,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return new[] { Issue(symbol, foundPrefix, CreateBetterNameProposal(proposal)) };
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
     }
 }

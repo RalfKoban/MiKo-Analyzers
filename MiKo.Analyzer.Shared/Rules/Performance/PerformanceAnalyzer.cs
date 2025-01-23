@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 
@@ -13,10 +13,10 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
                                                                                                                           ? Analyze(symbol, compilation)
-                                                                                                                          : Enumerable.Empty<Diagnostic>();
+                                                                                                                          : Array.Empty<Diagnostic>();
 
         protected virtual bool ShallAnalyze(IMethodSymbol symbol) => true;
 
-        protected virtual IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation) => Array.Empty<Diagnostic>();
     }
 }

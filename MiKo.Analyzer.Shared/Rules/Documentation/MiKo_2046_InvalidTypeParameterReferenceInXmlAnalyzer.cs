@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -40,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 default:
                 {
-                    return Enumerable.Empty<Diagnostic>();
+                    return Array.Empty<Diagnostic>();
                 }
             }
         }

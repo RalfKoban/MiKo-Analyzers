@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return new[] { Issue(symbol, Constants.XmlTag.Summary, phrases[0]) };
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
     }
 }

@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (parameterComment.GetTextTrimmed().EndsWithAny(Phrases, StringComparison.Ordinal))
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             return new[] { Issue(parameter.Name, parameterComment.GetContentsLocation(), Phrases[0], CreatePhraseProposal(Phrases[0])) };

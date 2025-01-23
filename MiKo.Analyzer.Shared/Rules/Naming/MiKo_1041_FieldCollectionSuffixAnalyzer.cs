@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             return diagnostic != null
                    ? new[] { diagnostic }
-                   : Enumerable.Empty<Diagnostic>();
+                   : Array.Empty<Diagnostic>();
         }
     }
 }

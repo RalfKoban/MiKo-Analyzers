@@ -622,22 +622,33 @@ namespace System.Linq
             return -1;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool IsEmptyArray<T>(this IEnumerable<T> source) => source is T[] array && array.Length == 0;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool None(this SyntaxTriviaList source) => source.Count == 0;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool None<T>(this SyntaxList<T> source) where T : SyntaxNode => source.Count == 0;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool None<T>(this SeparatedSyntaxList<T> source) where T : SyntaxNode => source.Count == 0;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool None(this SyntaxTokenList source) => source.Count == 0;
 
         internal static bool None<T>(this IEnumerable<T> source) => source.Any() is false;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool None<T>(this IReadOnlyCollection<T> source) => source.Count == 0;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool None<T>(this ImmutableArray<T> source) => source.Length == 0;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool None<T>(this SyntaxList<T> source, SyntaxKind kind) where T : SyntaxNode => source.IndexOf(kind) == -1;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool None<T>(this SeparatedSyntaxList<T> source, SyntaxKind kind) where T : SyntaxNode => source.IndexOf(kind) == -1;
 
         internal static bool None<T>(this SyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode => source.All(_ => predicate(_) is false);
@@ -985,7 +996,7 @@ namespace System.Linq
 
             if (difference <= 0)
             {
-                return Enumerable.Empty<T>();
+                return Array.Empty<T>();
             }
 
             var result = new T[difference];

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -23,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
             return methodsAndCtors.Count != 0
                    ? AnalyzeMethods(methodsAndCtors)
-                   : Enumerable.Empty<Diagnostic>();
+                   : Array.Empty<Diagnostic>();
         }
 
         private IEnumerable<Diagnostic> AnalyzeMethods(IEnumerable<IMethodSymbol> methods)

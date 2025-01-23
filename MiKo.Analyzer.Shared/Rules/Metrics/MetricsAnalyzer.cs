@@ -32,7 +32,10 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
         {
             var issue = AnalyzeSyntaxNode(context, context.ContainingSymbol);
 
-            ReportDiagnostics(context, issue);
+            if (issue != null)
+            {
+                ReportDiagnostics(context, issue);
+            }
         }
 
         protected virtual Diagnostic AnalyzeBody(BlockSyntax body, ISymbol containingSymbol) => null;

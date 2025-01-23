@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
             return comment is null
-                   ? Enumerable.Empty<Diagnostic>()
+                   ? Array.Empty<Diagnostic>()
                    : AnalyzeComment(symbol.Name, comment);
         }
 

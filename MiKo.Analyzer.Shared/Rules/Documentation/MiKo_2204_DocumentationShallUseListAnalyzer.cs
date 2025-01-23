@@ -18,11 +18,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 //// ncrunch: rdi off
         private static readonly string[] Delimiters = { ".)", ".", ")", ":" };
 
-        private static readonly string[] Triggers = Enumerable.Empty<string>()
-                                                              .Union(new[] { " -", "--", "---", "*" }.SelectMany(_ => Constants.Comments.Delimiters, (_, delimiter) => string.Concat(delimiter, _, " ")))
-                                                              .Union(new[] { "1", "a", "2", "b", "3", "c" }.SelectMany(_ => Delimiters, (_, delimiter) => string.Concat(" ", _, delimiter, " ")))
-                                                              .Union(new[] { " -- ", " --- ", " * ", " ** ", " *** " })
-                                                              .ToArray(AscendingStringComparer.Default);
+        private static readonly string[] Triggers = Array.Empty<string>()
+                                                         .Union(new[] { " -", "--", "---", "*" }.SelectMany(_ => Constants.Comments.Delimiters, (_, delimiter) => string.Concat(delimiter, _, " ")))
+                                                         .Union(new[] { "1", "a", "2", "b", "3", "c" }.SelectMany(_ => Delimiters, (_, delimiter) => string.Concat(" ", _, delimiter, " ")))
+                                                         .Union(new[] { " -- ", " --- ", " * ", " ** ", " *** " })
+                                                         .ToArray(AscendingStringComparer.Default);
 //// ncrunch: rdi default
 
         public MiKo_2204_DocumentationShallUseListAnalyzer() : base(Id)
@@ -33,8 +33,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var issues = AnalyzeComment(symbol, comment).ToList();
 
-            // only report if we fund more than 1 issue
-            return issues.Count > 1 ? issues : Enumerable.Empty<Diagnostic>();
+            if (issues.Count > 1)
+            {
+                return issues; // only report if we found more than 1 issue
+            }
+
+            return Array.Empty<Diagnostic>();
         }
 
         private IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, DocumentationCommentTriviaSyntax comment)

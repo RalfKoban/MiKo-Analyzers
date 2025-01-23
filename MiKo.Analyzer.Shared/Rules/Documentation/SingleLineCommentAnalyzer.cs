@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -62,13 +63,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         break;
 
-                    case AccessorDeclarationSyntax accessor:
-                        AnalyzeComment(context, accessor);
+                    case BaseFieldDeclarationSyntax field: // fields seem te be more than accessors
+                        AnalyzeComment(context, field);
 
                         break;
 
-                    case BaseFieldDeclarationSyntax field:
-                        AnalyzeComment(context, field);
+                    case AccessorDeclarationSyntax accessor:
+                        AnalyzeComment(context, accessor);
 
                         break;
                 }
@@ -79,26 +80,35 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var issues = AnalyzeCommentTrivia(node, context.SemanticModel);
 
-            ReportDiagnostics(context, issues);
+            if (issues.IsEmptyArray() is false)
+            {
+                ReportDiagnostics(context, issues);
+            }
         }
 
         private void AnalyzeComment(SyntaxNodeAnalysisContext context, BaseFieldDeclarationSyntax node)
         {
             var issues = AnalyzeCommentTrivia(node, context.SemanticModel);
 
-            ReportDiagnostics(context, issues);
+            if (issues.IsEmptyArray() is false)
+            {
+                ReportDiagnostics(context, issues);
+            }
         }
 
         private void AnalyzeComment(SyntaxNodeAnalysisContext context, AccessorDeclarationSyntax node)
         {
             var issues = AnalyzeCommentTrivia(node, context.SemanticModel);
 
-            ReportDiagnostics(context, issues);
+            if (issues.IsEmptyArray() is false)
+            {
+                ReportDiagnostics(context, issues);
+            }
         }
 
         private bool AnalyzeComment(SyntaxTrivia trivia, SemanticModel semanticModel)
         {
-            if (trivia.IsSpanningMultipleLines() && IgnoreMultipleLines)
+            if (IgnoreMultipleLines && trivia.IsSpanningMultipleLines())
             {
                 return false; // ignore comment is multi-line comment (could also have with empty lines in between the different comment lines)
             }
@@ -110,14 +120,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var triviaToAnalyze = FindTriviaToAnalyze(node);
 
-            if (triviaToAnalyze.Count > 0)
+            if (triviaToAnalyze.Count == 0)
             {
-                var name = node.GetName();
-
-                return AnalyzeCommentTrivia(name, triviaToAnalyze, semanticModel);
+                return Array.Empty<Diagnostic>();
             }
 
-            return Array.Empty<Diagnostic>();
+            var name = node.GetName();
+
+            return AnalyzeCommentTrivia(name, triviaToAnalyze, semanticModel);
         }
 
         private IEnumerable<Diagnostic> AnalyzeCommentTrivia(BaseFieldDeclarationSyntax node, SemanticModel semanticModel)
@@ -189,12 +199,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            if (triviaToAnalyze is null)
-            {
-                return Array.Empty<SyntaxTrivia>();
-            }
-
-            return triviaToAnalyze;
+            return triviaToAnalyze ?? (IReadOnlyList<SyntaxTrivia>)Array.Empty<SyntaxTrivia>();
         }
     }
 }

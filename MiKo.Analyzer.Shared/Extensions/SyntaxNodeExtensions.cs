@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,13 +41,48 @@ namespace MiKoSolutions.Analyzers
 
         private static readonly Func<SyntaxNode, bool> DescendIntoChildren = _ => true;
 
-        internal static IEnumerable<SyntaxNode> AllDescendantNodes(this SyntaxNode value) => value.DescendantNodes(DescendIntoChildren, true);
+        internal static IEnumerable<SyntaxNode> AllDescendantNodes(this SyntaxNode value) => value?.DescendantNodes(DescendIntoChildren, true) ?? Array.Empty<SyntaxNode>();
 
         internal static IEnumerable<T> AllDescendantNodes<T>(this SyntaxNode value) where T : SyntaxNode => value.AllDescendantNodes().OfType<T>();
 
         internal static IEnumerable<SyntaxNodeOrToken> AllDescendantNodesAndTokens(this SyntaxNode value) => value.DescendantNodesAndTokens(DescendIntoChildren);
 
         internal static IEnumerable<T> Ancestors<T>(this SyntaxNode value) where T : SyntaxNode => value.Ancestors().OfType<T>(); // value.AncestorsAndSelf().OfType<T>();
+
+        // TODO RKN: Use properties, fields etc. as well?
+        internal static IEnumerable<T> AncestorsWithinMethods<T>(this SyntaxNode value) where T : SyntaxNode
+        {
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
+            foreach (var ancestor in value.Ancestors())
+            {
+                if (ancestor is T t)
+                {
+                    yield return t;
+                }
+
+                if (ancestor is BaseMethodDeclarationSyntax)
+                {
+                    yield break;
+                }
+            }
+        }
+
+        internal static IEnumerable<T> AncestorsWithinDocumentation<T>(this SyntaxNode value) where T : XmlNodeSyntax
+        {
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
+            foreach (var ancestor in value.Ancestors())
+            {
+                if (ancestor is T t)
+                {
+                    yield return t;
+                }
+
+                if (ancestor is DocumentationCommentTriviaSyntax)
+                {
+                    yield break;
+                }
+            }
+        }
 
         internal static bool Contains(this SyntaxNode value, char c) => value?.ToString().Contains(c) ?? false;
 
@@ -272,9 +308,34 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static string GetParameterName(this XmlElementSyntax value) => value.GetAttributes<XmlNameAttributeSyntax>().FirstOrDefault()?.Identifier.GetName();
+        internal static string GetParameterName(this XmlElementSyntax value)
+        {
+            var list = value.GetAttributes<XmlNameAttributeSyntax>();
 
-        internal static string GetParameterName(this XmlEmptyElementSyntax value) => value.Attributes.OfType<XmlNameAttributeSyntax>().FirstOrDefault()?.Identifier.GetName();
+            return list.Count > 0
+                   ? list[0].Identifier.GetName()
+                   : null;
+        }
+
+        internal static string GetParameterName(this XmlEmptyElementSyntax value)
+        {
+            var attributes = value.Attributes;
+
+            var count = attributes.Count;
+
+            if (count > 0)
+            {
+                for (var index = 0; index < count; index++)
+                {
+                    if (attributes[index] is XmlNameAttributeSyntax syntax)
+                    {
+                        return syntax.Identifier.GetName();
+                    }
+                }
+            }
+
+            return null;
+        }
 
         internal static XmlElementSyntax GetParameterComment(this DocumentationCommentTriviaSyntax value, string parameterName) => value.FirstDescendant<XmlElementSyntax>(_ => _.GetName() == Constants.XmlTag.Param && _.GetParameterName() == parameterName);
 
@@ -425,9 +486,15 @@ namespace MiKoSolutions.Analyzers
             return result;
         }
 
-        internal static IEnumerable<T> GetAttributes<T>(this XmlEmptyElementSyntax value) where T : XmlAttributeSyntax => value?.Attributes.OfType<XmlAttributeSyntax, T>() ?? Enumerable.Empty<T>();
+        internal static IReadOnlyList<T> GetAttributes<T>(this XmlElementSyntax value) where T : XmlAttributeSyntax
+        {
+            return value?.StartTag.Attributes.OfType<XmlAttributeSyntax, T>() ?? Array.Empty<T>();
+        }
 
-        internal static IEnumerable<T> GetAttributes<T>(this XmlElementSyntax value) where T : XmlAttributeSyntax => value?.StartTag.Attributes.OfType<XmlAttributeSyntax, T>() ?? Enumerable.Empty<T>();
+        internal static IReadOnlyList<T> GetAttributes<T>(this XmlEmptyElementSyntax value) where T : XmlAttributeSyntax
+        {
+            return value?.Attributes.OfType<XmlAttributeSyntax, T>() ?? Array.Empty<T>();
+        }
 
         internal static T GetEnclosing<T>(this SyntaxNode value) where T : SyntaxNode => value.FirstAncestorOrSelf<T>();
 
@@ -603,6 +670,7 @@ namespace MiKoSolutions.Analyzers
             return string.Empty;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this ArgumentSyntax value) => value.Expression.GetName();
 
         internal static string GetName(this AttributeSyntax value)
@@ -663,18 +731,25 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this ClassDeclarationSyntax value) => value?.Identifier.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this ConstructorDeclarationSyntax value) => value?.Identifier.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this ConversionOperatorDeclarationSyntax value) => value?.OperatorKeyword.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this DestructorDeclarationSyntax value) => value?.Identifier.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this EnumDeclarationSyntax value) => value?.Identifier.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this EnumMemberDeclarationSyntax value) => value?.Identifier.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this EventDeclarationSyntax value) => value?.Identifier.ValueText;
 
         internal static string GetName(this ExpressionSyntax value)
@@ -726,18 +801,25 @@ namespace MiKoSolutions.Analyzers
             return string.Empty;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this IdentifierNameSyntax value) => value?.Identifier.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this IndexerDeclarationSyntax value) => value?.ThisKeyword.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this InterfaceDeclarationSyntax value) => value?.Identifier.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this LiteralExpressionSyntax value) => value?.Token.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this LocalFunctionStatementSyntax value) => value?.Identifier.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this MemberAccessExpressionSyntax value) => value?.Name.GetName();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this MemberBindingExpressionSyntax value) => value?.Name.GetName();
 
         internal static string GetName(this MemberDeclarationSyntax value)
@@ -754,22 +836,31 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this MethodDeclarationSyntax value) => value?.Identifier.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this NameColonSyntax value) => value?.Name.GetName();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this NameEqualsSyntax value) => value?.Name.GetName();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this OperatorDeclarationSyntax value) => value?.OperatorToken.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this ParameterSyntax value) => value?.Identifier.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this PropertyDeclarationSyntax value) => value?.Identifier.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this RecordDeclarationSyntax value) => value?.Identifier.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this SimpleNameSyntax value) => value?.Identifier.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this StructDeclarationSyntax value) => value?.Identifier.ValueText;
 
         internal static string GetName(this TypeDeclarationSyntax value)
@@ -797,20 +888,28 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this UsingDirectiveSyntax value) => value?.Name.GetName();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this VariableDeclaratorSyntax value) => value?.Identifier.ValueText;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this XmlAttributeSyntax value) => value?.Name.GetName();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this XmlElementSyntax value) => value?.StartTag.GetName();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this XmlEmptyElementSyntax value) => value?.Name.GetName();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this XmlElementStartTagSyntax value) => value?.Name.GetName();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this XmlElementEndTagSyntax value) => value?.Name.GetName();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this XmlNameSyntax value) => value?.LocalName.ValueText;
 
         internal static IEnumerable<string> GetNames(this BaseFieldDeclarationSyntax value)
@@ -820,7 +919,7 @@ namespace MiKoSolutions.Analyzers
                 case FieldDeclarationSyntax s: return s.Declaration.Variables.GetNames();
                 case EventFieldDeclarationSyntax s: return s.Declaration.Variables.GetNames();
                 default:
-                    return Enumerable.Empty<string>();
+                    return Array.Empty<string>();
             }
         }
 
@@ -1038,15 +1137,52 @@ namespace MiKoSolutions.Analyzers
 
         internal static LinePosition GetEndPosition(this SyntaxNode value) => value.GetLocation().GetEndPosition();
 
-        internal static IEnumerable<DocumentationCommentTriviaSyntax> GetDocumentationCommentTriviaSyntax(this SyntaxNode value)
+        internal static bool HasDocumentationCommentTriviaSyntax(this SyntaxNode value)
         {
             if (value != null)
             {
-                var token = value.FirstDescendantToken();
-
-                if (token.HasStructuredTrivia)
+                if (value.HasStructuredTrivia)
                 {
-                    return GetDocumentationCommentTriviaSyntax(token);
+                    var token = value.FirstDescendantToken();
+
+                    if (token.HasStructuredTrivia)
+                    {
+                        var leadingTrivia = token.LeadingTrivia;
+                        var count = leadingTrivia.Count;
+
+                        for (var index = 0; index < count; index++)
+                        {
+                            var trivia = leadingTrivia[index];
+
+                            if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        internal static DocumentationCommentTriviaSyntax[] GetDocumentationCommentTriviaSyntax(this SyntaxNode value)
+        {
+            if (value != null)
+            {
+                if (value.HasStructuredTrivia)
+                {
+                    var token = value.FirstDescendantToken();
+
+                    if (token.HasStructuredTrivia)
+                    {
+                        var comment = GetDocumentationCommentTriviaSyntax(token);
+
+                        if (comment != null)
+                        {
+                            return comment;
+                        }
+                    }
                 }
             }
 
@@ -1733,14 +1869,21 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsExceptionComment(this XmlElementSyntax value, Type exceptionType)
         {
-            var type = value?.StartTag.Attributes.OfType<XmlCrefAttributeSyntax>().FirstOrDefault().GetCrefType();
+            var list = value.GetAttributes<XmlCrefAttributeSyntax>();
 
-            return type != null && type.IsException(exceptionType);
+            if (list.Count > 0)
+            {
+                var type = list[0].GetCrefType();
+
+                return type != null && type.IsException(exceptionType);
+            }
+
+            return false;
         }
 
         internal static bool IsExpression(this SyntaxNode value, SemanticModel semanticModel)
         {
-            foreach (var a in value.Ancestors<ArgumentSyntax>())
+            foreach (var a in value.AncestorsWithinMethods<ArgumentSyntax>())
             {
                 var convertedType = semanticModel.GetTypeInfo(a.Expression).ConvertedType;
                 var isExpression = convertedType?.InheritsFrom<Expression>() is true;
@@ -1770,7 +1913,7 @@ namespace MiKoSolutions.Analyzers
 
                         if (elseStatement != null && ifStatement.Equals(elseStatement.Parent))
                         {
-                            // we are in the else part, not the if part, so fail
+                            // we are in the else part, not inside the 'if' part, so we fail
                             return false;
                         }
 
@@ -2241,11 +2384,11 @@ namespace MiKoSolutions.Analyzers
                 return list.OfKind(kind);
             }
 
-            // ReSharper disable once LoopCanBeConvertedToQuery
             return OfKindLocal();
 
             IEnumerable<T> OfKindLocal()
             {
+                // ReSharper disable once LoopCanBePartlyConvertedToQuery
                 foreach (var item in source)
                 {
                     if (item.IsKind(kind))
@@ -2256,8 +2399,10 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static IReadOnlyList<TResult> OfType<TResult>(this SyntaxList<XmlNodeSyntax> source) where TResult : XmlNodeSyntax => source.OfType<XmlNodeSyntax, TResult>();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static IReadOnlyList<TResult> OfType<TResult>(this SyntaxList<XmlAttributeSyntax> source) where TResult : XmlAttributeSyntax => source.OfType<XmlAttributeSyntax, TResult>();
 
         internal static IReadOnlyList<TResult> OfType<T, TResult>(this SyntaxList<T> source) where T : SyntaxNode
@@ -2286,12 +2431,7 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            if (results is null)
-            {
-                return Array.Empty<TResult>();
-            }
-
-            return results;
+            return results ?? (IReadOnlyList<TResult>)Array.Empty<TResult>();
         }
 
         internal static T RemoveTrivia<T>(this T node, SyntaxTrivia trivia) where T : SyntaxNode => node.ReplaceTrivia(trivia, SyntaxFactory.ElasticMarker);
@@ -2842,7 +2982,7 @@ namespace MiKoSolutions.Analyzers
                                    (original, rewritten) => rewritten.WithAdditionalLeadingSpaces(additionalSpaces),
                                    descendants.Where(_ => _.IsToken).Select(_ => _.AsToken()),
                                    (original, rewritten) => rewritten.WithAdditionalLeadingSpaces(additionalSpaces),
-                                   Enumerable.Empty<SyntaxTrivia>(),
+                                   Array.Empty<SyntaxTrivia>(),
                                    (original, rewritten) => rewritten);
         }
 
@@ -3946,23 +4086,37 @@ namespace MiKoSolutions.Analyzers
             return finalTrivia;
         }
 
-        private static IEnumerable<DocumentationCommentTriviaSyntax> GetDocumentationCommentTriviaSyntax(SyntaxToken value)
+        private static DocumentationCommentTriviaSyntax[] GetDocumentationCommentTriviaSyntax(SyntaxToken value)
         {
             var leadingTrivia = value.LeadingTrivia;
             var count = leadingTrivia.Count;
+
+            DocumentationCommentTriviaSyntax[] results = null;
+            var resultsIndex = 0;
 
             for (var index = 0; index < count; index++)
             {
                 var trivia = leadingTrivia[index];
 
-                if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
+                if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
                 {
-                    if (trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
+                    if (results is null)
                     {
-                        yield return syntax;
+                        results = new DocumentationCommentTriviaSyntax[1];
                     }
+                    else
+                    {
+                        // seems we have more separate comments, so increase by one
+                        Array.Resize(ref results, results.Length + 1);
+                    }
+
+                    results[resultsIndex] = syntax;
+
+                    resultsIndex++;
                 }
             }
+
+            return results;
         }
 
         private static XmlTextSyntax XmlText(string text) => SyntaxFactory.XmlText(text);

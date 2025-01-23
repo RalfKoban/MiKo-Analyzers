@@ -1171,11 +1171,11 @@ namespace MiKoSolutions.Analyzers
                                                                                        "candidateUnderTest",
                                                                                    };
 
-            internal static readonly ISet<string> ObjectUnderTestNames = Enumerable.Empty<string>()
-                                                                                   .Concat(TypeUnderTestFieldNames)
-                                                                                   .Concat(TypeUnderTestVariableNames)
-                                                                                   .Concat(TypeUnderTestPropertyNames)
-                                                                                   .ToHashSet();
+            internal static readonly ISet<string> ObjectUnderTestNames = Array.Empty<string>()
+                                                                              .Concat(TypeUnderTestFieldNames)
+                                                                              .Concat(TypeUnderTestVariableNames)
+                                                                              .Concat(TypeUnderTestPropertyNames)
+                                                                              .ToHashSet();
 
             internal static readonly ISet<string> AssertionTypes = new HashSet<string>
                                                                        {

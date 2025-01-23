@@ -17,7 +17,12 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxToken AsToken(this SyntaxKind value) => SyntaxFactory.Token(value);
 
-        internal static SyntaxToken First(this SyntaxTokenList value, SyntaxKind kind) => value.OfKind(kind).FirstOrDefault();
+        internal static SyntaxToken First(this SyntaxTokenList value, SyntaxKind kind)
+        {
+            var list = value.OfKind(kind);
+
+            return list.Count > 0 ? list[0] : default;
+        }
 
         internal static T GetEnclosing<T>(this SyntaxToken value) where T : SyntaxNode => value.Parent.GetEnclosing<T>();
 
@@ -145,7 +150,7 @@ namespace MiKoSolutions.Analyzers
                 return Array.Empty<SyntaxToken>();
             }
 
-            var results = new List<SyntaxToken>();
+            List<SyntaxToken> results = null;
 
             for (var index = 0; index < sourceCount; index++)
             {
@@ -153,11 +158,16 @@ namespace MiKoSolutions.Analyzers
 
                 if (item.IsKind(kind))
                 {
+                    if (results is null)
+                    {
+                        results = new List<SyntaxToken>(1);
+                    }
+
                     results.Add(item);
                 }
             }
 
-            return results;
+            return results ?? (IReadOnlyList<SyntaxToken>)Array.Empty<SyntaxToken>();
         }
 
         internal static IEnumerable<SyntaxToken> OfKind(this IEnumerable<SyntaxToken> source, SyntaxKind kind)

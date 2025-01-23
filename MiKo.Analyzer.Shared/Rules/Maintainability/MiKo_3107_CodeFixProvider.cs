@@ -68,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (type.IsEnum())
                 {
                     // take the first value
-                    return SimpleMemberAccess(typeSyntax, type.GetFields().First().Name);
+                    return SimpleMemberAccess(typeSyntax, type.GetFields()[0].Name);
                 }
 
                 // we have a struct

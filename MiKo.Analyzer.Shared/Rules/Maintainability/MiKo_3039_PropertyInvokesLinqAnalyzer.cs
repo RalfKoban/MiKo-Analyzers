@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -43,10 +44,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var propertyName = property.GetName();
 
-            return Enumerable.Empty<Diagnostic>()
-                             .Concat(AnalyzeProperty(property.ExpressionBody, propertyName, semanticModel))
-                             .Concat(AnalyzeProperty(property.GetGetter(), propertyName, semanticModel))
-                             .Concat(AnalyzeProperty(property.GetSetter(), propertyName, semanticModel));
+            return Array.Empty<Diagnostic>()
+                        .Concat(AnalyzeProperty(property.ExpressionBody, propertyName, semanticModel))
+                        .Concat(AnalyzeProperty(property.GetGetter(), propertyName, semanticModel))
+                        .Concat(AnalyzeProperty(property.GetSetter(), propertyName, semanticModel));
         }
 
         private IEnumerable<Diagnostic> AnalyzeProperty(SyntaxNode node, string propertyName, SemanticModel semanticModel)

@@ -141,9 +141,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             // first loop over the elements to collect all lines that are also required to check for the empty elements, then loop over the empty ones
-            return Enumerable.Empty<Diagnostic>()
-                             .Concat(elements.SelectMany(_ => AnalyzeXmlElement(_, lines)))
-                             .Concat(emptyElements.Select(_ => AnalyzeEmptyXmlElement(_, lines)));
+            return Array.Empty<Diagnostic>()
+                        .Concat(elements.SelectMany(_ => AnalyzeXmlElement(_, lines)))
+                        .Concat(emptyElements.Select(_ => AnalyzeEmptyXmlElement(_, lines)));
         }
 
         private IEnumerable<Diagnostic> AnalyzeXmlElement(XmlElementSyntax element, HashSet<int> lines)

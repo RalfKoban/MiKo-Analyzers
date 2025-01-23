@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return new[] { Issue(symbol, Constants.Comments.SealedClassPhrase) };
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
     }
 }

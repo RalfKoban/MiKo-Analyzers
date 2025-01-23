@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -44,16 +43,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var issues = Analyze(node);
 
-            ReportDiagnostics(context, issues);
+            if (issues.Length > 0)
+            {
+                ReportDiagnostics(context, issues);
+            }
         }
 
-        private IEnumerable<Diagnostic> Analyze(ExpressionStatementSyntax node)
+        private Diagnostic[] Analyze(ExpressionStatementSyntax node)
         {
             var problematicNode = FindProblematicNode(node);
 
             return problematicNode != null
                    ? new[] { Issue(problematicNode) }
-                   : Enumerable.Empty<Diagnostic>();
+                   : Array.Empty<Diagnostic>();
         }
     }
 }

@@ -70,11 +70,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
-            var alreadyReportedLocations = new List<Location>();
+            var issues = AnalyzeCommentXml(comment);
+            var count = issues.Count;
 
-            var issues = AnalyzeCommentXml(comment).OrderByDescending(_ => _.Location.SourceSpan.Length); // find largest parts first
+            switch (count)
+            {
+                case 0: return Array.Empty<Diagnostic>();
+                case 1: return new[] { issues[0] };
+            }
 
-            foreach (var issue in issues)
+            var alreadyReportedLocations = new List<Location>(count);
+            var finalIssues = new List<Diagnostic>(count);
+
+            foreach (var issue in issues.OrderByDescending(_ => _.Location.SourceSpan.Length)) // find largest parts first
             {
                 var location = issue.Location;
 
@@ -86,14 +94,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 alreadyReportedLocations.Add(location);
 
-                yield return issue;
+                finalIssues.Add(issue);
             }
+
+            return finalIssues;
         }
 
-        private IEnumerable<Diagnostic> AnalyzeCommentXml(DocumentationCommentTriviaSyntax comment)
+        private List<Diagnostic> AnalyzeCommentXml(DocumentationCommentTriviaSyntax comment)
         {
+            var issues = new List<Diagnostic>();
+
             foreach (var token in comment.GetXmlTextTokens())
             {
+                if (token.ValueText.IsNullOrWhiteSpace())
+                {
+                    continue;
+                }
+
                 const int Offset = 1; // we do not want to underline the first and last char
 
                 foreach (var location in GetAllLocations(token, Phrases, StringComparison.OrdinalIgnoreCase, Offset, Offset))
@@ -102,40 +119,37 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (PhrasesMap.TryGetValue(text, out var replacement))
                     {
-                        yield return Issue(location, replacement);
+                        issues.Add(Issue(location, replacement));
                     }
                 }
 
+                // ReSharper disable once LoopCanBePartlyConvertedToQuery
                 foreach (var issue in AnalyzeForSpecialPhrase(token, WillPhraseStartUpperCase, _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)))
                 {
                     var text = issue.Location.GetText().ToLowerCase();
 
                     if (text.Contains(AcceptedPhrase) is false)
                     {
-                        yield return issue;
+                        issues.Add(issue);
                     }
                 }
 
+                // ReSharper disable once LoopCanBePartlyConvertedToQuery
                 foreach (var issue in AnalyzeForSpecialPhrase(token, WillPhrase, Verbalizer.MakeThirdPersonSingularVerb))
                 {
                     var text = issue.Location.GetText().ToLowerCase();
 
                     if (text.Contains(AcceptedPhrase) is false && text.ContainsAny(PhrasesMapKeys) is false)
                     {
-                        yield return issue;
+                        issues.Add(issue);
                     }
                 }
 
-                foreach (var issue in AnalyzeForSpecialPhrase(token, WillNeverPhraseStartUpperCase, _ => NeverPhraseStartUpperCase + " " + Verbalizer.MakeThirdPersonSingularVerb(_)))
-                {
-                    yield return issue;
-                }
-
-                foreach (var issue in AnalyzeForSpecialPhrase(token, WillNeverPhrase, _ => NeverPhrase + " " + Verbalizer.MakeThirdPersonSingularVerb(_)))
-                {
-                    yield return issue;
-                }
+                issues.AddRange(AnalyzeForSpecialPhrase(token, WillNeverPhraseStartUpperCase, _ => NeverPhraseStartUpperCase + " " + Verbalizer.MakeThirdPersonSingularVerb(_)));
+                issues.AddRange(AnalyzeForSpecialPhrase(token, WillNeverPhrase, _ => NeverPhrase + " " + Verbalizer.MakeThirdPersonSingularVerb(_)));
             }
+
+            return issues;
         }
     }
 }

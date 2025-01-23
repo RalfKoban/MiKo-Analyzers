@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -24,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override bool ShallAnalyze(IMethodSymbol symbol) => (symbol.ReturnsVoid || symbol.ReturnType.IsTask()) && symbol.IsTestMethod();
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation) => ContainsAssertion(symbol, compilation, 0)
-                                                                                                             ? Enumerable.Empty<Diagnostic>()
+                                                                                                             ? Array.Empty<Diagnostic>()
                                                                                                              : new[] { Issue(symbol) };
 
         private static bool ContainsAssertion(IMethodSymbol method, Compilation compilation, int nestingLevel)

@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (symbolName.Contains(CorrectName))
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             if (symbolName.ContainsAny(WrongNames))
@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return new[] { Issue(symbol, wrongName, CreateBetterNameProposal(proposal)) };
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
     }
 }

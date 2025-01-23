@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -39,28 +39,31 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var issues = AnalyzeSimpleMemberAccessExpression(context, node);
 
-            ReportDiagnostics(context, issues);
+            if (issues.Length > 0)
+            {
+                ReportDiagnostics(context, issues);
+            }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeSimpleMemberAccessExpression(SyntaxNodeAnalysisContext context, MemberAccessExpressionSyntax node)
+        private Diagnostic[] AnalyzeSimpleMemberAccessExpression(SyntaxNodeAnalysisContext context, MemberAccessExpressionSyntax node)
         {
             if (node.Expression is IdentifierNameSyntax invokedClass)
             {
                 if (AllowedAssertionMethods.Contains(node.GetName()))
                 {
-                    return Enumerable.Empty<Diagnostic>();
+                    return Array.Empty<Diagnostic>();
                 }
 
                 if (Constants.Names.AssertionTypes.Contains(invokedClass.GetName()) is false)
                 {
-                    return Enumerable.Empty<Diagnostic>();
+                    return Array.Empty<Diagnostic>();
                 }
 
                 var testFrameworkNamespace = invokedClass.GetTypeSymbol(context.SemanticModel)?.ContainingNamespace.FullyQualifiedName();
 
                 if (Constants.Names.AssertionNamespaces.Contains(testFrameworkNamespace) is false)
                 {
-                    return Enumerable.Empty<Diagnostic>();
+                    return Array.Empty<Diagnostic>();
                 }
 
                 var method = context.GetEnclosingMethod();
@@ -68,13 +71,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (method is null)
                 {
                     // nameof() is also a SimpleMemberAccessExpression, so assignments of lists etc. may cause an NRE to be thrown
-                    return Enumerable.Empty<Diagnostic>();
+                    return Array.Empty<Diagnostic>();
                 }
 
                 return new[] { Issue(method.Name, node) };
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
     }
 }

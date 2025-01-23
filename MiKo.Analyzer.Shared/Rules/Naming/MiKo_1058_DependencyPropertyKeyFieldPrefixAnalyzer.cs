@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (propertyNames.None())
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             var betterNames = propertyNames.Select(_ => _ + Constants.DependencyPropertyKey.FieldSuffix).ToList();

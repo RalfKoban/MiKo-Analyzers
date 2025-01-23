@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -33,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSimpleMemberAccessExpression, SyntaxKind.SimpleMemberAccessExpression);
 
-        private IEnumerable<Diagnostic> AnalyzeIssue(MemberAccessExpressionSyntax node, ISymbol method)
+        private Diagnostic[] AnalyzeIssue(MemberAccessExpressionSyntax node, ISymbol method)
         {
             if (node.Parent is InvocationExpressionSyntax i && Names.Contains(node.GetName()))
             {
@@ -45,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
 
         private void AnalyzeSimpleMemberAccessExpression(SyntaxNodeAnalysisContext context)
@@ -60,7 +61,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return;
             }
 
-            ReportDiagnostics(context, AnalyzeIssue(node, methodSymbol));
+            var issues = AnalyzeIssue(node, methodSymbol);
+
+            if (issues.Length > 0)
+            {
+                ReportDiagnostics(context, issues);
+            }
         }
     }
 }

@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (summaries.None())
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             var symbolNames = GetSelfSymbolNames(symbol);

@@ -264,12 +264,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static XmlElementSyntax ModifyElseOtherwisePart(XmlElementSyntax comment)
         {
-            var followUpText = comment.Content.OfType<XmlTextSyntax>().FirstOrDefault();
+            var followUpTexts = comment.Content.OfType<XmlTextSyntax>();
 
-            if (followUpText is null)
+            if (followUpTexts.Count <= 0)
             {
                 return comment;
             }
+
+            var followUpText = followUpTexts[0];
 
             var token = followUpText.TextTokens.LastOrDefault(_ => _.ValueText.ContainsAny(Constants.TrailingSentenceMarkers));
 
@@ -718,13 +720,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     var condition = conditions[conditionIndex];
 
                     // we have lots of loops, so cache data to avoid unnecessary calculations
-                    var end = " " + condition + " ";
+                    var end = " " + condition + " "; // TODO RKN: Change string creation
 
                     // for performance reasons we use for loops here
                     for (var verbIndex = 0; verbIndex < verbsLength; verbIndex++)
                     {
                         var verb = verbs[verbIndex];
-                        var middle = " " + verb + end;
+                        var middle = " " + verb + end; // TODO RKN: Change string creation
 
                         // for performance reasons we use for loops here
                         for (var startIndex = 0; startIndex < startsCount; startIndex++)
@@ -740,7 +742,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     for (var index = 0; index < startingVerbsLength; index++)
                     {
                         var startingVerb = startingVerbs[index];
-                        var text = startingVerb + end;
+                        var text = startingVerb + end; // TODO RKN: Change string creation
 
                         results.Add(text.ToUpperCaseAt(0));
                         results.Add(text.ToLowerCaseAt(0));

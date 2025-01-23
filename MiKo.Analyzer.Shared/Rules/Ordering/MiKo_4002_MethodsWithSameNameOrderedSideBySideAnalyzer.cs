@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
             return methodsAndCtors.Count != 0
                    ? AnalyzeMethodsGroupedByAccessibility(methodsAndCtors)
-                   : Enumerable.Empty<Diagnostic>();
+                   : Array.Empty<Diagnostic>();
         }
 
         private IEnumerable<Diagnostic> AnalyzeMethodsGroupedByAccessibility(IList<IMethodSymbol> allMethods) => allMethods.GroupBy(_ => _.DeclaredAccessibility)

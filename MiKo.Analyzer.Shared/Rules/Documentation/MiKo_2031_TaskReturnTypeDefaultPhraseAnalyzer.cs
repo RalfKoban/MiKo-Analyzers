@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
@@ -69,7 +69,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return AnalyzeStartingPhrase(owningSymbol, comment, commentXml, xmlTag, Constants.Comments.GenericTaskReturnTypeStartingPhrase);
                 }
 
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             return AnalyzePhrase(owningSymbol, comment, commentXml, xmlTag, Constants.Comments.NonGenericTaskReturnTypePhrase);

@@ -81,7 +81,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (HasIssue(switchStatement))
             {
                 // keep in mind that 'while(true) { switch ... }' is a performance optimization to avoid recursive calls
-                if (switchStatement.Ancestors<WhileStatementSyntax>().None())
+                if (switchStatement.AncestorsWithinMethods<WhileStatementSyntax>().None())
                 {
                     ReportDiagnostics(context, Issue(switchStatement));
                 }

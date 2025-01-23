@@ -20,7 +20,14 @@ namespace MiKoSolutions.Analyzers
             if (value is IParameterSymbol p)
             {
                 // parameter might be method or property (setter or indexer)
-                return GetComment(p, p.ContainingSymbol?.GetDocumentationCommentXml());
+                var containingSymbol = p.ContainingSymbol;
+
+                if (containingSymbol is null)
+                {
+                    return null;
+                }
+
+                return GetComment(p, containingSymbol.GetDocumentationCommentXml());
             }
 
             return Cleaned(GetCommentElement(value));
@@ -61,12 +68,26 @@ namespace MiKoSolutions.Analyzers
 
         internal static XElement GetCommentElement(this string value)
         {
+            if (value is null)
+            {
+                return null;
+            }
+
             // just to be sure that we always have a root element (malformed XMLs are reported as comment but without a root element)
-            var xml = "<root>".ConcatenatedWith(value.AsSpan().Trim(), "</root>");
+            var start = value.CountLeadingWhitespaces();
+            var end = value.CountTrailingWhitespaces(start);
+
+            var count = value.Length - end - start;
+
+            var xml = StringBuilderCache.Acquire(13 + count)
+                                        .Append("<root>")
+                                        .Append(value, start, count)
+                                        .Append("</root>")
+                                        .ToStringAndRelease();
 
             try
             {
-                return XElement.Parse(xml);
+                return XElement.Parse(xml, LoadOptions.None);
             }
             catch (XmlException)
             {
@@ -83,7 +104,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         internal static IEnumerable<XElement> GetCommentElements(this XElement value, string xmlTag) => value is null
-                                                                                                        ? Enumerable.Empty<XElement>() // happens in case of an invalid character
+                                                                                                        ? Array.Empty<XElement>() // happens in case of an invalid character
                                                                                                         : value.Descendants(xmlTag);
 
         internal static IEnumerable<XElement> GetExceptionCommentElements(string commentXml)
@@ -108,15 +129,35 @@ namespace MiKoSolutions.Analyzers
 
         internal static IReadOnlyCollection<string> Cleaned(IEnumerable<string> comments)
         {
-            var cleanedComments = comments.WhereNotNull().ToList();
+            List<string> cleanedComments = null;
 
-            switch (cleanedComments.Count)
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
+            foreach (var s in comments)
             {
-                case 0: return Array.Empty<string>();
-                case 1: return new[] { TrimComment(cleanedComments[0]) };
-                default:
-                    return cleanedComments.ToHashSet(TrimComment);
+                if (s is null)
+                {
+                    continue;
+                }
+
+                if (cleanedComments is null)
+                {
+                    cleanedComments = new List<string>(1);
+                }
+
+                cleanedComments.Add(s);
             }
+
+            if (cleanedComments is null)
+            {
+                return Array.Empty<string>();
+            }
+
+            if (cleanedComments.Count == 1)
+            {
+                return new[] { TrimComment(cleanedComments[0]) };
+            }
+
+            return cleanedComments.ToHashSet(TrimComment);
 
             string TrimComment(string comment) => comment.AsCachedBuilder().WithoutParaTags().Trimmed().ToStringAndRelease();
         }
@@ -129,9 +170,19 @@ namespace MiKoSolutions.Analyzers
             }
 
             // remove all code elements
-            var codeElements = element.Descendants(Constants.XmlTag.Code).ToList();
+            List<XElement> codeElements = null;
 
-            if (codeElements.Count > 0)
+            foreach (var descendant in element.Descendants(Constants.XmlTag.Code))
+            {
+                if (codeElements is null)
+                {
+                    codeElements = new List<XElement>(1);
+                }
+
+                codeElements.Add(descendant);
+            }
+
+            if (codeElements?.Count > 0)
             {
                 codeElements.ForEach(_ => _.Remove());
             }
@@ -178,9 +229,7 @@ namespace MiKoSolutions.Analyzers
         {
             if (comments.Any())
             {
-                var comment = Cleaned(comments.Nodes());
-
-                return comment;
+                return Cleaned(comments.Nodes());
             }
 
             return null;
