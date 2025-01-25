@@ -233,6 +233,15 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("pinging", ExpectedResult = "pings")]
         [TestCase("ringing", ExpectedResult = "rings")]
         [TestCase("singing", ExpectedResult = "sings")]
+        [TestCase("represent", ExpectedResult = "represents")]
+        [TestCase("representing", ExpectedResult = "represents")]
+        [TestCase("represents", ExpectedResult = "represents")]
+        [TestCase("determine", ExpectedResult = "determines")]
+        [TestCase("determining", ExpectedResult = "determines")]
+        [TestCase("determines", ExpectedResult = "determines")]
+        [TestCase("maintain", ExpectedResult = "maintains")]
+        [TestCase("maintaining", ExpectedResult = "maintains")]
+        [TestCase("maintains", ExpectedResult = "maintains")]
         public static string MakeThirdPersonSingularVerb_finds_proper_3rd_person_singular_verb_(string name) => Verbalizer.MakeThirdPersonSingularVerb(name);
 
         [TestCase("access", ExpectedResult = false)]
