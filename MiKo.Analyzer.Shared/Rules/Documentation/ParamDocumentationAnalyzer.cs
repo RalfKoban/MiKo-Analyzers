@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var phrase = phrases[0];
             var preview = GetPreview(phrase, phrases);
 
-            return new[] { Issue(parameter.Name, GetIssueLocation(parameterComment), preview, CreateStartingPhraseProposal(phrase)) };
+            return new[] { Issue(parameter.Name, GetIssueLocation(parameterComment), preview, CreateProposal(parameter, phrase)) };
         }
 
         protected IEnumerable<Diagnostic> AnalyzePlainTextStartingPhrase(IParameterSymbol parameter, XmlElementSyntax parameterComment, string[] phrases, StringComparison comparison = StringComparison.Ordinal)
@@ -39,10 +39,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var phrase = phrases[0];
             var preview = GetPreview(phrase, phrases);
 
-            return new[] { Issue(parameter.Name, GetIssueLocation(parameterComment), preview, CreateStartingPhraseProposal(phrase)) };
+            return new[] { Issue(parameter.Name, GetIssueLocation(parameterComment), preview, CreateProposal(parameter, phrase)) };
         }
 
         protected virtual Location GetIssueLocation(XmlElementSyntax parameterComment) => parameterComment.GetContentsLocation();
+
+        protected virtual Pair[] CreateProposal(IParameterSymbol parameter, string phrase) => CreateStartingPhraseProposal(phrase);
 
         protected virtual bool ShallAnalyzeParameter(IParameterSymbol parameter) => true;
 

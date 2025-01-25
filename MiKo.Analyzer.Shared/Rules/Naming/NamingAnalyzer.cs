@@ -154,8 +154,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (symbol.ContainingSymbol is IMethodSymbol method && method.IsConstructor())
             {
-                if (method.HasAttributeApplied("System.Text.Json.Serialization.JsonConstructorAttribute")
-                 || method.HasAttributeApplied("Newtonsoft.Json.JsonConstructorAttribute"))
+                if (method.HasAttribute("System.Text.Json.Serialization.JsonConstructorAttribute")
+                 || method.HasAttribute("Newtonsoft.Json.JsonConstructorAttribute"))
                 {
                     // ignore Json constructors
                     return false;
