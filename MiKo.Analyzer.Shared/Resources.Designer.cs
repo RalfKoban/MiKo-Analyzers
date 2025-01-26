@@ -13822,6 +13822,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Place field before all other fields.
+        /// </summary>
+        internal static string MiKo_4105_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_4105_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The field that contains the object under test is an essential part of a test class. To make them easy to find, place these fields first..
+        /// </summary>
+        internal static string MiKo_4105_Description {
+            get {
+                return ResourceManager.GetString("MiKo_4105_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place object under test field before all other fields.
+        /// </summary>
+        internal static string MiKo_4105_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_4105_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Object under test fields should be ordered before all other fields.
+        /// </summary>
+        internal static string MiKo_4105_Title {
+            get {
+                return ResourceManager.GetString("MiKo_4105_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Place inside &apos;if&apos;.
         /// </summary>
         internal static string MiKo_5001_CodeFixTitle {
