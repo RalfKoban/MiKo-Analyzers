@@ -18,9 +18,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly string[] FourCharacterGerundEndings = { "pping", "rring", "tting" };
 
-        private static readonly string[] ThreeCharacterGerundEndings = { "anging", "inging", "ssing", "cting", "pting" };
+        private static readonly string[] ThreeCharacterGerundEndings = { "anging", "inging", "ssing", "cting", "pting", "enting" };
 
-        private static readonly string[] ThreeCharacterGerundEndingsWithE = { "bling", "kling", "ging", "sing", "ting", "uing", "ving", "zing" };
+        private static readonly string[] ThreeCharacterGerundEndingsWithE = { "bling", "kling", "ging", "sing", "ting", "uing", "ving", "zing", "mining" };
 
         private static readonly ConcurrentDictionary<string, string> GerundVerbs = new ConcurrentDictionary<string, string>();
 

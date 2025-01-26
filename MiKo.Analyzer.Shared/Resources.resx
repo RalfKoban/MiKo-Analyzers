@@ -4830,6 +4830,18 @@ This organization ensures clarity and makes the code easier to find, understand 
   <data name="MiKo_4104_Title" xml:space="preserve">
     <value>One-Time test cleanup methods should be ordered directly after One-Time test initialization methods</value>
   </data>
+  <data name="MiKo_4105_CodeFixTitle" xml:space="preserve">
+    <value>Place field before all other fields</value>
+  </data>
+  <data name="MiKo_4105_Description" xml:space="preserve">
+    <value>The field that contains the object under test is an essential part of a test class. To make them easy to find, place these fields first.</value>
+  </data>
+  <data name="MiKo_4105_MessageFormat" xml:space="preserve">
+    <value>Place object under test field before all other fields</value>
+  </data>
+  <data name="MiKo_4105_Title" xml:space="preserve">
+    <value>Object under test fields should be ordered before all other fields</value>
+  </data>
   <data name="MiKo_5001_CodeFixTitle" xml:space="preserve">
     <value>Place inside 'if'</value>
   </data>

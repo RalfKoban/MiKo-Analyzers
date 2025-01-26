@@ -23,15 +23,23 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             if (symbol.IsRecord)
             {
                 // filter primary ctors (as we cannot re-align those)
-                ctors = ctors.Where(_ => _.IsPrimaryConstructor() is false);
+                ctors = ctors.Where(_ => _.IsPrimaryConstructor() is false).ToList();
             }
 
             var methods = GetMethodsOrderedByLocation(symbol);
-            var methodsAndCtors = ctors.Concat(methods).ToList();
 
-            return methodsAndCtors.Count != 0
-                   ? AnalyzeMethodsGroupedByAccessibility(methodsAndCtors)
-                   : Array.Empty<Diagnostic>();
+            var count = ctors.Count + methods.Count;
+
+            if (count <= 0)
+            {
+                return Array.Empty<Diagnostic>();
+            }
+
+            var methodsAndCtors = new List<IMethodSymbol>(count);
+            methodsAndCtors.AddRange(ctors);
+            methodsAndCtors.AddRange(methods);
+
+            return AnalyzeMethodsGroupedByAccessibility(methodsAndCtors);
         }
 
         private IEnumerable<Diagnostic> AnalyzeMethodsGroupedByAccessibility(IList<IMethodSymbol> allMethods) => allMethods.GroupBy(_ => _.DeclaredAccessibility)

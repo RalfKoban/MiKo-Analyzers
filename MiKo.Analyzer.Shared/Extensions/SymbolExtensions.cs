@@ -652,18 +652,6 @@ namespace MiKoSolutions.Analyzers
             return value.GetTypeUnderTestMembers().Select(_ => _.GetReturnTypeSymbol()).WhereNotNull().ToHashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
         }
 
-        internal static bool HasAttribute(this ISymbol value, ISet<string> attributeNames)
-        {
-            var attributes = value.GetAttributes();
-
-            if (attributes.Length == 0)
-            {
-                return false;
-            }
-
-            return attributes.Any(_ => attributeNames.Contains(_.AttributeClass?.Name));
-        }
-
         internal static bool HasAttributeApplied(this ISymbol value, string attributeName)
         {
             var attributes = value.GetAttributes();
@@ -674,6 +662,30 @@ namespace MiKoSolutions.Analyzers
             }
 
             return attributes.Any(_ => _.AttributeClass.InheritsFrom(attributeName));
+        }
+
+        internal static bool HasAttribute(this ISymbol value, string attributeName)
+        {
+            var attributes = value.GetAttributes();
+
+            if (attributes.Length == 0)
+            {
+                return false;
+            }
+
+            return attributes.Any(_ => attributeName == _.AttributeClass?.FullyQualifiedName());
+        }
+
+        internal static bool HasAttribute(this ISymbol value, ISet<string> attributeNames)
+        {
+            var attributes = value.GetAttributes();
+
+            if (attributes.Length == 0)
+            {
+                return false;
+            }
+
+            return attributes.Any(_ => attributeNames.Contains(_.AttributeClass?.Name) || attributeNames.Contains(_.AttributeClass?.FullyQualifiedName()));
         }
 
         internal static bool HasDependencyObjectParameter(this IMethodSymbol value)
@@ -687,6 +699,10 @@ namespace MiKoSolutions.Analyzers
 
             return parameters.Any(_ => _.Type.IsDependencyObject());
         }
+
+        internal static bool HasFlags(this IParameterSymbol value) => value.Type.HasFlags();
+
+        internal static bool HasFlags(this ITypeSymbol value) => value.HasAttribute(Constants.Names.FlagsAttributeNames);
 
         internal static bool HasModifier(this IMethodSymbol value, SyntaxKind kind) => ((BaseMethodDeclarationSyntax)value.GetSyntax()).Modifiers.Any(kind);
 

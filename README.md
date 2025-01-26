@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables lists all the 473 rules that are currently provided by the analyzer.
+The following tables lists all the 474 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -440,6 +440,7 @@ The following tables lists all the 473 rules that are currently provided by the 
 |MiKo_4102|Test cleanup methods should be ordered after test initialization methods and before test methods|&#x2713;|&#x2713;|
 |MiKo_4103|One-Time test initialization methods should be ordered before all other methods|&#x2713;|&#x2713;|
 |MiKo_4104|One-Time test cleanup methods should be ordered directly after One-Time test initialization methods|&#x2713;|&#x2713;|
+|MiKo_4105|Object under test fields should be ordered before all other fields|&#x2713;|&#x2713;|
 
 ### Performance
 |ID|Title|Enabled by default|CodeFix available|

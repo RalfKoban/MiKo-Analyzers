@@ -39,7 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return Array.Empty<Diagnostic>();
             }
 
-            if (parameter.HasAttributeApplied("System.Runtime.CompilerServices.CallerMemberNameAttribute"))
+            if (parameter.HasAttribute("System.Runtime.CompilerServices.CallerMemberNameAttribute"))
             {
                 // nothing to report as that attribute indicates that the value gets automatically set
                 return Array.Empty<Diagnostic>();

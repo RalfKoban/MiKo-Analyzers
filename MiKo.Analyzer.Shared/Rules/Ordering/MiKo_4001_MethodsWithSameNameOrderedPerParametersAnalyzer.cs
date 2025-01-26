@@ -20,11 +20,19 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
         {
             var ctors = GetMethodsOrderedByLocation(symbol, MethodKind.Constructor);
             var methods = GetMethodsOrderedByLocation(symbol);
-            var methodsAndCtors = ctors.Concat(methods).ToList();
 
-            return methodsAndCtors.Count != 0
-                   ? AnalyzeMethods(methodsAndCtors)
-                   : Array.Empty<Diagnostic>();
+            var count = ctors.Count + methods.Count;
+
+            if (count <= 0)
+            {
+                return Array.Empty<Diagnostic>();
+            }
+
+            var methodsAndCtors = new List<IMethodSymbol>(count);
+            methodsAndCtors.AddRange(ctors);
+            methodsAndCtors.AddRange(methods);
+
+            return AnalyzeMethods(methodsAndCtors);
         }
 
         private IEnumerable<Diagnostic> AnalyzeMethods(IEnumerable<IMethodSymbol> methods)

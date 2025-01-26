@@ -20,23 +20,44 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment)
         {
+            var phrases = parameter.HasFlags()
+                          ? Constants.Comments.EnumFlagsParameterStartingPhrase
+                          : Constants.Comments.EnumParameterStartingPhrase;
+
+            var adjustedPhrases = AdjustPhrases(parameter, phrases);
+
+            return AnalyzeStartingPhrase(parameter, parameterComment, comment, adjustedPhrases);
+        }
+
+        protected override Pair[] CreateProposal(IParameterSymbol parameter, string phrase)
+        {
+            return new[]
+                   {
+                       new Pair(Constants.AnalyzerCodeFixSharedData.StartingPhrase, phrase),
+                       new Pair(Constants.AnalyzerCodeFixSharedData.IsFlagged, parameter.HasFlags().ToString()),
+                   };
+        }
+
+        private static string[] AdjustPhrases(IParameterSymbol parameter, string[] phrases)
+        {
             var parameterType = parameter.Type;
             var qualifiedName = parameterType.FullyQualifiedName();
+            var parameterTypeName = parameterType.Name;
 
-            var phrases = Constants.Comments.EnumParameterStartingPhrase;
             var length = phrases.Length;
 
             var finalPhrases = new string[2 * length];
 
             for (var i = 0; i < length; i++)
             {
-                // apply full qualified name here as this is applied under the hood to the comment itself
-                finalPhrases[i + length] = phrases[i].FormatWith(qualifiedName);
+                var phrase = phrases[i];
 
-                finalPhrases[i] = phrases[i].FormatWith(parameterType.Name);
+                // apply full qualified name here as this is applied under the hood to the comment itself
+                finalPhrases[i + length] = phrase.FormatWith(qualifiedName);
+                finalPhrases[i] = phrase.FormatWith(parameterTypeName);
             }
 
-            return AnalyzeStartingPhrase(parameter, parameterComment, comment, finalPhrases);
+            return finalPhrases;
         }
     }
 }
