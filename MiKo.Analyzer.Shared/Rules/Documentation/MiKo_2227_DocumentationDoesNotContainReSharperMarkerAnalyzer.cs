@@ -19,9 +19,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             foreach (var token in comment.GetXmlTextTokens())
             {
-                foreach (var location in GetAllLocations(token, Constants.Markers.ReSharper))
+                var locations = GetAllLocations(token, Constants.Markers.ReSharper);
+                var locationsCount = locations.Count;
+
+                if (locationsCount > 0)
                 {
-                    yield return Issue(location);
+                    for (var index = 0; index < locationsCount; index++)
+                    {
+                        yield return Issue(locations[index]);
+                    }
                 }
             }
         }

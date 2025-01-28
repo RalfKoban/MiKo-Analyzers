@@ -22,9 +22,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             foreach (var token in comment.GetXmlTextTokens())
             {
-                foreach (var location in GetAllLocations(token, Triggers, StringComparison.OrdinalIgnoreCase))
+                var locations = GetAllLocations(token, Triggers, StringComparison.OrdinalIgnoreCase);
+                var locationsCount = locations.Count;
+
+                if (locationsCount > 0)
                 {
-                    yield return Issue(symbol.Name, location);
+                    for (var index = 0; index < locationsCount; index++)
+                    {
+                        yield return Issue(symbol.Name, locations[index]);
+                    }
                 }
             }
         }

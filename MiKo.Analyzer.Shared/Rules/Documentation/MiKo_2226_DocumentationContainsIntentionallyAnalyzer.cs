@@ -33,9 +33,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     continue;
                 }
 
-                foreach (var location in GetAllLocations(token, Constants.Comments.IntentionallyPhrase, StringComparison.OrdinalIgnoreCase))
+                var locations = GetAllLocations(token, Constants.Comments.IntentionallyPhrase, StringComparison.OrdinalIgnoreCase);
+                var locationsCount = locations.Count;
+
+                if (locationsCount > 0)
                 {
-                    yield return Issue(symbol.Name, location);
+                    for (var index = 0; index < locationsCount; index++)
+                    {
+                        yield return Issue(symbol.Name, locations[index]);
+                    }
                 }
             }
         }

@@ -18,13 +18,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] EndingPhrases = Constants.Comments.BooleanParameterEndingPhrase;
         private static readonly string EndingPhrase = EndingPhrases[0];
 
-        public MiKo_2023_BooleanParamDefaultPhraseAnalyzer() : base(Id)
-        {
-        }
+        public MiKo_2023_BooleanParamDefaultPhraseAnalyzer() : base(Id) => IgnoreEmptyParameters = false;
 
         protected override bool ShallAnalyzeParameter(IParameterSymbol parameter) => parameter.Type.IsBoolean()
-                                                                                  && parameter.RefKind != RefKind.Out
-                                                                                  && parameter.GetEnclosingMethod().Name != nameof(IDisposable.Dispose);
+                                                                                     && parameter.RefKind != RefKind.Out
+                                                                                     && parameter.GetEnclosingMethod().Name != nameof(IDisposable.Dispose);
 
         protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment)
         {

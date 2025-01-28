@@ -1252,16 +1252,43 @@ namespace MiKoSolutions.Analyzers
 
             var builder = StringBuilderCache.Acquire();
 
-            foreach (var valueText in value.GetTextWithoutTriviaLazy())
-            {
-                builder.Append(valueText);
-            }
+            GetTextWithoutTrivia(value, builder);
 
             var trimmed = builder.Trim();
 
             StringBuilderCache.Release(builder);
 
             return trimmed;
+        }
+
+        internal static StringBuilder GetTextWithoutTrivia(this XmlTextSyntax value, StringBuilder builder)
+        {
+            if (value is null)
+            {
+                return builder;
+            }
+
+            var textTokens = value.TextTokens;
+
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var textTokensCount = textTokens.Count;
+
+            if (textTokensCount > 0)
+            {
+                for (var index = 0; index < textTokensCount; index++)
+                {
+                    var token = textTokens[index];
+
+                    if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                    {
+                        continue;
+                    }
+
+                    builder.Append(token.WithoutTrivia().ValueText);
+                }
+            }
+
+            return builder;
         }
 
         internal static StringBuilder GetTextWithoutTrivia(this XmlElementSyntax value, StringBuilder builder)
@@ -1276,21 +1303,28 @@ namespace MiKoSolutions.Analyzers
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var contentCount = content.Count;
 
-            if (content.Count > 0)
+            if (contentCount > 0)
             {
                 for (var index = 0; index < contentCount; index++)
                 {
                     var node = content[index];
                     var tagName = node.GetXmlTagName();
 
-                    if (tagName == Constants.XmlTag.C)
+                    switch (tagName)
                     {
-                        // ignore code
-                        continue;
+                        case "i":
+                        case "b":
+                        case Constants.XmlTag.C:
+                            continue; // ignore code
                     }
 
                     switch (node)
                     {
+                        case XmlTextSyntax text:
+                            GetTextWithoutTrivia(text, builder);
+
+                            break;
+
                         case XmlEmptyElementSyntax empty:
                             builder.Append(empty.WithoutTrivia());
 
@@ -1298,14 +1332,6 @@ namespace MiKoSolutions.Analyzers
 
                         case XmlElementSyntax e:
                             GetTextWithoutTrivia(e, builder);
-
-                            break;
-
-                        case XmlTextSyntax text:
-                            foreach (var valueText in text.GetTextWithoutTriviaLazy())
-                            {
-                                builder.Append(valueText);
-                            }
 
                             break;
                     }

@@ -25,9 +25,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 const int Offset = 1; // we do not want to underline the first and last char
 
-                foreach (var location in GetAllLocations(token, Constants.Comments.IdTerms, StringComparison.OrdinalIgnoreCase, Offset, Offset))
+                var locations = GetAllLocations(token, Constants.Comments.IdTerms, StringComparison.OrdinalIgnoreCase, Offset, Offset);
+                var locationsCount = locations.Count;
+
+                if (locationsCount > 0)
                 {
-                    yield return Issue(symbol.Name, location);
+                    for (var index = 0; index < locationsCount; index++)
+                    {
+                        yield return Issue(symbol.Name, locations[index]);
+                    }
                 }
             }
         }
