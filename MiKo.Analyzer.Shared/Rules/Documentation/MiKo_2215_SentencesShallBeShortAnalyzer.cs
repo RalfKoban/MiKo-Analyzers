@@ -51,7 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static bool HasIssue(DocumentationCommentTriviaSyntax comment)
         {
-            foreach (var node in comment.DescendantNodes<XmlElementSyntax>().Where(_ => XmlTags.Contains(_.GetName())))
+            foreach (var node in comment.DescendantNodes<XmlElementSyntax>(_ => XmlTags.Contains(_.GetName())))
             {
                 var builder = StringBuilderCache.Acquire();
 

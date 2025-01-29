@@ -54,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
 
                 // we do not want to find a ' - ' in the middle of the text (except it contains lots of whitespaces)
-                if (token.HasLeadingTrivia && text.AsSpan().TrimStart().StartsWith("- ", StringComparison.OrdinalIgnoreCase))
+                if (token.HasLeadingTrivia && text.AsSpan().TrimStart().StartsWith("- ", StringComparison.Ordinal))
                 {
                     yield return Issue(symbol.Name, token);
                 }
