@@ -521,6 +521,8 @@ namespace MiKoSolutions.Analyzers
 
             if (length > 0)
             {
+                var extension = Constants.CSharpFileExtension.AsSpan();
+
                 for (var index = 0; index < length; index++)
                 {
                     if (references[index].GetSyntax() is TSyntaxNode node)
@@ -530,10 +532,10 @@ namespace MiKoSolutions.Analyzers
                         var filePathSpan = filePath.AsSpan();
 
                         // Perf: quick catch via span and ordinal comparison (as that is the most likely case)
-                        if (filePathSpan.EndsWith(Constants.CSharpFileExtension, StringComparison.Ordinal))
+                        if (filePathSpan.EndsWith(extension, StringComparison.Ordinal))
                         {
                             // Perf: quick catch find another dot, as we do not need to check for additional extensions in case we do not have any other dot here
-                            if (filePathSpan.Slice(0, filePathSpan.Length - Constants.CSharpFileExtension.Length).LastIndexOfAny('.', Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) >= 0)
+                            if (filePathSpan.Slice(0, filePathSpan.Length - extension.Length).LastIndexOfAny('.', Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) >= 0)
                             {
                                 if (filePathSpan.EndsWithAny(Constants.GeneratedCSharpFileExtensions, StringComparison.Ordinal))
                                 {
@@ -546,7 +548,7 @@ namespace MiKoSolutions.Analyzers
                         }
 
                         // non-performant part: use string and ignore case
-                        if (filePath.EndsWith(Constants.CSharpFileExtension, StringComparison.OrdinalIgnoreCase))
+                        if (filePathSpan.EndsWith(extension, StringComparison.OrdinalIgnoreCase))
                         {
                             if (filePath.EndsWithAny(Constants.GeneratedCSharpFileExtensions, StringComparison.OrdinalIgnoreCase))
                             {
