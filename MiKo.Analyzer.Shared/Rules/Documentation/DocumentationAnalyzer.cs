@@ -118,7 +118,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var firstPart = returnType.AsSpan(0, length);
 
                 var returnTypeWithTs = firstPart.ConcatenatedWith('{', ts, '}');
-                var returnTypeWithGenericCount = firstPart.ConcatenatedWith("`", count.ToString());
+                var returnTypeWithGenericCount = firstPart.ConcatenatedWith('`', count.ToString());
 
 //// ncrunch: rdi off
                 return Array.Empty<string>()
