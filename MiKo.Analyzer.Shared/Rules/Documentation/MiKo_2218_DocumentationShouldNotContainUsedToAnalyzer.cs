@@ -368,11 +368,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var token in comment.GetXmlTextTokens())
             {
-                if (token.ValueText.IsNullOrWhiteSpace())
-                {
-                    continue;
-                }
-
                 AnalyzeForPhrases(issues, token, UsedToPhrases, UsedToReplacement);
                 AnalyzeForPhrases(issues, token, CanPhrases, CanReplacement, StringComparison.OrdinalIgnoreCase);
                 AnalyzeForPhrases(issues, token, CanPluralPhrases, CanPluralReplacement, StringComparison.OrdinalIgnoreCase);

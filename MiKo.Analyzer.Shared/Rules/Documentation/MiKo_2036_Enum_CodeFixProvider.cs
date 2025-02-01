@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -26,10 +26,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var defaultValue = typeSymbol.GetFields()[0];
                 var nameSyntax = SyntaxFactory.ParseName(defaultValue.Name);
 
-                yield return XmlText(Constants.Comments.DefaultStartingPhrase);
-                yield return SeeCref(returnType, nameSyntax);
-                yield return XmlText(".");
+                return new XmlNodeSyntax[]
+                           {
+                               XmlText(Constants.Comments.DefaultStartingPhrase),
+                               SeeCref(returnType, nameSyntax),
+                               XmlText("."),
+                           };
             }
+
+            return Array.Empty<XmlNodeSyntax>();
         }
     }
 }

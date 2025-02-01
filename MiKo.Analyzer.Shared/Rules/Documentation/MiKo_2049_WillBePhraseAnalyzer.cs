@@ -45,6 +45,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] Phrases = PhrasesMapKeys.WithDelimiters();
 
+        private static readonly int MinimumPhraseLength = Phrases.Min(_ => _.Length);
+
         public MiKo_2049_WillBePhraseAnalyzer() : base(Id)
         {
         }
@@ -73,10 +75,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var issues = AnalyzeCommentXml(comment);
             var count = issues.Count;
 
-            switch (count)
+            if (count < 2)
             {
-                case 0: return Array.Empty<Diagnostic>();
-                case 1: return new[] { issues[0] };
+                return issues;
             }
 
             var alreadyReportedLocations = new List<Location>(count);
@@ -102,11 +103,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private List<Diagnostic> AnalyzeCommentXml(DocumentationCommentTriviaSyntax comment)
         {
-            var issues = new List<Diagnostic>();
+            var issues = new List<Diagnostic>(0);
 
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
             foreach (var token in comment.GetXmlTextTokens())
             {
-                if (token.ValueText.IsNullOrWhiteSpace())
+                if (token.ValueText.Length < MinimumPhraseLength)
                 {
                     continue;
                 }
@@ -123,6 +125,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                 }
 
+                // ReSharper disable once LoopCanBeConvertedToQuery
                 // ReSharper disable once LoopCanBePartlyConvertedToQuery
                 foreach (var issue in AnalyzeForSpecialPhrase(token, WillPhraseStartUpperCase, _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)))
                 {
@@ -134,6 +137,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                 }
 
+                // ReSharper disable once LoopCanBeConvertedToQuery
                 // ReSharper disable once LoopCanBePartlyConvertedToQuery
                 foreach (var issue in AnalyzeForSpecialPhrase(token, WillPhrase, Verbalizer.MakeThirdPersonSingularVerb))
                 {

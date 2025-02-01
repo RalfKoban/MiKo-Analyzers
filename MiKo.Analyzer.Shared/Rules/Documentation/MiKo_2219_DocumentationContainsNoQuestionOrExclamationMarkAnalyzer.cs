@@ -31,16 +31,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             foreach (var token in comment.DescendantNodes<XmlTextSyntax>(_ => _.AncestorsWithinDocumentation<XmlElementSyntax>().None(__ => AllowedTags.Contains(__.GetName())))
                                          .SelectMany(_ => _.TextTokens.OfKind(SyntaxKind.XmlTextLiteralToken)))
             {
-                foreach (var location in GetAllLocations(token, Terms))
+                var locations = GetAllLocations(token, Terms);
+                var locationsCount = locations.Count;
+
+                if (locationsCount > 0)
                 {
-                    var word = location.GetSurroundingWord();
-
-                    if (word.IsHyperlink())
+                    for (var index = 0; index < locationsCount; index++)
                     {
-                        continue;
-                    }
+                        var location = locations[index];
+                        var word = location.GetSurroundingWord();
 
-                    yield return Issue(location);
+                        if (word.IsHyperlink())
+                        {
+                            continue;
+                        }
+
+                        yield return Issue(location);
+                    }
                 }
             }
         }

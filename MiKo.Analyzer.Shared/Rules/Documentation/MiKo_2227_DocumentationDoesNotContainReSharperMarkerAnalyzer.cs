@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -11,6 +12,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2227";
 
+        private static readonly string[] Phrases = Constants.Markers.ReSharper;
+
+        private static readonly int MinimumPhraseLength = Phrases.Min(_ => _.Length);
+
         public MiKo_2227_DocumentationDoesNotContainReSharperMarkerAnalyzer() : base(Id)
         {
         }
@@ -19,9 +24,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             foreach (var token in comment.GetXmlTextTokens())
             {
-                foreach (var location in GetAllLocations(token, Constants.Markers.ReSharper))
+                if (token.ValueText.Length < MinimumPhraseLength)
                 {
-                    yield return Issue(location);
+                    continue;
+                }
+
+                var locations = GetAllLocations(token, Phrases);
+                var locationsCount = locations.Count;
+
+                if (locationsCount > 0)
+                {
+                    for (var index = 0; index < locationsCount; index++)
+                    {
+                        yield return Issue(locations[index]);
+                    }
                 }
             }
         }

@@ -373,6 +373,32 @@ namespace System
             }
         }
 
+        public static string ConcatenatedWith(this ReadOnlySpan<char> value, char arg0, string arg1)
+        {
+            var valueLength = value.Length;
+
+            if (valueLength == 0)
+            {
+                return string.Concat(arg0, arg1);
+            }
+
+            var arg1Length = arg1?.Length ?? 0;
+
+            var length = valueLength + 1 + arg1Length;
+
+            unsafe
+            {
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
+
+                value.CopyTo(bufferSpan);
+                buffer[valueLength] = arg0;
+                arg1.AsSpan().CopyTo(bufferSpan.Slice(valueLength + 1));
+
+                return new string(buffer, 0, length);
+            }
+        }
+
         public static string ConcatenatedWith(this ReadOnlySpan<char> value, string arg0, string arg1)
         {
             var valueLength = value.Length;
@@ -508,10 +534,10 @@ namespace System
                     value.CopyTo(bufferSpan);
                 }
 
-                buffer[valueLength + 1] = arg0;
-                buffer[valueLength + 1 + arg1Length] = arg2;
+                buffer[valueLength] = arg0;
+                buffer[valueLength + arg1Length + 1] = arg2;
 
-                arg1.AsSpan().CopyTo(bufferSpan.Slice(valueLength + 2));
+                arg1.AsSpan().CopyTo(bufferSpan.Slice(valueLength + 1));
 
                 return new string(buffer, 0, length);
             }

@@ -20,15 +20,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
-            foreach (var summary in comment.GetSummaryXmls())
-            {
-                var content = summary.Content;
+            var summaryXmls = comment.GetSummaryXmls();
+            var count = summaryXmls.Count;
 
-                switch (content.Count)
+            if (count > 0)
+            {
+                for (var index = 0; index < count; index++)
                 {
-                    case 0:
-                    case 1 when content[0] is XmlTextSyntax text && text.GetTextWithoutTrivia().IsNullOrEmpty():
-                        return new[] { Issue(summary) };
+                    var summary = summaryXmls[index];
+                    var content = summary.Content;
+
+                    switch (content.Count)
+                    {
+                        case 0:
+                        case 1 when content[0] is XmlTextSyntax text && text.GetTextWithoutTrivia().IsNullOrEmpty():
+                            return new[] { Issue(summary) };
+                    }
                 }
             }
 

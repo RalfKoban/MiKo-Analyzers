@@ -71,9 +71,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (comments.None(_ => phrases.Exists(__ => _.StartsWith(__, StringComparison.Ordinal))))
             {
-                var summary = comment.GetSummaryXmls().First();
+                var summaries = comment.GetSummaryXmls();
 
-                return new[] { Issue(symbol.Name, summary.GetContentsLocation(), phrases[0]) };
+                return new[] { Issue(symbol.Name, summaries[0].GetContentsLocation(), phrases[0]) };
             }
 
             // fitting comment

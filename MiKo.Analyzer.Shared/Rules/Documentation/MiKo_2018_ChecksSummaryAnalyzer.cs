@@ -36,16 +36,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var summaryXmls = comment.GetSummaryXmls();
 
-            foreach (var summaryXml in summaryXmls)
+            if (summaryXmls.Count == 0)
             {
-                if (symbol is ITypeSymbol && summaryXml.GetTextTrimmed().IsNullOrEmpty())
-                {
-                    // do not report for empty types
-                    continue;
-                }
-
-                yield return AnalyzeTextStart(symbol, summaryXml);
+                return Array.Empty<Diagnostic>();
             }
+
+            return AnalyzeSummaries(symbol, summaryXmls);
         }
 
         protected override bool AnalyzeTextStart(ISymbol symbol, string valueText, out string problematicText, out StringComparison comparison)
@@ -72,6 +68,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             problematicText = null;
 
             return false;
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeSummaries(ISymbol symbol, IReadOnlyList<XmlElementSyntax> summaryXmls)
+        {
+            var count = summaryXmls.Count;
+
+            for (var index = 0; index < count; index++)
+            {
+                var summaryXml = summaryXmls[index];
+
+                if (symbol is ITypeSymbol && summaryXml.GetTextTrimmed().IsNullOrEmpty())
+                {
+                    // do not report for empty types
+                    continue;
+                }
+
+                yield return AnalyzeTextStart(symbol, summaryXml);
+            }
         }
     }
 }

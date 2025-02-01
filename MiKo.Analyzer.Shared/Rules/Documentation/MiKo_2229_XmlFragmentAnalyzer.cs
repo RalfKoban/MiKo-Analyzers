@@ -28,9 +28,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     continue;
                 }
 
-                foreach (var location in GetAllLocations(token, Phrases))
+                var locations = GetAllLocations(token, Phrases);
+                var locationsCount = locations.Count;
+
+                if (locationsCount > 0)
                 {
-                    yield return Issue(location);
+                    for (var index = 0; index < locationsCount; index++)
+                    {
+                        yield return Issue(locations[index]);
+                    }
                 }
             }
         }

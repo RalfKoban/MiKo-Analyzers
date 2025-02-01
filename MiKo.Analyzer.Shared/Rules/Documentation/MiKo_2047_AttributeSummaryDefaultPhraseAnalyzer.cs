@@ -24,15 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location, StartingPhrases);
 
         // TODO RKN: Move this to SummaryDocumentAnalyzer when finished
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
-        {
-            var summaryXmls = comment.GetSummaryXmls();
-
-            foreach (var summaryXml in summaryXmls)
-            {
-                yield return AnalyzeTextStart(symbol, summaryXml);
-            }
-        }
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeSummariesStart(symbol, compilation, commentXml, comment);
 
         protected override bool AnalyzeTextStart(ISymbol symbol, string valueText, out string problematicText, out StringComparison comparison)
         {

@@ -17,9 +17,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
+            const string Phrase = Constants.Comments.WasNotSuccessfulPhrase;
+
             foreach (var token in comment.GetXmlTextTokens())
             {
-                foreach (var location in GetAllLocations(token, Constants.Comments.WasNotSuccessfulPhrase))
+                if (token.ValueText.Length < Phrase.Length)
+                {
+                    continue;
+                }
+
+                foreach (var location in GetAllLocations(token, Phrase))
                 {
                     yield return Issue(symbol.Name, location);
                 }

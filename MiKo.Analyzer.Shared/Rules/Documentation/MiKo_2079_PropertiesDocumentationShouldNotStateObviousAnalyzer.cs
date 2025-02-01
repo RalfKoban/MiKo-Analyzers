@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -42,19 +43,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
             var summaries = comment.GetSummaryXmls();
-            var symbolName = symbol.Name;
 
-            var obviousComments = GetObviousComments(symbolName);
-
-            foreach (var summary in summaries)
+            if (summaries.Count == 0)
             {
-                var trimmed = summary.GetTextTrimmed();
-
-                if (obviousComments.Contains(trimmed))
-                {
-                    yield return Issue(symbolName, comment);
-                }
+                return Array.Empty<Diagnostic>();
             }
+
+            return AnalyzeSummaries(symbol.Name, comment, summaries);
         }
 
         private static HashSet<string> GetObviousComments(string symbolName)
@@ -70,6 +65,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return result;
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeSummaries(string symbolName, DocumentationCommentTriviaSyntax comment, IReadOnlyList<XmlElementSyntax> summaries)
+        {
+            var obviousComments = GetObviousComments(symbolName);
+
+            var count = summaries.Count;
+
+            for (var index = 0; index < count; index++)
+            {
+                var summary = summaries[index];
+                var trimmed = summary.GetTextTrimmed();
+
+                if (obviousComments.Contains(trimmed))
+                {
+                    yield return Issue(symbolName, comment);
+                }
+            }
         }
     }
 }

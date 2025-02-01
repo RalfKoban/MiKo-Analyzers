@@ -104,7 +104,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static bool CommentHasIssue(ReadOnlySpan<char> comment)
         {
-            if (comment.StartsWith("//", StringComparison.OrdinalIgnoreCase))
+            if (comment.StartsWith("//", StringComparison.Ordinal))
             {
                 return false; // ignore all comments that have the "double comment" marker
             }

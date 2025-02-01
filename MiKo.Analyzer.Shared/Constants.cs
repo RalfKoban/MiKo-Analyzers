@@ -8,6 +8,7 @@ namespace MiKoSolutions.Analyzers
     internal static class Constants
     {
         internal const int Indentation = 4;
+        internal const int MinimumCharactersThreshold = 4;
 
         internal const string Core = "Core";
         internal const string AsyncSuffix = "Async";

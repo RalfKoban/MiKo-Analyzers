@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (syntax is MethodDeclarationSyntax method && method.Body is BlockSyntax body)
             {
-                var returnStatements = body.DescendantNodes<ReturnStatementSyntax>().Where(_ => _.ReturnsCompletedTask());
+                var returnStatements = body.DescendantNodes<ReturnStatementSyntax>(_ => _.ReturnsCompletedTask());
 
                 return method.Without(returnStatements)
                              .WithReturnType(PredefinedType(SyntaxKind.VoidKeyword));

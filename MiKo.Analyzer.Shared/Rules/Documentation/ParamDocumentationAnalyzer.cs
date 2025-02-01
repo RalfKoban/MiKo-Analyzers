@@ -12,6 +12,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
+        protected bool IgnoreEmptyParameters { get; set; } = true;
+
         protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeParameters(symbol, commentXml, comment);
 
         protected IEnumerable<Diagnostic> AnalyzeStartingPhrase(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment, string[] phrases, StringComparison comparison = StringComparison.Ordinal)
@@ -55,32 +57,41 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var parameters = symbol.Parameters;
             var parametersLength = parameters.Length;
 
-            if (parametersLength > 0)
+            if (parametersLength <= 0)
             {
-                for (var index = 0; index < parametersLength; index++)
+                yield break;
+            }
+
+            var ignoreEmptyParameters = IgnoreEmptyParameters;
+
+            for (var index = 0; index < parametersLength; index++)
+            {
+                var parameter = parameters[index];
+
+                if (ShallAnalyzeParameter(parameter))
                 {
-                    var parameter = parameters[index];
+                    var parameterComment = comment.GetParameterComment(parameter.Name);
 
-                    if (ShallAnalyzeParameter(parameter))
+                    if (parameterComment is null)
                     {
-                        var parameterComment = comment.GetParameterComment(parameter.Name);
+                        continue;
+                    }
 
-                        if (parameterComment is null)
-                        {
-                            continue;
-                        }
+                    var parameterCommentXml = parameter.GetComment(commentXml);
 
-                        var parameterCommentXml = parameter.GetComment(commentXml);
+                    if (parameterCommentXml.IsNullOrEmpty() && ignoreEmptyParameters)
+                    {
+                        continue;
+                    }
 
-                        if (parameterCommentXml.EqualsAny(Constants.Comments.UnusedPhrase))
-                        {
-                            continue;
-                        }
+                    if (parameterCommentXml.EqualsAny(Constants.Comments.UnusedPhrase))
+                    {
+                        continue;
+                    }
 
-                        foreach (var issue in AnalyzeParameter(parameter, parameterComment, parameterCommentXml))
-                        {
-                            yield return issue;
-                        }
+                    foreach (var issue in AnalyzeParameter(parameter, parameterComment, parameterCommentXml))
+                    {
+                        yield return issue;
                     }
                 }
             }

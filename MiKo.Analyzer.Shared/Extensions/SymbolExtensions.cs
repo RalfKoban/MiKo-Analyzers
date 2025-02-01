@@ -521,6 +521,8 @@ namespace MiKoSolutions.Analyzers
 
             if (length > 0)
             {
+                var extension = Constants.CSharpFileExtension.AsSpan();
+
                 for (var index = 0; index < length; index++)
                 {
                     if (references[index].GetSyntax() is TSyntaxNode node)
@@ -530,10 +532,10 @@ namespace MiKoSolutions.Analyzers
                         var filePathSpan = filePath.AsSpan();
 
                         // Perf: quick catch via span and ordinal comparison (as that is the most likely case)
-                        if (filePathSpan.EndsWith(Constants.CSharpFileExtension, StringComparison.Ordinal))
+                        if (filePathSpan.EndsWith(extension, StringComparison.Ordinal))
                         {
                             // Perf: quick catch find another dot, as we do not need to check for additional extensions in case we do not have any other dot here
-                            if (filePathSpan.Slice(0, filePathSpan.Length - Constants.CSharpFileExtension.Length).LastIndexOfAny('.', Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) >= 0)
+                            if (filePathSpan.Slice(0, filePathSpan.Length - extension.Length).LastIndexOfAny('.', Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) >= 0)
                             {
                                 if (filePathSpan.EndsWithAny(Constants.GeneratedCSharpFileExtensions, StringComparison.Ordinal))
                                 {
@@ -546,7 +548,7 @@ namespace MiKoSolutions.Analyzers
                         }
 
                         // non-performant part: use string and ignore case
-                        if (filePath.EndsWith(Constants.CSharpFileExtension, StringComparison.OrdinalIgnoreCase))
+                        if (filePathSpan.EndsWith(extension, StringComparison.OrdinalIgnoreCase))
                         {
                             if (filePath.EndsWithAny(Constants.GeneratedCSharpFileExtensions, StringComparison.OrdinalIgnoreCase))
                             {
@@ -1796,21 +1798,52 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        private static bool IsInterfaceImplementation<TSymbol>(this TSymbol value, ITypeSymbol typeSymbol, ImmutableArray<INamedTypeSymbol> implementedInterfaces) where TSymbol : ISymbol
+        {
+            var name = value.Name;
+            var length = implementedInterfaces.Length;
+
+            // Perf: do not use enumerable
+            for (var index = 0; index < length; index++)
+            {
+                var members = implementedInterfaces[index].GetMembers(name);
+                var membersLength = members.Length;
+
+                if (membersLength > 0)
+                {
+                    // Perf: do not use Linq
+                    for (var memberIndex = 0; memberIndex < membersLength; memberIndex++)
+                    {
+                        if (members[memberIndex] is TSymbol symbol && value.Equals(typeSymbol.FindImplementationForInterfaceMember(symbol), SymbolEqualityComparer.Default))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
         private static bool IsInterfaceImplementation<TSymbol>(this TSymbol value, ITypeSymbol typeSymbol, IEnumerable<INamedTypeSymbol> implementedInterfaces) where TSymbol : ISymbol
         {
             var name = value.Name;
 
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
             foreach (var implementedInterface in implementedInterfaces)
             {
                 var members = implementedInterface.GetMembers(name);
+                var membersLength = members.Length;
 
-                if (members.Length > 0)
+                if (membersLength > 0)
                 {
-                    var symbols = members.OfType<TSymbol>();
-
-                    if (symbols.Any(_ => value.Equals(typeSymbol.FindImplementationForInterfaceMember(_), SymbolEqualityComparer.Default)))
+                    // Perf: do not use Linq
+                    for (var memberIndex = 0; memberIndex < membersLength; memberIndex++)
                     {
-                        return true;
+                        if (members[memberIndex] is TSymbol symbol && value.Equals(typeSymbol.FindImplementationForInterfaceMember(symbol), SymbolEqualityComparer.Default))
+                        {
+                            return true;
+                        }
                     }
                 }
             }

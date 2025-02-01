@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -22,8 +23,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var summaryXmls = comment.GetSummaryXmls();
 
-            foreach (var summaryXml in summaryXmls)
+            if (summaryXmls.Count == 0)
             {
+                return Array.Empty<Diagnostic>();
+            }
+
+            return AnalyzeSummaries(symbol, summaryXmls);
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeSummaries(ISymbol symbol, IReadOnlyList<XmlElementSyntax> summaryXmls)
+        {
+            var count = summaryXmls.Count;
+
+            for (var index = 0; index < count; index++)
+            {
+                var summaryXml = summaryXmls[index];
+
                 foreach (var code in summaryXml.GetXmlSyntax(Constants.XmlTag.Code))
                 {
                     // we have an issue

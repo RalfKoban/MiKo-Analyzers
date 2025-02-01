@@ -22,20 +22,39 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
-            foreach (var commentElement in GetExceptionComments(comment))
+            var comments = GetExceptionComments(comment);
+
+            if (comments is XmlElementSyntax[] array && array.Length == 0)
             {
-                foreach (var issue in AnalyzeException(symbol, commentElement))
+                return Array.Empty<Diagnostic>();
+            }
+
+            return AnalyzeComment(symbol, comments);
+        }
+
+        protected virtual IEnumerable<XmlElementSyntax> GetExceptionComments(DocumentationCommentTriviaSyntax documentation)
+        {
+            var exceptionXmls = documentation.GetExceptionXmls();
+
+            if (exceptionXmls.Count == 0)
+            {
+                return Array.Empty<XmlElementSyntax>();
+            }
+
+            return exceptionXmls.Where(_ => _.IsExceptionComment(m_exceptionType));
+        }
+
+        protected Diagnostic ExceptionIssue(XmlElementSyntax exceptionComment, string proposal) => Issue(string.Empty, exceptionComment.GetContentsLocation(), ExceptionPhrase, proposal, CreatePhraseProposal(proposal));
+
+        private IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, IEnumerable<XmlElementSyntax> comments)
+        {
+            foreach (var comment in comments)
+            {
+                foreach (var issue in AnalyzeException(symbol, comment))
                 {
                     yield return issue;
                 }
             }
         }
-
-        protected virtual IEnumerable<XmlElementSyntax> GetExceptionComments(DocumentationCommentTriviaSyntax documentation)
-        {
-            return documentation.GetExceptionXmls().Where(_ => _.IsExceptionComment(m_exceptionType));
-        }
-
-        protected Diagnostic ExceptionIssue(XmlElementSyntax exceptionComment, string proposal) => Issue(string.Empty, exceptionComment.GetContentsLocation(), ExceptionPhrase, proposal, CreatePhraseProposal(proposal));
     }
 }

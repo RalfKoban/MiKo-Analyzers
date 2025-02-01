@@ -35,13 +35,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         // TODO RKN: Move this to SummaryDocumentAnalyzer when finished
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
-            foreach (var xml in comment.GetSummaryXmls())
+            var summaryXmls = comment.GetSummaryXmls();
+
+            if (summaryXmls.Count == 0)
             {
-                if (HasIssue(xml))
-                {
-                    yield return Issue(xml.StartTag);
-                }
+                return Array.Empty<Diagnostic>();
             }
+
+            return AnalyzeSummaries(summaryXmls);
         }
 
         private static bool HasIssue(XmlElementSyntax xml)
@@ -83,6 +84,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return false;
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeSummaries(IReadOnlyList<XmlElementSyntax> summaryXmls)
+        {
+            var count = summaryXmls.Count;
+
+            for (var index = 0; index < count; index++)
+            {
+                var xml = summaryXmls[index];
+
+                if (HasIssue(xml))
+                {
+                    yield return Issue(xml.StartTag);
+                }
+            }
         }
     }
 }

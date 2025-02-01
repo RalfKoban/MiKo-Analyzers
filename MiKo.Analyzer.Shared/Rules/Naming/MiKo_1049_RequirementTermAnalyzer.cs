@@ -91,20 +91,55 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return result.ToStringAndRelease();
         }
 
-        private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol)
+        private Diagnostic[] AnalyzeName(ISymbol symbol)
         {
-            var symbolName = symbol.Name
-                                   .AsCachedBuilder()
-                                   .ReplaceWithCheck("efresh", "#") // filter 'refresh' and 'Refresh'
-                                   .ReplaceWithCheck("hallow", "#") // filter 'shallow' and 'Shallow'
-                                   .ReplaceWithCheck("icenseNeed", "#") // filter 'licenseNeed' and 'LicenseNeed'
-                                   .ReplaceWithCheck("eeded", "#") // filter 'needed' and 'Needed'
-                                   .ReplaceWithCheck("eeds", "#") // filter 'needs' and 'Needs'
-                                   .ToStringAndRelease();
+            var symbolName = symbol.Name;
 
-            return Constants.Markers.Requirements
-                            .Where(_ => symbolName.Contains(_, StringComparison.OrdinalIgnoreCase))
-                            .Select(_ => Issue(symbol, _, CreateBetterNameProposal(FindBetterName(symbol.Name))));
+            var name = symbolName.AsCachedBuilder()
+                                 .ReplaceWithCheck("efresh", "#") // filter 'refresh' and 'Refresh'
+                                 .ReplaceWithCheck("hallow", "#") // filter 'shallow' and 'Shallow'
+                                 .ReplaceWithCheck("icenseNeed", "#") // filter 'licenseNeed' and 'LicenseNeed'
+                                 .ReplaceWithCheck("eeded", "#") // filter 'needed' and 'Needed'
+                                 .ReplaceWithCheck("eeds", "#") // filter 'needs' and 'Needs'
+                                 .ToStringAndRelease();
+
+            List<string> findings = null;
+
+            var requirements = Constants.Markers.Requirements;
+            var requirementsLength = requirements.Length;
+
+            for (var index = 0; index < requirementsLength; index++)
+            {
+                var requirement = requirements[index];
+
+                if (name.Contains(requirement, StringComparison.OrdinalIgnoreCase))
+                {
+                    if (findings is null)
+                    {
+                        findings = new List<string>(1);
+                    }
+
+                    findings.Add(requirement);
+                }
+            }
+
+            if (findings is null)
+            {
+                return Array.Empty<Diagnostic>();
+            }
+
+            var proposal = CreateBetterNameProposal(FindBetterName(symbolName));
+
+            var issues = new Diagnostic[findings.Count];
+
+            for (var index = 0; index < findings.Count; index++)
+            {
+                var finding = findings[index];
+
+                issues[index] = Issue(symbol, finding, proposal);
+            }
+
+            return issues;
         }
     }
 }

@@ -215,7 +215,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 var text = textToken.ValueText;
 
-                if (text.Length <= 2 && text.IsNullOrWhiteSpace())
+                if (text.Length <= Constants.MinimumCharactersThreshold && text.IsNullOrWhiteSpace())
                 {
                     // nothing to inspect as the text is too short and consists of whitespaces only
                     continue;
@@ -238,11 +238,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     const int StartOffset = 1; // we do not want to underline the first char
                     const int EndOffset = 1; // we do not want to underline the last char
 
-                    foreach (var location in GetAllLocations(textToken, wrongText, StringComparison.OrdinalIgnoreCase, StartOffset, EndOffset))
+                    var allLocations = GetAllLocations(textToken, wrongText, StringComparison.OrdinalIgnoreCase, StartOffset, EndOffset);
+                    var allLocationsCount = allLocations.Count;
+
+                    if (allLocationsCount > 0)
                     {
-                        if (alreadyFoundLocations.Add(location))
+                        for (var locationsIndex = 0; locationsIndex < allLocationsCount; locationsIndex++)
                         {
-                            yield return Issue(symbolName, location, wrongText, proposal);
+                            var location = allLocations[locationsIndex];
+
+                            if (alreadyFoundLocations.Add(location))
+                            {
+                                yield return Issue(symbolName, location, wrongText, proposal);
+                            }
                         }
                     }
                 }
