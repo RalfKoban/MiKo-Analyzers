@@ -1798,21 +1798,52 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        private static bool IsInterfaceImplementation<TSymbol>(this TSymbol value, ITypeSymbol typeSymbol, ImmutableArray<INamedTypeSymbol> implementedInterfaces) where TSymbol : ISymbol
+        {
+            var name = value.Name;
+            var length = implementedInterfaces.Length;
+
+            // Perf: do not use enumerable
+            for (var index = 0; index < length; index++)
+            {
+                var members = implementedInterfaces[index].GetMembers(name);
+                var membersLength = members.Length;
+
+                if (membersLength > 0)
+                {
+                    // Perf: do not use Linq
+                    for (var memberIndex = 0; memberIndex < membersLength; memberIndex++)
+                    {
+                        if (members[memberIndex] is TSymbol symbol && value.Equals(typeSymbol.FindImplementationForInterfaceMember(symbol), SymbolEqualityComparer.Default))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
         private static bool IsInterfaceImplementation<TSymbol>(this TSymbol value, ITypeSymbol typeSymbol, IEnumerable<INamedTypeSymbol> implementedInterfaces) where TSymbol : ISymbol
         {
             var name = value.Name;
 
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
             foreach (var implementedInterface in implementedInterfaces)
             {
                 var members = implementedInterface.GetMembers(name);
+                var membersLength = members.Length;
 
-                if (members.Length > 0)
+                if (membersLength > 0)
                 {
-                    var symbols = members.OfType<TSymbol>();
-
-                    if (symbols.Any(_ => value.Equals(typeSymbol.FindImplementationForInterfaceMember(_), SymbolEqualityComparer.Default)))
+                    // Perf: do not use Linq
+                    for (var memberIndex = 0; memberIndex < membersLength; memberIndex++)
                     {
-                        return true;
+                        if (members[memberIndex] is TSymbol symbol && value.Equals(typeSymbol.FindImplementationForInterfaceMember(symbol), SymbolEqualityComparer.Default))
+                        {
+                            return true;
+                        }
                     }
                 }
             }

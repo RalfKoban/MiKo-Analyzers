@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] Triggers = Array.Empty<string>()
                                                          .Union(new[] { " -", "--", "---", "*" }.SelectMany(_ => Constants.Comments.Delimiters, (_, delimiter) => string.Concat(delimiter, _, " ")))
-                                                         .Union(new[] { "1", "a", "2", "b", "3", "c" }.SelectMany(_ => Delimiters, (_, delimiter) => string.Concat(" ", _, delimiter, " ")))
+                                                         .Union(new[] { "1", "2", "3", "a", "b", "c", "A", "B", "C" }.SelectMany(_ => Delimiters, (_, delimiter) => string.Concat(" ", _, delimiter, " ")))
                                                          .Union(new[] { " -- ", " --- ", " * ", " ** ", " *** " })
                                                          .ToArray(AscendingStringComparer.Default);
 //// ncrunch: rdi default
@@ -47,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var text = token.ValueText;
 
-                if (text.Length <= 2 && text.IsNullOrWhiteSpace())
+                if (text.Length <= Constants.MinimumCharactersThreshold && text.IsNullOrWhiteSpace())
                 {
                     // nothing to inspect as the text is too short and consists of whitespaces only
                     continue;
@@ -62,7 +62,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     const int Offset = 1; // we do not want to underline the first and last char
 
-                    var locations = GetAllLocations(token, Triggers, StringComparison.OrdinalIgnoreCase, Offset, Offset);
+                    var locations = GetAllLocations(token, Triggers, StringComparison.Ordinal, Offset, Offset);
                     var locationsCount = locations.Count;
 
                     if (locationsCount > 0)

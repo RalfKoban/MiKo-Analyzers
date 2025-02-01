@@ -1369,42 +1369,29 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static IEnumerable<XmlElementSyntax> GetExampleXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Example);
+        internal static IReadOnlyList<XmlElementSyntax> GetExampleXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Example);
 
-        internal static IEnumerable<XmlElementSyntax> GetExceptionXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Exception);
+        internal static IReadOnlyList<XmlElementSyntax> GetExceptionXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Exception);
 
-        internal static IEnumerable<XmlElementSyntax> GetSummaryXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Summary);
+        internal static IReadOnlyList<XmlElementSyntax> GetSummaryXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Summary);
 
         internal static IEnumerable<XmlNodeSyntax> GetSummaryXmls(this DocumentationCommentTriviaSyntax value, ISet<string> tags)
         {
             var summaryXmls = value.GetSummaryXmls();
 
-            foreach (var summary in summaryXmls)
+            if (summaryXmls.Count == 0)
             {
-                // we have to delve into the trivia to find the XML syntax nodes
-                foreach (var node in summary.AllDescendantNodes())
-                {
-                    switch (node)
-                    {
-                        case XmlElementSyntax e when tags.Contains(e.GetName()):
-                            yield return e;
-
-                            break;
-
-                        case XmlEmptyElementSyntax ee when tags.Contains(ee.GetName()):
-                            yield return ee;
-
-                            break;
-                    }
-                }
+                return Array.Empty<XmlNodeSyntax>();
             }
+
+            return GetSummaryXmlsCore(summaryXmls, tags);
         }
 
-        internal static IEnumerable<XmlElementSyntax> GetRemarksXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Remarks);
+        internal static IReadOnlyList<XmlElementSyntax> GetRemarksXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Remarks);
 
-        internal static IEnumerable<XmlElementSyntax> GetReturnsXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Returns);
+        internal static IReadOnlyList<XmlElementSyntax> GetReturnsXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Returns);
 
-        internal static IEnumerable<XmlElementSyntax> GetValueXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Value);
+        internal static IReadOnlyList<XmlElementSyntax> GetValueXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Value);
 
         /// <summary>
         /// Gets only those XML elements that are NOT empty (have some content) and the given tag out of the documentation syntax.
@@ -1421,17 +1408,24 @@ namespace MiKoSolutions.Analyzers
         /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,string)"/>
         /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,ISet{string})"/>
         /// <seealso cref="GetXmlSyntax(SyntaxNode,ISet{string})"/>
-        internal static IEnumerable<XmlElementSyntax> GetXmlSyntax(this SyntaxNode value, string tag)
+        internal static IReadOnlyList<XmlElementSyntax> GetXmlSyntax(this SyntaxNode value, string tag)
         {
-            // we have to delve into the trivia to find the XML syntax nodes
-            // ReSharper disable once LoopCanBeConvertedToQuery
+            List<XmlElementSyntax> elements = null;
+
             foreach (var element in value.AllDescendantNodes<XmlElementSyntax>())
             {
                 if (element.GetName() == tag)
                 {
-                    yield return element;
+                    if (elements is null)
+                    {
+                        elements = new List<XmlElementSyntax>(1);
+                    }
+
+                    elements.Add(element);
                 }
             }
+
+            return (IReadOnlyList<XmlElementSyntax>)elements ?? Array.Empty<XmlElementSyntax>();
         }
 
         /// <summary>
@@ -1449,17 +1443,25 @@ namespace MiKoSolutions.Analyzers
         /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,string)"/>
         /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,ISet{string})"/>
         /// <seealso cref="GetXmlSyntax(SyntaxNode,string)"/>
-        internal static IEnumerable<XmlElementSyntax> GetXmlSyntax(this SyntaxNode value, ISet<string> tags)
+        internal static IReadOnlyList<XmlElementSyntax> GetXmlSyntax(this SyntaxNode value, ISet<string> tags)
         {
             // we have to delve into the trivia to find the XML syntax nodes
-            // ReSharper disable once LoopCanBeConvertedToQuery
+            List<XmlElementSyntax> elements = null;
+
             foreach (var element in value.AllDescendantNodes<XmlElementSyntax>())
             {
                 if (tags.Contains(element.GetName()))
                 {
-                    yield return element;
+                    if (elements is null)
+                    {
+                        elements = new List<XmlElementSyntax>(1);
+                    }
+
+                    elements.Add(element);
                 }
             }
+
+            return (IReadOnlyList<XmlElementSyntax>)elements ?? Array.Empty<XmlElementSyntax>();
         }
 
         /// <summary>
@@ -3977,6 +3979,33 @@ namespace MiKoSolutions.Analyzers
             }
 
             return default;
+        }
+
+        private static IEnumerable<XmlNodeSyntax> GetSummaryXmlsCore(IReadOnlyList<XmlElementSyntax> summaryXmls, ISet<string> tags)
+        {
+            var count = summaryXmls.Count;
+
+            for (var index = 0; index < count; index++)
+            {
+                var summary = summaryXmls[index];
+
+                // we have to delve into the trivia to find the XML syntax nodes
+                foreach (var node in summary.AllDescendantNodes())
+                {
+                    switch (node)
+                    {
+                        case XmlElementSyntax e when tags.Contains(e.GetName()):
+                            yield return e;
+
+                            break;
+
+                        case XmlEmptyElementSyntax ee when tags.Contains(ee.GetName()):
+                            yield return ee;
+
+                            break;
+                    }
+                }
+            }
         }
 
         private static bool Is(this SyntaxNode value, string tagName, params string[] contents)

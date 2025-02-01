@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -12,6 +13,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2208";
 
+        private static readonly string[] Phrases = Constants.Comments.InstanceOfPhrases;
+
+        private static readonly int MinimumPhraseLength = Phrases.Min(_ => _.Length);
+
         public MiKo_2208_DocumentationDoesNotUseAnInstanceOfAnalyzer() : base(Id)
         {
         }
@@ -20,9 +25,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             foreach (var token in comment.GetXmlTextTokens())
             {
+                if (token.ValueText.Length < MinimumPhraseLength)
+                {
+                    continue;
+                }
+
                 const int EndOffset = 1; // we do not want to underline the last char
 
-                var locations = GetAllLocations(token, Constants.Comments.InstanceOfPhrases, StringComparison.Ordinal, 0, EndOffset);
+                var locations = GetAllLocations(token, Phrases, StringComparison.Ordinal, 0, EndOffset);
                 var locationsCount = locations.Count;
 
                 if (locationsCount > 0)

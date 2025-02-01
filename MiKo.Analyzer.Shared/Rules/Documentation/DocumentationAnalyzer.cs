@@ -410,7 +410,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var textLength = text.Length;
 
-            if (textLength <= 2 && text.IsNullOrWhiteSpace())
+            if (textLength <= Constants.MinimumCharactersThreshold && text.IsNullOrWhiteSpace())
             {
                 // nothing to inspect as the text is too short and consists of whitespaces only
                 return Array.Empty<Location>();
@@ -437,7 +437,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var textLength = text.Length;
 
-            if (textLength <= 2 && text.IsNullOrWhiteSpace())
+            if (textLength <= Constants.MinimumCharactersThreshold && text.IsNullOrWhiteSpace())
             {
                 // nothing to inspect as the text is too short and consists of whitespaces only
                 return Array.Empty<Location>();
@@ -450,7 +450,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var textLength = text.Length;
 
-            if (textLength <= 2 && text.IsNullOrWhiteSpace())
+            if (textLength <= Constants.MinimumCharactersThreshold && text.IsNullOrWhiteSpace())
             {
                 // nothing to inspect as the text is too short and consists of whitespaces only
                 return Array.Empty<Location>();
