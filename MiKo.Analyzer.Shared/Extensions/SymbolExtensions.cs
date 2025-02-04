@@ -35,14 +35,6 @@ namespace MiKoSolutions.Analyzers
                                                                                                                   SymbolDisplayGenericsOptions.IncludeTypeParameters,
                                                                                                                   miscellaneousOptions: SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers);
 
-        private static readonly SyntaxKind[] LocalFunctionContainerSyntaxKinds =
-                                                                                 {
-                                                                                     SyntaxKind.MethodDeclaration,
-                                                                                     SyntaxKind.Block,
-                                                                                     SyntaxKind.ConstructorDeclaration,
-                                                                                     SyntaxKind.LocalFunctionStatement,
-                                                                                 };
-
         internal static IEnumerable<IMethodSymbol> GetExtensionMethods(this ITypeSymbol value) => value.GetMethods().Where(_ => _.IsExtensionMethod);
 
         internal static IReadOnlyList<IMethodSymbol> GetMethods(this ITypeSymbol value) => value.GetMembers<IMethodSymbol>();
@@ -160,7 +152,7 @@ namespace MiKoSolutions.Analyzers
 
             List<LocalFunctionStatementSyntax> functions = null;
 
-            foreach (var descendantNode in node.DescendantNodes(_ => _.IsAnyKind(LocalFunctionContainerSyntaxKinds)))
+            foreach (var descendantNode in node.DescendantNodes(IsLocalFunctionContainerSyntaxKind))
             {
                 if (descendantNode is LocalFunctionStatementSyntax function)
                 {
@@ -569,6 +561,17 @@ namespace MiKoSolutions.Analyzers
         {
             switch (value)
             {
+                case IFieldSymbol field:
+                {
+                    // maybe it is an enum member
+                    if (field.ContainingType.IsEnum())
+                    {
+                        return GetSyntax<EnumMemberDeclarationSyntax>(field);
+                    }
+
+                    return GetSyntax<FieldDeclarationSyntax>(field);
+                }
+
                 case IEventSymbol @event:
                 {
                     var eventField = GetSyntax<EventFieldDeclarationSyntax>(@event);
@@ -579,17 +582,6 @@ namespace MiKoSolutions.Analyzers
                     }
 
                     return GetSyntax<EventDeclarationSyntax>(@event);
-                }
-
-                case IFieldSymbol field:
-                {
-                    // maybe it is an enum member
-                    if (field.ContainingType.IsEnum())
-                    {
-                        return GetSyntax<EnumMemberDeclarationSyntax>(field);
-                    }
-
-                    return GetSyntax<FieldDeclarationSyntax>(field);
                 }
 
                 case IParameterSymbol parameter:
@@ -1364,7 +1356,11 @@ namespace MiKoSolutions.Analyzers
             {
                 case TypeKind.Class:
                 case TypeKind.Interface:
-                    return value.Name.EndsWith(Constants.Names.Factory, StringComparison.Ordinal) && value.Name.EndsWith(nameof(TaskFactory), StringComparison.Ordinal) is false;
+                {
+                    var valueName = value.Name.AsSpan();
+
+                    return valueName.EndsWith(Constants.Names.Factory, StringComparison.Ordinal) && valueName.EndsWith(nameof(TaskFactory), StringComparison.Ordinal) is false;
+                }
 
                 default:
                     return false;
@@ -1869,6 +1865,21 @@ namespace MiKoSolutions.Analyzers
             }
 
             return results;
+        }
+
+        private static bool IsLocalFunctionContainerSyntaxKind(SyntaxNode node)
+        {
+            switch (node.RawKind)
+            {
+                case (int)SyntaxKind.Block: // 8792
+                case (int)SyntaxKind.LocalFunctionStatement: // 8830
+                case (int)SyntaxKind.MethodDeclaration: // 8875,
+                case (int)SyntaxKind.ConstructorDeclaration: // 8878
+                    return true;
+
+                default:
+                    return false;
+            }
         }
     }
 }

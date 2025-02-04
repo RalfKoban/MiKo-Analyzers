@@ -1421,14 +1421,14 @@ namespace System
 
         public static bool IsUpperCase(this char value)
         {
-            if ((uint)(value - 'A') <= 'Z' - 'A')
-            {
-                return true;
-            }
-
             if ((uint)(value - 'a') <= 'z' - 'a')
             {
                 return false;
+            }
+
+            if ((uint)(value - 'A') <= 'Z' - 'A')
+            {
+                return true;
             }
 
             return IsUpperCaseWithSwitch(ref value);
