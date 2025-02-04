@@ -11,9 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2022";
 
-        public MiKo_2022_OutParamDefaultPhraseAnalyzer() : base(Id)
-        {
-        }
+        public MiKo_2022_OutParamDefaultPhraseAnalyzer() : base(Id) => IgnoreEmptyParameters = false;
 
         protected override bool ShallAnalyzeParameter(IParameterSymbol parameter) => parameter.RefKind == RefKind.Out;
 

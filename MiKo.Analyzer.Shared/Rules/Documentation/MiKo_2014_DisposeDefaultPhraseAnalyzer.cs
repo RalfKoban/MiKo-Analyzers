@@ -25,9 +25,28 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var summaries = comment.GetSummaryXmls();
 
-            foreach (var summary in summaries)
+            if (summaries.Count == 0)
             {
-                if (IsEqual(summary, SummaryPhrase) is false)
+                return Array.Empty<Diagnostic>();
+            }
+
+            return AnalyzeSummaries(symbol, comment, summaries);
+        }
+
+        private static bool IsEqual(XmlElementSyntax syntax, string text)
+        {
+            var trimmed = syntax.GetTextTrimmed();
+
+            return trimmed.Equals(text, StringComparison.Ordinal);
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeSummaries(IMethodSymbol symbol, DocumentationCommentTriviaSyntax comment, IReadOnlyList<XmlElementSyntax> summaries)
+        {
+            var summariesCount = summaries.Count;
+
+            for (var index = 0; index < summariesCount; index++)
+            {
+                if (IsEqual(summaries[index], SummaryPhrase) is false)
                 {
                     yield return Issue(symbol, SummaryPhrase);
                 }
@@ -38,27 +57,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 // keep in local variable to avoid multiple requests (see Roslyn implementation)
                 var parametersLength = parameters.Length;
 
-                for (var index = 0; index < parametersLength; index++)
+                if (parametersLength > 0)
                 {
-                    var parameter = parameters[index];
-                    var parameterComment = comment.GetParameterComment(parameter.Name);
-
-                    if (parameterComment != null)
+                    for (var i = 0; i < parametersLength; i++)
                     {
-                        if (IsEqual(parameterComment, ParameterPhrase) is false)
+                        var parameter = parameters[i];
+                        var parameterComment = comment.GetParameterComment(parameter.Name);
+
+                        if (parameterComment != null)
                         {
-                            yield return Issue(parameter, ParameterPhrase);
+                            if (IsEqual(parameterComment, ParameterPhrase) is false)
+                            {
+                                yield return Issue(parameter, ParameterPhrase);
+                            }
                         }
                     }
                 }
             }
-        }
-
-        private static bool IsEqual(XmlElementSyntax syntax, string text)
-        {
-            var trimmed = syntax.GetTextTrimmed();
-
-            return trimmed.Equals(text, StringComparison.Ordinal);
         }
     }
 }

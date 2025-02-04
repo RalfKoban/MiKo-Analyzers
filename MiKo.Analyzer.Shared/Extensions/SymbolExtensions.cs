@@ -35,14 +35,6 @@ namespace MiKoSolutions.Analyzers
                                                                                                                   SymbolDisplayGenericsOptions.IncludeTypeParameters,
                                                                                                                   miscellaneousOptions: SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers);
 
-        private static readonly SyntaxKind[] LocalFunctionContainerSyntaxKinds =
-                                                                                 {
-                                                                                     SyntaxKind.MethodDeclaration,
-                                                                                     SyntaxKind.Block,
-                                                                                     SyntaxKind.ConstructorDeclaration,
-                                                                                     SyntaxKind.LocalFunctionStatement,
-                                                                                 };
-
         internal static IEnumerable<IMethodSymbol> GetExtensionMethods(this ITypeSymbol value) => value.GetMethods().Where(_ => _.IsExtensionMethod);
 
         internal static IReadOnlyList<IMethodSymbol> GetMethods(this ITypeSymbol value) => value.GetMembers<IMethodSymbol>();
@@ -160,7 +152,7 @@ namespace MiKoSolutions.Analyzers
 
             List<LocalFunctionStatementSyntax> functions = null;
 
-            foreach (var descendantNode in node.DescendantNodes(_ => _.IsAnyKind(LocalFunctionContainerSyntaxKinds)))
+            foreach (var descendantNode in node.DescendantNodes(IsLocalFunctionContainerSyntaxKind))
             {
                 if (descendantNode is LocalFunctionStatementSyntax function)
                 {
@@ -521,6 +513,8 @@ namespace MiKoSolutions.Analyzers
 
             if (length > 0)
             {
+                var extension = Constants.CSharpFileExtension.AsSpan();
+
                 for (var index = 0; index < length; index++)
                 {
                     if (references[index].GetSyntax() is TSyntaxNode node)
@@ -530,10 +524,10 @@ namespace MiKoSolutions.Analyzers
                         var filePathSpan = filePath.AsSpan();
 
                         // Perf: quick catch via span and ordinal comparison (as that is the most likely case)
-                        if (filePathSpan.EndsWith(Constants.CSharpFileExtension, StringComparison.Ordinal))
+                        if (filePathSpan.EndsWith(extension, StringComparison.Ordinal))
                         {
                             // Perf: quick catch find another dot, as we do not need to check for additional extensions in case we do not have any other dot here
-                            if (filePathSpan.Slice(0, filePathSpan.Length - Constants.CSharpFileExtension.Length).LastIndexOfAny('.', Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) >= 0)
+                            if (filePathSpan.Slice(0, filePathSpan.Length - extension.Length).LastIndexOfAny('.', Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) >= 0)
                             {
                                 if (filePathSpan.EndsWithAny(Constants.GeneratedCSharpFileExtensions, StringComparison.Ordinal))
                                 {
@@ -546,7 +540,7 @@ namespace MiKoSolutions.Analyzers
                         }
 
                         // non-performant part: use string and ignore case
-                        if (filePath.EndsWith(Constants.CSharpFileExtension, StringComparison.OrdinalIgnoreCase))
+                        if (filePathSpan.EndsWith(extension, StringComparison.OrdinalIgnoreCase))
                         {
                             if (filePath.EndsWithAny(Constants.GeneratedCSharpFileExtensions, StringComparison.OrdinalIgnoreCase))
                             {
@@ -567,6 +561,17 @@ namespace MiKoSolutions.Analyzers
         {
             switch (value)
             {
+                case IFieldSymbol field:
+                {
+                    // maybe it is an enum member
+                    if (field.ContainingType.IsEnum())
+                    {
+                        return GetSyntax<EnumMemberDeclarationSyntax>(field);
+                    }
+
+                    return GetSyntax<FieldDeclarationSyntax>(field);
+                }
+
                 case IEventSymbol @event:
                 {
                     var eventField = GetSyntax<EventFieldDeclarationSyntax>(@event);
@@ -577,17 +582,6 @@ namespace MiKoSolutions.Analyzers
                     }
 
                     return GetSyntax<EventDeclarationSyntax>(@event);
-                }
-
-                case IFieldSymbol field:
-                {
-                    // maybe it is an enum member
-                    if (field.ContainingType.IsEnum())
-                    {
-                        return GetSyntax<EnumMemberDeclarationSyntax>(field);
-                    }
-
-                    return GetSyntax<FieldDeclarationSyntax>(field);
                 }
 
                 case IParameterSymbol parameter:
@@ -1362,7 +1356,11 @@ namespace MiKoSolutions.Analyzers
             {
                 case TypeKind.Class:
                 case TypeKind.Interface:
-                    return value.Name.EndsWith(Constants.Names.Factory, StringComparison.Ordinal) && value.Name.EndsWith(nameof(TaskFactory), StringComparison.Ordinal) is false;
+                {
+                    var valueName = value.Name.AsSpan();
+
+                    return valueName.EndsWith(Constants.Names.Factory, StringComparison.Ordinal) && valueName.EndsWith(nameof(TaskFactory), StringComparison.Ordinal) is false;
+                }
 
                 default:
                     return false;
@@ -1796,21 +1794,52 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        private static bool IsInterfaceImplementation<TSymbol>(this TSymbol value, ITypeSymbol typeSymbol, ImmutableArray<INamedTypeSymbol> implementedInterfaces) where TSymbol : ISymbol
+        {
+            var name = value.Name;
+            var length = implementedInterfaces.Length;
+
+            // Perf: do not use enumerable
+            for (var index = 0; index < length; index++)
+            {
+                var members = implementedInterfaces[index].GetMembers(name);
+                var membersLength = members.Length;
+
+                if (membersLength > 0)
+                {
+                    // Perf: do not use Linq
+                    for (var memberIndex = 0; memberIndex < membersLength; memberIndex++)
+                    {
+                        if (members[memberIndex] is TSymbol symbol && value.Equals(typeSymbol.FindImplementationForInterfaceMember(symbol), SymbolEqualityComparer.Default))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
         private static bool IsInterfaceImplementation<TSymbol>(this TSymbol value, ITypeSymbol typeSymbol, IEnumerable<INamedTypeSymbol> implementedInterfaces) where TSymbol : ISymbol
         {
             var name = value.Name;
 
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
             foreach (var implementedInterface in implementedInterfaces)
             {
                 var members = implementedInterface.GetMembers(name);
+                var membersLength = members.Length;
 
-                if (members.Length > 0)
+                if (membersLength > 0)
                 {
-                    var symbols = members.OfType<TSymbol>();
-
-                    if (symbols.Any(_ => value.Equals(typeSymbol.FindImplementationForInterfaceMember(_), SymbolEqualityComparer.Default)))
+                    // Perf: do not use Linq
+                    for (var memberIndex = 0; memberIndex < membersLength; memberIndex++)
                     {
-                        return true;
+                        if (members[memberIndex] is TSymbol symbol && value.Equals(typeSymbol.FindImplementationForInterfaceMember(symbol), SymbolEqualityComparer.Default))
+                        {
+                            return true;
+                        }
                     }
                 }
             }
@@ -1836,6 +1865,21 @@ namespace MiKoSolutions.Analyzers
             }
 
             return results;
+        }
+
+        private static bool IsLocalFunctionContainerSyntaxKind(SyntaxNode node)
+        {
+            switch (node.RawKind)
+            {
+                case (int)SyntaxKind.Block: // 8792
+                case (int)SyntaxKind.LocalFunctionStatement: // 8830
+                case (int)SyntaxKind.MethodDeclaration: // 8875,
+                case (int)SyntaxKind.ConstructorDeclaration: // 8878
+                    return true;
+
+                default:
+                    return false;
+            }
         }
     }
 }

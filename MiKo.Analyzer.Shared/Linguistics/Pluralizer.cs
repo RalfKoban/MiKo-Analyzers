@@ -83,7 +83,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// The name to create a plural for.
         /// </param>
         /// <returns>
-        /// The plural for the given <paramref name="name"/>.
+        /// A <see cref="string"/> that contains the plural for the given <paramref name="name"/>.
         /// </returns>
         public static string MakePluralName(string name) => GetPluralName(name, StringComparison.Ordinal) ?? name;
 
@@ -97,7 +97,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// One of the <see cref="StringComparison"/> values that specifies the rules for comparison.
         /// </param>
         /// <returns>
-        /// The plural for the given <paramref name="name"/>.
+        /// A <see cref="string"/> that contains the plural for the given <paramref name="name"/>.
         /// </returns>
         public static string GetPluralName(string name, StringComparison comparison = StringComparison.OrdinalIgnoreCase) => GetPluralName(name, name, comparison);
 
@@ -114,7 +114,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// One of the <see cref="StringComparison"/> values that specifies the rules for comparison.
         /// </param>
         /// <returns>
-        /// The plural for the given <paramref name="name"/>.
+        /// A <see cref="string"/> that contains the plural for the given <paramref name="name"/>.
         /// </returns>
         public static string GetPluralName(string name, string proposedName, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
@@ -139,7 +139,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// The suffixes to remove from the plural name.
         /// </param>
         /// <returns>
-        /// The plural for the given <paramref name="name"/>.
+        /// A <see cref="string"/> that contains the plural for the given <paramref name="name"/>.
         /// </returns>
         public static string GetPluralName(string name, StringComparison comparison = StringComparison.OrdinalIgnoreCase, params string[] suffixes)
         {

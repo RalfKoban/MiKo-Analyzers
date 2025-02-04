@@ -15,8 +15,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] ContinuationPhrases = { "whether ", "if " };
 
-        private static readonly string[] BooleanPhrases = new[] { " indicating ", " indicates ", " indicate " }.SelectMany(_ => ContinuationPhrases, string.Concat)
-                                                                                                               .ToArray();
+        private static readonly string[] BooleanPhrases = new[] { " indicating ", " indicates ", " indicate " }.SelectMany(_ => ContinuationPhrases, string.Concat).ToArray();
+
+        private static readonly int MinimumPhraseLength = BooleanPhrases.Min(_ => _.Length);
 
         public MiKo_2071_EnumMethodSummaryAnalyzer() : base(Id, (SymbolKind)(-1))
         {
@@ -32,11 +33,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             foreach (var token in comment.GetXmlTextTokens())
             {
+                if (token.ValueText.Length < MinimumPhraseLength)
+                {
+                    continue;
+                }
+
                 const int Offset = 1; // we do not want to underline the first and last char
 
-                foreach (var location in GetAllLocations(token, BooleanPhrases, StringComparison.Ordinal, Offset, Offset))
+                var locations = GetAllLocations(token, BooleanPhrases, StringComparison.Ordinal, Offset, Offset);
+                var locationsCount = locations.Count;
+
+                if (locationsCount > 0)
                 {
-                    yield return Issue(location);
+                    for (var index = 0; index < locationsCount; index++)
+                    {
+                        yield return Issue(locations[index]);
+                    }
                 }
             }
         }

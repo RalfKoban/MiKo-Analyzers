@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -26,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 foreach (var token in tokens)
                 {
-                    var index = token.ValueText.IndexOf("=", StringComparison.OrdinalIgnoreCase);
+                    var index = token.ValueText.IndexOf('=');
 
                     if (index >= 0)
                     {

@@ -23,9 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                        "Defaults to",
                                                    };
 
-        public MiKo_2076_OptionalParameterDefaultPhraseAnalyzer() : base(Id)
-        {
-        }
+        public MiKo_2076_OptionalParameterDefaultPhraseAnalyzer() : base(Id) => IgnoreEmptyParameters = false;
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.Parameters.Any(_ => _.HasExplicitDefaultValue) && base.ShallAnalyze(symbol);
 

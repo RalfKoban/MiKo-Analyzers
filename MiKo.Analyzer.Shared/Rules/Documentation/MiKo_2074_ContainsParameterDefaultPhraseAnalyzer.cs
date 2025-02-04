@@ -15,9 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] Phrases = { " to seek.", " to locate." };
 
-        public MiKo_2074_ContainsParameterDefaultPhraseAnalyzer() : base(Id)
-        {
-        }
+        public MiKo_2074_ContainsParameterDefaultPhraseAnalyzer() : base(Id) => IgnoreEmptyParameters = false;
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.Name.StartsWith("Contains", StringComparison.OrdinalIgnoreCase) && symbol.Parameters.Any() && base.ShallAnalyze(symbol);
 

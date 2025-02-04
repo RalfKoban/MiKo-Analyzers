@@ -106,6 +106,14 @@ namespace MiKoSolutions.Analyzers
 
                         if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
                         {
+                            var text = token.ValueText;
+
+                            if (text.Length <= Constants.MinimumCharactersThreshold && string.IsNullOrWhiteSpace(text))
+                            {
+                                // nothing to inspect as the text is too short and consists of whitespaces only
+                                continue;
+                            }
+
                             yield return token;
                         }
                     }
