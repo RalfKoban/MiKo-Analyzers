@@ -1139,50 +1139,22 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool HasDocumentationCommentTriviaSyntax(this SyntaxNode value)
         {
-            if (value != null)
-            {
-                if (value.HasStructuredTrivia)
-                {
-                    var token = value.FirstDescendantToken();
+            var token = value.FindStructuredTriviaToken();
 
-                    if (token.HasStructuredTrivia)
-                    {
-                        var leadingTrivia = token.LeadingTrivia;
-                        var count = leadingTrivia.Count;
-
-                        for (var index = 0; index < count; index++)
-                        {
-                            var trivia = leadingTrivia[index];
-
-                            if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
-
-            return false;
+            return token.HasStructuredTrivia && HasDocumentationCommentTriviaSyntax(token);
         }
 
         internal static DocumentationCommentTriviaSyntax[] GetDocumentationCommentTriviaSyntax(this SyntaxNode value)
         {
-            if (value != null)
+            var token = value.FindStructuredTriviaToken();
+
+            if (token.HasStructuredTrivia)
             {
-                if (value.HasStructuredTrivia)
+                var comment = GetDocumentationCommentTriviaSyntax(token);
+
+                if (comment != null)
                 {
-                    var token = value.FirstDescendantToken();
-
-                    if (token.HasStructuredTrivia)
-                    {
-                        var comment = GetDocumentationCommentTriviaSyntax(token);
-
-                        if (comment != null)
-                        {
-                            return comment;
-                        }
-                    }
+                    return comment;
                 }
             }
 
@@ -4141,10 +4113,45 @@ namespace MiKoSolutions.Analyzers
             return finalTrivia;
         }
 
+        private static bool HasDocumentationCommentTriviaSyntax(SyntaxToken token)
+        {
+            var leadingTrivia = token.LeadingTrivia;
+            var count = leadingTrivia.Count;
+
+            // Perf: quick check to avoid costly loop
+            if (count >= 2 && leadingTrivia[1].IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
+            {
+                return true;
+            }
+
+            for (var index = 0; index < count; index++)
+            {
+                var trivia = leadingTrivia[index];
+
+                if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private static DocumentationCommentTriviaSyntax[] GetDocumentationCommentTriviaSyntax(SyntaxToken value)
         {
             var leadingTrivia = value.LeadingTrivia;
             var count = leadingTrivia.Count;
+
+            // Perf: quick check to avoid costly loop
+            if (count >= 2)
+            {
+                var trivia = leadingTrivia[1];
+
+                if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
+                {
+                    return new[] { syntax };
+                }
+            }
 
             DocumentationCommentTriviaSyntax[] results = null;
             var resultsIndex = 0;
@@ -4153,25 +4160,71 @@ namespace MiKoSolutions.Analyzers
             {
                 var trivia = leadingTrivia[index];
 
-                if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
+                if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
                 {
-                    if (results is null)
+                    if (trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
                     {
-                        results = new DocumentationCommentTriviaSyntax[1];
-                    }
-                    else
-                    {
-                        // seems we have more separate comments, so increase by one
-                        Array.Resize(ref results, results.Length + 1);
-                    }
+                        if (results is null)
+                        {
+                            results = new DocumentationCommentTriviaSyntax[1];
+                        }
+                        else
+                        {
+                            // seems we have more separate comments, so increase by one
+                            Array.Resize(ref results, results.Length + 1);
+                        }
 
-                    results[resultsIndex] = syntax;
+                        results[resultsIndex] = syntax;
 
-                    resultsIndex++;
+                        resultsIndex++;
+                    }
                 }
             }
 
             return results;
+        }
+
+        private static SyntaxToken FindStructuredTriviaToken(this SyntaxNode value)
+        {
+            if (value != null)
+            {
+                if (value.HasStructuredTrivia)
+                {
+                    var children = value.ChildNodesAndTokens();
+
+                    var count = children.Count;
+
+                    if (count > 0)
+                    {
+                        for (var index = 0; index < count; index++)
+                        {
+                            var child = children[index];
+
+                            if (child.IsToken)
+                            {
+                                var childToken = child.AsToken();
+
+                                if (childToken.HasStructuredTrivia)
+                                {
+                                    return childToken;
+                                }
+
+                                // no structure, so maybe it is the first descendant token to use
+                                break;
+                            }
+                        }
+                    }
+
+                    var token = value.FirstDescendantToken();
+
+                    if (token.HasStructuredTrivia)
+                    {
+                        return token;
+                    }
+                }
+            }
+
+            return default;
         }
 
         private static XmlTextSyntax XmlText(string text) => SyntaxFactory.XmlText(text);
