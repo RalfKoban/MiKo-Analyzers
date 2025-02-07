@@ -645,7 +645,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                      .Append(optionalStart)
                                                                      .Append(boolean)
                                                                      .Append(' ')
-                                                                     .ReplaceAllWithCheck(Constants.Comments.MultiWhitespaceStrings, Constants.Comments.SingleWhitespaceString)
+                                                                     .WithoutMultipleWhiteSpaces()
                                                                      .TrimmedStart()
                                                                      .ToStringAndRelease();
 

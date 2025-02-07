@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -17,10 +18,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
+            var textTokens = comment.GetXmlTextTokens();
+            var textTokensCount = textTokens.Count;
+
+            if (textTokensCount == 0)
+            {
+                yield break;
+            }
+
             const string Phrase = Constants.Comments.WasNotSuccessfulPhrase;
 
-            foreach (var token in comment.GetXmlTextTokens())
+            var text = textTokens.GetTextTrimmedWithParaTags();
+
+            if (text.Contains(Phrase, StringComparison.Ordinal) is false)
             {
+                yield break;
+            }
+
+            for (var i = 0; i < textTokensCount; i++)
+            {
+                var token = textTokens[i];
+
                 if (token.ValueText.Length < Phrase.Length)
                 {
                     continue;

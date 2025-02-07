@@ -530,6 +530,10 @@ namespace System.Text
             return value.Remove(length - end, end);
         }
 
+        public static StringBuilder WithoutMultipleWhiteSpaces(this StringBuilder value) => value.ReplaceAllWithCheck(Constants.Comments.MultiWhitespaceStrings, Constants.Comments.SingleWhitespaceString); // ncrunch: no coverage
+
+        public static StringBuilder WithoutNewLines(this StringBuilder value) => value.Replace("\r", string.Empty).Replace("\n", string.Empty); // ncrunch: no coverage
+
         public static StringBuilder Without(this StringBuilder value, string phrase) => value.ReplaceWithCheck(phrase, string.Empty); // ncrunch: no coverage
 
         public static StringBuilder Without(this StringBuilder value, string[] phrases) => value.ReplaceAllWithCheck(phrases, string.Empty); // ncrunch: no coverage

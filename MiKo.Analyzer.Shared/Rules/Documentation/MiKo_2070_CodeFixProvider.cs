@@ -83,7 +83,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 for (var index = 0; index < textTokensCount; index++)
                 {
                     var token = textTokens[index];
-                    var valueText = token.WithoutTrivia().ValueText.Without(Constants.Comments.AsynchronouslyStartingPhrase).AsSpan().Trim();
+                    var valueText = token.ValueText.Without(Constants.Comments.AsynchronouslyStartingPhrase).AsSpan().Trim();
 
                     if (valueText.StartsWithAny(Constants.Comments.ReturnWords))
                     {
@@ -129,7 +129,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         if (textTokens.Count > 0)
                         {
                             var token = textTokens[0];
-                            var valueText = token.WithoutTrivia().ValueText;
+                            var valueText = token.ValueText;
                             var newText = valueText.WithoutFirstWords(MiddleConditions);
 
                             summary = summary.ReplaceToken(token, token.WithText(newText));
@@ -172,7 +172,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                          return XmlText(tokens.ToArray());
                                                                                                      }
 
-                                                                                                     return default;
+                                                                                                     return null;
                                                                                                  });
                     }
                 }
@@ -202,7 +202,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         continue;
                     }
 
-                    var valueText = token.WithoutTrivia().ValueText;
+                    var valueText = token.ValueText;
 
                     if (valueText.IsNullOrWhiteSpace())
                     {
@@ -251,8 +251,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (property.Type is GenericNameSyntax g && g.Identifier.ValueText == nameof(Task))
             {
+                var arguments = g.TypeArgumentList.Arguments;
+
                 isAsync = true;
-                isBool = g.TypeArgumentList.Arguments.Count > 0 && g.TypeArgumentList.Arguments[0].IsBoolean();
+                isBool = arguments.Count > 0 && arguments[0].IsBoolean();
             }
 
             var startText = isBool ? "Gets a value indicating whether" : "Gets";
@@ -272,8 +274,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (method.ReturnType is GenericNameSyntax g && g.Identifier.ValueText == nameof(Task))
             {
+                var arguments = g.TypeArgumentList.Arguments;
+
                 isAsync = true;
-                isBool = g.TypeArgumentList.Arguments.Count > 0 && g.TypeArgumentList.Arguments[0].IsBoolean();
+                isBool = arguments.Count > 0 && arguments[0].IsBoolean();
             }
 
             var startText = isBool ? Constants.Comments.DeterminesWhetherPhrase : "Gets";

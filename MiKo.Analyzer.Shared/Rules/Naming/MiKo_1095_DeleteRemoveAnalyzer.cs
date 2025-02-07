@@ -67,13 +67,21 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 for (var index = 0; index < commentsLength; index++)
                 {
-                    foreach (var token in comments[index].GetXmlTextTokens())
-                    {
-                        var text = token.ValueText;
+                    var comment = comments[index];
+                    var textTokens = comment.GetXmlTextTokens();
+                    var textTokensCount = textTokens.Count;
 
-                        if (text.Length >= forbiddenWord.Length && text.Contains(forbiddenWord, StringComparison.OrdinalIgnoreCase))
+                    if (textTokensCount > 0)
+                    {
+                        for (var i = 0; i < textTokensCount; i++)
                         {
-                            return new[] { Issue(symbol) };
+                            var token = textTokens[i];
+                            var text = token.ValueText;
+
+                            if (text.Length >= forbiddenWord.Length && text.Contains(forbiddenWord, StringComparison.OrdinalIgnoreCase))
+                            {
+                                return new[] { Issue(symbol) };
+                            }
                         }
                     }
                 }

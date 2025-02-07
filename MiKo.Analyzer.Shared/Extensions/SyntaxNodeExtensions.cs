@@ -1159,6 +1159,26 @@ namespace MiKoSolutions.Analyzers
             return Array.Empty<DocumentationCommentTriviaSyntax>();
         }
 
+        internal static string GetTextTrimmedWithParaTags(this IReadOnlyList<SyntaxToken> values)
+        {
+            if (values.Count == 0)
+            {
+                return string.Empty;
+            }
+
+            var builder = StringBuilderCache.Acquire();
+
+            GetTextWithoutTrivia(values, builder);
+
+            var trimmed = builder.WithoutNewLines()
+                                 .WithoutMultipleWhiteSpaces()
+                                 .Trim();
+
+            StringBuilderCache.Release(builder);
+
+            return trimmed;
+        }
+
         internal static string GetTextTrimmed(this XmlElementSyntax value)
         {
             if (value is null)
@@ -1168,7 +1188,11 @@ namespace MiKoSolutions.Analyzers
 
             var builder = StringBuilderCache.Acquire();
 
-            var trimmed = value.GetTextWithoutTrivia(builder).Without(Constants.EnvironmentNewLine).WithoutParaTags().Trim();
+            var trimmed = value.GetTextWithoutTrivia(builder)
+                               .WithoutParaTags()
+                               .WithoutNewLines()
+                               .WithoutMultipleWhiteSpaces()
+                               .Trim();
 
             StringBuilderCache.Release(builder);
 
@@ -1194,17 +1218,7 @@ namespace MiKoSolutions.Analyzers
 
             var builder = StringBuilderCache.Acquire();
 
-            for (var index = 0; index < textTokensCount; index++)
-            {
-                var token = textTokens[index];
-
-                if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
-                {
-                    continue;
-                }
-
-                builder.Append(token.WithoutTrivia().ValueText);
-            }
+            GetTextWithoutTrivia(textTokens, builder);
 
             var trimmed = builder.Trim();
 
@@ -1238,8 +1252,11 @@ namespace MiKoSolutions.Analyzers
                 return builder;
             }
 
-            var textTokens = value.TextTokens;
+            return GetTextWithoutTrivia(value.TextTokens, builder);
+        }
 
+        internal static StringBuilder GetTextWithoutTrivia(IReadOnlyList<SyntaxToken> textTokens, StringBuilder builder)
+        {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var textTokensCount = textTokens.Count;
 
@@ -1254,7 +1271,7 @@ namespace MiKoSolutions.Analyzers
                         continue;
                     }
 
-                    builder.Append(token.WithoutTrivia().ValueText);
+                    builder.Append(token.ValueText);
                 }
             }
 
@@ -1334,7 +1351,7 @@ namespace MiKoSolutions.Analyzers
                         continue;
                     }
 
-                    yield return token.WithoutTrivia().ValueText;
+                    yield return token.ValueText;
                 }
             }
         }
@@ -3322,7 +3339,7 @@ namespace MiKoSolutions.Analyzers
                             var modifiedText = token.Text
                                                     .AsCachedBuilder()
                                                     .Without(text)
-                                                    .ReplaceAllWithCheck(Constants.Comments.MultiWhitespaceStrings, Constants.Comments.SingleWhitespaceString)
+                                                    .WithoutMultipleWhiteSpaces()
                                                     .ToStringAndRelease();
 
                             if (modifiedText.IsNullOrWhiteSpace())

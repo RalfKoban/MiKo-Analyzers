@@ -28,9 +28,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
-            foreach (var token in comment.GetXmlTextTokens())
+            var textTokens = comment.GetXmlTextTokens();
+            var textTokensCount = textTokens.Count;
+
+            if (textTokensCount == 0)
             {
-                var locations = GetAllLocations(token, ForbiddenPhrases, StringComparison.OrdinalIgnoreCase);
+                yield break;
+            }
+
+            var text = textTokens.GetTextTrimmedWithParaTags();
+
+            if (text.ContainsAny(ForbiddenWords, StringComparison.OrdinalIgnoreCase) is false)
+            {
+                yield break;
+            }
+
+            for (var i = 0; i < textTokensCount; i++)
+            {
+                var locations = GetAllLocations(textTokens[i], ForbiddenPhrases, StringComparison.OrdinalIgnoreCase);
                 var locationsCount = locations.Count;
 
                 if (locationsCount > 0)

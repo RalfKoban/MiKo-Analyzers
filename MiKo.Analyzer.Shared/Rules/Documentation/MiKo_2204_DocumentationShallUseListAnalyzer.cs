@@ -43,8 +43,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, DocumentationCommentTriviaSyntax comment)
         {
-            foreach (var token in comment.GetXmlTextTokens())
+            var textTokens = comment.GetXmlTextTokens();
+            var textTokensCount = textTokens.Count;
+
+            if (textTokensCount == 0)
             {
+                yield break;
+            }
+
+            var commentXml = textTokens.GetTextTrimmedWithParaTags();
+
+            if (commentXml.ContainsAny(Triggers, StringComparison.Ordinal) is false)
+            {
+                yield break;
+            }
+
+            for (var i = 0; i < textTokensCount; i++)
+            {
+                var token = textTokens[i];
                 var text = token.ValueText;
 
                 if (text.Length <= Constants.MinimumCharactersThreshold && text.IsNullOrWhiteSpace())

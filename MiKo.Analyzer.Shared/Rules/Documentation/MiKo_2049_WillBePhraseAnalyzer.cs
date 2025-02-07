@@ -105,9 +105,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var issues = new List<Diagnostic>(0);
 
-            // ReSharper disable once LoopCanBePartlyConvertedToQuery
-            foreach (var token in comment.GetXmlTextTokens())
+            var textTokens = comment.GetXmlTextTokens();
+            var textTokensCount = textTokens.Count;
+
+            if (textTokensCount == 0)
             {
+                return issues;
+            }
+
+            var commentXml = textTokens.GetTextTrimmedWithParaTags();
+
+            if (commentXml.Contains(WillPhrase, StringComparison.OrdinalIgnoreCase) is false)
+            {
+                return issues;
+            }
+
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
+            for (var i = 0; i < textTokensCount; i++)
+            {
+                var token = textTokens[i];
+
                 if (token.ValueText.Length < MinimumPhraseLength)
                 {
                     continue;

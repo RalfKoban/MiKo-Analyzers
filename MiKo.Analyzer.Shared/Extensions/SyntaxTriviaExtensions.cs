@@ -131,14 +131,14 @@ namespace MiKoSolutions.Analyzers
             return value.SelectMany(_ => _.GetXmlTextTokens());
         }
 
-        internal static IEnumerable<SyntaxToken> GetXmlTextTokens(this DocumentationCommentTriviaSyntax value)
+        internal static IReadOnlyList<SyntaxToken> GetXmlTextTokens(this DocumentationCommentTriviaSyntax value)
         {
             return GetXmlTextTokens(value, node => node.IsCode() is false); // skip code
         }
 
-        internal static IEnumerable<SyntaxToken> GetXmlTextTokens(this DocumentationCommentTriviaSyntax value, Func<XmlElementSyntax, bool> descendantNodesFilter)
+        internal static IReadOnlyList<SyntaxToken> GetXmlTextTokens(this DocumentationCommentTriviaSyntax value, Func<XmlElementSyntax, bool> descendantNodesFilter)
         {
-            return value?.DescendantNodes(descendantNodesFilter).GetXmlTextTokens() ?? Array.Empty<SyntaxToken>();
+            return (IReadOnlyList<SyntaxToken>)value?.DescendantNodes(descendantNodesFilter).GetXmlTextTokens().ToList() ?? Array.Empty<SyntaxToken>();
         }
 
         internal static IEnumerable<SyntaxTrivia> NextSiblings(this SyntaxTrivia value, int count = int.MaxValue)

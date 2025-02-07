@@ -211,19 +211,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment)
         {
-            foreach (var token in comment.GetXmlTextTokens(_ => IgnoreTags.Contains(_.GetName()) is false))
+            var textTokens = comment.GetXmlTextTokens(_ => IgnoreTags.Contains(_.GetName()) is false);
+            var textTokensCount = textTokens.Count;
+
+            if (textTokensCount > 0)
             {
-                var text = token.ValueText;
-
-                if (text.Length < 3)
+                for (var i = 0; i < textTokensCount; i++)
                 {
-                    // ignore small texts as they do not contain compound words
-                    continue;
-                }
+                    var token = textTokens[i];
+                    var text = token.ValueText;
 
-                foreach (var diagnostic in AnalyzeComment(token, text))
-                {
-                    yield return diagnostic;
+                    if (text.Length < Constants.MinimumCharactersThreshold)
+                    {
+                        // ignore small texts as they do not contain compound words
+                        continue;
+                    }
+
+                    foreach (var diagnostic in AnalyzeComment(token, text))
+                    {
+                        yield return diagnostic;
+                    }
                 }
             }
         }

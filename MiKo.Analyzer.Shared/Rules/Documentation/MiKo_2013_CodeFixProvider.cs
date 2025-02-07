@@ -95,7 +95,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (textTokens.Count != 0)
             {
                 // fix starting text
-                var existingText = textTokens[0].WithoutTrivia().ValueText.AsSpan();
+                var existingText = textTokens[0].ValueText.AsSpan();
                 var firstWord = existingText.FirstWord();
 
                 if (firstWord.EqualsAny(WrongStartingWords))

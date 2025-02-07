@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -24,11 +25,34 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
-            foreach (var token in comment.GetXmlTextTokens())
+            var textTokens = comment.GetXmlTextTokens();
+            var textTokensCount = textTokens.Count;
+
+            if (textTokensCount == 0)
             {
-                foreach (var location in GetAllLocations(token, "..", _ => AllowedChars.Contains(_) is false)) // we want to underline the first and last char
+                yield break;
+            }
+
+            const string Dots = "..";
+
+            var text = textTokens.GetTextTrimmedWithParaTags();
+
+            if (text.Contains(Dots, StringComparison.Ordinal) is false)
+            {
+                yield break;
+            }
+
+            for (var i = 0; i < textTokensCount; i++)
+            {
+                var locations = GetAllLocations(textTokens[i], Dots, _ => AllowedChars.Contains(_) is false); // we want to underline the first and last char
+                var locationsCount = locations.Count;
+
+                if (locationsCount > 0)
                 {
-                    yield return Issue(symbol.Name, location);
+                    for (var index = 0; index < locationsCount; index++)
+                    {
+                        yield return Issue(symbol.Name, locations[index]);
+                    }
                 }
             }
         }
