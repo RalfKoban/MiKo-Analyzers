@@ -28,9 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (symbol.IsFactory())
             {
-                var typeIssues = base.AnalyzeType(symbol, compilation);
-
-                return typeIssues.Concat(symbol.GetNamedMethods().SelectMany(_ => AnalyzeMethod(_, compilation)));
+                return AnalyzeAll(symbol, compilation);
             }
 
             return Array.Empty<Diagnostic>();
@@ -78,6 +76,40 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             // fitting comment
             return Array.Empty<Diagnostic>();
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeAll(INamedTypeSymbol symbol, Compilation compilation)
+        {
+            var typeIssues = base.AnalyzeType(symbol, compilation);
+
+            if (typeIssues.IsEmptyArray() is false)
+            {
+                foreach (var typeIssue in typeIssues)
+                {
+                    yield return typeIssue;
+                }
+            }
+
+            var methods = symbol.GetNamedMethods();
+            var methodsCount = methods.Count;
+
+            if (methodsCount > 0)
+            {
+                for (var index = 0; index < methodsCount; index++)
+                {
+                    var methodIssues = AnalyzeMethod(methods[index], compilation);
+
+                    if (methodIssues.IsEmptyArray())
+                    {
+                        continue;
+                    }
+
+                    foreach (var methodIssue in methodIssues)
+                    {
+                        yield return methodIssue;
+                    }
+                }
+            }
         }
     }
 }

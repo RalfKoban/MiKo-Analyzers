@@ -138,18 +138,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var summaries = symbol.GetOverloadSummaries();
 
-            return summaries.Count != 0
-                   ? AnalyzeSummaryPhrase(symbol, summaries, comment, defaultPhrases)
-                   : Array.Empty<Diagnostic>();
+            if (summaries.Count == 0)
+            {
+                return Array.Empty<Diagnostic>();
+            }
+
+            return AnalyzeSummaryPhrase(symbol, summaries, comment, defaultPhrases);
         }
 
         private Diagnostic[] AnalyzeRemarksPhrase(IMethodSymbol symbol, DocumentationCommentTriviaSyntax comment, params string[] defaultPhrases)
         {
             var comments = symbol.GetRemarks();
 
-            return comments.Count != 0
-                   ? AnalyzeStartingPhrase(symbol, Constants.XmlTag.Remarks, comments, comment, defaultPhrases)
-                   : Array.Empty<Diagnostic>();
+            if (comments.Count == 0)
+            {
+                return Array.Empty<Diagnostic>();
+            }
+
+            return AnalyzeStartingPhrase(symbol, Constants.XmlTag.Remarks, comments, comment, defaultPhrases);
         }
 
         private Diagnostic[] AnalyzeStartingPhrase(ISymbol symbol, string xmlTag, IEnumerable<string> comments, DocumentationCommentTriviaSyntax comment, params string[] phrases)
@@ -157,11 +163,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (comments.None(_ => phrases.Exists(__ => _.StartsWith(__, StringComparison.Ordinal))))
             {
                 // find XML
-                var problematicComment = comment.GetXmlSyntax(xmlTag).FirstOrDefault();
+                var problematicComments = comment.GetXmlSyntax(xmlTag);
 
-                var issue = problematicComment is null
+                var issue = problematicComments.Count == 0
                             ? Issue(symbol, xmlTag, phrases[0])
-                            : Issue(symbol.Name, problematicComment, xmlTag, phrases[0]);
+                            : Issue(symbol.Name, problematicComments[0], xmlTag, phrases[0]);
 
                 return new[] { issue };
             }

@@ -59,10 +59,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     case MethodDeclarationSyntax _:
                     case PropertyDeclarationSyntax _:
                     {
-                        var syntax = syntaxNode.GetXmlSyntax(Constants.XmlTag.Returns).FirstOrDefault()
-                                  ?? syntaxNode.GetXmlSyntax(Constants.XmlTag.Value).FirstOrDefault();
+                        var returnsSyntax = syntaxNode.GetXmlSyntax(Constants.XmlTag.Returns);
 
-                        return syntax;
+                        if (returnsSyntax.Count > 0)
+                        {
+                            return returnsSyntax[0];
+                        }
+
+                        var valuesSyntax = syntaxNode.GetXmlSyntax(Constants.XmlTag.Value);
+
+                        if (valuesSyntax.Count > 0)
+                        {
+                            return valuesSyntax[0];
+                        }
+
+                        return null;
                     }
                 }
             }

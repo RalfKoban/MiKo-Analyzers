@@ -40,9 +40,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             const string Phrase = Constants.Comments.ExceptionTypeSummaryStartingPhrase;
 
-            var summary = comment.GetXmlSyntax(Constants.XmlTag.Summary).FirstOrDefault();
+            var summaries = comment.GetXmlSyntax(Constants.XmlTag.Summary);
 
-            if (summary is null)
+            if (summaries.Count == 0)
             {
                 var newSummary = Comment(SyntaxFactory.XmlSummaryElement(), Phrase).WithTrailingXmlComment();
 
@@ -50,6 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
             else
             {
+                var summary = summaries[0];
                 var preparedSummary = Comment(summary, TypeReplacementMapKeys, TypeReplacementMap, FirstWordHandling.MakeLowerCase);
                 var newSummary = CommentStartingWith(preparedSummary, Phrase);
 

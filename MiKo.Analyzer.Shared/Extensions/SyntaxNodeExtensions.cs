@@ -124,8 +124,6 @@ namespace MiKoSolutions.Analyzers
 
         internal static T FirstAncestor<T>(this SyntaxNode value, ISet<SyntaxKind> kinds) where T : SyntaxNode => value.FirstAncestor<T>(_ => _.IsAnyKind(kinds));
 
-        internal static T FirstAncestor<T>(this SyntaxNode value, params SyntaxKind[] kinds) where T : SyntaxNode => value.FirstAncestor<T>(_ => _.IsAnyKind(kinds));
-
         internal static SyntaxNode FirstChild(this SyntaxNode value) => value.ChildNodes().FirstOrDefault();
 
         internal static T FirstChild<T>(this SyntaxNode value) where T : SyntaxNode => value.ChildNodes<T>().FirstOrDefault();
@@ -1585,6 +1583,11 @@ namespace MiKoSolutions.Analyzers
             if (kindsLength > 0)
             {
                 var valueKind = value.Kind();
+
+                if (kindsLength == 2)
+                {
+                    return valueKind == kinds[0] || valueKind == kinds[1];
+                }
 
                 for (var index = 0; index < kindsLength; index++)
                 {
@@ -4119,16 +4122,17 @@ namespace MiKoSolutions.Analyzers
             var count = leadingTrivia.Count;
 
             // Perf: quick check to avoid costly loop
-            if (count >= 2 && leadingTrivia[1].IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
+            if (count >= 2)
             {
-                return true;
+                if (leadingTrivia[count == 4 ? 2 : 1].IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
+                {
+                    return true;
+                }
             }
 
             for (var index = 0; index < count; index++)
             {
-                var trivia = leadingTrivia[index];
-
-                if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
+                if (leadingTrivia[index].IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
                 {
                     return true;
                 }
@@ -4145,7 +4149,7 @@ namespace MiKoSolutions.Analyzers
             // Perf: quick check to avoid costly loop
             if (count >= 2)
             {
-                var trivia = leadingTrivia[1];
+                var trivia = leadingTrivia[count == 4 ? 2 : 1];
 
                 if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
                 {
@@ -4160,24 +4164,21 @@ namespace MiKoSolutions.Analyzers
             {
                 var trivia = leadingTrivia[index];
 
-                if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
+                if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
                 {
-                    if (trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
+                    if (results is null)
                     {
-                        if (results is null)
-                        {
-                            results = new DocumentationCommentTriviaSyntax[1];
-                        }
-                        else
-                        {
-                            // seems we have more separate comments, so increase by one
-                            Array.Resize(ref results, results.Length + 1);
-                        }
-
-                        results[resultsIndex] = syntax;
-
-                        resultsIndex++;
+                        results = new DocumentationCommentTriviaSyntax[1];
                     }
+                    else
+                    {
+                        // seems we have more separate comments, so increase by one
+                        Array.Resize(ref results, results.Length + 1);
+                    }
+
+                    results[resultsIndex] = syntax;
+
+                    resultsIndex++;
                 }
             }
 
