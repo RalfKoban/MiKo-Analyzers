@@ -26,12 +26,13 @@ namespace System
 
         private static readonly char[] GenericTypeArgumentSeparator = { ',' };
 
-        private static readonly Regex HyperlinkRegex = new Regex(@"(www|ftp:|ftps:|http:|https:)+[^\s]+[\w]", RegexOptions.Compiled, 100.Milliseconds());
+        private static readonly Regex HyperlinkRegex = new Regex(@"(www|ftp:|ftps:|http:|https:)+[^\s]+[\w]", RegexOptions.Compiled, 150.Milliseconds());
 
         private static readonly Regex PascalCasingRegex = new Regex("[a-z]+[A-Z]+", RegexOptions.Compiled, 100.Milliseconds());
 
 //// ncrunch: no coverage start
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool HasFlag(FirstWordHandling value, FirstWordHandling flag) => (value & flag) == flag;
 
         public static string AdjustFirstWord(this string value, FirstWordHandling handling)
@@ -111,7 +112,7 @@ namespace System
             return AllIndicesNonOrdinal(value, finding, ref comparison);
         }
 
-        //// ncrunch: no coverage end
+//// ncrunch: no coverage end
 
         public static IReadOnlyList<int> AllIndicesOf(this ReadOnlySpan<char> value, string finding, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
@@ -136,10 +137,13 @@ namespace System
 
 //// ncrunch: no coverage start
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static StringBuilder AsCachedBuilder(this string value) => StringBuilderCache.Acquire(value.Length).Append(value);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ToStringAndRelease(this StringBuilder value) => StringBuilderCache.GetStringAndRelease(value);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SyntaxToken AsToken(this string source, SyntaxKind kind = SyntaxKind.StringLiteralToken)
         {
             if (kind == SyntaxKind.IdentifierToken)
@@ -543,10 +547,13 @@ namespace System
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Contains(this string value, char c) => value?.IndexOf(c) >= 0;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Contains(this ReadOnlySpan<char> value, char c) => value.Length > 0 && value.IndexOf(c) >= 0;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Contains(this ReadOnlySpan<char> value, ReadOnlySpan<char> finding)
         {
             if (finding.Length > value.Length)
@@ -557,6 +564,7 @@ namespace System
             return value.IndexOf(finding) >= 0;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Contains(this ReadOnlySpan<char> value, string finding)
         {
             if (finding is null)
@@ -615,6 +623,7 @@ namespace System
 
 //// ncrunch: no coverage end
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Contains(this ReadOnlySpan<char> value, string finding, Func<char, bool> nextCharValidationCallback, StringComparison comparison) => value.Contains(finding.AsSpan(), nextCharValidationCallback, comparison);
 
         public static bool Contains(this ReadOnlySpan<char> value, ReadOnlySpan<char> finding, Func<char, bool> nextCharValidationCallback, StringComparison comparison)
@@ -664,10 +673,13 @@ namespace System
             while (true);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ContainsAny(this string value, char[] characters) => value?.IndexOfAny(characters) >= 0;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ContainsAny(this ReadOnlySpan<char> value, ReadOnlySpan<char> characters) => value.Length > 0 && value.IndexOfAny(characters) >= 0;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ContainsAny(this string value, string[] phrases) => value.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase); // ncrunch: no coverage
 
 //// ncrunch: no coverage start
@@ -739,8 +751,10 @@ namespace System
 
 //// ncrunch: no coverage end
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool EndsWith(this string value, char character) => value.HasCharacters() && value[value.Length - 1] == character;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool EndsWith(this ReadOnlySpan<char> value, char character) => value.Length > 0 && value[value.Length - 1] == character;
 
 //// ncrunch: no coverage start
@@ -754,8 +768,10 @@ namespace System
 
 //// ncrunch: no coverage end
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool EndsWithAny(this string value, ReadOnlySpan<char> suffixCharacters) => value.HasCharacters() && suffixCharacters.Contains(value[value.Length - 1]);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool EndsWithAny(this string value, string[] suffixes) => value.EndsWithAny(suffixes, StringComparison.OrdinalIgnoreCase);
 
         public static bool EndsWithAny(this ReadOnlySpan<char> value, ReadOnlySpan<char> suffixCharacters)
@@ -778,6 +794,7 @@ namespace System
             return false;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool EndsWithAny(this ReadOnlySpan<char> value, string[] suffixes) => value.EndsWithAny(suffixes, StringComparison.OrdinalIgnoreCase);
 
 //// ncrunch: no coverage start
@@ -870,12 +887,16 @@ namespace System
 
         public static bool EndsWithNumber(this ReadOnlySpan<char> value) => value.Length > 0 && value[value.Length - 1].IsNumber();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Equals(this string value, ReadOnlySpan<char> other, StringComparison comparison) => value != null && value.AsSpan().Equals(other, comparison);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Equals(this ReadOnlySpan<char> value, string other, StringComparison comparison) => other != null && value.Equals(other.AsSpan(), comparison);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool EqualsAny(this string value, IEnumerable<string> phrases) => EqualsAny(value, phrases, StringComparison.OrdinalIgnoreCase);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool EqualsAny(this ReadOnlySpan<char> value, string[] phrases) => EqualsAny(value, phrases, StringComparison.OrdinalIgnoreCase);
 
 //// ncrunch: no coverage start
@@ -1046,6 +1067,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string FormatWith(this string format, string arg0, string arg1, string arg2, string arg3) => string.Format(format, arg0, arg1, arg2, arg3);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string GetNameOnlyPart(this string value) => GetNameOnlyPart(value.AsSpan());
 
         public static string GetNameOnlyPart(this ReadOnlySpan<char> value)
@@ -1105,6 +1127,7 @@ namespace System
 
         public static ReadOnlySpan<char> GetPartAfterLastDot(this ReadOnlySpan<char> value) => value.Slice(value.LastIndexOf('.') + 1);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool HasCollectionMarker(this string value) => value.EndsWithAny(Constants.Markers.Collections);
 
         public static bool HasEntityMarker(this string value)
@@ -1326,6 +1349,7 @@ namespace System
             return -1;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsAcronym(this string value) => value.HasCharacters() && value.None(_ => _.IsLowerCaseLetter());
 
         public static bool IsHyperlink(this string value)
@@ -1413,12 +1437,15 @@ namespace System
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsSingleWord(this string value) => value != null && IsSingleWord(value.AsSpan());
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsSingleWord(this ReadOnlySpan<char> value) => value.HasWhitespaces() is false;
 
-        //// ncrunch: no coverage start
+//// ncrunch: no coverage start
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsUpperCase(this char value)
         {
             if ((uint)(value - 'a') <= 'z' - 'a')
@@ -1456,6 +1483,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWith(this string value, char character) => value.HasCharacters() && value[0] == character;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWith(this string value, ReadOnlySpan<char> characters) => value.HasCharacters() && value.AsSpan().StartsWith(characters);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1464,6 +1492,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWith(this ReadOnlySpan<char> value, string characters) => characters.HasCharacters() && value.StartsWith(characters.AsSpan());
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWith(this string value, ReadOnlySpan<char> characters, StringComparison comparison) => value.HasCharacters() && value.AsSpan().StartsWith(characters, comparison);
 
         public static bool StartsWith(this ReadOnlySpan<char> value, string characters, StringComparison comparison)
@@ -1486,12 +1515,16 @@ namespace System
 
 //// ncrunch: no coverage end
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWithAny(this string value, IEnumerable<char> characters) => value.HasCharacters() && characters.Contains(value[0]);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWithAny(this ReadOnlySpan<char> value, IEnumerable<char> characters) => value.Length > 0 && characters.Contains(value[0]);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWithAny(this string value, string[] prefixes) => value.StartsWithAny(prefixes, StringComparison.OrdinalIgnoreCase);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWithAny(this ReadOnlySpan<char> value, string[] prefixes) => value.StartsWithAny(prefixes, StringComparison.OrdinalIgnoreCase);
 
 //// ncrunch: no coverage start
@@ -1560,7 +1593,9 @@ namespace System
         public static string ToLowerCase(this string source) => source?.ToLowerInvariant();
 #pragma warning restore CA1308
 
-        //// ncrunch: no coverage start
+//// ncrunch: no coverage start
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static char ToLowerCase(this char source)
         {
             if ((uint)(source - 'A') <= 'Z' - 'A')
@@ -1636,6 +1671,7 @@ namespace System
             return MakeLowerCaseAt(source, index);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static char ToUpperCase(this char source)
         {
             if ((uint)(source - 'a') <= 'z' - 'a')
@@ -1688,7 +1724,7 @@ namespace System
             return MakeUpperCaseAt(source.AsSpan(), index);
         }
 
-        //// ncrunch: no coverage end
+//// ncrunch: no coverage end
 
         /// <summary>
         /// Gets a <see cref="string"/> where the specified character is upper-case.
@@ -2299,6 +2335,6 @@ namespace System
             return indices ?? (IReadOnlyList<int>)Array.Empty<int>();
         }
 
-        //// ncrunch: no coverage end
+//// ncrunch: no coverage end
     }
 }

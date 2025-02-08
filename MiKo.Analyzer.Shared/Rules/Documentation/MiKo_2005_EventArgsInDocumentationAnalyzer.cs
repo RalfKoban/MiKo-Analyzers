@@ -20,11 +20,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
-            foreach (var token in comment.GetXmlTextTokens())
+            var textTokens = comment.GetXmlTextTokens();
+            var textTokensCount = textTokens.Count;
+
+            if (textTokensCount == 0)
+            {
+                yield break;
+            }
+
+            var text = textTokens.GetTextTrimmedWithParaTags();
+
+            if (text.ContainsAny(Constants.Comments.EventArgsTermsWithDelimiters, StringComparison.OrdinalIgnoreCase) is false)
+            {
+                yield break;
+            }
+
+            for (var i = 0; i < textTokensCount; i++)
             {
                 const int Offset = 1; // we do not want to underline the first and last char
 
-                var locations = GetAllLocations(token, Constants.Comments.EventArgsTermsWithDelimiters, StringComparison.OrdinalIgnoreCase, Offset, Offset);
+                var locations = GetAllLocations(textTokens[i], Constants.Comments.EventArgsTermsWithDelimiters, StringComparison.OrdinalIgnoreCase, Offset, Offset);
                 var locationsCount = locations.Count;
 
                 if (locationsCount > 0)

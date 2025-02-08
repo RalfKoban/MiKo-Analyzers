@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -13,13 +14,27 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3080";
 
-        private static readonly SyntaxKind[] Declarations = { SyntaxKind.MethodDeclaration, SyntaxKind.IndexerDeclaration, SyntaxKind.ConstructorDeclaration };
+        private static readonly Func<SyntaxNode, bool> IsNoDeclaration = IsNoDeclarationCore;
 
         public MiKo_3080_SwitchReturnInsteadSwitchBreakAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSwitchStatement, SyntaxKind.SwitchStatement);
+
+        private static bool IsNoDeclarationCore(SyntaxNode node)
+        {
+            switch (node.RawKind)
+            {
+                case (int)SyntaxKind.MethodDeclaration:
+                case (int)SyntaxKind.ConstructorDeclaration:
+                case (int)SyntaxKind.IndexerDeclaration:
+                    return false;
+
+                default:
+                    return true;
+            }
+        }
 
         private static bool HasIssue(SwitchStatementSyntax switchStatement)
         {
@@ -54,7 +69,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static IEnumerable<string> GetVariableNamesUntilHere(SwitchStatementSyntax switchStatement)
         {
             return switchStatement.Ancestors()
-                                  .TakeWhile(_ => _.IsAnyKind(Declarations) is false)
+                                  .TakeWhile(IsNoDeclaration)
                                   .SelectMany(_ => GetVariableNames(_, switchStatement));
 
             IEnumerable<string> GetVariableNames(SyntaxNode node, SyntaxNode stopNode) => node.ChildNodes()

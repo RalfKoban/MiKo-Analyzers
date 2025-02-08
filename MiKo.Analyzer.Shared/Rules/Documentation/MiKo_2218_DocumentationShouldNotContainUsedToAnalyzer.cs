@@ -366,33 +366,41 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var issues = new List<Diagnostic>();
 
-            foreach (var token in comment.GetXmlTextTokens())
+            var textTokens = comment.GetXmlTextTokens();
+            var textTokensCount = textTokens.Count;
+
+            if (textTokensCount > 0)
             {
-                AnalyzeForPhrases(issues, token, UsedToPhrases, UsedToReplacement);
-                AnalyzeForPhrases(issues, token, CanPhrases, CanReplacement, StringComparison.OrdinalIgnoreCase);
-                AnalyzeForPhrases(issues, token, CanPluralPhrases, CanPluralReplacement, StringComparison.OrdinalIgnoreCase);
-                AnalyzeForPhrases(issues, token, UsedToDetermineInSingular, UsedToDetermineInSingularReplacement, StringComparison.OrdinalIgnoreCase);
-                AnalyzeForPhrases(issues, token, UsedToDetermineInPlural, UsedToDetermineInPluralReplacement, StringComparison.OrdinalIgnoreCase);
+                for (var i = 0; i < textTokensCount; i++)
+                {
+                    var token = textTokens[i];
 
-                issues.AddRange(AnalyzeForSpecialPhrase(token, IsUsedToPhraseStartUpperCase, _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)));
-                issues.AddRange(AnalyzeForSpecialPhrase(token, AreUsedToPhraseStartUpperCase, _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)));
-                issues.AddRange(AnalyzeForSpecialPhrase(token, UsedToPhraseStartUpperCase, _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)));
-                issues.AddRange(AnalyzeForSpecialPhrase(token, IsUsedToPhrase, Verbalizer.MakeThirdPersonSingularVerb));
-                issues.AddRange(AnalyzeForSpecialPhrase(token, AreUsedToPhrase, Verbalizer.MakeInfiniteVerb));
+                    AnalyzeForPhrases(issues, token, UsedToPhrases, UsedToReplacement);
+                    AnalyzeForPhrases(issues, token, CanPhrases, CanReplacement, StringComparison.OrdinalIgnoreCase);
+                    AnalyzeForPhrases(issues, token, CanPluralPhrases, CanPluralReplacement, StringComparison.OrdinalIgnoreCase);
+                    AnalyzeForPhrases(issues, token, UsedToDetermineInSingular, UsedToDetermineInSingularReplacement, StringComparison.OrdinalIgnoreCase);
+                    AnalyzeForPhrases(issues, token, UsedToDetermineInPlural, UsedToDetermineInPluralReplacement, StringComparison.OrdinalIgnoreCase);
 
-                AnalyzeForPhrases(issues, token, UsedToPhrase, UsedToReplacement); // do not use case-insensitive here
-                AnalyzeForPhrases(issues, token, UsedInCombinationPluralPhrases, UsedInCombinationPluralReplacement, StringComparison.OrdinalIgnoreCase);
-                AnalyzeForPhrases(issues, token, UsedInCombinationSingularPhrases, UsedInCombinationSingularReplacement, StringComparison.OrdinalIgnoreCase);
-                AnalyzeForPhrases(issues, token, UsedInCombinationUnclearPhrases, UsedInCombinationUnclearReplacement, StringComparison.OrdinalIgnoreCase);
-                AnalyzeForPhrases(issues, token, UsedInternallyPluralPhrases, UsedInternallyPluralReplacement, StringComparison.OrdinalIgnoreCase);
-                AnalyzeForPhrases(issues, token, UsedInternallySingularPhrases, UsedInternallySingularReplacement, StringComparison.OrdinalIgnoreCase);
-                AnalyzeForPhrases(issues, token, UsedInternallyUnclearPhrases, UsedInternallyUnclearReplacement, StringComparison.OrdinalIgnoreCase);
-                AnalyzeForPhrases(issues, token, UsedInPluralPhrases, UsedInPluralReplacement, StringComparison.OrdinalIgnoreCase);
-                AnalyzeForPhrases(issues, token, UsedInSingularPhrases, UsedInSingularReplacement, StringComparison.OrdinalIgnoreCase);
-                AnalyzeForPhrases(issues, token, UsedInUnclearPhrases, UsedInUnclearReplacement, StringComparison.OrdinalIgnoreCase);
-                AnalyzeForPhrases(issues, token, UsedByPhrase, UsedByReplacement, StringComparison.OrdinalIgnoreCase);
-                AnalyzeForPhrases(issues, token, UsedWhenPhrases, UsedWhenReplacement, StringComparison.OrdinalIgnoreCase);
-                AnalyzeForPhrases(issues, token, UsedWithinPhrases, UsedWithinReplacement, StringComparison.OrdinalIgnoreCase);
+                    issues.AddRange(AnalyzeForSpecialPhrase(token, IsUsedToPhraseStartUpperCase, _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)));
+                    issues.AddRange(AnalyzeForSpecialPhrase(token, AreUsedToPhraseStartUpperCase, _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)));
+                    issues.AddRange(AnalyzeForSpecialPhrase(token, UsedToPhraseStartUpperCase, _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)));
+                    issues.AddRange(AnalyzeForSpecialPhrase(token, IsUsedToPhrase, Verbalizer.MakeThirdPersonSingularVerb));
+                    issues.AddRange(AnalyzeForSpecialPhrase(token, AreUsedToPhrase, Verbalizer.MakeInfiniteVerb));
+
+                    AnalyzeForPhrases(issues, token, UsedToPhrase, UsedToReplacement); // do not use case-insensitive here
+                    AnalyzeForPhrases(issues, token, UsedInCombinationPluralPhrases, UsedInCombinationPluralReplacement, StringComparison.OrdinalIgnoreCase);
+                    AnalyzeForPhrases(issues, token, UsedInCombinationSingularPhrases, UsedInCombinationSingularReplacement, StringComparison.OrdinalIgnoreCase);
+                    AnalyzeForPhrases(issues, token, UsedInCombinationUnclearPhrases, UsedInCombinationUnclearReplacement, StringComparison.OrdinalIgnoreCase);
+                    AnalyzeForPhrases(issues, token, UsedInternallyPluralPhrases, UsedInternallyPluralReplacement, StringComparison.OrdinalIgnoreCase);
+                    AnalyzeForPhrases(issues, token, UsedInternallySingularPhrases, UsedInternallySingularReplacement, StringComparison.OrdinalIgnoreCase);
+                    AnalyzeForPhrases(issues, token, UsedInternallyUnclearPhrases, UsedInternallyUnclearReplacement, StringComparison.OrdinalIgnoreCase);
+                    AnalyzeForPhrases(issues, token, UsedInPluralPhrases, UsedInPluralReplacement, StringComparison.OrdinalIgnoreCase);
+                    AnalyzeForPhrases(issues, token, UsedInSingularPhrases, UsedInSingularReplacement, StringComparison.OrdinalIgnoreCase);
+                    AnalyzeForPhrases(issues, token, UsedInUnclearPhrases, UsedInUnclearReplacement, StringComparison.OrdinalIgnoreCase);
+                    AnalyzeForPhrases(issues, token, UsedByPhrase, UsedByReplacement, StringComparison.OrdinalIgnoreCase);
+                    AnalyzeForPhrases(issues, token, UsedWhenPhrases, UsedWhenReplacement, StringComparison.OrdinalIgnoreCase);
+                    AnalyzeForPhrases(issues, token, UsedWithinPhrases, UsedWithinReplacement, StringComparison.OrdinalIgnoreCase);
+                }
             }
 
             return issues;

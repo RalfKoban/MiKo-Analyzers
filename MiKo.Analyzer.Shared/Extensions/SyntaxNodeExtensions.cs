@@ -124,8 +124,6 @@ namespace MiKoSolutions.Analyzers
 
         internal static T FirstAncestor<T>(this SyntaxNode value, ISet<SyntaxKind> kinds) where T : SyntaxNode => value.FirstAncestor<T>(_ => _.IsAnyKind(kinds));
 
-        internal static T FirstAncestor<T>(this SyntaxNode value, params SyntaxKind[] kinds) where T : SyntaxNode => value.FirstAncestor<T>(_ => _.IsAnyKind(kinds));
-
         internal static SyntaxNode FirstChild(this SyntaxNode value) => value.ChildNodes().FirstOrDefault();
 
         internal static T FirstChild<T>(this SyntaxNode value) where T : SyntaxNode => value.ChildNodes<T>().FirstOrDefault();
@@ -1139,54 +1137,46 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool HasDocumentationCommentTriviaSyntax(this SyntaxNode value)
         {
-            if (value != null)
-            {
-                if (value.HasStructuredTrivia)
-                {
-                    var token = value.FirstDescendantToken();
+            var token = value.FindStructuredTriviaToken();
 
-                    if (token.HasStructuredTrivia)
-                    {
-                        var leadingTrivia = token.LeadingTrivia;
-                        var count = leadingTrivia.Count;
-
-                        for (var index = 0; index < count; index++)
-                        {
-                            var trivia = leadingTrivia[index];
-
-                            if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
-
-            return false;
+            return token.HasStructuredTrivia && HasDocumentationCommentTriviaSyntax(token);
         }
 
         internal static DocumentationCommentTriviaSyntax[] GetDocumentationCommentTriviaSyntax(this SyntaxNode value)
         {
-            if (value != null)
+            var token = value.FindStructuredTriviaToken();
+
+            if (token.HasStructuredTrivia)
             {
-                if (value.HasStructuredTrivia)
+                var comment = GetDocumentationCommentTriviaSyntax(token);
+
+                if (comment != null)
                 {
-                    var token = value.FirstDescendantToken();
-
-                    if (token.HasStructuredTrivia)
-                    {
-                        var comment = GetDocumentationCommentTriviaSyntax(token);
-
-                        if (comment != null)
-                        {
-                            return comment;
-                        }
-                    }
+                    return comment;
                 }
             }
 
             return Array.Empty<DocumentationCommentTriviaSyntax>();
+        }
+
+        internal static string GetTextTrimmedWithParaTags(this IReadOnlyList<SyntaxToken> values)
+        {
+            if (values.Count == 0)
+            {
+                return string.Empty;
+            }
+
+            var builder = StringBuilderCache.Acquire();
+
+            GetTextWithoutTrivia(values, builder);
+
+            var trimmed = builder.WithoutNewLines()
+                                 .WithoutMultipleWhiteSpaces()
+                                 .Trim();
+
+            StringBuilderCache.Release(builder);
+
+            return trimmed;
         }
 
         internal static string GetTextTrimmed(this XmlElementSyntax value)
@@ -1198,7 +1188,11 @@ namespace MiKoSolutions.Analyzers
 
             var builder = StringBuilderCache.Acquire();
 
-            var trimmed = value.GetTextWithoutTrivia(builder).Without(Constants.EnvironmentNewLine).WithoutParaTags().Trim();
+            var trimmed = value.GetTextWithoutTrivia(builder)
+                               .WithoutParaTags()
+                               .WithoutNewLines()
+                               .WithoutMultipleWhiteSpaces()
+                               .Trim();
 
             StringBuilderCache.Release(builder);
 
@@ -1224,17 +1218,7 @@ namespace MiKoSolutions.Analyzers
 
             var builder = StringBuilderCache.Acquire();
 
-            for (var index = 0; index < textTokensCount; index++)
-            {
-                var token = textTokens[index];
-
-                if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
-                {
-                    continue;
-                }
-
-                builder.Append(token.WithoutTrivia().ValueText);
-            }
+            GetTextWithoutTrivia(textTokens, builder);
 
             var trimmed = builder.Trim();
 
@@ -1268,8 +1252,11 @@ namespace MiKoSolutions.Analyzers
                 return builder;
             }
 
-            var textTokens = value.TextTokens;
+            return GetTextWithoutTrivia(value.TextTokens, builder);
+        }
 
+        internal static StringBuilder GetTextWithoutTrivia(IReadOnlyList<SyntaxToken> textTokens, StringBuilder builder)
+        {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var textTokensCount = textTokens.Count;
 
@@ -1284,7 +1271,7 @@ namespace MiKoSolutions.Analyzers
                         continue;
                     }
 
-                    builder.Append(token.WithoutTrivia().ValueText);
+                    builder.Append(token.ValueText);
                 }
             }
 
@@ -1364,7 +1351,7 @@ namespace MiKoSolutions.Analyzers
                         continue;
                     }
 
-                    yield return token.WithoutTrivia().ValueText;
+                    yield return token.ValueText;
                 }
             }
         }
@@ -1613,6 +1600,11 @@ namespace MiKoSolutions.Analyzers
             if (kindsLength > 0)
             {
                 var valueKind = value.Kind();
+
+                if (kindsLength == 2)
+                {
+                    return valueKind == kinds[0] || valueKind == kinds[1];
+                }
 
                 for (var index = 0; index < kindsLength; index++)
                 {
@@ -3347,7 +3339,7 @@ namespace MiKoSolutions.Analyzers
                             var modifiedText = token.Text
                                                     .AsCachedBuilder()
                                                     .Without(text)
-                                                    .ReplaceAllWithCheck(Constants.Comments.MultiWhitespaceStrings, Constants.Comments.SingleWhitespaceString)
+                                                    .WithoutMultipleWhiteSpaces()
                                                     .ToStringAndRelease();
 
                             if (modifiedText.IsNullOrWhiteSpace())
@@ -4141,10 +4133,46 @@ namespace MiKoSolutions.Analyzers
             return finalTrivia;
         }
 
+        private static bool HasDocumentationCommentTriviaSyntax(SyntaxToken token)
+        {
+            var leadingTrivia = token.LeadingTrivia;
+            var count = leadingTrivia.Count;
+
+            // Perf: quick check to avoid costly loop
+            if (count >= 2)
+            {
+                if (leadingTrivia[count == 4 ? 2 : 1].IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
+                {
+                    return true;
+                }
+            }
+
+            for (var index = 0; index < count; index++)
+            {
+                if (leadingTrivia[index].IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private static DocumentationCommentTriviaSyntax[] GetDocumentationCommentTriviaSyntax(SyntaxToken value)
         {
             var leadingTrivia = value.LeadingTrivia;
             var count = leadingTrivia.Count;
+
+            // Perf: quick check to avoid costly loop
+            if (count >= 2)
+            {
+                var trivia = leadingTrivia[count == 4 ? 2 : 1];
+
+                if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
+                {
+                    return new[] { syntax };
+                }
+            }
 
             DocumentationCommentTriviaSyntax[] results = null;
             var resultsIndex = 0;
@@ -4172,6 +4200,49 @@ namespace MiKoSolutions.Analyzers
             }
 
             return results;
+        }
+
+        private static SyntaxToken FindStructuredTriviaToken(this SyntaxNode value)
+        {
+            if (value != null)
+            {
+                if (value.HasStructuredTrivia)
+                {
+                    var children = value.ChildNodesAndTokens();
+
+                    var count = children.Count;
+
+                    if (count > 0)
+                    {
+                        for (var index = 0; index < count; index++)
+                        {
+                            var child = children[index];
+
+                            if (child.IsToken)
+                            {
+                                var childToken = child.AsToken();
+
+                                if (childToken.HasStructuredTrivia)
+                                {
+                                    return childToken;
+                                }
+
+                                // no structure, so maybe it is the first descendant token to use
+                                break;
+                            }
+                        }
+                    }
+
+                    var token = value.FirstDescendantToken();
+
+                    if (token.HasStructuredTrivia)
+                    {
+                        return token;
+                    }
+                }
+            }
+
+            return default;
         }
 
         private static XmlTextSyntax XmlText(string text) => SyntaxFactory.XmlText(text);

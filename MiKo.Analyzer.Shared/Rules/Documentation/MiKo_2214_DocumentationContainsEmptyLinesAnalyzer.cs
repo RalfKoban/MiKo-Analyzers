@@ -24,17 +24,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var count = tokens.Count - 1;
 
-                for (var i = 0; i < count; i++)
+                if (count > 0)
                 {
-                    var currentToken = tokens[i];
-
-                    if (currentToken.IsKind(SyntaxKind.XmlTextLiteralToken) && currentToken.LeadingTrivia.Any(SyntaxKind.DocumentationCommentExteriorTrivia) && currentToken.ValueText.IsNullOrWhiteSpace())
+                    for (var i = 0; i < count; i++)
                     {
-                        var nextToken = tokens[i + 1];
+                        var currentToken = tokens[i];
 
-                        if (nextToken.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                        if (currentToken.IsKind(SyntaxKind.XmlTextLiteralToken) && currentToken.LeadingTrivia.Any(SyntaxKind.DocumentationCommentExteriorTrivia) && currentToken.ValueText.IsNullOrWhiteSpace())
                         {
-                            yield return Issue(symbol.Name, nextToken);
+                            var nextToken = tokens[i + 1];
+
+                            if (nextToken.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                            {
+                                yield return Issue(symbol.Name, nextToken);
+                            }
                         }
                     }
                 }

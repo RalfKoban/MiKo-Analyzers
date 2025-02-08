@@ -32,10 +32,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override Pair[] CreateProposal(IParameterSymbol parameter, string phrase)
         {
             return new[]
-                   {
-                       new Pair(Constants.AnalyzerCodeFixSharedData.StartingPhrase, phrase),
-                       new Pair(Constants.AnalyzerCodeFixSharedData.IsFlagged, parameter.HasFlags().ToString()),
-                   };
+                       {
+                           new Pair(Constants.AnalyzerCodeFixSharedData.StartingPhrase, phrase),
+                           new Pair(Constants.AnalyzerCodeFixSharedData.IsFlagged, parameter.HasFlags().ToString()),
+                       };
         }
 
         private static string[] AdjustPhrases(IParameterSymbol parameter, string[] phrases)

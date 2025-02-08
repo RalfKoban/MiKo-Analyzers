@@ -35,6 +35,8 @@ namespace MiKoSolutions.Analyzers
                                                                                                                   SymbolDisplayGenericsOptions.IncludeTypeParameters,
                                                                                                                   miscellaneousOptions: SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers);
 
+        private static readonly Func<SyntaxNode, bool> IsLocalFunctionContainerSyntaxKind = IsLocalFunctionContainerSyntaxKindCore;
+
         internal static IEnumerable<IMethodSymbol> GetExtensionMethods(this ITypeSymbol value) => value.GetMethods().Where(_ => _.IsExtensionMethod);
 
         internal static IReadOnlyList<IMethodSymbol> GetMethods(this ITypeSymbol value) => value.GetMembers<IMethodSymbol>();
@@ -526,8 +528,19 @@ namespace MiKoSolutions.Analyzers
                         // Perf: quick catch via span and ordinal comparison (as that is the most likely case)
                         if (filePathSpan.EndsWith(extension, StringComparison.Ordinal))
                         {
+                            // MaximumGeneratedCSharpFileExtensionLength
+                            var pathLength = filePathSpan.Length;
+                            var remainingPathLength = pathLength - Constants.MaximumGeneratedCSharpFileExtensionLength;
+
+                            var span = filePathSpan.Slice(0, pathLength - extension.Length);
+
+                            if (remainingPathLength > 0)
+                            {
+                                span = span.Slice(remainingPathLength);
+                            }
+
                             // Perf: quick catch find another dot, as we do not need to check for additional extensions in case we do not have any other dot here
-                            if (filePathSpan.Slice(0, filePathSpan.Length - extension.Length).LastIndexOfAny('.', Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) >= 0)
+                            if (span.LastIndexOfAny('.', Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) >= 0)
                             {
                                 if (filePathSpan.EndsWithAny(Constants.GeneratedCSharpFileExtensions, StringComparison.Ordinal))
                                 {
@@ -1867,7 +1880,7 @@ namespace MiKoSolutions.Analyzers
             return results;
         }
 
-        private static bool IsLocalFunctionContainerSyntaxKind(SyntaxNode node)
+        private static bool IsLocalFunctionContainerSyntaxKindCore(SyntaxNode node)
         {
             switch (node.RawKind)
             {

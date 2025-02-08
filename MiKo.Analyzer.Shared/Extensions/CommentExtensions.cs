@@ -216,7 +216,7 @@ namespace MiKoSolutions.Analyzers
             {
                 cleaned = builder.WithoutParaTags()
                                  .Without(Constants.Markers.SymbolsAndLineBreaks)
-                                 .ReplaceAllWithCheck(Constants.Comments.MultiWhitespaceStrings, Constants.Comments.SingleWhitespaceString)
+                                 .WithoutMultipleWhiteSpaces()
                                  .Trim();
             }
 

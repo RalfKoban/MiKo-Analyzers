@@ -15,13 +15,26 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private const int MaxLineLength = 180;
 
-        private static readonly SyntaxKind[] LogicalExpressions = { SyntaxKind.LogicalAndExpression, SyntaxKind.LogicalOrExpression };
+        private static readonly Func<SyntaxNode, bool> IsLogicalExpression = IsLogicalExpressionCore;
 
         public MiKo_6043_LambdaExpressionBodiesAreOnSameLineAnalyzer() : base(Id)
         {
         }
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeLambdaExpression, SyntaxKind.ParenthesizedLambdaExpression, SyntaxKind.SimpleLambdaExpression);
+
+        private static bool IsLogicalExpressionCore(SyntaxNode node)
+        {
+            switch (node.RawKind)
+            {
+                case (int)SyntaxKind.LogicalAndExpression:
+                case (int)SyntaxKind.LogicalOrExpression:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
 
         private static bool CanAnalyzeBody(SyntaxNode lambda)
         {
@@ -116,7 +129,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             bool CanAnalyzeBinaryExpressionSyntax(BinaryExpressionSyntax syntax)
             {
-                if (syntax.IsAnyKind(LogicalExpressions) && syntax.DescendantNodes<BinaryExpressionSyntax>().Any(_ => _.IsAnyKind(LogicalExpressions)))
+                if (IsLogicalExpressionCore(syntax) && syntax.DescendantNodes<BinaryExpressionSyntax>().Any(IsLogicalExpression))
                 {
                     // multiple binary expressions such as && or || are allowed to span multiple lines, so nothing to analyze here
                     return false;

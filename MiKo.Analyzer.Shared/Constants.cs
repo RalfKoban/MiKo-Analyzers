@@ -62,6 +62,8 @@ namespace MiKoSolutions.Analyzers
                                                                               ".generated.cs",
                                                                           };
 
+        internal static readonly int MaximumGeneratedCSharpFileExtensionLength = GeneratedCSharpFileExtensions.Max(_ => _.Length) + 1;
+
         internal static readonly string[] WellknownFileExtensions =
                                                                     {
                                                                         ".bmp",
