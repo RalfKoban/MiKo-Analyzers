@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -67,8 +68,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
 #else
 
+        private static int s_testNumber;
+
+        [OneTimeSetUp]
+        public static void PrepareTestEnvironment() => s_testNumber = 0;
+
         [OneTimeTearDown]
         public static void CleanupTestEnvironment() => GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
+
+        [SetUp]
+        public void PrepareTest() => Interlocked.Increment(ref s_testNumber);
+
+        [TearDown]
+        public void TearDown()
+        {
+            if (s_testNumber % 5000 == 0)
+            {
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
+            }
+        }
 
 #endif
 
