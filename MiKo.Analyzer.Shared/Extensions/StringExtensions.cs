@@ -584,6 +584,11 @@ namespace System
 
             if (difference < 0)
             {
+                if (comparison == StringComparison.Ordinal)
+                {
+                    return value.AsSpan().IndexOf(finding.AsSpan()) >= 0;
+                }
+
                 return value.IndexOf(finding, comparison) >= 0;
             }
 

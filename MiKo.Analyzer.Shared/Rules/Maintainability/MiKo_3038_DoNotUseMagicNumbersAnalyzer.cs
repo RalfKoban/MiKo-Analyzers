@@ -92,7 +92,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool IgnoreBasedOnParent(LiteralExpressionSyntax node)
         {
-            var parent = FilterUnimportantParents(node);
+            var parent = SkipUnimportantParents(node);
             var kind = parent?.Kind();
 
             switch (kind)
@@ -150,9 +150,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static SyntaxNode FilterUnimportantParents(LiteralExpressionSyntax node)
+        private static SyntaxNode SkipUnimportantParents(LiteralExpressionSyntax node)
         {
-            var parent = FilterUnimportantUnaryParents(node.Parent);
+            var parent = SkipUnimportantUnaryParents(node.Parent);
 
             if (parent != null && parent.IsKind(SyntaxKind.ParenthesizedExpression))
             {
@@ -162,7 +162,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return parent;
         }
 
-        private static SyntaxNode FilterUnimportantUnaryParents(SyntaxNode parent)
+        private static SyntaxNode SkipUnimportantUnaryParents(SyntaxNode parent)
         {
             switch (parent?.Kind())
             {

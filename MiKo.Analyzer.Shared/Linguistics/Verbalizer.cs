@@ -430,7 +430,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                         return word;
                     }
 
-                    if (word.EndsWith("thing", StringComparison.CurrentCultureIgnoreCase))
+                    if (word.EndsWith("thing", StringComparison.OrdinalIgnoreCase))
                     {
                         return word;
                     }
