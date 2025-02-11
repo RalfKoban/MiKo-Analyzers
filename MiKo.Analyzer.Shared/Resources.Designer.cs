@@ -4633,6 +4633,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When naming something &apos;Filter&apos;, it is not clear whether the criteria to filter on gets included or excluded in the result. So instead, it should be named something like `IncludeBy`, `ExcludeBy`, `Remove`, `Skip` or `Take`. That makes it clear about what gets filtered..
+        /// </summary>
+        internal static string MiKo_1501_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1501_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;Filter&apos; to something like `IncludeBy`, `ExcludeBy`, `Remove`, `Skip` or `Take`.
+        /// </summary>
+        internal static string MiKo_1501_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1501_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use &apos;Filter&apos; in names.
+        /// </summary>
+        internal static string MiKo_1501_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1501_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fix malformed XML.
         /// </summary>
         internal static string MiKo_2000_CodeFixTitle {
