@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1059";
 
-        private static readonly string[] WrongSuffixes = { "Impl", "Implementation", };
+        private static readonly string[] WrongSuffixes = { "Impl", "Implementation", "Imp" };
 
         public MiKo_1059_ImplClassNameAnalyzer() : base(Id, SymbolKind.NamedType)
         {
