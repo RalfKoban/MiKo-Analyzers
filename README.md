@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables lists all the 475 rules that are currently provided by the analyzer.
+The following tables lists all the 476 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -160,6 +160,7 @@ The following tables lists all the 475 rules that are currently provided by the 
 |MiKo_1408|Extension methods should be placed in same namespace as the extended types|&#x2713;|\-|
 |MiKo_1409|Do not prefix or suffix namespaces with underscores|&#x2713;|\-|
 |MiKo_1501|Do not use 'Filter' in names|&#x2713;|\-|
+|MiKo_1502|Do not use 'Process' in names|&#x2713;|\-|
 
 ### Documentation
 |ID|Title|Enabled by default|CodeFix available|

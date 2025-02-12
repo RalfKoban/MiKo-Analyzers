@@ -4660,6 +4660,37 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When naming something &apos;Process&apos;, it is not clear what is processed, why it is processed and what the result after processing is.
+        ///It is better to when the name contains the purpose behind it.
+        ///
+        ///Example:
+        ///&quot;ProcessMessages&quot; could be renamed to &quot;DeleteObsoleteMessages&quot; or similar if the purpose of processing messages is to detect and delete obsolete ones..
+        /// </summary>
+        internal static string MiKo_1502_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1502_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename so that &apos;Process&apos; is not used.
+        /// </summary>
+        internal static string MiKo_1502_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1502_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use &apos;Process&apos; in names.
+        /// </summary>
+        internal static string MiKo_1502_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1502_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fix malformed XML.
         /// </summary>
         internal static string MiKo_2000_CodeFixTitle {
