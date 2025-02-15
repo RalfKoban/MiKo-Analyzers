@@ -4026,6 +4026,9 @@ This approach enhances clarity and maintainability.</value>
   <data name="MiKo_3084_Title" xml:space="preserve">
     <value>Do not place constants on the left side for comparisons</value>
   </data>
+  <data name="MiKo_3085_CodeFixTitle" xml:space="preserve">
+    <value>Convert to 'if ... else ...'</value>
+  </data>
   <data name="MiKo_3085_Description" xml:space="preserve">
     <value>Long conditional statements are hard to read and maintain. Keep them short for easy understanding at a glance, or refactor into if-else statements for clarity. This approach keeps your code clean and maintainable.</value>
   </data>
