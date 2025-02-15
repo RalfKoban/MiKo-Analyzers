@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -78,45 +79,6 @@ public class TestMe
 }");
 
         [Test]
-        public void An_issue_is_reported_for_conditional_expression_with_long_condition_and_short_paths() => An_issue_is_reported_for(@"
-using System;
-
-public class TestMe
-{
-    public bool DoSomething(object o) => (o != null && (o.GetHashCode() == 42 || o.GetHashCode() == 0815)) ? true : false;
-}");
-
-        [Test]
-        public void An_issue_is_reported_for_conditional_expression_with_short_condition_and_long_true_path() => An_issue_is_reported_for(@"
-using System;
-using System.Linq;
-
-public class TestMe
-{
-    public bool DoSomething(List<object> items)
-    {
-        return items != null
-                ? items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any()
-                : false;
-    }
-}");
-
-        [Test]
-        public void An_issue_is_reported_for_conditional_expression_with_short_condition_and_long_false_path() => An_issue_is_reported_for(@"
-using System;
-using System.Linq;
-
-public class TestMe
-{
-    public bool DoSomething(List<object> items)
-    {
-        return items == null
-                ? false
-                : items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any();
-    }
-}");
-
-        [Test]
         public void No_issue_is_reported_for_object_creation_only() => No_issue_is_reported_for(@"
 using System;
 using System.Linq;
@@ -154,18 +116,6 @@ public class TestMe
         return value is null
                ? new ArgumentOutOfRangeException(paramName, someLongerValue, string.Empty)
                : new ArgumentOutOfRangeException(paramName, someLongerValue, message);
-}");
-
-        [Test]
-        public void An_issue_is_reported_for_object_creation_with_Linq() => An_issue_is_reported_for(@"
-using System;
-using System.Linq;
-
-public class TestMe
-{
-    internal static ArgumentOutOfRangeException ArgumentOutOfRange(string paramName, string[] messages, object value) => messages.Any()
-                                                                                                                          ? new ArgumentOutOfRangeException(paramName, 0815, messages.Where(_ => _.Length > 1).FirstOrDefault())
-                                                                                                                          : new ArgumentOutOfRangeException(paramName, 0815, string.Empty);
 }");
 
         [Test]
@@ -231,8 +181,418 @@ public class TestMeWithAVeryLongName
                                                             : Array.Empty<TestMeWithAVeryLongName>()
 }");
 
+        [Test]
+        public void An_issue_is_reported_for_conditional_expression_with_long_condition_and_short_paths() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(object o) => (o != null && (o.GetHashCode() == 42 || o.GetHashCode() == 0815)) ? true : false;
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_conditional_expression_with_short_condition_and_long_true_path() => An_issue_is_reported_for(@"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    public bool DoSomething(List<object> items)
+    {
+        return items != null
+                ? items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any()
+                : false;
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_conditional_expression_with_short_condition_and_long_false_path() => An_issue_is_reported_for(@"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    public bool DoSomething(List<object> items)
+    {
+        return items == null
+                ? false
+                : items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any();
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_object_creation_with_Linq() => An_issue_is_reported_for(@"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    internal static ArgumentOutOfRangeException ArgumentOutOfRange(string paramName, string[] messages, object value) => messages.Any()
+                                                                                                                          ? new ArgumentOutOfRangeException(paramName, 0815, messages.Where(_ => _.Length > 1).FirstOrDefault())
+                                                                                                                          : new ArgumentOutOfRangeException(paramName, 0815, string.Empty);
+}");
+
+        [Test]
+        public void Code_gets_fixed_for_conditional_expression_with_long_condition_and_short_paths()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(object o) => (o != null && (o.GetHashCode() == 42 || o.GetHashCode() == 0815)) ? true : false;
+}";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(object o)
+    {
+        if (o != null && (o.GetHashCode() == 42 || o.GetHashCode() == 0815))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_conditional_expression_with_short_condition_and_long_true_path()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    public bool DoSomething(List<object> items)
+    {
+        return items != null
+                ? items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any()
+                : false;
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    public bool DoSomething(List<object> items)
+    {
+        if (items != null)
+        {
+            return items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any();
+        }
+        else
+        {
+            return false;
+        }
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_conditional_expression_with_short_condition_and_long_false_path()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    public bool DoSomething(List<object> items)
+    {
+        return items == null
+                ? false
+                : items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any();
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    public bool DoSomething(List<object> items)
+    {
+        if (items == null)
+        {
+            return false;
+        }
+        else
+        {
+            return items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any();
+        }
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_object_creation_with_Linq()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    internal static ArgumentOutOfRangeException ArgumentOutOfRange(string paramName, string[] messages, object value) => messages.Any()
+                                                                                                                          ? new ArgumentOutOfRangeException(paramName, 0815, messages.Where(_ => _.Length > 1).FirstOrDefault())
+                                                                                                                          : new ArgumentOutOfRangeException(paramName, 0815, string.Empty);
+}";
+
+            const string FixedCode = @"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    internal static ArgumentOutOfRangeException ArgumentOutOfRange(string paramName, string[] messages, object value)
+    {
+        if (messages.Any())
+        {
+            return new ArgumentOutOfRangeException(paramName, 0815, messages.Where(_ => _.Length > 1).FirstOrDefault());
+        }
+        else
+        {
+            return new ArgumentOutOfRangeException(paramName, 0815, string.Empty);
+        }
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_object_creation_with_throw()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    internal static ArgumentOutOfRangeException ArgumentOutOfRange(string paramName, string[] messages, object value)
+    {
+        throw messages.Any()
+              ? new ArgumentOutOfRangeException(paramName, 0815, messages.Where(_ => _.Length > 1).FirstOrDefault())
+              : new ArgumentOutOfRangeException(paramName, 0815, string.Empty);
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    internal static ArgumentOutOfRangeException ArgumentOutOfRange(string paramName, string[] messages, object value)
+    {
+        if (messages.Any())
+        {
+            throw new ArgumentOutOfRangeException(paramName, 0815, messages.Where(_ => _.Length > 1).FirstOrDefault());
+        }
+        else
+        {
+            throw new ArgumentOutOfRangeException(paramName, 0815, string.Empty);
+        }
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_conditional_expression_with_long_condition_and_short_paths_in_property()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    private object o;
+
+    public bool DoSomething => (o != null && (o.GetHashCode() == 42 || o.GetHashCode() == 0815)) ? true : false;
+}";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    private object o;
+
+    public bool DoSomething
+    {
+        get
+        {
+            if (o != null && (o.GetHashCode() == 42 || o.GetHashCode() == 0815))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_conditional_expression_with_long_condition_and_short_paths_in_property_getter()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    private object o;
+
+    public bool DoSomething
+    {
+        get => (o != null && (o.GetHashCode() == 42 || o.GetHashCode() == 0815)) ? true : false;
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    private object o;
+
+    public bool DoSomething
+    {
+        get
+        {
+            if (o != null && (o.GetHashCode() == 42 || o.GetHashCode() == 0815))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_conditional_expression_with_long_condition_and_short_paths_in_property_setter()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    private object o;
+    private bool doSomething;
+
+    public bool DoSomething
+    {
+        get => doSomething;
+        set => doSomething = (o != null && (o.GetHashCode() == 42 || o.GetHashCode() == 0815)) ? true : false;
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    private object o;
+    private bool doSomething;
+
+    public bool DoSomething
+    {
+        get => doSomething;
+        set
+        {
+            if (o != null && (o.GetHashCode() == 42 || o.GetHashCode() == 0815))
+            {
+                doSomething = true;
+            }
+            else
+            {
+                doSomething = false;
+            }
+        }
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_conditional_expression_with_short_condition_and_long_true_path_and_value_assignment()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    public bool DoSomething(List<object> items)
+    {
+        var result = items != null
+                     ? items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any()
+                     : false;
+
+        return result;
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    public bool DoSomething(List<object> items)
+    {
+        bool result;
+        if (items != null)
+        {
+            result = items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any();
+        }
+        else
+        {
+            result = false;
+        }
+
+        return result;
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        // TODO RKN: Conditional inside conditional
         protected override string GetDiagnosticId() => MiKo_3085_ConditionalExpressionTooLongAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3085_ConditionalExpressionTooLongAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3085_CodeFixProvider();
     }
 }

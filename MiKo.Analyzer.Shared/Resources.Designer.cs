@@ -11458,6 +11458,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Convert to &apos;if ... else ...&apos;.
+        /// </summary>
+        internal static string MiKo_3085_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3085_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Long conditional statements are hard to read and maintain. Keep them short for easy understanding at a glance, or refactor into if-else statements for clarity. This approach keeps your code clean and maintainable..
         /// </summary>
         internal static string MiKo_3085_Description {
