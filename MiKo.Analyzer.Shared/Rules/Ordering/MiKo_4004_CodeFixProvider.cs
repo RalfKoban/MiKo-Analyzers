@@ -60,8 +60,8 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         private static MethodDeclarationSyntax FindTargetMethod(Document document, BaseTypeDeclarationSyntax typeSyntax, MethodDeclarationSyntax disposeMethod)
         {
-            var methodSymbol = (IMethodSymbol)GetSymbol(document, disposeMethod);
-            var typeSymbol = (INamedTypeSymbol)GetSymbol(document, typeSyntax);
+            var methodSymbol = (IMethodSymbol)disposeMethod.GetSymbol(document);
+            var typeSymbol = (INamedTypeSymbol)typeSyntax.GetSymbol(document);
 
             var methods = typeSymbol.GetMethods(MethodKind.Ordinary).Except(methodSymbol);
             var method = methods.FirstOrDefault(_ => _.DeclaredAccessibility == methodSymbol.DeclaredAccessibility && _.IsStatic is false);

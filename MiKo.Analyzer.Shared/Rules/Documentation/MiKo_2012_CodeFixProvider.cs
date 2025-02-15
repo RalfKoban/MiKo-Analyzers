@@ -225,14 +225,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var text = t.GetTextWithoutTrivia();
 
-                if (text.IsNullOrWhiteSpace() && content.Count > 1 && IsSeeCref(content[1]))
+                if (text.IsNullOrWhiteSpace() && content.Count > 1 && content[1].IsSeeCref())
                 {
                     return Inheritdoc();
                 }
 
                 if (text.StartsWithAny(DefaultPhrases, StringComparison.OrdinalIgnoreCase))
                 {
-                    if (content.Count > 1 && IsSeeCref(content[1]))
+                    if (content.Count > 1 && content[1].IsSeeCref())
                     {
                         return Inheritdoc(GetSeeCref(content[1]));
                     }

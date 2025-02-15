@@ -27,29 +27,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Cref(Constants.XmlTag.See, type, member);
         }
 
-        protected static bool IsSeeCrefTaskResult(SyntaxNode value)
-        {
-            var type = SyntaxFactory.ParseTypeName("Task<TResult>");
-            var member = SyntaxFactory.ParseName(nameof(Task<object>.Result));
-
-            return IsSeeCref(value, type, member);
-        }
-
-        protected static bool IsSeeCrefTask(SyntaxNode value)
-        {
-            if (IsSeeCref(value, SyntaxFactory.ParseTypeName("Task")))
-            {
-                return true;
-            }
-
-            if (IsSeeCref(value, SyntaxFactory.ParseTypeName("Task<TResult>")))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
         protected sealed override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes)
         {
             foreach (var syntaxNode in syntaxNodes)

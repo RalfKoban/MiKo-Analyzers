@@ -21,7 +21,10 @@ using MiKoSolutions.Analyzers.Linguistics;
 #pragma warning disable CA1506
 namespace MiKoSolutions.Analyzers
 {
-    internal static class SyntaxNodeExtensions
+    /// <summary>
+    /// Provides extensions for <see cref="SyntaxNode"/>s.
+    /// </summary>
+    internal static partial class SyntaxNodeExtensions
     {
         internal static readonly SyntaxTrivia XmlCommentExterior = SyntaxFactory.DocumentationCommentExterior("/// ");
 

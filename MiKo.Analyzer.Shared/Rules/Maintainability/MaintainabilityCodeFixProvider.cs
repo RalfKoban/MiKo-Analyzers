@@ -111,8 +111,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        protected static bool IsNullable(Document document, IsPatternExpressionSyntax pattern) => GetSymbol(document, pattern.Expression) is ITypeSymbol typeSymbol && typeSymbol.IsNullable();
-
         protected static ExpressionSyntax LogicalNot(ExpressionSyntax expression) => SyntaxFactory.PrefixUnaryExpression(SyntaxKind.LogicalNotExpression, SyntaxFactory.ParenthesizedExpression(expression));
 
         protected static IsPatternExpressionSyntax UnaryNot(IsPatternExpressionSyntax expression) => expression.WithPattern(UnaryNot(expression.Pattern));
@@ -258,7 +256,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         case SyntaxKind.NullLiteralExpression:
                         {
-                            if (HasMinimumCSharpVersion(document, LanguageVersion.CSharp9))
+                            if (document.HasMinimumCSharpVersion(LanguageVersion.CSharp9))
                             {
                                 return UnaryNot(condition);
                             }
@@ -269,9 +267,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         case SyntaxKind.FalseLiteralExpression:
                         case SyntaxKind.TrueLiteralExpression:
                         {
-                            if (IsNullable(document, condition))
+                            if (condition.IsNullable(document))
                             {
-                                return HasMinimumCSharpVersion(document, LanguageVersion.CSharp9)
+                                return document.HasMinimumCSharpVersion(LanguageVersion.CSharp9)
                                        ? UnaryNot(condition)
                                        : LogicalNot(condition);
                             }
@@ -291,8 +289,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         {
                             var expression = condition.Expression;
 
-                            var semanticModel = GetSemanticModel(document);
-                            var type = expression.GetTypeSymbol(semanticModel);
+                            var type = expression.GetTypeSymbol(document);
 
                             if (type.IsNullable() is false)
                             {
@@ -303,7 +300,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         return condition.WithPattern(pattern.Pattern);
                     }
 
-                    return HasMinimumCSharpVersion(document, LanguageVersion.CSharp9)
+                    return document.HasMinimumCSharpVersion(LanguageVersion.CSharp9)
                            ? UnaryNot(condition)
                            : LogicalNot(condition);
                 }
