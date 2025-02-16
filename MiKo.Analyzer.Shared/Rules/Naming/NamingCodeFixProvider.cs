@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             // Produce a new solution that has all references to that symbol renamed, including the declaration.
             var originalSolution = document.Project.Solution;
 
-            var symbol = await GetSymbolAsync(document, syntax, cancellationToken).ConfigureAwait(false);
+            var symbol = await syntax.GetSymbolAsync(document, cancellationToken).ConfigureAwait(false);
 
             var newName = GetNewName(diagnostic, symbol);
 

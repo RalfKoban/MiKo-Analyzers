@@ -108,38 +108,6 @@ namespace MiKoSolutions.Analyzers.Rules
             return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, type, method);
         }
 
-        protected static SemanticModel GetSemanticModel(Document document)
-        {
-            if (document.TryGetSemanticModel(out var result))
-            {
-                return result;
-            }
-
-            return document.GetSemanticModelAsync(CancellationToken.None).GetAwaiter().GetResult();
-        }
-
-        protected static ISymbol GetSymbol(Document document, SyntaxNode syntax) => GetSymbolAsync(document, syntax, CancellationToken.None).GetAwaiter().GetResult();
-
-        protected static async Task<ISymbol> GetSymbolAsync(Document document, SyntaxNode syntax, CancellationToken cancellationToken)
-        {
-            if (cancellationToken.IsCancellationRequested)
-            {
-                return null;
-            }
-
-            if (document.TryGetSemanticModel(out var semanticModel) is false)
-            {
-                semanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
-            }
-
-            if (syntax is TypeSyntax typeSyntax)
-            {
-                return semanticModel?.GetTypeInfo(typeSyntax, cancellationToken).Type;
-            }
-
-            return semanticModel?.GetDeclaredSymbol(syntax, cancellationToken);
-        }
-
         protected static TSyntaxNode GetSyntaxWithLeadingSpaces<TSyntaxNode>(TSyntaxNode syntaxNode, int spaces) where TSyntaxNode : SyntaxNode
         {
             var syntax = syntaxNode.WithLeadingSpaces(spaces);
@@ -171,42 +139,6 @@ namespace MiKoSolutions.Analyzers.Rules
             return block.WithOpenBraceToken(block.OpenBraceToken.WithLeadingSpaces(spaces))
                         .WithStatements(block.Statements.Select(_ => GetUpdatedStatement(_, indentation)).ToSyntaxList())
                         .WithCloseBraceToken(block.CloseBraceToken.WithLeadingSpaces(spaces));
-        }
-
-        protected static bool HasMinimumCSharpVersion(Document document, LanguageVersion wantedVersion) => document.TryGetSyntaxTree(out var syntaxTree) && syntaxTree.HasMinimumCSharpVersion(wantedVersion);
-
-        protected static bool IsConst(Document document, ArgumentSyntax syntax)
-        {
-            var identifierName = syntax.Expression.GetName();
-
-            var method = syntax.GetEnclosingMethod(GetSemanticModel(document));
-            var type = method.FindContainingType();
-
-            var isConst = type.GetFields(identifierName).Any(_ => _.IsConst);
-
-            if (isConst)
-            {
-                // const value inside class
-                return true;
-            }
-
-            // local const variable
-            var isLocalConst = method.GetSyntax().DescendantNodes<LocalDeclarationStatementSyntax>(_ => _.IsConst)
-                                     .Any(_ => _.Declaration.Variables.Any(__ => __.GetName() == identifierName));
-
-            return isLocalConst;
-        }
-
-        protected static bool IsEnum(Document document, ArgumentSyntax syntax)
-        {
-            var expression = (MemberAccessExpressionSyntax)syntax.Expression;
-
-            if (GetSymbol(document, expression.Expression) is ITypeSymbol type)
-            {
-                return type.IsEnum();
-            }
-
-            return false;
         }
 
 //// ncrunch: rdi off
@@ -312,13 +244,13 @@ namespace MiKoSolutions.Analyzers.Rules
 
                         switch (token.Kind())
                         {
-                            case SyntaxKind.PlusToken when IsStringCreation(token.Parent):
+                            case SyntaxKind.PlusToken when token.Parent.IsStringCreation():
                             {
                                 // ignore string constructions via add
                                 continue;
                             }
 
-                            case SyntaxKind.CloseParenToken when token.Parent is ArgumentListSyntax l && IsStringCreation(l.Arguments.Last().Expression):
+                            case SyntaxKind.CloseParenToken when token.Parent is ArgumentListSyntax l && l.Arguments.Last().Expression.IsStringCreation():
                             {
                                 // ignore string constructions via add
                                 continue;
@@ -329,24 +261,6 @@ namespace MiKoSolutions.Analyzers.Rules
                     yield return nodeOrToken;
                 }
             }
-        }
-
-        private static bool IsStringCreation(SyntaxNode node)
-        {
-            if (node is BinaryExpressionSyntax b && b.IsKind(SyntaxKind.AddExpression))
-            {
-                if (b.Left.IsStringLiteral() || b.Right.IsStringLiteral())
-                {
-                    return true;
-                }
-
-                if (IsStringCreation(b.Left) || IsStringCreation(b.Right))
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
 
         private CodeAction CreateCodeFix(CodeFixContext context, SyntaxNode root, Diagnostic issue)

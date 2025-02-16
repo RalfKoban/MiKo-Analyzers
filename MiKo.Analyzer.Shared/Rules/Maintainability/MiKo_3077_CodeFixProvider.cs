@@ -67,7 +67,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static EqualsValueClauseSyntax CreateInitializer(Document document, TypeSyntax typeSyntax)
         {
-            var type = typeSyntax.GetTypeSymbol(GetSemanticModel(document));
+            var type = typeSyntax.GetTypeSymbol(document);
 
             var memberAccess = SimpleMemberAccess(type.Name, type.GetFields()[0].Name);
 

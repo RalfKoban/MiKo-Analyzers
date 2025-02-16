@@ -173,10 +173,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (declarationType is IdentifierNameSyntax identifier && identifier.Identifier.ValueText == "var")
             {
-                var type = declarationType.GetTypeSymbol(GetSemanticModel(document));
+                var type = declarationType.GetTypeSymbol(document);
 
                 return TypeMapping.TryGetValue(type.SpecialType, out var kind)
-                       ? SyntaxFactory.PredefinedType(SyntaxFactory.Token(kind))
+                       ? PredefinedType(kind)
                        : SyntaxFactory.ParseTypeName(type.Name);
             }
 
