@@ -46,6 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 switch (conditional.Parent)
                 {
                     case ArrowExpressionClauseSyntax clause: return UpdateArrowExpressionClause(root, conditional, clause);
+                    case ArgumentSyntax argument: return UpdateArgument(document, root, conditional, argument);
                     case AssignmentExpressionSyntax assignment: return UpdateAssignment(root, conditional, assignment);
                     case EqualsValueClauseSyntax clause: return UpdateEqualsValueClause(document, root, conditional, clause);
                     case ReturnStatementSyntax statement: return UpdateReturn(root, conditional, statement);
@@ -60,11 +61,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var ifStatement = ConvertToIfStatement(conditional, SyntaxFactory.ReturnStatement);
 
+            return UpdateArrowExpressionClause(root, arrowClause, SyntaxFactory.Block(ifStatement));
+        }
+
+        private static SyntaxNode UpdateArrowExpressionClause(SyntaxNode root, ArrowExpressionClauseSyntax arrowClause, BlockSyntax block)
+        {
             switch (arrowClause.Parent)
             {
                 case MethodDeclarationSyntax method:
                 {
-                    var updatedMethod = method.WithBody(SyntaxFactory.Block(ifStatement))
+                    var updatedMethod = method.WithBody(block)
                                               .WithExpressionBody(null)
                                               .WithSemicolonToken(default);
 
@@ -73,7 +79,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 case PropertyDeclarationSyntax property:
                 {
-                    var getter = SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration, SyntaxFactory.Block(ifStatement));
+                    var getter = SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration, block);
                     var updatedProperty = property.WithAccessorList(SyntaxFactory.AccessorList(getter.ToSyntaxList()))
                                                   .WithExpressionBody(null)
                                                   .WithSemicolonToken(default);
@@ -83,7 +89,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 case AccessorDeclarationSyntax accessor:
                 {
-                    var updatedAccessor = accessor.WithBody(SyntaxFactory.Block(ifStatement))
+                    var updatedAccessor = accessor.WithBody(block)
                                                   .WithExpressionBody(null)
                                                   .WithSemicolonToken(default);
 
@@ -93,6 +99,54 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 default:
                     return root;
             }
+        }
+
+        private static SyntaxNode UpdateArgument(Document document, SyntaxNode root, ConditionalExpressionSyntax conditional, ArgumentSyntax argument)
+        {
+            if (argument.Parent is ArgumentListSyntax argumentList && argumentList.Parent is InvocationExpressionSyntax invocation)
+            {
+                var symbol = invocation.GetSymbol(document);
+
+                if (symbol is IMethodSymbol methodSymbol)
+                {
+                    var argumentIndex = argumentList.Arguments.IndexOf(argument);
+                    var parameterSymbol = methodSymbol.Parameters[argumentIndex];
+
+                    var typeSyntax = GetTypeSyntax(parameterSymbol.Type);
+                    var variableName = parameterSymbol.Name;
+
+                    var declarator = SyntaxFactory.VariableDeclarator(variableName);
+                    var declaration = SyntaxFactory.VariableDeclaration(typeSyntax, declarator.ToSeparatedSyntaxList());
+
+                    var ifStatement = ConvertToIfStatement(conditional, trueCase => AssignmentStatement(declarator, trueCase), falseCase => AssignmentStatement(declarator, falseCase));
+
+                    var updatedInvocation = invocation.ReplaceNode(argument, Argument(variableName).WithTriviaFrom(argument));
+
+                    switch (invocation.Parent)
+                    {
+                        case ReturnStatementSyntax returnStatement:
+                        {
+                            var localDeclaration = SyntaxFactory.LocalDeclarationStatement(declaration).WithLeadingTriviaFrom(returnStatement);
+                            var updatedReturnStatement = returnStatement.ReplaceNode(invocation, updatedInvocation);
+
+                            return root.ReplaceNode(returnStatement, new SyntaxNode[] { localDeclaration, ifStatement, updatedReturnStatement });
+                        }
+
+                        case ArrowExpressionClauseSyntax arrowClause:
+                        {
+                            var localDeclaration = SyntaxFactory.LocalDeclarationStatement(declaration);
+
+                            var statement = arrowClause.HasReturnValue()
+                                            ? (StatementSyntax)SyntaxFactory.ReturnStatement(updatedInvocation)
+                                            : SyntaxFactory.ExpressionStatement(updatedInvocation);
+
+                            return UpdateArrowExpressionClause(root, arrowClause, SyntaxFactory.Block(localDeclaration, ifStatement, statement));
+                        }
+                    }
+                }
+            }
+
+            return root;
         }
 
         private static SyntaxNode UpdateAssignment(SyntaxNode root, ConditionalExpressionSyntax conditional, AssignmentExpressionSyntax assignment)
@@ -184,16 +238,26 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (declarationType is IdentifierNameSyntax identifier && identifier.Identifier.ValueText == "var")
             {
-                var type = declarationType.GetTypeSymbol(document);
-
-                var updatedType = TypeMapping.TryGetValue(type.SpecialType, out var kind)
-                                  ? PredefinedType(kind)
-                                  : SyntaxFactory.ParseTypeName(type.Name);
+                var updatedType = GetTypeSyntax(declarationType.GetTypeSymbol(document));
 
                 return updatedType.WithTriviaFrom(declarationType);
             }
 
             return declarationType;
+        }
+
+        private static TypeSyntax GetTypeSyntax(ITypeSymbol type)
+        {
+            if (TypeMapping.TryGetValue(type.SpecialType, out var kind))
+            {
+                return PredefinedType(kind);
+            }
+
+            var name = type.IsGeneric()
+                       ? type.FullyQualifiedName().GetNameOnlyPart()
+                       : type.Name;
+
+            return SyntaxFactory.ParseTypeName(name);
         }
     }
 }

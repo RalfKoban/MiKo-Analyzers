@@ -1581,6 +1581,21 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool HasPrimaryConstructor(this RecordDeclarationSyntax value) => value.ParameterList != null;
 
+        internal static bool HasReturnValue(this ArrowExpressionClauseSyntax value) => value?.Parent is BaseMethodDeclarationSyntax method && method.HasReturnValue();
+
+        internal static bool HasReturnValue(this BaseMethodDeclarationSyntax value)
+        {
+            switch (value)
+            {
+                case MethodDeclarationSyntax m: return m.ReturnType?.IsVoid() is false;
+                case OperatorDeclarationSyntax o: return o.ReturnType?.IsVoid() is false;
+                case ConversionOperatorDeclarationSyntax c: return c.Type?.IsVoid() is false;
+
+                default:
+                    return false;
+            }
+        }
+
         internal static TRoot InsertNodeAfter<TRoot>(this TRoot value, SyntaxNode nodeInList, SyntaxNode newNode) where TRoot : SyntaxNode
         {
             return value.InsertNodesAfter(nodeInList, new[] { newNode });

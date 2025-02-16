@@ -681,11 +681,12 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        [Test, Ignore("Just for now")]
+        [Test]
         public void Code_gets_fixed_for_conditional_expression_as_parameter_assignment_in_method_expression_body_with_return_value()
         {
             const string OriginalCode = @"
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 public class TestMe
@@ -694,20 +695,22 @@ public class TestMe
                                                                    ? items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42)
                                                                    : Enumerable.Empty<int>());
 
-    private void DoSomethingCore(List<int> numbers)
+    private bool DoSomethingCore(IEnumerable<int> numbers)
     {
+        return numbers.Any();
     }
 }";
 
             const string FixedCode = @"
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 public class TestMe
 {
     public bool DoSomething(List<object> items)
     {
-        bool numbers;
+        IEnumerable<int> numbers;
         if (items != null)
         {
             numbers = items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42);
@@ -720,19 +723,21 @@ public class TestMe
         return DoSomethingCore(numbers);
     }
 
-    private void DoSomethingCore(List<int> numbers)
+    private bool DoSomethingCore(IEnumerable<int> numbers)
     {
+        return numbers.Any();
     }
 }";
 
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        [Test, Ignore("Just for now")]
+        [Test]
         public void Code_gets_fixed_for_conditional_expression_as_parameter_assignment_in_method_expression_body_without_return_value()
         {
             const string OriginalCode = @"
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 public class TestMe
@@ -741,20 +746,21 @@ public class TestMe
                                                                    ? items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42)
                                                                    : Enumerable.Empty<int>());
 
-    private void DoSomethingCore(List<int> numbers)
+    private void DoSomethingCore(IEnumerable<int> numbers)
     {
     }
 }";
 
             const string FixedCode = @"
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 public class TestMe
 {
     public void DoSomething(List<object> items)
     {
-        bool numbers;
+        IEnumerable<int> numbers;
         if (items != null)
         {
             numbers = items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42);
@@ -767,7 +773,7 @@ public class TestMe
         DoSomethingCore(numbers);
     }
 
-    private void DoSomethingCore(List<int> numbers)
+    private void DoSomethingCore(IEnumerable<int> numbers)
     {
     }
 }";
@@ -775,11 +781,12 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        [Test, Ignore("Just for now")]
+        [Test]
         public void Code_gets_fixed_for_conditional_expression_as_parameter_assignment_in_method_body()
         {
             const string OriginalCode = @"
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 public class TestMe
@@ -791,20 +798,22 @@ public class TestMe
                                : Enumerable.Empty<int>());
     }
 
-    private void DoSomethingCore(List<int> numbers)
+    private bool DoSomethingCore(IEnumerable<int> numbers)
     {
+        return numbers.Any();
     }
 }";
 
             const string FixedCode = @"
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 public class TestMe
 {
     public bool DoSomething(List<object> items)
     {
-        bool numbers;
+        IEnumerable<int> numbers;
         if (items != null)
         {
             numbers = items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42);
@@ -817,15 +826,17 @@ public class TestMe
         return DoSomethingCore(numbers);
     }
 
-    private void DoSomethingCore(List<int> numbers)
+    private bool DoSomethingCore(IEnumerable<int> numbers)
     {
+        return numbers.Any();
     }
 }";
 
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        // TODO RKN: Conditional as parameter
+        // TODO RKN: Conditional as parameter for array access
+        // TODO RKN: Conditional as parameter for list access
         // TODO RKN: Conditional inside conditional
         // TODO RKN: Conditional within initializer
         protected override string GetDiagnosticId() => MiKo_3085_ConditionalExpressionTooLongAnalyzer.Id;
