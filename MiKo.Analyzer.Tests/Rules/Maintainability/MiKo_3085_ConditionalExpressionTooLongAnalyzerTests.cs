@@ -418,7 +418,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_conditional_expression_with_long_condition_and_short_paths_in_property()
+        public void Code_gets_fixed_for_conditional_expression_in_property()
         {
             const string OriginalCode = @"
 using System;
@@ -457,7 +457,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_conditional_expression_with_long_condition_and_short_paths_in_property_getter()
+        public void Code_gets_fixed_for_conditional_expression_in_property_getter()
         {
             const string OriginalCode = @"
 using System;
@@ -499,7 +499,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_conditional_expression_with_long_condition_and_short_paths_in_property_setter()
+        public void Code_gets_fixed_for_conditional_expression_in_property_setter()
         {
             const string OriginalCode = @"
 using System;
@@ -545,7 +545,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_conditional_expression_with_short_condition_and_long_true_path_and_value_assignment()
+        public void Code_gets_fixed_for_conditional_expression_with_var_variable_assignment()
         {
             const string OriginalCode = @"
 using System;
@@ -588,7 +588,246 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_conditional_expression_with_typed_variable_assignment()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    public bool DoSomething(List<object> items)
+    {
+        bool result = items != null
+                      ? items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any()
+                      : false;
+
+        return result;
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    public bool DoSomething(List<object> items)
+    {
+        bool result;
+        if (items != null)
+        {
+            result = items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any();
+        }
+        else
+        {
+            result = false;
+        }
+
+        return result;
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_conditional_expression_with_typed_simple_variable_assignment()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    public bool DoSomething(List<object> items)
+    {
+        bool result;
+        result = false;
+
+        result = items != null
+                 ? items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any()
+                 : false;
+
+        return result;
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    public bool DoSomething(List<object> items)
+    {
+        bool result;
+        result = false;
+
+        if (items != null)
+        {
+            result = items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any();
+        }
+        else
+        {
+            result = false;
+        }
+
+        return result;
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test, Ignore("Just for now")]
+        public void Code_gets_fixed_for_conditional_expression_as_parameter_assignment_in_method_expression_body_with_return_value()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    public bool DoSomething(List<object> items) => DoSomethingCore(items != null
+                                                                   ? items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42)
+                                                                   : Enumerable.Empty<int>());
+
+    private void DoSomethingCore(List<int> numbers)
+    {
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    public bool DoSomething(List<object> items)
+    {
+        bool numbers;
+        if (items != null)
+        {
+            numbers = items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42);
+        }
+        else
+        {
+            numbers = Enumerable.Empty<int>();
+        }
+
+        return DoSomethingCore(numbers);
+    }
+
+    private void DoSomethingCore(List<int> numbers)
+    {
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test, Ignore("Just for now")]
+        public void Code_gets_fixed_for_conditional_expression_as_parameter_assignment_in_method_expression_body_without_return_value()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    public void DoSomething(List<object> items) => DoSomethingCore(items != null
+                                                                   ? items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42)
+                                                                   : Enumerable.Empty<int>());
+
+    private void DoSomethingCore(List<int> numbers)
+    {
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    public void DoSomething(List<object> items)
+    {
+        bool numbers;
+        if (items != null)
+        {
+            numbers = items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42);
+        }
+        else
+        {
+            numbers = Enumerable.Empty<int>();
+        }
+
+        DoSomethingCore(numbers);
+    }
+
+    private void DoSomethingCore(List<int> numbers)
+    {
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test, Ignore("Just for now")]
+        public void Code_gets_fixed_for_conditional_expression_as_parameter_assignment_in_method_body()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    public bool DoSomething(List<object> items)
+    {
+        return DoSomethingCore(items != null
+                               ? items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42)
+                               : Enumerable.Empty<int>());
+    }
+
+    private void DoSomethingCore(List<int> numbers)
+    {
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    public bool DoSomething(List<object> items)
+    {
+        bool numbers;
+        if (items != null)
+        {
+            numbers = items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42);
+        }
+        else
+        {
+            numbers = Enumerable.Empty<int>();
+        }
+
+        return DoSomethingCore(numbers);
+    }
+
+    private void DoSomethingCore(List<int> numbers)
+    {
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        // TODO RKN: Conditional as parameter
         // TODO RKN: Conditional inside conditional
+        // TODO RKN: Conditional within initializer
         protected override string GetDiagnosticId() => MiKo_3085_ConditionalExpressionTooLongAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3085_ConditionalExpressionTooLongAnalyzer();

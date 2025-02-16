@@ -97,18 +97,29 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static SyntaxNode UpdateAssignment(SyntaxNode root, ConditionalExpressionSyntax conditional, AssignmentExpressionSyntax assignment)
         {
-            if (assignment.Parent is ArrowExpressionClauseSyntax clause && clause.Parent is AccessorDeclarationSyntax accessor)
+            switch (assignment.Parent)
             {
-                var ifStatement = ConvertToIfStatement(conditional, trueCase => AssignmentStatement(assignment, trueCase), falseCase => AssignmentStatement(assignment, falseCase));
+                case ArrowExpressionClauseSyntax clause when clause.Parent is AccessorDeclarationSyntax accessor:
+                {
+                    var ifStatement = ConvertToIfStatement(conditional, trueCase => AssignmentStatement(assignment, trueCase), falseCase => AssignmentStatement(assignment, falseCase));
 
-                var updatedAccessor = accessor.WithBody(SyntaxFactory.Block(ifStatement))
-                                              .WithExpressionBody(null)
-                                              .WithSemicolonToken(default);
+                    var updatedAccessor = accessor.WithBody(SyntaxFactory.Block(ifStatement))
+                                                  .WithExpressionBody(null)
+                                                  .WithSemicolonToken(default);
 
-                return root.ReplaceNode(accessor, updatedAccessor);
+                    return root.ReplaceNode(accessor, updatedAccessor);
+                }
+
+                case ExpressionStatementSyntax expression:
+                {
+                    var ifStatement = ConvertToIfStatement(conditional, trueCase => AssignmentStatement(assignment, trueCase), falseCase => AssignmentStatement(assignment, falseCase));
+
+                    return root.ReplaceNode(expression, ifStatement.WithTriviaFrom(expression));
+                }
+
+                default:
+                    return root;
             }
-
-            return root;
         }
 
         private static SyntaxNode UpdateEqualsValueClause(Document document, SyntaxNode root, ConditionalExpressionSyntax conditional, EqualsValueClauseSyntax clause)
