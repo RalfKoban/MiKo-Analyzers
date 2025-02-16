@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var o = (ObjectCreationExpressionSyntax)syntax;
 
-            var problematicNode = o.GetExceptionSwallowingNode(() => GetSemanticModel(document));
+            var problematicNode = o.GetExceptionSwallowingNode(() => document.GetSemanticModel());
 
             var replacements = CreateReplacements(o.ArgumentList, problematicNode);
 

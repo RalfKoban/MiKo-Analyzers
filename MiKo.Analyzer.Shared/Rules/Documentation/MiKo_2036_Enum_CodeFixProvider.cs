@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<XmlNodeSyntax> GetDefaultComment(Document document, TypeSyntax returnType)
         {
-            var symbol = GetSymbol(document, returnType);
+            var symbol = returnType.GetSymbol(document);
 
             if (symbol is INamedTypeSymbol typeSymbol && typeSymbol.IsEnum())
             {

@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
             var baseType = baseList.Types.First();
 
-            var type = baseType.GetTypeSymbol(GetSemanticModel(document));
+            var type = baseType.GetTypeSymbol(document);
 
             var types = new List<BaseTypeSyntax>();
 

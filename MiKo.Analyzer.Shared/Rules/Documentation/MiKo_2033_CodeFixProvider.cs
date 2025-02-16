@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (content.Count > 5)
             {
                 // we might have an almost complete string
-                if (content[0] is XmlTextSyntax startText && IsSeeCrefTaskResult(content[1]))
+                if (content[0] is XmlTextSyntax startText && content[1].IsSeeCrefTaskResult())
                 {
                     var newComment = ReplaceText(comment, startText, "representing", "that represents");
 
@@ -61,7 +61,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         newComment = ReplaceText(newComment, continueText1, "returning", "that returns");
                     }
 
-                    if (IsSeeCref(newComment.Content[3], "string") && newComment.Content[4] is XmlTextSyntax continueText2)
+                    if (newComment.Content[3].IsSeeCref("string") && newComment.Content[4] is XmlTextSyntax continueText2)
                     {
                         newComment = ReplaceText(newComment, continueText2, TextParts, "that contains");
                     }
@@ -77,7 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
             else if (content.Count == 5)
             {
-                if (content[0] is XmlTextSyntax start && IsSeeCref(content[1]) && content[2] is XmlTextSyntax middle && IsSeeCref(content[3]) && content[4] is XmlTextSyntax)
+                if (content[0] is XmlTextSyntax start && content[1].IsSeeCref() && content[2] is XmlTextSyntax middle && content[3].IsSeeCref() && content[4] is XmlTextSyntax)
                 {
                     // seems like some almost correct text
                     return comment.ReplaceNodes(
@@ -113,7 +113,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             // we might have an almost complete string
-            if (contents.Count >= 3 && contents[0] is XmlTextSyntax startText && IsSeeCref(contents[1], "string") && contents[2] is XmlTextSyntax continueText)
+            if (contents.Count >= 3 && contents[0] is XmlTextSyntax startText && contents[1].IsSeeCref("string") && contents[2] is XmlTextSyntax continueText)
             {
                 if (startText.TextTokens.Any(_ => _.ValueText.AsSpan().TrimStart().Equals(commentStart, StringComparison.Ordinal)))
                 {

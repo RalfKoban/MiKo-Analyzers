@@ -87,8 +87,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "NotBeNull": return AssertThat(expression, Is("Not", "Null"), arguments, 0, removeNameColon: true);
                 case "BeEmpty":
                 {
-                    var semanticModel = GetSemanticModel(document);
-                    var type = originalExpression.GetTypeSymbol(semanticModel);
+                    var type = originalExpression.GetTypeSymbol(document);
 
                     if (type != null)
                     {
@@ -103,8 +102,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 case "NotBeEmpty":
                 {
-                    var semanticModel = GetSemanticModel(document);
-                    var type = originalExpression.GetTypeSymbol(semanticModel);
+                    var type = originalExpression.GetTypeSymbol(document);
 
                     if (type != null)
                     {
@@ -172,8 +170,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         var argument = arguments[0];
 
-                        var semanticModel = GetSemanticModel(document);
-                        var type = argument.GetTypeSymbol(semanticModel);
+                        var type = argument.GetTypeSymbol(document);
 
                         if (type != null)
                         {
@@ -205,8 +202,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         var argument = arguments[0];
 
-                        var semanticModel = GetSemanticModel(document);
-                        var type = argument.GetTypeSymbol(semanticModel);
+                        var type = argument.GetTypeSymbol(document);
 
                         if (type != null)
                         {
@@ -276,8 +272,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var argument = arguments.First();
 
-                    var semanticModel = GetSemanticModel(document);
-                    var type = argument.GetTypeSymbol(semanticModel);
+                    var type = argument.GetTypeSymbol(document);
 
                     if (type != null)
                     {
@@ -325,8 +320,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (argument.Expression is SimpleLambdaExpressionSyntax)
                 {
                     // we need to find out the type
-                    var semanticModel = GetSemanticModel(document);
-                    var type = originalExpression.GetTypeSymbol(semanticModel);
+                    var type = originalExpression.GetTypeSymbol(document);
 
                     if (type != null && type.TryGetGenericArgumentCount(out var genericArgumentsCount))
                     {

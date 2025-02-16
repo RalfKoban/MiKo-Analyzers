@@ -61,7 +61,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             // it might be a struct or an an enum, so let's check that
-            var type = typeSyntax.GetTypeSymbol(GetSemanticModel(document));
+            var type = typeSyntax.GetTypeSymbol(document);
 
             if (type.IsValueType)
             {
