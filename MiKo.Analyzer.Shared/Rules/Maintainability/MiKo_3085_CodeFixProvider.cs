@@ -117,9 +117,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var typeSyntax = GetTypeSyntax(declaration, document);
 
-                var updatedDeclarator = SyntaxFactory.VariableDeclarator(declarator.Identifier);
-                var updatedDeclaration = SyntaxFactory.VariableDeclaration(typeSyntax, updatedDeclarator.ToSeparatedSyntaxList());
-                var updatedLocalDeclaration = SyntaxFactory.LocalDeclarationStatement(updatedDeclaration);
+                var updatedDeclarator = SyntaxFactory.VariableDeclarator(declarator.Identifier).WithTriviaFrom(declarator);
+                var updatedDeclaration = SyntaxFactory.VariableDeclaration(typeSyntax, updatedDeclarator.ToSeparatedSyntaxList()).WithTriviaFrom(declaration);
+                var updatedLocalDeclaration = SyntaxFactory.LocalDeclarationStatement(updatedDeclaration).WithTriviaFrom(localDeclaration);
 
                 var ifStatement = ConvertToIfStatement(conditional, trueCase => AssignmentStatement(declarator, trueCase), falseCase => AssignmentStatement(declarator, falseCase));
 
@@ -175,9 +175,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var type = declarationType.GetTypeSymbol(document);
 
-                return TypeMapping.TryGetValue(type.SpecialType, out var kind)
-                       ? PredefinedType(kind)
-                       : SyntaxFactory.ParseTypeName(type.Name);
+                var updatedType = TypeMapping.TryGetValue(type.SpecialType, out var kind)
+                                  ? PredefinedType(kind)
+                                  : SyntaxFactory.ParseTypeName(type.Name);
+
+                return updatedType.WithTriviaFrom(declarationType);
             }
 
             return declarationType;
