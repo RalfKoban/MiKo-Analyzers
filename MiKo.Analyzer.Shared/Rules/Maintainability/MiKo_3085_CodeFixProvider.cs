@@ -49,6 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     case ArgumentSyntax argument: return UpdateArgument(document, root, conditional, argument);
                     case AssignmentExpressionSyntax assignment: return UpdateAssignment(root, conditional, assignment);
                     case EqualsValueClauseSyntax clause: return UpdateEqualsValueClause(document, root, conditional, clause);
+                    case ParenthesizedExpressionSyntax parenthesized: return UpdateParenthesized(root, conditional, parenthesized);
                     case ReturnStatementSyntax statement: return UpdateReturn(root, conditional, statement);
                     case ThrowStatementSyntax statement: return UpdateThrow(root, conditional, statement);
                 }
@@ -204,6 +205,35 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName(declarator.Identifier), expression));
         }
 
+        private static SyntaxNode UpdateParenthesized(SyntaxNode root, ConditionalExpressionSyntax conditional, ParenthesizedExpressionSyntax parenthesized)
+        {
+            if (parenthesized.Parent is BinaryExpressionSyntax binary)
+            {
+                switch (binary.Parent)
+                {
+                    case ReturnStatementSyntax returnStatement:
+                        return ReplaceReturn(returnStatement);
+
+                    case ParenthesizedExpressionSyntax redundant when redundant.Parent is ReturnStatementSyntax returnStatement:
+                        return ReplaceReturn(returnStatement);
+                }
+            }
+
+            return root;
+
+            SyntaxNode ReplaceReturn(ReturnStatementSyntax returnStatement)
+            {
+                var ifStatement = ConvertToIfStatement(conditional, SyntaxFactory.ReturnStatement);
+
+                if (ifStatement.Statement is BlockSyntax block && block.Statements.First() is ReturnStatementSyntax leftReturn && leftReturn.Expression is ExpressionSyntax leftExpression)
+                {
+                    ifStatement = ifStatement.ReplaceNode(leftReturn, leftReturn.WithExpression(binary.WithLeft(leftExpression)));
+                }
+
+                return root.ReplaceNode(returnStatement, ifStatement);
+            }
+        }
+
         private static SyntaxNode UpdateReturn(SyntaxNode root, ConditionalExpressionSyntax conditional, ReturnStatementSyntax returnStatement)
         {
             var ifStatement = ConvertToIfStatement(conditional, SyntaxFactory.ReturnStatement);
@@ -218,32 +248,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return root.ReplaceNode(throwStatement, ifStatement);
         }
 
-        private static IfStatementSyntax ConvertToIfStatement(ConditionalExpressionSyntax conditional, Func<ExpressionSyntax, StatementSyntax> statementCallback)
+        private static IfStatementSyntax ConvertToIfStatement(ConditionalExpressionSyntax conditional, Func<ExpressionSyntax, StatementSyntax> callback)
         {
-            return ConvertToIfStatement(conditional, statementCallback, statementCallback);
+            return ConvertToIfStatement(conditional, callback, callback);
         }
 
-        private static IfStatementSyntax ConvertToIfStatement(ConditionalExpressionSyntax conditional, Func<ExpressionSyntax, StatementSyntax> trueStatementCallback, Func<ExpressionSyntax, StatementSyntax> falseStatementCallback)
+        private static IfStatementSyntax ConvertToIfStatement(ConditionalExpressionSyntax conditional, Func<ExpressionSyntax, StatementSyntax> trueCallback, Func<ExpressionSyntax, StatementSyntax> falseCallback)
         {
             var condition = conditional.Condition.WithoutParenthesis().WithoutTrivia();
-            var ifBlock = SyntaxFactory.Block(trueStatementCallback(conditional.WhenTrue));
-            var elseBlock = SyntaxFactory.Block(falseStatementCallback(conditional.WhenFalse));
+            var ifBlock = SyntaxFactory.Block(trueCallback(conditional.WhenTrue));
+            var elseBlock = SyntaxFactory.Block(falseCallback(conditional.WhenFalse));
 
             return SyntaxFactory.IfStatement(condition, ifBlock, SyntaxFactory.ElseClause(elseBlock));
-        }
-
-        private static TypeSyntax GetTypeSyntax(VariableDeclarationSyntax declaration, Document document)
-        {
-            var declarationType = declaration.Type;
-
-            if (declarationType is IdentifierNameSyntax identifier && identifier.Identifier.ValueText == "var")
-            {
-                var updatedType = GetTypeSyntax(declarationType.GetTypeSymbol(document));
-
-                return updatedType.WithTriviaFrom(declarationType);
-            }
-
-            return declarationType;
         }
 
         private static TypeSyntax GetTypeSyntax(ITypeSymbol type)
@@ -258,6 +274,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                        : type.Name;
 
             return SyntaxFactory.ParseTypeName(name);
+        }
+
+        private static TypeSyntax GetTypeSyntax(VariableDeclarationSyntax declaration, Document document)
+        {
+            var declarationType = declaration.Type;
+
+            if (declarationType is IdentifierNameSyntax identifier && identifier.Identifier.ValueText == "var")
+            {
+                var updatedType = GetTypeSyntax(declarationType.GetTypeSymbol(document));
+
+                return updatedType.WithTriviaFrom(declarationType);
+            }
+
+            return declarationType;
         }
     }
 }

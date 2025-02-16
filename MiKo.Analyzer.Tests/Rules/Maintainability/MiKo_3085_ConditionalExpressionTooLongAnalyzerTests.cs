@@ -782,53 +782,138 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_conditional_expression_as_parameter_assignment_in_method_body()
+        public void Code_gets_fixed_for_formatted_conditional_expression_in_unchecked_block()
         {
             const string OriginalCode = @"
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 public class TestMe
 {
-    public bool DoSomething(List<object> items)
-    {
-        return DoSomethingCore(items != null
-                               ? items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42)
-                               : Enumerable.Empty<int>());
-    }
+    public string SomeVeryVeryVeryLongDescription { get; set; }
 
-    private bool DoSomethingCore(IEnumerable<int> numbers)
+    public int GetHashCode(TestMe obj)
     {
-        return numbers.Any();
+        unchecked
+        {
+            return (obj.SomeVeryVeryVeryLongDescription != null
+                    ? StringComparer.GetHashCode(obj.SomeVeryVeryVeryLongDescription)
+                    : 0)
+                        * 397;
+        }
     }
 }";
 
             const string FixedCode = @"
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 public class TestMe
 {
-    public bool DoSomething(List<object> items)
-    {
-        IEnumerable<int> numbers;
-        if (items != null)
-        {
-            numbers = items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42);
-        }
-        else
-        {
-            numbers = Enumerable.Empty<int>();
-        }
+    public string SomeVeryVeryVeryLongDescription { get; set; }
 
-        return DoSomethingCore(numbers);
+    public int GetHashCode(TestMe obj)
+    {
+        unchecked
+        {
+            if (obj.SomeVeryVeryVeryLongDescription != null)
+            {
+                return StringComparer.GetHashCode(obj.SomeVeryVeryVeryLongDescription)
+                        * 397;
+            }
+            else
+            {
+                return 0;
+            }
+        }
     }
+}";
 
-    private bool DoSomethingCore(IEnumerable<int> numbers)
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_conditional_expression_in_unchecked_block()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public string SomeVeryVeryVeryLongDescription { get; set; }
+
+    public int GetHashCode(TestMe obj)
     {
-        return numbers.Any();
+        unchecked
+        {
+            return (obj.SomeVeryVeryVeryLongDescription != null ? StringComparer.GetHashCode(obj.SomeVeryVeryVeryLongDescription) : 0) * 397;
+        }
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public string SomeVeryVeryVeryLongDescription { get; set; }
+
+    public int GetHashCode(TestMe obj)
+    {
+        unchecked
+        {
+            if (obj.SomeVeryVeryVeryLongDescription != null)
+            {
+                return StringComparer.GetHashCode(obj.SomeVeryVeryVeryLongDescription) * 397;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_conditional_expression_in_unchecked_block_with_redundant_parenthesized_expression()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public string SomeVeryVeryVeryLongDescription { get; set; }
+
+    public int GetHashCode(TestMe obj)
+    {
+        unchecked
+        {
+            return ((obj.SomeVeryVeryVeryLongDescription != null ? StringComparer.GetHashCode(obj.SomeVeryVeryVeryLongDescription) : 0) * 397);
+        }
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public string SomeVeryVeryVeryLongDescription { get; set; }
+
+    public int GetHashCode(TestMe obj)
+    {
+        unchecked
+        {
+            if (obj.SomeVeryVeryVeryLongDescription != null)
+            {
+                return StringComparer.GetHashCode(obj.SomeVeryVeryVeryLongDescription) * 397;
+            }
+            else
+            {
+                return 0;
+            }
+        }
     }
 }";
 
