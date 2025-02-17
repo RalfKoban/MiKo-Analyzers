@@ -302,6 +302,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static TypeSyntax GetTypeSyntax(ITypeSymbol type)
         {
+            if (type is IArrayTypeSymbol arrayTypeSymbol)
+            {
+                var elementType = GetTypeSyntax(arrayTypeSymbol.ElementType);
+
+                ExpressionSyntax size = SyntaxFactory.OmittedArraySizeExpression(); // needs to be the omitted size as otherwise it is not working to create an array with rank 1 (such as 'int[]')
+
+                return SyntaxFactory.ArrayType(elementType, SyntaxFactory.ArrayRankSpecifier(size.ToSeparatedSyntaxList()).ToSyntaxList());
+            }
+
             if (TypeMapping.TryGetValue(type.SpecialType, out var kind))
             {
                 return PredefinedType(kind);

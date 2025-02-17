@@ -200,7 +200,7 @@ public class TestMe
     public bool DoSomething(List<object> items)
     {
         return items != null
-                ? items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any()
+                ? items.Select(item => item.GetHashCode()).Where(hashCode => hashCode >= 42).Any()
                 : false;
     }
 }");
@@ -216,7 +216,7 @@ public class TestMe
     {
         return items == null
                 ? false
-                : items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any();
+                : items.Select(item => item.GetHashCode()).Where(hashCode => hashCode >= 42).Any();
     }
 }");
 
@@ -276,7 +276,7 @@ public class TestMe
     public bool DoSomething(List<object> items)
     {
         return items != null
-                ? items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any()
+                ? items.Select(item => item.GetHashCode()).Where(hashCode => hashCode >= 42).Any()
                 : false;
     }
 }";
@@ -291,7 +291,7 @@ public class TestMe
     {
         if (items != null)
         {
-            return items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any();
+            return items.Select(item => item.GetHashCode()).Where(hashCode => hashCode >= 42).Any();
         }
         else
         {
@@ -316,7 +316,7 @@ public class TestMe
     {
         return items == null
                 ? false
-                : items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any();
+                : items.Select(item => item.GetHashCode()).Where(hashCode => hashCode >= 42).Any();
     }
 }";
 
@@ -334,7 +334,7 @@ public class TestMe
         }
         else
         {
-            return items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any();
+            return items.Select(item => item.GetHashCode()).Where(hashCode => hashCode >= 42).Any();
         }
     }
 }";
@@ -664,6 +664,7 @@ public class TestMe
         {
             const string OriginalCode = @"
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 public class TestMe
@@ -671,7 +672,7 @@ public class TestMe
     public bool DoSomething(List<object> items)
     {
         var result = items != null
-                     ? items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any()
+                     ? items.Select(item => item.GetHashCode()).Where(hashCode => hashCode >= 42).Any()
                      : false;
 
         return result;
@@ -680,6 +681,7 @@ public class TestMe
 
             const string FixedCode = @"
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 public class TestMe
@@ -689,7 +691,7 @@ public class TestMe
         bool result;
         if (items != null)
         {
-            result = items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any();
+            result = items.Select(item => item.GetHashCode()).Where(hashCode => hashCode >= 42).Any();
         }
         else
         {
@@ -704,10 +706,57 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_conditional_expression_with_var_variable_assignment_where_false_part_is_null()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class TestMe
+{
+    public string DoSomething(List<string> items)
+    {
+        var result = items != null
+                     ? items.OrderBy(item => item.Length).ThenBy(item => item).Where(item => item.GetHashCode() >= 42).First()
+                     : null;
+
+        return result;
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class TestMe
+{
+    public string DoSomething(List<string> items)
+    {
+        string result;
+        if (items != null)
+        {
+            result = items.OrderBy(item => item.Length).ThenBy(item => item).Where(item => item.GetHashCode() >= 42).First();
+        }
+        else
+        {
+            result = null;
+        }
+
+        return result;
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_conditional_expression_with_typed_variable_assignment()
         {
             const string OriginalCode = @"
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 public class TestMe
@@ -715,7 +764,7 @@ public class TestMe
     public bool DoSomething(List<object> items)
     {
         bool result = items != null
-                      ? items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any()
+                      ? items.Select(item => item.GetHashCode()).Where(hashCode => hashCode >= 42).Any()
                       : false;
 
         return result;
@@ -724,6 +773,7 @@ public class TestMe
 
             const string FixedCode = @"
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 public class TestMe
@@ -733,7 +783,7 @@ public class TestMe
         bool result;
         if (items != null)
         {
-            result = items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any();
+            result = items.Select(item => item.GetHashCode()).Where(hashCode => hashCode >= 42).Any();
         }
         else
         {
@@ -752,6 +802,7 @@ public class TestMe
         {
             const string OriginalCode = @"
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 public class TestMe
@@ -762,7 +813,7 @@ public class TestMe
         result = false;
 
         result = items != null
-                 ? items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any()
+                 ? items.Select(item => item.GetHashCode()).Where(hashCode => hashCode >= 42).Any()
                  : false;
 
         return result;
@@ -771,6 +822,7 @@ public class TestMe
 
             const string FixedCode = @"
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 public class TestMe
@@ -782,7 +834,7 @@ public class TestMe
 
         if (items != null)
         {
-            result = items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any();
+            result = items.Select(item => item.GetHashCode()).Where(hashCode => hashCode >= 42).Any();
         }
         else
         {
@@ -801,6 +853,7 @@ public class TestMe
         {
             const string OriginalCode = @"
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 public class TestMe
@@ -809,7 +862,7 @@ public class TestMe
     {
         var result = items != null
                      // some comment for true case
-                     ? items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any()
+                     ? items.Select(item => item.GetHashCode()).Where(hashCode => hashCode >= 42).Any()
 
                      // some comment for false case
                      : false;
@@ -820,6 +873,7 @@ public class TestMe
 
             const string FixedCode = @"
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 public class TestMe
@@ -830,7 +884,7 @@ public class TestMe
         if (items != null)
         {
             // some comment for true case
-            result = items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any();
+            result = items.Select(item => item.GetHashCode()).Where(hashCode => hashCode >= 42).Any();
         }
         else
         {
@@ -850,6 +904,7 @@ public class TestMe
         {
             const string OriginalCode = @"
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 public class TestMe
@@ -857,7 +912,7 @@ public class TestMe
     public bool DoSomething(List<object> items)
     {
         var result = items != null
-                     ? items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any() // some comment for true case
+                     ? items.Select(item => item.GetHashCode()).Where(hashCode => hashCode >= 42).Any() // some comment for true case
                      : false; // some comment for false case
 
         return result;
@@ -866,6 +921,7 @@ public class TestMe
 
             const string FixedCode = @"
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 public class TestMe
@@ -876,7 +932,7 @@ public class TestMe
         if (items != null)
         {
             // some comment for true case
-            result = items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any();
+            result = items.Select(item => item.GetHashCode()).Where(hashCode => hashCode >= 42).Any();
         }
         else
         {
@@ -902,7 +958,7 @@ using System.Linq;
 public class TestMe
 {
     public bool DoSomething(List<object> items) => DoSomethingCore(items != null
-                                                                   ? items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42)
+                                                                   ? items.Select(item => item.GetHashCode()).Where(hashCode => hashCode >= 42)
                                                                    : Enumerable.Empty<int>());
 
     private bool DoSomethingCore(IEnumerable<int> numbers)
@@ -923,7 +979,7 @@ public class TestMe
         IEnumerable<int> numbers;
         if (items != null)
         {
-            numbers = items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42);
+            numbers = items.Select(item => item.GetHashCode()).Where(hashCode => hashCode >= 42);
         }
         else
         {
@@ -953,7 +1009,7 @@ using System.Linq;
 public class TestMe
 {
     public void DoSomething(List<object> items) => DoSomethingCore(items != null
-                                                                   ? items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42)
+                                                                   ? items.Select(item => item.GetHashCode()).Where(hashCode => hashCode >= 42)
                                                                    : Enumerable.Empty<int>());
 
     private void DoSomethingCore(IEnumerable<int> numbers)
@@ -973,7 +1029,7 @@ public class TestMe
         IEnumerable<int> numbers;
         if (items != null)
         {
-            numbers = items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42);
+            numbers = items.Select(item => item.GetHashCode()).Where(hashCode => hashCode >= 42);
         }
         else
         {
@@ -1124,6 +1180,46 @@ public class TestMe
                 return 0;
             }
         }
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_conditional_expression_with_array_type()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(string parameterPath items)
+    {
+        var subPaths = parameterPath == null ? null : parameterPath.Split(new[] {'\\', '/', '.'}, StringSplitOptions.RemoveEmptyEntries);
+
+        return subPaths;
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(string parameterPath items)
+    {
+        string[] subPaths;
+        if (parameterPath == null)
+        {
+            subPaths = null;
+        }
+        else
+        {
+            subPaths = parameterPath.Split(new[] {'\\', '/', '.'}, StringSplitOptions.RemoveEmptyEntries);
+        }
+
+        return subPaths;
     }
 }";
 
