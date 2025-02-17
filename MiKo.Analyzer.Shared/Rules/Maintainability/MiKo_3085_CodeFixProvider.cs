@@ -183,9 +183,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var typeSyntax = GetTypeSyntax(declaration, document);
 
-                var updatedDeclarator = SyntaxFactory.VariableDeclarator(declarator.Identifier).WithTriviaFrom(declarator);
-                var updatedDeclaration = SyntaxFactory.VariableDeclaration(typeSyntax, updatedDeclarator.ToSeparatedSyntaxList()).WithTriviaFrom(declaration);
-                var updatedLocalDeclaration = SyntaxFactory.LocalDeclarationStatement(updatedDeclaration).WithTriviaFrom(localDeclaration);
+                var updatedDeclarator = SyntaxFactory.VariableDeclarator(declarator.Identifier).WithLeadingTriviaFrom(declarator);
+                var updatedDeclaration = SyntaxFactory.VariableDeclaration(typeSyntax, updatedDeclarator.ToSeparatedSyntaxList()).WithLeadingTriviaFrom(declaration);
+                var updatedLocalDeclaration = SyntaxFactory.LocalDeclarationStatement(updatedDeclaration).WithLeadingTriviaFrom(localDeclaration);
 
                 var ifStatement = ConvertToIfStatement(conditional, trueCase => AssignmentStatement(declarator, trueCase), falseCase => AssignmentStatement(declarator, falseCase));
 
@@ -255,9 +255,47 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static IfStatementSyntax ConvertToIfStatement(ConditionalExpressionSyntax conditional, Func<ExpressionSyntax, StatementSyntax> trueCallback, Func<ExpressionSyntax, StatementSyntax> falseCallback)
         {
+            // create 'if' statement and move comments to proper positions
+            var questionToken = conditional.QuestionToken;
+            var trueCase = conditional.WhenTrue;
+            var trueStatement = trueCallback(trueCase.HasComment() ? trueCase.WithoutTrivia() : trueCase);
+
+            if (questionToken.HasComment())
+            {
+                trueStatement = trueStatement.WithAdditionalLeadingTrivia(questionToken.GetComment()).WithAdditionalLeadingEmptyLine();
+            }
+
+            if (trueCase.HasComment())
+            {
+                trueStatement = trueStatement.WithAdditionalLeadingTrivia(trueCase.GetComment()).WithAdditionalLeadingEmptyLine();
+            }
+
+            // create 'else' statement and move comments to proper positions
+            var falseCase = conditional.WhenFalse;
+            var colonToken = conditional.ColonToken;
+            var falseStatement = falseCallback(falseCase.HasComment() ? falseCase.WithoutTrivia() : falseCase);
+
+            if (colonToken.HasComment())
+            {
+                falseStatement = falseStatement.WithAdditionalLeadingTrivia(colonToken.GetComment()).WithAdditionalLeadingEmptyLine();
+            }
+
+            if (falseCase.HasComment())
+            {
+                falseStatement = falseStatement.WithAdditionalLeadingTrivia(falseCase.GetComment()).WithAdditionalLeadingEmptyLine();
+            }
+
+            var semicolonToken = conditional.FirstAncestor<StatementSyntax>()?.GetSemicolonToken() ?? conditional.FirstAncestor<MemberDeclarationSyntax>().GetSemicolonToken();
+
+            if (semicolonToken.HasTrailingComment())
+            {
+                falseStatement = falseStatement.WithAdditionalLeadingTrivia(semicolonToken.GetComment()).WithAdditionalLeadingEmptyLine();
+            }
+
             var condition = conditional.Condition.WithoutParenthesis().WithoutTrivia();
-            var ifBlock = SyntaxFactory.Block(trueCallback(conditional.WhenTrue));
-            var elseBlock = SyntaxFactory.Block(falseCallback(conditional.WhenFalse));
+
+            var ifBlock = SyntaxFactory.Block(trueStatement);
+            var elseBlock = SyntaxFactory.Block(falseStatement);
 
             return SyntaxFactory.IfStatement(condition, ifBlock, SyntaxFactory.ElseClause(elseBlock));
         }

@@ -343,6 +343,121 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_conditional_expression_with_long_condition_and_short_paths_and_leading_comments_before_operators()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(object o) => (o != null && (o.GetHashCode() == 42 || o.GetHashCode() == 0815))
+                                         // some comment for true case
+                                         ? true
+
+                                         // some comment for false case
+                                         : false;
+}";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(object o)
+    {
+        if (o != null && (o.GetHashCode() == 42 || o.GetHashCode() == 0815))
+        {
+            // some comment for true case
+            return true;
+        }
+        else
+        {
+            // some comment for false case
+            return false;
+        }
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_conditional_expression_with_long_condition_and_short_paths_and_leading_comments_after_operators()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(object o) => (o != null && (o.GetHashCode() == 42 || o.GetHashCode() == 0815))
+                                         ?
+                                           // some comment for true case
+                                           true
+                                         :
+                                           // some comment for false case
+                                           false;
+}";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(object o)
+    {
+        if (o != null && (o.GetHashCode() == 42 || o.GetHashCode() == 0815))
+        {
+            // some comment for true case
+            return true;
+        }
+        else
+        {
+            // some comment for false case
+            return false;
+        }
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_conditional_expression_with_long_condition_and_short_paths_and_trailing_comments()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(object o) => (o != null && (o.GetHashCode() == 42 || o.GetHashCode() == 0815))
+                                         ? true // some comment for true case
+                                         : false; // some comment for false case
+}";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(object o)
+    {
+        if (o != null && (o.GetHashCode() == 42 || o.GetHashCode() == 0815))
+        {
+            // some comment for true case
+            return true;
+        }
+        else
+        {
+            // some comment for false case
+            return false;
+        }
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_object_creation_with_Linq()
         {
             const string OriginalCode = @"
@@ -671,6 +786,101 @@ public class TestMe
         }
         else
         {
+            result = false;
+        }
+
+        return result;
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_conditional_expression_with_var_variable_assignment_and_leading_comments()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    public bool DoSomething(List<object> items)
+    {
+        var result = items != null
+                     // some comment for true case
+                     ? items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any()
+
+                     // some comment for false case
+                     : false;
+
+        return result;
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    public bool DoSomething(List<object> items)
+    {
+        bool result;
+        if (items != null)
+        {
+            // some comment for true case
+            result = items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any();
+        }
+        else
+        {
+            // some comment for false case
+            result = false;
+        }
+
+        return result;
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_conditional_expression_with_var_variable_assignment_and_trailing_comments()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    public bool DoSomething(List<object> items)
+    {
+        var result = items != null
+                     ? items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any() // some comment for true case
+                     : false; // some comment for false case
+
+        return result;
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    public bool DoSomething(List<object> items)
+    {
+        bool result;
+        if (items != null)
+        {
+            // some comment for true case
+            result = items.Select(item => item.GetHashCode()).Where(hashCode  => hashCode >= 42).Any();
+        }
+        else
+        {
+            // some comment for false case
             result = false;
         }
 

@@ -603,6 +603,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static string GetIdentifierName(this InvocationExpressionSyntax value) => value.GetIdentifierExpression().GetName();
 
+        internal static SyntaxTrivia[] GetComment(this SyntaxNode value) => value.GetLeadingTrivia().Concat(value.GetTrailingTrivia()).Where(_ => _.IsComment()).ToArray();
+
         internal static SyntaxTrivia GetLeadingComment(this SyntaxNode value)
         {
             while (true)
@@ -1040,6 +1042,35 @@ namespace MiKoSolutions.Analyzers
         internal static int GetStartingLine(this SyntaxNode value) => value.GetLocation().GetStartingLine();
 
         internal static int GetEndingLine(this SyntaxNode value) => value.GetLocation().GetEndingLine();
+
+        internal static SyntaxToken GetSemicolonToken(this StatementSyntax statement)
+        {
+            switch (statement)
+            {
+                case LocalDeclarationStatementSyntax l: return l.SemicolonToken;
+                case ExpressionStatementSyntax e: return e.SemicolonToken;
+                case ReturnStatementSyntax r: return r.SemicolonToken;
+                case ThrowStatementSyntax t: return t.SemicolonToken;
+
+                default:
+                    return default;
+            }
+        }
+
+        internal static SyntaxToken GetSemicolonToken(this MemberDeclarationSyntax declaration)
+        {
+            switch (declaration)
+            {
+                case BaseMethodDeclarationSyntax m: return m.SemicolonToken;
+                case PropertyDeclarationSyntax p: return p.SemicolonToken;
+                case EventDeclarationSyntax e: return e.SemicolonToken;
+                case EventFieldDeclarationSyntax ef: return ef.SemicolonToken;
+                case FieldDeclarationSyntax f: return f.SemicolonToken;
+
+                default:
+                    return default;
+            }
+        }
 
         internal static ISymbol GetSymbol(this SyntaxNode value, SemanticModel semanticModel)
         {
@@ -2982,6 +3013,8 @@ namespace MiKoSolutions.Analyzers
 
             return values.Replace(value, value.WithIndentation());
         }
+
+        internal static T WithAdditionalLeadingEmptyLine<T>(this T value) where T : SyntaxNode => value.WithAdditionalLeadingTrivia(SyntaxFactory.CarriageReturnLineFeed);
 
         internal static T WithLeadingEmptyLine<T>(this T value) where T : SyntaxNode => value.WithFirstLeadingTrivia(SyntaxFactory.CarriageReturnLineFeed); // do not use elastic one to prevent formatting it away again
 
