@@ -76,7 +76,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return Array.Empty<Diagnostic>();
             }
 
-            return new[] { Issue(symbol, Suffix, CreateBetterNameProposal(symbolName + Suffix)) };
+            return new[] { Issue(symbol, Suffix, CreateBetterNameProposal(symbolName.WithoutSuffix("Cmd") + Suffix)) };
         }
     }
 }
