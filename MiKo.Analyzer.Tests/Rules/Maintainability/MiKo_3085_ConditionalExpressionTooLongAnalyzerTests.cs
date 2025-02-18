@@ -182,6 +182,29 @@ public class TestMeWithAVeryLongName
 }");
 
         [Test]
+        public void No_issue_is_reported_for_conditional_inside_exclusive_OR_such_as_used_in_GetHashCode() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    string Id { get; set; }
+
+    string SerializableDefaultValue { get; set; }
+
+    public override int GetHashCode()
+    {
+        unchecked
+        {
+            var hashCode = (Id != null ? Id.GetHashCode() : 0);
+            hashCode = (hashCode * 397) ^ (SerializableDefaultValue != null ? StringComparer.OrdinalIgnoreCase.GetHashCode(SerializableDefaultValue) : 0);
+
+            return hashCode;
+        }
+    }
+}");
+
+        [Test]
         public void An_issue_is_reported_for_conditional_expression_with_long_condition_and_short_paths() => An_issue_is_reported_for(@"
 using System;
 

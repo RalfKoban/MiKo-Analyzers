@@ -27,6 +27,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeExpression, SyntaxKind.ConditionalExpression);
 
+        private static bool IsApplicable(ConditionalExpressionSyntax node)
+        {
+            if (node.Parent is ParenthesizedExpressionSyntax p && p.Parent is ExpressionSyntax e && e.IsKind(SyntaxKind.ExclusiveOrExpression) && e.Parent is AssignmentExpressionSyntax a && a.IsKind(SyntaxKind.SimpleAssignmentExpression))
+            {
+                // seems to be inside GetHashCode
+                return false;
+            }
+
+            return true;
+        }
+
         private static bool ObjectCreationCannotBeShortened(ObjectCreationExpressionSyntax syntax, SemanticModel semanticModel)
         {
             var argumentList = syntax.ArgumentList;
@@ -159,17 +170,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var node = (ConditionalExpressionSyntax)context.Node;
 
-            if (node.Condition.IsAnyKind(IsExpressions))
+            if (IsApplicable(node))
             {
-                // ignore
-            }
-            else
-            {
-                AnalyzeLength(context, node.Condition);
-            }
+                if (node.Condition.IsAnyKind(IsExpressions))
+                {
+                    // ignore
+                }
+                else
+                {
+                    AnalyzeLength(context, node.Condition);
+                }
 
-            AnalyzeLength(context, node.WhenTrue);
-            AnalyzeLength(context, node.WhenFalse);
+                AnalyzeLength(context, node.WhenTrue);
+                AnalyzeLength(context, node.WhenFalse);
+            }
         }
     }
 }
