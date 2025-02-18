@@ -27,8 +27,6 @@ namespace MiKoSolutions.Analyzers
             return document.GetSemanticModelAsync(CancellationToken.None).GetAwaiter().GetResult();
         }
 
-        internal static ISymbol GetSymbol(this SyntaxNode syntax, Document document) => syntax.GetSymbolAsync(document, CancellationToken.None).GetAwaiter().GetResult();
-
         internal static async Task<ISymbol> GetSymbolAsync(this SyntaxNode syntax, Document document, CancellationToken cancellationToken)
         {
             if (cancellationToken.IsCancellationRequested)
@@ -48,6 +46,10 @@ namespace MiKoSolutions.Analyzers
 
             return semanticModel?.GetDeclaredSymbol(syntax, cancellationToken);
         }
+
+        internal static ISymbol GetSymbol(this SyntaxNode syntax, Document document) => syntax.GetSymbolAsync(document, CancellationToken.None).GetAwaiter().GetResult();
+
+        internal static ISymbol GetSymbol(this InvocationExpressionSyntax syntax, Document document) => syntax.GetSymbol(document.GetSemanticModel());
 
         internal static ITypeSymbol GetTypeSymbol(this ArgumentSyntax value, Document document) => value?.Expression.GetTypeSymbol(GetSemanticModel(document));
 

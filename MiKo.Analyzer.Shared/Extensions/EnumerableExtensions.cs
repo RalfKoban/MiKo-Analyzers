@@ -1356,13 +1356,13 @@ namespace System.Linq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static SyntaxList<T> ToSyntaxList<T>(this T source) where T : SyntaxNode => new SyntaxList<T>(source);
+        internal static SyntaxList<T> ToSyntaxList<T>(this T source) where T : SyntaxNode => SyntaxFactory.SingletonList(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxList<T> ToSyntaxList<T>(this IEnumerable<T> source) where T : SyntaxNode => SyntaxFactory.List(source); // ncrunch: no coverage
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static SeparatedSyntaxList<T> ToSeparatedSyntaxList<T>(this T value) where T : SyntaxNode => new[] { value }.ToSeparatedSyntaxList();
+        internal static SeparatedSyntaxList<T> ToSeparatedSyntaxList<T>(this T value) where T : SyntaxNode => SyntaxFactory.SingletonSeparatedList(value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SeparatedSyntaxList<T> ToSeparatedSyntaxList<T>(this IEnumerable<T> source) where T : SyntaxNode => SyntaxFactory.SeparatedList(source);
