@@ -211,17 +211,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 switch (binary.Parent)
                 {
-                    case ReturnStatementSyntax returnStatement:
-                        return ReplaceReturn(returnStatement);
+                    case ReturnStatementSyntax statement:
+                        return ReplaceReturn(statement);
 
-                    case ParenthesizedExpressionSyntax redundant when redundant.Parent is ReturnStatementSyntax returnStatement:
-                        return ReplaceReturn(returnStatement);
+                    case ParenthesizedExpressionSyntax redundant when redundant.Parent is ReturnStatementSyntax statement:
+                        return ReplaceReturn(statement);
                 }
             }
 
             return root;
 
-            SyntaxNode ReplaceReturn(ReturnStatementSyntax returnStatement)
+            SyntaxNode ReplaceReturn(ReturnStatementSyntax statement)
             {
                 var ifStatement = ConvertToIfStatement(conditional, SyntaxFactory.ReturnStatement);
 
@@ -230,22 +230,40 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     ifStatement = ifStatement.ReplaceNode(leftReturn, leftReturn.WithExpression(binary.WithLeft(leftExpression)));
                 }
 
-                return root.ReplaceNode(returnStatement, ifStatement);
+                return root.ReplaceNode(statement, ifStatement);
             }
         }
 
-        private static SyntaxNode UpdateReturn(SyntaxNode root, ConditionalExpressionSyntax conditional, ReturnStatementSyntax returnStatement)
+        private static SyntaxNode UpdateReturn(SyntaxNode root, ConditionalExpressionSyntax conditional, ReturnStatementSyntax statement)
         {
             var ifStatement = ConvertToIfStatement(conditional, SyntaxFactory.ReturnStatement);
 
-            return root.ReplaceNode(returnStatement, ifStatement);
+            // check if we have an if/else block and update that as well
+            switch (statement.Parent)
+            {
+                case IfStatementSyntax _:
+                case ElseClauseSyntax _:
+                    return root.ReplaceNode(statement, SyntaxFactory.Block(ifStatement));
+
+                default:
+                    return root.ReplaceNode(statement, ifStatement);
+            }
         }
 
-        private static SyntaxNode UpdateThrow(SyntaxNode root, ConditionalExpressionSyntax conditional, ThrowStatementSyntax throwStatement)
+        private static SyntaxNode UpdateThrow(SyntaxNode root, ConditionalExpressionSyntax conditional, ThrowStatementSyntax statement)
         {
             var ifStatement = ConvertToIfStatement(conditional, SyntaxFactory.ThrowStatement);
 
-            return root.ReplaceNode(throwStatement, ifStatement);
+            // check if we have an if/else block and update that as well
+            switch (statement.Parent)
+            {
+                case IfStatementSyntax _:
+                case ElseClauseSyntax _:
+                    return root.ReplaceNode(statement, SyntaxFactory.Block(ifStatement));
+
+                default:
+                    return root.ReplaceNode(statement, ifStatement);
+            }
         }
 
         private static IfStatementSyntax ConvertToIfStatement(ConditionalExpressionSyntax conditional, Func<ExpressionSyntax, StatementSyntax> callback)

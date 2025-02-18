@@ -1249,6 +1249,176 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_conditional_expression_in_return_below_if_statement()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(bool flag, object o)
+    {
+        if (flag)
+            return (o != null && (o.GetHashCode() == 42 || o.GetHashCode() == 0815)) ? true : false;
+        return flag;
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(bool flag, object o)
+    {
+        if (flag)
+        {
+            if (o != null && (o.GetHashCode() == 42 || o.GetHashCode() == 0815))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        return flag;
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_conditional_expression_in_return_below_else_statement()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(bool flag, object o)
+    {
+        if (flag)
+            return flag;
+        else
+            return (o != null && (o.GetHashCode() == 42 || o.GetHashCode() == 0815)) ? true : false;
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(bool flag, object o)
+    {
+        if (flag)
+            return flag;
+        else
+        {
+            if (o != null && (o.GetHashCode() == 42 || o.GetHashCode() == 0815))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_conditional_expression_in_throw_below_if_statement()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(bool flag, object o)
+    {
+        if (flag)
+            throw (o != null && (o.GetHashCode() == 42 || o.GetHashCode() == 0815)) ? new ArgumentException() : new ArgumentNullException();
+        return flag;
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(bool flag, object o)
+    {
+        if (flag)
+        {
+            if (o != null && (o.GetHashCode() == 42 || o.GetHashCode() == 0815))
+            {
+                throw new ArgumentException();
+            }
+            else
+            {
+                throw new ArgumentNullException();
+            }
+        }
+
+        return flag;
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_conditional_expression_in_throw_below_else_statement()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(bool flag, object o)
+    {
+        if (flag)
+            return flag;
+        else
+            throw (o != null && (o.GetHashCode() == 42 || o.GetHashCode() == 0815)) ? new ArgumentException() : new ArgumentNullException();
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(bool flag, object o)
+    {
+        if (flag)
+            return flag;
+        else
+        {
+            if (o != null && (o.GetHashCode() == 42 || o.GetHashCode() == 0815))
+            {
+                throw new ArgumentException();
+            }
+            else
+            {
+                throw new ArgumentNullException();
+            }
+        }
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         // TODO RKN: Conditional as parameter for array access
         // TODO RKN: Conditional as parameter for list access
         // TODO RKN: Conditional inside conditional
