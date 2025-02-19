@@ -182,6 +182,29 @@ public class TestMeWithAVeryLongName
 }");
 
         [Test]
+        public void No_issue_is_reported_for_conditional_inside_exclusive_OR_such_as_used_in_GetHashCode() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    string Id { get; set; }
+
+    string SerializableDefaultValue { get; set; }
+
+    public override int GetHashCode()
+    {
+        unchecked
+        {
+            var hashCode = (Id != null ? Id.GetHashCode() : 0);
+            hashCode = (hashCode * 397) ^ (SerializableDefaultValue != null ? StringComparer.OrdinalIgnoreCase.GetHashCode(SerializableDefaultValue) : 0);
+
+            return hashCode;
+        }
+    }
+}");
+
+        [Test]
         public void An_issue_is_reported_for_conditional_expression_with_long_condition_and_short_paths() => An_issue_is_reported_for(@"
 using System;
 
@@ -1226,10 +1249,296 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_conditional_expression_in_return_below_if_statement()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(bool flag, object o)
+    {
+        if (flag)
+            return (o != null && (o.GetHashCode() == 42 || o.GetHashCode() == 0815)) ? true : false;
+        return flag;
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(bool flag, object o)
+    {
+        if (flag)
+        {
+            if (o != null && (o.GetHashCode() == 42 || o.GetHashCode() == 0815))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        return flag;
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_conditional_expression_in_return_below_else_statement()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(bool flag, object o)
+    {
+        if (flag)
+            return flag;
+        else
+            return (o != null && (o.GetHashCode() == 42 || o.GetHashCode() == 0815)) ? true : false;
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(bool flag, object o)
+    {
+        if (flag)
+            return flag;
+        else
+        {
+            if (o != null && (o.GetHashCode() == 42 || o.GetHashCode() == 0815))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_conditional_expression_in_throw_below_if_statement()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(bool flag, object o)
+    {
+        if (flag)
+            throw (o != null && (o.GetHashCode() == 42 || o.GetHashCode() == 0815)) ? new ArgumentException() : new ArgumentNullException();
+        return flag;
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(bool flag, object o)
+    {
+        if (flag)
+        {
+            if (o != null && (o.GetHashCode() == 42 || o.GetHashCode() == 0815))
+            {
+                throw new ArgumentException();
+            }
+            else
+            {
+                throw new ArgumentNullException();
+            }
+        }
+
+        return flag;
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_conditional_expression_in_throw_below_else_statement()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(bool flag, object o)
+    {
+        if (flag)
+            return flag;
+        else
+            throw (o != null && (o.GetHashCode() == 42 || o.GetHashCode() == 0815)) ? new ArgumentException() : new ArgumentNullException();
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(bool flag, object o)
+    {
+        if (flag)
+            return flag;
+        else
+        {
+            if (o != null && (o.GetHashCode() == 42 || o.GetHashCode() == 0815))
+            {
+                throw new ArgumentException();
+            }
+            else
+            {
+                throw new ArgumentNullException();
+            }
+        }
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_conditional_expression_in_object_initializer()
+        {
+            const string OriginalCode = @"
+using System;
+
+public record SomeHelperWithAVeryVeryLongName(string Name);
+
+public class TestMe
+{
+    public int Id { get; set; }
+
+    public string SerializableDefaultValue { get; set; }
+
+    public static TestMe Create(object someVeryLongObjectName)
+    {
+        ArgumentNullException.ThrowIfNull(someVeryLongObjectName);
+
+        return new TestMe
+                   {
+                       SerializableDefaultValue = someVeryLongObjectName != null ? new SomeHelperWithAVeryVeryLongName(someVeryLongObjectName).ToString() : someVeryLongObjectName.GetType().FullName,
+                       Id = 42,
+                   };
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+
+public record SomeHelperWithAVeryVeryLongName(string Name);
+
+public class TestMe
+{
+    public int Id { get; set; }
+
+    public string SerializableDefaultValue { get; set; }
+
+    public static TestMe Create(object someVeryLongObjectName)
+    {
+        ArgumentNullException.ThrowIfNull(someVeryLongObjectName);
+
+        string serializableDefaultValue;
+        if (someVeryLongObjectName != null)
+        {
+            serializableDefaultValue = new SomeHelperWithAVeryVeryLongName(someVeryLongObjectName).ToString();
+        }
+        else
+        {
+            serializableDefaultValue = someVeryLongObjectName.GetType().FullName;
+        }
+
+        return new TestMe
+                   {
+                       SerializableDefaultValue = serializableDefaultValue,
+                       Id = 42,
+                   };
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_conditional_expression_in_object_initializer_of_method_expression_body()
+        {
+            const string OriginalCode = @"
+using System;
+
+public record SomeHelperWithAVeryVeryLongName(string Name);
+
+public class TestMe
+{
+    public int Id { get; set; }
+
+    public string SerializableDefaultValue { get; set; }
+
+    public static TestMe Create(object someVeryLongObjectName) => new TestMe
+                                                                      {
+                                                                          SerializableDefaultValue = someVeryLongObjectName != null ? new SomeHelperWithAVeryVeryLongName(someVeryLongObjectName).ToString() : someVeryLongObjectName.GetType().FullName,
+                                                                          Id = 42,
+                                                                      };
+}";
+
+            const string FixedCode = @"
+using System;
+
+public record SomeHelperWithAVeryVeryLongName(string Name);
+
+public class TestMe
+{
+    public int Id { get; set; }
+
+    public string SerializableDefaultValue { get; set; }
+
+    public static TestMe Create(object someVeryLongObjectName)
+    {
+        string serializableDefaultValue;
+        if (someVeryLongObjectName != null)
+        {
+            serializableDefaultValue = new SomeHelperWithAVeryVeryLongName(someVeryLongObjectName).ToString();
+        }
+        else
+        {
+            serializableDefaultValue = someVeryLongObjectName.GetType().FullName;
+        }
+
+        return new TestMe
+                   {
+                       SerializableDefaultValue = serializableDefaultValue,
+                       Id = 42,
+                   };
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         // TODO RKN: Conditional as parameter for array access
         // TODO RKN: Conditional as parameter for list access
         // TODO RKN: Conditional inside conditional
-        // TODO RKN: Conditional within initializer
         protected override string GetDiagnosticId() => MiKo_3085_ConditionalExpressionTooLongAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3085_ConditionalExpressionTooLongAnalyzer();
