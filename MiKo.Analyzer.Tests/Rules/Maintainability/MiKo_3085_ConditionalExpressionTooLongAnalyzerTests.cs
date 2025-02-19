@@ -1419,10 +1419,126 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_conditional_expression_in_object_initializer()
+        {
+            const string OriginalCode = @"
+using System;
+
+public record SomeHelperWithAVeryVeryLongName(string Name);
+
+public class TestMe
+{
+    public int Id { get; set; }
+
+    public string SerializableDefaultValue { get; set; }
+
+    public static TestMe Create(object someVeryLongObjectName)
+    {
+        ArgumentNullException.ThrowIfNull(someVeryLongObjectName);
+
+        return new TestMe
+                   {
+                       SerializableDefaultValue = someVeryLongObjectName != null ? new SomeHelperWithAVeryVeryLongName(someVeryLongObjectName).ToString() : someVeryLongObjectName.GetType().FullName,
+                       Id = 42,
+                   };
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+
+public record SomeHelperWithAVeryVeryLongName(string Name);
+
+public class TestMe
+{
+    public int Id { get; set; }
+
+    public string SerializableDefaultValue { get; set; }
+
+    public static TestMe Create(object someVeryLongObjectName)
+    {
+        ArgumentNullException.ThrowIfNull(someVeryLongObjectName);
+
+        string serializableDefaultValue;
+        if (someVeryLongObjectName != null)
+        {
+            serializableDefaultValue = new SomeHelperWithAVeryVeryLongName(someVeryLongObjectName).ToString();
+        }
+        else
+        {
+            serializableDefaultValue = someVeryLongObjectName.GetType().FullName;
+        }
+
+        return new TestMe
+                   {
+                       SerializableDefaultValue = serializableDefaultValue,
+                       Id = 42,
+                   };
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_conditional_expression_in_object_initializer_of_method_expression_body()
+        {
+            const string OriginalCode = @"
+using System;
+
+public record SomeHelperWithAVeryVeryLongName(string Name);
+
+public class TestMe
+{
+    public int Id { get; set; }
+
+    public string SerializableDefaultValue { get; set; }
+
+    public static TestMe Create(object someVeryLongObjectName) => new TestMe
+                                                                      {
+                                                                          SerializableDefaultValue = someVeryLongObjectName != null ? new SomeHelperWithAVeryVeryLongName(someVeryLongObjectName).ToString() : someVeryLongObjectName.GetType().FullName,
+                                                                          Id = 42,
+                                                                      };
+}";
+
+            const string FixedCode = @"
+using System;
+
+public record SomeHelperWithAVeryVeryLongName(string Name);
+
+public class TestMe
+{
+    public int Id { get; set; }
+
+    public string SerializableDefaultValue { get; set; }
+
+    public static TestMe Create(object someVeryLongObjectName)
+    {
+        string serializableDefaultValue;
+        if (someVeryLongObjectName != null)
+        {
+            serializableDefaultValue = new SomeHelperWithAVeryVeryLongName(someVeryLongObjectName).ToString();
+        }
+        else
+        {
+            serializableDefaultValue = someVeryLongObjectName.GetType().FullName;
+        }
+
+        return new TestMe
+                   {
+                       SerializableDefaultValue = serializableDefaultValue,
+                       Id = 42,
+                   };
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         // TODO RKN: Conditional as parameter for array access
         // TODO RKN: Conditional as parameter for list access
         // TODO RKN: Conditional inside conditional
-        // TODO RKN: Conditional within initializer
         protected override string GetDiagnosticId() => MiKo_3085_ConditionalExpressionTooLongAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3085_ConditionalExpressionTooLongAnalyzer();

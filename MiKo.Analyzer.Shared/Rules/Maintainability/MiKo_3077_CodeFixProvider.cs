@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
@@ -30,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 // append a semicolon to the end
                 var initializer = CreateInitializer(document, propertySyntax.Type);
-                var updatedNode = propertySyntax.WithInitializer(initializer).WithSemicolonToken(";".AsToken(SyntaxKind.SemicolonToken));
+                var updatedNode = propertySyntax.WithInitializer(initializer).WithSemicolonToken();
 
                 return root.ReplaceNode(propertySyntax, updatedNode);
             }

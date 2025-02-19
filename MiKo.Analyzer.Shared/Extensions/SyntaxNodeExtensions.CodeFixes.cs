@@ -287,6 +287,24 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        internal static AccessorDeclarationSyntax WithSemicolonToken(this AccessorDeclarationSyntax value) => value.WithSemicolonToken(SyntaxKind.SemicolonToken.AsToken());
+
+        internal static MethodDeclarationSyntax WithSemicolonToken(this MethodDeclarationSyntax value) => value.WithSemicolonToken(SyntaxKind.SemicolonToken.AsToken());
+
+        internal static PropertyDeclarationSyntax WithSemicolonToken(this PropertyDeclarationSyntax value) => value.WithSemicolonToken(SyntaxKind.SemicolonToken.AsToken());
+
+        internal static AccessorDeclarationSyntax WithoutSemicolonToken(this AccessorDeclarationSyntax value) => value.WithSemicolonToken(SyntaxKind.None.AsToken());
+
+        internal static MethodDeclarationSyntax WithoutSemicolonToken(this MethodDeclarationSyntax value) => value.WithSemicolonToken(SyntaxKind.None.AsToken());
+
+        internal static PropertyDeclarationSyntax WithoutSemicolonToken(this PropertyDeclarationSyntax value) => value.WithSemicolonToken(SyntaxKind.None.AsToken());
+
+        internal static AccessorDeclarationSyntax WithoutExpressionBody(this AccessorDeclarationSyntax value) => value.WithExpressionBody(null).WithoutSemicolonToken();
+
+        internal static MethodDeclarationSyntax WithoutExpressionBody(this MethodDeclarationSyntax value) => value.WithExpressionBody(null).WithoutSemicolonToken();
+
+        internal static PropertyDeclarationSyntax WithoutExpressionBody(this PropertyDeclarationSyntax value) => value.WithExpressionBody(null).WithoutSemicolonToken();
+
         private static bool IsSameGeneric(TypeSyntax t1, TypeSyntax t2)
         {
             if (t1 is GenericNameSyntax g1 && t2 is GenericNameSyntax g2)
