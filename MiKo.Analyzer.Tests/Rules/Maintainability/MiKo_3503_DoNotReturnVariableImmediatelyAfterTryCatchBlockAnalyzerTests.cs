@@ -93,6 +93,28 @@ public class TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_when_returning_a_variable_directly_after_try_catch_block_that_was_assigned_inside_the_block_but_catch_block_swallows() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public string DoSomething(object o)
+    {
+        string result;
+        try
+        {
+            result = DoSomething(null);
+        }
+        catch
+        {
+        }
+
+        return result;
+    }
+}
+");
+
+        [Test]
         public void Code_gets_fixed_when_returning_a_variable_directly_after_try_catch_block_that_was_assigned_inside_the_block()
         {
             const string OriginalCode = @"
@@ -134,6 +156,107 @@ public class TestMe
         catch
         {
            throw;
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_returning_a_variable_directly_after_try_catch_block_that_was_assigned_inside_the_block_and_catch_block_returns()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public string DoSomething(object o)
+    {
+        string result;
+        try
+        {
+            result = DoSomething(null);
+        }
+        catch
+        {
+           return null;
+        }
+
+        return result;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public string DoSomething(object o)
+    {
+        try
+        {
+            string result;
+            result = DoSomething(null);
+
+            return result;
+        }
+        catch
+        {
+           return null;
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_returning_a_variable_directly_after_try_catch_block_that_was_assigned_inside_the_block_but_catch_block_swallows()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public string DoSomething(object o)
+    {
+        string result;
+        try
+        {
+            result = DoSomething(null);
+        }
+        catch
+        {
+        }
+
+        return result;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public string DoSomething(object o)
+    {
+        try
+        {
+            string result;
+            result = DoSomething(null);
+
+            return result;
+        }
+        catch
+        {
+            string result;
+
+            return result;
         }
     }
 }
