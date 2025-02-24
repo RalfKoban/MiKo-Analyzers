@@ -89,6 +89,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool HasTrailingComment(this SyntaxToken value) => value.TrailingTrivia.Any(_ => _.IsComment());
 
+        internal static bool HasTrailingEndOfLine(this SyntaxToken value) => value.TrailingTrivia.Any(_ => _.IsEndOfLine());
+
         internal static bool IsDefaultValue(this SyntaxToken value) => value.IsKind(SyntaxKind.None);
 
         internal static bool IsAnyKind(this SyntaxToken value, ISet<SyntaxKind> kinds) => kinds.Contains(value.Kind());
