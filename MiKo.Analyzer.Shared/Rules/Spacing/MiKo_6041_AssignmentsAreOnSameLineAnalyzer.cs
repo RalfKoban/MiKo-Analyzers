@@ -36,6 +36,23 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SimpleAssignmentExpressions);
 
+        private static bool IgnoreIssue(SyntaxNode node)
+        {
+            switch (node)
+            {
+                // arrays and collections spanning multiple lines are allowed
+                case InitializerExpressionSyntax initializer when initializer.OpenBraceToken.GetStartingLine() != initializer.CloseBraceToken.GetStartingLine():
+                    return true;
+#if  VS2022
+                case CollectionExpressionSyntax expression when expression.OpenBracketToken.GetStartingLine() != expression.CloseBracketToken.GetStartingLine():
+                    return true;
+#endif
+
+                default:
+                    return false;
+            }
+        }
+
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
             switch (context.Node)
@@ -89,23 +106,18 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private void ReportIssue(SyntaxNodeAnalysisContext context, EqualsValueClauseSyntax node)
         {
-            switch (node.Value)
+            if (IgnoreIssue(node.Value) is false)
             {
-                // arrays and collections spanning multiple lines are allowed
-                case InitializerExpressionSyntax initializer when initializer.OpenBraceToken.GetStartingLine() != initializer.CloseBraceToken.GetStartingLine():
-                    break;
-#if  VS2022
-                case CollectionExpressionSyntax expression when expression.OpenBracketToken.GetStartingLine() != expression.CloseBracketToken.GetStartingLine():
-                    break;
-#endif
-
-                default:
-                    ReportIssue(context, node.EqualsToken);
-
-                    break;
+                ReportIssue(context, node.EqualsToken);
             }
         }
 
-        private void ReportIssue(SyntaxNodeAnalysisContext context, SyntaxToken token) => ReportDiagnostics(context, Issue(token));
+        private void ReportIssue(SyntaxNodeAnalysisContext context, SyntaxToken token)
+        {
+            if (IgnoreIssue(token.Parent?.Parent) is false)
+            {
+                ReportDiagnostics(context, Issue(token));
+            }
+        }
     }
 }
