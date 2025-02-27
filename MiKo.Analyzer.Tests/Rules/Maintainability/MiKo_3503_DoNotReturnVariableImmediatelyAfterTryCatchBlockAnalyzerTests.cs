@@ -254,7 +254,7 @@ public class TestMe
         }
         catch
         {
-            string result;
+            string result = default(string);
 
             return result;
         }

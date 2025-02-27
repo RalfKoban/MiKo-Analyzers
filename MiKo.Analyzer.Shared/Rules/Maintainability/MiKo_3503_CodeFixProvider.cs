@@ -56,32 +56,49 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                       return null; // remove the variable declaration statement
                                                                   }
 
-                                                                  if (rewritten is TryStatementSyntax statement)
+                                                                  switch (rewritten)
                                                                   {
-                                                                      // move the statements inside the try block
-                                                                      var block = statement.Block;
-                                                                      var statements = block.Statements
-                                                                                            .Insert(0, localDeclarationStatement.WithAdditionalLeadingSpaces(Constants.Indentation))
-                                                                                            .Add(returnStatement.WithAdditionalLeadingSpaces(Constants.Indentation));
+                                                                      case TryStatementSyntax statement:
+                                                                          // move the statements inside the try block
+                                                                          return statement.WithBlock(UpdateBlock(statement.Block, localDeclarationStatement, returnStatement));
 
-                                                                      return statement.WithBlock(block.WithStatements(statements));
+                                                                      case CatchClauseSyntax catchClause:
+                                                                          // move the statements inside the catch block
+                                                                          return catchClause.WithBlock(UpdateBlock(catchClause.Block, localDeclarationStatement, returnStatement));
+
+                                                                      default:
+                                                                          return rewritten;
                                                                   }
-
-                                                                  if (rewritten is CatchClauseSyntax catchClause)
-                                                                  {
-                                                                      // move the statements inside the catch block
-                                                                      var block = catchClause.Block;
-                                                                      var statements = block.Statements
-                                                                                            .Insert(0, localDeclarationStatement.WithAdditionalLeadingSpaces(Constants.Indentation))
-                                                                                            .Add(returnStatement.WithAdditionalLeadingSpaces(Constants.Indentation));
-                                                                      return catchClause.WithBlock(block.WithStatements(statements));
-                                                                  }
-
-                                                                  return rewritten;
                                                               });
             }
 
             return null;
+        }
+
+        private static BlockSyntax UpdateBlock(BlockSyntax block, LocalDeclarationStatementSyntax localDeclarationStatement, ReturnStatementSyntax returnStatement)
+        {
+            var localDeclaration = localDeclarationStatement;
+            var declarationSyntax = localDeclaration.Declaration;
+            var declarationVariable = declarationSyntax.Variables[0];
+
+            if (declarationVariable.Initializer is null)
+            {
+                var name = declarationVariable.GetName();
+
+                // only add a type initializer if the block does not contain the variable's assignment
+                if (block.Statements.None(_ => _.IsAssignmentOf(name)))
+                {
+                    var updatedDeclarationVariable = declarationVariable.WithInitializer(SyntaxFactory.EqualsValueClause(SyntaxFactory.DefaultExpression(declarationSyntax.Type)));
+
+                    localDeclaration = localDeclarationStatement.WithDeclaration(declarationSyntax.WithVariables(declarationSyntax.Variables.Replace(declarationVariable, updatedDeclarationVariable)));
+                }
+            }
+
+            var statements = block.Statements
+                                  .Insert(0, localDeclaration.WithAdditionalLeadingSpaces(Constants.Indentation))
+                                  .Add(returnStatement.WithAdditionalLeadingSpaces(Constants.Indentation));
+
+            return block.WithStatements(statements);
         }
     }
 }

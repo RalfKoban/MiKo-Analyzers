@@ -22,12 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (context.Node is TryStatementSyntax node)
             {
-                var issue = Analyze(node);
-
-                if (issue != null)
-                {
-                    context.ReportDiagnostic(issue);
-                }
+                ReportDiagnostics(context, Analyze(node));
             }
         }
 
@@ -48,12 +43,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         {
                             for (var index = 0; index < statementsCount; index++)
                             {
-                                if (statements[index] is ExpressionStatementSyntax e && e.Expression is AssignmentExpressionSyntax assignment && assignment.IsKind(SyntaxKind.SimpleAssignmentExpression))
+                                if (statements[index].IsAssignmentOf(identifierName))
                                 {
-                                    if (assignment.Left is IdentifierNameSyntax left && left.GetName() == identifierName)
-                                    {
-                                        return Issue(identifier);
-                                    }
+                                    return Issue(identifierName, identifier);
                                 }
                             }
                         }
