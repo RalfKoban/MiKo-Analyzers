@@ -23,6 +23,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var symbol = await syntax.GetSymbolAsync(document, cancellationToken).ConfigureAwait(false);
 
+            if (symbol is null)
+            {
+                // cannot change anything
+                return originalSolution;
+            }
+
             var newName = GetNewName(diagnostic, symbol);
 
             if (newName.IsNullOrWhiteSpace() || newName.Equals(symbol.Name, StringComparison.Ordinal))
