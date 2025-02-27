@@ -260,6 +260,48 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_if_call_is_messed_up()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        List<TestMe> result =
+                TestMe.CreateSomething<
+                                IList<int>
+                            >(42);
+    }
+
+    public static TestMe CreateSomething<T1>(int value)
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        List<TestMe> result =
+                TestMe.CreateSomething<IList<int>>(42);
+    }
+
+    public static TestMe CreateSomething<T1>(int value)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6035_OpenParenthesisAreOnSameLineAsInvocationAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6035_OpenParenthesisAreOnSameLineAsInvocationAnalyzer();
