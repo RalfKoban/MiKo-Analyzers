@@ -301,11 +301,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "signCertificate",
                                                             "text",
                                                             "tires",
+
+                                                            // languages
+                                                            "ptPT", // Portugal
+                                                            "ptBR", // Brazil
+                                                            "lvLV", // Latvia
                                                         ];
 
         private static readonly string[] AllowedWords = [.. AllowedTerms, "obj", "href", "cref"];
 
-        private static readonly string[] WrongWords = BadPrefixes.Except(AllowedWords).ToArray();
+        private static readonly string[] WrongWords = [.. BadPrefixes.Except(AllowedWords)];
 
         [Test]
         public void No_issue_is_reported_for_properly_named_code() => No_issue_is_reported_for(@"

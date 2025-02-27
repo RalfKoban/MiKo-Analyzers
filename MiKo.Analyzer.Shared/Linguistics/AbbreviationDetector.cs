@@ -305,6 +305,14 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                             "text",
                                                             "Text",
                                                             "MEF",
+
+                                                            // languages
+                                                            "lvLV",
+                                                            "LvLV",
+                                                            "ptBR",
+                                                            "PtBR",
+                                                            "ptPT",
+                                                            "PtPT",
                                                         };
 
         private static readonly string[] AllowedNames =
