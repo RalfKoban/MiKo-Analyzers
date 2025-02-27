@@ -427,7 +427,7 @@ The following tables lists all the 477 rules that are currently provided by the 
 |MiKo_3401|Namespace hierarchies should not be too deep|&#x2713;|\-|
 |MiKo_3501|Do not suppress nullable warnings on Null-conditional operators|&#x2713;|&#x2713;|
 |MiKo_3502|Do not suppress nullable warnings on Linq calls|&#x2713;|&#x2713;|
-|MiKo_3503|Do not assign variables in try catch blocks and return them directly outside the block|&#x2713;|&#x2713;|
+|MiKo_3503|Do not assign variables in try-catch blocks and return them directly outside the block|&#x2713;|&#x2713;|
 
 ### Ordering
 |ID|Title|Enabled by default|CodeFix available|

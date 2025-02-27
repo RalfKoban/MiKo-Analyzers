@@ -1843,6 +1843,12 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsCode(this XmlElementSyntax value) => value.GetName() == Constants.XmlTag.Code;
 
+        internal static bool IsAssignmentOf(this StatementSyntax value, string identifierName) => value is ExpressionStatementSyntax e
+                                                                                               && e.Expression is AssignmentExpressionSyntax a
+                                                                                               && a.IsKind(SyntaxKind.SimpleAssignmentExpression)
+                                                                                               && a.Left is IdentifierNameSyntax i
+                                                                                               && i.GetName() == identifierName;
+
         internal static bool IsCommand(this TypeSyntax value, SemanticModel semanticModel)
         {
             if (value is PredefinedTypeSyntax)

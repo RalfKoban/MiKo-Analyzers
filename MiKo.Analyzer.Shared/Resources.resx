@@ -4721,13 +4721,13 @@ Instead, use non-generic types as type arguments. This approach makes the code's
     <value>Return variable inside try/catch block</value>
   </data>
   <data name="MiKo_3503_Description" xml:space="preserve">
-    <value>Do not assign variables in try/catch blocks and return them as soon as the try/catch block is left. Instead, return them from within the try block.</value>
+    <value>Avoid defining variables outside of try/catch blocks, assigning them within the try/catch block, and then returning them immediately after leaving the block. Instead, return the variables directly from within the try/catch block. This makes the code easier to read and understand.</value>
   </data>
   <data name="MiKo_3503_MessageFormat" xml:space="preserve">
-    <value>Return variable inside try/catch block</value>
+    <value>Place return inside the try/catch block</value>
   </data>
   <data name="MiKo_3503_Title" xml:space="preserve">
-    <value>Do not assign variables in try catch blocks and return them directly outside the block</value>
+    <value>Do not assign variables in try-catch blocks and return them directly outside the block</value>
   </data>
   <data name="MiKo_4001_CodeFixTitle" xml:space="preserve">
     <value>Place and order method side-by-side with overloads</value>

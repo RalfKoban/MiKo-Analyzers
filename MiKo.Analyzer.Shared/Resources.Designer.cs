@@ -13496,7 +13496,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not assign variables in try/catch blocks and return them as soon as the try/catch block is left. Instead, return them from within the try block..
+        ///   Looks up a localized string similar to Avoid defining variables outside of try/catch blocks, assigning them within the try/catch block, and then returning them immediately after leaving the block. Instead, return the variables directly from within the try/catch block. This makes the code easier to read and understand..
         /// </summary>
         internal static string MiKo_3503_Description {
             get {
@@ -13505,7 +13505,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Return variable inside try/catch block.
+        ///   Looks up a localized string similar to Place return inside the try/catch block.
         /// </summary>
         internal static string MiKo_3503_MessageFormat {
             get {
@@ -13514,7 +13514,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not assign variables in try catch blocks and return them directly outside the block.
+        ///   Looks up a localized string similar to Do not assign variables in try-catch blocks and return them directly outside the block.
         /// </summary>
         internal static string MiKo_3503_Title {
             get {
