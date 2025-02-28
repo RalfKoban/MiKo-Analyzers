@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -12,17 +14,36 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2000";
 
+        private static readonly string[] XmlEntities = { "&amp;", "&lt;", "&gt;" };
+
         public MiKo_2000_MalformedDocumentationAnalyzer() : base(Id)
         {
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
-            foreach (var token in comment.DescendantTokens(SyntaxKind.XmlEntityLiteralToken))
+            foreach (var nodeOrToken in comment.AllDescendantNodesAndTokens())
             {
-                if (token.Text.Length == 1)
+                if (nodeOrToken.IsNode)
                 {
-                    yield return Issue(token);
+                    if (nodeOrToken.AsNode() is XmlEmptyElementSyntax element && element.SlashGreaterThanToken.IsMissing)
+                    {
+                        yield return Issue(element.LessThanToken);
+                    }
+                }
+                else if (nodeOrToken.IsToken)
+                {
+                    var token = nodeOrToken.AsToken();
+
+                    if (token.IsKind(SyntaxKind.XmlEntityLiteralToken))
+                    {
+                        var text = token.Text.AsCachedBuilder().Without(XmlEntities).ToStringAndRelease();
+
+                        if (text.Contains('&'))
+                        {
+                            yield return Issue(token);
+                        }
+                    }
                 }
             }
         }

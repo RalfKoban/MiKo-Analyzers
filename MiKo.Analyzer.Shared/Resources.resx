@@ -1712,7 +1712,7 @@ Example:
     <value>Documentation should be valid XML to generate API documentation and support IntelliSense. This helps developers understand and use the code better, ensuring the documentation is accurate and accessible.</value>
   </data>
   <data name="MiKo_2000_MessageFormat" xml:space="preserve">
-    <value>Documentation is malformed (contains invalid characters, e.g. '&amp;', '&gt;', '&lt;')</value>
+    <value>Documentation is malformed and contains invalid characters (such as '&amp;' or '&lt;')</value>
   </data>
   <data name="MiKo_2000_Title" xml:space="preserve">
     <value>Documentation should be valid XML</value>
