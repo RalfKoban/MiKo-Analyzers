@@ -649,6 +649,9 @@ namespace System.Linq
         internal static bool None<T>(this SyntaxList<T> source, SyntaxKind kind) where T : SyntaxNode => source.IndexOf(kind) == -1;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool None(this SyntaxTokenList source, SyntaxKind kind) => source.Any(kind) is false;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool None<T>(this SeparatedSyntaxList<T> source, SyntaxKind kind) where T : SyntaxNode => source.IndexOf(kind) == -1;
 
         internal static bool None<T>(this SyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode => source.All(_ => predicate(_) is false);
