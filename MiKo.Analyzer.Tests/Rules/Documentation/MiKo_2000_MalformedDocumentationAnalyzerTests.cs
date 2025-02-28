@@ -55,9 +55,9 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_XML_on_class_with_escaped_XML_entities() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correct_XML_on_class_with_escaped_XML_entity_([Values("&amp;", "&lt;")] string entity) => No_issue_is_reported_for(@"
 /// <summary>
-/// Something &amp; valid.
+/// Something " + entity + @" valid.
 /// </summary>
 public sealed class TestMe
 {
@@ -65,11 +65,34 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_XML_on_class_inside_code_tag() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correct_XML_on_class_with_escaped_XML_entity_without_spaces_([Values("&amp;", "&lt;")] string entity) => No_issue_is_reported_for(@"
+/// <summary>
+/// Something" + entity + @"valid.
+/// </summary>
+public sealed class TestMe
+{
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_correct_XML_on_class_inside_c_tag_([Values("&amp;", "&lt;")] string entity) => No_issue_is_reported_for(@"
+/// <summary>
+/// Something valid.
+/// <c>
+/// Test " + entity + @" other stuff.
+/// </c>
+/// </summary>
+public sealed class TestMe
+{
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_correct_XML_on_class_inside_code_tag_([Values("&amp;", "&lt;")] string entity) => No_issue_is_reported_for(@"
 /// <summary>
 /// Something valid.
 /// <code>
-/// Test &amp; other stuff.
+/// Test " + entity + @" other stuff.
 /// </code>
 /// </summary>
 public sealed class TestMe
@@ -124,7 +147,7 @@ public sealed class TestMe
         [Test]
         public void An_issue_is_reported_for_malformed_XML_on_class() => An_issue_is_reported_for(@"
 /// <summary>
-/// Saves & Loads the relevant layout inforamtion of the ribbon within <see cref=""XmlRibbonLayout""/>
+/// Saves & Loads the relevant layout information of the ribbon within <see cref=""XmlRibbonLayout""/>
 /// </summary>
 public sealed class TestMe
 {
@@ -136,7 +159,7 @@ public sealed class TestMe
 public sealed class TestMe
 {
     /// <summary>
-    /// Saves & Loads the relevant layout inforamtion of the ribbon within <see cref=""XmlRibbonLayout""/>
+    /// Saves & Loads the relevant layout information of the ribbon within <see cref=""XmlRibbonLayout""/>
     /// </summary>
     public void Malform() { }
 }
@@ -147,7 +170,7 @@ public sealed class TestMe
 public sealed class TestMe
 {
     /// <summary>
-    /// Saves & Loads the relevant layout inforamtion of the ribbon within <see cref=""XmlRibbonLayout""/>
+    /// Saves & Loads the relevant layout information of the ribbon within <see cref=""XmlRibbonLayout""/>
     /// </summary>
     public int Malform { get; set; }
 }
@@ -158,7 +181,7 @@ public sealed class TestMe
 public sealed class TestMe
 {
     /// <summary>
-    /// Saves & Loads the relevant layout inforamtion of the ribbon within <see cref=""XmlRibbonLayout""/>
+    /// Saves & Loads the relevant layout information of the ribbon within <see cref=""XmlRibbonLayout""/>
     /// </summary>
     public event EventHandler Malform;
 }
@@ -169,34 +192,32 @@ public sealed class TestMe
 public sealed class TestMe
 {
     /// <summary>
-    /// Saves & Loads the relevant layout inforamtion of the ribbon within <see cref=""XmlRibbonLayout""/>
+    /// Saves & Loads the relevant layout information of the ribbon within <see cref=""XmlRibbonLayout""/>
     /// </summary>
     private string Malform;
 }
 ");
 
-        [Test]
-        public void Code_gets_fixed()
+        [TestCase("&", "&amp;")]
+        [TestCase("& ", "&amp; ")]
+        [TestCase(" &", " &amp;")]
+        [TestCase(" & ", " &amp; ")]
+        [TestCase("<", "&lt;")]
+        [TestCase("< ", "&lt; ")]
+        [TestCase(" <", " &lt;")]
+        [TestCase(" < ", " &lt; ")]
+        public void Code_gets_fixed_for_(string malformed, string corrected)
         {
-            const string OriginalCode = @"
+            const string Template = @"
 /// <summary>
-/// Saves & loads something on <see cref=""TestMe""/>.
+/// Saves###loads something on <see cref=""TestMe""/>.
 /// </summary>
 public sealed class TestMe
 {
 }
 ";
 
-            const string FixedCode = @"
-/// <summary>
-/// Saves &amp; loads something on <see cref=""TestMe""/>.
-/// </summary>
-public sealed class TestMe
-{
-}
-";
-
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(Template.Replace("###", malformed), Template.Replace("###", corrected));
         }
 
         protected override string GetDiagnosticId() => MiKo_2000_MalformedDocumentationAnalyzer.Id;

@@ -4709,7 +4709,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation is malformed (contains invalid characters, e.g. &apos;&amp;&apos;, &apos;&gt;&apos;, &apos;&lt;&apos;).
+        ///   Looks up a localized string similar to Documentation is malformed and contains invalid characters (such as &apos;&amp;&apos; or &apos;&lt;&apos;).
         /// </summary>
         internal static string MiKo_2000_MessageFormat {
             get {
