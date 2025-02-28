@@ -198,6 +198,20 @@ public sealed class TestMe
 }
 ");
 
+        [TestCase("KeyValuePair<,>")]
+        [TestCase("KeyValuePair<, >")]
+        [TestCase("KeyValuePair< ,>")]
+        [TestCase("KeyValuePair< , >")]
+        public void An_issue_is_reported_for_malformed_remarks_XML_on_field_(string issue) => An_issue_is_reported_for(@"
+public sealed class TestMe
+{
+    /// <summary>
+    /// Fun-fact: IDictionary provides the Add(" + issue + @") interface
+    /// </summary>
+    private string Malform;
+}
+");
+
         [TestCase("&", "&amp;")]
         [TestCase("& ", "&amp; ")]
         [TestCase(" &", " &amp;")]
@@ -218,6 +232,25 @@ public sealed class TestMe
 ";
 
             VerifyCSharpFix(Template.Replace("###", malformed), Template.Replace("###", corrected));
+        }
+
+        [TestCase("KeyValuePair<,>")]
+        [TestCase("KeyValuePair<, >")]
+        [TestCase("KeyValuePair< ,>")]
+        [TestCase("KeyValuePair< , >")]
+        public void Code_gets_fixed_for_malformed_remarks_XML_on_field_(string issue)
+        {
+            const string Template = @"
+public sealed class TestMe
+{
+    /// <summary>
+    /// Fun-fact: IDictionary provides the Add(###) interface
+    /// </summary>
+    private string Malform;
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", issue), Template.Replace("###", issue.Replace("<", "&lt;").Replace(">", "&gt;")));
         }
 
         protected override string GetDiagnosticId() => MiKo_2000_MalformedDocumentationAnalyzer.Id;
