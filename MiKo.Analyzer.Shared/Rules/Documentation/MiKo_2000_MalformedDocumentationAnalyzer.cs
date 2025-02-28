@@ -26,9 +26,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 if (nodeOrToken.IsNode)
                 {
-                    if (nodeOrToken.AsNode() is XmlEmptyElementSyntax element && element.SlashGreaterThanToken.IsMissing)
+                    switch (nodeOrToken.AsNode())
                     {
-                        yield return Issue(element.LessThanToken);
+                        case XmlEmptyElementSyntax emptyElement when emptyElement.SlashGreaterThanToken.IsMissing:
+                        {
+                            yield return Issue(emptyElement.LessThanToken);
+
+                            break;
+                        }
+
+                        case XmlElementSyntax element:
+                        {
+                            var name = element.StartTag.GetName();
+
+                            if (name.IsNullOrWhiteSpace())
+                            {
+                                yield return Issue(element.StartTag);
+                            }
+
+                            break;
+                        }
                     }
                 }
                 else if (nodeOrToken.IsToken)
