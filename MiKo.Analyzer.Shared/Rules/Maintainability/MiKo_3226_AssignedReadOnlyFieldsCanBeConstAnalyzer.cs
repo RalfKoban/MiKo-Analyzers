@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private void AnalyzeField(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is FieldDeclarationSyntax declaration && declaration.Modifiers.Any(SyntaxKind.ReadOnlyKeyword))
+            if (context.Node is FieldDeclarationSyntax declaration && declaration.IsReadOnly())
             {
                 foreach (var variable in declaration.Declaration.Variables)
                 {
