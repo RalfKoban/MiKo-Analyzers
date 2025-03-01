@@ -8514,6 +8514,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Replace with &apos;to&apos;.
+        /// </summary>
+        internal static string MiKo_2234_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2234_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phrases like &quot;that is to&quot; or &quot;which is to&quot; are wordy and can just be replaced with &quot;to&quot;. This makes documentation clearer and more concise for developers..
+        /// </summary>
+        internal static string MiKo_2234_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2234_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;to&apos; instead.
+        /// </summary>
+        internal static string MiKo_2234_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2234_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should use &apos;to&apos; instead of &apos;that is to&apos; or &apos;which is to&apos;.
+        /// </summary>
+        internal static string MiKo_2234_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2234_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works—let the code itself do that.
         ///This approach ensures comments are insightful and add real value by giving context and rationale, helping developers understand the reasoning behind the implementation..
         /// </summary>
@@ -8905,6 +8941,42 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_2311_Title {
             get {
                 return ResourceManager.GetString("MiKo_2311_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace with &apos;to&apos;.
+        /// </summary>
+        internal static string MiKo_2312_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2312_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phrases like &quot;that is to&quot; or &quot;which is to&quot; are wordy and can just be replaced with &quot;to&quot;. This makes comments clearer and more concise for developers..
+        /// </summary>
+        internal static string MiKo_2312_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2312_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;to&apos; instead.
+        /// </summary>
+        internal static string MiKo_2312_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2312_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comments should use &apos;to&apos; instead of &apos;that is to&apos; or &apos;which is to&apos;.
+        /// </summary>
+        internal static string MiKo_2312_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2312_Title", resourceCulture);
             }
         }
         

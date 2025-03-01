@@ -295,6 +295,7 @@ namespace MiKoSolutions.Analyzers
             internal const string SpecialOrPhrase = "-or-";
             internal const string StringReturnTypeStartingPhraseTemplate = "A {0} {1} ";
             internal const string ThatContainsTerm = "that contains";
+            internal const string ToTerm = " to ";
             internal const string ToSeekTerm = "to seek";
             internal const string TryStartingPhrase = "Attempts to";
             internal const string ValueConverterSummaryStartingPhrase = "Represents a converter that converts ";
@@ -993,6 +994,18 @@ namespace MiKoSolutions.Analyzers
                                                                                  "Specifies",
                                                                                  "Enum",
                                                                              };
+
+            internal static readonly string[] WhichIsToTerms =
+                                                               {
+                                                                   ", that is to have to ",
+                                                                   ", that is to ",
+                                                                   " that is to have to ",
+                                                                   " that is to ",
+                                                                   ", which is to have to ",
+                                                                   ", which is to ",
+                                                                   " which is to have to ",
+                                                                   " which is to ",
+                                                               };
         }
 
         internal static class XmlTag
