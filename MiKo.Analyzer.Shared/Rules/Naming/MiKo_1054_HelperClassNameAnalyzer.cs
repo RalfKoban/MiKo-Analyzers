@@ -14,10 +14,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private const string CorrectName = "Utilization";
 
-        private static readonly string[] WrongNames = { "Helper", "Util" };
+        private static readonly string[] WrongNames = { "Helper", "Util", "Misc" };
 
         // sorted by intent so that the best match is found until a more generic is found
-        private static readonly string[] WrongNamesForConcreteLookup = { "Helpers", "Helper", "Utils", "Utility", "Utilities", "Util" };
+        private static readonly string[] WrongNamesForConcreteLookup = { "Helpers", "Helper", "Miscellaneous", "Misc", "Utils", "Utility", "Utilities", "Util" };
 
         public MiKo_1054_HelperClassNameAnalyzer() : base(Id, SymbolKind.NamedType)
         {

@@ -19,6 +19,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                          [
                                                              "Helper",
                                                              "Helpers",
+                                                             "Misc",
+                                                             "Miscellaneous",
                                                              "Util",
                                                              "Utils",
                                                              "Utility",
