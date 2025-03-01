@@ -3006,6 +3006,18 @@ However, these suppressions should remain inline comments and must not be part o
   <data name="MiKo_2233_Title" xml:space="preserve">
     <value>XML tags should be placed on single line</value>
   </data>
+  <data name="MiKo_2234_CodeFixTitle" xml:space="preserve">
+    <value>Replace with 'to'</value>
+  </data>
+  <data name="MiKo_2234_Description" xml:space="preserve">
+    <value>Phrases like "that is to" or "which is to" are wordy and can just be replaced with "to". This makes documentation clearer and more concise for developers.</value>
+  </data>
+  <data name="MiKo_2234_MessageFormat" xml:space="preserve">
+    <value>Use 'to' instead</value>
+  </data>
+  <data name="MiKo_2234_Title" xml:space="preserve">
+    <value>Documentation should use 'to' instead of 'that is to' or 'which is to'</value>
+  </data>
   <data name="MiKo_2300_Description" xml:space="preserve">
     <value>Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works—let the code itself do that.
 This approach ensures comments are insightful and add real value by giving context and rationale, helping developers understand the reasoning behind the implementation.</value>
@@ -3142,6 +3154,18 @@ Instead, comments should enhance understanding, giving context and reasoning for
   </data>
   <data name="MiKo_2311_Title" xml:space="preserve">
     <value>Do not use separator comments</value>
+  </data>
+  <data name="MiKo_2312_CodeFixTitle" xml:space="preserve">
+    <value>Replace with 'to'</value>
+  </data>
+  <data name="MiKo_2312_Description" xml:space="preserve">
+    <value>Phrases like "that is to" or "which is to" are wordy and can just be replaced with "to". This makes comments clearer and more concise for developers.</value>
+  </data>
+  <data name="MiKo_2312_MessageFormat" xml:space="preserve">
+    <value>Use 'to' instead</value>
+  </data>
+  <data name="MiKo_2312_Title" xml:space="preserve">
+    <value>Comments should use 'to' instead of 'that is to' or 'which is to'</value>
   </data>
   <data name="MiKo_3000_Description" xml:space="preserve">
     <value>If #region directives are used, avoid any empty #region. They just clutter the code without adding any value. When regions are truly needed, keep them meaningful and populated to ensure the code remains clean and efficient. This approach maintains clarity and organization in the codebase.</value>

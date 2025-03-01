@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables lists all the 478 rules that are currently provided by the analyzer.
+The following tables lists all the 480 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -272,6 +272,7 @@ The following tables lists all the 478 rules that are currently provided by the 
 |MiKo_2231|Documentation of overridden 'GetHashCode()' methods shall use '&lt;inheritdoc /&gt;' marker|&#x2713;|&#x2713;|
 |MiKo_2232|&lt;summary&gt; documentation should not be empty|&#x2713;|&#x2713;|
 |MiKo_2233|XML tags should be placed on single line|&#x2713;|&#x2713;|
+|MiKo_2224|Documentation should use 'to' instead of 'that is to' or 'which is to'|&#x2713;|&#x2713;|
 |MiKo_2300|Comments should explain the 'Why' and not the 'How'|&#x2713;|\-|
 |MiKo_2301|Do not use obvious comments in AAA-Tests|&#x2713;|&#x2713;|
 |MiKo_2302|Do not keep code that is commented out|&#x2713;|\-|
@@ -284,6 +285,7 @@ The following tables lists all the 478 rules that are currently provided by the 
 |MiKo_2309|Comments should not use the contraction "n't"|&#x2713;|&#x2713;|
 |MiKo_2310|Comments should explain the 'Why' and not the 'That'|&#x2713;|\-|
 |MiKo_2311|Do not use separator comments|&#x2713;|&#x2713;|
+|MiKo_2312|Comments should use 'to' instead of 'that is to' or 'which is to'|&#x2713;|&#x2713;|
 
 ### Maintainability
 |ID|Title|Enabled by default|CodeFix available|
