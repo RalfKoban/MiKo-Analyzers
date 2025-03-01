@@ -4660,6 +4660,18 @@ Instead, use non-generic types as type arguments. This approach makes the code's
   <data name="MiKo_3225_Title" xml:space="preserve">
     <value>Redundant comparisons can be simplified</value>
   </data>
+  <data name="MiKo_3226_CodeFixTitle" xml:space="preserve">
+    <value>Convert field to const</value>
+  </data>
+  <data name="MiKo_3226_Description" xml:space="preserve">
+    <value>Read-only fields with pre-assigned values are likely meant to be constant values. Therefore, make these fields 'const'. This ensures their values remain constant and clearly communicates their intended use.</value>
+  </data>
+  <data name="MiKo_3226_MessageFormat" xml:space="preserve">
+    <value>Convert field to const</value>
+  </data>
+  <data name="MiKo_3226_Title" xml:space="preserve">
+    <value>Read-only fields with initializers should be const</value>
+  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>

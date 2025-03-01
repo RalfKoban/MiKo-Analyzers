@@ -13316,6 +13316,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Convert field to const.
+        /// </summary>
+        internal static string MiKo_3226_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3226_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Read-only fields with pre-assigned values are likely meant to be constant values. Therefore, make these fields &apos;const&apos;. This ensures their values remain constant and clearly communicates their intended use..
+        /// </summary>
+        internal static string MiKo_3226_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3226_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Convert field to const.
+        /// </summary>
+        internal static string MiKo_3226_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3226_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Read-only fields with initializers should be const.
+        /// </summary>
+        internal static string MiKo_3226_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3226_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         internal static string MiKo_3301_CodeFixTitle {
