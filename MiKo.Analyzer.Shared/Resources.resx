@@ -4664,7 +4664,7 @@ Instead, use non-generic types as type arguments. This approach makes the code's
     <value>Convert field to const</value>
   </data>
   <data name="MiKo_3226_Description" xml:space="preserve">
-    <value>Read-only fields with pre-assigned values are likely meant to be constant values. Therefore, make these fields const'. This ensures their values remain constant and clearly communicates their intended use.</value>
+    <value>Read-only fields with pre-assigned values are likely meant to be constant values. Therefore, make these fields 'const'. This ensures their values remain constant and clearly communicates their intended use.</value>
   </data>
   <data name="MiKo_3226_MessageFormat" xml:space="preserve">
     <value>Convert field to const</value>

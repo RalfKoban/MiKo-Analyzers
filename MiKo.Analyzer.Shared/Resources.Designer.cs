@@ -13325,7 +13325,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Read-only fields with pre-assigned values are likely meant to be constant values. Therefore, make these fields const&apos;. This ensures their values remain constant and clearly communicates their intended use..
+        ///   Looks up a localized string similar to Read-only fields with pre-assigned values are likely meant to be constant values. Therefore, make these fields &apos;const&apos;. This ensures their values remain constant and clearly communicates their intended use..
         /// </summary>
         internal static string MiKo_3226_Description {
             get {
