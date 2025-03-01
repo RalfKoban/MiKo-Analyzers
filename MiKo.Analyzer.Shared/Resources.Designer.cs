@@ -6118,7 +6118,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;&lt;para/&gt;&apos; instead of &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Use &apos;&lt;para/&gt;&apos; instead of &apos;{0}&apos;.
         /// </summary>
         internal static string MiKo_2042_MessageFormat {
             get {
@@ -7993,7 +7993,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &lt;list&gt; properly: {1}.
+        ///   Looks up a localized string similar to Use &lt;list&gt; properly: {0}.
         /// </summary>
         internal static string MiKo_2217_MessageFormat {
             get {
@@ -8125,7 +8125,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Provide a documentation for &lt;{1}/&gt;.
+        ///   Looks up a localized string similar to Provide a documentation for &lt;{0}/&gt;.
         /// </summary>
         internal static string MiKo_2221_MessageFormat {
             get {
@@ -11339,7 +11339,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;unchecked((int)0x{1})&apos; instead for HResult.
+        ///   Looks up a localized string similar to Use &apos;unchecked((int)0x{0})&apos; instead for HResult.
         /// </summary>
         internal static string MiKo_3079_MessageFormat {
             get {
@@ -11512,7 +11512,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place it on right side of &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Place it on right side of &apos;{0}&apos;.
         /// </summary>
         internal static string MiKo_3084_MessageFormat {
             get {

@@ -28,14 +28,57 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
-        {
-            return comment is null
-                   ? Array.Empty<Diagnostic>()
-                   : AnalyzeComment(symbol.Name, comment);
-        }
-
 //// ncrunch: rdi off
+
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol)
+        {
+            var results = new List<Diagnostic>(1);
+
+            foreach (var descendant in comment.DescendantNodes(DescendIntoChildren))
+            {
+                switch (descendant)
+                {
+                    case XmlElementSyntax e when e.IsWrongBooleanTag() || e.IsWrongNullTag():
+                    {
+                        var wrongText = e.Content.ToString();
+                        var proposal = Proposal(wrongText);
+
+                        results.Add(Issue(e, wrongText, proposal));
+
+                        break;
+                    }
+
+                    case XmlEmptyElementSyntax ee when ee.IsSee(WrongAttributes) || ee.IsSeeAlso(WrongAttributes):
+                    {
+                        var wrongText = GetWrongText(ee.Attributes);
+                        var proposal = Proposal(wrongText);
+
+                        results.Add(Issue(ee, wrongText, proposal));
+
+                        break;
+                    }
+
+                    case XmlElementSyntax e when e.IsSee(WrongAttributes) || e.IsSeeAlso(WrongAttributes):
+                    {
+                        var wrongText = GetWrongText(e.StartTag.Attributes);
+                        var proposal = Proposal(wrongText);
+
+                        results.Add(Issue(e, wrongText, proposal));
+
+                        break;
+                    }
+
+                    case XmlTextSyntax textNode:
+                    {
+                        results.AddRange(AnalyzeTextTokens(textNode));
+
+                        break;
+                    }
+                }
+            }
+
+            return results;
+        }
 
         private static Pair[] CreateStartParts()
         {
@@ -144,58 +187,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeComment(string symbolName, DocumentationCommentTriviaSyntax comment)
-        {
-            var descendantNodes = comment.DescendantNodes(DescendIntoChildren);
-
-            foreach (var descendant in descendantNodes)
-            {
-                switch (descendant)
-                {
-                    case XmlElementSyntax e when e.IsWrongBooleanTag() || e.IsWrongNullTag():
-                    {
-                        var wrongText = e.Content.ToString();
-                        var proposal = Proposal(wrongText);
-
-                        yield return Issue(symbolName, e, wrongText, proposal);
-
-                        break;
-                    }
-
-                    case XmlEmptyElementSyntax ee when ee.IsSee(WrongAttributes) || ee.IsSeeAlso(WrongAttributes):
-                    {
-                        var wrongText = GetWrongText(ee.Attributes);
-                        var proposal = Proposal(wrongText);
-
-                        yield return Issue(symbolName, ee, wrongText, proposal);
-
-                        break;
-                    }
-
-                    case XmlElementSyntax e when e.IsSee(WrongAttributes) || e.IsSeeAlso(WrongAttributes):
-                    {
-                        var wrongText = GetWrongText(e.StartTag.Attributes);
-                        var proposal = Proposal(wrongText);
-
-                        yield return Issue(symbolName, e, wrongText, proposal);
-
-                        break;
-                    }
-
-                    case XmlTextSyntax textNode:
-                    {
-                        foreach (var issue in AnalyzeTextTokens(symbolName, textNode))
-                        {
-                            yield return issue;
-                        }
-
-                        break;
-                    }
-                }
-            }
-        }
-
-        private IEnumerable<Diagnostic> AnalyzeTextTokens(string symbolName, XmlTextSyntax textNode)
+        private IEnumerable<Diagnostic> AnalyzeTextTokens(XmlTextSyntax textNode)
         {
             var alreadyFoundLocations = new HashSet<Location>();
 
@@ -249,7 +241,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                             if (alreadyFoundLocations.Add(location))
                             {
-                                yield return Issue(symbolName, location, wrongText, proposal);
+                                yield return Issue(location, wrongText, proposal);
                             }
                         }
                     }
@@ -268,7 +260,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (location != null && alreadyFoundLocations.Add(location))
                     {
-                        yield return Issue(symbolName, location, wrongText, proposal);
+                        yield return Issue(location, wrongText, proposal);
                     }
                 }
 
@@ -285,7 +277,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (location != null && alreadyFoundLocations.Add(location))
                     {
-                        yield return Issue(symbolName, location, wrongText, proposal);
+                        yield return Issue(location, wrongText, proposal);
                     }
                 }
             }

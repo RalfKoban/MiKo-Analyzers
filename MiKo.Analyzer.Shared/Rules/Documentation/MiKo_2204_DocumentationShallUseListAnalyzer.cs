@@ -29,34 +29,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
-        {
-            var issues = AnalyzeComment(symbol, comment).ToList();
-
-            if (issues.Count > 1)
-            {
-                return issues; // only report if we found more than 1 issue
-            }
-
-            return Array.Empty<Diagnostic>();
-        }
-
-        private IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol)
         {
             var textTokens = comment.GetXmlTextTokens();
             var textTokensCount = textTokens.Count;
 
             if (textTokensCount == 0)
             {
-                yield break;
+                return Array.Empty<Diagnostic>();
             }
 
             var commentXml = textTokens.GetTextTrimmedWithParaTags();
 
             if (commentXml.ContainsAny(Triggers, StringComparison.Ordinal) is false)
             {
-                yield break;
+                return Array.Empty<Diagnostic>();
             }
+
+            List<Diagnostic> results = null;
 
             for (var i = 0; i < textTokensCount; i++)
             {
@@ -72,7 +62,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 // we do not want to find a ' - ' in the middle of the text (except it contains lots of whitespaces)
                 if (token.HasLeadingTrivia && text.AsSpan().TrimStart().StartsWith("- ", StringComparison.Ordinal))
                 {
-                    yield return Issue(symbol.Name, token);
+                    if (results is null)
+                    {
+                        results = new List<Diagnostic>(1);
+                    }
+
+                    results.Add(Issue(token));
                 }
                 else
                 {
@@ -83,13 +78,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (locationsCount > 0)
                     {
+                        if (results is null)
+                        {
+                            results = new List<Diagnostic>(locationsCount);
+                        }
+
                         for (var index = 0; index < locationsCount; index++)
                         {
-                            yield return Issue(symbol.Name, locations[index]);
+                            results.Add(Issue(locations[index]));
                         }
                     }
                 }
             }
+
+            // only report if we found more than 1 issue
+            if (results?.Count > 1)
+            {
+                return results;
+            }
+
+            return Array.Empty<Diagnostic>();
         }
     }
 }

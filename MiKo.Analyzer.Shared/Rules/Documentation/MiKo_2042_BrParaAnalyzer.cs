@@ -17,8 +17,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol)
         {
+            List<Diagnostic> results = null;
+
             foreach (var node in comment.DescendantNodes(_ => CodeTags.Contains(_.GetXmlTagName()) is false, true))
             {
                 if (node is XmlElementStartTagSyntax || node is XmlEmptyElementSyntax)
@@ -28,17 +30,29 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     switch (tag)
                     {
                         case "br":
-                            yield return Issue(symbol.Name, node, "<br/>");
+                            if (results is null)
+                            {
+                                results = new List<Diagnostic>();
+                            }
+
+                            results.Add(Issue(node, "<br/>"));
 
                             break;
 
                         case "p":
-                            yield return Issue(symbol.Name, node, "<p>...</p>");
+                            if (results is null)
+                            {
+                                results = new List<Diagnostic>();
+                            }
+
+                            results.Add(Issue(node, "<p>...</p>"));
 
                             break;
                     }
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
         }
     }
 }

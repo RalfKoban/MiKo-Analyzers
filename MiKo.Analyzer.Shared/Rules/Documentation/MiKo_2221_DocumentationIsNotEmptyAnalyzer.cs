@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -29,8 +30,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol)
         {
+            List<Diagnostic> results = null;
+
             foreach (var xml in comment.GetEmptyXmlSyntax(Tags))
             {
                 var tagName = xml.GetName();
@@ -41,8 +44,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     continue;
                 }
 
-                yield return Issue(symbol.Name, xml, tagName);
+                if (results is null)
+                {
+                    results = new List<Diagnostic>(1);
+                }
+
+                results.Add(Issue(xml, tagName));
             }
+
+            return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
         }
     }
 }

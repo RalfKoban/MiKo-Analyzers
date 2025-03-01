@@ -26,8 +26,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol)
         {
+            List<Diagnostic> results = null;
+
             foreach (var token in comment.DescendantNodes<XmlTextSyntax>(_ => _.AncestorsWithinDocumentation<XmlElementSyntax>().None(__ => AllowedTags.Contains(__.GetName())))
                                          .SelectMany(_ => _.TextTokens.OfKind(SyntaxKind.XmlTextLiteralToken)))
             {
@@ -46,10 +48,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             continue;
                         }
 
-                        yield return Issue(location);
+                        if (results is null)
+                        {
+                            results = new List<Diagnostic>(1);
+                        }
+
+                        results.Add(Issue(location));
                     }
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
         }
     }
 }

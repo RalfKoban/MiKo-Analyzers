@@ -250,6 +250,8 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected Diagnostic Issue(SyntaxToken token) => Issue(token, Array.Empty<Pair>());
 
+        protected Diagnostic Issue(SyntaxTrivia trivia) => Issue(trivia, Array.Empty<Pair>());
+
         protected Diagnostic Issue(Location location) => Issue(location, Array.Empty<Pair>());
 
         protected Diagnostic Issue<T>(ISymbol symbol, T arg1) => Issue(symbol, arg1, Array.Empty<Pair>());
@@ -280,6 +282,8 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected Diagnostic Issue<T1, T2>(ISymbol symbol, T1 arg1, T2 arg2) => Issue(symbol, arg1, arg2, Array.Empty<Pair>());
 
+        protected Diagnostic Issue<T1, T2>(SyntaxNode node, T1 arg1, T2 arg2) => Issue(node.GetLocation(), arg1, arg2, Array.Empty<Pair>());
+
         protected Diagnostic Issue<T1, T2>(Location location, T1 arg1, T2 arg2) => Issue(location, arg1, arg2, Array.Empty<Pair>());
 
         protected Diagnostic Issue<T1, T2>(string name, ISymbol symbol, T1 arg1, T2 arg2) => Issue(name, symbol, arg1, arg2, Array.Empty<Pair>());
@@ -303,6 +307,8 @@ namespace MiKoSolutions.Analyzers.Rules
         protected Diagnostic Issue(SyntaxNode node, params Pair[] properties) => CreateIssue(node.GetLocation(), properties, node.ToString());
 
         protected Diagnostic Issue(SyntaxToken token, params Pair[] properties) => CreateIssue(token.GetLocation(), properties, token.ValueText);
+
+        protected Diagnostic Issue(SyntaxTrivia trivia, params Pair[] properties) => CreateIssue(trivia.GetLocation(), properties);
 
         protected Diagnostic Issue(Location location, params Pair[] properties) => CreateIssue(location, properties, location.GetText());
 

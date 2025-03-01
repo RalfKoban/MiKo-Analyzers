@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol)
         {
             var summaryXmls = comment.GetSummaryXmls();
             var remarksXmls = comment.GetRemarksXmls();
@@ -31,7 +31,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return Array.Empty<Diagnostic>()
                         .Concat(AnalyzeXml(summaryXmls))
-                        .Concat(AnalyzeXml(remarksXmls));
+                        .Concat(AnalyzeXml(remarksXmls))
+                        .ToList();
         }
 
         private static bool SentenceHasIssue(XmlElementSyntax xml)

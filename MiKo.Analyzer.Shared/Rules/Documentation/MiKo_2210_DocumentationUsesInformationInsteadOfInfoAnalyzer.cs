@@ -16,22 +16,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol)
         {
             var textTokens = comment.GetXmlTextTokens();
             var textTokensCount = textTokens.Count;
 
             if (textTokensCount == 0)
             {
-                yield break;
+                return Array.Empty<Diagnostic>();
             }
 
             var text = textTokens.GetTextTrimmedWithParaTags();
 
             if (text.ContainsAny(Constants.Comments.InfoTerms, StringComparison.OrdinalIgnoreCase) is false)
             {
-                yield break;
+                return Array.Empty<Diagnostic>();
             }
+
+            List<Diagnostic> results = null;
 
             for (var i = 0; i < textTokensCount; i++)
             {
@@ -42,12 +44,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (locationsCount > 0)
                 {
+                    if (results is null)
+                    {
+                        results = new List<Diagnostic>(locationsCount);
+                    }
+
                     for (var index = 0; index < locationsCount; index++)
                     {
-                        yield return Issue(symbol.Name, locations[index]);
+                        results.Add(Issue(locations[index]));
                     }
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -18,8 +19,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol)
         {
+            List<Diagnostic> results = null;
+
             foreach (var token in comment.DescendantTokens(SyntaxKind.XmlTextLiteralToken))
             {
                 if (token.Parent.IsKind(SyntaxKind.XmlCDataSection))
@@ -33,12 +36,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (locationsCount > 0)
                 {
+                    if (results is null)
+                    {
+                        results = new List<Diagnostic>(locationsCount);
+                    }
+
                     for (var index = 0; index < locationsCount; index++)
                     {
-                        yield return Issue(locations[index]);
+                        results.Add(Issue(locations[index]));
                     }
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
         }
     }
 }

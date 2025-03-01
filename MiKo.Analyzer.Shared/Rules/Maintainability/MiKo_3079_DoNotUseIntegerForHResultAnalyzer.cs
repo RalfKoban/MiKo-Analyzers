@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var hexValue = ((-1) * result).ToString("X");
 
-                    ReportDiagnostics(context, Issue(string.Empty, parent, hexValue));
+                    ReportDiagnostics(context, Issue(parent, hexValue));
                 }
             }
         }

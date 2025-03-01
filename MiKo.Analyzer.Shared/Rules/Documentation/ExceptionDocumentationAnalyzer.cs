@@ -44,7 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return exceptionXmls.Where(_ => _.IsExceptionComment(m_exceptionType));
         }
 
-        protected Diagnostic ExceptionIssue(XmlElementSyntax exceptionComment, string proposal) => Issue(string.Empty, exceptionComment.GetContentsLocation(), ExceptionPhrase, proposal, CreatePhraseProposal(proposal));
+        protected Diagnostic ExceptionIssue(XmlElementSyntax exceptionComment, string proposal) => Issue(exceptionComment.GetContentsLocation(), ExceptionPhrase, proposal, CreatePhraseProposal(proposal));
 
         private IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, IEnumerable<XmlElementSyntax> comments)
         {
