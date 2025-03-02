@@ -3,20 +3,21 @@ using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class ParamDocumentationAnalyzer : DocumentationAnalyzer
     {
-        protected ParamDocumentationAnalyzer(string diagnosticId) : base(diagnosticId, SymbolKind.Method)
+        protected ParamDocumentationAnalyzer(string diagnosticId) : base(diagnosticId, (SymbolKind)(-1))
         {
         }
 
         protected bool IgnoreEmptyParameters { get; set; } = true;
 
-        protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeParameters(symbol, commentXml, comment);
+        protected sealed override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeComment, DocumentationCommentTrivia);
 
-        protected IEnumerable<Diagnostic> AnalyzeStartingPhrase(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment, string[] phrases, StringComparison comparison = StringComparison.Ordinal)
+        protected Diagnostic[] AnalyzeStartingPhrase(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment, string[] phrases, StringComparison comparison = StringComparison.Ordinal)
         {
             if (comment.StartsWithAny(phrases, comparison))
             {
@@ -29,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return new[] { Issue(parameter.Name, GetIssueLocation(parameterComment), preview, CreateProposal(parameter, phrase)) };
         }
 
-        protected IEnumerable<Diagnostic> AnalyzePlainTextStartingPhrase(IParameterSymbol parameter, XmlElementSyntax parameterComment, string[] phrases, StringComparison comparison = StringComparison.Ordinal)
+        protected Diagnostic[] AnalyzePlainTextStartingPhrase(IParameterSymbol parameter, XmlElementSyntax parameterComment, string[] phrases, StringComparison comparison = StringComparison.Ordinal)
         {
             var text = parameterComment.GetTextTrimmed();
 
@@ -50,17 +51,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual bool ShallAnalyzeParameter(IParameterSymbol parameter) => true;
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment) => Array.Empty<Diagnostic>();
+        protected virtual Diagnostic[] AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment) => Array.Empty<Diagnostic>();
 
-        protected IEnumerable<Diagnostic> AnalyzeParameters(IMethodSymbol symbol, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected IReadOnlyList<Diagnostic> AnalyzeParameters(IMethodSymbol symbol, DocumentationCommentTriviaSyntax comment)
         {
             var parameters = symbol.Parameters;
             var parametersLength = parameters.Length;
 
             if (parametersLength <= 0)
             {
-                yield break;
+                return Array.Empty<Diagnostic>();
             }
+
+            List<Diagnostic> results = null;
+
+            var commentXml = symbol.GetDocumentationCommentXml();
 
             var ignoreEmptyParameters = IgnoreEmptyParameters;
 
@@ -89,16 +94,42 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         continue;
                     }
 
-                    foreach (var issue in AnalyzeParameter(parameter, parameterComment, parameterCommentXml))
+                    var issues = AnalyzeParameter(parameter, parameterComment, parameterCommentXml);
+                    var issuesCount = issues.Length;
+
+                    if (issuesCount > 0)
                     {
-                        yield return issue;
+                        if (results is null)
+                        {
+                            results = new List<Diagnostic>(issuesCount);
+                        }
+
+                        results.AddRange(issues);
                     }
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
         }
 
         private static string GetPreview(string phrase, string[] phrases) => phrases.Length > 1 && phrase.Length <= 10
                                                                              ? phrases.HumanizedConcatenated()
                                                                              : phrase.SurroundedWithApostrophe();
+
+        private void AnalyzeComment(SyntaxNodeAnalysisContext context)
+        {
+            if (context.Node is DocumentationCommentTriviaSyntax comment)
+            {
+                if (context.ContainingSymbol is IMethodSymbol symbol && ShallAnalyze(symbol))
+                {
+                    var issues = AnalyzeParameters(symbol, comment);
+
+                    if (issues.Count > 0)
+                    {
+                        ReportDiagnostics(context, issues);
+                    }
+                }
+            }
+        }
     }
 }
