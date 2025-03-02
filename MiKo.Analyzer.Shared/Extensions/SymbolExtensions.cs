@@ -5,6 +5,7 @@ using System.Collections.Immutable;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
@@ -1113,10 +1114,13 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsAsyncTaskBased(this IMethodSymbol value) => value.IsAsync || value.ReturnType.IsTask();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsBoolean(this ITypeSymbol value) => value.SpecialType == SpecialType.System_Boolean;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsByte(this ITypeSymbol value) => value.SpecialType == SpecialType.System_Byte;
 
         internal static bool IsByteArray(this ITypeSymbol value) => value is IArrayTypeSymbol array && array.ElementType.IsByte();
@@ -1136,6 +1140,7 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsCancellationToken(this ITypeSymbol value) => value.TypeKind == TypeKind.Struct && value.ToString() == TypeNames.CancellationToken;
 
         internal static bool IsCoerceValueCallback(this IMethodSymbol value)
@@ -1150,11 +1155,16 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsCommand(this ITypeSymbol value) => value.Implements<ICommand>();
 
         internal static bool IsConstructor(this ISymbol value) => value is IMethodSymbol m && m.IsConstructor();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsConstructor(this IMethodSymbol value) => value.MethodKind == MethodKind.Constructor;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool IsPrimaryConstructor(this ISymbol value) => value is IMethodSymbol m && m.IsPrimaryConstructor();
 
         internal static bool IsPrimaryConstructor(this IMethodSymbol value)
         {
@@ -1175,6 +1185,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsDependencyObject(this ITypeSymbol value) => value.InheritsFrom("DependencyObject", "System.Windows.DependencyObject");
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsDependencyProperty(this ITypeSymbol value) => value.Name == Constants.DependencyProperty.TypeName || value.Name == Constants.DependencyProperty.FullyQualifiedTypeName;
 
         internal static bool IsDependencyPropertyChangedEventArgs(this ITypeSymbol value)
@@ -1217,6 +1228,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsEnhancedByPostSharpAdvice(this ISymbol value) => value.HasAttributeApplied("PostSharp.Aspects.Advices.Advice");
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsEnum(this ITypeSymbol value) => value?.TypeKind == TypeKind.Enum;
 
         internal static bool IsEnumerable(this ITypeSymbol value)
@@ -1382,8 +1394,10 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsGenerated(this ITypeSymbol value) => value?.TypeKind == TypeKind.Class && value.HasAttribute(Constants.Names.GeneratedAttributeNames);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsGeneric(this ITypeSymbol value) => value is INamedTypeSymbol type && type.TypeArguments.Length > 0;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsGuid(this ITypeSymbol value) => value.IsValueType && value.Name == nameof(Guid);
 
         internal static bool IsImport(this ISymbol value) => value.HasAttribute(Constants.Names.ImportAttributeNames);
@@ -1571,12 +1585,16 @@ namespace MiKoSolutions.Analyzers
                                                                            || value.InheritsFrom(Constants.Names.IMultiValueConverter, Constants.Names.IMultiValueConverterFullName);
 
         // ignore special situation for task factory
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsNullable(this ITypeSymbol value) => value.IsValueType && value.Name == nameof(Nullable);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsObject(this ITypeSymbol value) => value.SpecialType == SpecialType.System_Object;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsPartial(this ITypeSymbol value) => value.Locations.Length > 1;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsPartial(this IMethodSymbol value) => value.HasModifier(SyntaxKind.PartialKeyword);
 
         internal static bool IsPubliclyVisible(this ISymbol value)
@@ -1609,6 +1627,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsSerializationConstructor(this IMethodSymbol value) => value.IsConstructor() && value.Parameters.Length == 2 && value.Parameters[0].IsSerializationInfoParameter() && value.Parameters[1].IsStreamingContextParameter();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsSerializationInfoParameter(this IParameterSymbol value) => value.Type.Name == nameof(SerializationInfo);
 
         internal static bool IsSpecialAccessor(this IMethodSymbol value)
@@ -1627,10 +1646,13 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsStreamingContextParameter(this IParameterSymbol value) => value.Type.Name == nameof(StreamingContext);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsString(this ITypeSymbol value) => value?.SpecialType == SpecialType.System_String;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsTask(this ITypeSymbol value) => value?.Name == nameof(Task);
 
         internal static bool IsTestClass(this ITypeSymbol value) => value?.TypeKind == TypeKind.Class && value.IsRecord is false && value.HasAttribute(Constants.Names.TestClassAttributeNames);
@@ -1716,6 +1738,7 @@ namespace MiKoSolutions.Analyzers
             return value.ContainingType.GetMembersIncludingInherited<IPropertySymbol>().Any(_ => string.Equals(valueName, _.Name, StringComparison.OrdinalIgnoreCase));
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string MinimalTypeName(this ITypeSymbol value) => value.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
 
         internal static bool NameMatchesTypeName(this ISymbol value, ITypeSymbol type, ushort minimumUpperCaseLetters = 0)
