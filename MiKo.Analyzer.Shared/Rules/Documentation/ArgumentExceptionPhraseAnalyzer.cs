@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             m_exceptionPhrases = phrases;
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeException(ISymbol symbol, XmlElementSyntax exceptionComment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeException(ISymbol symbol, XmlElementSyntax exceptionComment)
         {
             switch (symbol)
             {
@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeException(ISymbol owningSymbol, IReadOnlyCollection<IParameterSymbol> parameters, XmlElementSyntax exceptionComment)
+        protected virtual IReadOnlyList<Diagnostic> AnalyzeException(ISymbol owningSymbol, IReadOnlyCollection<IParameterSymbol> parameters, XmlElementSyntax exceptionComment)
         {
             // get rid of the para tags as we are not interested into them
             var comment = exceptionComment.GetTextTrimmed();
@@ -80,7 +80,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual IReadOnlyCollection<IParameterSymbol> GetMatchingParameters(ImmutableArray<IParameterSymbol> parameterSymbols) => parameterSymbols;
 
-        private IEnumerable<Diagnostic> AnalyzeException(ISymbol owningSymbol, IMethodSymbol methodSymbol, XmlElementSyntax exceptionComment)
+        private IReadOnlyList<Diagnostic> AnalyzeException(ISymbol owningSymbol, IMethodSymbol methodSymbol, XmlElementSyntax exceptionComment)
         {
             if (methodSymbol is null)
             {

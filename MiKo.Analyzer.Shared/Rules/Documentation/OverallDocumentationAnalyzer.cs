@@ -19,6 +19,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual Diagnostic Issue(Location location, string replacement) => base.Issue(location, replacement);
 
+        protected void AnalyzeComment(SyntaxNodeAnalysisContext context)
+        {
+            if (context.Node is DocumentationCommentTriviaSyntax comment)
+            {
+                var symbol = context.ContainingSymbol;
+
+                if (symbol is IMethodSymbol method && method.IsPrimaryConstructor())
+                {
+                    // records are analyzed for their type as well, so we do not need to report twice
+                    return;
+                }
+
+                var issues = AnalyzeComment(comment, symbol);
+
+                if (issues.Count > 0)
+                {
+                    ReportDiagnostics(context, issues);
+                }
+            }
+        }
+
         protected abstract IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol);
 
         protected IReadOnlyList<Diagnostic> AnalyzeForSpecialPhrase(SyntaxToken token, string startingPhrase, Func<string, string> replacementCallback)
@@ -78,27 +99,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
 
                 return issues;
-            }
-        }
-
-        protected void AnalyzeComment(SyntaxNodeAnalysisContext context)
-        {
-            if (context.Node is DocumentationCommentTriviaSyntax comment)
-            {
-                var symbol = context.ContainingSymbol;
-
-                if (symbol is IMethodSymbol method && method.IsPrimaryConstructor())
-                {
-                    // records are analyzed for their type as well, so we do not need to report twice
-                    return;
-                }
-
-                var issues = AnalyzeComment(comment, symbol);
-
-                if (issues.Count > 0)
-                {
-                    ReportDiagnostics(context, issues);
-                }
             }
         }
     }

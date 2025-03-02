@@ -16,11 +16,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected string ExceptionPhrase => Constants.Comments.ExceptionPhrase.FormatWith(m_exceptionType.Name);
 
-        protected sealed override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Property);
+        protected sealed override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeComment, DocumentationCommentTrivia);
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeException(ISymbol symbol, XmlElementSyntax exceptionComment) => Array.Empty<Diagnostic>();
+        protected virtual IReadOnlyList<Diagnostic> AnalyzeException(ISymbol symbol, XmlElementSyntax exceptionComment) => Array.Empty<Diagnostic>();
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected virtual IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol)
         {
             var comments = GetExceptionComments(comment);
 
@@ -46,15 +46,51 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected Diagnostic ExceptionIssue(XmlElementSyntax exceptionComment, string proposal) => Issue(exceptionComment.GetContentsLocation(), ExceptionPhrase, proposal, CreatePhraseProposal(proposal));
 
-        private IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, IEnumerable<XmlElementSyntax> comments)
+        private void AnalyzeComment(SyntaxNodeAnalysisContext context)
         {
-            foreach (var comment in comments)
+            if (context.Node is DocumentationCommentTriviaSyntax comment)
             {
-                foreach (var issue in AnalyzeException(symbol, comment))
+                var symbol = context.ContainingSymbol;
+
+                switch (symbol?.Kind)
                 {
-                    yield return issue;
+                    case SymbolKind.Method:
+                    case SymbolKind.Property:
+                    {
+                        var issues = AnalyzeComment(comment, symbol);
+
+                        if (issues.Count > 0)
+                        {
+                            ReportDiagnostics(context, issues);
+                        }
+
+                        break;
+                    }
                 }
             }
+        }
+
+        private IReadOnlyList<Diagnostic> AnalyzeComment(ISymbol symbol, IEnumerable<XmlElementSyntax> comments)
+        {
+            List<Diagnostic> results = null;
+
+            foreach (var comment in comments)
+            {
+                var issues = AnalyzeException(symbol, comment);
+                var count = issues.Count;
+
+                if (count > 0)
+                {
+                    if (results is null)
+                    {
+                        results = new List<Diagnostic>(count);
+                    }
+
+                    results.AddRange(issues);
+                }
+            }
+
+            return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
         }
     }
 }

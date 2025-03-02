@@ -17,15 +17,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol)
         {
-            var groups = CommentExtensions.GetExceptionsOfExceptionComments(commentXml)
-                                          .GroupBy(_ => _); // TODO: what about namespaces
+            List<Diagnostic> results = null;
 
-            foreach (var g in groups.Where(_ => _.MoreThan(1)))
+            var groups = symbol.GetDocumentationCommentXml()
+                               .GetExceptionsOfExceptionComments()
+                               .GroupBy(_ => _) // TODO: what about namespaces
+                               .Where(_ => _.MoreThan(1));
+
+            foreach (var g in groups)
             {
-                yield return Issue(symbol, g.Key);
+                if (results is null)
+                {
+                    results = new List<Diagnostic>(1);
+                }
+
+                results.Add(Issue(symbol, g.Key));
             }
+
+            return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
         }
     }
 }
