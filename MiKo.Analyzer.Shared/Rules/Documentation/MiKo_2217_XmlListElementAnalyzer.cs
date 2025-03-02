@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -17,26 +16,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol)
         {
-            return GetProblematicElements(comment).SelectMany(AnalyzeList);
-        }
+            List<Diagnostic> results = null;
 
-        private static IEnumerable<XmlElementSyntax> GetProblematicElements(DocumentationCommentTriviaSyntax comment) => comment.DescendantNodes<XmlElementSyntax>(_ => _.IsXmlTag(Constants.XmlTag.List));
-
-        private IEnumerable<Diagnostic> AnalyzeList(XmlElementSyntax list)
-        {
-            var listType = list.GetListType();
-
-            if (listType is null)
+            foreach (var list in comment.DescendantNodes<XmlElementSyntax>(_ => _.IsXmlTag(Constants.XmlTag.List)))
             {
-                // no type specified, so it seems to be a bullet, hence analyze it
+                var listType = list.GetListType();
+
+                if (listType is null)
+                {
+                    // no type specified, so it seems to be a bullet, hence analyze it
+                }
+
+                foreach (var issue in AnalyzeList(list, listType))
+                {
+                    if (results is null)
+                    {
+                        results = new List<Diagnostic>(1);
+                    }
+
+                    results.Add(issue);
+                }
             }
 
-            foreach (var issue in AnalyzeList(list, listType))
-            {
-                yield return issue;
-            }
+            return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
         }
 
         private IEnumerable<Diagnostic> AnalyzeList(XmlElementSyntax list, XmlTextAttributeSyntax listType)
@@ -54,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return AnalyzeTable(list);
 
                 default: // unknown type
-                    return new[] { Issue(string.Empty, listType, Resources.MiKo_2217_MessageArgument_UnknownTypeSpecified.FormatWith(type)) };
+                    return new[] { Issue(listType, Resources.MiKo_2217_MessageArgument_UnknownTypeSpecified.FormatWith(type)) };
             }
         }
 
@@ -67,7 +71,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     case Constants.XmlTag.ListHeader:
                     {
                         // no header allowed
-                        yield return Issue(string.Empty, child, Resources.MiKo_2217_MessageArgument_NoHeaderAllowed);
+                        yield return Issue(child, Resources.MiKo_2217_MessageArgument_NoHeaderAllowed);
 
                         break;
                     }
@@ -83,7 +87,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             {
                                 case Constants.XmlTag.Description when descriptionFound:
                                 {
-                                    yield return Issue(string.Empty, grandChild, Resources.MiKo_2217_MessageArgument_OnlySingleDescriptionAllowed); // there should be only a single description
+                                    yield return Issue(grandChild, Resources.MiKo_2217_MessageArgument_OnlySingleDescriptionAllowed); // there should be only a single description
 
                                     break;
                                 }
@@ -97,7 +101,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                                 case Constants.XmlTag.Term when termFound:
                                 {
-                                    yield return Issue(string.Empty, grandChild, Resources.MiKo_2217_MessageArgument_OnlySingleTermAllowed); // there should be only a single term
+                                    yield return Issue(grandChild, Resources.MiKo_2217_MessageArgument_OnlySingleTermAllowed); // there should be only a single term
 
                                     break;
                                 }
@@ -114,7 +118,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         if (descriptionFound is false)
                         {
                             // there should be at least one term and description per item
-                            yield return Issue(string.Empty, child, Resources.MiKo_2217_MessageArgument_MissingDescription);
+                            yield return Issue(child, Resources.MiKo_2217_MessageArgument_MissingDescription);
                         }
 
                         break;
@@ -141,7 +145,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             {
                                 case Constants.XmlTag.Description when descriptionFound:
                                 {
-                                    yield return Issue(string.Empty, grandChild, Resources.MiKo_2217_MessageArgument_OnlySingleDescriptionAllowed); // there should be only a single description
+                                    yield return Issue(grandChild, Resources.MiKo_2217_MessageArgument_OnlySingleDescriptionAllowed); // there should be only a single description
 
                                     break;
                                 }
@@ -165,7 +169,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         if (termFound is false || descriptionFound is false)
                         {
                             // there should be at least one term and description per item
-                            yield return Issue(string.Empty, child, Resources.MiKo_2217_MessageArgument_MissingTermOrDescription);
+                            yield return Issue(child, Resources.MiKo_2217_MessageArgument_MissingTermOrDescription);
                         }
 
                         break;

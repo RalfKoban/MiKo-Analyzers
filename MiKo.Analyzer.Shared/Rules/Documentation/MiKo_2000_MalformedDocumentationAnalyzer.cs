@@ -20,8 +20,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol)
         {
+            List<Diagnostic> results = null;
+
             foreach (var nodeOrToken in comment.AllDescendantNodesAndTokens())
             {
                 if (nodeOrToken.IsNode)
@@ -30,7 +32,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         case XmlEmptyElementSyntax emptyElement when emptyElement.SlashGreaterThanToken.IsMissing:
                         {
-                            yield return Issue(emptyElement.LessThanToken);
+                            if (results is null)
+                            {
+                                results = new List<Diagnostic>(1);
+                            }
+
+                            results.Add(Issue(emptyElement.LessThanToken));
 
                             break;
                         }
@@ -41,7 +48,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                             if (name.IsNullOrWhiteSpace())
                             {
-                                yield return Issue(element.StartTag);
+                                if (results is null)
+                                {
+                                    results = new List<Diagnostic>(1);
+                                }
+
+                                results.Add(Issue(element.StartTag));
                             }
 
                             break;
@@ -58,11 +70,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         if (text.Contains('&'))
                         {
-                            yield return Issue(token);
+                            if (results is null)
+                            {
+                                results = new List<Diagnostic>(1);
+                            }
+
+                            results.Add(Issue(token));
                         }
                     }
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
         }
     }
 }

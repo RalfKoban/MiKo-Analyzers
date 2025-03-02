@@ -162,7 +162,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (AnalyzeLength(node, context.SemanticModel))
             {
-                ReportDiagnostics(context, Issue(string.Empty, node));
+                ReportDiagnostics(context, Issue(node));
             }
         }
 

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using MiKoSolutions.Analyzers.Linguistics;
@@ -10,13 +12,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class OverallDocumentationAnalyzer : DocumentationAnalyzer
     {
+        private static readonly SyntaxKind[] DocumentationCommentTrivia = { SyntaxKind.SingleLineDocumentationCommentTrivia, SyntaxKind.MultiLineDocumentationCommentTrivia };
+
         protected OverallDocumentationAnalyzer(string id) : base(id, (SymbolKind)(-1))
         {
         }
 
-        protected sealed override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event, SymbolKind.Field, SymbolKind.TypeParameter);
+        protected sealed override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeComment, DocumentationCommentTrivia);
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsPrimaryConstructor() is false; // records are analyzed for their type as well, so we do not need to report twice
+        protected virtual Diagnostic Issue(Location location, string replacement) => base.Issue(location, replacement);
+
+        protected abstract IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol);
 
         protected IReadOnlyList<Diagnostic> AnalyzeForSpecialPhrase(SyntaxToken token, string startingPhrase, Func<string, string> replacementCallback)
         {
@@ -78,6 +84,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected virtual Diagnostic Issue(Location location, string replacement) => base.Issue(location, replacement);
+        protected void AnalyzeComment(SyntaxNodeAnalysisContext context)
+        {
+            if (context.Node is DocumentationCommentTriviaSyntax comment)
+            {
+                var symbol = context.ContainingSymbol;
+
+                if (symbol is IMethodSymbol method && method.IsPrimaryConstructor())
+                {
+                    // records are analyzed for their type as well, so we do not need to report twice
+                    return;
+                }
+
+                var issues = AnalyzeComment(comment, symbol);
+
+                if (issues.Count > 0)
+                {
+                    ReportDiagnostics(context, issues);
+                }
+            }
+        }
     }
 }

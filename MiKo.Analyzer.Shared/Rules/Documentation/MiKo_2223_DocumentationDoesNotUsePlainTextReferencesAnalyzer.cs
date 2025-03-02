@@ -65,7 +65,40 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(comment);
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol)
+        {
+            List<Diagnostic> results = null;
+
+            var textTokens = comment.GetXmlTextTokens(_ => IgnoreTags.Contains(_.GetName()) is false);
+            var textTokensCount = textTokens.Count;
+
+            if (textTokensCount > 0)
+            {
+                for (var i = 0; i < textTokensCount; i++)
+                {
+                    var token = textTokens[i];
+                    var text = token.ValueText;
+
+                    if (text.Length < Constants.MinimumCharactersThreshold)
+                    {
+                        // ignore small texts as they do not contain compound words
+                        continue;
+                    }
+
+                    foreach (var diagnostic in AnalyzeComment(token, text))
+                    {
+                        if (results is null)
+                        {
+                            results = new List<Diagnostic>(1);
+                        }
+
+                        results.Add(diagnostic);
+                    }
+                }
+            }
+
+            return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
+        }
 
         private static bool TryFindCompoundWord(string text, ref int startIndex, ref int endIndex)
         {
@@ -207,32 +240,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return true;
-        }
-
-        private IEnumerable<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment)
-        {
-            var textTokens = comment.GetXmlTextTokens(_ => IgnoreTags.Contains(_.GetName()) is false);
-            var textTokensCount = textTokens.Count;
-
-            if (textTokensCount > 0)
-            {
-                for (var i = 0; i < textTokensCount; i++)
-                {
-                    var token = textTokens[i];
-                    var text = token.ValueText;
-
-                    if (text.Length < Constants.MinimumCharactersThreshold)
-                    {
-                        // ignore small texts as they do not contain compound words
-                        continue;
-                    }
-
-                    foreach (var diagnostic in AnalyzeComment(token, text))
-                    {
-                        yield return diagnostic;
-                    }
-                }
-            }
         }
 
         private IEnumerable<Diagnostic> AnalyzeComment(SyntaxToken token, string text)

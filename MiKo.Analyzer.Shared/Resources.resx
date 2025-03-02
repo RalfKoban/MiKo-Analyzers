@@ -2185,7 +2185,7 @@ This format clearly describes the purpose of the class and its functionality, ma
     <value>https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/para</value>
   </data>
   <data name="MiKo_2042_MessageFormat" xml:space="preserve">
-    <value>Use '&lt;para/&gt;' instead of '{1}'</value>
+    <value>Use '&lt;para/&gt;' instead of '{0}'</value>
   </data>
   <data name="MiKo_2042_Title" xml:space="preserve">
     <value>Documentation should use '&lt;para/&gt;' XML tags instead of '&lt;br/&gt;' HTML tags</value>
@@ -2828,7 +2828,7 @@ This ensures your list documentation is clear and accurately structured.</value>
     <value>The 'type' attribute contains the unknown type {0}</value>
   </data>
   <data name="MiKo_2217_MessageFormat" xml:space="preserve">
-    <value>Use &lt;list&gt; properly: {1}</value>
+    <value>Use &lt;list&gt; properly: {0}</value>
   </data>
   <data name="MiKo_2217_Title" xml:space="preserve">
     <value>&lt;list&gt; documentation is done properly</value>
@@ -2876,7 +2876,7 @@ This ensures clarity and usability in your documentation, making it straightforw
     <value>An empty documentation is a code smell. It indicates that the developer created the XML documentation tag intentionally but failed to provide any actual content. This suggests a potential oversight or lack of attention to detail. Proper documentation is crucial for code clarity and maintenance.</value>
   </data>
   <data name="MiKo_2221_MessageFormat" xml:space="preserve">
-    <value>Provide a documentation for &lt;{1}/&gt;</value>
+    <value>Provide a documentation for &lt;{0}/&gt;</value>
   </data>
   <data name="MiKo_2221_Title" xml:space="preserve">
     <value>Documentation should not use empty XML tags</value>
@@ -3986,7 +3986,7 @@ This approach ensures stability and clarity, keeping the Enum's behavior consist
     <value>Write HResults in hexadecimal, not as negative integers. It's much easier to recognize and search for '0x80070005' than '-2147024891'. Keeps the code clean and user-friendly.</value>
   </data>
   <data name="MiKo_3079_MessageFormat" xml:space="preserve">
-    <value>Use 'unchecked((int)0x{1})' instead for HResult</value>
+    <value>Use 'unchecked((int)0x{0})' instead for HResult</value>
   </data>
   <data name="MiKo_3079_Title" xml:space="preserve">
     <value>HResults should be written in hexadecimal</value>
@@ -4045,7 +4045,7 @@ This approach enhances clarity and maintainability.</value>
     <value>To increase readability, place constants on the right side of an operator, not the left. This makes the code look more intuitive and easier to understand.</value>
   </data>
   <data name="MiKo_3084_MessageFormat" xml:space="preserve">
-    <value>Place it on right side of '{1}'</value>
+    <value>Place it on right side of '{0}'</value>
   </data>
   <data name="MiKo_3084_Title" xml:space="preserve">
     <value>Do not place constants on the left side for comparisons</value>

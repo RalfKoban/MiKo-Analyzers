@@ -34,11 +34,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol)
         {
+            var commentXml = symbol.GetDocumentationCommentXml();
             var element = commentXml.GetCommentElement();
 
-            return XmlTags.Where(_ => element.GetCommentElements(_).SelectMany(__ => __.Nodes()).Any(CommentHasIssue)).Select(_ => Issue(symbol, _));
+            List<Diagnostic> results = null;
+
+            foreach (var xmlTag in XmlTags)
+            {
+                if (element.GetCommentElements(xmlTag).SelectMany(__ => __.Nodes()).Any(CommentHasIssue))
+                {
+                    if (results is null)
+                    {
+                        results = new List<Diagnostic>(1);
+                    }
+
+                    results.Add(Issue(symbol, xmlTag));
+                }
+            }
+
+            return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
         }
 
         private static bool CommentHasIssue(XNode node)

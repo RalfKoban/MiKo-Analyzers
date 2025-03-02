@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (CommentContainsSeparator(comment.AsSpan()))
                     {
-                        yield return Issue(string.Empty, trivia);
+                        yield return Issue(trivia);
                     }
                 }
             }

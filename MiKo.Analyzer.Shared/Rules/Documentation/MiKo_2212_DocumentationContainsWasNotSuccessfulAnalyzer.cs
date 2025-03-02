@@ -16,14 +16,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol)
         {
             var textTokens = comment.GetXmlTextTokens();
             var textTokensCount = textTokens.Count;
 
             if (textTokensCount == 0)
             {
-                yield break;
+                return Array.Empty<Diagnostic>();
             }
 
             const string Phrase = Constants.Comments.WasNotSuccessfulPhrase;
@@ -32,8 +32,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (text.Contains(Phrase, StringComparison.Ordinal) is false)
             {
-                yield break;
+                return Array.Empty<Diagnostic>();
             }
+
+            List<Diagnostic> results = null;
 
             for (var i = 0; i < textTokensCount; i++)
             {
@@ -44,11 +46,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     continue;
                 }
 
-                foreach (var location in GetAllLocations(token, Phrase))
+                var locations = GetAllLocations(token, Phrase);
+                var locationsCount = locations.Count;
+
+                if (locationsCount > 0)
                 {
-                    yield return Issue(symbol.Name, location);
+                    if (results is null)
+                    {
+                        results = new List<Diagnostic>(locationsCount);
+                    }
+
+                    for (var index = 0; index < locationsCount; index++)
+                    {
+                        results.Add(Issue(locations[index]));
+                    }
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
         }
     }
 }
