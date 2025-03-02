@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -24,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                      && parameter.RefKind != RefKind.Out
                                                                                      && parameter.GetEnclosingMethod().Name != nameof(IDisposable.Dispose);
 
-        protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment)
+        protected override Diagnostic[] AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment)
         {
             if (CommentHasIssue(comment))
             {

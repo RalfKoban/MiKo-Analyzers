@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -29,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyzeParameter(IParameterSymbol parameter) => parameter.HasExplicitDefaultValue;
 
-        protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment)
+        protected override Diagnostic[] AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment)
         {
             if (parameterComment.GetTextTrimmed().ContainsAny(Phrases, StringComparison.OrdinalIgnoreCase))
             {
@@ -137,7 +136,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 case TypeKind.Struct:
                 {
                     var defaultStructValue = parameterType.GetProperties().FirstOrDefault(_ => _.IsStatic)?.Name
-                                             ?? parameterType.GetFields().FirstOrDefault(_ => _.IsStatic)?.Name;
+                                          ?? parameterType.GetFields().FirstOrDefault(_ => _.IsStatic)?.Name;
 
                     var defaultValue = defaultStructValue != null
                                        ? parameterType.Name + "." + defaultStructValue
