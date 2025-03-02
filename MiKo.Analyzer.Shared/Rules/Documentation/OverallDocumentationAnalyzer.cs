@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var symbol = context.ContainingSymbol;
 
-                if (symbol is IMethodSymbol method && method.IsPrimaryConstructor())
+                if (symbol.IsPrimaryConstructor())
                 {
                     // records are analyzed for their type as well, so we do not need to report twice
                     return;
