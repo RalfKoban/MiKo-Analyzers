@@ -45,31 +45,31 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return root.ReplaceNodes(
                                      nodesToAdjust,
                                      (original, rewritten) =>
-                                                              {
-                                                                  if (rewritten == returnStatement)
-                                                                  {
-                                                                      return null; // remove the return statement
-                                                                  }
+                                                             {
+                                                                 if (rewritten == returnStatement)
+                                                                 {
+                                                                     return null; // remove the return statement
+                                                                 }
 
-                                                                  if (rewritten == localDeclarationStatement)
-                                                                  {
-                                                                      return null; // remove the variable declaration statement
-                                                                  }
+                                                                 if (rewritten == localDeclarationStatement)
+                                                                 {
+                                                                     return null; // remove the variable declaration statement
+                                                                 }
 
-                                                                  switch (rewritten)
-                                                                  {
-                                                                      case TryStatementSyntax statement:
-                                                                          // move the statements inside the try block
-                                                                          return statement.WithBlock(UpdateBlock(statement.Block, localDeclarationStatement, returnStatement));
+                                                                 switch (rewritten)
+                                                                 {
+                                                                     case TryStatementSyntax statement:
+                                                                         // move the statements inside the try block
+                                                                         return statement.WithBlock(UpdateBlock(statement.Block, localDeclarationStatement, returnStatement));
 
-                                                                      case CatchClauseSyntax catchClause:
-                                                                          // move the statements inside the catch block
-                                                                          return catchClause.WithBlock(UpdateBlock(catchClause.Block, localDeclarationStatement, returnStatement));
+                                                                     case CatchClauseSyntax catchClause:
+                                                                         // move the statements inside the catch block
+                                                                         return catchClause.WithBlock(UpdateBlock(catchClause.Block, localDeclarationStatement, returnStatement));
 
-                                                                      default:
-                                                                          return rewritten;
-                                                                  }
-                                                              });
+                                                                     default:
+                                                                         return rewritten;
+                                                                 }
+                                                             });
             }
 
             return null;
