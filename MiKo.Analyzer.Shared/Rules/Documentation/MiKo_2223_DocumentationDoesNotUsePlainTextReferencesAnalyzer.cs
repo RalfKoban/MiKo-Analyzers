@@ -159,11 +159,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (trimmed[0].IsNumber())
             {
-                if (trimmed.Any(_ => _ == '.') && trimmed[1].IsLetter())
-                {
-                    return true;
-                }
+                return trimmed.Any(_ => _ == '.') && trimmed[1].IsLetter();
+            }
 
+            if (trimmed.Length == 3 && trimmed.Equals("e.g", StringComparison.OrdinalIgnoreCase))
+            {
                 return false;
             }
 
