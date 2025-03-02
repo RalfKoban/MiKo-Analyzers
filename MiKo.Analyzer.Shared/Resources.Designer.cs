@@ -6539,6 +6539,7 @@ namespace MiKoSolutions.Analyzers {
         
         /// <summary>
         ///   Looks up a localized string similar to {1} should be something like:
+        ///
         ///{2}.
         /// </summary>
         internal static string MiKo_2054_MessageFormat {
@@ -6577,6 +6578,7 @@ namespace MiKoSolutions.Analyzers {
         
         /// <summary>
         ///   Looks up a localized string similar to {1} should be something like:
+        ///
         ///{2}.
         /// </summary>
         internal static string MiKo_2055_MessageFormat {

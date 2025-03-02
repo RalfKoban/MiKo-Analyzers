@@ -2330,6 +2330,7 @@ This approach ensures clarity and consistency, helping developers understand the
   </data>
   <data name="MiKo_2054_MessageFormat" xml:space="preserve">
     <value>{1} should be something like:
+
 {2}</value>
   </data>
   <data name="MiKo_2054_Title" xml:space="preserve">
@@ -2344,6 +2345,7 @@ This approach ensures clarity and consistency, helping developers understand und
   </data>
   <data name="MiKo_2055_MessageFormat" xml:space="preserve">
     <value>{1} should be something like:
+
 {2}</value>
   </data>
   <data name="MiKo_2055_Title" xml:space="preserve">

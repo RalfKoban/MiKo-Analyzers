@@ -122,7 +122,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<string> GetExceptionComments(string commentXml) => Cleaned(GetExceptionCommentElements(commentXml)).WhereNotNull();
 
-        internal static IEnumerable<string> GetExceptionsOfExceptionComments(string commentXml)
+        internal static IEnumerable<string> GetExceptionsOfExceptionComments(this string commentXml)
         {
             return GetExceptionCommentElements(commentXml).Select(_ => _.Attribute(Constants.XmlTag.Attribute.Cref)?.Value).WhereNotNull();
         }
