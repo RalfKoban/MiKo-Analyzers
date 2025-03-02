@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -12,8 +11,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class OverallDocumentationAnalyzer : DocumentationAnalyzer
     {
-        private static readonly SyntaxKind[] DocumentationCommentTrivia = { SyntaxKind.SingleLineDocumentationCommentTrivia, SyntaxKind.MultiLineDocumentationCommentTrivia };
-
         protected OverallDocumentationAnalyzer(string id) : base(id, (SymbolKind)(-1))
         {
         }

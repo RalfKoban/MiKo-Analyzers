@@ -7272,7 +7272,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start &lt;example&gt; with: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Start &lt;example&gt; with: &apos;{0}&apos;.
         /// </summary>
         internal static string MiKo_2100_MessageFormat {
             get {

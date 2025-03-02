@@ -2577,7 +2577,7 @@ This ensures the documentation is precise and informative, helping developers un
     <value>To make example documentation more user-friendly, it should begin with a brief phrase that explains what the example demonstrates. This provides clarity and helps developers quickly understand the purpose of the example.</value>
   </data>
   <data name="MiKo_2100_MessageFormat" xml:space="preserve">
-    <value>Start &lt;example&gt; with: '{1}'</value>
+    <value>Start &lt;example&gt; with: '{0}'</value>
   </data>
   <data name="MiKo_2100_Title" xml:space="preserve">
     <value>&lt;example&gt; documentation should start with descriptive default phrase</value>

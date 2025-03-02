@@ -13,20 +13,32 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event);
+        protected sealed override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeComment, DocumentationCommentTrivia);
 
-        protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected virtual IReadOnlyList<Diagnostic> AnalyzeExample(ISymbol symbol, IReadOnlyList<XmlElementSyntax> examples) => Array.Empty<Diagnostic>();
+
+        private void AnalyzeComment(SyntaxNodeAnalysisContext context)
         {
-            return AnalyzeComment(symbol, compilation, symbol.GetDocumentationCommentXml(), comment);
+            if (context.Node is DocumentationCommentTriviaSyntax comment)
+            {
+                var symbol = context.ContainingSymbol;
+
+                var issues = AnalyzeComment(comment, symbol);
+
+                if (issues.Count > 0)
+                {
+                    ReportDiagnostics(context, issues);
+                }
+            }
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        private IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol)
         {
             var examples = comment.GetExampleXmls();
 
-            return AnalyzeExample(symbol, examples);
+            return examples.Count == 0
+                   ? Array.Empty<Diagnostic>()
+                   : AnalyzeExample(symbol, examples);
         }
-
-        protected virtual IEnumerable<Diagnostic> AnalyzeExample(ISymbol owningSymbol, IEnumerable<XmlElementSyntax> examples) => Array.Empty<Diagnostic>();
     }
 }
