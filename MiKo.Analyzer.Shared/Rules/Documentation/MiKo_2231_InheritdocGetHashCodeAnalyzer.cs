@@ -13,13 +13,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2231";
 
-        public MiKo_2231_InheritdocGetHashCodeAnalyzer() : base(Id, SymbolKind.Method)
+        public MiKo_2231_InheritdocGetHashCodeAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeComment, DocumentationCommentTrivia);
+
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsOverride && symbol.Parameters.IsEmpty && symbol.ReturnType.SpecialType == SpecialType.System_Int32 && symbol.Name == nameof(GetHashCode);
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        private void AnalyzeComment(SyntaxNodeAnalysisContext context)
+        {
+            if (context.Node is DocumentationCommentTriviaSyntax comment)
+            {
+                if (context.ContainingSymbol is IMethodSymbol symbol && ShallAnalyze(symbol))
+                {
+                    var issues = AnalyzeComment(comment);
+
+                    if (issues.Count > 0)
+                    {
+                        ReportDiagnostics(context, issues);
+                    }
+                }
+            }
+        }
+
+        private IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment)
         {
             var tagNames = comment.Content.ToHashSet(_ => _.GetXmlTagName());
 

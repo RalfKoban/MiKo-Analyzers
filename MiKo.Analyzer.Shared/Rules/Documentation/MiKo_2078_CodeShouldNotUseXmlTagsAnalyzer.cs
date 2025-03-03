@@ -16,18 +16,50 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeComment, DocumentationCommentTrivia);
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        private void AnalyzeComment(SyntaxNodeAnalysisContext context)
         {
-            foreach (var code in comment.GetXmlSyntax(Constants.XmlTag.Code))
+            if (context.Node is DocumentationCommentTriviaSyntax comment)
             {
-                foreach (var entry in code.Content)
+                switch (context.ContainingSymbol?.Kind)
                 {
-                    if (entry.IsXml())
+                    case SymbolKind.NamedType:
+                    case SymbolKind.Method:
+                    case SymbolKind.Property:
+                    case SymbolKind.Event:
                     {
-                        // we have an issue
-                        return new[] { Issue(symbol.Name, entry) };
+                        var issues = AnalyzeComment(comment);
+
+                        if (issues.Count > 0)
+                        {
+                            ReportDiagnostics(context, issues);
+                        }
+
+                        break;
+                    }
+                }
+            }
+        }
+
+        private IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment)
+        {
+            var codeTags = comment.GetXmlSyntax(Constants.XmlTag.Code);
+            var codeTagsCount = codeTags.Count;
+
+            if (codeTagsCount > 0)
+            {
+                for (var index = 0; index < codeTagsCount; index++)
+                {
+                    var code = codeTags[index];
+
+                    foreach (var entry in code.Content)
+                    {
+                        if (entry.IsXml())
+                        {
+                            // we have an issue
+                            return new[] { Issue(entry) };
+                        }
                     }
                 }
             }

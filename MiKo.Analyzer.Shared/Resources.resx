@@ -2210,7 +2210,7 @@ Declaring a delegate type sets a contract specifying the method signatures it ca
     <value>Method parameters should be referenced using &lt;paramref name="..."/&gt; in the documentation, not &lt;param name="..."/&gt; or plain text. This allows the documentation to update automatically if the parameter is renamed or deleted.</value>
   </data>
   <data name="MiKo_2044_MessageFormat" xml:space="preserve">
-    <value>Fix incorrect parameter reference '{1}'</value>
+    <value>Fix incorrect parameter reference '{0}'</value>
   </data>
   <data name="MiKo_2044_Title" xml:space="preserve">
     <value>Documentation references method parameters correctly</value>

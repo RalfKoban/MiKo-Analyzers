@@ -23,9 +23,33 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeComment, DocumentationCommentTrivia);
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        private void AnalyzeComment(SyntaxNodeAnalysisContext context)
+        {
+            if (context.Node is DocumentationCommentTriviaSyntax comment)
+            {
+                var symbol = context.ContainingSymbol;
+
+                switch (symbol?.Kind)
+                {
+                    case SymbolKind.NamedType:
+                    case SymbolKind.Method:
+                    {
+                        var issues = AnalyzeComment(comment, symbol);
+
+                        if (issues.Count > 0)
+                        {
+                            ReportDiagnostics(context, issues);
+                        }
+
+                        break;
+                    }
+                }
+            }
+        }
+
+        private IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol)
         {
             switch (symbol)
             {
@@ -46,30 +70,41 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, IEnumerable<ITypeParameterSymbol> parameters)
+        private IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, IEnumerable<ITypeParameterSymbol> parameters)
         {
             var names = parameters.ToHashSet(_ => _.Name);
 
-            if (names.Count > 0)
+            if (names.Count == 0)
             {
-                foreach (var node in comment.AllDescendantNodes())
+                return Array.Empty<Diagnostic>();
+            }
+
+            List<Diagnostic> results = null;
+
+            foreach (var node in comment.AllDescendantNodes())
+            {
+                if (node.IsXml())
                 {
-                    if (node.IsXml())
+                    var tag = node.GetXmlTagName();
+
+                    if (Tags.Contains(tag))
                     {
-                        var tag = node.GetXmlTagName();
+                        var name = node.GetReferencedName();
 
-                        if (Tags.Contains(tag))
+                        if (names.Contains(name))
                         {
-                            var name = node.GetReferencedName();
-
-                            if (names.Contains(name))
+                            if (results is null)
                             {
-                                yield return Issue(node);
+                                results = new List<Diagnostic>(1);
                             }
+
+                            results.Add(Issue(node));
                         }
                     }
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
         }
     }
 }
