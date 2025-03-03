@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -18,40 +19,70 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                Constants.XmlTag.SeeAlso,
                                                            };
 
-        public MiKo_2044_InvalidSeeParameterInXmlAnalyzer() : base(Id, SymbolKind.Method)
+        public MiKo_2044_InvalidSeeParameterInXmlAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeComment, DocumentationCommentTrivia);
+
+        private void AnalyzeComment(SyntaxNodeAnalysisContext context)
         {
-            var method = (IMethodSymbol)symbol;
+            if (context.Node is DocumentationCommentTriviaSyntax comment)
+            {
+                if (context.ContainingSymbol is IMethodSymbol method)
+                {
+                    var issues = AnalyzeComment(comment, method);
+
+                    if (issues.Count > 0)
+                    {
+                        ReportDiagnostics(context, issues);
+                    }
+                }
+            }
+        }
+
+        private IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, IMethodSymbol method)
+        {
             var names = method.Parameters.ToHashSet(_ => _.Name);
 
-            if (names.Count > 0)
+            if (names.Count == 0)
             {
-                foreach (var node in comment.AllDescendantNodes())
+                return Array.Empty<Diagnostic>();
+            }
+
+            List<Diagnostic> results = null;
+
+            foreach (var node in comment.AllDescendantNodes())
+            {
+                if (node.IsXml())
                 {
-                    if (node.IsXml())
+                    var tag = node.GetXmlTagName();
+
+                    if (Tags.Contains(tag))
                     {
-                        var tag = node.GetXmlTagName();
+                        var cref = node.GetCref();
 
-                        if (Tags.Contains(tag))
+                        if (cref is null)
                         {
-                            var cref = node.GetCref();
+                            continue;
+                        }
 
-                            if (cref != null)
+                        var name = cref.GetCrefType().GetName();
+
+                        if (names.Contains(name))
+                        {
+                            if (results is null)
                             {
-                                var name = cref.GetCrefType().GetName();
-
-                                if (names.Contains(name))
-                                {
-                                    yield return Issue(symbol.Name, node, node.GetText());
-                                }
+                                results = new List<Diagnostic>(1);
                             }
+
+                            results.Add(Issue(node, node.GetText()));
                         }
                     }
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
         }
     }
 }

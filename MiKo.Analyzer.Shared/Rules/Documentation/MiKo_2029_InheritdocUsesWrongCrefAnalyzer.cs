@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -15,20 +16,55 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeComment, DocumentationCommentTrivia);
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        private void AnalyzeComment(SyntaxNodeAnalysisContext context)
         {
+            if (context.Node is DocumentationCommentTriviaSyntax comment)
+            {
+                var symbol = context.ContainingSymbol;
+
+                switch (symbol?.Kind)
+                {
+                    case SymbolKind.NamedType:
+                    case SymbolKind.Method:
+                    case SymbolKind.Property:
+                    case SymbolKind.Event:
+                    {
+                        var issues = AnalyzeComment(comment, symbol, context.SemanticModel);
+
+                        if (issues.Count > 0)
+                        {
+                            ReportDiagnostics(context, issues);
+                        }
+
+                        break;
+                    }
+                }
+            }
+        }
+
+        private IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
+        {
+            List<Diagnostic> results = null;
+
             foreach (var node in comment.DescendantNodes())
             {
                 var cref = node.GetCref(Constants.XmlTag.Inheritdoc);
                 var type = cref.GetCrefType();
 
-                if (type?.GetSymbol(compilation) is ISymbol linked && symbol.Equals(linked, SymbolEqualityComparer.Default))
+                if (type?.GetSymbol(semanticModel) is ISymbol linked && symbol.Equals(linked, SymbolEqualityComparer.Default))
                 {
-                    yield return Issue(cref);
+                    if (results is null)
+                    {
+                        results = new List<Diagnostic>(1);
+                    }
+
+                    results.Add(Issue(cref));
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
         }
     }
 }

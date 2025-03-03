@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -11,18 +13,40 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2211";
 
-        public MiKo_2211_EnumerationMemberDocumentationHasNoRemarksAnalyzer() : base(Id, SymbolKind.Field)
+        public MiKo_2211_EnumerationMemberDocumentationHasNoRemarksAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
-        protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.ContainingType.IsEnum() && base.ShallAnalyze(symbol);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeComment, DocumentationCommentTrivia);
 
-        protected override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.ContainingType.IsEnum();
+
+        private void AnalyzeComment(SyntaxNodeAnalysisContext context)
         {
-            foreach (var remarks in comment.GetRemarksXmls())
+            if (context.Node is DocumentationCommentTriviaSyntax comment)
             {
-                yield return Issue(symbol.Name, remarks.StartTag);
+                if (context.ContainingSymbol is IFieldSymbol symbol && ShallAnalyze(symbol))
+                {
+                    var issues = AnalyzeComment(comment);
+
+                    if (issues.Count > 0)
+                    {
+                        ReportDiagnostics(context, issues);
+                    }
+                }
             }
+        }
+
+        private IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment)
+        {
+            var remarks = comment.GetRemarksXmls();
+
+            if (remarks.Count == 0)
+            {
+                return Array.Empty<Diagnostic>();
+            }
+
+            return remarks.Select(_ => Issue(_.StartTag)).ToList();
         }
     }
 }
