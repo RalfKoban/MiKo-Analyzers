@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     var issues = AnalyzeComment(comment);
 
-                    if (issues.Count > 0)
+                    if (issues.Length > 0)
                     {
                         ReportDiagnostics(context, issues);
                     }
@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment)
+        private Diagnostic[] AnalyzeComment(DocumentationCommentTriviaSyntax comment)
         {
             var tagNames = comment.Content.ToHashSet(_ => _.GetXmlTagName());
 
