@@ -38,15 +38,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool AnalyzeTextStart(ISymbol symbol, string valueText, out string problematicText, out StringComparison comparison)
         {
+            problematicText = string.Empty;
             comparison = StringComparison.OrdinalIgnoreCase;
 
             var text = valueText.AsSpan().TrimStart();
 
-            var startsWith = text.StartsWithAny(Constants.Comments.EnumMemberWrongStartingWords, comparison);
+            if (text.StartsWithAny(Constants.Comments.EnumMemberWrongStartingWords, comparison))
+            {
+                problematicText = text.FirstWord().ToString();
 
-            problematicText = text.FirstWord().ToString();
+                return true;
+            }
 
-            return startsWith;
+            return false;
         }
     }
 }

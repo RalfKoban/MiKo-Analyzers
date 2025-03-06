@@ -27,15 +27,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool AnalyzeTextStart(ISymbol symbol, string valueText, out string problematicText, out StringComparison comparison)
         {
+            problematicText = string.Empty;
             comparison = StringComparison.Ordinal;
 
-            var text = valueText.AsSpan().TrimStart();
-
-            var startsWith = text.StartsWith(StartingPhrase, comparison);
+            if (valueText.AsSpan().TrimStart().StartsWith(StartingPhrase, comparison))
+            {
+                return false;
+            }
 
             problematicText = valueText.FirstWord();
 
-            return startsWith is false;
+            return true;
         }
     }
 }
