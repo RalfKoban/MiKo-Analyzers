@@ -98,9 +98,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                     if (difference != 0)
                     {
-                        var issue = Issue(dot, CreateProposalForSpaces(startCharacterPosition, difference));
-
-                        ReportDiagnostics(context, issue);
+                        ReportDiagnostics(context, Issue(dot, CreateProposalForSpaces(startCharacterPosition, difference)));
                     }
                 }
             }
