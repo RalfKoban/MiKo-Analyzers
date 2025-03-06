@@ -43,14 +43,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool AnalyzeTextStart(ISymbol symbol, string valueText, out string problematicText, out StringComparison comparison)
         {
+            problematicText = string.Empty;
             comparison = StringComparison.OrdinalIgnoreCase;
 
             var firstWord = valueText.Without(Constants.Comments.AsynchronouslyStartingPhrase) // skip over async starting phrase
                                      .FirstWord();
 
-            problematicText = valueText.FirstWord();
+            if (firstWord.EqualsAny(Constants.Comments.ReturnWords))
+            {
+                problematicText = valueText.FirstWord();
+                return true;
+            }
 
-            return firstWord.EqualsAny(Constants.Comments.ReturnWords);
+            return false;
         }
 
         private static string GetProposal(ISymbol symbol)

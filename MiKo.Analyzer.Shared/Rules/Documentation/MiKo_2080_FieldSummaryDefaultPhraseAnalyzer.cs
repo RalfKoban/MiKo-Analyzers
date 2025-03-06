@@ -65,7 +65,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (comment.StartsWith(phrase, Comparison))
             {
                 // no issue
-                problematicText = null;
+                problematicText = string.Empty;
 
                 return false;
             }

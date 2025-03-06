@@ -44,7 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 if (secondWord.Equals(StartingPhraseSecondWord, comparison))
                 {
                     // no issue
-                    problematicText = null;
+                    problematicText = string.Empty;
 
                     return false;
                 }
