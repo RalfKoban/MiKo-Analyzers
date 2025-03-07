@@ -1756,7 +1756,7 @@ namespace MiKoSolutions.Analyzers
             if (symbolName.Equals(typeName, StringComparison.OrdinalIgnoreCase))
             {
                 // there must be at least a minimum of upper case letters (except the first character)
-                if (typeName.HasUpperCaseLettersAbove(minimumUpperCaseLetters))
+                if (symbolName.HasUpperCaseLettersAbove(minimumUpperCaseLetters))
                 {
                     return true;
                 }
