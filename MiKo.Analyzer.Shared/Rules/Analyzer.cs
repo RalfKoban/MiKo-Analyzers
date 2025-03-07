@@ -172,9 +172,13 @@ namespace MiKoSolutions.Analyzers.Rules
                 return;
             }
 
-            if (issues is IReadOnlyList<Diagnostic> list && list.Count == 1)
+            if (issues is Diagnostic[] array)
             {
-                ReportDiagnostics(context, list[0]);
+                ReportDiagnostics(context, array);
+            }
+            else if (issues is IReadOnlyList<Diagnostic> list)
+            {
+                ReportDiagnostics(context, list);
             }
             else
             {
@@ -365,29 +369,59 @@ namespace MiKoSolutions.Analyzers.Rules
 
             var issues = analyzer((T)symbol, compilation);
 
-            if (issues is IReadOnlyList<Diagnostic> emptyList && emptyList.Count == 0)
-            {
-                return;
-            }
-
             if (context.CancellationToken.IsCancellationRequested)
             {
                 // seems that we should cancel and not report further issues
                 return;
             }
 
-            if (issues is IReadOnlyList<Diagnostic> list && list.Count == 1)
+            if (issues is Diagnostic[] array)
             {
-                var issue = list[0];
-
-                if (issue != null)
-                {
-                    context.ReportDiagnostic(issue);
-                }
+                ReportDiagnostics(context, array);
+            }
+            else if (issues is IReadOnlyList<Diagnostic> list)
+            {
+                ReportDiagnostics(context, list);
             }
             else
             {
                 ReportDiagnosticsEnumerable(context, issues);
+            }
+        }
+
+        private static void ReportDiagnostics(SymbolAnalysisContext context, Diagnostic[] array)
+        {
+            var arrayLength = array.Length;
+
+            if (arrayLength > 0)
+            {
+                for (var index = 0; index < arrayLength; index++)
+                {
+                    var issue = array[index];
+
+                    if (issue != null)
+                    {
+                        context.ReportDiagnostic(issue);
+                    }
+                }
+            }
+        }
+
+        private static void ReportDiagnostics(SymbolAnalysisContext context, IReadOnlyList<Diagnostic> list)
+        {
+            var listCount = list.Count;
+
+            if (listCount > 0)
+            {
+                for (var index = 0; index < listCount; index++)
+                {
+                    var issue = list[index];
+
+                    if (issue != null)
+                    {
+                        context.ReportDiagnostic(issue);
+                    }
+                }
             }
         }
 
@@ -404,6 +438,42 @@ namespace MiKoSolutions.Analyzers.Rules
                 if (issue != null)
                 {
                     context.ReportDiagnostic(issue);
+                }
+            }
+        }
+
+        private static void ReportDiagnostics(SyntaxNodeAnalysisContext context, Diagnostic[] issues)
+        {
+            var issuesLength = issues.Length;
+
+            if (issuesLength > 0)
+            {
+                for (var index = 0; index < issuesLength; index++)
+                {
+                    var issue = issues[index];
+
+                    if (issue != null)
+                    {
+                        context.ReportDiagnostic(issue);
+                    }
+                }
+            }
+        }
+
+        private static void ReportDiagnostics(SyntaxNodeAnalysisContext context, IReadOnlyList<Diagnostic> issues)
+        {
+            var issuesCount = issues.Count;
+
+            if (issuesCount > 0)
+            {
+                for (var index = 0; index < issuesCount; index++)
+                {
+                    var issue = issues[index];
+
+                    if (issue != null)
+                    {
+                        context.ReportDiagnostic(issue);
+                    }
                 }
             }
         }

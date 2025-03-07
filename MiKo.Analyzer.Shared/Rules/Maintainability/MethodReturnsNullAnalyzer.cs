@@ -275,11 +275,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private void ReportIssue(SyntaxNodeAnalysisContext context, SyntaxNode node)
-        {
-            var issue = Issue(node);
-
-            ReportDiagnostics(context, issue);
-        }
+        private void ReportIssue(SyntaxNodeAnalysisContext context, SyntaxNode node) => ReportDiagnostics(context, Issue(node));
     }
 }

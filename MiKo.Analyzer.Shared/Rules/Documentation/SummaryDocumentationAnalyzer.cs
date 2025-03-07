@@ -29,12 +29,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var summaryXmls = comment.GetSummaryXmls();
 
-            if (summaryXmls.Count == 0)
+            switch (summaryXmls.Count)
             {
-                return Array.Empty<Diagnostic>();
-            }
+                case 0:
+                    return Array.Empty<Diagnostic>();
 
-            return AnalyzeSummaries(symbol, summaryXmls);
+                case 1:
+                {
+                    var issue = AnalyzeTextStart(symbol, summaryXmls[0]);
+
+                    return issue is null
+                           ? Array.Empty<Diagnostic>()
+                           : new[] { issue };
+                }
+
+                default:
+                    return AnalyzeSummaries(symbol, summaryXmls);
+            }
         }
 
         private IEnumerable<Diagnostic> AnalyzeSummaries(ISymbol symbol, IReadOnlyList<XmlElementSyntax> summaryXmls)

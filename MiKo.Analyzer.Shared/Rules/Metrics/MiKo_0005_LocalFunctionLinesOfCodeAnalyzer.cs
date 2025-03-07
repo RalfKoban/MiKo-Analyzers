@@ -24,9 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
                 if (loc > MaxLinesOfCode)
                 {
-                    var issue = Issue(localFunction.GetName(), localFunction.Identifier, loc, MaxLinesOfCode);
-
-                    ReportDiagnostics(context, issue);
+                    ReportDiagnostics(context, Issue(localFunction.GetName(), localFunction.Identifier, loc, MaxLinesOfCode));
                 }
             }
         }
