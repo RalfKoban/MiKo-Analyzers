@@ -12,38 +12,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2005";
 
-        public MiKo_2005_EventArgsInDocumentationAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_2005_EventArgsInDocumentationAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeComment, DocumentationCommentTrivia);
-
-        private void AnalyzeComment(SyntaxNodeAnalysisContext context)
+        protected override bool ShallAnalyze(ISymbol symbol)
         {
-            if (context.Node is DocumentationCommentTriviaSyntax comment)
+            switch (symbol.Kind)
             {
-                switch (context.ContainingSymbol?.Kind)
-                {
-                    case SymbolKind.NamedType:
-                    case SymbolKind.Method:
-                    case SymbolKind.Property:
-                    case SymbolKind.Event:
-                    case SymbolKind.Field:
-                    {
-                        var issues = AnalyzeComment(comment);
+                case SymbolKind.NamedType:
+                case SymbolKind.Method:
+                case SymbolKind.Property:
+                case SymbolKind.Event:
+                case SymbolKind.Field:
+                    return true;
 
-                        if (issues.Count > 0)
-                        {
-                            ReportDiagnostics(context, issues);
-                        }
-
-                        break;
-                    }
-                }
+                default:
+                    return false;
             }
         }
 
-        private IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
             var textTokens = comment.GetXmlTextTokens();
             var textTokensCount = textTokens.Count;

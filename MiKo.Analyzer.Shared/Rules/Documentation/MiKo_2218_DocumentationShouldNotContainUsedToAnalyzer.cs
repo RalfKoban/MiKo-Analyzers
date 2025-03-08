@@ -331,7 +331,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Issue(location, replacement, properties);
         }
 
-        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
             var issues = AnalyzeCommentXml(comment);
             var count = issues.Count;

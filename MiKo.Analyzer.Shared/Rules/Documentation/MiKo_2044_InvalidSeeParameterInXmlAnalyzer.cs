@@ -19,36 +19,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                Constants.XmlTag.SeeAlso,
                                                            };
 
-        public MiKo_2044_InvalidSeeParameterInXmlAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_2044_InvalidSeeParameterInXmlAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeComment, DocumentationCommentTrivia);
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol is IMethodSymbol method && method.Parameters.Length > 0;
 
-        private void AnalyzeComment(SyntaxNodeAnalysisContext context)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
-            if (context.Node is DocumentationCommentTriviaSyntax comment)
+            if (symbol is IMethodSymbol method)
             {
-                if (context.ContainingSymbol is IMethodSymbol method)
-                {
-                    var issues = AnalyzeComment(comment, method);
-
-                    if (issues.Count > 0)
-                    {
-                        ReportDiagnostics(context, issues);
-                    }
-                }
+                return AnalyzeComment(comment, method);
             }
+
+            return Array.Empty<Diagnostic>();
         }
 
         private IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, IMethodSymbol method)
         {
             var names = method.Parameters.ToHashSet(_ => _.Name);
-
-            if (names.Count == 0)
-            {
-                return Array.Empty<Diagnostic>();
-            }
 
             List<Diagnostic> results = null;
 

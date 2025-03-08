@@ -20,68 +20,73 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
             List<Diagnostic> results = null;
 
             foreach (var nodeOrToken in comment.AllDescendantNodesAndTokens())
             {
+                Diagnostic issue = null;
+
                 if (nodeOrToken.IsNode)
                 {
-                    switch (nodeOrToken.AsNode())
-                    {
-                        case XmlEmptyElementSyntax emptyElement when emptyElement.SlashGreaterThanToken.IsMissing:
-                        {
-                            if (results is null)
-                            {
-                                results = new List<Diagnostic>(1);
-                            }
-
-                            results.Add(Issue(emptyElement.LessThanToken));
-
-                            break;
-                        }
-
-                        case XmlElementSyntax element:
-                        {
-                            var name = element.StartTag.GetName();
-
-                            if (name.IsNullOrWhiteSpace())
-                            {
-                                if (results is null)
-                                {
-                                    results = new List<Diagnostic>(1);
-                                }
-
-                                results.Add(Issue(element.StartTag));
-                            }
-
-                            break;
-                        }
-                    }
+                    issue = FindIssue(nodeOrToken.AsNode());
                 }
                 else if (nodeOrToken.IsToken)
                 {
-                    var token = nodeOrToken.AsToken();
-
-                    if (token.IsKind(SyntaxKind.XmlEntityLiteralToken))
-                    {
-                        var text = token.Text.AsCachedBuilder().Without(XmlEntities).ToStringAndRelease();
-
-                        if (text.Contains('&'))
-                        {
-                            if (results is null)
-                            {
-                                results = new List<Diagnostic>(1);
-                            }
-
-                            results.Add(Issue(token));
-                        }
-                    }
+                    issue = FindIssue(nodeOrToken.AsToken());
                 }
+
+                if (issue is null)
+                {
+                    continue;
+                }
+
+                if (results is null)
+                {
+                    results = new List<Diagnostic>(1);
+                }
+
+                results.Add(issue);
             }
 
             return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
+        }
+
+        private Diagnostic FindIssue(SyntaxNode node)
+        {
+            switch (node)
+            {
+                case XmlEmptyElementSyntax ee when ee.SlashGreaterThanToken.IsMissing:
+                {
+                    return Issue(ee.LessThanToken);
+                }
+
+                case XmlElementSyntax e:
+                {
+                    var name = e.StartTag.GetName();
+
+                    return name.IsNullOrWhiteSpace() ? Issue(e.StartTag) : null;
+                }
+
+                default:
+                    return null;
+            }
+        }
+
+        private Diagnostic FindIssue(SyntaxToken token)
+        {
+            if (token.IsKind(SyntaxKind.XmlEntityLiteralToken))
+            {
+                var text = token.Text.AsCachedBuilder().Without(XmlEntities).ToStringAndRelease();
+
+                if (text.Contains('&'))
+                {
+                    return Issue(token);
+                }
+            }
+
+            return null;
         }
     }
 }

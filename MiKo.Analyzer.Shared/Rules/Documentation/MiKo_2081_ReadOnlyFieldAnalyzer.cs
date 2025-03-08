@@ -15,26 +15,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private const StringComparison Comparison = StringComparison.Ordinal;
 
-        public MiKo_2081_ReadOnlyFieldAnalyzer() : base(Id, SymbolKind.Field)
+        public MiKo_2081_ReadOnlyFieldAnalyzer() : base(Id)
         {
         }
 
-        protected override bool ShallAnalyze(IFieldSymbol symbol)
+        protected override bool ShallAnalyze(ISymbol symbol)
         {
-            if (symbol.IsReadOnly)
+            if (symbol is IFieldSymbol field && field.IsReadOnly)
             {
-                switch (symbol.DeclaredAccessibility)
+                switch (field.DeclaredAccessibility)
                 {
                     case Accessibility.Public:
                     case Accessibility.Protected:
-                        return symbol.ContainingType.IsTestClass() is false;
+                        return field.ContainingType.IsTestClass() is false;
                 }
             }
 
             return false;
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(DocumentationCommentTriviaSyntax comment, ISymbol symbol, IReadOnlyList<XmlElementSyntax> summaryXmls, string commentXml, IReadOnlyCollection<string> summaries)
         {
             if (summaries.None(_ => _.EndsWith(Constants.Comments.FieldIsReadOnly, Comparison)))
             {

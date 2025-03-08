@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Diagnostics;
 
 using MiKoSolutions.Analyzers.Linguistics;
 
@@ -11,36 +9,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class OverallDocumentationAnalyzer : DocumentationAnalyzer
     {
-        protected OverallDocumentationAnalyzer(string id) : base(id, (SymbolKind)(-1))
+        protected OverallDocumentationAnalyzer(string id) : base(id)
         {
         }
 
-        protected sealed override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeComment, DocumentationCommentTrivia);
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol.IsPrimaryConstructor() is false;
 
         protected virtual Diagnostic Issue(Location location, string replacement) => base.Issue(location, replacement);
-
-        protected void AnalyzeComment(SyntaxNodeAnalysisContext context)
-        {
-            if (context.Node is DocumentationCommentTriviaSyntax comment)
-            {
-                var symbol = context.ContainingSymbol;
-
-                if (symbol.IsPrimaryConstructor())
-                {
-                    // records are analyzed for their type as well, so we do not need to report twice
-                    return;
-                }
-
-                var issues = AnalyzeComment(comment, symbol);
-
-                if (issues.Count > 0)
-                {
-                    ReportDiagnostics(context, issues);
-                }
-            }
-        }
-
-        protected abstract IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol);
 
         protected IReadOnlyList<Diagnostic> AnalyzeForSpecialPhrase(SyntaxToken token, string startingPhrase, Func<string, string> replacementCallback)
         {

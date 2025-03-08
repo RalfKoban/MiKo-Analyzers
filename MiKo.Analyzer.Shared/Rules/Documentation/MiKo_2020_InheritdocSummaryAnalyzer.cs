@@ -22,14 +22,29 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                "SEEALSO",
                                                            };
 
-        public MiKo_2020_InheritdocSummaryAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_2020_InheritdocSummaryAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event);
-
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override bool ShallAnalyze(ISymbol symbol)
         {
+            switch (symbol.Kind)
+            {
+                case SymbolKind.NamedType:
+                case SymbolKind.Method:
+                case SymbolKind.Property:
+                case SymbolKind.Event:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
+        {
+            List<Diagnostic> issues = null;
+
             foreach (var xmlTag in comment.GetSummaryXmls(Tags))
             {
                 var cref = xmlTag.GetCref();
@@ -48,21 +63,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     if (index == 0)
                     {
                         // is it the first inside the comment
-                        if (HasIssue(symbol, compilation, cref))
+                        if (HasIssue(symbol, semanticModel, cref))
                         {
-                            yield return Issue(xmlTag);
+                            if (issues is null)
+                            {
+                                issues = new List<Diagnostic>(1);
+                            }
+
+                            issues.Add(Issue(xmlTag));
                         }
                     }
                     else if (index > 0 && content[index - 1] is XmlTextSyntax t) // there might be multiple <see/> in a comment, so consider all of them
                     {
                         // we seem to have an issue here, so inspect the code
-                        if (HasIssue(symbol, compilation, cref))
+                        if (HasIssue(symbol, semanticModel, cref))
                         {
                             var text = t.GetTextWithoutTrivia();
 
                             if (text.IsNullOrWhiteSpace())
                             {
-                                yield return Issue(xmlTag);
+                                if (issues is null)
+                                {
+                                    issues = new List<Diagnostic>(1);
+                                }
+
+                                issues.Add(Issue(xmlTag));
                             }
                             else
                             {
@@ -72,16 +97,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                 if (words.First().Text.StartsWithAny(InheritMarkerTexts, StringComparison.OrdinalIgnoreCase)
                                  || words.Last().Text.ToString().ContainsAny(InheritMarkerTexts, StringComparison.OrdinalIgnoreCase))
                                 {
-                                    yield return Issue(xmlTag);
+                                    if (issues is null)
+                                    {
+                                        issues = new List<Diagnostic>(1);
+                                    }
+
+                                    issues.Add(Issue(xmlTag));
                                 }
                             }
                         }
                     }
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)issues ?? Array.Empty<Diagnostic>();
         }
 
-        private static bool HasIssue(ISymbol symbol, Compilation compilation, XmlCrefAttributeSyntax cref)
+        private static bool HasIssue(ISymbol symbol, SemanticModel semanticModel, XmlCrefAttributeSyntax cref)
         {
             if (symbol.IsOverride)
             {
@@ -89,7 +121,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             var type = cref.GetCrefType();
-            var linkedSymbol = type?.GetSymbol(compilation);
+            var linkedSymbol = type?.GetSymbol(semanticModel);
 
             switch (symbol)
             {

@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] Separators = { "----", "****", "====", "####" };
 
-        public MiKo_2311_CommentIsSeparatorAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_2311_CommentIsSeparatorAnalyzer() : base(Id)
         {
         }
 

@@ -13,13 +13,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2039";
 
-        public MiKo_2039_ExtensionMethodsClassSummaryAnalyzer() : base(Id, SymbolKind.NamedType)
+        public MiKo_2039_ExtensionMethodsClassSummaryAnalyzer() : base(Id)
         {
         }
 
-        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.ContainsExtensionMethods() && base.ShallAnalyze(symbol);
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol is INamedTypeSymbol type && type.ContainsExtensionMethods();
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(DocumentationCommentTriviaSyntax comment, ISymbol symbol, IReadOnlyList<XmlElementSyntax> summaryXmls, string commentXml, IReadOnlyCollection<string> summaries)
         {
             var phrases = Constants.Comments.ExtensionMethodClassStartingPhrase;
 

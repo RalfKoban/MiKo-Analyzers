@@ -8,59 +8,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class SummaryDocumentationAnalyzer : DocumentationAnalyzer
     {
-        protected SummaryDocumentationAnalyzer(string diagnosticId, SymbolKind symbolKind) : base(diagnosticId, symbolKind)
+        protected SummaryDocumentationAnalyzer(string diagnosticId) : base(diagnosticId)
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeSummaries(symbol, compilation, commentXml, comment);
-
-        protected IEnumerable<Diagnostic> AnalyzeSummaries(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
-        {
-            var summaries = CommentExtensions.GetSummaries(commentXml);
-
-            return summaries.Count == 0
-                   ? Array.Empty<Diagnostic>()
-                   : AnalyzeSummary(symbol, compilation, summaries, comment);
-        }
-
-        protected virtual IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment) => Array.Empty<Diagnostic>();
-
-        protected IEnumerable<Diagnostic> AnalyzeSummariesStart(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
             var summaryXmls = comment.GetSummaryXmls();
 
-            switch (summaryXmls.Count)
+            if (summaryXmls.Count == 0)
             {
-                case 0:
-                    return Array.Empty<Diagnostic>();
-
-                case 1:
-                {
-                    var issue = AnalyzeTextStart(symbol, summaryXmls[0]);
-
-                    return issue is null
-                           ? Array.Empty<Diagnostic>()
-                           : new[] { issue };
-                }
-
-                default:
-                    return AnalyzeSummaries(symbol, summaryXmls);
+                return Array.Empty<Diagnostic>();
             }
+
+            var commentXml = symbol.GetDocumentationCommentXml();
+
+            var summaries = CommentExtensions.GetSummaries(commentXml);
+
+            return AnalyzeSummaries(comment, symbol, summaryXmls, commentXml, summaries);
         }
 
-        private IEnumerable<Diagnostic> AnalyzeSummaries(ISymbol symbol, IReadOnlyList<XmlElementSyntax> summaryXmls)
-        {
-            var count = summaryXmls.Count;
-
-            for (var index = 0; index < count; index++)
-            {
-                var issue = AnalyzeTextStart(symbol, summaryXmls[index]);
-
-                if (issue != null)
-                {
-                    yield return issue;
-                }
-            }
-        }
+        protected virtual IReadOnlyList<Diagnostic> AnalyzeSummaries(DocumentationCommentTriviaSyntax comment, ISymbol symbol, IReadOnlyList<XmlElementSyntax> summaryXmls, string commentXml, IReadOnlyCollection<string> summaries) => Array.Empty<Diagnostic>();
     }
 }

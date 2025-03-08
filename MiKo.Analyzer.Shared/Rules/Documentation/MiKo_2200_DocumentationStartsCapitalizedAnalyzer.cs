@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
             List<Diagnostic> results = null;
 
@@ -43,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     var issue = AnalyzeText(text, xml.GetName());
 
-                    if (issue == null)
+                    if (issue is null)
                     {
                         continue;
                     }

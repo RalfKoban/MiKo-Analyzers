@@ -12,39 +12,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2029";
 
-        public MiKo_2029_InheritdocUsesWrongCrefAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_2029_InheritdocUsesWrongCrefAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeComment, DocumentationCommentTrivia);
-
-        private void AnalyzeComment(SyntaxNodeAnalysisContext context)
+        protected override bool ShallAnalyze(ISymbol symbol)
         {
-            if (context.Node is DocumentationCommentTriviaSyntax comment)
+            switch (symbol.Kind)
             {
-                var symbol = context.ContainingSymbol;
+                case SymbolKind.NamedType:
+                case SymbolKind.Method:
+                case SymbolKind.Property:
+                case SymbolKind.Event:
+                    return true;
 
-                switch (symbol?.Kind)
-                {
-                    case SymbolKind.NamedType:
-                    case SymbolKind.Method:
-                    case SymbolKind.Property:
-                    case SymbolKind.Event:
-                    {
-                        var issues = AnalyzeComment(comment, symbol, context.SemanticModel);
-
-                        if (issues.Count > 0)
-                        {
-                            ReportDiagnostics(context, issues);
-                        }
-
-                        break;
-                    }
-                }
+                default:
+                    return false;
             }
         }
 
-        private IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
             List<Diagnostic> results = null;
 

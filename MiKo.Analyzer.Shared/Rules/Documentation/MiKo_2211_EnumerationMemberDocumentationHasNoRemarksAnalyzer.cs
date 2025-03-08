@@ -13,31 +13,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2211";
 
-        public MiKo_2211_EnumerationMemberDocumentationHasNoRemarksAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_2211_EnumerationMemberDocumentationHasNoRemarksAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeComment, DocumentationCommentTrivia);
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol is IFieldSymbol field && field.ContainingType.IsEnum();
 
-        protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.ContainingType.IsEnum();
-
-        private void AnalyzeComment(SyntaxNodeAnalysisContext context)
-        {
-            if (context.Node is DocumentationCommentTriviaSyntax comment)
-            {
-                if (context.ContainingSymbol is IFieldSymbol symbol && ShallAnalyze(symbol))
-                {
-                    var issues = AnalyzeComment(comment);
-
-                    if (issues.Count > 0)
-                    {
-                        ReportDiagnostics(context, issues);
-                    }
-                }
-            }
-        }
-
-        private IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
             var remarks = comment.GetRemarksXmls();
 

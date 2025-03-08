@@ -12,30 +12,40 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2232";
 
-        public MiKo_2232_EmptySummaryAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_2232_EmptySummaryAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event, SymbolKind.Field);
-
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override bool ShallAnalyze(ISymbol symbol)
         {
-            var summaryXmls = comment.GetSummaryXmls();
+            switch (symbol.Kind)
+            {
+                case SymbolKind.NamedType:
+                case SymbolKind.Method:
+                case SymbolKind.Property:
+                case SymbolKind.Event:
+                case SymbolKind.Field:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(DocumentationCommentTriviaSyntax comment, ISymbol symbol, IReadOnlyList<XmlElementSyntax> summaryXmls, string commentXml, IReadOnlyCollection<string> summaries)
+        {
             var count = summaryXmls.Count;
 
-            if (count > 0)
+            for (var index = 0; index < count; index++)
             {
-                for (var index = 0; index < count; index++)
-                {
-                    var summary = summaryXmls[index];
-                    var content = summary.Content;
+                var summary = summaryXmls[index];
+                var content = summary.Content;
 
-                    switch (content.Count)
-                    {
-                        case 0:
-                        case 1 when content[0] is XmlTextSyntax text && text.GetTextWithoutTrivia().IsNullOrEmpty():
-                            return new[] { Issue(summary) };
-                    }
+                switch (content.Count)
+                {
+                    case 0:
+                    case 1 when content[0] is XmlTextSyntax text && text.GetTextWithoutTrivia().IsNullOrEmpty():
+                        return new[] { Issue(summary) };
                 }
             }
 

@@ -18,25 +18,34 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                       Constants.XmlTag.ParamRef,
                                                                   };
 
-        public MiKo_2045_InvalidParameterReferenceInSummaryAnalyzer() : base(Id, SymbolKind.Method)
+        public MiKo_2045_InvalidParameterReferenceInSummaryAnalyzer() : base(Id)
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment)
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol.Kind == SymbolKind.Method;
+
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
             var method = (IMethodSymbol)symbol;
 
-            if (method.Parameters.Length != 0)
+            if (method.Parameters.Length == 0)
             {
-                foreach (var node in GetIssues(comment))
-                {
-                    yield return Issue(node);
-                }
+                return Array.Empty<Diagnostic>();
             }
-        }
 
-        private static IEnumerable<XmlNodeSyntax> GetIssues(DocumentationCommentTriviaSyntax documentation) => documentation != null
-                                                                                                               ? documentation.GetSummaryXmls(InvalidTags)
-                                                                                                               : Array.Empty<XmlNodeSyntax>();
+            List<Diagnostic> issues = null;
+
+            foreach (var node in comment.GetSummaryXmls(InvalidTags))
+            {
+                if (issues is null)
+                {
+                    issues = new List<Diagnostic>(1);
+                }
+
+                issues.Add(Issue(node));
+            }
+
+            return (IReadOnlyList<Diagnostic>)issues ?? Array.Empty<Diagnostic>();
+        }
     }
 }

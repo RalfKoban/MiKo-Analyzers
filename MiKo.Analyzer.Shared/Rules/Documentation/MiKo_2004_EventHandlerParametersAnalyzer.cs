@@ -17,13 +17,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private const string DefaultEnding = " that contains the event data";
 
-        public MiKo_2004_EventHandlerParametersAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_2004_EventHandlerParametersAnalyzer() : base(Id)
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsEventHandler() && base.ShallAnalyze(symbol);
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol is IMethodSymbol method && method.IsEventHandler();
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeComment, DocumentationCommentTrivia);
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
+        {
+            if (symbol is IMethodSymbol method)
+            {
+                return AnalyzeComment(comment, method, method.GetDocumentationCommentXml());
+            }
+
+            return Array.Empty<Diagnostic>();
+        }
 
         private static string GetDefaultStartingPhrase(string name) => ArticleProvider.GetArticleFor(name);
 
@@ -46,22 +54,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                            variantWithoutSpace + ".",
                            variantWithoutSpace,
                        };
-        }
-
-        private void AnalyzeComment(SyntaxNodeAnalysisContext context)
-        {
-            if (context.Node is DocumentationCommentTriviaSyntax comment)
-            {
-                if (context.ContainingSymbol is IMethodSymbol method && ShallAnalyze(method))
-                {
-                    var issues = AnalyzeComment(comment, method, method.GetDocumentationCommentXml());
-
-                    if (issues.Count > 0)
-                    {
-                        ReportDiagnostics(context, issues);
-                    }
-                }
-            }
         }
 
         private IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, IMethodSymbol symbol, string commentXml)

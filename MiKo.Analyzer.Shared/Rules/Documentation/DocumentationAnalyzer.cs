@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
@@ -14,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static readonly SyntaxKind[] DocumentationCommentTrivia = { SyntaxKind.SingleLineDocumentationCommentTrivia, SyntaxKind.MultiLineDocumentationCommentTrivia };
 
-        protected DocumentationAnalyzer(string diagnosticId, SymbolKind symbolKind) : base(nameof(Documentation), diagnosticId, symbolKind)
+        protected DocumentationAnalyzer(string diagnosticId) : base(nameof(Documentation), diagnosticId, (SymbolKind)(-1))
         {
         }
 
@@ -134,267 +135,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 //// ncrunch: rdi default
         }
 
-        protected virtual bool ShallAnalyze(INamedTypeSymbol symbol) => true;
+        protected sealed override IEnumerable<Diagnostic> AnalyzeNamespace(INamespaceSymbol symbol, Compilation compilation) => throw new NotSupportedException("Namespaces are not supported.");
 
-        protected virtual bool ShallAnalyze(IMethodSymbol symbol) => true;
+        protected sealed override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation) => throw new NotSupportedException("Types are not supported.");
 
-        protected virtual bool ShallAnalyze(IEventSymbol symbol) => true;
+        protected sealed override IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol, Compilation compilation) => throw new NotSupportedException("Events are not supported.");
 
-        protected virtual bool ShallAnalyze(IPropertySymbol symbol) => true;
+        protected sealed override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation) => throw new NotSupportedException("Fields are not supported.");
 
-        protected virtual bool ShallAnalyze(IFieldSymbol symbol) => true;
+        protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation) => throw new NotSupportedException("Methods are not supported.");
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation)
-        {
-            if (ShallAnalyze(symbol) is false)
-            {
-                return Array.Empty<Diagnostic>();
-            }
+        protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation) => throw new NotSupportedException("Properties are not supported.");
 
-            var comments = symbol.GetDocumentationCommentTriviaSyntax();
-            var commentsLength = comments.Length;
+        protected sealed override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol symbol, Compilation compilation) => throw new NotSupportedException("Parameters are not supported.");
 
-            if (commentsLength <= 0)
-            {
-                return Array.Empty<Diagnostic>();
-            }
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeComment, DocumentationCommentTrivia);
 
-            var commentXml = symbol.GetDocumentationCommentXml();
+        protected virtual bool ShallAnalyze(ISymbol symbol) => true;
 
-            if (commentsLength == 1)
-            {
-                return AnalyzeType(symbol, compilation, commentXml, comments[0]);
-            }
-
-            return AnalyzeTypeWithLoop(symbol, compilation, commentXml, comments);
-        }
-
-        protected virtual IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, compilation, commentXml, comment);
-
-        protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation)
-        {
-            if (ShallAnalyze(symbol) is false)
-            {
-                return Array.Empty<Diagnostic>();
-            }
-
-            var comments = symbol.GetDocumentationCommentTriviaSyntax();
-            var commentsLength = comments.Length;
-
-            if (commentsLength <= 0)
-            {
-                return Array.Empty<Diagnostic>();
-            }
-
-            var commentXml = symbol.GetDocumentationCommentXml();
-
-            if (commentsLength == 1)
-            {
-                return AnalyzeMethod(symbol, compilation, commentXml, comments[0]);
-            }
-
-            return AnalyzeMethodWithLoop(symbol, compilation, commentXml, comments);
-        }
-
-        protected virtual IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, compilation, commentXml, comment);
-
-        protected sealed override IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol, Compilation compilation)
-        {
-            if (ShallAnalyze(symbol) is false)
-            {
-                return Array.Empty<Diagnostic>();
-            }
-
-            var comments = symbol.GetDocumentationCommentTriviaSyntax();
-            var commentsLength = comments.Length;
-
-            if (commentsLength <= 0)
-            {
-                return Array.Empty<Diagnostic>();
-            }
-
-            var commentXml = symbol.GetDocumentationCommentXml();
-
-            if (commentsLength == 1)
-            {
-                return AnalyzeEvent(symbol, compilation, commentXml, comments[0]);
-            }
-
-            return AnalyzeEventWithLoop(symbol, compilation, commentXml, comments);
-        }
-
-        protected virtual IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, compilation, commentXml, comment);
-
-        protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation)
-        {
-            if (ShallAnalyze(symbol) is false)
-            {
-                return Array.Empty<Diagnostic>();
-            }
-
-            var comments = symbol.GetDocumentationCommentTriviaSyntax();
-            var commentsLength = comments.Length;
-
-            if (commentsLength <= 0)
-            {
-                return Array.Empty<Diagnostic>();
-            }
-
-            var commentXml = symbol.GetDocumentationCommentXml();
-
-            if (commentsLength == 1)
-            {
-                return AnalyzeProperty(symbol, compilation, commentXml, comments[0]);
-            }
-
-            return AnalyzePropertyWithLoop(symbol, compilation, commentXml, comments);
-        }
-
-        protected virtual IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, compilation, commentXml, comment);
-
-        protected sealed override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation)
-        {
-            if (ShallAnalyze(symbol) is false)
-            {
-                return Array.Empty<Diagnostic>();
-            }
-
-            var comments = symbol.GetDocumentationCommentTriviaSyntax();
-            var commentsLength = comments.Length;
-
-            if (commentsLength <= 0)
-            {
-                return Array.Empty<Diagnostic>();
-            }
-
-            var commentXml = symbol.GetDocumentationCommentXml();
-
-            if (commentsLength == 1)
-            {
-                return AnalyzeField(symbol, compilation, commentXml, comments[0]);
-            }
-
-            return AnalyzeFieldWithLoop(symbol, compilation, commentXml, comments);
-        }
-
-        protected virtual IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, compilation, commentXml, comment);
-
-        protected virtual IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => Array.Empty<Diagnostic>();
-
-        protected virtual Diagnostic StartIssue(ISymbol symbol, SyntaxNode node) => StartIssue(symbol, node.GetLocation());
-
-        protected virtual Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location);
-
-        protected Diagnostic AnalyzeTextStart(ISymbol symbol, XmlElementSyntax xml)
-        {
-            var tag = xml.StartTag.GetName();
-
-            var descendantNodes = xml.DescendantNodes();
-
-            foreach (var node in descendantNodes)
-            {
-                switch (node)
-                {
-                    case XmlElementStartTagSyntax startTag:
-                    {
-                        var tagName = startTag.GetName();
-
-                        if (tagName == tag || tagName == Constants.XmlTag.Para)
-                        {
-                            continue; // skip over the start tag and name syntax
-                        }
-
-                        return StartIssue(symbol, node); // it's no text, so it must be something different
-                    }
-
-                    case XmlElementEndTagSyntax endTag:
-                    {
-                        var tagName = endTag.GetName();
-
-                        if (tagName == Constants.XmlTag.Para)
-                        {
-                            continue; // skip over the start tag and name syntax
-                        }
-
-                        if (endTag.Parent is XmlElementSyntax element)
-                        {
-                            if (ConsiderEmptyTextAsIssue(symbol))
-                            {
-                                return StartIssue(symbol, element.GetContentsLocation()); // it's an empty text
-                            }
-
-                            continue;
-                        }
-
-                        return StartIssue(symbol, node); // it's no text, so it must be something different
-                    }
-
-                    case XmlNameSyntax _:
-                    case XmlElementSyntax e when e.GetName() == Constants.XmlTag.Para:
-                    case XmlEmptyElementSyntax ee when ee.GetName() == Constants.XmlTag.Para:
-                        continue; // skip over the start tag and name syntax
-
-                    case XmlTextSyntax text:
-                    {
-                        // report the location of the first word(s) via the corresponding text token
-                        var textTokens = text.TextTokens;
-
-                        // keep in local variable to avoid multiple requests (see Roslyn implementation)
-                        var textTokensCount = textTokens.Count;
-
-                        for (var index = 0; index < textTokensCount; index++)
-                        {
-                            var token = textTokens[index];
-
-                            if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
-                            {
-                                continue;
-                            }
-
-                            var valueText = token.ValueText;
-
-                            if (valueText.IsNullOrWhiteSpace())
-                            {
-                                // we found the first but empty /// line, so ignore it
-                                continue;
-                            }
-
-                            if (valueText.Length == 1 && Constants.Comments.Delimiters.Contains(valueText[0]))
-                            {
-                                // this is a dot or something directly after the XML tag, so ignore that
-                                continue;
-                            }
-
-                            // we found some text
-                            if (AnalyzeTextStart(symbol, valueText, out var problematicText, out var comparison))
-                            {
-                                // it's no valid text, so we have an issue
-                                var position = valueText.IndexOf(problematicText, comparison);
-
-                                var start = token.SpanStart + position; // find start position for underlining
-                                var end = start + problematicText.Length; // find end position for underlining
-
-                                var location = CreateLocation(token, start, end);
-
-                                return StartIssue(symbol, location);
-                            }
-
-                            // it's a valid text, so we quit
-                            return null;
-                        }
-
-                        // we found a completely empty /// line, so ignore it
-                        continue;
-                    }
-
-                    default:
-                        return StartIssue(symbol, node); // it's no text, so it must be something different
-                }
-            }
-
-            // nothing to report
-            return null;
-        }
+        protected virtual IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel) => Array.Empty<Diagnostic>();
 
 #pragma warning disable CA1021
         protected virtual bool AnalyzeTextStart(ISymbol symbol, string valueText, out string problematicText, out StringComparison comparison)
@@ -639,121 +398,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return results ?? (IReadOnlyList<Location>)Array.Empty<Location>();
         }
 
-        private IEnumerable<Diagnostic> AnalyzeTypeWithLoop(INamedTypeSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax[] comments)
+        private void AnalyzeComment(SyntaxNodeAnalysisContext context)
         {
-            var commentsLength = comments.Length;
-
-            for (var index = 0; index < commentsLength; index++)
+            if (context.Node is DocumentationCommentTriviaSyntax comment)
             {
-                var issues = AnalyzeType(symbol, compilation, commentXml, comments[index]);
+                var symbol = context.ContainingSymbol;
 
-                if (issues.IsEmptyArray())
+                if (ShallAnalyze(symbol))
                 {
-                    continue;
-                }
+                    var issues = AnalyzeComment(comment, symbol, context.SemanticModel);
 
-                // ReSharper disable once LoopCanBePartlyConvertedToQuery
-                foreach (var issue in issues)
-                {
-                    if (issue != null)
+                    if (issues.Count > 0)
                     {
-                        yield return issue;
-                    }
-                }
-            }
-        }
-
-        private IEnumerable<Diagnostic> AnalyzeMethodWithLoop(IMethodSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax[] comments)
-        {
-            var commentsLength = comments.Length;
-
-            for (var index = 0; index < commentsLength; index++)
-            {
-                var issues = AnalyzeMethod(symbol, compilation, commentXml, comments[index]);
-
-                if (issues.IsEmptyArray())
-                {
-                    continue;
-                }
-
-                // ReSharper disable once LoopCanBePartlyConvertedToQuery
-                foreach (var issue in issues)
-                {
-                    if (issue != null)
-                    {
-                        yield return issue;
-                    }
-                }
-            }
-        }
-
-        private IEnumerable<Diagnostic> AnalyzeEventWithLoop(IEventSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax[] comments)
-        {
-            var commentsLength = comments.Length;
-
-            for (var index = 0; index < commentsLength; index++)
-            {
-                var issues = AnalyzeEvent(symbol, compilation, commentXml, comments[index]);
-
-                if (issues.IsEmptyArray())
-                {
-                    continue;
-                }
-
-                // ReSharper disable once LoopCanBePartlyConvertedToQuery
-                foreach (var issue in issues)
-                {
-                    if (issue != null)
-                    {
-                        yield return issue;
-                    }
-                }
-            }
-        }
-
-        private IEnumerable<Diagnostic> AnalyzePropertyWithLoop(IPropertySymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax[] comments)
-        {
-            var commentsLength = comments.Length;
-
-            for (var index = 0; index < commentsLength; index++)
-            {
-                var issues = AnalyzeProperty(symbol, compilation, commentXml, comments[index]);
-
-                if (issues.IsEmptyArray())
-                {
-                    continue;
-                }
-
-                // ReSharper disable once LoopCanBePartlyConvertedToQuery
-                foreach (var issue in issues)
-                {
-                    if (issue != null)
-                    {
-                        yield return issue;
-                    }
-                }
-            }
-        }
-
-        private IEnumerable<Diagnostic> AnalyzeFieldWithLoop(IFieldSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax[] comments)
-        {
-            var commentsLength = comments.Length;
-
-            for (var index = 0; index < commentsLength; index++)
-            {
-                var issues = AnalyzeField(symbol, compilation, commentXml, comments[index]);
-
-                if (issues.IsEmptyArray())
-                {
-                    continue;
-                }
-
-                // ReSharper disable once LoopCanBePartlyConvertedToQuery
-                foreach (var issue in issues)
-                {
-                    if (issue != null)
-                    {
-                        yield return issue;
+                        ReportDiagnostics(context, issues);
                     }
                 }
             }

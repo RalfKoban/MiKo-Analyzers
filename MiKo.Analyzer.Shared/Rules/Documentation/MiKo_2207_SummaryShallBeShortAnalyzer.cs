@@ -15,34 +15,58 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private const int MaxAllowedWhitespaces = 42;
 
-        public MiKo_2207_SummaryShallBeShortAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_2207_SummaryShallBeShortAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event, SymbolKind.Field);
-
-        protected override bool ShallAnalyze(IFieldSymbol symbol)
+        protected override bool ShallAnalyze(ISymbol symbol)
         {
-            if (symbol.Type.IsEnum())
+            switch (symbol.Kind)
             {
-                // remarks sections for enum fields do not work, see MiKo_2211
-                return false;
-            }
+                case SymbolKind.NamedType:
+                case SymbolKind.Method:
+                case SymbolKind.Property:
+                case SymbolKind.Event:
+                    return true;
 
-            return base.ShallAnalyze(symbol);
+                case SymbolKind.Field:
+                {
+                    if (((IFieldSymbol)symbol).Type.IsEnum())
+                    {
+                        // remarks sections for enum fields do not work, see MiKo_2211
+                        return false;
+                    }
+
+                    return true;
+                }
+
+                default:
+                    return false;
+            }
         }
 
-        // TODO RKN: Move this to SummaryDocumentAnalyzer when finished
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(DocumentationCommentTriviaSyntax comment, ISymbol symbol, IReadOnlyList<XmlElementSyntax> summaryXmls, string commentXml, IReadOnlyCollection<string> summaries)
         {
-            var summaryXmls = comment.GetSummaryXmls();
+            var count = summaryXmls.Count;
 
-            if (summaryXmls.Count == 0)
+            List<Diagnostic> issues = null;
+
+            for (var index = 0; index < count; index++)
             {
-                return Array.Empty<Diagnostic>();
+                var xml = summaryXmls[index];
+
+                if (HasIssue(xml))
+                {
+                    if (issues is null)
+                    {
+                        issues = new List<Diagnostic>(1);
+                    }
+
+                    issues.Add(Issue(xml.StartTag));
+                }
             }
 
-            return AnalyzeSummaries(summaryXmls);
+            return (IReadOnlyList<Diagnostic>)issues ?? Array.Empty<Diagnostic>();
         }
 
         private static bool HasIssue(XmlElementSyntax xml)
@@ -84,21 +108,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return false;
-        }
-
-        private IEnumerable<Diagnostic> AnalyzeSummaries(IReadOnlyList<XmlElementSyntax> summaryXmls)
-        {
-            var count = summaryXmls.Count;
-
-            for (var index = 0; index < count; index++)
-            {
-                var xml = summaryXmls[index];
-
-                if (HasIssue(xml))
-                {
-                    yield return Issue(xml.StartTag);
-                }
-            }
         }
     }
 }
