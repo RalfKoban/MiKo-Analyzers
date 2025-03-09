@@ -172,6 +172,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\ReturnTypeDefaultPhraseAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\SingleLineCommentAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\SummaryDocumentationAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\SummaryStartDocumentationAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\DependencyPropertyRegisterMaintainabilityAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\DoNotUseSuppressNullableWarningAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\InvertNegativeIfAnalyzer.cs" />

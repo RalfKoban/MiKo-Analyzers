@@ -1,30 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2047_AttributeSummaryDefaultPhraseAnalyzer : SummaryDocumentationAnalyzer
+    public sealed class MiKo_2047_AttributeSummaryDefaultPhraseAnalyzer : SummaryStartDocumentationAnalyzer
     {
         public const string Id = "MiKo_2047";
 
         private static readonly string StartingPhrases = Constants.Comments.AttributeSummaryStartingPhrase.OrderBy(_ => _).HumanizedConcatenated();
 
-        public MiKo_2047_AttributeSummaryDefaultPhraseAnalyzer() : base(Id, SymbolKind.NamedType)
+        public MiKo_2047_AttributeSummaryDefaultPhraseAnalyzer() : base(Id)
         {
         }
 
-        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.InheritsFrom<Attribute>() && base.ShallAnalyze(symbol);
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol is INamedTypeSymbol type && type.InheritsFrom<Attribute>();
 
         protected override Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location, StartingPhrases);
-
-        // TODO RKN: Move this to SummaryDocumentAnalyzer when finished
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeSummariesStart(symbol, compilation, commentXml, comment);
 
         protected override bool AnalyzeTextStart(ISymbol symbol, string valueText, out string problematicText, out StringComparison comparison)
         {
@@ -37,6 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             problematicText = valueText.FirstWord();
+
             return true;
         }
     }

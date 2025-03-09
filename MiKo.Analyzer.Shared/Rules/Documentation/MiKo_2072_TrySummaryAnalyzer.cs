@@ -1,30 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2072_TrySummaryAnalyzer : SummaryDocumentationAnalyzer
+    public sealed class MiKo_2072_TrySummaryAnalyzer : SummaryStartDocumentationAnalyzer
     {
         public const string Id = "MiKo_2072";
 
-        public MiKo_2072_TrySummaryAnalyzer() : base(Id, SymbolKind.Method)
+        public MiKo_2072_TrySummaryAnalyzer() : base(Id)
         {
         }
+
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol.Kind == SymbolKind.Method;
 
         protected override bool ConsiderEmptyTextAsIssue(ISymbol symbol) => false;
 
         protected override Diagnostic StartIssue(ISymbol symbol, SyntaxNode node) => null; // this is no issue as we do not start with any word
 
         protected override Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location, Constants.Comments.TryStartingPhrase);
-
-        // TODO RKN: Move this to SummaryDocumentAnalyzer when finished
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeSummariesStart(symbol, compilation, commentXml, comment);
 
         protected override bool AnalyzeTextStart(ISymbol symbol, string valueText, out string problematicText, out StringComparison comparison)
         {

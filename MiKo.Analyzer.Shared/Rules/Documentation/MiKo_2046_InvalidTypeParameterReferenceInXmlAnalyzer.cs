@@ -19,37 +19,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                Constants.XmlTag.SeeAlso,
                                                            };
 
-        public MiKo_2046_InvalidTypeParameterReferenceInXmlAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_2046_InvalidTypeParameterReferenceInXmlAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeComment, DocumentationCommentTrivia);
-
-        private void AnalyzeComment(SyntaxNodeAnalysisContext context)
-        {
-            if (context.Node is DocumentationCommentTriviaSyntax comment)
-            {
-                var symbol = context.ContainingSymbol;
-
-                switch (symbol?.Kind)
-                {
-                    case SymbolKind.NamedType:
-                    case SymbolKind.Method:
-                    {
-                        var issues = AnalyzeComment(comment, symbol);
-
-                        if (issues.Count > 0)
-                        {
-                            ReportDiagnostics(context, issues);
-                        }
-
-                        break;
-                    }
-                }
-            }
-        }
-
-        private IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
             switch (symbol)
             {

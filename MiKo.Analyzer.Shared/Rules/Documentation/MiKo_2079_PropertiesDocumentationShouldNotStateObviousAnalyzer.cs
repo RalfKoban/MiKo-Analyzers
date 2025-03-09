@@ -34,22 +34,39 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                       "Get AND Set ",
                                                                   };
 
-        public MiKo_2079_PropertiesDocumentationShouldNotStateObviousAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_2079_PropertiesDocumentationShouldNotStateObviousAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.Property);
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol.Kind == SymbolKind.Property;
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(DocumentationCommentTriviaSyntax comment, ISymbol symbol, IReadOnlyList<XmlElementSyntax> summaryXmls, string commentXml, IReadOnlyCollection<string> summaries)
         {
-            var summaries = comment.GetSummaryXmls();
+            var symbolName = symbol.Name;
+            var obviousComments = GetObviousComments(symbolName);
 
-            if (summaries.Count == 0)
+            var count = summaries.Count;
+
+            List<Diagnostic> issues = null;
+
+            for (var index = 0; index < count; index++)
             {
-                return Array.Empty<Diagnostic>();
+                var summary = summaryXmls[index];
+                var trimmed = summary.GetTextTrimmed();
+
+                if (obviousComments.Contains(trimmed))
+                {
+                    if (issues is null)
+                    {
+                        issues = new List<Diagnostic>(1);
+                    }
+
+                    // we have an issue
+                    issues.Add(Issue(symbolName, comment));
+                }
             }
 
-            return AnalyzeSummaries(symbol.Name, comment, summaries);
+            return (IReadOnlyList<Diagnostic>)issues ?? Array.Empty<Diagnostic>();
         }
 
         private static HashSet<string> GetObviousComments(string symbolName)
@@ -65,24 +82,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return result;
-        }
-
-        private IEnumerable<Diagnostic> AnalyzeSummaries(string symbolName, DocumentationCommentTriviaSyntax comment, IReadOnlyList<XmlElementSyntax> summaries)
-        {
-            var obviousComments = GetObviousComments(symbolName);
-
-            var count = summaries.Count;
-
-            for (var index = 0; index < count; index++)
-            {
-                var summary = summaries[index];
-                var trimmed = summary.GetTextTrimmed();
-
-                if (obviousComments.Contains(trimmed))
-                {
-                    yield return Issue(symbolName, comment);
-                }
-            }
         }
     }
 }

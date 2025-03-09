@@ -20,15 +20,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private const StringComparison Comparison = StringComparison.Ordinal;
 
-        public MiKo_2002_EventArgsSummaryAnalyzer() : base(Id, SymbolKind.NamedType)
+        public MiKo_2002_EventArgsSummaryAnalyzer() : base(Id)
         {
         }
 
-        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsEventArgs() && base.ShallAnalyze(symbol);
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol is INamedTypeSymbol s && s.IsEventArgs();
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment) => HasEventSummary(summaries)
-                                                                                                                                                                                       ? Array.Empty<Diagnostic>()
-                                                                                                                                                                                       : new[] { Issue(symbol, StartingPhraseConcrete, "\"" + EndingPhraseConcrete) };
+        protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(DocumentationCommentTriviaSyntax comment, ISymbol symbol, IReadOnlyList<XmlElementSyntax> summaryXmls, string commentXml, IReadOnlyCollection<string> summaries)
+        {
+            return HasEventSummary(summaries)
+                   ? Array.Empty<Diagnostic>()
+                   : new[] { Issue(symbol, StartingPhraseConcrete, "\"" + EndingPhraseConcrete) };
+        }
 
         private static bool HasEventSummary(IEnumerable<string> summaries)
         {

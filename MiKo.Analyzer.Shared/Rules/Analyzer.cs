@@ -442,6 +442,23 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
+        private static void ReportDiagnosticsEnumerable(SyntaxNodeAnalysisContext context, IEnumerable<Diagnostic> issues)
+        {
+            foreach (var issue in issues)
+            {
+                if (context.CancellationToken.IsCancellationRequested)
+                {
+                    // seems that we should cancel and not report further issues
+                    return;
+                }
+
+                if (issue != null)
+                {
+                    context.ReportDiagnostic(issue);
+                }
+            }
+        }
+
         private static void ReportDiagnostics(SyntaxNodeAnalysisContext context, Diagnostic[] issues)
         {
             var issuesLength = issues.Length;
@@ -474,23 +491,6 @@ namespace MiKoSolutions.Analyzers.Rules
                     {
                         context.ReportDiagnostic(issue);
                     }
-                }
-            }
-        }
-
-        private static void ReportDiagnosticsEnumerable(SyntaxNodeAnalysisContext context, IEnumerable<Diagnostic> issues)
-        {
-            foreach (var issue in issues)
-            {
-                if (context.CancellationToken.IsCancellationRequested)
-                {
-                    // seems that we should cancel and not report further issues
-                    return;
-                }
-
-                if (issue != null)
-                {
-                    context.ReportDiagnostic(issue);
                 }
             }
         }

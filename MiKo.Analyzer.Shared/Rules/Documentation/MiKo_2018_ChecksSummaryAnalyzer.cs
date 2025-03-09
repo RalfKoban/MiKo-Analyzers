@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2018_ChecksSummaryAnalyzer : SummaryDocumentationAnalyzer
+    public sealed class MiKo_2018_ChecksSummaryAnalyzer : SummaryStartDocumentationAnalyzer
     {
         public const string Id = "MiKo_2018";
 
@@ -17,31 +17,64 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] WrongPhrases = { "Check ", "Checks ", "Test ", "Tests ", "Determines if " };
 
-        public MiKo_2018_ChecksSummaryAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_2018_ChecksSummaryAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property);
-
         protected override bool ConsiderEmptyTextAsIssue(ISymbol symbol) => symbol is IMethodSymbol method && method.ReturnType.IsBoolean();
 
-        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsNamespace is false && symbol.IsEnum() is false && base.ShallAnalyze(symbol);
+        protected override bool ShallAnalyze(ISymbol symbol)
+        {
+            switch (symbol)
+            {
+                case INamedTypeSymbol type:
+                    return type.IsNamespace is false && type.IsEnum() is false;
+
+                case IMethodSymbol _:
+                case IPropertySymbol _:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
 
         protected override Diagnostic StartIssue(ISymbol symbol, SyntaxNode node) => null; // this is no issue as we do not start with any word
 
         protected override Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location, StartingPhrase);
 
-        // TODO RKN: Move this to SummaryDocumentAnalyzer when finished
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(DocumentationCommentTriviaSyntax comment, ISymbol symbol, IReadOnlyList<XmlElementSyntax> summaryXmls, string commentXml, IReadOnlyCollection<string> summaries)
         {
-            var summaryXmls = comment.GetSummaryXmls();
+            var count = summaryXmls.Count;
 
-            if (summaryXmls.Count == 0)
+            List<Diagnostic> issues = null;
+
+            for (var index = 0; index < count; index++)
             {
-                return Array.Empty<Diagnostic>();
+                var summaryXml = summaryXmls[index];
+
+                if (symbol is ITypeSymbol && summaryXml.GetTextTrimmed().IsNullOrEmpty())
+                {
+                    // do not report for empty types
+                    continue;
+                }
+
+                var issue = AnalyzeTextStart(symbol, summaryXml);
+
+                if (issue is null)
+                {
+                    continue;
+                }
+
+                if (issues is null)
+                {
+                    issues = new List<Diagnostic>(1);
+                }
+
+                issues.Add(issue);
             }
 
-            return AnalyzeSummaries(symbol, summaryXmls);
+            return (IReadOnlyList<Diagnostic>)issues ?? Array.Empty<Diagnostic>();
         }
 
         protected override bool AnalyzeTextStart(ISymbol symbol, string valueText, out string problematicText, out StringComparison comparison)
@@ -68,24 +101,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             problematicText = null;
 
             return false;
-        }
-
-        private IEnumerable<Diagnostic> AnalyzeSummaries(ISymbol symbol, IReadOnlyList<XmlElementSyntax> summaryXmls)
-        {
-            var count = summaryXmls.Count;
-
-            for (var index = 0; index < count; index++)
-            {
-                var summaryXml = summaryXmls[index];
-
-                if (symbol is ITypeSymbol && summaryXml.GetTextTrimmed().IsNullOrEmpty())
-                {
-                    // do not report for empty types
-                    continue;
-                }
-
-                yield return AnalyzeTextStart(symbol, summaryXml);
-            }
         }
     }
 }

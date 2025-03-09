@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class SingleLineCommentAnalyzer : DocumentationAnalyzer
     {
-        protected SingleLineCommentAnalyzer(string diagnosticId) : base(diagnosticId, (SymbolKind)(-1)) => IgnoreMultipleLines = true;
+        protected SingleLineCommentAnalyzer(string diagnosticId) : base(diagnosticId) => IgnoreMultipleLines = true;
 
         protected bool IgnoreMultipleLines { get; set; }
 
@@ -48,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual IEnumerable<Diagnostic> CollectIssues(string name, SyntaxTrivia trivia) => new[] { Issue(name, trivia) };
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => true;
+        protected virtual bool ShallAnalyze(IMethodSymbol symbol) => true;
 
         protected virtual bool ShallAnalyze(SyntaxTrivia trivia) => trivia.IsSingleLineComment();
 

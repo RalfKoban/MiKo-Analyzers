@@ -4,7 +4,6 @@ using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
@@ -12,15 +11,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private readonly Type m_exceptionType;
 
-        protected ExceptionDocumentationAnalyzer(string diagnosticId, Type exceptionType) : base(diagnosticId, (SymbolKind)(-1)) => m_exceptionType = exceptionType;
+        protected ExceptionDocumentationAnalyzer(string diagnosticId, Type exceptionType) : base(diagnosticId) => m_exceptionType = exceptionType;
 
         protected string ExceptionPhrase => Constants.Comments.ExceptionPhrase.FormatWith(m_exceptionType.Name);
 
-        protected sealed override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeComment, DocumentationCommentTrivia);
+        protected sealed override bool ShallAnalyze(ISymbol symbol)
+        {
+            switch (symbol.Kind)
+            {
+                case SymbolKind.Method:
+                case SymbolKind.Property:
+                    return true;
 
-        protected virtual IReadOnlyList<Diagnostic> AnalyzeException(ISymbol symbol, XmlElementSyntax exceptionComment) => Array.Empty<Diagnostic>();
+                default:
+                    return false;
+            }
+        }
 
-        protected virtual IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
             var comments = GetExceptionComments(comment);
 
@@ -31,6 +39,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return AnalyzeComment(symbol, comments);
         }
+
+        protected virtual IReadOnlyList<Diagnostic> AnalyzeException(ISymbol symbol, XmlElementSyntax exceptionComment) => Array.Empty<Diagnostic>();
 
         protected virtual IEnumerable<XmlElementSyntax> GetExceptionComments(DocumentationCommentTriviaSyntax documentation)
         {
@@ -45,30 +55,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         protected Diagnostic ExceptionIssue(XmlElementSyntax exceptionComment, string proposal) => Issue(exceptionComment.GetContentsLocation(), ExceptionPhrase, proposal, CreatePhraseProposal(proposal));
-
-        private void AnalyzeComment(SyntaxNodeAnalysisContext context)
-        {
-            if (context.Node is DocumentationCommentTriviaSyntax comment)
-            {
-                var symbol = context.ContainingSymbol;
-
-                switch (symbol?.Kind)
-                {
-                    case SymbolKind.Method:
-                    case SymbolKind.Property:
-                    {
-                        var issues = AnalyzeComment(comment, symbol);
-
-                        if (issues.Count > 0)
-                        {
-                            ReportDiagnostics(context, issues);
-                        }
-
-                        break;
-                    }
-                }
-            }
-        }
 
         private IReadOnlyList<Diagnostic> AnalyzeComment(ISymbol symbol, IEnumerable<XmlElementSyntax> comments)
         {

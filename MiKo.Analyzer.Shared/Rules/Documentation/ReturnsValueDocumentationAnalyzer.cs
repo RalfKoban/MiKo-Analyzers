@@ -4,7 +4,6 @@ using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Diagnostics;
 
 using static MiKoSolutions.Analyzers.Constants;
 
@@ -12,28 +11,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class ReturnsValueDocumentationAnalyzer : DocumentationAnalyzer
     {
-        protected ReturnsValueDocumentationAnalyzer(string diagnosticId) : base(diagnosticId, (SymbolKind)(-1))
+        protected ReturnsValueDocumentationAnalyzer(string diagnosticId) : base(diagnosticId)
         {
         }
 
-        protected sealed override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeComment, DocumentationCommentTrivia);
+        protected virtual bool ShallAnalyze(IMethodSymbol symbol) => symbol.ReturnsVoid is false;
 
-        protected void AnalyzeComment(SyntaxNodeAnalysisContext context)
-        {
-            if (context.Node is DocumentationCommentTriviaSyntax comment)
-            {
-                var issues = AnalyzeComment(comment, context.ContainingSymbol);
-
-                if (issues.Count > 0)
-                {
-                    ReportDiagnostics(context, issues);
-                }
-            }
-        }
-
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.ReturnsVoid is false;
-
-        protected override bool ShallAnalyze(IPropertySymbol symbol) => symbol.GetReturnType() != null;
+        protected virtual bool ShallAnalyze(IPropertySymbol symbol) => symbol.GetReturnType() != null;
 
         protected virtual bool ShallAnalyzeReturnType(ITypeSymbol returnType) => true;
 
@@ -75,7 +59,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual Diagnostic[] AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, DocumentationCommentTriviaSyntax comment, string commentXml, string xmlTag) => Array.Empty<Diagnostic>();
 
-        private IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
             switch (symbol)
             {

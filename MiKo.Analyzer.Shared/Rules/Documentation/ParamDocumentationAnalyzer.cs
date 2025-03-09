@@ -3,19 +3,28 @@ using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class ParamDocumentationAnalyzer : DocumentationAnalyzer
     {
-        protected ParamDocumentationAnalyzer(string diagnosticId) : base(diagnosticId, (SymbolKind)(-1))
+        protected ParamDocumentationAnalyzer(string diagnosticId) : base(diagnosticId)
         {
         }
 
         protected bool IgnoreEmptyParameters { get; set; } = true;
 
-        protected sealed override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeComment, DocumentationCommentTrivia);
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol.Kind == SymbolKind.Method;
+
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
+        {
+            if (symbol is IMethodSymbol method)
+            {
+                return AnalyzeParameters(method, comment);
+            }
+
+            return Array.Empty<Diagnostic>();
+        }
 
         protected Diagnostic[] AnalyzeStartingPhrase(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment, string[] phrases, StringComparison comparison = StringComparison.Ordinal)
         {
@@ -115,21 +124,5 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static string GetPreview(string phrase, string[] phrases) => phrases.Length > 1 && phrase.Length <= 10
                                                                              ? phrases.HumanizedConcatenated()
                                                                              : phrase.SurroundedWithApostrophe();
-
-        private void AnalyzeComment(SyntaxNodeAnalysisContext context)
-        {
-            if (context.Node is DocumentationCommentTriviaSyntax comment)
-            {
-                if (context.ContainingSymbol is IMethodSymbol symbol && ShallAnalyze(symbol))
-                {
-                    var issues = AnalyzeParameters(symbol, comment);
-
-                    if (issues.Count > 0)
-                    {
-                        ReportDiagnostics(context, issues);
-                    }
-                }
-            }
-        }
     }
 }

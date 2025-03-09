@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public MiKo_2074_ContainsParameterDefaultPhraseAnalyzer() : base(Id) => IgnoreEmptyParameters = false;
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.Name.StartsWith("Contains", StringComparison.OrdinalIgnoreCase) && symbol.Parameters.Length > 0 && base.ShallAnalyze(symbol);
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol is IMethodSymbol method && method.Parameters.Length > 0 && method.Name.StartsWith("Contains", StringComparison.OrdinalIgnoreCase);
 
         protected override bool ShallAnalyzeParameter(IParameterSymbol parameter) => parameter.ContainingSymbol is IMethodSymbol method && method.Parameters.IndexOf(parameter) == 0;
 

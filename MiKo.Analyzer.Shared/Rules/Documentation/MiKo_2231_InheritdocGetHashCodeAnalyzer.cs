@@ -13,31 +13,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2231";
 
-        public MiKo_2231_InheritdocGetHashCodeAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_2231_InheritdocGetHashCodeAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeComment, DocumentationCommentTrivia);
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol is IMethodSymbol method && method.IsOverride && method.Parameters.IsEmpty && method.ReturnType.SpecialType == SpecialType.System_Int32 && method.Name == nameof(GetHashCode);
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsOverride && symbol.Parameters.IsEmpty && symbol.ReturnType.SpecialType == SpecialType.System_Int32 && symbol.Name == nameof(GetHashCode);
-
-        private void AnalyzeComment(SyntaxNodeAnalysisContext context)
-        {
-            if (context.Node is DocumentationCommentTriviaSyntax comment)
-            {
-                if (context.ContainingSymbol is IMethodSymbol symbol && ShallAnalyze(symbol))
-                {
-                    var issues = AnalyzeComment(comment);
-
-                    if (issues.Length > 0)
-                    {
-                        ReportDiagnostics(context, issues);
-                    }
-                }
-            }
-        }
-
-        private Diagnostic[] AnalyzeComment(DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
             var tagNames = comment.Content.ToHashSet(_ => _.GetXmlTagName());
 

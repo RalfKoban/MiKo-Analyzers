@@ -13,59 +13,73 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2050";
 
-        public MiKo_2050_ExceptionSummaryAnalyzer() : base(Id, SymbolKind.NamedType)
+        public MiKo_2050_ExceptionSummaryAnalyzer() : base(Id)
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol)
-        {
-            if (symbol.IsConstructor())
-            {
-                return IsParameterlessCtor(symbol)
-                    || IsMessageCtor(symbol)
-                    || IsMessageExceptionCtor(symbol)
-                    || symbol.IsSerializationConstructor();
-            }
-
-            return false;
-        }
-
-        // overridden because we want to inspect the methods of the type as well
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation)
-        {
-            if (symbol.IsNamespace is false && symbol.IsException())
-            {
-                // let's see if the type contains a documentation XML
-                var typeIssues = base.AnalyzeType(symbol, compilation);
-
-                return typeIssues.Concat(symbol.GetMethods(MethodKind.Constructor).SelectMany(_ => AnalyzeMethod(_, compilation)));
-            }
-
-            return Array.Empty<Diagnostic>();
-        }
-
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
-        {
-            return base.AnalyzeMethod(symbol, compilation, commentXml, comment)
-                       .Concat(symbol.Parameters.SelectMany(_ => AnalyzeParameter(_, commentXml, comment)))
-                       .ToList();
-        }
-
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment)
+        protected override bool ShallAnalyze(ISymbol symbol)
         {
             switch (symbol)
             {
-                case INamedTypeSymbol type: return AnalyzeTypeSummary(type, summaries, comment);
-                case IMethodSymbol method: return AnalyzeMethodSummary(method, summaries, comment);
-                default: return Array.Empty<Diagnostic>();
+                case INamedTypeSymbol type:
+                {
+                    return type.IsNamespace is false && type.IsException();
+                }
+
+                case IMethodSymbol method when method.IsConstructor() && method.ContainingType.IsException():
+                {
+                    return IsParameterlessCtor(method)
+                        || IsMessageCtor(method)
+                        || IsMessageExceptionCtor(method)
+                        || method.IsSerializationConstructor();
+                }
+
+                default:
+                    return false;
+            }
+        }
+
+        protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(DocumentationCommentTriviaSyntax comment, ISymbol symbol, IReadOnlyList<XmlElementSyntax> summaryXmls, string commentXml, IReadOnlyCollection<string> summaries)
+        {
+            switch (symbol)
+            {
+                case INamedTypeSymbol type:
+                    return AnalyzeTypeSummary(type, summaries, comment);
+
+                case IMethodSymbol method:
+                {
+                    var parameters = method.Parameters;
+
+                    var issues = new List<Diagnostic>(AnalyzeMethodSummary(method, summaries, comment));
+
+                    if (parameters.Length > 0)
+                    {
+                        issues.AddRange(parameters.SelectMany(_ => AnalyzeParameter(_, commentXml, comment)));
+                    }
+
+                    return issues;
+                }
+
+                default:
+                    return Array.Empty<Diagnostic>();
             }
         }
 
         private static bool IsParameterlessCtor(IMethodSymbol symbol) => symbol.Parameters.Length == 0;
 
-        private static bool IsMessageCtor(IMethodSymbol symbol) => symbol.Parameters.Length == 1 && IsMessageParameter(symbol.Parameters[0]);
+        private static bool IsMessageCtor(IMethodSymbol symbol)
+        {
+            var parameters = symbol.Parameters;
 
-        private static bool IsMessageExceptionCtor(IMethodSymbol symbol) => symbol.Parameters.Length == 2 && IsMessageParameter(symbol.Parameters[0]) && IsExceptionParameter(symbol.Parameters[1]);
+            return parameters.Length == 1 && IsMessageParameter(parameters[0]);
+        }
+
+        private static bool IsMessageExceptionCtor(IMethodSymbol symbol)
+        {
+            var parameters = symbol.Parameters;
+
+            return parameters.Length == 2 && IsMessageParameter(parameters[0]) && IsExceptionParameter(parameters[1]);
+        }
 
         private static bool IsMessageParameter(IParameterSymbol parameter) => parameter.Type.IsString();
 
@@ -98,7 +112,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private Diagnostic[] AnalyzeTypeSummary(INamedTypeSymbol symbol, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment) => AnalyzeSummaryPhrase(symbol, summaries, comment, Constants.Comments.ExceptionTypeSummaryStartingPhrase);
 
-        private IEnumerable<Diagnostic> AnalyzeMethodSummary(IMethodSymbol symbol, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment)
+        private IReadOnlyList<Diagnostic> AnalyzeMethodSummary(IMethodSymbol symbol, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment)
         {
             var defaultPhrases = Constants.Comments.ExceptionCtorSummaryStartingPhrase.ToArray(_ => _.FormatWith(symbol.ContainingType));
 
@@ -126,9 +140,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (symbol.IsSerializationConstructor())
             {
-                return Array.Empty<Diagnostic>()
-                            .Concat(AnalyzeSummaryPhrase(symbol, summaries, comment, defaultPhrases.ToArray(_ => _ + Constants.Comments.ExceptionCtorSerializationParamSummaryContinuingPhrase)))
-                            .Concat(AnalyzeRemarksPhrase(symbol, comment, Constants.Comments.ExceptionCtorSerializationParamRemarksPhrase));
+                var issues = new List<Diagnostic>();
+
+                issues.AddRange(AnalyzeSummaryPhrase(symbol, summaries, comment, defaultPhrases.ToArray(_ => _ + Constants.Comments.ExceptionCtorSerializationParamSummaryContinuingPhrase)));
+                issues.AddRange(AnalyzeRemarksPhrase(symbol, comment, Constants.Comments.ExceptionCtorSerializationParamRemarksPhrase));
+
+                return issues;
             }
 
             return Array.Empty<Diagnostic>();

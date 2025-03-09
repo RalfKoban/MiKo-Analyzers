@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                    .SelectMany(_ => SentenceEndings, string.Concat)
                                                    .ToArray();
 
-        public MiKo_2026_StillUsedParamPhraseAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_2026_StillUsedParamPhraseAnalyzer() : base(Id)
         {
         }
 

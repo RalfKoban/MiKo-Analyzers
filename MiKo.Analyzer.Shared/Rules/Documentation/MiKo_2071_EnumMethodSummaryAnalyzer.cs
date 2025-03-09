@@ -19,32 +19,43 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly int MinimumPhraseLength = BooleanPhrases.Min(_ => _.Length);
 
-        public MiKo_2071_EnumMethodSummaryAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_2071_EnumMethodSummaryAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Property);
+        protected override bool ShallAnalyze(ISymbol symbol)
+        {
+            switch (symbol)
+            {
+                case IMethodSymbol method:
+                    return method.ReturnType.IsEnum();
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.ReturnType.IsEnum() && base.ShallAnalyze(symbol);
+                case IPropertySymbol property:
+                    return property.GetReturnType()?.IsEnum() is true;
 
-        protected override bool ShallAnalyze(IPropertySymbol symbol) => symbol.GetReturnType()?.IsEnum() is true && base.ShallAnalyze(symbol);
+                default:
+                    return false;
+            }
+        }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(DocumentationCommentTriviaSyntax comment, ISymbol symbol, IReadOnlyList<XmlElementSyntax> summaryXmls, string commentXml, IReadOnlyCollection<string> summaries)
         {
             var textTokens = comment.GetXmlTextTokens();
             var textTokensCount = textTokens.Count;
 
             if (textTokensCount == 0)
             {
-                yield break;
+                return Array.Empty<Diagnostic>();
             }
 
             var text = textTokens.GetTextTrimmedWithParaTags();
 
             if (text.ContainsAny(BooleanPhrases, StringComparison.Ordinal) is false)
             {
-                yield break;
+                return Array.Empty<Diagnostic>();
             }
+
+            List<Diagnostic> issues = null;
 
             for (var i = 0; i < textTokensCount; i++)
             {
@@ -62,12 +73,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (locationsCount > 0)
                 {
+                    if (issues is null)
+                    {
+                        issues = new List<Diagnostic>(locationsCount);
+                    }
+
                     for (var index = 0; index < locationsCount; index++)
                     {
-                        yield return Issue(locations[index]);
+                        issues.Add(Issue(locations[index]));
                     }
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)issues ?? Array.Empty<Diagnostic>();
         }
     }
 }

@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly SyntaxKind[] XmlTags = { SyntaxKind.XmlEmptyElement, SyntaxKind.XmlElementStartTag, SyntaxKind.XmlElementEndTag };
 
-        public MiKo_2233_EmptyXmlTagIsOnSameLineAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_2233_EmptyXmlTagIsOnSameLineAnalyzer() : base(Id)
         {
         }
 
