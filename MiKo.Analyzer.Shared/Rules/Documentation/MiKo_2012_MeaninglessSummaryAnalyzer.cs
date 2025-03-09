@@ -34,12 +34,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return false;
         }
 
-        protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(DocumentationCommentTriviaSyntax comment, ISymbol symbol, IReadOnlyList<XmlElementSyntax> summaryXmls, string commentXml, IReadOnlyCollection<string> summaries)
+        protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(
+                                                                  DocumentationCommentTriviaSyntax comment,
+                                                                  ISymbol symbol,
+                                                                  IReadOnlyList<XmlElementSyntax> summaryXmls,
+                                                                  Lazy<string> commentXml,
+                                                                  Lazy<IReadOnlyCollection<string>> summaries)
         {
             var symbolNames = GetSelfSymbolNames(symbol);
             var phrases = GetPhrases(symbol);
 
-            return AnalyzeSummaryPhrases(symbol, summaries, symbolNames.Concat(phrases));
+            return AnalyzeSummaryPhrases(symbol, summaries.Value, symbolNames.Concat(phrases));
         }
 
         private static string[] GetPhrases(ISymbol symbol)

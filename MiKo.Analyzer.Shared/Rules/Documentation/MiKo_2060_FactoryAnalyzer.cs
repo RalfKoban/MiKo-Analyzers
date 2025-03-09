@@ -36,12 +36,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(DocumentationCommentTriviaSyntax comment, ISymbol symbol, IReadOnlyList<XmlElementSyntax> summaryXmls, string commentXml, IReadOnlyCollection<string> summaries)
+        protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(
+                                                                  DocumentationCommentTriviaSyntax comment,
+                                                                  ISymbol symbol,
+                                                                  IReadOnlyList<XmlElementSyntax> summaryXmls,
+                                                                  Lazy<string> commentXml,
+                                                                  Lazy<IReadOnlyCollection<string>> summaries)
         {
             switch (symbol)
             {
-                case INamedTypeSymbol type: return AnalyzeStartingPhrase(type, summaryXmls, summaries, Constants.Comments.FactorySummaryPhrase);
-                case IMethodSymbol method: return AnalyzeStartingPhrase(method, summaryXmls, summaries, GetPhrases(method).ToArray());
+                case INamedTypeSymbol type: return AnalyzeStartingPhrase(type, summaryXmls, summaries.Value, Constants.Comments.FactorySummaryPhrase);
+                case IMethodSymbol method: return AnalyzeStartingPhrase(method, summaryXmls, summaries.Value, GetPhrases(method).ToArray());
                 default: return Array.Empty<Diagnostic>();
             }
         }
