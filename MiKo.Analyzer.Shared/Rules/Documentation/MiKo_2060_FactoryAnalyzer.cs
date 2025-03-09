@@ -40,8 +40,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             switch (symbol)
             {
-                case INamedTypeSymbol type: return AnalyzeStartingPhrase(type, summaries, comment, Constants.Comments.FactorySummaryPhrase);
-                case IMethodSymbol method: return AnalyzeStartingPhrase(method, summaries, comment, GetPhrases(method).ToArray());
+                case INamedTypeSymbol type: return AnalyzeStartingPhrase(type, summaryXmls, summaries, Constants.Comments.FactorySummaryPhrase);
+                case IMethodSymbol method: return AnalyzeStartingPhrase(method, summaryXmls, summaries, GetPhrases(method).ToArray());
                 default: return Array.Empty<Diagnostic>();
             }
         }
@@ -67,13 +67,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                    : startingPhrases.Select(_ => _.FormatWith(argumentType));
         }
 
-        private Diagnostic[] AnalyzeStartingPhrase(ISymbol symbol, IEnumerable<string> comments, DocumentationCommentTriviaSyntax comment, params string[] phrases)
+        private Diagnostic[] AnalyzeStartingPhrase(ISymbol symbol, IReadOnlyList<XmlElementSyntax> summaryXmls, IEnumerable<string> summaries, params string[] phrases)
         {
-            if (comments.None(_ => phrases.Exists(__ => _.StartsWith(__, StringComparison.Ordinal))))
+            if (summaries.None(_ => phrases.Exists(__ => _.StartsWith(__, StringComparison.Ordinal))))
             {
-                var summaries = comment.GetSummaryXmls();
-
-                return new[] { Issue(symbol.Name, summaries[0].GetContentsLocation(), phrases[0]) };
+                return new[] { Issue(symbol.Name, summaryXmls[0].GetContentsLocation(), phrases[0]) };
             }
 
             // fitting comment

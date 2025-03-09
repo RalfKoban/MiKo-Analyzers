@@ -45,7 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var symbolName = symbol.Name;
             var obviousComments = GetObviousComments(symbolName);
 
-            var count = summaries.Count;
+            var count = summaryXmls.Count;
 
             List<Diagnostic> issues = null;
 
