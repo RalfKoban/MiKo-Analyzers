@@ -36,11 +36,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(DocumentationCommentTriviaSyntax comment, ISymbol symbol, IReadOnlyList<XmlElementSyntax> summaryXmls, string commentXml, IReadOnlyCollection<string> summaries)
         {
-            if (summaries.None())
-            {
-                return Array.Empty<Diagnostic>();
-            }
-
             var symbolNames = GetSelfSymbolNames(symbol);
             var phrases = GetPhrases(symbol);
 
