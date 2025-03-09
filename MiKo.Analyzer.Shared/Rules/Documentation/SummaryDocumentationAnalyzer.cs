@@ -21,13 +21,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return Array.Empty<Diagnostic>();
             }
 
-            var commentXml = symbol.GetDocumentationCommentXml();
+            var lazyCommentXml = new Lazy<string>(() => symbol.GetDocumentationCommentXml());
+            var lazySummaries = new Lazy<IReadOnlyCollection<string>>(() => CommentExtensions.GetSummaries(lazyCommentXml.Value));
 
-            var summaries = CommentExtensions.GetSummaries(commentXml);
-
-            return AnalyzeSummaries(comment, symbol, summaryXmls, commentXml, summaries);
+            return AnalyzeSummaries(comment, symbol, summaryXmls, lazyCommentXml, lazySummaries);
         }
 
-        protected virtual IReadOnlyList<Diagnostic> AnalyzeSummaries(DocumentationCommentTriviaSyntax comment, ISymbol symbol, IReadOnlyList<XmlElementSyntax> summaryXmls, string commentXml, IReadOnlyCollection<string> summaries) => Array.Empty<Diagnostic>();
+        protected virtual IReadOnlyList<Diagnostic> AnalyzeSummaries(
+                                                                 DocumentationCommentTriviaSyntax comment,
+                                                                 ISymbol symbol,
+                                                                 IReadOnlyList<XmlElementSyntax> summaryXmls,
+                                                                 Lazy<string> commentXml,
+                                                                 Lazy<IReadOnlyCollection<string>> summaries)
+        {
+            return Array.Empty<Diagnostic>();
+        }
     }
 }

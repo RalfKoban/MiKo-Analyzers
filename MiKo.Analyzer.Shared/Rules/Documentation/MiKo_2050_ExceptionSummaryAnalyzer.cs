@@ -39,22 +39,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(DocumentationCommentTriviaSyntax comment, ISymbol symbol, IReadOnlyList<XmlElementSyntax> summaryXmls, string commentXml, IReadOnlyCollection<string> summaries)
+        protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(
+                                                                  DocumentationCommentTriviaSyntax comment,
+                                                                  ISymbol symbol,
+                                                                  IReadOnlyList<XmlElementSyntax> summaryXmls,
+                                                                  Lazy<string> commentXml,
+                                                                  Lazy<IReadOnlyCollection<string>> summaries)
         {
             switch (symbol)
             {
                 case INamedTypeSymbol type:
-                    return AnalyzeTypeSummary(type, summaries, comment);
+                    return AnalyzeTypeSummary(type, summaries.Value, comment);
 
                 case IMethodSymbol method:
                 {
                     var parameters = method.Parameters;
 
-                    var issues = new List<Diagnostic>(AnalyzeMethodSummary(method, summaries, comment));
+                    var issues = new List<Diagnostic>(AnalyzeMethodSummary(method, summaries.Value, comment));
 
                     if (parameters.Length > 0)
                     {
-                        issues.AddRange(parameters.SelectMany(_ => AnalyzeParameter(_, commentXml, comment)));
+                        issues.AddRange(parameters.SelectMany(_ => AnalyzeParameter(_, commentXml.Value, comment)));
                     }
 
                     return issues;

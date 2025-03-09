@@ -19,11 +19,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(ISymbol symbol) => symbol is IPropertySymbol property && property.Type.IsCommand();
 
-        protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(DocumentationCommentTriviaSyntax comment, ISymbol symbol, IReadOnlyList<XmlElementSyntax> summaryXmls, string commentXml, IReadOnlyCollection<string> summaries)
+        protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(
+                                                                  DocumentationCommentTriviaSyntax comment,
+                                                                  ISymbol symbol,
+                                                                  IReadOnlyList<XmlElementSyntax> summaryXmls,
+                                                                  Lazy<string> commentXml,
+                                                                  Lazy<IReadOnlyCollection<string>> summaries)
         {
             var phrases = GetStartingPhrase((IPropertySymbol)symbol);
 
-            if (summaries.None(_ => _.StartsWithAny(phrases, StringComparison.Ordinal)))
+            if (summaries.Value.None(_ => _.StartsWithAny(phrases, StringComparison.Ordinal)))
             {
                 return new[] { Issue(symbol, Constants.XmlTag.Summary, phrases[0]) };
             }
