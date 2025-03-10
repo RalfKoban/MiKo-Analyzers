@@ -123,6 +123,52 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", original), Template.Replace("###", fix));
         }
 
+        [Test]
+        public void Code_gets_fixed_for_test_method_if_method_name_starts_with_called_method()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public bool DoSomething() => false;
+}
+
+public class TestMeTests
+{
+    [Test]
+    public void DoSomething_ThrowException_InsteadToReturnSomething()
+    {
+        var objectUnderTest = new TestMe();
+
+        var result = objectUnderTest.DoSomething();
+
+        Assert.That(result, Is.True);
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public bool DoSomething() => false;
+}
+
+public class TestMeTests
+{
+    [Test]
+    public void DoSomething_throws_exception_instead_to_return_something()
+    {
+        var objectUnderTest = new TestMe();
+
+        var result = objectUnderTest.DoSomething();
+
+        Assert.That(result, Is.True);
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_1107_TestMethodsPascalCasingAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1107_TestMethodsPascalCasingAnalyzer();

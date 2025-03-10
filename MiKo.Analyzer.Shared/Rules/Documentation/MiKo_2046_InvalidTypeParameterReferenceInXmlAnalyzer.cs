@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -18,13 +19,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                Constants.XmlTag.SeeAlso,
                                                            };
 
-        public MiKo_2046_InvalidTypeParameterReferenceInXmlAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_2046_InvalidTypeParameterReferenceInXmlAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method);
-
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
             switch (symbol)
             {
@@ -40,41 +39,46 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 default:
                 {
-                    return Enumerable.Empty<Diagnostic>();
+                    return Array.Empty<Diagnostic>();
                 }
             }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, IEnumerable<ITypeParameterSymbol> parameters)
+        private IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, IEnumerable<ITypeParameterSymbol> parameters)
         {
             var names = parameters.ToHashSet(_ => _.Name);
 
-            if (names.Count > 0)
+            if (names.Count == 0)
             {
-                foreach (var node in comment.DescendantNodes(_ => true, true))
+                return Array.Empty<Diagnostic>();
+            }
+
+            List<Diagnostic> results = null;
+
+            foreach (var node in comment.AllDescendantNodes())
+            {
+                if (node.IsXml())
                 {
-                    switch (node)
+                    var tag = node.GetXmlTagName();
+
+                    if (Tags.Contains(tag))
                     {
-                        case XmlElementSyntax _:
-                        case XmlEmptyElementSyntax _:
+                        var name = node.GetReferencedName();
+
+                        if (names.Contains(name))
                         {
-                            var tag = node.GetXmlTagName();
-
-                            if (Tags.Contains(tag))
+                            if (results is null)
                             {
-                                var name = node.GetReferencedName();
-
-                                if (names.Contains(name))
-                                {
-                                    yield return Issue(node);
-                                }
+                                results = new List<Diagnostic>(1);
                             }
 
-                            break;
+                            results.Add(Issue(node));
                         }
                     }
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -11,13 +9,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2022";
 
-        public MiKo_2022_OutParamDefaultPhraseAnalyzer() : base(Id)
-        {
-        }
+        public MiKo_2022_OutParamDefaultPhraseAnalyzer() : base(Id) => IgnoreEmptyParameters = false;
 
         protected override bool ShallAnalyzeParameter(IParameterSymbol parameter) => parameter.RefKind == RefKind.Out;
 
-        protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment)
+        protected override Diagnostic[] AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment)
         {
             var phrases = GetStartingPhrase(parameter);
 

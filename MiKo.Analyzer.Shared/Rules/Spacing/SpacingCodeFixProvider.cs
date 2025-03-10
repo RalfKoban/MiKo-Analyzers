@@ -157,7 +157,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                 case GenericNameSyntax genericName:
                     return genericName.WithoutTrivia()
-                                      .WithIdentifier(genericName.Identifier.WithoutTrailingTrivia())
+                                      .WithIdentifier(genericName.Identifier.WithoutTrivia())
                                       .WithTypeArgumentList(PlacedOnSameLine(genericName.TypeArgumentList)) as T;
 
                 case SimpleNameSyntax simpleName:

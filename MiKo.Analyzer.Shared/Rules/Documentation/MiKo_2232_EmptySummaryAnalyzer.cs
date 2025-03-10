@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -13,16 +12,38 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2232";
 
-        public MiKo_2232_EmptySummaryAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_2232_EmptySummaryAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event, SymbolKind.Field);
-
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override bool ShallAnalyze(ISymbol symbol)
         {
-            foreach (var summary in comment.GetSummaryXmls())
+            switch (symbol.Kind)
             {
+                case SymbolKind.NamedType:
+                case SymbolKind.Method:
+                case SymbolKind.Property:
+                case SymbolKind.Event:
+                case SymbolKind.Field:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(
+                                                                  DocumentationCommentTriviaSyntax comment,
+                                                                  ISymbol symbol,
+                                                                  IReadOnlyList<XmlElementSyntax> summaryXmls,
+                                                                  Lazy<string> commentXml,
+                                                                  Lazy<IReadOnlyCollection<string>> summaries)
+        {
+            var count = summaryXmls.Count;
+
+            for (var index = 0; index < count; index++)
+            {
+                var summary = summaryXmls[index];
                 var content = summary.Content;
 
                 switch (content.Count)
@@ -33,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
     }
 }

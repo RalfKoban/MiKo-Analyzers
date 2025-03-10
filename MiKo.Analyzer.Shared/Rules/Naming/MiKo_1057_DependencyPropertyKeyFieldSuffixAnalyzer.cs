@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (symbolName.EndsWith(Constants.DependencyPropertyKey.FieldSuffix, StringComparison.Ordinal))
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             var propertyNames = NamesFinder.FindPropertyNames(symbol, Constants.DependencyPropertyKey.FieldSuffix, Constants.DependencyProperty.RegisterReadOnly);

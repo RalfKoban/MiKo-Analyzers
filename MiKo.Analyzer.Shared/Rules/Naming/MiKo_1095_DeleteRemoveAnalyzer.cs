@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -33,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod() is false;
 
-        private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol)
+        private Diagnostic[] AnalyzeName(ISymbol symbol)
         {
             var symbolName = symbol.Name;
 
@@ -43,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (containsDelete && containsRemove)
             {
                 // name contains both, such as in "DeleteRemovedStuff" or "RemoveDeletedStuff", so nothing to do
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             if (containsDelete)
@@ -56,19 +55,39 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return AnalyzeDocumentation(symbol, Delet);
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
 
-        private IEnumerable<Diagnostic> AnalyzeDocumentation(ISymbol symbol, string forbiddenWord)
+        private Diagnostic[] AnalyzeDocumentation(ISymbol symbol, string forbiddenWord)
         {
-            var texts = symbol.GetDocumentationCommentTriviaSyntax().SelectMany(_ => _.GetXmlTextTokens()).Select(_ => _.ValueText);
+            var comments = symbol.GetDocumentationCommentTriviaSyntax();
+            var commentsLength = comments.Length;
 
-            if (texts.Any(_ => _.Contains(forbiddenWord, StringComparison.OrdinalIgnoreCase)))
+            if (commentsLength > 0)
             {
-                return new[] { Issue(symbol) };
+                for (var index = 0; index < commentsLength; index++)
+                {
+                    var comment = comments[index];
+                    var textTokens = comment.GetXmlTextTokens();
+                    var textTokensCount = textTokens.Count;
+
+                    if (textTokensCount > 0)
+                    {
+                        for (var i = 0; i < textTokensCount; i++)
+                        {
+                            var token = textTokens[i];
+                            var text = token.ValueText;
+
+                            if (text.Length >= forbiddenWord.Length && text.Contains(forbiddenWord, StringComparison.OrdinalIgnoreCase))
+                            {
+                                return new[] { Issue(symbol) };
+                            }
+                        }
+                    }
+                }
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
     }
 }

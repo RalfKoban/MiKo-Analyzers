@@ -27,7 +27,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var issues = AnalyzeNamespaceName(names);
 
-            ReportDiagnostics(context, issues);
+            if (issues.IsEmptyArray() is false)
+            {
+                ReportDiagnostics(context, issues);
+            }
         }
     }
 }

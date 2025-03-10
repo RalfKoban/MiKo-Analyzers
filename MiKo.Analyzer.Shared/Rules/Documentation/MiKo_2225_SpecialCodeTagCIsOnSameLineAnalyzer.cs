@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2225";
 
-        public MiKo_2225_SpecialCodeTagCIsOnSameLineAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_2225_SpecialCodeTagCIsOnSameLineAnalyzer() : base(Id)
         {
         }
 

@@ -38,6 +38,58 @@ public class Side
 ");
 
         [Test]
+        public void No_issue_is_reported_for_ctor_parameter_named_after_interface_type_and_only_lowercase_letters() => No_issue_is_reported_for(@"
+public interface IProducer
+{
+}
+
+public class TestMe
+{
+    public TestMe(IProducer producer)
+    { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_ctor_parameter_named_after_generic_interface_type_and_only_lowercase_letters() => No_issue_is_reported_for(@"
+public interface ILogger<T>
+{
+}
+
+public class TestMe
+{
+    public TestMe(ILogger<string> logger)
+    { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_parameter_named_after_interface_type_and_only_lowercase_letters() => No_issue_is_reported_for(@"
+public interface IProducer
+{
+}
+
+public class TestMe
+{
+    public void DoSomething(IProducer producer)
+    { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_parameter_named_after_generic_interface_type_and_only_lowercase_letters() => No_issue_is_reported_for(@"
+public interface ILogger<T>
+{
+}
+
+public class TestMe
+{
+    public void DoSomething(ILogger<string> logger)
+    { }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_parameter_named_after_property_and_used_in_ctor() => No_issue_is_reported_for(@"
 public enum Side
 {

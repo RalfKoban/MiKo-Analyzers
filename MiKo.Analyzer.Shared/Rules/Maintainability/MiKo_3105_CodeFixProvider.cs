@@ -144,8 +144,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             switch (arg0.Expression.Kind())
             {
                 // constants & enums
-                case SyntaxKind.SimpleMemberAccessExpression when IsEnum(document, arg0): return AssertThat(arg1, Is(call, arg0), args);
-                case SyntaxKind.IdentifierName when IsConst(document, arg0) || IsExpected(arg0): return AssertThat(arg1, Is(call, arg0), args);
+                case SyntaxKind.SimpleMemberAccessExpression when arg0.IsEnum(document): return AssertThat(arg1, Is(call, arg0), args);
+                case SyntaxKind.IdentifierName when arg0.IsConst(document) || IsExpected(arg0): return AssertThat(arg1, Is(call, arg0), args);
                 case SyntaxKind.IdentifierName when IsActual(arg0): return AssertThat(arg0, Is(call, arg1), args);
 
                 // literals
@@ -173,8 +173,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             switch (arg1.Expression.Kind())
             {
                 // constants & enums
-                case SyntaxKind.SimpleMemberAccessExpression when IsEnum(document, arg1): return AssertThat(arg0, Is(call, arg1), args);
-                case SyntaxKind.IdentifierName when IsConst(document, arg1) || IsExpected(arg1): return AssertThat(arg0, Is(call, arg1), args);
+                case SyntaxKind.SimpleMemberAccessExpression when arg1.IsEnum(document): return AssertThat(arg0, Is(call, arg1), args);
+                case SyntaxKind.IdentifierName when arg1.IsConst(document) || IsExpected(arg1): return AssertThat(arg0, Is(call, arg1), args);
                 case SyntaxKind.IdentifierName when IsActual(arg1): return AssertThat(arg1, Is(call, arg0), args);
 
                 // literals
@@ -216,8 +216,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             switch (arg0.Expression.Kind())
             {
                 // constants & enums
-                case SyntaxKind.SimpleMemberAccessExpression when IsEnum(document, arg0): return AssertThat(arg1, Is("Not", call, arg0), args);
-                case SyntaxKind.IdentifierName when IsConst(document, arg0) || IsExpected(arg0): return AssertThat(arg1, Is("Not", call, arg0), args);
+                case SyntaxKind.SimpleMemberAccessExpression when arg0.IsEnum(document): return AssertThat(arg1, Is("Not", call, arg0), args);
+                case SyntaxKind.IdentifierName when arg0.IsConst(document) || IsExpected(arg0): return AssertThat(arg1, Is("Not", call, arg0), args);
                 case SyntaxKind.IdentifierName when IsActual(arg0): return AssertThat(arg0, Is("Not", call, arg1), args);
 
                 // literals
@@ -231,8 +231,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             switch (arg1.Expression.Kind())
             {
                 // constants & enums
-                case SyntaxKind.SimpleMemberAccessExpression when IsEnum(document, arg1): return AssertThat(arg0, Is("Not", call, arg1), args);
-                case SyntaxKind.IdentifierName when IsConst(document, arg1) || IsExpected(arg1): return AssertThat(arg0, Is("Not", call, arg1), args);
+                case SyntaxKind.SimpleMemberAccessExpression when arg1.IsEnum(document): return AssertThat(arg0, Is("Not", call, arg1), args);
+                case SyntaxKind.IdentifierName when arg1.IsConst(document) || IsExpected(arg1): return AssertThat(arg0, Is("Not", call, arg1), args);
                 case SyntaxKind.IdentifierName when IsActual(arg1): return AssertThat(arg1, Is("Not", call, arg0), args);
 
                 // literals

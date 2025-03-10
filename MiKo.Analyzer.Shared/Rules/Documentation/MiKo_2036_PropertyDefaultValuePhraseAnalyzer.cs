@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -17,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.Property);
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => false;
 
         protected override bool ShallAnalyze(IPropertySymbol symbol)
         {
@@ -36,11 +35,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return false;
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, DocumentationCommentTriviaSyntax comment, string commentXml, string xmlTag)
+        protected override Diagnostic[] AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, DocumentationCommentTriviaSyntax comment, string commentXml, string xmlTag)
         {
             if (commentXml.EndsWith(Constants.Comments.NoDefaultPhrase, StringComparison.Ordinal))
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             var isBoolean = returnType.IsBoolean();
@@ -53,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (commentXml.EndsWithAny(endingPhrases, StringComparison.Ordinal))
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             var properties = isBoolean

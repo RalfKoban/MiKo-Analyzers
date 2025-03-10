@@ -54,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         continue;
                     }
 
-                    if (maes.Ancestors<InvocationExpressionSyntax>().Any(_ => _.IsMoqItIsConditionMatcher()))
+                    if (maes.AncestorsWithinMethods<InvocationExpressionSyntax>().Any(_ => _.IsMoqItIsConditionMatcher()))
                     {
                         continue;
                     }

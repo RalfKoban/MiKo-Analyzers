@@ -18,27 +18,39 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
+            List<Diagnostic> results = null;
+
             foreach (var tokens in comment.DescendantNodes<XmlTextSyntax>().Select(_ => _.TextTokens))
             {
                 var count = tokens.Count - 1;
 
-                for (var i = 0; i < count; i++)
+                if (count > 0)
                 {
-                    var currentToken = tokens[i];
-
-                    if (currentToken.IsKind(SyntaxKind.XmlTextLiteralToken) && currentToken.LeadingTrivia.Any(SyntaxKind.DocumentationCommentExteriorTrivia) && currentToken.ValueText.IsNullOrWhiteSpace())
+                    for (var i = 0; i < count; i++)
                     {
-                        var nextToken = tokens[i + 1];
+                        var currentToken = tokens[i];
 
-                        if (nextToken.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                        if (currentToken.IsKind(SyntaxKind.XmlTextLiteralToken) && currentToken.LeadingTrivia.Any(SyntaxKind.DocumentationCommentExteriorTrivia) && currentToken.ValueText.IsNullOrWhiteSpace())
                         {
-                            yield return Issue(symbol.Name, nextToken);
+                            var nextToken = tokens[i + 1];
+
+                            if (nextToken.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                            {
+                                if (results is null)
+                                {
+                                    results = new List<Diagnostic>(1);
+                                }
+
+                                results.Add(Issue(nextToken));
+                            }
                         }
                     }
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
         }
     }
 }

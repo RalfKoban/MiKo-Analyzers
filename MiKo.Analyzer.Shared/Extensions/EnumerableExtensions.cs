@@ -622,22 +622,36 @@ namespace System.Linq
             return -1;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool IsEmptyArray<T>(this IEnumerable<T> source) => source is T[] array && array.Length == 0;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool None(this SyntaxTriviaList source) => source.Count == 0;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool None<T>(this SyntaxList<T> source) where T : SyntaxNode => source.Count == 0;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool None<T>(this SeparatedSyntaxList<T> source) where T : SyntaxNode => source.Count == 0;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool None(this SyntaxTokenList source) => source.Count == 0;
 
         internal static bool None<T>(this IEnumerable<T> source) => source.Any() is false;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool None<T>(this IReadOnlyCollection<T> source) => source.Count == 0;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool None<T>(this ImmutableArray<T> source) => source.Length == 0;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool None<T>(this SyntaxList<T> source, SyntaxKind kind) where T : SyntaxNode => source.IndexOf(kind) == -1;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool None(this SyntaxTokenList source, SyntaxKind kind) => source.Any(kind) is false;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool None<T>(this SeparatedSyntaxList<T> source, SyntaxKind kind) where T : SyntaxNode => source.IndexOf(kind) == -1;
 
         internal static bool None<T>(this SyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode => source.All(_ => predicate(_) is false);
@@ -985,7 +999,7 @@ namespace System.Linq
 
             if (difference <= 0)
             {
-                return Enumerable.Empty<T>();
+                return Array.Empty<T>();
             }
 
             var result = new T[difference];
@@ -998,7 +1012,7 @@ namespace System.Linq
             return result;
         }
 
-        internal static IEnumerable<T> Skip<T>(this SeparatedSyntaxList<T> source, int count) where T : SyntaxNode
+        internal static T[] Skip<T>(this SeparatedSyntaxList<T> source, int count) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
@@ -1007,7 +1021,7 @@ namespace System.Linq
 
             if (difference <= 0)
             {
-                return Enumerable.Empty<T>();
+                return Array.Empty<T>();
             }
 
             var result = new T[difference];
@@ -1020,7 +1034,7 @@ namespace System.Linq
             return result;
         }
 
-        internal static IEnumerable<SyntaxToken> Skip(this SyntaxTokenList source, int count)
+        internal static SyntaxToken[] Skip(this SyntaxTokenList source, int count)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
@@ -1029,7 +1043,7 @@ namespace System.Linq
 
             if (difference <= 0)
             {
-                return Enumerable.Empty<SyntaxToken>();
+                return Array.Empty<SyntaxToken>();
             }
 
             var result = new SyntaxToken[difference];
@@ -1055,6 +1069,8 @@ namespace System.Linq
                 {
                     target[index] = source[index];
                 }
+
+                return target;
             }
 
             return Array.Empty<SyntaxToken>();
@@ -1343,13 +1359,13 @@ namespace System.Linq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static SyntaxList<T> ToSyntaxList<T>(this T source) where T : SyntaxNode => new SyntaxList<T>(source);
+        internal static SyntaxList<T> ToSyntaxList<T>(this T source) where T : SyntaxNode => SyntaxFactory.SingletonList(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxList<T> ToSyntaxList<T>(this IEnumerable<T> source) where T : SyntaxNode => SyntaxFactory.List(source); // ncrunch: no coverage
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static SeparatedSyntaxList<T> ToSeparatedSyntaxList<T>(this T value) where T : SyntaxNode => new[] { value }.ToSeparatedSyntaxList();
+        internal static SeparatedSyntaxList<T> ToSeparatedSyntaxList<T>(this T value) where T : SyntaxNode => SyntaxFactory.SingletonSeparatedList(value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SeparatedSyntaxList<T> ToSeparatedSyntaxList<T>(this IEnumerable<T> source) where T : SyntaxNode => SyntaxFactory.SeparatedList(source);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -64,6 +65,28 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         [OneTimeSetUp]
         public static void PrepareTestEnvironment() => MiKo_2023_CodeFixProvider.LoadData();
+
+#else
+
+        private static int s_testNumber;
+
+        [OneTimeSetUp]
+        public static void PrepareTestEnvironment() => s_testNumber = 0;
+
+        [OneTimeTearDown]
+        public static void CleanupTestEnvironment() => GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
+
+        [SetUp]
+        public void PrepareTest() => Interlocked.Increment(ref s_testNumber);
+
+        [TearDown]
+        public void TearDown()
+        {
+            if (s_testNumber % 5000 == 0)
+            {
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
+            }
+        }
 
 #endif
 
@@ -1055,7 +1078,7 @@ public class TestMe
                                    from boolean in booleans
                                    select " " + boolean + vc into end // we have lots of loops, so cache data to avoid unnecessary calculations
                                    from start in starts
-                                   select new StringBuilder(start + end).Replace("   ", " ").Replace("  ", " ").Trim())
+                                   select StringBuilderCache.GetStringAndRelease(StringBuilderCache.Acquire(start.Length + end.Length).Append(start).Append(end).Replace("   ", " ").Replace("  ", " ").Trimmed()))
             {
                 results.Add(phrase.ToUpperCaseAt(0));
                 results.Add(phrase.ToLowerCaseAt(0));

@@ -65,18 +65,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation) => AnalyzeNames(symbol, Suffixes);
 
-        private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol) => AnalyzeNames(symbol, SingleSuffix);
+        private Diagnostic[] AnalyzeName(ISymbol symbol) => AnalyzeNames(symbol, SingleSuffix);
 
-        private IEnumerable<Diagnostic> AnalyzeNames(ISymbol symbol, IEnumerable<string> suffixes)
+        private Diagnostic[] AnalyzeNames(ISymbol symbol, IEnumerable<string> suffixes)
         {
             var symbolName = symbol.Name;
 
             if (suffixes.Any(_ => symbolName.EndsWith(_, StringComparison.Ordinal)))
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
-            return new[] { Issue(symbol, Suffix, CreateBetterNameProposal(symbolName + Suffix)) };
+            return new[] { Issue(symbol, Suffix, CreateBetterNameProposal(symbolName.WithoutSuffix("Cmd") + Suffix)) };
         }
     }
 }

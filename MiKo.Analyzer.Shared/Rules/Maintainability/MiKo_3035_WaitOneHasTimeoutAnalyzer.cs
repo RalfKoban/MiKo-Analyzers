@@ -25,14 +25,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (node.Parent is InvocationExpressionSyntax i)
             {
-                foreach (var argument in i.ArgumentList.Arguments)
-                {
-                    var argumentType = argument.GetTypeSymbol(semanticModel);
+                var arguments = i.ArgumentList.Arguments;
+                var argumentsCount = arguments.Count;
 
-                    if (argumentType.SpecialType == SpecialType.System_Int32 || argumentType.FullyQualifiedName() == TypeNames.TimeSpan)
+                if (argumentsCount > 0)
+                {
+                    for (var index = 0; index < argumentsCount; index++)
                     {
-                        // we use a timeout parameter (int or TimeSpan)
-                        return false;
+                        var argumentType = arguments[index].GetTypeSymbol(semanticModel);
+
+                        if (argumentType.SpecialType == SpecialType.System_Int32 || argumentType.FullyQualifiedName() == TypeNames.TimeSpan)
+                        {
+                            // we use a timeout parameter (int or TimeSpan)
+                            return false;
+                        }
                     }
                 }
             }
@@ -54,9 +60,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return;
                 }
 
-                var issue = Issue(methodSymbol.Name, node);
-
-                ReportDiagnostics(context, issue);
+                ReportDiagnostics(context, Issue(methodSymbol.Name, node));
             }
         }
     }

@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var syntaxNode = trivia.GetStructure();
 
-            var token = syntaxNode.DescendantNodes<XmlTextSyntax>().Where(_ => _.GetLocation().Contains(location))
+            var token = syntaxNode.DescendantNodes<XmlTextSyntax>(_ => _.GetLocation().Contains(location))
                                   .Select(_ => _.TextTokens.First(__ => __.GetLocation().Contains(location)))
                                   .First();
 

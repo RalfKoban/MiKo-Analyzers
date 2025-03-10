@@ -75,9 +75,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                     if (typeUnderTest?.TypeKind == TypeKind.Interface)
                     {
-                        var issue = Issue(declaration.Type);
-
-                        ReportDiagnostics(context, issue);
+                        ReportDiagnostics(context, Issue(declaration.Type));
                     }
                 }
             }

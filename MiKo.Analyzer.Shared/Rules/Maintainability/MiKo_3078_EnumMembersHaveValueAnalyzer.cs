@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var fields = symbol.GetFields().ToList();
 
-            var isFlagged = symbol.HasAttribute(Constants.Names.FlagsAttributeNames);
+            var isFlagged = symbol.HasFlags();
 
             foreach (var field in fields)
             {

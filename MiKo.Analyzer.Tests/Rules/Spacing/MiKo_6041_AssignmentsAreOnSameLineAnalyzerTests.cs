@@ -27,6 +27,27 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_if_multi_line_assignment_of_collection_initializer_is_on_other_line() => No_issue_is_reported_for(@"
+using System;
+using System.Net.Http;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        HttpClient client = new HttpClient
+                                {
+                                    DefaultRequestHeaders =
+                                                            {
+                                                                { ""some text A"", ""some Value 1"" },
+                                                                { ""some text B"", ""some Value 2"" },
+                                                            }
+                                };
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_if_multi_line_assignment_to_array_is_on_other_line() => No_issue_is_reported_for(@"
 using System;
 

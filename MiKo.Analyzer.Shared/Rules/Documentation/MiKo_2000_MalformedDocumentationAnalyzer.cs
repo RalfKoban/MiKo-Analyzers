@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -12,19 +14,79 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2000";
 
+        private static readonly string[] XmlEntities = { "&amp;", "&lt;", "&gt;" };
+
         public MiKo_2000_MalformedDocumentationAnalyzer() : base(Id)
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
-            foreach (var token in comment.DescendantTokens(SyntaxKind.XmlEntityLiteralToken))
+            List<Diagnostic> results = null;
+
+            foreach (var nodeOrToken in comment.AllDescendantNodesAndTokens())
             {
-                if (token.Text.Length == 1)
+                Diagnostic issue = null;
+
+                if (nodeOrToken.IsNode)
                 {
-                    yield return Issue(token);
+                    issue = FindIssue(nodeOrToken.AsNode());
+                }
+                else if (nodeOrToken.IsToken)
+                {
+                    issue = FindIssue(nodeOrToken.AsToken());
+                }
+
+                if (issue is null)
+                {
+                    continue;
+                }
+
+                if (results is null)
+                {
+                    results = new List<Diagnostic>(1);
+                }
+
+                results.Add(issue);
+            }
+
+            return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
+        }
+
+        private Diagnostic FindIssue(SyntaxNode node)
+        {
+            switch (node)
+            {
+                case XmlEmptyElementSyntax ee when ee.SlashGreaterThanToken.IsMissing:
+                {
+                    return Issue(ee.LessThanToken);
+                }
+
+                case XmlElementSyntax e:
+                {
+                    var name = e.StartTag.GetName();
+
+                    return name.IsNullOrWhiteSpace() ? Issue(e.StartTag) : null;
+                }
+
+                default:
+                    return null;
+            }
+        }
+
+        private Diagnostic FindIssue(SyntaxToken token)
+        {
+            if (token.IsKind(SyntaxKind.XmlEntityLiteralToken))
+            {
+                var text = token.Text.AsCachedBuilder().Without(XmlEntities).ToStringAndRelease();
+
+                if (text.Contains('&'))
+                {
+                    return Issue(token);
                 }
             }
+
+            return null;
         }
     }
 }

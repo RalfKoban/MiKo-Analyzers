@@ -17,27 +17,47 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
+            List<Diagnostic> results = null;
+
             foreach (var node in comment.DescendantNodes(_ => CodeTags.Contains(_.GetXmlTagName()) is false, true))
             {
                 if (node is XmlElementStartTagSyntax || node is XmlEmptyElementSyntax)
                 {
-                    var tag = node.GetXmlTagName().ToLowerCase();
+                    var issue = FindIssue(node);
 
-                    switch (tag)
+                    if (issue is null)
                     {
-                        case "br":
-                            yield return Issue(symbol.Name, node, "<br/>");
-
-                            break;
-
-                        case "p":
-                            yield return Issue(symbol.Name, node, "<p>...</p>");
-
-                            break;
+                        continue;
                     }
+
+                    if (results is null)
+                    {
+                        results = new List<Diagnostic>(1);
+                    }
+
+                    results.Add(issue);
                 }
+            }
+
+            return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
+        }
+
+        private Diagnostic FindIssue(SyntaxNode node)
+        {
+            var tag = node.GetXmlTagName().ToLowerCase();
+
+            switch (tag)
+            {
+                case "br":
+                    return Issue(node, "<br/>");
+
+                case "p":
+                    return Issue(node, "<p>...</p>");
+
+                default:
+                    return null;
             }
         }
     }

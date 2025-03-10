@@ -73,7 +73,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                 returnType = g.TypeArgumentList.Arguments[0];
                             }
 
-                            var parts = template.FormatWith('|').Split('|');
+                            var parts = template.FormatWith("|").Split('|');
 
                             var fixedComment = CommentStartingWith(preparedComment, parts[0], SeeCref(returnType), parts[1]);
 
@@ -323,7 +323,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             private static string[] CreateTypeReplacementMapKeys()
             {
                 var allPhrases = CreateAllPhrases();
-                var allContinuations = new HashSet<string>(CreateAllContinuations());
+                var allContinuations = new HashSet<string>();
+                FillWithAllContinuations(allContinuations);
 
                 var results = new HashSet<string> // avoid duplicates
                                   {
@@ -343,17 +344,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 var strangeTexts = new[]
                                        {
-                                           "methods a", "methods instance", "methods new", "methods the", "factory class method", "method that are", "method which are",
+                                           "ethods a", "ethods instance", "ethods new", "ethods the", "actory class method", "ethod that are", "ethod which are",
                                            "es that is capable", "es which is capable", "es that is able", "es which is able",
                                            "ss that are capable", "ss which are capable", "ss that are able", "ss which are able",
                                            "y that are capable", "y which are capable", "y that are able", "y which are able",
                                            "rn that are capable", "rn which are capable", "rn that are able", "rn which are able",
                                            "ace that are capable", "ace which are capable", "ace that are able", "ace which are able",
                                            "ies that provides", "ies which provides",
-                                           "providing provid", "provides provid", "provide provid",
+                                           "roviding provid", "rovides provid", "rovide provid",
                                        };
 
-                results.RemoveWhere(_ => _.ContainsAny(strangeTexts));
+                results.RemoveWhere(_ => _.ContainsAny(strangeTexts, StringComparison.Ordinal));
 
                 return results.ToArray();
             }
@@ -436,7 +437,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     for (var continuationsIndex = 0; continuationsIndex < continuationsLength; continuationsIndex++)
                     {
                         var continuation = continuations[continuationsIndex];
-                        var start = word + continuation;
+                        var start = word + continuation; // TODO RKN: Change string creation
 
                         results.Add(start + " an new instances of the ");
                         results.Add(start + " an new instances of an ");
@@ -485,10 +486,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                 }
 
-                var resultsArray = new string[results.Count];
-                results.CopyTo(resultsArray);
-
-                return resultsArray;
+                return results.ToArray();
             }
 
             private static HashSet<string> CreateAllPhrases()
@@ -626,16 +624,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                   };
 
                 var results = new HashSet<string>(phrases);
+                var phrasesLength = phrases.Length;
 
-                foreach (var phrase in phrases)
+                for (var index = 0; index < phrasesLength; index++)
                 {
-                    results.Add(phrase.Replace("actory", "actory class"));
+                    results.Add(phrases[index].Replace("actory", "actory class"));
                 }
 
                 return results;
             }
 
-            private static IEnumerable<string> CreateAllContinuations()
+            private static void FillWithAllContinuations(HashSet<string> set)
             {
                 var continuations = new[]
                                         {
@@ -661,105 +660,109 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                             "the new instances of the ",
                                         };
 
-                foreach (var continuation in continuations)
+                var continuationsLength = continuations.Length;
+
+                for (var index = 0; index < continuationsLength; index++)
                 {
-                    yield return " that can build " + continuation;
-                    yield return " that build " + continuation;
-                    yield return " that builds " + continuation;
-                    yield return " that can construct " + continuation;
-                    yield return " that construct " + continuation;
-                    yield return " that constructs " + continuation;
-                    yield return " that can create " + continuation;
-                    yield return " that create " + continuation;
-                    yield return " that creates " + continuation;
-                    yield return " that can provide " + continuation;
-                    yield return " that provide " + continuation;
-                    yield return " that provides " + continuation;
-                    yield return " that " + continuation;
+                    var continuation = continuations[index];
 
-                    yield return " which can build " + continuation;
-                    yield return " which build " + continuation;
-                    yield return " which builds " + continuation;
-                    yield return " which can construct " + continuation;
-                    yield return " which construct " + continuation;
-                    yield return " which constructs " + continuation;
-                    yield return " which can create " + continuation;
-                    yield return " which create " + continuation;
-                    yield return " which creates " + continuation;
-                    yield return " which can provide " + continuation;
-                    yield return " which provide " + continuation;
-                    yield return " which provides " + continuation;
-                    yield return " which " + continuation;
+                    set.Add(" that can build " + continuation);
+                    set.Add(" that build " + continuation);
+                    set.Add(" that builds " + continuation);
+                    set.Add(" that can construct " + continuation);
+                    set.Add(" that construct " + continuation);
+                    set.Add(" that constructs " + continuation);
+                    set.Add(" that can create " + continuation);
+                    set.Add(" that create " + continuation);
+                    set.Add(" that creates " + continuation);
+                    set.Add(" that can provide " + continuation);
+                    set.Add(" that provide " + continuation);
+                    set.Add(" that provides " + continuation);
+                    set.Add(" that " + continuation);
 
-                    yield return " for building of " + continuation;
-                    yield return " for building " + continuation;
-                    yield return " for the building of " + continuation;
-                    yield return " for constructing " + continuation;
-                    yield return " for construction of " + continuation;
-                    yield return " for the construction of " + continuation;
-                    yield return " for creating " + continuation;
-                    yield return " for creation of " + continuation;
-                    yield return " for the creation of " + continuation;
-                    yield return " for providing of " + continuation;
-                    yield return " for providing " + continuation;
-                    yield return " for " + continuation;
+                    set.Add(" which can build " + continuation);
+                    set.Add(" which build " + continuation);
+                    set.Add(" which builds " + continuation);
+                    set.Add(" which can construct " + continuation);
+                    set.Add(" which construct " + continuation);
+                    set.Add(" which constructs " + continuation);
+                    set.Add(" which can create " + continuation);
+                    set.Add(" which create " + continuation);
+                    set.Add(" which creates " + continuation);
+                    set.Add(" which can provide " + continuation);
+                    set.Add(" which provide " + continuation);
+                    set.Add(" which provides " + continuation);
+                    set.Add(" which " + continuation);
 
-                    yield return " building " + continuation;
-                    yield return " builds " + continuation;
-                    yield return " constructing " + continuation;
-                    yield return " constructs " + continuation;
-                    yield return " creating " + continuation;
-                    yield return " creates " + continuation;
-                    yield return " providing " + continuation;
-                    yield return " provides " + continuation;
+                    set.Add(" for building of " + continuation);
+                    set.Add(" for building " + continuation);
+                    set.Add(" for the building of " + continuation);
+                    set.Add(" for constructing " + continuation);
+                    set.Add(" for construction of " + continuation);
+                    set.Add(" for the construction of " + continuation);
+                    set.Add(" for creating " + continuation);
+                    set.Add(" for creation of " + continuation);
+                    set.Add(" for the creation of " + continuation);
+                    set.Add(" for providing of " + continuation);
+                    set.Add(" for providing " + continuation);
+                    set.Add(" for " + continuation);
 
-                    yield return " that is able to build " + continuation;
-                    yield return " which is able to build " + continuation;
-                    yield return " that is capable to build " + continuation;
-                    yield return " which is capable to build " + continuation;
-                    yield return " that is able to construct " + continuation;
-                    yield return " which is able to construct " + continuation;
-                    yield return " that is capable to construct " + continuation;
-                    yield return " which is capable to construct " + continuation;
-                    yield return " that is able to create " + continuation;
-                    yield return " which is able to create " + continuation;
-                    yield return " that is capable to create " + continuation;
-                    yield return " which is capable to create " + continuation;
-                    yield return " that is able to provide " + continuation;
-                    yield return " which is able to provide " + continuation;
-                    yield return " that is capable to provide " + continuation;
-                    yield return " which is capable to provide " + continuation;
+                    set.Add(" building " + continuation);
+                    set.Add(" builds " + continuation);
+                    set.Add(" constructing " + continuation);
+                    set.Add(" constructs " + continuation);
+                    set.Add(" creating " + continuation);
+                    set.Add(" creates " + continuation);
+                    set.Add(" providing " + continuation);
+                    set.Add(" provides " + continuation);
 
-                    yield return " that are able to build " + continuation;
-                    yield return " which are able to build " + continuation;
-                    yield return " that are capable to build " + continuation;
-                    yield return " which are capable to build " + continuation;
-                    yield return " that are able to construct " + continuation;
-                    yield return " which are able to construct " + continuation;
-                    yield return " that are capable to construct " + continuation;
-                    yield return " which are capable to construct " + continuation;
-                    yield return " that are able to create " + continuation;
-                    yield return " which are able to create " + continuation;
-                    yield return " that are capable to create " + continuation;
-                    yield return " which are capable to create " + continuation;
-                    yield return " that are able to provide " + continuation;
-                    yield return " which are able to provide " + continuation;
-                    yield return " that are capable to provide " + continuation;
-                    yield return " which are capable to provide " + continuation;
+                    set.Add(" that is able to build " + continuation);
+                    set.Add(" which is able to build " + continuation);
+                    set.Add(" that is capable to build " + continuation);
+                    set.Add(" which is capable to build " + continuation);
+                    set.Add(" that is able to construct " + continuation);
+                    set.Add(" which is able to construct " + continuation);
+                    set.Add(" that is capable to construct " + continuation);
+                    set.Add(" which is capable to construct " + continuation);
+                    set.Add(" that is able to create " + continuation);
+                    set.Add(" which is able to create " + continuation);
+                    set.Add(" that is capable to create " + continuation);
+                    set.Add(" which is capable to create " + continuation);
+                    set.Add(" that is able to provide " + continuation);
+                    set.Add(" which is able to provide " + continuation);
+                    set.Add(" that is capable to provide " + continuation);
+                    set.Add(" which is capable to provide " + continuation);
 
-                    yield return " to build " + continuation;
-                    yield return " to construct " + continuation;
-                    yield return " to create " + continuation;
-                    yield return " to provide factory methods to build " + continuation;
-                    yield return " to provide factory methods to construct " + continuation;
-                    yield return " to provide factory methods to create " + continuation;
-                    yield return " to provide methods to build " + continuation;
-                    yield return " to provide methods to construct " + continuation;
-                    yield return " to provide methods to create " + continuation;
-                    yield return " to provide " + continuation;
-                    yield return " to " + continuation;
+                    set.Add(" that are able to build " + continuation);
+                    set.Add(" which are able to build " + continuation);
+                    set.Add(" that are capable to build " + continuation);
+                    set.Add(" which are capable to build " + continuation);
+                    set.Add(" that are able to construct " + continuation);
+                    set.Add(" which are able to construct " + continuation);
+                    set.Add(" that are capable to construct " + continuation);
+                    set.Add(" which are capable to construct " + continuation);
+                    set.Add(" that are able to create " + continuation);
+                    set.Add(" which are able to create " + continuation);
+                    set.Add(" that are capable to create " + continuation);
+                    set.Add(" which are capable to create " + continuation);
+                    set.Add(" that are able to provide " + continuation);
+                    set.Add(" which are able to provide " + continuation);
+                    set.Add(" that are capable to provide " + continuation);
+                    set.Add(" which are capable to provide " + continuation);
 
-                    yield return " " + continuation;
+                    set.Add(" to build " + continuation);
+                    set.Add(" to construct " + continuation);
+                    set.Add(" to create " + continuation);
+                    set.Add(" to provide factory methods to build " + continuation);
+                    set.Add(" to provide factory methods to construct " + continuation);
+                    set.Add(" to provide factory methods to create " + continuation);
+                    set.Add(" to provide methods to build " + continuation);
+                    set.Add(" to provide methods to construct " + continuation);
+                    set.Add(" to provide methods to create " + continuation);
+                    set.Add(" to provide " + continuation);
+                    set.Add(" to " + continuation);
+
+                    set.Add(" " + continuation);
                 }
             }
         }

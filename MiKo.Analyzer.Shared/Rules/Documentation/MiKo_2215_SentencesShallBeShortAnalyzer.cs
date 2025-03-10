@@ -39,30 +39,32 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
             if (HasIssue(comment))
             {
                 return new[] { Issue(symbol) };
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
 
         private static bool HasIssue(DocumentationCommentTriviaSyntax comment)
         {
-            foreach (var node in comment.DescendantNodes<XmlElementSyntax>().Where(_ => XmlTags.Contains(_.GetName())))
+            foreach (var node in comment.DescendantNodes<XmlElementSyntax>(_ => XmlTags.Contains(_.GetName())))
             {
-                var commentBuilder = new StringBuilder();
+                var builder = StringBuilderCache.Acquire();
 
                 foreach (var syntax in node.DescendantNodes(_ => _.IsCode() is false, true).OfType<XmlTextSyntax>())
                 {
-                    commentBuilder.Append(' ').WithoutXmlCommentExterior(syntax).Append(' ');
+                    builder.Append(' ').Append(syntax).Append(' ');
                 }
 
-                var specificComment = commentBuilder.ToString();
+                var specificComment = builder.WithoutXmlCommentExterior().Trim();
 
-                if (HasIssue(specificComment.AsSpan().Trim()))
+                StringBuilderCache.Release(builder);
+
+                if (HasIssue(specificComment.AsSpan()))
                 {
                     return true;
                 }

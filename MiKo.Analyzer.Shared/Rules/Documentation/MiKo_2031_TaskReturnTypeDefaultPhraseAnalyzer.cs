@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
@@ -19,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyzeReturnType(ITypeSymbol returnType) => returnType.IsTask();
 
-        protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, DocumentationCommentTriviaSyntax comment, string commentXml, string xmlTag)
+        protected override Diagnostic[] AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, DocumentationCommentTriviaSyntax comment, string commentXml, string xmlTag)
         {
             switch (owningSymbol?.Name)
             {
@@ -59,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return true;
         }
 
-        private IEnumerable<Diagnostic> AnalyzeDefaultReturnType(ISymbol owningSymbol, ITypeSymbol returnType, DocumentationCommentTriviaSyntax comment, string commentXml, string xmlTag)
+        private Diagnostic[] AnalyzeDefaultReturnType(ISymbol owningSymbol, ITypeSymbol returnType, DocumentationCommentTriviaSyntax comment, string commentXml, string xmlTag)
         {
             if (returnType.TryGetGenericArgumentType(out var argumentType))
             {
@@ -69,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return AnalyzeStartingPhrase(owningSymbol, comment, commentXml, xmlTag, Constants.Comments.GenericTaskReturnTypeStartingPhrase);
                 }
 
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             return AnalyzePhrase(owningSymbol, comment, commentXml, xmlTag, Constants.Comments.NonGenericTaskReturnTypePhrase);

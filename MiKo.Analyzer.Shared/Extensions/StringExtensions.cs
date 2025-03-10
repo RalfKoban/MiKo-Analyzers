@@ -26,12 +26,13 @@ namespace System
 
         private static readonly char[] GenericTypeArgumentSeparator = { ',' };
 
-        private static readonly Regex HyperlinkRegex = new Regex(@"(www|ftp:|ftps:|http:|https:)+[^\s]+[\w]", RegexOptions.Compiled, 100.Milliseconds());
+        private static readonly Regex HyperlinkRegex = new Regex(@"(www|ftp:|ftps:|http:|https:)+[^\s]+[\w]", RegexOptions.Compiled, 150.Milliseconds());
 
         private static readonly Regex PascalCasingRegex = new Regex("[a-z]+[A-Z]+", RegexOptions.Compiled, 100.Milliseconds());
 
 //// ncrunch: no coverage start
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool HasFlag(FirstWordHandling value, FirstWordHandling flag) => (value & flag) == flag;
 
         public static string AdjustFirstWord(this string value, FirstWordHandling handling)
@@ -90,45 +91,25 @@ namespace System
 
         public static IReadOnlyList<int> AllIndicesOf(this string value, string finding, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
-            if (value.IsNullOrWhiteSpace())
+            // Perf: This code sits on the hot path and is invoked quite often (several million times), so we directly use 'string.IsNullOrWhiteSpace(value)'
+            //       (otherwise, it would cost about 1/10 of the overall time here which is - given the several million times - recognizable)
+            if (string.IsNullOrWhiteSpace(value))
             {
                 return Array.Empty<int>();
             }
 
-            var valueLength = value.Length;
-            var findingLength = finding.Length;
-
-            if (findingLength > valueLength)
+            if (finding.Length > value.Length)
             {
                 return Array.Empty<int>();
             }
 
-            List<int> indices = null;
-
-            for (var index = 0; ; index += findingLength)
+            if (comparison == StringComparison.Ordinal)
             {
-                index = value.IndexOf(finding, index, comparison);
-
-                if (index == -1)
-                {
-                    // nothing more to find
-                    break;
-                }
-
-                if (indices is null)
-                {
-                    indices = new List<int>(1);
-                }
-
-                indices.Add(index);
+                // Perf: about 1/3 the times the strings are compared ordinal, so splitting this up increases the overall performance significantly
+                return AllIndicesOrdinal(value.AsSpan(), finding.AsSpan());
             }
 
-            if (indices is null)
-            {
-                return Array.Empty<int>();
-            }
-
-            return indices;
+            return AllIndicesNonOrdinal(value, finding, ref comparison);
         }
 
 //// ncrunch: no coverage end
@@ -152,48 +133,17 @@ namespace System
             }
 
             return AllIndicesOf(value.ToString(), finding, comparison);
-
-            IReadOnlyList<int> AllIndicesOrdinal(ReadOnlySpan<char> span, ReadOnlySpan<char> other)
-            {
-                var otherLength = other.Length;
-
-                List<int> indices = null;
-
-                for (var index = 0; ; index += otherLength)
-                {
-                    var newIndex = span.Slice(index).IndexOf(other, StringComparison.Ordinal);
-
-                    if (newIndex == -1)
-                    {
-                        // nothing more to find
-                        break;
-                    }
-
-                    index += newIndex;
-
-                    if (indices is null)
-                    {
-                        indices = new List<int>(1);
-                    }
-
-                    indices.Add(index);
-                }
-
-                if (indices is null)
-                {
-                    return Array.Empty<int>();
-                }
-
-                return indices;
-            }
         }
 
 //// ncrunch: no coverage start
 
-        public static StringBuilder AsBuilder(this ReadOnlySpan<char> value) => new StringBuilder(value.ToString());
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static StringBuilder AsCachedBuilder(this string value) => StringBuilderCache.Acquire(value.Length).Append(value);
 
-        public static StringBuilder AsBuilder(this string value) => new StringBuilder(value);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string ToStringAndRelease(this StringBuilder value) => StringBuilderCache.GetStringAndRelease(value);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SyntaxToken AsToken(this string source, SyntaxKind kind = SyntaxKind.StringLiteralToken)
         {
             if (kind == SyntaxKind.IdentifierToken)
@@ -210,21 +160,6 @@ namespace System
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatenatedWith(this IEnumerable<string> values) => string.Concat(values.WhereNotNull());
-
-        public static StringBuilder ConcatenatedWith<T>(this IEnumerable<T> values) where T : class
-        {
-            var builder = new StringBuilder();
-
-            foreach (var value in values)
-            {
-                if (value != null)
-                {
-                    builder.Append(value);
-                }
-            }
-
-            return builder;
-        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatenatedWith(this IEnumerable<string> values, string separator) => string.Join(separator, values);
@@ -442,6 +377,32 @@ namespace System
             }
         }
 
+        public static string ConcatenatedWith(this ReadOnlySpan<char> value, char arg0, string arg1)
+        {
+            var valueLength = value.Length;
+
+            if (valueLength == 0)
+            {
+                return string.Concat(arg0, arg1);
+            }
+
+            var arg1Length = arg1?.Length ?? 0;
+
+            var length = valueLength + 1 + arg1Length;
+
+            unsafe
+            {
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
+
+                value.CopyTo(bufferSpan);
+                buffer[valueLength] = arg0;
+                arg1.AsSpan().CopyTo(bufferSpan.Slice(valueLength + 1));
+
+                return new string(buffer, 0, length);
+            }
+        }
+
         public static string ConcatenatedWith(this ReadOnlySpan<char> value, string arg0, string arg1)
         {
             var valueLength = value.Length;
@@ -577,19 +538,22 @@ namespace System
                     value.CopyTo(bufferSpan);
                 }
 
-                buffer[valueLength + 1] = arg0;
-                buffer[valueLength + 1 + arg1Length] = arg2;
+                buffer[valueLength] = arg0;
+                buffer[valueLength + arg1Length + 1] = arg2;
 
-                arg1.AsSpan().CopyTo(bufferSpan.Slice(valueLength + 2));
+                arg1.AsSpan().CopyTo(bufferSpan.Slice(valueLength + 1));
 
                 return new string(buffer, 0, length);
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Contains(this string value, char c) => value?.IndexOf(c) >= 0;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Contains(this ReadOnlySpan<char> value, char c) => value.Length > 0 && value.IndexOf(c) >= 0;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Contains(this ReadOnlySpan<char> value, ReadOnlySpan<char> finding)
         {
             if (finding.Length > value.Length)
@@ -600,6 +564,7 @@ namespace System
             return value.IndexOf(finding) >= 0;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Contains(this ReadOnlySpan<char> value, string finding)
         {
             if (finding is null)
@@ -619,6 +584,11 @@ namespace System
 
             if (difference < 0)
             {
+                if (comparison == StringComparison.Ordinal)
+                {
+                    return value.AsSpan().IndexOf(finding.AsSpan()) >= 0;
+                }
+
                 return value.IndexOf(finding, comparison) >= 0;
             }
 
@@ -658,6 +628,7 @@ namespace System
 
 //// ncrunch: no coverage end
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Contains(this ReadOnlySpan<char> value, string finding, Func<char, bool> nextCharValidationCallback, StringComparison comparison) => value.Contains(finding.AsSpan(), nextCharValidationCallback, comparison);
 
         public static bool Contains(this ReadOnlySpan<char> value, ReadOnlySpan<char> finding, Func<char, bool> nextCharValidationCallback, StringComparison comparison)
@@ -677,7 +648,7 @@ namespace System
                 }
             }
 
-            while (true)
+            do
             {
                 var newIndex = value.Slice(index).IndexOf(finding, comparison);
 
@@ -704,15 +675,19 @@ namespace System
 
                 index = positionAfterCharacter;
             }
+            while (true);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ContainsAny(this string value, char[] characters) => value?.IndexOfAny(characters) >= 0;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ContainsAny(this ReadOnlySpan<char> value, ReadOnlySpan<char> characters) => value.Length > 0 && value.IndexOfAny(characters) >= 0;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ContainsAny(this string value, string[] phrases) => value.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase); // ncrunch: no coverage
 
-        //// ncrunch: no coverage start
+//// ncrunch: no coverage start
 
         public static bool ContainsAny(this string value, string[] phrases, StringComparison comparison)
         {
@@ -740,16 +715,68 @@ namespace System
             return false;
         }
 
+        public static int CountLeadingWhitespaces(this string value, int start = 0)
+        {
+            var whitespaces = 0;
+            var valueLength = value.Length;
+
+            for (; start < valueLength; start++)
+            {
+                if (value[start].IsWhiteSpace())
+                {
+                    whitespaces++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return whitespaces;
+        }
+
+        public static int CountTrailingWhitespaces(this string value, int start = 0)
+        {
+            var whitespaces = 0;
+
+            for (var i = value.Length - 1; i >= start; i--)
+            {
+                if (value[i].IsWhiteSpace())
+                {
+                    whitespaces++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return whitespaces;
+        }
+
 //// ncrunch: no coverage end
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool EndsWith(this string value, char character) => value.HasCharacters() && value[value.Length - 1] == character;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool EndsWith(this ReadOnlySpan<char> value, char character) => value.Length > 0 && value[value.Length - 1] == character;
 
-        public static bool EndsWith(this ReadOnlySpan<char> value, string characters, StringComparison comparison) => characters.HasCharacters() && value.EndsWith(characters.AsSpan(), comparison); // ncrunch: no coverage
+//// ncrunch: no coverage start
 
+        public static bool EndsWith(this ReadOnlySpan<char> value, string characters, StringComparison comparison)
+        {
+            var span = characters.AsSpan();
+
+            return span.Length > 0 && value.EndsWith(span, comparison);
+        }
+
+//// ncrunch: no coverage end
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool EndsWithAny(this string value, ReadOnlySpan<char> suffixCharacters) => value.HasCharacters() && suffixCharacters.Contains(value[value.Length - 1]);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool EndsWithAny(this string value, string[] suffixes) => value.EndsWithAny(suffixes, StringComparison.OrdinalIgnoreCase);
 
         public static bool EndsWithAny(this ReadOnlySpan<char> value, ReadOnlySpan<char> suffixCharacters)
@@ -772,6 +799,7 @@ namespace System
             return false;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool EndsWithAny(this ReadOnlySpan<char> value, string[] suffixes) => value.EndsWithAny(suffixes, StringComparison.OrdinalIgnoreCase);
 
 //// ncrunch: no coverage start
@@ -864,12 +892,16 @@ namespace System
 
         public static bool EndsWithNumber(this ReadOnlySpan<char> value) => value.Length > 0 && value[value.Length - 1].IsNumber();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Equals(this string value, ReadOnlySpan<char> other, StringComparison comparison) => value != null && value.AsSpan().Equals(other, comparison);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Equals(this ReadOnlySpan<char> value, string other, StringComparison comparison) => other != null && value.Equals(other.AsSpan(), comparison);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool EqualsAny(this string value, IEnumerable<string> phrases) => EqualsAny(value, phrases, StringComparison.OrdinalIgnoreCase);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool EqualsAny(this ReadOnlySpan<char> value, string[] phrases) => EqualsAny(value, phrases, StringComparison.OrdinalIgnoreCase);
 
 //// ncrunch: no coverage start
@@ -1026,26 +1058,21 @@ namespace System
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string FormatWith(this string format, char arg0) => string.Format(format, arg0.ToString());
+        public static string FormatWith(this string format, ISymbol arg0) => string.Format(format, arg0);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string FormatWith(this string format, object arg0) => string.Format(format, arg0);
+        public static string FormatWith(this string format, string arg0) => string.Format(format, arg0);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string FormatWith(this string format, object arg0, object arg1) => string.Format(format, arg0, arg1);
+        public static string FormatWith(this string format, string arg0, string arg1) => string.Format(format, arg0, arg1);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string FormatWith(this string format, string arg0, char arg1) => string.Format(format, arg0, arg1.ToString());
+        public static string FormatWith(this string format, string arg0, string arg1, string arg2) => string.Format(format, arg0, arg1, arg2);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string FormatWith(this string format, object arg0, object arg1, object arg2) => string.Format(format, arg0, arg1, arg2);
+        public static string FormatWith(this string format, string arg0, string arg1, string arg2, string arg3) => string.Format(format, arg0, arg1, arg2, arg3);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string FormatWith(this string format, object arg0, object arg1, object arg2, object arg3) => string.Format(format, arg0, arg1, arg2, arg3);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string FormatWith(this string format, char arg0, char arg1, char arg2, char arg3) => string.Format(format, arg0.ToString(), arg1.ToString(), arg2.ToString(), arg3.ToString());
-
         public static string GetNameOnlyPart(this string value) => GetNameOnlyPart(value.AsSpan());
 
         public static string GetNameOnlyPart(this ReadOnlySpan<char> value)
@@ -1105,24 +1132,21 @@ namespace System
 
         public static ReadOnlySpan<char> GetPartAfterLastDot(this ReadOnlySpan<char> value) => value.Slice(value.LastIndexOf('.') + 1);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool HasCollectionMarker(this string value) => value.EndsWithAny(Constants.Markers.Collections);
 
-        public static bool HasEntityMarker(this string value) => HasEntityMarker(value.AsSpan());
-
-        public static bool HasEntityMarker(this ReadOnlySpan<char> value)
+        public static bool HasEntityMarker(this string value)
         {
-            var s = value.ToString();
-
-            var hasMarker = s.ContainsAny(Constants.Markers.Models);
+            var hasMarker = value.ContainsAny(Constants.Markers.Models, StringComparison.OrdinalIgnoreCase);
 
             if (hasMarker)
             {
-                if (s.ContainsAny(Constants.Markers.ViewModels))
+                if (value.ContainsAny(Constants.Markers.ViewModels, StringComparison.OrdinalIgnoreCase))
                 {
                     return false;
                 }
 
-                if (s.ContainsAny(Constants.Markers.SpecialModels))
+                if (value.ContainsAny(Constants.Markers.SpecialModels, StringComparison.OrdinalIgnoreCase))
                 {
                     return false;
                 }
@@ -1131,8 +1155,9 @@ namespace System
             return hasMarker;
         }
 
+        // Perf: As this method is invoked several million times, we directly use 'string.IsNullOrEmpty(value)' here instead of our own extension method helper
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool HasCharacters(this string value) => value.IsNullOrEmpty() is false; // ncrunch: no coverage
+        public static bool HasCharacters(this string value) => string.IsNullOrEmpty(value) is false; // ncrunch: no coverage
 
         public static bool HasUpperCaseLettersAbove(this string value, ushort limit) => value != null && HasUpperCaseLettersAbove(value.AsSpan(), limit);
 
@@ -1176,8 +1201,41 @@ namespace System
             switch (count)
             {
                 case 2: return string.Concat(items[0], separatorForLast, items[1]);
-                case 3: return items[0].AsBuilder().Append(Separator).Append(items[1]).Append(separatorForLast).Append(items[2]).ToString();
-                case 4: return items[0].AsBuilder().Append(Separator).Append(items[1]).Append(Separator).Append(items[2]).Append(separatorForLast).Append(items[3]).ToString();
+                case 3:
+                {
+                    var item0 = items[0];
+                    var item1 = items[1];
+                    var item2 = items[2];
+
+                    var builder = StringBuilderCache.Acquire(item0.Length + Separator.Length + item1.Length + separatorForLast.Length + item2.Length)
+                                                    .Append(item0)
+                                                    .Append(Separator)
+                                                    .Append(item1)
+                                                    .Append(separatorForLast)
+                                                    .Append(item2);
+
+                    return StringBuilderCache.GetStringAndRelease(builder);
+                }
+
+                case 4:
+                {
+                    var item0 = items[0];
+                    var item1 = items[1];
+                    var item2 = items[2];
+                    var item3 = items[3];
+
+                    var builder = StringBuilderCache.Acquire(item0.Length + Separator.Length + item1.Length + Separator.Length + item2.Length + separatorForLast.Length + item3.Length)
+                                                    .Append(item0)
+                                                    .Append(Separator)
+                                                    .Append(item1)
+                                                    .Append(Separator)
+                                                    .Append(item2)
+                                                    .Append(separatorForLast)
+                                                    .Append(item3);
+
+                    return StringBuilderCache.GetStringAndRelease(builder);
+                }
+
                 default: return string.Concat(items.Take(count - 1).ConcatenatedWith(Separator), separatorForLast, items[count - 1]);
             }
         }
@@ -1296,6 +1354,7 @@ namespace System
             return -1;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsAcronym(this string value) => value.HasCharacters() && value.None(_ => _.IsLowerCaseLetter());
 
         public static bool IsHyperlink(this string value)
@@ -1383,34 +1442,32 @@ namespace System
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsSingleWord(this string value) => value != null && IsSingleWord(value.AsSpan());
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsSingleWord(this ReadOnlySpan<char> value) => value.HasWhitespaces() is false;
 
-        //// ncrunch: no coverage start
+//// ncrunch: no coverage start
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsUpperCase(this char value)
         {
-            if ((uint)(value - 'A') <= 'Z' - 'A')
-            {
-                return true;
-            }
-
             if ((uint)(value - 'a') <= 'z' - 'a')
             {
                 return false;
             }
 
-            if (value == ' ')
+            if ((uint)(value - 'A') <= 'Z' - 'A')
             {
-                return false;
+                return true;
             }
 
-            return char.IsUpper(value);
+            return IsUpperCaseWithSwitch(ref value);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsUpperCaseLetter(this char value) => value.IsLetter() && value.IsUpperCase();
+        public static bool IsUpperCaseLetter(this char value) => value.IsUpperCase() && value.IsLetter();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsWhiteSpace(this char value)
@@ -1419,6 +1476,8 @@ namespace System
             {
                 case ' ':
                 case '\t':
+                case '\r':
+                case '\n':
                     return true;
 
                 default:
@@ -1429,6 +1488,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWith(this string value, char character) => value.HasCharacters() && value[0] == character;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWith(this string value, ReadOnlySpan<char> characters) => value.HasCharacters() && value.AsSpan().StartsWith(characters);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1437,11 +1497,12 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWith(this ReadOnlySpan<char> value, string characters) => characters.HasCharacters() && value.StartsWith(characters.AsSpan());
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWith(this string value, ReadOnlySpan<char> characters, StringComparison comparison) => value.HasCharacters() && value.AsSpan().StartsWith(characters, comparison);
 
         public static bool StartsWith(this ReadOnlySpan<char> value, string characters, StringComparison comparison)
         {
-            if (string.IsNullOrEmpty(characters))
+            if (characters.IsNullOrEmpty())
             {
                 return false;
             }
@@ -1459,12 +1520,16 @@ namespace System
 
 //// ncrunch: no coverage end
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWithAny(this string value, IEnumerable<char> characters) => value.HasCharacters() && characters.Contains(value[0]);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWithAny(this ReadOnlySpan<char> value, IEnumerable<char> characters) => value.Length > 0 && characters.Contains(value[0]);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWithAny(this string value, string[] prefixes) => value.StartsWithAny(prefixes, StringComparison.OrdinalIgnoreCase);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWithAny(this ReadOnlySpan<char> value, string[] prefixes) => value.StartsWithAny(prefixes, StringComparison.OrdinalIgnoreCase);
 
 //// ncrunch: no coverage start
@@ -1533,7 +1598,9 @@ namespace System
         public static string ToLowerCase(this string source) => source?.ToLowerInvariant();
 #pragma warning restore CA1308
 
-        //// ncrunch: no coverage start
+//// ncrunch: no coverage start
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static char ToLowerCase(this char source)
         {
             if ((uint)(source - 'A') <= 'Z' - 'A')
@@ -1609,6 +1676,7 @@ namespace System
             return MakeLowerCaseAt(source, index);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static char ToUpperCase(this char source)
         {
             if ((uint)(source - 'a') <= 'z' - 'a')
@@ -1661,7 +1729,7 @@ namespace System
             return MakeUpperCaseAt(source.AsSpan(), index);
         }
 
-        //// ncrunch: no coverage end
+//// ncrunch: no coverage end
 
         /// <summary>
         /// Gets a <see cref="string"/> where the specified character is upper-case.
@@ -1737,7 +1805,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string Without(this string value, string phrase) => value.Replace(phrase, string.Empty);
 
-        public static string Without(this string value, string[] phrases) => value.AsBuilder().Without(phrases).Trim(); // ncrunch: no coverage
+        public static string Without(this string value, string[] phrases) => value.AsCachedBuilder().Without(phrases).Trimmed().ToStringAndRelease(); // ncrunch: no coverage
 
         public static string WithoutFirstWord(this string value) => WithoutFirstWord(value.AsSpan()).ToString();
 
@@ -1837,8 +1905,6 @@ namespace System
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string WithoutQuotes(this string value) => value.Without(@"""");
-
-        public static IEnumerable<StringBuilder> WithoutParaTags(this IEnumerable<string> values) => values.Select(_ => _.AsBuilder().WithoutParaTags()); // ncrunch: no coverage
 
 //// ncrunch: no coverage start
 
@@ -2060,112 +2126,218 @@ namespace System
 
                     int charA = *a;
                     int charB = *b;
-
-                    // uppercase both chars - notice that we need just one compare per char
-                    if ((uint)(charA - 'a') <= 'z' - 'a')
                     {
-                        charA -= DifferenceBetweenUpperAndLowerCaseAscii;
-                    }
+                        // uppercase both chars - notice that we need just one compare per char
+                        if ((uint)(charA - 'a') <= 'z' - 'a')
+                        {
+                            charA -= DifferenceBetweenUpperAndLowerCaseAscii;
+                        }
 
-                    if ((uint)(charB - 'a') <= 'z' - 'a')
-                    {
-                        charB -= DifferenceBetweenUpperAndLowerCaseAscii;
-                    }
+                        if ((uint)(charB - 'a') <= 'z' - 'a')
+                        {
+                            charB -= DifferenceBetweenUpperAndLowerCaseAscii;
+                        }
 
-                    if (charA != charB)
-                    {
-                        // they do not fit as characters do not match
-                        return false;
+                        if (charA != charB)
+                        {
+                            // they do not fit as characters do not match
+                            return false;
+                        }
                     }
 
                     var lastIndex = length - 1;
                     charA = *(a + lastIndex);
                     charB = *(b + lastIndex);
-
-                    // uppercase both chars - notice that we need just one compare per char
-                    if ((uint)(charA - 'a') <= 'z' - 'a')
                     {
-                        charA -= DifferenceBetweenUpperAndLowerCaseAscii;
-                    }
+                        // uppercase both chars - notice that we need just one compare per char
+                        if ((uint)(charA - 'a') <= 'z' - 'a')
+                        {
+                            charA -= DifferenceBetweenUpperAndLowerCaseAscii;
+                        }
 
-                    if ((uint)(charB - 'a') <= 'z' - 'a')
-                    {
-                        charB -= DifferenceBetweenUpperAndLowerCaseAscii;
-                    }
+                        if ((uint)(charB - 'a') <= 'z' - 'a')
+                        {
+                            charB -= DifferenceBetweenUpperAndLowerCaseAscii;
+                        }
 
-                    if (charA != charB)
-                    {
-                        // they do not fit as characters do not match
-                        return false;
+                        if (charA != charB)
+                        {
+                            // they do not fit as characters do not match
+                            return false;
+                        }
                     }
 
                     var middleIndex = length / 2;
                     charA = *(a + middleIndex);
                     charB = *(b + middleIndex);
-
-                    // uppercase both chars - notice that we need just one compare per char
-                    if ((uint)(charA - 'a') <= 'z' - 'a')
                     {
-                        charA -= DifferenceBetweenUpperAndLowerCaseAscii;
-                    }
+                        // uppercase both chars - notice that we need just one compare per char
+                        if ((uint)(charA - 'a') <= 'z' - 'a')
+                        {
+                            charA -= DifferenceBetweenUpperAndLowerCaseAscii;
+                        }
 
-                    if ((uint)(charB - 'a') <= 'z' - 'a')
-                    {
-                        charB -= DifferenceBetweenUpperAndLowerCaseAscii;
-                    }
+                        if ((uint)(charB - 'a') <= 'z' - 'a')
+                        {
+                            charB -= DifferenceBetweenUpperAndLowerCaseAscii;
+                        }
 
-                    if (charA != charB)
-                    {
-                        // they do not fit as characters do not match
-                        return false;
+                        if (charA != charB)
+                        {
+                            // they do not fit as characters do not match
+                            return false;
+                        }
                     }
 
                     var indexPart1 = length / 3;
                     charA = *(a + indexPart1);
                     charB = *(b + indexPart1);
-
-                    // uppercase both chars - notice that we need just one compare per char
-                    if ((uint)(charA - 'a') <= 'z' - 'a')
                     {
-                        charA -= DifferenceBetweenUpperAndLowerCaseAscii;
-                    }
+                        // uppercase both chars - notice that we need just one compare per char
+                        if ((uint)(charA - 'a') <= 'z' - 'a')
+                        {
+                            charA -= DifferenceBetweenUpperAndLowerCaseAscii;
+                        }
 
-                    if ((uint)(charB - 'a') <= 'z' - 'a')
-                    {
-                        charB -= DifferenceBetweenUpperAndLowerCaseAscii;
-                    }
+                        if ((uint)(charB - 'a') <= 'z' - 'a')
+                        {
+                            charB -= DifferenceBetweenUpperAndLowerCaseAscii;
+                        }
 
-                    if (charA != charB)
-                    {
-                        // they do not fit as characters do not match
-                        return false;
+                        if (charA != charB)
+                        {
+                            // they do not fit as characters do not match
+                            return false;
+                        }
                     }
 
                     var indexPart2 = 2 * indexPart1;
                     charA = *(a + indexPart2);
                     charB = *(b + indexPart2);
-
-                    // uppercase both chars - notice that we need just one compare per char
-                    if ((uint)(charA - 'a') <= 'z' - 'a')
                     {
-                        charA -= DifferenceBetweenUpperAndLowerCaseAscii;
-                    }
+                        // uppercase both chars - notice that we need just one compare per char
+                        if ((uint)(charA - 'a') <= 'z' - 'a')
+                        {
+                            charA -= DifferenceBetweenUpperAndLowerCaseAscii;
+                        }
 
-                    if ((uint)(charB - 'a') <= 'z' - 'a')
-                    {
-                        charB -= DifferenceBetweenUpperAndLowerCaseAscii;
-                    }
+                        if ((uint)(charB - 'a') <= 'z' - 'a')
+                        {
+                            charB -= DifferenceBetweenUpperAndLowerCaseAscii;
+                        }
 
-                    if (charA != charB)
-                    {
-                        // they do not fit as characters do not match
-                        return false;
+                        if (charA != charB)
+                        {
+                            // they do not fit as characters do not match
+                            return false;
+                        }
                     }
                 }
             }
 
             // continue to check
             return true;
+        }
+
+        private static bool IsUpperCaseWithSwitch(ref char value)
+        {
+            switch (value)
+            {
+                case ' ':
+                case '.':
+                case ',':
+                case ';':
+                case ':':
+                case '?':
+                case '!':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                case '0':
+                case '+':
+                case '-':
+                case '*':
+                case '/':
+                case '(':
+                case ')':
+                case '[':
+                case ']':
+                case '<':
+                case '>':
+                case '\\':
+                case Constants.Underscore:
+                    return false;
+
+                case 'Ö':
+                case 'Ä':
+                case 'Ü':
+                    return true;
+
+                default:
+                    return char.IsUpper(value);
+            }
+        }
+
+        private static IReadOnlyList<int> AllIndicesOrdinal(ReadOnlySpan<char> span, ReadOnlySpan<char> other)
+        {
+            var otherLength = other.Length;
+
+            List<int> indices = null;
+
+            for (var index = 0; ; index += otherLength)
+            {
+                var newIndex = span.Slice(index).IndexOf(other, StringComparison.Ordinal);
+
+                if (newIndex == -1)
+                {
+                    // nothing more to find
+                    break;
+                }
+
+                index += newIndex;
+
+                if (indices is null)
+                {
+                    indices = new List<int>(1);
+                }
+
+                indices.Add(index);
+            }
+
+            return indices ?? (IReadOnlyList<int>)Array.Empty<int>();
+        }
+
+        private static IReadOnlyList<int> AllIndicesNonOrdinal(string value, string finding, ref StringComparison comparison)
+        {
+            var findingLength = finding.Length;
+
+            List<int> indices = null;
+
+            for (var index = 0; ; index += findingLength)
+            {
+                index = value.IndexOf(finding, index, comparison);
+
+                if (index == -1)
+                {
+                    // nothing more to find
+                    break;
+                }
+
+                if (indices is null)
+                {
+                    indices = new List<int>(1);
+                }
+
+                indices.Add(index);
+            }
+
+            return indices ?? (IReadOnlyList<int>)Array.Empty<int>();
         }
 
 //// ncrunch: no coverage end

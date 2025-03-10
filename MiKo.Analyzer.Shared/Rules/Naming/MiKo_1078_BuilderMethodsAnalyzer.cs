@@ -44,7 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return new[] { Issue(symbol, CreateBetterNameProposal(betterName)) };
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
 
         private static string FindBetterName(string name) => name.Replace(Constants.Names.Create, "Build");
