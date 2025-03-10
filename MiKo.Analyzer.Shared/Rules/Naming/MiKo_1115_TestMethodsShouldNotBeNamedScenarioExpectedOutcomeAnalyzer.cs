@@ -53,6 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                       "Everything",
                                                                       Rejected,
                                                                       Consumed,
+                                                                      "Once",
                                                                   };
 
         private static readonly string[] SpecialFirstPhrases =
@@ -105,7 +106,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             foreach (var part in parts)
             {
-                if (part[0].IsUpperCase() is false)
+                if (part[0].IsUpperCase() is false && part[0].IsNumber() is false)
                 {
                     return false;
                 }
