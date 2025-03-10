@@ -53,6 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                       "Everything",
                                                                       Rejected,
                                                                       Consumed,
+                                                                      "Once",
                                                                   };
 
         private static readonly string[] SpecialFirstPhrases =
@@ -100,12 +101,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static bool HasIssue(string methodName)
         {
-            var parts = methodName.Split(Constants.Underscores, StringSplitOptions.RemoveEmptyEntries);
+            var parts = GetParts(methodName);
             var first = true;
 
             foreach (var part in parts)
             {
-                if (part[0].IsUpperCase() is false)
+                if (part[0].IsUpperCase() is false && part[0].IsNumber() is false)
                 {
                     return false;
                 }
@@ -140,9 +141,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return NamesFinder.FindBetterTestName(nameToImprove, symbol);
         }
 
+        private static string[] GetParts(string methodName) => methodName.Split(Constants.Underscores, StringSplitOptions.RemoveEmptyEntries);
+
         private static bool TryGetInOrder(string name, out string result)
         {
-            var parts = name.Split(Constants.Underscores, StringSplitOptions.RemoveEmptyEntries);
+            var parts = GetParts(name);
 
             switch (parts.Length)
             {
