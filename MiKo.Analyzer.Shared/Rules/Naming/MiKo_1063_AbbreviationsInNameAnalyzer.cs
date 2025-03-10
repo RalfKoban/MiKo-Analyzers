@@ -78,24 +78,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return prefixLength > 0
                    ? AnalyzeName(symbolName.Substring(prefixLength), symbol, fieldPrefix)
                    : AnalyzeName(symbolName, symbol);
-
-            string GetFieldPrefix(string fieldName)
-            {
-                var fieldPrefixes = Constants.Markers.FieldPrefixes;
-                var prefixesLength = fieldPrefixes.Length;
-
-                for (var index = 0; index < prefixesLength; index++)
-                {
-                    var prefix = fieldPrefixes[index];
-
-                    if (prefix.Length > 0 && fieldName.StartsWith(prefix, StringComparison.Ordinal))
-                    {
-                        return prefix;
-                    }
-                }
-
-                return string.Empty;
-            }
         }
 
         private Diagnostic[] AnalyzeName(string symbolName, ISymbol symbol, string prefix = "")

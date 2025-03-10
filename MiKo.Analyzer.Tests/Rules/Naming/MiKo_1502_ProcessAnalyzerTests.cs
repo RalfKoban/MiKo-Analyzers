@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1502_ProcessAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] FieldPrefixes = ["m_", "s_", "t_", "_", string.Empty,];
+        private static readonly string[] FieldPrefixes = Constants.Markers.FieldPrefixes;
         private static readonly string[] Names = ["Process", "process", "Processor", "processor"];
 
         [Test]
@@ -71,7 +71,7 @@ namespace Bla
         public void An_issue_is_reported_for_type_with_([ValueSource(nameof(Names))] string name) => An_issue_is_reported_for(@"
 namespace Bla
 {
-  public static class Test" + name + @"Me
+  public class Test" + name + @"Me
   {
       public void DoSomething(int i) { }
   }
@@ -82,7 +82,7 @@ namespace Bla
         public void An_issue_is_reported_for_method_with_([ValueSource(nameof(Names))] string name) => An_issue_is_reported_for(@"
 namespace Bla
 {
-  public static class TestMe
+  public class TestMe
   {
       public void " + name + @"Something(int i) { }
   }
@@ -93,7 +93,7 @@ namespace Bla
         public void An_issue_is_reported_for_event_with_([ValueSource(nameof(Names))] string name) => An_issue_is_reported_for(@"
 namespace Bla
 {
-  public static class TestMe
+  public class TestMe
   {
       public event EventHandler " + name + @"Something;
   }
@@ -104,7 +104,7 @@ namespace Bla
         public void An_issue_is_reported_for_property_with_([ValueSource(nameof(Names))] string name) => An_issue_is_reported_for(@"
 namespace Bla
 {
-  public static class TestMe
+  public class TestMe
   {
       public int " + name + @"Something { get; set;}
   }
@@ -115,7 +115,7 @@ namespace Bla
         public void An_issue_is_reported_for_field_with_([ValueSource(nameof(FieldPrefixes))] string fieldPrefix, [ValueSource(nameof(Names))] string name) => An_issue_is_reported_for(@"
 namespace Bla
 {
-  public static class TestMe
+  public class TestMe
   {
       private int " + fieldPrefix + name + @"Something(int i) { }
   }

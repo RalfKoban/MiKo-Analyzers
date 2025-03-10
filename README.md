@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables lists all the 480 rules that are currently provided by the analyzer.
+The following tables lists all the 485 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -161,6 +161,11 @@ The following tables lists all the 480 rules that are currently provided by the 
 |MiKo_1409|Do not prefix or suffix namespaces with underscores|&#x2713;|\-|
 |MiKo_1501|Do not use 'Filter' in names|&#x2713;|\-|
 |MiKo_1502|Do not use 'Process' in names|&#x2713;|\-|
+|MiKo_1503|Methods should not be suffixed with 'Counter'|&#x2713;|&#x2713;|
+|MiKo_1504|Properties should not be suffixed with 'Counter'|&#x2713;|&#x2713;|
+|MiKo_1505|Fields should not be suffixed with 'Counter'|&#x2713;|&#x2713;|
+|MiKo_1506|Local variables should not be suffixed with 'Counter'|&#x2713;|&#x2713;|
+|MiKo_1507|Parameters should not be suffixed with 'Counter'|&#x2713;|&#x2713;|
 
 ### Documentation
 |ID|Title|Enabled by default|CodeFix available|
