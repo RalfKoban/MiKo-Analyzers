@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -35,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (list is null)
             {
                 // incomplete, so no issue
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             var arguments = list.Arguments;
@@ -50,10 +49,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     }
 
                     // it's either the serialization ctor or the one with the inner exception
-                    return Enumerable.Empty<Diagnostic>();
+                    return Array.Empty<Diagnostic>();
 
                 case 3: // correct call
-                    return Enumerable.Empty<Diagnostic>();
+                    return Array.Empty<Diagnostic>();
             }
 
             return new[] { Issue(node.Type.ToString(), node) };

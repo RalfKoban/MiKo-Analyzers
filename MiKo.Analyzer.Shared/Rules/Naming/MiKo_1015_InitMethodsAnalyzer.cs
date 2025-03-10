@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -33,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
 
         private static string GetExpectedName(string methodName)

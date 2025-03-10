@@ -42,13 +42,20 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var issueCanExecute = AnalyzeMethodName(nameof(ICommand.CanExecute), symbol);
 
-            yield return issueCanExecute;
-
             if (issueCanExecute is null)
             {
                 // CanExecute is not contained, thus we can check for execute (otherwise 'Execute' would already be part of the method's name)
-                yield return AnalyzeMethodName(nameof(ICommand.Execute), symbol);
+                var issueExecute = AnalyzeMethodName(nameof(ICommand.Execute), symbol);
+
+                if (issueExecute is null)
+                {
+                    return Array.Empty<Diagnostic>();
+                }
+
+                return new[] { issueExecute };
             }
+
+            return new[] { issueCanExecute };
         }
 
         private static string GetProposal(string methodName, string forbiddenName)

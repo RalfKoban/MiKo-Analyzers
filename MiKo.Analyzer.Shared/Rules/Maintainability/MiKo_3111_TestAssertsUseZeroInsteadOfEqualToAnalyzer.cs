@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -27,10 +26,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var issues = Analyze(node);
 
-            ReportDiagnostics(context, issues);
+            if (issues.Length > 0)
+            {
+                ReportDiagnostics(context, issues);
+            }
         }
 
-        private IEnumerable<Diagnostic> Analyze(InvocationExpressionSyntax node)
+        private Diagnostic[] Analyze(InvocationExpressionSyntax node)
         {
             if (node.Expression is MemberAccessExpressionSyntax maes && maes.Name.GetName() == "EqualTo")
             {
@@ -45,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
     }
 }

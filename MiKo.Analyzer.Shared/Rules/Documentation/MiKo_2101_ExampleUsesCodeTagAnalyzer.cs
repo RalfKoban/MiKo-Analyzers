@@ -16,25 +16,30 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeExample(ISymbol owningSymbol, IEnumerable<XmlElementSyntax> examples) => AnalyzeStartingPhrase(owningSymbol, examples);
-
-        private IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, IEnumerable<XmlElementSyntax> examples)
+        protected override IReadOnlyList<Diagnostic> AnalyzeExample(ISymbol symbol, IReadOnlyList<XmlElementSyntax> examples)
         {
+            List<Diagnostic> results = null;
+
             foreach (var example in examples)
             {
                 var tokens = example.GetXmlTextTokens();
 
                 foreach (var token in tokens)
                 {
-                    var index = token.ValueText.IndexOf("=", StringComparison.OrdinalIgnoreCase);
-
-                    if (index >= 0)
+                    if (token.ValueText.IndexOf('=') >= 0)
                     {
+                        if (results is null)
+                        {
+                            results = new List<Diagnostic>(1);
+                        }
+
                         // we have an issue
-                        yield return Issue(symbol.Name, example);
+                        results.Add(Issue(example));
                     }
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
         }
     }
 }

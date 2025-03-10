@@ -7,7 +7,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 
 
 ## Build / Project status
-[![Maintenance](https://img.shields.io/maintenance/yes/2024.svg)](https://github.com/RalfKoban/MiKo-Analyzers)
+[![Maintenance](https://img.shields.io/maintenance/yes/2025.svg)](https://github.com/RalfKoban/MiKo-Analyzers)
 [![Build status](https://ci.appveyor.com/api/projects/status/qanrqn7r4q9frr9m/branch/master?svg=true)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/branch/master)
 [![codecov](https://codecov.io/gh/RalfKoban/MiKo-Analyzers/branch/master/graph/badge.svg)](https://codecov.io/gh/RalfKoban/MiKo-Analyzers)
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/18917.svg)](https://scan.coverity.com/projects/ralfkoban-miko-analyzers)
@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables lists all the 471 rules that are currently provided by the analyzer.
+The following tables lists all the 480 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -109,6 +109,7 @@ The following tables lists all the 471 rules that are currently provided by the 
 |MiKo_1076|Prism event types should be suffixed with 'Event'|&#x2713;|&#x2713;|
 |MiKo_1077|Enum members should not be suffixed with 'Enum'|&#x2713;|&#x2713;|
 |MiKo_1078|Builder method names should start with 'Build'|&#x2713;|&#x2713;|
+|MiKo_1079|Repositories should not be suffixed with 'Repository'|&#x2713;|&#x2713;|
 |MiKo_1080|Names should contain numbers instead of their spellings|&#x2713;|\-|
 |MiKo_1081|Methods should not be suffixed with a number|&#x2713;|&#x2713;|
 |MiKo_1082|Properties should not be suffixed with a number if their types have number suffixes|&#x2713;|&#x2713;|
@@ -118,6 +119,7 @@ The following tables lists all the 471 rules that are currently provided by the 
 |MiKo_1086|Methods should not be named using numbers as slang|&#x2713;|\-|
 |MiKo_1087|Name constructor parameters after their counterparts in the base class|&#x2713;|&#x2713;|
 |MiKo_1088|Singleton instances should be named 'Instance'|&#x2713;|\-|
+|MiKo_1089|Methods should not be prefixed with 'Get'|&#x2713;|&#x2713;|
 |MiKo_1090|Parameters should not be suffixed with specific types|&#x2713;|&#x2713;|
 |MiKo_1091|Variables should not be suffixed with specific types|&#x2713;|&#x2713;|
 |MiKo_1092|'Ability' Types should not be suffixed with redundant information|&#x2713;|&#x2713;|
@@ -157,6 +159,8 @@ The following tables lists all the 471 rules that are currently provided by the 
 |MiKo_1407|Test namespaces should not contain 'Test'|&#x2713;|\-|
 |MiKo_1408|Extension methods should be placed in same namespace as the extended types|&#x2713;|\-|
 |MiKo_1409|Do not prefix or suffix namespaces with underscores|&#x2713;|\-|
+|MiKo_1501|Do not use 'Filter' in names|&#x2713;|\-|
+|MiKo_1502|Do not use 'Process' in names|&#x2713;|\-|
 
 ### Documentation
 |ID|Title|Enabled by default|CodeFix available|
@@ -268,6 +272,7 @@ The following tables lists all the 471 rules that are currently provided by the 
 |MiKo_2231|Documentation of overridden 'GetHashCode()' methods shall use '&lt;inheritdoc /&gt;' marker|&#x2713;|&#x2713;|
 |MiKo_2232|&lt;summary&gt; documentation should not be empty|&#x2713;|&#x2713;|
 |MiKo_2233|XML tags should be placed on single line|&#x2713;|&#x2713;|
+|MiKo_2224|Documentation should use 'to' instead of 'that is to' or 'which is to'|&#x2713;|&#x2713;|
 |MiKo_2300|Comments should explain the 'Why' and not the 'How'|&#x2713;|\-|
 |MiKo_2301|Do not use obvious comments in AAA-Tests|&#x2713;|&#x2713;|
 |MiKo_2302|Do not keep code that is commented out|&#x2713;|\-|
@@ -280,6 +285,7 @@ The following tables lists all the 471 rules that are currently provided by the 
 |MiKo_2309|Comments should not use the contraction "n't"|&#x2713;|&#x2713;|
 |MiKo_2310|Comments should explain the 'Why' and not the 'That'|&#x2713;|\-|
 |MiKo_2311|Do not use separator comments|&#x2713;|&#x2713;|
+|MiKo_2312|Comments should use 'to' instead of 'that is to' or 'which is to'|&#x2713;|&#x2713;|
 
 ### Maintainability
 |ID|Title|Enabled by default|CodeFix available|
@@ -360,7 +366,7 @@ The following tables lists all the 471 rules that are currently provided by the 
 |MiKo_3082|Prefer pattern matching over a logical comparison with 'true' or 'false'|&#x2713;|&#x2713;|
 |MiKo_3083|Prefer pattern matching for null checks|&#x2713;|&#x2713;|
 |MiKo_3084|Do not place constants on the left side for comparisons|&#x2713;|&#x2713;|
-|MiKo_3085|Conditional statements should be short|&#x2713;|\-|
+|MiKo_3085|Conditional statements should be short|&#x2713;|&#x2713;|
 |MiKo_3086|Do not nest conditional statements|&#x2713;|\-|
 |MiKo_3087|Do not use negative complex conditions|&#x2713;|\-|
 |MiKo_3088|Prefer pattern matching for not-null checks|&#x2713;|&#x2713;|
@@ -418,11 +424,13 @@ The following tables lists all the 471 rules that are currently provided by the 
 |MiKo_3223|Reference comparisons can be simplified|&#x2713;|&#x2713;|
 |MiKo_3224|Value comparisons can be simplified|&#x2713;|&#x2713;|
 |MiKo_3225|Redundant comparisons can be simplified|&#x2713;|&#x2713;|
+|MiKo_3226|Read-only fields with initializers should be const|&#x2713;|&#x2713;|
 |MiKo_3301|Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements|&#x2713;|&#x2713;|
 |MiKo_3302|Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters|&#x2713;|&#x2713;|
 |MiKo_3401|Namespace hierarchies should not be too deep|&#x2713;|\-|
 |MiKo_3501|Do not suppress nullable warnings on Null-conditional operators|&#x2713;|&#x2713;|
 |MiKo_3502|Do not suppress nullable warnings on Linq calls|&#x2713;|&#x2713;|
+|MiKo_3503|Do not assign variables in try-catch blocks and return them directly outside the block|&#x2713;|&#x2713;|
 
 ### Ordering
 |ID|Title|Enabled by default|CodeFix available|
@@ -438,6 +446,7 @@ The following tables lists all the 471 rules that are currently provided by the 
 |MiKo_4102|Test cleanup methods should be ordered after test initialization methods and before test methods|&#x2713;|&#x2713;|
 |MiKo_4103|One-Time test initialization methods should be ordered before all other methods|&#x2713;|&#x2713;|
 |MiKo_4104|One-Time test cleanup methods should be ordered directly after One-Time test initialization methods|&#x2713;|&#x2713;|
+|MiKo_4105|Object under test fields should be ordered before all other fields|&#x2713;|&#x2713;|
 
 ### Performance
 |ID|Title|Enabled by default|CodeFix available|

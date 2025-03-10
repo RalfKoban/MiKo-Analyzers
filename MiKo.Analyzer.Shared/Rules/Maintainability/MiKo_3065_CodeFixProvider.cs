@@ -91,9 +91,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 pairs[i] = new Pair("{" + indexString + "}", "{" + identifier + "}");
             }
 
-            var updatedText = token.ValueText.AsBuilder().ReplaceAllWithCheck(pairs);
+            var updatedText = token.ValueText.AsCachedBuilder().ReplaceAllWithCheck(pairs).ToStringAndRelease();
 
-            return StringLiteral(updatedText.ToString());
+            return StringLiteral(updatedText);
         }
 
         private static ExpressionSyntax ConvertToExpression(InterpolationSyntax syntax)

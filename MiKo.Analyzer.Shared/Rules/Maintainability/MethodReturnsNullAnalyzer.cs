@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -69,7 +70,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
             }
 
-            return Enumerable.Empty<ExpressionSyntax>();
+            return Array.Empty<ExpressionSyntax>();
         }
 
         private static bool HasIssue(SyntaxNode node) => node.IsKind(SyntaxKind.NullLiteralExpression) && ParentWithoutIssue(node.Parent) is false;
@@ -274,11 +275,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private void ReportIssue(SyntaxNodeAnalysisContext context, SyntaxNode node)
-        {
-            var issue = Issue(node);
-
-            ReportDiagnostics(context, issue);
-        }
+        private void ReportIssue(SyntaxNodeAnalysisContext context, SyntaxNode node) => ReportDiagnostics(context, Issue(node));
     }
 }

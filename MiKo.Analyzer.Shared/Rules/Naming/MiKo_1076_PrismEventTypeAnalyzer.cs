@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -43,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             if (IsProperlyNamed(symbol))
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             var proposal = GetNameWithoutSuffix(symbol.Name.AsSpan()).ConcatenatedWith(CorrectSuffix);

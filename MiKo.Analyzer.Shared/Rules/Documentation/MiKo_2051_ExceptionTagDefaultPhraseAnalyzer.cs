@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -19,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<XmlElementSyntax> GetExceptionComments(DocumentationCommentTriviaSyntax documentation) => documentation.GetExceptionXmls();
 
-        protected override IEnumerable<Diagnostic> AnalyzeException(ISymbol symbol, XmlElementSyntax exceptionComment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeException(ISymbol symbol, XmlElementSyntax exceptionComment)
         {
             // get rid of the para tags as we are not interested into them
             var comment = exceptionComment.GetTextTrimmed();
@@ -29,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return new[] { Issue(symbol.Name, exceptionComment.GetContentsLocation()) };
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
     }
 }

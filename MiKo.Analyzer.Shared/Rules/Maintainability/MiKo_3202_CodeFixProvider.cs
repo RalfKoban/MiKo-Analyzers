@@ -12,8 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3202_CodeFixProvider)), Shared]
     public sealed class MiKo_3202_CodeFixProvider : MaintainabilityCodeFixProvider
     {
-        private static readonly SyntaxKind[] ReturnPoints = { SyntaxKind.ArrowExpressionClause, SyntaxKind.ReturnStatement };
-
         public override string FixableDiagnosticId => "MiKo_3202";
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes)
@@ -91,7 +89,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var newCondition = GetUpdatedCondition(document, syntax.Condition);
 
-            var returnPoint = syntax.FirstAncestor<SyntaxNode>(ReturnPoints);
+            var returnPoint = syntax.FirstAncestor<SyntaxNode>(IsReturnPoint);
 
             var oldWhenTrue = syntax.WhenTrue;
             var oldWhenFalse = syntax.WhenFalse;
@@ -146,6 +144,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var newCondition = condition.WithoutParenthesis();
 
             return InvertCondition(document, newCondition).WithTriviaFrom(condition);
+        }
+
+        private static bool IsReturnPoint(SyntaxNode node)
+        {
+            switch (node.RawKind)
+            {
+                case (int)SyntaxKind.ArrowExpressionClause:
+                case (int)SyntaxKind.ReturnStatement:
+                    return true;
+
+                default:
+                    return false;
+            }
         }
     }
 }

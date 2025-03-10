@@ -13,36 +13,41 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2060";
 
-        public MiKo_2060_FactoryAnalyzer() : base(Id, SymbolKind.NamedType)
+        public MiKo_2060_FactoryAnalyzer() : base(Id)
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.MethodKind == MethodKind.Ordinary
-                                                                   && symbol.IsPubliclyVisible()
-                                                                   && symbol.ReturnsVoid is false
-                                                                   && symbol.ReturnType.SpecialType != SpecialType.System_Boolean
-                                                                   && base.ShallAnalyze(symbol);
-
-        // overridden because we want to inspect the methods of the type as well
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation)
-        {
-            if (symbol.IsFactory())
-            {
-                var typeIssues = base.AnalyzeType(symbol, compilation);
-
-                return typeIssues.Concat(symbol.GetNamedMethods().SelectMany(_ => AnalyzeMethod(_, compilation)));
-            }
-
-            return Enumerable.Empty<Diagnostic>();
-        }
-
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment)
+        protected override bool ShallAnalyze(ISymbol symbol)
         {
             switch (symbol)
             {
-                case INamedTypeSymbol type: return AnalyzeStartingPhrase(type, summaries, comment, Constants.Comments.FactorySummaryPhrase);
-                case IMethodSymbol method: return AnalyzeStartingPhrase(symbol, summaries, comment, GetPhrases(method).ToArray());
-                default: return Enumerable.Empty<Diagnostic>();
+                case INamedTypeSymbol type:
+                    return type.IsFactory();
+
+                case IMethodSymbol method:
+                    return method.ContainingType.IsFactory()
+                        && method.MethodKind == MethodKind.Ordinary
+                        && method.IsPubliclyVisible()
+                        && method.ReturnsVoid is false
+                        && method.ReturnType.SpecialType != SpecialType.System_Boolean;
+
+                default:
+                    return false;
+            }
+        }
+
+        protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(
+                                                                  DocumentationCommentTriviaSyntax comment,
+                                                                  ISymbol symbol,
+                                                                  IReadOnlyList<XmlElementSyntax> summaryXmls,
+                                                                  Lazy<string> commentXml,
+                                                                  Lazy<IReadOnlyCollection<string>> summaries)
+        {
+            switch (symbol)
+            {
+                case INamedTypeSymbol type: return AnalyzeStartingPhrase(type, summaryXmls, summaries.Value, Constants.Comments.FactorySummaryPhrase);
+                case IMethodSymbol method: return AnalyzeStartingPhrase(method, summaryXmls, summaries.Value, GetPhrases(method).ToArray());
+                default: return Array.Empty<Diagnostic>();
             }
         }
 
@@ -67,17 +72,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                    : startingPhrases.Select(_ => _.FormatWith(argumentType));
         }
 
-        private IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, IEnumerable<string> comments, DocumentationCommentTriviaSyntax comment, params string[] phrases)
+        private Diagnostic[] AnalyzeStartingPhrase(ISymbol symbol, IReadOnlyList<XmlElementSyntax> summaryXmls, IEnumerable<string> summaries, params string[] phrases)
         {
-            if (comments.None(_ => phrases.Exists(__ => _.StartsWith(__, StringComparison.Ordinal))))
+            if (summaries.None(_ => phrases.Exists(__ => _.StartsWith(__, StringComparison.Ordinal))))
             {
-                var summary = comment.GetSummaryXmls().First();
-
-                return new[] { Issue(symbol.Name, summary.GetContentsLocation(), phrases[0]) };
+                return new[] { Issue(symbol.Name, summaryXmls[0].GetContentsLocation(), phrases[0]) };
             }
 
             // fitting comment
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
     }
 }

@@ -382,13 +382,13 @@ public sealed class TestMe
         [ExcludeFromCodeCoverage]
         private static IEnumerable<string> CreateWrongItems(bool withCode, params string[] tokens)
         {
-            var words = new List<string>();
+            var words = new HashSet<string>();
 
             foreach (var token in tokens)
             {
                 words.Add(token);
-                words.Add(token.ToUpperInvariant());
-                words.Add(char.ToUpperInvariant(token[0]) + token[1..]);
+                words.Add(token.ToUpperCase());
+                words.Add(token.ToUpperCaseAt(0));
             }
 
             var results = new HashSet<string>();

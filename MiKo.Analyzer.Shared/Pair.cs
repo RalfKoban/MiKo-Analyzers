@@ -22,7 +22,7 @@ namespace System
 
         public static bool operator !=(Pair left, Pair right) => left.Equals(right) is false;
 
-        public bool Equals(Pair other) => Key == other.Key && Value == other.Value;
+        public bool Equals(Pair other) => Key.AsSpan().SequenceEqual(other.Key.AsSpan()) && Value.AsSpan().SequenceEqual(other.Value.AsSpan());
 
         public override bool Equals(object obj) => obj is Pair other && Equals(other);
 

@@ -18,9 +18,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly string[] FourCharacterGerundEndings = { "pping", "rring", "tting" };
 
-        private static readonly string[] ThreeCharacterGerundEndings = { "anging", "inging", "ssing", "cting", "pting" };
+        private static readonly string[] ThreeCharacterGerundEndings = { "anging", "inging", "ssing", "cting", "pting", "enting" };
 
-        private static readonly string[] ThreeCharacterGerundEndingsWithE = { "bling", "kling", "ging", "sing", "ting", "uing", "ving", "zing" };
+        private static readonly string[] ThreeCharacterGerundEndingsWithE = { "bling", "kling", "ging", "sing", "ting", "uing", "ving", "zing", "mining" };
 
         private static readonly ConcurrentDictionary<string, string> GerundVerbs = new ConcurrentDictionary<string, string>();
 
@@ -367,13 +367,13 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     return word + "ing";
                 }
 
-                var gerundVerb = word.AsBuilder()
+                var gerundVerb = word.AsCachedBuilder()
                                      .Append("ing")
                                      .ReplaceWithCheck("ping", "pping")
                                      .ReplaceWithCheck("eing", "ing")
                                      .ReplaceWithCheck("uring", "urring")
                                      .ReplaceWithCheck("uting", "utting")
-                                     .ToString();
+                                     .ToStringAndRelease();
 
                 return gerundVerb;
             }
@@ -430,7 +430,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                         return word;
                     }
 
-                    if (word.EndsWith("thing", StringComparison.CurrentCultureIgnoreCase))
+                    if (word.EndsWith("thing", StringComparison.OrdinalIgnoreCase))
                     {
                         return word;
                     }

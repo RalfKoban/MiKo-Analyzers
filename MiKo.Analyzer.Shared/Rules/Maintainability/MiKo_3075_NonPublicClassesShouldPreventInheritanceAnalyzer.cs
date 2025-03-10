@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -36,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (symbol.IsStatic || symbol.IsSealed || symbol.IsAbstract)
             {
                 // nothing to report
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             var node = symbol.GetSyntaxNodeInSource();
@@ -44,7 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (node is CompilationUnitSyntax)
             {
                 // nothing to report as we cannot use it anyway (such as the 'Program' class in the new C# global statement style)
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             if (symbol.DeclaredAccessibility == Accessibility.Private)
@@ -62,7 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         if (otherClass.InheritsFrom(symbol.FullyQualifiedName()))
                         {
                             // we found a private base class, so nothing to report
-                            return Enumerable.Empty<Diagnostic>();
+                            return Array.Empty<Diagnostic>();
                         }
                     }
                 }

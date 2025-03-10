@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
 //// ncrunch: rdi off
 
-        private static readonly string[] Parts = Constants.Comments.ExtensionMethodClassStartingPhraseTemplate.FormatWith('|').Split('|');
+        private static readonly string[] Parts = Constants.Comments.ExtensionMethodClassStartingPhraseTemplate.FormatWith("|").Split('|');
 
         private static readonly string[] ReplacementMapKeys = CreateReplacementMapKeys().ToArray();
 

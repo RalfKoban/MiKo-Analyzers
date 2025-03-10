@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -18,7 +17,12 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxToken AsToken(this SyntaxKind value) => SyntaxFactory.Token(value);
 
-        internal static SyntaxToken First(this SyntaxTokenList value, SyntaxKind kind) => value.OfKind(kind).FirstOrDefault();
+        internal static SyntaxToken First(this SyntaxTokenList value, SyntaxKind kind)
+        {
+            var list = value.OfKind(kind);
+
+            return list.Count > 0 ? list[0] : default;
+        }
 
         internal static T GetEnclosing<T>(this SyntaxToken value) where T : SyntaxNode => value.Parent.GetEnclosing<T>();
 
@@ -85,6 +89,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool HasTrailingComment(this SyntaxToken value) => value.TrailingTrivia.Any(_ => _.IsComment());
 
+        internal static bool HasTrailingEndOfLine(this SyntaxToken value) => value.TrailingTrivia.Any(_ => _.IsEndOfLine());
+
         internal static bool IsDefaultValue(this SyntaxToken value) => value.IsKind(SyntaxKind.None);
 
         internal static bool IsAnyKind(this SyntaxToken value, ISet<SyntaxKind> kinds) => kinds.Contains(value.Kind());
@@ -146,7 +152,7 @@ namespace MiKoSolutions.Analyzers
                 return Array.Empty<SyntaxToken>();
             }
 
-            var results = new List<SyntaxToken>();
+            List<SyntaxToken> results = null;
 
             for (var index = 0; index < sourceCount; index++)
             {
@@ -154,11 +160,16 @@ namespace MiKoSolutions.Analyzers
 
                 if (item.IsKind(kind))
                 {
+                    if (results is null)
+                    {
+                        results = new List<SyntaxToken>(1);
+                    }
+
                     results.Add(item);
                 }
             }
 
-            return results;
+            return results ?? (IReadOnlyList<SyntaxToken>)Array.Empty<SyntaxToken>();
         }
 
         internal static IEnumerable<SyntaxToken> OfKind(this IEnumerable<SyntaxToken> source, SyntaxKind kind)
@@ -214,20 +225,11 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxToken WithLeadingEndOfLine(this SyntaxToken value) => value.WithLeadingTrivia(SyntaxFactory.CarriageReturnLineFeed); // do not use elastic one to prevent formatting it away again
 
-        internal static SyntaxToken WithLeadingSpace(this SyntaxToken value) => value.WithLeadingTrivia(SyntaxFactory.ElasticSpace); // use elastic one to allow formatting to be done automatically
-
-        internal static SyntaxToken WithAdditionalLeadingSpaces(this SyntaxToken value, int additionalSpaces)
-        {
-            var currentSpaces = value.GetPositionWithinStartLine();
-
-            return value.WithLeadingSpaces(currentSpaces + additionalSpaces);
-        }
-
         internal static SyntaxToken WithAdditionalLeadingTrivia(this SyntaxToken value, SyntaxTrivia trivia) => value.WithLeadingTrivia(value.LeadingTrivia.Add(trivia));
 
         internal static SyntaxToken WithAdditionalLeadingTrivia(this SyntaxToken value, SyntaxTriviaList trivia) => value.WithLeadingTrivia(value.LeadingTrivia.AddRange(trivia));
 
-        internal static SyntaxToken WithAdditionalLeadingTrivia(this SyntaxToken value, params SyntaxTrivia[] trivia) => value.WithLeadingTrivia(value.LeadingTrivia.AddRange(trivia));
+        internal static SyntaxToken WithAdditionalLeadingTrivia(this SyntaxToken value, IEnumerable<SyntaxTrivia> trivia) => value.WithLeadingTrivia(value.LeadingTrivia.AddRange(trivia));
 
         internal static SyntaxToken WithAdditionalLeadingTriviaFrom(this SyntaxToken value, SyntaxNode node)
         {
@@ -247,7 +249,57 @@ namespace MiKoSolutions.Analyzers
                    : value;
         }
 
-        internal static SyntaxToken WithLeadingSpaces(this SyntaxToken value, int count) => value.WithLeadingTrivia(Enumerable.Repeat(SyntaxFactory.Space, count)); // use non-elastic one to prevent formatting to be done automatically
+        internal static SyntaxToken WithLeadingSpace(this SyntaxToken value) => value.WithLeadingTrivia(SyntaxFactory.ElasticSpace); // use elastic one to allow formatting to be done automatically
+
+        internal static SyntaxToken WithLeadingSpaces(this SyntaxToken value, int count)
+        {
+            if (value.HasLeadingComment())
+            {
+                // we have to add the spaces after the comment, so we have to determine the additional spaces to add
+                var additionalSpaces = count - value.GetPositionWithinStartLine();
+
+                var leadingTrivia = value.LeadingTrivia.ToList();
+                var triviaCount = leadingTrivia.Count;
+
+                // first collect all indices of the comments, for later reference
+                var indices = new List<int>(1);
+
+                for (var index = 0; index < triviaCount; index++)
+                {
+                    var trivia = leadingTrivia[index];
+
+                    if (trivia.IsComment())
+                    {
+                        indices.Add(index);
+                    }
+                }
+
+                // ensure proper size to avoid multiple resizes
+                leadingTrivia.Capacity += additionalSpaces * indices.Count;
+
+                // now update the comments, but adjust the offset to remember the already added spaces (trivia indices change due to that)
+                var offset = 0;
+
+                foreach (var index in indices)
+                {
+                    leadingTrivia.InsertRange(index + offset, Spaces(additionalSpaces));
+
+                    offset += additionalSpaces;
+                }
+
+                return value.WithLeadingTrivia(leadingTrivia)
+                            .WithAdditionalLeadingTrivia(Spaces(additionalSpaces));
+            }
+
+            return value.WithLeadingTrivia(Spaces(count));
+        }
+
+        internal static SyntaxToken WithAdditionalLeadingSpaces(this SyntaxToken value, int additionalSpaces)
+        {
+            var currentSpaces = value.GetPositionWithinStartLine();
+
+            return value.WithLeadingSpaces(currentSpaces + additionalSpaces);
+        }
 
         internal static SyntaxToken WithLeadingXmlComment(this SyntaxToken value) => value.WithLeadingTrivia(SyntaxNodeExtensions.XmlCommentStart);
 
@@ -366,8 +418,6 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxToken WithText(this SyntaxToken value, string text) => SyntaxFactory.Token(value.LeadingTrivia, value.Kind(), text, text, value.TrailingTrivia);
 
-        internal static SyntaxToken WithText(this SyntaxToken value, StringBuilder text) => WithText(value, text.ToString());
-
         internal static SyntaxToken WithText(this SyntaxToken value, ReadOnlySpan<char> text) => value.WithText(text.ToString());
 
         internal static SyntaxToken WithTrailingEmptyLine(this SyntaxToken value) => value.WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed, SyntaxFactory.CarriageReturnLineFeed);
@@ -377,5 +427,7 @@ namespace MiKoSolutions.Analyzers
         internal static SyntaxToken WithTrailingSpace(this SyntaxToken value) => value.WithTrailingTrivia(SyntaxFactory.Space); // use non-elastic one to prevent formatting to be done automatically
 
         internal static SyntaxToken WithTrailingXmlComment(this SyntaxToken value) => value.WithTrailingTrivia(SyntaxNodeExtensions.XmlCommentStart);
+
+        private static IEnumerable<SyntaxTrivia> Spaces(int count) => Enumerable.Repeat(SyntaxFactory.Space, count); // use non-elastic one to prevent formatting to be done automatically
     }
 }

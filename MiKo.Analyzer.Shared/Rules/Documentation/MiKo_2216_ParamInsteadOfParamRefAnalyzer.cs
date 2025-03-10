@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -15,23 +16,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
-            foreach (var element in FindProblematicElements(comment))
-            {
-                yield return Issue(element);
-            }
-        }
+            List<Diagnostic> results = null;
 
-        private static IEnumerable<SyntaxNode> FindProblematicElements(SyntaxNode comment)
-        {
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
             foreach (var element in comment.DescendantNodes())
             {
                 if (element.Parent is XmlElementSyntax && element.IsXmlTag(Constants.XmlTag.Param))
                 {
-                    yield return element;
+                    if (results is null)
+                    {
+                        results = new List<Diagnostic>(1);
+                    }
+
+                    results.Add(Issue(element));
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
         }
     }
 }

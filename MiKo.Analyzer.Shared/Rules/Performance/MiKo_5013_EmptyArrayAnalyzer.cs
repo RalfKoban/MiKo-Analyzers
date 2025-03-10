@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -18,11 +19,11 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         protected override IEnumerable<Diagnostic> AnalyzeArrayCreation(ArrayCreationExpressionSyntax node, SemanticModel semanticModel) => HasIssue(node)
                                                                                                                                             ? new[] { Issue(node) }
-                                                                                                                                            : Enumerable.Empty<Diagnostic>();
+                                                                                                                                            : Array.Empty<Diagnostic>();
 
         protected override IEnumerable<Diagnostic> AnalyzeArrayInitializer(InitializerExpressionSyntax node, SemanticModel semanticModel) => HasIssue(node)
                                                                                                                                              ? new[] { Issue(node) }
-                                                                                                                                             : Enumerable.Empty<Diagnostic>();
+                                                                                                                                             : Array.Empty<Diagnostic>();
 
         private static bool HasIssue(ArrayCreationExpressionSyntax node)
         {

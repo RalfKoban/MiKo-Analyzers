@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -16,21 +17,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private const string DefaultEnding = " that contains the event data";
 
-        public MiKo_2004_EventHandlerParametersAnalyzer() : base(Id, SymbolKind.Method)
+        public MiKo_2004_EventHandlerParametersAnalyzer() : base(Id)
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsEventHandler() && base.ShallAnalyze(symbol);
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol is IMethodSymbol method && method.IsEventHandler();
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
-            if (commentXml.Contains(Constants.Comments.XmlElementStartingTag + Constants.XmlTag.Inheritdoc))
+            if (symbol is IMethodSymbol method)
             {
-                // nothing to report as the documentation is inherited
-                return Enumerable.Empty<Diagnostic>();
+                return AnalyzeComment(comment, method, method.GetDocumentationCommentXml());
             }
 
-            return VerifyParameterComments(symbol, commentXml, comment);
+            return Array.Empty<Diagnostic>();
         }
 
         private static string GetDefaultStartingPhrase(string name) => ArticleProvider.GetArticleFor(name);
@@ -56,10 +56,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                        };
         }
 
-        private IEnumerable<Diagnostic> VerifyParameterComments(IMethodSymbol method, string xml, DocumentationCommentTriviaSyntax comment)
+        private IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, IMethodSymbol symbol, string commentXml)
+        {
+            if (commentXml.Contains(Constants.Comments.XmlElementStartingTag + Constants.XmlTag.Inheritdoc))
+            {
+                // nothing to report as the documentation is inherited
+                return Array.Empty<Diagnostic>();
+            }
+
+            return VerifyParameterComments(symbol, commentXml, comment);
+        }
+
+        private IReadOnlyList<Diagnostic> VerifyParameterComments(IMethodSymbol method, string xml, DocumentationCommentTriviaSyntax comment)
         {
             var sender = method.Parameters[0];
             var senderComment = comment.GetParameterComment(sender.Name);
+
+            List<Diagnostic> results = null;
 
             if (senderComment != null)
             {
@@ -67,9 +80,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (Constants.Comments.EventSourcePhrase.None(_ => _ == phrase))
                 {
+                    results = new List<Diagnostic>(2);
+
                     var proposal = Constants.Comments.EventSourcePhrase[0];
 
-                    yield return Issue(sender.Name, senderComment.GetContentsLocation(), proposal, CreatePhraseProposal(proposal));
+                    results.Add(Issue(sender.Name, senderComment.GetContentsLocation(), proposal, CreatePhraseProposal(proposal)));
                 }
             }
 
@@ -84,11 +99,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (phrases.None(_ => _ == phrase))
                 {
+                    if (results is null)
+                    {
+                        results = new List<Diagnostic>(1);
+                    }
+
                     var start = GetDefaultStartingPhrase(eventArgs.Type.Name);
 
-                    yield return Issue(eventArgs.Name, eventArgsComment.GetContentsLocation(), phrases[0], CreateStartingEndingPhraseProposal(start, DefaultEnding));
+                    results.Add(Issue(eventArgs.Name, eventArgsComment.GetContentsLocation(), phrases[0], CreateStartingEndingPhraseProposal(start, DefaultEnding)));
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
         }
     }
 }

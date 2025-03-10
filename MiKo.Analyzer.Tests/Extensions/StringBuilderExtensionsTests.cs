@@ -129,5 +129,12 @@ namespace MiKoSolutions.Analyzers.Extensions
                                      Assert.That(resultFromS, Is.EqualTo(expectedResult), "Bug in String extension");
                                  });
         }
+
+        [TestCase("", ExpectedResult = "")]
+        [TestCase("SomeValue", ExpectedResult = "Some_value")]
+        [TestCase("SomeValueWithNumber1234", ExpectedResult = "Some_value_with_number_1234")]
+        [TestCase("SomeValueWithNumber1234InBetween", ExpectedResult = "Some_value_with_number_1234_in_between")]
+        [TestCase("SomeValueWithNumber1234AfterWhatever", ExpectedResult = "Some_value_with_number_1234_after_whatever")]
+        public static string SeparateWords_separates_words_at_underscores_(string s) => new StringBuilder(s).SeparateWords(Constants.Underscore).ToString();
     }
 }

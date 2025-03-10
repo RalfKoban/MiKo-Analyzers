@@ -79,9 +79,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 if (contents.Count >= 3)
                 {
-                    var taskRef = contents[1];
-
-                    if (IsSeeCrefTask(taskRef) && contents[2] is XmlTextSyntax continueText)
+                    if (contents[1].IsSeeCrefTask() && contents[2] is XmlTextSyntax continueText)
                     {
                         // might be an almost complete text
                         var text = continueText.GetTextWithoutTrivia();

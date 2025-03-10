@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
@@ -49,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
 
         private static bool HasIssue(SyntaxNode node, ExpressionSyntax argumentExpression, SemanticModel semanticModel)

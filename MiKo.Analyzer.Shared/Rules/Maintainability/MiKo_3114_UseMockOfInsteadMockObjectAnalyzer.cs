@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -33,11 +32,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var node = (MemberAccessExpressionSyntax)context.Node;
             var issues = AnalyzeSimpleMemberAccessExpression(node);
 
-            ReportDiagnostics(context, issues);
+            if (issues.Length > 0)
+            {
+                ReportDiagnostics(context, issues);
+            }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeSimpleMemberAccessExpression(MemberAccessExpressionSyntax node) => node.TryGetMoqTypes(out _)
-                                                                                                                  ? new[] { Issue(node) }
-                                                                                                                  : Enumerable.Empty<Diagnostic>();
+        private Diagnostic[] AnalyzeSimpleMemberAccessExpression(MemberAccessExpressionSyntax node) => node.TryGetMoqTypes(out _)
+                                                                                                       ? new[] { Issue(node) }
+                                                                                                       : Array.Empty<Diagnostic>();
     }
 }

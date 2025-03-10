@@ -50,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
 
         private static string FindBetterName(string name)
