@@ -58,6 +58,7 @@ namespace Bla
 }
 ");
 
+        [TestCase("Counter", "Count")]
         [TestCase("DataCounter", "CountedData")]
         [TestCase("TransactionCounter", "CountedTransactions")]
         public void Code_gets_fixed_for_property_with_(string originalName, string fixedName)
