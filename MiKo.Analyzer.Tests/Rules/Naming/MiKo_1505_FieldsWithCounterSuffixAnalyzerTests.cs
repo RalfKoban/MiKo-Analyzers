@@ -88,6 +88,7 @@ namespace Bla
         {
             foreach (var prefix in FieldPrefixes)
             {
+                yield return new TestCaseData<string, string, string>(prefix, "counter", "count");
                 yield return new TestCaseData<string, string, string>(prefix, "dataCounter", "countedData");
                 yield return new TestCaseData<string, string, string>(prefix, "transactionCounter", "countedTransactions");
             }

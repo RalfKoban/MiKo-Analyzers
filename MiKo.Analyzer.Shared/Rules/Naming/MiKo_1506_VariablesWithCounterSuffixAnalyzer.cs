@@ -42,6 +42,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static string FindBetterName(string name)
         {
+            if (name.Equals(Constants.Names.Counter, StringComparison.OrdinalIgnoreCase))
+            {
+                return "count";
+            }
+
             return "counted" + Pluralizer.MakePluralName(name.WithoutSuffix(Constants.Names.Counter).ToUpperCaseAt(0));
         }
     }

@@ -71,6 +71,7 @@ namespace Bla
 
 ");
 
+        [TestCase("counter", "count")]
         [TestCase("dataCounter", "countedData")]
         [TestCase("transactionCounter", "countedTransactions")]
         public void Code_gets_fixed_for_variable_(string originalName, string fixedName)

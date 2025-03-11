@@ -35,24 +35,23 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation)
         {
-            var symbolName = symbol.Name;
+            var betterName = FindBetterName(symbol.Name);
 
-            if (symbol.Type.TypeKind == TypeKind.Struct && symbolName.EndsWith(Constants.Names.Counter, StringComparison.OrdinalIgnoreCase))
-            {
-                var betterName = FindBetterName(symbolName);
-
-                return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
-            }
-
-            return Array.Empty<Diagnostic>();
+            return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
         }
 
         private static string FindBetterName(string symbolName)
         {
-            var prefix = GetFieldPrefix(symbolName);
-
             // be aware of field prefixes, such as 'm_'
-            return prefix + "counted" + Pluralizer.MakePluralName(symbolName.AsSpan().Slice(prefix.Length, symbolName.Length - prefix.Length - Constants.Names.Counter.Length).ToUpperCaseAt(0));
+            var prefix = GetFieldPrefix(symbolName);
+            var name = symbolName.AsSpan().Slice(prefix.Length, symbolName.Length - prefix.Length - Constants.Names.Counter.Length).ToUpperCaseAt(0);
+
+            if (name.IsNullOrEmpty())
+            {
+                return prefix + "count";
+            }
+
+            return prefix + "counted" + Pluralizer.MakePluralName(name);
         }
     }
 }

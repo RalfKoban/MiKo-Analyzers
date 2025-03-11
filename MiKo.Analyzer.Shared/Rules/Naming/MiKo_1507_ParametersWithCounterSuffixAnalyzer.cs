@@ -17,23 +17,23 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        protected override bool ShallAnalyze(IParameterSymbol symbol) => symbol.Type.TypeKind == TypeKind.Struct && symbol.Name.EndsWith(Constants.Names.Counter, StringComparison.OrdinalIgnoreCase);
+
         protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol, Compilation compilation)
         {
-            if (HasIssue(symbol))
-            {
-                var betterName = FindBetterName(symbol);
+            var betterName = FindBetterName(symbol.Name);
 
-                return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
-            }
-
-            return Array.Empty<Diagnostic>();
+            return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
         }
 
-        private static bool HasIssue(IParameterSymbol symbol) => symbol.Type.TypeKind == TypeKind.Struct && symbol.Name.EndsWith(Constants.Names.Counter, StringComparison.OrdinalIgnoreCase);
-
-        private static string FindBetterName(IParameterSymbol symbol)
+        private static string FindBetterName(string symbolName)
         {
-            return "counted" + Pluralizer.MakePluralName(symbol.Name.WithoutSuffix(Constants.Names.Counter).ToUpperCaseAt(0));
+            if (symbolName.Equals(Constants.Names.Counter, StringComparison.OrdinalIgnoreCase))
+            {
+                return "count";
+            }
+
+            return "counted" + Pluralizer.MakePluralName(symbolName.WithoutSuffix(Constants.Names.Counter).ToUpperCaseAt(0));
         }
     }
 }
