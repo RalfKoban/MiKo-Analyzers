@@ -16641,6 +16641,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Align expression right beside open brace.
+        /// </summary>
+        internal static string MiKo_6062_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6062_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code readability improves when expressions within complex initializer expressions are indented right beside the opening braces. This makes the code clearer and easier to follow..
+        /// </summary>
+        internal static string MiKo_6062_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6062_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align expression right beside open brace.
+        /// </summary>
+        internal static string MiKo_6062_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6062_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expressions within complex initializer expressions should be placed beside open brace.
+        /// </summary>
+        internal static string MiKo_6062_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6062_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Surround with blank lines.
         /// </summary>
         internal static string MiKo_6070_CodeFixTitle {
