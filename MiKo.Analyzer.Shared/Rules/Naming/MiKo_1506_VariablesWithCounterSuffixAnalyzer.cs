@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
+using MiKoSolutions.Analyzers.Linguistics;
+
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
@@ -28,14 +30,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     var identifier = identifiers[index];
                     var name = identifier.ValueText;
 
-                    if (name.EndsWith("Counter", StringComparison.OrdinalIgnoreCase))
+                    if (name.EndsWith(Constants.Names.Counter, StringComparison.OrdinalIgnoreCase))
                     {
-                        var betterName = "counted" + name.WithoutSuffix("Counter").ToUpperCaseAt(0);
+                        var betterName = FindBetterName(name);
 
                         yield return Issue(name, identifier, betterName, CreateBetterNameProposal(betterName));
                     }
                 }
             }
+        }
+
+        private static string FindBetterName(string name)
+        {
+            return "counted" + Pluralizer.MakePluralName(name.WithoutSuffix(Constants.Names.Counter).ToUpperCaseAt(0));
         }
     }
 }

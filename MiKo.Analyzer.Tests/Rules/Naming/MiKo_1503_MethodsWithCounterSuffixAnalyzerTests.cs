@@ -86,62 +86,43 @@ namespace Bla
 }
 ");
 
-        [Test]
-        public void Code_gets_fixed_for_method_with_Counter_suffix()
+        [TestCase("SomeCounter", "SomeCount")]
+        [TestCase("IncrementCounter", "Increment")]
+        [TestCase("DecrementCounter", "Decrement")]
+        public void Code_gets_fixed_for_method_(string originalName, string fixedName)
         {
-            const string OriginalCode = @"
+            const string Template = @"
 namespace Bla
 {
     public class TestMe
     {
-        private int SomeCounter() => 42;
+        private int ###() => 42;
     }
 }
 ";
 
-            const string FixedCode = @"
-namespace Bla
-{
-    public class TestMe
-    {
-        private int SomeCount() => 42;
-    }
-}
-";
-
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(Template.Replace("###", originalName), Template.Replace("###", fixedName));
         }
 
-        [Test]
-        public void Code_gets_fixed_for_local_function_with_Counter_suffix()
+        [TestCase("SomeCounter", "SomeCount")]
+        [TestCase("IncrementCounter", "Increment")]
+        [TestCase("DecrementCounter", "Decrement")]
+        public void Code_gets_fixed_for_local_function_(string originalName, string fixedName)
         {
-            const string OriginalCode = @"
+            const string Template = @"
 namespace Bla
 {
     public class TestMe
     {
         private void DoSomething()
         {
-            int SomeCounter() => 42;
+            int ###() => 42;
         }
     }
 }
 ";
 
-            const string FixedCode = @"
-namespace Bla
-{
-    public class TestMe
-    {
-        private void DoSomething()
-        {
-            int SomeCount() => 42;
-        }
-    }
-}
-";
-
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(Template.Replace("###", originalName), Template.Replace("###", fixedName));
         }
 
         protected override string GetDiagnosticId() => MiKo_1503_MethodsWithCounterSuffixAnalyzer.Id;

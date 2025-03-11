@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System.Collections.Generic;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -60,30 +62,20 @@ namespace Bla
 }
 ");
 
-        [Test]
-        public void Code_gets_fixed_for_field_with_([ValueSource(nameof(FieldPrefixes))] string fieldPrefix)
+        [TestCaseSource(nameof(CodeFixeData))]
+        public void Code_gets_fixed_for_field_with_(string fieldPrefix, string originalName, string fixedName)
         {
-            var originalCode = @"
+            const string Template = @"
 namespace Bla
 {
     public class TestMe
     {
-        private int " + fieldPrefix + @"SomeCounter;
+        private int #1##2#;
     }
 }
 ";
 
-            var fixedCode = @"
-namespace Bla
-{
-    public class TestMe
-    {
-        private int " + fieldPrefix + @"countedSome;
-    }
-}
-";
-
-            VerifyCSharpFix(originalCode, fixedCode);
+            VerifyCSharpFix(Template.Replace("#1#", fieldPrefix).Replace("#2#", originalName), Template.Replace("#1#", fieldPrefix).Replace("#2#", fixedName));
         }
 
         protected override string GetDiagnosticId() => MiKo_1505_FieldsWithCounterSuffixAnalyzer.Id;
@@ -91,5 +83,14 @@ namespace Bla
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1505_FieldsWithCounterSuffixAnalyzer();
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1505_CodeFixProvider();
+
+        private static IEnumerable<TestCaseData<string, string, string>> CodeFixeData()
+        {
+            foreach (var prefix in FieldPrefixes)
+            {
+                yield return new TestCaseData<string, string, string>(prefix, "dataCounter", "countedData");
+                yield return new TestCaseData<string, string, string>(prefix, "transactionCounter", "countedTransactions");
+            }
+        }
     }
 }

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
+using MiKoSolutions.Analyzers.Linguistics;
+
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
@@ -19,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             if (HasIssue(symbol))
             {
-                var betterName = "counted" + symbol.Name.WithoutSuffix("Counter").ToUpperCaseAt(0);
+                var betterName = FindBetterName(symbol);
 
                 return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
             }
@@ -27,6 +29,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return Array.Empty<Diagnostic>();
         }
 
-        private static bool HasIssue(IParameterSymbol symbol) => symbol.Type.TypeKind == TypeKind.Struct && symbol.Name.EndsWith("Counter", StringComparison.OrdinalIgnoreCase);
+        private static bool HasIssue(IParameterSymbol symbol) => symbol.Type.TypeKind == TypeKind.Struct && symbol.Name.EndsWith(Constants.Names.Counter, StringComparison.OrdinalIgnoreCase);
+
+        private static string FindBetterName(IParameterSymbol symbol)
+        {
+            return "counted" + Pluralizer.MakePluralName(symbol.Name.WithoutSuffix(Constants.Names.Counter).ToUpperCaseAt(0));
+        }
     }
 }

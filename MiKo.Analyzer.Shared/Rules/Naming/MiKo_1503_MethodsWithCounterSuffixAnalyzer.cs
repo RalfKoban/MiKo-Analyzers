@@ -25,14 +25,26 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var symbolName = symbol.Name;
 
-            if (symbolName.EndsWith("Counter", StringComparison.OrdinalIgnoreCase))
+            if (symbolName.EndsWith(Constants.Names.Counter, StringComparison.OrdinalIgnoreCase))
             {
-                var betterName = symbolName.WithoutSuffix("er");
+                var betterName = FindBetterName(symbolName);
 
                 return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
             }
 
             return Array.Empty<Diagnostic>();
+        }
+
+        private static string FindBetterName(string symbolName)
+        {
+            var nameSpan = symbolName.AsSpan();
+
+            if (nameSpan.Contains("Increment") || nameSpan.Contains("Decrement"))
+            {
+                return symbolName.WithoutSuffix(Constants.Names.Counter);
+            }
+
+            return symbolName.WithoutSuffix("er");
         }
     }
 }

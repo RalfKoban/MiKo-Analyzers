@@ -58,30 +58,21 @@ namespace Bla
 }
 ");
 
-        [Test]
-        public void Code_gets_fixed_for_property_with_Counter_suffix()
+        [TestCase("DataCounter", "CountedData")]
+        [TestCase("TransactionCounter", "CountedTransactions")]
+        public void Code_gets_fixed_for_property_with_(string originalName, string fixedName)
         {
-            const string OriginalCode = @"
+            const string Template = @"
 namespace Bla
 {
     public class TestMe
     {
-        private int SomeCounter { get; set; }
+        private int ### { get; set; }
     }
 }
 ";
 
-            const string FixedCode = @"
-namespace Bla
-{
-    public class TestMe
-    {
-        private int CountedSome { get; set; }
-    }
-}
-";
-
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(Template.Replace("###", originalName), Template.Replace("###", fixedName));
         }
 
         protected override string GetDiagnosticId() => MiKo_1504_PropertiesWithCounterSuffixAnalyzer.Id;

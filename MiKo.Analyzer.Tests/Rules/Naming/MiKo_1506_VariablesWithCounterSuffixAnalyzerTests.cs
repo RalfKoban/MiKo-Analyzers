@@ -71,36 +71,24 @@ namespace Bla
 
 ");
 
-        [Test]
-        public void Code_gets_fixed_for_variable_with_Counter_in_its_name()
+        [TestCase("dataCounter", "countedData")]
+        [TestCase("transactionCounter", "countedTransactions")]
+        public void Code_gets_fixed_for_variable_(string originalName, string fixedName)
         {
-            const string OriginalCode = @"
+            const string Template = @"
 namespace Bla
 {
     public class TestMe
     {
         private void DoSomething()
         {
-            int somethingCounter = 42;
+            int ### = 42;
         }
     }
 }
 ";
 
-            const string FixedCode = @"
-namespace Bla
-{
-    public class TestMe
-    {
-        private void DoSomething()
-        {
-            int countedSomething = 42;
-        }
-    }
-}
-";
-
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(Template.Replace("###", originalName), Template.Replace("###", fixedName));
         }
 
         protected override string GetDiagnosticId() => MiKo_1506_VariablesWithCounterSuffixAnalyzer.Id;
