@@ -1687,7 +1687,7 @@ For example, using a 'Lib' suffix just indicates the assembly is a DLL, which is
     <value>When naming something 'Filter', it is not clear whether the criteria to filter on gets included or excluded in the result. So instead, it should be named something like `IncludeBy`, `ExcludeBy`, `Remove`, `Skip` or `Take`. That makes it clear about what gets filtered.</value>
   </data>
   <data name="MiKo_1501_MessageFormat" xml:space="preserve">
-    <value>Rename 'Filter' to something like `IncludeBy`, `ExcludeBy`, `Remove`, `Skip` or `Take`</value>
+    <value>Rename 'Filter' to something like 'IncludeBy', 'ExcludeBy', 'Remove', 'Skip' or 'Take'</value>
   </data>
   <data name="MiKo_1501_Title" xml:space="preserve">
     <value>Do not use 'Filter' in names</value>
