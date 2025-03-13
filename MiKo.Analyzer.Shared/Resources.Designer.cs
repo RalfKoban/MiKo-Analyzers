@@ -4642,7 +4642,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rename &apos;Filter&apos; to something like `IncludeBy`, `ExcludeBy`, `Remove`, `Skip` or `Take`.
+        ///   Looks up a localized string similar to Rename &apos;Filter&apos; to something like &apos;IncludeBy&apos;, &apos;ExcludeBy&apos;, &apos;Remove&apos;, &apos;Skip&apos; or &apos;Take&apos;.
         /// </summary>
         internal static string MiKo_1501_MessageFormat {
             get {
@@ -4687,6 +4687,191 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_1502_Title {
             get {
                 return ResourceManager.GetString("MiKo_1502_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace &apos;Counter&apos; with &apos;Count&apos;.
+        /// </summary>
+        internal static string MiKo_1503_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1503_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods that return values but are suffixed with &apos;Counter&apos; are most likely not returning counters but counted values instead.
+        ///So they should be suffixed with &apos;Count&apos;..
+        /// </summary>
+        internal static string MiKo_1503_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1503_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1503_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1503_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods should not be suffixed with &apos;Counter&apos;.
+        /// </summary>
+        internal static string MiKo_1503_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1503_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace &apos;Counter&apos; with &apos;Counted&apos;.
+        /// </summary>
+        internal static string MiKo_1504_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1504_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Properties that return values but are suffixed with &apos;Counter&apos; are most likely not returning counters but counted values instead.
+        ///So they should be named accordingly..
+        /// </summary>
+        internal static string MiKo_1504_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1504_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1504_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1504_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Properties should not be suffixed with &apos;Counter&apos;.
+        /// </summary>
+        internal static string MiKo_1504_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1504_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace &apos;Counter&apos; with &apos;counted&apos;.
+        /// </summary>
+        internal static string MiKo_1505_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1505_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fields that hold values but are suffixed with &apos;Counter&apos; are most likely not holding counters but counted values instead.
+        ///So they should be named accordingly..
+        /// </summary>
+        internal static string MiKo_1505_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1505_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1505_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1505_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fields should not be suffixed with &apos;Counter&apos;.
+        /// </summary>
+        internal static string MiKo_1505_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1505_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace &apos;Counter&apos; with &apos;counted&apos;.
+        /// </summary>
+        internal static string MiKo_1506_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1506_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local variables that hold values but are suffixed with &apos;Counter&apos; are most likely not holding counters but counted values instead.
+        ///So they should be named accordingly..
+        /// </summary>
+        internal static string MiKo_1506_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1506_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1506_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1506_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local variables should not be suffixed with &apos;Counter&apos;.
+        /// </summary>
+        internal static string MiKo_1506_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1506_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace &apos;Counter&apos; with &apos;counted&apos;.
+        /// </summary>
+        internal static string MiKo_1507_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1507_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameters that hold values but are suffixed with &apos;Counter&apos; are most likely not holding counters but counted values instead.
+        ///So they should be named accordingly..
+        /// </summary>
+        internal static string MiKo_1507_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1507_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1507_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1507_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameters should not be suffixed with &apos;Counter&apos;.
+        /// </summary>
+        internal static string MiKo_1507_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1507_Title", resourceCulture);
             }
         }
         
@@ -16452,6 +16637,42 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_6061_Title {
             get {
                 return ResourceManager.GetString("MiKo_6061_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align expression right beside open brace.
+        /// </summary>
+        internal static string MiKo_6062_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6062_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code readability improves when expressions within complex initializer expressions are indented right beside the opening braces. This makes the code clearer and easier to follow..
+        /// </summary>
+        internal static string MiKo_6062_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6062_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align expression right beside open brace.
+        /// </summary>
+        internal static string MiKo_6062_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6062_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expressions within complex initializer expressions should be placed beside open brace.
+        /// </summary>
+        internal static string MiKo_6062_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6062_Title", resourceCulture);
             }
         }
         

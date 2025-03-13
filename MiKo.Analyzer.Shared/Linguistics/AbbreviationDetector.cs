@@ -85,6 +85,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("num", "number"),
                                                       new Pair("nums", "numbers"),
                                                       new Pair("obj", "object"),
+                                                      new Pair("para", "parameter"),
                                                       new Pair("param", "parameter"),
                                                       new Pair("params", "parameters"),
                                                       new Pair("perc", "percentage"),
@@ -210,6 +211,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Objs", "Objects"),
                                                           new Pair("Op", "Operation"),
                                                           new Pair("Ops", "Operations"),
+                                                          new Pair("Para", "Parameter"),
                                                           new Pair("Param", "Parameter"),
                                                           new Pair("Params", "Parameters"),
                                                           new Pair("Perc", "Percentage"),
@@ -245,20 +247,17 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Var", "Variable"),
                                                           new Pair("Ver", "Version"),
                                                           new Pair("Vol", "Volume"),
+                                                          new Pair("BL", "BusinessLogic"),
+                                                          new Pair("Bl", "BusinessLogic"),
+                                                          new Pair("VM", "ViewModel"),
+                                                          new Pair("VMs", "ViewModels"),
+                                                          new Pair("Vm", "ViewModel"),
+                                                          new Pair("Vms", "ViewModels"),
                                                       };
 
         private static readonly Pair[] MidTerms = Prefixes.Concat(OnlyMidTerms).ToArray();
 
-        private static readonly Pair[] Postfixes = OnlyMidTerms.Concat(new[]
-                                                                           {
-                                                                               new Pair("BL", "BusinessLogic"),
-                                                                               new Pair("Bl", "BusinessLogic"),
-                                                                               new Pair("VM", "ViewModel"),
-                                                                               new Pair("VMs", "ViewModels"),
-                                                                               new Pair("Vm", "ViewModel"),
-                                                                               new Pair("Vms", "ViewModels"),
-                                                                           })
-                                                               .ToArray();
+        private static readonly Pair[] Postfixes = OnlyMidTerms;
 
         private static readonly string[] AllowedPostFixTerms =
                                                                {
@@ -300,6 +299,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                             "Next",
                                                             "oAuth",
                                                             "OAuth",
+                                                            "Over", // 'ver'
                                                             "salt",
                                                             "Salt",
                                                             "text",
@@ -313,6 +313,19 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                             "PtBR",
                                                             "ptPT",
                                                             "PtPT",
+                                                            "ABLE", // BL
+                                                            "IBLE", // BL
+                                                            "BLUE", // BL
+                                                            "CLIC", // CLI
+                                                            "LEFT", // EF
+                                                            "DOUBLE", // BL
+                                                            "REFRESH", // EF
+                                                            "REFER", // EF
+                                                            "REFACTOR", // EF
+                                                            "REFRIGERATOR", // EF
+                                                            "BLOCK", // BL
+                                                            "DEFAULT", // EF
+                                                            "USEFUL", // EF
                                                         };
 
         private static readonly string[] AllowedNames =
