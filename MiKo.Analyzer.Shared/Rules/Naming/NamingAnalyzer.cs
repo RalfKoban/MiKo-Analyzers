@@ -33,9 +33,27 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return expected;
         }
 
+        protected static string GetFieldPrefix(string fieldName)
+        {
+            var fieldPrefixes = Constants.Markers.FieldPrefixes;
+            var prefixesLength = fieldPrefixes.Length;
+
+            for (var index = 0; index < prefixesLength; index++)
+            {
+                var prefix = fieldPrefixes[index];
+
+                if (prefix.Length > 0 && fieldName.StartsWith(prefix, StringComparison.Ordinal))
+                {
+                    return prefix;
+                }
+            }
+
+            return string.Empty;
+        }
+
         protected sealed override IEnumerable<Diagnostic> AnalyzeNamespace(INamespaceSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
-                                                                                                                                ? AnalyzeName(symbol, compilation)
-                                                                                                                                : Array.Empty<Diagnostic>();
+                                                                                                                                    ? AnalyzeName(symbol, compilation)
+                                                                                                                                    : Array.Empty<Diagnostic>();
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
                                                                                                                            ? AnalyzeName(symbol, compilation)

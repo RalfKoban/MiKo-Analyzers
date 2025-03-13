@@ -1103,6 +1103,8 @@ namespace MiKoSolutions.Analyzers
             internal const string Create = "Create";
             internal const string Factory = "Factory";
 
+            internal const string Counter = "Counter";
+
             internal const string DefaultPropertyParameterName = "value";
 
             internal const string IMultiValueConverter = "IMultiValueConverter";

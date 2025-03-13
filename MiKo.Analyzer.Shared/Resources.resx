@@ -1687,7 +1687,7 @@ For example, using a 'Lib' suffix just indicates the assembly is a DLL, which is
     <value>When naming something 'Filter', it is not clear whether the criteria to filter on gets included or excluded in the result. So instead, it should be named something like `IncludeBy`, `ExcludeBy`, `Remove`, `Skip` or `Take`. That makes it clear about what gets filtered.</value>
   </data>
   <data name="MiKo_1501_MessageFormat" xml:space="preserve">
-    <value>Rename 'Filter' to something like `IncludeBy`, `ExcludeBy`, `Remove`, `Skip` or `Take`</value>
+    <value>Rename 'Filter' to something like 'IncludeBy', 'ExcludeBy', 'Remove', 'Skip' or 'Take'</value>
   </data>
   <data name="MiKo_1501_Title" xml:space="preserve">
     <value>Do not use 'Filter' in names</value>
@@ -1704,6 +1704,71 @@ Example:
   </data>
   <data name="MiKo_1502_Title" xml:space="preserve">
     <value>Do not use 'Process' in names</value>
+  </data>
+  <data name="MiKo_1503_CodeFixTitle" xml:space="preserve">
+    <value>Replace 'Counter' with 'Count'</value>
+  </data>
+  <data name="MiKo_1503_Description" xml:space="preserve">
+    <value>Methods that return values but are suffixed with 'Counter' are most likely not returning counters but counted values instead.
+So they should be suffixed with 'Count'.</value>
+  </data>
+  <data name="MiKo_1503_MessageFormat" xml:space="preserve">
+    <value>Rename '{0}' to '{1}'</value>
+  </data>
+  <data name="MiKo_1503_Title" xml:space="preserve">
+    <value>Methods should not be suffixed with 'Counter'</value>
+  </data>
+  <data name="MiKo_1504_CodeFixTitle" xml:space="preserve">
+    <value>Replace 'Counter' with 'Counted'</value>
+  </data>
+  <data name="MiKo_1504_Description" xml:space="preserve">
+    <value>Properties that return values but are suffixed with 'Counter' are most likely not returning counters but counted values instead.
+So they should be named accordingly.</value>
+  </data>
+  <data name="MiKo_1504_MessageFormat" xml:space="preserve">
+    <value>Rename '{0}' to '{1}'</value>
+  </data>
+  <data name="MiKo_1504_Title" xml:space="preserve">
+    <value>Properties should not be suffixed with 'Counter'</value>
+  </data>
+  <data name="MiKo_1505_CodeFixTitle" xml:space="preserve">
+    <value>Replace 'Counter' with 'counted'</value>
+  </data>
+  <data name="MiKo_1505_Description" xml:space="preserve">
+    <value>Fields that hold values but are suffixed with 'Counter' are most likely not holding counters but counted values instead.
+So they should be named accordingly.</value>
+  </data>
+  <data name="MiKo_1505_MessageFormat" xml:space="preserve">
+    <value>Rename '{0}' to '{1}'</value>
+  </data>
+  <data name="MiKo_1505_Title" xml:space="preserve">
+    <value>Fields should not be suffixed with 'Counter'</value>
+  </data>
+  <data name="MiKo_1506_CodeFixTitle" xml:space="preserve">
+    <value>Replace 'Counter' with 'counted'</value>
+  </data>
+  <data name="MiKo_1506_Description" xml:space="preserve">
+    <value>Local variables that hold values but are suffixed with 'Counter' are most likely not holding counters but counted values instead.
+So they should be named accordingly.</value>
+  </data>
+  <data name="MiKo_1506_MessageFormat" xml:space="preserve">
+    <value>Rename '{0}' to '{1}'</value>
+  </data>
+  <data name="MiKo_1506_Title" xml:space="preserve">
+    <value>Local variables should not be suffixed with 'Counter'</value>
+  </data>
+  <data name="MiKo_1507_CodeFixTitle" xml:space="preserve">
+    <value>Replace 'Counter' with 'counted'</value>
+  </data>
+  <data name="MiKo_1507_Description" xml:space="preserve">
+    <value>Parameters that hold values but are suffixed with 'Counter' are most likely not holding counters but counted values instead.
+So they should be named accordingly.</value>
+  </data>
+  <data name="MiKo_1507_MessageFormat" xml:space="preserve">
+    <value>Rename '{0}' to '{1}'</value>
+  </data>
+  <data name="MiKo_1507_Title" xml:space="preserve">
+    <value>Parameters should not be suffixed with 'Counter'</value>
   </data>
   <data name="MiKo_2000_CodeFixTitle" xml:space="preserve">
     <value>Fix malformed XML</value>
@@ -5711,6 +5776,18 @@ This organization ensures clarity and makes the code easier to find, understand 
   </data>
   <data name="MiKo_6061_Title" xml:space="preserve">
     <value>Switch expression arms should be placed on same line</value>
+  </data>
+  <data name="MiKo_6062_CodeFixTitle" xml:space="preserve">
+    <value>Align expression right beside open brace</value>
+  </data>
+  <data name="MiKo_6062_Description" xml:space="preserve">
+    <value>Code readability improves when expressions within complex initializer expressions are indented right beside the opening braces. This makes the code clearer and easier to follow.</value>
+  </data>
+  <data name="MiKo_6062_MessageFormat" xml:space="preserve">
+    <value>Align expression right beside open brace</value>
+  </data>
+  <data name="MiKo_6062_Title" xml:space="preserve">
+    <value>Expressions within complex initializer expressions should be placed beside open brace</value>
   </data>
   <data name="MiKo_6070_CodeFixTitle" xml:space="preserve">
     <value>Surround with blank lines</value>
