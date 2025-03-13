@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsExtensionMethod;
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation) => symbol.ContainingType.Name.Contains("Extension")
-                                                                                                             ? Enumerable.Empty<Diagnostic>()
+                                                                                                             ? Array.Empty<Diagnostic>()
                                                                                                              : new[] { Issue(symbol) };
     }
 }

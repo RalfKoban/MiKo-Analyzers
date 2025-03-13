@@ -49,15 +49,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (IsResponsibleNode(left) || left.IsConst(context))
             {
-                ReportIssue(context, node.OperatorToken, left);
+                ReportDiagnostics(context, Issue(left, node.OperatorToken.ValueText));
             }
-        }
-
-        private void ReportIssue(SyntaxNodeAnalysisContext context, SyntaxToken token, SyntaxNode node)
-        {
-            var issue = Issue(string.Empty, node, token.ValueText);
-
-            ReportDiagnostics(context, issue);
         }
     }
 }

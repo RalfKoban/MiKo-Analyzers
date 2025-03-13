@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -12,31 +12,48 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2078";
 
-        public MiKo_2078_CodeShouldNotUseXmlTagsAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_2078_CodeShouldNotUseXmlTagsAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event);
-
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override bool ShallAnalyze(ISymbol symbol)
         {
-            foreach (var code in comment.GetXmlSyntax(Constants.XmlTag.Code))
+            switch (symbol.Kind)
             {
-                foreach (var entry in code.Content)
+                case SymbolKind.NamedType:
+                case SymbolKind.Method:
+                case SymbolKind.Property:
+                case SymbolKind.Event:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
+        {
+            var codeTags = comment.GetXmlSyntax(Constants.XmlTag.Code);
+            var codeTagsCount = codeTags.Count;
+
+            if (codeTagsCount > 0)
+            {
+                for (var index = 0; index < codeTagsCount; index++)
                 {
-                    switch (entry.Kind())
+                    var code = codeTags[index];
+
+                    foreach (var entry in code.Content)
                     {
-                        case SyntaxKind.XmlElement:
-                        case SyntaxKind.XmlEmptyElement:
+                        if (entry.IsXml())
                         {
                             // we have an issue
-                            yield return Issue(symbol.Name, entry);
-
-                            break;
+                            return new[] { Issue(entry) };
                         }
                     }
                 }
             }
+
+            return Array.Empty<Diagnostic>();
         }
     }
 }

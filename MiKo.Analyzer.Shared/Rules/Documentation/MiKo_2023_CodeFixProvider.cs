@@ -31,10 +31,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private const string StartWithArticleLowerCaseThe = "the ";
         private const string StartWithParenthesis = "(";
 
-        private static readonly string[] StartPhraseParts = Constants.Comments.BooleanParameterStartingPhraseTemplate.FormatWith('|').Split('|');
+        private static readonly string[] StartPhraseParts = Constants.Comments.BooleanParameterStartingPhraseTemplate.FormatWith("|").Split('|');
         private static readonly string StartPhraseParts0 = StartPhraseParts[0];
         private static readonly string StartPhraseParts1 = StartPhraseParts[1];
-        private static readonly string[] EndPhraseParts = Constants.Comments.BooleanParameterEndingPhraseTemplate.FormatWith('|').Split('|');
+        private static readonly string[] EndPhraseParts = Constants.Comments.BooleanParameterEndingPhraseTemplate.FormatWith("|").Split('|');
         private static readonly string EndPhraseParts0 = EndPhraseParts[0];
         private static readonly string EndPhraseParts1 = EndPhraseParts[1];
 
@@ -148,14 +148,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     //    false: some other condition'
                     var replacement = text.Contains(':') ? ReplacementTo : Replacement;
 
-                    var data = FindMatchingReplacementMapKeysInUpperCase(text);
-                    var keysInUpperCase = data.KeysInUpperCase;
-                    var length = keysInUpperCase.Length;
+                    var data = FindMatchingReplacementMapKeys(text);
+                    var uniqueKeys = data.UniqueKeys;
+                    var length = uniqueKeys.Length;
 
 //// ncrunch: no coverage start
                     for (var index = 0; index < length; index++)
                     {
-                        var key = keysInUpperCase[index];
+                        var key = uniqueKeys[index];
 
                         if (text.StartsWith(key, StringComparison.OrdinalIgnoreCase))
                         {
@@ -177,7 +177,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                           .TrimStart(Constants.TrailingSentenceMarkers)
                                           .TrimEnd(Constants.TrailingSentenceMarkers);
 
-                        return FixTextOnlyComment(comment, t, subText, replacement, FindMatchingReplacementMapKeysInUpperCase(ReadOnlySpan<char>.Empty));
+                        return FixTextOnlyComment(comment, t, subText, replacement, FindMatchingReplacementMapKeys(ReadOnlySpan<char>.Empty));
                     }
 
                     break;
@@ -222,7 +222,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            var commentContinuation = new StringBuilder();
+            var commentContinuation = StringBuilderCache.Acquire();
 
             // be aware of a gerund verb
             if (replacement == ReplacementTo || Verbalizer.IsGerundVerb(subText.FirstWord()))
@@ -245,9 +245,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             commentContinuation.ReplaceAllWithCheck(info.Map);
 
+            var finalCommentContinuation = StringBuilderCache.GetStringAndRelease(commentContinuation);
+
             var prepared = comment.ReplaceNode(originalText, XmlText(string.Empty));
 
-            return FixComment(prepared, info.Keys, info.Map, commentContinuation.ToString());
+            return FixComment(prepared, info.Keys, info.Map, finalCommentContinuation);
         }
 
         private static XmlElementSyntax FixComment(XmlElementSyntax prepared, string[] replacementMapKeys, ReadOnlySpan<Pair> replacementMap, string commentContinue = null)
@@ -262,12 +264,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static XmlElementSyntax ModifyElseOtherwisePart(XmlElementSyntax comment)
         {
-            var followUpText = comment.Content.OfType<XmlTextSyntax>().FirstOrDefault();
+            var followUpTexts = comment.Content.OfType<XmlTextSyntax>();
 
-            if (followUpText is null)
+            if (followUpTexts.Count <= 0)
             {
                 return comment;
             }
+
+            var followUpText = followUpTexts[0];
 
             var token = followUpText.TextTokens.LastOrDefault(_ => _.ValueText.ContainsAny(Constants.TrailingSentenceMarkers));
 
@@ -308,63 +312,66 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static ReadOnlySpan<char> ModifyOrNotPart(ReadOnlySpan<char> text) => text.WithoutSuffix(OrNotPhrase);
 
-        private static ConcreteMapInfo FindMatchingReplacementMapKeysInUpperCase(ReadOnlySpan<char> text)
+        private static ConcreteMapInfo FindMatchingReplacementMapKeys(ReadOnlySpan<char> text)
         {
             // now get all data
             var mappedDataValue = MappedData.Value;
 
-            if (text.StartsWith(StartWithArticleA, StringComparison.Ordinal))
+            if (text.Length > 0)
             {
-                return new ConcreteMapInfo(mappedDataValue.ReplacementMapForA, mappedDataValue.ReplacementMapKeysForA, mappedDataValue.ReplacementMapKeysInUpperCaseForA);
+                if (text.StartsWith(StartWithArticleA, StringComparison.Ordinal))
+                {
+                    return new ConcreteMapInfo(mappedDataValue.ReplacementMapForA, mappedDataValue.ReplacementMapKeysForA, mappedDataValue.UniqueReplacementMapKeysForA);
+                }
+
+                if (text.StartsWith(StartWithArticleAn, StringComparison.Ordinal))
+                {
+                    return new ConcreteMapInfo(mappedDataValue.ReplacementMapForAn, mappedDataValue.ReplacementMapKeysForAn, mappedDataValue.UniqueReplacementMapKeysForAn);
+                }
+
+                if (text.StartsWith(StartWithArticleThe, StringComparison.Ordinal))
+                {
+                    return new ConcreteMapInfo(mappedDataValue.ReplacementMapForThe, mappedDataValue.ReplacementMapKeysForThe, mappedDataValue.UniqueReplacementMapKeysForThe);
+                }
+
+                if (text.StartsWith(StartWithParenthesis, StringComparison.OrdinalIgnoreCase))
+                {
+                    return new ConcreteMapInfo(mappedDataValue.ReplacementMapForParenthesis, mappedDataValue.ReplacementMapKeysForParenthesis, mappedDataValue.UniqueReplacementMapKeysForParenthesis);
+                }
+
+                if (text.StartsWith(StartWithArticleLowerCaseA, StringComparison.Ordinal))
+                {
+                    return new ConcreteMapInfo(mappedDataValue.ReplacementMapForLowerCaseA, mappedDataValue.ReplacementMapKeysForLowerCaseA, mappedDataValue.UniqueReplacementMapKeysForA);
+                }
+
+                if (text.StartsWith(StartWithArticleLowerCaseAn, StringComparison.Ordinal))
+                {
+                    return new ConcreteMapInfo(mappedDataValue.ReplacementMapForLowerCaseAn, mappedDataValue.ReplacementMapKeysForLowerCaseAn, mappedDataValue.UniqueReplacementMapKeysForAn);
+                }
+
+                if (text.StartsWith(StartWithArticleLowerCaseThe, StringComparison.Ordinal))
+                {
+                    return new ConcreteMapInfo(mappedDataValue.ReplacementMapForLowerCaseThe, mappedDataValue.ReplacementMapKeysForLowerCaseThe, mappedDataValue.UniqueReplacementMapKeysForThe);
+                }
             }
 
-            if (text.StartsWith(StartWithArticleAn, StringComparison.Ordinal))
-            {
-                return new ConcreteMapInfo(mappedDataValue.ReplacementMapForAn, mappedDataValue.ReplacementMapKeysForAn, mappedDataValue.ReplacementMapKeysInUpperCaseForAn);
-            }
-
-            if (text.StartsWith(StartWithArticleThe, StringComparison.Ordinal))
-            {
-                return new ConcreteMapInfo(mappedDataValue.ReplacementMapForThe, mappedDataValue.ReplacementMapKeysForThe, mappedDataValue.ReplacementMapKeysInUpperCaseForThe);
-            }
-
-            if (text.StartsWith(StartWithParenthesis, StringComparison.OrdinalIgnoreCase))
-            {
-                return new ConcreteMapInfo(mappedDataValue.ReplacementMapForParenthesis, mappedDataValue.ReplacementMapKeysForParenthesis, mappedDataValue.ReplacementMapKeysInUpperCaseForParenthesis);
-            }
-
-            if (text.StartsWith(StartWithArticleLowerCaseA, StringComparison.Ordinal))
-            {
-                return new ConcreteMapInfo(mappedDataValue.ReplacementMapForLowerCaseA, mappedDataValue.ReplacementMapKeysForLowerCaseA, mappedDataValue.ReplacementMapKeysInUpperCaseForA);
-            }
-
-            if (text.StartsWith(StartWithArticleLowerCaseAn, StringComparison.Ordinal))
-            {
-                return new ConcreteMapInfo(mappedDataValue.ReplacementMapForLowerCaseAn, mappedDataValue.ReplacementMapKeysForLowerCaseAn, mappedDataValue.ReplacementMapKeysInUpperCaseForAn);
-            }
-
-            if (text.StartsWith(StartWithArticleLowerCaseThe, StringComparison.Ordinal))
-            {
-                return new ConcreteMapInfo(mappedDataValue.ReplacementMapForLowerCaseThe, mappedDataValue.ReplacementMapKeysForLowerCaseThe, mappedDataValue.ReplacementMapKeysInUpperCaseForThe);
-            }
-
-            return new ConcreteMapInfo(mappedDataValue.ReplacementMapForOthers, mappedDataValue.ReplacementMapKeysForOthers, mappedDataValue.ReplacementMapKeysInUpperCaseForOthers);
+            return new ConcreteMapInfo(mappedDataValue.ReplacementMapForOthers, mappedDataValue.ReplacementMapKeysForOthers, mappedDataValue.UniqueReplacementMapKeysForOthers);
         }
 
         private readonly ref struct ConcreteMapInfo
         {
-            public ConcreteMapInfo(ReadOnlySpan<Pair> map, string[] keys, string[] keysInUpperCase)
+            public ConcreteMapInfo(ReadOnlySpan<Pair> map, string[] keys, string[] uniqueKeys)
             {
                 Map = map;
                 Keys = keys;
-                KeysInUpperCase = keysInUpperCase;
+                UniqueKeys = uniqueKeys;
             }
 
             public ReadOnlySpan<Pair> Map { get; }
 
             public string[] Keys { get; }
 
-            public string[] KeysInUpperCase { get; }
+            public string[] UniqueKeys { get; }
         }
 
         private sealed class MapData
@@ -488,28 +495,48 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 ReplacementMapForParenthesis = ToMapArray(replacementMap, replacementMapKeysForParenthesisHashSet, replacementMapCommon);
                 ReplacementMapForOthers = ToMapArray(replacementMap, replacementMapKeysForOthersHashSet, replacementMapCommon);
 
-                ReplacementMapKeysInUpperCaseForA = ToIgnoreCase(replacementMapKeysForA);
-                ReplacementMapKeysInUpperCaseForAn = ToIgnoreCase(replacementMapKeysForAn);
-                ReplacementMapKeysInUpperCaseForThe = ToIgnoreCase(replacementMapKeysForThe);
-                ReplacementMapKeysInUpperCaseForParenthesis = ToIgnoreCase(replacementMapKeysForParenthesis);
-                ReplacementMapKeysInUpperCaseForOthers = ToIgnoreCase(replacementMapKeysForOthersHashSet);
+                UniqueReplacementMapKeysForA = ToUnique(replacementMapKeysForA);
+                UniqueReplacementMapKeysForAn = ToUnique(replacementMapKeysForAn);
+                UniqueReplacementMapKeysForThe = ToUnique(replacementMapKeysForThe);
+                UniqueReplacementMapKeysForParenthesis = ToUnique(replacementMapKeysForParenthesis);
+                UniqueReplacementMapKeysForOthers = ToUnique(replacementMapKeysForOthersHashSet);
 
                 // now set keys here at the end as we want these keys sorted based on string contents (and only contain the smallest sub-sequences)
-                ReplacementMapKeysForA = GetTermsForQuickLookup(ReplacementMapKeysInUpperCaseForA);
-                ReplacementMapKeysForAn = GetTermsForQuickLookup(ReplacementMapKeysInUpperCaseForAn);
-                ReplacementMapKeysForThe = GetTermsForQuickLookup(ReplacementMapKeysInUpperCaseForThe);
+                ReplacementMapKeysForA = GetTermsForQuickLookup(UniqueReplacementMapKeysForA);
+                ReplacementMapKeysForAn = GetTermsForQuickLookup(UniqueReplacementMapKeysForAn);
+                ReplacementMapKeysForThe = GetTermsForQuickLookup(UniqueReplacementMapKeysForThe);
                 ReplacementMapKeysForLowerCaseA = ReplacementMapKeysForA;
                 ReplacementMapKeysForLowerCaseAn = ReplacementMapKeysForAn;
                 ReplacementMapKeysForLowerCaseThe = ReplacementMapKeysForThe;
-                ReplacementMapKeysForParenthesis = GetTermsForQuickLookup(ReplacementMapKeysInUpperCaseForParenthesis);
-                ReplacementMapKeysForOthers = GetTermsForQuickLookup(ReplacementMapKeysInUpperCaseForOthers);
+                ReplacementMapKeysForParenthesis = GetTermsForQuickLookup(UniqueReplacementMapKeysForParenthesis);
+                ReplacementMapKeysForOthers = GetTermsForQuickLookup(UniqueReplacementMapKeysForOthers);
 
-                string[] ToKeyArray(IEnumerable<string> keys, string text) => keys.Where(_ => _.StartsWith(text, StringComparison.Ordinal)).ToArray();
+                string[] ToKeyArray(string[] keys, string text)
+                {
+                    var length = keys.Length;
+
+                    var indexInResult = 0;
+                    var results = new string[length];
+
+                    for (var index = 0; index < length; index++)
+                    {
+                        var key = keys[index];
+
+                        if (key.StartsWith(text, StringComparison.Ordinal))
+                        {
+                            results[indexInResult++] = key;
+                        }
+                    }
+
+                    Array.Resize(ref results, indexInResult);
+
+                    return results;
+                }
 
                 Pair[] ToMapArray(ReadOnlySpan<Pair> map, HashSet<string> keys, Pair[] others)
                 {
-                    var results = new Pair[keys.Count + others.Length];
                     var resultIndex = 0;
+                    var results = new Pair[keys.Count + others.Length];
 
                     var count = map.Length;
 
@@ -530,7 +557,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return results;
                 }
 
-                string[] ToIgnoreCase(IEnumerable<string> strings) => new HashSet<string>(strings, StringComparer.OrdinalIgnoreCase).ToArray();
+                string[] ToUnique(IEnumerable<string> strings) => new HashSet<string>(strings, StringComparer.OrdinalIgnoreCase).ToArray();
             }
 
             public Pair[] ReplacementMapForA { get; }
@@ -565,15 +592,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             public string[] ReplacementMapKeysForLowerCaseThe { get; }
 
-            public string[] ReplacementMapKeysInUpperCaseForA { get; }
+            public string[] UniqueReplacementMapKeysForA { get; }
 
-            public string[] ReplacementMapKeysInUpperCaseForAn { get; }
+            public string[] UniqueReplacementMapKeysForAn { get; }
 
-            public string[] ReplacementMapKeysInUpperCaseForThe { get; }
+            public string[] UniqueReplacementMapKeysForThe { get; }
 
-            public string[] ReplacementMapKeysInUpperCaseForParenthesis { get; }
+            public string[] UniqueReplacementMapKeysForParenthesis { get; }
 
-            public string[] ReplacementMapKeysInUpperCaseForOthers { get; }
+            public string[] UniqueReplacementMapKeysForOthers { get; }
 
             private static Pair[] CreateReplacementMap()
             {
@@ -581,8 +608,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 var textsCount = startTerms.Count;
 
-                var replacements = new Pair[textsCount];
                 var index = 0;
+                var replacements = new Pair[textsCount];
 
                 foreach (var text in startTerms.OrderBy(_ => _, ArticleStartComparer).ThenByDescending(_ => _.Length).ThenBy(_ => _))
                 {
@@ -594,45 +621,41 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             private static HashSet<string> CreateStartTerms()
             {
-                var startTerms = new[] { "A", "An", "The", string.Empty };
-                var optionals = new[] { "Optional", "(optional)", "(Optional)", "optional", string.Empty };
+                var optionalStarts = CreateStartTermsWithOptionals();
+
+                var optionalStartsLength = optionalStarts.Length;
+
                 var booleans = new[] { "bool", "Bool", "boolean", "Boolean", string.Empty };
                 var parameters = new[] { "flag", "Flag", "value", "Value", "parameter", "Parameter", "paramter", "Paramter", string.Empty };
+                var booleansLength = booleans.Length;
+                var parametersLength = parameters.Length;
 
-                var starts = new List<string>((startTerms.Length * optionals.Length * booleans.Length * parameters.Length) + 1) { string.Empty };
+                var starts = new List<string>((optionalStartsLength * booleansLength * parametersLength) + 1) { string.Empty };
 
-                // ReSharper disable once LoopCanBeConvertedToQuery
-                foreach (var startTerm in startTerms)
+                for (var optionalIndex = 0; optionalIndex < optionalStartsLength; optionalIndex++)
                 {
-                    // we have lots of loops, so cache data to avoid unnecessary calculations
-                    var s = startTerm + " ";
+                    var optionalStart = optionalStarts[optionalIndex];
 
-                    // ReSharper disable once LoopCanBeConvertedToQuery
-                    foreach (var optional in optionals)
+                    for (var booleanIndex = 0; booleanIndex < booleansLength; booleanIndex++)
                     {
                         // we have lots of loops, so cache data to avoid unnecessary calculations
-                        var optionalStart = s + optional + " ";
+                        var boolean = booleans[booleanIndex];
 
-                        // ReSharper disable once LoopCanBeConvertedToQuery
-                        foreach (var boolean in booleans)
+                        var optionalBooleanStart = StringBuilderCache.Acquire(optionalStart.Length + boolean.Length + 1)
+                                                                     .Append(optionalStart)
+                                                                     .Append(boolean)
+                                                                     .Append(' ')
+                                                                     .WithoutMultipleWhiteSpaces()
+                                                                     .TrimmedStart()
+                                                                     .ToStringAndRelease();
+
+                        for (var parameterIndex = 0; parameterIndex < parametersLength; parameterIndex++)
                         {
-                            // we have lots of loops, so cache data to avoid unnecessary calculations
-                            var optionalBooleanStart = optionalStart.AsBuilder()
-                                                                    .Append(boolean)
-                                                                    .Append(' ')
-                                                                    .ReplaceWithCheck("   ", " ")
-                                                                    .ReplaceWithCheck("  ", " ")
-                                                                    .TrimStart();
+                            var fixedStart = optionalBooleanStart.AsCachedBuilder().Append(parameters[parameterIndex]).TrimmedEnd().ToStringAndRelease();
 
-                            // ReSharper disable once LoopCanBeConvertedToQuery
-                            foreach (var parameter in parameters)
+                            if (fixedStart.IsNullOrWhiteSpace() is false)
                             {
-                                var fixedStart = optionalBooleanStart.AsBuilder().Append(parameter).TrimEnd();
-
-                                if (fixedStart.IsNullOrWhiteSpace() is false)
-                                {
-                                    starts.Add(fixedStart);
-                                }
+                                starts.Add(fixedStart);
                             }
                         }
                     }
@@ -697,18 +720,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     var condition = conditions[conditionIndex];
 
                     // we have lots of loops, so cache data to avoid unnecessary calculations
-                    var end = " " + condition + " ";
+                    var end = " " + condition + " "; // TODO RKN: Change string creation
 
                     // for performance reasons we use for loops here
                     for (var verbIndex = 0; verbIndex < verbsLength; verbIndex++)
                     {
                         var verb = verbs[verbIndex];
-                        var middle = " " + verb + end;
+                        var middle = " " + verb + end; // TODO RKN: Change string creation
 
                         // for performance reasons we use for loops here
                         for (var startIndex = 0; startIndex < startsCount; startIndex++)
                         {
-                            var text = starts[startIndex].AsBuilder().Append(middle).TrimStart();
+                            var text = starts[startIndex].AsCachedBuilder().Append(middle).TrimmedStart().ToStringAndRelease();
 
                             results.Add(text.ToUpperCaseAt(0));
                             results.Add(text.ToLowerCaseAt(0));
@@ -719,7 +742,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     for (var index = 0; index < startingVerbsLength; index++)
                     {
                         var startingVerb = startingVerbs[index];
-                        var text = startingVerb + end;
+                        var text = startingVerb + end; // TODO RKN: Change string creation
 
                         results.Add(text.ToUpperCaseAt(0));
                         results.Add(text.ToLowerCaseAt(0));
@@ -727,6 +750,33 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
 
                 return results;
+
+                string[] CreateStartTermsWithOptionals()
+                {
+                    var startTerms = new[] { "A ", "An ", "The ", " " };
+                    var optionals = new[] { "Optional ", "(optional) ", "(Optional) ", "optional ", " " };
+
+                    var startTermsLength = startTerms.Length;
+                    var optionalsLength = optionals.Length;
+
+                    var index = 0;
+                    var strings = new string[startTermsLength * optionalsLength];
+
+                    // we have lots of loops, so cache data to avoid unnecessary calculations
+                    for (var startTermIndex = 0; startTermIndex < startTermsLength; startTermIndex++)
+                    {
+                        var startTerm = startTerms[startTermIndex];
+
+                        for (var optionalIndex = 0; optionalIndex < optionalsLength; optionalIndex++)
+                        {
+                            var optional = optionals[optionalIndex];
+
+                            strings[index++] = startTerm + optional;
+                        }
+                    }
+
+                    return strings;
+                }
             }
         }
 

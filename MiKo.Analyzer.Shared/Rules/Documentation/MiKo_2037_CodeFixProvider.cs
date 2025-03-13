@@ -11,9 +11,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2037_CodeFixProvider)), Shared]
     public sealed class MiKo_2037_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
-        private static readonly string[] GetOnly = Constants.Comments.CommandPropertyGetterOnlySummaryStartingPhraseTemplate.FormatWith('|').Split('|');
-        private static readonly string[] SetOnly = Constants.Comments.CommandPropertySetterOnlySummaryStartingPhraseTemplate.FormatWith('|').Split('|');
-        private static readonly string[] GetSet = Constants.Comments.CommandPropertyGetterSetterSummaryStartingPhraseTemplate.FormatWith('|').Split('|');
+        private static readonly string[] GetOnly = Constants.Comments.CommandPropertyGetterOnlySummaryStartingPhraseTemplate.FormatWith("|").Split('|');
+        private static readonly string[] SetOnly = Constants.Comments.CommandPropertySetterOnlySummaryStartingPhraseTemplate.FormatWith("|").Split('|');
+        private static readonly string[] GetSet = Constants.Comments.CommandPropertyGetterSetterSummaryStartingPhraseTemplate.FormatWith("|").Split('|');
 
         public override string FixableDiagnosticId => "MiKo_2037";
 

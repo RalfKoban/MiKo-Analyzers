@@ -15,43 +15,71 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private const string SummaryPhrase = Constants.Comments.DisposeSummaryPhrase;
         private const string ParameterPhrase = Constants.Comments.DisposeParameterPhrase;
 
-        public MiKo_2014_DisposeDefaultPhraseAnalyzer() : base(Id, SymbolKind.Method)
+        public MiKo_2014_DisposeDefaultPhraseAnalyzer() : base(Id)
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.Name == nameof(IDisposable.Dispose) && base.ShallAnalyze(symbol);
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol is IMethodSymbol method && method.Name == nameof(IDisposable.Dispose);
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(
+                                                                  DocumentationCommentTriviaSyntax comment,
+                                                                  ISymbol symbol,
+                                                                  IReadOnlyList<XmlElementSyntax> summaryXmls,
+                                                                  Lazy<string> commentXml,
+                                                                  Lazy<IReadOnlyCollection<string>> summaries)
         {
-            var summaries = comment.GetSummaryXmls();
+            var method = (IMethodSymbol)symbol;
 
-            foreach (var summary in summaries)
+            List<Diagnostic> issues = null;
+
+            var summariesCount = summaryXmls.Count;
+
+            for (var index = 0; index < summariesCount; index++)
             {
-                if (IsEqual(summary, SummaryPhrase) is false)
+                if (IsEqual(summaryXmls[index], SummaryPhrase) is false)
                 {
-                    yield return Issue(symbol, SummaryPhrase);
+                    if (issues is null)
+                    {
+                        issues = new List<Diagnostic>(1);
+                    }
+
+                    issues.Add(Issue(method, SummaryPhrase));
                 }
 
                 // check for parameter
-                var parameters = symbol.Parameters;
+                var parameters = method.Parameters;
 
                 // keep in local variable to avoid multiple requests (see Roslyn implementation)
                 var parametersLength = parameters.Length;
 
-                for (var index = 0; index < parametersLength; index++)
+                if (parametersLength <= 0)
                 {
-                    var parameter = parameters[index];
+                    continue;
+                }
+
+                for (var i = 0; i < parametersLength; i++)
+                {
+                    var parameter = parameters[i];
                     var parameterComment = comment.GetParameterComment(parameter.Name);
 
-                    if (parameterComment != null)
+                    if (parameterComment is null)
                     {
-                        if (IsEqual(parameterComment, ParameterPhrase) is false)
+                        continue;
+                    }
+
+                    if (IsEqual(parameterComment, ParameterPhrase) is false)
+                    {
+                        if (issues is null)
                         {
-                            yield return Issue(parameter, ParameterPhrase);
+                            issues = new List<Diagnostic>(1);
                         }
+
+                        issues.Add(Issue(parameter, ParameterPhrase));
                     }
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)issues ?? Array.Empty<Diagnostic>();
         }
 
         private static bool IsEqual(XmlElementSyntax syntax, string text)

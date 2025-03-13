@@ -25,7 +25,10 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             var node = (InvocationExpressionSyntax)context.Node;
             var issue = AnalyzeInvocation(node, context.SemanticModel);
 
-            ReportDiagnostics(context, issue);
+            if (issue != null)
+            {
+                ReportDiagnostics(context, issue);
+            }
         }
 
         private Diagnostic AnalyzeInvocation(InvocationExpressionSyntax node, SemanticModel semanticModel) => node.Expression is MemberAccessExpressionSyntax methodCall && node.ArgumentList.Arguments.Count == 1

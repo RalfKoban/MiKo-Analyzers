@@ -8,6 +8,7 @@ namespace MiKoSolutions.Analyzers
     internal static class Constants
     {
         internal const int Indentation = 4;
+        internal const int MinimumCharactersThreshold = 4;
 
         internal const string Core = "Core";
         internal const string AsyncSuffix = "Async";
@@ -54,12 +55,14 @@ namespace MiKoSolutions.Analyzers
 
         internal static readonly string[] GeneratedCSharpFileExtensions =
                                                                           {
+                                                                              ".Designer.cs",
                                                                               ".g.cs",
                                                                               ".g.i.cs",
-                                                                              ".generated.cs",
-                                                                              ".Designer.cs",
                                                                               ".feature.cs", // SpecFlow generated code
+                                                                              ".generated.cs",
                                                                           };
+
+        internal static readonly int MaximumGeneratedCSharpFileExtensionLength = GeneratedCSharpFileExtensions.Max(_ => _.Length) + 1;
 
         internal static readonly string[] WellknownFileExtensions =
                                                                     {
@@ -292,6 +295,7 @@ namespace MiKoSolutions.Analyzers
             internal const string SpecialOrPhrase = "-or-";
             internal const string StringReturnTypeStartingPhraseTemplate = "A {0} {1} ";
             internal const string ThatContainsTerm = "that contains";
+            internal const string ToTerm = " to ";
             internal const string ToSeekTerm = "to seek";
             internal const string TryStartingPhrase = "Attempts to";
             internal const string ValueConverterSummaryStartingPhrase = "Represents a converter that converts ";
@@ -303,6 +307,10 @@ namespace MiKoSolutions.Analyzers
             internal const string WhenAnyTaskReturnTypeStartingPhraseTemplate = "A {0} that represents the completion of one of the supplied tasks. Its {1} is the task that completed first.";
             internal const string XmlElementEndingTag = "/>";
             internal const string XmlElementStartingTag = "<";
+
+            internal const string SingleWhitespaceString = " ";
+
+            internal static readonly string[] MultiWhitespaceStrings = { "    ", "   ", "  " };
 
             internal static readonly char[] Delimiters = { ' ', '.', ',', ';', ':', '!', '?' };
             internal static readonly string[] UnusedPhrase = { "Unused.", "Unused", "This parameter is not used.", "This parameter is not used" };
@@ -323,8 +331,10 @@ namespace MiKoSolutions.Analyzers
                                                                             {
                                                                                 "One of the enumeration members that specifies ",
                                                                                 "One of the enumeration members that determines ",
+                                                                                "One of the enumeration members that defines ",
                                                                                 "One of the enumeration values that specifies ",
                                                                                 "One of the enumeration values that determines ",
+                                                                                "One of the enumeration values that defines ",
                                                                                 "One of the enumeration members specifying ",
                                                                                 "One of the enumeration values specifying ",
                                                                                 @"A <see cref=""{0}""/> value specifying ",
@@ -335,7 +345,115 @@ namespace MiKoSolutions.Analyzers
                                                                                 @"An <see cref=""{0}"" /> value specifying ",
                                                                                 @"An <see cref=""{0}""/> value that specifies ",
                                                                                 @"An <see cref=""{0}"" /> value that specifies ",
+                                                                                @"A <see cref=""{0}""/> value defining ",
+                                                                                @"A <see cref=""{0}"" /> value defining ",
+                                                                                @"A <see cref=""{0}""/> value that defines ",
+                                                                                @"A <see cref=""{0}"" /> value that defines ",
+                                                                                @"An <see cref=""{0}""/> value defining ",
+                                                                                @"An <see cref=""{0}"" /> value defining ",
+                                                                                @"An <see cref=""{0}""/> value that defines ",
+                                                                                @"An <see cref=""{0}"" /> value that defines ",
+                                                                                @"One of the <see cref=""{0}""/> enumeration members that specifies ",
+                                                                                @"One of the <see cref=""{0}"" /> enumeration members that specifies ",
+                                                                                @"One of the <see cref=""{0}""/> enumeration members that determines ",
+                                                                                @"One of the <see cref=""{0}"" /> enumeration members that determines ",
+                                                                                @"One of the <see cref=""{0}""/> enumeration members that defines ",
+                                                                                @"One of the <see cref=""{0}"" /> enumeration members that defines ",
+                                                                                @"One of the <see cref=""{0}""/> enumeration values that specifies ",
+                                                                                @"One of the <see cref=""{0}"" /> enumeration values that specifies ",
+                                                                                @"One of the <see cref=""{0}""/> enumeration values that determines ",
+                                                                                @"One of the <see cref=""{0}"" /> enumeration values that determines ",
+                                                                                @"One of the <see cref=""{0}""/> enumeration values that defines ",
+                                                                                @"One of the <see cref=""{0}"" /> enumeration values that defines ",
+                                                                                @"One of the <see cref=""{0}""/> enumeration members specifying ",
+                                                                                @"One of the <see cref=""{0}"" /> enumeration members specifying ",
+                                                                                @"One of the <see cref=""{0}""/> enumeration values specifying ",
+                                                                                @"One of the <see cref=""{0}"" /> enumeration values specifying ",
+                                                                                @"One of the <see cref=""{0}""/> enumeration members defining ",
+                                                                                @"One of the <see cref=""{0}"" /> enumeration members defining ",
+                                                                                @"One of the <see cref=""{0}""/> enumeration values defining ",
+                                                                                @"One of the <see cref=""{0}"" /> enumeration values defining ",
+                                                                                @"One of the <see cref=""{0}""/> members that specifies ",
+                                                                                @"One of the <see cref=""{0}"" /> members that specifies ",
+                                                                                @"One of the <see cref=""{0}""/> members that determines ",
+                                                                                @"One of the <see cref=""{0}"" /> members that determines ",
+                                                                                @"One of the <see cref=""{0}""/> members that defines ",
+                                                                                @"One of the <see cref=""{0}"" /> members that defines ",
+                                                                                @"One of the <see cref=""{0}""/> values that specifies ",
+                                                                                @"One of the <see cref=""{0}"" /> values that specifies ",
+                                                                                @"One of the <see cref=""{0}""/> values that determines ",
+                                                                                @"One of the <see cref=""{0}"" /> values that determines ",
+                                                                                @"One of the <see cref=""{0}""/> values that defines ",
+                                                                                @"One of the <see cref=""{0}"" /> values that defines ",
+                                                                                @"One of the <see cref=""{0}""/> members specifying ",
+                                                                                @"One of the <see cref=""{0}"" /> members specifying ",
+                                                                                @"One of the <see cref=""{0}""/> values specifying ",
+                                                                                @"One of the <see cref=""{0}"" /> values specifying ",
+                                                                                @"One of the <see cref=""{0}""/> members defining ",
+                                                                                @"One of the <see cref=""{0}"" /> members defining ",
+                                                                                @"One of the <see cref=""{0}""/> values defining ",
+                                                                                @"One of the <see cref=""{0}"" /> values defining ",
+                                                                                @"The <see cref=""{0}""/> value specifying ",
+                                                                                @"The <see cref=""{0}"" /> value specifying ",
+                                                                                @"The <see cref=""{0}""/> value that specifies ",
+                                                                                @"The <see cref=""{0}"" /> value that specifies ",
+                                                                                @"The <see cref=""{0}""/> value defining ",
+                                                                                @"The <see cref=""{0}"" /> value defining ",
+                                                                                @"The <see cref=""{0}""/> value that defines ",
+                                                                                @"The <see cref=""{0}"" /> value that defines ",
                                                                             };
+
+            internal static readonly string[] EnumFlagsParameterStartingPhrase =
+                                                                                 {
+                                                                                     "A bitwise combination of enumeration values that ",
+                                                                                     "A bitwise combination of enumeration members that ",
+                                                                                     "A bitwise combination of enumeration values which ",
+                                                                                     "A bitwise combination of enumeration members which ",
+                                                                                     "A bitwise combination of values that ",
+                                                                                     "A bitwise combination of members that ",
+                                                                                     "A bitwise combination of values which ",
+                                                                                     "A bitwise combination of members which ",
+                                                                                     "A bitwise combination of the enumeration values that ",
+                                                                                     "A bitwise combination of the enumeration members that ",
+                                                                                     "A bitwise combination of the enumeration values which ",
+                                                                                     "A bitwise combination of the enumeration members which ",
+                                                                                     "A bitwise combination of the values that ",
+                                                                                     "A bitwise combination of the members that ",
+                                                                                     "A bitwise combination of the values which ",
+                                                                                     "A bitwise combination of the members which ",
+                                                                                     @"A bitwise combination of <see cref=""{0}""/> enumeration values that ",
+                                                                                     @"A bitwise combination of <see cref=""{0}""/> enumeration members that ",
+                                                                                     @"A bitwise combination of <see cref=""{0}""/> enumeration values which ",
+                                                                                     @"A bitwise combination of <see cref=""{0}""/> enumeration members which ",
+                                                                                     @"A bitwise combination of <see cref=""{0}""/> values that ",
+                                                                                     @"A bitwise combination of <see cref=""{0}""/> members that ",
+                                                                                     @"A bitwise combination of <see cref=""{0}""/> values which ",
+                                                                                     @"A bitwise combination of <see cref=""{0}""/> members which ",
+                                                                                     @"A bitwise combination of <see cref=""{0}"" /> enumeration values that ",
+                                                                                     @"A bitwise combination of <see cref=""{0}"" /> enumeration members that ",
+                                                                                     @"A bitwise combination of <see cref=""{0}"" /> enumeration values which ",
+                                                                                     @"A bitwise combination of <see cref=""{0}"" /> enumeration members which ",
+                                                                                     @"A bitwise combination of <see cref=""{0}"" /> values that ",
+                                                                                     @"A bitwise combination of <see cref=""{0}"" /> members that ",
+                                                                                     @"A bitwise combination of <see cref=""{0}"" /> values which ",
+                                                                                     @"A bitwise combination of <see cref=""{0}"" /> members which ",
+                                                                                     @"A bitwise combination of the <see cref=""{0}""/> enumeration values that ",
+                                                                                     @"A bitwise combination of the <see cref=""{0}""/> enumeration members that ",
+                                                                                     @"A bitwise combination of the <see cref=""{0}""/> enumeration values which ",
+                                                                                     @"A bitwise combination of the <see cref=""{0}""/> enumeration members which ",
+                                                                                     @"A bitwise combination of the <see cref=""{0}""/> values that ",
+                                                                                     @"A bitwise combination of the <see cref=""{0}""/> members that ",
+                                                                                     @"A bitwise combination of the <see cref=""{0}""/> values which ",
+                                                                                     @"A bitwise combination of the <see cref=""{0}""/> members which ",
+                                                                                     @"A bitwise combination of the <see cref=""{0}"" /> enumeration values that ",
+                                                                                     @"A bitwise combination of the <see cref=""{0}"" /> enumeration members that ",
+                                                                                     @"A bitwise combination of the <see cref=""{0}"" /> enumeration values which ",
+                                                                                     @"A bitwise combination of the <see cref=""{0}"" /> enumeration members which ",
+                                                                                     @"A bitwise combination of the <see cref=""{0}"" /> values that ",
+                                                                                     @"A bitwise combination of the <see cref=""{0}"" /> members that ",
+                                                                                     @"A bitwise combination of the <see cref=""{0}"" /> values which ",
+                                                                                     @"A bitwise combination of the <see cref=""{0}"" /> members which ",
+                                                                                 };
 
             internal static readonly string[] CancellationTokenParameterPhrase = { "The token to monitor for cancellation requests." };
 
@@ -879,6 +997,18 @@ namespace MiKoSolutions.Analyzers
                                                                                  "Specifies",
                                                                                  "Enum",
                                                                              };
+
+            internal static readonly string[] WhichIsToTerms =
+                                                               {
+                                                                   ", that is to have to ",
+                                                                   ", that is to ",
+                                                                   " that is to have to ",
+                                                                   " that is to ",
+                                                                   ", which is to have to ",
+                                                                   ", which is to ",
+                                                                   " which is to have to ",
+                                                                   " which is to ",
+                                                               };
         }
 
         internal static class XmlTag
@@ -975,6 +1105,8 @@ namespace MiKoSolutions.Analyzers
         {
             internal const string Create = "Create";
             internal const string Factory = "Factory";
+
+            internal const string Counter = "Counter";
 
             internal const string DefaultPropertyParameterName = "value";
 
@@ -1102,7 +1234,7 @@ namespace MiKoSolutions.Analyzers
                                                                                               "candidateUnderTest",
                                                                                           };
 
-            internal static readonly ISet<string> TypeUnderTestFieldNames = Markers.FieldPrefixes.SelectMany(_ => TypeUnderTestRawFieldNames, (prefix, name) => prefix + name).ToHashSet();
+            internal static readonly ISet<string> TypeUnderTestFieldNames = Markers.FieldPrefixes.SelectMany(_ => TypeUnderTestRawFieldNames, string.Concat).ToHashSet();
 
             internal static readonly ISet<string> TypeUnderTestPropertyNames = new HashSet<string>
                                                                                    {
@@ -1123,7 +1255,7 @@ namespace MiKoSolutions.Analyzers
                                                                                        "Testee",
                                                                                    };
 
-            internal static readonly ISet<string> TypeUnderTestMethodNames = new[] { "Create", "Get" }.SelectMany(_ => TypeUnderTestPropertyNames, (prefix, name) => prefix + name).ToHashSet();
+            internal static readonly ISet<string> TypeUnderTestMethodNames = new[] { "Create", "Get" }.SelectMany(_ => TypeUnderTestPropertyNames, string.Concat).ToHashSet();
 
             internal static readonly ISet<string> TypeUnderTestVariableNames = new HashSet<string>
                                                                                    {
@@ -1142,11 +1274,11 @@ namespace MiKoSolutions.Analyzers
                                                                                        "candidateUnderTest",
                                                                                    };
 
-            internal static readonly ISet<string> ObjectUnderTestNames = Enumerable.Empty<string>()
-                                                                                   .Concat(TypeUnderTestFieldNames)
-                                                                                   .Concat(TypeUnderTestVariableNames)
-                                                                                   .Concat(TypeUnderTestPropertyNames)
-                                                                                   .ToHashSet();
+            internal static readonly ISet<string> ObjectUnderTestNames = Array.Empty<string>()
+                                                                              .Concat(TypeUnderTestFieldNames)
+                                                                              .Concat(TypeUnderTestVariableNames)
+                                                                              .Concat(TypeUnderTestPropertyNames)
+                                                                              .ToHashSet();
 
             internal static readonly ISet<string> AssertionTypes = new HashSet<string>
                                                                        {

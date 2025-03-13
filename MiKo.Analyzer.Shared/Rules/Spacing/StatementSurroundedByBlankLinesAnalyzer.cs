@@ -29,7 +29,10 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             {
                 var issue = AnalyzeStatement(node);
 
-                ReportDiagnostics(context, issue);
+                if (issue != null)
+                {
+                    ReportDiagnostics(context, issue);
+                }
             }
         }
 

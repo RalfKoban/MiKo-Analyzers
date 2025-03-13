@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -11,19 +13,60 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2227";
 
+        private static readonly string[] Phrases = Constants.Markers.ReSharper;
+
+        private static readonly int MinimumPhraseLength = Phrases.Min(_ => _.Length);
+
         public MiKo_2227_DocumentationDoesNotContainReSharperMarkerAnalyzer() : base(Id)
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
-            foreach (var token in comment.GetXmlTextTokens())
+            var textTokens = comment.GetXmlTextTokens();
+            var textTokensCount = textTokens.Count;
+
+            if (textTokensCount == 0)
             {
-                foreach (var location in GetAllLocations(token, Constants.Markers.ReSharper))
+                return Array.Empty<Diagnostic>();
+            }
+
+            var trimmed = textTokens.GetTextTrimmedWithParaTags();
+
+            if (trimmed.ContainsAny(Phrases, StringComparison.Ordinal) is false)
+            {
+                return Array.Empty<Diagnostic>();
+            }
+
+            List<Diagnostic> results = null;
+
+            for (var i = 0; i < textTokensCount; i++)
+            {
+                var token = textTokens[i];
+
+                if (token.ValueText.Length < MinimumPhraseLength)
                 {
-                    yield return Issue(location);
+                    continue;
+                }
+
+                var locations = GetAllLocations(token, Phrases);
+                var locationsCount = locations.Count;
+
+                if (locationsCount > 0)
+                {
+                    if (results is null)
+                    {
+                        results = new List<Diagnostic>(locationsCount);
+                    }
+
+                    for (var index = 0; index < locationsCount; index++)
+                    {
+                        results.Add(Issue(locations[index]));
+                    }
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
         }
     }
 }

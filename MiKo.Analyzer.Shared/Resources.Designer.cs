@@ -2987,6 +2987,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove suffix &apos;Repository&apos;.
+        /// </summary>
+        internal static string MiKo_1079_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1079_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DDD defines repository classes. However, those classes should not be suffixed with &apos;Repository&apos; as everybody understands different things as a repository..
+        /// </summary>
+        internal static string MiKo_1079_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1079_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove suffix &apos;Repository&apos;.
+        /// </summary>
+        internal static string MiKo_1079_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1079_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Repositories should not be suffixed with &apos;Repository&apos;.
+        /// </summary>
+        internal static string MiKo_1079_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1079_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to It is much easier to read a number inside a name if it is written as number and not its spelling (e.g. &apos;issue42&apos; in contrast to &apos;issueFortyTwo&apos;)..
         /// </summary>
         internal static string MiKo_1080_Description {
@@ -3280,6 +3316,43 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_1088_Title {
             get {
                 return ResourceManager.GetString("MiKo_1088_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename method and remove &apos;Get&apos; prefix.
+        /// </summary>
+        internal static string MiKo_1089_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1089_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To ease reading, methods should not be prefixed with &apos;Get&apos;, especially when they are part of repositories.
+        ///For example, &apos;GetUsersByCity&apos; should be renamed to &apos;UsersWithCity&apos;, as the code where it is used is easier to read that way..
+        /// </summary>
+        internal static string MiKo_1089_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1089_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not prefix with &apos;Get&apos;.
+        /// </summary>
+        internal static string MiKo_1089_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1089_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods should not be prefixed with &apos;Get&apos;.
+        /// </summary>
+        internal static string MiKo_1089_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1089_Title", resourceCulture);
             }
         }
         
@@ -4560,6 +4633,249 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When naming something &apos;Filter&apos;, it is not clear whether the criteria to filter on gets included or excluded in the result. So instead, it should be named something like `IncludeBy`, `ExcludeBy`, `Remove`, `Skip` or `Take`. That makes it clear about what gets filtered..
+        /// </summary>
+        internal static string MiKo_1501_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1501_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;Filter&apos; to something like &apos;IncludeBy&apos;, &apos;ExcludeBy&apos;, &apos;Remove&apos;, &apos;Skip&apos; or &apos;Take&apos;.
+        /// </summary>
+        internal static string MiKo_1501_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1501_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use &apos;Filter&apos; in names.
+        /// </summary>
+        internal static string MiKo_1501_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1501_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When naming something &apos;Process&apos;, it is not clear what is processed, why it is processed and what the result after processing is.
+        ///It is better to when the name contains the purpose behind it.
+        ///
+        ///Example:
+        ///&quot;ProcessMessages&quot; could be renamed to &quot;DeleteObsoleteMessages&quot; or similar if the purpose of processing messages is to detect and delete obsolete ones..
+        /// </summary>
+        internal static string MiKo_1502_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1502_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename so that &apos;Process&apos; is not used.
+        /// </summary>
+        internal static string MiKo_1502_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1502_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use &apos;Process&apos; in names.
+        /// </summary>
+        internal static string MiKo_1502_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1502_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace &apos;Counter&apos; with &apos;Count&apos;.
+        /// </summary>
+        internal static string MiKo_1503_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1503_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods that return values but are suffixed with &apos;Counter&apos; are most likely not returning counters but counted values instead.
+        ///So they should be suffixed with &apos;Count&apos;..
+        /// </summary>
+        internal static string MiKo_1503_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1503_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1503_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1503_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods should not be suffixed with &apos;Counter&apos;.
+        /// </summary>
+        internal static string MiKo_1503_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1503_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace &apos;Counter&apos; with &apos;Counted&apos;.
+        /// </summary>
+        internal static string MiKo_1504_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1504_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Properties that return values but are suffixed with &apos;Counter&apos; are most likely not returning counters but counted values instead.
+        ///So they should be named accordingly..
+        /// </summary>
+        internal static string MiKo_1504_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1504_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1504_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1504_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Properties should not be suffixed with &apos;Counter&apos;.
+        /// </summary>
+        internal static string MiKo_1504_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1504_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace &apos;Counter&apos; with &apos;counted&apos;.
+        /// </summary>
+        internal static string MiKo_1505_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1505_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fields that hold values but are suffixed with &apos;Counter&apos; are most likely not holding counters but counted values instead.
+        ///So they should be named accordingly..
+        /// </summary>
+        internal static string MiKo_1505_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1505_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1505_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1505_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fields should not be suffixed with &apos;Counter&apos;.
+        /// </summary>
+        internal static string MiKo_1505_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1505_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace &apos;Counter&apos; with &apos;counted&apos;.
+        /// </summary>
+        internal static string MiKo_1506_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1506_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local variables that hold values but are suffixed with &apos;Counter&apos; are most likely not holding counters but counted values instead.
+        ///So they should be named accordingly..
+        /// </summary>
+        internal static string MiKo_1506_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1506_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1506_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1506_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local variables should not be suffixed with &apos;Counter&apos;.
+        /// </summary>
+        internal static string MiKo_1506_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1506_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace &apos;Counter&apos; with &apos;counted&apos;.
+        /// </summary>
+        internal static string MiKo_1507_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1507_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameters that hold values but are suffixed with &apos;Counter&apos; are most likely not holding counters but counted values instead.
+        ///So they should be named accordingly..
+        /// </summary>
+        internal static string MiKo_1507_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1507_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1507_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1507_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameters should not be suffixed with &apos;Counter&apos;.
+        /// </summary>
+        internal static string MiKo_1507_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1507_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fix malformed XML.
         /// </summary>
         internal static string MiKo_2000_CodeFixTitle {
@@ -4578,7 +4894,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation is malformed (contains invalid characters, e.g. &apos;&amp;&apos;, &apos;&gt;&apos;, &apos;&lt;&apos;).
+        ///   Looks up a localized string similar to Documentation is malformed and contains invalid characters (such as &apos;&amp;&apos; or &apos;&lt;&apos;).
         /// </summary>
         internal static string MiKo_2000_MessageFormat {
             get {
@@ -5987,7 +6303,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;&lt;para/&gt;&apos; instead of &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Use &apos;&lt;para/&gt;&apos; instead of &apos;{0}&apos;.
         /// </summary>
         internal static string MiKo_2042_MessageFormat {
             get {
@@ -6060,7 +6376,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fix incorrect parameter reference &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Fix incorrect parameter reference &apos;{0}&apos;.
         /// </summary>
         internal static string MiKo_2044_MessageFormat {
             get {
@@ -6408,6 +6724,7 @@ namespace MiKoSolutions.Analyzers {
         
         /// <summary>
         ///   Looks up a localized string similar to {1} should be something like:
+        ///
         ///{2}.
         /// </summary>
         internal static string MiKo_2054_MessageFormat {
@@ -6446,6 +6763,7 @@ namespace MiKoSolutions.Analyzers {
         
         /// <summary>
         ///   Looks up a localized string similar to {1} should be something like:
+        ///
         ///{2}.
         /// </summary>
         internal static string MiKo_2055_MessageFormat {
@@ -7141,7 +7459,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start &lt;example&gt; with: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Start &lt;example&gt; with: &apos;{0}&apos;.
         /// </summary>
         internal static string MiKo_2100_MessageFormat {
             get {
@@ -7862,7 +8180,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &lt;list&gt; properly: {1}.
+        ///   Looks up a localized string similar to Use &lt;list&gt; properly: {0}.
         /// </summary>
         internal static string MiKo_2217_MessageFormat {
             get {
@@ -7994,7 +8312,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Provide a documentation for &lt;{1}/&gt;.
+        ///   Looks up a localized string similar to Provide a documentation for &lt;{0}/&gt;.
         /// </summary>
         internal static string MiKo_2221_MessageFormat {
             get {
@@ -8421,6 +8739,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Replace with &apos;to&apos;.
+        /// </summary>
+        internal static string MiKo_2234_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2234_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phrases like &quot;that is to&quot; or &quot;which is to&quot; are wordy and can just be replaced with &quot;to&quot;. This makes documentation clearer and more concise for developers..
+        /// </summary>
+        internal static string MiKo_2234_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2234_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;to&apos; instead.
+        /// </summary>
+        internal static string MiKo_2234_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2234_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should use &apos;to&apos; instead of &apos;that is to&apos; or &apos;which is to&apos;.
+        /// </summary>
+        internal static string MiKo_2234_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2234_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works—let the code itself do that.
         ///This approach ensures comments are insightful and add real value by giving context and rationale, helping developers understand the reasoning behind the implementation..
         /// </summary>
@@ -8812,6 +9166,42 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_2311_Title {
             get {
                 return ResourceManager.GetString("MiKo_2311_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace with &apos;to&apos;.
+        /// </summary>
+        internal static string MiKo_2312_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2312_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phrases like &quot;that is to&quot; or &quot;which is to&quot; are wordy and can just be replaced with &quot;to&quot;. This makes comments clearer and more concise for developers..
+        /// </summary>
+        internal static string MiKo_2312_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2312_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;to&apos; instead.
+        /// </summary>
+        internal static string MiKo_2312_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2312_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comments should use &apos;to&apos; instead of &apos;that is to&apos; or &apos;which is to&apos;.
+        /// </summary>
+        internal static string MiKo_2312_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2312_Title", resourceCulture);
             }
         }
         
@@ -11174,7 +11564,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;unchecked((int)0x{1})&apos; instead for HResult.
+        ///   Looks up a localized string similar to Use &apos;unchecked((int)0x{0})&apos; instead for HResult.
         /// </summary>
         internal static string MiKo_3079_MessageFormat {
             get {
@@ -11347,7 +11737,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place it on right side of &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Place it on right side of &apos;{0}&apos;.
         /// </summary>
         internal static string MiKo_3084_MessageFormat {
             get {
@@ -11361,6 +11751,15 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_3084_Title {
             get {
                 return ResourceManager.GetString("MiKo_3084_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Convert to &apos;if ... else ...&apos;.
+        /// </summary>
+        internal static string MiKo_3085_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3085_CodeFixTitle", resourceCulture);
             }
         }
         
@@ -13214,6 +13613,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Convert field to const.
+        /// </summary>
+        internal static string MiKo_3226_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3226_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Read-only fields with pre-assigned values are likely meant to be constant values. Therefore, make these fields &apos;const&apos;. This ensures their values remain constant and clearly communicates their intended use..
+        /// </summary>
+        internal static string MiKo_3226_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3226_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Convert field to const.
+        /// </summary>
+        internal static string MiKo_3226_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3226_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Read-only fields with initializers should be const.
+        /// </summary>
+        internal static string MiKo_3226_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3226_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         internal static string MiKo_3301_CodeFixTitle {
@@ -13381,6 +13816,42 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_3502_Title {
             get {
                 return ResourceManager.GetString("MiKo_3502_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Return variable inside try/catch block.
+        /// </summary>
+        internal static string MiKo_3503_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3503_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avoid defining variables outside of try/catch blocks, assigning them within the try/catch block, and then returning them immediately after leaving the block. Instead, return the variables directly from within the try/catch block. This makes the code easier to read and understand..
+        /// </summary>
+        internal static string MiKo_3503_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3503_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place return inside the try/catch block.
+        /// </summary>
+        internal static string MiKo_3503_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3503_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not assign variables in try-catch blocks and return them directly outside the block.
+        /// </summary>
+        internal static string MiKo_3503_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3503_Title", resourceCulture);
             }
         }
         
@@ -13783,6 +14254,42 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_4104_Title {
             get {
                 return ResourceManager.GetString("MiKo_4104_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place field before all other fields.
+        /// </summary>
+        internal static string MiKo_4105_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_4105_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The field that contains the object under test is an essential part of a test class. To make them easy to find, place these fields first..
+        /// </summary>
+        internal static string MiKo_4105_Description {
+            get {
+                return ResourceManager.GetString("MiKo_4105_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place object under test field before all other fields.
+        /// </summary>
+        internal static string MiKo_4105_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_4105_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Object under test fields should be ordered before all other fields.
+        /// </summary>
+        internal static string MiKo_4105_Title {
+            get {
+                return ResourceManager.GetString("MiKo_4105_Title", resourceCulture);
             }
         }
         
@@ -16168,6 +16675,42 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_6061_Title {
             get {
                 return ResourceManager.GetString("MiKo_6061_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align expression right beside open brace.
+        /// </summary>
+        internal static string MiKo_6062_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6062_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code readability improves when expressions within complex initializer expressions are indented right beside the opening braces. This makes the code clearer and easier to follow..
+        /// </summary>
+        internal static string MiKo_6062_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6062_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align expression right beside open brace.
+        /// </summary>
+        internal static string MiKo_6062_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6062_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expressions within complex initializer expressions should be placed beside open brace.
+        /// </summary>
+        internal static string MiKo_6062_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6062_Title", resourceCulture);
             }
         }
         

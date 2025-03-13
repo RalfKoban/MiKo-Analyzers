@@ -19,11 +19,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
-            return Enumerable.Empty<Diagnostic>()
-                             .Concat(AnalyzeXml(comment.GetSummaryXmls()))
-                             .Concat(AnalyzeXml(comment.GetRemarksXmls()));
+            var summaryXmls = comment.GetSummaryXmls();
+            var remarksXmls = comment.GetRemarksXmls();
+
+            if (summaryXmls.Count == 0 && remarksXmls.Count == 0)
+            {
+                return Array.Empty<Diagnostic>();
+            }
+
+            return Array.Empty<Diagnostic>()
+                        .Concat(AnalyzeXml(summaryXmls))
+                        .Concat(AnalyzeXml(remarksXmls))
+                        .ToList();
         }
 
         private static bool SentenceHasIssue(XmlElementSyntax xml)
@@ -48,13 +57,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return false;
         }
 
-        private IEnumerable<Diagnostic> AnalyzeXml(IEnumerable<XmlElementSyntax> xmls)
+        private IEnumerable<Diagnostic> AnalyzeXml(IReadOnlyList<XmlElementSyntax> xmls)
         {
-            foreach (var xml in xmls)
+            var count = xmls.Count;
+
+            if (count > 0)
             {
-                if (SentenceHasIssue(xml))
+                for (var index = 0; index < count; index++)
                 {
-                    yield return Issue(xml.StartTag);
+                    var xml = xmls[index];
+
+                    if (SentenceHasIssue(xml))
+                    {
+                        yield return Issue(xml.StartTag);
+                    }
                 }
             }
         }

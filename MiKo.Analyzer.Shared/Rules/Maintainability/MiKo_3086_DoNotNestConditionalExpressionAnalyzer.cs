@@ -32,19 +32,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     case SyntaxKind.ConditionalExpression:
                     case SyntaxKind.CoalesceExpression:
                     {
-                        ReportIssue(context, descendant);
+                        ReportDiagnostics(context, Issue(descendant));
 
                         break;
                     }
                 }
             }
-        }
-
-        private void ReportIssue(SyntaxNodeAnalysisContext context, SyntaxNode node)
-        {
-            var issue = Issue(string.Empty, node);
-
-            ReportDiagnostics(context, issue);
         }
     }
 }

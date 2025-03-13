@@ -331,13 +331,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Issue(location, replacement, properties);
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
-            var alreadyReportedLocations = new List<Location>();
+            var issues = AnalyzeCommentXml(comment);
+            var count = issues.Count;
 
-            var issues = AnalyzeCommentXml(comment).OrderByDescending(_ => _.Location.SourceSpan.Length).ToList(); // find largest parts first
+            switch (count)
+            {
+                case 0: return Array.Empty<Diagnostic>();
+                case 1: return new[] { issues[0] };
+            }
 
-            foreach (var issue in issues)
+            var alreadyReportedLocations = new List<Location>(count);
+            var finalIssues = new List<Diagnostic>(count);
+
+            foreach (var issue in issues.OrderByDescending(_ => _.Location.SourceSpan.Length)) // find largest parts first
             {
                 var location = issue.Location;
 
@@ -348,129 +356,83 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
 
                 alreadyReportedLocations.Add(location);
+                finalIssues.Add(issue);
+            }
 
-                yield return issue;
+            return finalIssues;
+        }
+
+        private List<Diagnostic> AnalyzeCommentXml(DocumentationCommentTriviaSyntax comment)
+        {
+            var issues = new List<Diagnostic>();
+
+            var textTokens = comment.GetXmlTextTokens();
+            var textTokensCount = textTokens.Count;
+
+            if (textTokensCount > 0)
+            {
+                for (var i = 0; i < textTokensCount; i++)
+                {
+                    var token = textTokens[i];
+
+                    AnalyzeForPhrases(issues, token, UsedToPhrases, UsedToReplacement);
+                    AnalyzeForPhrases(issues, token, CanPhrases, CanReplacement, StringComparison.OrdinalIgnoreCase);
+                    AnalyzeForPhrases(issues, token, CanPluralPhrases, CanPluralReplacement, StringComparison.OrdinalIgnoreCase);
+                    AnalyzeForPhrases(issues, token, UsedToDetermineInSingular, UsedToDetermineInSingularReplacement, StringComparison.OrdinalIgnoreCase);
+                    AnalyzeForPhrases(issues, token, UsedToDetermineInPlural, UsedToDetermineInPluralReplacement, StringComparison.OrdinalIgnoreCase);
+
+                    issues.AddRange(AnalyzeForSpecialPhrase(token, IsUsedToPhraseStartUpperCase, _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)));
+                    issues.AddRange(AnalyzeForSpecialPhrase(token, AreUsedToPhraseStartUpperCase, _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)));
+                    issues.AddRange(AnalyzeForSpecialPhrase(token, UsedToPhraseStartUpperCase, _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)));
+                    issues.AddRange(AnalyzeForSpecialPhrase(token, IsUsedToPhrase, Verbalizer.MakeThirdPersonSingularVerb));
+                    issues.AddRange(AnalyzeForSpecialPhrase(token, AreUsedToPhrase, Verbalizer.MakeInfiniteVerb));
+
+                    AnalyzeForPhrases(issues, token, UsedToPhrase, UsedToReplacement); // do not use case-insensitive here
+                    AnalyzeForPhrases(issues, token, UsedInCombinationPluralPhrases, UsedInCombinationPluralReplacement, StringComparison.OrdinalIgnoreCase);
+                    AnalyzeForPhrases(issues, token, UsedInCombinationSingularPhrases, UsedInCombinationSingularReplacement, StringComparison.OrdinalIgnoreCase);
+                    AnalyzeForPhrases(issues, token, UsedInCombinationUnclearPhrases, UsedInCombinationUnclearReplacement, StringComparison.OrdinalIgnoreCase);
+                    AnalyzeForPhrases(issues, token, UsedInternallyPluralPhrases, UsedInternallyPluralReplacement, StringComparison.OrdinalIgnoreCase);
+                    AnalyzeForPhrases(issues, token, UsedInternallySingularPhrases, UsedInternallySingularReplacement, StringComparison.OrdinalIgnoreCase);
+                    AnalyzeForPhrases(issues, token, UsedInternallyUnclearPhrases, UsedInternallyUnclearReplacement, StringComparison.OrdinalIgnoreCase);
+                    AnalyzeForPhrases(issues, token, UsedInPluralPhrases, UsedInPluralReplacement, StringComparison.OrdinalIgnoreCase);
+                    AnalyzeForPhrases(issues, token, UsedInSingularPhrases, UsedInSingularReplacement, StringComparison.OrdinalIgnoreCase);
+                    AnalyzeForPhrases(issues, token, UsedInUnclearPhrases, UsedInUnclearReplacement, StringComparison.OrdinalIgnoreCase);
+                    AnalyzeForPhrases(issues, token, UsedByPhrase, UsedByReplacement, StringComparison.OrdinalIgnoreCase);
+                    AnalyzeForPhrases(issues, token, UsedWhenPhrases, UsedWhenReplacement, StringComparison.OrdinalIgnoreCase);
+                    AnalyzeForPhrases(issues, token, UsedWithinPhrases, UsedWithinReplacement, StringComparison.OrdinalIgnoreCase);
+                }
+            }
+
+            return issues;
+        }
+
+        private void AnalyzeForPhrases(List<Diagnostic> issues, SyntaxToken token, string[] phrases, string replacement, StringComparison comparison = StringComparison.Ordinal)
+        {
+            var locations = GetAllLocations(token, phrases, comparison);
+
+            if (locations.Count > 0)
+            {
+                AddIssues(issues, replacement, locations);
             }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeCommentXml(DocumentationCommentTriviaSyntax comment)
+        private void AnalyzeForPhrases(List<Diagnostic> issues, SyntaxToken token, string phrase, string replacement, StringComparison comparison = StringComparison.Ordinal)
         {
-            foreach (var token in comment.GetXmlTextTokens())
+            var locations = GetAllLocations(token, phrase, comparison);
+
+            if (locations.Count > 0)
             {
-                foreach (var location in GetAllLocations(token, UsedToPhrases))
-                {
-                    yield return Issue(location, UsedToReplacement);
-                }
+                AddIssues(issues, replacement, locations);
+            }
+        }
 
-                foreach (var location in GetAllLocations(token, CanPhrases, StringComparison.OrdinalIgnoreCase))
-                {
-                    yield return Issue(location, CanReplacement);
-                }
+        private void AddIssues(List<Diagnostic> issues, string replacement, IReadOnlyList<Location> locations)
+        {
+            var count = locations.Count;
 
-                foreach (var location in GetAllLocations(token, CanPluralPhrases, StringComparison.OrdinalIgnoreCase))
-                {
-                    yield return Issue(location, CanPluralReplacement);
-                }
-
-                foreach (var location in GetAllLocations(token, UsedToDetermineInSingular, StringComparison.OrdinalIgnoreCase))
-                {
-                    yield return Issue(location, UsedToDetermineInSingularReplacement);
-                }
-
-                foreach (var location in GetAllLocations(token, UsedToDetermineInPlural, StringComparison.OrdinalIgnoreCase))
-                {
-                    yield return Issue(location, UsedToDetermineInPluralReplacement);
-                }
-
-                foreach (var issue in AnalyzeForSpecialPhrase(token, IsUsedToPhraseStartUpperCase, _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)))
-                {
-                    yield return issue;
-                }
-
-                foreach (var issue in AnalyzeForSpecialPhrase(token, AreUsedToPhraseStartUpperCase, _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)))
-                {
-                    yield return issue;
-                }
-
-                foreach (var issue in AnalyzeForSpecialPhrase(token, UsedToPhraseStartUpperCase, _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)))
-                {
-                    yield return issue;
-                }
-
-                foreach (var issue in AnalyzeForSpecialPhrase(token, IsUsedToPhrase, Verbalizer.MakeThirdPersonSingularVerb))
-                {
-                    yield return issue;
-                }
-
-                foreach (var issue in AnalyzeForSpecialPhrase(token, AreUsedToPhrase, Verbalizer.MakeInfiniteVerb))
-                {
-                    yield return issue;
-                }
-
-                foreach (var location in GetAllLocations(token, UsedToPhrase)) // do not use case-insensitive here
-                {
-                    yield return Issue(location, UsedToReplacement);
-                }
-
-                foreach (var location in GetAllLocations(token, UsedInCombinationPluralPhrases, StringComparison.OrdinalIgnoreCase))
-                {
-                    yield return Issue(location, UsedInCombinationPluralReplacement);
-                }
-
-                foreach (var location in GetAllLocations(token, UsedInCombinationSingularPhrases, StringComparison.OrdinalIgnoreCase))
-                {
-                    yield return Issue(location, UsedInCombinationSingularReplacement);
-                }
-
-                foreach (var location in GetAllLocations(token, UsedInCombinationUnclearPhrases, StringComparison.OrdinalIgnoreCase))
-                {
-                    yield return Issue(location, UsedInCombinationUnclearReplacement);
-                }
-
-                foreach (var location in GetAllLocations(token, UsedInternallyPluralPhrases, StringComparison.OrdinalIgnoreCase))
-                {
-                    yield return Issue(location, UsedInternallyPluralReplacement);
-                }
-
-                foreach (var location in GetAllLocations(token, UsedInternallySingularPhrases, StringComparison.OrdinalIgnoreCase))
-                {
-                    yield return Issue(location, UsedInternallySingularReplacement);
-                }
-
-                foreach (var location in GetAllLocations(token, UsedInternallyUnclearPhrases, StringComparison.OrdinalIgnoreCase))
-                {
-                    yield return Issue(location, UsedInternallyUnclearReplacement);
-                }
-
-                foreach (var location in GetAllLocations(token, UsedInPluralPhrases, StringComparison.OrdinalIgnoreCase))
-                {
-                    yield return Issue(location, UsedInPluralReplacement);
-                }
-
-                foreach (var location in GetAllLocations(token, UsedInSingularPhrases, StringComparison.OrdinalIgnoreCase))
-                {
-                    yield return Issue(location, UsedInSingularReplacement);
-                }
-
-                foreach (var location in GetAllLocations(token, UsedInUnclearPhrases, StringComparison.OrdinalIgnoreCase))
-                {
-                    yield return Issue(location, UsedInUnclearReplacement);
-                }
-
-                foreach (var location in GetAllLocations(token, UsedByPhrase, StringComparison.OrdinalIgnoreCase))
-                {
-                    yield return Issue(location, UsedByReplacement);
-                }
-
-                foreach (var location in GetAllLocations(token, UsedWhenPhrases, StringComparison.OrdinalIgnoreCase))
-                {
-                    yield return Issue(location, UsedWhenReplacement);
-                }
-
-                foreach (var location in GetAllLocations(token, UsedWithinPhrases, StringComparison.OrdinalIgnoreCase))
-                {
-                    yield return Issue(location, UsedWithinReplacement);
-                }
+            for (var index = 0; index < count; index++)
+            {
+                issues.Add(Issue(locations[index], replacement));
             }
         }
     }

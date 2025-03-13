@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Linq;
@@ -36,27 +37,27 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (argumentList is null)
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             var arguments = argumentList.Arguments;
 
             if (arguments.Count != 1)
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             var method = node.GetEnclosingMethod(semanticModel);
 
             if (method is null)
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             // no string parameters
             if (method.Parameters.All(_ => _.Type.IsString() is false))
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             if (arguments[0].Expression is IdentifierNameSyntax s)
@@ -64,10 +65,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return AnalyzeParameter(s.GetName(), method.Parameters);
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
 
-        private IEnumerable<Diagnostic> AnalyzeParameter(string propertyName, ImmutableArray<IParameterSymbol> parameters)
+        private Diagnostic[] AnalyzeParameter(string propertyName, ImmutableArray<IParameterSymbol> parameters)
         {
             // TODO: RKN
             // x - get parent invocation
@@ -81,16 +82,22 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (parameter is null)
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
-            foreach (var name in parameter.GetAttributeNames())
+            var names = parameter.GetAttributeNames();
+            var namesLength = names.Length;
+
+            if (namesLength > 0)
             {
-                switch (name)
+                for (var index = 0; index < namesLength; index++)
                 {
-                    case "CallerMemberName":
-                    case nameof(CallerMemberNameAttribute):
-                        return Enumerable.Empty<Diagnostic>();
+                    switch (names[index])
+                    {
+                        case "CallerMemberName":
+                        case nameof(CallerMemberNameAttribute):
+                            return Array.Empty<Diagnostic>();
+                    }
                 }
             }
 

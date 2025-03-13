@@ -44,11 +44,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                         return new[] { Issue(symbol, CreateBetterNameProposal(betterName)) };
                     }
 
-                    return Enumerable.Empty<Diagnostic>();
+                    return Array.Empty<Diagnostic>();
                 }
 
                 default:
-                    return Enumerable.Empty<Diagnostic>();
+                    return Array.Empty<Diagnostic>();
             }
         }
 

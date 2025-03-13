@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -23,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                       && symbol.IsTestClass() is false;
 
         protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol, Compilation compilation) => symbol.Implements<INotifyPropertyChanged>()
-                                                                                                                ? Enumerable.Empty<Diagnostic>()
+                                                                                                                ? Array.Empty<Diagnostic>()
                                                                                                                 : new[] { Issue(symbol) };
     }
 }

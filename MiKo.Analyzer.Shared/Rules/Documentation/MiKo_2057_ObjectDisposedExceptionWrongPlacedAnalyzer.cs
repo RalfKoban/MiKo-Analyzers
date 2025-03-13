@@ -16,12 +16,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeException(ISymbol symbol, XmlElementSyntax exceptionComment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeException(ISymbol symbol, XmlElementSyntax exceptionComment)
         {
-            if (symbol.FindContainingType().IsDisposable() is false)
-            {
-                yield return ExceptionIssue(exceptionComment, string.Empty);
-            }
+            return symbol.FindContainingType().IsDisposable()
+                   ? Array.Empty<Diagnostic>()
+                   : new[] { ExceptionIssue(exceptionComment, string.Empty) };
         }
     }
 }

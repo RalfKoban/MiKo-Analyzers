@@ -32,9 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
                     if (count > MaxParametersCount)
                     {
-                        var issue = Issue(localFunction.Identifier.GetLocation(), count, MaxParametersCount);
-
-                        ReportDiagnostics(context, issue);
+                        ReportDiagnostics(context, Issue(localFunction.Identifier.GetLocation(), count, MaxParametersCount));
                     }
                 }
             }

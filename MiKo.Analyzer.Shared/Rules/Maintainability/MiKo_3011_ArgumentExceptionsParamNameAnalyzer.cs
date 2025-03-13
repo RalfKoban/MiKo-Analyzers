@@ -47,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (method is null || method.Parameters.Length == 0)
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             var type = node.Type.ToString();
@@ -62,7 +62,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return new[] { Issue(type, location, parameters) };
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
 
         private static Location InspectArgumentException(ArgumentListSyntax syntax, IMethodSymbol method, SemanticModel semanticModel)

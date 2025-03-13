@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -36,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                 }
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
 
         private static bool IsAtFirstPosition(INamedTypeSymbol symbol, string defaultInterfaceName)

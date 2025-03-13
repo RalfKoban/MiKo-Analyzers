@@ -429,6 +429,132 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_and_adjusts_but_keeps_comment_with_empty_line()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public TestMe Start()
+    {
+        return new TestMe().DoSomethingMore()
+           .DoSomething(1, 2, 3)
+           .DoSomething(4, 5, 6)
+
+           // some comment here
+           .DoSomething(7, 8, 9);
+    }
+
+    public TestMe DoSomething(int x, int y, int z)
+    {
+        return this;
+    }
+
+    public TestMe DoSomethingMore()
+    {
+        return this;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public TestMe Start()
+    {
+        return new TestMe().DoSomethingMore()
+                           .DoSomething(1, 2, 3)
+                           .DoSomething(4, 5, 6)
+
+                           // some comment here
+                           .DoSomething(7, 8, 9);
+    }
+
+    public TestMe DoSomething(int x, int y, int z)
+    {
+        return this;
+    }
+
+    public TestMe DoSomethingMore()
+    {
+        return this;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_and_adjusts_but_keeps_multiple_comments_with_empty_lines()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public TestMe Start()
+    {
+        return new TestMe().DoSomethingMore()
+           .DoSomething(1, 2, 3)
+           .DoSomething(4, 5, 6)
+
+           // some comment
+           // some comment here
+           .DoSomething(7, 8, 9);
+    }
+
+    public TestMe DoSomething(int x, int y, int z)
+    {
+        return this;
+    }
+
+    public TestMe DoSomethingMore()
+    {
+        return this;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public TestMe Start()
+    {
+        return new TestMe().DoSomethingMore()
+                           .DoSomething(1, 2, 3)
+                           .DoSomething(4, 5, 6)
+
+                           // some comment
+                           // some comment here
+                           .DoSomething(7, 8, 9);
+    }
+
+    public TestMe DoSomething(int x, int y, int z)
+    {
+        return this;
+    }
+
+    public TestMe DoSomethingMore()
+    {
+        return this;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6040_MultiLineCallChainsAreOnSamePositionAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6040_MultiLineCallChainsAreOnSamePositionAnalyzer();

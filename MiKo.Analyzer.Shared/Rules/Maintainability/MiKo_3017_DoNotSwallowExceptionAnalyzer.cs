@@ -50,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel) => HasIssue(node, semanticModel)
                                                                                                                                               ? new[] { Issue(node.Type.ToString(), node) }
-                                                                                                                                              : Enumerable.Empty<Diagnostic>();
+                                                                                                                                              : Array.Empty<Diagnostic>();
 
         private static bool HasIssue(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
         {

@@ -66,7 +66,10 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             var node = (AwaitExpressionSyntax)context.Node;
             var issue = AnalyzeAwaitExpression(node);
 
-            ReportDiagnostics(context, issue);
+            if (issue != null)
+            {
+                ReportDiagnostics(context, issue);
+            }
         }
 
         private Diagnostic AnalyzeAwaitExpression(AwaitExpressionSyntax node)

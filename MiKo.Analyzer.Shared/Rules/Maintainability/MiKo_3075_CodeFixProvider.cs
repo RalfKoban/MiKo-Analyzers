@@ -57,7 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool MakeStatic(Document document, ClassDeclarationSyntax syntax)
         {
-            var type = syntax.GetTypeSymbol(GetSemanticModel(document));
+            var type = syntax.GetTypeSymbol(document);
 
             // Inspect members, if all are static, then make it static, else make it sealed
             if (type.BaseType is null || type.BaseType.IsObject())
