@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -19,46 +19,59 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                Constants.XmlTag.SeeAlso,
                                                            };
 
-        public MiKo_2044_InvalidSeeParameterInXmlAnalyzer() : base(Id, SymbolKind.Method)
+        public MiKo_2044_InvalidSeeParameterInXmlAnalyzer() : base(Id)
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol is IMethodSymbol method && method.Parameters.Length > 0;
+
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
-            var method = (IMethodSymbol)symbol;
+            if (symbol is IMethodSymbol method)
+            {
+                return AnalyzeComment(comment, method);
+            }
+
+            return Array.Empty<Diagnostic>();
+        }
+
+        private IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, IMethodSymbol method)
+        {
             var names = method.Parameters.ToHashSet(_ => _.Name);
 
-            if (names.Count > 0)
+            List<Diagnostic> results = null;
+
+            foreach (var node in comment.AllDescendantNodes())
             {
-                foreach (var node in comment.DescendantNodes(_ => true, true))
+                if (node.IsXml())
                 {
-                    switch (node.Kind())
+                    var tag = node.GetXmlTagName();
+
+                    if (Tags.Contains(tag))
                     {
-                        case SyntaxKind.XmlElement:
-                        case SyntaxKind.XmlEmptyElement:
+                        var cref = node.GetCref();
+
+                        if (cref is null)
                         {
-                            var tag = node.GetXmlTagName();
+                            continue;
+                        }
 
-                            if (Tags.Contains(tag))
+                        var name = cref.GetCrefType().GetName();
+
+                        if (names.Contains(name))
+                        {
+                            if (results is null)
                             {
-                                var cref = node.GetCref();
-
-                                if (cref != null)
-                                {
-                                    var name = cref.GetCrefType().GetName();
-
-                                    if (names.Contains(name))
-                                    {
-                                        yield return Issue(symbol.Name, node, node.GetText());
-                                    }
-                                }
+                                results = new List<Diagnostic>(1);
                             }
 
-                            break;
+                            results.Add(Issue(node, node.GetText()));
                         }
                     }
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -26,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             switch (symbol.MethodKind)
             {
                 case MethodKind.Ordinary when symbol.IsOverride || symbol.IsInterfaceImplementation():
-                    return Enumerable.Empty<Diagnostic>();
+                    return Array.Empty<Diagnostic>();
 
                 case MethodKind.Constructor:
                 case MethodKind.Ordinary:
@@ -35,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                     if (parameters.Length == 0)
                     {
-                        return Enumerable.Empty<Diagnostic>();
+                        return Array.Empty<Diagnostic>();
                     }
 
                     return parameters.Where(_ => _.Type.TypeKind == TypeKind.Delegate)
@@ -44,7 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
 
                 default:
-                    return Enumerable.Empty<Diagnostic>();
+                    return Array.Empty<Diagnostic>();
             }
         }
 
@@ -54,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             return returnType?.TypeKind == TypeKind.Delegate
                    ? new[] { Issue(returnType) }
-                   : Enumerable.Empty<Diagnostic>();
+                   : Array.Empty<Diagnostic>();
         }
     }
 }

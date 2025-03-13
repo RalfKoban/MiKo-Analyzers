@@ -274,7 +274,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
                                          var codeFixTitle = provider.GetType().GetProperty("Title", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(provider).ToString();
 
-                                         var parts = expectedTitle.FormatWith('|').Split('|');
+                                         var parts = expectedTitle.FormatWith("|").Split('|');
 
                                          if (parts.Length <= 1)
                                          {

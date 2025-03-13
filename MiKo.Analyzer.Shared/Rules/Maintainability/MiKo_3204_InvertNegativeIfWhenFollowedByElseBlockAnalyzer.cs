@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> AnalyzeIfStatement(IfStatementSyntax node, SyntaxNodeAnalysisContext context) => HasIssue(node)
                                                                                                                                     ? new[] { Issue(node) }
-                                                                                                                                    : Enumerable.Empty<Diagnostic>();
+                                                                                                                                    : Array.Empty<Diagnostic>();
 
         private static bool HasIssue(IfStatementSyntax node)
         {

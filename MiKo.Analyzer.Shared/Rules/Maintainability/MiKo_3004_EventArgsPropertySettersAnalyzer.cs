@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -21,19 +21,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (symbol.IsReadOnly)
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             var setter = symbol.SetMethod;
 
             if (setter is null)
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             return setter.DeclaredAccessibility != Accessibility.Private
                    ? new[] { Issue(setter) }
-                   : Enumerable.Empty<Diagnostic>();
+                   : Array.Empty<Diagnostic>();
         }
     }
 }

@@ -63,7 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 var comment = trivia.ToString().AsSpan().Trim();
 
-                if (comment.StartsWith("////", StringComparison.OrdinalIgnoreCase))
+                if (comment.StartsWith("////", StringComparison.Ordinal))
                 {
                     // that's a comment to ignore
                     return false;

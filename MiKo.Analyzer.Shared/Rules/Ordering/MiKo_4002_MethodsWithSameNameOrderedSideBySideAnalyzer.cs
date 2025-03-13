@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -24,15 +23,23 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             if (symbol.IsRecord)
             {
                 // filter primary ctors (as we cannot re-align those)
-                ctors = ctors.Where(_ => _.IsPrimaryConstructor() is false);
+                ctors = ctors.Where(_ => _.IsPrimaryConstructor() is false).ToList();
             }
 
             var methods = GetMethodsOrderedByLocation(symbol);
-            var methodsAndCtors = ctors.Concat(methods).ToList();
 
-            return methodsAndCtors.Count != 0
-                   ? AnalyzeMethodsGroupedByAccessibility(methodsAndCtors)
-                   : Enumerable.Empty<Diagnostic>();
+            var count = ctors.Count + methods.Count;
+
+            if (count <= 0)
+            {
+                return Array.Empty<Diagnostic>();
+            }
+
+            var methodsAndCtors = new List<IMethodSymbol>(count);
+            methodsAndCtors.AddRange(ctors);
+            methodsAndCtors.AddRange(methods);
+
+            return AnalyzeMethodsGroupedByAccessibility(methodsAndCtors);
         }
 
         private IEnumerable<Diagnostic> AnalyzeMethodsGroupedByAccessibility(IList<IMethodSymbol> allMethods) => allMethods.GroupBy(_ => _.DeclaredAccessibility)
@@ -60,7 +67,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                     {
                         var method = allMethods[index];
 
-                        var builder = new StringBuilder();
+                        var builder = StringBuilderCache.Acquire();
 
                         foreach (var other in methodsWithSameName)
                         {
@@ -70,7 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                             }
                         }
 
-                        var signatures = builder.ToString();
+                        var signatures = StringBuilderCache.GetStringAndRelease(builder);
 
                         yield return Issue(method, signatures);
                     }

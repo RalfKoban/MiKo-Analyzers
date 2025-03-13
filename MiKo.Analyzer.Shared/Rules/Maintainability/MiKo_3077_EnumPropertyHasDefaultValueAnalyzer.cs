@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -21,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> Analyze(IPropertySymbol symbol, Compilation compilation) => HasIssue(symbol)
                                                                                                                ? new[] { Issue(symbol) }
-                                                                                                               : Enumerable.Empty<Diagnostic>();
+                                                                                                               : Array.Empty<Diagnostic>();
 
         private static bool HasIssue(IPropertySymbol property)
         {

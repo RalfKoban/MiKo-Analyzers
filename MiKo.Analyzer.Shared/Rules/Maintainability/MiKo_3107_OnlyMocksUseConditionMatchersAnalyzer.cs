@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -38,7 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (argumentList is null)
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             var method = node.GetEnclosingMethod(semanticModel);
@@ -71,16 +72,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var node = (InvocationExpressionSyntax)context.Node;
             var issues = AnalyzeNormalInvocationExpression(node, context.SemanticModel);
 
-            ReportDiagnostics(context, issues);
+            if (issues.IsEmptyArray() is false)
+            {
+                ReportDiagnostics(context, issues);
+            }
         }
 
         private IEnumerable<Diagnostic> AnalyzeNormalInvocationExpression(InvocationExpressionSyntax node, SemanticModel semanticModel)
         {
             var argumentList = node.ArgumentList;
 
-            if (node.Ancestors<LambdaExpressionSyntax>().Any(_ => _.IsMoqCall()))
+            if (node.AncestorsWithinMethods<LambdaExpressionSyntax>().Any(_ => _.IsMoqCall()))
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             var method = node.GetEnclosingMethod(semanticModel);
@@ -93,7 +97,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var node = (InitializerExpressionSyntax)context.Node;
             var issues = AnalyzeInitializerExpression(node, context.SemanticModel);
 
-            ReportDiagnostics(context, issues);
+            if (issues.IsEmptyArray() is false)
+            {
+                ReportDiagnostics(context, issues);
+            }
         }
 
         private IEnumerable<Diagnostic> AnalyzeInitializerExpression(InitializerExpressionSyntax node, SemanticModel semanticModel)
@@ -144,12 +151,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         }
 
         private IEnumerable<Diagnostic> AnalyzeArguments(IMethodSymbol method, ArgumentListSyntax argumentList) => method is null
-                                                                                                                   ? Enumerable.Empty<Diagnostic>()
+                                                                                                                   ? Array.Empty<Diagnostic>()
                                                                                                                    : AnalyzeArguments(method.Name, argumentList);
 
         private IEnumerable<Diagnostic> AnalyzeArguments(string name, ArgumentListSyntax argumentList) => argumentList.Arguments.SelectMany(_ => AnalyzeExpression(_.Expression, name, _.GetLocation()));
 
-        private IEnumerable<Diagnostic> AnalyzeExpression(ExpressionSyntax expression, string methodName, Location location)
+        private Diagnostic[] AnalyzeExpression(ExpressionSyntax expression, string methodName, Location location)
         {
             var hasIssue = expression is InvocationExpressionSyntax ies
                         && ies.Expression is MemberAccessExpressionSyntax mae
@@ -161,7 +168,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return new[] { Issue(methodName, location) };
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
     }
 }

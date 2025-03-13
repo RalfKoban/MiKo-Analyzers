@@ -149,6 +149,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return null;
         }
 
-        private Diagnostic Issue(SyntaxToken token) => Issue(token, token.ValueText, new[] { new Pair(Constants.AnalyzerCodeFixSharedData.Marker, token.ValueText) });
+        private new Diagnostic Issue(SyntaxToken token) => Issue(token, new Pair(Constants.AnalyzerCodeFixSharedData.Marker, token.ValueText));
     }
 }

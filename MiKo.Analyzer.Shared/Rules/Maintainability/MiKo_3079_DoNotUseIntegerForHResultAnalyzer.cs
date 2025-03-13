@@ -26,11 +26,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var number = node.Token.ValueText;
 
-                if (number.Length == 10 && number.StartsWith("2147", StringComparison.OrdinalIgnoreCase) && int.TryParse(number, out var result))
+                if (number.Length == 10 && number.StartsWith("2147", StringComparison.Ordinal) && int.TryParse(number, out var result))
                 {
                     var hexValue = ((-1) * result).ToString("X");
 
-                    ReportDiagnostics(context, Issue(string.Empty, parent, hexValue));
+                    ReportDiagnostics(context, Issue(parent, hexValue));
                 }
             }
         }

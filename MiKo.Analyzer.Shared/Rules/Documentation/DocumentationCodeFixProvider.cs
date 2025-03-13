@@ -39,9 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 for (var index = 0; index < resultIndex; index++)
                 {
-                    var item = result[index];
-
-                    if (span.StartsWith(item.AsSpan()))
+                    if (span.StartsWith(result[index].AsSpan()))
                     {
                         found = true;
 
@@ -187,10 +185,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         if (originalText.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase))
                         {
-                            var replacedText = originalText.AsBuilder()
+                            var replacedText = originalText.AsCachedBuilder()
                                                            .ReplaceAllWithCheck(map)
                                                            .AdjustFirstWord(firstWordHandling)
-                                                           .ToString();
+                                                           .ToStringAndRelease();
 
                             if (originalText.Equals(replacedText, StringComparison.Ordinal))
                             {
@@ -485,139 +483,32 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Cref(tag, SyntaxFactory.QualifiedCref(type.WithoutTrivia(), SyntaxFactory.NameMemberCref(member.WithoutTrivia())));
         }
 
-        protected static string GetParameterName(XmlElementSyntax syntax) => syntax.GetAttributes<XmlNameAttributeSyntax>().First().Identifier.GetName();
+        protected static string GetParameterName(XmlElementSyntax syntax) => syntax.GetAttributes<XmlNameAttributeSyntax>()[0].Identifier.GetName();
 
-        protected static string GetParameterName(XmlEmptyElementSyntax syntax) => syntax.Attributes.OfType<XmlAttributeSyntax, XmlNameAttributeSyntax>()[0].Identifier.GetName();
+        protected static string GetParameterName(XmlEmptyElementSyntax syntax) => syntax.GetAttributes<XmlNameAttributeSyntax>()[0].Identifier.GetName();
 
         protected static XmlCrefAttributeSyntax GetSeeCref(SyntaxNode value) => value.GetCref(Constants.XmlTag.See);
 
-        protected static DocumentationCommentTriviaSyntax GetXmlSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.SelectMany(_ => _.GetDocumentationCommentTriviaSyntax())
-                                                                                                                          .FirstOrDefault(_ => _ != null);
+        protected static DocumentationCommentTriviaSyntax GetXmlSyntax(IEnumerable<SyntaxNode> syntaxNodes)
+        {
+            foreach (var node in syntaxNodes)
+            {
+                var comments = node.GetDocumentationCommentTriviaSyntax();
+
+                if (comments.Length > 0)
+                {
+                    return comments[0];
+                }
+            }
+
+            return null;
+        }
 
         protected static IEnumerable<XmlElementSyntax> GetXmlSyntax(string startTag, IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.SelectMany(_ => _.GetXmlSyntax(startTag));
 
         protected static XmlEmptyElementSyntax Inheritdoc() => XmlEmptyElement(Constants.XmlTag.Inheritdoc);
 
         protected static XmlEmptyElementSyntax Inheritdoc(XmlCrefAttributeSyntax cref) => Inheritdoc().WithAttributes(cref.ToSyntaxList<XmlAttributeSyntax>());
-
-        protected static bool IsSeeCref(SyntaxNode value)
-        {
-            switch (value)
-            {
-                case XmlEmptyElementSyntax element when element.GetName() == Constants.XmlTag.See:
-                {
-                    return IsCref(element.Attributes);
-                }
-
-                case XmlElementSyntax element when element.GetName() == Constants.XmlTag.See:
-                {
-                    return IsCref(element.StartTag.Attributes);
-                }
-
-                default:
-                {
-                    return false;
-                }
-            }
-
-            bool IsCref(SyntaxList<XmlAttributeSyntax> syntax) => syntax.FirstOrDefault() is XmlCrefAttributeSyntax;
-        }
-
-        protected static bool IsSeeCref(SyntaxNode value, string type)
-        {
-            switch (value)
-            {
-                case XmlEmptyElementSyntax element when element.GetName() == Constants.XmlTag.See:
-                {
-                    return IsCref(element.Attributes, type);
-                }
-
-                case XmlElementSyntax element when element.GetName() == Constants.XmlTag.See:
-                {
-                    return IsCref(element.StartTag.Attributes, type);
-                }
-
-                default:
-                {
-                    return false;
-                }
-            }
-
-            bool IsCref(SyntaxList<XmlAttributeSyntax> syntax, string content) => syntax.FirstOrDefault() is XmlCrefAttributeSyntax attribute && attribute.Cref.ToString() == content;
-        }
-
-        protected static bool IsSeeCref(SyntaxNode value, TypeSyntax type)
-        {
-            switch (value)
-            {
-                case XmlEmptyElementSyntax element when element.GetName() == Constants.XmlTag.See:
-                {
-                    return IsCref(element.Attributes, type);
-                }
-
-                case XmlElementSyntax element when element.GetName() == Constants.XmlTag.See:
-                {
-                    return IsCref(element.StartTag.Attributes, type);
-                }
-
-                default:
-                {
-                    return false;
-                }
-            }
-
-            bool IsCref(SyntaxList<XmlAttributeSyntax> syntax, TypeSyntax t)
-            {
-                if (syntax.FirstOrDefault() is XmlCrefAttributeSyntax attribute)
-                {
-                    if (attribute.Cref is NameMemberCrefSyntax m)
-                    {
-                        return t is GenericNameSyntax
-                               ? IsSameGeneric(m.Name, t)
-                               : IsSameName(m.Name, t);
-                    }
-                }
-
-                return false;
-            }
-        }
-
-        protected static bool IsSeeCref(SyntaxNode value, TypeSyntax type, NameSyntax member)
-        {
-            switch (value)
-            {
-                case XmlEmptyElementSyntax element when element.GetName() == Constants.XmlTag.See:
-                {
-                    return IsCref(element.Attributes, type, member);
-                }
-
-                case XmlElementSyntax element when element.GetName() == Constants.XmlTag.See:
-                {
-                    return IsCref(element.StartTag.Attributes, type, member);
-                }
-
-                default:
-                {
-                    return false;
-                }
-            }
-
-            bool IsCref(SyntaxList<XmlAttributeSyntax> syntax, TypeSyntax t, NameSyntax name)
-            {
-                if (syntax.FirstOrDefault() is XmlCrefAttributeSyntax attribute)
-                {
-                    if (attribute.Cref is QualifiedCrefSyntax q && IsSameGeneric(q.Container, t))
-                    {
-                        if (q.Member is NameMemberCrefSyntax m && IsSameName(m.Name, name))
-                        {
-                            return true;
-                        }
-                    }
-                }
-
-                return false;
-            }
-        }
 
         protected static XmlElementSyntax MakeFirstWordInfiniteVerb(XmlElementSyntax syntax)
         {
@@ -949,47 +840,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return 0;
-        }
-
-        private static bool IsSameGeneric(TypeSyntax t1, TypeSyntax t2)
-        {
-            if (t1 is GenericNameSyntax g1 && t2 is GenericNameSyntax g2)
-            {
-                if (g1.Identifier.ValueText == g2.Identifier.ValueText)
-                {
-                    var arguments1 = g1.TypeArgumentList.Arguments;
-                    var arguments2 = g2.TypeArgumentList.Arguments;
-
-                    // keep in local variable to avoid multiple requests (see Roslyn implementation)
-                    var arguments1Count = arguments1.Count;
-                    var arguments2Count = arguments2.Count;
-
-                    if (arguments1Count == arguments2Count)
-                    {
-                        for (var i = 0; i < arguments1Count; i++)
-                        {
-                            if (IsSameName(arguments1[i], arguments2[i]) is false)
-                            {
-                                return false;
-                            }
-                        }
-
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        private static bool IsSameName(TypeSyntax t1, TypeSyntax t2)
-        {
-            if (t1 is IdentifierNameSyntax n1 && t2 is IdentifierNameSyntax n2)
-            {
-                return n1.Identifier.ValueText == n2.Identifier.ValueText;
-            }
-
-            return t1.ToString() == t2.ToString();
         }
 
 //// ncrunch: rdi off

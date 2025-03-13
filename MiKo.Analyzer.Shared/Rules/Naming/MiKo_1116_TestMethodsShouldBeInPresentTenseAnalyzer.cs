@@ -12,23 +12,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public const string Id = "MiKo_1116";
 
         private const string Returned = "Returned";
-        private const string Returns = "Returns";
-        private const string Thrown = "Thrown";
-        private const string Throws = "Throws";
+        private const string Threw = "Threw";
         private const string Was = "Was";
         private const string Will = "Will";
 
-        private static readonly string[] NonPresentPhrases = { Returned, /* Thrown, */ Was, Will };
+        private static readonly string[] NonPresentPhrases = { Returned, Threw, Was, Will };
 
         public MiKo_1116_TestMethodsShouldBeInPresentTenseAnalyzer() : base(Id)
         {
         }
 
         protected override bool IsUnitTestAnalyzer => true;
-
-        internal static string FindBetterName(ISymbol symbol) => FindBetterName(symbol.Name);
-
-        internal static string FindBetterName(string symbolName) => NamesFinder.FindBetterTestName(symbolName);
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod();
 
@@ -40,7 +34,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 if (HasIssue(methodName))
                 {
-                    yield return Issue(symbol);
+                    var betterName = NamesFinder.FindBetterTestName(symbol.Name, symbol);
+
+                    yield return Issue(symbol, betterName, CreateBetterNameProposal(betterName));
                 }
             }
         }

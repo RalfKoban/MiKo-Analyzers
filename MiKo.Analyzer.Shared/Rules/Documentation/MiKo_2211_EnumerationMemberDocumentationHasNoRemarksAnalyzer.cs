@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -11,18 +13,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2211";
 
-        public MiKo_2211_EnumerationMemberDocumentationHasNoRemarksAnalyzer() : base(Id, SymbolKind.Field)
+        public MiKo_2211_EnumerationMemberDocumentationHasNoRemarksAnalyzer() : base(Id)
         {
         }
 
-        protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.ContainingType.IsEnum() && base.ShallAnalyze(symbol);
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol is IFieldSymbol field && field.ContainingType.IsEnum();
 
-        protected override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
-            foreach (var remarks in comment.GetRemarksXmls())
+            var remarks = comment.GetRemarksXmls();
+
+            if (remarks.Count == 0)
             {
-                yield return Issue(symbol.Name, remarks.StartTag);
+                return Array.Empty<Diagnostic>();
             }
+
+            return remarks.Select(_ => Issue(_.StartTag)).ToList();
         }
     }
 }

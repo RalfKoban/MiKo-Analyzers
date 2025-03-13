@@ -30,15 +30,9 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsComment(this SyntaxTrivia value)
         {
-            switch (value.Kind())
-            {
-                case SyntaxKind.SingleLineCommentTrivia:
-                case SyntaxKind.MultiLineCommentTrivia:
-                    return true;
-
-                default:
-                    return false;
-            }
+            // we use 'RawKind' for performance reasons as most likely, we have single line comments
+            // (SyntaxKind.MultiLineCommentTrivia is 1 higher than SyntaxKind.SingleLineCommentTrivia, so we include both)
+            return (uint)(value.RawKind - (int)SyntaxKind.SingleLineCommentTrivia) <= 1;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -79,7 +73,7 @@ namespace MiKoSolutions.Analyzers
         {
             if (value is null)
             {
-                return Enumerable.Empty<SyntaxToken>();
+                return Array.Empty<SyntaxToken>();
             }
 
             return value.ChildNodes<XmlTextSyntax>().GetXmlTextTokens();
@@ -89,7 +83,7 @@ namespace MiKoSolutions.Analyzers
         {
             if (value is null)
             {
-                return Enumerable.Empty<SyntaxToken>();
+                return Array.Empty<SyntaxToken>();
             }
 
             return value.SelectMany(_ => _.GetXmlTextTokens());
@@ -112,6 +106,14 @@ namespace MiKoSolutions.Analyzers
 
                         if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
                         {
+                            var text = token.ValueText;
+
+                            if (text.Length <= Constants.MinimumCharactersThreshold && string.IsNullOrWhiteSpace(text))
+                            {
+                                // nothing to inspect as the text is too short and consists of whitespaces only
+                                continue;
+                            }
+
                             yield return token;
                         }
                     }
@@ -123,20 +125,20 @@ namespace MiKoSolutions.Analyzers
         {
             if (value is null)
             {
-                return Enumerable.Empty<SyntaxToken>();
+                return Array.Empty<SyntaxToken>();
             }
 
             return value.SelectMany(_ => _.GetXmlTextTokens());
         }
 
-        internal static IEnumerable<SyntaxToken> GetXmlTextTokens(this DocumentationCommentTriviaSyntax value)
+        internal static IReadOnlyList<SyntaxToken> GetXmlTextTokens(this DocumentationCommentTriviaSyntax value)
         {
             return GetXmlTextTokens(value, node => node.IsCode() is false); // skip code
         }
 
-        internal static IEnumerable<SyntaxToken> GetXmlTextTokens(this DocumentationCommentTriviaSyntax value, Func<XmlElementSyntax, bool> descendantNodesFilter)
+        internal static IReadOnlyList<SyntaxToken> GetXmlTextTokens(this DocumentationCommentTriviaSyntax value, Func<XmlElementSyntax, bool> descendantNodesFilter)
         {
-            return value?.DescendantNodes(descendantNodesFilter).GetXmlTextTokens() ?? Enumerable.Empty<SyntaxToken>();
+            return (IReadOnlyList<SyntaxToken>)value?.DescendantNodes(descendantNodesFilter).GetXmlTextTokens().ToList() ?? Array.Empty<SyntaxToken>();
         }
 
         internal static IEnumerable<SyntaxTrivia> NextSiblings(this SyntaxTrivia value, int count = int.MaxValue)
@@ -162,7 +164,7 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            return Enumerable.Empty<SyntaxTrivia>();
+            return Array.Empty<SyntaxTrivia>();
         }
 
         internal static IEnumerable<SyntaxTrivia> PreviousSiblings(this SyntaxTrivia value, int count = int.MaxValue)
@@ -188,7 +190,7 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            return Enumerable.Empty<SyntaxTrivia>();
+            return Array.Empty<SyntaxTrivia>();
         }
     }
 }

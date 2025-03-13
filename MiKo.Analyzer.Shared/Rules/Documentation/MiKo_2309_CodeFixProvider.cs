@@ -19,9 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (DocumentationComment.ContainsPhrases(Constants.Comments.NotContractionPhrase, comment.AsSpan().TrimEnd()))
             {
-                var text = comment.AsBuilder()
-                                  .ReplaceAllWithCheck(Constants.Comments.NotContractionReplacementMap.AsSpan())
-                                  .ToString();
+                var text = comment.AsCachedBuilder().ReplaceAllWithCheck(Constants.Comments.NotContractionReplacementMap.AsSpan()).ToStringAndRelease();
 
                 return SyntaxFactory.Comment(text);
             }

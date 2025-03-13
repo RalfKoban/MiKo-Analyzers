@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -19,6 +19,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation) => symbol.ContainingNamespace?.Name != "Converters"
                                                                                                                     ? new[] { Issue(symbol) }
-                                                                                                                    : Enumerable.Empty<Diagnostic>();
+                                                                                                                    : Array.Empty<Diagnostic>();
     }
 }

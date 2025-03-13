@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -13,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3113";
 
-        private static readonly SyntaxKind[] Ancestors = { SyntaxKind.ExpressionStatement, SyntaxKind.SimpleLambdaExpression, SyntaxKind.ParenthesizedLambdaExpression };
+        private static readonly Func<SyntaxNode, bool> IsAncestor = IsAncestorCore;
 
         public MiKo_3113_TestsDoNotUseFluentAssertionsAnalyzer() : base(Id)
         {
@@ -25,10 +24,24 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeExpressionStatementSyntax, SyntaxKind.ExpressionStatement);
 
+        private static bool IsAncestorCore(SyntaxNode node)
+        {
+            switch (node.RawKind)
+            {
+                case (int)SyntaxKind.ExpressionStatement:
+                case (int)SyntaxKind.SimpleLambdaExpression:
+                case (int)SyntaxKind.ParenthesizedLambdaExpression:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
         private static ExpressionSyntax FindProblematicNode(ExpressionStatementSyntax node)
         {
             var problematicNode = node.GetFluentAssertionShouldNode();
-            var root = problematicNode?.FirstAncestor<SyntaxNode>(_ => _.IsAnyKind(Ancestors));
+            var root = problematicNode?.FirstAncestor(IsAncestor);
 
             switch (root)
             {
@@ -44,16 +57,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var issues = Analyze(node);
 
-            ReportDiagnostics(context, issues);
+            if (issues.Length > 0)
+            {
+                ReportDiagnostics(context, issues);
+            }
         }
 
-        private IEnumerable<Diagnostic> Analyze(ExpressionStatementSyntax node)
+        private Diagnostic[] Analyze(ExpressionStatementSyntax node)
         {
             var problematicNode = FindProblematicNode(node);
 
             return problematicNode != null
                    ? new[] { Issue(problematicNode) }
-                   : Enumerable.Empty<Diagnostic>();
+                   : Array.Empty<Diagnostic>();
         }
     }
 }

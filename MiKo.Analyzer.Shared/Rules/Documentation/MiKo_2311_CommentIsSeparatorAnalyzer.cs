@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -15,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] Separators = { "----", "****", "====", "####" };
 
-        public MiKo_2311_CommentIsSeparatorAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_2311_CommentIsSeparatorAnalyzer() : base(Id)
         {
         }
 
@@ -27,13 +26,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeComment(SyntaxNode node)
         {
-            foreach (var trivia in node.DescendantTrivia().Where(_ => _.IsSingleLineComment()))
+            foreach (var trivia in node.DescendantTrivia())
             {
-                var comment = trivia.ToString();
-
-                if (CommentContainsSeparator(comment.AsSpan()))
+                if (trivia.IsSingleLineComment())
                 {
-                    yield return Issue(string.Empty, trivia);
+                    var comment = trivia.ToString();
+
+                    if (CommentContainsSeparator(comment.AsSpan()))
+                    {
+                        yield return Issue(trivia);
+                    }
                 }
             }
         }

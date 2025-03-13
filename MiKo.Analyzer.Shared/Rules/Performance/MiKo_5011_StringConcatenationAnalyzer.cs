@@ -21,7 +21,10 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             var node = (AssignmentExpressionSyntax)context.Node;
             var issue = AnalyzeAddAssignmentExpression(node, context.SemanticModel);
 
-            ReportDiagnostics(context, issue);
+            if (issue != null)
+            {
+                ReportDiagnostics(context, issue);
+            }
         }
 
         private Diagnostic AnalyzeAddAssignmentExpression(AssignmentExpressionSyntax node, SemanticModel semanticModel) => node.Left.IsString(semanticModel)

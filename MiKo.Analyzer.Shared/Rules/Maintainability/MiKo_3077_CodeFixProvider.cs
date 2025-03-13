@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
@@ -30,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 // append a semicolon to the end
                 var initializer = CreateInitializer(document, propertySyntax.Type);
-                var updatedNode = propertySyntax.WithInitializer(initializer).WithSemicolonToken(";".AsToken(SyntaxKind.SemicolonToken));
+                var updatedNode = propertySyntax.WithInitializer(initializer).WithSemicolonToken();
 
                 return root.ReplaceNode(propertySyntax, updatedNode);
             }
@@ -67,9 +66,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static EqualsValueClauseSyntax CreateInitializer(Document document, TypeSyntax typeSyntax)
         {
-            var type = typeSyntax.GetTypeSymbol(GetSemanticModel(document));
+            var type = typeSyntax.GetTypeSymbol(document);
 
-            var memberAccess = SimpleMemberAccess(type.Name, type.GetFields().First().Name);
+            var memberAccess = SimpleMemberAccess(type.Name, type.GetFields()[0].Name);
 
             return SyntaxFactory.EqualsValueClause(memberAccess);
         }

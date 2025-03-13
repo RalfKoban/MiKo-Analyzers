@@ -465,6 +465,55 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_method_with_arguments_that_contains_initializer_and_second_argument_that_is_on_same_line_as_end_of_first_argument()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(new Dictionary<int, int>
+                            {
+                                { 1, 2 },
+                                { 3, 4 },
+                            }, 42);
+    }
+
+    private void DoSomethingCore(Dictionary<int, int> dictionary, int i)
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(new Dictionary<int, int>
+                            {
+                                { 1, 2 },
+                                { 3, 4 },
+                            },
+                        42);
+    }
+
+    private void DoSomethingCore(Dictionary<int, int> dictionary, int i)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6050_MultilineArgumentsAreIndentedToRightAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6050_MultilineArgumentsAreIndentedToRightAnalyzer();

@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -19,6 +19,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation) => symbol.ContainingType.DeclaredAccessibility == Accessibility.Public
                                                                                                              ? new[] { Issue(symbol) }
-                                                                                                             : Enumerable.Empty<Diagnostic>();
+                                                                                                             : Array.Empty<Diagnostic>();
     }
 }

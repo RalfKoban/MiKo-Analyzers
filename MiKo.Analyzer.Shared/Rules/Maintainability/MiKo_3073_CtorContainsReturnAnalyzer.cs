@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -13,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3073";
 
-        private static readonly SyntaxKind[] NestedCalls = { SyntaxKind.LocalFunctionStatement, SyntaxKind.ParenthesizedLambdaExpression, SyntaxKind.SimpleLambdaExpression };
+        private static readonly Func<SyntaxNode, bool> IsNoNestedCall = IsNoNestedCallCore;
 
         public MiKo_3073_CtorContainsReturnAnalyzer() : base(Id)
         {
@@ -23,8 +24,22 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                    && symbol.IsPrimaryConstructor() is false;
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation) => symbol.GetSyntax()
-                                                                                                                   .DescendantNodes(_ => _.IsAnyKind(NestedCalls) is false)
+                                                                                                                   .DescendantNodes(IsNoNestedCall)
                                                                                                                    .OfType<ReturnStatementSyntax>()
                                                                                                                    .Select(_ => Issue(symbol.Name, _));
+
+        private static bool IsNoNestedCallCore(SyntaxNode node)
+        {
+            switch (node.RawKind)
+            {
+                case (int)SyntaxKind.LocalFunctionStatement:
+                case (int)SyntaxKind.ParenthesizedLambdaExpression:
+                case (int)SyntaxKind.SimpleLambdaExpression:
+                    return false;
+
+                default:
+                    return true;
+            }
+        }
     }
 }

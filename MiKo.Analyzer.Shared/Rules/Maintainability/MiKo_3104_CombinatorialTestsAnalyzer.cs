@@ -92,6 +92,39 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool IsSequential(IMethodSymbol method) => method.HasAttribute(SequentialAttributes);
 
-        private static int CountApplicableParameters(IMethodSymbol method) => method.Parameters.SelectMany(_ => _.GetAttributeNames()).Count(AttributeNames.Contains);
+        private static int CountApplicableParameters(IMethodSymbol method)
+        {
+            var parameters = method.Parameters;
+            var parametersLength = parameters.Length;
+
+            if (parametersLength == 0)
+            {
+                return 0;
+            }
+
+            var count = 0;
+
+            for (var parameterIndex = 0; parameterIndex < parametersLength; parameterIndex++)
+            {
+                var parameter = parameters[parameterIndex];
+
+                var attributeNames = parameter.GetAttributeNames();
+
+                var attributeNamesLength = attributeNames.Length;
+
+                if (attributeNamesLength > 0)
+                {
+                    for (var nameIndex = 0; nameIndex < attributeNamesLength; nameIndex++)
+                    {
+                        if (AttributeNames.Contains(attributeNames[nameIndex]))
+                        {
+                            count++;
+                        }
+                    }
+                }
+            }
+
+            return count;
+        }
     }
 }

@@ -1123,6 +1123,18 @@ Example:
   <data name="MiKo_1078_Title" xml:space="preserve">
     <value>Builder method names should start with 'Build'</value>
   </data>
+  <data name="MiKo_1079_CodeFixTitle" xml:space="preserve">
+    <value>Remove suffix 'Repository'</value>
+  </data>
+  <data name="MiKo_1079_Description" xml:space="preserve">
+    <value>DDD defines repository classes. However, those classes should not be suffixed with 'Repository' as everybody understands different things as a repository.</value>
+  </data>
+  <data name="MiKo_1079_MessageFormat" xml:space="preserve">
+    <value>Remove suffix 'Repository'</value>
+  </data>
+  <data name="MiKo_1079_Title" xml:space="preserve">
+    <value>Repositories should not be suffixed with 'Repository'</value>
+  </data>
   <data name="MiKo_1080_Description" xml:space="preserve">
     <value>It is much easier to read a number inside a name if it is written as number and not its spelling (e.g. 'issue42' in contrast to 'issueFortyTwo').</value>
   </data>
@@ -1221,6 +1233,19 @@ Example:
   </data>
   <data name="MiKo_1088_Title" xml:space="preserve">
     <value>Singleton instances should be named 'Instance'</value>
+  </data>
+  <data name="MiKo_1089_CodeFixTitle" xml:space="preserve">
+    <value>Rename method and remove 'Get' prefix</value>
+  </data>
+  <data name="MiKo_1089_Description" xml:space="preserve">
+    <value>To ease reading, methods should not be prefixed with 'Get', especially when they are part of repositories.
+For example, 'GetUsersByCity' should be renamed to 'UsersWithCity', as the code where it is used is easier to read that way.</value>
+  </data>
+  <data name="MiKo_1089_MessageFormat" xml:space="preserve">
+    <value>Do not prefix with 'Get'</value>
+  </data>
+  <data name="MiKo_1089_Title" xml:space="preserve">
+    <value>Methods should not be prefixed with 'Get'</value>
   </data>
   <data name="MiKo_1090_CodeFixTitle" xml:space="preserve">
     <value>Rename parameter</value>
@@ -1667,6 +1692,93 @@ For example, using a 'Lib' suffix just indicates the assembly is a DLL, which is
   <data name="MiKo_1409_Title" xml:space="preserve">
     <value>Do not prefix or suffix namespaces with underscores</value>
   </data>
+  <data name="MiKo_1501_Description" xml:space="preserve">
+    <value>When naming something 'Filter', it is not clear whether the criteria to filter on gets included or excluded in the result. So instead, it should be named something like `IncludeBy`, `ExcludeBy`, `Remove`, `Skip` or `Take`. That makes it clear about what gets filtered.</value>
+  </data>
+  <data name="MiKo_1501_MessageFormat" xml:space="preserve">
+    <value>Rename 'Filter' to something like 'IncludeBy', 'ExcludeBy', 'Remove', 'Skip' or 'Take'</value>
+  </data>
+  <data name="MiKo_1501_Title" xml:space="preserve">
+    <value>Do not use 'Filter' in names</value>
+  </data>
+  <data name="MiKo_1502_Description" xml:space="preserve">
+    <value>When naming something 'Process', it is not clear what is processed, why it is processed and what the result after processing is.
+It is better to when the name contains the purpose behind it.
+
+Example:
+"ProcessMessages" could be renamed to "DeleteObsoleteMessages" or similar if the purpose of processing messages is to detect and delete obsolete ones.</value>
+  </data>
+  <data name="MiKo_1502_MessageFormat" xml:space="preserve">
+    <value>Rename so that 'Process' is not used</value>
+  </data>
+  <data name="MiKo_1502_Title" xml:space="preserve">
+    <value>Do not use 'Process' in names</value>
+  </data>
+  <data name="MiKo_1503_CodeFixTitle" xml:space="preserve">
+    <value>Replace 'Counter' with 'Count'</value>
+  </data>
+  <data name="MiKo_1503_Description" xml:space="preserve">
+    <value>Methods that return values but are suffixed with 'Counter' are most likely not returning counters but counted values instead.
+So they should be suffixed with 'Count'.</value>
+  </data>
+  <data name="MiKo_1503_MessageFormat" xml:space="preserve">
+    <value>Rename '{0}' to '{1}'</value>
+  </data>
+  <data name="MiKo_1503_Title" xml:space="preserve">
+    <value>Methods should not be suffixed with 'Counter'</value>
+  </data>
+  <data name="MiKo_1504_CodeFixTitle" xml:space="preserve">
+    <value>Replace 'Counter' with 'Counted'</value>
+  </data>
+  <data name="MiKo_1504_Description" xml:space="preserve">
+    <value>Properties that return values but are suffixed with 'Counter' are most likely not returning counters but counted values instead.
+So they should be named accordingly.</value>
+  </data>
+  <data name="MiKo_1504_MessageFormat" xml:space="preserve">
+    <value>Rename '{0}' to '{1}'</value>
+  </data>
+  <data name="MiKo_1504_Title" xml:space="preserve">
+    <value>Properties should not be suffixed with 'Counter'</value>
+  </data>
+  <data name="MiKo_1505_CodeFixTitle" xml:space="preserve">
+    <value>Replace 'Counter' with 'counted'</value>
+  </data>
+  <data name="MiKo_1505_Description" xml:space="preserve">
+    <value>Fields that hold values but are suffixed with 'Counter' are most likely not holding counters but counted values instead.
+So they should be named accordingly.</value>
+  </data>
+  <data name="MiKo_1505_MessageFormat" xml:space="preserve">
+    <value>Rename '{0}' to '{1}'</value>
+  </data>
+  <data name="MiKo_1505_Title" xml:space="preserve">
+    <value>Fields should not be suffixed with 'Counter'</value>
+  </data>
+  <data name="MiKo_1506_CodeFixTitle" xml:space="preserve">
+    <value>Replace 'Counter' with 'counted'</value>
+  </data>
+  <data name="MiKo_1506_Description" xml:space="preserve">
+    <value>Local variables that hold values but are suffixed with 'Counter' are most likely not holding counters but counted values instead.
+So they should be named accordingly.</value>
+  </data>
+  <data name="MiKo_1506_MessageFormat" xml:space="preserve">
+    <value>Rename '{0}' to '{1}'</value>
+  </data>
+  <data name="MiKo_1506_Title" xml:space="preserve">
+    <value>Local variables should not be suffixed with 'Counter'</value>
+  </data>
+  <data name="MiKo_1507_CodeFixTitle" xml:space="preserve">
+    <value>Replace 'Counter' with 'counted'</value>
+  </data>
+  <data name="MiKo_1507_Description" xml:space="preserve">
+    <value>Parameters that hold values but are suffixed with 'Counter' are most likely not holding counters but counted values instead.
+So they should be named accordingly.</value>
+  </data>
+  <data name="MiKo_1507_MessageFormat" xml:space="preserve">
+    <value>Rename '{0}' to '{1}'</value>
+  </data>
+  <data name="MiKo_1507_Title" xml:space="preserve">
+    <value>Parameters should not be suffixed with 'Counter'</value>
+  </data>
   <data name="MiKo_2000_CodeFixTitle" xml:space="preserve">
     <value>Fix malformed XML</value>
   </data>
@@ -1674,7 +1786,7 @@ For example, using a 'Lib' suffix just indicates the assembly is a DLL, which is
     <value>Documentation should be valid XML to generate API documentation and support IntelliSense. This helps developers understand and use the code better, ensuring the documentation is accurate and accessible.</value>
   </data>
   <data name="MiKo_2000_MessageFormat" xml:space="preserve">
-    <value>Documentation is malformed (contains invalid characters, e.g. '&amp;', '&gt;', '&lt;')</value>
+    <value>Documentation is malformed and contains invalid characters (such as '&amp;' or '&lt;')</value>
   </data>
   <data name="MiKo_2000_Title" xml:space="preserve">
     <value>Documentation should be valid XML</value>
@@ -2147,7 +2259,7 @@ This format clearly describes the purpose of the class and its functionality, ma
     <value>https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/para</value>
   </data>
   <data name="MiKo_2042_MessageFormat" xml:space="preserve">
-    <value>Use '&lt;para/&gt;' instead of '{1}'</value>
+    <value>Use '&lt;para/&gt;' instead of '{0}'</value>
   </data>
   <data name="MiKo_2042_Title" xml:space="preserve">
     <value>Documentation should use '&lt;para/&gt;' XML tags instead of '&lt;br/&gt;' HTML tags</value>
@@ -2172,7 +2284,7 @@ Declaring a delegate type sets a contract specifying the method signatures it ca
     <value>Method parameters should be referenced using &lt;paramref name="..."/&gt; in the documentation, not &lt;param name="..."/&gt; or plain text. This allows the documentation to update automatically if the parameter is renamed or deleted.</value>
   </data>
   <data name="MiKo_2044_MessageFormat" xml:space="preserve">
-    <value>Fix incorrect parameter reference '{1}'</value>
+    <value>Fix incorrect parameter reference '{0}'</value>
   </data>
   <data name="MiKo_2044_Title" xml:space="preserve">
     <value>Documentation references method parameters correctly</value>
@@ -2292,6 +2404,7 @@ This approach ensures clarity and consistency, helping developers understand the
   </data>
   <data name="MiKo_2054_MessageFormat" xml:space="preserve">
     <value>{1} should be something like:
+
 {2}</value>
   </data>
   <data name="MiKo_2054_Title" xml:space="preserve">
@@ -2306,6 +2419,7 @@ This approach ensures clarity and consistency, helping developers understand und
   </data>
   <data name="MiKo_2055_MessageFormat" xml:space="preserve">
     <value>{1} should be something like:
+
 {2}</value>
   </data>
   <data name="MiKo_2055_Title" xml:space="preserve">
@@ -2539,7 +2653,7 @@ This ensures the documentation is precise and informative, helping developers un
     <value>To make example documentation more user-friendly, it should begin with a brief phrase that explains what the example demonstrates. This provides clarity and helps developers quickly understand the purpose of the example.</value>
   </data>
   <data name="MiKo_2100_MessageFormat" xml:space="preserve">
-    <value>Start &lt;example&gt; with: '{1}'</value>
+    <value>Start &lt;example&gt; with: '{0}'</value>
   </data>
   <data name="MiKo_2100_Title" xml:space="preserve">
     <value>&lt;example&gt; documentation should start with descriptive default phrase</value>
@@ -2790,7 +2904,7 @@ This ensures your list documentation is clear and accurately structured.</value>
     <value>The 'type' attribute contains the unknown type {0}</value>
   </data>
   <data name="MiKo_2217_MessageFormat" xml:space="preserve">
-    <value>Use &lt;list&gt; properly: {1}</value>
+    <value>Use &lt;list&gt; properly: {0}</value>
   </data>
   <data name="MiKo_2217_Title" xml:space="preserve">
     <value>&lt;list&gt; documentation is done properly</value>
@@ -2838,7 +2952,7 @@ This ensures clarity and usability in your documentation, making it straightforw
     <value>An empty documentation is a code smell. It indicates that the developer created the XML documentation tag intentionally but failed to provide any actual content. This suggests a potential oversight or lack of attention to detail. Proper documentation is crucial for code clarity and maintenance.</value>
   </data>
   <data name="MiKo_2221_MessageFormat" xml:space="preserve">
-    <value>Provide a documentation for &lt;{1}/&gt;</value>
+    <value>Provide a documentation for &lt;{0}/&gt;</value>
   </data>
   <data name="MiKo_2221_Title" xml:space="preserve">
     <value>Documentation should not use empty XML tags</value>
@@ -2967,6 +3081,18 @@ However, these suppressions should remain inline comments and must not be part o
   </data>
   <data name="MiKo_2233_Title" xml:space="preserve">
     <value>XML tags should be placed on single line</value>
+  </data>
+  <data name="MiKo_2234_CodeFixTitle" xml:space="preserve">
+    <value>Replace with 'to'</value>
+  </data>
+  <data name="MiKo_2234_Description" xml:space="preserve">
+    <value>Phrases like "that is to" or "which is to" are wordy and can just be replaced with "to". This makes documentation clearer and more concise for developers.</value>
+  </data>
+  <data name="MiKo_2234_MessageFormat" xml:space="preserve">
+    <value>Use 'to' instead</value>
+  </data>
+  <data name="MiKo_2234_Title" xml:space="preserve">
+    <value>Documentation should use 'to' instead of 'that is to' or 'which is to'</value>
   </data>
   <data name="MiKo_2300_Description" xml:space="preserve">
     <value>Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works—let the code itself do that.
@@ -3104,6 +3230,18 @@ Instead, comments should enhance understanding, giving context and reasoning for
   </data>
   <data name="MiKo_2311_Title" xml:space="preserve">
     <value>Do not use separator comments</value>
+  </data>
+  <data name="MiKo_2312_CodeFixTitle" xml:space="preserve">
+    <value>Replace with 'to'</value>
+  </data>
+  <data name="MiKo_2312_Description" xml:space="preserve">
+    <value>Phrases like "that is to" or "which is to" are wordy and can just be replaced with "to". This makes comments clearer and more concise for developers.</value>
+  </data>
+  <data name="MiKo_2312_MessageFormat" xml:space="preserve">
+    <value>Use 'to' instead</value>
+  </data>
+  <data name="MiKo_2312_Title" xml:space="preserve">
+    <value>Comments should use 'to' instead of 'that is to' or 'which is to'</value>
   </data>
   <data name="MiKo_3000_Description" xml:space="preserve">
     <value>If #region directives are used, avoid any empty #region. They just clutter the code without adding any value. When regions are truly needed, keep them meaningful and populated to ensure the code remains clean and efficient. This approach maintains clarity and organization in the codebase.</value>
@@ -3924,7 +4062,7 @@ This approach ensures stability and clarity, keeping the Enum's behavior consist
     <value>Write HResults in hexadecimal, not as negative integers. It's much easier to recognize and search for '0x80070005' than '-2147024891'. Keeps the code clean and user-friendly.</value>
   </data>
   <data name="MiKo_3079_MessageFormat" xml:space="preserve">
-    <value>Use 'unchecked((int)0x{1})' instead for HResult</value>
+    <value>Use 'unchecked((int)0x{0})' instead for HResult</value>
   </data>
   <data name="MiKo_3079_Title" xml:space="preserve">
     <value>HResults should be written in hexadecimal</value>
@@ -3983,10 +4121,13 @@ This approach enhances clarity and maintainability.</value>
     <value>To increase readability, place constants on the right side of an operator, not the left. This makes the code look more intuitive and easier to understand.</value>
   </data>
   <data name="MiKo_3084_MessageFormat" xml:space="preserve">
-    <value>Place it on right side of '{1}'</value>
+    <value>Place it on right side of '{0}'</value>
   </data>
   <data name="MiKo_3084_Title" xml:space="preserve">
     <value>Do not place constants on the left side for comparisons</value>
+  </data>
+  <data name="MiKo_3085_CodeFixTitle" xml:space="preserve">
+    <value>Convert to 'if ... else ...'</value>
   </data>
   <data name="MiKo_3085_Description" xml:space="preserve">
     <value>Long conditional statements are hard to read and maintain. Keep them short for easy understanding at a glance, or refactor into if-else statements for clarity. This approach keeps your code clean and maintainable.</value>
@@ -4619,6 +4760,18 @@ Instead, use non-generic types as type arguments. This approach makes the code's
   <data name="MiKo_3225_Title" xml:space="preserve">
     <value>Redundant comparisons can be simplified</value>
   </data>
+  <data name="MiKo_3226_CodeFixTitle" xml:space="preserve">
+    <value>Convert field to const</value>
+  </data>
+  <data name="MiKo_3226_Description" xml:space="preserve">
+    <value>Read-only fields with pre-assigned values are likely meant to be constant values. Therefore, make these fields 'const'. This ensures their values remain constant and clearly communicates their intended use.</value>
+  </data>
+  <data name="MiKo_3226_MessageFormat" xml:space="preserve">
+    <value>Convert field to const</value>
+  </data>
+  <data name="MiKo_3226_Title" xml:space="preserve">
+    <value>Read-only fields with initializers should be const</value>
+  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>
@@ -4675,6 +4828,18 @@ Instead, use non-generic types as type arguments. This approach makes the code's
   </data>
   <data name="MiKo_3502_Title" xml:space="preserve">
     <value>Do not suppress nullable warnings on Linq calls</value>
+  </data>
+  <data name="MiKo_3503_CodeFixTitle" xml:space="preserve">
+    <value>Return variable inside try/catch block</value>
+  </data>
+  <data name="MiKo_3503_Description" xml:space="preserve">
+    <value>Avoid defining variables outside of try/catch blocks, assigning them within the try/catch block, and then returning them immediately after leaving the block. Instead, return the variables directly from within the try/catch block. This makes the code easier to read and understand.</value>
+  </data>
+  <data name="MiKo_3503_MessageFormat" xml:space="preserve">
+    <value>Place return inside the try/catch block</value>
+  </data>
+  <data name="MiKo_3503_Title" xml:space="preserve">
+    <value>Do not assign variables in try-catch blocks and return them directly outside the block</value>
   </data>
   <data name="MiKo_4001_CodeFixTitle" xml:space="preserve">
     <value>Place and order method side-by-side with overloads</value>
@@ -4813,6 +4978,18 @@ This organization ensures clarity and makes the code easier to find, understand 
   </data>
   <data name="MiKo_4104_Title" xml:space="preserve">
     <value>One-Time test cleanup methods should be ordered directly after One-Time test initialization methods</value>
+  </data>
+  <data name="MiKo_4105_CodeFixTitle" xml:space="preserve">
+    <value>Place field before all other fields</value>
+  </data>
+  <data name="MiKo_4105_Description" xml:space="preserve">
+    <value>The field that contains the object under test is an essential part of a test class. To make them easy to find, place these fields first.</value>
+  </data>
+  <data name="MiKo_4105_MessageFormat" xml:space="preserve">
+    <value>Place object under test field before all other fields</value>
+  </data>
+  <data name="MiKo_4105_Title" xml:space="preserve">
+    <value>Object under test fields should be ordered before all other fields</value>
   </data>
   <data name="MiKo_5001_CodeFixTitle" xml:space="preserve">
     <value>Place inside 'if'</value>
@@ -5608,6 +5785,18 @@ This organization ensures clarity and makes the code easier to find, understand 
   </data>
   <data name="MiKo_6061_Title" xml:space="preserve">
     <value>Switch expression arms should be placed on same line</value>
+  </data>
+  <data name="MiKo_6062_CodeFixTitle" xml:space="preserve">
+    <value>Align expression right beside open brace</value>
+  </data>
+  <data name="MiKo_6062_Description" xml:space="preserve">
+    <value>Code readability improves when expressions within complex initializer expressions are indented right beside the opening braces. This makes the code clearer and easier to follow.</value>
+  </data>
+  <data name="MiKo_6062_MessageFormat" xml:space="preserve">
+    <value>Align expression right beside open brace</value>
+  </data>
+  <data name="MiKo_6062_Title" xml:space="preserve">
+    <value>Expressions within complex initializer expressions should be placed beside open brace</value>
   </data>
   <data name="MiKo_6070_CodeFixTitle" xml:space="preserve">
     <value>Surround with blank lines</value>

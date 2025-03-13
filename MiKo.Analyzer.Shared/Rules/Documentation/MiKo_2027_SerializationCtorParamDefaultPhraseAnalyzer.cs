@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -17,35 +15,35 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsSerializationConstructor() && base.ShallAnalyze(symbol);
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol is IMethodSymbol method && method.IsSerializationConstructor();
 
         protected override bool ShallAnalyzeParameter(IParameterSymbol parameter) => parameter.IsSerializationInfoParameter() || parameter.IsStreamingContextParameter();
 
-        protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment)
+        protected override Diagnostic[] AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment)
         {
             if (parameter.IsSerializationInfoParameter())
             {
-                return AnalyzeParameterComment(Constants.Comments.CtorSerializationInfoParamPhrase);
+                return AnalyzeParameterComment(parameter.Name, parameterComment, comment, Constants.Comments.CtorSerializationInfoParamPhrase);
             }
 
             if (parameter.IsStreamingContextParameter())
             {
-                return AnalyzeParameterComment(Constants.Comments.CtorStreamingContextParamPhrase);
+                return AnalyzeParameterComment(parameter.Name, parameterComment, comment, Constants.Comments.CtorStreamingContextParamPhrase);
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
+        }
 
-            IEnumerable<Diagnostic> AnalyzeParameterComment(string[] phrases)
+        private Diagnostic[] AnalyzeParameterComment(string parameterName, XmlElementSyntax parameterComment, string comment, string[] phrases)
+        {
+            if (comment.EqualsAny(phrases))
             {
-                if (comment.EqualsAny(phrases) is false)
-                {
-                    var phrase = phrases[0];
-
-                    return new[] { Issue(parameter.Name, parameterComment.GetContentsLocation(), phrase, CreatePhraseProposal(phrase)) };
-                }
-
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
+
+            var phrase = phrases[0];
+
+            return new[] { Issue(parameterName, parameterComment.GetContentsLocation(), phrase, CreatePhraseProposal(phrase)) };
         }
     }
 }

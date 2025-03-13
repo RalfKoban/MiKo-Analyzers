@@ -25,7 +25,10 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             var issue = AnalyzeReturnStatementSyntax(context.Node);
 
-            ReportDiagnostics(context, issue);
+            if (issue != null)
+            {
+                ReportDiagnostics(context, issue);
+            }
         }
 
         private Diagnostic AnalyzeReturnStatementSyntax(SyntaxNode statement)
