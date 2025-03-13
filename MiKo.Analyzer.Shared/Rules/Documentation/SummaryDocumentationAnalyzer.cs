@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -8,21 +8,33 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class SummaryDocumentationAnalyzer : DocumentationAnalyzer
     {
-        protected SummaryDocumentationAnalyzer(string diagnosticId, SymbolKind symbolKind) : base(diagnosticId, symbolKind)
+        protected SummaryDocumentationAnalyzer(string diagnosticId) : base(diagnosticId)
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeSummaries(symbol, compilation, commentXml, comment);
-
-        protected IEnumerable<Diagnostic> AnalyzeSummaries(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
-            var summaries = CommentExtensions.GetSummaries(commentXml);
+            var summaryXmls = comment.GetSummaryXmls();
 
-            return summaries.Count != 0
-                   ? AnalyzeSummary(symbol, compilation, summaries, comment)
-                   : Enumerable.Empty<Diagnostic>();
+            if (summaryXmls.Count == 0)
+            {
+                return Array.Empty<Diagnostic>();
+            }
+
+            var lazyCommentXml = new Lazy<string>(() => symbol.GetDocumentationCommentXml());
+            var lazySummaries = new Lazy<IReadOnlyCollection<string>>(() => CommentExtensions.GetSummaries(lazyCommentXml.Value));
+
+            return AnalyzeSummaries(comment, symbol, summaryXmls, lazyCommentXml, lazySummaries);
         }
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment) => Enumerable.Empty<Diagnostic>();
+        protected virtual IReadOnlyList<Diagnostic> AnalyzeSummaries(
+                                                                 DocumentationCommentTriviaSyntax comment,
+                                                                 ISymbol symbol,
+                                                                 IReadOnlyList<XmlElementSyntax> summaryXmls,
+                                                                 Lazy<string> commentXml,
+                                                                 Lazy<IReadOnlyCollection<string>> summaries)
+        {
+            return Array.Empty<Diagnostic>();
+        }
     }
 }

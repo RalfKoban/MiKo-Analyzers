@@ -405,6 +405,21 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_comment_with_e_g() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something, e.g. that is very important, on stuff.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_incorrectly_documented_method() => An_issue_is_reported_for(@"
 using System;
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -19,20 +20,22 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation) => AnalyzeNamespaceNames(symbol, symbol.ContainingNamespace.ToString());
 
-        private IEnumerable<Diagnostic> AnalyzeNamespaceNames(INamedTypeSymbol symbol, string qualifiedNamespaceOfExtensionMethod)
+        private Diagnostic[] AnalyzeNamespaceNames(INamedTypeSymbol symbol, string qualifiedNamespaceOfExtensionMethod)
         {
             // get namespace (qualified) of class and of extension method parameter (first one) and compare those
-            var diagnostic = symbol.GetExtensionMethods()
-                                   .Select(_ => _.Parameters[0].Type.ContainingNamespace)
-                                   .WhereNotNull() // generic types do not have a namespace to detect
-                                   .Select(_ => _.ToString())
-                                   .Where(_ => _ != qualifiedNamespaceOfExtensionMethod)
-                                   .Select(_ => Issue(symbol, _))
-                                   .FirstOrDefault();
 
-            return diagnostic is null
-                   ? Enumerable.Empty<Diagnostic>()
-                   : new[] { diagnostic };
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
+            foreach (var namespaceSymbol in symbol.GetExtensionMethods().Select(_ => _.Parameters[0].Type.ContainingNamespace).WhereNotNull())
+            {
+                var ns = namespaceSymbol.ToString();
+
+                if (ns != qualifiedNamespaceOfExtensionMethod)
+                {
+                    return new[] { Issue(symbol, ns) };
+                }
+            }
+
+            return Array.Empty<Diagnostic>();
         }
     }
 }

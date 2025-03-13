@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Linq;
+using System.Threading;
 
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -38,6 +39,28 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         [OneTimeSetUp]
         public static void PrepareTestEnvironment() => MiKo_2060_CodeFixProvider.LoadData();
+
+#else
+
+        private static int s_testNumber;
+
+        [OneTimeSetUp]
+        public static void PrepareTestEnvironment() => s_testNumber = 0;
+
+        [OneTimeTearDown]
+        public static void CleanupTestEnvironment() => GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
+
+        [SetUp]
+        public void PrepareTest() => Interlocked.Increment(ref s_testNumber);
+
+        [TearDown]
+        public void TearDown()
+        {
+            if (s_testNumber % 5000 == 0)
+            {
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
+            }
+        }
 
 #endif
 
@@ -1007,9 +1030,9 @@ public class TestMe
 
             results.AddRange(types);
             results.AddRange(phrases);
-            results.AddRange(from type in types from phrase in phrases select type + " " + phrase);
-            results.AddRange(phrases.Select(_ => _.ToLower(CultureInfo.CurrentCulture)));
-            results.AddRange(phrases.Select(_ => _.ToUpper(CultureInfo.CurrentCulture)));
+            results.AddRange(from type in types from phrase in phrases select string.Concat(type, " ", phrase));
+            results.AddRange(phrases.Select(_ => _.ToLowerInvariant()));
+            results.AddRange(phrases.Select(_ => _.ToUpperInvariant()));
 
             results.Add("<see cref=\"ITestMe\"/>");
             results.Add("<see cref=\"ITestMe\" />");

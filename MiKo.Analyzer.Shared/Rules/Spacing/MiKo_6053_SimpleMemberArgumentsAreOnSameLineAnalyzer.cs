@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -23,11 +22,16 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (context.Node is ArgumentSyntax argument)
             {
-                ReportDiagnostics(context, AnalyzeNode(argument));
+                var issues = AnalyzeNode(argument);
+
+                if (issues.Length > 0)
+                {
+                    ReportDiagnostics(context, issues);
+                }
             }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeNode(ArgumentSyntax argument)
+        private Diagnostic[] AnalyzeNode(ArgumentSyntax argument)
         {
             if (argument.Expression is MemberAccessExpressionSyntax maes && maes.IsKind(SyntaxKind.SimpleMemberAccessExpression))
             {
@@ -43,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 }
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
     }
 }

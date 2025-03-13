@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -11,36 +12,26 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3216";
 
-        public MiKo_3216_AssignedStaticFieldsAreReadOnlyAnalyzer() : base(Id, SymbolKind.Field)
+        public MiKo_3216_AssignedStaticFieldsAreReadOnlyAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
-        protected override bool ShallAnalyze(IFieldSymbol symbol)
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeField, SyntaxKind.FieldDeclaration);
+
+        private void AnalyzeField(SyntaxNodeAnalysisContext context)
         {
-            if (symbol.IsConst)
+            if (context.Node is FieldDeclarationSyntax declaration)
             {
-                return false;
-            }
+                var modifiers = declaration.Modifiers;
 
-            if (symbol.IsStatic)
-            {
-                return symbol.IsReadOnly is false;
-            }
-
-            return false;
-        }
-
-        protected override IEnumerable<Diagnostic> Analyze(IFieldSymbol symbol, Compilation compilation)
-        {
-            var declaration = symbol.GetSyntax<FieldDeclarationSyntax>();
-
-            if (declaration != null)
-            {
-                foreach (var variable in declaration.Declaration.Variables)
+                if (modifiers.Any(SyntaxKind.StaticKeyword) && modifiers.None(SyntaxKind.ReadOnlyKeyword))
                 {
-                    if (variable.Initializer != null)
+                    foreach (var variable in declaration.Declaration.Variables)
                     {
-                        yield return Issue(variable.Identifier);
+                        if (variable.Initializer != null)
+                        {
+                            ReportDiagnostics(context, Issue(variable.Identifier));
+                        }
                     }
                 }
             }

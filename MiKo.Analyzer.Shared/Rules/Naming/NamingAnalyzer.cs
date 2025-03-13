@@ -33,48 +33,79 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return expected;
         }
 
+        protected static string GetFieldPrefix(string fieldName)
+        {
+            var fieldPrefixes = Constants.Markers.FieldPrefixes;
+            var prefixesLength = fieldPrefixes.Length;
+
+            for (var index = 0; index < prefixesLength; index++)
+            {
+                var prefix = fieldPrefixes[index];
+
+                if (prefix.Length > 0 && fieldName.StartsWith(prefix, StringComparison.Ordinal))
+                {
+                    return prefix;
+                }
+            }
+
+            return string.Empty;
+        }
+
         protected sealed override IEnumerable<Diagnostic> AnalyzeNamespace(INamespaceSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
-                                                                                                                                ? AnalyzeName(symbol, compilation)
-                                                                                                                                : Enumerable.Empty<Diagnostic>();
+                                                                                                                                    ? AnalyzeName(symbol, compilation)
+                                                                                                                                    : Array.Empty<Diagnostic>();
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
                                                                                                                            ? AnalyzeName(symbol, compilation)
-                                                                                                                           : Enumerable.Empty<Diagnostic>();
+                                                                                                                           : Array.Empty<Diagnostic>();
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation)
         {
+            IEnumerable<Diagnostic> namingIssues = Array.Empty<Diagnostic>();
+            IEnumerable<Diagnostic> localFunctionIssues = Array.Empty<Diagnostic>();
+
             if (ShallAnalyze(symbol))
             {
-                foreach (var issue in AnalyzeName(symbol, compilation))
-                {
-                    yield return issue;
-                }
+                namingIssues = AnalyzeName(symbol, compilation);
             }
 
             if (ShallAnalyzeLocalFunctions(symbol))
             {
-                foreach (var issue in AnalyzeLocalFunctions(symbol, compilation))
-                {
-                    yield return issue;
-                }
+                localFunctionIssues = AnalyzeLocalFunctions(symbol, compilation);
             }
+
+            var noNamingIssues = namingIssues.IsEmptyArray();
+            var noLocalFunctionIssues = localFunctionIssues.IsEmptyArray();
+
+            if (noLocalFunctionIssues)
+            {
+                if (noNamingIssues)
+                {
+                    // nothing to report here
+                    return Array.Empty<Diagnostic>();
+                }
+
+                return namingIssues;
+            }
+
+            return namingIssues.Concat(localFunctionIssues);
         }
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
                                                                                                                               ? AnalyzeName(symbol, compilation)
-                                                                                                                              : Enumerable.Empty<Diagnostic>();
+                                                                                                                              : Array.Empty<Diagnostic>();
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
                                                                                                                         ? AnalyzeName(symbol, compilation)
-                                                                                                                        : Enumerable.Empty<Diagnostic>();
+                                                                                                                        : Array.Empty<Diagnostic>();
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
                                                                                                                         ? AnalyzeName(symbol, compilation)
-                                                                                                                        : Enumerable.Empty<Diagnostic>();
+                                                                                                                        : Array.Empty<Diagnostic>();
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
                                                                                                                                 ? AnalyzeName(symbol, compilation)
-                                                                                                                                : Enumerable.Empty<Diagnostic>();
+                                                                                                                                : Array.Empty<Diagnostic>();
 
         protected IEnumerable<Diagnostic> AnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation)
         {
@@ -82,10 +113,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (localFunctions.Count == 0)
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
-            var semanticModel = compilation.GetSemanticModel(symbol.GetSyntax().SyntaxTree);
+            var semanticModel = compilation.GetSemanticModel(localFunctions[0].SyntaxTree);
 
             return localFunctions.Select(_ => _.GetSymbol(semanticModel))
                                  .Where(ShallAnalyzeLocalFunction)
@@ -141,8 +172,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (symbol.ContainingSymbol is IMethodSymbol method && method.IsConstructor())
             {
-                if (method.HasAttributeApplied("System.Text.Json.Serialization.JsonConstructorAttribute")
-                 || method.HasAttributeApplied("Newtonsoft.Json.JsonConstructorAttribute"))
+                if (method.HasAttribute("System.Text.Json.Serialization.JsonConstructorAttribute")
+                 || method.HasAttribute("Newtonsoft.Json.JsonConstructorAttribute"))
                 {
                     // ignore Json constructors
                     return false;
@@ -156,19 +187,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected virtual bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => false;
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeName(INamespaceSymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeName(INamespaceSymbol symbol, Compilation compilation) => Array.Empty<Diagnostic>();
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation) => Array.Empty<Diagnostic>();
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation) => Array.Empty<Diagnostic>();
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeName(IPropertySymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeName(IPropertySymbol symbol, Compilation compilation) => Array.Empty<Diagnostic>();
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeName(IEventSymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeName(IEventSymbol symbol, Compilation compilation) => Array.Empty<Diagnostic>();
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation) => Array.Empty<Diagnostic>();
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol, Compilation compilation) => Array.Empty<Diagnostic>();
 
         protected IEnumerable<Diagnostic> AnalyzeEntityMarkers(ISymbol symbol)
         {
@@ -181,7 +212,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
 
         protected Diagnostic AnalyzeCollectionSuffix(ISymbol symbol) => Constants.Markers.Collections.Select(_ => AnalyzeCollectionSuffix(symbol, _)).FirstOrDefault(_ => _ != null);
@@ -284,7 +315,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             ReportDiagnostics(context, issues);
         }
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers) => Array.Empty<Diagnostic>();
 
         private static string HandleSpecialEntityMarkerSituations(string symbolName)
         {
@@ -355,7 +386,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     return s.Variables.SelectMany(_ => Analyze(semanticModel, type, _));
 
                 default:
-                    return Enumerable.Empty<Diagnostic>();
+                    return Array.Empty<Diagnostic>();
             }
         }
     }

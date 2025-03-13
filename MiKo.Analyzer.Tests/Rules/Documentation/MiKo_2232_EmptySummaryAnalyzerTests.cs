@@ -128,6 +128,53 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_type_with_empty_summary_and_non_empty_remarks_on_single_line_with_empty_line_between_xml_nodes()
+        {
+            const string OriginalCode = @"
+/// <summary></summary>
+
+/// <remarks>Some value</remarks>
+public class TestMe
+{
+}
+";
+
+            const string FixedCode = @"
+/// <remarks>Some value</remarks>
+public class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_type_with_attribute_and_empty_summary_on_single_line()
+        {
+            const string OriginalCode = @"
+using System;
+
+/// <summary></summary>
+[SomeAttribute]
+public class TestMe
+{
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+[SomeAttribute]
+public class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_field_with_empty_summary_on_single_line()
         {
             const string OriginalCode = @"
@@ -141,6 +188,38 @@ public class TestMe
             const string FixedCode = @"
 public class TestMe
 {
+    private int m_something;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_field_with_empty_summary_and_non_empty_value_on_single_line_with_empty_line_between_xml_nodes()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>Some text</summary>
+    public void DoSomething()
+    { }
+
+    /// <summary></summary>
+    
+    /// <value>Some value</value>
+    private int m_something;
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>Some text</summary>
+    public void DoSomething()
+    { }
+
+    /// <value>Some value</value>
     private int m_something;
 }
 ";
@@ -170,6 +249,38 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_property_with_empty_summary_and_non_empty_value_on_single_line_with_empty_line_between_xml_nodes()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>Some text</summary>
+    public void DoSomething()
+    { }
+
+    /// <summary></summary>
+    
+    /// <value>Some value</value>
+    public int DoSomethingElse { get; set; } = 42;
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>Some text</summary>
+    public void DoSomething()
+    { }
+
+    /// <value>Some value</value>
+    public int DoSomethingElse { get; set; } = 42;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_event_with_empty_summary_on_single_line()
         {
             const string OriginalCode = @"
@@ -183,6 +294,38 @@ public class TestMe
             const string FixedCode = @"
 public class TestMe
 {
+    public event EventHandler MyEvent;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_event_with_empty_summary_and_non_empty_remarks_on_single_line_with_empty_line_between_xml_nodes()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>Some text</summary>
+    public void DoSomething()
+    { }
+
+    /// <summary></summary>
+    
+    /// <remarks>Some value</remarks>
+    public event EventHandler MyEvent;
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>Some text</summary>
+    public void DoSomething()
+    { }
+
+    /// <remarks>Some value</remarks>
     public event EventHandler MyEvent;
 }
 ";
@@ -410,31 +553,6 @@ public class TestMe
 
     /// <returns>Some value</returns>
     public int DoSomethingElse() => 42;
-}
-";
-
-            VerifyCSharpFix(OriginalCode, FixedCode);
-        }
-
-        [Test]
-        public void Code_gets_fixed_for_type_with_attribute_and_empty_summary_on_single_line()
-        {
-            const string OriginalCode = @"
-using System;
-
-/// <summary></summary>
-[SomeAttribute]
-public class TestMe
-{
-}
-";
-
-            const string FixedCode = @"
-using System;
-
-[SomeAttribute]
-public class TestMe
-{
 }
 ";
 

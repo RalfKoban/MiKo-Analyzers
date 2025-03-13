@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Composition;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -21,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var o = (ObjectCreationExpressionSyntax)syntax;
 
-            var problematicNode = o.GetExceptionSwallowingNode(() => GetSemanticModel(document));
+            var problematicNode = o.GetExceptionSwallowingNode(() => document.GetSemanticModel());
 
             var replacements = CreateReplacements(o.ArgumentList, problematicNode);
 

@@ -24,6 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "btn",
                                                            "cb",
                                                            "cert",
+                                                           "cfg",
                                                            "chk",
                                                            "cls",
                                                            "cmb",
@@ -85,6 +86,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "perc",
                                                            "perf",
                                                            "phys",
+                                                           "plausi",
                                                            "pos",
                                                            "pow",
                                                            "proc",
@@ -123,6 +125,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "Btn",
                                                            "Cb",
                                                            "Cert",
+                                                           "Cfg",
                                                            "Chk",
                                                            "Cli",
                                                            "Cls",
@@ -185,6 +188,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "Perc",
                                                            "Perf",
                                                            "Phys",
+                                                           "Plausi",
                                                            "Pos",
                                                            "Pow",
                                                            "Proc",
@@ -212,27 +216,25 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "Vol",
                                                        ];
 
-        private static readonly string[] BadPostfixes = BadMidTerms
-                                                        .Union([
-                                                                   "Bl",
-                                                                   "BL",
-                                                                   "CLI",
-                                                                   "Dto",
-                                                                   "DTO",
-                                                                   "Itf",
-                                                                   "Meth",
-                                                                   "Param",
-                                                                   "Params",
-                                                                   "Pos",
-                                                                   "Proc",
-                                                                   "Prop",
-                                                                   "PropName",
-                                                                   "PropNames",
-                                                                   "Props",
-                                                                   "Vm",
-                                                                   "VM",
-                                                               ])
-                                                        .ToArray();
+        private static readonly string[] BadPostfixes = [.. BadMidTerms.Union([
+                                                                                  "Bl",
+                                                                                  "BL",
+                                                                                  "CLI",
+                                                                                  "Dto",
+                                                                                  "DTO",
+                                                                                  "Itf",
+                                                                                  "Meth",
+                                                                                  "Param",
+                                                                                  "Params",
+                                                                                  "Pos",
+                                                                                  "Proc",
+                                                                                  "Prop",
+                                                                                  "PropName",
+                                                                                  "PropNames",
+                                                                                  "Props",
+                                                                                  "Vm",
+                                                                                  "VM",
+                                                                              ])];
 
         private static readonly string[] AllowedTerms =
                                                         [
@@ -297,11 +299,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "signCertificate",
                                                             "text",
                                                             "tires",
+
+                                                            // languages
+                                                            "ptPT", // Portugal
+                                                            "ptBR", // Brazil
+                                                            "lvLV", // Latvia
                                                         ];
 
         private static readonly string[] AllowedWords = [.. AllowedTerms, "obj", "href", "cref"];
 
-        private static readonly string[] WrongWords = BadPrefixes.Except(AllowedWords).ToArray();
+        private static readonly string[] WrongWords = [.. BadPrefixes.Except(AllowedWords)];
 
         [Test]
         public void No_issue_is_reported_for_properly_named_code() => No_issue_is_reported_for(@"

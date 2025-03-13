@@ -81,7 +81,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                   ? maes.Name
                                   : node;
 
-            ReportDiagnostics(context, Issue(string.Empty, problematicNode));
+            ReportDiagnostics(context, Issue(problematicNode));
         }
     }
 }

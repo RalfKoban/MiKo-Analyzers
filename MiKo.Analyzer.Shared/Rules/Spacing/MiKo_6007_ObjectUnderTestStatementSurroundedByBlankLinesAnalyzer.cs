@@ -42,7 +42,10 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             var node = (ExpressionStatementSyntax)context.Node;
             var issue = AnalyzeExpressionStatement(node);
 
-            ReportDiagnostics(context, issue);
+            if (issue != null)
+            {
+                ReportDiagnostics(context, issue);
+            }
         }
 
         private Diagnostic AnalyzeExpressionStatement(ExpressionStatementSyntax node)

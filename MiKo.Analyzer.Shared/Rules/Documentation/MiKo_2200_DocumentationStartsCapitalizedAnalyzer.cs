@@ -33,15 +33,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
+            List<Diagnostic> results = null;
+
             foreach (var xml in comment.GetXmlSyntax(XmlTags))
             {
                 if (xml.Content.FirstOrDefault() is XmlTextSyntax text)
                 {
-                    yield return AnalyzeText(text, xml.GetName());
+                    var issue = AnalyzeText(text, xml.GetName());
+
+                    if (issue is null)
+                    {
+                        continue;
+                    }
+
+                    if (results is null)
+                    {
+                        results = new List<Diagnostic>(1);
+                    }
+
+                    results.Add(issue);
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
         }
 
         private Diagnostic AnalyzeText(XmlTextSyntax syntax, string xmlTag)

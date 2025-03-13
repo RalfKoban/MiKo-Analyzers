@@ -168,9 +168,57 @@ public class TestMe
         [TestCase("MethodName_ThrowsArgumentException_if_SomeConditionIsMet", "Method_name_throws_ArgumentException_if_some_condition_is_met")]
         [TestCase("MethodName_NoLongerThrowsNullReferenceException_if_SomeConditionIsMet", "Method_name_throws_no_NullReferenceException_if_some_condition_is_met")]
         [TestCase("MethodName_NotThrowsNullReferenceException_if_SomeConditionIsMet", "Method_name_throws_no_NullReferenceException_if_some_condition_is_met")]
+        [TestCase("Send_2Args_ContentParameterIsNull_ThrowsArgumentNullException", "Send_throws_ArgumentNullException_if_content_parameter_is_null_and_2_args")]
+        [TestCase("Send_2Args_ValidMessageContent_MessageIsSentOnce", "Send_message_is_sent_once_if_valid_message_content_and_2_args")] // TODO RKN: we should better rename it to 'Send_sends_message_with_valid_content_once_and_2_args'
         public void Code_gets_fixed_for_3_slashes_in_(string originalName, string fixedName) => VerifyCSharpFix(
                                                                                                             "class TestMe { [Test] public void " + originalName + "() { } }",
                                                                                                             "class TestMe { [Test] public void " + fixedName + "() { } }");
+
+        [Test]
+        public void Code_gets_fixed_for_2_slashes_if_method_name_starts_with_called_method()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public bool DoSomething() => false;
+}
+
+public class TestMeTests
+{
+    [Test]
+    public void DoSomething_SomeSituation_ReturnsTrue()
+    {
+        var objectUnderTest = new TestMe();
+
+        var result = objectUnderTest.DoSomething();
+
+        Assert.That(result, Is.True);
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public bool DoSomething() => false;
+}
+
+public class TestMeTests
+{
+    [Test]
+    public void DoSomething_returns_true_if_some_situation()
+    {
+        var objectUnderTest = new TestMe();
+
+        var result = objectUnderTest.DoSomething();
+
+        Assert.That(result, Is.True);
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
 
         protected override string GetDiagnosticId() => MiKo_1115_TestMethodsShouldNotBeNamedScenarioExpectedOutcomeAnalyzer.Id;
 

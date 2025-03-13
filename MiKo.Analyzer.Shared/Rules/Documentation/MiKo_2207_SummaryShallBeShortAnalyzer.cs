@@ -15,49 +15,82 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private const int MaxAllowedWhitespaces = 42;
 
-        public MiKo_2207_SummaryShallBeShortAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_2207_SummaryShallBeShortAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event, SymbolKind.Field);
-
-        protected override bool ShallAnalyze(IFieldSymbol symbol)
+        protected override bool ShallAnalyze(ISymbol symbol)
         {
-            if (symbol.Type.IsEnum())
+            switch (symbol.Kind)
             {
-                // remarks sections for enum fields do not work, see MiKo_2211
-                return false;
-            }
+                case SymbolKind.NamedType:
+                case SymbolKind.Method:
+                case SymbolKind.Property:
+                case SymbolKind.Event:
+                    return true;
 
-            return base.ShallAnalyze(symbol);
-        }
-
-        // TODO RKN: Move this to SummaryDocumentAnalyzer when finished
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
-        {
-            foreach (var xml in comment.GetSummaryXmls())
-            {
-                var summary = xml.GetTextWithoutTrivia();
-
-                if (HasIssue(summary))
+                case SymbolKind.Field:
                 {
-                    yield return Issue(xml.StartTag);
+                    if (((IFieldSymbol)symbol).Type.IsEnum())
+                    {
+                        // remarks sections for enum fields do not work, see MiKo_2211
+                        return false;
+                    }
+
+                    return true;
+                }
+
+                default:
+                    return false;
+            }
+        }
+
+        protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(
+                                                                  DocumentationCommentTriviaSyntax comment,
+                                                                  ISymbol symbol,
+                                                                  IReadOnlyList<XmlElementSyntax> summaryXmls,
+                                                                  Lazy<string> commentXml,
+                                                                  Lazy<IReadOnlyCollection<string>> summaries)
+        {
+            var count = summaryXmls.Count;
+
+            List<Diagnostic> issues = null;
+
+            for (var index = 0; index < count; index++)
+            {
+                var xml = summaryXmls[index];
+
+                if (HasIssue(xml))
+                {
+                    if (issues is null)
+                    {
+                        issues = new List<Diagnostic>(1);
+                    }
+
+                    issues.Add(Issue(xml.StartTag));
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)issues ?? Array.Empty<Diagnostic>();
         }
 
-        private static bool HasIssue(StringBuilder builder)
+        private static bool HasIssue(XmlElementSyntax xml)
         {
-            var summary = builder.ReplaceWithCheck(" - ", " ")
-                                 .ReplaceWithCheck(" />", "/>")
-                                 .ReplaceWithCheck(" </", "</")
-                                 .ReplaceWithCheck("> <", "><")
-                                 .ReplaceWithCheck(" cref=", "cref=")
-                                 .ReplaceWithCheck(" href=", "href=")
-                                 .ReplaceWithCheck(" type=", "type=")
-                                 .ReplaceWithCheck(" langref=", "langref=")
-                                 .ReplaceWithCheck(" langword=", "langword=")
-                                 .Trim();
+            var builder = StringBuilderCache.Acquire();
+
+            var summary = xml.GetTextWithoutTrivia(builder)
+                             .ReplaceWithCheck(" - ", " ")
+                             .ReplaceWithCheck(" />", "/>")
+                             .ReplaceWithCheck(" </", "</")
+                             .ReplaceWithCheck("> <", "><")
+                             .ReplaceWithCheck(" cref=", "cref=")
+                             .ReplaceWithCheck(" href=", "href=")
+                             .ReplaceWithCheck(" type=", "type=")
+                             .ReplaceWithCheck(" langref=", "langref=")
+                             .ReplaceWithCheck(" langword=", "langword=")
+                             .Trim();
+
+            StringBuilderCache.Release(builder);
 
             return HasIssue(summary.AsSpan());
         }

@@ -8,22 +8,26 @@ using System.Xml.Linq;
 using Microsoft.CodeAnalysis;
 
 // ncrunch: rdi off
+// ncrunch: no coverage start
 // ReSharper disable once CheckNamespace
 #pragma warning disable IDE0130
 namespace MiKoSolutions.Analyzers
 {
     internal static class CommentExtensions
     {
-        private const string SingleWhitespaceString = " ";
-
-        private static readonly string[] MultiWhitespaceStrings = { "    ", "   ", "  " };
-
         internal static string GetComment(this ISymbol value)
         {
             if (value is IParameterSymbol p)
             {
                 // parameter might be method or property (setter or indexer)
-                return GetComment(p, p.ContainingSymbol?.GetDocumentationCommentXml());
+                var containingSymbol = p.ContainingSymbol;
+
+                if (containingSymbol is null)
+                {
+                    return null;
+                }
+
+                return GetComment(p, containingSymbol.GetDocumentationCommentXml());
             }
 
             return Cleaned(GetCommentElement(value));
@@ -64,12 +68,26 @@ namespace MiKoSolutions.Analyzers
 
         internal static XElement GetCommentElement(this string value)
         {
+            if (value is null)
+            {
+                return null;
+            }
+
             // just to be sure that we always have a root element (malformed XMLs are reported as comment but without a root element)
-            var xml = "<root>".ConcatenatedWith(value.AsSpan().Trim(), "</root>");
+            var start = value.CountLeadingWhitespaces();
+            var end = value.CountTrailingWhitespaces(start);
+
+            var count = value.Length - end - start;
+
+            var xml = StringBuilderCache.Acquire(13 + count)
+                                        .Append("<root>")
+                                        .Append(value, start, count)
+                                        .Append("</root>")
+                                        .ToStringAndRelease();
 
             try
             {
-                return XElement.Parse(xml);
+                return XElement.Parse(xml, LoadOptions.None);
             }
             catch (XmlException)
             {
@@ -86,12 +104,12 @@ namespace MiKoSolutions.Analyzers
         }
 
         internal static IEnumerable<XElement> GetCommentElements(this XElement value, string xmlTag) => value is null
-                                                                                                        ? Enumerable.Empty<XElement>() // happens in case of an invalid character
+                                                                                                        ? Array.Empty<XElement>() // happens in case of an invalid character
                                                                                                         : value.Descendants(xmlTag);
 
         internal static IEnumerable<XElement> GetExceptionCommentElements(string commentXml)
         {
-            var comment = commentXml.AsBuilder().Without(Constants.Markers.Symbols).ToString();
+            var comment = commentXml.AsCachedBuilder().Without(Constants.Markers.Symbols).ToStringAndRelease();
             var commentElements = GetCommentElements(comment, Constants.XmlTag.Exception);
 
             return commentElements;
@@ -104,12 +122,45 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<string> GetExceptionComments(string commentXml) => Cleaned(GetExceptionCommentElements(commentXml)).WhereNotNull();
 
-        internal static IEnumerable<string> GetExceptionsOfExceptionComments(string commentXml)
+        internal static IEnumerable<string> GetExceptionsOfExceptionComments(this string commentXml)
         {
             return GetExceptionCommentElements(commentXml).Select(_ => _.Attribute(Constants.XmlTag.Attribute.Cref)?.Value).WhereNotNull();
         }
 
-        internal static IReadOnlyCollection<string> Cleaned(IEnumerable<string> comments) => comments.WhereNotNull().WithoutParaTags().ToHashSet(_ => _.Trim());
+        internal static IReadOnlyCollection<string> Cleaned(IEnumerable<string> comments)
+        {
+            List<string> cleanedComments = null;
+
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
+            foreach (var s in comments)
+            {
+                if (s is null)
+                {
+                    continue;
+                }
+
+                if (cleanedComments is null)
+                {
+                    cleanedComments = new List<string>(1);
+                }
+
+                cleanedComments.Add(s);
+            }
+
+            if (cleanedComments is null)
+            {
+                return Array.Empty<string>();
+            }
+
+            if (cleanedComments.Count == 1)
+            {
+                return new[] { TrimComment(cleanedComments[0]) };
+            }
+
+            return cleanedComments.ToHashSet(TrimComment);
+
+            string TrimComment(string comment) => comment.AsCachedBuilder().WithoutParaTags().Trimmed().ToStringAndRelease();
+        }
 
         internal static string Cleaned(XElement element)
         {
@@ -119,14 +170,24 @@ namespace MiKoSolutions.Analyzers
             }
 
             // remove all code elements
-            var codeElements = element.Descendants(Constants.XmlTag.Code).ToList();
+            List<XElement> codeElements = null;
 
-            if (codeElements.Count > 0)
+            foreach (var descendant in element.Descendants(Constants.XmlTag.Code))
+            {
+                if (codeElements is null)
+                {
+                    codeElements = new List<XElement>(1);
+                }
+
+                codeElements.Add(descendant);
+            }
+
+            if (codeElements?.Count > 0)
             {
                 codeElements.ForEach(_ => _.Remove());
             }
 
-            return Cleaned(element.Nodes().ConcatenatedWith());
+            return Cleaned(element.Nodes());
         }
 
         private static IEnumerable<string> Cleaned(IEnumerable<XElement> elements)
@@ -137,26 +198,38 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        private static string Cleaned(StringBuilder builder)
+        private static string Cleaned(IEnumerable<XNode> nodes)
         {
-            if (builder.Length == 0)
+            var builder = StringBuilderCache.Acquire();
+
+            foreach (var node in nodes)
             {
-                return string.Empty;
+                if (node != null)
+                {
+                    builder.Append(node);
+                }
             }
 
-            return builder.WithoutParaTags()
-                          .Without(Constants.Markers.SymbolsAndLineBreaks)
-                          .ReplaceAllWithCheck(MultiWhitespaceStrings, SingleWhitespaceString)
-                          .Trim();
+            var cleaned = string.Empty;
+
+            if (builder.Length > 0)
+            {
+                cleaned = builder.WithoutParaTags()
+                                 .Without(Constants.Markers.SymbolsAndLineBreaks)
+                                 .WithoutMultipleWhiteSpaces()
+                                 .Trim();
+            }
+
+            StringBuilderCache.Release(builder);
+
+            return cleaned;
         }
 
         private static string FlattenComment(IEnumerable<XElement> comments)
         {
             if (comments.Any())
             {
-                var comment = Cleaned(comments.Nodes().ConcatenatedWith());
-
-                return comment;
+                return Cleaned(comments.Nodes());
             }
 
             return null;

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 using Microsoft.CodeAnalysis;
@@ -54,6 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                       "Everything",
                                                                       Rejected,
                                                                       Consumed,
+                                                                      "Once",
                                                                   };
 
         private static readonly string[] SpecialFirstPhrases =
@@ -91,22 +91,22 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (methodName.Length > 10 && HasIssue(methodName))
             {
-                var betterName = FindBetterName(methodName);
+                var betterName = FindBetterName(methodName, symbol);
 
                 return new[] { Issue(symbol, CreateBetterNameProposal(betterName)) };
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
 
         private static bool HasIssue(string methodName)
         {
-            var parts = methodName.Split(Constants.Underscores, StringSplitOptions.RemoveEmptyEntries);
+            var parts = GetParts(methodName);
             var first = true;
 
             foreach (var part in parts)
             {
-                if (part[0].IsUpperCase() is false)
+                if (part[0].IsUpperCase() is false && part[0].IsNumber() is false)
                 {
                     return false;
                 }
@@ -130,21 +130,22 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return false;
         }
 
-        private static string FindBetterName(string symbolName)
+        private static string FindBetterName(string symbolName, IMethodSymbol symbol)
         {
             var name = symbolName.Replace("_Expect_", "_");
 
-            if (TryGetInOrder(name, out var nameInOrder))
-            {
-                return NamesFinder.FindBetterTestName(nameInOrder);
-            }
+            var nameToImprove = TryGetInOrder(name, out var nameInOrder)
+                                ? nameInOrder
+                                : name;
 
-            return NamesFinder.FindBetterTestName(name);
+            return NamesFinder.FindBetterTestName(nameToImprove, symbol);
         }
+
+        private static string[] GetParts(string methodName) => methodName.Split(Constants.Underscores, StringSplitOptions.RemoveEmptyEntries);
 
         private static bool TryGetInOrder(string name, out string result)
         {
-            var parts = name.Split(Constants.Underscores, StringSplitOptions.RemoveEmptyEntries);
+            var parts = GetParts(name);
 
             switch (parts.Length)
             {
@@ -181,7 +182,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 capacity += ifToAdd.Length;
             }
 
-            var builder = new StringBuilder(capacity);
+            var builder = StringBuilderCache.Acquire(capacity);
             FixPart(builder, part1);
 
             if (addIf)
@@ -193,7 +194,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             builder.ReplaceWithCheck(When, If).ReplaceWithCheck(If + If, If);
 
-            result = builder.ToString();
+            result = StringBuilderCache.GetStringAndRelease(builder);
 
             return true;
         }
@@ -218,7 +219,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 capacity += ifToAdd.Length;
             }
 
-            var builder = new StringBuilder(capacity);
+            var builder = StringBuilderCache.Acquire(capacity);
             FixPart(builder, part0);
             FixPart(builder, part2);
 
@@ -236,7 +237,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             builder.ReplaceWithCheck(When, If).ReplaceWithCheck(If + If, If);
 
-            result = builder.ToString();
+            result = StringBuilderCache.GetStringAndRelease(builder);
 
             return true;
         }
@@ -271,7 +272,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 capacity += ifToAdd.Length;
             }
 
-            var builder = new StringBuilder(capacity);
+            var builder = StringBuilderCache.Acquire(capacity);
             FixPart(builder, part0);
             FixPart(builder, part3);
 
@@ -294,7 +295,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             builder.ReplaceWithCheck(When, If).ReplaceWithCheck(If + If, If);
 
-            result = builder.ToString();
+            result = StringBuilderCache.GetStringAndRelease(builder);
 
             return true;
         }

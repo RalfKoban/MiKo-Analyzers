@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -38,7 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation) => symbol.GetSyntax() is MethodDeclarationSyntax methodSyntax && HasIssue(methodSyntax)
                                                                                                              ? new[] { Issue(methodSyntax.ReturnType) }
-                                                                                                             : Enumerable.Empty<Diagnostic>();
+                                                                                                             : Array.Empty<Diagnostic>();
 
         private static bool HasIssue(MethodDeclarationSyntax methodSyntax)
         {

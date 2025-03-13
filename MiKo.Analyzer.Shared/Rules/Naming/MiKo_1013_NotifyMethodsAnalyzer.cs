@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 using Microsoft.CodeAnalysis;
@@ -35,16 +34,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 // avoid situation that method has no name
                 if (symbolName.Without(StartingPhrase).Length != 0)
                 {
-                    var proposal = symbolName.AsBuilder()
+                    var proposal = symbolName.AsCachedBuilder()
                                              .ReplaceWithCheck(StartingPhrase, CorrectStartingPhrase)
-                                             .ReplaceWithCheck(CorrectStartingPhrase + CorrectStartingPhrase, CorrectStartingPhrase) // may happen for "OnNotifyXyz"
-                                             .ToString();
+                                             .ReplaceWithCheck(CorrectStartingPhrase + CorrectStartingPhrase, CorrectStartingPhrase)
+                                             .ToStringAndRelease(); // may happen for "OnNotifyXyz"
 
                     return new[] { Issue(symbol, CreateBetterNameProposal(proposal)) };
                 }
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
     }
 }

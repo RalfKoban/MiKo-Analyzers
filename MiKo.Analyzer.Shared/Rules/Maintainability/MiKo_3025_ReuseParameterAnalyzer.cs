@@ -25,7 +25,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var node = (AssignmentExpressionSyntax)context.Node;
             var issue = AnalyzeSimpleAssignmentExpression(node, context.SemanticModel);
 
-            ReportDiagnostics(context, issue);
+            if (issue != null)
+            {
+                ReportDiagnostics(context, issue);
+            }
         }
 
         private Diagnostic AnalyzeSimpleAssignmentExpression(AssignmentExpressionSyntax node, SemanticModel semanticModel)

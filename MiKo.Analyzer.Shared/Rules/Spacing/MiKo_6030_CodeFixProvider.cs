@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Composition;
-using System.Linq;
+﻿using System.Composition;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -13,8 +11,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     public sealed class MiKo_6030_CodeFixProvider : SpacingCodeFixProvider
     {
         public override string FixableDiagnosticId => "MiKo_6030";
-
-        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.FirstOrDefault();
 
         protected override TSyntaxNode GetUpdatedSyntax<TSyntaxNode>(TSyntaxNode node, int leadingSpaces)
         {

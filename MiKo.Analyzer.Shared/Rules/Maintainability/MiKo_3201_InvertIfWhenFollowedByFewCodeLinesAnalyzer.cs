@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -51,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     if (block.Parent is IfStatementSyntax)
                     {
                         // do not invert nested ones
-                        return Enumerable.Empty<Diagnostic>();
+                        return Array.Empty<Diagnostic>();
                     }
 
                     var otherStatements = block.Statements.ToList();
@@ -61,20 +62,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         if (otherStatements.Exists(_ => _.IsAnyKind(ForbiddenFollowUps)))
                         {
-                            // we assume that those follow ups also contain code, so inverting would make the code less readable
-                            return Enumerable.Empty<Diagnostic>();
+                            // we assume that those follow-ups also contain code, so inverting would make the code less readable
+                            return Array.Empty<Diagnostic>();
                         }
 
                         if (node.IsInside(ForbiddenInsides))
                         {
                             // inverting would alter behavior
-                            return Enumerable.Empty<Diagnostic>();
+                            return Array.Empty<Diagnostic>();
                         }
 
                         if (node.FirstDescendant<ReturnStatementSyntax>().HasComment())
                         {
                             // the developer documented a reason, in that case we keep the if statement
-                            return Enumerable.Empty<Diagnostic>();
+                            return Array.Empty<Diagnostic>();
                         }
 
                         // report only in case we have something to invert
@@ -88,7 +89,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
 
         private static bool IsApplicable(IfStatementSyntax node) => node.Else is null // do not invert in case of an else block

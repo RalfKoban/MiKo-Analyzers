@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,11 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3020";
 
-        private static readonly SyntaxKind[] Lambdas =
-                                                       {
-                                                           SyntaxKind.SimpleLambdaExpression,
-                                                           SyntaxKind.ParenthesizedLambdaExpression,
-                                                       };
+        private static readonly Func<ExpressionSyntax, bool> IsLambda = IsLambdaCore;
 
         public MiKo_3020_CompletedTaskAnalyzer() : base(Id)
         {
@@ -42,7 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     case SyntaxKind.ReturnStatement:
                     {
                         // seems it is a return, so we have to inspect for lambda's to see if the type is correct
-                        var expression = invocation.FirstAncestor<ExpressionSyntax>(Lambdas);
+                        var expression = invocation.FirstAncestor(IsLambda);
 
                         // investigate into lambda return types and ignore those that are of no interest to us
                         if (expression?.GetSymbol(compilation) is IMethodSymbol lambdaMethod && ShallAnalyze(lambdaMethod) is false)
@@ -55,6 +52,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
 
                 yield return Issue(nameof(Task) + "." + nameof(Task.FromResult), invocation);
+            }
+        }
+
+        private static bool IsLambdaCore(ExpressionSyntax node)
+        {
+            switch (node.RawKind)
+            {
+                case (int)SyntaxKind.SimpleLambdaExpression:
+                case (int)SyntaxKind.ParenthesizedLambdaExpression:
+                    return true;
+
+                default:
+                    return false;
             }
         }
     }

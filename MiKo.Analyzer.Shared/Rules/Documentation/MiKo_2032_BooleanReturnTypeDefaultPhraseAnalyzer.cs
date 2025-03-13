@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -17,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, DocumentationCommentTriviaSyntax comment, string commentXml, string xmlTag)
+        protected override Diagnostic[] AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, DocumentationCommentTriviaSyntax comment, string commentXml, string xmlTag)
         {
             var startingPhrases = GetStartingPhrases(owningSymbol, returnType);
             var endingPhrases = GetEndingPhrases(returnType);
@@ -27,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (commentXml.StartsWithAny(startingPhrases, Comparison) && commentXml.ContainsAny(endingPhrases, Comparison))
             {
                 // nothing to do here
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             var syntaxNode = comment.FirstChild<XmlElementSyntax>(_ => _.GetName() == xmlTag);

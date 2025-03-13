@@ -13,22 +13,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2037";
 
-        public MiKo_2037_CommandPropertySummaryAnalyzer() : base(Id, SymbolKind.Property)
+        public MiKo_2037_CommandPropertySummaryAnalyzer() : base(Id)
         {
         }
 
-        protected override bool ShallAnalyze(IPropertySymbol symbol) => symbol.Type.IsCommand() && base.ShallAnalyze(symbol);
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol is IPropertySymbol property && property.Type.IsCommand();
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(
+                                                                  DocumentationCommentTriviaSyntax comment,
+                                                                  ISymbol symbol,
+                                                                  IReadOnlyList<XmlElementSyntax> summaryXmls,
+                                                                  Lazy<string> commentXml,
+                                                                  Lazy<IReadOnlyCollection<string>> summaries)
         {
             var phrases = GetStartingPhrase((IPropertySymbol)symbol);
 
-            if (summaries.None(_ => _.StartsWithAny(phrases, StringComparison.Ordinal)))
+            if (summaries.Value.None(_ => _.StartsWithAny(phrases, StringComparison.Ordinal)))
             {
                 return new[] { Issue(symbol, Constants.XmlTag.Summary, phrases[0]) };
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
 
         private static string[] GetStartingPhrase(IPropertySymbol symbol)

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Collections.Immutable;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -22,21 +22,37 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (symbol.IsInterfaceImplementation())
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
-            switch (symbol.Parameters.Length)
+            var parameters = symbol.Parameters;
+
+            switch (parameters.Length)
             {
-                case 1 when symbol.Name == nameof(IDisposable.Dispose) && symbol.Parameters[0].Name == "disposing":
+                case 0:
+                case 1 when symbol.Name == nameof(IDisposable.Dispose) && parameters[0].Name == "disposing":
                 case 2 when symbol.HasDependencyObjectParameter():
-                    return Enumerable.Empty<Diagnostic>();
+                    return Array.Empty<Diagnostic>();
             }
 
-            return symbol.Parameters
-                         .Where(_ => _.Type.IsBoolean())
-                         .Select(_ => _.GetSyntax())
-                         .Select(_ => Issue(_.GetName(), _.Type))
-                         .ToList();
+            return Analyze(parameters);
+        }
+
+        private IEnumerable<Diagnostic> Analyze(ImmutableArray<IParameterSymbol> parameters)
+        {
+            var length = parameters.Length;
+
+            for (var index = 0; index < length; index++)
+            {
+                var parameter = parameters[index];
+
+                if (parameter.Type.IsBoolean())
+                {
+                    var syntax = parameter.GetSyntax();
+
+                    yield return Issue(syntax.GetName(), syntax.Type);
+                }
+            }
         }
     }
 }

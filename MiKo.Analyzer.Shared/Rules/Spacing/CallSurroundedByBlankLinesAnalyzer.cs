@@ -37,7 +37,10 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             var node = (MemberAccessExpressionSyntax)context.Node;
             var issue = AnalyzeSimpleMemberAccessExpression(node, context.SemanticModel);
 
-            ReportDiagnostics(context, issue);
+            if (issue != null)
+            {
+                ReportDiagnostics(context, issue);
+            }
         }
 
         private Diagnostic AnalyzeSimpleMemberAccessExpression(MemberAccessExpressionSyntax syntax, SemanticModel semanticModel)

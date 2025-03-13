@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace MiKoSolutions.Analyzers.Linguistics
@@ -15,7 +16,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("assoc", "association"),
                                                       new Pair("auth", "authorization"),
                                                       new Pair("btn", "button"),
+                                                      new Pair("calc", "calculate"),
                                                       new Pair("cb", "checkBox"),
+                                                      new Pair("cfg", "configuration"),
                                                       new Pair("cert", "certificate"),
                                                       new Pair("chk", "checkBox"),
                                                       new Pair("cls", "class"),
@@ -82,11 +85,13 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("num", "number"),
                                                       new Pair("nums", "numbers"),
                                                       new Pair("obj", "object"),
+                                                      new Pair("para", "parameter"),
                                                       new Pair("param", "parameter"),
                                                       new Pair("params", "parameters"),
                                                       new Pair("perc", "percentage"),
                                                       new Pair("perf", "performance"),
                                                       new Pair("phys", "physical"),
+                                                      new Pair("plausi", "plausibility"),
                                                       new Pair("pos", "position"),
                                                       new Pair("pow", "power"),
                                                       new Pair("proc", "process"),
@@ -129,9 +134,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Auth", "Authorization"),
                                                           new Pair("Btn", "Button"),
                                                           new Pair("Btns", "Buttons"),
+                                                          new Pair("Calc", "Calculate"),
                                                           new Pair("Cb", "CheckBox"),
                                                           new Pair("Cert", "Certificate"),
                                                           new Pair("Certs", "Certificates"),
+                                                          new Pair("Cfg", "Configuration"),
                                                           new Pair("Chk", "CheckBox"),
                                                           new Pair("Cli", "CommandLineInterface"),
                                                           new Pair("CLI", "CommandLineInterface"),
@@ -204,11 +211,13 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Objs", "Objects"),
                                                           new Pair("Op", "Operation"),
                                                           new Pair("Ops", "Operations"),
+                                                          new Pair("Para", "Parameter"),
                                                           new Pair("Param", "Parameter"),
                                                           new Pair("Params", "Parameters"),
                                                           new Pair("Perc", "Percentage"),
                                                           new Pair("Perf", "Performance"),
                                                           new Pair("Phys", "Physical"),
+                                                          new Pair("Plausi", "Plausibility"),
                                                           new Pair("Pos", "Position"),
                                                           new Pair("Pow", "Power"),
                                                           new Pair("Proc", "Process"),
@@ -238,20 +247,17 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Var", "Variable"),
                                                           new Pair("Ver", "Version"),
                                                           new Pair("Vol", "Volume"),
+                                                          new Pair("BL", "BusinessLogic"),
+                                                          new Pair("Bl", "BusinessLogic"),
+                                                          new Pair("VM", "ViewModel"),
+                                                          new Pair("VMs", "ViewModels"),
+                                                          new Pair("Vm", "ViewModel"),
+                                                          new Pair("Vms", "ViewModels"),
                                                       };
 
         private static readonly Pair[] MidTerms = Prefixes.Concat(OnlyMidTerms).ToArray();
 
-        private static readonly Pair[] Postfixes = OnlyMidTerms.Concat(new[]
-                                                                           {
-                                                                               new Pair("BL", "BusinessLogic"),
-                                                                               new Pair("Bl", "BusinessLogic"),
-                                                                               new Pair("VM", "ViewModel"),
-                                                                               new Pair("VMs", "ViewModels"),
-                                                                               new Pair("Vm", "ViewModel"),
-                                                                               new Pair("Vms", "ViewModels"),
-                                                                           })
-                                                               .ToArray();
+        private static readonly Pair[] Postfixes = OnlyMidTerms;
 
         private static readonly string[] AllowedPostFixTerms =
                                                                {
@@ -293,11 +299,33 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                             "Next",
                                                             "oAuth",
                                                             "OAuth",
+                                                            "Over", // 'ver'
                                                             "salt",
                                                             "Salt",
                                                             "text",
                                                             "Text",
                                                             "MEF",
+
+                                                            // languages
+                                                            "lvLV",
+                                                            "LvLV",
+                                                            "ptBR",
+                                                            "PtBR",
+                                                            "ptPT",
+                                                            "PtPT",
+                                                            "ABLE", // BL
+                                                            "IBLE", // BL
+                                                            "BLUE", // BL
+                                                            "CLIC", // CLI
+                                                            "LEFT", // EF
+                                                            "DOUBLE", // BL
+                                                            "REFRESH", // EF
+                                                            "REFER", // EF
+                                                            "REFACTOR", // EF
+                                                            "REFRIGERATOR", // EF
+                                                            "BLOCK", // BL
+                                                            "DEFAULT", // EF
+                                                            "USEFUL", // EF
                                                         };
 
         private static readonly string[] AllowedNames =
@@ -320,66 +348,14 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return ReadOnlySpan<Pair>.Empty;
             }
 
-            value = value.Without(AllowedParts);
-
-//// ncrunch: rdi off
-            var result = new HashSet<Pair>(KeyEqualityComparer.Instance);
-
-            var prefixesLength = Prefixes.Length;
-
-            for (var index = 0; index < prefixesLength; index++)
-            {
-                var pair = Prefixes[index];
-
-                if (PrefixHasIssue(pair.Key, value))
-                {
-                    result.Add(pair);
-                }
-
-                if (CompleteTermHasIssue(pair.Key, value))
-                {
-                    result.Add(pair);
-                }
-            }
-
-            //// TODO RKN: replace prefixes to not find them again as middle terms or whatever?
-
-            var postfixesLength = Postfixes.Length;
-
-            for (var index = 0; index < postfixesLength; index++)
-            {
-                var pair = Postfixes[index];
-
-                if (PostFixHasIssue(pair.Key, value))
-                {
-                    result.Add(pair);
-                }
-            }
-
-            var midTermsLength = MidTerms.Length;
-
-            for (var index = 0; index < midTermsLength; index++)
-            {
-                var pair = MidTerms[index];
-
-                if (MidTermHasIssue(pair.Key, value))
-                {
-                    result.Add(pair);
-                }
-            }
-
-            return result.Count > 0
-                   ? result.ToArray()
-                   : ReadOnlySpan<Pair>.Empty;
-
-//// ncrunch: rdi default
+            return FindCore(value.Without(AllowedParts).AsSpan());
         }
 
         internal static string ReplaceAllAbbreviations(string value, ReadOnlySpan<Pair> findings)
         {
             if (findings.Length > 0)
             {
-                return ReplaceAllAbbreviations(value.AsBuilder(), findings).ToString();
+                return ReplaceAllAbbreviations(value.AsCachedBuilder(), findings).ToStringAndRelease();
             }
 
             return value;
@@ -409,57 +385,144 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return ReplaceAllAbbreviations(value, findings);
         }
 
-        private static bool IndicatesNewWord(char c) => c == Constants.Underscore || c.IsUpperCase();
+        //// ncrunch: rdi off
+        private static ReadOnlySpan<Pair> FindCore(ReadOnlySpan<char> valueSpan)
+        {
+            var result = new HashSet<Pair>(KeyEqualityComparer.Instance);
 
-        private static bool CompleteTermHasIssue(string key, string value) => string.Equals(value, key, StringComparison.Ordinal);
+            var prefixesLength = Prefixes.Length;
 
-        private static bool PrefixHasIssue(string key, string value) => value.Length > key.Length && IndicatesNewWord(value[key.Length]) && value.StartsWith(key, StringComparison.Ordinal);
+            for (var index = 0; index < prefixesLength; index++)
+            {
+                var pair = Prefixes[index];
 
-        private static bool PostFixHasIssue(string key, string value) => value.EndsWith(key, StringComparison.Ordinal) && value.EndsWithAny(AllowedPostFixTerms, StringComparison.Ordinal) is false;
+                var keySpan = pair.Key.AsSpan();
 
-        private static bool MidTermHasIssue(string key, string value)
+                if (PrefixHasIssue(keySpan, valueSpan))
+                {
+                    result.Add(pair);
+                }
+
+                if (CompleteTermHasIssue(keySpan, valueSpan))
+                {
+                    result.Add(pair);
+                }
+            }
+
+            //// TODO RKN: replace prefixes to not find them again as middle terms or whatever?
+
+            var postfixesLength = Postfixes.Length;
+
+            for (var index = 0; index < postfixesLength; index++)
+            {
+                var pair = Postfixes[index];
+
+                if (PostFixHasIssue(pair.Key.AsSpan(), valueSpan))
+                {
+                    result.Add(pair);
+                }
+            }
+
+            var midTermsLength = MidTerms.Length;
+
+            for (var index = 0; index < midTermsLength; index++)
+            {
+                var pair = MidTerms[index];
+
+                if (MidTermHasIssue(pair.Key.AsSpan(), valueSpan))
+                {
+                    result.Add(pair);
+                }
+            }
+
+            return result.Count > 0
+                   ? result.ToArray()
+                   : ReadOnlySpan<Pair>.Empty;
+        }
+//// ncrunch: rdi default
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool IndicatesNewWord(ref char c) => c.IsUpperCase() || c == Constants.Underscore;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool CompleteTermHasIssue(ReadOnlySpan<char> key, ReadOnlySpan<char> value) => key.SequenceEqual(value);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool PrefixHasIssue(ReadOnlySpan<char> key, ReadOnlySpan<char> value)
+        {
+            if (value.Length > key.Length)
+            {
+                var last = value[key.Length];
+
+                if (IndicatesNewWord(ref last) && value.StartsWith(key, StringComparison.Ordinal))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool PostFixHasIssue(ReadOnlySpan<char> key, ReadOnlySpan<char> value) => value.EndsWith(key, StringComparison.Ordinal) && value.EndsWithAny(AllowedPostFixTerms, StringComparison.Ordinal) is false;
+
+        private static bool MidTermHasIssue(ReadOnlySpan<char> key, ReadOnlySpan<char> value)
         {
             var index = 0;
-            var keyLength = key.Length;
-            var valueLength = value.Length;
 
-            var keyStartsUpperCase = key[0].IsUpperCase();
-
-            while (true)
+            // do not cache 'key.Length' or 'value.Length' or 'keys[0].IsUpperCase' as most times (~99.8%) they are not used
+            do
             {
-                index = value.IndexOf(key, index, StringComparison.Ordinal);
+                var newIndex = value.Slice(index).IndexOf(key, StringComparison.Ordinal);
 
-                if (index <= -1)
+                if (newIndex <= -1)
                 {
                     return false;
                 }
 
-                var positionAfterCharacter = index + keyLength;
+                index += newIndex;
 
-                if (positionAfterCharacter < valueLength && IndicatesNewWord(value[positionAfterCharacter]))
+                var positionAfterCharacter = index + key.Length;
+
+                if (positionAfterCharacter < value.Length)
                 {
-                    if (keyStartsUpperCase)
-                    {
-                        return true;
-                    }
+                    var charAfter = value[positionAfterCharacter];
 
-                    var positionBeforeText = index - 1;
-
-                    if (positionBeforeText >= 0 && IndicatesNewWord(value[positionBeforeText]))
+                    if (IndicatesNewWord(ref charAfter))
                     {
-                        return true;
+                        if (key[0].IsUpperCase())
+                        {
+                            return true;
+                        }
+
+                        var positionBeforeText = index - 1;
+
+                        if (positionBeforeText >= 0)
+                        {
+                            var charBefore = value[positionBeforeText];
+
+                            if (IndicatesNewWord(ref charBefore))
+                            {
+                                return true;
+                            }
+                        }
                     }
                 }
 
                 index = positionAfterCharacter;
             }
+            while (true);
         }
 
         private sealed class KeyEqualityComparer : IEqualityComparer<Pair>
         {
             internal static readonly KeyEqualityComparer Instance = new KeyEqualityComparer();
 
-            public bool Equals(Pair x, Pair y) => string.Equals(x.Key, y.Key, StringComparison.Ordinal);
+            private KeyEqualityComparer()
+            {
+            }
+
+            public bool Equals(Pair x, Pair y) => x.Key.AsSpan().SequenceEqual(y.Key.AsSpan());
 
             public int GetHashCode(Pair obj) => obj.Key.GetHashCode();
         }

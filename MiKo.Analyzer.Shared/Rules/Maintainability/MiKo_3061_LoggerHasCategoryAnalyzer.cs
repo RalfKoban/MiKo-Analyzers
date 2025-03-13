@@ -28,15 +28,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var node = (MemberAccessExpressionSyntax)context.Node;
 
-            if (node.Parent is InvocationExpressionSyntax s && s.ArgumentList.Arguments.Count == 1 && IsLogManagerGetLoggerCall(node))
+            if (node.Parent is InvocationExpressionSyntax s)
             {
-                var argument = s.ArgumentList.Arguments[0];
+                var arguments = s.ArgumentList.Arguments;
 
-                if (argument.IsString(context.SemanticModel) is false)
+                if (arguments.Count == 1 && IsLogManagerGetLoggerCall(node))
                 {
-                    var issue = Issue(context.ContainingSymbol?.Name, argument);
+                    var argument = arguments[0];
 
-                    ReportDiagnostics(context, issue);
+                    if (argument.IsString(context.SemanticModel) is false)
+                    {
+                        ReportDiagnostics(context, Issue(context.ContainingSymbol?.Name, argument));
+                    }
                 }
             }
         }

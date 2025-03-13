@@ -24,14 +24,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static int GetNamespaceDepth(NamespaceDeclarationSyntax declaration)
         {
-            var parentNamespaces = declaration.Ancestors<NamespaceDeclarationSyntax>().ToList();
+            var parentNamespacesCount = declaration.Ancestors<NamespaceDeclarationSyntax>().Sum(CountNamespaces);
 
-            if (parentNamespaces.Count != 0)
-            {
-                return parentNamespaces.Sum(CountNamespaces) + 1;
-            }
-
-            return CountNamespaces(declaration);
+            return parentNamespacesCount + CountNamespaces(declaration);
         }
 
         private void AnalyzeNamespace(SyntaxNodeAnalysisContext context)
@@ -42,9 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (depth > MaxDepth)
             {
-                var issue = Issue(string.Empty, node.Name, depth, MaxDepth);
-
-                ReportDiagnostics(context, issue);
+                ReportDiagnostics(context, Issue(node.Name, depth, MaxDepth));
             }
         }
     }

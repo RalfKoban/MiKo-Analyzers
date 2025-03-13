@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -11,24 +12,46 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2029";
 
-        public MiKo_2029_InheritdocUsesWrongCrefAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_2029_InheritdocUsesWrongCrefAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event);
-
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override bool ShallAnalyze(ISymbol symbol)
         {
+            switch (symbol.Kind)
+            {
+                case SymbolKind.NamedType:
+                case SymbolKind.Method:
+                case SymbolKind.Property:
+                case SymbolKind.Event:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
+        {
+            List<Diagnostic> results = null;
+
             foreach (var node in comment.DescendantNodes())
             {
                 var cref = node.GetCref(Constants.XmlTag.Inheritdoc);
                 var type = cref.GetCrefType();
 
-                if (type?.GetSymbol(compilation) is ISymbol linked && symbol.Equals(linked, SymbolEqualityComparer.Default))
+                if (type?.GetSymbol(semanticModel) is ISymbol linked && symbol.Equals(linked, SymbolEqualityComparer.Default))
                 {
-                    yield return Issue(cref);
+                    if (results is null)
+                    {
+                        results = new List<Diagnostic>(1);
+                    }
+
+                    results.Add(Issue(cref));
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
         }
     }
 }

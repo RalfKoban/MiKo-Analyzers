@@ -17,19 +17,47 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, comment);
-
-        private IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
-            foreach (var token in comment.GetXmlTextTokens(_ => CodeTags.Contains(_.GetName()) is false))
+            var textTokens = comment.GetXmlTextTokens(_ => CodeTags.Contains(_.GetName()) is false);
+            var textTokensCount = textTokens.Count;
+
+            if (textTokensCount == 0)
+            {
+                return Array.Empty<Diagnostic>();
+            }
+
+            var trimmed = textTokens.GetTextTrimmedWithParaTags();
+
+            if (trimmed.ContainsAny(Constants.Comments.Guids, StringComparison.Ordinal) is false)
+            {
+                return Array.Empty<Diagnostic>();
+            }
+
+            List<Diagnostic> results = null;
+
+            for (var i = 0; i < textTokensCount; i++)
             {
                 const int Offset = 1; // we do not want to underline the first and last char
 
-                foreach (var location in GetAllLocations(token, Constants.Comments.GuidTermsWithDelimiters, StringComparison.Ordinal, Offset, Offset))
+                var locations = GetAllLocations(textTokens[i], Constants.Comments.GuidTermsWithDelimiters, StringComparison.Ordinal, Offset, Offset);
+                var locationsCount = locations.Count;
+
+                if (locationsCount > 0)
                 {
-                    yield return Issue(symbol.Name, location);
+                    if (results is null)
+                    {
+                        results = new List<Diagnostic>(locationsCount);
+                    }
+
+                    for (var index = 0; index < locationsCount; index++)
+                    {
+                        results.Add(Issue(locations[index]));
+                    }
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
         }
     }
 }

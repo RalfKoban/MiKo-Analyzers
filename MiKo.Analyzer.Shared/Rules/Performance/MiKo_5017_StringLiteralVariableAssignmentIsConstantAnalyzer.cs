@@ -18,7 +18,15 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeStringLiteral, SyntaxKind.StringLiteralExpression);
 
-        private void AnalyzeStringLiteral(SyntaxNodeAnalysisContext context) => ReportDiagnostics(context, AnalyzeStringLiteral(context.Node));
+        private void AnalyzeStringLiteral(SyntaxNodeAnalysisContext context)
+        {
+            var issue = AnalyzeStringLiteral(context.Node);
+
+            if (issue != null)
+            {
+                ReportDiagnostics(context, issue);
+            }
+        }
 
         private Diagnostic AnalyzeStringLiteral(SyntaxNode node)
         {

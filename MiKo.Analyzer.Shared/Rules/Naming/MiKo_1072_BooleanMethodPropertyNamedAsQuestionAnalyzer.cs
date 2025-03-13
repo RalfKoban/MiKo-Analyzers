@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -79,14 +78,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IPropertySymbol symbol, Compilation compilation) => AnalyzeName(symbol);
 
-        private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol)
+        private Diagnostic[] AnalyzeName(ISymbol symbol)
         {
             var name = symbol.Name;
 
             if (name.Length <= 5)
             {
                 // skip all short names (such as isIP)
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             if (name.StartsWithAny(Prefixes, StringComparison.Ordinal) && name.HasUpperCaseLettersAbove(2))
@@ -94,13 +93,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 if (WellKnownNames.Contains(name) || name.StartsWithAny(WellKnownPrefixes, StringComparison.Ordinal) || name.EndsWithAny(WellKnownPostfixes, StringComparison.Ordinal))
                 {
                     // skip all well known names
-                    return Enumerable.Empty<Diagnostic>();
+                    return Array.Empty<Diagnostic>();
                 }
 
                 return new[] { Issue(symbol) };
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
     }
 }

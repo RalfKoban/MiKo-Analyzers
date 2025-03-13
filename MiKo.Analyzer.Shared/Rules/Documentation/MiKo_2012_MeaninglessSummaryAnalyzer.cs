@@ -13,25 +13,38 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2012";
 
-        public MiKo_2012_MeaninglessSummaryAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_2012_MeaninglessSummaryAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event, SymbolKind.Field);
-
-        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsNamespace is false && symbol.IsEnum() is false && symbol.IsException() is false && base.ShallAnalyze(symbol);
-
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment)
+        protected override bool ShallAnalyze(ISymbol symbol)
         {
-            if (summaries.None())
+            switch (symbol.Kind)
             {
-                return Enumerable.Empty<Diagnostic>();
+                case SymbolKind.NamedType:
+                    return symbol is INamedTypeSymbol type && type.IsNamespace is false && type.IsEnum() is false && type.IsException() is false;
+
+                case SymbolKind.Method:
+                case SymbolKind.Property:
+                case SymbolKind.Event:
+                case SymbolKind.Field:
+                    return true;
             }
 
+            return false;
+        }
+
+        protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(
+                                                                  DocumentationCommentTriviaSyntax comment,
+                                                                  ISymbol symbol,
+                                                                  IReadOnlyList<XmlElementSyntax> summaryXmls,
+                                                                  Lazy<string> commentXml,
+                                                                  Lazy<IReadOnlyCollection<string>> summaries)
+        {
             var symbolNames = GetSelfSymbolNames(symbol);
             var phrases = GetPhrases(symbol);
 
-            return AnalyzeSummaryPhrases(symbol, summaries, symbolNames.Concat(phrases));
+            return AnalyzeSummaryPhrases(symbol, summaries.Value, symbolNames.Concat(phrases));
         }
 
         private static string[] GetPhrases(ISymbol symbol)

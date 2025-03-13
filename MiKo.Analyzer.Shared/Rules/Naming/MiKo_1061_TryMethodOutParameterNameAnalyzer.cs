@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation) => symbol.IsTestClass()
-                                                                                                                    ? Enumerable.Empty<Diagnostic>() // ignore tests
+                                                                                                                    ? Array.Empty<Diagnostic>() // ignore tests
                                                                                                                     : symbol.GetNamedMethods().Select(AnalyzeTryMethod).WhereNotNull();
 
         private static string GetPreferredParameterName(string methodName)

@@ -50,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly Lazy<MapData> MappedData = new Lazy<MapData>();
 
-        private static readonly string[] TaskParts = Constants.Comments.GenericTaskReturnTypeStartingPhraseTemplate.FormatWith("task", '|').Split('|');
+        private static readonly string[] TaskParts = Constants.Comments.GenericTaskReturnTypeStartingPhraseTemplate.FormatWith("task", "|").Split('|');
 
 #if !NCRUNCH // do not define a static ctor to speed up tests in NCrunch
         static MiKo_2035_CodeFixProvider() => LoadData(); // ensure that we have the object available
@@ -83,7 +83,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (WellKnownTypeNames.Contains(typeName) is false)
                 {
-                    var text = typeName.AsBuilder().AdjustFirstWord(FirstWordHandling.MakePlural).SeparateWords(' ', FirstWordHandling.MakeLowerCase).ToString();
+                    var text = typeName.AsCachedBuilder()
+                                       .AdjustFirstWord(FirstWordHandling.MakePlural)
+                                       .SeparateWords(' ', FirstWordHandling.MakeLowerCase)
+                                       .ToStringAndRelease();
 
                     if (text.Length > 0)
                     {
@@ -147,7 +150,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var contents = preparedComment.Content;
             var count = contents.Count;
 
-            if (count > 1 && IsSeeCref(contents[1], "byte") && contents[0].IsWhiteSpaceOnlyText())
+            if (count > 1 && contents[1].IsSeeCref("byte") && contents[0].IsWhiteSpaceOnlyText())
             {
                 // inspect the continue text and - if necessary - clean it up
                 if (count > 2 && contents[2] is XmlTextSyntax continueText)
@@ -157,7 +160,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (text.StartsWithAny(MappedData.Value.ByteArrayContinueTexts))
                     {
-                        var newContinueText = continueText.ReplaceToken(token, token.WithText(text.AsBuilder().Without(MappedData.Value.ByteArrayContinueTexts)));
+                        var fixedText = text.AsCachedBuilder().Without(MappedData.Value.ByteArrayContinueTexts).ToStringAndRelease();
+                        var newContinueText = continueText.ReplaceToken(token, token.WithText(fixedText));
 
                         preparedComment = preparedComment.ReplaceNode(continueText, newContinueText);
                     }
