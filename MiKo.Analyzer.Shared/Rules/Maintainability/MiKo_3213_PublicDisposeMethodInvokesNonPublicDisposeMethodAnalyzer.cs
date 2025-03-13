@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -34,17 +33,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 switch (statements.Count)
                 {
                     case 1 when IsCallDisposeTrue(statements[0]):
-                        return Enumerable.Empty<Diagnostic>();
+                        return Array.Empty<Diagnostic>();
 
                     case 2 when IsCallDisposeTrue(statements[0]) && IsCallGcFinalizeThis(statements[1]):
-                        return Enumerable.Empty<Diagnostic>();
+                        return Array.Empty<Diagnostic>();
                 }
             }
             else
             {
                 if (IsCallDisposeTrue(method.ExpressionBody?.Expression))
                 {
-                    return Enumerable.Empty<Diagnostic>();
+                    return Array.Empty<Diagnostic>();
                 }
             }
 

@@ -84,9 +84,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             if (HasIssue(node))
             {
-                var issue = Issue(node, true, false);
-
-                ReportDiagnostics(context, issue);
+                ReportDiagnostics(context, Issue(node, true, false));
             }
         }
     }

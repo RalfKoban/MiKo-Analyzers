@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -51,8 +50,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static bool ViolatesLimit(ReadOnlySpan<char> name, ushort limit) => name.StartsWithAny(Prefixes, StringComparison.OrdinalIgnoreCase) && name.HasUpperCaseLettersAbove(limit);
 
-        private IEnumerable<Diagnostic> AnalyzeCamelCase(ISymbol symbol, ReadOnlySpan<char> symbolName, ushort limit) => ViolatesLimit(symbolName, limit)
-                                                                                                                         ? new[] { Issue(symbol, limit) }
-                                                                                                                         : Enumerable.Empty<Diagnostic>();
+        private Diagnostic[] AnalyzeCamelCase(ISymbol symbol, ReadOnlySpan<char> symbolName, ushort limit) => ViolatesLimit(symbolName, limit)
+                                                                                                              ? new[] { Issue(symbol, limit) }
+                                                                                                              : Array.Empty<Diagnostic>();
     }
 }

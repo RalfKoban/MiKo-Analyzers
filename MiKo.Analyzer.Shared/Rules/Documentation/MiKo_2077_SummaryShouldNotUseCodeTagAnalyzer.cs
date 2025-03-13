@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -11,25 +12,53 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2077";
 
-        public MiKo_2077_SummaryShouldNotUseCodeTagAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_2077_SummaryShouldNotUseCodeTagAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event);
-
-        // TODO RKN: Consolidate this into SummaryDocumentAnalyzer when finished
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override bool ShallAnalyze(ISymbol symbol)
         {
-            var summaryXmls = comment.GetSummaryXmls();
-
-            foreach (var summaryXml in summaryXmls)
+            switch (symbol.Kind)
             {
+                case SymbolKind.NamedType:
+                case SymbolKind.Method:
+                case SymbolKind.Property:
+                case SymbolKind.Event:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(
+                                                                  DocumentationCommentTriviaSyntax comment,
+                                                                  ISymbol symbol,
+                                                                  IReadOnlyList<XmlElementSyntax> summaryXmls,
+                                                                  Lazy<string> commentXml,
+                                                                  Lazy<IReadOnlyCollection<string>> summaries)
+        {
+            var count = summaryXmls.Count;
+
+            List<Diagnostic> issues = null;
+
+            for (var index = 0; index < count; index++)
+            {
+                var summaryXml = summaryXmls[index];
+
                 foreach (var code in summaryXml.GetXmlSyntax(Constants.XmlTag.Code))
                 {
+                    if (issues is null)
+                    {
+                        issues = new List<Diagnostic>(1);
+                    }
+
                     // we have an issue
-                    yield return Issue(symbol.Name, code);
+                    issues.Add(Issue(symbol.Name, code));
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)issues ?? Array.Empty<Diagnostic>();
         }
     }
 }

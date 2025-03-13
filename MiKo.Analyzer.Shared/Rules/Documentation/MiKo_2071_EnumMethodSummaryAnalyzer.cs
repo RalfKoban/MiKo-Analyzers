@@ -15,30 +15,82 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] ContinuationPhrases = { "whether ", "if " };
 
-        private static readonly string[] BooleanPhrases = new[] { " indicating ", " indicates ", " indicate " }.SelectMany(term1 => ContinuationPhrases, string.Concat)
-                                                                                                               .ToArray();
+        private static readonly string[] BooleanPhrases = new[] { " indicating ", " indicates ", " indicate " }.SelectMany(_ => ContinuationPhrases, string.Concat).ToArray();
 
-        public MiKo_2071_EnumMethodSummaryAnalyzer() : base(Id, (SymbolKind)(-1))
+        private static readonly int MinimumPhraseLength = BooleanPhrases.Min(_ => _.Length);
+
+        public MiKo_2071_EnumMethodSummaryAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Property);
-
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.ReturnType.IsEnum() && base.ShallAnalyze(symbol);
-
-        protected override bool ShallAnalyze(IPropertySymbol symbol) => symbol.GetReturnType()?.IsEnum() is true && base.ShallAnalyze(symbol);
-
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override bool ShallAnalyze(ISymbol symbol)
         {
-            foreach (var token in comment.GetXmlTextTokens())
+            switch (symbol)
             {
+                case IMethodSymbol method:
+                    return method.ReturnType.IsEnum();
+
+                case IPropertySymbol property:
+                    return property.GetReturnType()?.IsEnum() is true;
+
+                default:
+                    return false;
+            }
+        }
+
+        protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(
+                                                                  DocumentationCommentTriviaSyntax comment,
+                                                                  ISymbol symbol,
+                                                                  IReadOnlyList<XmlElementSyntax> summaryXmls,
+                                                                  Lazy<string> commentXml,
+                                                                  Lazy<IReadOnlyCollection<string>> summaries)
+        {
+            var textTokens = comment.GetXmlTextTokens();
+            var textTokensCount = textTokens.Count;
+
+            if (textTokensCount == 0)
+            {
+                return Array.Empty<Diagnostic>();
+            }
+
+            var text = textTokens.GetTextTrimmedWithParaTags();
+
+            if (text.ContainsAny(BooleanPhrases, StringComparison.Ordinal) is false)
+            {
+                return Array.Empty<Diagnostic>();
+            }
+
+            List<Diagnostic> issues = null;
+
+            for (var i = 0; i < textTokensCount; i++)
+            {
+                var token = textTokens[i];
+
+                if (token.ValueText.Length < MinimumPhraseLength)
+                {
+                    continue;
+                }
+
                 const int Offset = 1; // we do not want to underline the first and last char
 
-                foreach (var location in GetAllLocations(token, BooleanPhrases, StringComparison.Ordinal, Offset, Offset))
+                var locations = GetAllLocations(token, BooleanPhrases, StringComparison.Ordinal, Offset, Offset);
+                var locationsCount = locations.Count;
+
+                if (locationsCount > 0)
                 {
-                    yield return Issue(location);
+                    if (issues is null)
+                    {
+                        issues = new List<Diagnostic>(locationsCount);
+                    }
+
+                    for (var index = 0; index < locationsCount; index++)
+                    {
+                        issues.Add(Issue(locations[index]));
+                    }
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)issues ?? Array.Empty<Diagnostic>();
         }
     }
 }

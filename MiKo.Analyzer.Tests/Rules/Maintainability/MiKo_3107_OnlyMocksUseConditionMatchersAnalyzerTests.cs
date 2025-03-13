@@ -436,7 +436,7 @@ namespace Bla
 }
 ";
 
-            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
+            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode), allowNewCompilerDiagnostics: true); // CS8019 unused 'using' directive
         }
 
         [TestCase("It.IsAny<bool>()", "false")]
@@ -462,7 +462,7 @@ namespace Bla
 }
 ";
 
-            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
+            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode), allowNewCompilerDiagnostics: true); // CS8019 unused 'using' directive
         }
 
         [TestCase("It.IsAny<bool>()", "false")]
@@ -488,7 +488,7 @@ namespace Bla
 }
 ";
 
-            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
+            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode), allowNewCompilerDiagnostics: true); // CS8019 unused 'using' directive
         }
 
         [Test]
@@ -522,7 +522,7 @@ namespace Bla
 }
 ";
 
-            VerifyCSharpFix(Template.Replace("###", "It.IsAny<object>()"), Template.Replace("###", "null"));
+            VerifyCSharpFix(Template.Replace("###", "It.IsAny<object>()"), Template.Replace("###", "null"), allowNewCompilerDiagnostics: true); // CS8019 unused 'using' directive
         }
 
         [Test]
@@ -560,7 +560,7 @@ namespace Bla
 }
 ";
 
-            VerifyCSharpFix(Template.Replace("###", "It.IsAny<TestMeStruct>()"), Template.Replace("###", "default(TestMeStruct)"));
+            VerifyCSharpFix(Template.Replace("###", "It.IsAny<TestMeStruct>()"), Template.Replace("###", "default(TestMeStruct)"), allowNewCompilerDiagnostics: true); // CS8019 unused 'using' directive
         }
 
         protected override string GetDiagnosticId() => MiKo_3107_OnlyMocksUseConditionMatchersAnalyzer.Id;

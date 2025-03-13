@@ -55,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (ThrowsObjectDisposedException(syntax, symbol) || AlwaysThrows<NotImplementedException, NotSupportedException>(syntax))
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             return new[] { Issue(symbol.Name, GetLocation(syntax)) };

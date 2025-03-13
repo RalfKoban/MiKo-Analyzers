@@ -20,6 +20,17 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, PossibleEventRegistrations);
 
+        private void AnalyzeNode(SyntaxNodeAnalysisContext context)
+        {
+            var assignment = (AssignmentExpressionSyntax)context.Node;
+            var issue = AnalyzeAssignment(assignment, context.SemanticModel);
+
+            if (issue != null)
+            {
+                ReportDiagnostics(context, issue);
+            }
+        }
+
         private Diagnostic AnalyzeAssignment(AssignmentExpressionSyntax assignment, SemanticModel semanticModel)
         {
             if (assignment.IsEventRegistration(semanticModel))
@@ -45,13 +56,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
 
             return null;
-        }
-
-        private void AnalyzeNode(SyntaxNodeAnalysisContext context)
-        {
-            var assignment = (AssignmentExpressionSyntax)context.Node;
-
-            ReportDiagnostics(context, AnalyzeAssignment(assignment, context.SemanticModel));
         }
     }
 }

@@ -31,10 +31,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                            "Parameter is not used",
                                                            "Parameter is ignored",
                                                        }
-                                                   .SelectMany(_ => SentenceEndings, (phrase, end) => phrase + end)
+                                                   .SelectMany(_ => SentenceEndings, string.Concat)
                                                    .ToArray();
 
-        public MiKo_2026_StillUsedParamPhraseAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_2026_StillUsedParamPhraseAnalyzer() : base(Id)
         {
         }
 
@@ -106,29 +106,48 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> Analyze(SyntaxNodeAnalysisContext context, SyntaxNode method, SyntaxNode methodBody, IMethodSymbol methodSymbol)
         {
-            var comments = method.GetDocumentationCommentTriviaSyntax().ToList();
+            var comments = method.GetDocumentationCommentTriviaSyntax();
+            var commentsLength = comments.Length;
 
-            if (comments.Count > 0)
+            if (commentsLength <= 0)
             {
-                var used = methodBody.GetAllUsedVariables(context.SemanticModel);
+                yield break;
+            }
 
-                if (used.Count != 0)
+            var used = methodBody.GetAllUsedVariables(context.SemanticModel);
+
+            if (used.Count <= 0)
+            {
+                yield break;
+            }
+
+            var parameters = methodSymbol.Parameters;
+            var parametersLength = parameters.Length;
+
+            if (parametersLength <= 0)
+            {
+                yield break;
+            }
+
+            for (var index = 0; index < parametersLength; index++)
+            {
+                var parameter = parameters[index];
+                var parameterName = parameter.Name;
+
+                if (used.Contains(parameterName))
                 {
-                    foreach (var parameter in methodSymbol.Parameters.Where(_ => used.Contains(_.Name)))
+                    for (var i = 0; i < commentsLength; i++)
                     {
-                        foreach (var comment in comments)
+                        var parameterComment = comments[i].GetParameterComment(parameterName);
+
+                        if (parameterComment is null)
                         {
-                            var parameterComment = comment.GetParameterComment(parameter.Name);
+                            continue;
+                        }
 
-                            if (parameterComment is null)
-                            {
-                                continue;
-                            }
-
-                            if (parameterComment.GetTextTrimmed().EqualsAny(Phrases))
-                            {
-                                yield return Issue(parameter.Name, parameterComment.GetContentsLocation());
-                            }
+                        if (parameterComment.GetTextTrimmed().EqualsAny(Phrases))
+                        {
+                            yield return Issue(parameterName, parameterComment.GetContentsLocation());
                         }
                     }
                 }

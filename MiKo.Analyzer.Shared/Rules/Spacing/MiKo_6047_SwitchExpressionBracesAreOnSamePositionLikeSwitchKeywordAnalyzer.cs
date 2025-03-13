@@ -29,9 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                 if (switchPosition.Line != openBracePosition.Line && switchPosition.Character != openBracePosition.Character)
                 {
-                    var issue = Issue(openBraceToken, CreateProposalForSpaces(switchPosition.Character));
-
-                    ReportDiagnostics(context, issue);
+                    ReportDiagnostics(context, Issue(openBraceToken, CreateProposalForSpaces(switchPosition.Character)));
                 }
             }
         }

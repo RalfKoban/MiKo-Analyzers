@@ -26,23 +26,39 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
-            foreach (var token in comment.DescendantNodes<XmlTextSyntax>(_ => _.Ancestors<XmlElementSyntax>().None(__ => AllowedTags.Contains(__.GetName())))
+            List<Diagnostic> results = null;
+
+            foreach (var token in comment.DescendantNodes<XmlTextSyntax>(_ => _.AncestorsWithinDocumentation<XmlElementSyntax>().None(__ => AllowedTags.Contains(__.GetName())))
                                          .SelectMany(_ => _.TextTokens.OfKind(SyntaxKind.XmlTextLiteralToken)))
             {
-                foreach (var location in GetAllLocations(token, Terms))
+                var locations = GetAllLocations(token, Terms);
+                var locationsCount = locations.Count;
+
+                if (locationsCount > 0)
                 {
-                    var word = location.GetSurroundingWord();
-
-                    if (word.IsHyperlink())
+                    for (var index = 0; index < locationsCount; index++)
                     {
-                        continue;
-                    }
+                        var location = locations[index];
+                        var word = location.GetSurroundingWord();
 
-                    yield return Issue(location);
+                        if (word.IsHyperlink())
+                        {
+                            continue;
+                        }
+
+                        if (results is null)
+                        {
+                            results = new List<Diagnostic>(1);
+                        }
+
+                        results.Add(Issue(location));
+                    }
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
         }
     }
 }

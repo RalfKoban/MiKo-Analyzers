@@ -225,14 +225,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var text = t.GetTextWithoutTrivia();
 
-                if (text.IsNullOrWhiteSpace() && content.Count > 1 && IsSeeCref(content[1]))
+                if (text.IsNullOrWhiteSpace() && content.Count > 1 && content[1].IsSeeCref())
                 {
                     return Inheritdoc();
                 }
 
                 if (text.StartsWithAny(DefaultPhrases, StringComparison.OrdinalIgnoreCase))
                 {
-                    if (content.Count > 1 && IsSeeCref(content[1]))
+                    if (content.Count > 1 && content[1].IsSeeCref())
                     {
                         return Inheritdoc(GetSeeCref(content[1]));
                     }
@@ -283,7 +283,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static Pair[] CreateReplacementMap()
         {
             var entries = CreateReplacementMapEntries().ToArray(_ => _.Key, AscendingStringComparer.Default); // sort by first character
-
             var result = new Dictionary<string, string>(entries.Length);
 
             foreach (var entry in entries)
@@ -447,8 +446,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                       "will",
                                   };
 
-            foreach (var word in Verbs)
+            var verbsLength = Verbs.Length;
+            var beginningsLength = beginnings.Length;
+            var middlePartsLength = middleParts.Length;
+
+            for (var verbIndex = 0; verbIndex < verbsLength; verbIndex++)
             {
+                var word = Verbs[verbIndex];
                 var noun = word.ToUpperCaseAt(0);
                 var verb = word.ToLowerCaseAt(0);
 
@@ -458,10 +462,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 var fix = thirdPersonStart + " ";
 
-                foreach (var start in beginnings)
+                for (var beginningIndex = 0; beginningIndex < beginningsLength; beginningIndex++)
                 {
-                    foreach (var middle in middleParts)
+                    var start = beginnings[beginningIndex];
+
+                    for (var middleIndex = 0; middleIndex < middlePartsLength; middleIndex++)
                     {
+                        var middle = middleParts[middleIndex];
                         var begin = string.Concat(start, " ", middle, " ");
 
                         yield return new Pair(string.Concat(begin, verb, " "), fix);
@@ -484,14 +491,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var middles = new[] { string.Empty, "is ", "that is ", "which is " };
             var lasts = new[] { "to", "able to", "capable to", "used to" };
 
-            foreach (var start in starts)
+            var startsLength = starts.Length;
+            var middlesLength = middles.Length;
+            var lastsLength = lasts.Length;
+
+            for (var startIndex = 0; startIndex < startsLength; startIndex++)
             {
-                foreach (var middle in middles)
+                var start = starts[startIndex];
+
+                for (var middleIndex = 0; middleIndex < middlesLength; middleIndex++)
                 {
+                    var middle = middles[middleIndex];
                     var begin = string.Concat(start, " ", middle);
 
-                    foreach (var last in lasts)
+                    for (var lastIndex = 0; lastIndex < lastsLength; lastIndex++)
                     {
+                        var last = lasts[lastIndex];
+
                         yield return string.Concat(begin, last, " ");
                     }
                 }

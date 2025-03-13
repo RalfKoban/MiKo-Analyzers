@@ -1,32 +1,26 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class ExampleDocumentationAnalyzer : DocumentationAnalyzer
     {
-        protected ExampleDocumentationAnalyzer(string diagnosticId) : base(diagnosticId, (SymbolKind)(-1))
+        protected ExampleDocumentationAnalyzer(string diagnosticId) : base(diagnosticId)
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event);
-
-        protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
-        {
-            return AnalyzeComment(symbol, compilation, symbol.GetDocumentationCommentXml(), comment);
-        }
-
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected sealed override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
             var examples = comment.GetExampleXmls();
 
-            return AnalyzeExample(symbol, examples);
+            return examples.Count == 0
+                   ? Array.Empty<Diagnostic>()
+                   : AnalyzeExample(symbol, examples);
         }
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeExample(ISymbol owningSymbol, IEnumerable<XmlElementSyntax> examples) => Enumerable.Empty<Diagnostic>();
+        protected virtual IReadOnlyList<Diagnostic> AnalyzeExample(ISymbol symbol, IReadOnlyList<XmlElementSyntax> examples) => Array.Empty<Diagnostic>();
     }
 }

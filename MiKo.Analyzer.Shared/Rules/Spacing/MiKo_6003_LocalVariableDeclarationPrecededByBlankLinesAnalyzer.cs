@@ -16,10 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeLocalDeclarationStatement, SyntaxKind.LocalDeclarationStatement);
-        }
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeLocalDeclarationStatement, SyntaxKind.LocalDeclarationStatement);
 
         private static bool IsDeclaration(StatementSyntax statement) => statement is LocalDeclarationStatementSyntax;
 
@@ -28,7 +25,10 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             var node = (LocalDeclarationStatementSyntax)context.Node;
             var issue = AnalyzeLocalDeclarationStatement(node);
 
-            ReportDiagnostics(context, issue);
+            if (issue != null)
+            {
+                ReportDiagnostics(context, issue);
+            }
         }
 
         private Diagnostic AnalyzeLocalDeclarationStatement(LocalDeclarationStatementSyntax declaration)

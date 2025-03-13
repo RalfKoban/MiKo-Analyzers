@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -25,18 +24,21 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             {
                 var issues = AnalyzeTypeParameterConstraintClause(node);
 
-                ReportDiagnostics(context, issues);
+                if (issues.Length > 0)
+                {
+                    ReportDiagnostics(context, issues);
+                }
             }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeTypeParameterConstraintClause(TypeParameterConstraintClauseSyntax node)
+        private Diagnostic[] AnalyzeTypeParameterConstraintClause(TypeParameterConstraintClauseSyntax node)
         {
             var clauses = node.GetConstraintClauses();
 
             if (clauses.IndexOf(node) > 0)
             {
                 // only report for the first one
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             var referenceToken = node.GetTypeParameterConstraintReferenceToken();
@@ -57,7 +59,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 }
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
     }
 }

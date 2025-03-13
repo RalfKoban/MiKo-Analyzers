@@ -58,6 +58,7 @@ namespace TestHelper
                                          var message = result.GetMessage(null);
 
                                          Assert.That(message, Does.Not.Contain("tring[]"), "Wrong parameter provided, string array is not converted.");
+                                         Assert.That(message, Does.Not.Contain(" -> "), "Wrong parameter provided, Pair.");
 
                                          foreach (var placeholder in Placeholders)
                                          {

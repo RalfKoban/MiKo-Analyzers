@@ -19,14 +19,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeException(ISymbol symbol, XmlElementSyntax exceptionComment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeException(ISymbol symbol, XmlElementSyntax exceptionComment)
         {
             // get rid of the para tags as we are not interested into them
             var comment = exceptionComment.GetTextTrimmed();
 
             if (comment.EndsWith(Constants.Comments.ObjectDisposedExceptionEndingPhrase, Comparison))
             {
-                yield break;
+                return Array.Empty<Diagnostic>();
             }
 
             var hasCloseMethod = HasCloseMethod(symbol);
@@ -34,14 +34,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (hasCloseMethod && comment.EndsWith(Constants.Comments.ObjectDisposedExceptionAlternatingEndingPhrase, Comparison))
             {
                 // allowed alternative for Closed methods
-                yield break;
+                return Array.Empty<Diagnostic>();
             }
 
             var endingPhrase = hasCloseMethod
                                ? Constants.Comments.ObjectDisposedExceptionAlternatingEndingPhrase
                                : Constants.Comments.ObjectDisposedExceptionEndingPhrase;
 
-            yield return ExceptionIssue(exceptionComment, endingPhrase);
+            return new[] { ExceptionIssue(exceptionComment, endingPhrase) };
         }
 
         private static bool HasCloseMethod(ISymbol symbol) => symbol.FindContainingType().GetMembersIncludingInherited<IMethodSymbol>("Close").Any();

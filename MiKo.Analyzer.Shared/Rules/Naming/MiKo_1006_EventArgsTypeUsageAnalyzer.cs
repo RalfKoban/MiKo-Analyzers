@@ -37,7 +37,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var node = (EventFieldDeclarationSyntax)context.Node;
             var issue = AnalyzeVariableDeclaration(node.Declaration, context.SemanticModel);
 
-            ReportDiagnostics(context, issue);
+            if (issue != null)
+            {
+                ReportDiagnostics(context, issue);
+            }
         }
 
         private Diagnostic AnalyzeVariableDeclaration(VariableDeclarationSyntax declaration, SemanticModel semanticModel)

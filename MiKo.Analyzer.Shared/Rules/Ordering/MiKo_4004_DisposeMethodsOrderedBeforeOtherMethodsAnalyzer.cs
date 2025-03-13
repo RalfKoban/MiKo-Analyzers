@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         private IEnumerable<Diagnostic> AnalyzeTypeCore(INamedTypeSymbol symbol)
         {
-            var ordinaryMethods = GetMethodsOrderedByLocation(symbol).ToList();
+            var ordinaryMethods = GetMethodsOrderedByLocation(symbol);
 
             foreach (var accessibility in Accessibilities)
             {
@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
                 if (accessibility == Accessibility.Public && disposeMethods.Count == 0)
                 {
-                    var interfaceImplementations = GetMethodsOrderedByLocation(symbol, MethodKind.ExplicitInterfaceImplementation).ToList();
+                    var interfaceImplementations = GetMethodsOrderedByLocation(symbol, MethodKind.ExplicitInterfaceImplementation);
                     disposeMethods = interfaceImplementations.Where(_ => _.Parameters.None() && _.Name == nameof(System) + "." + nameof(IDisposable) + "." + nameof(IDisposable.Dispose)).ToList();
                 }
 

@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        private static void FilterIdenticalParameters(List<IParameterSymbol> referenceParameters, List<IParameterSymbol> otherParameters)
+        private static void RemoveIdenticalParameters(List<IParameterSymbol> referenceParameters, List<IParameterSymbol> otherParameters)
         {
             var otherIndex = 0;
             var referenceIndex = 0;
@@ -84,13 +84,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     referenceParameters.Reverse();
                     otherParameters.Reverse();
 
-                    FilterIdenticalParameters(referenceParameters, otherParameters);
+                    RemoveIdenticalParameters(referenceParameters, otherParameters);
 
                     referenceParameters.Reverse();
                     otherParameters.Reverse();
                 }
 
-                FilterIdenticalParameters(referenceParameters, otherParameters);
+                RemoveIdenticalParameters(referenceParameters, otherParameters);
 
                 var referenceIndex = 0;
                 var otherIndex = 0;

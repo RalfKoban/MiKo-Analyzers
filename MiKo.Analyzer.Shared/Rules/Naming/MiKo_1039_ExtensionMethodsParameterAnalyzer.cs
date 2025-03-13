@@ -89,11 +89,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return symbol.Type.IsEnumerable() ? Values : Value;
         }
 
-        private IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol parameter, params string[] names)
+        private Diagnostic[] AnalyzeName(IParameterSymbol parameter, params string[] names)
         {
             if (names.Any(_ => _ == parameter.Name))
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             var proposal = FindBetterName(parameter);

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -27,7 +29,17 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         private void AnalyzeArrayCreation(SyntaxNodeAnalysisContext context)
         {
-            switch (context.Node)
+            var issues = AnalyzeArrayCreationNode(context.Node, context);
+
+            if (issues.IsEmptyArray() is false)
+            {
+                ReportDiagnostics(context, issues);
+            }
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeArrayCreationNode(SyntaxNode node, SyntaxNodeAnalysisContext context)
+        {
+            switch (node)
             {
                 case ArrayCreationExpressionSyntax creation:
                 {
@@ -35,9 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
                     if (ShallAnalyzeArrayCreation(creation, semanticModel))
                     {
-                        var issues = AnalyzeArrayCreation(creation, semanticModel);
-
-                        ReportDiagnostics(context, issues);
+                        return AnalyzeArrayCreation(creation, semanticModel);
                     }
 
                     break;
@@ -49,14 +59,14 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
                     if (ShallAnalyzeArrayInitializer(initializer, semanticModel))
                     {
-                        var issues = AnalyzeArrayInitializer(initializer, semanticModel);
-
-                        ReportDiagnostics(context, issues);
+                        return AnalyzeArrayInitializer(initializer, semanticModel);
                     }
 
                     break;
                 }
             }
+
+            return Array.Empty<Diagnostic>();
         }
     }
 }

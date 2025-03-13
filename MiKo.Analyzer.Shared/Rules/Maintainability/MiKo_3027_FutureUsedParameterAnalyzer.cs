@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -21,8 +22,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var commentXml = symbol.GetComment();
 
-            var parameters = symbol.Parameters;
+            if (commentXml.IsNullOrEmpty())
+            {
+                return Array.Empty<Diagnostic>();
+            }
 
+            return Analyze(symbol.Parameters, commentXml);
+        }
+
+        private IEnumerable<Diagnostic> Analyze(ImmutableArray<IParameterSymbol> parameters, string commentXml)
+        {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var parametersLength = parameters.Length;
 
@@ -30,6 +39,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var parameter = parameters[index];
                 var comment = parameter.GetComment(commentXml);
+
+                if (comment.IsNullOrEmpty())
+                {
+                    continue;
+                }
 
                 if (comment.ContainsAny(Constants.Comments.FuturePhrase))
                 {

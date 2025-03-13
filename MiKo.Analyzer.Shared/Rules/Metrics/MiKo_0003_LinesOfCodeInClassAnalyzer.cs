@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -37,16 +36,24 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
                 var issues = AnalyzeDeclarations(declaration);
 
-                ReportDiagnostics(context, issues);
+                if (issues.Length > 0)
+                {
+                    ReportDiagnostics(context, issues);
+                }
             }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeDeclarations(TypeDeclarationSyntax declaration)
+        private Diagnostic[] AnalyzeDeclarations(TypeDeclarationSyntax declaration)
         {
             var loc = 0;
 
-            foreach (var member in declaration.Members)
+            var members = declaration.Members;
+            var count = members.Count;
+
+            for (var index = 0; index < count; index++)
             {
+                var member = members[index];
+
                 switch (member)
                 {
                     case BaseMethodDeclarationSyntax _:
@@ -67,7 +74,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                 return new[] { Issue(declaration.Identifier.GetLocation(), loc, MaxLinesOfCode) };
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
     }
 }

@@ -13,15 +13,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2100";
 
+        private const string Phrase = Constants.Comments.ExampleDefaultPhrase;
+
         public MiKo_2100_ExampleDefaultPhraseAnalyzer() : base(Id)
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeExample(ISymbol owningSymbol, IEnumerable<XmlElementSyntax> examples) => AnalyzeStartingPhrase(owningSymbol, examples);
-
-        private IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, IEnumerable<XmlElementSyntax> examples)
+        protected override IReadOnlyList<Diagnostic> AnalyzeExample(ISymbol symbol, IReadOnlyList<XmlElementSyntax> examples)
         {
-            const string Phrase = Constants.Comments.ExampleDefaultPhrase;
+            List<Diagnostic> results = null;
 
             foreach (var example in examples)
             {
@@ -29,9 +29,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (tokens.None(_ => _.ValueText.AsSpan().TrimStart().StartsWith(Phrase, StringComparison.Ordinal)))
                 {
-                    yield return Issue(symbol.Name, example.StartTag, Phrase);
+                    if (results is null)
+                    {
+                        results = new List<Diagnostic>(1);
+                    }
+
+                    results.Add(Issue(example.StartTag, Phrase));
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
         }
     }
 }

@@ -95,7 +95,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (textTokens.Count != 0)
             {
                 // fix starting text
-                var existingText = textTokens[0].WithoutTrivia().ValueText.AsSpan();
+                var existingText = textTokens[0].ValueText.AsSpan();
                 var firstWord = existingText.FirstWord();
 
                 if (firstWord.EqualsAny(WrongStartingWords))
@@ -117,7 +117,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     trimmedExistingText = trimmedExistingText.Slice(0, end);
                 }
 
-                var continuation = trimmedExistingText.AsBuilder().Without(EnumStartingPhrases).Trimmed();
+                var continuation = trimmedExistingText.ToString().AsCachedBuilder().Without(EnumStartingPhrases).Trimmed();
 
                 if (continuation.IsSingleWord())
                 {
@@ -152,7 +152,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                             .Append(trimmedExistingTextEnd)
                                             .ReplaceWithCheck(" kinds of state ", " states of ")
                                             .ReplaceWithCheck(" of of ", " of ")
-                                            .ToString();
+                                            .ToStringAndRelease();
 
                 textTokens.RemoveAt(0);
                 textTokens.Insert(0, XmlTextToken(finalText));

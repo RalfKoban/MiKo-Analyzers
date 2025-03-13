@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (arguments.Count < 3)
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             // public static System.Windows.DependencyProperty Register(string name, Type propertyType, Type ownerType);
@@ -29,10 +29,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var propertyType = arguments[1];
             var ownerType = arguments[2];
 
-            return Enumerable.Empty<Diagnostic>()
-                             .Concat(AnalyzeParameterName(symbol, nameArgument))
-                             .Concat(AnalyzeParameterPropertyType(symbol, propertyType, nameArgument))
-                             .Concat(AnalyzeParameterOwningType(symbol, ownerType));
+            return Array.Empty<Diagnostic>()
+                        .Concat(AnalyzeParameterName(symbol, nameArgument))
+                        .Concat(AnalyzeParameterPropertyType(symbol, propertyType, nameArgument))
+                        .Concat(AnalyzeParameterOwningType(symbol, ownerType));
         }
 
         private IEnumerable<Diagnostic> AnalyzeParameterName(IFieldSymbol symbol, ArgumentSyntax nameArgument)

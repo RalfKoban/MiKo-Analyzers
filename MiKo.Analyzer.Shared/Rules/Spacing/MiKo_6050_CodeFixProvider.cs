@@ -30,5 +30,26 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             return syntax;
         }
+
+        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
+        {
+            if (syntax is ArgumentSyntax argument && argument.Parent is ArgumentListSyntax list)
+            {
+                var arguments = list.Arguments;
+                var index = arguments.IndexOf(argument);
+
+                if (index > 0)
+                {
+                    var separator = arguments.GetSeparators().ElementAtOrDefault(index - 1);
+
+                    if (separator.HasTrailingEndOfLine() is false)
+                    {
+                        return root.ReplaceNode(list, list.ReplaceToken(separator, separator.WithTrailingNewLine()));
+                    }
+                }
+            }
+
+            return root;
+        }
     }
 }

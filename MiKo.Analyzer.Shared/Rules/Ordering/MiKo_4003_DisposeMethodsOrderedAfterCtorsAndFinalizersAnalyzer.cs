@@ -32,8 +32,8 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             var ctors = GetMethodsOrderedByLocation(symbol, MethodKind.Constructor).Select(_ => _.GetStartingLine()).ToList();
             var finalizers = GetMethodsOrderedByLocation(symbol, MethodKind.Destructor).Select(_ => _.GetStartingLine()).ToList();
 
-            var ordinaryMethods = GetMethodsOrderedByLocation(symbol).ToList();
-            var interfaceImplementations = GetMethodsOrderedByLocation(symbol, MethodKind.ExplicitInterfaceImplementation).ToList();
+            var ordinaryMethods = GetMethodsOrderedByLocation(symbol);
+            var interfaceImplementations = GetMethodsOrderedByLocation(symbol, MethodKind.ExplicitInterfaceImplementation);
 
             var ordinaryDisposeMethods = ordinaryMethods.Where(_ => _.DeclaredAccessibility == Accessibility.Public && _.Parameters.None() && _.Name == nameof(IDisposable.Dispose)).ToList();
             var interfaceDisposeMethods = interfaceImplementations.Where(_ => _.Parameters.None() && _.Name == nameof(System) + "." + nameof(IDisposable) + "." + nameof(IDisposable.Dispose)).ToList();
