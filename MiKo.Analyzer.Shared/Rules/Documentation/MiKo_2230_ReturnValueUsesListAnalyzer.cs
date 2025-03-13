@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 
@@ -17,17 +17,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, DocumentationCommentTriviaSyntax comment, string commentXml, string xmlTag)
+        protected override Diagnostic[] AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, DocumentationCommentTriviaSyntax comment, string commentXml, string xmlTag)
         {
-            foreach (var token in comment.GetXmlSyntax(xmlTag).GetXmlTextTokens())
-            {
-                var text = token.ValueText;
+            var xmlSyntax = comment.GetXmlSyntax(xmlTag);
 
-                if (text.Contains(Constants.Comments.ValueMeaningPhrase, StringComparison.Ordinal))
-                {
-                    yield return Issue(token);
-                }
+            if (xmlSyntax.Count == 0)
+            {
+                return Array.Empty<Diagnostic>();
             }
+
+            return xmlSyntax.GetXmlTextTokens()
+                            .Where(_ => _.ValueText.Contains(Constants.Comments.ValueMeaningPhrase, StringComparison.Ordinal))
+                            .Select(_ => Issue(_))
+                            .ToArray();
         }
     }
 }
