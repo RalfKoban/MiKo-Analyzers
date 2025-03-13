@@ -4642,7 +4642,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rename &apos;Filter&apos; to something like `IncludeBy`, `ExcludeBy`, `Remove`, `Skip` or `Take`.
+        ///   Looks up a localized string similar to Rename &apos;Filter&apos; to something like &apos;IncludeBy&apos;, &apos;ExcludeBy&apos;, &apos;Remove&apos;, &apos;Skip&apos; or &apos;Take&apos;.
         /// </summary>
         internal static string MiKo_1501_MessageFormat {
             get {

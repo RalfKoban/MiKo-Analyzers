@@ -18,13 +18,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private void AnalyzeField(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is FieldDeclarationSyntax declaration && declaration.IsReadOnly())
+            if (context.Node is FieldDeclarationSyntax field && field.IsReadOnly())
             {
-                foreach (var variable in declaration.Declaration.Variables)
+                foreach (var variable in field.Declaration.Variables)
                 {
                     if (variable.Initializer?.Value is LiteralExpressionSyntax)
                     {
-                        ReportDiagnostics(context, Issue(declaration));
+                        ReportDiagnostics(context, Issue(field));
                     }
                 }
             }
