@@ -21,9 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (HasIssue(warningExpression))
             {
-                var issue = Issue(warningExpression.OperatorToken);
-
-                ReportDiagnostics(context, issue);
+                ReportDiagnostics(context, Issue(warningExpression.OperatorToken));
             }
         }
     }

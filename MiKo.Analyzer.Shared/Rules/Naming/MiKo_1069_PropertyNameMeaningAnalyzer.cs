@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (symbol.IsImport())
             {
                 // ignore imports
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             var returnType = symbol.GetReturnType();
@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (returnType is null)
             {
                 // may happen during typing
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             if (symbol.NameMatchesTypeName(returnType, 2))
@@ -40,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return new[] { Issue(symbol) };
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
     }
 }

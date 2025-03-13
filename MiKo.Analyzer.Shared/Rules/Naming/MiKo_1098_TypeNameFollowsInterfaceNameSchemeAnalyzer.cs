@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     return AnalyzeName(symbol);
 
                 default:
-                    return Enumerable.Empty<Diagnostic>();
+                    return Array.Empty<Diagnostic>();
             }
         }
 
@@ -112,7 +112,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return names;
         }
 
-        private IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol)
+        private Diagnostic[] AnalyzeName(INamedTypeSymbol symbol)
         {
             var directlyImplementedInterfaces = symbol.Interfaces;
 
@@ -126,7 +126,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 }
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
     }
 }

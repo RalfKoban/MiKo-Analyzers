@@ -45,7 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     case BaseMethodDeclarationSyntax method:
                     {
-                        var symbol = GetSymbol(document, method);
+                        var symbol = method.GetSymbol(document);
 
                         if (symbol is IMethodSymbol methodSymbol)
                         {

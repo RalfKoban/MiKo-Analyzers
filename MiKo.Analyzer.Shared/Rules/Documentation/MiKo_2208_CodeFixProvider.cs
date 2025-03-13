@@ -27,16 +27,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return syntax.ReplaceToken(token, token.WithText(ReplaceText(token.Text)));
         }
 
-        private static StringBuilder ReplaceText(string originalText)
+        private static string ReplaceText(string originalText)
         {
-            var result = originalText.AsBuilder();
+            var result = originalText.AsCachedBuilder();
 
             foreach (var pair in ReplacementMap)
             {
                 result.ReplaceWithCheck(pair.Key, pair.Value);
             }
 
-            return result;
+            return result.ToStringAndRelease();
         }
 
 //// ncrunch: rdi off

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 using Microsoft.CodeAnalysis;
@@ -35,15 +34,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return new[] { Issue(symbol, proposal, CreateBetterNameProposal(proposal)) };
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
 
         private static string FindBetterName(IMethodSymbol method) => method.Name
-                                                                            .AsBuilder()
+                                                                            .AsCachedBuilder()
                                                                             .ReplaceWithCheck("Fire", "Raise")
                                                                             .ReplaceWithCheck("_fire", "_raise")
                                                                             .ReplaceWithCheck("Firing", "Raising")
                                                                             .ReplaceWithCheck("_firing", "_raising")
-                                                                            .ToString();
+                                                                            .ToStringAndRelease();
     }
 }

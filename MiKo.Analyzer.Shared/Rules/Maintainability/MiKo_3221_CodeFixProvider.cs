@@ -64,8 +64,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             statements.Add(SyntaxFactory.ParseStatement("return hash.ToHashCode();"));
 
             return method.WithBody(SyntaxFactory.Block(statements.Select(_ => _.WithIndentation().WithTrailingNewLine())))
-                         .WithExpressionBody(null)
-                         .WithSemicolonToken(default);
+                         .WithoutExpressionBody();
         }
 
         private static MethodDeclarationSyntax GetUpdatedSyntaxWithHashCodeCombine(IEnumerable<SyntaxNode> nodes, MethodDeclarationSyntax method)
@@ -75,7 +74,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             return method.WithBody(null)
                          .WithExpressionBody(SyntaxFactory.ArrowExpressionClause(invocation))
-                         .WithSemicolonToken(SyntaxKind.SemicolonToken.AsToken());
+                         .WithSemicolonToken();
         }
     }
 }

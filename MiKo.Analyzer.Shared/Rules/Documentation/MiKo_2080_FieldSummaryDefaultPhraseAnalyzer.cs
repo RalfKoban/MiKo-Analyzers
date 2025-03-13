@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2080_FieldSummaryDefaultPhraseAnalyzer : SummaryDocumentationAnalyzer
+    public sealed class MiKo_2080_FieldSummaryDefaultPhraseAnalyzer : SummaryStartDocumentationAnalyzer
     {
         public const string Id = "MiKo_2080";
 
@@ -19,28 +17,33 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private const StringComparison Comparison = StringComparison.OrdinalIgnoreCase;
 
-        public MiKo_2080_FieldSummaryDefaultPhraseAnalyzer() : base(Id, SymbolKind.Field)
+        public MiKo_2080_FieldSummaryDefaultPhraseAnalyzer() : base(Id)
         {
         }
 
-        protected override bool ShallAnalyze(IFieldSymbol symbol)
+        protected override bool ShallAnalyze(ISymbol symbol)
         {
-            if (symbol.ContainingType.IsEnum())
+            if (symbol is IFieldSymbol field)
             {
-                return false;
+                if (field.ContainingType.IsEnum())
+                {
+                    return false;
+                }
+
+                if (field.Type.IsDependencyProperty())
+                {
+                    return false; // validated by rule MiKo_2017
+                }
+
+                if (field.Type.IsRoutedEvent())
+                {
+                    return false; // validated by rule MiKo_2006
+                }
+
+                return true;
             }
 
-            if (symbol.Type.IsDependencyProperty())
-            {
-                return false; // validated by rule MiKo_2017
-            }
-
-            if (symbol.Type.IsRoutedEvent())
-            {
-                return false; // validated by rule MiKo_2006
-            }
-
-            return base.ShallAnalyze(symbol);
+            return false;
         }
 
         protected override Diagnostic StartIssue(ISymbol symbol, Location location)
@@ -48,17 +51,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var proposal = GetStartingPhrase((IFieldSymbol)symbol);
 
             return Issue(symbol.Name, location, proposal, CreateStartingPhraseProposal(proposal));
-        }
-
-        // TODO RKN: Move this to SummaryDocumentAnalyzer when finished
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
-        {
-            var summaryXmls = comment.GetSummaryXmls();
-
-            foreach (var summaryXml in summaryXmls)
-            {
-                yield return AnalyzeTextStart(symbol, summaryXml);
-            }
         }
 
         protected override bool AnalyzeTextStart(ISymbol symbol, string valueText, out string problematicText, out StringComparison comparison)
@@ -73,7 +65,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (comment.StartsWith(phrase, Comparison))
             {
                 // no issue
-                problematicText = null;
+                problematicText = string.Empty;
 
                 return false;
             }

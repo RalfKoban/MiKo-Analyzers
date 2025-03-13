@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
             }
 
-            return Enumerable.Empty<SyntaxToken>();
+            return Array.Empty<SyntaxToken>();
         }
 
         private void AnalyzeInvocation(SyntaxNodeAnalysisContext context)
@@ -54,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (arguments.Count == 0)
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             if (node.Expression is MemberAccessExpressionSyntax methodCall)
@@ -106,7 +106,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
 
         private IEnumerable<Diagnostic> AnalyzeCall(MemberAccessExpressionSyntax methodCall, ArgumentSyntax argument, SemanticModel semanticModel)
@@ -118,13 +118,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (type?.Name == Constants.ILog.TypeName)
             {
                 var syntaxTree = argument.SyntaxTree;
+                var phrases = Constants.Comments.NotContractionPhrase;
+                var phrasesLength = phrases.Length;
 
                 foreach (var token in GetTextTokens(argument))
                 {
                     var text = token.Text; // use 'Text' and not 'ValueText' here because otherwise the indices do not match (as 'Text' still contains the " )
 
-                    foreach (var value in Constants.Comments.NotContractionPhrase)
+                    for (var i = 0; i < phrasesLength; i++)
                     {
+                        var value = phrases[i];
+
                         foreach (var index in text.AllIndicesOf(value))
                         {
                             var location = CreateLocation(value, syntaxTree, token.SpanStart, index);

@@ -198,6 +198,32 @@ public class TestMe
 ");
 
         [Test]
+        public void Code_gets_fixed_for_field_and_suffix_Cmd()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Windows.Input;
+
+public class TestMe
+{
+    private ICommand m_fieldCmd;
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Windows.Input;
+
+public class TestMe
+{
+    private ICommand m_fieldCommand;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_field()
         {
             const string OriginalCode = @"

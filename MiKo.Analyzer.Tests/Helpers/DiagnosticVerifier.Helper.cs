@@ -10,6 +10,8 @@ using System.Text.RegularExpressions;
 using System.Windows.Input;
 using System.Xml;
 
+using log4net;
+
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -17,6 +19,8 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
 
 using MiKoSolutions.Analyzers.Rules;
+
+using Moq;
 
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
@@ -43,8 +47,10 @@ namespace TestHelper
         private static readonly MetadataReference CorlibReference = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
         private static readonly MetadataReference CSharpSymbolsReference = MetadataReference.CreateFromFile(typeof(CSharpCompilation).Assembly.Location);
         private static readonly MetadataReference DescriptionAttributeReference = MetadataReference.CreateFromFile(typeof(DescriptionAttribute).Assembly.Location);
+        private static readonly MetadataReference LogForNetReference = MetadataReference.CreateFromFile(typeof(ILog).Assembly.Location);
         private static readonly MetadataReference MiKoAnalyzersReference = MetadataReference.CreateFromFile(typeof(Analyzer).Assembly.Location);
         private static readonly MetadataReference MiKoAnalyzersTestsReference = MetadataReference.CreateFromFile(typeof(DiagnosticVerifier).Assembly.Location);
+        private static readonly MetadataReference MoqReference = MetadataReference.CreateFromFile(typeof(IMock<>).Assembly.Location);
         private static readonly MetadataReference NUnitLegacyReference = MetadataReference.CreateFromFile(typeof(DirectoryAssert).Assembly.Location);
         private static readonly MetadataReference NUnitReference = MetadataReference.CreateFromFile(typeof(Assert).Assembly.Location);
         private static readonly MetadataReference SystemReference = MetadataReference.CreateFromFile(typeof(Console).Assembly.Location);
@@ -68,27 +74,29 @@ namespace TestHelper
 
         private static readonly MetadataReference[] References =
                                                                  [
-                                                                     CorlibReference,
-                                                                     SystemCoreReference,
-                                                                     SystemCompositionReference,
-                                                                     SystemRuntimeReference,
-                                                                     SystemWindowsInputReference,
+                                                                     AspNetCoreMvcAbstractionsReference,
                                                                      AttributeReference,
                                                                      AttributeTargetsReference,
-                                                                     DescriptionAttributeReference,
-                                                                     AspNetCoreMvcAbstractionsReference,
-                                                                     CSharpSymbolsReference,
                                                                      CodeAnalysisReference,
-                                                                     NUnitReference,
-                                                                     NUnitLegacyReference,
+                                                                     CorlibReference,
+                                                                     CSharpSymbolsReference,
+                                                                     DescriptionAttributeReference,
+                                                                     LogForNetReference,
                                                                      MiKoAnalyzersReference,
                                                                      MiKoAnalyzersTestsReference,
+                                                                     MoqReference,
                                                                      NetStandardReference,
+                                                                     NUnitLegacyReference,
+                                                                     NUnitReference,
+                                                                     SystemCompositionReference,
+                                                                     SystemCoreReference,
+                                                                     SystemLinqReference,
                                                                      SystemReference,
                                                                      SystemRuntimeNetStandardReference,
-                                                                     SystemLinqReference,
-                                                                     SystemTextReference,
+                                                                     SystemRuntimeReference,
                                                                      SystemTextJsonReference,
+                                                                     SystemTextReference,
+                                                                     SystemWindowsInputReference,
                                                                      SystemXmlReference,
                                                                  ];
 

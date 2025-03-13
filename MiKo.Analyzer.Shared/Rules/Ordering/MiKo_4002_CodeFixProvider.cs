@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic diagnostic)
         {
-            var method = diagnostic.Location.GetEnclosing<IMethodSymbol>(GetSemanticModel(document));
+            var method = diagnostic.Location.GetEnclosing<IMethodSymbol>(document.GetSemanticModel());
             var methodName = method.Name;
 
             var methods = method.ContainingType.GetMethods(methodName);

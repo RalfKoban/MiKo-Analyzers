@@ -18,17 +18,47 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
-            foreach (var token in comment.GetXmlTextTokens())
+            var textTokens = comment.GetXmlTextTokens();
+            var textTokensCount = textTokens.Count;
+
+            if (textTokensCount == 0)
+            {
+                return Array.Empty<Diagnostic>();
+            }
+
+            var text = textTokens.GetTextTrimmedWithParaTags();
+
+            if (text.ContainsAny(Constants.Comments.FindTerms, StringComparison.OrdinalIgnoreCase) is false)
+            {
+                return Array.Empty<Diagnostic>();
+            }
+
+            List<Diagnostic> results = null;
+
+            for (var i = 0; i < textTokensCount; i++)
             {
                 const int Offset = 1; // we do not want to underline the first and last char
 
-                foreach (var location in GetAllLocations(token, FindTermsWithDelimiters, StringComparison.OrdinalIgnoreCase, Offset, Offset))
+                var locations = GetAllLocations(textTokens[i], FindTermsWithDelimiters, StringComparison.OrdinalIgnoreCase, Offset, Offset);
+                var locationsCount = locations.Count;
+
+                if (locationsCount > 0)
                 {
-                    yield return Issue(symbol.Name, location, Constants.Comments.ToSeekTerm);
+                    if (results is null)
+                    {
+                        results = new List<Diagnostic>(locationsCount);
+                    }
+
+                    for (var index = 0; index < locationsCount; index++)
+                    {
+                        results.Add(Issue(locations[index], Constants.Comments.ToSeekTerm));
+                    }
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
         }
     }
 }

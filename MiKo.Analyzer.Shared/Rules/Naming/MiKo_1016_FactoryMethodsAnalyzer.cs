@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             if (symbol.Name.StartsWith(Constants.Names.Create, StringComparison.Ordinal))
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             var betterName = FindBetterName(symbol);

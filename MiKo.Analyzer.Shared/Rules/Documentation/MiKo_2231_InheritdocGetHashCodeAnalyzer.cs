@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -12,19 +13,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2231";
 
-        public MiKo_2231_InheritdocGetHashCodeAnalyzer() : base(Id, SymbolKind.Method)
+        public MiKo_2231_InheritdocGetHashCodeAnalyzer() : base(Id)
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsOverride && symbol.Parameters.IsEmpty && symbol.ReturnType.SpecialType == SpecialType.System_Int32 && symbol.Name == nameof(GetHashCode);
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol is IMethodSymbol method && method.IsOverride && method.Parameters.IsEmpty && method.ReturnType.SpecialType == SpecialType.System_Int32 && method.Name == nameof(GetHashCode);
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
             var tagNames = comment.Content.ToHashSet(_ => _.GetXmlTagName());
 
             if (tagNames.Contains(Constants.XmlTag.Inheritdoc))
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             return new[] { Issue(comment) };

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 using Microsoft.CodeAnalysis;
@@ -50,7 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (betterName.IsNullOrWhiteSpace())
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
@@ -60,10 +59,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var symbolName = symbol.Name;
 
-            var betterName = symbolName.AsBuilder()
+            var betterName = symbolName.AsCachedBuilder()
                                        .ReplaceWithCheck("TypeEnum", "Kind")
                                        .Without(WrongSuffixes)
-                                       .ToString();
+                                       .ToStringAndRelease();
 
             if (betterName.IsNullOrWhiteSpace())
             {

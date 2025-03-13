@@ -46,7 +46,57 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(comment);
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
+        {
+            var lines = new HashSet<int>();
+
+            var emptyElements = new List<XmlEmptyElementSyntax>();
+            var elements = new List<XmlElementSyntax>();
+
+            foreach (var node in comment.DescendantNodes<XmlNodeSyntax>())
+            {
+                switch (node)
+                {
+                    case XmlEmptyElementSyntax emptyElement:
+                        emptyElements.Add(emptyElement);
+
+                        break;
+
+                    case XmlElementSyntax element:
+                        elements.Add(element);
+
+                        break;
+                }
+            }
+
+            // first loop over the elements to collect all lines that are also required to check for the empty elements, then loop over the empty ones
+            List<Diagnostic> results = null;
+
+            foreach (var element in elements)
+            {
+                foreach (var issue in AnalyzeXmlElement(element, lines))
+                {
+                    if (results is null)
+                    {
+                        results = new List<Diagnostic>(1);
+                    }
+
+                    results.Add(issue);
+                }
+            }
+
+            foreach (var issue in emptyElements.Select(_ => AnalyzeEmptyXmlElement(_, lines)))
+            {
+                if (results is null)
+                {
+                    results = new List<Diagnostic>(1);
+                }
+
+                results.Add(issue);
+            }
+
+            return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
+        }
 
         private static bool IsOnSameLine(XmlTextSyntax text, params int[] lines)
         {
@@ -115,35 +165,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return onSameLineAsTextAfter ? AddSpacesAfter : Array.Empty<Pair>();
-        }
-
-        private IEnumerable<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment)
-        {
-            var lines = new HashSet<int>();
-
-            var emptyElements = new List<XmlEmptyElementSyntax>();
-            var elements = new List<XmlElementSyntax>();
-
-            foreach (var node in comment.DescendantNodes<XmlNodeSyntax>())
-            {
-                switch (node)
-                {
-                    case XmlEmptyElementSyntax emptyElement:
-                        emptyElements.Add(emptyElement);
-
-                        break;
-
-                    case XmlElementSyntax element:
-                        elements.Add(element);
-
-                        break;
-                }
-            }
-
-            // first loop over the elements to collect all lines that are also required to check for the empty elements, then loop over the empty ones
-            return Enumerable.Empty<Diagnostic>()
-                             .Concat(elements.SelectMany(_ => AnalyzeXmlElement(_, lines)))
-                             .Concat(emptyElements.Select(_ => AnalyzeEmptyXmlElement(_, lines)));
         }
 
         private IEnumerable<Diagnostic> AnalyzeXmlElement(XmlElementSyntax element, HashSet<int> lines)

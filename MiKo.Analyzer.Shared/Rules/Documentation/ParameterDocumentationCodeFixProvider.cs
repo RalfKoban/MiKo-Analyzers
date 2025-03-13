@@ -18,6 +18,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         return ((XmlElementStartTagSyntax)node).Parent;
 
                     case SyntaxKind.XmlElement:
+                        if (node.IsPara())
+                        {
+                            continue; // ignore para tags
+                        }
+
                         return node;
 
                     case SyntaxKind.XmlText:
@@ -48,6 +53,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         if (parameter.GetName() == parameterName)
                         {
+                            var content = parameterCommentSyntax.Content;
+
+                            if (content.Count > 1 && content[0].IsWhiteSpaceOnlyText() && content[1] is XmlElementSyntax para && para.IsPara())
+                            {
+                                var updatedPara = Comment(document, para, parameter, index, issue);
+
+                                return parameterCommentSyntax.ReplaceNode(para, updatedPara);
+                            }
+
                             return Comment(document, parameterCommentSyntax, parameter, index, issue);
                         }
                     }

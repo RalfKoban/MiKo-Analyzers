@@ -14,7 +14,7 @@ namespace System.Text
     internal static class StringBuilderExtensions
     {
         private const int QuickCompareLengthThreshold = 4;
-        private const int QuickCompareRentLengthThreshold = 24;
+        private const int QuickCompareRentLengthThreshold = 22;
 
         public static bool IsNullOrWhiteSpace(this StringBuilder value) => value is null || value.CountLeadingWhitespaces() == value.Length;
 
@@ -239,7 +239,6 @@ namespace System.Text
 
         public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, ReadOnlySpan<Pair> replacementPairs)
         {
-            // ReSharper disable once ForCanBeConvertedToForeach
             var count = replacementPairs.Length;
 
             for (var index = 0; index < count; index++)
@@ -265,7 +264,6 @@ namespace System.Text
 
         public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, string[] texts, string replacement)
         {
-            // ReSharper disable once ForCanBeConvertedToForeach
             var length = texts.Length;
 
             for (var index = 0; index < length; index++)
@@ -326,7 +324,9 @@ namespace System.Text
                     continue;
                 }
 
-                if (c.IsUpperCase())
+                var isUpperCaseC = c.IsUpperCase();
+
+                if (isUpperCaseC || c.IsNumber())
                 {
                     if (index == CharacterToStartWith)
                     {
@@ -334,16 +334,28 @@ namespace System.Text
                         multipleUpperCases = true;
                     }
 
+                    var previousC = value[index - 1];
+
                     if (multipleUpperCases)
                     {
                         // let's see if we start with an IXyz interface
-                        if (value[index - 1] == 'I')
+                        if (previousC == 'I')
                         {
                             // seems we are in an IXyz interface
                             multipleUpperCases = false;
+
+                            continue;
                         }
 
-                        continue;
+                        if (isUpperCaseC && previousC.IsNumber())
+                        {
+                            // nothing to do here
+                        }
+                        else
+                        {
+                            // multiple upper cases in a line, so do not flip
+                            continue;
+                        }
                     }
 
                     // let's consider an upper-case 'A' as a special situation as that is a single word
@@ -355,13 +367,13 @@ namespace System.Text
 
                     var nextIndex = index + 1;
 
-                    if ((nextIndex >= value.Length || (nextIndex < value.Length && value[nextIndex].IsUpperCase())) && isSpecialCharA is false)
+                    if ((nextIndex >= value.Length || (nextIndex < value.Length && value[nextIndex].IsUpperCaseLetter())) && isSpecialCharA is false)
                     {
                         // multiple upper cases in a line, so do not flip
                         nextC = c;
                     }
 
-                    if (value[index - 1] == separator)
+                    if (previousC == separator)
                     {
                         value[index] = nextC;
                     }
@@ -370,17 +382,22 @@ namespace System.Text
                         // only add an underline if we not already have one
                         value[index] = separator;
                         index++;
+
                         value.Insert(index, nextC);
                     }
                 }
                 else
                 {
-                    if (multipleUpperCases && value[index - 1].IsUpperCase())
+                    if (multipleUpperCases)
                     {
-                        // we are behind multiple upper cases in a line, so add an underline
-                        value[index++] = separator;
+                        if (value[index - 1].IsUpperCaseLetter())
+                        {
+                            // we are behind multiple upper cases in a line, so add an underline
+                            value[index] = separator;
+                            index++;
 
-                        value.Insert(index, c);
+                            value.Insert(index, c);
+                        }
                     }
 
                     multipleUpperCases = false;
@@ -402,7 +419,17 @@ namespace System.Text
             var start = value.CountLeadingWhitespaces();
             var end = value.CountTrailingWhitespaces(start);
 
-            return value.Remove(0, start).Remove(length - start - end, end);
+            if (end > 0)
+            {
+                value.Remove(length - end, end);
+            }
+
+            if (start > 0)
+            {
+                value.Remove(0, start);
+            }
+
+            return value;
         }
 
         public static string Trim(this StringBuilder value)
@@ -418,6 +445,20 @@ namespace System.Text
             var end = value.CountTrailingWhitespaces(start);
 
             return value.ToString(start, length - start - end);
+        }
+
+        public static StringBuilder TrimmedStart(this StringBuilder value)
+        {
+            var length = value.Length;
+
+            if (length == 0)
+            {
+                return value;
+            }
+
+            var start = value.CountLeadingWhitespaces();
+
+            return value.Remove(0, start);
         }
 
         public static string TrimStart(this StringBuilder value)
@@ -470,6 +511,29 @@ namespace System.Text
             return value.Remove(length - count, count);
         }
 
+        public static StringBuilder TrimmedEnd(this StringBuilder value)
+        {
+            var length = value.Length;
+
+            if (length == 0)
+            {
+                return value;
+            }
+
+            var end = value.CountTrailingWhitespaces();
+
+            if (end == 0)
+            {
+                return value;
+            }
+
+            return value.Remove(length - end, end);
+        }
+
+        public static StringBuilder WithoutMultipleWhiteSpaces(this StringBuilder value) => value.ReplaceAllWithCheck(Constants.Comments.MultiWhitespaceStrings, Constants.Comments.SingleWhitespaceString); // ncrunch: no coverage
+
+        public static StringBuilder WithoutNewLines(this StringBuilder value) => value.Replace("\r", string.Empty).Replace("\n", string.Empty); // ncrunch: no coverage
+
         public static StringBuilder Without(this StringBuilder value, string phrase) => value.ReplaceWithCheck(phrase, string.Empty); // ncrunch: no coverage
 
         public static StringBuilder Without(this StringBuilder value, string[] phrases) => value.ReplaceAllWithCheck(phrases, string.Empty); // ncrunch: no coverage
@@ -494,7 +558,7 @@ namespace System.Text
 
             if (difference > 0)
             {
-                if (other.Length > QuickCompareLengthThreshold)
+                if (otherValueLength > QuickCompareLengthThreshold)
                 {
                     var otherFirst = other[0];
 
@@ -503,14 +567,14 @@ namespace System.Text
 
                     var length = difference + 1; // increased by 1 to have the complete difference investigated
 
-                    if (difference < QuickCompareRentLengthThreshold)
+                    if (difference >= QuickCompareRentLengthThreshold)
                     {
-                        // could be part in the replacement only if characters match
-                        return QuickCompareAtIndices(ref current, ref otherFirst, ref otherLast, ref length, ref lastIndex);
+                        // use rented arrays here (if we have larger differences, the start and end may be in different chunks)
+                        return QuickCompareAtIndicesWithRent(ref current, ref otherFirst, ref otherLast, ref length, ref lastIndex);
                     }
 
-                    // use rented arrays here (if we have larger differences, the start and end may be in different chunks)
-                    return QuickCompareAtIndicesWithRent(ref current, ref otherFirst, ref otherLast, ref length, ref lastIndex);
+                    // could be part in the replacement only if characters match
+                    return QuickCompareAtIndices(ref current, ref otherFirst, ref otherLast, ref length, ref lastIndex);
                 }
 
                 // can be part in the replacement as other value is smaller and could fit current value

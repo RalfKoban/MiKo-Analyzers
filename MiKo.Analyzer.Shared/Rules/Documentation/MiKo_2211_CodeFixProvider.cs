@@ -15,11 +15,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            var remarks = syntax.GetXmlSyntax(Constants.XmlTag.Remarks).First();
-            var summary = syntax.GetXmlSyntax(Constants.XmlTag.Summary).FirstOrDefault();
+            var remarks = syntax.GetXmlSyntax(Constants.XmlTag.Remarks)[0];
+            var summaries = syntax.GetXmlSyntax(Constants.XmlTag.Summary);
 
             // add remarks into summary
-            if (summary is null)
+            if (summaries.Count == 0)
             {
                 var newSummary = SyntaxFactory.XmlSummaryElement(remarks.Content.ToArray());
 
@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
             else
             {
-                var newSummary = summary.AddContent(Para()).AddContent(remarks.Content.ToArray());
+                var newSummary = summaries[0].AddContent(Para()).AddContent(remarks.Content.ToArray());
 
                 return SyntaxFactory.DocumentationComment(newSummary).WithEndOfLine();
             }

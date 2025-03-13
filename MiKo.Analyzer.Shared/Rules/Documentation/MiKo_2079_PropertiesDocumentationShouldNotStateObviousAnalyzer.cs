@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -33,28 +34,44 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                       "Get AND Set ",
                                                                   };
 
-        public MiKo_2079_PropertiesDocumentationShouldNotStateObviousAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_2079_PropertiesDocumentationShouldNotStateObviousAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.Property);
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol.Kind == SymbolKind.Property;
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(
+                                                                  DocumentationCommentTriviaSyntax comment,
+                                                                  ISymbol symbol,
+                                                                  IReadOnlyList<XmlElementSyntax> summaryXmls,
+                                                                  Lazy<string> commentXml,
+                                                                  Lazy<IReadOnlyCollection<string>> summaries)
         {
-            var summaries = comment.GetSummaryXmls();
             var symbolName = symbol.Name;
-
             var obviousComments = GetObviousComments(symbolName);
 
-            foreach (var summary in summaries)
+            var count = summaryXmls.Count;
+
+            List<Diagnostic> issues = null;
+
+            for (var index = 0; index < count; index++)
             {
+                var summary = summaryXmls[index];
                 var trimmed = summary.GetTextTrimmed();
 
                 if (obviousComments.Contains(trimmed))
                 {
-                    yield return Issue(symbolName, comment);
+                    if (issues is null)
+                    {
+                        issues = new List<Diagnostic>(1);
+                    }
+
+                    // we have an issue
+                    issues.Add(Issue(symbolName, comment));
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)issues ?? Array.Empty<Diagnostic>();
         }
 
         private static HashSet<string> GetObviousComments(string symbolName)

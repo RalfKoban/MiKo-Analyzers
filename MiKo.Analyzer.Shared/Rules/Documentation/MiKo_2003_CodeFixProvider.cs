@@ -51,8 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly Pair[] ReplacementMap = ReplacementMapKeys.OrderByDescending(_ => _.Length)
                                                                           .ThenBy(_ => _)
-                                                                          .Select(_ => new Pair(_, Constants.Comments.EventHandlerSummaryStartingPhrase))
-                                                                          .ToArray();
+                                                                          .ToArray(_ => new Pair(_, Constants.Comments.EventHandlerSummaryStartingPhrase));
 
 //// ncrunch: rdi default
 

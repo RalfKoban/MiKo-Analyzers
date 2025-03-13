@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -20,11 +20,19 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
         {
             var ctors = GetMethodsOrderedByLocation(symbol, MethodKind.Constructor);
             var methods = GetMethodsOrderedByLocation(symbol);
-            var methodsAndCtors = ctors.Concat(methods).ToList();
 
-            return methodsAndCtors.Count != 0
-                   ? AnalyzeMethods(methodsAndCtors)
-                   : Enumerable.Empty<Diagnostic>();
+            var count = ctors.Count + methods.Count;
+
+            if (count <= 0)
+            {
+                return Array.Empty<Diagnostic>();
+            }
+
+            var methodsAndCtors = new List<IMethodSymbol>(count);
+            methodsAndCtors.AddRange(ctors);
+            methodsAndCtors.AddRange(methods);
+
+            return AnalyzeMethods(methodsAndCtors);
         }
 
         private IEnumerable<Diagnostic> AnalyzeMethods(IEnumerable<IMethodSymbol> methods)
@@ -49,14 +57,14 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                         continue;
                     }
 
-                    var builder = new StringBuilder();
+                    var builder = StringBuilderCache.Acquire();
 
                     foreach (var similarMethod in similarMethods)
                     {
                         similarMethod.GetMethodSignature(builder.Append("   ")).AppendLine();
                     }
 
-                    var order = builder.ToString();
+                    var order = StringBuilderCache.GetStringAndRelease(builder);
 
                     // check for locations
                     var lastLine = similarMethods.First().GetStartingLine();

@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                             new Pair("Determines to ", "value to "), // TODO RKN: new Pair("Determines to ", "value to "),
                                                         };
 
-        private static readonly string[] ReplacementMapKeys = ReplacementMap.Select(_ => _.Key).ToArray();
+        private static readonly string[] ReplacementMapKeys = ReplacementMap.ToArray(_ => _.Key);
 
         public override string FixableDiagnosticId => "MiKo_2021";
 

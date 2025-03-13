@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -14,27 +14,27 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeNamespace(INamespaceSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
                                                                                                                                 ? Analyze(symbol, compilation)
-                                                                                                                                : Enumerable.Empty<Diagnostic>();
+                                                                                                                                : Array.Empty<Diagnostic>();
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
                                                                                                                            ? Analyze(symbol, compilation)
-                                                                                                                           : Enumerable.Empty<Diagnostic>();
+                                                                                                                           : Array.Empty<Diagnostic>();
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
                                                                                                                           ? Analyze(symbol, compilation)
-                                                                                                                          : Enumerable.Empty<Diagnostic>();
+                                                                                                                          : Array.Empty<Diagnostic>();
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
                                                                                                                               ? Analyze(symbol, compilation)
-                                                                                                                              : Enumerable.Empty<Diagnostic>();
+                                                                                                                              : Array.Empty<Diagnostic>();
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
                                                                                                                         ? Analyze(symbol, compilation)
-                                                                                                                        : Enumerable.Empty<Diagnostic>();
+                                                                                                                        : Array.Empty<Diagnostic>();
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
                                                                                                                         ? Analyze(symbol, compilation)
-                                                                                                                        : Enumerable.Empty<Diagnostic>();
+                                                                                                                        : Array.Empty<Diagnostic>();
 
         protected virtual bool ShallAnalyze(INamespaceSymbol symbol) => true;
 
@@ -48,17 +48,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected virtual bool ShallAnalyze(IEventSymbol symbol) => symbol.IsOverride is false;
 
-        protected virtual IEnumerable<Diagnostic> Analyze(INamespaceSymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> Analyze(INamespaceSymbol symbol, Compilation compilation) => Array.Empty<Diagnostic>();
 
-        protected virtual IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol, Compilation compilation) => Array.Empty<Diagnostic>();
 
-        protected virtual IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation) => Array.Empty<Diagnostic>();
 
-        protected virtual IEnumerable<Diagnostic> Analyze(IPropertySymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> Analyze(IPropertySymbol symbol, Compilation compilation) => Array.Empty<Diagnostic>();
 
-        protected virtual IEnumerable<Diagnostic> Analyze(IFieldSymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> Analyze(IFieldSymbol symbol, Compilation compilation) => Array.Empty<Diagnostic>();
 
-        protected virtual IEnumerable<Diagnostic> Analyze(IEventSymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> Analyze(IEventSymbol symbol, Compilation compilation) => Array.Empty<Diagnostic>();
 
         protected Diagnostic IssueOnType(ITypeSymbol type, ISymbol container)
         {

@@ -49,6 +49,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                     case AssignmentExpressionSyntax assignment:
                         return assignment.OperatorToken;
+
+                    case LambdaExpressionSyntax lambda:
+                        return lambda.ArrowToken;
                 }
             }
 
@@ -78,6 +81,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                     case AssignmentExpressionSyntax assignment:
                         return assignment.OperatorToken.GetPositionWithinEndLine() - 2;
+
+                    case LambdaExpressionSyntax lambda:
+                        return lambda.ArrowToken.GetPositionWithinEndLine() - 2;
                 }
             }
 

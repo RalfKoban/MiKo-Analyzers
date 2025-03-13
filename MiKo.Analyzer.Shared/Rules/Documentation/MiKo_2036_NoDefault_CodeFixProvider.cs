@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<XmlNodeSyntax> GetDefaultComment(Document document, TypeSyntax returnType)
         {
-            yield return XmlText(Constants.Comments.NoDefaultPhrase);
+            return new XmlNodeSyntax[] { XmlText(Constants.Comments.NoDefaultPhrase) };
         }
     }
 }

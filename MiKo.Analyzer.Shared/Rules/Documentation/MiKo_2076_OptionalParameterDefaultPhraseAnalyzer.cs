@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -23,26 +22,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                        "Defaults to",
                                                    };
 
-        public MiKo_2076_OptionalParameterDefaultPhraseAnalyzer() : base(Id)
-        {
-        }
+        public MiKo_2076_OptionalParameterDefaultPhraseAnalyzer() : base(Id) => IgnoreEmptyParameters = false;
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.Parameters.Any(_ => _.HasExplicitDefaultValue) && base.ShallAnalyze(symbol);
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol is IMethodSymbol method && method.Parameters.Any(_ => _.HasExplicitDefaultValue);
 
         protected override bool ShallAnalyzeParameter(IParameterSymbol parameter) => parameter.HasExplicitDefaultValue;
 
-        protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment)
+        protected override Diagnostic[] AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment)
         {
             if (parameterComment.GetTextTrimmed().ContainsAny(Phrases, StringComparison.OrdinalIgnoreCase))
             {
                 // seems like there is a default parameter mentioned
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
-            if (parameter.HasAttributeApplied("System.Runtime.CompilerServices.CallerMemberNameAttribute"))
+            if (parameter.HasAttribute("System.Runtime.CompilerServices.CallerMemberNameAttribute"))
             {
                 // nothing to report as that attribute indicates that the value gets automatically set
-                return Enumerable.Empty<Diagnostic>();
+                return Array.Empty<Diagnostic>();
             }
 
             var data = CreatePropertyData(parameter);
@@ -139,7 +136,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 case TypeKind.Struct:
                 {
                     var defaultStructValue = parameterType.GetProperties().FirstOrDefault(_ => _.IsStatic)?.Name
-                                             ?? parameterType.GetFields().FirstOrDefault(_ => _.IsStatic)?.Name;
+                                          ?? parameterType.GetFields().FirstOrDefault(_ => _.IsStatic)?.Name;
 
                     var defaultValue = defaultStructValue != null
                                        ? parameterType.Name + "." + defaultStructValue

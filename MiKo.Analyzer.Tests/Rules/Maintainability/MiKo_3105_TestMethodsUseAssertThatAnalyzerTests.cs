@@ -135,9 +135,31 @@ namespace Bla
 {
     public class TestMe
     {
+        [Test]
         public void DoSomething()
         {
             Assert.Multiple(() => { });
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_a_AssertThatAsync() => No_issue_is_reported_for(@"
+using System.Threading.Tasks;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Test]
+        public async Task DoSomethingAsync()
+        {
+            var result = true;
+
+            await Assert.ThatAsync(() => Task.FromResult(result), Is.EqualTo(true));
         }
     }
 }

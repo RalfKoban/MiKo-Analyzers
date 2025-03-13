@@ -45,14 +45,7 @@ namespace MiKoSolutions.Analyzers.Extensions
         {
             var result = "do split if something is split here.".SplitBy(["split"]);
 
-            Assert.That(result, Is.EquivalentTo(new[]
-                                                    {
-                                                        "do ",
-                                                        "split",
-                                                        " if something is ",
-                                                        "split",
-                                                        " here.",
-                                                    }));
+            Assert.That(result, Is.EquivalentTo(["do ", "split", " if something is ", "split", " here."]));
         }
 
         [Test]
@@ -60,14 +53,7 @@ namespace MiKoSolutions.Analyzers.Extensions
         {
             var result = "do split_1 if something is split_2 here.".SplitBy(["split_1", "split_2"]);
 
-            Assert.That(result, Is.EquivalentTo(new[]
-                                                    {
-                                                        "do ",
-                                                        "split_1",
-                                                        " if something is ",
-                                                        "split_2",
-                                                        " here.",
-                                                    }));
+            Assert.That(result, Is.EquivalentTo(["do ", "split_1", " if something is ", "split_2", " here."]));
         }
 
         [Test]
@@ -75,18 +61,7 @@ namespace MiKoSolutions.Analyzers.Extensions
         {
             var result = "do split_1 if something is split_2 here. Also split_1 here because split_2 is contained multiple times.".SplitBy(["split_1", "split_2"]);
 
-            Assert.That(result, Is.EquivalentTo(new[]
-                                                    {
-                                                        "do ",
-                                                        "split_1",
-                                                        " if something is ",
-                                                        "split_2",
-                                                        " here. Also ",
-                                                        "split_1",
-                                                        " here because ",
-                                                        "split_2",
-                                                        " is contained multiple times.",
-                                                    }));
+            Assert.That(result, Is.EquivalentTo(["do ", "split_1", " if something is ", "split_2", " here. Also ", "split_1", " here because ", "split_2", " is contained multiple times."]));
         }
 
         [Test]
@@ -146,17 +121,66 @@ namespace MiKoSolutions.Analyzers.Extensions
         }
 
         [Test]
-        public static void WordsAsSpan_returns_words() => Assert.That("GetHashCode".AsSpan().WordsAsSpan().Select(_ => _.ToString()), Is.EquivalentTo(new[] { "Get", "Hash", "Code" }));
+        public static void WordsAsSpan_returns_words() => Assert.That("GetHashCode".AsSpan().WordsAsSpan().Select(_ => _.ToString()), Is.EquivalentTo(["Get", "Hash", "Code"]));
+
+        [TestCase(' ', "", ExpectedResult = " ")]
+        [TestCase('-', "", ExpectedResult = "-")]
+        [TestCase(' ', " with more ", ExpectedResult = "  with more ")]
+        [TestCase('-', " with more ", ExpectedResult = "- with more ")]
+        public static string ConcatenatedWith_with_char_and_string_(char c, string s) => c.ConcatenatedWith(s);
+
+        [TestCase(' ', "", ExpectedResult = " ")]
+        [TestCase('-', "", ExpectedResult = "-")]
+        [TestCase(' ', " with more ", ExpectedResult = "  with more ")]
+        [TestCase('-', " with more ", ExpectedResult = "- with more ")]
+        public static string ConcatenatedWith_with_char_and_span_(char c, string s) => c.ConcatenatedWith(s.AsSpan());
 
         [TestCase("", " text ", ExpectedResult = " text ")]
         [TestCase(" Some ", " text ", ExpectedResult = " Some  text ")]
         [TestCase(" Some ", "", ExpectedResult = " Some ")]
         public static string ConcatenatedWith_with_string_and_span_(string s, string span) => s.ConcatenatedWith(span.AsSpan());
 
+        [TestCase("", ' ', ExpectedResult = " ")]
+        [TestCase("", '-', ExpectedResult = "-")]
+        [TestCase("some start", ' ', ExpectedResult = "some start ")]
+        [TestCase("some start ", '-', ExpectedResult = "some start -")]
+        public static string ConcatenatedWith_with_string_and_char_(string s, char c) => s.ConcatenatedWith(c);
+
+        [TestCase("", ' ', ExpectedResult = " ")]
+        [TestCase("", '-', ExpectedResult = "-")]
+        [TestCase("some start", ' ', ExpectedResult = "some start ")]
+        [TestCase("some start ", '-', ExpectedResult = "some start -")]
+        public static string ConcatenatedWith_with_span_and_char_(string s, char c) => s.AsSpan().ConcatenatedWith(c);
+
         [TestCase("", " text ", ExpectedResult = " text ")]
         [TestCase(" Some ", " text ", ExpectedResult = " Some  text ")]
         [TestCase(" Some ", "", ExpectedResult = " Some ")]
         public static string ConcatenatedWith_with_span_and_string_(string span, string s) => span.AsSpan().ConcatenatedWith(s);
+
+        [TestCase(' ', "", '-', ExpectedResult = " -")]
+        [TestCase('-', "", ' ', ExpectedResult = "- ")]
+        [TestCase('-', "", 'a', ExpectedResult = "-a")]
+        [TestCase(' ', " with more ", '-', ExpectedResult = "  with more -")]
+        [TestCase('-', " with more ", ' ', ExpectedResult = "- with more  ")]
+        public static string ConcatenatedWith_with_char_and_string_and_char_(char c1, string s, char c2) => c1.ConcatenatedWith(s, c2);
+
+        [TestCase(' ', "", '-', ExpectedResult = " -")]
+        [TestCase('-', "", ' ', ExpectedResult = "- ")]
+        [TestCase('-', "", 'a', ExpectedResult = "-a")]
+        [TestCase(' ', " with more ", '-', ExpectedResult = "  with more -")]
+        [TestCase('-', " with more ", ' ', ExpectedResult = "- with more  ")]
+        public static string ConcatenatedWith_with_char_and_span_and_char_(char c1, string s, char c2) => c1.ConcatenatedWith(s.AsSpan(), c2);
+
+        [TestCase(' ', "", "some", ExpectedResult = " some")]
+        [TestCase('-', "", " ", ExpectedResult = "- ")]
+        [TestCase('-', "", "", ExpectedResult = "-")]
+        [TestCase(' ', " with more ", "values", ExpectedResult = "  with more values")]
+        [TestCase('-', " with more ", "values", ExpectedResult = "- with more values")]
+        public static string ConcatenatedWith_with_char_and_string_and_span_(char c, string s, string span) => c.ConcatenatedWith(s, span.AsSpan());
+
+        [TestCase(" Some ", ' ', " with more ", ExpectedResult = " Some   with more ")]
+        [TestCase(" Some ", '-', " with more ", ExpectedResult = " Some - with more ")]
+        public static string ConcatenatedWith_with_span_and_char_and_string_(string span, char c, string s) => span.AsSpan().ConcatenatedWith(c, s);
 
         [TestCase(" Some ", "", " with more ", ExpectedResult = " Some  with more ")]
         [TestCase(" Some ", " text ", " with more ", ExpectedResult = " Some  text  with more ")]
@@ -164,6 +188,33 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase("", " text ", "", ExpectedResult = " text ")]
         [TestCase("", "", "", ExpectedResult = "")]
         public static string ConcatenatedWith_with_span_and_string_and_string_(string span, string s1, string s2) => span.AsSpan().ConcatenatedWith(s1, s2);
+
+        [TestCase(" Some ", "", " with more ", ExpectedResult = " Some  with more ")]
+        [TestCase(" Some ", " text ", " with more ", ExpectedResult = " Some  text  with more ")]
+        [TestCase(" Some ", " text ", "", ExpectedResult = " Some  text ")]
+        [TestCase("", " text ", "", ExpectedResult = " text ")]
+        [TestCase("", "", "", ExpectedResult = "")]
+        public static string ConcatenatedWith_with_span_and_string_and_span_(string span1, string s, string span2) => span1.AsSpan().ConcatenatedWith(s, span2.AsSpan());
+
+        [TestCase(" Some ", "", " with more ", ExpectedResult = " Some  with more ")]
+        [TestCase(" Some ", " text ", " with more ", ExpectedResult = " Some  text  with more ")]
+        [TestCase(" Some ", " text ", "", ExpectedResult = " Some  text ")]
+        [TestCase("", " text ", "", ExpectedResult = " text ")]
+        [TestCase("", "", "", ExpectedResult = "")]
+        public static string ConcatenatedWith_with_string_and_string_and_span_(string s1, string s2, string span) => s1.ConcatenatedWith(s2, span.AsSpan());
+
+        [TestCase(" Some ", "", " with more ", ExpectedResult = " Some  with more ")]
+        [TestCase(" Some ", " text ", " with more ", ExpectedResult = " Some  text  with more ")]
+        [TestCase(" Some ", " text ", "", ExpectedResult = " Some  text ")]
+        [TestCase("", " text ", "", ExpectedResult = " text ")]
+        [TestCase("", "", "", ExpectedResult = "")]
+        public static string ConcatenatedWith_with_string_and_span_and_string_(string s1, string span, string s2) => s1.ConcatenatedWith(span.AsSpan(), s2);
+
+        [TestCase(" Some ", '-', " with more ", '!', ExpectedResult = " Some - with more !")]
+        [TestCase("", 'a', "", 'b', ExpectedResult = "ab")]
+        [TestCase("", 'a', " - ", 'b', ExpectedResult = "a - b")]
+        [TestCase("Some", ' ', "", '!', ExpectedResult = "Some !")]
+        public static string ConcatenatedWith_with_span_and_char_and_string_and_char_(string span, char c1, string s, char c2) => span.AsSpan().ConcatenatedWith(c1, s, c2);
 
         [TestCaseSource(nameof(LowerCaseCharacters))]
         public static void IsUpperCase_is_false_for_(char c) => Assert.That(c.IsUpperCase(), Is.False);

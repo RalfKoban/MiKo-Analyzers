@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -40,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (condition.IsKind(SyntaxKind.LogicalAndExpression) && conditions.Count == 2 && conditions[0].IsKind(SyntaxKind.IsPatternExpression) && IsNegative(conditions[1]))
                 {
                     // we do not want to report is-pattern checks for false because the inverted code looks much difficult to understand
-                    return Enumerable.Empty<Diagnostic>();
+                    return Array.Empty<Diagnostic>();
                 }
 
                 if (conditions.Exists(IsNegative))
@@ -56,7 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         if (followUpStatement.IsAnyKind(ForbiddenFollowUps))
                         {
                             // we assume that the follow-up also contain code, so inverting would make the code less readable
-                            return Enumerable.Empty<Diagnostic>();
+                            return Array.Empty<Diagnostic>();
                         }
 
                         // inspect only in case the if statement is followed by a single other statement
@@ -70,7 +71,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Array.Empty<Diagnostic>();
         }
     }
 }

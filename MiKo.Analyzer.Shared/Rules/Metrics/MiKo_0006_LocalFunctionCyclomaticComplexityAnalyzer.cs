@@ -26,9 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                 {
                     var identifier = localFunction.Identifier;
 
-                    var issue = Issue(identifier.ValueText, identifier, cc, MaxCyclomaticComplexity);
-
-                    ReportDiagnostics(context, issue);
+                    ReportDiagnostics(context, Issue(identifier.ValueText, identifier, cc, MaxCyclomaticComplexity));
                 }
             }
         }
