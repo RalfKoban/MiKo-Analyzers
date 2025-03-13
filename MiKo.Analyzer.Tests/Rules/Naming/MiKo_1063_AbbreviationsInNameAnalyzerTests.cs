@@ -216,27 +216,25 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "Vol",
                                                        ];
 
-        private static readonly string[] BadPostfixes = BadMidTerms
-                                                        .Union([
-                                                                   "Bl",
-                                                                   "BL",
-                                                                   "CLI",
-                                                                   "Dto",
-                                                                   "DTO",
-                                                                   "Itf",
-                                                                   "Meth",
-                                                                   "Param",
-                                                                   "Params",
-                                                                   "Pos",
-                                                                   "Proc",
-                                                                   "Prop",
-                                                                   "PropName",
-                                                                   "PropNames",
-                                                                   "Props",
-                                                                   "Vm",
-                                                                   "VM",
-                                                               ])
-                                                        .ToArray();
+        private static readonly string[] BadPostfixes = [.. BadMidTerms.Union([
+                                                                                  "Bl",
+                                                                                  "BL",
+                                                                                  "CLI",
+                                                                                  "Dto",
+                                                                                  "DTO",
+                                                                                  "Itf",
+                                                                                  "Meth",
+                                                                                  "Param",
+                                                                                  "Params",
+                                                                                  "Pos",
+                                                                                  "Proc",
+                                                                                  "Prop",
+                                                                                  "PropName",
+                                                                                  "PropNames",
+                                                                                  "Props",
+                                                                                  "Vm",
+                                                                                  "VM",
+                                                                              ])];
 
         private static readonly string[] AllowedTerms =
                                                         [
