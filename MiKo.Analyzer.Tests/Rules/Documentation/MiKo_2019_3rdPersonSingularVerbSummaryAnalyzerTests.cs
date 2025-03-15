@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -275,8 +276,47 @@ public class TestMe
 }
 ");
 
+        [TestCase("Repository that does something", "Represents a repository that does something")]
+        public void Code_gets_fixed_for_class_(string originalText, string fixedText)
+        {
+            const string Template = @"
+using System;
+
+/// <summary>
+/// ###
+/// </summary>
+public class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
+        }
+
+        [TestCase("Interface that may be used to update something", "Updates something")]
+        [TestCase("Interface that allows to update something", "Updates something")]
+        [TestCase("Interface which may be used to update something", "Updates something")]
+        [TestCase("Interface which allows to update something", "Updates something")]
+        public void Code_gets_fixed_for_interface_(string originalText, string fixedText)
+        {
+            const string Template = @"
+using System;
+
+/// <summary>
+/// ###
+/// </summary>
+public interface TestMe
+{
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
+        }
+
         protected override string GetDiagnosticId() => MiKo_2019_3rdPersonSingularVerbSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2019_3rdPersonSingularVerbSummaryAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2019_CodeFixProvider();
     }
 }

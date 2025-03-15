@@ -5446,6 +5446,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Start &lt;summary&gt; with a third person singular verb.
+        /// </summary>
+        internal static string MiKo_2019_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2019_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;summary&gt; documentation should always begin with a third person singular verb, such as &quot;Provides&quot;. This concise description of the functionality that the class, property, etc. offers or represents ensures clarity and helps maintain a uniform documentation style..
         /// </summary>
         internal static string MiKo_2019_Description {
