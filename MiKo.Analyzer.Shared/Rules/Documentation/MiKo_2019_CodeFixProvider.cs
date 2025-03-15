@@ -20,10 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly Pair[] ReplacementMap =
                                                         {
-                                                            new Pair("Interface that may be used to "),
-                                                            new Pair("Interface that allows to "),
-                                                            new Pair("Interface which may be used to "),
-                                                            new Pair("Interface which allows to "),
+                                                            new Pair("Called to "),
                                                         };
 
         private static readonly string[] ReplacementMapKeys = ReplacementMap.ToArray(_ => _.Key);
@@ -45,10 +42,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         return CommentStartingWith(summary, "Represents a ");
                     }
 
-                    if (startText.StartsWithAny(ReplacementMapKeys, StringComparison.Ordinal))
+                    var updatedSummary = MiKo_2012_CodeFixProvider.GetUpdatedSyntax(summary, textSyntax);
+
+                    if (ReferenceEquals(summary, updatedSummary))
                     {
+                        // nothing updated, so update by ourselves
                         return Comment(summary, ReplacementMapKeys, ReplacementMap, FirstWordHandling.MakeUpperCase | FirstWordHandling.MakeThirdPersonSingular | FirstWordHandling.KeepLeadingSpace);
                     }
+
+                    return updatedSummary;
                 }
             }
 

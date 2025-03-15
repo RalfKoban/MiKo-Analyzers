@@ -457,6 +457,7 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] MeaninglessStartingPhrase =
                                                                           {
                                                                               "A ",
+                                                                              "Abstract ",
                                                                               "Action",
                                                                               "Adapter",
                                                                               "An ",
@@ -536,12 +537,29 @@ namespace MiKoSolutions.Analyzers
                                                                       "that is called",
                                                                       "that is capable",
                                                                       "that is used",
+                                                                      "that can be used",
+                                                                      "that could be used",
+                                                                      "that may be used",
+                                                                      "that might be used",
+                                                                      "that shall be used",
+                                                                      "that should be used",
+                                                                      "that will be used",
+                                                                      "that would be used",
                                                                       "used for",
                                                                       "used to",
                                                                       "capable to",
+                                                                      "able to",
                                                                       "which is called",
                                                                       "which is capable",
                                                                       "which is used",
+                                                                      "which can be used",
+                                                                      "which could be used",
+                                                                      "which may be used",
+                                                                      "which might be used",
+                                                                      "which shall be used",
+                                                                      "which should be used",
+                                                                      "which will be used",
+                                                                      "which would be used",
                                                                   };
 
             internal static readonly string[] MeaninglessFieldStartingPhrase = MeaninglessStartingPhrase.Except(FieldStartingPhrase).OrderBy(_ => _.Length).ToArray();

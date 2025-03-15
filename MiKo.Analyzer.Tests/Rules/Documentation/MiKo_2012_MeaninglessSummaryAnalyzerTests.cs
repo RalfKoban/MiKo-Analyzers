@@ -324,11 +324,13 @@ public class TestMe : ITestMe
 }
 ");
 
+        [TestCase("Able to render something", "Renders something")]
+        [TestCase("Capable to render something", "Renders something")]
         [TestCase("A class that adopts", "Adopts")]
         [TestCase("A interface that adopts", "Adopts")]
         [TestCase("An interface that adopts", "Adopts")]
         [TestCase("Class that adopts", "Adopts")]
-        [TestCase("Class that allows", "Allows")]
+        [TestCase("Class that allows to do", "Does")]
         [TestCase("Class that creates", "Creates")]
         [TestCase("Class that describes", "Describes")]
         [TestCase("Class that enhances", "Enhances")]
@@ -441,6 +443,14 @@ public class TestMe : ITestMe
         [TestCase("The interface offers", "Provides")]
         [TestCase("The interface that adopts", "Adopts")]
         [TestCase("The interface which adopts", "Adopts")]
+        [TestCase("The interface that may be used to adopt", "Adopts")]
+        [TestCase("The interface which may be used to adopt", "Adopts")]
+        [TestCase("The interface that might be used to adopt", "Adopts")]
+        [TestCase("The interface which might be used to adopt", "Adopts")]
+        [TestCase("The interface that can be used to adopt", "Adopts")]
+        [TestCase("The interface which can be used to adopt", "Adopts")]
+        [TestCase("The interface that could be used to adopt", "Adopts")]
+        [TestCase("The interface which could be used to adopt", "Adopts")]
         [TestCase("This class adopts", "Adopts")]
         [TestCase("This class offers", "Provides")]
         [TestCase("This class provides", "Provides")]
@@ -751,20 +761,116 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
         }
 
-        [TestCase("A class to render something", "Renders something")]
-        [TestCase("An class to render something", "Renders something")]
-        [TestCase("A class that is used to render something", "Renders something")]
-        [TestCase("An class that is used to render something", "Renders something")]
-        [TestCase("A class which is used to render something", "Renders something")]
-        [TestCase("An class which is used to render something", "Renders something")]
-        [TestCase("Class to render something", "Renders something")]
-        [TestCase("Class used to render something", "Renders something")]
-        [TestCase("The class is used to render something", "Renders something")]
-        [TestCase("The class that is used to render something", "Renders something")]
-        [TestCase("This class is used to render something", "Renders something")]
-        [TestCase("Used to render something", "Renders something")]
+        [TestCase("A class that can be used to")]
+        [TestCase("A class that could be used to")]
+        [TestCase("A class that is used to")]
+        [TestCase("A class that may be used to")]
+        [TestCase("A class that might be used to")]
+        [TestCase("A class that shall be used to")]
+        [TestCase("A class that should be used to")]
+        [TestCase("A class that will be used to")]
+        [TestCase("A class that would be used to")]
+        [TestCase("A class to")]
+        [TestCase("A class which is used to")]
+        [TestCase("Abstract base class that can be used to")]
+        [TestCase("Abstract base class that could be used to")]
+        [TestCase("Abstract base class that is used to")]
+        [TestCase("Abstract base class that may be used to")]
+        [TestCase("Abstract base class that might be used to")]
+        [TestCase("Abstract base class that shall be used to")]
+        [TestCase("Abstract base class that should be used to")]
+        [TestCase("Abstract base class that will be used to")]
+        [TestCase("Abstract base class that would be used to")]
+        [TestCase("Abstract base class to")]
+        [TestCase("Abstract base class which is used to")]
+        [TestCase("An abstract base class that can be used to")]
+        [TestCase("An abstract base class that could be used to")]
+        [TestCase("An abstract base class that is used to")]
+        [TestCase("An abstract base class that may be used to")]
+        [TestCase("An abstract base class that might be used to")]
+        [TestCase("An abstract base class that shall be used to")]
+        [TestCase("An abstract base class that should be used to")]
+        [TestCase("An abstract base class that will be used to")]
+        [TestCase("An abstract base class that would be used to")]
+        [TestCase("An abstract base class to")]
+        [TestCase("An abstract base class which is used to")]
+        [TestCase("An base class that can be used to")]
+        [TestCase("An base class that could be used to")]
+        [TestCase("An base class that is used to")]
+        [TestCase("An base class that may be used to")]
+        [TestCase("An base class that might be used to")]
+        [TestCase("An base class that shall be used to")]
+        [TestCase("An base class that should be used to")]
+        [TestCase("An base class that will be used to")]
+        [TestCase("An base class that would be used to")]
+        [TestCase("An base class to")]
+        [TestCase("An base class which is used to")]
+        [TestCase("An class that is used to")]
+        [TestCase("An class to")]
+        [TestCase("An class which is used to")]
+        [TestCase("Base class that can be used to")]
+        [TestCase("Base class that could be used to")]
+        [TestCase("Base class that is used to")]
+        [TestCase("Base class that may be used to")]
+        [TestCase("Base class that might be used to")]
+        [TestCase("Base class that shall be used to")]
+        [TestCase("Base class that should be used to")]
+        [TestCase("Base class that will be used to")]
+        [TestCase("Base class that would be used to")]
+        [TestCase("Base class to")]
+        [TestCase("Base class which is used to")]
+        [TestCase("Class to")]
+        [TestCase("Class used to")]
+        [TestCase("The abstract base class that can be used to")]
+        [TestCase("The abstract base class that could be used to")]
+        [TestCase("The abstract base class that is used to")]
+        [TestCase("The abstract base class that may be used to")]
+        [TestCase("The abstract base class that might be used to")]
+        [TestCase("The abstract base class that shall be used to")]
+        [TestCase("The abstract base class that should be used to")]
+        [TestCase("The abstract base class that will be used to")]
+        [TestCase("The abstract base class that would be used to")]
+        [TestCase("The abstract base class to")]
+        [TestCase("The abstract base class which is used to")]
+        [TestCase("The base class that can be used to")]
+        [TestCase("The base class that could be used to")]
+        [TestCase("The base class that is used to")]
+        [TestCase("The base class that may be used to")]
+        [TestCase("The base class that might be used to")]
+        [TestCase("The base class that shall be used to")]
+        [TestCase("The base class that should be used to")]
+        [TestCase("The base class that will be used to")]
+        [TestCase("The base class that would be used to")]
+        [TestCase("The base class to")]
+        [TestCase("The base class which is used to")]
+        [TestCase("The class can be used to")]
+        [TestCase("The class could be used to")]
+        [TestCase("The class is used to")]
+        [TestCase("The class may be used to")]
+        [TestCase("The class might be used to")]
+        [TestCase("The class shall be used to")]
+        [TestCase("The class should be used to")]
+        [TestCase("The class that is used to")]
+        [TestCase("The class will be used to")]
+        [TestCase("The class would be used to")]
+        [TestCase("This class is used to")]
+        [TestCase("Used to")]
+        public void Code_gets_fixed_for_class_(string startingPhrase)
+        {
+            const string Template = @"
+/// <summary>
+/// ### something.
+/// </summary>
+public class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", startingPhrase + " render"), Template.Replace("###", "Renders"));
+        }
+
         [TestCase("A workflow that updates something.", "Represents a workflow that updates something.")]
-        public void Code_gets_fixed_for_class_(string originalComment, string fixedComment)
+        public void Code_gets_fixed_for_workflow_class_(string originalComment, string fixedComment)
         {
             const string Template = @"
 /// <summary>
@@ -778,34 +884,42 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
         }
 
-        [TestCase("A interface to render something", "Renders something")]
-        [TestCase("An interface to render something", "Renders something")]
-        [TestCase("A interface that is used to render something", "Renders something")]
-        [TestCase("An interface that is used to render something", "Renders something")]
-        [TestCase("A interface which is used to render something", "Renders something")]
-        [TestCase("An interface which is used to render something", "Renders something")]
-        [TestCase("Interface to render something", "Renders something")]
-        [TestCase("Interface used to render something", "Renders something")]
-        [TestCase("The interface is used to render something", "Renders something")]
-        [TestCase("The interface that is used to render something", "Renders something")]
-        [TestCase("This interface is used to render something", "Renders something")]
-        [TestCase("Used to render something", "Renders something")]
-        [TestCase("A workflow that updates something.", "Represents a workflow that updates something.")]
-        public void Code_gets_fixed_for_interface_(string originalComment, string fixedComment)
+        [TestCase("A interface to")]
+        [TestCase("An interface to")]
+        [TestCase("A interface that is used to")]
+        [TestCase("An interface that is used to")]
+        [TestCase("An interface that can be used to")]
+        [TestCase("An interface that could be used to")]
+        [TestCase("An interface that may be used to")]
+        [TestCase("An interface that might be used to")]
+        [TestCase("An interface that shall be used to")]
+        [TestCase("An interface that should be used to")]
+        [TestCase("An interface that will be used to")]
+        [TestCase("An interface that would be used to")]
+        [TestCase("A interface which is used to")]
+        [TestCase("An interface which is used to")]
+        [TestCase("Interface to")]
+        [TestCase("Interface used to")]
+        [TestCase("The interface is used to")]
+        [TestCase("The interface that is used to")]
+        [TestCase("This interface is used to")]
+        [TestCase("Used to")]
+        public void Code_gets_fixed_for_interface_(string startingPhrase)
         {
             const string Template = @"
 /// <summary>
-/// ###.
+/// ### something.
 /// </summary>
 public interface ITestMe
 {
 }
 ";
 
-            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
+            VerifyCSharpFix(Template.Replace("###", startingPhrase + " render"), Template.Replace("###", "Renders"));
         }
 
-        [TestCase("Attribute that allows to render something", "Allows to render something")]
+        [TestCase("Attribute that allows to do something", "Does something")]
+        [TestCase("Attribute which allows to do something", "Does something")]
         public void Code_gets_fixed_for_attribute_(string originalComment, string fixedComment)
         {
             const string Template = @"
@@ -876,60 +990,77 @@ public class TestMeViewModel
             VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
         }
 
-        [TestCase("A component to render something", "Renders something")]
-        [TestCase("A component that is used to render something", "Renders something")]
-        [TestCase("A component which is used to render something", "Renders something")]
-        [TestCase("A component used to render something", "Renders something")]
-        [TestCase("A component that is able to render something", "Renders something")]
-        [TestCase("A component which is able to render something", "Renders something")]
-        [TestCase("A component that is capable to render something", "Renders something")]
-        [TestCase("A component which is capable to render something", "Renders something")]
-        [TestCase("A component able to render something", "Renders something")]
-        [TestCase("A component capable to render something", "Renders something")]
-        [TestCase("An component to render something", "Renders something")]
-        [TestCase("An component that is used to render something", "Renders something")]
-        [TestCase("An component which is used to render something", "Renders something")]
-        [TestCase("An component used to render something", "Renders something")]
-        [TestCase("An component that is able to render something", "Renders something")]
-        [TestCase("An component which is able to render something", "Renders something")]
-        [TestCase("An component that is capable to render something", "Renders something")]
-        [TestCase("An component which is capable to render something", "Renders something")]
-        [TestCase("An component able to render something", "Renders something")]
-        [TestCase("An component capable to render something", "Renders something")]
-        [TestCase("Component to render something", "Renders something")]
-        [TestCase("Component that is used to render something", "Renders something")]
-        [TestCase("Component which is used to render something", "Renders something")]
-        [TestCase("Component used to render something", "Renders something")]
-        [TestCase("Component that is able to render something", "Renders something")]
-        [TestCase("Component which is able to render something", "Renders something")]
-        [TestCase("Component that is capable to render something", "Renders something")]
-        [TestCase("Component which is capable to render something", "Renders something")]
-        [TestCase("Component able to render something", "Renders something")]
-        [TestCase("Component capable to render something", "Renders something")]
-        [TestCase("The component to render something", "Renders something")]
-        [TestCase("The component that is used to render something", "Renders something")]
-        [TestCase("The component which is used to render something", "Renders something")]
-        [TestCase("The component used to render something", "Renders something")]
-        [TestCase("The component is used to render something", "Renders something")]
-        [TestCase("The component is able to render something", "Renders something")]
-        [TestCase("The component is capable to render something", "Renders something")]
-        [TestCase("The component that is able to render something", "Renders something")]
-        [TestCase("The component which is able to render something", "Renders something")]
-        [TestCase("The component that is capable to render something", "Renders something")]
-        [TestCase("The component which is capable to render something", "Renders something")]
-        [TestCase("The component able to render something", "Renders something")]
-        [TestCase("The component capable to render something", "Renders something")]
-        [TestCase("This component is used to render something", "Renders something")]
-        [TestCase("This component is able to render something", "Renders something")]
-        [TestCase("This component is capable to render something", "Renders something")]
-        public void Code_gets_fixed_for_component_text_(string originalComment, string fixedComment)
+        [TestCase("A component to")]
+        [TestCase("A component that is used to")]
+        [TestCase("A component which is used to")]
+        [TestCase("A component used to")]
+        [TestCase("A component that is able to")]
+        [TestCase("A component which is able to")]
+        [TestCase("A component that is capable to")]
+        [TestCase("A component which is capable to")]
+        [TestCase("A component able to")]
+        [TestCase("A component capable to")]
+        [TestCase("An component to")]
+        [TestCase("An component that is used to")]
+        [TestCase("An component which is used to")]
+        [TestCase("An component used to")]
+        [TestCase("An component that is able to")]
+        [TestCase("An component which is able to")]
+        [TestCase("An component that is capable to")]
+        [TestCase("An component which is capable to")]
+        [TestCase("An component able to")]
+        [TestCase("An component capable to")]
+        [TestCase("Component to")]
+        [TestCase("Component that is used to")]
+        [TestCase("Component which is used to")]
+        [TestCase("Component used to")]
+        [TestCase("Component that is able to")]
+        [TestCase("Component which is able to")]
+        [TestCase("Component that is capable to")]
+        [TestCase("Component which is capable to")]
+        [TestCase("Component able to")]
+        [TestCase("Component capable to")]
+        [TestCase("The component to")]
+        [TestCase("The component that is used to")]
+        [TestCase("The component which is used to")]
+        [TestCase("The component used to")]
+        [TestCase("The component is used to")]
+        [TestCase("The component is able to")]
+        [TestCase("The component is capable to")]
+        [TestCase("The component that is able to")]
+        [TestCase("The component which is able to")]
+        [TestCase("The component that is capable to")]
+        [TestCase("The component which is capable to")]
+        [TestCase("The component able to")]
+        [TestCase("The component capable to")]
+        [TestCase("This component is used to")]
+        [TestCase("This component is able to")]
+        [TestCase("This component is capable to")]
+        public void Code_gets_fixed_for_component_text_(string startingPhrase)
         {
             const string Template = @"
 /// <summary>
-/// ###.
+/// ### something.
 /// </summary>
 public class TestMe
 {
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", startingPhrase + " render"), Template.Replace("###", "Renders"));
+        }
+
+        [TestCase("Used to set something", "Sets something")]
+        [TestCase("Used to get something", "Gets something")]
+        public void Code_gets_fixed_for_property_text_(string originalComment, string fixedComment)
+        {
+            const string Template = @"
+public class TestMe
+{
+    /// <summary>
+    /// ###.
+    /// </summary>
+    public int Property { get; set; }
 }
 ";
 
