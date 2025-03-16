@@ -12,13 +12,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => "MiKo_2002";
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        internal static SyntaxNode GetUpdatedSyntax(XmlElementSyntax comment)
         {
-            var comment = (XmlElementSyntax)syntax;
-
             var cref = comment.Content.LastOrDefault(_ => _.IsSeeCref()) ?? SeeCref(Constants.TODO);
 
             return Comment(comment, Constants.Comments.EventArgsSummaryStartingPhrase, cref, " event.");
         }
+
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => GetUpdatedSyntax((XmlElementSyntax)syntax);
     }
 }

@@ -869,6 +869,22 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", startingPhrase + " render"), Template.Replace("###", "Renders"));
         }
 
+        [TestCase("Event args for something", @"Provides data for the <see cref=""TODO""/> event")]
+        [TestCase(@"Event args for <see cref=""IWhatever""/> event", @"Provides data for the <see cref=""IWhatever""/> event")]
+        public void Code_gets_fixed_for_EventArgs_class_(string startingPhrase, string fixedPhrase)
+        {
+            const string Template = @"
+/// <summary>
+/// ###.
+/// </summary>
+public class TestMeEventArgs
+{
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", startingPhrase), Template.Replace("###", fixedPhrase));
+        }
+
         [TestCase("A workflow that updates something.", "Represents a workflow that updates something.")]
         public void Code_gets_fixed_for_workflow_class_(string originalComment, string fixedComment)
         {

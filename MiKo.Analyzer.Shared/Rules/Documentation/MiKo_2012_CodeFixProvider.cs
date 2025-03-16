@@ -98,6 +98,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         return MiKo_2060_CodeFixProvider.GetUpdatedSyntax(comment);
                     }
                 }
+                else if (name.Contains(nameof(EventArgs)))
+                {
+                    return MiKo_2002_CodeFixProvider.GetUpdatedSyntax(comment);
+                }
 
                 if (text.StartsWithAny(ReplacementMapKeys, StringComparison.Ordinal))
                 {
