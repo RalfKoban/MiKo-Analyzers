@@ -186,7 +186,7 @@ The following tables lists all the 486 rules that are currently provided by the 
 |MiKo_2016|Documentation for asynchronous methods should start with specific phrase|&#x2713;|&#x2713;|
 |MiKo_2017|Dependency properties should be documented as done by the .NET Framework|&#x2713;|&#x2713;|
 |MiKo_2018|Documentation should not use the ambiguous terms 'Check' or 'Test'|&#x2713;|&#x2713;|
-|MiKo_2019|&lt;summary&gt; documentation should start with a third person singular verb (for example "Provides ")|&#x2713;|\-|
+|MiKo_2019|&lt;summary&gt; documentation should start with a third person singular verb (for example "Provides ")|&#x2713;|&#x2713;|
 |MiKo_2020|Inherited documentation should be used with &lt;inheritdoc /&gt; marker|&#x2713;|&#x2713;|
 |MiKo_2021|Documentation of parameter should have a default starting phrase|&#x2713;|&#x2713;|
 |MiKo_2022|Documentation of [out] parameters should have a default starting phrase|&#x2713;|&#x2713;|

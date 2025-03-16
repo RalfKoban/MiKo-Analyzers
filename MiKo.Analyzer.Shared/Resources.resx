@@ -1962,6 +1962,9 @@ This ensures clarity and precision in your code.</value>
   <data name="MiKo_2018_Title" xml:space="preserve">
     <value>Documentation should not use the ambiguous terms 'Check' or 'Test'</value>
   </data>
+  <data name="MiKo_2019_CodeFixTitle" xml:space="preserve">
+    <value>Start &lt;summary&gt; with a third person singular verb</value>
+  </data>
   <data name="MiKo_2019_Description" xml:space="preserve">
     <value>&lt;summary&gt; documentation should always begin with a third person singular verb, such as "Provides". This concise description of the functionality that the class, property, etc. offers or represents ensures clarity and helps maintain a uniform documentation style.</value>
   </data>

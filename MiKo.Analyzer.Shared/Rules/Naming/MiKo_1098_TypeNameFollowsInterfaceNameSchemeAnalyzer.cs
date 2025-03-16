@@ -77,10 +77,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     name = name.Without("Extended");
                 }
 
-                if (name.EndsWith("Command", StringComparison.Ordinal))
+                if (name.EndsWith(Constants.Names.Command, StringComparison.Ordinal))
                 {
                     // commands should be suffixed with 'Command' only
-                    name = "Command";
+                    name = Constants.Names.Command;
                 }
 
                 switch (name)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -16,34 +17,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2012_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
 //// ncrunch: rdi off
-        private static readonly string[] Verbs =
-                                                 {
-                                                     "Adopt",
-                                                     "Allow",
-                                                     "Build",
-                                                     "Construct",
-                                                     "Create",
-                                                     "Describe",
-                                                     "Detect",
-                                                     "Enhance",
-                                                     "Extend",
-                                                     "Generate",
-                                                     "Initialize",
-                                                     "Handle",
-                                                     "Manipulate",
-                                                     "Offer",
-                                                     "Perform",
-                                                     "Provide",
-                                                     "Process",
-                                                     "Represent",
-                                                     "Store",
-                                                     "Wrap",
-                                                 };
-
-        private static readonly Dictionary<string, string> ThirdPersonVerbs = Verbs.ToDictionary(_ => _, Verbalizer.MakeThirdPersonSingularVerb);
-
-        private static readonly Dictionary<string, string> GerundVerbs = Verbs.ToDictionary(_ => _, Verbalizer.MakeGerundVerb);
-
         private static readonly string[] DefaultPhrases =
                                                           {
                                                               "A default impl",
@@ -62,51 +35,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                               "The implementation ",
                                                           };
 
-        private static readonly string[] UsedToPhrases =
-                                                         {
-                                                             "Attribute that ",
-                                                             "A class to ",
-                                                             "A class used to ",
-                                                             "A class that is used to ",
-                                                             "A class which is used to ",
-                                                             "An class to ",
-                                                             "An class used to ",
-                                                             "An class that is used to ",
-                                                             "An class which is used to ",
-                                                             "Class to ",
-                                                             "Class used to ",
-                                                             "Class that is used to ",
-                                                             "Class which is used to ",
-                                                             "The class used to ",
-                                                             "The class is used to ",
-                                                             "The class that is used to ",
-                                                             "This class is used to ",
-                                                             "A interface to ",
-                                                             "An interface to ",
-                                                             "A interface used to ",
-                                                             "An interface used to ",
-                                                             "A interface that is used to ",
-                                                             "A interface which is used to ",
-                                                             "An interface that is used to ",
-                                                             "An interface which is used to ",
-                                                             "Interface to ",
-                                                             "Interface used to ",
-                                                             "Interface that is used to ",
-                                                             "Interface which is used to ",
-                                                             "The interface used to ",
-                                                             "The interface is used to ",
-                                                             "The interface that is used to ",
-                                                             "The interface which is used to ",
-                                                             "This interface is used to ",
-                                                             "Used to ",
-                                                         };
-
-        private static readonly string[] ComponentPhrases = CreateComponentPhrases().ToArray();
-
-        private static readonly Pair[] ReplacementMap = CreateReplacementMap();
-
-        private static readonly string[] ReplacementMapKeys = ReplacementMap.ToArray(_ => _.Key.Trim());
-
         private static readonly ISet<SyntaxKind> Declarations = new HashSet<SyntaxKind>
                                                                     {
                                                                         SyntaxKind.ClassDeclaration,
@@ -119,9 +47,103 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                         SyntaxKind.EventFieldDeclaration,
                                                                         SyntaxKind.FieldDeclaration,
                                                                     };
+
+        private static readonly string[] UsedToPhrases = CreateUsedToPhrases().ToArray();
+
+        private static readonly Pair[] ReplacementMap = CreateReplacementMap();
+
+        private static readonly string[] ReplacementMapKeys = ReplacementMap.ToArray(_ => _.Key.Trim());
+
+        private static readonly Pair[] EmptyReplacementsMap =
+                                                              {
+                                                                  new Pair("Called to "),
+                                                              };
+
+        private static readonly string[] EmptyReplacementsMapKeys = EmptyReplacementsMap.ToArray(_ => _.Key);
+
 //// ncrunch: rdi default
 
         public override string FixableDiagnosticId => "MiKo_2012";
+
+        internal static SyntaxNode GetUpdatedSyntax(XmlElementSyntax comment, XmlTextSyntax textSyntax)
+        {
+            var text = textSyntax.GetTextWithoutTrivia().AsSpan();
+
+            if (text.StartsWith("Interaction logic for", StringComparison.Ordinal))
+            {
+                // seems like this is the default comment for WPF controls
+                return Comment(comment, XmlText("Represents a TODO"));
+            }
+
+            if (text.StartsWithAny(EmptyReplacementsMapKeys, StringComparison.Ordinal))
+            {
+                return Comment(comment, EmptyReplacementsMapKeys, EmptyReplacementsMap, FirstWordHandling.MakeUpperCase | FirstWordHandling.MakeThirdPersonSingular | FirstWordHandling.KeepLeadingSpace);
+            }
+
+            if (comment.GetEnclosing(Declarations) is MemberDeclarationSyntax member)
+            {
+                var name = member.GetName();
+
+                if (name.Contains(Constants.Names.Command, StringComparison.OrdinalIgnoreCase))
+                {
+                    if (MiKo_2038_CodeFixProvider.CanFix(text))
+                    {
+                        return MiKo_2038_CodeFixProvider.GetUpdatedSyntax(comment);
+                    }
+                }
+                else if (name.Contains(Constants.Names.Factory, StringComparison.OrdinalIgnoreCase))
+                {
+                    if (MiKo_2060_CodeFixProvider.CanFix(text))
+                    {
+                        return MiKo_2060_CodeFixProvider.GetUpdatedSyntax(comment);
+                    }
+                }
+                else if (name.Contains(nameof(EventArgs)))
+                {
+                    return MiKo_2002_CodeFixProvider.GetUpdatedSyntax(comment);
+                }
+
+                if (text.StartsWithAny(ReplacementMapKeys, StringComparison.Ordinal))
+                {
+                    return Comment(comment, ReplacementMapKeys, ReplacementMap);
+                }
+
+                foreach (var phrase in UsedToPhrases)
+                {
+                    if (text.StartsWith(phrase, StringComparison.Ordinal))
+                    {
+                        var remainingText = text.Slice(phrase.Length);
+
+                        if (member is PropertyDeclarationSyntax property)
+                        {
+                            return GetUpdatedProperty(comment, property, remainingText);
+                        }
+
+                        var firstWord = remainingText.FirstWord();
+                        var index = remainingText.IndexOf(firstWord);
+                        var replacementForFirstWord = Verbalizer.MakeThirdPersonSingularVerb(firstWord.ToUpperCaseAt(0));
+
+                        var replacedText = replacementForFirstWord.ConcatenatedWith(remainingText.Slice(index + firstWord.Length));
+
+                        return Comment(comment, replacedText, comment.Content.RemoveAt(0));
+                    }
+                }
+
+                if (text.StartsWithAny(Constants.Comments.AAnThePhraseWithSpaces, StringComparison.Ordinal))
+                {
+                    switch (member)
+                    {
+                        case PropertyDeclarationSyntax property:
+                            return GetUpdatedProperty(comment, property, text);
+
+                        case BaseTypeDeclarationSyntax _:
+                            return CommentStartingWith(comment, "Represents ");
+                    }
+                }
+            }
+
+            return comment;
+        }
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
@@ -137,77 +159,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (content.FirstOrDefault() is XmlTextSyntax t)
             {
-                var text = t.GetTextWithoutTrivia().AsSpan();
-
-                if (text.StartsWith("Interaction logic for", StringComparison.Ordinal))
-                {
-                    // seems like this is the default comment for WPF controls
-                    return Comment(comment, XmlText("Represents a TODO"));
-                }
-
-                if (syntax.GetEnclosing(Declarations) is MemberDeclarationSyntax member)
-                {
-                    var name = member.GetName();
-
-                    if (name.Contains("Command", StringComparison.OrdinalIgnoreCase))
-                    {
-                        if (text.StartsWithAny(MiKo_2038_CodeFixProvider.CommandStartingPhrases, StringComparison.OrdinalIgnoreCase))
-                        {
-                            return MiKo_2038_CodeFixProvider.GetUpdatedSyntax(comment);
-                        }
-                    }
-                    else if (name.Contains("Factory", StringComparison.OrdinalIgnoreCase))
-                    {
-                        if (MiKo_2060_CodeFixProvider.CanFix(text))
-                        {
-                            return MiKo_2060_CodeFixProvider.GetUpdatedSyntax(comment);
-                        }
-                    }
-                }
-
-                if (text.StartsWithAny(ReplacementMapKeys, StringComparison.Ordinal))
-                {
-                    return Comment(comment, ReplacementMapKeys, ReplacementMap);
-                }
-
-                foreach (var phrase in ComponentPhrases.Concat(UsedToPhrases))
-                {
-                    if (text.StartsWith(phrase, StringComparison.Ordinal))
-                    {
-                        var remainingText = text.Slice(phrase.Length);
-
-                        var firstWord = remainingText.FirstWord();
-                        var index = remainingText.IndexOf(firstWord);
-                        var replacementForFirstWord = Verbalizer.MakeThirdPersonSingularVerb(firstWord.ToString()).ToUpperCaseAt(0);
-
-                        var replacedText = replacementForFirstWord.ConcatenatedWith(remainingText.Slice(index + firstWord.Length));
-
-                        return Comment(comment, replacedText, content.RemoveAt(0));
-                    }
-                }
-
-                if (text.StartsWithAny(Constants.Comments.AAnThePhraseWithSpaces, StringComparison.Ordinal))
-                {
-                    var ancestor = syntax.FirstAncestorOrSelf<MemberDeclarationSyntax>();
-
-                    switch (ancestor)
-                    {
-                        case PropertyDeclarationSyntax property:
-                        {
-                            var startingPhrase = GetPropertyStartingPhrase(property.AccessorList);
-
-                            return CommentStartingWith(comment, startingPhrase);
-                        }
-
-                        case BaseTypeDeclarationSyntax _:
-                            return CommentStartingWith(comment, "Represents ");
-                    }
-                }
+                return GetUpdatedSyntax(comment, t);
             }
 
-            var updatedComment = Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordHandling.MakeLowerCase);
-
-            return updatedComment;
+            return Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordHandling.MakeLowerCase);
         }
 
         private static XmlEmptyElementSyntax GetUpdatedSyntaxWithInheritdoc(SyntaxList<XmlNodeSyntax> content)
@@ -244,12 +199,40 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return null;
         }
 
-        private static string GetPropertyStartingPhrase(AccessorListSyntax accessorList)
+        private static SyntaxNode GetUpdatedProperty(XmlElementSyntax comment, PropertyDeclarationSyntax property, ReadOnlySpan<char> remainingText)
         {
+            var startingPhrase = GetPropertyStartingPhrase(property);
+
+            var builder = StringBuilderCache.Acquire(startingPhrase.Length + remainingText.Length)
+                                            .Append(startingPhrase)
+                                            .Append(remainingText.ToLowerCaseAt(0))
+                                            .ReplaceWithCheck("Gets or sets a value indicating get or set ", "Gets or sets a value indicating ")
+                                            .ReplaceWithCheck("Gets or sets a value indicating get ", "Gets or sets a value indicating ")
+                                            .ReplaceWithCheck("Gets or sets a value indicating set ", "Gets or sets a value indicating ")
+                                            .ReplaceWithCheck("Gets or sets get or set ", "Gets or sets ")
+                                            .ReplaceWithCheck("Gets or sets get ", "Gets or sets ")
+                                            .ReplaceWithCheck("Gets or sets set ", "Gets or sets ")
+                                            .ReplaceWithCheck("Gets a value indicating get ", "Gets a value indicating ")
+                                            .ReplaceWithCheck("Gets get ", "Gets ")
+                                            .ReplaceWithCheck("Sets a value indicating set ", "Sets a value indicating ")
+                                            .ReplaceWithCheck("Sets set ", "Sets ")
+                                            .ReplaceWithCheck("value indicating the value indicating", "value indicating the");
+
+            var replacedFixedText = builder.ToStringAndRelease();
+
+            return Comment(comment, replacedFixedText, comment.Content.RemoveAt(0));
+        }
+
+        private static string GetPropertyStartingPhrase(PropertyDeclarationSyntax property)
+        {
+            var accessorList = property.AccessorList;
+
             if (accessorList is null)
             {
                 return string.Empty;
             }
+
+            var boolean = property.Type.IsBoolean();
 
             var accessors = accessorList.Accessors;
 
@@ -260,10 +243,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     switch (accessors[0].Kind())
                     {
                         case SyntaxKind.GetAccessorDeclaration:
-                            return "Gets ";
+                            return boolean ? "Gets a value indicating " : "Gets ";
 
                         case SyntaxKind.SetAccessorDeclaration:
-                            return "Sets ";
+                            return boolean ? "Sets a value indicating " : "Sets ";
 
                         default:
                             return string.Empty;
@@ -271,7 +254,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
 
                 case 2:
-                    return "Gets or sets ";
+                    return boolean ? "Gets or sets a value indicating " : "Gets or sets ";
 
                 default:
                     return string.Empty;
@@ -282,11 +265,46 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static Pair[] CreateReplacementMap()
         {
-            var entries = CreateReplacementMapEntries().ToArray(_ => _.Key, AscendingStringComparer.Default); // sort by first character
-            var result = new Dictionary<string, string>(entries.Length);
+            var verbs = new[]
+                        {
+                            "Adopt",
+                            "Build",
+                            "Construct",
+                            "Create",
+                            "Describe",
+                            "Detect",
+                            "Enhance",
+                            "Extend",
+                            "Generate",
+                            "Initialize",
+                            "Handle",
+                            "Manipulate",
+                            "Offer",
+                            "Perform",
+                            "Provide",
+                            "Process",
+                            "Represent",
+                            "Store",
+                            "Wrap",
+                        };
 
-            foreach (var entry in entries)
+            var thirdPersonVerbs = verbs.ToDictionary(_ => _, Verbalizer.MakeThirdPersonSingularVerb);
+            var gerundVerbs = verbs.ToDictionary(_ => _, Verbalizer.MakeGerundVerb);
+
+            return CreateReplacementMap(verbs, thirdPersonVerbs, gerundVerbs);
+        }
+
+        private static Pair[] CreateReplacementMap(string[] verbs, Dictionary<string, string> thirdPersonVerbs, Dictionary<string, string> gerundVerbs)
+        {
+            var entries = CreateReplacementMapEntries(verbs, thirdPersonVerbs, gerundVerbs).ToArray(_ => _.Key, AscendingStringComparer.Default); // sort by first character
+            var entriesLength = entries.Length;
+
+            var result = new Dictionary<string, string>(entriesLength);
+
+            for (var index = 0; index < entriesLength; index++)
             {
+                var entry = entries[index];
+
                 if (result.ContainsKey(entry.Key) is false)
                 {
                     result[entry.Key] = entry.Value;
@@ -296,7 +314,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return result.ToArray(_ => new Pair(_.Key, _.Value));
         }
 
-        private static IEnumerable<Pair> CreateReplacementMapEntries()
+        private static IEnumerable<Pair> CreateReplacementMapEntries(string[] verbs, Dictionary<string, string> thirdPersonVerbs, Dictionary<string, string> gerundVerbs)
         {
             // event arguments
             yield return new Pair("Event argument for ", Constants.Comments.EventArgsSummaryStartingPhrase);
@@ -386,13 +404,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new Pair("View Model that represents ", "Represents the view model of ");
             yield return new Pair("View model that represents ", "Represents the view model of ");
 
-            foreach (var phrase in CreatePhrases())
+            foreach (var phrase in CreatePhrases(verbs, thirdPersonVerbs, gerundVerbs))
             {
                 yield return phrase;
             }
         }
 
-        private static IEnumerable<Pair> CreatePhrases()
+        private static IEnumerable<Pair> CreatePhrases(string[] verbs, Dictionary<string, string> thirdPersonVerbs, Dictionary<string, string> gerundVerbs)
         {
             var beginnings = new[]
                                  {
@@ -446,19 +464,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                       "will",
                                   };
 
-            var verbsLength = Verbs.Length;
+            var verbsLength = verbs.Length;
             var beginningsLength = beginnings.Length;
             var middlePartsLength = middleParts.Length;
 
             for (var verbIndex = 0; verbIndex < verbsLength; verbIndex++)
             {
-                var word = Verbs[verbIndex];
+                var word = verbs[verbIndex];
                 var noun = word.ToUpperCaseAt(0);
                 var verb = word.ToLowerCaseAt(0);
 
-                var thirdPersonStart = ThirdPersonVerbs[word];
+                var thirdPersonStart = thirdPersonVerbs[word];
                 var thirdPersonVerb = thirdPersonStart.ToLowerCaseAt(0);
-                var gerundVerb = GerundVerbs[word].ToLowerCaseAt(0);
+                var gerundVerb = gerundVerbs[word].ToLowerCaseAt(0);
 
                 var fix = thirdPersonStart + " ";
 
@@ -485,33 +503,54 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private static IEnumerable<string> CreateComponentPhrases()
+        private static IEnumerable<string> CreateUsedToPhrases()
         {
-            var starts = new[] { "A component", "An component", "The component", "This component", "Component" };
-            var middles = new[] { string.Empty, "is ", "that is ", "which is " };
-            var lasts = new[] { "to", "able to", "capable to", "used to" };
+            string[] subjects =
+                                {
+                                    "A class", "An class", "The class", "This class", "Class",
+                                    "A base class", "An base class", "The base class", "This base class", "Base class",
+                                    "A abstract base class", "An abstract base class", "The abstract base class", "This abstract base class", "Abstract base class",
+                                    "A interface", "An interface", "The interface", "This interface", "Interface",
+                                    "A component", "An component", "The component", "This component", "Component",
+                                    "A attribute", "An attribute", "The attribute", "This attribute", "Attribute",
+                                };
+            string[] conjunctions = { "that", "which" };
+            string[] conditionals = { "is", "can be", "could be", "may be", "might be", "shall be", "should be", "will be", "would be" };
 
-            var startsLength = starts.Length;
-            var middlesLength = middles.Length;
-            var lastsLength = lasts.Length;
-
-            for (var startIndex = 0; startIndex < startsLength; startIndex++)
+            foreach (var subject in subjects)
             {
-                var start = starts[startIndex];
+                yield return string.Concat(subject, " to ");
+                yield return string.Concat(subject, " allows to ");
+                yield return string.Concat(subject, " used to ");
+                yield return string.Concat(subject, " able to ");
+                yield return string.Concat(subject, " capable to ");
 
-                for (var middleIndex = 0; middleIndex < middlesLength; middleIndex++)
+                foreach (var conditional in conditionals)
                 {
-                    var middle = middles[middleIndex];
-                    var begin = string.Concat(start, " ", middle);
+                    yield return string.Concat(subject, " ", conditional, " used to ");
+                    yield return string.Concat(subject, " ", conditional, " able to ");
+                    yield return string.Concat(subject, " ", conditional, " capable to ");
+                }
 
-                    for (var lastIndex = 0; lastIndex < lastsLength; lastIndex++)
+                // ReSharper disable once LoopCanBePartlyConvertedToQuery
+                foreach (var conjunction in conjunctions)
+                {
+                    var beginning = string.Concat(subject, " ", conjunction, " ");
+
+                    yield return string.Concat(beginning, "allows to ");
+
+                    foreach (var conditional in conditionals)
                     {
-                        var last = lasts[lastIndex];
-
-                        yield return string.Concat(begin, last, " ");
+                        yield return string.Concat(beginning, conditional, " used to ");
+                        yield return string.Concat(beginning, conditional, " able to ");
+                        yield return string.Concat(beginning, conditional, " capable to ");
                     }
                 }
             }
+
+            yield return "Used to ";
+            yield return "Able to ";
+            yield return "Capable to ";
         }
 
 //// ncrunch: rdi default
