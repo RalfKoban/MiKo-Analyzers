@@ -489,6 +489,38 @@ namespace System
             }
         }
 
+        public static string ConcatenatedWith(this string value, ReadOnlySpan<char> arg0, char arg1)
+        {
+            if (value is null)
+            {
+                return arg0.ConcatenatedWith(arg1);
+            }
+
+            var valueLength = value.Length;
+
+            if (value.Length == 0)
+            {
+                return arg0.ConcatenatedWith(arg1);
+            }
+
+            var arg0Length = arg0.Length;
+
+            var length = valueLength + arg0Length + 1;
+
+            unsafe
+            {
+                var buffer = stackalloc char[length];
+                buffer[length - 1] = arg1;
+
+                var bufferSpan = new Span<char>(buffer, length);
+
+                value.AsSpan().CopyTo(bufferSpan);
+                arg0.CopyTo(bufferSpan.Slice(valueLength));
+
+                return new string(buffer, 0, length);
+            }
+        }
+
         public static string ConcatenatedWith(this string value, ReadOnlySpan<char> arg0, string arg1)
         {
             if (value is null)

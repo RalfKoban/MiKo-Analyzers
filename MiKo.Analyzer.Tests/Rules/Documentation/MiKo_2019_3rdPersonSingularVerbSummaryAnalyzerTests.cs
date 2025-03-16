@@ -457,6 +457,7 @@ public class TestMe
 
         [TestCase("Called to inform about something", "Informs about something")]
         [TestCase("Called to save something", "Saves something")]
+        [TestCase("Save something", "Saves something")]
         public void Code_gets_fixed_for_method_text_(string originalText, string fixedText)
         {
             const string Template = @"
@@ -466,6 +467,24 @@ public interface TestMe
 {
     /// <summary>
     /// ###
+    /// </summary>
+    public void DoSomething() { }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
+        }
+
+        [TestCase("Convert the given", "Converts the given")]
+        public void Code_gets_fixed_for_method_text_with_see_link_(string originalText, string fixedText)
+        {
+            const string Template = @"
+using System;
+
+public interface TestMe
+{
+    /// <summary>
+    /// ### <see cref=""int""/> to a <see cref=""string""/>.
     /// </summary>
     public void DoSomething() { }
 }

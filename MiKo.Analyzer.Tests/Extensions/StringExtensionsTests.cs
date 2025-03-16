@@ -203,6 +203,11 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase("", "", "", ExpectedResult = "")]
         public static string ConcatenatedWith_with_string_and_string_and_span_(string s1, string s2, string span) => s1.ConcatenatedWith(s2, span.AsSpan());
 
+        [TestCase(" Some ", "", '.', ExpectedResult = " Some .")]
+        [TestCase(" Some ", " text ", '.', ExpectedResult = " Some  text .")]
+        [TestCase("", "", '.', ExpectedResult = ".")]
+        public static string ConcatenatedWith_with_string_and_span_and_char_(string s, string span, char c) => s.ConcatenatedWith(span.AsSpan(), c);
+
         [TestCase(" Some ", "", " with more ", ExpectedResult = " Some  with more ")]
         [TestCase(" Some ", " text ", " with more ", ExpectedResult = " Some  text  with more ")]
         [TestCase(" Some ", " text ", "", ExpectedResult = " Some  text ")]

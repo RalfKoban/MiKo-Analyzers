@@ -5,6 +5,8 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
+using MiKoSolutions.Analyzers.Linguistics;
+
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2019_CodeFixProvider)), Shared]
@@ -32,7 +34,37 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         return CommentStartingWith(summary, "Represents a ");
                     }
 
-                    return MiKo_2012_CodeFixProvider.GetUpdatedSyntax(summary, textSyntax);
+                    var updatedSyntax = MiKo_2012_CodeFixProvider.GetUpdatedSyntax(summary, textSyntax);
+
+                    if (ReferenceEquals(summary, updatedSyntax) is false)
+                    {
+                        return updatedSyntax;
+                    }
+
+                    var text = startText.AsSpan();
+                    var firstWord = text.FirstWord();
+
+                    // only adjust in case there is no single letter
+                    if (firstWord.Length > 1)
+                    {
+                        if (firstWord.EndsWith("alled", StringComparison.Ordinal))
+                        {
+                            // currently we cannot adjust "Called" text properly
+                        }
+                        else
+                        {
+                            var index = text.IndexOf(firstWord);
+                            var remainingText = text.Slice(index + firstWord.Length);
+
+                            var replacementForFirstWord = Verbalizer.MakeThirdPersonSingularVerb(firstWord.ToUpperCaseAt(0));
+
+                            var replacedText = content.Count > 1
+                                               ? replacementForFirstWord.ConcatenatedWith(remainingText, ' ')
+                                               : replacementForFirstWord.ConcatenatedWith(remainingText);
+
+                            return Comment(summary, replacedText, content.RemoveAt(0));
+                        }
+                    }
                 }
             }
 
