@@ -46,9 +46,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var keys = CreateReplacementMapKeys().OrderByDescending(_ => _.Length) // get longest items first as shorter items may be part of the longer ones and would cause problems
                                                      .ThenBy(_ => _)
-                                                     .ToArray();
+                                                     .ToList();
 
-                ReplacementMap = keys.ToArray(_ => new Pair(_));
+                ReplacementMap = keys.Select(_ => new Pair(_))
+                                     .Concat(new[] { new Pair("Factory ", "a factory ") })
+                                     .ToArray();
+
+                keys.Add("Factory ");
 
                 ReplacementMapKeys = GetTermsForQuickLookup(keys);
 

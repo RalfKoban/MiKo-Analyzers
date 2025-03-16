@@ -292,6 +292,25 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", "Indicates whether"));
         }
 
+        [Test]
+        public void Code_gets_fixed_for_nullable_non_constant_boolean_field_([ValueSource(nameof(WrongBooleanPhrases))] string originalComment)
+        {
+            const string Template = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// ### some comment.
+    /// </summary>
+    private bool? m_field;
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", "Indicates whether"));
+        }
+
         [TestCase("A Guid of some comment", "The unique identifier for some comment")]
         [TestCase("A GUID of some comment", "The unique identifier for some comment")]
         [TestCase("A unique identifier for some comment", "The unique identifier for some comment")]
@@ -307,6 +326,7 @@ public class TestMe
         [TestCase("Some comment", "The unique identifier for some comment")]
         [TestCase("The Guid of some comment", "The unique identifier for some comment")]
         [TestCase("The GUID of some comment", "The unique identifier for some comment")]
+        [TestCase("Factory for some stuff", "The unique identifier for a factory for some stuff")]
         public void Code_gets_fixed_for_Guid_field_(string originalComment, string fixedComment)
         {
             const string Template = @"
