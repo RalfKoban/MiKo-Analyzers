@@ -12,10 +12,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1044";
 
-        private const string Suffix = "Command";
+        private const string Suffix = Constants.Names.Command;
 
         private static readonly string[] SingleSuffix = { Suffix };
-        private static readonly string[] Suffixes = { "_command", Suffix };
+        private static readonly string[] Suffixes = { "_" + Constants.Names.command, Suffix };
 
         public MiKo_1044_CommandSuffixAnalyzer() : base(Id, (SymbolKind)(-1))
         {

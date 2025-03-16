@@ -466,7 +466,7 @@ namespace MiKoSolutions.Analyzers
                                                                               "Builder",
                                                                               "Called ",
                                                                               "Class",
-                                                                              "Command",
+                                                                              Names.Command,
                                                                               "Component",
                                                                               "Constructor",
                                                                               "Converter",
@@ -485,7 +485,7 @@ namespace MiKoSolutions.Analyzers
                                                                               "Extension class of",
                                                                               "Extension of",
                                                                               "Extension method ",
-                                                                              "Factory",
+                                                                              Names.Factory,
                                                                               "Fake ",
                                                                               "Field",
                                                                               "For ",
@@ -1118,10 +1118,13 @@ namespace MiKoSolutions.Analyzers
 
         internal static class Names
         {
+#pragma warning disable SA1303 // Const field names should begin with upper-case letter
+            internal const string command = "command";
+#pragma warning restore SA1303 // Const field names should begin with upper-case letter
+            internal const string Command = "Command";
+            internal const string Counter = "Counter";
             internal const string Create = "Create";
             internal const string Factory = "Factory";
-
-            internal const string Counter = "Counter";
 
             internal const string DefaultPropertyParameterName = "value";
 

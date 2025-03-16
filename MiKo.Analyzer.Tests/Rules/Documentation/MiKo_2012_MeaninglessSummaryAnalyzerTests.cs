@@ -1050,17 +1050,124 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", startingPhrase + " render"), Template.Replace("###", "Renders"));
         }
 
-        [TestCase("Used to set something", "Sets something")]
-        [TestCase("Used to get something", "Gets something")]
+        [TestCase("Used to get", "Gets")]
+        [TestCase("The", "Gets the")]
+        public void Code_gets_fixed_for_getter_only_property_text_(string originalComment, string fixedComment)
+        {
+            const string Template = @"
+public class TestMe
+{
+    /// <summary>
+    /// ### something.
+    /// </summary>
+    public int Property { get; }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
+        }
+
+        [TestCase("Used to set", "Sets")]
+        [TestCase("The", "Sets the")]
+        public void Code_gets_fixed_for_setter_only_property_text_(string originalComment, string fixedComment)
+        {
+            const string Template = @"
+public class TestMe
+{
+    /// <summary>
+    /// ### something.
+    /// </summary>
+    public int Property { set; }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
+        }
+
+        [TestCase("Used to set", "Gets or sets")]
+        [TestCase("Used to get", "Gets or sets")]
+        [TestCase("The", "Gets or sets the")]
         public void Code_gets_fixed_for_property_text_(string originalComment, string fixedComment)
         {
             const string Template = @"
 public class TestMe
 {
     /// <summary>
-    /// ###.
+    /// ### something.
     /// </summary>
     public int Property { get; set; }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
+        }
+
+        [TestCase("Used to get", "Gets a value indicating")]
+        [TestCase("The", "Gets a value indicating the")]
+        [TestCase("The value indicating", "Gets a value indicating the")]
+        public void Code_gets_fixed_for_boolean_getter_only_property_text_(string originalComment, string fixedComment)
+        {
+            const string Template = @"
+public class TestMe
+{
+    /// <summary>
+    /// ### something.
+    /// </summary>
+    public bool Property { get; }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
+        }
+
+        [TestCase("Used to set", "Sets a value indicating")]
+        [TestCase("The", "Sets a value indicating the")]
+        [TestCase("The value indicating", "Sets a value indicating the")]
+        public void Code_gets_fixed_for_boolean_setter_only_property_text_(string originalComment, string fixedComment)
+        {
+            const string Template = @"
+public class TestMe
+{
+    /// <summary>
+    /// ### something.
+    /// </summary>
+    public bool Property { set; }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
+        }
+
+        [TestCase("Used to set", "Gets or sets a value indicating")]
+        [TestCase("Used to get", "Gets or sets a value indicating")]
+        [TestCase("Used to get or set", "Gets or sets a value indicating")]
+        [TestCase("The", "Gets or sets a value indicating the")]
+        [TestCase("The value indicating", "Gets or sets a value indicating the")]
+        public void Code_gets_fixed_for_boolean_property_text_(string originalComment, string fixedComment)
+        {
+            const string Template = @"
+public class TestMe
+{
+    /// <summary>
+    /// ### something.
+    /// </summary>
+    public bool Property { get; set; }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
+        }
+
+        [TestCase("Called to do", "Does")]
+        public void Code_gets_fixed_for_method_text_(string originalComment, string fixedComment)
+        {
+            const string Template = @"
+public class TestMe
+{
+    /// <summary>
+    /// ### something.
+    /// </summary>
+    public void DoSomething() {  }
 }
 ";
 

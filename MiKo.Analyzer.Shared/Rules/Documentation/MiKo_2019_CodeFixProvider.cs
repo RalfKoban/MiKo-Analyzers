@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Composition;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-
-using MiKoSolutions.Analyzers.Linguistics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
@@ -17,13 +14,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                 {
                                                                     "Repository ",
                                                                 };
-
-        private static readonly Pair[] ReplacementMap =
-                                                        {
-                                                            new Pair("Called to "),
-                                                        };
-
-        private static readonly string[] ReplacementMapKeys = ReplacementMap.ToArray(_ => _.Key);
 
         public override string FixableDiagnosticId => "MiKo_2019";
 
@@ -42,15 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         return CommentStartingWith(summary, "Represents a ");
                     }
 
-                    var updatedSummary = MiKo_2012_CodeFixProvider.GetUpdatedSyntax(summary, textSyntax);
-
-                    if (ReferenceEquals(summary, updatedSummary))
-                    {
-                        // nothing updated, so update by ourselves
-                        return Comment(summary, ReplacementMapKeys, ReplacementMap, FirstWordHandling.MakeUpperCase | FirstWordHandling.MakeThirdPersonSingular | FirstWordHandling.KeepLeadingSpace);
-                    }
-
-                    return updatedSummary;
+                    return MiKo_2012_CodeFixProvider.GetUpdatedSyntax(summary, textSyntax);
                 }
             }
 

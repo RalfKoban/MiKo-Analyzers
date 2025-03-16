@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -34,12 +35,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                               "The implementation ",
                                                           };
 
-        private static readonly string[] UsedToPhrases = CreateUsedToPhrases().ToArray();
-
-        private static readonly Pair[] ReplacementMap = CreateReplacementMap();
-
-        private static readonly string[] ReplacementMapKeys = ReplacementMap.ToArray(_ => _.Key.Trim());
-
         private static readonly ISet<SyntaxKind> Declarations = new HashSet<SyntaxKind>
                                                                     {
                                                                         SyntaxKind.ClassDeclaration,
@@ -52,6 +47,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                         SyntaxKind.EventFieldDeclaration,
                                                                         SyntaxKind.FieldDeclaration,
                                                                     };
+
+        private static readonly string[] UsedToPhrases = CreateUsedToPhrases().ToArray();
+
+        private static readonly Pair[] ReplacementMap = CreateReplacementMap();
+
+        private static readonly string[] ReplacementMapKeys = ReplacementMap.ToArray(_ => _.Key.Trim());
+
+        private static readonly Pair[] EmptyReplacementsMap =
+                                                              {
+                                                                  new Pair("Called to "),
+                                                              };
+
+        private static readonly string[] EmptyReplacementsMapKeys = EmptyReplacementsMap.ToArray(_ => _.Key);
+
 //// ncrunch: rdi default
 
         public override string FixableDiagnosticId => "MiKo_2012";
@@ -66,62 +75,66 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return Comment(comment, XmlText("Represents a TODO"));
             }
 
+            if (text.StartsWithAny(EmptyReplacementsMapKeys, StringComparison.Ordinal))
+            {
+                return Comment(comment, EmptyReplacementsMapKeys, EmptyReplacementsMap, FirstWordHandling.MakeUpperCase | FirstWordHandling.MakeThirdPersonSingular | FirstWordHandling.KeepLeadingSpace);
+            }
+
             if (comment.GetEnclosing(Declarations) is MemberDeclarationSyntax member)
             {
                 var name = member.GetName();
 
-                if (name.Contains("Command", StringComparison.OrdinalIgnoreCase))
+                if (name.Contains(Constants.Names.Command, StringComparison.OrdinalIgnoreCase))
                 {
-                    if (text.StartsWithAny(MiKo_2038_CodeFixProvider.CommandStartingPhrases, StringComparison.OrdinalIgnoreCase))
+                    if (MiKo_2038_CodeFixProvider.CanFix(text))
                     {
                         return MiKo_2038_CodeFixProvider.GetUpdatedSyntax(comment);
                     }
                 }
-                else if (name.Contains("Factory", StringComparison.OrdinalIgnoreCase))
+                else if (name.Contains(Constants.Names.Factory, StringComparison.OrdinalIgnoreCase))
                 {
                     if (MiKo_2060_CodeFixProvider.CanFix(text))
                     {
                         return MiKo_2060_CodeFixProvider.GetUpdatedSyntax(comment);
                     }
                 }
-            }
 
-            if (text.StartsWithAny(ReplacementMapKeys, StringComparison.Ordinal))
-            {
-                return Comment(comment, ReplacementMapKeys, ReplacementMap);
-            }
-
-            foreach (var phrase in UsedToPhrases)
-            {
-                if (text.StartsWith(phrase, StringComparison.Ordinal))
+                if (text.StartsWithAny(ReplacementMapKeys, StringComparison.Ordinal))
                 {
-                    var remainingText = text.Slice(phrase.Length);
-
-                    var firstWord = remainingText.FirstWord();
-                    var index = remainingText.IndexOf(firstWord);
-                    var replacementForFirstWord = Verbalizer.MakeThirdPersonSingularVerb(firstWord.ToString()).ToUpperCaseAt(0);
-
-                    var replacedText = replacementForFirstWord.ConcatenatedWith(remainingText.Slice(index + firstWord.Length));
-
-                    return Comment(comment, replacedText, comment.Content.RemoveAt(0));
+                    return Comment(comment, ReplacementMapKeys, ReplacementMap);
                 }
-            }
 
-            if (text.StartsWithAny(Constants.Comments.AAnThePhraseWithSpaces, StringComparison.Ordinal))
-            {
-                var ancestor = comment.FirstAncestorOrSelf<MemberDeclarationSyntax>();
-
-                switch (ancestor)
+                foreach (var phrase in UsedToPhrases)
                 {
-                    case PropertyDeclarationSyntax property:
+                    if (text.StartsWith(phrase, StringComparison.Ordinal))
                     {
-                        var startingPhrase = GetPropertyStartingPhrase(property.AccessorList);
+                        var remainingText = text.Slice(phrase.Length);
 
-                        return CommentStartingWith(comment, startingPhrase);
+                        if (member is PropertyDeclarationSyntax property)
+                        {
+                            return GetUpdatedProperty(comment, property, remainingText);
+                        }
+
+                        var firstWord = remainingText.FirstWord();
+                        var index = remainingText.IndexOf(firstWord);
+                        var replacementForFirstWord = Verbalizer.MakeThirdPersonSingularVerb(firstWord.ToUpperCaseAt(0));
+
+                        var replacedText = replacementForFirstWord.ConcatenatedWith(remainingText.Slice(index + firstWord.Length));
+
+                        return Comment(comment, replacedText, comment.Content.RemoveAt(0));
                     }
+                }
 
-                    case BaseTypeDeclarationSyntax _:
-                        return CommentStartingWith(comment, "Represents ");
+                if (text.StartsWithAny(Constants.Comments.AAnThePhraseWithSpaces, StringComparison.Ordinal))
+                {
+                    switch (member)
+                    {
+                        case PropertyDeclarationSyntax property:
+                            return GetUpdatedProperty(comment, property, text);
+
+                        case BaseTypeDeclarationSyntax _:
+                            return CommentStartingWith(comment, "Represents ");
+                    }
                 }
             }
 
@@ -182,12 +195,40 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return null;
         }
 
-        private static string GetPropertyStartingPhrase(AccessorListSyntax accessorList)
+        private static SyntaxNode GetUpdatedProperty(XmlElementSyntax comment, PropertyDeclarationSyntax property, ReadOnlySpan<char> remainingText)
         {
+            var startingPhrase = GetPropertyStartingPhrase(property);
+
+            var builder = StringBuilderCache.Acquire(startingPhrase.Length + remainingText.Length)
+                                            .Append(startingPhrase)
+                                            .Append(remainingText.ToLowerCaseAt(0))
+                                            .ReplaceWithCheck("Gets or sets a value indicating get or set ", "Gets or sets a value indicating ")
+                                            .ReplaceWithCheck("Gets or sets a value indicating get ", "Gets or sets a value indicating ")
+                                            .ReplaceWithCheck("Gets or sets a value indicating set ", "Gets or sets a value indicating ")
+                                            .ReplaceWithCheck("Gets or sets get or set ", "Gets or sets ")
+                                            .ReplaceWithCheck("Gets or sets get ", "Gets or sets ")
+                                            .ReplaceWithCheck("Gets or sets set ", "Gets or sets ")
+                                            .ReplaceWithCheck("Gets a value indicating get ", "Gets a value indicating ")
+                                            .ReplaceWithCheck("Gets get ", "Gets ")
+                                            .ReplaceWithCheck("Sets a value indicating set ", "Sets a value indicating ")
+                                            .ReplaceWithCheck("Sets set ", "Sets ")
+                                            .ReplaceWithCheck("value indicating the value indicating", "value indicating the");
+
+            var replacedFixedText = builder.ToStringAndRelease();
+
+            return Comment(comment, replacedFixedText, comment.Content.RemoveAt(0));
+        }
+
+        private static string GetPropertyStartingPhrase(PropertyDeclarationSyntax property)
+        {
+            var accessorList = property.AccessorList;
+
             if (accessorList is null)
             {
                 return string.Empty;
             }
+
+            var boolean = property.Type.IsBoolean();
 
             var accessors = accessorList.Accessors;
 
@@ -198,10 +239,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     switch (accessors[0].Kind())
                     {
                         case SyntaxKind.GetAccessorDeclaration:
-                            return "Gets ";
+                            return boolean ? "Gets a value indicating " : "Gets ";
 
                         case SyntaxKind.SetAccessorDeclaration:
-                            return "Sets ";
+                            return boolean ? "Sets a value indicating " : "Sets ";
 
                         default:
                             return string.Empty;
@@ -209,7 +250,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
 
                 case 2:
-                    return "Gets or sets ";
+                    return boolean ? "Gets or sets a value indicating " : "Gets or sets ";
 
                 default:
                     return string.Empty;

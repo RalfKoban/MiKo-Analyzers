@@ -1858,7 +1858,7 @@ namespace MiKoSolutions.Analyzers
 
             var name = value.ToString();
 
-            if (name.Contains("Command") && name.Contains("CommandManager") is false)
+            if (name.Contains(Constants.Names.Command) && name.Contains("CommandManager") is false)
             {
                 return semanticModel.LookupSymbols(value.GetLocation().SourceSpan.Start, name: name).FirstOrDefault() is ITypeSymbol symbol && symbol.IsCommand();
             }
