@@ -241,7 +241,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return results;
             }
 
-            private static string[] CreateCollectionReplacementMapKeys() => new[] { "A list of ", "List of ", "A cache for ", "A Cache for ", "Cache for ", "Stores " };
+            private static string[] CreateCollectionReplacementMapKeys() => new[] { "A list of ", "List of ", "A cache for ", "A Cache for ", "Cache for ", "A dictionary of ", "Dictionary of ", "Stores ", "Holds " };
 
             private static string[] CreateGetReplacementMapKeys() => new[] { "Gets ", "Get " };
 
