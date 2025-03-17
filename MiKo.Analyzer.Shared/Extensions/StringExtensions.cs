@@ -48,7 +48,12 @@ namespace System
 
             if (HasFlag(handling, FirstWordHandling.MakeLowerCase))
             {
-                word = valueSpan.FirstWord().ToLowerCaseAt(0);
+                var firstWord = valueSpan.FirstWord();
+
+                // only make lower case in case we have a word that is not all in upper case
+                word = firstWord.Length > 1 && firstWord.IsAllUpperCase()
+                       ? firstWord.ToString()
+                       : firstWord.ToLowerCaseAt(0);
             }
             else if (HasFlag(handling, FirstWordHandling.MakeUpperCase))
             {
@@ -1481,6 +1486,30 @@ namespace System
         public static bool IsSingleWord(this ReadOnlySpan<char> value) => value.HasWhitespaces() is false;
 
 //// ncrunch: no coverage start
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsAllUpperCase(this string value) => value.AsSpan().IsAllUpperCase();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsAllUpperCase(this ReadOnlySpan<char> value)
+        {
+            var valueLength = value.Length;
+
+            if (valueLength > 0)
+            {
+                for (var i = 0; i < valueLength; i++)
+                {
+                    if (value[i].IsUpperCase() is false)
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            return false;
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsUpperCase(this char value)

@@ -415,6 +415,7 @@ public class TestMe
 
         [TestCase("Some comment", "The some comment")]
         [TestCase("Shall indicate some comment", "The some comment")]
+        [TestCase("Shall indicate UPPER CASE comment", "The UPPER CASE comment")]
         [TestCase("Specifies a specific value. The range is a value between 1 and 254", "The specific value. The range is a value between 1 and 254")]
         [TestCase("Specifies the specific value. A valid value is between 1 and 254", "The specific value. A valid value is between 1 and 254")]
         public void Code_gets_fixed_for_normal_field_(string originalComment, string fixedComment)
