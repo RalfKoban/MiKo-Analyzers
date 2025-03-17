@@ -58,9 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                             var replacementForFirstWord = Verbalizer.MakeThirdPersonSingularVerb(firstWord.ToUpperCaseAt(0));
 
-                            var replacedText = content.Count > 1
-                                               ? replacementForFirstWord.ConcatenatedWith(remainingText, ' ')
-                                               : replacementForFirstWord.ConcatenatedWith(remainingText);
+                            var replacedText = replacementForFirstWord.ConcatenatedWith(remainingText);
 
                             return Comment(summary, replacedText, content.RemoveAt(0));
                         }
