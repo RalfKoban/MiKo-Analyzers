@@ -84,9 +84,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                    .ThenBy(_ => _)
                                                                    .ToArray(_ => new Pair(_, "The unique identifier for the type of "));
 
-                CleanupMapKeys = new[] { " a the ", " an the ", " the the " };
+                CleanupMap = new[]
+                                 {
+                                     new Pair(" a the ", " the "),
+                                     new Pair(" an the ", " the "),
+                                     new Pair(" the the ", " the "),
+                                     new Pair("The a ", "The "),
+                                     new Pair("The an ", "The "),
+                                     new Pair("The the ", "The "),
+                                 };
 
-                CleanupMap = CleanupMapKeys.ToArray(_ => new Pair(_, " the "));
+                CleanupMapKeys = CleanupMap.ToArray(_ => _.Key);
             }
 #pragma warning restore CA1861
 
@@ -163,7 +171,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     starts.Add("Specifies " + lowerText);
                 }
 
-                string[] verbs = { "to indicate", "that indicates", "which indicates", "indicating", "to control", "that controls", "which controls", "controlling" };
+                string[] verbs = { "to indicate", "that indicates", "which indicates", "indicating", "to control", "that controls", "which controls", "controlling", "controling" }; // typo
                 string[] continuations = { " if", " whether or not", " whether", " that", string.Empty };
 
                 var results = new HashSet<string>();
@@ -188,27 +196,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         var end = continuation + " ";
 
                         results.Add(start + " control" + end);
+                        results.Add(start + " control," + end);
                         results.Add(start + " indicate" + end);
+                        results.Add(start + " indicate," + end);
                     }
                 }
 
-                results.Add("Indicating if ");
-                results.Add("Indicating that ");
-                results.Add("Indicating whether or not");
-                results.Add("Indicating whether ");
+                foreach (var start in new[] { "Indicating", "Indicates", "Controlling", "Controling", "Controls" })
+                {
+                    foreach (var continuation in continuations)
+                    {
+                        if (continuation.IsNullOrEmpty() is false)
+                        {
+                            var end = continuation + " ";
 
-                results.Add("Indicates if ");
-                results.Add("Indicates that ");
-
-                results.Add("Controlling if ");
-                results.Add("Controlling that ");
-                results.Add("Controlling whether or not");
-                results.Add("Controlling whether ");
-
-                results.Add("Controls if ");
-                results.Add("Controls that ");
-                results.Add("Controls whether or not ");
-                results.Add("Controls whether ");
+                            results.Add(start + end);
+                            results.Add(start + "," + end);
+                        }
+                    }
+                }
 
                 return results;
             }
@@ -241,11 +247,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return results;
             }
 
-            private static string[] CreateCollectionReplacementMapKeys() => new[] { "A list of ", "List of ", "A cache for ", "A Cache for ", "Cache for ", "A dictionary of ", "Dictionary of ", "Stores ", "Holds " };
+            private static string[] CreateCollectionReplacementMapKeys() => new[] { "A list of ", "List of ", "A cache for ", "A Cache for ", "Cache for ", "A dictionary of ", "Dictionary of ", "Stores ", "Holds ", "This is " };
 
-            private static string[] CreateGetReplacementMapKeys() => new[] { "Gets ", "Get " };
+            private static string[] CreateGetReplacementMapKeys() => new[]
+                                                                     {
+                                                                         "Gets ", "Gets a ", "Gets an ", "Gets the ", "Get ", "Get a ", "Get an ", "Get the ",
+                                                                         "Sets ", "Sets a ", "Sets an ", "Sets the ", "Set ", "Set a ", "Set an ", "Set the ",
+                                                                         "Gets or sets a ", "Gets or Sets a ", "Get or set a ", "Get or Set a ",
+                                                                         "Gets or sets an ", "Gets or Sets an ", "Get or set an ", "Get or Set an ",
+                                                                         "Gets or sets the ", "Gets or Sets the ", "Get or set the ", "Get or Set the ",
+                                                                         "Return a ", "Return an ", "Return the ", "Returns a ", "Returns an ", "Returns the ", "Return ", "Returns ",
+                                                                         "/Return a ", "/Return an ", "/Return the ", "/Returns a ", "/Returns an ", "/Returns the ", "/Return ", "/Returns ", // typos
+                                                                     };
 
-            private static string[] CreateOtherReplacementMapKeys() => new[] { "Specifies the ", "Specifies an ", "Specifies a " };
+            private static string[] CreateOtherReplacementMapKeys() => new[] { "Specifies the ", "Specifies an ", "Specifies a ", "This " };
         }
 
         //// ncrunch: rdi default
