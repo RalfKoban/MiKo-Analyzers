@@ -40,6 +40,14 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase("1", ExpectedResult = true)]
         public static bool StartsWithNumber_works_(string input) => input.StartsWithNumber();
 
+        [TestCase("", ExpectedResult = false)]
+        [TestCase("A", ExpectedResult = true)]
+        [TestCase("a", ExpectedResult = false)]
+        [TestCase("Aa", ExpectedResult = false)]
+        [TestCase("aA", ExpectedResult = false)]
+        [TestCase("AA", ExpectedResult = true)]
+        public static bool IsAllUpperCase_works_(string input) => input.AsSpan().IsAllUpperCase();
+
         [Test]
         public static void SplitBy_splits_by_single_item_that_is_contained_multiple_times()
         {
