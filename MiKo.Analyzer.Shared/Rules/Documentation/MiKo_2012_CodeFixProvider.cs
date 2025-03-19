@@ -199,7 +199,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return null;
         }
 
-        private static SyntaxNode GetUpdatedProperty(XmlElementSyntax comment, PropertyDeclarationSyntax property, ReadOnlySpan<char> remainingText)
+        private static XmlElementSyntax GetUpdatedProperty(XmlElementSyntax comment, PropertyDeclarationSyntax property, ReadOnlySpan<char> remainingText)
         {
             var startingPhrase = GetPropertyStartingPhrase(property);
 
