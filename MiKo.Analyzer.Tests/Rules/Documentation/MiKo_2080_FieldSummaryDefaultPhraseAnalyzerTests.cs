@@ -317,7 +317,7 @@ public class TestMe
         [TestCase("An unique identifier for some comment", "The unique identifier for some comment")]
         [TestCase("Get some comment", "The unique identifier for some comment")]
         [TestCase("Gets some comment", "The unique identifier for some comment")]
-        [TestCase("Gets the some comment", "The unique identifier for the some comment", Ignore = "Just for now")]
+        [TestCase("Gets the some comment", "The unique identifier for the some comment")]
         [TestCase("Guid of some comment", "The unique identifier for some comment")]
         [TestCase("GUID of some comment", "The unique identifier for some comment")]
         [TestCase("Guid of the comment", "The unique identifier for the comment")]

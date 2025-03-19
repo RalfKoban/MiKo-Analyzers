@@ -251,16 +251,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             private static string[] CreateGetReplacementMapKeys() => new[]
                                                                      {
-                                                                         "Gets ", "Gets a ", "Gets an ", "Gets the ", "Get ", "Get a ", "Get an ", "Get the ",
-                                                                         "Sets ", "Sets a ", "Sets an ", "Sets the ", "Set ", "Set a ", "Set an ", "Set the ",
-                                                                         "Gets or sets a ", "Gets or Sets a ", "Get or set a ", "Get or Set a ",
-                                                                         "Gets or sets an ", "Gets or Sets an ", "Get or set an ", "Get or Set an ",
-                                                                         "Gets or sets the ", "Gets or Sets the ", "Get or set the ", "Get or Set the ",
-                                                                         "Return a ", "Return an ", "Return the ", "Returns a ", "Returns an ", "Returns the ", "Return ", "Returns ",
-                                                                         "/Return a ", "/Return an ", "/Return the ", "/Returns a ", "/Returns an ", "/Returns the ", "/Return ", "/Returns ", // typos
+                                                                         "Gets ", "Get ",
+                                                                         "Sets ", "Set ",
+                                                                         "Gets or sets ", "Gets or Sets ", "Get or set ", "Get or Set ",
+                                                                         "Return ", "Returns ",
+                                                                         "/Return ", "/Returns ", // typos
                                                                      };
 
-            private static string[] CreateOtherReplacementMapKeys() => new[] { "Specifies the ", "Specifies an ", "Specifies a ", "This " };
+            private static string[] CreateOtherReplacementMapKeys() => new[] { "Specifies ", "This " };
         }
 
         //// ncrunch: rdi default
