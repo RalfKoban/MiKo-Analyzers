@@ -465,6 +465,7 @@ public class TestMe
         [TestCase("Holds a something", "The something")]
         [TestCase("Holds an something", "The something")]
         [TestCase("Defines a something", "The something")]
+        [TestCase("Use this something", "The something")]
         public void Code_gets_fixed_for_normal_field_(string originalComment, string fixedComment)
         {
             const string Template = @"
