@@ -258,7 +258,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                          "/Return ", "/Returns ", // typos
                                                                      };
 
-            private static string[] CreateOtherReplacementMapKeys() => new[] { "Specifies ", "This " };
+            private static string[] CreateOtherReplacementMapKeys() => new[] { "Defines ", "Specifies ", "This " };
         }
 
         //// ncrunch: rdi default

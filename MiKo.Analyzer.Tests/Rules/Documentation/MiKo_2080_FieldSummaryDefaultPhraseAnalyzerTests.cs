@@ -327,6 +327,8 @@ public class TestMe
         [TestCase("The Guid of some comment", "The unique identifier for some comment")]
         [TestCase("The GUID of some comment", "The unique identifier for some comment")]
         [TestCase("Factory for some stuff", "The unique identifier for a factory for some stuff")]
+        [TestCase("Guid for some comment", "The unique identifier for some comment")]
+        [TestCase("GUID for some comment", "The unique identifier for some comment")]
         public void Code_gets_fixed_for_Guid_field_(string originalComment, string fixedComment)
         {
             const string Template = @"
@@ -462,6 +464,7 @@ public class TestMe
         [TestCase("Holds the something", "The something")]
         [TestCase("Holds a something", "The something")]
         [TestCase("Holds an something", "The something")]
+        [TestCase("Defines a something", "The something")]
         public void Code_gets_fixed_for_normal_field_(string originalComment, string fixedComment)
         {
             const string Template = @"
