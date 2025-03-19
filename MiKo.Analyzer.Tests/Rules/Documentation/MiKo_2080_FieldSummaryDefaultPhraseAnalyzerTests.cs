@@ -387,17 +387,17 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
         }
 
-        [TestCase("Some comment", "Contains some comment")]
-        [TestCase("List of some comment", "Contains some comment")]
-        [TestCase("A list of some comment", "Contains some comment")]
-        [TestCase("Dictionary of some comment", "Contains some comment")]
-        [TestCase("A dictionary of some comment", "Contains some comment")]
-        [TestCase("Cache for some comment", "Contains some comment")]
-        [TestCase("A Cache for some comment", "Contains some comment")]
-        [TestCase("A cache for some comment", "Contains some comment")]
-        [TestCase("Stores some comment", "Contains some comment")]
-        [TestCase("Holds some comment", "Contains some comment")]
-        [TestCase("This is some comment", "Contains some comment")]
+        [TestCase("Some comment", "Contains the some comment")]
+        [TestCase("List of some comment", "Contains the some comment")]
+        [TestCase("A list of some comment", "Contains the some comment")]
+        [TestCase("Dictionary of some comment", "Contains the some comment")]
+        [TestCase("A dictionary of some comment", "Contains the some comment")]
+        [TestCase("Cache for some comment", "Contains the some comment")]
+        [TestCase("A Cache for some comment", "Contains the some comment")]
+        [TestCase("A cache for some comment", "Contains the some comment")]
+        [TestCase("Stores some comment", "Contains the some comment")]
+        [TestCase("Holds some comment", "Contains the some comment")]
+        [TestCase("This is some comment", "Contains the some comment")]
         public void Code_gets_fixed_for_collection_field_(string originalComment, string fixedComment)
         {
             const string Template = @"

@@ -44,15 +44,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 #pragma warning disable CA1861
             public MapData()
             {
-                var keys = CreateReplacementMapKeys().OrderByDescending(_ => _.Length) // get longest items first as shorter items may be part of the longer ones and would cause problems
-                                                     .ThenBy(_ => _)
-                                                     .ToList();
+                ReplacementMap = CreateReplacementMapKeys().OrderByDescending(_ => _.Length) // get longest items first as shorter items may be part of the longer ones and would cause problems
+                                                           .ThenBy(_ => _)
+                                                           .Select(_ => new Pair(_))
+                                                           .Concat(new[] { new Pair("Factory ", "a factory ") })
+                                                           .ToArray();
 
-                ReplacementMap = keys.Select(_ => new Pair(_))
-                                     .Concat(new[] { new Pair("Factory ", "a factory ") })
-                                     .ToArray();
-
-                keys.Add("Factory ");
+                var keys = ReplacementMap.ToArray(_ => _.Key);
 
                 ReplacementMapKeys = GetTermsForQuickLookup(keys);
 
@@ -247,7 +245,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return results;
             }
 
-            private static string[] CreateCollectionReplacementMapKeys() => new[] { "A list of ", "List of ", "A cache for ", "A Cache for ", "Cache for ", "A dictionary of ", "Dictionary of ", "Stores ", "Holds ", "This is " };
+            private static string[] CreateCollectionReplacementMapKeys() => new[] { "A list of ", "List of ", "A dictionary of ", "Dictionary of ", "Cache for ", "A Cache for ", "A cache for ", "Stores ", "Holds ", "This is " };
 
             private static string[] CreateGetReplacementMapKeys() => new[]
                                                                      {
