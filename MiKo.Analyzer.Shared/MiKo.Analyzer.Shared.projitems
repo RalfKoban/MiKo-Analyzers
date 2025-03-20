@@ -447,6 +447,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1113_TestMethodsShouldNotBeNamedGivenWhenThenAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1114_TestMethodsShouldNotBeNamedBadOrHappyPathAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1115_TestMethodsShouldNotBeNamedScenarioExpectedOutcomeAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1117_TestMethodsShouldBeNamedMorePreciseAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1200_ExceptionCatchBlockAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1201_ExceptionParameterAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1300_SimpleLambdaExpressionIdentifierAnalyzer.cs" />
