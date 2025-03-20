@@ -4245,6 +4245,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tests with names like &apos;EventIsRaised&apos; or &apos;ExceptionThrown&apos; are too vague because they don&apos;t specify the particular event or exception involved.
+        ///To make them clearer and more descriptive, the names should include details about the exact event being raised or the exception being thrown..
+        /// </summary>
+        internal static string MiKo_1117_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1117_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test name should contain the exact event being raised or the exception being thrown.
+        /// </summary>
+        internal static string MiKo_1117_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1117_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test methods should be named more precisely.
+        /// </summary>
+        internal static string MiKo_1117_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1117_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rename exception.
         /// </summary>
         internal static string MiKo_1200_CodeFixTitle {
