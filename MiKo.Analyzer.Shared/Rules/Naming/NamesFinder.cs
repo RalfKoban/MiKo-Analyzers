@@ -166,6 +166,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                    .ReplaceWithCheck(nameof(TaskCanceledException) + "Thrown", "Throws" + nameof(TaskCanceledException))
                                    .ReplaceWithCheck(nameof(OperationCanceledException) + "Thrown", "Throws" + nameof(OperationCanceledException))
                                    .ReplaceWithCheck(nameof(NullReferenceException) + "Thrown", "Throws" + nameof(NullReferenceException))
+                                   .ReplaceWithCheck(nameof(KeyNotFoundException) + "Thrown", "Throws" + nameof(KeyNotFoundException))
                                    .ReplaceWithCheck(nameof(Exception) + "Thrown", "Throws" + nameof(Exception))
                                    .SeparateWords(Constants.Underscore)
                                    .ReplaceWithCheck("argument_null_exception", nameof(ArgumentNullException)) // fix some corrections, such as for known exceptions
@@ -178,6 +179,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                    .ReplaceWithCheck("task_canceled_exception", nameof(TaskCanceledException))
                                    .ReplaceWithCheck("operation_canceled_exception", nameof(OperationCanceledException))
                                    .ReplaceWithCheck("null_reference_exception", nameof(NullReferenceException))
+                                   .ReplaceWithCheck("key_not_found_exception", nameof(KeyNotFoundException))
                                    .ReplaceWithCheck("_guid_empty", "_empty_guid")
                                    .ReplaceWithCheck("_string_empty", "_empty_string")
                                    .ReplaceWithCheck("_in_return_", "<1>")
