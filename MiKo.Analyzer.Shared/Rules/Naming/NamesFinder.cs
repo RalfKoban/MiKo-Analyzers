@@ -152,7 +152,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                    .ReplaceWithCheck("DoesNotThrow", "_does_not_throw_")
                                    .ReplaceWithCheck("NotThrows", "ThrowsNo")
                                    .ReplaceWithCheck("NotThrow", "ThrowsNo")
+                                   .ReplaceWithCheck("NoThrows", "ThrowsNo")
+                                   .ReplaceWithCheck("NoThrow", "ThrowsNo")
                                    .ReplaceWithCheck("NoError", "HasNoError")
+                                   .ReplaceWithCheck("Already", "IsAlready")
                                    .ReplaceWithCheck(nameof(ArgumentNullException) + "Thrown", "Throws" + nameof(ArgumentNullException))
                                    .ReplaceWithCheck(nameof(ArgumentException) + "Thrown", "Throws" + nameof(ArgumentException))
                                    .ReplaceWithCheck(nameof(ArgumentOutOfRangeException) + "Thrown", "Throws" + nameof(ArgumentOutOfRangeException))
@@ -192,6 +195,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                    .ReplaceWithCheck("O_bject", "_object")
                                    .ReplaceWithCheck("R_eference", "_reference")
                                    .ReplaceWithCheck("T_ype", "_type")
+                                   .ReplaceWithCheck("_is_is_", "_is_")
                                    .ToStringAndRelease();
 
             return result;
