@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -27,6 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                   "Something_" + nameof(ObjectDisposedException) + "Thrown",
                                                                   "Something_" + nameof(NotImplementedException) + "Thrown",
                                                                   "Something_" + nameof(NullReferenceException) + "Thrown",
+                                                                  "Something_" + nameof(KeyNotFoundException) + "Thrown",
                                                                   "Something_throws_" + nameof(ArgumentException),
                                                                   "Something_throws_" + nameof(ArgumentNullException),
                                                                   "Something_throws_" + nameof(ArgumentOutOfRangeException),
@@ -37,6 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                   "Something_throws_" + nameof(ObjectDisposedException),
                                                                   "Something_throws_" + nameof(NotImplementedException),
                                                                   "Something_throws_" + nameof(NullReferenceException),
+                                                                  "Something_throws_" + nameof(KeyNotFoundException),
                                                               ];
 
         private static readonly string[] WrongMethodNames =
