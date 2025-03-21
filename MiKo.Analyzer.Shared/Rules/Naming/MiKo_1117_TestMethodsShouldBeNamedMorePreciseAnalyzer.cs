@@ -51,6 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                nameof(ObjectDisposedException),
                                                                nameof(NotImplementedException),
                                                                nameof(NullReferenceException),
+                                                               nameof(KeyNotFoundException),
                                                            };
 
         public MiKo_1117_TestMethodsShouldBeNamedMorePreciseAnalyzer() : base(Id)
