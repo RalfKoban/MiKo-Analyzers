@@ -70,15 +70,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return false;
             }
 
-            // alternative check for enumerables
-            if (fieldSymbol.IsConst is false && fieldSymbol.Type.IsEnumerable() && comment.StartsWith(StartingDefaultPhrase, Comparison))
-            {
-                // no issue
-                problematicText = null;
-
-                return false;
-            }
-
             problematicText = comment.FirstWord().ToString();
 
             return true;
