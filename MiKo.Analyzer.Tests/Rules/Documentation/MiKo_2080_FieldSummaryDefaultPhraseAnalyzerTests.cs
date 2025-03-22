@@ -54,14 +54,14 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_enumerable_field_([Values("Contains the", "The")] string comment) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_commented_enumerable_field() => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 
 public class TestMe
 {
     /// <summary>
-    /// " + comment + @" data for the field.
+    /// Contains the data for the field.
     /// </summary>
     private List<string> m_field;
 }
@@ -387,18 +387,8 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
         }
 
-        [TestCase("Some comment", "Contains the some comment")]
-        [TestCase("List of some comment", "Contains the some comment")]
-        [TestCase("A list of some comment", "Contains the some comment")]
-        [TestCase("Dictionary of some comment", "Contains the some comment")]
-        [TestCase("A dictionary of some comment", "Contains the some comment")]
-        [TestCase("Cache for some comment", "Contains the some comment")]
-        [TestCase("A Cache for some comment", "Contains the some comment")]
-        [TestCase("A cache for some comment", "Contains the some comment")]
-        [TestCase("Stores some comment", "Contains the some comment")]
-        [TestCase("Holds some comment", "Contains the some comment")]
-        [TestCase("This is some comment", "Contains the some comment")]
-        public void Code_gets_fixed_for_collection_field_(string originalComment, string fixedComment)
+        [Test]
+        public void Code_gets_fixed_for_collection_field()
         {
             const string Template = @"
 using System;
@@ -408,6 +398,113 @@ public class TestMe
 {
     /// <summary>
     /// ###.
+    /// </summary>
+    private List<string> m_field;
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", "Some comment"), Template.Replace("###", "Contains the some comment"));
+        }
+
+        [TestCase("A cache for")]
+        [TestCase("A Cache for")]
+        [TestCase("A collection for")]
+        [TestCase("A collection of")]
+        [TestCase("A collection that is holding")]
+        [TestCase("A collection that holds")]
+        [TestCase("A collection which holds")]
+        [TestCase("A collection which is holding")]
+        [TestCase("A collection holding")]
+        [TestCase("A collection that is containing")]
+        [TestCase("A collection that contains")]
+        [TestCase("A collection which contains")]
+        [TestCase("A collection which is containing")]
+        [TestCase("A collection containing")]
+        [TestCase("A collection that is storing")]
+        [TestCase("A collection that stores")]
+        [TestCase("A collection which stores")]
+        [TestCase("A collection which is storing")]
+        [TestCase("A collection storing")]
+        [TestCase("A dictionary for")]
+        [TestCase("A dictionary of")]
+        [TestCase("A list for")]
+        [TestCase("A list of")]
+        [TestCase("An array for")]
+        [TestCase("An array of")]
+        [TestCase("An array that holds")]
+        [TestCase("An array which holds")]
+        [TestCase("Array for")]
+        [TestCase("Array holding")]
+        [TestCase("Array of")]
+        [TestCase("Array that holds")]
+        [TestCase("Array which holds")]
+        [TestCase("Cache for")]
+        [TestCase("Containing")]
+        [TestCase("Collection for")]
+        [TestCase("Collection holding")]
+        [TestCase("Collection of")]
+        [TestCase("Collection that holds")]
+        [TestCase("Collection that is holding")]
+        [TestCase("Collection which holds")]
+        [TestCase("Collection which is holding")]
+        [TestCase("Dictionary for")]
+        [TestCase("Dictionary of")]
+        [TestCase("Holding")]
+        [TestCase("Holds")]
+        [TestCase("List for")]
+        [TestCase("List of")]
+        [TestCase("Stores")]
+        [TestCase("Storing")]
+        [TestCase("The collection that holds")]
+        [TestCase("The collection which holds")]
+        [TestCase("This cache holds")]
+        [TestCase("This collection holds")]
+        [TestCase("This dictionary holds")]
+        [TestCase("This is a array for")]
+        [TestCase("This is a array of")]
+        [TestCase("This is a cache for")]
+        [TestCase("This is a cache of")]
+        [TestCase("This is a dictionary for")]
+        [TestCase("This is a dictionary of")]
+        [TestCase("This is a list for")]
+        [TestCase("This is a list of")]
+        [TestCase("This list holds")]
+        public void Code_gets_fixed_for_collection_field_(string originalComment)
+        {
+            const string Template = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// ### some comment.
+    /// </summary>
+    private List<string> m_field;
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", "Contains the"));
+        }
+
+        [TestCase("List for all subsets", "Contains the subsets")]
+        [TestCase("List for all supersets", "Contains the supersets")]
+        [TestCase("List for all sub-sets", "Contains the sub-sets")]
+        [TestCase("List for all super-sets", "Contains the super-sets")]
+        [TestCase("List of all subsets", "Contains the subsets")]
+        [TestCase("List of all supersets", "Contains the supersets")]
+        [TestCase("List of all sub-sets", "Contains the sub-sets")]
+        [TestCase("List of all super-sets", "Contains the super-sets")]
+        public void Code_gets_fixed_for_collection_field_(string originalComment, string fixedComment)
+        {
+            const string Template = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// ### within some data.
     /// </summary>
     private List<string> m_field;
 }

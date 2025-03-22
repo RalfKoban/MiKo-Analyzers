@@ -29,12 +29,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var comment = (XmlElementSyntax)syntax;
             var phrase = GetStartingPhraseProposal(issue);
 
-            var preparedComment = Comment(comment, MappedData.Value.TypeGuidReplacementMapKeys, MappedData.Value.TypeGuidReplacementMap);
-            var preparedComment2 = Comment(preparedComment, MappedData.Value.ReplacementMapKeys, MappedData.Value.ReplacementMap);
+            var data = MappedData.Value;
+
+            var preparedComment = Comment(comment, data.PreparationMapKeys, data.PreparationMap);
+            var preparedComment1 = Comment(preparedComment, data.TypeGuidReplacementMapKeys, data.TypeGuidReplacementMap);
+            var preparedComment2 = Comment(preparedComment1, data.ReplacementMapKeys, data.ReplacementMap);
 
             var fixedComment = CommentStartingWith(preparedComment2, phrase);
 
-            return Comment(fixedComment, MappedData.Value.CleanupMapKeys, MappedData.Value.CleanupMap);
+            return Comment(fixedComment, data.CleanupMapKeys, data.CleanupMap);
         }
 
 //// ncrunch: rdi off
@@ -82,8 +85,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                    .ThenBy(_ => _)
                                                                    .ToArray(_ => new Pair(_, "The unique identifier for the type of "));
 
+                PreparationMap = new[]
+                                     {
+                                         new Pair("uperset", "#1#"), // prepare 'superset' as the 'set' would get replaced
+                                         new Pair("uper-set", "#2#"), // prepare 'super-set' as the 'set' would get replaced
+                                         new Pair("ubset", "#3#"), // prepare 'subset' as the 'set' would get replaced
+                                         new Pair("ub-set", "#4#"), // prepare 'sub-set' as the 'set' would get replaced
+                                     };
+
+                PreparationMapKeys = PreparationMap.ToArray(_ => _.Key);
+
                 CleanupMap = new[]
                                  {
+                                     new Pair("#1#", "uperset"), // restore 'superset' as the 'set' would get replaced
+                                     new Pair("#2#", "uper-set"), // restore 'super-set' as the 'set' would get replaced
+                                     new Pair("#3#", "ubset"), // restore 'subset' as the 'set' would get replaced
+                                     new Pair("#4#", "ub-set"), // restore 'sub-set' as the 'set' would get replaced
+
                                      new Pair(" a the ", " the "),
                                      new Pair(" an the ", " the "),
                                      new Pair(" the the ", " the "),
@@ -103,6 +121,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             public string[] TypeGuidReplacementMapKeys { get; }
 
             public Pair[] TypeGuidReplacementMap { get; }
+
+            public string[] PreparationMapKeys { get; }
+
+            public Pair[] PreparationMap { get; }
 
             public string[] CleanupMapKeys { get; }
 
@@ -245,7 +267,62 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return results;
             }
 
-            private static string[] CreateCollectionReplacementMapKeys() => new[] { "A list of ", "List of ", "A dictionary of ", "Dictionary of ", "Cache for ", "A Cache for ", "A cache for ", "Stores ", "Holds ", "This is " };
+            private static IEnumerable<string> CreateCollectionReplacementMapKeys()
+            {
+                yield return "Containing ";
+                yield return "Storing ";
+                yield return "Stores ";
+                yield return "Holding ";
+                yield return "Holds ";
+                yield return "This is ";
+
+                var articles = new[] { string.Empty, "A ", "An ", "The ", "This ", "a ", "an ", "the ", "this " };
+                var starts = new[]
+                                 {
+                                     "Array", "array",
+                                     "Collection", "collection",
+                                     "List", "list",
+                                     "Dictionary", "dictionary",
+                                     "Cache", "cache",
+                                 };
+
+                foreach (var article in articles)
+                {
+                    foreach (var start in starts)
+                    {
+                        var begin = article + start;
+
+                        yield return begin + " of all ";
+                        yield return begin + " of ";
+                        yield return begin + " for all ";
+                        yield return begin + " for ";
+
+                        yield return begin + " that holds ";
+                        yield return begin + " which holds ";
+                        yield return begin + " holds ";
+                        yield return begin + " holding ";
+                        yield return begin + " is holding ";
+                        yield return begin + " that is holding ";
+                        yield return begin + " which is holding ";
+
+                        yield return begin + " that contains ";
+                        yield return begin + " which contains ";
+                        yield return begin + " contains ";
+                        yield return begin + " containing ";
+                        yield return begin + " is containing ";
+                        yield return begin + " that is containing ";
+                        yield return begin + " which is containing ";
+
+                        yield return begin + " that stores ";
+                        yield return begin + " which stores ";
+                        yield return begin + " stores ";
+                        yield return begin + " storing ";
+                        yield return begin + " is storing ";
+                        yield return begin + " that is storing ";
+                        yield return begin + " which is storing ";
+                    }
+                }
+            }
 
             private static string[] CreateGetReplacementMapKeys() => new[]
                                                                      {
