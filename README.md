@@ -278,7 +278,7 @@ The following tables lists all the 487 rules that are currently provided by the 
 |MiKo_2231|Documentation of overridden 'GetHashCode()' methods shall use '&lt;inheritdoc /&gt;' marker|&#x2713;|&#x2713;|
 |MiKo_2232|&lt;summary&gt; documentation should not be empty|&#x2713;|&#x2713;|
 |MiKo_2233|XML tags should be placed on single line|&#x2713;|&#x2713;|
-|MiKo_2224|Documentation should use 'to' instead of 'that is to' or 'which is to'|&#x2713;|&#x2713;|
+|MiKo_2234|Documentation should use 'to' instead of 'that is to' or 'which is to'|&#x2713;|&#x2713;|
 |MiKo_2300|Comments should explain the 'Why' and not the 'How'|&#x2713;|\-|
 |MiKo_2301|Do not use obvious comments in AAA-Tests|&#x2713;|&#x2713;|
 |MiKo_2302|Do not keep code that is commented out|&#x2713;|\-|
