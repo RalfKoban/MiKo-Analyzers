@@ -13,7 +13,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/18917.svg)](https://scan.coverity.com/projects/ralfkoban-miko-analyzers)
 
 ## Available Rules
-The following tables lists all the 487 rules that are currently provided by the analyzer.
+The following tables lists all the 488 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -277,6 +277,7 @@ The following tables lists all the 487 rules that are currently provided by the 
 |MiKo_2232|&lt;summary&gt; documentation should not be empty|&#x2713;|&#x2713;|
 |MiKo_2233|XML tags should be placed on single line|&#x2713;|&#x2713;|
 |MiKo_2234|Documentation should use 'to' instead of 'that is to' or 'which is to'|&#x2713;|&#x2713;|
+|MiKo_2235|Documentation should use 'will' instead of 'going to'|&#x2713;|&#x2713;|
 |MiKo_2300|Comments should explain the 'Why' and not the 'How'|&#x2713;|\-|
 |MiKo_2301|Do not use obvious comments in AAA-Tests|&#x2713;|&#x2713;|
 |MiKo_2302|Do not keep code that is commented out|&#x2713;|\-|
