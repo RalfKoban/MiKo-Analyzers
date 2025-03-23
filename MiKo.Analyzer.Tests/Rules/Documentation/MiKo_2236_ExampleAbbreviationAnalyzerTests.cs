@@ -21,6 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             "It is i.e. something.",
             "(E.g. something)",
             "(e.g. something)",
+            "It is eg. something.",
         ];
 
         [Test]
