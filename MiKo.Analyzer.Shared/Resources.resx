@@ -3102,13 +3102,25 @@ However, these suppressions should remain inline comments and must not be part o
     <value>Replace 'going to' with 'will'</value>
   </data>
   <data name="MiKo_2235_Description" xml:space="preserve">
-    <value>The phrase "going to" is more verbose and effectively means "will." Opting for "will" instead promotes clarity and conciseness, making your code's behavior easier to understand.</value>
+    <value>The phrase 'going to' is more verbose and effectively means 'will'. Opting for 'will' instead promotes clarity and conciseness, making your code's behavior easier to understand.</value>
   </data>
   <data name="MiKo_2235_MessageFormat" xml:space="preserve">
     <value>Replace '{0}' with 'will'</value>
   </data>
   <data name="MiKo_2235_Title" xml:space="preserve">
     <value>Documentation should use 'will' instead of 'going to'</value>
+  </data>
+  <data name="MiKo_2236_CodeFixTitle" xml:space="preserve">
+    <value>Replace 'e.g.' with 'for example'</value>
+  </data>
+  <data name="MiKo_2236_Description" xml:space="preserve">
+    <value>Non-native speakers need to learn abbreviations like 'e.g.' to understand them. Therefore, using 'for example' is preferable because it directly conveys the intended meaning without requiring additional learning.</value>
+  </data>
+  <data name="MiKo_2236_MessageFormat" xml:space="preserve">
+    <value>Replace '{0}' with 'for example'</value>
+  </data>
+  <data name="MiKo_2236_Title" xml:space="preserve">
+    <value>Documentation should use 'for example' instead of abbreviation 'e.g.'</value>
   </data>
   <data name="MiKo_2300_Description" xml:space="preserve">
     <value>Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works—let the code itself do that.
