@@ -8783,7 +8783,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The phrase &quot;going to&quot; is more verbose and effectively means &quot;will.&quot; Opting for &quot;will&quot; instead promotes clarity and conciseness, making your code&apos;s behavior easier to understand..
+        ///   Looks up a localized string similar to The phrase &apos;going to&apos; is more verbose and effectively means &apos;will&apos;. Opting for &apos;will&apos; instead promotes clarity and conciseness, making your code&apos;s behavior easier to understand..
         /// </summary>
         internal static string MiKo_2235_Description {
             get {
@@ -8806,6 +8806,42 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_2235_Title {
             get {
                 return ResourceManager.GetString("MiKo_2235_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace &apos;e.g.&apos; with &apos;for example&apos;.
+        /// </summary>
+        internal static string MiKo_2236_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2236_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Non-native speakers need to learn abbreviations like &apos;e.g.&apos; to understand them. Therefore, using &apos;for example&apos; is preferable because it directly conveys the intended meaning without requiring additional learning..
+        /// </summary>
+        internal static string MiKo_2236_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2236_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace &apos;{0}&apos; with &apos;for example&apos;.
+        /// </summary>
+        internal static string MiKo_2236_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2236_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should use &apos;for example&apos; instead of abbreviation &apos;e.g.&apos;.
+        /// </summary>
+        internal static string MiKo_2236_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2236_Title", resourceCulture);
             }
         }
         
