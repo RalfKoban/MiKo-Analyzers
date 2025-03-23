@@ -8774,6 +8774,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Replace &apos;going to&apos; with &apos;will&apos;.
+        /// </summary>
+        internal static string MiKo_2235_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2235_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The phrase &quot;going to&quot; is more verbose and effectively means &quot;will.&quot; Opting for &quot;will&quot; instead promotes clarity and conciseness, making your code&apos;s behavior easier to understand..
+        /// </summary>
+        internal static string MiKo_2235_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2235_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace &apos;{0}&apos; with &apos;will&apos;.
+        /// </summary>
+        internal static string MiKo_2235_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2235_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should use &apos;will&apos; instead of &apos;going to&apos;.
+        /// </summary>
+        internal static string MiKo_2235_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2235_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works—let the code itself do that.
         ///This approach ensures comments are insightful and add real value by giving context and rationale, helping developers understand the reasoning behind the implementation..
         /// </summary>
