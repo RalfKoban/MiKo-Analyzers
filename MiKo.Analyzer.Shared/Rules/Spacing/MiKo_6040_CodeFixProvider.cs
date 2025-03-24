@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -13,39 +12,76 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     {
         public override string FixableDiagnosticId => "MiKo_6040";
 
-        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<MemberAccessExpressionSyntax>().FirstOrDefault();
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes)
+        {
+            foreach (var node in syntaxNodes)
+            {
+                switch (node)
+                {
+                    case MemberAccessExpressionSyntax _:
+                        return node;
+
+                    case MemberBindingExpressionSyntax _:
+                        return node;
+                }
+            }
+
+            return null;
+        }
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            if (syntax is MemberAccessExpressionSyntax m)
+            switch (syntax)
             {
-                var spaces = GetProposedSpaces(issue);
+                case MemberAccessExpressionSyntax a:
+                {
+                    var spaces = GetProposedSpaces(issue);
 
-                return m.WithOperatorToken(m.OperatorToken.WithLeadingSpaces(spaces));
+                    return a.WithOperatorToken(a.OperatorToken.WithLeadingSpaces(spaces));
+                }
+
+                case MemberBindingExpressionSyntax b:
+                {
+                    var spaces = GetProposedSpaces(issue);
+
+                    return b.WithOperatorToken(b.OperatorToken.WithLeadingSpaces(spaces));
+                }
+
+                default:
+                    return syntax;
             }
-
-            return syntax;
         }
 
         protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
         {
-            // adjust  of invocations
-            if (syntax is MemberAccessExpressionSyntax m && m.Parent is InvocationExpressionSyntax invocation)
+            // adjust the invocations
+            switch (syntax)
             {
-                var argumentList = invocation.ArgumentList;
+                case MemberAccessExpressionSyntax a when a.Parent is InvocationExpressionSyntax invocation:
+                    return UpdateInvocation(invocation, root, GetProposedAdditionalSpaces(issue));
 
-                if (argumentList.Arguments.Count > 0)
+                case MemberBindingExpressionSyntax b when b.Parent is InvocationExpressionSyntax invocation:
+                    return UpdateInvocation(invocation, root, GetProposedAdditionalSpaces(issue));
+
+                default:
+                    return root;
+            }
+        }
+
+        private static SyntaxNode UpdateInvocation(InvocationExpressionSyntax invocation, SyntaxNode root, int additionalSpaces)
+        {
+            var argumentList = invocation.ArgumentList;
+
+            if (argumentList.Arguments.Count > 0)
+            {
+                var descendants = SelfAndDescendantsOnSeparateLines(argumentList);
+                descendants.Remove(argumentList); // remove list to see if multiple other arguments are on different lines
+
+                if (descendants.Count > 0)
                 {
-                    var descendants = SelfAndDescendantsOnSeparateLines(argumentList);
-                    descendants.Remove(argumentList); // remove list to see if multiple other arguments are on different lines
+                    var updatedInvocation = invocation.WithAdditionalLeadingSpacesOnDescendants(descendants, additionalSpaces);
 
-                    if (descendants.Count > 0)
-                    {
-                        var additionalSpaces = GetProposedAdditionalSpaces(issue);
-                        var updatedInvocation = invocation.WithAdditionalLeadingSpacesOnDescendants(descendants, additionalSpaces);
-
-                        return root.ReplaceNode(invocation, updatedInvocation);
-                    }
+                    return root.ReplaceNode(invocation, updatedInvocation);
                 }
             }
 
