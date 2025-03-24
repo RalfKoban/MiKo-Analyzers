@@ -16786,6 +16786,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Place invocation on same line.
+        /// </summary>
+        internal static string MiKo_6063_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6063_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code readability improves when invocations span a single line. This makes the code clearer and easier to follow..
+        /// </summary>
+        internal static string MiKo_6063_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6063_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place invocation on same line.
+        /// </summary>
+        internal static string MiKo_6063_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6063_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invocations should be placed on same line.
+        /// </summary>
+        internal static string MiKo_6063_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6063_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Surround with blank lines.
         /// </summary>
         internal static string MiKo_6070_CodeFixTitle {

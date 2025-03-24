@@ -5826,6 +5826,18 @@ This organization ensures clarity and makes the code easier to find, understand 
   <data name="MiKo_6062_Title" xml:space="preserve">
     <value>Expressions within complex initializer expressions should be placed beside open brace</value>
   </data>
+  <data name="MiKo_6063_CodeFixTitle" xml:space="preserve">
+    <value>Place invocation on same line</value>
+  </data>
+  <data name="MiKo_6063_Description" xml:space="preserve">
+    <value>Code readability improves when invocations span a single line. This makes the code clearer and easier to follow.</value>
+  </data>
+  <data name="MiKo_6063_MessageFormat" xml:space="preserve">
+    <value>Place invocation on same line</value>
+  </data>
+  <data name="MiKo_6063_Title" xml:space="preserve">
+    <value>Invocations should be placed on same line</value>
+  </data>
   <data name="MiKo_6070_CodeFixTitle" xml:space="preserve">
     <value>Surround with blank lines</value>
   </data>
