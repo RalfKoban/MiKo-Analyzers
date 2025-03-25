@@ -100,6 +100,55 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_if_invocation_is_on_different_line_inside_lambda()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public void DoSomething(TestMe someObject)
+    {
+        DoSomethingCore(_ =>
+                             {
+                                 TestMe
+                                    .DoSomething(1, 2, 3)
+                                    .ConfigureAwait(false);
+                             });
+    }
+
+    private static Task DoSomething(int i, int j, int k) => Task.CompletedTask;
+
+    private void DoSomethingCore(Action<object> callback) { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public void DoSomething(TestMe someObject)
+    {
+        DoSomethingCore(_ =>
+                             {
+                                 TestMe.DoSomething(1, 2, 3)
+                                    .ConfigureAwait(false);
+                             });
+    }
+
+    private static Task DoSomething(int i, int j, int k) => Task.CompletedTask;
+
+    private void DoSomethingCore(Action<object> callback) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6063_InvocationIsOnSameLineAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6063_InvocationIsOnSameLineAnalyzer();
