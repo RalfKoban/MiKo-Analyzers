@@ -12,6 +12,39 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     public sealed class MiKo_6064_PropertyInvocationIsOnSameLineAnalyzerTests : CodeFixVerifier
     {
         [Test]
+        public void No_issue_is_reported_if_invocation_is_on_other_line() => No_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public void DoSomething(TestMe someObject)
+    {
+        var result = someObject
+                            .ToString();
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_if_invocations_are_on_other_lines() => No_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public void DoSomething(TestMe someObject)
+    {
+        var result = await someObject
+                                .DoSomething(1, 2, 3)
+                                .ConfigureAwait(false);
+    }
+
+    private Task DoSomething(int i, int j, int k) => Task.CompletedTask;
+}
+");
+
+        [Test]
         public void No_issue_is_reported_if_invocation_on_property_is_on_same_line() => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;

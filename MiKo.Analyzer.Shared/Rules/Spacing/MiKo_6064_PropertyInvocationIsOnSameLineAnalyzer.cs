@@ -20,6 +20,11 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (member.IsKind(SyntaxKind.SimpleMemberAccessExpression) && member.Name is IdentifierNameSyntax name && member.Expression is IdentifierNameSyntax expression)
             {
+                if (member.Parent is InvocationExpressionSyntax)
+                {
+                    return false;
+                }
+
                 if (name.GetStartingLine() != expression.GetStartingLine())
                 {
                     return true;
