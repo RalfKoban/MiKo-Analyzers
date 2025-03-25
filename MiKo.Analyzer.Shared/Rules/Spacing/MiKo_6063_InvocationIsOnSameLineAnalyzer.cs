@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (context.Node is InvocationExpressionSyntax invocation && HasIssue(invocation))
             {
-                ReportDiagnostics(context, Issue(invocation));
+                ReportDiagnostics(context, Issue(invocation.Expression));
             }
         }
     }
