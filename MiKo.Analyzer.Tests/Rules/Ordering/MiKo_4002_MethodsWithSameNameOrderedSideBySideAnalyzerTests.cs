@@ -447,7 +447,7 @@ public class TestMe
         }
 
         [Test]
-        public void Dogfood()
+        public void Code_gets_fixed_for_class_with_protected_and_private_static_methods_sharing_same_names()
         {
             const string OriginalCode = @"
 public class TestMe
