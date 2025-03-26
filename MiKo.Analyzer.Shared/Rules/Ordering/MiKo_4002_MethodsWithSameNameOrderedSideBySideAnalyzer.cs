@@ -73,7 +73,11 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                         {
                             if (ReferenceEquals(method, other) is false)
                             {
-                                other.GetMethodSignature(builder.Append("   ")).AppendLine();
+                                var sb = builder.Append("   ");
+
+                                other.GetMethodSignature(sb);
+
+                                sb.AppendLine();
                             }
                         }
 
