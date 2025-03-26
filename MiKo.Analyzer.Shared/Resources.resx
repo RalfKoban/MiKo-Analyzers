@@ -3122,6 +3122,20 @@ However, these suppressions should remain inline comments and must not be part o
   <data name="MiKo_2236_Title" xml:space="preserve">
     <value>Documentation should use 'for example' instead of abbreviation 'e.g.'</value>
   </data>
+  <data name="MiKo_2237_CodeFixTitle" xml:space="preserve">
+    <value>Remove empty lines between documentation</value>
+  </data>
+  <data name="MiKo_2237_Description" xml:space="preserve">
+    <value>XML documentation helps organize your code and allows tools like Sandcastle or IntelliSense to create useful references.
+Empty lines in XML comments can confuse these tools, leading to errors or problems.
+Keeping your comments compact and continuous makes them easier to read and ensures your documentation stays clear and reliable for both developers and tools.</value>
+  </data>
+  <data name="MiKo_2237_MessageFormat" xml:space="preserve">
+    <value>Remove empty lines between documentation</value>
+  </data>
+  <data name="MiKo_2237_Title" xml:space="preserve">
+    <value>Documentation should not be separated by empty lines</value>
+  </data>
   <data name="MiKo_2300_Description" xml:space="preserve">
     <value>Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works—let the code itself do that.
 This approach ensures comments are insightful and add real value by giving context and rationale, helping developers understand the reasoning behind the implementation.</value>
