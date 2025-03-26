@@ -52,9 +52,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         obsoleteNodes.Add(previousSibling);
                     }
 
-                    newContent = newContent
-                                        .Add(ParaOr().WithLeadingXmlComment())
-                                        .AddRange(duplicate.Content.WithLeadingXmlComment());
+                    newContent = newContent.Add(ParaOr().WithLeadingXmlComment())
+                                           .AddRange(duplicate.Content.WithLeadingXmlComment());
                 }
 
                 var consolidatedException = exception.WithContent(newContent.WithLeadingXmlComment().WithTrailingXmlComment());

@@ -14,15 +14,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] XmlTags = ["summary", "remarks", "returns", "example", "value", "exception"];
 
         private static readonly string[] Phrases =
-        [
-            "It's e.g. something.",
-            "It is e.g. something.",
-            "It's i.e. something.",
-            "It is i.e. something.",
-            "(E.g. something)",
-            "(e.g. something)",
-            "It is eg. something.",
-        ];
+                                                   [
+                                                       "It's e.g. something.",
+                                                       "It is e.g. something.",
+                                                       "It's i.e. something.",
+                                                       "It is i.e. something.",
+                                                       "(E.g. something)",
+                                                       "(e.g. something)",
+                                                       "It is eg. something.",
+                                                   ];
 
         [Test]
         public void No_issue_is_reported_for_undocumented_items() => No_issue_is_reported_for(@"
