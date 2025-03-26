@@ -56,7 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
             foreach (var methodsWithSameName in orderedMethods.GroupBy(_ => _.Name).Where(_ => _.MoreThan(1)))
             {
-                // we have a more than 1 method with same name, so we have do detect the index, sort the index and then see if the indices differ by more than one
+                // we have a more than 1 method with same name, so we have to detect the index, sort the index and then see if the indices differ by more than one
                 var indices = new HashSet<int>(methodsWithSameName.Select(allMethods.IndexOf));
 
                 var startIndex = indices.First();
