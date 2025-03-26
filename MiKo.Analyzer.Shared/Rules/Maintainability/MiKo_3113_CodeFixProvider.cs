@@ -93,7 +93,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         if (type.IsGuid())
                         {
-                            return AssertThat(expression, Is("EqualTo", Argument(SimpleMemberAccess(nameof(Guid), nameof(Guid.Empty)))), arguments, 0, removeNameColon: true);
+                            return AssertThat(expression, Is("EqualTo", Argument(nameof(Guid), nameof(Guid.Empty))), arguments, 0, removeNameColon: true);
                         }
                     }
 
@@ -108,7 +108,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         if (type.IsGuid())
                         {
-                            return AssertThat(expression, Is("Not", "EqualTo", Argument(SimpleMemberAccess(nameof(Guid), nameof(Guid.Empty)))), arguments, 0, removeNameColon: true);
+                            return AssertThat(expression, Is("Not", "EqualTo", Argument(nameof(Guid), nameof(Guid.Empty))), arguments, 0, removeNameColon: true);
                         }
                     }
 
@@ -119,7 +119,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "NotBeNullOrEmpty": return AssertThat(expression, Is("Not", "Null", "And", "Not", "Empty"), arguments, 0, removeNameColon: true);
                 case "Be":
                 {
-                    var argument = arguments.First();
+                    var argument = arguments[0];
 
                     if (argument.Expression is LiteralExpressionSyntax literal)
                     {
@@ -136,12 +136,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         }
                     }
 
-                    return AssertThat(expression, Is("EqualTo", arguments.First()), arguments, removeNameColon: true);
+                    return AssertThat(expression, Is("EqualTo", arguments[0]), arguments, removeNameColon: true);
                 }
 
                 case "NotBe":
                 {
-                    var argument = arguments.First();
+                    var argument = arguments[0];
 
                     if (argument.Expression is LiteralExpressionSyntax literal)
                     {
@@ -161,7 +161,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return AssertThat(expression, Is("Not", "EqualTo", argument), arguments, removeNameColon: true);
                 }
 
-                case "Equal": return AssertThat(expression, Is("EqualTo", arguments.First()), arguments, removeNameColon: true);
+                case "Equal": return AssertThat(expression, Is("EqualTo", arguments[0]), arguments, removeNameColon: true);
                 case "BeEquivalentTo":
                 {
                     var count = arguments.Count;
@@ -226,51 +226,51 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return null;
                 }
 
-                case "BeGreaterThan": return AssertThat(expression, Is("GreaterThan", arguments.First()), arguments, removeNameColon: true);
+                case "BeGreaterThan": return AssertThat(expression, Is("GreaterThan", arguments[0]), arguments, removeNameColon: true);
                 case "BeGreaterOrEqualTo":
-                case "BeGreaterThanOrEqualTo": return AssertThat(expression, Is("GreaterThanOrEqualTo", arguments.First()), arguments, removeNameColon: true);
-                case "BeLessThan": return AssertThat(expression, Is("LessThan", arguments.First()), arguments, removeNameColon: true);
+                case "BeGreaterThanOrEqualTo": return AssertThat(expression, Is("GreaterThanOrEqualTo", arguments[0]), arguments, removeNameColon: true);
+                case "BeLessThan": return AssertThat(expression, Is("LessThan", arguments[0]), arguments, removeNameColon: true);
                 case "BeLessOrEqualTo":
-                case "BeLessThanOrEqualTo": return AssertThat(expression, Is("LessThanOrEqualTo", arguments.First()), arguments, removeNameColon: true);
+                case "BeLessThanOrEqualTo": return AssertThat(expression, Is("LessThanOrEqualTo", arguments[0]), arguments, removeNameColon: true);
                 case "BePositive": return AssertThat(expression, Is("Positive"), arguments, 0, removeNameColon: true);
                 case "BeNegative": return AssertThat(expression, Is("Negative"), arguments, 0, removeNameColon: true);
-                case "BeSameAs": return AssertThat(expression, Is("SameAs", arguments.First()), arguments, removeNameColon: true);
-                case "NotBeSameAs": return AssertThat(expression, Is("Not", "SameAs", arguments.First()), arguments, removeNameColon: true);
+                case "BeSameAs": return AssertThat(expression, Is("SameAs", arguments[0]), arguments, removeNameColon: true);
+                case "NotBeSameAs": return AssertThat(expression, Is("Not", "SameAs", arguments[0]), arguments, removeNameColon: true);
                 case "HaveValue": return AssertThat(expression, Is("Not", "Null"), arguments, 0, removeNameColon: true);
                 case "NotHaveValue": return AssertThat(expression, Is("Null"), arguments, 0, removeNameColon: true);
-                case "HaveCount": return AssertThat(expression, Has("Count", "EqualTo", arguments.First()), arguments, removeNameColon: true);
-                case "HaveCountGreaterThan": return AssertThat(expression, Has("Count", "GreaterThan", arguments.First()), arguments, removeNameColon: true);
-                case "HaveCountGreaterThanOrEqualTo": return AssertThat(expression, Has("Count", "GreaterThanOrEqualTo", arguments.First()), arguments, removeNameColon: true);
-                case "HaveCountLessThan": return AssertThat(expression, Has("Count", "LessThan", arguments.First()), arguments, removeNameColon: true);
-                case "HaveCountLessThanOrEqualTo": return AssertThat(expression, Has("Count", "LessThanOrEqualTo", arguments.First()), arguments, removeNameColon: true);
-                case "NotHaveCount": return AssertThat(expression, Has("Count", "Not", "EqualTo", arguments.First()), arguments, removeNameColon: true);
+                case "HaveCount": return AssertThat(expression, Has("Count", "EqualTo", arguments[0]), arguments, removeNameColon: true);
+                case "HaveCountGreaterThan": return AssertThat(expression, Has("Count", "GreaterThan", arguments[0]), arguments, removeNameColon: true);
+                case "HaveCountGreaterThanOrEqualTo": return AssertThat(expression, Has("Count", "GreaterThanOrEqualTo", arguments[0]), arguments, removeNameColon: true);
+                case "HaveCountLessThan": return AssertThat(expression, Has("Count", "LessThan", arguments[0]), arguments, removeNameColon: true);
+                case "HaveCountLessThanOrEqualTo": return AssertThat(expression, Has("Count", "LessThanOrEqualTo", arguments[0]), arguments, removeNameColon: true);
+                case "NotHaveCount": return AssertThat(expression, Has("Count", "Not", "EqualTo", arguments[0]), arguments, removeNameColon: true);
                 case "BeInRange": return AssertThat(expression, Is("InRange", arguments[0], arguments[1]), arguments, 2, removeNameColon: true);
                 case "NotBeInRange": return AssertThat(expression, Is("Not", "InRange", arguments[0], arguments[1]), arguments, 2, removeNameColon: true);
-                case "BeOneOf": return AssertThat(expression, Is("AnyOf", arguments.First()), arguments, removeNameColon: true);
-                case "BeSubsetOf": return AssertThat(expression, Is("SubsetOf", arguments.First()), arguments, removeNameColon: true);
-                case "NotBeSubsetOf": return AssertThat(expression, Is("Not", "SubsetOf", arguments.First()), arguments, removeNameColon: true);
+                case "BeOneOf": return AssertThat(expression, Is("AnyOf", arguments[0]), arguments, removeNameColon: true);
+                case "BeSubsetOf": return AssertThat(expression, Is("SubsetOf", arguments[0]), arguments, removeNameColon: true);
+                case "NotBeSubsetOf": return AssertThat(expression, Is("Not", "SubsetOf", arguments[0]), arguments, removeNameColon: true);
 
                 case "BeBlank":
                 case "BeNullOrWhiteSpace":
-                    return AssertThat(Argument(Invocation(SimpleMemberAccess(nameof(String), nameof(string.IsNullOrWhiteSpace)), Argument(expression))), Is("True"), arguments, 0, removeNameColon: true);
+                    return AssertThat(Argument(Invocation(nameof(String), nameof(string.IsNullOrWhiteSpace), Argument(expression))), Is("True"), arguments, 0, removeNameColon: true);
 
                 case "NotBeBlank":
                 case "NotBeNullOrWhiteSpace":
-                    return AssertThat(Argument(Invocation(SimpleMemberAccess(nameof(String), nameof(string.IsNullOrWhiteSpace)), Argument(expression))), Is("False"), arguments, 0, removeNameColon: true);
+                    return AssertThat(Argument(Invocation(nameof(String), nameof(string.IsNullOrWhiteSpace), Argument(expression))), Is("False"), arguments, 0, removeNameColon: true);
 
-                case "StartWith": return AssertThat(expression, Does("StartWith", arguments.First()), arguments, removeNameColon: true);
-                case "StartWithEquivalentOf": return AssertThat(expression, Does("StartWith", arguments.First(), "IgnoreCase"), arguments, removeNameColon: true);
-                case "NotStartWith": return AssertThat(expression, Does("Not", "StartWith", arguments.First()), arguments, removeNameColon: true);
-                case "NotStartWithEquivalentOf": return AssertThat(expression, Does("Not", "StartWith", arguments.First(), "IgnoreCase"), arguments, removeNameColon: true);
-                case "EndWith": return AssertThat(expression, Does("EndWith", arguments.First()), arguments, removeNameColon: true);
-                case "EndWithEquivalentOf": return AssertThat(expression, Does("EndWith", arguments.First(), "IgnoreCase"), arguments, removeNameColon: true);
-                case "NotEndWith": return AssertThat(expression, Does("Not", "EndWith", arguments.First()), arguments, removeNameColon: true);
-                case "NotEndWithEquivalentOf": return AssertThat(expression, Does("Not", "EndWith", arguments.First(), "IgnoreCase"), arguments, removeNameColon: true);
+                case "StartWith": return AssertThat(expression, Does("StartWith", arguments[0]), arguments, removeNameColon: true);
+                case "StartWithEquivalentOf": return AssertThat(expression, Does("StartWith", arguments[0], "IgnoreCase"), arguments, removeNameColon: true);
+                case "NotStartWith": return AssertThat(expression, Does("Not", "StartWith", arguments[0]), arguments, removeNameColon: true);
+                case "NotStartWithEquivalentOf": return AssertThat(expression, Does("Not", "StartWith", arguments[0], "IgnoreCase"), arguments, removeNameColon: true);
+                case "EndWith": return AssertThat(expression, Does("EndWith", arguments[0]), arguments, removeNameColon: true);
+                case "EndWithEquivalentOf": return AssertThat(expression, Does("EndWith", arguments[0], "IgnoreCase"), arguments, removeNameColon: true);
+                case "NotEndWith": return AssertThat(expression, Does("Not", "EndWith", arguments[0]), arguments, removeNameColon: true);
+                case "NotEndWithEquivalentOf": return AssertThat(expression, Does("Not", "EndWith", arguments[0], "IgnoreCase"), arguments, removeNameColon: true);
 
-                case "Contain" when arguments.First().Expression is SimpleLambdaExpressionSyntax: return AssertThatHasMatches("Some");
+                case "Contain" when arguments[0].Expression is SimpleLambdaExpressionSyntax: return AssertThatHasMatches("Some");
                 case "Contain":
                 {
-                    var argument = arguments.First();
+                    var argument = arguments[0];
 
                     var type = argument.GetTypeSymbol(document);
 
@@ -289,9 +289,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "OnlyContain": return AssertThatHasMatches("All");
                 case "ContainSingle" when arguments.Count > 0: return AssertThatHasMatches("One");
                 case "ContainSingle": return AssertThat(expression, Has("Exactly", Argument(Literal(1)), "Items"), arguments, removeNameColon: true);
-                case "NotContain" when arguments.First().Expression is SimpleLambdaExpressionSyntax: return AssertThatHasMatches("None");
+                case "NotContain" when arguments[0].Expression is SimpleLambdaExpressionSyntax: return AssertThatHasMatches("None");
                 case "NotContain": return AssertThat(expression, Does("Not", "Contain", arguments[0]), arguments, removeNameColon: true);
-                case "NotContainEquivalentOf": return AssertThat(expression, Does("Not", "Contain", arguments.First(), "IgnoreCase"), arguments, removeNameColon: true);
+                case "NotContainEquivalentOf": return AssertThat(expression, Does("Not", "Contain", arguments[0], "IgnoreCase"), arguments, removeNameColon: true);
 
                 case "OnlyHaveUniqueItems": return AssertThat(expression, Is("Unique"), arguments, 0, removeNameColon: true);
 

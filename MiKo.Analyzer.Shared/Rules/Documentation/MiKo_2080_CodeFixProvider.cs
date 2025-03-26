@@ -325,13 +325,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             private static string[] CreateGetReplacementMapKeys() => new[]
-                                                                     {
-                                                                         "Gets ", "Get ",
-                                                                         "Sets ", "Set ",
-                                                                         "Gets or sets ", "Gets or Sets ", "Get or set ", "Get or Set ",
-                                                                         "Return ", "Returns ",
-                                                                         "/Return ", "/Returns ", // typos
-                                                                     };
+                                                                         {
+                                                                             "Gets ", "Get ",
+                                                                             "Sets ", "Set ",
+                                                                             "Gets or sets ", "Gets or Sets ", "Get or set ", "Get or Set ",
+                                                                             "Return ", "Returns ",
+                                                                             "/Return ", "/Returns ", // typos
+                                                                         };
 
             private static string[] CreateOtherReplacementMapKeys() => new[] { "Defines ", "Specifies ", "Use this ", "This " };
         }

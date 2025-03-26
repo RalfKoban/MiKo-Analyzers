@@ -266,27 +266,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static Pair[] CreateReplacementMap()
         {
             var verbs = new[]
-                        {
-                            "Adopt",
-                            "Build",
-                            "Construct",
-                            "Create",
-                            "Describe",
-                            "Detect",
-                            "Enhance",
-                            "Extend",
-                            "Generate",
-                            "Initialize",
-                            "Handle",
-                            "Manipulate",
-                            "Offer",
-                            "Perform",
-                            "Provide",
-                            "Process",
-                            "Represent",
-                            "Store",
-                            "Wrap",
-                        };
+                            {
+                                "Adopt",
+                                "Build",
+                                "Construct",
+                                "Create",
+                                "Describe",
+                                "Detect",
+                                "Enhance",
+                                "Extend",
+                                "Generate",
+                                "Initialize",
+                                "Handle",
+                                "Manipulate",
+                                "Offer",
+                                "Perform",
+                                "Provide",
+                                "Process",
+                                "Represent",
+                                "Store",
+                                "Wrap",
+                            };
 
             var thirdPersonVerbs = verbs.ToDictionary(_ => _, Verbalizer.MakeThirdPersonSingularVerb);
             var gerundVerbs = verbs.ToDictionary(_ => _, Verbalizer.MakeGerundVerb);
