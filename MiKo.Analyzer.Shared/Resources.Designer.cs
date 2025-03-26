@@ -8846,6 +8846,44 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove empty lines between documentation.
+        /// </summary>
+        internal static string MiKo_2237_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2237_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML documentation helps organize your code and allows tools like Sandcastle or IntelliSense to create useful references.
+        ///Empty lines in XML comments can confuse these tools, leading to errors or problems.
+        ///Keeping your comments compact and continuous makes them easier to read and ensures your documentation stays clear and reliable for both developers and tools..
+        /// </summary>
+        internal static string MiKo_2237_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2237_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove empty lines between documentation.
+        /// </summary>
+        internal static string MiKo_2237_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2237_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should not be separated by empty lines.
+        /// </summary>
+        internal static string MiKo_2237_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2237_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works—let the code itself do that.
         ///This approach ensures comments are insightful and add real value by giving context and rationale, helping developers understand the reasoning behind the implementation..
         /// </summary>
