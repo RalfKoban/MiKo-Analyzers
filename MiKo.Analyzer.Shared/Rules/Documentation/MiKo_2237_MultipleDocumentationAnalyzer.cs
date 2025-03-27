@@ -17,19 +17,35 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
-        {
-            var documentation = comment.ParentTrivia.Token.Parent.GetDocumentationCommentTriviaSyntax();
+        protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel) => HasIssue(comment)
+                                                                                                                                                              ? new[] { Issue(comment) }
+                                                                                                                                                              : Array.Empty<Diagnostic>();
 
-            if (documentation.Length > 1)
+        private static bool HasIssue(DocumentationCommentTriviaSyntax comment)
+        {
+            var token = comment.ParentTrivia.Token;
+
+            var comments = token.GetDocumentationCommentTriviaSyntax();
+
+            if (comments.Length <= 1)
             {
-                if (documentation.IndexOf(comment) > 0)
-                {
-                    return new[] { Issue(comment) };
-                }
+                // we only have a single comment, so nothing to report at all
+                return false;
             }
 
-            return Array.Empty<Diagnostic>();
+            if (comments.IndexOf(comment) <= 0)
+            {
+                // we have multiple comments, but the comment in question is the first one, and we do not want to report that one
+                return false;
+            }
+
+            if (token.HasLeadingComment())
+            {
+                // this seems to be some commented out code, so we cannot combine both documentation comments
+                return false;
+            }
+
+            return true;
         }
     }
 }
