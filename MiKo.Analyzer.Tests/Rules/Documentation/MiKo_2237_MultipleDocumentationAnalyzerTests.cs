@@ -33,24 +33,24 @@ public class TestMe
         public void No_issue_is_reported_for_correctly_documented_items_with_multiple_elements() => No_issue_is_reported_for(@"
 using System;
 
-/// <summary>It is for example something.</summary>
-/// <remarks>It is for example something.</remarks>
+/// <summary>This is some text.</summary>
+/// <remarks>This is some text.</remarks>
 public class TestMe
 {
-    /// <summary>It is for example something.</summary>
-    /// <remarks>It is for example something.</remarks>
+    /// <summary>This is some text.</summary>
+    /// <remarks>This is some text.</remarks>
     public event EventHandler<T> MyEvent;
 
-    /// <summary>It is for example something.</summary>
-    /// <remarks>It is for example something.</remarks>
+    /// <summary>This is some text.</summary>
+    /// <remarks>This is some text.</remarks>
     public void DoSomething() { }
 
-    /// <summary>It is for example something.</summary>
-    /// <remarks>It is for example something.</remarks>
+    /// <summary>This is some text.</summary>
+    /// <remarks>This is some text.</remarks>
     public int Age { get; set; }
 
-    /// <summary>It is for example something.</summary>
-    /// <remarks>It is for example something.</remarks>
+    /// <summary>This is some text.</summary>
+    /// <remarks>This is some text.</remarks>
     private bool m_field;
 }
 ");
@@ -59,20 +59,75 @@ public class TestMe
         public void No_issue_is_reported_for_correctly_documented_items_with_single_elements() => No_issue_is_reported_for(@"
 using System;
 
-/// <summary>It is for example something.</summary>
+/// <summary>This is some text.</summary>
 public class TestMe
 {
-    /// <summary>It is for example something.</summary>
+    /// <summary>This is some text.</summary>
     public event EventHandler<T> MyEvent;
 
-    /// <summary>It is for example something.</summary>
+    /// <summary>This is some text.</summary>
     public void DoSomething() { }
 
-    /// <summary>It is for example something.</summary>
+    /// <summary>This is some text.</summary>
     public int Age { get; set; }
 
-    /// <summary>It is for example something.</summary>
+    /// <summary>This is some text.</summary>
     private bool m_field;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_commented_out_code_with_documentation() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>This is some text.</summary>
+    // private bool m_field;
+
+    /// <summary>This is some text.</summary>
+    public void DoSomething() { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_commented_out_single_const_field_with_documentation() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// This is some text for commented out field.
+    /// </summary>
+    // private const MyField1 = ""42"";
+
+    /// <summary>
+    /// This is some text for field 2.
+    /// </summary>
+    private const MyField2 = ""42"";
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_commented_out_const_field_with_documentation() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// This is some text for field 1. It is important to have this field here!
+    /// </summary>
+    private const MyField1 = ""42"";
+
+    /// <summary>
+    /// This is some text for commented out field 2.
+    /// </summary>
+    // private const MyField2 = ""42"";
+
+    /// <summary>
+    /// This is some text for field 3.
+    /// </summary>
+    private const MyField3 = ""42"";
 }
 ");
 
