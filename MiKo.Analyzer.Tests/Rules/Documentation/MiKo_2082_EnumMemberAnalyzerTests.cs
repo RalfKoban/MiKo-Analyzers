@@ -91,6 +91,24 @@ public enum TestMe
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_commented_enum_member_that_starts_with_see_cref() => An_issue_is_reported_for(@"
+using System;
+
+public enum TestMe
+{
+    /// <summary>
+    /// Nothing to do.
+    /// </summary>
+    None = 0,
+
+    /// <summary>
+    /// <see cref=""TestMe""/> something to do.
+    /// </summary>
+    Something = 1,
+}
+");
+
         [Test, Combinatorial]
         public void Code_gets_fixed_for_incorrectly_commented_enum_member_(
                                                                        [Values("Defines", "Indicates", "Represents", "Specifies", "Enum")] string startingWord,

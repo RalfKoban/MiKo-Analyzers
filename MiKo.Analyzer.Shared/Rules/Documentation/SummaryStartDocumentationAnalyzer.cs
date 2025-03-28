@@ -14,9 +14,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected virtual Diagnostic NonTextStartIssue(ISymbol symbol, SyntaxNode node) => Issue(symbol.Name, node.GetLocation());
+        protected virtual Diagnostic NonTextStartIssue(ISymbol symbol, SyntaxNode node) => StartIssue(symbol, node.GetLocation());
 
-        protected virtual Diagnostic TextStartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location);
+        protected virtual Diagnostic TextStartIssue(ISymbol symbol, Location location) => StartIssue(symbol, location);
+
+        protected virtual Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location);
 
         protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(
                                                                   DocumentationCommentTriviaSyntax comment,

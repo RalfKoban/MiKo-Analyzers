@@ -201,6 +201,20 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_field_that_starts_with_see_cref() => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// <see cref=""TestMe""/>
+    /// </summary>
+    private const bool m_field;
+}
+");
+
         [Test, Combinatorial]
         public void An_issue_is_reported_for_incorrectly_commented_constant_boolean_field_(
                                                                                        [Values("Bla bla", "Indicates whether the field", "Contains something.")] string comment,
