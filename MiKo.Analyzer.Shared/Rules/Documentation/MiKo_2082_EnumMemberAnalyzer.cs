@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(ISymbol symbol) => symbol is IFieldSymbol field && field.ContainingType.IsEnum();
 
-        protected override Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(location);
+        protected override Diagnostic TextStartIssue(ISymbol symbol, Location location) => Issue(location);
 
         protected override bool AnalyzeTextStart(ISymbol symbol, string valueText, out string problematicText, out StringComparison comparison)
         {
