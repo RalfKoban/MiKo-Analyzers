@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return false;
         }
 
-        protected override Diagnostic StartIssue(ISymbol symbol, Location location)
+        protected override Diagnostic TextStartIssue(ISymbol symbol, Location location)
         {
             var proposal = GetStartingPhrase((IFieldSymbol)symbol);
 

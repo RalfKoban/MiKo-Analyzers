@@ -14,9 +14,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected virtual Diagnostic StartIssue(ISymbol symbol, SyntaxNode node) => StartIssue(symbol, node.GetLocation());
+        protected virtual Diagnostic NonTextStartIssue(ISymbol symbol, SyntaxNode node) => Issue(symbol.Name, node.GetLocation());
 
-        protected virtual Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location);
+        protected virtual Diagnostic TextStartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location);
 
         protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(
                                                                   DocumentationCommentTriviaSyntax comment,
@@ -68,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             continue; // skip over the start tag and name syntax
                         }
 
-                        return StartIssue(symbol, node); // it's no text, so it must be something different
+                        return NonTextStartIssue(symbol, node); // it's no text, so it must be something different
                     }
 
                     case XmlElementEndTagSyntax endTag:
@@ -84,13 +84,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         {
                             if (ConsiderEmptyTextAsIssue(symbol))
                             {
-                                return StartIssue(symbol, element.GetContentsLocation()); // it's an empty text
+                                return TextStartIssue(symbol, element.GetContentsLocation()); // it's an empty text
                             }
 
                             continue;
                         }
 
-                        return StartIssue(symbol, node); // it's no text, so it must be something different
+                        return NonTextStartIssue(symbol, node); // it's no text, so it must be something different
                     }
 
                     case XmlNameSyntax _:
@@ -140,7 +140,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                                 var location = CreateLocation(token, start, end);
 
-                                return StartIssue(symbol, location);
+                                return TextStartIssue(symbol, location);
                             }
 
                             // it's a valid text, so we quit
@@ -152,7 +152,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
 
                     default:
-                        return StartIssue(symbol, node); // it's no text, so it must be something different
+                        return NonTextStartIssue(symbol, node); // it's no text, so it must be something different
                 }
             }
 
