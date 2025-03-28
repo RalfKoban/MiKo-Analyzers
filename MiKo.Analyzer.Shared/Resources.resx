@@ -3136,6 +3136,16 @@ Keeping your comments compact and continuous makes them easier to read and ensur
   <data name="MiKo_2237_Title" xml:space="preserve">
     <value>Documentation should not be separated by empty lines</value>
   </data>
+  <data name="MiKo_2238_Description" xml:space="preserve">
+    <value>XML documentation should be clear and purposeful. Vague phrases like "Make sure to call this" fail to describe the functionality or behavior of the code, leading to ambiguity about the method’s purpose.
+Such documentation also undermines tool integration and usability, as IDEs rely on precise descriptions to generate meaningful IntelliSense tooltips and enhance developer productivity.</value>
+  </data>
+  <data name="MiKo_2238_MessageFormat" xml:space="preserve">
+    <value>&lt;summary&gt; should describe the purpose and not the usage</value>
+  </data>
+  <data name="MiKo_2238_Title" xml:space="preserve">
+    <value>&lt;summary&gt; documentation shall not start with 'Make sure to call this'</value>
+  </data>
   <data name="MiKo_2300_Description" xml:space="preserve">
     <value>Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works—let the code itself do that.
 This approach ensures comments are insightful and add real value by giving context and rationale, helping developers understand the reasoning behind the implementation.</value>
