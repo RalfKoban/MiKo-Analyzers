@@ -68,6 +68,18 @@ public class TestMe : Attribute
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_attribute_class_documentation_that_starts_with_see_cref() => An_issue_is_reported_for(@"
+using System;
+
+/// <summary>
+/// <see cref=""Attribute""/>
+/// </summary>
+public class TestMe : Attribute
+{
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_2047_AttributeSummaryDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2047_AttributeSummaryDefaultPhraseAnalyzer();

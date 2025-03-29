@@ -67,6 +67,19 @@ public class TestMe : " + interfaceName + @"
 ");
 
         [Test]
+        public void An_issue_is_reported_for_value_converter_class_documentation_that_starts_with_see_cref() => An_issue_is_reported_for(@"
+using System;
+using System.Windows.Data;
+
+/// <summary>
+/// <see cref=""TestMe""/>
+/// </summary>
+public class TestMe : IValueConverter
+{
+}
+");
+
+        [Test]
         public void Code_gets_fixed()
         {
             const string OriginalCode = @"

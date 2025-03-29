@@ -83,6 +83,17 @@ public class TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_comment_with_see_cref_only() => An_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// <see cref=""TestMe.MyEvent""/>
+    /// </summary>
+    public event EventHandler MyEvent;
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_inherited_comment() => No_issue_is_reported_for(@"
 public class TestMe
 {

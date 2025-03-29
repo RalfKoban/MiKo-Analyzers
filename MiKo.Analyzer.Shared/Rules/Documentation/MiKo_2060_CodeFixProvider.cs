@@ -425,6 +425,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                             " and provides",
                                             " and return",
                                             " and returns",
+                                            " and set up",
+                                            " and sets up",
                                         };
 
                 var startingWordsLength = startingWords.Length;

@@ -54,6 +54,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                       Rejected,
                                                                       Consumed,
                                                                       "Once",
+                                                                      "DoesNot",
+                                                                      "Create",
+                                                                      "Append",
                                                                   };
 
         private static readonly string[] SpecialFirstPhrases =

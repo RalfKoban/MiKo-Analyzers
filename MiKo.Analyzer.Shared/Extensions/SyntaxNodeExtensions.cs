@@ -1173,7 +1173,7 @@ namespace MiKoSolutions.Analyzers
         {
             var token = value.FindStructuredTriviaToken();
 
-            return token.HasStructuredTrivia && HasDocumentationCommentTriviaSyntax(token);
+            return token.HasStructuredTrivia && token.HasDocumentationCommentTriviaSyntax();
         }
 
         internal static DocumentationCommentTriviaSyntax[] GetDocumentationCommentTriviaSyntax(this SyntaxNode value)
@@ -1182,7 +1182,7 @@ namespace MiKoSolutions.Analyzers
 
             if (token.HasStructuredTrivia)
             {
-                var comment = GetDocumentationCommentTriviaSyntax(token);
+                var comment = token.GetDocumentationCommentTriviaSyntax();
 
                 if (comment != null)
                 {
@@ -1600,6 +1600,14 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool HasTrailingEndOfLine(this SyntaxNode value) => value != null && value.GetTrailingTrivia().Any(_ => _.IsEndOfLine());
 
+        internal static bool HasMinimumCSharpVersion(this SyntaxTree value, LanguageVersion expectedVersion)
+        {
+            var languageVersion = ((CSharpParseOptions)value.Options).LanguageVersion;
+
+            // ignore the latest versions (or above)
+            return languageVersion >= expectedVersion && expectedVersion < LanguageVersion.LatestMajor;
+        }
+
         internal static bool HasLinqExtensionMethod(this SyntaxNode value, SemanticModel semanticModel) => value.LinqExtensionMethods(semanticModel).Any();
 
 #if VS2022
@@ -1858,7 +1866,7 @@ namespace MiKoSolutions.Analyzers
 
             var name = value.ToString();
 
-            if (name.Contains("Command") && name.Contains("CommandManager") is false)
+            if (name.Contains(Constants.Names.Command) && name.Contains("CommandManager") is false)
             {
                 return semanticModel.LookupSymbols(value.GetLocation().SourceSpan.Start, name: name).FirstOrDefault() is ITypeSymbol symbol && symbol.IsCommand();
             }
@@ -2337,14 +2345,6 @@ namespace MiKoSolutions.Analyzers
                 default:
                     return false;
             }
-        }
-
-        internal static bool HasMinimumCSharpVersion(this SyntaxTree value, LanguageVersion expectedVersion)
-        {
-            var languageVersion = ((CSharpParseOptions)value.Options).LanguageVersion;
-
-            // ignore the latest versions (or above)
-            return languageVersion >= expectedVersion && expectedVersion < LanguageVersion.LatestMajor;
         }
 
         internal static bool IsInsideTestClass(this SyntaxNode value) => value.Ancestors<ClassDeclarationSyntax>().Any(_ => _.IsTestClass());
@@ -4188,75 +4188,6 @@ namespace MiKoSolutions.Analyzers
             }
 
             return finalTrivia;
-        }
-
-        private static bool HasDocumentationCommentTriviaSyntax(SyntaxToken token)
-        {
-            var leadingTrivia = token.LeadingTrivia;
-            var count = leadingTrivia.Count;
-
-            // Perf: quick check to avoid costly loop
-            if (count >= 2)
-            {
-                if (leadingTrivia[count == 4 ? 2 : 1].IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
-                {
-                    return true;
-                }
-            }
-
-            for (var index = 0; index < count; index++)
-            {
-                if (leadingTrivia[index].IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private static DocumentationCommentTriviaSyntax[] GetDocumentationCommentTriviaSyntax(SyntaxToken value)
-        {
-            var leadingTrivia = value.LeadingTrivia;
-            var count = leadingTrivia.Count;
-
-            // Perf: quick check to avoid costly loop
-            if (count >= 2)
-            {
-                var trivia = leadingTrivia[count == 4 ? 2 : 1];
-
-                if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
-                {
-                    return new[] { syntax };
-                }
-            }
-
-            DocumentationCommentTriviaSyntax[] results = null;
-            var resultsIndex = 0;
-
-            for (var index = 0; index < count; index++)
-            {
-                var trivia = leadingTrivia[index];
-
-                if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
-                {
-                    if (results is null)
-                    {
-                        results = new DocumentationCommentTriviaSyntax[1];
-                    }
-                    else
-                    {
-                        // seems we have more separate comments, so increase by one
-                        Array.Resize(ref results, results.Length + 1);
-                    }
-
-                    results[resultsIndex] = syntax;
-
-                    resultsIndex++;
-                }
-            }
-
-            return results;
         }
 
         private static SyntaxToken FindStructuredTriviaToken(this SyntaxNode value)

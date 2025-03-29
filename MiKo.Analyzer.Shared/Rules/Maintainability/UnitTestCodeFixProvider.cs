@@ -142,7 +142,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static MemberAccessExpressionSyntax MemberIs(params string[] names) => SimpleMemberAccess("Is", names);
 
-        protected static ArgumentSyntax Throws(string name) => Argument(SimpleMemberAccess("Throws", name));
+        protected static ArgumentSyntax Throws(string name) => Argument("Throws", name);
 
         protected static ArgumentSyntax Throws(string name, ArgumentSyntax argument) => Argument(Invocation("Throws", name, argument));
 

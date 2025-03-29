@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Composition;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -24,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comment = (XmlElementSyntax)syntax;
 
-            var startText = comment.Content.ToString().Without("/").TrimStart(Constants.Comments.Delimiters);
+            var startText = comment.Content.ToString().AsCachedBuilder().Without('/').WithoutNewLines().TrimStart(Constants.Comments.Delimiters).ToStringAndRelease();
 
             if (startText.IsNullOrWhiteSpace())
             {
