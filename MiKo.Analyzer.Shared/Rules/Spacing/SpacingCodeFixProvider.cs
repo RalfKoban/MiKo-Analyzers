@@ -42,38 +42,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         }
 #pragma warning restore CA1002
 
-        protected static SeparatedSyntaxList<TSyntaxNode> GetUpdatedSyntax<TSyntaxNode>(SeparatedSyntaxList<TSyntaxNode> expressions, int leadingSpaces) where TSyntaxNode : SyntaxNode
-        {
-            if (expressions.Count == 0)
-            {
-                return SyntaxFactory.SeparatedList<TSyntaxNode>();
-            }
-
-            int? currentLine = null;
-
-            var updatedExpressions = new List<TSyntaxNode>(expressions.Count);
-
-            foreach (var expression in expressions)
-            {
-                var startingLine = expression.GetStartingLine();
-
-                if (currentLine == startingLine)
-                {
-                    // it is on same line, so do not add any additional space
-                    updatedExpressions.Add(expression);
-                }
-                else
-                {
-                    currentLine = startingLine;
-
-                    // it seems to be on a different line, so add with spaces
-                    updatedExpressions.Add(expression.WithLeadingSpaces(leadingSpaces));
-                }
-            }
-
-            return SyntaxFactory.SeparatedList(updatedExpressions, expressions.GetSeparators());
-        }
-
         protected static SeparatedSyntaxList<T> PlacedOnSameLine<T>(SeparatedSyntaxList<T> syntax) where T : SyntaxNode
         {
             var updatedItems = syntax.GetWithSeparators()
@@ -215,5 +183,37 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         protected static WhenClauseSyntax PlacedOnSameLine(WhenClauseSyntax clause) => clause?.WithoutTrivia()
                                                                                               .WithWhenKeyword(clause.WhenKeyword.WithLeadingSpace().WithoutTrailingTrivia())
                                                                                               .WithCondition(PlacedOnSameLine(clause.Condition));
+
+        protected static SeparatedSyntaxList<TSyntaxNode> GetUpdatedSyntax<TSyntaxNode>(SeparatedSyntaxList<TSyntaxNode> expressions, int leadingSpaces) where TSyntaxNode : SyntaxNode
+        {
+            if (expressions.Count == 0)
+            {
+                return SyntaxFactory.SeparatedList<TSyntaxNode>();
+            }
+
+            int? currentLine = null;
+
+            var updatedExpressions = new List<TSyntaxNode>(expressions.Count);
+
+            foreach (var expression in expressions)
+            {
+                var startingLine = expression.GetStartingLine();
+
+                if (currentLine == startingLine)
+                {
+                    // it is on same line, so do not add any additional space
+                    updatedExpressions.Add(expression);
+                }
+                else
+                {
+                    currentLine = startingLine;
+
+                    // it seems to be on a different line, so add with spaces
+                    updatedExpressions.Add(expression.WithLeadingSpaces(leadingSpaces));
+                }
+            }
+
+            return SyntaxFactory.SeparatedList(updatedExpressions, expressions.GetSeparators());
+        }
     }
 }
