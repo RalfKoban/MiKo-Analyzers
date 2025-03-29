@@ -1,5 +1,5 @@
 # MiKo-Analyzers
-Provides analyzers that are based on the .NET Compiler Platform (Roslyn) and can be used inside Visual Studio 2019 (v16.11) or 2022 (v17.11).
+Provides analyzers that are based on the .NET Compiler Platform (Roslyn) and can be used inside Visual Studio 2019 (v16.11) or 2022 (v17.13).
 
 How to install an Roslyn analyzer is described [here](https://learn.microsoft.com/en-us/visualstudio/code-quality/install-roslyn-analyzers?view=vs-2022).
 
@@ -12,10 +12,8 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![codecov](https://codecov.io/gh/RalfKoban/MiKo-Analyzers/branch/master/graph/badge.svg)](https://codecov.io/gh/RalfKoban/MiKo-Analyzers)
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/18917.svg)](https://scan.coverity.com/projects/ralfkoban-miko-analyzers)
 
-[![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
-
 ## Available Rules
-The following tables lists all the 487 rules that are currently provided by the analyzer.
+The following tables lists all the 494 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -146,6 +144,7 @@ The following tables lists all the 487 rules that are currently provided by the 
 |MiKo_1113|Test methods should not be named according BDD style|&#x2713;|\-|
 |MiKo_1114|Test methods should not be named 'HappyPath' or 'BadPath'|&#x2713;|\-|
 |MiKo_1115|Test methods should be named in a fluent way|&#x2713;|&#x2713;|
+|MiKo_1117|Test methods should be named more precisely|&#x2713;|\-|
 |MiKo_1200|Name exceptions in catch blocks consistently|&#x2713;|&#x2713;|
 |MiKo_1201|Name exceptions as parameters consistently|&#x2713;|&#x2713;|
 |MiKo_1300|Unimportant identifiers in lambda statements should be named '_'|&#x2713;|&#x2713;|
@@ -186,7 +185,7 @@ The following tables lists all the 487 rules that are currently provided by the 
 |MiKo_2016|Documentation for asynchronous methods should start with specific phrase|&#x2713;|&#x2713;|
 |MiKo_2017|Dependency properties should be documented as done by the .NET Framework|&#x2713;|&#x2713;|
 |MiKo_2018|Documentation should not use the ambiguous terms 'Check' or 'Test'|&#x2713;|&#x2713;|
-|MiKo_2019|&lt;summary&gt; documentation should start with a third person singular verb (for example "Provides ")|&#x2713;|\-|
+|MiKo_2019|&lt;summary&gt; documentation should start with a third person singular verb (for example "Provides ")|&#x2713;|&#x2713;|
 |MiKo_2020|Inherited documentation should be used with &lt;inheritdoc /&gt; marker|&#x2713;|&#x2713;|
 |MiKo_2021|Documentation of parameter should have a default starting phrase|&#x2713;|&#x2713;|
 |MiKo_2022|Documentation of [out] parameters should have a default starting phrase|&#x2713;|&#x2713;|
@@ -277,7 +276,11 @@ The following tables lists all the 487 rules that are currently provided by the 
 |MiKo_2231|Documentation of overridden 'GetHashCode()' methods shall use '&lt;inheritdoc /&gt;' marker|&#x2713;|&#x2713;|
 |MiKo_2232|&lt;summary&gt; documentation should not be empty|&#x2713;|&#x2713;|
 |MiKo_2233|XML tags should be placed on single line|&#x2713;|&#x2713;|
-|MiKo_2224|Documentation should use 'to' instead of 'that is to' or 'which is to'|&#x2713;|&#x2713;|
+|MiKo_2234|Documentation should use 'to' instead of 'that is to' or 'which is to'|&#x2713;|&#x2713;|
+|MiKo_2235|Documentation should use 'will' instead of 'going to'|&#x2713;|&#x2713;|
+|MiKo_2236|Documentation should use 'for example' instead of abbreviation 'e.g.'|&#x2713;|&#x2713;|
+|MiKo_2237|Documentation should not be separated by empty lines|&#x2713;|&#x2713;|
+|MiKo_2238|&lt;summary&gt; documentation shall not start with 'Make sure to call this'|&#x2713;|\-|
 |MiKo_2300|Comments should explain the 'Why' and not the 'How'|&#x2713;|\-|
 |MiKo_2301|Do not use obvious comments in AAA-Tests|&#x2713;|&#x2713;|
 |MiKo_2302|Do not keep code that is commented out|&#x2713;|\-|
@@ -529,5 +532,7 @@ The following tables lists all the 487 rules that are currently provided by the 
 |MiKo_6060|Switch case labels should be placed on same line|&#x2713;|&#x2713;|
 |MiKo_6061|Switch expression arms should be placed on same line|&#x2713;|&#x2713;|
 |MiKo_6062|Expressions within complex initializer expressions should be placed beside open brace|&#x2713;|&#x2713;|
+|MiKo_6063|Invocations should be placed on same line|&#x2713;|&#x2713;|
+|MiKo_6064|Identifier invocations should be placed on same line|&#x2713;|&#x2713;|
 |MiKo_6070|Console statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6071|Local using statements should be surrounded by blank lines|&#x2713;|&#x2713;|

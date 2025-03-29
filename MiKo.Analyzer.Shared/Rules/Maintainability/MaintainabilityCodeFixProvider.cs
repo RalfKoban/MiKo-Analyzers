@@ -35,6 +35,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return Argument(syntax);
         }
 
+        protected static ArgumentSyntax Argument(string typeName, string methodName, params ArgumentSyntax[] arguments)
+        {
+            return Argument(SimpleMemberAccess(typeName, methodName), arguments);
+        }
+
         protected static ArgumentSyntax ArgumentWithCast(SyntaxKind kind, ParameterSyntax parameter) => ArgumentWithCast(PredefinedType(kind), parameter);
 
         protected static ArgumentSyntax ArgumentWithCast(TypeSyntax type, ParameterSyntax parameter) => ArgumentWithCast(type, SyntaxFactory.IdentifierName(parameter.GetName()));

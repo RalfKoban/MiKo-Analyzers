@@ -40,6 +40,14 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase("1", ExpectedResult = true)]
         public static bool StartsWithNumber_works_(string input) => input.StartsWithNumber();
 
+        [TestCase("", ExpectedResult = false)]
+        [TestCase("A", ExpectedResult = true)]
+        [TestCase("a", ExpectedResult = false)]
+        [TestCase("Aa", ExpectedResult = false)]
+        [TestCase("aA", ExpectedResult = false)]
+        [TestCase("AA", ExpectedResult = true)]
+        public static bool IsAllUpperCase_works_(string input) => input.AsSpan().IsAllUpperCase();
+
         [Test]
         public static void SplitBy_splits_by_single_item_that_is_contained_multiple_times()
         {
@@ -202,6 +210,11 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase("", " text ", "", ExpectedResult = " text ")]
         [TestCase("", "", "", ExpectedResult = "")]
         public static string ConcatenatedWith_with_string_and_string_and_span_(string s1, string s2, string span) => s1.ConcatenatedWith(s2, span.AsSpan());
+
+        [TestCase(" Some ", "", '.', ExpectedResult = " Some .")]
+        [TestCase(" Some ", " text ", '.', ExpectedResult = " Some  text .")]
+        [TestCase("", "", '.', ExpectedResult = ".")]
+        public static string ConcatenatedWith_with_string_and_span_and_char_(string s, string span, char c) => s.ConcatenatedWith(span.AsSpan(), c);
 
         [TestCase(" Some ", "", " with more ", ExpectedResult = " Some  with more ")]
         [TestCase(" Some ", " text ", " with more ", ExpectedResult = " Some  text  with more ")]

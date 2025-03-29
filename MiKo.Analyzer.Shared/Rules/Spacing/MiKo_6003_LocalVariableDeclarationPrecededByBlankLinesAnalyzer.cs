@@ -74,9 +74,8 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             var callLineSpan = declaration.GetLocation().GetLineSpan();
 
-            var noBlankLinesBefore = statements
-                                             .Where(_ => HasNoBlankLinesBefore(callLineSpan, _))
-                                             .Any(_ => IsDeclaration(_) is false);
+            var noBlankLinesBefore = statements.Where(_ => HasNoBlankLinesBefore(callLineSpan, _))
+                                               .Any(_ => IsDeclaration(_) is false);
 
             if (noBlankLinesBefore)
             {

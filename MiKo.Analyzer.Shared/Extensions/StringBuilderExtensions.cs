@@ -475,6 +475,21 @@ namespace System.Text
             return value.ToString(start, length - start);
         }
 
+        public static StringBuilder TrimStart(this StringBuilder value, char[] characters)
+        {
+            var charactersLength = characters.Length;
+
+            for (var index = 0; index < charactersLength; index++)
+            {
+                if (value.Length > 0 && value[0] == characters[index])
+                {
+                    value.Remove(0, 1);
+                }
+            }
+
+            return value;
+        }
+
         public static string TrimEnd(this StringBuilder value)
         {
             var length = value.Length;
@@ -487,6 +502,23 @@ namespace System.Text
             var end = value.CountTrailingWhitespaces();
 
             return value.ToString(0, length - end);
+        }
+
+        public static StringBuilder TrimEnd(this StringBuilder value, char[] characters)
+        {
+            var charactersLength = characters.Length;
+
+            for (var index = 0; index < charactersLength; index++)
+            {
+                var i = value.Length - 1;
+
+                if (i >= 0 && value[i] == characters[index])
+                {
+                    value.Remove(i, 1);
+                }
+            }
+
+            return value;
         }
 
         public static StringBuilder TrimEndBy(this StringBuilder value, int count)
@@ -532,7 +564,20 @@ namespace System.Text
 
         public static StringBuilder WithoutMultipleWhiteSpaces(this StringBuilder value) => value.ReplaceAllWithCheck(Constants.Comments.MultiWhitespaceStrings, Constants.Comments.SingleWhitespaceString); // ncrunch: no coverage
 
-        public static StringBuilder WithoutNewLines(this StringBuilder value) => value.Replace("\r", string.Empty).Replace("\n", string.Empty); // ncrunch: no coverage
+        public static StringBuilder WithoutNewLines(this StringBuilder value) => value.Without('\r').Without('\n'); // ncrunch: no coverage
+
+        public static StringBuilder Without(this StringBuilder value, char c)
+        {
+            for (var position = value.Length - 1; position > -1; position--)
+            {
+                if (value[position] == c)
+                {
+                    value.Remove(position, 1);
+                }
+            }
+
+            return value;
+        }
 
         public static StringBuilder Without(this StringBuilder value, string phrase) => value.ReplaceWithCheck(phrase, string.Empty); // ncrunch: no coverage
 

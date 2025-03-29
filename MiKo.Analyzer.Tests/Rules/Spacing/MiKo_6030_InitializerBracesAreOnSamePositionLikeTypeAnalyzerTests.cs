@@ -38,7 +38,7 @@ using System.Collections.Generic;
 
 public class TestMe
 {
-    private new HashSet<int> MyField = new HashSet<int> { 1, 2, 3 };
+    private HashSet<int> MyField = new HashSet<int> { 1, 2, 3 };
 }
 ");
 
@@ -49,7 +49,7 @@ using System.Collections.Generic;
 
 public class TestMe
 {
-    private new HashSet<int> MyField = new() { 1, 2, 3 };
+    private HashSet<int> MyField = new() { 1, 2, 3 };
 }
 ");
 
@@ -120,12 +120,12 @@ using System.Collections.Generic;
 
 public class TestMe
 {
-    private new HashSet<int> MyField = new HashSet<int>
-                                           {
-                                               1,
-                                               2,
-                                               3,
-                                           };
+    private HashSet<int> MyField = new HashSet<int>
+                                       {
+                                           1,
+                                           2,
+                                           3,
+                                       };
 }
 ");
 
@@ -136,12 +136,12 @@ using System.Collections.Generic;
 
 public class TestMe
 {
-    private new HashSet<int> MyField = new()
-                                           {
-                                               1,
-                                               2,
-                                               3,
-                                           };
+    private HashSet<int> MyField = new()
+                                       {
+                                           1,
+                                           2,
+                                           3,
+                                       };
 }
 ");
 
@@ -250,12 +250,12 @@ using System.Collections.Generic;
 
 public class TestMe
 {
-    private new HashSet<int> MyField = new HashSet<int>
-                                          {
-                                               1,
-                                               2,
-                                               3,
-                                           };
+    private HashSet<int> MyField = new HashSet<int>
+                                      {
+                                           1,
+                                           2,
+                                           3,
+                                       };
 }
 ");
 
@@ -266,12 +266,12 @@ using System.Collections.Generic;
 
 public class TestMe
 {
-    private new HashSet<int> MyField = new HashSet<int>
-                                            {
-                                               1,
-                                               2,
-                                               3,
-                                           };
+    private HashSet<int> MyField = new HashSet<int>
+                                        {
+                                           1,
+                                           2,
+                                           3,
+                                       };
 }
 ");
 
@@ -282,12 +282,12 @@ using System.Collections.Generic;
 
 public class TestMe
 {
-    private new HashSet<int> MyField = new()
-                                          {
-                                               1,
-                                               2,
-                                               3,
-                                           };
+    private HashSet<int> MyField = new()
+                                      {
+                                           1,
+                                           2,
+                                           3,
+                                       };
 }
 ");
 
@@ -298,12 +298,12 @@ using System.Collections.Generic;
 
 public class TestMe
 {
-    private new HashSet<int> MyField = new()
-                                            {
-                                               1,
-                                               2,
-                                               3,
-                                           };
+    private HashSet<int> MyField = new()
+                                        {
+                                           1,
+                                           2,
+                                           3,
+                                       };
 }
 ");
 
@@ -594,12 +594,12 @@ using System.Collections.Generic;
 
 public class TestMe
 {
-    private new HashSet<int> MyField = new HashSet<int>
-                                          {
-                                               1,
-                                               2,
-                                               3,
-                                           };
+    private HashSet<int> MyField = new HashSet<int>
+                                      {
+                                           1,
+                                           2,
+                                           3,
+                                       };
 }
 ";
 
@@ -609,12 +609,12 @@ using System.Collections.Generic;
 
 public class TestMe
 {
-    private new HashSet<int> MyField = new HashSet<int>
-                                           {
-                                               1,
-                                               2,
-                                               3,
-                                           };
+    private HashSet<int> MyField = new HashSet<int>
+                                       {
+                                           1,
+                                           2,
+                                           3,
+                                       };
 }
 ";
 
@@ -630,12 +630,12 @@ using System.Collections.Generic;
 
 public class TestMe
 {
-    private new HashSet<int> MyField = new HashSet<int>
-                                            {
-                                               1,
-                                               2,
-                                               3,
-                                           };
+    private HashSet<int> MyField = new HashSet<int>
+                                        {
+                                           1,
+                                           2,
+                                           3,
+                                       };
 }
 ";
 
@@ -645,12 +645,12 @@ using System.Collections.Generic;
 
 public class TestMe
 {
-    private new HashSet<int> MyField = new HashSet<int>
-                                           {
-                                               1,
-                                               2,
-                                               3,
-                                           };
+    private HashSet<int> MyField = new HashSet<int>
+                                       {
+                                           1,
+                                           2,
+                                           3,
+                                       };
 }
 ";
 
@@ -666,11 +666,11 @@ using System.Collections.Generic;
 
 public class TestMe
 {
-    private new HashSet<int> MyField = new HashSet<int>
-                                            {
-                                                1, 2, 3,
-                                                4, 5, 6,
-                                           };
+    private HashSet<int> MyField = new HashSet<int>
+                                        {
+                                            1, 2, 3,
+                                            4, 5, 6,
+                                       };
 }
 ";
 
@@ -680,11 +680,11 @@ using System.Collections.Generic;
 
 public class TestMe
 {
-    private new HashSet<int> MyField = new HashSet<int>
-                                           {
-                                               1, 2, 3,
-                                               4, 5, 6,
-                                           };
+    private HashSet<int> MyField = new HashSet<int>
+                                       {
+                                           1, 2, 3,
+                                           4, 5, 6,
+                                       };
 }
 ";
 
@@ -1094,12 +1094,12 @@ using System.Collections.Generic;
 
 public class TestMe
 {
-    private new HashSet<int> MyField = new()
-                                          {
-                                               1,
-                                               2,
-                                               3,
-                                           };
+    private HashSet<int> MyField = new()
+                                      {
+                                           1,
+                                           2,
+                                           3,
+                                       };
 }
 ";
 
@@ -1109,12 +1109,12 @@ using System.Collections.Generic;
 
 public class TestMe
 {
-    private new HashSet<int> MyField = new()
-                                           {
-                                               1,
-                                               2,
-                                               3,
-                                           };
+    private HashSet<int> MyField = new()
+                                       {
+                                           1,
+                                           2,
+                                           3,
+                                       };
 }
 ";
 
@@ -1130,12 +1130,12 @@ using System.Collections.Generic;
 
 public class TestMe
 {
-    private new HashSet<int> MyField = new()
-                                            {
-                                               1,
-                                               2,
-                                               3,
-                                           };
+    private HashSet<int> MyField = new()
+                                        {
+                                           1,
+                                           2,
+                                           3,
+                                       };
 }
 ";
             const string FixedCode = @"
@@ -1144,12 +1144,98 @@ using System.Collections.Generic;
 
 public class TestMe
 {
-    private new HashSet<int> MyField = new()
-                                           {
-                                               1,
-                                               2,
-                                               3,
-                                           };
+    private HashSet<int> MyField = new()
+                                       {
+                                           1,
+                                           2,
+                                           3,
+                                       };
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_implicit_field_object_initializer_with_arguments_when_placed_on_position_before_position_of_type()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe : IList<int>
+{
+    public TestMe(int id)
+    {
+    }
+
+    private TestMe MyField = new(42)
+                                {
+                                     1,
+                                     2,
+                                     3,
+                                 };
+}
+";
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe : IList<int>
+{
+    public TestMe(int id)
+    {
+    }
+
+    private TestMe MyField = new(42)
+                                 {
+                                     1,
+                                     2,
+                                     3,
+                                 };
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_implicit_field_object_initializer_with_arguments_when_placed_on_position_after_position_of_type()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe : IList<int>
+{
+    public TestMe(int id)
+    {
+    }
+
+    private TestMe MyField = new(42)
+                                  {
+                                     1,
+                                     2,
+                                     3,
+                                 };
+}
+";
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe : IList<int>
+{
+    public TestMe(int id)
+    {
+    }
+
+    private TestMe MyField = new(42)
+                                 {
+                                     1,
+                                     2,
+                                     3,
+                                 };
 }
 ";
 

@@ -74,7 +74,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_that_starts_documentation_with_see_XML() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_that_starts_documentation_with_see_cref() => No_issue_is_reported_for(@"
 /// <summary>
 /// <see cref=""TestMe""/> documentation.
 /// </summary>
@@ -187,6 +187,17 @@ public class TestMe
 {
     /// <summary>
     /// Some documentation.
+    /// </summary>
+    public void DoSomething() { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_method_with_documentation_and_see_cref_only() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// <see cref=""DoSomething""/>
     /// </summary>
     public void DoSomething() { }
 }

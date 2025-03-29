@@ -34,9 +34,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var typeSymbols = symbol.IncludingAllBaseTypes().Concat(symbol.IncludingAllNestedTypes()).Where(_ => _.CanBeReferencedByName).ToHashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
 
-            return typeSymbols
-                       .SelectMany(_ => _.GetMethods(MethodKind.Ordinary))
-                       .Where(_ => _.IsTestMethod());
+            return typeSymbols.SelectMany(_ => _.GetMethods(MethodKind.Ordinary))
+                              .Where(_ => _.IsTestMethod());
         }
     }
 }

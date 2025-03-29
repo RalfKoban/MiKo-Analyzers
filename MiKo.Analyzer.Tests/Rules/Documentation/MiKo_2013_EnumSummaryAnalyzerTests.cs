@@ -90,6 +90,16 @@ public enum TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_comment_with_see_cref_only() => An_issue_is_reported_for(@"
+/// <summary>
+/// <see cref=""TestMe""/>
+/// </summary>
+public enum TestMe
+{
+}
+");
+
+        [Test]
         public void Code_gets_fixed()
         {
             const string OriginalCode = @"

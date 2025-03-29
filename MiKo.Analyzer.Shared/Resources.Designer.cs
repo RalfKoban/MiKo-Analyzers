@@ -4245,6 +4245,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tests with names like &apos;EventIsRaised&apos; or &apos;ExceptionThrown&apos; are too vague because they don&apos;t specify the particular event or exception involved.
+        ///To make them clearer and more descriptive, the names should include details about the exact event being raised or the exception being thrown..
+        /// </summary>
+        internal static string MiKo_1117_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1117_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test name should contain the exact event being raised or the exception being thrown.
+        /// </summary>
+        internal static string MiKo_1117_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1117_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test methods should be named more precisely.
+        /// </summary>
+        internal static string MiKo_1117_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1117_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rename exception.
         /// </summary>
         internal static string MiKo_1200_CodeFixTitle {
@@ -5442,6 +5470,15 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_2018_Title {
             get {
                 return ResourceManager.GetString("MiKo_2018_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start &lt;summary&gt; with a third person singular verb.
+        /// </summary>
+        internal static string MiKo_2019_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2019_CodeFixTitle", resourceCulture);
             }
         }
         
@@ -8733,6 +8770,144 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_2234_Title {
             get {
                 return ResourceManager.GetString("MiKo_2234_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace &apos;going to&apos; with &apos;will&apos;.
+        /// </summary>
+        internal static string MiKo_2235_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2235_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The phrase &apos;going to&apos; is more verbose and effectively means &apos;will&apos;. Opting for &apos;will&apos; instead promotes clarity and conciseness, making your code&apos;s behavior easier to understand..
+        /// </summary>
+        internal static string MiKo_2235_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2235_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace &apos;{0}&apos; with &apos;will&apos;.
+        /// </summary>
+        internal static string MiKo_2235_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2235_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should use &apos;will&apos; instead of &apos;going to&apos;.
+        /// </summary>
+        internal static string MiKo_2235_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2235_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace &apos;e.g.&apos; with &apos;for example&apos;.
+        /// </summary>
+        internal static string MiKo_2236_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2236_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Non-native speakers need to learn abbreviations like &apos;e.g.&apos; to understand them. Therefore, using &apos;for example&apos; is preferable because it directly conveys the intended meaning without requiring additional learning..
+        /// </summary>
+        internal static string MiKo_2236_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2236_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace &apos;{0}&apos; with &apos;for example&apos;.
+        /// </summary>
+        internal static string MiKo_2236_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2236_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should use &apos;for example&apos; instead of abbreviation &apos;e.g.&apos;.
+        /// </summary>
+        internal static string MiKo_2236_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2236_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove empty lines between documentation.
+        /// </summary>
+        internal static string MiKo_2237_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2237_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML documentation helps organize your code and allows tools like Sandcastle or IntelliSense to create useful references.
+        ///Empty lines in XML comments can confuse these tools, leading to errors or problems.
+        ///Keeping your comments compact and continuous makes them easier to read and ensures your documentation stays clear and reliable for both developers and tools..
+        /// </summary>
+        internal static string MiKo_2237_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2237_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove empty lines between documentation.
+        /// </summary>
+        internal static string MiKo_2237_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2237_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should not be separated by empty lines.
+        /// </summary>
+        internal static string MiKo_2237_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2237_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML documentation should be clear and purposeful. Vague phrases like &quot;Make sure to call this&quot; fail to describe the functionality or behavior of the code, leading to ambiguity about the method’s purpose.
+        ///Such documentation also undermines tool integration and usability, as IDEs rely on precise descriptions to generate meaningful IntelliSense tooltips and enhance developer productivity..
+        /// </summary>
+        internal static string MiKo_2238_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2238_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; should describe the purpose and not the usage.
+        /// </summary>
+        internal static string MiKo_2238_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2238_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation shall not start with &apos;Make sure to call this&apos;.
+        /// </summary>
+        internal static string MiKo_2238_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2238_Title", resourceCulture);
             }
         }
         
@@ -16709,6 +16884,78 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_6062_Title {
             get {
                 return ResourceManager.GetString("MiKo_6062_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place invocation on same line.
+        /// </summary>
+        internal static string MiKo_6063_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6063_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code readability improves when invocations span a single line. This makes the code clearer and easier to follow..
+        /// </summary>
+        internal static string MiKo_6063_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6063_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place invocation on same line.
+        /// </summary>
+        internal static string MiKo_6063_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6063_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invocations should be placed on same line.
+        /// </summary>
+        internal static string MiKo_6063_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6063_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place identifier invocation on same line.
+        /// </summary>
+        internal static string MiKo_6064_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6064_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code readability improves when invocations of identifiers span a single line. This makes the code clearer and easier to follow..
+        /// </summary>
+        internal static string MiKo_6064_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6064_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place identifier invocation on same line.
+        /// </summary>
+        internal static string MiKo_6064_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6064_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Identifier invocations should be placed on same line.
+        /// </summary>
+        internal static string MiKo_6064_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6064_Title", resourceCulture);
             }
         }
         

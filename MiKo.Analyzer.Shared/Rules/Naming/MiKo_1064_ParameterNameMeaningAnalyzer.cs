@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly HashSet<string> WellknownNames = new HashSet<string>
                                                                      {
-                                                                         "command",
+                                                                         Constants.Names.command,
                                                                          "cancellationToken",
                                                                          "formatProvider",
                                                                          "progress",
