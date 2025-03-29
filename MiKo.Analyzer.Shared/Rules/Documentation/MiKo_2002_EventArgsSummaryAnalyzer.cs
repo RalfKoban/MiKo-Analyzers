@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             return HasEventSummary(summaries.Value)
                    ? Array.Empty<Diagnostic>()
-                   : new[] { Issue(symbol, StartingPhraseConcrete, "\"" + EndingPhraseConcrete) };
+                   : new[] { Issue(summaryXmls[0].GetContentsLocation(), StartingPhraseConcrete, "\"" + EndingPhraseConcrete) };
         }
 
         private static bool HasEventSummary(IEnumerable<string> summaries)

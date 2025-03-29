@@ -46,7 +46,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_that_starts_documentation_with_see_XML() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_that_starts_documentation_with_see_cref() => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>

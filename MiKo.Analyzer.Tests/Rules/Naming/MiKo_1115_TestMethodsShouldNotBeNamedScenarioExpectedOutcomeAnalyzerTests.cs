@@ -89,6 +89,7 @@ public class TestMe
         [TestCase("ContainsData_TriesToDoStuff", "Tries_to_do_stuff_if_it_contains_data")]
         [TestCase("Method_ThrowsExceptionIfNull", "Method_throws_exception_if_null")]
         [TestCase("Method_ThrowsArgumentNullExceptionIfNull", "Method_throws_ArgumentNullException_if_null")]
+        [TestCase("Method_ThrowsKeyNotFoundExceptionIfKeyIsMissing", "Method_throws_KeyNotFoundException_if_key_is_missing")]
         public void Code_gets_fixed_for_1_slash_in_(string originalName, string fixedName) => VerifyCSharpFix(
                                                                                                           "class TestMe { [Test] public void " + originalName + "() { } }",
                                                                                                           "class TestMe { [Test] public void " + fixedName + "() { } }");
@@ -219,6 +220,16 @@ public class TestMeTests
 
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
+
+        [TestCase("AddHideDirective", "AddHideDirective_HideDirectiveAlreadyPresent_DoesNotAppendDirective", "AddHideDirective_does_not_append_directive_if_hide_directive_is_already_present")]
+        [TestCase("AddHideDirective", "AddHideDirective_HideDirectiveIsAlreadyPresent_DoesNotAppendDirective", "AddHideDirective_does_not_append_directive_if_hide_directive_is_already_present")]
+        [TestCase("AddHideDirective", "AddHideDirective_SomeDirectiveAlreadyPresent_AppendsHideDirective", "AddHideDirective_appends_hide_directive_if_some_directive_is_already_present")]
+        [TestCase("AddHideDirective", "AddHideDirective_SomeDirectiveIsAlreadyPresent_AppendsHideDirective", "AddHideDirective_appends_hide_directive_if_some_directive_is_already_present")]
+        [TestCase("AddHideDirective", "AddHideDirective_NoDirectivesSetYet_CreatesDirectiveListWithHideDirective", "AddHideDirective_creates_directive_list_with_hide_directive_if_no_directives_set_yet")]
+        [TestCase("GetStringDirectiveNoThrow", "GetStringDirectiveNoThrow_ReceivesListWithMatchButNotAsString_ReturnsNull", "GetStringDirectiveNoThrow_returns_null_if_it_receives_list_with_match_but_not_as_string")]
+        public void Code_gets_fixed_for_(string methodName, string originalName, string fixedName) => VerifyCSharpFix(
+                                                                                                                  "class TestMe { [Test] public void " + originalName + "() { " + methodName + "(); } }",
+                                                                                                                  "class TestMe { [Test] public void " + fixedName + "() { " + methodName + "(); } }");
 
         protected override string GetDiagnosticId() => MiKo_1115_TestMethodsShouldNotBeNamedScenarioExpectedOutcomeAnalyzer.Id;
 

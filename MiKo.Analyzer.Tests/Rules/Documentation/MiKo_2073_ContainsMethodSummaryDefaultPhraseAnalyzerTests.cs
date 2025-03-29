@@ -37,7 +37,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_with_see_XML_([ValueSource(nameof(MethodNames))] string methodName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_method_with_see_cref_([ValueSource(nameof(MethodNames))] string methodName) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>

@@ -40,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var builder = valueText.AsCachedBuilder()
                                    .Without(Constants.Comments.AsynchronouslyStartingPhrase) // skip over async starting phrase
                                    .Without(Constants.Comments.RecursivelyStartingPhrase) // skip over recursively starting phrase
-                                   .Without(","); // skip over first comma
+                                   .Without(','); // skip over first comma
 
             problematicText = builder.FirstWord(out _);
 

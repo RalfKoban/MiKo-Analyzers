@@ -446,6 +446,46 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_class_with_protected_and_private_static_methods_sharing_same_names()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    protected static int A(int i) => 1;
+
+    protected int B() => 2;
+
+    private static int A(object o) => 3;
+
+    private static int C(object o) => 5;
+
+    private static int A() => 4;
+
+    private static int D() => 6;
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    protected static int A(int i) => 1;
+
+    protected int B() => 2;
+
+    private static int A(object o) => 3;
+
+    private static int A() => 4;
+
+    private static int C(object o) => 5;
+
+    private static int D() => 6;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         [Test, Ignore("Just for the moment")]
         public void Code_gets_fixed_for_class_using_IEquatable_within_regions()
         {

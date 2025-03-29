@@ -48,7 +48,12 @@ namespace System
 
             if (HasFlag(handling, FirstWordHandling.MakeLowerCase))
             {
-                word = valueSpan.FirstWord().ToLowerCaseAt(0);
+                var firstWord = valueSpan.FirstWord();
+
+                // only make lower case in case we have a word that is not all in upper case
+                word = firstWord.Length > 1 && firstWord.IsAllUpperCase()
+                       ? firstWord.ToString()
+                       : firstWord.ToLowerCaseAt(0);
             }
             else if (HasFlag(handling, FirstWordHandling.MakeUpperCase))
             {
@@ -484,6 +489,38 @@ namespace System
                 value.AsSpan().CopyTo(bufferSpan);
                 arg0.AsSpan().CopyTo(bufferSpan.Slice(valueLength));
                 arg1.CopyTo(bufferSpan.Slice(valueLength + arg0Length));
+
+                return new string(buffer, 0, length);
+            }
+        }
+
+        public static string ConcatenatedWith(this string value, ReadOnlySpan<char> arg0, char arg1)
+        {
+            if (value is null)
+            {
+                return arg0.ConcatenatedWith(arg1);
+            }
+
+            var valueLength = value.Length;
+
+            if (value.Length == 0)
+            {
+                return arg0.ConcatenatedWith(arg1);
+            }
+
+            var arg0Length = arg0.Length;
+
+            var length = valueLength + arg0Length + 1;
+
+            unsafe
+            {
+                var buffer = stackalloc char[length];
+                buffer[length - 1] = arg1;
+
+                var bufferSpan = new Span<char>(buffer, length);
+
+                value.AsSpan().CopyTo(bufferSpan);
+                arg0.CopyTo(bufferSpan.Slice(valueLength));
 
                 return new string(buffer, 0, length);
             }
@@ -1449,6 +1486,30 @@ namespace System
         public static bool IsSingleWord(this ReadOnlySpan<char> value) => value.HasWhitespaces() is false;
 
 //// ncrunch: no coverage start
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsAllUpperCase(this string value) => value.AsSpan().IsAllUpperCase();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsAllUpperCase(this ReadOnlySpan<char> value)
+        {
+            var valueLength = value.Length;
+
+            if (valueLength > 0)
+            {
+                for (var i = 0; i < valueLength; i++)
+                {
+                    if (value[i].IsUpperCase() is false)
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            return false;
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsUpperCase(this char value)

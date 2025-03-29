@@ -17,8 +17,9 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
         {
             var method = diagnostic.Location.GetEnclosing<IMethodSymbol>(document.GetSemanticModel());
             var methodName = method.Name;
+            var accessibility = method.DeclaredAccessibility;
 
-            var methods = method.ContainingType.GetMethods(methodName);
+            var methods = method.ContainingType.GetMethods(methodName).Where(_ => _.DeclaredAccessibility <= accessibility);
 
             var methodsOrderedByParameters = Orderer.GetMethodsOrderedByStatics(methods, methodName);
 
