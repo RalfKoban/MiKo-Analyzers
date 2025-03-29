@@ -45,20 +45,20 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         protected static SeparatedSyntaxList<T> PlacedOnSameLine<T>(SeparatedSyntaxList<T> syntax) where T : SyntaxNode
         {
             var updatedItems = syntax.GetWithSeparators()
-                                     .Select(token =>
+                                     .Select(_ =>
+                                                 {
+                                                     if (_.IsNode)
                                                      {
-                                                         if (token.IsNode)
-                                                         {
-                                                             return PlacedOnSameLine(token.AsNode());
-                                                         }
+                                                         return PlacedOnSameLine(_.AsNode());
+                                                     }
 
-                                                         if (token.IsToken)
-                                                         {
-                                                             return token.AsToken().WithoutLeadingTrivia().WithTrailingSpace();
-                                                         }
+                                                     if (_.IsToken)
+                                                     {
+                                                         return _.AsToken().WithoutLeadingTrivia().WithTrailingSpace();
+                                                     }
 
-                                                         return token;
-                                                     });
+                                                     return _;
+                                                 });
 
             return SyntaxFactory.SeparatedList<T>(updatedItems);
         }
@@ -184,8 +184,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                                                                                               .WithWhenKeyword(clause.WhenKeyword.WithLeadingSpace().WithoutTrailingTrivia())
                                                                                               .WithCondition(PlacedOnSameLine(clause.Condition));
 
-        protected virtual TSyntaxNode GetUpdatedSyntax<TSyntaxNode>(TSyntaxNode node, int leadingSpaces) where TSyntaxNode : SyntaxNode => node.WithLeadingSpaces(leadingSpaces);
-
         protected SeparatedSyntaxList<TSyntaxNode> GetUpdatedSyntax<TSyntaxNode>(SeparatedSyntaxList<TSyntaxNode> expressions, int leadingSpaces) where TSyntaxNode : SyntaxNode
         {
             if (expressions.Count == 0)
@@ -219,5 +217,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             return SyntaxFactory.SeparatedList(updatedExpressions, expressions.GetSeparators());
         }
+
+        protected virtual TSyntaxNode GetUpdatedSyntax<TSyntaxNode>(TSyntaxNode node, int leadingSpaces) where TSyntaxNode : SyntaxNode => node.WithLeadingSpaces(leadingSpaces);
     }
 }
