@@ -8884,6 +8884,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to XML documentation should be clear and purposeful. Vague phrases like &quot;Make sure to call this&quot; fail to describe the functionality or behavior of the code, leading to ambiguity about the method’s purpose.
+        ///Such documentation also undermines tool integration and usability, as IDEs rely on precise descriptions to generate meaningful IntelliSense tooltips and enhance developer productivity..
+        /// </summary>
+        internal static string MiKo_2238_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2238_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; should describe the purpose and not the usage.
+        /// </summary>
+        internal static string MiKo_2238_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2238_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation shall not start with &apos;Make sure to call this&apos;.
+        /// </summary>
+        internal static string MiKo_2238_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2238_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works—let the code itself do that.
         ///This approach ensures comments are insightful and add real value by giving context and rationale, helping developers understand the reasoning behind the implementation..
         /// </summary>
