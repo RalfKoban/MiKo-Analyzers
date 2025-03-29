@@ -101,6 +101,19 @@ public interface ITestMe : ICommand
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_class_with_see_cref() => An_issue_is_reported_for(@"
+using System;
+using System.Windows.Input;
+
+/// <summary>
+/// <see cref=""ICommand""/>
+/// </summary>
+public class TestMe : ICommand
+{
+}
+");
+
         [TestCase("A command that can do something.", "Represents a command that can do something.")]
         [TestCase("The command that can do something.", "Represents a command that can do something.")]
         [TestCase("Command that can do something.", "Represents a command that can do something.")]

@@ -4,6 +4,7 @@ using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
 // ncrunch: rdi off
@@ -79,6 +80,75 @@ namespace MiKoSolutions.Analyzers
             }
 
             return symbol;
+        }
+
+        internal static bool HasDocumentationCommentTriviaSyntax(this SyntaxToken value)
+        {
+            var leadingTrivia = value.LeadingTrivia;
+            var count = leadingTrivia.Count;
+
+            // Perf: quick check to avoid costly loop
+            if (count >= 2)
+            {
+                if (leadingTrivia[count == 4 ? 2 : 1].IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
+                {
+                    return true;
+                }
+            }
+
+            for (var index = 0; index < count; index++)
+            {
+                if (leadingTrivia[index].IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        internal static DocumentationCommentTriviaSyntax[] GetDocumentationCommentTriviaSyntax(this SyntaxToken value)
+        {
+            var leadingTrivia = value.LeadingTrivia;
+            var count = leadingTrivia.Count;
+
+            // Perf: quick check to avoid costly loop
+            if (count >= 2)
+            {
+                var trivia = leadingTrivia[count == 4 ? 2 : 1];
+
+                if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
+                {
+                    return new[] { syntax };
+                }
+            }
+
+            DocumentationCommentTriviaSyntax[] results = null;
+            var resultsIndex = 0;
+
+            for (var index = 0; index < count; index++)
+            {
+                var trivia = leadingTrivia[index];
+
+                if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
+                {
+                    if (results is null)
+                    {
+                        results = new DocumentationCommentTriviaSyntax[1];
+                    }
+                    else
+                    {
+                        // seems we have more separate comments, so increase by one
+                        Array.Resize(ref results, results.Length + 1);
+                    }
+
+                    results[resultsIndex] = syntax;
+
+                    resultsIndex++;
+                }
+            }
+
+            return results;
         }
 
         internal static SyntaxTrivia[] GetComment(this SyntaxToken value) => value.GetAllTrivia().Where(_ => _.IsComment()).ToArray();

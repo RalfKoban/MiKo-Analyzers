@@ -31,6 +31,20 @@ namespace MiKoSolutions.Analyzers
 
         internal static string GetText(this Location value) => value.SourceTree?.GetText().ToString(value.SourceSpan);
 
+        internal static string GetText(this Location value, int length)
+        {
+            var tree = value.SourceTree;
+
+            if (tree is null)
+            {
+                return null;
+            }
+
+            var start = value.SourceSpan.Start;
+
+            return tree.GetText().ToString(TextSpan.FromBounds(start, start + length));
+        }
+
         internal static string GetSurroundingWord(this Location value)
         {
             var tree = value.SourceTree;

@@ -1553,6 +1553,16 @@ A clearer name would be "Send_sends_email_to_valid_address", which is easier to 
   <data name="MiKo_1115_Title" xml:space="preserve">
     <value>Test methods should be named in a fluent way</value>
   </data>
+  <data name="MiKo_1117_Description" xml:space="preserve">
+    <value>Tests with names like 'EventIsRaised' or 'ExceptionThrown' are too vague because they don't specify the particular event or exception involved.
+To make them clearer and more descriptive, the names should include details about the exact event being raised or the exception being thrown.</value>
+  </data>
+  <data name="MiKo_1117_MessageFormat" xml:space="preserve">
+    <value>Test name should contain the exact event being raised or the exception being thrown</value>
+  </data>
+  <data name="MiKo_1117_Title" xml:space="preserve">
+    <value>Test methods should be named more precisely</value>
+  </data>
   <data name="MiKo_1200_CodeFixTitle" xml:space="preserve">
     <value>Rename exception</value>
   </data>
@@ -1961,6 +1971,9 @@ This ensures clarity and precision in your code.</value>
   </data>
   <data name="MiKo_2018_Title" xml:space="preserve">
     <value>Documentation should not use the ambiguous terms 'Check' or 'Test'</value>
+  </data>
+  <data name="MiKo_2019_CodeFixTitle" xml:space="preserve">
+    <value>Start &lt;summary&gt; with a third person singular verb</value>
   </data>
   <data name="MiKo_2019_Description" xml:space="preserve">
     <value>&lt;summary&gt; documentation should always begin with a third person singular verb, such as "Provides". This concise description of the functionality that the class, property, etc. offers or represents ensures clarity and helps maintain a uniform documentation style.</value>
@@ -3098,6 +3111,54 @@ In contrast, when the documentation is just some plain text then that is very di
   </data>
   <data name="MiKo_2234_Title" xml:space="preserve">
     <value>Documentation should use 'to' instead of 'that is to' or 'which is to'</value>
+  </data>
+  <data name="MiKo_2235_CodeFixTitle" xml:space="preserve">
+    <value>Replace 'going to' with 'will'</value>
+  </data>
+  <data name="MiKo_2235_Description" xml:space="preserve">
+    <value>The phrase 'going to' is more verbose and effectively means 'will'. Opting for 'will' instead promotes clarity and conciseness, making your code's behavior easier to understand.</value>
+  </data>
+  <data name="MiKo_2235_MessageFormat" xml:space="preserve">
+    <value>Replace '{0}' with 'will'</value>
+  </data>
+  <data name="MiKo_2235_Title" xml:space="preserve">
+    <value>Documentation should use 'will' instead of 'going to'</value>
+  </data>
+  <data name="MiKo_2236_CodeFixTitle" xml:space="preserve">
+    <value>Replace 'e.g.' with 'for example'</value>
+  </data>
+  <data name="MiKo_2236_Description" xml:space="preserve">
+    <value>Non-native speakers need to learn abbreviations like 'e.g.' to understand them. Therefore, using 'for example' is preferable because it directly conveys the intended meaning without requiring additional learning.</value>
+  </data>
+  <data name="MiKo_2236_MessageFormat" xml:space="preserve">
+    <value>Replace '{0}' with 'for example'</value>
+  </data>
+  <data name="MiKo_2236_Title" xml:space="preserve">
+    <value>Documentation should use 'for example' instead of abbreviation 'e.g.'</value>
+  </data>
+  <data name="MiKo_2237_CodeFixTitle" xml:space="preserve">
+    <value>Remove empty lines between documentation</value>
+  </data>
+  <data name="MiKo_2237_Description" xml:space="preserve">
+    <value>XML documentation helps organize your code and allows tools like Sandcastle or IntelliSense to create useful references.
+Empty lines in XML comments can confuse these tools, leading to errors or problems.
+Keeping your comments compact and continuous makes them easier to read and ensures your documentation stays clear and reliable for both developers and tools.</value>
+  </data>
+  <data name="MiKo_2237_MessageFormat" xml:space="preserve">
+    <value>Remove empty lines between documentation</value>
+  </data>
+  <data name="MiKo_2237_Title" xml:space="preserve">
+    <value>Documentation should not be separated by empty lines</value>
+  </data>
+  <data name="MiKo_2238_Description" xml:space="preserve">
+    <value>XML documentation should be clear and purposeful. Vague phrases like "Make sure to call this" fail to describe the functionality or behavior of the code, leading to ambiguity about the method’s purpose.
+Such documentation also undermines tool integration and usability, as IDEs rely on precise descriptions to generate meaningful IntelliSense tooltips and enhance developer productivity.</value>
+  </data>
+  <data name="MiKo_2238_MessageFormat" xml:space="preserve">
+    <value>&lt;summary&gt; should describe the purpose and not the usage</value>
+  </data>
+  <data name="MiKo_2238_Title" xml:space="preserve">
+    <value>&lt;summary&gt; documentation shall not start with 'Make sure to call this'</value>
   </data>
   <data name="MiKo_2300_Description" xml:space="preserve">
     <value>Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works—let the code itself do that.
@@ -5802,6 +5863,30 @@ This organization ensures clarity and makes the code easier to find, understand 
   </data>
   <data name="MiKo_6062_Title" xml:space="preserve">
     <value>Expressions within complex initializer expressions should be placed beside open brace</value>
+  </data>
+  <data name="MiKo_6063_CodeFixTitle" xml:space="preserve">
+    <value>Place invocation on same line</value>
+  </data>
+  <data name="MiKo_6063_Description" xml:space="preserve">
+    <value>Code readability improves when invocations span a single line. This makes the code clearer and easier to follow.</value>
+  </data>
+  <data name="MiKo_6063_MessageFormat" xml:space="preserve">
+    <value>Place invocation on same line</value>
+  </data>
+  <data name="MiKo_6063_Title" xml:space="preserve">
+    <value>Invocations should be placed on same line</value>
+  </data>
+  <data name="MiKo_6064_CodeFixTitle" xml:space="preserve">
+    <value>Place identifier invocation on same line</value>
+  </data>
+  <data name="MiKo_6064_Description" xml:space="preserve">
+    <value>Code readability improves when invocations of identifiers span a single line. This makes the code clearer and easier to follow.</value>
+  </data>
+  <data name="MiKo_6064_MessageFormat" xml:space="preserve">
+    <value>Place identifier invocation on same line</value>
+  </data>
+  <data name="MiKo_6064_Title" xml:space="preserve">
+    <value>Identifier invocations should be placed on same line</value>
   </data>
   <data name="MiKo_6070_CodeFixTitle" xml:space="preserve">
     <value>Surround with blank lines</value>

@@ -152,7 +152,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                    .ReplaceWithCheck("DoesNotThrow", "_does_not_throw_")
                                    .ReplaceWithCheck("NotThrows", "ThrowsNo")
                                    .ReplaceWithCheck("NotThrow", "ThrowsNo")
+                                   .ReplaceWithCheck("NoThrows", "ThrowsNo")
+                                   .ReplaceWithCheck("NoThrow", "ThrowsNo")
                                    .ReplaceWithCheck("NoError", "HasNoError")
+                                   .ReplaceWithCheck("Already", "IsAlready")
                                    .ReplaceWithCheck(nameof(ArgumentNullException) + "Thrown", "Throws" + nameof(ArgumentNullException))
                                    .ReplaceWithCheck(nameof(ArgumentException) + "Thrown", "Throws" + nameof(ArgumentException))
                                    .ReplaceWithCheck(nameof(ArgumentOutOfRangeException) + "Thrown", "Throws" + nameof(ArgumentOutOfRangeException))
@@ -163,6 +166,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                    .ReplaceWithCheck(nameof(TaskCanceledException) + "Thrown", "Throws" + nameof(TaskCanceledException))
                                    .ReplaceWithCheck(nameof(OperationCanceledException) + "Thrown", "Throws" + nameof(OperationCanceledException))
                                    .ReplaceWithCheck(nameof(NullReferenceException) + "Thrown", "Throws" + nameof(NullReferenceException))
+                                   .ReplaceWithCheck(nameof(KeyNotFoundException) + "Thrown", "Throws" + nameof(KeyNotFoundException))
                                    .ReplaceWithCheck(nameof(Exception) + "Thrown", "Throws" + nameof(Exception))
                                    .SeparateWords(Constants.Underscore)
                                    .ReplaceWithCheck("argument_null_exception", nameof(ArgumentNullException)) // fix some corrections, such as for known exceptions
@@ -175,6 +179,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                    .ReplaceWithCheck("task_canceled_exception", nameof(TaskCanceledException))
                                    .ReplaceWithCheck("operation_canceled_exception", nameof(OperationCanceledException))
                                    .ReplaceWithCheck("null_reference_exception", nameof(NullReferenceException))
+                                   .ReplaceWithCheck("key_not_found_exception", nameof(KeyNotFoundException))
                                    .ReplaceWithCheck("_guid_empty", "_empty_guid")
                                    .ReplaceWithCheck("_string_empty", "_empty_string")
                                    .ReplaceWithCheck("_in_return_", "<1>")
@@ -192,6 +197,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                    .ReplaceWithCheck("O_bject", "_object")
                                    .ReplaceWithCheck("R_eference", "_reference")
                                    .ReplaceWithCheck("T_ype", "_type")
+                                   .ReplaceWithCheck("_is_is_", "_is_")
                                    .ToStringAndRelease();
 
             return result;

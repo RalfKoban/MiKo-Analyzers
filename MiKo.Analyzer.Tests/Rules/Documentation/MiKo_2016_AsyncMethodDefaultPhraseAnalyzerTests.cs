@@ -78,6 +78,21 @@ public class TestMe
 }
 ");
 
+        [TestCase("Task")]
+        [TestCase("Task<int>")]
+        public void An_issue_is_reported_for_comment_with_see_cref_only_(string returnType) => An_issue_is_reported_for(@"
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// <see cref=""DoSomething""/>
+    /// </summary>
+    public " + returnType + @" DoSomething() { }
+}
+
+");
+
         [Test]
         public void Code_gets_fixed_and_upper_case_text_adjusted()
         {

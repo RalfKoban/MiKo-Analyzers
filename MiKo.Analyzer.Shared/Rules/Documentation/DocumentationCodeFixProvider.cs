@@ -815,6 +815,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var skip = 0;
             XmlTextSyntax textCommentEnd;
 
+            var length = commendEndNodes.Length;
+
+            // add a white space at the end of the comment in case we have further texts
+            if (length > 1 && commentEnd.Length > 0 && commentEnd[commentEnd.Length - 1] != ' ')
+            {
+                commentEnd += " ";
+            }
+
             if (commendEndNodes.FirstOrDefault() is XmlTextSyntax text)
             {
                 skip = 1;
@@ -835,8 +843,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 textCommentEnd = XmlText(commentEnd);
             }
-
-            var length = commendEndNodes.Length;
 
             // if there are more than 1 item contained, also remove the new line and /// from the last item
             if (length > 1)
