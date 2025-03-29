@@ -29,6 +29,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     var startText = textSyntax.GetTextWithoutTrivia();
 
+                    if (startText.StartsWith("Given ", StringComparison.Ordinal))
+                    {
+                        // we cannot fix that for the moment
+                        return syntax;
+                    }
+
                     if (startText.StartsWithAny(RepresentsCandidates, StringComparison.Ordinal))
                     {
                         return CommentStartingWith(summary, "Represents a ");
