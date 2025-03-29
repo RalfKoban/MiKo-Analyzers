@@ -57,27 +57,26 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             // inspect arguments to see only simple ones
-            var found = arguments
-                            .Select(_ => _.Expression)
-                            .All(_ =>
-                                     {
-                                         switch (_)
-                                         {
-                                             case LiteralExpressionSyntax _:
-                                             case MemberAccessExpressionSyntax m when m.IsKind(SyntaxKind.SimpleMemberAccessExpression):
-                                                 return true;
+            var found = arguments.Select(_ => _.Expression)
+                                 .All(_ =>
+                                          {
+                                              switch (_)
+                                              {
+                                                  case LiteralExpressionSyntax _:
+                                                  case MemberAccessExpressionSyntax m when m.IsKind(SyntaxKind.SimpleMemberAccessExpression):
+                                                      return true;
 
-                                             case IdentifierNameSyntax i:
-                                             {
-                                                 var symbol = i.Identifier.GetSymbol(semanticModel);
+                                                  case IdentifierNameSyntax i:
+                                                  {
+                                                      var symbol = i.Identifier.GetSymbol(semanticModel);
 
-                                                 return symbol is IParameterSymbol || symbol is ILocalSymbol;
-                                             }
+                                                      return symbol is IParameterSymbol || symbol is ILocalSymbol;
+                                                  }
 
-                                             default:
-                                                 return false;
-                                         }
-                                     });
+                                                  default:
+                                                      return false;
+                                              }
+                                          });
 
             return found;
         }

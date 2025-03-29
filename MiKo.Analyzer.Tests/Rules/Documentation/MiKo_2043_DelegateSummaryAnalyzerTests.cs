@@ -63,6 +63,17 @@ public delegate void TestMe();
 ");
 
         [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_delegate_with_see_cref() => An_issue_is_reported_for(@"
+using System;
+
+/// <summary>
+/// <see cref=""TestMe""/>
+/// </summary>
+public delegate void TestMe();
+
+");
+
+        [Test]
         public void Code_gets_fixed()
         {
             const string OriginalCode = @"

@@ -39,9 +39,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected override Diagnostic StartIssue(ISymbol symbol, SyntaxNode node) => null; // this is no issue as we do not start with any word
+        protected override Diagnostic NonTextStartIssue(ISymbol symbol, SyntaxNode node) => null; // this is no issue as we do not start with any word
 
-        protected override Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location, StartingPhrase);
+        protected override Diagnostic TextStartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location, StartingPhrase);
 
         protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(
                                                                   DocumentationCommentTriviaSyntax comment,
@@ -89,7 +89,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var trimmedSummary = valueText.AsCachedBuilder()
                                           .Without(Constants.Comments.AsynchronouslyStartingPhrase) // skip over async starting phrase
                                           .Without(Constants.Comments.RecursivelyStartingPhrase) // skip over recursively starting phrase
-                                          .Without(",") // skip over first comma
+                                          .Without(',') // skip over first comma
                                           .TrimmedStart()
                                           .ToStringAndRelease();
 

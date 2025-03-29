@@ -52,8 +52,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeNamespace(INamespaceSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
-                                                                                                                                    ? AnalyzeName(symbol, compilation)
-                                                                                                                                    : Array.Empty<Diagnostic>();
+                                                                                                                                ? AnalyzeName(symbol, compilation)
+                                                                                                                                : Array.Empty<Diagnostic>();
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
                                                                                                                            ? AnalyzeName(symbol, compilation)

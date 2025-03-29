@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1045";
 
-        internal const string Suffix = "Command";
+        internal const string Suffix = Constants.Names.Command;
 
         private const string IsPrefix = "Is";
         private static readonly string[] HasArePrefix = { "Has", "Are" };

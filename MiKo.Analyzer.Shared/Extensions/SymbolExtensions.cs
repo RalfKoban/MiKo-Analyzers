@@ -1118,7 +1118,20 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsAsyncTaskBased(this IMethodSymbol value) => value.IsAsync || value.ReturnType.IsTask();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsBoolean(this ITypeSymbol value) => value.SpecialType == SpecialType.System_Boolean;
+        internal static bool IsBoolean(this ITypeSymbol value)
+        {
+            if (value is null)
+            {
+                return false;
+            }
+
+            if (value.SpecialType == SpecialType.System_Boolean)
+            {
+                return true;
+            }
+
+            return value.IsNullable() && value is INamedTypeSymbol type && type.TypeArguments[0].SpecialType == SpecialType.System_Boolean;
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsByte(this ITypeSymbol value) => value.SpecialType == SpecialType.System_Byte;
@@ -1586,7 +1599,7 @@ namespace MiKoSolutions.Analyzers
 
         // ignore special situation for task factory
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsNullable(this ITypeSymbol value) => value.IsValueType && value.Name == nameof(Nullable);
+        internal static bool IsNullable(this ITypeSymbol value) => value.IsValueType && value.OriginalDefinition.SpecialType == SpecialType.System_Nullable_T;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsObject(this ITypeSymbol value) => value.SpecialType == SpecialType.System_Object;
