@@ -144,7 +144,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 // ReSharper disable once LoopCanBeConvertedToQuery
                 // ReSharper disable once LoopCanBePartlyConvertedToQuery
-                foreach (var issue in AnalyzeForSpecialPhrase(token, WillPhraseStartUpperCase, _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)))
+                foreach (var issue in AnalyzeForSpecialPhrase(token, WillPhraseStartUpperCase, _ => Verbalizer.MakeThirdPersonSingularVerb(_.ToUpperCaseAt(0))))
                 {
                     var text = issue.Location.GetText().ToLowerCase();
 

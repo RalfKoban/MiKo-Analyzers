@@ -16,23 +16,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
 //// ncrunch: rdi off
 
-        internal static readonly string[] CommandStartingPhrases =
-                                                                   {
-                                                                       "A command ",
-                                                                       "A standard command ",
-                                                                       "A toggle command ",
-                                                                       "The command ",
-                                                                       "The standard command ",
-                                                                       "The toggle command ",
-                                                                       "This command ",
-                                                                       "This standard command ",
-                                                                       "This toggle command ",
-                                                                       "Command ",
-                                                                       "command ",
-                                                                       "A class ",
-                                                                       "The class ",
-                                                                       "This class ",
-                                                                   };
+        private static readonly string[] CommandStartingPhrases =
+                                                                  {
+                                                                      "A command ",
+                                                                      "A standard command ",
+                                                                      "A toggle command ",
+                                                                      "The command ",
+                                                                      "The standard command ",
+                                                                      "The toggle command ",
+                                                                      "This command ",
+                                                                      "This standard command ",
+                                                                      "This toggle command ",
+                                                                      "Command ",
+                                                                      "command ",
+                                                                      "A class ",
+                                                                      "The class ",
+                                                                      "This class ",
+                                                                  };
 
         private static readonly Pair[] CommandReplacementMap = CreateCommandReplacementMapEntries().OrderByDescending(_ => _.Key.Length)
                                                                                                    .ThenBy(_ => _.Key)
@@ -43,6 +43,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 //// ncrunch: rdi default
 
         public override string FixableDiagnosticId => "MiKo_2038";
+
+        internal static bool CanFix(ReadOnlySpan<char> text) => text.StartsWithAny(CommandStartingPhrases, StringComparison.OrdinalIgnoreCase);
 
         internal static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
         {

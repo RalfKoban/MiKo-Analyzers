@@ -381,9 +381,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     AnalyzeForPhrases(issues, token, UsedToDetermineInSingular, UsedToDetermineInSingularReplacement, StringComparison.OrdinalIgnoreCase);
                     AnalyzeForPhrases(issues, token, UsedToDetermineInPlural, UsedToDetermineInPluralReplacement, StringComparison.OrdinalIgnoreCase);
 
-                    issues.AddRange(AnalyzeForSpecialPhrase(token, IsUsedToPhraseStartUpperCase, _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)));
-                    issues.AddRange(AnalyzeForSpecialPhrase(token, AreUsedToPhraseStartUpperCase, _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)));
-                    issues.AddRange(AnalyzeForSpecialPhrase(token, UsedToPhraseStartUpperCase, _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)));
+                    issues.AddRange(AnalyzeForSpecialPhrase(token, IsUsedToPhraseStartUpperCase, _ => Verbalizer.MakeThirdPersonSingularVerb(_.ToUpperCaseAt(0))));
+                    issues.AddRange(AnalyzeForSpecialPhrase(token, AreUsedToPhraseStartUpperCase, _ => Verbalizer.MakeThirdPersonSingularVerb(_.ToUpperCaseAt(0))));
+                    issues.AddRange(AnalyzeForSpecialPhrase(token, UsedToPhraseStartUpperCase, _ => Verbalizer.MakeThirdPersonSingularVerb(_.ToUpperCaseAt(0))));
                     issues.AddRange(AnalyzeForSpecialPhrase(token, IsUsedToPhrase, Verbalizer.MakeThirdPersonSingularVerb));
                     issues.AddRange(AnalyzeForSpecialPhrase(token, AreUsedToPhrase, Verbalizer.MakeInfiniteVerb));
 
