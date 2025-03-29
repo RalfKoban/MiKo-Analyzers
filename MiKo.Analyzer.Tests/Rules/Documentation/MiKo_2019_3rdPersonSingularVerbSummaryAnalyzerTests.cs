@@ -493,6 +493,24 @@ public interface TestMe
             VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
         }
 
+        [Test]
+        public void Code_is_not_fixed_for_special_phrase_Given()
+        {
+            const string Code = @"
+using System;
+
+public interface TestMe
+{
+    /// <summary>
+    /// Given anything, does something.
+    /// </summary>
+    public void DoSomething() { }
+}
+";
+
+            VerifyCSharpFix(Code, Code);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2019_3rdPersonSingularVerbSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2019_3rdPersonSingularVerbSummaryAnalyzer();
