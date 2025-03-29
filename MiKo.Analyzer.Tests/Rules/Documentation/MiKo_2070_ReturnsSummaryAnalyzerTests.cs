@@ -24,6 +24,36 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_ToString() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// Returns a string that represents the current object.
+    /// </summary>
+    public override string ToString()
+    {
+        return ""Bla"";
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_GetEnumerator() => No_issue_is_reported_for(@"
+using System.Collections;
+
+public class TestMe : IEnumerable
+{
+    /// <summary>
+    /// Returns an enumerator that iterates through a collection.
+    /// </summary>
+    public IEnumerator GetEnumerator()
+    {
+        return null;
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_empty_summary_of_documented_items() => No_issue_is_reported_for(@"
 public class TestMe
 {
@@ -74,6 +104,30 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_documented_method_that_starts_with_see_cref() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// <see cref=""DoSomething""/>
+    /// </summary>
+    public int DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_documented_property_that_starts_with_see_cref() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// <see cref=""SomethingProperty""/>
+    /// </summary>
+    public int SomethingProperty { get; set; }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_incorrectly_documented_method_([Values("Return", "Returns", "return", "returns")] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {
@@ -94,36 +148,6 @@ public class TestMe
     /// " + phrase + @" something.
     /// </summary>
     public int SomethingProperty { get; set; }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_ToString() => No_issue_is_reported_for(@"
-public class TestMe
-{
-    /// <summary>
-    /// Returns a string that represents the current object.
-    /// </summary>
-    public override string ToString()
-    {
-        return ""Bla"";
-    }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_GetEnumerator() => No_issue_is_reported_for(@"
-using System.Collections;
-
-public class TestMe : IEnumerable
-{
-    /// <summary>
-    /// Returns an enumerator that iterates through a collection.
-    /// </summary>
-    public IEnumerator GetEnumerator()
-    {
-        return null;
-    }
 }
 ");
 

@@ -13,55 +13,68 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     {
         public const string Id = "MiKo_6040";
 
+        private static readonly SyntaxKind[] Expressions = { SyntaxKind.SimpleMemberAccessExpression, SyntaxKind.ConditionalAccessExpression };
+
         public MiKo_6040_MultiLineCallChainsAreOnSamePositionAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.SimpleMemberAccessExpression);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, Expressions);
 
         private static Stack<SyntaxToken> CollectDots(ExpressionSyntax startingExpression)
         {
             var dots = new Stack<SyntaxToken>();
 
-            var expression = startingExpression;
-
-            while (expression != null)
-            {
-                switch (expression)
-                {
-                    case MemberAccessExpressionSyntax s:
-                    {
-                        dots.Push(s.OperatorToken);
-
-                        expression = s.Expression;
-
-                        break;
-                    }
-
-                    case InvocationExpressionSyntax i:
-                    {
-                        expression = i.Expression;
-
-                        break;
-                    }
-
-                    default:
-                    {
-                        expression = null;
-
-                        break;
-                    }
-                }
-            }
+            CollectDots(startingExpression, dots);
 
             return dots;
         }
 
+        private static void CollectDots(ExpressionSyntax expression, Stack<SyntaxToken> dots)
+        {
+            switch (expression)
+            {
+                case MemberAccessExpressionSyntax a:
+                {
+                    dots.Push(a.OperatorToken);
+
+                    CollectDots(a.Expression, dots);
+
+                    return;
+                }
+
+                case MemberBindingExpressionSyntax b:
+                {
+                    dots.Push(b.OperatorToken);
+
+                    return;
+                }
+
+                case InvocationExpressionSyntax i:
+                {
+                    CollectDots(i.Expression, dots);
+
+                    return;
+                }
+
+                case ConditionalAccessExpressionSyntax ca:
+                {
+                    CollectDots(ca.WhenNotNull, dots);
+                    CollectDots(ca.Expression, dots);
+
+                    return;
+                }
+
+                default:
+                    return;
+            }
+        }
+
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            var node = (MemberAccessExpressionSyntax)context.Node;
+            var node = (ExpressionSyntax)context.Node;
 
-            if (node.Ancestors<MemberAccessExpressionSyntax>().Any())
+            if (node.Ancestors().Any(_ => _.IsAnyKind(Expressions)))
             {
                 // we are a nested one, hence we do not need to calculate and report again
                 return;

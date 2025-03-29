@@ -54,6 +54,23 @@ namespace Bla
     }
 }");
 
+        [Test]
+        public void An_issue_is_reported_for_comment_with_see_cref_only() => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class MyEventArgs : System.EventArgs { }
+
+    public class TestMe
+    {
+        /// <summary>
+        /// <see cref=""TestMe.DoSomething""/>
+        /// </summary>
+        public void DoSomething(object sender, MyEventArgs e) { }
+    }
+}");
+
         [TestCase("Handle the <see cref='MyEvent' /> event.")]
         [TestCase("<para>Handle the <see cref='MyEvent' /> event.</para>")]
         [TestCase("Called by the <see cref='MyEvent' /> event.")]

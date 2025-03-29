@@ -457,6 +457,7 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] MeaninglessStartingPhrase =
                                                                           {
                                                                               "A ",
+                                                                              "Abstract ",
                                                                               "Action",
                                                                               "Adapter",
                                                                               "An ",
@@ -465,7 +466,7 @@ namespace MiKoSolutions.Analyzers
                                                                               "Builder",
                                                                               "Called ",
                                                                               "Class",
-                                                                              "Command",
+                                                                              Names.Command,
                                                                               "Component",
                                                                               "Constructor",
                                                                               "Converter",
@@ -484,7 +485,7 @@ namespace MiKoSolutions.Analyzers
                                                                               "Extension class of",
                                                                               "Extension of",
                                                                               "Extension method ",
-                                                                              "Factory",
+                                                                              Names.Factory,
                                                                               "Fake ",
                                                                               "Field",
                                                                               "For ",
@@ -536,12 +537,29 @@ namespace MiKoSolutions.Analyzers
                                                                       "that is called",
                                                                       "that is capable",
                                                                       "that is used",
+                                                                      "that can be used",
+                                                                      "that could be used",
+                                                                      "that may be used",
+                                                                      "that might be used",
+                                                                      "that shall be used",
+                                                                      "that should be used",
+                                                                      "that will be used",
+                                                                      "that would be used",
                                                                       "used for",
                                                                       "used to",
                                                                       "capable to",
+                                                                      "able to",
                                                                       "which is called",
                                                                       "which is capable",
                                                                       "which is used",
+                                                                      "which can be used",
+                                                                      "which could be used",
+                                                                      "which may be used",
+                                                                      "which might be used",
+                                                                      "which shall be used",
+                                                                      "which should be used",
+                                                                      "which will be used",
+                                                                      "which would be used",
                                                                   };
 
             internal static readonly string[] MeaninglessFieldStartingPhrase = MeaninglessStartingPhrase.Except(FieldStartingPhrase).OrderBy(_ => _.Length).ToArray();
@@ -1100,10 +1118,13 @@ namespace MiKoSolutions.Analyzers
 
         internal static class Names
         {
+#pragma warning disable SA1303 // Const field names should begin with upper-case letter
+            internal const string command = "command";
+#pragma warning restore SA1303 // Const field names should begin with upper-case letter
+            internal const string Command = "Command";
+            internal const string Counter = "Counter";
             internal const string Create = "Create";
             internal const string Factory = "Factory";
-
-            internal const string Counter = "Counter";
 
             internal const string DefaultPropertyParameterName = "value";
 

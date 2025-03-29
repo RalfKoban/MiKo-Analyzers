@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         public const string Id = "MiKo_2080";
 
         private const string StartingDefaultPhrase = "The ";
-        private const string StartingEnumerableDefaultPhrase = "Contains ";
+        private const string StartingEnumerableDefaultPhrase = "Contains the ";
         private const string StartingBooleanDefaultPhrase = "Indicates whether ";
         private const string StartingGuidDefaultPhrase = "The unique identifier for ";
 
@@ -66,15 +66,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 // no issue
                 problematicText = string.Empty;
-
-                return false;
-            }
-
-            // alternative check for enumerables
-            if (fieldSymbol.IsConst is false && fieldSymbol.Type.IsEnumerable() && comment.StartsWith(StartingDefaultPhrase, Comparison))
-            {
-                // no issue
-                problematicText = null;
 
                 return false;
             }

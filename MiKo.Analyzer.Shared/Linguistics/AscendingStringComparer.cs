@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 //// ncrunch: rdi off
+//// ncrunch: no coverage start
 namespace MiKoSolutions.Analyzers.Linguistics
 {
     internal sealed class AscendingStringComparer : IComparer<string>
@@ -20,38 +21,16 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return 1;
             }
 
-            var lengthX = x.Length;
-            var lengthY = y.Length;
+            var result = string.Compare(x, 0, y, 0, Math.Min(x.Length, y.Length), StringComparison.OrdinalIgnoreCase);
 
-            var minimumLength = Math.Min(lengthX, lengthY);
-
-            var spanX = x.AsSpan(0, minimumLength);
-            var spanY = y.AsSpan(0, minimumLength);
-
-            var result = spanX.CompareTo(spanY, StringComparison.OrdinalIgnoreCase);
-
-            if (result != 0)
+            if (result == 0)
             {
-                // found something different
-                return result;
+                // same sub string, so investigate into length (if y is longer, prefer y but if x is longer, prefer x)
+                return y.Length - x.Length;
             }
 
-            // same sub string, so investigate into length
-            var lengthDifference = lengthX - lengthY;
-
-            if (lengthDifference < 0)
-            {
-                // y longer, so prefer y
-                return 1;
-            }
-
-            if (lengthDifference > 0)
-            {
-                // x longer, so prefer x
-                return -1;
-            }
-
-            return 0;
+            // found something different
+            return result;
         }
     }
 }
