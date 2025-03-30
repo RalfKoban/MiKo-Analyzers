@@ -3235,6 +3235,21 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static SyntaxNode WithoutParenthesisParent(this SyntaxNode value)
+        {
+            while (true)
+            {
+                if (value is ParenthesizedExpressionSyntax parenthesized)
+                {
+                    value = parenthesized.Parent;
+
+                    continue;
+                }
+
+                return value;
+            }
+        }
+
         internal static T WithTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode => value.WithLeadingTriviaFrom(node)
                                                                                                         .WithTrailingTriviaFrom(node);
 

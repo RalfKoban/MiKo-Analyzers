@@ -28,16 +28,6 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_class_with_value_type_comparison_if_string_comparison_comes_first() => No_issue_is_reported_for(@"
-using System;
-
-public class TestMe
-{
-    public bool DoSomething(string s, int i) => s == ""whatever"" && i == 42;
-}
-");
-
-        [Test]
         public void No_issue_is_reported_for_class_with_value_type_comparison() => No_issue_is_reported_for(@"
 using System;
 
@@ -353,6 +343,16 @@ using System.Linq;
 public class TestMe
 {
     public bool DoSomething(int i, int[] array) => array.SequenceEqual(Array.Empty<int>()) || i == 42;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_class_with_value_type_comparison_if_string_comparison_comes_first() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(string s, int i) => s == ""whatever"" && i == 42;
 }
 ");
 
