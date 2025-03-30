@@ -45,20 +45,20 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         protected static SeparatedSyntaxList<T> PlacedOnSameLine<T>(SeparatedSyntaxList<T> syntax) where T : SyntaxNode
         {
             var updatedItems = syntax.GetWithSeparators()
-                                     .Select(token =>
+                                     .Select(_ =>
+                                                 {
+                                                     if (_.IsNode)
                                                      {
-                                                         if (token.IsNode)
-                                                         {
-                                                             return PlacedOnSameLine(token.AsNode());
-                                                         }
+                                                         return PlacedOnSameLine(_.AsNode());
+                                                     }
 
-                                                         if (token.IsToken)
-                                                         {
-                                                             return token.AsToken().WithoutLeadingTrivia().WithTrailingSpace();
-                                                         }
+                                                     if (_.IsToken)
+                                                     {
+                                                         return _.AsToken().WithoutLeadingTrivia().WithTrailingSpace();
+                                                     }
 
-                                                         return token;
-                                                     });
+                                                     return _;
+                                                 });
 
             return SyntaxFactory.SeparatedList<T>(updatedItems);
         }
