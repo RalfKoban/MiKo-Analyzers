@@ -265,6 +265,25 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_boolean_properties() => No_issue_is_reported_for(@"
+using System;
+
+public interface IProvider
+{
+    bool HasData { get; }
+}
+
+public class TestMe
+{
+    private IProvider _provider;
+
+    private bool IsActive { get; }
+
+    public static bool SomeComparison() => _provider.HasData && IsActive;
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_CancellationToken_IsCancellationRequested_call() => No_issue_is_reported_for(@"
 using System;
 using System.Threading;

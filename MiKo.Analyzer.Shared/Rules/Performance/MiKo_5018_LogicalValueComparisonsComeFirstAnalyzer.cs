@@ -41,20 +41,22 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 case IdentifierNameSyntax _:
                     return true; // do not report checks on boolean members
 
-                case IsPatternExpressionSyntax e when e.Pattern is DeclarationPatternSyntax:
-                    return true; // do not report pattern checks
+                case IsPatternExpressionSyntax e:
+                    return e.Pattern is DeclarationPatternSyntax || IsNullCheck(e); // do not report pattern checks or null pattern checks
 
-                case IsPatternExpressionSyntax e when IsNullCheck(e):
-                    return true; // do not report null pattern checks
+                case MemberAccessExpressionSyntax m:
+                    return m.Name.GetTypeSymbol(context.SemanticModel)?.IsValueType is true; // do not report checks on value type members
 
-                case MemberAccessExpressionSyntax m when m.GetTypeSymbol(context.SemanticModel)?.IsValueType is true:
-                    return true; // do not report checks on value type members
+                case BinaryExpressionSyntax b:
+                {
+                    if (IsNullCheck(b))
+                    {
+                        return true; // do not report on checks for null
+                    }
 
-                case BinaryExpressionSyntax b when IsNullCheck(b):
-                    return true; // do not report on checks for null
-
-                case BinaryExpressionSyntax b when b.Right.GetTypeSymbol(context.SemanticModel)?.IsValueType is true && b.Left.GetTypeSymbol(context.SemanticModel)?.IsValueType is true:
-                    return true; // do not report on value types
+                    // do not report on value types
+                    return b.Right.GetTypeSymbol(context.SemanticModel)?.IsValueType is true && b.Left.GetTypeSymbol(context.SemanticModel)?.IsValueType is true;
+                }
 
                 default:
                     return false;
@@ -65,6 +67,8 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         {
             Collect(binary.Right.WithoutParenthesis());
             Collect(binary.Left.WithoutParenthesis());
+
+            return;
 
             void Collect(ExpressionSyntax expression)
             {
