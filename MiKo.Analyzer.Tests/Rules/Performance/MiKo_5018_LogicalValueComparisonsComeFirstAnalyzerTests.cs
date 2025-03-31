@@ -284,6 +284,43 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_boolean_return_value_checked_with_is_false() => No_issue_is_reported_for(@"
+using System;
+
+public interface IProvider
+{
+    bool HasData { get; }
+}
+
+public class TestMe
+{
+    private bool IsActive { get; }
+
+    public static bool SomeComparison(IProvider provider, StringComparison comparison)
+    {
+        var hasData = provider.HasData;
+
+        if (hasData is false && comparison == StringComparison.Ordinal)
+        {
+            return true;
+        }
+
+        if (hasData is not true && comparison == StringComparison.CurrentCulture)
+        {
+            return true;
+        }
+
+        if (hasData && comparison == StringComparison.OrdinalIgnoreCase)
+        {
+            return true;
+        }
+
+        return false;
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_CancellationToken_IsCancellationRequested_call() => No_issue_is_reported_for(@"
 using System;
 using System.Threading;

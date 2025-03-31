@@ -27,10 +27,34 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         {
             switch (expression.Pattern)
             {
-                case ConstantPatternSyntax constant when constant.Expression.IsKind(SyntaxKind.NullLiteralExpression): return true;
-                case UnaryPatternSyntax unary when unary.Pattern is ConstantPatternSyntax constant && constant.Expression.IsKind(SyntaxKind.NullLiteralExpression): return true;
+                case ConstantPatternSyntax constant when constant.Expression.IsKind(SyntaxKind.NullLiteralExpression): return true; // is null
+                case UnaryPatternSyntax unary when unary.Pattern is ConstantPatternSyntax constant && constant.Expression.IsKind(SyntaxKind.NullLiteralExpression): return true; // is not null
                 default:
                     return false;
+            }
+        }
+
+        private static bool IsBooleanCheck(IsPatternExpressionSyntax expression)
+        {
+            switch (expression.Pattern)
+            {
+                case ConstantPatternSyntax constant when IsBoolean(constant): return true;
+                case UnaryPatternSyntax unary when unary.Pattern is ConstantPatternSyntax constant && IsBoolean(constant): return true;
+                default:
+                    return false;
+            }
+
+            bool IsBoolean(ConstantPatternSyntax constant)
+            {
+                switch (constant.Expression.Kind())
+                {
+                    case SyntaxKind.TrueLiteralExpression:
+                    case SyntaxKind.FalseLiteralExpression:
+                        return true;
+
+                    default:
+                        return false;
+                }
             }
         }
 
@@ -42,7 +66,22 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                     return true; // do not report checks on boolean members
 
                 case IsPatternExpressionSyntax e:
-                    return e.Pattern is DeclarationPatternSyntax || IsNullCheck(e); // do not report pattern checks or null pattern checks
+                    if (e.Pattern is DeclarationPatternSyntax)
+                    {
+                        return true;  // do not report pattern checks
+                    }
+
+                    if (IsNullCheck(e))
+                    {
+                        return true; // do not report null pattern checks
+                    }
+
+                    if (IsBooleanCheck(e))
+                    {
+                        return true; // do not report boolean pattern checks
+                    }
+
+                    return false;
 
                 case MemberAccessExpressionSyntax m:
                     return m.Name.GetTypeSymbol(context.SemanticModel)?.IsValueType is true; // do not report checks on value type members
