@@ -65,6 +65,9 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 case IdentifierNameSyntax _:
                     return true; // do not report checks on boolean members
 
+                case PrefixUnaryExpressionSyntax pu when pu.IsKind(SyntaxKind.LogicalNotExpression):
+                    return true; // do not report on boolean !xyz checks
+
                 case IsPatternExpressionSyntax e:
                     if (e.Pattern is DeclarationPatternSyntax)
                     {
