@@ -21,23 +21,6 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeLogicalCondition, LogicalConditions);
 
-        private static bool IsElementAccess(ExpressionSyntax expression) => expression is BinaryExpressionSyntax binary && IsElementAccess(binary);
-
-        private static bool IsElementAccess(BinaryExpressionSyntax expression) => expression.Left.IsKind(SyntaxKind.ElementAccessExpression) || expression.Right.IsKind(SyntaxKind.ElementAccessExpression);
-
-        private static bool IsNullCheck(BinaryExpressionSyntax expression) => expression.Left.IsKind(SyntaxKind.NullLiteralExpression) || expression.Right.IsKind(SyntaxKind.NullLiteralExpression);
-
-        private static bool IsNullCheck(IsPatternExpressionSyntax expression)
-        {
-            switch (expression.Pattern)
-            {
-                case ConstantPatternSyntax constant when constant.Expression.IsKind(SyntaxKind.NullLiteralExpression): return true; // is null
-                case UnaryPatternSyntax unary when unary.Pattern is ConstantPatternSyntax constant && constant.Expression.IsKind(SyntaxKind.NullLiteralExpression): return true; // is not null
-                default:
-                    return false;
-            }
-        }
-
         private static bool IsBooleanCheck(IsPatternExpressionSyntax expression)
         {
             switch (expression.Pattern)
@@ -59,6 +42,45 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                     default:
                         return false;
                 }
+            }
+        }
+
+        private static bool IsElementAccess(ExpressionSyntax expression) => expression is BinaryExpressionSyntax binary && IsElementAccess(binary);
+
+        private static bool IsElementAccess(BinaryExpressionSyntax expression) => expression.Left.IsKind(SyntaxKind.ElementAccessExpression) || expression.Right.IsKind(SyntaxKind.ElementAccessExpression);
+
+        private static bool IsNullCheck(BinaryExpressionSyntax expression) => expression.Left.IsKind(SyntaxKind.NullLiteralExpression) || expression.Right.IsKind(SyntaxKind.NullLiteralExpression);
+
+        private static bool IsNullCheck(IsPatternExpressionSyntax expression)
+        {
+            switch (expression.Pattern)
+            {
+                case ConstantPatternSyntax constant when constant.Expression.IsKind(SyntaxKind.NullLiteralExpression): return true; // is null
+                case UnaryPatternSyntax unary when unary.Pattern is ConstantPatternSyntax constant && constant.Expression.IsKind(SyntaxKind.NullLiteralExpression): return true; // is not null
+                default:
+                    return false;
+            }
+        }
+
+        private static bool IsValueType(ExpressionSyntax node, SyntaxNodeAnalysisContext context)
+        {
+            switch (node?.Kind())
+            {
+                case SyntaxKind.NumericLiteralExpression:
+                case SyntaxKind.TrueLiteralExpression:
+                case SyntaxKind.FalseLiteralExpression:
+                case SyntaxKind.CharacterLiteralExpression:
+                    return true;
+
+                case SyntaxKind.NullLiteralExpression:
+                case SyntaxKind.StringLiteralExpression:
+#if VS2022
+                case SyntaxKind.Utf8StringLiteralExpression:
+#endif
+                    return false;
+
+                default:
+                    return node.GetTypeSymbol(context.SemanticModel)?.IsValueType is true;
             }
         }
 
@@ -91,7 +113,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                     return false;
 
                 case MemberAccessExpressionSyntax m:
-                    return m.Name.GetTypeSymbol(context.SemanticModel)?.IsValueType is true; // do not report checks on value type members
+                    return IsValueType(m.Name, context); // do not report checks on value type members
 
                 case BinaryExpressionSyntax b:
                 {
@@ -101,7 +123,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                     }
 
                     // do not report on value types
-                    return b.Right.GetTypeSymbol(context.SemanticModel)?.IsValueType is true && b.Left.GetTypeSymbol(context.SemanticModel)?.IsValueType is true;
+                    return IsValueType(b.Right, context) && IsValueType(b.Left, context);
                 }
 
                 default:
@@ -143,10 +165,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             CollectLeafs(binary, leafs);
 
             // first ignore all that could be skipped, but then see if some nodes are left that could be skipped
-            var hasIssues = leafs.SkipWhile(_ => CanBeSkipped(_, context))
-                                 .Any(_ => CanBeSkipped(_, context));
-
-            if (hasIssues)
+            if (leafs.SkipWhile(_ => CanBeSkipped(_, context)).Any(_ => CanBeSkipped(_, context)))
             {
                 // seems we have a non-number that is ordered before, so we have to report that
                 return true;
