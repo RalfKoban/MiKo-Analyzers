@@ -21,6 +21,10 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeLogicalCondition, LogicalConditions);
 
+        private static bool IsElementAccess(ExpressionSyntax expression) => expression is BinaryExpressionSyntax binary && IsElementAccess(binary);
+
+        private static bool IsElementAccess(BinaryExpressionSyntax expression) => expression.Left.IsKind(SyntaxKind.ElementAccessExpression) || expression.Right.IsKind(SyntaxKind.ElementAccessExpression);
+
         private static bool IsNullCheck(BinaryExpressionSyntax expression) => expression.Left.IsKind(SyntaxKind.NullLiteralExpression) || expression.Right.IsKind(SyntaxKind.NullLiteralExpression);
 
         private static bool IsNullCheck(IsPatternExpressionSyntax expression)
@@ -148,9 +152,11 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 return true;
             }
 
-            // TODO RKN: it still might be that we have array access before number comparisons, so investigate that
-            //  ElementAccessExpressionSyntax -> do not report on element access
-            return false;
+            // it still might be that we have array access before number comparisons, so investigate that
+            // (note: as the element access nodes can be in between others, we have to sort them out
+            return leafs.SkipWhile(_ => IsElementAccess(_) is false) // jump over all non-element access leafs
+                        .SkipWhile(IsElementAccess) // now jump over all element access leafs
+                        .Any(_ => CanBeSkipped(_, context)); // now no leaf should be left, otherwise we have an issue
         }
 
         private void AnalyzeLogicalCondition(SyntaxNodeAnalysisContext context)
