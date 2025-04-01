@@ -2,6 +2,7 @@
 
 using NUnit.Framework;
 
+//// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers
 {
     [TestFixture]
