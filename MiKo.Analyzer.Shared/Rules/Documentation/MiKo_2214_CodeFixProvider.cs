@@ -22,7 +22,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return syntax.ReplaceNodes(texts, GetReplacements);
         }
 
-        private static bool IsEmptyLine(SyntaxToken token, SyntaxToken nextToken) => token.IsKind(SyntaxKind.XmlTextLiteralToken) && nextToken.IsKind(SyntaxKind.XmlTextLiteralNewLineToken) && token.ValueText.IsNullOrWhiteSpace();
+        private static bool IsEmptyLine(SyntaxToken token, SyntaxToken nextToken)
+        {
+            if (nextToken.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+            {
+                switch (token.Kind())
+                {
+                    case SyntaxKind.XmlTextLiteralToken:
+                        return token.ValueText.IsNullOrWhiteSpace();
+
+                    case SyntaxKind.XmlTextLiteralNewLineToken:
+                        return true;
+
+                    default:
+                        return false;
+                }
+            }
+
+            return false;
+        }
 
         private static bool HasIssue(XmlTextSyntax text)
         {
@@ -42,16 +60,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static IEnumerable<SyntaxNode> GetReplacements(XmlTextSyntax text)
         {
-            var tokens = text.TextTokens;
-
             var replacements = new List<SyntaxNode>();
-
             var tokensForTexts = new List<SyntaxToken>();
 
-            int i;
-            var tokensCount = tokens.Count;
-
             var noXmlTagOnCommentStart = false;
+
+            int i;
+            var tokens = text.TextTokens;
+            var tokensCount = tokens.Count;
 
             for (i = 0; i < tokensCount - 1; i++)
             {
@@ -116,7 +132,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             replacements.Add(XmlText(tokensForTexts));
 
                             // now add a <para/> tag
-                            replacements.Add(Para().WithLeadingXmlCommentExterior());
+                            if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken) && nextToken.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                            {
+                                replacements.Add(Para().WithLeadingXmlComment().WithTrailingNewLine());
+
+                                // skip the next token as that is the duplicated new line
+                                i++;
+                            }
+                            else
+                            {
+                                replacements.Add(Para().WithLeadingXmlCommentExterior());
+                            }
                         }
                     }
 
@@ -146,14 +172,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // Remove the last <para/> tag if it there is no more text available after it
             if (replacementsCount >= 3)
             {
-                if (replacements[replacementsCount - 1] is XmlTextSyntax t && t.TextTokens.All(_ => _.ValueText.IsNullOrWhiteSpace()) && replacements[replacementsCount - 2] is XmlEmptyElementSyntax e && e.IsPara())
+                if (replacements[replacementsCount - 1] is XmlTextSyntax t && t.TextTokens.All(_ => _.ValueText.IsNullOrWhiteSpace()))
                 {
-                    if (replacements[replacementsCount - 3] is XmlTextSyntax textBeforeParaNode)
+                    if (replacements[replacementsCount - 2] is XmlEmptyElementSyntax e && e.IsPara())
                     {
-                        replacements[replacementsCount - 3] = textBeforeParaNode.WithoutTrailingXmlComment();
-                    }
+                        if (replacements[replacementsCount - 3] is XmlTextSyntax textBeforeParaNode)
+                        {
+                            replacements[replacementsCount - 3] = textBeforeParaNode.WithoutTrailingXmlComment();
+                        }
 
-                    replacements.Remove(e);
+                        replacements.Remove(e);
+                    }
                 }
             }
 
