@@ -1,3 +1,6 @@
+# Remove the line below if you want to inherit .editorconfig settings from higher directories
+root = true
+
 [*.{cs,vb}]
 dotnet_diagnostic.IDE0100.severity = none # Remove unnecessary equality operator (IDE0100)
 
