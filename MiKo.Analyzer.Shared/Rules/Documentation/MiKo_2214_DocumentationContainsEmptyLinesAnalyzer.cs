@@ -46,6 +46,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                 results.Add(Issue(nextToken));
                             }
                         }
+                        else
+                        {
+                            if (i > 0 && currentToken.IsKind(SyntaxKind.XmlTextLiteralNewLineToken) && tokens[i - 1].IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                            {
+                                if (results is null)
+                                {
+                                    results = new List<Diagnostic>(1);
+                                }
+
+                                results.Add(Issue(currentToken));
+                            }
+                        }
                     }
                 }
             }
