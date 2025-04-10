@@ -65,10 +65,32 @@ public class TestMe
 }");
 
         [Test]
-        public void An_issue_is_reported_for_empty_line_at_middle_of_comment() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_empty_line_at_middle_of_comment_without_space() => An_issue_is_reported_for(@"
+/// <summary>
+/// Some summary.
+///
+/// Some more summary.
+/// </summary>
+public class TestMe
+{
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_empty_line_at_middle_of_comment_with_single_space() => An_issue_is_reported_for(@"
 /// <summary>
 /// Some summary.
 /// 
+/// Some more summary.
+/// </summary>
+public class TestMe
+{
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_empty_line_at_middle_of_comment_with_multiple_spaces() => An_issue_is_reported_for(@"
+/// <summary>
+/// Some summary.
+///    
 /// Some more summary.
 /// </summary>
 public class TestMe
@@ -179,12 +201,64 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_empty_line_at_middle_of_comment()
+        public void Code_gets_fixed_for_empty_line_at_middle_of_comment_without_space()
+        {
+            const string OriginalCode = @"
+/// <summary>
+/// Some summary.
+///
+/// Some more summary.
+/// </summary>
+public class TestMe
+{
+}";
+
+            const string FixedCode = @"
+/// <summary>
+/// Some summary.
+/// <para/>
+/// Some more summary.
+/// </summary>
+public class TestMe
+{
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_empty_line_at_middle_of_comment_with_single_space()
         {
             const string OriginalCode = @"
 /// <summary>
 /// Some summary.
 /// 
+/// Some more summary.
+/// </summary>
+public class TestMe
+{
+}";
+
+            const string FixedCode = @"
+/// <summary>
+/// Some summary.
+/// <para/>
+/// Some more summary.
+/// </summary>
+public class TestMe
+{
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_empty_line_at_middle_of_comment_with_multiple_spaces()
+        {
+            const string OriginalCode = @"
+/// <summary>
+/// Some summary.
+///    
 /// Some more summary.
 /// </summary>
 public class TestMe
