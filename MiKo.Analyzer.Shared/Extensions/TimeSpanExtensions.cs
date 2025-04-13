@@ -9,6 +9,6 @@ namespace System
     internal static class TimeSpanExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TimeSpan Milliseconds(this int value) => TimeSpan.FromMilliseconds(value);
+        public static TimeSpan Milliseconds(this in int value) => TimeSpan.FromMilliseconds(value);
     }
 }

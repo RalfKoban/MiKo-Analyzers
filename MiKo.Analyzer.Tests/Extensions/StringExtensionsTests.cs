@@ -8,8 +8,9 @@ namespace MiKoSolutions.Analyzers.Extensions
     [TestFixture]
     public static class StringExtensionsTests
     {
-        private const string LowerCaseCharacters = " abcdefghijklmnopqrstuvwxyz1234567890";
+        private const string LowerCaseCharacters = "abcdefghijklmnopqrstuvwxyz";
         private const string UpperCaseCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        private const string SpecialCases = " \t.?!;:,-1234567890";
 
         [TestCase(null, ExpectedResult = null)]
         [TestCase("", ExpectedResult = "")]
@@ -228,6 +229,9 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase("", 'a', " - ", 'b', ExpectedResult = "a - b")]
         [TestCase("Some", ' ', "", '!', ExpectedResult = "Some !")]
         public static string ConcatenatedWith_with_span_and_char_and_string_and_char_(string span, char c1, string s, char c2) => span.AsSpan().ConcatenatedWith(c1, s, c2);
+
+        [TestCaseSource(nameof(SpecialCases))]
+        public static void IsUpperCase_is_false_for_char_(char c) => Assert.That(c.IsUpperCase(), Is.False);
 
         [TestCaseSource(nameof(LowerCaseCharacters))]
         public static void IsUpperCase_is_false_for_(char c) => Assert.That(c.IsUpperCase(), Is.False);

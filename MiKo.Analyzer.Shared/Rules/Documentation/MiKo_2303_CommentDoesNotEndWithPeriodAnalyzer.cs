@@ -15,9 +15,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool CommentHasIssue(ReadOnlySpan<char> comment, SemanticModel semanticModel) => DocumentationComment.EndsWithPeriod(comment);
+        protected override bool CommentHasIssue(in ReadOnlySpan<char> comment, SemanticModel semanticModel) => DocumentationComment.EndsWithPeriod(comment);
 
-        protected override IEnumerable<Diagnostic> CollectIssues(string name, SyntaxTrivia trivia)
+        protected override IEnumerable<Diagnostic> CollectIssues(string name, in SyntaxTrivia trivia)
         {
             return new[] { Issue(name, GetLastLocation(trivia, '.')) };
         }

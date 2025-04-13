@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static bool IsProperlyNamed(ISymbol symbol) => symbol.Name.EndsWith(CorrectSuffix, StringComparison.Ordinal);
 
-        private static ReadOnlySpan<char> GetNameWithoutSuffix(ReadOnlySpan<char> name)
+        private static ReadOnlySpan<char> GetNameWithoutSuffix(in ReadOnlySpan<char> name)
         {
             if (name.EndsWith(Arg, StringComparison.Ordinal))
             {
@@ -77,7 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return name;
         }
 
-        private static ReadOnlySpan<char> GetNameWithoutSuffixes(ReadOnlySpan<char> name, params string[] phrases)
+        private static ReadOnlySpan<char> GetNameWithoutSuffixes(in ReadOnlySpan<char> name, params string[] phrases)
         {
             foreach (var phrase in phrases)
             {

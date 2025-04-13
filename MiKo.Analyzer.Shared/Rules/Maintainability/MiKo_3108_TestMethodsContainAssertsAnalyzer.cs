@@ -77,7 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return true;
         }
 
-        private static bool ContainsAssertion(ITypeSymbol type, Compilation compilation, InvocationExpressionSyntax invocation, int nestingLevel)
+        private static bool ContainsAssertion(ITypeSymbol type, Compilation compilation, InvocationExpressionSyntax invocation, in int nestingLevel)
         {
             var name = invocation.GetName();
 

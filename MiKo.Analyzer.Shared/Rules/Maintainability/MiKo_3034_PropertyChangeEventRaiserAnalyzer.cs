@@ -68,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return Array.Empty<Diagnostic>();
         }
 
-        private Diagnostic[] AnalyzeParameter(string propertyName, ImmutableArray<IParameterSymbol> parameters)
+        private Diagnostic[] AnalyzeParameter(string propertyName, in ImmutableArray<IParameterSymbol> parameters)
         {
             // TODO: RKN
             // x - get parent invocation

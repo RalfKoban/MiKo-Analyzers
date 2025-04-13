@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeArrayCreationNode(SyntaxNode node, SyntaxNodeAnalysisContext context)
+        private IEnumerable<Diagnostic> AnalyzeArrayCreationNode(SyntaxNode node, in SyntaxNodeAnalysisContext context)
         {
             switch (node)
             {

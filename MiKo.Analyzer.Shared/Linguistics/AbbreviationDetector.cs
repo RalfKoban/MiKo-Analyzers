@@ -353,7 +353,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return FindCore(value.Without(AllowedParts).AsSpan());
         }
 
-        internal static string ReplaceAllAbbreviations(string value, ReadOnlySpan<Pair> findings)
+        internal static string ReplaceAllAbbreviations(string value, in ReadOnlySpan<Pair> findings)
         {
             if (findings.Length > 0)
             {
@@ -363,7 +363,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return value;
         }
 
-        internal static StringBuilder ReplaceAllAbbreviations(StringBuilder value, ReadOnlySpan<Pair> findings)
+        internal static StringBuilder ReplaceAllAbbreviations(StringBuilder value, in ReadOnlySpan<Pair> findings)
         {
             if (findings.Length > 0)
             {
@@ -388,7 +388,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         }
 
         //// ncrunch: rdi off
-        private static ReadOnlySpan<Pair> FindCore(ReadOnlySpan<char> valueSpan)
+        private static ReadOnlySpan<Pair> FindCore(in ReadOnlySpan<char> valueSpan)
         {
             var result = new HashSet<Pair>(KeyEqualityComparer.Instance);
 
@@ -444,19 +444,19 @@ namespace MiKoSolutions.Analyzers.Linguistics
 //// ncrunch: rdi default
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool IndicatesNewWord(ref char c) => c.IsUpperCase() || c == Constants.Underscore;
+        private static bool IndicatesNewWord(in char c) => c.IsUpperCase() || c == Constants.Underscore;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool CompleteTermHasIssue(ReadOnlySpan<char> key, ReadOnlySpan<char> value) => key.SequenceEqual(value);
+        private static bool CompleteTermHasIssue(in ReadOnlySpan<char> key, in ReadOnlySpan<char> value) => key.SequenceEqual(value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool PrefixHasIssue(ReadOnlySpan<char> key, ReadOnlySpan<char> value)
+        private static bool PrefixHasIssue(in ReadOnlySpan<char> key, in ReadOnlySpan<char> value)
         {
-            if (value.Length > key.Length)
-            {
-                var last = value[key.Length];
+            var keyLength = key.Length;
 
-                if (IndicatesNewWord(ref last) && value.StartsWith(key, StringComparison.Ordinal))
+            if (value.Length > keyLength)
+            {
+                if (IndicatesNewWord(value[keyLength]) && value.StartsWith(key, StringComparison.Ordinal))
                 {
                     return true;
                 }
@@ -466,9 +466,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool PostFixHasIssue(ReadOnlySpan<char> key, ReadOnlySpan<char> value) => value.EndsWith(key, StringComparison.Ordinal) && value.EndsWithAny(AllowedPostFixTerms, StringComparison.Ordinal) is false;
+        private static bool PostFixHasIssue(in ReadOnlySpan<char> key, in ReadOnlySpan<char> value) => value.EndsWith(key, StringComparison.Ordinal) && value.EndsWithAny(AllowedPostFixTerms, StringComparison.Ordinal) is false;
 
-        private static bool MidTermHasIssue(ReadOnlySpan<char> key, ReadOnlySpan<char> value)
+        private static bool MidTermHasIssue(in ReadOnlySpan<char> key, in ReadOnlySpan<char> value)
         {
             var index = 0;
 
@@ -488,9 +488,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
                 if (positionAfterCharacter < value.Length)
                 {
-                    var charAfter = value[positionAfterCharacter];
-
-                    if (IndicatesNewWord(ref charAfter))
+                    if (IndicatesNewWord(value[positionAfterCharacter]))
                     {
                         if (key[0].IsUpperCase())
                         {
@@ -501,9 +499,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
                         if (positionBeforeText >= 0)
                         {
-                            var charBefore = value[positionBeforeText];
-
-                            if (IndicatesNewWord(ref charBefore))
+                            if (IndicatesNewWord(value[positionBeforeText]))
                             {
                                 return true;
                             }

@@ -63,7 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return updatedRoot;
         }
 
-        private static SyntaxList<XmlNodeSyntax> GetUpdatedXmlContent(SyntaxList<XmlNodeSyntax> originalContent, XmlElementSyntax issue)
+        private static SyntaxList<XmlNodeSyntax> GetUpdatedXmlContent(in SyntaxList<XmlNodeSyntax> originalContent, XmlElementSyntax issue)
         {
             var content = originalContent.ToList();
             var index = content.IndexOf(issue);

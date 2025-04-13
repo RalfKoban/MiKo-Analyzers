@@ -69,7 +69,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return SyntaxFactory.XmlElement(Constants.XmlTag.C, XmlText(text).ToSyntaxList<XmlNodeSyntax>());
         }
 
-        protected static XmlElementSyntax Comment(XmlElementSyntax comment, SyntaxList<XmlNodeSyntax> content)
+        protected static XmlElementSyntax Comment(XmlElementSyntax comment, in SyntaxList<XmlNodeSyntax> content)
         {
             var result = comment.WithStartTag(comment.StartTag.WithoutLeadingTrivia().WithTrailingXmlComment())
                                 .WithContent(content)
@@ -85,14 +85,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, text[0], additionalComment);
         }
 
-        protected static XmlElementSyntax Comment(XmlElementSyntax comment, string[] text, SyntaxList<XmlNodeSyntax> additionalComment)
+        protected static XmlElementSyntax Comment(XmlElementSyntax comment, string[] text, in SyntaxList<XmlNodeSyntax> additionalComment)
         {
             return Comment(comment, text[0], additionalComment);
         }
 
 //// ncrunch: rdi off
 
-        protected static XmlElementSyntax Comment(XmlElementSyntax comment, string text, SyntaxList<XmlNodeSyntax> additionalComment)
+        protected static XmlElementSyntax Comment(XmlElementSyntax comment, string text, in SyntaxList<XmlNodeSyntax> additionalComment)
         {
             var end = CommentEnd(text, additionalComment.ToArray());
 
@@ -104,18 +104,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, XmlText(text + additionalComment));
         }
 
-        protected static XmlElementSyntax Comment(XmlElementSyntax syntax, string[] terms, ReadOnlySpan<Pair> replacementMap, FirstWordHandling firstWordHandling = FirstWordHandling.KeepLeadingSpace)
+        protected static XmlElementSyntax Comment(XmlElementSyntax syntax, string[] terms, in ReadOnlySpan<Pair> replacementMap, in FirstWordHandling firstWordHandling = FirstWordHandling.KeepLeadingSpace)
         {
             var result = Comment<XmlElementSyntax>(syntax, terms, replacementMap, firstWordHandling);
 
             return CombineTexts(result);
         }
 
-        protected static T Comment<T>(T syntax, string[] terms, ReadOnlySpan<Pair> replacementMap, FirstWordHandling firstWordHandling = FirstWordHandling.KeepLeadingSpace) where T : SyntaxNode
+        protected static T Comment<T>(T syntax, string[] terms, in ReadOnlySpan<Pair> replacementMap, in FirstWordHandling firstWordHandling = FirstWordHandling.KeepLeadingSpace) where T : SyntaxNode
         {
             var minimumLength = MinLength(terms);
 
-            var textMap = CreateReplacementTextMap(minimumLength, terms, replacementMap);
+            var textMap = CreateReplacementTextMap(minimumLength, terms, replacementMap, firstWordHandling);
 
             if (textMap is null)
             {
@@ -152,7 +152,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return minimum;
             }
 
-            Dictionary<XmlTextSyntax, XmlTextSyntax> CreateReplacementTextMap(int minLength, string[] phrases, ReadOnlySpan<Pair> map)
+            Dictionary<XmlTextSyntax, XmlTextSyntax> CreateReplacementTextMap(in int minLength, string[] phrases, in ReadOnlySpan<Pair> map, in FirstWordHandling handling)
             {
                 Dictionary<XmlTextSyntax, XmlTextSyntax> result = null;
 
@@ -187,7 +187,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         {
                             var replacedText = originalText.AsCachedBuilder()
                                                            .ReplaceAllWithCheck(map)
-                                                           .AdjustFirstWord(firstWordHandling)
+                                                           .AdjustFirstWord(handling)
                                                            .ToStringAndRelease();
 
                             if (originalText.Equals(replacedText, StringComparison.Ordinal))
@@ -240,7 +240,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                               string commentStart,
                                               XmlNodeSyntax link,
                                               string commentEnd,
-                                              SyntaxList<XmlNodeSyntax> commendEndNodes)
+                                              in SyntaxList<XmlNodeSyntax> commendEndNodes)
         {
             return Comment(comment, commentStart, link, commentEnd, commendEndNodes.ToArray());
         }
@@ -373,19 +373,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string[] phrases, FirstWordHandling firstWordHandling = FirstWordHandling.MakeLowerCase)
+        protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string[] phrases, in FirstWordHandling firstWordHandling = FirstWordHandling.MakeLowerCase)
         {
             return CommentStartingWith(comment, phrases[0], firstWordHandling);
         }
 
-        protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string phrase, FirstWordHandling firstWordHandling = FirstWordHandling.MakeLowerCase)
+        protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string phrase, in FirstWordHandling firstWordHandling = FirstWordHandling.MakeLowerCase)
         {
             var content = CommentStartingWith(comment.Content, phrase, firstWordHandling);
 
             return CommentWithContent(comment, content);
         }
 
-        protected static SyntaxList<XmlNodeSyntax> CommentStartingWith(SyntaxList<XmlNodeSyntax> content, string phrase, FirstWordHandling firstWordHandling = FirstWordHandling.MakeLowerCase)
+        protected static SyntaxList<XmlNodeSyntax> CommentStartingWith(SyntaxList<XmlNodeSyntax> content, string phrase, in FirstWordHandling firstWordHandling = FirstWordHandling.MakeLowerCase)
         {
             // when necessary adjust beginning text
             // Note: when on new line, then the text is not the 1st one but the 2nd one
@@ -469,7 +469,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return CommentWithContent(comment, newContent);
         }
 
-        protected static XmlElementSyntax CommentWithContent(XmlElementSyntax value, SyntaxList<XmlNodeSyntax> content) => SyntaxFactory.XmlElement(value.StartTag, content, value.EndTag).WithTagsOnSeparateLines();
+        protected static XmlElementSyntax CommentWithContent(XmlElementSyntax value, in SyntaxList<XmlNodeSyntax> content) => SyntaxFactory.XmlElement(value.StartTag, content, value.EndTag).WithTagsOnSeparateLines();
 
         protected static XmlEmptyElementSyntax Cref(string tag, TypeSyntax type)
         {
@@ -552,7 +552,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return text;
         }
 
-        protected static string MakeFirstWordInfiniteVerb(string text, FirstWordHandling handling = FirstWordHandling.None)
+        protected static string MakeFirstWordInfiniteVerb(string text, in FirstWordHandling handling = FirstWordHandling.None)
         {
             if (text.IsNullOrWhiteSpace())
             {
@@ -562,7 +562,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return MakeFirstWordInfiniteVerb(text.AsSpan(), handling);
         }
 
-        protected static string MakeFirstWordInfiniteVerb(ReadOnlySpan<char> text, FirstWordHandling handling = FirstWordHandling.None)
+        protected static string MakeFirstWordInfiniteVerb(in ReadOnlySpan<char> text, in FirstWordHandling firstWordHandling = FirstWordHandling.None)
         {
             if (text.IsNullOrWhiteSpace())
             {
@@ -579,7 +579,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             // first word
-            var firstWord = GetFirstWord(valueText);
+            var firstWord = GetFirstWord(valueText, firstWordHandling);
 
             var infiniteVerb = Verbalizer.MakeInfiniteVerb(firstWord);
 
@@ -590,7 +590,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return text.ToString();
 
-            string GetFirstWord(ReadOnlySpan<char> span)
+            string GetFirstWord(in ReadOnlySpan<char> span, in FirstWordHandling handling)
             {
                 var word = span.FirstWord();
 
@@ -608,7 +608,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlElementSyntax Para(string text) => SyntaxFactory.XmlParaElement(XmlText(text));
 
-        protected static XmlElementSyntax Para(SyntaxList<XmlNodeSyntax> nodes) => SyntaxFactory.XmlParaElement(nodes);
+        protected static XmlElementSyntax Para(in SyntaxList<XmlNodeSyntax> nodes) => SyntaxFactory.XmlParaElement(nodes);
 
         protected static XmlElementSyntax ParameterComment(ParameterSyntax parameter, string[] comments) => ParameterComment(parameter, comments[0]);
 
@@ -763,11 +763,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlTextSyntax TrailingNewLineXmlText() => XmlText(string.Empty).WithTrailingXmlComment();
 
-        protected static XmlTextSyntax XmlText(ReadOnlySpan<char> text) => XmlText(text.ToString());
+        protected static XmlTextSyntax XmlText(in ReadOnlySpan<char> text) => XmlText(text.ToString());
 
         protected static XmlTextSyntax XmlText(string text) => SyntaxFactory.XmlText(text);
 
-        protected static XmlTextSyntax XmlText(SyntaxTokenList textTokens)
+        protected static XmlTextSyntax XmlText(in SyntaxTokenList textTokens)
         {
             if (textTokens.Count == 0)
             {
@@ -833,7 +833,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static XmlEmptyElementSyntax Cref(string tag, CrefSyntax syntax) => XmlEmptyElement(tag).WithAttribute(SyntaxFactory.XmlCrefAttribute(syntax));
 
-        private static int GetIndex(SyntaxList<XmlNodeSyntax> content)
+        private static int GetIndex(in SyntaxList<XmlNodeSyntax> content)
         {
             if (content.Count == 0)
             {

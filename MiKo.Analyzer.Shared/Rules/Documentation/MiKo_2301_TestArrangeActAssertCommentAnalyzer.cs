@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool IsUnitTestAnalyzer => true;
 
-        internal static bool CommentContainsArrangeActAssert(ReadOnlySpan<char> comment) => comment.StartsWithAny(Phrases, StringComparison.OrdinalIgnoreCase);
+        internal static bool CommentContainsArrangeActAssert(in ReadOnlySpan<char> comment) => comment.StartsWithAny(Phrases, StringComparison.OrdinalIgnoreCase);
 
         protected override bool ShallAnalyze(IMethodSymbol symbol)
         {
@@ -47,6 +47,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return symbol.IsTestMethod() || symbol.ContainingType.IsTestClass();
         }
 
-        protected override bool CommentHasIssue(ReadOnlySpan<char> comment, SemanticModel semanticModel) => CommentContainsArrangeActAssert(comment);
+        protected override bool CommentHasIssue(in ReadOnlySpan<char> comment, SemanticModel semanticModel) => CommentContainsArrangeActAssert(comment);
     }
 }

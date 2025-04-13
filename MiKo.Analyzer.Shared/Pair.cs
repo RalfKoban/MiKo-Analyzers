@@ -18,9 +18,9 @@ namespace System
             Value = value;
         }
 
-        public static bool operator ==(Pair left, Pair right) => left.Equals(right);
+        public static bool operator ==(in Pair left, in Pair right) => left.Equals(right);
 
-        public static bool operator !=(Pair left, Pair right) => left.Equals(right) is false;
+        public static bool operator !=(in Pair left, in Pair right) => left.Equals(right) is false;
 
         public bool Equals(Pair other) => Key.AsSpan().SequenceEqual(other.Key.AsSpan()) && Value.AsSpan().SequenceEqual(other.Value.AsSpan());
 

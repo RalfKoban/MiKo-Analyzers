@@ -62,7 +62,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return base.GetUpdatedSyntax(document, syntax, issue);
         }
 
-        private static ExpressionSyntax GetUpdatedCondition(ExpressionSyntax expression, string name, SyntaxKind expressionKind, LiteralExpressionSyntax literal)
+        private static ExpressionSyntax GetUpdatedCondition(ExpressionSyntax expression, string name, in SyntaxKind expressionKind, LiteralExpressionSyntax literal)
         {
             var operand = SimpleMemberAccess(expression, name);
 

@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeExpression, SyntaxKinds);
 
-        private static bool IsViolation(SyntaxNodeAnalysisContext context, SyntaxNode parent)
+        private static bool IsViolation(in SyntaxNodeAnalysisContext context, SyntaxNode parent)
         {
             if (parent.Parent is InvocationExpressionSyntax)
             {
@@ -75,7 +75,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private void ReportIssue(SyntaxNodeAnalysisContext context, SyntaxNode node)
+        private void ReportIssue(in SyntaxNodeAnalysisContext context, SyntaxNode node)
         {
             var problematicNode = node is MemberAccessExpressionSyntax maes
                                   ? maes.Name

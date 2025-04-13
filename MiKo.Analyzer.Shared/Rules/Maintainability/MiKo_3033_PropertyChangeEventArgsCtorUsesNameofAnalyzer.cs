@@ -68,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static bool NameofHasIssue(SyntaxNode node, SeparatedSyntaxList<ArgumentSyntax> arguments, SemanticModel semanticModel)
+        private static bool NameofHasIssue(SyntaxNode node, in SeparatedSyntaxList<ArgumentSyntax> arguments, SemanticModel semanticModel)
         {
             // it might happen that the code is currently being written so there might not yet exist a specific property name
             var a = arguments.Select(_ => _.Expression).OfType<IdentifierNameSyntax>().FirstOrDefault();

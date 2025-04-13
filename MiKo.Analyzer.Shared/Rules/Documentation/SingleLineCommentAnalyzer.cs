@@ -34,9 +34,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             context.RegisterSyntaxNodeAction(AnalyzeComment, SyntaxKind.EventFieldDeclaration);
         }
 
-        protected abstract bool CommentHasIssue(ReadOnlySpan<char> comment, SemanticModel semanticModel);
+        protected abstract bool CommentHasIssue(in ReadOnlySpan<char> comment, SemanticModel semanticModel);
 
-        protected virtual bool CommentHasIssue(SyntaxTrivia trivia, SemanticModel semanticModel)
+        protected virtual bool CommentHasIssue(in SyntaxTrivia trivia, SemanticModel semanticModel)
         {
             var comment = trivia.ToFullString()
                                 .AsSpan()
@@ -46,11 +46,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return CommentHasIssue(comment, semanticModel);
         }
 
-        protected virtual IEnumerable<Diagnostic> CollectIssues(string name, SyntaxTrivia trivia) => new[] { Issue(name, trivia) };
+        protected virtual IEnumerable<Diagnostic> CollectIssues(string name, in SyntaxTrivia trivia) => new[] { Issue(name, trivia) };
 
         protected virtual bool ShallAnalyze(IMethodSymbol symbol) => true;
 
-        protected virtual bool ShallAnalyze(SyntaxTrivia trivia) => trivia.IsSingleLineComment();
+        protected virtual bool ShallAnalyze(in SyntaxTrivia trivia) => trivia.IsSingleLineComment();
 
         private void AnalyzeComment(SyntaxNodeAnalysisContext context)
         {
@@ -76,7 +76,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private void AnalyzeComment(SyntaxNodeAnalysisContext context, BaseMethodDeclarationSyntax node)
+        private void AnalyzeComment(in SyntaxNodeAnalysisContext context, BaseMethodDeclarationSyntax node)
         {
             var issues = AnalyzeCommentTrivia(node, context.SemanticModel);
 
@@ -86,7 +86,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private void AnalyzeComment(SyntaxNodeAnalysisContext context, BaseFieldDeclarationSyntax node)
+        private void AnalyzeComment(in SyntaxNodeAnalysisContext context, BaseFieldDeclarationSyntax node)
         {
             var issues = AnalyzeCommentTrivia(node, context.SemanticModel);
 
@@ -96,7 +96,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private void AnalyzeComment(SyntaxNodeAnalysisContext context, AccessorDeclarationSyntax node)
+        private void AnalyzeComment(in SyntaxNodeAnalysisContext context, AccessorDeclarationSyntax node)
         {
             var issues = AnalyzeCommentTrivia(node, context.SemanticModel);
 
@@ -106,7 +106,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private bool AnalyzeComment(SyntaxTrivia trivia, SemanticModel semanticModel)
+        private bool AnalyzeComment(in SyntaxTrivia trivia, SemanticModel semanticModel)
         {
             if (IgnoreMultipleLines && trivia.IsSpanningMultipleLines())
             {

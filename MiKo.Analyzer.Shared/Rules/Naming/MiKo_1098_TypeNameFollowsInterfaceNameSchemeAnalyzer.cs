@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        private static List<string> CollectNames(ImmutableArray<INamedTypeSymbol> directlyImplementedInterfaces)
+        private static List<string> CollectNames(in ImmutableArray<INamedTypeSymbol> directlyImplementedInterfaces)
         {
             var names = new List<string>();
 
