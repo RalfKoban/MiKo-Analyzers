@@ -270,7 +270,7 @@ namespace System.Text
             {
                 var oldValue = texts[index];
 
-                if (oldValue.IsNullOrEmpty())
+                if (string.IsNullOrEmpty(oldValue))
                 {
                     // cannot replace any empty value
                     continue;
@@ -564,13 +564,28 @@ namespace System.Text
 
         public static StringBuilder WithoutMultipleWhiteSpaces(this StringBuilder value) => value.ReplaceAllWithCheck(Constants.Comments.MultiWhitespaceStrings, Constants.Comments.SingleWhitespaceString); // ncrunch: no coverage
 
-        public static StringBuilder WithoutNewLines(this StringBuilder value) => value.Without('\r').Without('\n'); // ncrunch: no coverage
+        public static StringBuilder WithoutNewLines(this StringBuilder value) => value.Without('\r', '\n'); // ncrunch: no coverage
 
         public static StringBuilder Without(this StringBuilder value, in char c)
         {
             for (var position = value.Length - 1; position > -1; position--)
             {
                 if (value[position] == c)
+                {
+                    value.Remove(position, 1);
+                }
+            }
+
+            return value;
+        }
+
+        public static StringBuilder Without(this StringBuilder value, in char c1, in char c2)
+        {
+            for (var position = value.Length - 1; position > -1; position--)
+            {
+                var c = value[position];
+
+                if (c == c1 || c == c2)
                 {
                     value.Remove(position, 1);
                 }
