@@ -135,7 +135,7 @@ public enum TestMe
         [TestCase(3, ExpectedResult = 8)]
         [TestCase(4, ExpectedResult = 16)]
         [TestCase(5, ExpectedResult = 32)]
-        public int Left_shifting_One_leads_to_correct_value_for_(int i) => 1 << i;
+        public int Left_shifting_One_leads_to_correct_value_for_(in int i) => 1 << i;
 
         protected override string GetDiagnosticId() => MiKo_3078_EnumMembersHaveValueAnalyzer.Id;
 

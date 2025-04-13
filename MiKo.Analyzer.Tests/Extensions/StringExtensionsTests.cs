@@ -136,13 +136,13 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase('-', "", ExpectedResult = "-")]
         [TestCase(' ', " with more ", ExpectedResult = "  with more ")]
         [TestCase('-', " with more ", ExpectedResult = "- with more ")]
-        public static string ConcatenatedWith_with_char_and_string_(char c, string s) => c.ConcatenatedWith(s);
+        public static string ConcatenatedWith_with_char_and_string_(in char c, string s) => c.ConcatenatedWith(s);
 
         [TestCase(' ', "", ExpectedResult = " ")]
         [TestCase('-', "", ExpectedResult = "-")]
         [TestCase(' ', " with more ", ExpectedResult = "  with more ")]
         [TestCase('-', " with more ", ExpectedResult = "- with more ")]
-        public static string ConcatenatedWith_with_char_and_span_(char c, string s) => c.ConcatenatedWith(s.AsSpan());
+        public static string ConcatenatedWith_with_char_and_span_(in char c, string s) => c.ConcatenatedWith(s.AsSpan());
 
         [TestCase("", " text ", ExpectedResult = " text ")]
         [TestCase(" Some ", " text ", ExpectedResult = " Some  text ")]
@@ -153,13 +153,13 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase("", '-', ExpectedResult = "-")]
         [TestCase("some start", ' ', ExpectedResult = "some start ")]
         [TestCase("some start ", '-', ExpectedResult = "some start -")]
-        public static string ConcatenatedWith_with_string_and_char_(string s, char c) => s.ConcatenatedWith(c);
+        public static string ConcatenatedWith_with_string_and_char_(string s, in char c) => s.ConcatenatedWith(c);
 
         [TestCase("", ' ', ExpectedResult = " ")]
         [TestCase("", '-', ExpectedResult = "-")]
         [TestCase("some start", ' ', ExpectedResult = "some start ")]
         [TestCase("some start ", '-', ExpectedResult = "some start -")]
-        public static string ConcatenatedWith_with_span_and_char_(string s, char c) => s.AsSpan().ConcatenatedWith(c);
+        public static string ConcatenatedWith_with_span_and_char_(string s, in char c) => s.AsSpan().ConcatenatedWith(c);
 
         [TestCase("", " text ", ExpectedResult = " text ")]
         [TestCase(" Some ", " text ", ExpectedResult = " Some  text ")]
@@ -171,25 +171,25 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase('-', "", 'a', ExpectedResult = "-a")]
         [TestCase(' ', " with more ", '-', ExpectedResult = "  with more -")]
         [TestCase('-', " with more ", ' ', ExpectedResult = "- with more  ")]
-        public static string ConcatenatedWith_with_char_and_string_and_char_(char c1, string s, char c2) => c1.ConcatenatedWith(s, c2);
+        public static string ConcatenatedWith_with_char_and_string_and_char_(in char c1, string s, in char c2) => c1.ConcatenatedWith(s, c2);
 
         [TestCase(' ', "", '-', ExpectedResult = " -")]
         [TestCase('-', "", ' ', ExpectedResult = "- ")]
         [TestCase('-', "", 'a', ExpectedResult = "-a")]
         [TestCase(' ', " with more ", '-', ExpectedResult = "  with more -")]
         [TestCase('-', " with more ", ' ', ExpectedResult = "- with more  ")]
-        public static string ConcatenatedWith_with_char_and_span_and_char_(char c1, string s, char c2) => c1.ConcatenatedWith(s.AsSpan(), c2);
+        public static string ConcatenatedWith_with_char_and_span_and_char_(in char c1, string s, in char c2) => c1.ConcatenatedWith(s.AsSpan(), c2);
 
         [TestCase(' ', "", "some", ExpectedResult = " some")]
         [TestCase('-', "", " ", ExpectedResult = "- ")]
         [TestCase('-', "", "", ExpectedResult = "-")]
         [TestCase(' ', " with more ", "values", ExpectedResult = "  with more values")]
         [TestCase('-', " with more ", "values", ExpectedResult = "- with more values")]
-        public static string ConcatenatedWith_with_char_and_string_and_span_(char c, string s, string span) => c.ConcatenatedWith(s, span.AsSpan());
+        public static string ConcatenatedWith_with_char_and_string_and_span_(in char c, string s, string span) => c.ConcatenatedWith(s, span.AsSpan());
 
         [TestCase(" Some ", ' ', " with more ", ExpectedResult = " Some   with more ")]
         [TestCase(" Some ", '-', " with more ", ExpectedResult = " Some - with more ")]
-        public static string ConcatenatedWith_with_span_and_char_and_string_(string span, char c, string s) => span.AsSpan().ConcatenatedWith(c, s);
+        public static string ConcatenatedWith_with_span_and_char_and_string_(string span, in char c, string s) => span.AsSpan().ConcatenatedWith(c, s);
 
         [TestCase(" Some ", "", " with more ", ExpectedResult = " Some  with more ")]
         [TestCase(" Some ", " text ", " with more ", ExpectedResult = " Some  text  with more ")]
@@ -215,7 +215,7 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase(" Some ", "", '.', ExpectedResult = " Some .")]
         [TestCase(" Some ", " text ", '.', ExpectedResult = " Some  text .")]
         [TestCase("", "", '.', ExpectedResult = ".")]
-        public static string ConcatenatedWith_with_string_and_span_and_char_(string s, string span, char c) => s.ConcatenatedWith(span.AsSpan(), c);
+        public static string ConcatenatedWith_with_string_and_span_and_char_(string s, string span, in char c) => s.ConcatenatedWith(span.AsSpan(), c);
 
         [TestCase(" Some ", "", " with more ", ExpectedResult = " Some  with more ")]
         [TestCase(" Some ", " text ", " with more ", ExpectedResult = " Some  text  with more ")]
@@ -228,27 +228,27 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase("", 'a', "", 'b', ExpectedResult = "ab")]
         [TestCase("", 'a', " - ", 'b', ExpectedResult = "a - b")]
         [TestCase("Some", ' ', "", '!', ExpectedResult = "Some !")]
-        public static string ConcatenatedWith_with_span_and_char_and_string_and_char_(string span, char c1, string s, char c2) => span.AsSpan().ConcatenatedWith(c1, s, c2);
+        public static string ConcatenatedWith_with_span_and_char_and_string_and_char_(string span, in char c1, string s, in char c2) => span.AsSpan().ConcatenatedWith(c1, s, c2);
 
         [TestCaseSource(nameof(SpecialCases))]
-        public static void IsUpperCase_is_false_for_char_(char c) => Assert.That(c.IsUpperCase(), Is.False);
+        public static void IsUpperCase_is_false_for_char_(in char c) => Assert.That(c.IsUpperCase(), Is.False);
 
         [TestCaseSource(nameof(LowerCaseCharacters))]
-        public static void IsUpperCase_is_false_for_(char c) => Assert.That(c.IsUpperCase(), Is.False);
+        public static void IsUpperCase_is_false_for_(in char c) => Assert.That(c.IsUpperCase(), Is.False);
 
         [TestCaseSource(nameof(UpperCaseCharacters))]
-        public static void IsUpperCase_is_true_for_(char c) => Assert.That(c.IsUpperCase(), Is.True);
+        public static void IsUpperCase_is_true_for_(in char c) => Assert.That(c.IsUpperCase(), Is.True);
 
         [TestCaseSource(nameof(LowerCaseCharacters))]
-        public static void ToUpperCase_for_lower_case_(char c) => Assert.That(c.ToUpperCase(), Is.EqualTo(char.ToUpperInvariant(c)));
+        public static void ToUpperCase_for_lower_case_(in char c) => Assert.That(c.ToUpperCase(), Is.EqualTo(char.ToUpperInvariant(c)));
 
         [TestCaseSource(nameof(UpperCaseCharacters))]
-        public static void ToUpperCase_for_upper_case_(char c) => Assert.That(c.ToUpperCase(), Is.EqualTo(c));
+        public static void ToUpperCase_for_upper_case_(in char c) => Assert.That(c.ToUpperCase(), Is.EqualTo(c));
 
         [TestCaseSource(nameof(LowerCaseCharacters))]
-        public static void ToLowerCase_for_lower_case_(char c) => Assert.That(c.ToLowerCase(), Is.EqualTo(c));
+        public static void ToLowerCase_for_lower_case_(in char c) => Assert.That(c.ToLowerCase(), Is.EqualTo(c));
 
         [TestCaseSource(nameof(UpperCaseCharacters))]
-        public static void ToLowerCase_for_upper_case_(char c) => Assert.That(c.ToLowerCase(), Is.EqualTo(char.ToLowerInvariant(c)));
+        public static void ToLowerCase_for_upper_case_(in char c) => Assert.That(c.ToLowerCase(), Is.EqualTo(char.ToLowerInvariant(c)));
     }
 }

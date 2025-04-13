@@ -131,7 +131,7 @@ namespace TestHelper
         /// <returns>
         /// An array of Diagnostics that surfaced in the source code, sorted by Location.
         /// </returns>
-        protected static Diagnostic[] GetSortedDiagnosticsFromDocuments(ReadOnlySpan<DiagnosticAnalyzer> analyzers, ReadOnlySpan<Document> documents, bool profileAnalysis)
+        protected static Diagnostic[] GetSortedDiagnosticsFromDocuments(in ReadOnlySpan<DiagnosticAnalyzer> analyzers, in ReadOnlySpan<Document> documents, in bool profileAnalysis)
         {
             var projects = new HashSet<Project>();
 
@@ -198,7 +198,7 @@ namespace TestHelper
         /// <returns>
         /// A Document created from the source string.
         /// </returns>
-        protected static Document CreateDocument(string source, LanguageVersion languageVersion)
+        protected static Document CreateDocument(string source, in LanguageVersion languageVersion)
         {
             return CreateProject([source], languageVersion).Documents.First();
         }
@@ -221,7 +221,7 @@ namespace TestHelper
         /// <returns>
         /// An array of <see cref="Diagnostic"/>s that surfaced in the source code, sorted by <see cref="Diagnostic.Location"/>.
         /// </returns>
-        private static Diagnostic[] GetSortedDiagnostics(ReadOnlySpan<string> sources, LanguageVersion languageVersion, ReadOnlySpan<DiagnosticAnalyzer> analyzers, bool profileAnalysis)
+        private static Diagnostic[] GetSortedDiagnostics(in ReadOnlySpan<string> sources, in LanguageVersion languageVersion, in ReadOnlySpan<DiagnosticAnalyzer> analyzers, in bool profileAnalysis)
         {
             return GetSortedDiagnosticsFromDocuments(analyzers, GetDocuments(sources, languageVersion), profileAnalysis);
         }
@@ -252,7 +252,7 @@ namespace TestHelper
         /// <returns>
         /// The <see cref="Document"/>s produced from the sources.
         /// </returns>
-        private static Document[] GetDocuments(ReadOnlySpan<string> sources, LanguageVersion languageVersion)
+        private static Document[] GetDocuments(in ReadOnlySpan<string> sources, in LanguageVersion languageVersion)
         {
             var project = CreateProject(sources, languageVersion);
             var documents = project.Documents.ToArray();
@@ -277,7 +277,7 @@ namespace TestHelper
         /// <returns>
         /// A Project created out of the Documents created from the source strings.
         /// </returns>
-        private static Project CreateProject(ReadOnlySpan<string> sources, LanguageVersion languageVersion)
+        private static Project CreateProject(in ReadOnlySpan<string> sources, in LanguageVersion languageVersion)
         {
             var projectId = ProjectId.CreateNewId(debugName: TestProjectName);
             var projectInfo = ProjectInfo.Create(projectId, VersionStamp.Default, TestProjectName, TestProjectName, LanguageNames.CSharp, parseOptions: CSharpParseOptions.Default.WithLanguageVersion(languageVersion));
