@@ -334,7 +334,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return new ConcreteMapInfo(mappedDataValue.ReplacementMapForThe, mappedDataValue.ReplacementMapKeysForThe, mappedDataValue.UniqueReplacementMapKeysForThe);
                 }
 
-                if (text.StartsWith(StartWithParenthesis, StringComparison.OrdinalIgnoreCase))
+                if (text.StartsWith(StartWithParenthesis, StringComparison.Ordinal))
                 {
                     return new ConcreteMapInfo(mappedDataValue.ReplacementMapForParenthesis, mappedDataValue.ReplacementMapKeysForParenthesis, mappedDataValue.UniqueReplacementMapKeysForParenthesis);
                 }
@@ -720,7 +720,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     var condition = conditions[conditionIndex];
 
                     // we have lots of loops, so cache data to avoid unnecessary calculations
-                    var end = " " + condition + " "; // TODO RKN: Change string creation
+                    var end = condition.SurroundedWith(' '); // TODO RKN: Change string creation
 
                     // for performance reasons we use for loops here
                     for (var verbIndex = 0; verbIndex < verbsLength; verbIndex++)
@@ -828,7 +828,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return int.MaxValue;
             }
         }
-
 //// ncrunch: no coverage end
 //// ncrunch: rdi default
     }

@@ -41,6 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
 //// ncrunch: rdi off
+//// ncrunch: no coverage start
 
         private sealed class MapData
         {
@@ -335,7 +336,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             private static string[] CreateOtherReplacementMapKeys() => new[] { "Defines ", "Specifies ", "Use this ", "This " };
         }
-
-        //// ncrunch: rdi default
+//// ncrunch: no coverage end
+//// ncrunch: rdi default
     }
 }
