@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -338,6 +339,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                             "href",
                                                         };
 
+        private static readonly ConcurrentDictionary<string, string> AlreadyInspectedNames = new ConcurrentDictionary<string, string>();
+
         internal static ReadOnlySpan<Pair> Find(string value)
         {
             if (value is null)
@@ -350,7 +353,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return ReadOnlySpan<Pair>.Empty;
             }
 
-            return FindCore(value.Without(AllowedParts).AsSpan());
+            var name = AlreadyInspectedNames.GetOrAdd(value, _ => _.Without(AllowedParts));
+
+            return FindCore(name.AsSpan());
         }
 
         internal static string ReplaceAllAbbreviations(string value, in ReadOnlySpan<Pair> findings)
