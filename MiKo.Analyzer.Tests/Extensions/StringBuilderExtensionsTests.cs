@@ -136,5 +136,14 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase("SomeValueWithNumber1234InBetween", ExpectedResult = "Some_value_with_number_1234_in_between")]
         [TestCase("SomeValueWithNumber1234AfterWhatever", ExpectedResult = "Some_value_with_number_1234_after_whatever")]
         public static string SeparateWords_separates_words_at_underscores_(string s) => new StringBuilder(s).SeparateWords(Constants.Underscore).ToString();
+
+        [TestCase("", ExpectedResult = "")]
+        [TestCase(" ", ExpectedResult = " ")]
+        [TestCase("  ", ExpectedResult = " ")]
+        [TestCase("   ", ExpectedResult = " ")]
+        [TestCase("    ", ExpectedResult = " ")]
+        [TestCase("a    ", ExpectedResult = "a ")]
+        [TestCase("a    b", ExpectedResult = "a b")]
+        public static string WithoutMultipleWhiteSpaces_shortens_multiple_whitespaces_to_single(string s) => new StringBuilder(s).WithoutMultipleWhiteSpaces().ToString();
     }
 }
