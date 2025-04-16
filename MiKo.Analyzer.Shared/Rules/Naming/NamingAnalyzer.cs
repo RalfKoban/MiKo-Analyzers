@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     public abstract class NamingAnalyzer : Analyzer
     {
-        protected NamingAnalyzer(string diagnosticId, SymbolKind kind = SymbolKind.Method) : base(nameof(Naming), diagnosticId, kind)
+        protected NamingAnalyzer(string diagnosticId, in SymbolKind kind = SymbolKind.Method) : base(nameof(Naming), diagnosticId, kind)
         {
         }
 

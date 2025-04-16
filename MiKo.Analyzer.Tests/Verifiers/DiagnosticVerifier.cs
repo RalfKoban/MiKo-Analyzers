@@ -20,9 +20,9 @@ namespace TestHelper
     /// </summary>
     public abstract partial class DiagnosticVerifier
     {
-        private static readonly string[] Placeholders = Enumerable.Range(0, 10).Select(_ => "{" + _ + "}").ToArray();
+        private static readonly string[] Placeholders = [.. Enumerable.Range(0, 10).Select(_ => "{" + _ + "}")];
 
-        internal static Diagnostic[] GetDiagnostics(ReadOnlySpan<string> sources, LanguageVersion languageVersion, ReadOnlySpan<DiagnosticAnalyzer> analyzers, bool profileAnalysis) => GetSortedDiagnostics(sources, languageVersion, analyzers, profileAnalysis);
+        internal static Diagnostic[] GetDiagnostics(in ReadOnlySpan<string> sources, in LanguageVersion languageVersion, in ReadOnlySpan<DiagnosticAnalyzer> analyzers, in bool profileAnalysis) => GetSortedDiagnostics(sources, languageVersion, analyzers, profileAnalysis);
 
         /// <summary>
         /// Gets the CSharp analyzer being tested - to be implemented in non-abstract class.
@@ -40,7 +40,7 @@ namespace TestHelper
         /// </returns>
         protected virtual string GetDiagnosticId() => null;
 
-        protected void An_issue_is_reported_for(string fileContent, LanguageVersion languageVersion = LanguageVersion.Default) => An_issue_is_reported_for(1, fileContent, languageVersion);
+        protected void An_issue_is_reported_for(string fileContent, in LanguageVersion languageVersion = LanguageVersion.Default) => An_issue_is_reported_for(1, fileContent, languageVersion);
 
         protected void An_issue_is_reported_for(int violations, string fileContent, LanguageVersion languageVersion = LanguageVersion.Default)
         {
@@ -68,16 +68,16 @@ namespace TestHelper
                                  });
         }
 
-        protected void An_issue_is_reported_for_file_(string path, int violations, LanguageVersion languageVersion = LanguageVersion.Default) => An_issue_is_reported_for(violations, File.ReadAllText(path), languageVersion);
+        protected void An_issue_is_reported_for_file_(string path, in int violations, in LanguageVersion languageVersion = LanguageVersion.Default) => An_issue_is_reported_for(violations, File.ReadAllText(path), languageVersion);
 
-        protected void No_issue_is_reported_for(string fileContent, string message = null, LanguageVersion languageVersion = LanguageVersion.Default)
+        protected void No_issue_is_reported_for(string fileContent, string message = null, in LanguageVersion languageVersion = LanguageVersion.Default)
         {
             var results = GetDiagnostics(fileContent, languageVersion);
 
             Assert.That(results, Is.Empty, message ?? Environment.NewLine + string.Join(Environment.NewLine, results.Select(_ => _.Location + ":" + _)));
         }
 
-        protected void No_issue_is_reported_for_file_(string path, LanguageVersion languageVersion = LanguageVersion.Default) => No_issue_is_reported_for(File.ReadAllText(path), path, languageVersion);
+        protected void No_issue_is_reported_for_file_(string path, in LanguageVersion languageVersion = LanguageVersion.Default) => No_issue_is_reported_for(File.ReadAllText(path), path, languageVersion);
 
         protected void No_issue_is_reported_for_folder_(string path, LanguageVersion languageVersion = LanguageVersion.Default)
         {
@@ -176,7 +176,7 @@ namespace TestHelper
         /// <returns>
         /// An array of Diagnostics that surfaced in the source code, sorted by Location.
         /// </returns>
-        protected Diagnostic[] GetDiagnostics(string source, LanguageVersion languageVersion) => GetDiagnostics([source], languageVersion);
+        protected Diagnostic[] GetDiagnostics(string source, in LanguageVersion languageVersion) => GetDiagnostics([source], languageVersion);
 
         /// <summary>
         /// General method that gets a collection of actual diagnostics found in the source after the analyzer is run,
@@ -191,6 +191,6 @@ namespace TestHelper
         /// <returns>
         /// An array of Diagnostics that surfaced in the source code, sorted by Location.
         /// </returns>
-        private Diagnostic[] GetDiagnostics(ReadOnlySpan<string> sources, LanguageVersion languageVersion) => GetSortedDiagnostics(sources, languageVersion, [GetObjectUnderTest()], false);
+        private Diagnostic[] GetDiagnostics(in ReadOnlySpan<string> sources, in LanguageVersion languageVersion) => GetSortedDiagnostics(sources, languageVersion, [GetObjectUnderTest()], false);
     }
 }

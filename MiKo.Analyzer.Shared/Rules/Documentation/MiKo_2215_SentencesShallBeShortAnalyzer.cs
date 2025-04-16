@@ -73,7 +73,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return false;
         }
 
-        private static bool HasIssue(ReadOnlySpan<char> text)
+        private static bool HasIssue(in ReadOnlySpan<char> text)
         {
             foreach (var sentence in text.SplitBy(Constants.SentenceMarkers, StringSplitOptions.RemoveEmptyEntries))
             {
@@ -86,7 +86,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return false;
         }
 
-        private static bool SentenceHasIssue(ReadOnlySpan<char> sentence)
+        private static bool SentenceHasIssue(in ReadOnlySpan<char> sentence)
         {
             var words = sentence.SplitBy(WordSeparators, StringSplitOptions.RemoveEmptyEntries);
             var wordsLength = words.Count();
@@ -109,7 +109,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return false;
         }
 
-        private static bool SentenceClauseHasIssue(ReadOnlySpan<char> sentence)
+        private static bool SentenceClauseHasIssue(in ReadOnlySpan<char> sentence)
         {
             var clauses = sentence.SplitBy(Constants.SentenceClauseMarkers, StringSplitOptions.RemoveEmptyEntries);
             var count = clauses.Count();

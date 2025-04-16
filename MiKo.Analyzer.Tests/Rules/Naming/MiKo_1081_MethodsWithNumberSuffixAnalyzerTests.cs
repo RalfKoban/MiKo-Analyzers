@@ -38,7 +38,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_OS_bit_number_suffix_([Values(32, 64)] int number) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_OS_bit_number_suffix_([Values(32, 64)] in int number) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething" + number + @"() { }
@@ -46,7 +46,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_local_function_with_OS_bit_number_suffix_([Values(32, 64)] int number) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_local_function_with_OS_bit_number_suffix_([Values(32, 64)] in int number) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()

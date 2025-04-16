@@ -9,7 +9,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private readonly SyntaxKind m_syntaxKind;
         private readonly LanguageVersion m_languageVersion;
 
-        protected UsePatternMatchingForExpressionAnalyzer(string diagnosticId, SyntaxKind syntaxKind, LanguageVersion languageVersion = LanguageVersion.CSharp7) : base(diagnosticId, (SymbolKind)(-1))
+        protected UsePatternMatchingForExpressionAnalyzer(string diagnosticId, in SyntaxKind syntaxKind, LanguageVersion languageVersion = LanguageVersion.CSharp7) : base(diagnosticId, (SymbolKind)(-1))
         {
             m_syntaxKind = syntaxKind;
             m_languageVersion = languageVersion;
@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected abstract void AnalyzeExpression(SyntaxNodeAnalysisContext context);
 
-        protected void ReportIssue(SyntaxNodeAnalysisContext context, SyntaxToken token) => ReportDiagnostics(context, Issue(token));
+        protected void ReportIssue(in SyntaxNodeAnalysisContext context, in SyntaxToken token) => ReportDiagnostics(context, Issue(token));
 
         private void AnalyzeExpressionLanguageAware(SyntaxNodeAnalysisContext context)
         {

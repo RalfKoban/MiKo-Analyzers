@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(Analyze, SyntaxKind.NullLiteralExpression);
 
-        private static bool IsEnum(ExpressionSyntax value, SyntaxNodeAnalysisContext context)
+        private static bool IsEnum(ExpressionSyntax value, in SyntaxNodeAnalysisContext context)
         {
             var type = value.GetTypeSymbol(context.SemanticModel);
 

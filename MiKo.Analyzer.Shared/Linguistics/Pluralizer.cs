@@ -34,9 +34,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
         private static readonly string[] SingularOrPluralEndings = { "data", "heep", "moose", "trivia", "ircraft", "nformation", "nested" };
         private static readonly string[] SpecialPluralEndingsWithoutS = new[] { "cti", "men", "ngi", "dren", "eeth", "feet", "mena", "mice", "eople", "teria" }.Concat(SingularOrPluralEndings).ToArray();
 
-        public static bool IsSingularAndPlural(ReadOnlySpan<char> value) => IsPlural(value) && value.EndsWithAny(SingularOrPluralEndings);
+        public static bool IsSingularAndPlural(in ReadOnlySpan<char> value) => IsPlural(value) && value.EndsWithAny(SingularOrPluralEndings);
 
-        public static bool IsPlural(ReadOnlySpan<char> value)
+        public static bool IsPlural(in ReadOnlySpan<char> value)
         {
             if (value.Length <= 2)
             {
@@ -165,7 +165,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static bool IsAllowedListName(string symbolName, StringComparison comparison = StringComparison.OrdinalIgnoreCase) => symbolName.EqualsAny(AllowedListNames, comparison);
 
-        private static string CreatePluralName(ReadOnlySpan<char> proposedName, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        private static string CreatePluralName(in ReadOnlySpan<char> proposedName, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             if (proposedName.EqualsAny(SpecialPluralWords, StringComparison.OrdinalIgnoreCase))
             {

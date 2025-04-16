@@ -96,7 +96,7 @@ namespace TestHelper
         /// <param name="assertResult">
         /// A bool controlling whether or not the test will assert the result of the CodeFix after being applied.
         /// </param>
-        protected void VerifyCSharpFix(string oldSource, string newSource, LanguageVersion languageVersion = LanguageVersion.Default, int? codeFixIndex = null, bool allowNewCompilerDiagnostics = false, bool assertResult = true)
+        protected void VerifyCSharpFix(string oldSource, string newSource, in LanguageVersion languageVersion = LanguageVersion.Default, int? codeFixIndex = null, in bool allowNewCompilerDiagnostics = false, in bool assertResult = true)
         {
             VerifyFix(GetObjectUnderTest(), GetCSharpCodeFixProvider(), oldSource, newSource, languageVersion, codeFixIndex, allowNewCompilerDiagnostics, assertResult);
         }
@@ -131,7 +131,7 @@ namespace TestHelper
         /// <param name="assertResult">
         /// A bool controlling whether or not the test will assert the result of the CodeFix after being applied.
         /// </param>
-        private static void VerifyFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFixProvider, string oldSource, string newSource, LanguageVersion languageVersion, int? codeFixIndex, bool allowNewCompilerDiagnostics, bool assertResult)
+        private static void VerifyFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFixProvider, string oldSource, string newSource, in LanguageVersion languageVersion, int? codeFixIndex, in bool allowNewCompilerDiagnostics, in bool assertResult)
         {
             Assert.That(analyzer, Is.Not.Null, "Missing Analyzer");
             Assert.That(codeFixProvider, Is.Not.Null, "Missing CodeFixProvider");

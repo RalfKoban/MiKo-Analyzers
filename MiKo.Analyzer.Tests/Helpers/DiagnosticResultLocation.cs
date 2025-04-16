@@ -10,7 +10,7 @@ namespace TestHelper
     /// </summary>
     public readonly struct DiagnosticResultLocation
     {
-        public DiagnosticResultLocation(string path, int line, int column)
+        public DiagnosticResultLocation(string path, in int line, in int column)
         {
             if (line < -1)
             {

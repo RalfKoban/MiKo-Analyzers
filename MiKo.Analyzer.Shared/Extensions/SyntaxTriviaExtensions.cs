@@ -15,20 +15,20 @@ namespace MiKoSolutions.Analyzers
 {
     internal static class SyntaxTriviaExtensions
     {
-        internal static int GetPositionWithinStartLine(this SyntaxTrivia value) => value.GetLocation().GetPositionWithinStartLine();
+        internal static int GetPositionWithinStartLine(this in SyntaxTrivia value) => value.GetLocation().GetPositionWithinStartLine();
 
-        internal static int GetStartingLine(this SyntaxTrivia value) => value.GetLocation().GetStartingLine();
+        internal static int GetStartingLine(this in SyntaxTrivia value) => value.GetLocation().GetStartingLine();
 
-        internal static int GetEndingLine(this SyntaxTrivia value) => value.GetLocation().GetEndingLine();
+        internal static int GetEndingLine(this in SyntaxTrivia value) => value.GetLocation().GetEndingLine();
 
-        internal static LinePosition GetStartPosition(this SyntaxTrivia value) => value.GetLocation().GetStartPosition();
+        internal static LinePosition GetStartPosition(this in SyntaxTrivia value) => value.GetLocation().GetStartPosition();
 
-        internal static LinePosition GetEndPosition(this SyntaxTrivia value) => value.GetLocation().GetEndPosition();
+        internal static LinePosition GetEndPosition(this in SyntaxTrivia value) => value.GetLocation().GetEndPosition();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsEndOfLine(this SyntaxTrivia value) => value.IsKind(SyntaxKind.EndOfLineTrivia);
+        internal static bool IsEndOfLine(this in SyntaxTrivia value) => value.IsKind(SyntaxKind.EndOfLineTrivia);
 
-        internal static bool IsComment(this SyntaxTrivia value)
+        internal static bool IsComment(this in SyntaxTrivia value)
         {
             // we use 'RawKind' for performance reasons as most likely, we have single line comments
             // (SyntaxKind.MultiLineCommentTrivia is 1 higher than SyntaxKind.SingleLineCommentTrivia, so we include both)
@@ -36,19 +36,19 @@ namespace MiKoSolutions.Analyzers
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsMultiLineComment(this SyntaxTrivia value) => value.IsKind(SyntaxKind.MultiLineCommentTrivia);
+        internal static bool IsMultiLineComment(this in SyntaxTrivia value) => value.IsKind(SyntaxKind.MultiLineCommentTrivia);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsSingleLineComment(this SyntaxTrivia value) => value.IsKind(SyntaxKind.SingleLineCommentTrivia);
+        internal static bool IsSingleLineComment(this in SyntaxTrivia value) => value.IsKind(SyntaxKind.SingleLineCommentTrivia);
 
-        internal static bool IsSpanningMultipleLines(this SyntaxTrivia value) => value.Token.IsSpanningMultipleLines();
+        internal static bool IsSpanningMultipleLines(this in SyntaxTrivia value) => value.Token.IsSpanningMultipleLines();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsWhiteSpace(this SyntaxTrivia value) => value.IsKind(SyntaxKind.WhitespaceTrivia);
+        internal static bool IsWhiteSpace(this in SyntaxTrivia value) => value.IsKind(SyntaxKind.WhitespaceTrivia);
 
-        internal static bool IsAnyKind(this SyntaxTrivia value, ISet<SyntaxKind> kinds) => kinds.Contains(value.Kind());
+        internal static bool IsAnyKind(this in SyntaxTrivia value, ISet<SyntaxKind> kinds) => kinds.Contains(value.Kind());
 
-        internal static bool IsAnyKind(this SyntaxTrivia value, params SyntaxKind[] kinds)
+        internal static bool IsAnyKind(this in SyntaxTrivia value, params SyntaxKind[] kinds)
         {
             var valueKind = value.Kind();
 
@@ -141,7 +141,7 @@ namespace MiKoSolutions.Analyzers
             return (IReadOnlyList<SyntaxToken>)value?.DescendantNodes(descendantNodesFilter).GetXmlTextTokens().ToList() ?? Array.Empty<SyntaxToken>();
         }
 
-        internal static IEnumerable<SyntaxTrivia> NextSiblings(this SyntaxTrivia value, int count = int.MaxValue)
+        internal static IEnumerable<SyntaxTrivia> NextSiblings(this in SyntaxTrivia value, in int count = int.MaxValue)
         {
             if (count > 0)
             {
@@ -167,7 +167,7 @@ namespace MiKoSolutions.Analyzers
             return Array.Empty<SyntaxTrivia>();
         }
 
-        internal static IEnumerable<SyntaxTrivia> PreviousSiblings(this SyntaxTrivia value, int count = int.MaxValue)
+        internal static IEnumerable<SyntaxTrivia> PreviousSiblings(this in SyntaxTrivia value, in int count = int.MaxValue)
         {
             if (count > 0)
             {

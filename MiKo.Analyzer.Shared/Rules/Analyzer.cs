@@ -49,7 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules
                                                               LocalizableResource(id, "HelpLinkUri")?.ToString()));
         }
 
-        protected Analyzer(string category, string diagnosticId, SymbolKind symbolKind) : this(category, diagnosticId) => SymbolKind = symbolKind;
+        protected Analyzer(string category, string diagnosticId, in SymbolKind symbolKind) : this(category, diagnosticId) => SymbolKind = symbolKind;
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
@@ -119,13 +119,13 @@ namespace MiKoSolutions.Analyzers.Rules
                                                        });
         }
 
-        protected static Location CreateLocation(SyntaxNode node, int start, int end) => CreateLocation(node.SyntaxTree, start, end);
+        protected static Location CreateLocation(SyntaxNode node, in int start, in int end) => CreateLocation(node.SyntaxTree, start, end);
 
-        protected static Location CreateLocation(SyntaxToken token, int start, int end) => CreateLocation(token.SyntaxTree, start, end);
+        protected static Location CreateLocation(in SyntaxToken token, in int start, in int end) => CreateLocation(token.SyntaxTree, start, end);
 
-        protected static Location CreateLocation(SyntaxTree syntaxTree, int start, int end) => Location.Create(syntaxTree, TextSpan.FromBounds(start, end));
+        protected static Location CreateLocation(SyntaxTree syntaxTree, in int start, in int end) => Location.Create(syntaxTree, TextSpan.FromBounds(start, end));
 
-        protected static Location CreateLocation(char value, SyntaxTree syntaxTree, int spanStart, int position, int startOffset = 0, int endOffset = 0)
+        protected static Location CreateLocation(in char value, SyntaxTree syntaxTree, in int spanStart, in int position, in int startOffset = 0, in int endOffset = 0)
         {
             if (position == -1)
             {
@@ -138,7 +138,7 @@ namespace MiKoSolutions.Analyzers.Rules
             return CreateLocation(syntaxTree, start, end);
         }
 
-        protected static Location CreateLocation(string value, SyntaxTree syntaxTree, int spanStart, int position, int startOffset = 0, int endOffset = 0)
+        protected static Location CreateLocation(string value, SyntaxTree syntaxTree, in int spanStart, in int position, in int startOffset = 0, in int endOffset = 0)
         {
             if (position == -1)
             {
@@ -151,7 +151,7 @@ namespace MiKoSolutions.Analyzers.Rules
             return CreateLocation(syntaxTree, start, end);
         }
 
-        protected static void ReportDiagnostics(SyntaxNodeAnalysisContext context, Diagnostic issue)
+        protected static void ReportDiagnostics(in SyntaxNodeAnalysisContext context, Diagnostic issue)
         {
             if (issue != null)
             {
@@ -159,7 +159,7 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
-        protected static void ReportDiagnostics(SyntaxNodeAnalysisContext context, IEnumerable<Diagnostic> issues)
+        protected static void ReportDiagnostics(in SyntaxNodeAnalysisContext context, IEnumerable<Diagnostic> issues)
         {
             if (issues is IReadOnlyList<Diagnostic> emptyList && emptyList.Count == 0)
             {
@@ -252,9 +252,9 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected Diagnostic Issue(SyntaxNode node) => Issue(node, Array.Empty<Pair>());
 
-        protected Diagnostic Issue(SyntaxToken token) => Issue(token, Array.Empty<Pair>());
+        protected Diagnostic Issue(in SyntaxToken token) => Issue(token, Array.Empty<Pair>());
 
-        protected Diagnostic Issue(SyntaxTrivia trivia) => Issue(trivia, Array.Empty<Pair>());
+        protected Diagnostic Issue(in SyntaxTrivia trivia) => Issue(trivia, Array.Empty<Pair>());
 
         protected Diagnostic Issue(Location location) => Issue(location, Array.Empty<Pair>());
 
@@ -262,9 +262,9 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected Diagnostic Issue<T>(SyntaxNode node, T arg1) => Issue(node, arg1, Array.Empty<Pair>());
 
-        protected Diagnostic Issue<T>(SyntaxToken token, T arg1) => Issue(token, arg1, Array.Empty<Pair>());
+        protected Diagnostic Issue<T>(in SyntaxToken token, T arg1) => Issue(token, arg1, Array.Empty<Pair>());
 
-        protected Diagnostic Issue<T>(SyntaxTrivia trivia, T arg1) => Issue(trivia, arg1, Array.Empty<Pair>());
+        protected Diagnostic Issue<T>(in SyntaxTrivia trivia, T arg1) => Issue(trivia, arg1, Array.Empty<Pair>());
 
         protected Diagnostic Issue<T>(Location location, T arg1) => Issue(location, arg1, Array.Empty<Pair>());
 
@@ -272,15 +272,15 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected Diagnostic Issue(string name, SyntaxNode node) => Issue(name, node, Array.Empty<Pair>());
 
-        protected Diagnostic Issue(string name, SyntaxToken token) => Issue(name, token, Array.Empty<Pair>());
+        protected Diagnostic Issue(string name, in SyntaxToken token) => Issue(name, token, Array.Empty<Pair>());
 
-        protected Diagnostic Issue(string name, SyntaxTrivia trivia) => Issue(name, trivia, Array.Empty<Pair>());
+        protected Diagnostic Issue(string name, in SyntaxTrivia trivia) => Issue(name, trivia, Array.Empty<Pair>());
 
         protected Diagnostic Issue(string name, Location location) => Issue(name, location, Array.Empty<Pair>());
 
         protected Diagnostic Issue<T>(string name, SyntaxNode node, T arg1) => Issue(name, node, arg1, Array.Empty<Pair>());
 
-        protected Diagnostic Issue<T>(string name, SyntaxToken token, T arg1) => Issue(name, token, arg1, Array.Empty<Pair>());
+        protected Diagnostic Issue<T>(string name, in SyntaxToken token, T arg1) => Issue(name, token, arg1, Array.Empty<Pair>());
 
         protected Diagnostic Issue<T>(string name, Location location, T arg1) => Issue(name, location, arg1, Array.Empty<Pair>());
 
@@ -294,7 +294,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected Diagnostic Issue<T1, T2>(string name, SyntaxNode node, T1 arg1, T2 arg2) => Issue(name, node, arg1, arg2, Array.Empty<Pair>());
 
-        protected Diagnostic Issue<T1, T2>(string name, SyntaxToken token, T1 arg1, T2 arg2) => Issue(name, token, arg1, arg2, Array.Empty<Pair>());
+        protected Diagnostic Issue<T1, T2>(string name, in SyntaxToken token, T1 arg1, T2 arg2) => Issue(name, token, arg1, arg2, Array.Empty<Pair>());
 
         protected Diagnostic Issue<T1, T2>(string name, Location location, T1 arg1, T2 arg2) => Issue(name, location, arg1, arg2, Array.Empty<Pair>());
 
@@ -302,7 +302,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected Diagnostic Issue<T1, T2, T3>(string name, SyntaxNode node, T1 arg1, T2 arg2, T3 arg3) => Issue(name, node, arg1, arg2, arg3, Array.Empty<Pair>());
 
-        protected Diagnostic Issue<T1, T2, T3>(string name, SyntaxToken token, T1 arg1, T2 arg2, T3 arg3) => Issue(name, token, arg1, arg2, arg3, Array.Empty<Pair>());
+        protected Diagnostic Issue<T1, T2, T3>(string name, in SyntaxToken token, T1 arg1, T2 arg2, T3 arg3) => Issue(name, token, arg1, arg2, arg3, Array.Empty<Pair>());
 
         protected Diagnostic Issue<T1, T2, T3>(string name, Location location, T1 arg1, T2 arg2, T3 arg3) => Issue(name, location, arg1, arg2, arg3, Array.Empty<Pair>());
 
@@ -310,9 +310,9 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected Diagnostic Issue(SyntaxNode node, params Pair[] properties) => CreateIssue(node.GetLocation(), properties, node.ToString());
 
-        protected Diagnostic Issue(SyntaxToken token, params Pair[] properties) => CreateIssue(token.GetLocation(), properties, token.ValueText);
+        protected Diagnostic Issue(in SyntaxToken token, params Pair[] properties) => CreateIssue(token.GetLocation(), properties, token.ValueText);
 
-        protected Diagnostic Issue(SyntaxTrivia trivia, params Pair[] properties) => CreateIssue(trivia.GetLocation(), properties);
+        protected Diagnostic Issue(in SyntaxTrivia trivia, params Pair[] properties) => CreateIssue(trivia.GetLocation(), properties);
 
         protected Diagnostic Issue(Location location, params Pair[] properties) => CreateIssue(location, properties, location.GetText());
 
@@ -320,9 +320,9 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected Diagnostic Issue<T>(SyntaxNode node, T arg1, params Pair[] properties) => CreateIssue(node.GetLocation(), properties, arg1.ToString());
 
-        protected Diagnostic Issue<T>(SyntaxToken token, T arg1, params Pair[] properties) => CreateIssue(token.GetLocation(), properties, arg1.ToString());
+        protected Diagnostic Issue<T>(in SyntaxToken token, T arg1, params Pair[] properties) => CreateIssue(token.GetLocation(), properties, arg1.ToString());
 
-        protected Diagnostic Issue<T>(SyntaxTrivia trivia, T arg1, params Pair[] properties) => CreateIssue(trivia.GetLocation(), properties, arg1.ToString());
+        protected Diagnostic Issue<T>(in SyntaxTrivia trivia, T arg1, params Pair[] properties) => CreateIssue(trivia.GetLocation(), properties, arg1.ToString());
 
         protected Diagnostic Issue<T>(Location location, T arg1, params Pair[] properties) => CreateIssue(location, properties, location.GetText(), arg1.ToString());
 
@@ -330,15 +330,15 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected Diagnostic Issue(string name, SyntaxNode node, params Pair[] properties) => CreateIssue(node.GetLocation(), properties, name);
 
-        protected Diagnostic Issue(string name, SyntaxToken token, params Pair[] properties) => CreateIssue(token.GetLocation(), properties, name);
+        protected Diagnostic Issue(string name, in SyntaxToken token, params Pair[] properties) => CreateIssue(token.GetLocation(), properties, name);
 
-        protected Diagnostic Issue(string name, SyntaxTrivia trivia, params Pair[] properties) => CreateIssue(trivia.GetLocation(), properties, name);
+        protected Diagnostic Issue(string name, in SyntaxTrivia trivia, params Pair[] properties) => CreateIssue(trivia.GetLocation(), properties, name);
 
         protected Diagnostic Issue(string name, Location location, params Pair[] properties) => CreateIssue(location, properties, name);
 
         protected Diagnostic Issue<T>(string name, SyntaxNode node, T arg1, params Pair[] properties) => CreateIssue(node.GetLocation(), properties, name, arg1.ToString());
 
-        protected Diagnostic Issue<T>(string name, SyntaxToken token, T arg1, params Pair[] properties) => CreateIssue(token.GetLocation(), properties, name, arg1.ToString());
+        protected Diagnostic Issue<T>(string name, in SyntaxToken token, T arg1, params Pair[] properties) => CreateIssue(token.GetLocation(), properties, name, arg1.ToString());
 
         protected Diagnostic Issue<T>(string name, Location location, T arg1, params Pair[] properties) => CreateIssue(location, properties, name, arg1.ToString());
 
@@ -350,7 +350,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected Diagnostic Issue<T1, T2>(string name, SyntaxNode node, T1 arg1, T2 arg2, params Pair[] properties) => CreateIssue(node.GetLocation(), properties, name, arg1.ToString(), arg2.ToString());
 
-        protected Diagnostic Issue<T1, T2>(string name, SyntaxToken token, T1 arg1, T2 arg2, params Pair[] properties) => CreateIssue(token.GetLocation(), properties, name, arg1.ToString(), arg2.ToString());
+        protected Diagnostic Issue<T1, T2>(string name, in SyntaxToken token, T1 arg1, T2 arg2, params Pair[] properties) => CreateIssue(token.GetLocation(), properties, name, arg1.ToString(), arg2.ToString());
 
         protected Diagnostic Issue<T1, T2>(string name, Location location, T1 arg1, T2 arg2, params Pair[] properties) => CreateIssue(location, properties, name, arg1.ToString(), arg2.ToString());
 
@@ -358,11 +358,11 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected Diagnostic Issue<T1, T2, T3>(string name, SyntaxNode node, T1 arg1, T2 arg2, T3 arg3, params Pair[] properties) => CreateIssue(node.GetLocation(), properties, name, arg1.ToString(), arg2.ToString(), arg3.ToString());
 
-        protected Diagnostic Issue<T1, T2, T3>(string name, SyntaxToken token, T1 arg1, T2 arg2, T3 arg3, params Pair[] properties) => CreateIssue(token.GetLocation(), properties, name, arg1.ToString(), arg2.ToString(), arg3.ToString());
+        protected Diagnostic Issue<T1, T2, T3>(string name, in SyntaxToken token, T1 arg1, T2 arg2, T3 arg3, params Pair[] properties) => CreateIssue(token.GetLocation(), properties, name, arg1.ToString(), arg2.ToString(), arg3.ToString());
 
         protected Diagnostic Issue<T1, T2, T3>(string name, Location location, T1 arg1, T2 arg2, T3 arg3, params Pair[] properties) => CreateIssue(location, properties, name, arg1.ToString(), arg2.ToString(), arg3.ToString());
 
-        private static void ReportDiagnostics<T>(SymbolAnalysisContext context, Func<T, Compilation, IEnumerable<Diagnostic>> analyzer) where T : ISymbol
+        private static void ReportDiagnostics<T>(in SymbolAnalysisContext context, Func<T, Compilation, IEnumerable<Diagnostic>> analyzer) where T : ISymbol
         {
             var symbol = context.Symbol;
             var compilation = context.Compilation;
@@ -389,7 +389,7 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
-        private static void ReportDiagnostics(SymbolAnalysisContext context, Diagnostic[] array)
+        private static void ReportDiagnostics(in SymbolAnalysisContext context, Diagnostic[] array)
         {
             var arrayLength = array.Length;
 
@@ -407,7 +407,7 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
-        private static void ReportDiagnostics(SymbolAnalysisContext context, IReadOnlyList<Diagnostic> list)
+        private static void ReportDiagnostics(in SymbolAnalysisContext context, IReadOnlyList<Diagnostic> list)
         {
             var listCount = list.Count;
 
@@ -425,7 +425,7 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
-        private static void ReportDiagnostics(SyntaxNodeAnalysisContext context, Diagnostic[] issues)
+        private static void ReportDiagnostics(in SyntaxNodeAnalysisContext context, Diagnostic[] issues)
         {
             var issuesLength = issues.Length;
 
@@ -443,7 +443,7 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
-        private static void ReportDiagnostics(SyntaxNodeAnalysisContext context, IReadOnlyList<Diagnostic> issues)
+        private static void ReportDiagnostics(in SyntaxNodeAnalysisContext context, IReadOnlyList<Diagnostic> issues)
         {
             var issuesCount = issues.Count;
 
@@ -461,7 +461,7 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
-        private static void ReportDiagnosticsEnumerable(SymbolAnalysisContext context, IEnumerable<Diagnostic> issues)
+        private static void ReportDiagnosticsEnumerable(in SymbolAnalysisContext context, IEnumerable<Diagnostic> issues)
         {
             foreach (var issue in issues)
             {
@@ -478,7 +478,7 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
-        private static void ReportDiagnosticsEnumerable(SyntaxNodeAnalysisContext context, IEnumerable<Diagnostic> issues)
+        private static void ReportDiagnosticsEnumerable(in SyntaxNodeAnalysisContext context, IEnumerable<Diagnostic> issues)
         {
             foreach (var issue in issues)
             {

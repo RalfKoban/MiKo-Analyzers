@@ -74,7 +74,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private Diagnostic FindIssue(SyntaxToken token)
+        private Diagnostic FindIssue(in SyntaxToken token)
         {
             if (token.IsKind(SyntaxKind.XmlEntityLiteralToken))
             {

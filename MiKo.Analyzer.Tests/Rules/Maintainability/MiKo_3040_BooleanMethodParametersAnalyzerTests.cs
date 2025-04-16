@@ -125,7 +125,7 @@ namespace My
         [TestCase("int x, bool b", 1)]
         [TestCase("bool b1, bool b2, bool b3", 3)]
         [TestCase("bool b, DependencyObject o, int x", 1)] // check for method with dependency object but 3 parameters
-        public void An_issue_is_reported_for_boolean_parameter_on_method_(string parameters, int violations) => An_issue_is_reported_for(violations, @"
+        public void An_issue_is_reported_for_boolean_parameter_on_method_(string parameters, in int violations) => An_issue_is_reported_for(violations, @"
 using System;
 
 public class TestMe

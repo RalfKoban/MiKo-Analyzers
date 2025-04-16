@@ -216,7 +216,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                    "turn",
                                                                };
 
-        public static bool IsAdjectiveOrAdverb(ReadOnlySpan<char> value, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        public static bool IsAdjectiveOrAdverb(in ReadOnlySpan<char> value, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             if (value.EndsWith("ly", comparison))
             {
@@ -231,7 +231,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return value.EqualsAny(AdjectivesOrAdverbs, comparison);
         }
 
-        public static bool IsThirdPersonSingularVerb(ReadOnlySpan<char> value)
+        public static bool IsThirdPersonSingularVerb(in ReadOnlySpan<char> value)
         {
             var length = value.Length;
 
@@ -282,11 +282,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         public static bool IsPastTense(string value) => value != null && IsPastTense(value.AsSpan());
 
-        public static bool IsPastTense(ReadOnlySpan<char> value) => value.EndsWithAny(PastEndings, StringComparison.Ordinal);
+        public static bool IsPastTense(in ReadOnlySpan<char> value) => value.EndsWithAny(PastEndings, StringComparison.Ordinal);
 
         public static bool IsGerundVerb(string value) => value != null && IsGerundVerb(value.AsSpan());
 
-        public static bool IsGerundVerb(ReadOnlySpan<char> value)
+        public static bool IsGerundVerb(in ReadOnlySpan<char> value)
         {
             if (value.Length <= 4)
             {
@@ -654,7 +654,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return false;
         }
 
-        private static bool HasAcceptableStartingPhrase(ReadOnlySpan<char> value)
+        private static bool HasAcceptableStartingPhrase(in ReadOnlySpan<char> value)
         {
             var length = StartingPhrases.Length;
 
@@ -675,6 +675,6 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static bool HasAcceptableMiddlePhrase(string value) => value.ContainsAny(MiddlePhrases);
 
-        private static bool HasAcceptableEndingPhrase(ReadOnlySpan<char> value) => value.EndsWithAny(EndingPhrases);
+        private static bool HasAcceptableEndingPhrase(in ReadOnlySpan<char> value) => value.EndsWithAny(EndingPhrases);
     }
 }

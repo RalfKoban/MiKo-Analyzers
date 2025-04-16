@@ -72,7 +72,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             return null;
         }
 
-        private Diagnostic AnalyzeCall(MemberAccessExpressionSyntax methodCall, SeparatedSyntaxList<ArgumentSyntax> arguments, SemanticModel semanticModel, string proposedMethodName)
+        private Diagnostic AnalyzeCall(MemberAccessExpressionSyntax methodCall, in SeparatedSyntaxList<ArgumentSyntax> arguments, SemanticModel semanticModel, string proposedMethodName)
         {
             // only ILog methods shall be reported
             var type = methodCall.GetTypeSymbol(semanticModel);

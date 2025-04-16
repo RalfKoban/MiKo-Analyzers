@@ -14,10 +14,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static readonly string[] FormatIdentifiers = { "{0}", "{1}", "{2}", "{3}", "{4}", "{5}", "{6}", "{7}", "{8}", "{9}" };
 
-        protected static InvocationExpressionSyntax AssertThat(ExpressionSyntax expression, ArgumentSyntax constraint, SeparatedSyntaxList<ArgumentSyntax> arguments, int skip = 1, bool removeNameColon = false) // skip the first argument
+        protected static InvocationExpressionSyntax AssertThat(ExpressionSyntax expression, ArgumentSyntax constraint, in SeparatedSyntaxList<ArgumentSyntax> arguments, in int skip = 1, in bool removeNameColon = false) // skip the first argument
             => AssertThat(Argument(expression), constraint, arguments, skip, removeNameColon);
 
-        protected static InvocationExpressionSyntax AssertThat(ArgumentSyntax argument, ArgumentSyntax constraint, SeparatedSyntaxList<ArgumentSyntax> arguments, int skip = 2, bool removeNameColon = false) // skip both arguments in the original call as we have to correct those
+        protected static InvocationExpressionSyntax AssertThat(ArgumentSyntax argument, ArgumentSyntax constraint, in SeparatedSyntaxList<ArgumentSyntax> arguments, in int skip = 2, in bool removeNameColon = false) // skip both arguments in the original call as we have to correct those
         {
             var args = new List<ArgumentSyntax>(Math.Max(2, 2 + arguments.Count - skip))
                            {

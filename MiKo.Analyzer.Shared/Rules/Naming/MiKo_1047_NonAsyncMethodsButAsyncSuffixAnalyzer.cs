@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
         }
 
-        private static string FindBetterName(ReadOnlySpan<char> symbolName)
+        private static string FindBetterName(in ReadOnlySpan<char> symbolName)
         {
             if (symbolName.EndsWith(Constants.AsyncSuffix, StringComparison.Ordinal))
             {

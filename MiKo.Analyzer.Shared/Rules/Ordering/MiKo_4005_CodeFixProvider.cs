@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             }
         }
 
-        private static BaseListSyntax UpdatedBaseList(Document document, BaseListSyntax baseList, SyntaxToken identifier)
+        private static BaseListSyntax UpdatedBaseList(Document document, BaseListSyntax baseList, in SyntaxToken identifier)
         {
             var interfaceName = "I" + identifier.ValueText.GetNameOnlyPart();
 

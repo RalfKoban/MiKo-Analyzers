@@ -68,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 //// ncrunch: no coverage end
 //// ncrunch: rdi default
 
-        protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index, Diagnostic issue)
+        protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, in int index, Diagnostic issue)
         {
             // fix ". Otherwise ..." comments so that they will not get split
             var mergedComment = Comment(comment, OtherwisePairKey, OtherwisePairArray);
@@ -202,7 +202,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return bothFixed.WithTagsOnSeparateLines();
         }
 
-        private static XmlElementSyntax FixTextOnlyComment(XmlElementSyntax comment, XmlTextSyntax originalText, ReadOnlySpan<char> subText, string replacement, ConcreteMapInfo info)
+        private static XmlElementSyntax FixTextOnlyComment(XmlElementSyntax comment, XmlTextSyntax originalText, ReadOnlySpan<char> subText, string replacement, in ConcreteMapInfo info)
         {
             subText = ModifyOrNotPart(subText);
 
@@ -252,7 +252,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return FixComment(prepared, info.Keys, info.Map, finalCommentContinuation);
         }
 
-        private static XmlElementSyntax FixComment(XmlElementSyntax prepared, string[] replacementMapKeys, ReadOnlySpan<Pair> replacementMap, string commentContinue = null)
+        private static XmlElementSyntax FixComment(XmlElementSyntax prepared, string[] replacementMapKeys, in ReadOnlySpan<Pair> replacementMap, string commentContinue = null)
         {
             var startFixed = CommentStartingWith(prepared, StartPhraseParts0, SeeLangword_True(), commentContinue ?? StartPhraseParts1);
             var bothFixed = CommentEndingWith(startFixed, EndPhraseParts0, SeeLangword_False(), EndPhraseParts1);
@@ -310,9 +310,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 //// ncrunch: rdi off
 //// ncrunch: no coverage start
 
-        private static ReadOnlySpan<char> ModifyOrNotPart(ReadOnlySpan<char> text) => text.WithoutSuffix(OrNotPhrase);
+        private static ReadOnlySpan<char> ModifyOrNotPart(in ReadOnlySpan<char> text) => text.WithoutSuffix(OrNotPhrase);
 
-        private static ConcreteMapInfo FindMatchingReplacementMapKeys(ReadOnlySpan<char> text)
+        private static ConcreteMapInfo FindMatchingReplacementMapKeys(in ReadOnlySpan<char> text)
         {
             // now get all data
             var mappedDataValue = MappedData.Value;
@@ -360,7 +360,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private readonly ref struct ConcreteMapInfo
         {
-            public ConcreteMapInfo(ReadOnlySpan<Pair> map, string[] keys, string[] uniqueKeys)
+            public ConcreteMapInfo(in ReadOnlySpan<Pair> map, string[] keys, string[] uniqueKeys)
             {
                 Map = map;
                 Keys = keys;
@@ -811,7 +811,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return 0;
             }
 
-            private static int GetOrder(ReadOnlySpan<char> text, ReadOnlySpan<string> orders)
+            private static int GetOrder(in ReadOnlySpan<char> text, in ReadOnlySpan<string> orders)
             {
                 var length = orders.Length;
 

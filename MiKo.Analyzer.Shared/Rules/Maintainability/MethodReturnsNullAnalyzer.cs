@@ -102,7 +102,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static List<ExpressionSyntax> GetIssues(SyntaxNodeAnalysisContext context, ConditionalExpressionSyntax conditional)
+        private static List<ExpressionSyntax> GetIssues(in SyntaxNodeAnalysisContext context, ConditionalExpressionSyntax conditional)
         {
             var results = new List<ExpressionSyntax>();
             GetIssues(context, conditional.WhenTrue, results);
@@ -111,7 +111,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return results;
         }
 
-        private static void GetIssues(SyntaxNodeAnalysisContext context, ExpressionSyntax expression, List<ExpressionSyntax> results)
+        private static void GetIssues(in SyntaxNodeAnalysisContext context, ExpressionSyntax expression, List<ExpressionSyntax> results)
         {
             if (expression is ConditionalExpressionSyntax nested)
             {
@@ -164,7 +164,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private void AnalyzeMethodBody(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax method, BlockSyntax methodBody)
+        private void AnalyzeMethodBody(in SyntaxNodeAnalysisContext context, MethodDeclarationSyntax method, BlockSyntax methodBody)
         {
             var controlFlow = context.SemanticModel.AnalyzeControlFlow(methodBody);
 
@@ -174,7 +174,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private void AnalyzeMethodExpressionBody(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax method, ExpressionSyntax expression)
+        private void AnalyzeMethodExpressionBody(in SyntaxNodeAnalysisContext context, MethodDeclarationSyntax method, ExpressionSyntax expression)
         {
             switch (expression)
             {
@@ -198,7 +198,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private void AnalyzeExpression(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax method, ExpressionSyntax expression)
+        private void AnalyzeExpression(in SyntaxNodeAnalysisContext context, MethodDeclarationSyntax method, ExpressionSyntax expression)
         {
             if (HasIssue(expression))
             {
@@ -228,7 +228,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private void AnalyzeAssignments(SyntaxNodeAnalysisContext context, IEnumerable<ExpressionSyntax> assignments)
+        private void AnalyzeAssignments(in SyntaxNodeAnalysisContext context, IEnumerable<ExpressionSyntax> assignments)
         {
             if (assignments.Any(HasIssue))
             {
@@ -260,14 +260,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private void AnalyzeConditional(SyntaxNodeAnalysisContext context, ConditionalExpressionSyntax conditional)
+        private void AnalyzeConditional(in SyntaxNodeAnalysisContext context, ConditionalExpressionSyntax conditional)
         {
             var issues = GetIssues(context, conditional);
 
             ReportIssues(context, issues);
         }
 
-        private void ReportIssues(SyntaxNodeAnalysisContext context, IEnumerable<ExpressionSyntax> assignmentsWithIssues)
+        private void ReportIssues(in SyntaxNodeAnalysisContext context, IEnumerable<ExpressionSyntax> assignmentsWithIssues)
         {
             foreach (var assignment in assignmentsWithIssues)
             {
@@ -275,6 +275,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private void ReportIssue(SyntaxNodeAnalysisContext context, SyntaxNode node) => ReportDiagnostics(context, Issue(node));
+        private void ReportIssue(in SyntaxNodeAnalysisContext context, SyntaxNode node) => ReportDiagnostics(context, Issue(node));
     }
 }

@@ -47,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private Diagnostic[] AnalyzeSimpleMemberAccessExpression(InvocationExpressionSyntax node, ArgumentSyntax argument, SyntaxNodeAnalysisContext context)
+        private Diagnostic[] AnalyzeSimpleMemberAccessExpression(InvocationExpressionSyntax node, ArgumentSyntax argument, in SyntaxNodeAnalysisContext context)
         {
             if (node.IsMoqItIsConditionMatcher() && argument.Expression is LambdaExpressionSyntax lambda)
             {

@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                            ];
 
         [Test]
-        public void No_issue_is_reported_for_const_field_([Values(-42, -1, 0, 1, 42)] int value) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_const_field_([Values(-42, -1, 0, 1, 42)] in int value) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -34,7 +34,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_const_variable_([Values(-42, -1, 0, 1, 42)] int value) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_const_variable_([Values(-42, -1, 0, 1, 42)] in int value) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -368,7 +368,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_array_access_at_([Values(0, 1)] int value) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_array_access_at_([Values(0, 1)] in int value) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -537,7 +537,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_screen_resolution_number_([Values(320, 200, 640, 480, 800, 600, 1024, 768, 1920, 1080, 1280, 1440, 1600, 1200)] int number) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_screen_resolution_number_([Values(320, 200, 640, 480, 800, 600, 1024, 768, 1920, 1080, 1280, 1440, 1600, 1200)] in int number) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -630,7 +630,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_field_([Values(-42, 42)] int value) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_field_([Values(-42, 42)] in int value) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -643,7 +643,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_array_access_at_([Values(2, 3, 4, 5, 10, 20, 42)] int value) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_array_access_at_([Values(2, 3, 4, 5, 10, 20, 42)] in int value) => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla
