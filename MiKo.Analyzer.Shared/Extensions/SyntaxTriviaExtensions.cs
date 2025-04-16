@@ -28,6 +28,7 @@ namespace MiKoSolutions.Analyzers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsEndOfLine(this in SyntaxTrivia value) => value.IsKind(SyntaxKind.EndOfLineTrivia);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsComment(this in SyntaxTrivia value)
         {
             // we use 'RawKind' for performance reasons as most likely, we have single line comments
@@ -41,11 +42,13 @@ namespace MiKoSolutions.Analyzers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsSingleLineComment(this in SyntaxTrivia value) => value.IsKind(SyntaxKind.SingleLineCommentTrivia);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsSpanningMultipleLines(this in SyntaxTrivia value) => value.Token.IsSpanningMultipleLines();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsWhiteSpace(this in SyntaxTrivia value) => value.IsKind(SyntaxKind.WhitespaceTrivia);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsAnyKind(this in SyntaxTrivia value, ISet<SyntaxKind> kinds) => kinds.Contains(value.Kind());
 
         internal static bool IsAnyKind(this in SyntaxTrivia value, params SyntaxKind[] kinds)
