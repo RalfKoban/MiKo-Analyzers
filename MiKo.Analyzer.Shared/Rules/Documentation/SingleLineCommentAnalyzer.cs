@@ -192,7 +192,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     if (triviaToAnalyze is null)
                     {
-                        triviaToAnalyze = new List<SyntaxTrivia>(1);
+                        triviaToAnalyze = new List<SyntaxTrivia>();
                     }
 
                     triviaToAnalyze.Add(trivia);
