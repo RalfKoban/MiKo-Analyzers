@@ -475,9 +475,18 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static bool MidTermHasIssue(in ReadOnlySpan<char> key, in ReadOnlySpan<char> value)
         {
+            // do a quick check on the hot path, as most times (~99.8%) there is no issue
+            if (value.Contains(key, StringComparison.Ordinal) is false)
+            {
+                return false;
+            }
+
+            var keyLength = key.Length;
+            var valueLength = value.Length;
+            var keyStartsUpperCase = key[0].IsUpperCase();
+
             var index = 0;
 
-            // do not cache 'key.Length' or 'value.Length' or 'keys[0].IsUpperCase' as most times (~99.8%) they are not used
             do
             {
                 var newIndex = value.Slice(index).IndexOf(key, StringComparison.Ordinal);
@@ -489,21 +498,21 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
                 index += newIndex;
 
-                var positionAfterCharacter = index + key.Length;
+                var positionAfterCharacter = index + keyLength;
 
-                if (positionAfterCharacter < value.Length)
+                if (positionAfterCharacter < valueLength)
                 {
                     if (IndicatesNewWord(value[positionAfterCharacter]))
                     {
-                        if (key[0].IsUpperCase())
+                        if (keyStartsUpperCase)
                         {
                             return true;
                         }
 
-                        var positionBeforeText = index - 1;
-
-                        if (positionBeforeText >= 0)
+                        if (index > 0)
                         {
+                            var positionBeforeText = index - 1;
+
                             if (IndicatesNewWord(value[positionBeforeText]))
                             {
                                 return true;
