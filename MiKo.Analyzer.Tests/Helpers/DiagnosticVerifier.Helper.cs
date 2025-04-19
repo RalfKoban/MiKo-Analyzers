@@ -140,6 +140,7 @@ namespace TestHelper
                 projects.Add(document.Project);
             }
 
+            var documentsLength = documents.Length;
             var diagnostics = new List<Diagnostic>();
 
             foreach (var project in projects)
@@ -152,38 +153,41 @@ namespace TestHelper
                 var compilation = project.GetCompilationAsync().Result;
                 var compilationWithAnalyzers = compilation.WithAnalyzers([..analyzers]);
                 var diags = compilationWithAnalyzers.GetAnalyzerDiagnosticsAsync().Result;
+                var diagsLength = diags.Length;
 
                 if (profileAnalysis)
                 {
                     JetBrains.Profiler.Api.MeasureProfiler.SaveData();
                 }
 
-                foreach (var diag in diags)
+                if (diagsLength > 0)
                 {
-                    if (diag.Location == Location.None || diag.Location.IsInMetadata)
+                    for (var index = 0; index < diagsLength; index++)
                     {
-                        diagnostics.Add(diag);
-                    }
-                    else
-                    {
-                        for (var i = 0; i < documents.Length; i++)
-                        {
-                            var document = documents[i];
-                            var tree = document.GetSyntaxTreeAsync().Result;
+                        var diag = diags[index];
 
-                            if (tree == diag.Location.SourceTree)
+                        if (diag.Location == Location.None || diag.Location.IsInMetadata)
+                        {
+                            diagnostics.Add(diag);
+                        }
+                        else
+                        {
+                            for (var documentIndex = 0; documentIndex < documentsLength; documentIndex++)
                             {
-                                diagnostics.Add(diag);
+                                var document = documents[documentIndex];
+                                var tree = document.GetSyntaxTreeAsync().Result;
+
+                                if (tree == diag.Location.SourceTree)
+                                {
+                                    diagnostics.Add(diag);
+                                }
                             }
                         }
                     }
                 }
             }
 
-            var results = SortDiagnostics(diagnostics);
-            diagnostics.Clear();
-
-            return results;
+            return SortDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -235,8 +239,13 @@ namespace TestHelper
         /// <returns>
         /// An array of <see cref="Diagnostic"/>s in order of <see cref="Diagnostic.Location"/>.
         /// </returns>
-        private static Diagnostic[] SortDiagnostics(IEnumerable<Diagnostic> diagnostics)
+        private static Diagnostic[] SortDiagnostics(List<Diagnostic> diagnostics)
         {
+            if (diagnostics.Count == 0)
+            {
+                return [];
+            }
+
             return [.. diagnostics.OrderBy(_ => _.Location.SourceSpan.Start)];
         }
 
@@ -259,11 +268,13 @@ namespace TestHelper
 
             if (sources.Length != documents.Length)
             {
-                throw new InvalidOperationException("Amount of sources did not match amount of Documents created");
+                ThrowInvalidOperation("Amount of sources did not match amount of Documents created");
             }
 
             return documents;
         }
+
+        private static void ThrowInvalidOperation(string message) => throw new InvalidOperationException(message);
 
         /// <summary>
         /// Create a project using the inputted strings as sources.
@@ -288,14 +299,24 @@ namespace TestHelper
 
             var length = sources.Length;
 
-            for (var index = 0; index < length; index++)
+            if (length == 1)
             {
-                var source = sources[index];
+                const string FileName = "Test.cs";
+                var documentId = DocumentId.CreateNewId(projectId, debugName: FileName);
 
-                var newFileName = "Test" + index + ".cs";
-                var documentId = DocumentId.CreateNewId(projectId, debugName: newFileName);
+                solution = solution.AddDocument(documentId, FileName, SourceText.From(sources[0]));
+            }
+            else
+            {
+                for (var index = 0; index < length; index++)
+                {
+                    var source = sources[index];
 
-                solution = solution.AddDocument(documentId, newFileName, SourceText.From(source));
+                    var newFileName = "Test" + index + ".cs";
+                    var documentId = DocumentId.CreateNewId(projectId, debugName: newFileName);
+
+                    solution = solution.AddDocument(documentId, newFileName, SourceText.From(source));
+                }
             }
 
             return solution.GetProject(projectId);

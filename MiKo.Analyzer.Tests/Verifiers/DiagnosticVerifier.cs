@@ -47,11 +47,16 @@ namespace TestHelper
             Assert.Multiple(() =>
                                  {
                                      var results = GetDiagnostics(fileContent, languageVersion);
+                                     var resultsLength = results.Length;
 
-                                     Assert.That(results.Length, Is.EqualTo(violations), string.Join(Environment.NewLine, results.Select(_ => _.ToString())));
+                                     Assert.That(resultsLength, Is.EqualTo(violations), string.Join(Environment.NewLine, results.Select(_ => _.ToString())));
 
-                                     foreach (var result in results)
+                                     var placeholdersLength = Placeholders.Length;
+
+                                     for (var index = 0; index < resultsLength; index++)
                                      {
+                                         var result = results[index];
+
                                          Assert.That(result.Id, Is.EqualTo(GetDiagnosticId()));
                                          Assert.That(result.Id, Is.Not.EqualTo("AD0001")); // This is a programming error
 
@@ -60,9 +65,11 @@ namespace TestHelper
                                          Assert.That(message, Does.Not.Contain("tring[]"), "Wrong parameter provided, string array is not converted.");
                                          Assert.That(message, Does.Not.Contain(" -> "), "Wrong parameter provided, Pair.");
 
-                                         foreach (var placeholder in Placeholders)
+                                         for (var placeholderIndex = 0; placeholderIndex < placeholdersLength; placeholderIndex++)
                                          {
-                                             Assert.That(message, Does.Not.Contain(placeholder), $"Placeholder {placeholder} found!");
+                                             var placeholder = Placeholders[placeholderIndex];
+
+                                             Assert.That(message, Does.Not.Contain(placeholder), "Placeholder " + placeholder + " found!");
                                          }
                                      }
                                  });
@@ -74,7 +81,11 @@ namespace TestHelper
         {
             var results = GetDiagnostics(fileContent, languageVersion);
 
-            Assert.That(results, Is.Empty, message ?? Environment.NewLine + string.Join(Environment.NewLine, results.Select(_ => _.Location + ":" + _)));
+            // performance optimization to avoid the string creation for the message in case we do not have any issue and therefore do not need to report anythings
+            if (results.Length > 0)
+            {
+                Assert.That(results, Is.Empty, message ?? Environment.NewLine + string.Join(Environment.NewLine, results.Select(_ => _.Location + ":" + _)));
+            }
         }
 
         protected void No_issue_is_reported_for_file_(string path, in LanguageVersion languageVersion = LanguageVersion.Default) => No_issue_is_reported_for(File.ReadAllText(path), path, languageVersion);
