@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // ReSharper disable once TooWideLocalVariableScope : it's done to have less memory pressure on garbage collector
             bool found;
 
-            foreach (var term in terms.OrderBy(_ => _.Length).ThenBy(_ => _))
+            foreach (var term in terms.OrderBy(_ => _.Length))
             {
                 var span = term.AsSpan();
 
@@ -541,7 +541,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 var valueText = token.ValueText;
 
-                var fixedText = MakeFirstWordInfiniteVerb(valueText);
+                var fixedText = Verbalizer.MakeFirstWordInfiniteVerb(valueText);
 
                 if (fixedText.Length != valueText.Length)
                 {
@@ -550,58 +550,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return text;
-        }
-
-        protected static string MakeFirstWordInfiniteVerb(string text, in FirstWordHandling handling = FirstWordHandling.None)
-        {
-            if (text.IsNullOrWhiteSpace())
-            {
-                return text;
-            }
-
-            return MakeFirstWordInfiniteVerb(text.AsSpan(), handling);
-        }
-
-        protected static string MakeFirstWordInfiniteVerb(in ReadOnlySpan<char> text, in FirstWordHandling firstWordHandling = FirstWordHandling.None)
-        {
-            if (text.IsNullOrWhiteSpace())
-            {
-                return string.Empty;
-            }
-
-            // it may happen that the text starts with a special character, such as an ':'
-            // so remove those special characters
-            var valueText = text.TrimStart(Constants.SentenceMarkers);
-
-            if (valueText.IsNullOrWhiteSpace())
-            {
-                return string.Empty;
-            }
-
-            // first word
-            var firstWord = GetFirstWord(valueText, firstWordHandling);
-
-            var infiniteVerb = Verbalizer.MakeInfiniteVerb(firstWord);
-
-            if (firstWord != infiniteVerb)
-            {
-                return infiniteVerb.ConcatenatedWith(valueText.WithoutFirstWord());
-            }
-
-            return text.ToString();
-
-            string GetFirstWord(in ReadOnlySpan<char> span, in FirstWordHandling handling)
-            {
-                var word = span.FirstWord();
-
-                switch (handling)
-                {
-                    case FirstWordHandling.MakeLowerCase: return word.ToLowerCaseAt(0);
-                    case FirstWordHandling.MakeUpperCase: return word.ToUpperCaseAt(0);
-                    default:
-                        return word.ToString();
-                }
-            }
         }
 
         protected static XmlEmptyElementSyntax Para() => XmlEmptyElement(Constants.XmlTag.Para);
@@ -835,12 +783,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static int GetIndex(in SyntaxList<XmlNodeSyntax> content)
         {
-            if (content.Count == 0)
+            var contentCount = content.Count;
+
+            if (contentCount == 0)
             {
                 return -1;
             }
 
-            if (content.Count > 1 && content[0].IsWhiteSpaceOnlyText())
+            if (contentCount > 1 && content[0].IsWhiteSpaceOnlyText())
             {
                 return 1;
             }
