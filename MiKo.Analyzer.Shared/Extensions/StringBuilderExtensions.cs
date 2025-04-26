@@ -13,8 +13,8 @@ namespace System.Text
 {
     internal static class StringBuilderExtensions
     {
-        private const int QuickCompareLengthThreshold = 4;
-        private const int QuickCompareRentLengthThreshold = 22;
+        private const int QuickCompareLengthThreshold = 6;
+        private const int QuickCompareRentLengthThreshold = 24;
 
         public static bool IsNullOrWhiteSpace(this StringBuilder value) => value is null || value.CountLeadingWhitespaces() == value.Length;
 
@@ -245,12 +245,6 @@ namespace System.Text
             {
                 var pair = replacementPairs[index];
                 var oldValue = pair.Key;
-
-                if (oldValue.IsNullOrEmpty())
-                {
-                    // cannot replace any empty value
-                    continue;
-                }
 
                 if (QuickCompare(ref value, ref oldValue))
                 {
@@ -606,9 +600,7 @@ namespace System.Text
         private static bool QuickCompare(ref StringBuilder current, ref string other)
         {
             var otherValueLength = other.Length;
-            var currentValueLength = current.Length;
-
-            var difference = currentValueLength - otherValueLength;
+            var difference = current.Length - otherValueLength;
 
             if (difference < 0)
             {
