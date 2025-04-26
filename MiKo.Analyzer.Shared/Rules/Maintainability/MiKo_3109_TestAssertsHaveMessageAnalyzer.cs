@@ -141,7 +141,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return false;
         }
 
-        private static bool HasMessageParameter(SeparatedSyntaxList<ArgumentSyntax> arguments, int[] expectedArgumentIndices, Compilation compilation)
+        private static bool HasMessageParameter(in SeparatedSyntaxList<ArgumentSyntax> arguments, int[] expectedArgumentIndices, Compilation compilation)
         {
             var count = arguments.Count;
 

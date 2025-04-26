@@ -109,7 +109,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return null;
         }
 
-        private Diagnostic AnalyzeAwaitExpression(SyntaxList<StatementSyntax> statements, AwaitExpressionSyntax node)
+        private Diagnostic AnalyzeAwaitExpression(in SyntaxList<StatementSyntax> statements, AwaitExpressionSyntax node)
         {
             switch (node.Parent)
             {

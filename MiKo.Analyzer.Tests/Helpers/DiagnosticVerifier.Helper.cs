@@ -131,7 +131,7 @@ namespace TestHelper
         /// <returns>
         /// An array of Diagnostics that surfaced in the source code, sorted by Location.
         /// </returns>
-        protected static Diagnostic[] GetSortedDiagnosticsFromDocuments(ReadOnlySpan<DiagnosticAnalyzer> analyzers, ReadOnlySpan<Document> documents, bool profileAnalysis)
+        protected static Diagnostic[] GetSortedDiagnosticsFromDocuments(in ReadOnlySpan<DiagnosticAnalyzer> analyzers, in ReadOnlySpan<Document> documents, in bool profileAnalysis)
         {
             var projects = new HashSet<Project>();
 
@@ -140,6 +140,7 @@ namespace TestHelper
                 projects.Add(document.Project);
             }
 
+            var documentsLength = documents.Length;
             var diagnostics = new List<Diagnostic>();
 
             foreach (var project in projects)
@@ -152,38 +153,41 @@ namespace TestHelper
                 var compilation = project.GetCompilationAsync().Result;
                 var compilationWithAnalyzers = compilation.WithAnalyzers([..analyzers]);
                 var diags = compilationWithAnalyzers.GetAnalyzerDiagnosticsAsync().Result;
+                var diagsLength = diags.Length;
 
                 if (profileAnalysis)
                 {
                     JetBrains.Profiler.Api.MeasureProfiler.SaveData();
                 }
 
-                foreach (var diag in diags)
+                if (diagsLength > 0)
                 {
-                    if (diag.Location == Location.None || diag.Location.IsInMetadata)
+                    for (var index = 0; index < diagsLength; index++)
                     {
-                        diagnostics.Add(diag);
-                    }
-                    else
-                    {
-                        for (var i = 0; i < documents.Length; i++)
-                        {
-                            var document = documents[i];
-                            var tree = document.GetSyntaxTreeAsync().Result;
+                        var diag = diags[index];
 
-                            if (tree == diag.Location.SourceTree)
+                        if (diag.Location == Location.None || diag.Location.IsInMetadata)
+                        {
+                            diagnostics.Add(diag);
+                        }
+                        else
+                        {
+                            for (var documentIndex = 0; documentIndex < documentsLength; documentIndex++)
                             {
-                                diagnostics.Add(diag);
+                                var document = documents[documentIndex];
+                                var tree = document.GetSyntaxTreeAsync().Result;
+
+                                if (tree == diag.Location.SourceTree)
+                                {
+                                    diagnostics.Add(diag);
+                                }
                             }
                         }
                     }
                 }
             }
 
-            var results = SortDiagnostics(diagnostics);
-            diagnostics.Clear();
-
-            return results;
+            return SortDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -198,7 +202,7 @@ namespace TestHelper
         /// <returns>
         /// A Document created from the source string.
         /// </returns>
-        protected static Document CreateDocument(string source, LanguageVersion languageVersion)
+        protected static Document CreateDocument(string source, in LanguageVersion languageVersion)
         {
             return CreateProject([source], languageVersion).Documents.First();
         }
@@ -221,7 +225,7 @@ namespace TestHelper
         /// <returns>
         /// An array of <see cref="Diagnostic"/>s that surfaced in the source code, sorted by <see cref="Diagnostic.Location"/>.
         /// </returns>
-        private static Diagnostic[] GetSortedDiagnostics(ReadOnlySpan<string> sources, LanguageVersion languageVersion, ReadOnlySpan<DiagnosticAnalyzer> analyzers, bool profileAnalysis)
+        private static Diagnostic[] GetSortedDiagnostics(in ReadOnlySpan<string> sources, in LanguageVersion languageVersion, in ReadOnlySpan<DiagnosticAnalyzer> analyzers, in bool profileAnalysis)
         {
             return GetSortedDiagnosticsFromDocuments(analyzers, GetDocuments(sources, languageVersion), profileAnalysis);
         }
@@ -235,8 +239,13 @@ namespace TestHelper
         /// <returns>
         /// An array of <see cref="Diagnostic"/>s in order of <see cref="Diagnostic.Location"/>.
         /// </returns>
-        private static Diagnostic[] SortDiagnostics(IEnumerable<Diagnostic> diagnostics)
+        private static Diagnostic[] SortDiagnostics(List<Diagnostic> diagnostics)
         {
+            if (diagnostics.Count == 0)
+            {
+                return [];
+            }
+
             return [.. diagnostics.OrderBy(_ => _.Location.SourceSpan.Start)];
         }
 
@@ -252,18 +261,20 @@ namespace TestHelper
         /// <returns>
         /// The <see cref="Document"/>s produced from the sources.
         /// </returns>
-        private static Document[] GetDocuments(ReadOnlySpan<string> sources, LanguageVersion languageVersion)
+        private static Document[] GetDocuments(in ReadOnlySpan<string> sources, in LanguageVersion languageVersion)
         {
             var project = CreateProject(sources, languageVersion);
             var documents = project.Documents.ToArray();
 
             if (sources.Length != documents.Length)
             {
-                throw new InvalidOperationException("Amount of sources did not match amount of Documents created");
+                ThrowInvalidOperation("Amount of sources did not match amount of Documents created");
             }
 
             return documents;
         }
+
+        private static void ThrowInvalidOperation(string message) => throw new InvalidOperationException(message);
 
         /// <summary>
         /// Create a project using the inputted strings as sources.
@@ -277,7 +288,7 @@ namespace TestHelper
         /// <returns>
         /// A Project created out of the Documents created from the source strings.
         /// </returns>
-        private static Project CreateProject(ReadOnlySpan<string> sources, LanguageVersion languageVersion)
+        private static Project CreateProject(in ReadOnlySpan<string> sources, in LanguageVersion languageVersion)
         {
             var projectId = ProjectId.CreateNewId(debugName: TestProjectName);
             var projectInfo = ProjectInfo.Create(projectId, VersionStamp.Default, TestProjectName, TestProjectName, LanguageNames.CSharp, parseOptions: CSharpParseOptions.Default.WithLanguageVersion(languageVersion));
@@ -288,14 +299,24 @@ namespace TestHelper
 
             var length = sources.Length;
 
-            for (var index = 0; index < length; index++)
+            if (length == 1)
             {
-                var source = sources[index];
+                const string FileName = "Test.cs";
+                var documentId = DocumentId.CreateNewId(projectId, debugName: FileName);
 
-                var newFileName = "Test" + index + ".cs";
-                var documentId = DocumentId.CreateNewId(projectId, debugName: newFileName);
+                solution = solution.AddDocument(documentId, FileName, SourceText.From(sources[0]));
+            }
+            else
+            {
+                for (var index = 0; index < length; index++)
+                {
+                    var source = sources[index];
 
-                solution = solution.AddDocument(documentId, newFileName, SourceText.From(source));
+                    var newFileName = "Test" + index + ".cs";
+                    var documentId = DocumentId.CreateNewId(projectId, debugName: newFileName);
+
+                    solution = solution.AddDocument(documentId, newFileName, SourceText.From(source));
+                }
             }
 
             return solution.GetProject(projectId);

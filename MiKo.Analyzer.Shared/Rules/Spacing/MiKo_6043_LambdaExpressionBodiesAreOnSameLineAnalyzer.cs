@@ -158,7 +158,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
         }
 
-        private void AnalyzeBody(SyntaxNodeAnalysisContext context, SyntaxNode lambda)
+        private void AnalyzeBody(in SyntaxNodeAnalysisContext context, SyntaxNode lambda)
         {
             if (lambda.IsSpanningMultipleLines() && FitsOnSingleLine(lambda))
             {

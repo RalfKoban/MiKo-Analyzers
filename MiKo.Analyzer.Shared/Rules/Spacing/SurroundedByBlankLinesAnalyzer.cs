@@ -51,7 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return node.GetLocation();
         }
 
-        protected static bool HasNoBlankLinesBefore(FileLinePositionSpan callLineSpan, SyntaxNode other)
+        protected static bool HasNoBlankLinesBefore(in FileLinePositionSpan callLineSpan, SyntaxNode other)
         {
             var endingLine = GetLocationOfNodeOrTrailingComment(other).GetEndingLine();
 
@@ -65,7 +65,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return HasNoBlankLinesBefore(GetLocationOfNodeOrLeadingComment(node).GetLineSpan(), other);
         }
 
-        protected static bool HasNoBlankLinesAfter(FileLinePositionSpan callLineSpan, SyntaxNode other)
+        protected static bool HasNoBlankLinesAfter(in FileLinePositionSpan callLineSpan, SyntaxNode other)
         {
             var startingLine = GetLocationOfNodeOrLeadingComment(other).GetStartingLine();
 
@@ -79,24 +79,24 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return HasNoBlankLinesAfter(GetLocationOfNodeOrTrailingComment(node).GetLineSpan(), other);
         }
 
-        protected Diagnostic Issue(SyntaxNode call, bool noBlankLinesBefore, bool noBlankLinesAfter)
+        protected Diagnostic Issue(SyntaxNode call, in bool noBlankLinesBefore, in bool noBlankLinesAfter)
         {
             return Issue(call.GetLocation(), noBlankLinesBefore, noBlankLinesAfter);
         }
 
-        protected Diagnostic Issue(SyntaxToken token, bool noBlankLinesBefore, bool noBlankLinesAfter)
+        protected Diagnostic Issue(in SyntaxToken token, in bool noBlankLinesBefore, in bool noBlankLinesAfter)
         {
             return Issue(token.GetLocation(), noBlankLinesBefore, noBlankLinesAfter);
         }
 
-        protected Diagnostic Issue(Location location, bool noBlankLinesBefore, bool noBlankLinesAfter)
+        protected Diagnostic Issue(Location location, in bool noBlankLinesBefore, in bool noBlankLinesAfter)
         {
             var pairs = CreateProperties(noBlankLinesBefore, noBlankLinesAfter);
 
             return Issue(location, properties: pairs);
         }
 
-        private static Pair[] CreateProperties(bool noBlankLinesBefore, bool noBlankLinesAfter)
+        private static Pair[] CreateProperties(in bool noBlankLinesBefore, in bool noBlankLinesAfter)
         {
             if (noBlankLinesBefore)
             {

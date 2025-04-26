@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static bool IsProperlyNamed(ITypeSymbol type, string expectedName) => type?.IsEventArgs() is true && type.Name == expectedName;
 
-        private static bool IsInherited(SyntaxToken syntax, SemanticModel semanticModel)
+        private static bool IsInherited(in SyntaxToken syntax, SemanticModel semanticModel)
         {
             var symbol = syntax.GetSymbol(semanticModel);
 

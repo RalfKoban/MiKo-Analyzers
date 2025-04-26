@@ -165,7 +165,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordHandling.MakeLowerCase);
         }
 
-        private static XmlEmptyElementSyntax GetUpdatedSyntaxWithInheritdoc(SyntaxList<XmlNodeSyntax> content)
+        private static XmlEmptyElementSyntax GetUpdatedSyntaxWithInheritdoc(in SyntaxList<XmlNodeSyntax> content)
         {
             var inheritdoc = content.OfType<XmlEmptyElementSyntax>().FirstOrDefault(_ => _.GetName() == Constants.XmlTag.Inheritdoc);
 
@@ -199,7 +199,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return null;
         }
 
-        private static XmlElementSyntax GetUpdatedProperty(XmlElementSyntax comment, PropertyDeclarationSyntax property, ReadOnlySpan<char> remainingText)
+        private static XmlElementSyntax GetUpdatedProperty(XmlElementSyntax comment, PropertyDeclarationSyntax property, in ReadOnlySpan<char> remainingText)
         {
             var startingPhrase = GetPropertyStartingPhrase(property);
 

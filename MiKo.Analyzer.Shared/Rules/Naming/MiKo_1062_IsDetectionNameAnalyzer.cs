@@ -48,10 +48,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return AnalyzeCamelCase(symbol, symbolName, 2);
         }
 
-        private static bool ViolatesLimit(ReadOnlySpan<char> name, ushort limit) => name.StartsWithAny(Prefixes, StringComparison.OrdinalIgnoreCase) && name.HasUpperCaseLettersAbove(limit);
+        private static bool ViolatesLimit(in ReadOnlySpan<char> name, in ushort limit) => name.StartsWithAny(Prefixes, StringComparison.OrdinalIgnoreCase) && name.HasUpperCaseLettersAbove(limit);
 
-        private Diagnostic[] AnalyzeCamelCase(ISymbol symbol, ReadOnlySpan<char> symbolName, ushort limit) => ViolatesLimit(symbolName, limit)
-                                                                                                              ? new[] { Issue(symbol, limit) }
-                                                                                                              : Array.Empty<Diagnostic>();
+        private Diagnostic[] AnalyzeCamelCase(ISymbol symbol, in ReadOnlySpan<char> symbolName, in ushort limit) => ViolatesLimit(symbolName, limit)
+                                                                                                                    ? new[] { Issue(symbol, limit) }
+                                                                                                                    : Array.Empty<Diagnostic>();
     }
 }

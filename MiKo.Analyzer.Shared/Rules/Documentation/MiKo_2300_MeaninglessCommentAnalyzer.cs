@@ -100,9 +100,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool CommentHasIssue(ReadOnlySpan<char> comment, SemanticModel semanticModel) => CommentHasIssue(comment) && comment.ToString().ContainsAny(ReasoningMarkers) is false;
+        protected override bool CommentHasIssue(in ReadOnlySpan<char> comment, SemanticModel semanticModel) => CommentHasIssue(comment) && comment.ToString().ContainsAny(ReasoningMarkers) is false;
 
-        private static bool CommentHasIssue(ReadOnlySpan<char> comment)
+        private static bool CommentHasIssue(in ReadOnlySpan<char> comment)
         {
             if (comment.StartsWith("//", StringComparison.Ordinal))
             {

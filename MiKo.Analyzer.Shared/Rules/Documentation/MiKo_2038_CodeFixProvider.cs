@@ -44,7 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => "MiKo_2038";
 
-        internal static bool CanFix(ReadOnlySpan<char> text) => text.StartsWithAny(CommandStartingPhrases, StringComparison.OrdinalIgnoreCase);
+        internal static bool CanFix(in ReadOnlySpan<char> text) => text.StartsWithAny(CommandStartingPhrases, StringComparison.OrdinalIgnoreCase);
 
         internal static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
         {

@@ -6,6 +6,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         protected MultiLineCommentAnalyzer(string diagnosticId) : base(diagnosticId) => IgnoreMultipleLines = false;
 
-        protected override bool ShallAnalyze(SyntaxTrivia trivia) => trivia.IsComment();
+        protected override bool ShallAnalyze(in SyntaxTrivia trivia) => trivia.IsComment();
     }
 }

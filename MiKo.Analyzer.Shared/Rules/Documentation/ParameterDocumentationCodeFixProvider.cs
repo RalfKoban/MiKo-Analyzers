@@ -71,6 +71,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return syntax;
         }
 
-        protected abstract XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index, Diagnostic issue);
+        protected abstract XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, in int index, Diagnostic issue);
     }
 }

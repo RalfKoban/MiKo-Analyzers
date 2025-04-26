@@ -13,6 +13,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool IsResponsibleNode(SyntaxKind kind) => kind == SyntaxKind.TrueLiteralExpression || kind == SyntaxKind.FalseLiteralExpression;
+        protected override bool IsResponsibleNode(in SyntaxKind kind) => kind == SyntaxKind.TrueLiteralExpression || kind == SyntaxKind.FalseLiteralExpression;
     }
 }

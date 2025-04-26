@@ -175,6 +175,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
 //// ncrunch: rdi off
+//// ncrunch: no coverage start
 
         private sealed class MapData
         {
@@ -299,7 +300,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
         }
+//// ncrunch: no coverage end
+//// ncrunch: rdi default
     }
-
-    //// ncrunch: rdi default
 }

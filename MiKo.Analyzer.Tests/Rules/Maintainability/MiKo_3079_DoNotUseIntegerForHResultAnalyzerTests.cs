@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3079_DoNotUseIntegerForHResultAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_([Values(-2147, 2147, int.MinValue, int.MaxValue)] int number) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_([Values(-2147, 2147, int.MinValue, int.MaxValue)] in int number) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -25,7 +25,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_([Values(0x80070000, 0x80070001, 0x80070002, 0x80070003, 0x80070004, 0x80070005)] uint number) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_([Values(0x80070000, 0x80070001, 0x80070002, 0x80070003, 0x80070004, 0x80070005)] in uint number) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -38,7 +38,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_for_HResult_([Values(0x80070000, 0x80070001, 0x80070002, 0x80070003, 0x80070004, 0x80070005)] uint number)
+        public void Code_gets_fixed_for_HResult_([Values(0x80070000, 0x80070001, 0x80070002, 0x80070003, 0x80070004, 0x80070005)] in uint number)
         {
             var originalCode = @"
 using System;

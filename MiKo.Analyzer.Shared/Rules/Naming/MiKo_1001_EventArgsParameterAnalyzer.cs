@@ -92,7 +92,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static bool IsApplicable(ITypeSymbol type) => type.IsEventArgs() || type.IsDependencyPropertyChangedEventArgs();
 
-        private static string GetNameForIndex(int i)
+        private static string GetNameForIndex(in int i)
         {
             switch (i)
             {

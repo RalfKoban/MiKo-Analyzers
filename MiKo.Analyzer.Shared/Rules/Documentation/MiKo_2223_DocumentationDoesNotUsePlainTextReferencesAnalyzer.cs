@@ -150,7 +150,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return findings > 1;
         }
 
-        private static bool IsCompoundWord(ReadOnlySpan<char> trimmed)
+        private static bool IsCompoundWord(in ReadOnlySpan<char> trimmed)
         {
             if (trimmed.Length == 0)
             {
