@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         private readonly SyntaxKind m_syntaxKind;
 
-        protected UsePatternMatchingCodeFixProvider(SyntaxKind syntaxKind = SyntaxKind.EqualsExpression) => m_syntaxKind = syntaxKind;
+        protected UsePatternMatchingCodeFixProvider(in SyntaxKind syntaxKind = SyntaxKind.EqualsExpression) => m_syntaxKind = syntaxKind;
 
         protected sealed override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.First(_ => _.IsKind(m_syntaxKind));
 

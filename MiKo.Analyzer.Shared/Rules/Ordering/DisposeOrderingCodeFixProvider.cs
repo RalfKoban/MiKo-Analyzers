@@ -126,7 +126,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                                                                });
         }
 
-        private static SyntaxTrivia[] GetTriviaToRemove(SyntaxTrivia trivia)
+        private static SyntaxTrivia[] GetTriviaToRemove(in SyntaxTrivia trivia)
         {
             var result = Enumerable.Empty<SyntaxTrivia>()
                                    .Concat(trivia.PreviousSiblings(2))
@@ -136,7 +136,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             return result;
         }
 
-        private static SyntaxTrivia[] GetTriviaToAdd(SyntaxTrivia[] triviaToRemove, SyntaxTrivia additionalTrivia)
+        private static SyntaxTrivia[] GetTriviaToAdd(SyntaxTrivia[] triviaToRemove, in SyntaxTrivia additionalTrivia)
         {
             var result = new SyntaxTrivia[triviaToRemove.Length + 1];
             result[triviaToRemove.Length] = additionalTrivia;

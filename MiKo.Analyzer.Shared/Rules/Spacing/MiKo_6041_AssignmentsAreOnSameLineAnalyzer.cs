@@ -69,7 +69,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
         }
 
-        private void AnalyzeAssignmentExpression(SyntaxNodeAnalysisContext context, AssignmentExpressionSyntax node)
+        private void AnalyzeAssignmentExpression(in SyntaxNodeAnalysisContext context, AssignmentExpressionSyntax node)
         {
             var operatorToken = node.OperatorToken;
 
@@ -83,7 +83,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
         }
 
-        private void AnalyzeEqualsValueClause(SyntaxNodeAnalysisContext context, EqualsValueClauseSyntax node)
+        private void AnalyzeEqualsValueClause(in SyntaxNodeAnalysisContext context, EqualsValueClauseSyntax node)
         {
             var startLine = node.EqualsToken.GetStartingLine();
             var expressionLine = node.Value.GetStartingLine();
@@ -104,7 +104,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
         }
 
-        private void ReportIssue(SyntaxNodeAnalysisContext context, EqualsValueClauseSyntax node)
+        private void ReportIssue(in SyntaxNodeAnalysisContext context, EqualsValueClauseSyntax node)
         {
             if (IgnoreIssue(node.Value) is false)
             {
@@ -112,7 +112,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
         }
 
-        private void ReportIssue(SyntaxNodeAnalysisContext context, SyntaxToken token)
+        private void ReportIssue(in SyntaxNodeAnalysisContext context, in SyntaxToken token)
         {
             if (IgnoreIssue(token.Parent?.Parent) is false)
             {

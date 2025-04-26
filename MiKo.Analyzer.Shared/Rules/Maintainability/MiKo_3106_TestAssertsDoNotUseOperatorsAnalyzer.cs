@@ -49,7 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return false;
         }
 
-        private static bool IsFrameworkAssertion(SyntaxNodeAnalysisContext context, ExpressionSyntax expression)
+        private static bool IsFrameworkAssertion(in SyntaxNodeAnalysisContext context, ExpressionSyntax expression)
         {
             var type = expression.GetTypeSymbol(context.SemanticModel);
             var namespaceName = type?.ContainingNamespace.FullyQualifiedName();

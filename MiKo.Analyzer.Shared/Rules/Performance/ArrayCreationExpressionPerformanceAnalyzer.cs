@@ -9,11 +9,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Performance
 {
-    public abstract class ArrayCreationExpressionMaintainabilityAnalyzer : PerformanceAnalyzer
+    public abstract class ArrayCreationExpressionPerformanceAnalyzer : PerformanceAnalyzer
     {
         private static readonly SyntaxKind[] Expressions = { SyntaxKind.ArrayCreationExpression, SyntaxKind.ArrayInitializerExpression };
 
-        protected ArrayCreationExpressionMaintainabilityAnalyzer(string diagnosticId) : base(diagnosticId, (SymbolKind)(-1))
+        protected ArrayCreationExpressionPerformanceAnalyzer(string diagnosticId) : base(diagnosticId, (SymbolKind)(-1))
         {
         }
 
@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeArrayCreationNode(SyntaxNode node, SyntaxNodeAnalysisContext context)
+        private IEnumerable<Diagnostic> AnalyzeArrayCreationNode(SyntaxNode node, in SyntaxNodeAnalysisContext context)
         {
             switch (node)
             {

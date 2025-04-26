@@ -9,7 +9,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         private readonly int m_limit;
 
-        protected NamingLengthAnalyzer(string diagnosticId, SymbolKind kind, int limit) : base(diagnosticId, kind) => m_limit = limit;
+        protected NamingLengthAnalyzer(string diagnosticId, SymbolKind kind, in int limit) : base(diagnosticId, kind) => m_limit = limit;
 
         public static bool EnabledPerDefault { get; set; } = false; // TODO: RKN set to false to limit the default analyzing (but be aware to get the tests running)
 
@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return Array.Empty<Diagnostic>();
         }
 
-        protected Diagnostic Issue(ISymbol symbol, int exceeding) => Issue(symbol, exceeding, m_limit);
+        protected Diagnostic Issue(ISymbol symbol, in int exceeding) => Issue(symbol, exceeding, m_limit);
 
         protected int GetExceedingCharacters(string symbolName)
         {

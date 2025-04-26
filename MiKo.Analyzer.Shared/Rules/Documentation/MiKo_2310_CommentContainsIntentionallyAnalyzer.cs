@@ -16,11 +16,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool CommentHasIssue(ReadOnlySpan<char> comment, SemanticModel semanticModel) => CommentHasIssue(comment);
+        protected override bool CommentHasIssue(in ReadOnlySpan<char> comment, SemanticModel semanticModel) => CommentHasIssue(comment);
 
-        protected override IEnumerable<Diagnostic> CollectIssues(string name, SyntaxTrivia trivia) => GetAllLocations(trivia, Constants.Comments.IntentionallyPhrase, StringComparison.OrdinalIgnoreCase).Select(_ => Issue(name, _));
+        protected override IEnumerable<Diagnostic> CollectIssues(string name, in SyntaxTrivia trivia) => GetAllLocations(trivia, Constants.Comments.IntentionallyPhrase, StringComparison.OrdinalIgnoreCase).Select(_ => Issue(name, _));
 
-        private static bool CommentHasIssue(ReadOnlySpan<char> comment)
+        private static bool CommentHasIssue(in ReadOnlySpan<char> comment)
         {
             var c = comment.ToString();
 

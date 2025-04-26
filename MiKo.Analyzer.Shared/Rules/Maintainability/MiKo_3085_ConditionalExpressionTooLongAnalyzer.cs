@@ -157,7 +157,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private void AnalyzeLength(SyntaxNodeAnalysisContext context, SyntaxNode node)
+        private void AnalyzeLength(in SyntaxNodeAnalysisContext context, SyntaxNode node)
         {
             if (AnalyzeLength(node, context.SemanticModel))
             {

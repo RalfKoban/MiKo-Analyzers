@@ -77,7 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return false;
         }
 
-        private bool HasIssue(BinaryExpressionSyntax node, SyntaxNodeAnalysisContext context)
+        private bool HasIssue(BinaryExpressionSyntax node, in SyntaxNodeAnalysisContext context)
         {
             // "a == b || (a != null && a.Equals(b))"
             // "a == b || a?.Equals(b) is true)"

@@ -150,7 +150,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
 //// ncrunch: rdi default
 
-        private static string GetWrongText(SyntaxList<XmlAttributeSyntax> attributes)
+        private static string GetWrongText(in SyntaxList<XmlAttributeSyntax> attributes)
         {
             var attribute = attributes.First(_ => WrongAttributes.Contains(_.GetName()));
             var token = attribute.FirstChildToken(SyntaxKind.XmlTextLiteralToken);

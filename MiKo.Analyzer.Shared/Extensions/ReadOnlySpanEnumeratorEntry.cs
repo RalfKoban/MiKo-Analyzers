@@ -6,13 +6,13 @@ namespace System
 {
     internal readonly ref struct ReadOnlySpanEnumeratorEntry
     {
-        public ReadOnlySpanEnumeratorEntry(ReadOnlySpan<char> text) => Text = text;
+        public ReadOnlySpanEnumeratorEntry(in ReadOnlySpan<char> text) => Text = text;
 
         public ReadOnlySpan<char> Text { get; }
 
         public bool IsEmpty => Text.IsEmpty;
 
-        public static implicit operator ReadOnlySpan<char>(ReadOnlySpanEnumeratorEntry entry) => entry.Text;
+        public static implicit operator ReadOnlySpan<char>(in ReadOnlySpanEnumeratorEntry entry) => entry.Text;
 
         public override string ToString() => Text.ToString();
     }

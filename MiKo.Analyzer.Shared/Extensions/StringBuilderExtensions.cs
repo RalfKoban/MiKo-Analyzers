@@ -18,7 +18,7 @@ namespace System.Text
 
         public static bool IsNullOrWhiteSpace(this StringBuilder value) => value is null || value.CountLeadingWhitespaces() == value.Length;
 
-        public static StringBuilder AdjustFirstWord(this StringBuilder value, FirstWordHandling handling)
+        public static StringBuilder AdjustFirstWord(this StringBuilder value, in FirstWordHandling handling)
         {
             if (value is null)
             {
@@ -143,7 +143,7 @@ namespace System.Text
                 value.Insert(whitespacesBefore, pluralWord);
             }
 
-            void TrimLeadingSpacesTo(int count)
+            void TrimLeadingSpacesTo(in int count)
             {
                 if (value[0] == ' ')
                 {
@@ -159,7 +159,7 @@ namespace System.Text
             }
         }
 
-        public static bool EndsWith(this StringBuilder value, string ending, StringComparison comparison = StringComparison.Ordinal)
+        public static bool EndsWith(this StringBuilder value, string ending, in StringComparison comparison = StringComparison.Ordinal)
         {
             if (ending is null)
             {
@@ -237,7 +237,7 @@ namespace System.Text
 
         public static bool IsSingleWord(this StringBuilder value) => value?.HasWhitespaces() is false;
 
-        public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, ReadOnlySpan<Pair> replacementPairs)
+        public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, in ReadOnlySpan<Pair> replacementPairs)
         {
             var count = replacementPairs.Length;
 
@@ -270,7 +270,7 @@ namespace System.Text
             {
                 var oldValue = texts[index];
 
-                if (oldValue.IsNullOrEmpty())
+                if (string.IsNullOrEmpty(oldValue))
                 {
                     // cannot replace any empty value
                     continue;
@@ -303,7 +303,7 @@ namespace System.Text
             return value;
         }
 
-        public static StringBuilder SeparateWords(this StringBuilder value, char separator, FirstWordHandling firstWordHandling = FirstWordHandling.None)
+        public static StringBuilder SeparateWords(this StringBuilder value, in char separator, in FirstWordHandling firstWordHandling = FirstWordHandling.None)
         {
             if (value.IsNullOrEmpty())
             {
@@ -521,7 +521,7 @@ namespace System.Text
             return value;
         }
 
-        public static StringBuilder TrimEndBy(this StringBuilder value, int count)
+        public static StringBuilder TrimEndBy(this StringBuilder value, in int count)
         {
             if (count == 0)
             {
@@ -564,13 +564,28 @@ namespace System.Text
 
         public static StringBuilder WithoutMultipleWhiteSpaces(this StringBuilder value) => value.ReplaceAllWithCheck(Constants.Comments.MultiWhitespaceStrings, Constants.Comments.SingleWhitespaceString); // ncrunch: no coverage
 
-        public static StringBuilder WithoutNewLines(this StringBuilder value) => value.Without('\r').Without('\n'); // ncrunch: no coverage
+        public static StringBuilder WithoutNewLines(this StringBuilder value) => value.Without('\r', '\n'); // ncrunch: no coverage
 
-        public static StringBuilder Without(this StringBuilder value, char c)
+        public static StringBuilder Without(this StringBuilder value, in char c)
         {
             for (var position = value.Length - 1; position > -1; position--)
             {
                 if (value[position] == c)
+                {
+                    value.Remove(position, 1);
+                }
+            }
+
+            return value;
+        }
+
+        public static StringBuilder Without(this StringBuilder value, in char c1, in char c2)
+        {
+            for (var position = value.Length - 1; position > -1; position--)
+            {
+                var c = value[position];
+
+                if (c == c1 || c == c2)
                 {
                     value.Remove(position, 1);
                 }
@@ -615,11 +630,11 @@ namespace System.Text
                     if (difference >= QuickCompareRentLengthThreshold)
                     {
                         // use rented arrays here (if we have larger differences, the start and end may be in different chunks)
-                        return QuickCompareAtIndicesWithRent(ref current, ref otherFirst, ref otherLast, ref length, ref lastIndex);
+                        return QuickCompareAtIndicesWithRent(ref current, otherFirst, otherLast, length, lastIndex);
                     }
 
                     // could be part in the replacement only if characters match
-                    return QuickCompareAtIndices(ref current, ref otherFirst, ref otherLast, ref length, ref lastIndex);
+                    return QuickCompareAtIndices(ref current, otherFirst, otherLast, length, lastIndex);
                 }
 
                 // can be part in the replacement as other value is smaller and could fit current value
@@ -640,7 +655,7 @@ namespace System.Text
             }
         }
 
-        private static bool QuickCompareAtIndices(ref StringBuilder current, ref char first, ref char last, ref int length, ref int lastIndex)
+        private static bool QuickCompareAtIndices(ref StringBuilder current, in char first, in char last, in int length, in int lastIndex)
         {
             for (var i = 0; i < length; i++)
             {
@@ -656,7 +671,7 @@ namespace System.Text
             return false;
         }
 
-        private static bool QuickCompareAtIndicesWithRent(ref StringBuilder current, ref char first, ref char last, ref int length, ref int lastIndex)
+        private static bool QuickCompareAtIndicesWithRent(ref StringBuilder current, in char first, in char last, in int length, in int lastIndex)
         {
             // use a rented shared pool for performance reasons
             var shared = ArrayPool<char>.Shared;
@@ -709,7 +724,7 @@ namespace System.Text
             return whitespaces;
         }
 
-        private static int CountTrailingWhitespaces(this StringBuilder value, int start = 0)
+        private static int CountTrailingWhitespaces(this StringBuilder value, in int start = 0)
         {
             var whitespaces = 0;
 

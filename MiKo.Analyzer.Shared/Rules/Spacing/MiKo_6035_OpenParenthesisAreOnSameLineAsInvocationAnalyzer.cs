@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
         }
 
-        private void AnalyzeNameSyntax(SyntaxNodeAnalysisContext context, NameSyntax name, SyntaxToken parenthesis)
+        private void AnalyzeNameSyntax(in SyntaxNodeAnalysisContext context, NameSyntax name, in SyntaxToken parenthesis)
         {
             var parenthesisLine = parenthesis.GetStartingLine();
             var memberLine = name.GetStartingLine();

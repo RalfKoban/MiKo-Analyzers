@@ -44,7 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
         }
 
-        private static bool HasNoBlankLinesBefore(SyntaxNode current, int previousIndex, SyntaxList<StatementSyntax> statements)
+        private static bool HasNoBlankLinesBefore(SyntaxNode current, in int previousIndex, in SyntaxList<StatementSyntax> statements)
         {
             if (previousIndex >= 0)
             {
@@ -56,7 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return false;
         }
 
-        private static bool HasNoBlankLinesAfter(SyntaxNode current, int nextIndex, SyntaxList<StatementSyntax> statements, int statementsCount, AssignmentExpressionSyntax assignment)
+        private static bool HasNoBlankLinesAfter(SyntaxNode current, in int nextIndex, in SyntaxList<StatementSyntax> statements, in int statementsCount, AssignmentExpressionSyntax assignment)
         {
             if (nextIndex >= statementsCount)
             {
