@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
         }
 
-        private void AnalyzeLambda(SyntaxNodeAnalysisContext context, SyntaxNode parameter, SyntaxToken arrowToken, ExpressionSyntax expressionBody)
+        private void AnalyzeLambda(in SyntaxNodeAnalysisContext context, SyntaxNode parameter, in SyntaxToken arrowToken, ExpressionSyntax expressionBody)
         {
             var parametersStartingLine = parameter.GetStartingLine();
             var tokenStartingLine = arrowToken.GetStartingLine();

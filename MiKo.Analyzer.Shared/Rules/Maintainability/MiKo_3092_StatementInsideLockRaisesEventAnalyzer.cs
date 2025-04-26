@@ -54,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private Diagnostic AnalyzeToken(SyntaxNodeAnalysisContext context, SyntaxToken token)
+        private Diagnostic AnalyzeToken(in SyntaxNodeAnalysisContext context, in SyntaxToken token)
         {
             var eventName = token.ValueText;
 

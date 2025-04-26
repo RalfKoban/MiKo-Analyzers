@@ -109,7 +109,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return null;
         }
 
-        private Diagnostic AnalyzeSimpleMemberAccessExpression(SyntaxList<StatementSyntax> statements, MemberAccessExpressionSyntax call, SemanticModel semanticModel)
+        private Diagnostic AnalyzeSimpleMemberAccessExpression(in SyntaxList<StatementSyntax> statements, MemberAccessExpressionSyntax call, SemanticModel semanticModel)
         {
             var callLineSpan = call.GetLocation().GetLineSpan();
 

@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] MeaninglessPhrases = CreateMeaninglessPhrases(MeaninglessTextPhrases);
 
-        private static readonly string[] MeaninglessFieldPhrases = MeaninglessPhrases.Except(Constants.Comments.FieldStartingPhrase).ToArray();
+        private static readonly string[] MeaninglessFieldPhrases = [.. MeaninglessPhrases.Except(Constants.Comments.FieldStartingPhrase)];
 
 #if NCRUNCH
 

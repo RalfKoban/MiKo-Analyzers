@@ -7,7 +7,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 {
     public abstract class PerformanceAnalyzer : Analyzer
     {
-        protected PerformanceAnalyzer(string diagnosticId, SymbolKind kind = SymbolKind.Method) : base(nameof(Performance), diagnosticId, kind)
+        protected PerformanceAnalyzer(string diagnosticId, in SymbolKind kind = SymbolKind.Method) : base(nameof(Performance), diagnosticId, kind)
         {
         }
 

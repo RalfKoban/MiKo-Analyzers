@@ -103,7 +103,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private Diagnostic AnalyzeArgument(MemberAccessExpressionSyntax node, ArgumentSyntax argument, SeparatedSyntaxList<ArgumentSyntax> arguments)
+        private Diagnostic AnalyzeArgument(MemberAccessExpressionSyntax node, ArgumentSyntax argument, in SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
             switch (argument.Expression)
             {
@@ -149,6 +149,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return null;
         }
 
-        private new Diagnostic Issue(SyntaxToken token) => Issue(token, new Pair(Constants.AnalyzerCodeFixSharedData.Marker, token.ValueText));
+        private new Diagnostic Issue(in SyntaxToken token) => Issue(token, new Pair(Constants.AnalyzerCodeFixSharedData.Marker, token.ValueText));
     }
 }

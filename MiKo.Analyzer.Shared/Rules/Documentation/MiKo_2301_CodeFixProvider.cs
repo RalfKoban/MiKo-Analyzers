@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool IsTrivia => true;
 
-        protected override SyntaxToken GetUpdatedToken(SyntaxToken token, Diagnostic issue)
+        protected override SyntaxToken GetUpdatedToken(in SyntaxToken token, Diagnostic issue)
         {
             var trivia = token.LeadingTrivia;
             var count = trivia.Count;

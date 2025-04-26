@@ -12,14 +12,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                      '\\',
                                                                  };
 
-        internal static bool EndsWithPeriod(ReadOnlySpan<char> comment) => comment.EndsWith('.')
+        internal static bool EndsWithPeriod(in ReadOnlySpan<char> comment) => comment.EndsWith('.')
                                                                         && comment.EndsWith("...", StringComparison.Ordinal) is false
                                                                         && comment.EndsWith("etc.", StringComparison.OrdinalIgnoreCase) is false;
 
-        internal static bool ContainsDoublePeriod(ReadOnlySpan<char> comment) => comment.Contains("..", _ => AllowedChars.Contains(_) is false, StringComparison.Ordinal)
+        internal static bool ContainsDoublePeriod(in ReadOnlySpan<char> comment) => comment.Contains("..", _ => AllowedChars.Contains(_) is false, StringComparison.Ordinal)
                                                                               && comment.EndsWith("...", StringComparison.Ordinal) is false;
 
-        internal static bool ContainsPhrase(string phrase, ReadOnlySpan<char> comment)
+        internal static bool ContainsPhrase(string phrase, in ReadOnlySpan<char> comment)
         {
             // use string here to avoid unnecessary 'ToString' calls on 'ReadOnlySpan' (see 'IndexOf' method inside 'MemoryExtensions')
             var index = comment.ToString().IndexOf(phrase, StringComparison.OrdinalIgnoreCase);
@@ -40,6 +40,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return comment.Slice(indexAfterPhrase).StartsWithAny(Constants.Comments.Delimiters);
         }
 
-        internal static bool ContainsPhrases(string[] phrases, ReadOnlySpan<char> comment) => comment.ToString().ContainsAny(phrases, StringComparison.OrdinalIgnoreCase);
+        internal static bool ContainsPhrases(string[] phrases, in ReadOnlySpan<char> comment) => comment.ToString().ContainsAny(phrases, StringComparison.OrdinalIgnoreCase);
     }
 }

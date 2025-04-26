@@ -16,9 +16,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool CommentHasIssue(ReadOnlySpan<char> comment, SemanticModel semanticModel) => false;
+        protected override bool CommentHasIssue(in ReadOnlySpan<char> comment, SemanticModel semanticModel) => false;
 
-        protected override bool CommentHasIssue(SyntaxTrivia trivia, SemanticModel semanticModel)
+        protected override bool CommentHasIssue(in SyntaxTrivia trivia, SemanticModel semanticModel)
         {
             var current = trivia.Token;
 

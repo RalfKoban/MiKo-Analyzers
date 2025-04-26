@@ -43,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return betterName;
         }
 
-        internal static string FindDescribingWord(char c, string defaultValue = null)
+        internal static string FindDescribingWord(in char c, string defaultValue = null)
         {
             switch (c)
             {

@@ -48,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             return GetUpdatedSyntax(syntax, issue, SyntaxKind.None);
         }
 
-        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax, Diagnostic issue, SyntaxKind predefined)
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax, Diagnostic issue, in SyntaxKind predefined)
         {
             var invocation = GetInvocationExpressionSyntax(syntax, out var kind);
 

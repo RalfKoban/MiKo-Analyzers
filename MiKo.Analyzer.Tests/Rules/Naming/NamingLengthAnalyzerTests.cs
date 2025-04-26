@@ -39,8 +39,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                    "Abcdefghijklmnopqrstuvwxyz01234567890äöüß",
                                                ];
 
-        protected static string[] GetAllWithMaxLengthOf(int length) => All.Where(_ => _.Length <= length).ToArray();
+        protected static string[] GetAllWithMaxLengthOf(int length) => [.. All.Where(_ => _.Length <= length)];
 
-        protected static string[] GetAllAboveLengthOf(int length) => All.Where(_ => _.Length > length).ToArray();
+        protected static string[] GetAllAboveLengthOf(int length) => [.. All.Where(_ => _.Length > length)];
     }
 }

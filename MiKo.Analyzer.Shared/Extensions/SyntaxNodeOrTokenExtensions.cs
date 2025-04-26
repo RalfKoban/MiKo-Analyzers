@@ -8,14 +8,14 @@ namespace MiKoSolutions.Analyzers
 {
     internal static class SyntaxNodeOrTokenExtensions
     {
-        internal static int GetPositionWithinStartLine(this SyntaxNodeOrToken value) => value.GetLocation().GetPositionWithinStartLine();
+        internal static int GetPositionWithinStartLine(this in SyntaxNodeOrToken value) => value.GetLocation().GetPositionWithinStartLine();
 
-        internal static int GetStartingLine(this SyntaxNodeOrToken value) => value.GetLocation().GetStartingLine();
+        internal static int GetStartingLine(this in SyntaxNodeOrToken value) => value.GetLocation().GetStartingLine();
 
-        internal static int GetEndingLine(this SyntaxNodeOrToken value) => value.GetLocation().GetEndingLine();
+        internal static int GetEndingLine(this in SyntaxNodeOrToken value) => value.GetLocation().GetEndingLine();
 
-        internal static LinePosition GetStartPosition(this SyntaxNodeOrToken value) => value.GetLocation().GetStartPosition();
+        internal static LinePosition GetStartPosition(this in SyntaxNodeOrToken value) => value.GetLocation().GetStartPosition();
 
-        internal static LinePosition GetEndPosition(this SyntaxNodeOrToken value) => value.GetLocation().GetEndPosition();
+        internal static LinePosition GetEndPosition(this in SyntaxNodeOrToken value) => value.GetLocation().GetEndPosition();
     }
 }

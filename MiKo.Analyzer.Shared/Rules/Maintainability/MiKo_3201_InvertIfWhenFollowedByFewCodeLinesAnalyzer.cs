@@ -43,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeIfStatement(IfStatementSyntax node, SyntaxNodeAnalysisContext context)
+        protected override IEnumerable<Diagnostic> AnalyzeIfStatement(IfStatementSyntax node, in SyntaxNodeAnalysisContext context)
         {
             if (IsApplicable(node))
             {

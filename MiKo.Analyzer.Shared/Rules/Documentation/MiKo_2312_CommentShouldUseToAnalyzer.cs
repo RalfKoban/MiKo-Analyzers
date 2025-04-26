@@ -16,8 +16,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool CommentHasIssue(ReadOnlySpan<char> comment, SemanticModel semanticModel) => DocumentationComment.ContainsPhrases(Constants.Comments.WhichIsToTerms, comment);
+        protected override bool CommentHasIssue(in ReadOnlySpan<char> comment, SemanticModel semanticModel) => DocumentationComment.ContainsPhrases(Constants.Comments.WhichIsToTerms, comment);
 
-        protected override IEnumerable<Diagnostic> CollectIssues(string name, SyntaxTrivia trivia) => GetAllLocations(trivia, Constants.Comments.WhichIsToTerms, StringComparison.OrdinalIgnoreCase).Select(_ => Issue(name, _, Constants.Comments.ToTerm));
+        protected override IEnumerable<Diagnostic> CollectIssues(string name, in SyntaxTrivia trivia) => GetAllLocations(trivia, Constants.Comments.WhichIsToTerms, StringComparison.OrdinalIgnoreCase).Select(_ => Issue(name, _, Constants.Comments.ToTerm));
     }
 }

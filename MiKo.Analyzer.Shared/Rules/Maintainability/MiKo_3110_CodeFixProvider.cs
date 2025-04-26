@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return original;
         }
 
-        private static InvocationExpressionSyntax UpdatedSyntax(MemberAccessExpressionSyntax syntax, SeparatedSyntaxList<ArgumentSyntax> args, string text)
+        private static InvocationExpressionSyntax UpdatedSyntax(MemberAccessExpressionSyntax syntax, in SeparatedSyntaxList<ArgumentSyntax> args, string text)
         {
             var methodName = syntax.GetName();
 
@@ -58,9 +58,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static InvocationExpressionSyntax FixAreEqual(SeparatedSyntaxList<ArgumentSyntax> args) => FixAreEqualOrSame(args);
+        private static InvocationExpressionSyntax FixAreEqual(in SeparatedSyntaxList<ArgumentSyntax> args) => FixAreEqualOrSame(args);
 
-        private static InvocationExpressionSyntax FixAreEqualOrSame(SeparatedSyntaxList<ArgumentSyntax> args)
+        private static InvocationExpressionSyntax FixAreEqualOrSame(in SeparatedSyntaxList<ArgumentSyntax> args)
         {
             var arg0 = args[0];
             var arg1 = args[1];
@@ -78,9 +78,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return AssertThat(arg1, Has("Exactly", arg0, "Items"), args);
         }
 
-        private static InvocationExpressionSyntax FixAreNotEqual(SeparatedSyntaxList<ArgumentSyntax> args, string text) => FixAreNotEqualOrSame(args, text);
+        private static InvocationExpressionSyntax FixAreNotEqual(in SeparatedSyntaxList<ArgumentSyntax> args, string text) => FixAreNotEqualOrSame(args, text);
 
-        private static InvocationExpressionSyntax FixAreNotEqualOrSame(SeparatedSyntaxList<ArgumentSyntax> args, string text)
+        private static InvocationExpressionSyntax FixAreNotEqualOrSame(in SeparatedSyntaxList<ArgumentSyntax> args, string text)
         {
             var arg0 = args[0];
             var arg1 = args[1];
@@ -98,15 +98,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return AssertThat(arg1, Has(text, "Not", "EqualTo", arg0), args);
         }
 
-        private static InvocationExpressionSyntax FixGreater(SeparatedSyntaxList<ArgumentSyntax> args, string text) => AssertThat(args[0], Has(text, "GreaterThan", args[1]), args);
+        private static InvocationExpressionSyntax FixGreater(in SeparatedSyntaxList<ArgumentSyntax> args, string text) => AssertThat(args[0], Has(text, "GreaterThan", args[1]), args);
 
-        private static InvocationExpressionSyntax FixGreaterOrEqual(SeparatedSyntaxList<ArgumentSyntax> args, string text) => AssertThat(args[0], Has(text, "GreaterThanOrEqualTo", args[1]), args);
+        private static InvocationExpressionSyntax FixGreaterOrEqual(in SeparatedSyntaxList<ArgumentSyntax> args, string text) => AssertThat(args[0], Has(text, "GreaterThanOrEqualTo", args[1]), args);
 
-        private static InvocationExpressionSyntax FixLess(SeparatedSyntaxList<ArgumentSyntax> args, string text) => AssertThat(args[0], Has(text, "LessThan", args[1]), args);
+        private static InvocationExpressionSyntax FixLess(in SeparatedSyntaxList<ArgumentSyntax> args, string text) => AssertThat(args[0], Has(text, "LessThan", args[1]), args);
 
-        private static InvocationExpressionSyntax FixLessOrEqual(SeparatedSyntaxList<ArgumentSyntax> args, string text) => AssertThat(args[0], Has(text, "LessThanOrEqualTo", args[1]), args);
+        private static InvocationExpressionSyntax FixLessOrEqual(in SeparatedSyntaxList<ArgumentSyntax> args, string text) => AssertThat(args[0], Has(text, "LessThanOrEqualTo", args[1]), args);
 
-        private static InvocationExpressionSyntax FixThat(SeparatedSyntaxList<ArgumentSyntax> args)
+        private static InvocationExpressionSyntax FixThat(in SeparatedSyntaxList<ArgumentSyntax> args)
         {
             var args1 = args[1];
 
@@ -131,7 +131,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return null;
         }
 
-        private static InvocationExpressionSyntax AssertThat(ArgumentSyntax argument, ArgumentSyntax constraint, SeparatedSyntaxList<ArgumentSyntax> arguments) => UnitTestCodeFixProvider.AssertThat(GetFixedArgument(argument), constraint, arguments);
+        private static InvocationExpressionSyntax AssertThat(ArgumentSyntax argument, ArgumentSyntax constraint, in SeparatedSyntaxList<ArgumentSyntax> arguments) => UnitTestCodeFixProvider.AssertThat(GetFixedArgument(argument), constraint, arguments);
 
         private static ArgumentSyntax GetFixedArgument(ArgumentSyntax argument)
         {
