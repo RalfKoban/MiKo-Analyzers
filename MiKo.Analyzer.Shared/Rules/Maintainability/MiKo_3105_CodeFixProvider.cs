@@ -63,7 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue) => root.WithoutUsing("NUnit.Framework.Legacy"); // remove unused "using NUnit.Framework.Legacy;"
 
-        private static InvocationExpressionSyntax UpdatedSyntax(Document document, MemberAccessExpressionSyntax syntax, SeparatedSyntaxList<ArgumentSyntax> args, string typeName)
+        private static InvocationExpressionSyntax UpdatedSyntax(Document document, MemberAccessExpressionSyntax syntax, in SeparatedSyntaxList<ArgumentSyntax> args, string typeName)
         {
             var methodName = syntax.GetName();
 
@@ -126,17 +126,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static InvocationExpressionSyntax FixAllItemsAreInstancesOfType(SeparatedSyntaxList<ArgumentSyntax> args, SimpleNameSyntax name) => FixGenericIs("All", "InstanceOf", args, name);
+        private static InvocationExpressionSyntax FixAllItemsAreInstancesOfType(in SeparatedSyntaxList<ArgumentSyntax> args, SimpleNameSyntax name) => FixGenericIs("All", "InstanceOf", args, name);
 
-        private static InvocationExpressionSyntax FixAllItemsAreNotNull(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("All", "Not", "Null"), args, 1);
+        private static InvocationExpressionSyntax FixAllItemsAreNotNull(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("All", "Not", "Null"), args, 1);
 
-        private static InvocationExpressionSyntax FixAllItemsAreUnique(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Unique"), args, 1);
+        private static InvocationExpressionSyntax FixAllItemsAreUnique(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Unique"), args, 1);
 
-        private static InvocationExpressionSyntax FixAreEqual(Document document, SeparatedSyntaxList<ArgumentSyntax> args) => FixAreEqualOrSame(document, args, "EqualTo");
+        private static InvocationExpressionSyntax FixAreEqual(Document document, in SeparatedSyntaxList<ArgumentSyntax> args) => FixAreEqualOrSame(document, args, "EqualTo");
 
-        private static InvocationExpressionSyntax FixAreEqualIgnoringCase(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("EqualTo", args[0], "IgnoreCase"), args);
+        private static InvocationExpressionSyntax FixAreEqualIgnoringCase(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("EqualTo", args[0], "IgnoreCase"), args);
 
-        private static InvocationExpressionSyntax FixAreEqualOrSame(Document document, SeparatedSyntaxList<ArgumentSyntax> args, string call)
+        private static InvocationExpressionSyntax FixAreEqualOrSame(Document document, in SeparatedSyntaxList<ArgumentSyntax> args, string call)
         {
             var arg0 = args[0];
             var arg1 = args[1];
@@ -202,13 +202,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return AssertThat(arg1, Is(call, arg0), args);
         }
 
-        private static InvocationExpressionSyntax FixAreEquivalent(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("EquivalentTo", args[0]), args);
+        private static InvocationExpressionSyntax FixAreEquivalent(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("EquivalentTo", args[0]), args);
 
-        private static InvocationExpressionSyntax FixAreNotEqual(Document document, SeparatedSyntaxList<ArgumentSyntax> args) => FixAreNotEqualOrSame(document, args, "EqualTo");
+        private static InvocationExpressionSyntax FixAreNotEqual(Document document, in SeparatedSyntaxList<ArgumentSyntax> args) => FixAreNotEqualOrSame(document, args, "EqualTo");
 
-        private static InvocationExpressionSyntax FixAreNotEqualIgnoringCase(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("Not", "EqualTo", args[0], "IgnoreCase"), args);
+        private static InvocationExpressionSyntax FixAreNotEqualIgnoringCase(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("Not", "EqualTo", args[0], "IgnoreCase"), args);
 
-        private static InvocationExpressionSyntax FixAreNotEqualOrSame(Document document, SeparatedSyntaxList<ArgumentSyntax> args, string call)
+        private static InvocationExpressionSyntax FixAreNotEqualOrSame(Document document, in SeparatedSyntaxList<ArgumentSyntax> args, string call)
         {
             var arg0 = args[0];
             var arg1 = args[1];
@@ -246,33 +246,33 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return AssertThat(arg1, Is("Not", call, arg0), args);
         }
 
-        private static InvocationExpressionSyntax FixAreNotEquivalent(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("Not", "EquivalentTo", args[0]), args);
+        private static InvocationExpressionSyntax FixAreNotEquivalent(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("Not", "EquivalentTo", args[0]), args);
 
-        private static InvocationExpressionSyntax FixAreNotSame(Document document, SeparatedSyntaxList<ArgumentSyntax> args) => FixAreNotEqualOrSame(document, args, "SameAs");
+        private static InvocationExpressionSyntax FixAreNotSame(Document document, in SeparatedSyntaxList<ArgumentSyntax> args) => FixAreNotEqualOrSame(document, args, "SameAs");
 
-        private static InvocationExpressionSyntax FixAreSame(Document document, SeparatedSyntaxList<ArgumentSyntax> args) => FixAreEqualOrSame(document, args, "SameAs");
+        private static InvocationExpressionSyntax FixAreSame(Document document, in SeparatedSyntaxList<ArgumentSyntax> args) => FixAreEqualOrSame(document, args, "SameAs");
 
-        private static InvocationExpressionSyntax FixCollectionAssertContains(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Does("Contain", args[1]), args);
+        private static InvocationExpressionSyntax FixCollectionAssertContains(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Does("Contain", args[1]), args);
 
-        private static InvocationExpressionSyntax FixCollectionAssertDoesNotContain(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Does("Not", "Contain", args[1]), args);
+        private static InvocationExpressionSyntax FixCollectionAssertDoesNotContain(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Does("Not", "Contain", args[1]), args);
 
-        private static InvocationExpressionSyntax FixContains(string typeName, SeparatedSyntaxList<ArgumentSyntax> args) => typeName == "CollectionAssert" ? FixCollectionAssertContains(args) : FixStringAssertContains(args);
+        private static InvocationExpressionSyntax FixContains(string typeName, in SeparatedSyntaxList<ArgumentSyntax> args) => typeName == "CollectionAssert" ? FixCollectionAssertContains(args) : FixStringAssertContains(args);
 
-        private static InvocationExpressionSyntax FixDoesNotContain(SeparatedSyntaxList<ArgumentSyntax> args, string typeName) => typeName == "CollectionAssert" ? FixCollectionAssertDoesNotContain(args) : FixStringAssertDoesNotContain(args);
+        private static InvocationExpressionSyntax FixDoesNotContain(in SeparatedSyntaxList<ArgumentSyntax> args, string typeName) => typeName == "CollectionAssert" ? FixCollectionAssertDoesNotContain(args) : FixStringAssertDoesNotContain(args);
 
-        private static InvocationExpressionSyntax FixDoesNotEndWith(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("Not", "EndWith", args[0]), args);
+        private static InvocationExpressionSyntax FixDoesNotEndWith(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("Not", "EndWith", args[0]), args);
 
-        private static InvocationExpressionSyntax FixDoesNotExist(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Does("Not", "Exist"), args, 1);
+        private static InvocationExpressionSyntax FixDoesNotExist(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Does("Not", "Exist"), args, 1);
 
-        private static InvocationExpressionSyntax FixDoesNotStartWith(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("Not", "StartWith", args[0]), args);
+        private static InvocationExpressionSyntax FixDoesNotStartWith(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("Not", "StartWith", args[0]), args);
 
-        private static InvocationExpressionSyntax FixDoesNotThrow(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Throws("Nothing"), args, 1);
+        private static InvocationExpressionSyntax FixDoesNotThrow(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Throws("Nothing"), args, 1);
 
-        private static InvocationExpressionSyntax FixEndsWith(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("EndWith", args[0]), args);
+        private static InvocationExpressionSyntax FixEndsWith(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("EndWith", args[0]), args);
 
-        private static InvocationExpressionSyntax FixExists(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Does("Exist"), args, 1);
+        private static InvocationExpressionSyntax FixExists(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Does("Exist"), args, 1);
 
-        private static InvocationExpressionSyntax FixGenericIs(string methodName, SeparatedSyntaxList<ArgumentSyntax> args, SimpleNameSyntax name)
+        private static InvocationExpressionSyntax FixGenericIs(string methodName, in SeparatedSyntaxList<ArgumentSyntax> args, SimpleNameSyntax name)
         {
             var arg0 = args[0];
 
@@ -312,7 +312,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return AssertThat(arg0, Is(methodName), args, 1);
         }
 
-        private static InvocationExpressionSyntax FixGenericIs(string propertyName, string methodName, SeparatedSyntaxList<ArgumentSyntax> args, SimpleNameSyntax name)
+        private static InvocationExpressionSyntax FixGenericIs(string propertyName, string methodName, in SeparatedSyntaxList<ArgumentSyntax> args, SimpleNameSyntax name)
         {
             var arg0 = args[0];
 
@@ -357,15 +357,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return AssertThat(arg0, Is(propertyName, methodName), args, 1);
         }
 
-        private static InvocationExpressionSyntax FixGreater(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("GreaterThan", args[1]), args);
+        private static InvocationExpressionSyntax FixGreater(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("GreaterThan", args[1]), args);
 
-        private static InvocationExpressionSyntax FixGreaterOrEqual(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("GreaterThanOrEqualTo", args[1]), args);
+        private static InvocationExpressionSyntax FixGreaterOrEqual(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("GreaterThanOrEqualTo", args[1]), args);
 
-        private static InvocationExpressionSyntax FixIsAssignableFrom(SeparatedSyntaxList<ArgumentSyntax> args, SimpleNameSyntax name) => FixGenericIs("AssignableFrom", args, name);
+        private static InvocationExpressionSyntax FixIsAssignableFrom(in SeparatedSyntaxList<ArgumentSyntax> args, SimpleNameSyntax name) => FixGenericIs("AssignableFrom", args, name);
 
-        private static InvocationExpressionSyntax FixIsEmpty(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Empty"), args, 1);
+        private static InvocationExpressionSyntax FixIsEmpty(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Empty"), args, 1);
 
-        private static InvocationExpressionSyntax FixIsFalse(SeparatedSyntaxList<ArgumentSyntax> args)
+        private static InvocationExpressionSyntax FixIsFalse(in SeparatedSyntaxList<ArgumentSyntax> args)
         {
             var argument = args[0];
 
@@ -412,33 +412,33 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return AssertThat(argument, Is("False"), args, 1);
         }
 
-        private static InvocationExpressionSyntax FixIsInstanceOf(SeparatedSyntaxList<ArgumentSyntax> args, SimpleNameSyntax name) => FixGenericIs("InstanceOf", args, name);
+        private static InvocationExpressionSyntax FixIsInstanceOf(in SeparatedSyntaxList<ArgumentSyntax> args, SimpleNameSyntax name) => FixGenericIs("InstanceOf", args, name);
 
-        private static InvocationExpressionSyntax FixIsNaN(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("NaN"), args, 1);
+        private static InvocationExpressionSyntax FixIsNaN(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("NaN"), args, 1);
 
-        private static InvocationExpressionSyntax FixIsNotAssignableFrom(SeparatedSyntaxList<ArgumentSyntax> args, SimpleNameSyntax name) => FixGenericIs("Not", "AssignableFrom", args, name);
+        private static InvocationExpressionSyntax FixIsNotAssignableFrom(in SeparatedSyntaxList<ArgumentSyntax> args, SimpleNameSyntax name) => FixGenericIs("Not", "AssignableFrom", args, name);
 
-        private static InvocationExpressionSyntax FixIsNotEmpty(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Not", "Empty"), args, 1);
+        private static InvocationExpressionSyntax FixIsNotEmpty(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Not", "Empty"), args, 1);
 
-        private static InvocationExpressionSyntax FixIsNotInstanceOf(SeparatedSyntaxList<ArgumentSyntax> args, SimpleNameSyntax name) => FixGenericIs("Not", "InstanceOf", args, name);
+        private static InvocationExpressionSyntax FixIsNotInstanceOf(in SeparatedSyntaxList<ArgumentSyntax> args, SimpleNameSyntax name) => FixGenericIs("Not", "InstanceOf", args, name);
 
-        private static InvocationExpressionSyntax FixIsNotNull(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Not", "Null"), args, 1);
+        private static InvocationExpressionSyntax FixIsNotNull(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Not", "Null"), args, 1);
 
-        private static InvocationExpressionSyntax FixIsNotSubsetOf(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("Not", "SubsetOf", args[0]), args);
+        private static InvocationExpressionSyntax FixIsNotSubsetOf(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("Not", "SubsetOf", args[0]), args);
 
-        private static InvocationExpressionSyntax FixIsNotSupersetOf(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("Not", "SupersetOf", args[0]), args);
+        private static InvocationExpressionSyntax FixIsNotSupersetOf(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("Not", "SupersetOf", args[0]), args);
 
-        private static InvocationExpressionSyntax FixIsNull(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Null"), args, 1);
+        private static InvocationExpressionSyntax FixIsNull(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Null"), args, 1);
 
-        private static InvocationExpressionSyntax FixIsNullOrEmpty(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Null", "Or", "Empty"), args, 1);
+        private static InvocationExpressionSyntax FixIsNullOrEmpty(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Null", "Or", "Empty"), args, 1);
 
-        private static InvocationExpressionSyntax FixIsOrdered(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Ordered"), args, 1);
+        private static InvocationExpressionSyntax FixIsOrdered(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Ordered"), args, 1);
 
-        private static InvocationExpressionSyntax FixIsSubsetOf(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("SubsetOf", args[0]), args);
+        private static InvocationExpressionSyntax FixIsSubsetOf(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("SubsetOf", args[0]), args);
 
-        private static InvocationExpressionSyntax FixIsSupersetOf(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("SupersetOf", args[0]), args);
+        private static InvocationExpressionSyntax FixIsSupersetOf(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("SupersetOf", args[0]), args);
 
-        private static InvocationExpressionSyntax FixIsTrue(SeparatedSyntaxList<ArgumentSyntax> args)
+        private static InvocationExpressionSyntax FixIsTrue(in SeparatedSyntaxList<ArgumentSyntax> args)
         {
             var argument = args[0];
 
@@ -485,29 +485,29 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return AssertThat(argument, Is("True"), args, 1);
         }
 
-        private static InvocationExpressionSyntax FixLess(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("LessThan", args[1]), args);
+        private static InvocationExpressionSyntax FixLess(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("LessThan", args[1]), args);
 
-        private static InvocationExpressionSyntax FixLessOrEqual(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("LessThanOrEqualTo", args[1]), args);
+        private static InvocationExpressionSyntax FixLessOrEqual(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("LessThanOrEqualTo", args[1]), args);
 
-        private static InvocationExpressionSyntax FixNegative(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Negative"), args, 1);
+        private static InvocationExpressionSyntax FixNegative(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Negative"), args, 1);
 
-        private static InvocationExpressionSyntax FixNotNull(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Not", "Null"), args, 1);
+        private static InvocationExpressionSyntax FixNotNull(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Not", "Null"), args, 1);
 
-        private static InvocationExpressionSyntax FixNotZero(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Not", "Zero"), args, 1);
+        private static InvocationExpressionSyntax FixNotZero(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Not", "Zero"), args, 1);
 
-        private static InvocationExpressionSyntax FixPositive(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Positive"), args, 1);
+        private static InvocationExpressionSyntax FixPositive(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Positive"), args, 1);
 
-        private static InvocationExpressionSyntax FixStartsWith(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("StartWith", args[0]), args);
+        private static InvocationExpressionSyntax FixStartsWith(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("StartWith", args[0]), args);
 
-        private static InvocationExpressionSyntax FixStringAssertContains(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("Contain", args[0]), args);
+        private static InvocationExpressionSyntax FixStringAssertContains(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("Contain", args[0]), args);
 
-        private static InvocationExpressionSyntax FixStringAssertDoesNotContain(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("Not", "Contain", args[0]), args);
+        private static InvocationExpressionSyntax FixStringAssertDoesNotContain(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("Not", "Contain", args[0]), args);
 
-        private static InvocationExpressionSyntax FixStringAssertDoesNotMatch(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("Not", "Match", args[0]), args);
+        private static InvocationExpressionSyntax FixStringAssertDoesNotMatch(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("Not", "Match", args[0]), args);
 
-        private static InvocationExpressionSyntax FixStringAssertIsMatch(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("Match", args[0]), args);
+        private static InvocationExpressionSyntax FixStringAssertIsMatch(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("Match", args[0]), args);
 
-        private static InvocationExpressionSyntax FixThrows(SeparatedSyntaxList<ArgumentSyntax> args, SimpleNameSyntax name)
+        private static InvocationExpressionSyntax FixThrows(in SeparatedSyntaxList<ArgumentSyntax> args, SimpleNameSyntax name)
         {
             if (name is GenericNameSyntax generic)
             {
@@ -543,7 +543,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static InvocationExpressionSyntax FixZero(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Zero"), args, 1);
+        private static InvocationExpressionSyntax FixZero(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Zero"), args, 1);
 
         private static bool IsActual(ArgumentSyntax syntax)
         {

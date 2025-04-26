@@ -493,7 +493,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\Orderer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\OrderingAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\TestMethodsOrderingAnalyzer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Rules\Performance\ArrayCreationExpressionMaintainabilityAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Performance\ArrayCreationExpressionPerformanceAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Performance\MiKo_5001_DebugLogIsEnabledAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Performance\MiKo_5002_DebugFormatInsteadDebugLogAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Performance\MiKo_5003_LogExceptionAnalyzer.cs" />

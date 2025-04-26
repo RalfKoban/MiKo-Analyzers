@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeIfStatement(IfStatementSyntax node, SyntaxNodeAnalysisContext context)
+        protected override IEnumerable<Diagnostic> AnalyzeIfStatement(IfStatementSyntax node, in SyntaxNodeAnalysisContext context)
         {
             // do not invert in case of an else block
             if (node.Else is null && node.Parent is BlockSyntax block)

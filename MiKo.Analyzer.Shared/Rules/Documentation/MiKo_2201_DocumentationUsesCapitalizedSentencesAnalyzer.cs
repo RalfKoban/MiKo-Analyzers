@@ -93,7 +93,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return CommentHasIssue(node.ToString().AsSpan());
         }
 
-        private static bool CommentHasIssue(ReadOnlySpan<char> comment)
+        private static bool CommentHasIssue(in ReadOnlySpan<char> comment)
         {
             var commentLength = comment.Length;
             var last = commentLength - 1;
@@ -125,7 +125,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return false;
         }
 
-        private static void SkipWhiteSpaces(ReadOnlySpan<char> comment, int last, ref char c, ref int i)
+        private static void SkipWhiteSpaces(in ReadOnlySpan<char> comment, in int last, ref char c, ref int i)
         {
             while (c.IsWhiteSpace() && i < last)
             {
@@ -133,7 +133,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private static void SkipAbbreviations(ReadOnlySpan<char> comment, int last, ref char c, ref int i)
+        private static void SkipAbbreviations(in ReadOnlySpan<char> comment, in int last, ref char c, ref int i)
         {
             // for example in string "e.g.": c is already 'g', as well as i
             const int Gap = 2;
@@ -154,6 +154,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private static bool IsWellknownFileExtension(ReadOnlySpan<char> comment, int startIndex) => comment.Slice(startIndex).StartsWithAny(Constants.WellknownFileExtensions);
+        private static bool IsWellknownFileExtension(in ReadOnlySpan<char> comment, in int startIndex) => comment.Slice(startIndex).StartsWithAny(Constants.WellknownFileExtensions);
     }
 }

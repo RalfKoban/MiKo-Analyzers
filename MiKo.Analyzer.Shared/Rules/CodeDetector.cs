@@ -80,11 +80,11 @@ namespace MiKoSolutions.Analyzers.Rules
 
         public static bool IsCommentedOutCodeLine(string line) => IsCommentedOutCodeLine(line, null);
 
-        public static bool IsCommentedOutCodeLine(ReadOnlySpan<char> line) => IsCommentedOutCodeLine(line, null);
+        public static bool IsCommentedOutCodeLine(in ReadOnlySpan<char> line) => IsCommentedOutCodeLine(line, null);
 
         public static bool IsCommentedOutCodeLine(string line, SemanticModel semanticModel) => line != null && IsCommentedOutCodeLine(line.AsSpan(), semanticModel);
 
-        public static bool IsCommentedOutCodeLine(ReadOnlySpan<char> line, SemanticModel semanticModel)
+        public static bool IsCommentedOutCodeLine(in ReadOnlySpan<char> line, SemanticModel semanticModel)
         {
             if (line.IsNullOrWhiteSpace())
             {

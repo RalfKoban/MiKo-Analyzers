@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private readonly bool m_addDotsToProposal;
         private readonly string[] m_exceptionPhrases;
 
-        protected ArgumentExceptionPhraseAnalyzer(string diagnosticId, Type exceptionType, bool addDotsToProposal, params string[] phrases) : base(diagnosticId, exceptionType)
+        protected ArgumentExceptionPhraseAnalyzer(string diagnosticId, Type exceptionType, in bool addDotsToProposal, params string[] phrases) : base(diagnosticId, exceptionType)
         {
             m_addDotsToProposal = addDotsToProposal;
             m_exceptionPhrases = phrases;
@@ -77,7 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return results;
         }
 
-        protected virtual IReadOnlyCollection<IParameterSymbol> GetMatchingParameters(ImmutableArray<IParameterSymbol> parameterSymbols) => parameterSymbols;
+        protected virtual IReadOnlyCollection<IParameterSymbol> GetMatchingParameters(in ImmutableArray<IParameterSymbol> parameterSymbols) => parameterSymbols;
 
         private IReadOnlyList<Diagnostic> AnalyzeException(ISymbol owningSymbol, IMethodSymbol methodSymbol, XmlElementSyntax exceptionComment)
         {

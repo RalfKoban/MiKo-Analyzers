@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     {
         private readonly SyntaxKind m_syntaxKind;
 
-        protected StatementSurroundedByBlankLinesAnalyzer(SyntaxKind syntaxKind, string id) : base(id) => m_syntaxKind = syntaxKind;
+        protected StatementSurroundedByBlankLinesAnalyzer(in SyntaxKind syntaxKind, string id) : base(id) => m_syntaxKind = syntaxKind;
 
         protected abstract SyntaxToken GetKeyword(T node);
 

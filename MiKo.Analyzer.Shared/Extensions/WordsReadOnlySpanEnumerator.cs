@@ -13,7 +13,7 @@ namespace System
         private readonly int[] m_wordStartingPositions;
         private int m_currentIndex;
 
-        public WordsReadOnlySpanEnumerator(ReadOnlySpan<char> text)
+        public WordsReadOnlySpanEnumerator(in ReadOnlySpan<char> text)
         {
             m_text = text;
 

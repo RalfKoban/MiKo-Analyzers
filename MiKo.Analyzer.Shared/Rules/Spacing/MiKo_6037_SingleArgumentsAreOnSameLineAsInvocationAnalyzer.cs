@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
         }
 
-        private void AnalyzeArgument(SyntaxNodeAnalysisContext context, ArgumentSyntax argument, InvocationExpressionSyntax invocation)
+        private void AnalyzeArgument(in SyntaxNodeAnalysisContext context, ArgumentSyntax argument, InvocationExpressionSyntax invocation)
         {
             var startPosition = GetStartPosition(invocation);
             var argumentPosition = argument.GetStartPosition();

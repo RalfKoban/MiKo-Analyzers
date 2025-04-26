@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeEventFieldDeclaration, SyntaxKind.EventFieldDeclaration);
 
-        private static bool IsInherited(SyntaxToken syntax, SemanticModel semanticModel)
+        private static bool IsInherited(in SyntaxToken syntax, SemanticModel semanticModel)
         {
             var symbol = syntax.GetSymbol(semanticModel);
 

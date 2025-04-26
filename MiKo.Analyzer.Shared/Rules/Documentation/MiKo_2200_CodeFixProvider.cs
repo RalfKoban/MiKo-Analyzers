@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool IsTrivia => true;
 
-        protected override SyntaxToken GetToken(SyntaxTrivia trivia, Diagnostic issue)
+        protected override SyntaxToken GetToken(in SyntaxTrivia trivia, Diagnostic issue)
         {
             // we have the trivia, but we need the specific text token, so search for it
             var location = issue.Location;
@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return token;
         }
 
-        protected override SyntaxToken GetUpdatedToken(SyntaxToken token, Diagnostic issue)
+        protected override SyntaxToken GetUpdatedToken(in SyntaxToken token, Diagnostic issue)
         {
             var text = token.Text;
 

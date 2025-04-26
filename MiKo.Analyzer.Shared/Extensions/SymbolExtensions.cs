@@ -173,11 +173,11 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool ContainsExtensionMethods(this INamedTypeSymbol value) => value.TypeKind == TypeKind.Class && value.IsStatic && value.MightContainExtensionMethods && value.GetExtensionMethods().Any();
 
-        internal static INamedTypeSymbol FindContainingType(this SyntaxNodeAnalysisContext value) => FindContainingType(value.ContainingSymbol);
+        internal static INamedTypeSymbol FindContainingType(this in SyntaxNodeAnalysisContext value) => FindContainingType(value.ContainingSymbol);
 
         internal static INamedTypeSymbol FindContainingType(this ISymbol value) => value as INamedTypeSymbol ?? value?.ContainingType;
 
-        internal static string FullyQualifiedName(this ISymbol value, bool useAlias = true)
+        internal static string FullyQualifiedName(this ISymbol value, in bool useAlias = true)
         {
             switch (value)
             {
@@ -484,7 +484,7 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static SyntaxToken GetModifier(this IMethodSymbol value, SyntaxKind kind)
+        internal static SyntaxToken GetModifier(this IMethodSymbol value, in SyntaxKind kind)
         {
             switch (value.GetSyntax())
             {
@@ -496,7 +496,7 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static SyntaxToken GetModifier(this IParameterSymbol value, SyntaxKind kind)
+        internal static SyntaxToken GetModifier(this IParameterSymbol value, in SyntaxKind kind)
         {
             var syntax = value.GetSyntax();
 
@@ -712,7 +712,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool HasFlags(this ITypeSymbol value) => value.HasAttribute(Constants.Names.FlagsAttributeNames);
 
-        internal static bool HasModifier(this IMethodSymbol value, SyntaxKind kind) => ((BaseMethodDeclarationSyntax)value.GetSyntax()).Modifiers.Any(kind);
+        internal static bool HasModifier(this IMethodSymbol value, in SyntaxKind kind) => ((BaseMethodDeclarationSyntax)value.GetSyntax()).Modifiers.Any(kind);
 
         internal static bool Implements<T>(this ITypeSymbol value) => Implements(value, typeof(T).FullName);
 
@@ -1754,7 +1754,7 @@ namespace MiKoSolutions.Analyzers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string MinimalTypeName(this ITypeSymbol value) => value.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
 
-        internal static bool NameMatchesTypeName(this ISymbol value, ITypeSymbol type, ushort minimumUpperCaseLetters = 0)
+        internal static bool NameMatchesTypeName(this ISymbol value, ITypeSymbol type, in ushort minimumUpperCaseLetters = 0)
         {
             var symbolName = value.Name;
 
@@ -1790,7 +1790,7 @@ namespace MiKoSolutions.Analyzers
             return result > 0;
         }
 
-        internal static bool TryGetGenericArgumentType(this ITypeSymbol value, out ITypeSymbol result, int index = 0)
+        internal static bool TryGetGenericArgumentType(this ITypeSymbol value, out ITypeSymbol result, in int index = 0)
         {
             result = null;
 
@@ -1843,7 +1843,7 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        private static bool IsInterfaceImplementation<TSymbol>(this TSymbol value, ITypeSymbol typeSymbol, ImmutableArray<INamedTypeSymbol> implementedInterfaces) where TSymbol : ISymbol
+        private static bool IsInterfaceImplementation<TSymbol>(this TSymbol value, ITypeSymbol typeSymbol, in ImmutableArray<INamedTypeSymbol> implementedInterfaces) where TSymbol : ISymbol
         {
             var name = value.Name;
             var length = implementedInterfaces.Length;

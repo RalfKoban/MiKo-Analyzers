@@ -17,18 +17,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual Diagnostic Issue(Location location, string replacement) => base.Issue(location, replacement);
 
-        protected IReadOnlyList<Diagnostic> AnalyzeForSpecialPhrase(SyntaxToken token, string startingPhrase, Func<string, string> replacementCallback)
+        protected IReadOnlyList<Diagnostic> AnalyzeForSpecialPhrase(in SyntaxToken syntaxToken, string startingPhrase, Func<string, string> replacementCallback)
         {
-            var locations = GetAllLocations(token, startingPhrase);
+            var locations = GetAllLocations(syntaxToken, startingPhrase);
 
             if (locations.Count > 0)
             {
-                return AnalyzeForSpecialPhraseLocal();
+                return AnalyzeForSpecialPhraseLocal(syntaxToken);
             }
 
             return Array.Empty<Diagnostic>();
 
-            IReadOnlyList<Diagnostic> AnalyzeForSpecialPhraseLocal()
+            IReadOnlyList<Diagnostic> AnalyzeForSpecialPhraseLocal(in SyntaxToken token)
             {
                 var issues = new List<Diagnostic>(locations.Count);
 

@@ -165,6 +165,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private static IdentifierNameSyntax GetUpdatedSyntax(IdentifierNameSyntax syntax) => syntax?.WithoutTrivia();
 
-        private static SyntaxToken GetUpdatedSyntax(SyntaxToken token) => token.WithSurroundingSpace();
+        private static SyntaxToken GetUpdatedSyntax(in SyntaxToken token) => token.WithSurroundingSpace();
     }
 }

@@ -121,7 +121,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             return symbolInfo.Symbol as IMethodSymbol;
         }
 
-        private static bool ParametersHaveSameTypes(ImmutableArray<IParameterSymbol> candidateParameters, SeparatedSyntaxList<ArgumentSyntax> arguments, SemanticModel semanticModel)
+        private static bool ParametersHaveSameTypes(in ImmutableArray<IParameterSymbol> candidateParameters, in SeparatedSyntaxList<ArgumentSyntax> arguments, SemanticModel semanticModel)
         {
             var candidateParametersLength = candidateParameters.Length;
 

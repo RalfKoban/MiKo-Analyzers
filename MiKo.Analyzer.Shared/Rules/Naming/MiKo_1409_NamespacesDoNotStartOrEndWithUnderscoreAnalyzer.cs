@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        private static bool HasIssue(string name, char character)
+        private static bool HasIssue(string name, in char character)
         {
             if (name.First() == character)
             {

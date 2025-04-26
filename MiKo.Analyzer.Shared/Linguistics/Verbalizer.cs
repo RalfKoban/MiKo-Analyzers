@@ -216,7 +216,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                    "turn",
                                                                };
 
-        public static bool IsAdjectiveOrAdverb(ReadOnlySpan<char> value, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        public static bool IsAdjectiveOrAdverb(in ReadOnlySpan<char> value, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             if (value.EndsWith("ly", comparison))
             {
@@ -231,7 +231,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return value.EqualsAny(AdjectivesOrAdverbs, comparison);
         }
 
-        public static bool IsThirdPersonSingularVerb(ReadOnlySpan<char> value)
+        public static bool IsThirdPersonSingularVerb(in ReadOnlySpan<char> value)
         {
             var length = value.Length;
 
@@ -282,11 +282,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         public static bool IsPastTense(string value) => value != null && IsPastTense(value.AsSpan());
 
-        public static bool IsPastTense(ReadOnlySpan<char> value) => value.EndsWithAny(PastEndings, StringComparison.Ordinal);
+        public static bool IsPastTense(in ReadOnlySpan<char> value) => value.EndsWithAny(PastEndings, StringComparison.Ordinal);
 
         public static bool IsGerundVerb(string value) => value != null && IsGerundVerb(value.AsSpan());
 
-        public static bool IsGerundVerb(ReadOnlySpan<char> value)
+        public static bool IsGerundVerb(in ReadOnlySpan<char> value)
         {
             if (value.Length <= 4)
             {
@@ -454,6 +454,58 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 }
 
                 return word;
+            }
+        }
+
+        public static string MakeFirstWordInfiniteVerb(string text, in FirstWordHandling handling = FirstWordHandling.None)
+        {
+            if (text.IsNullOrWhiteSpace())
+            {
+                return text;
+            }
+
+            return MakeFirstWordInfiniteVerb(text.AsSpan(), handling);
+        }
+
+        public static string MakeFirstWordInfiniteVerb(in ReadOnlySpan<char> text, in FirstWordHandling firstWordHandling = FirstWordHandling.None)
+        {
+            if (text.IsNullOrWhiteSpace())
+            {
+                return string.Empty;
+            }
+
+            // it may happen that the text starts with a special character, such as an ':'
+            // so remove those special characters
+            var valueText = text.TrimStart(Constants.SentenceMarkers);
+
+            if (valueText.IsNullOrWhiteSpace())
+            {
+                return string.Empty;
+            }
+
+            // first word
+            var firstWord = GetFirstWord(valueText, firstWordHandling);
+
+            var infiniteVerb = MakeInfiniteVerb(firstWord);
+
+            if (firstWord != infiniteVerb)
+            {
+                return infiniteVerb.ConcatenatedWith(valueText.WithoutFirstWord());
+            }
+
+            return text.ToString();
+
+            string GetFirstWord(in ReadOnlySpan<char> span, in FirstWordHandling handling)
+            {
+                var word = span.FirstWord();
+
+                switch (handling)
+                {
+                    case FirstWordHandling.MakeLowerCase: return word.ToLowerCaseAt(0);
+                    case FirstWordHandling.MakeUpperCase: return word.ToUpperCaseAt(0);
+                    default:
+                        return word.ToString();
+                }
             }
         }
 
@@ -654,7 +706,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return false;
         }
 
-        private static bool HasAcceptableStartingPhrase(ReadOnlySpan<char> value)
+        private static bool HasAcceptableStartingPhrase(in ReadOnlySpan<char> value)
         {
             var length = StartingPhrases.Length;
 
@@ -675,6 +727,6 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static bool HasAcceptableMiddlePhrase(string value) => value.ContainsAny(MiddlePhrases);
 
-        private static bool HasAcceptableEndingPhrase(ReadOnlySpan<char> value) => value.EndsWithAny(EndingPhrases);
+        private static bool HasAcceptableEndingPhrase(in ReadOnlySpan<char> value) => value.EndsWithAny(EndingPhrases);
     }
 }

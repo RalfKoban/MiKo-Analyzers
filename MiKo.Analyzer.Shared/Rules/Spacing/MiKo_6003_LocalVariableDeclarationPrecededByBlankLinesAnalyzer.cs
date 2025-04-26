@@ -70,7 +70,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return null;
         }
 
-        private Diagnostic AnalyzeLocalDeclarationStatement(SyntaxList<StatementSyntax> statements, LocalDeclarationStatementSyntax declaration)
+        private Diagnostic AnalyzeLocalDeclarationStatement(in SyntaxList<StatementSyntax> statements, LocalDeclarationStatementSyntax declaration)
         {
             var callLineSpan = declaration.GetLocation().GetLineSpan();
 

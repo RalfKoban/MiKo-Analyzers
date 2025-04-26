@@ -73,7 +73,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeIfStatement, SyntaxKind.IfStatement);
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeIfStatement(IfStatementSyntax node, SyntaxNodeAnalysisContext context) => Array.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeIfStatement(IfStatementSyntax node, in SyntaxNodeAnalysisContext context) => Array.Empty<Diagnostic>();
 
         private static void GetConditionParts(SyntaxNode condition, ICollection<SyntaxNode> parts)
         {
