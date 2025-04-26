@@ -533,7 +533,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return results;
                 }
 
-                Pair[] ToMapArray(ReadOnlySpan<Pair> map, HashSet<string> keys, Pair[] others)
+                Pair[] ToMapArray(in ReadOnlySpan<Pair> map, HashSet<string> keys, Pair[] others)
                 {
                     var resultIndex = 0;
                     var results = new Pair[keys.Count + others.Length];
