@@ -8,13 +8,13 @@ namespace System
 {
     internal static class StringSplitExtensions
     {
-        public static SplitReadOnlySpanEnumerator SplitBy(this ReadOnlySpan<char> value, ReadOnlySpan<char> separatorChars) => SplitBy(value, separatorChars, StringSplitOptions.None);
+        public static SplitReadOnlySpanEnumerator SplitBy(this in ReadOnlySpan<char> value, in ReadOnlySpan<char> separatorChars) => SplitBy(value, separatorChars, StringSplitOptions.None);
 
-        public static SplitReadOnlySpanEnumerator SplitBy(this ReadOnlySpan<char> value, ReadOnlySpan<char> separatorChars, StringSplitOptions options) => new SplitReadOnlySpanEnumerator(value, separatorChars, options);
+        public static SplitReadOnlySpanEnumerator SplitBy(this in ReadOnlySpan<char> value, in ReadOnlySpan<char> separatorChars, StringSplitOptions options) => new SplitReadOnlySpanEnumerator(value, separatorChars, options);
 
-        public static SplitReadOnlySpanEnumerator SplitBy(this ReadOnlySpan<char> value, char[] separatorChars, StringSplitOptions options) => SplitBy(value, separatorChars.AsSpan(), options);
+        public static SplitReadOnlySpanEnumerator SplitBy(this in ReadOnlySpan<char> value, char[] separatorChars, StringSplitOptions options) => SplitBy(value, separatorChars.AsSpan(), options);
 
-        public static IReadOnlyList<string> SplitBy(this ReadOnlySpan<char> value, string[] findings, StringComparison comparison = StringComparison.OrdinalIgnoreCase, StringSplitOptions options = StringSplitOptions.None)
+        public static IReadOnlyList<string> SplitBy(this in ReadOnlySpan<char> value, string[] findings, StringComparison comparison = StringComparison.OrdinalIgnoreCase, StringSplitOptions options = StringSplitOptions.None)
         {
             if (value.IsNullOrWhiteSpace())
             {

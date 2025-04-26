@@ -39,7 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool IsResponsibleNode(CSharpSyntaxNode syntax) => syntax != null && IsResponsibleNode(syntax.Kind());
 
-        private static bool IsResponsibleNode(SyntaxKind kind) => ExpressionValues.Contains(kind);
+        private static bool IsResponsibleNode(in SyntaxKind kind) => ExpressionValues.Contains(kind);
 
         private void AnalyzeExpression(SyntaxNodeAnalysisContext context)
         {

@@ -35,7 +35,7 @@ public " + type + " " + name + @"
         [TestCase("class", "AbstractSomething", 1)]
         [TestCase("interface", "IAbstractSomethingBase", 2)]
         [TestCase("class", "AbstractSomethingBase", 2)]
-        public void An_issue_is_reported_for_(string type, string name, int violations) => An_issue_is_reported_for(violations, @"
+        public void An_issue_is_reported_for_(string type, string name, in int violations) => An_issue_is_reported_for(violations, @"
 public " + type + " " + name + @"
 {
 }

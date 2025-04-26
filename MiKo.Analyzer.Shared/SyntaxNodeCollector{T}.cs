@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers
         private readonly SyntaxKind m_syntaxKindToIgnore;
         private List<T> m_nodes = null;
 
-        public SyntaxNodeCollector(SyntaxKind syntaxKindToIgnore) => m_syntaxKindToIgnore = syntaxKindToIgnore;
+        public SyntaxNodeCollector(in SyntaxKind syntaxKindToIgnore) => m_syntaxKindToIgnore = syntaxKindToIgnore;
 
         public IReadOnlyList<T> Nodes
         {

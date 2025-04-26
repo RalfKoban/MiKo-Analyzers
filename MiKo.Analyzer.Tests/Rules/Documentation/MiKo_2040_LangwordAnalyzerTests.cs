@@ -29,10 +29,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                             string.Empty,
                                                         ];
 
-        private static readonly string[] WrongItemsWithoutCode = CreateWrongItems(false, Terms).Take(TestLimit).ToArray();
-        private static readonly string[] WrongItemsWithCode = CreateWrongItems(true, Terms).Take(TestLimit).ToArray();
+        private static readonly string[] WrongItemsWithoutCode = [.. CreateWrongItems(false, Terms).Take(TestLimit)];
+        private static readonly string[] WrongItemsWithCode = [.. CreateWrongItems(true, Terms).Take(TestLimit)];
 
-        private static readonly TestCaseData[] CodeFixData = CreateCodeFixData().Take(TestLimit).ToArray();
+        private static readonly TestCaseData[] CodeFixData = [.. CreateCodeFixData().Take(TestLimit)];
 
         [Test]
         public void No_issue_is_reported_for_undocumented_items() => No_issue_is_reported_for(@"
@@ -380,7 +380,7 @@ public sealed class TestMe
 //// ncrunch: no coverage start
 
         [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> CreateWrongItems(bool withCode, params string[] tokens)
+        private static IEnumerable<string> CreateWrongItems(in bool withCode, params string[] tokens)
         {
             var words = new HashSet<string>();
 

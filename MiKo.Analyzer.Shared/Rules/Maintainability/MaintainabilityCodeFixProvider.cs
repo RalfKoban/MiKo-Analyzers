@@ -40,11 +40,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return Argument(SimpleMemberAccess(typeName, methodName), arguments);
         }
 
-        protected static ArgumentSyntax ArgumentWithCast(SyntaxKind kind, ParameterSyntax parameter) => ArgumentWithCast(PredefinedType(kind), parameter);
+        protected static ArgumentSyntax ArgumentWithCast(in SyntaxKind kind, ParameterSyntax parameter) => ArgumentWithCast(PredefinedType(kind), parameter);
 
         protected static ArgumentSyntax ArgumentWithCast(TypeSyntax type, ParameterSyntax parameter) => ArgumentWithCast(type, SyntaxFactory.IdentifierName(parameter.GetName()));
 
-        protected static ArgumentSyntax ArgumentWithCast(SyntaxKind kind, IdentifierNameSyntax identifier) => ArgumentWithCast(PredefinedType(kind), identifier);
+        protected static ArgumentSyntax ArgumentWithCast(in SyntaxKind kind, IdentifierNameSyntax identifier) => ArgumentWithCast(PredefinedType(kind), identifier);
 
         protected static ArgumentSyntax ArgumentWithCast(TypeSyntax type, IdentifierNameSyntax identifier) => Argument(SyntaxFactory.CastExpression(type, identifier));
 
@@ -122,15 +122,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static UnaryPatternSyntax UnaryNot(PatternSyntax pattern) => SyntaxFactory.UnaryPattern(SyntaxKind.NotKeyword.AsToken().WithTrailingSpace(), pattern);
 
-        protected static LiteralExpressionSyntax Literal(char value) => Literal(SyntaxFactory.Literal(value));
+        protected static LiteralExpressionSyntax Literal(in char value) => Literal(SyntaxFactory.Literal(value));
 
         protected static LiteralExpressionSyntax Literal(decimal value) => Literal(SyntaxFactory.Literal(value));
 
-        protected static LiteralExpressionSyntax Literal(int value) => Literal(SyntaxFactory.Literal(value));
+        protected static LiteralExpressionSyntax Literal(in int value) => Literal(SyntaxFactory.Literal(value));
 
-        protected static LiteralExpressionSyntax Literal(SyntaxToken token) => SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, token);
+        protected static LiteralExpressionSyntax Literal(in SyntaxToken token) => SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, token);
 
-        protected static LiteralExpressionSyntax Literal(int value, string valueRepresentation) => Literal(SyntaxFactory.Literal(valueRepresentation, value));
+        protected static LiteralExpressionSyntax Literal(in int value, string valueRepresentation) => Literal(SyntaxFactory.Literal(valueRepresentation, value));
 
         protected static LiteralExpressionSyntax StringLiteral(string text)
         {
@@ -148,7 +148,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                    : TypeOf(typeSyntax);
         }
 
-        protected static TypeOfExpressionSyntax TypeOf(SyntaxKind kind) => TypeOf(PredefinedType(kind));
+        protected static TypeOfExpressionSyntax TypeOf(in SyntaxKind kind) => TypeOf(PredefinedType(kind));
 
         protected static TypeOfExpressionSyntax TypeOf(string typeName) => TypeOf(SyntaxFactory.ParseTypeName(typeName));
 

@@ -95,7 +95,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return HasIssue(summary.AsSpan());
         }
 
-        private static bool HasIssue(ReadOnlySpan<char> summary)
+        private static bool HasIssue(in ReadOnlySpan<char> summary)
         {
             var whitespaces = 0;
 

@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol, Compilation compilation) => AnalyzeName(symbol);
 
-        private static string FindWrongPrefix(ReadOnlySpan<char> symbolName)
+        private static string FindWrongPrefix(in ReadOnlySpan<char> symbolName)
         {
             const int MinimalPrefixLength = 2;
 
@@ -58,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return null;
         }
 
-        private static string FindBetterName(ReadOnlySpan<char> symbolName, string prefix) => symbolName.Slice(prefix.Length).ToLowerCaseAt(0);
+        private static string FindBetterName(in ReadOnlySpan<char> symbolName, string prefix) => symbolName.Slice(prefix.Length).ToLowerCaseAt(0);
 
         private Diagnostic[] AnalyzeName(ISymbol symbol)
         {

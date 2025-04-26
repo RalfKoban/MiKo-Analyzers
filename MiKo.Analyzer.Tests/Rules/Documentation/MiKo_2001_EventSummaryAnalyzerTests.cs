@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2001_EventSummaryAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] StartingPhrases = CreatePhrases().Take(TestLimit).ToArray();
+        private static readonly string[] StartingPhrases = [.. CreatePhrases().Take(TestLimit)];
 
         [Test]
         public void No_issue_is_reported_for_non_commented_event_on_class() => No_issue_is_reported_for(@"

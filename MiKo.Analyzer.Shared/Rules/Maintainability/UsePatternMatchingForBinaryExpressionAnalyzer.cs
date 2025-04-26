@@ -6,7 +6,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     public abstract class UsePatternMatchingForBinaryExpressionAnalyzer : UsePatternMatchingForExpressionAnalyzer
     {
-        protected UsePatternMatchingForBinaryExpressionAnalyzer(string diagnosticId, SyntaxKind syntaxKind, LanguageVersion languageVersion = LanguageVersion.CSharp7) : base(diagnosticId, syntaxKind, languageVersion)
+        protected UsePatternMatchingForBinaryExpressionAnalyzer(string diagnosticId, in SyntaxKind syntaxKind, LanguageVersion languageVersion = LanguageVersion.CSharp7) : base(diagnosticId, syntaxKind, languageVersion)
         {
         }
 
@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        protected abstract bool IsResponsibleNode(SyntaxKind kind);
+        protected abstract bool IsResponsibleNode(in SyntaxKind kind);
 
         private bool IsResponsibleNode(CSharpSyntaxNode syntax) => syntax != null && IsResponsibleNode(syntax.Kind());
     }
