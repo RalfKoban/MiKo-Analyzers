@@ -127,7 +127,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return false;
         }
 
-        private static bool IsOnSameLine(SyntaxList<XmlNodeSyntax> contents, params int[] lines)
+        private static bool IsOnSameLine(in SyntaxList<XmlNodeSyntax> contents, params int[] lines)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var contentsCount = contents.Count;
@@ -157,7 +157,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return false;
         }
 
-        private static Pair[] CreateProperties(bool onSameLineAsTextBefore, bool onSameLineAsTextAfter)
+        private static Pair[] CreateProperties(in bool onSameLineAsTextBefore, in bool onSameLineAsTextAfter)
         {
             if (onSameLineAsTextBefore)
             {

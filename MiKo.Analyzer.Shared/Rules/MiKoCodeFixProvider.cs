@@ -83,7 +83,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected static IsPatternExpressionSyntax IsNullPattern(ExpressionSyntax operand) => IsPattern(operand, NullLiteral());
 
-        protected static LiteralExpressionSyntax Literal(SyntaxKind expressionKind) => SyntaxFactory.LiteralExpression(expressionKind);
+        protected static LiteralExpressionSyntax Literal(in SyntaxKind expressionKind) => SyntaxFactory.LiteralExpression(expressionKind);
 
         protected static LiteralExpressionSyntax NullLiteral() => Literal(SyntaxKind.NullLiteralExpression);
 
@@ -91,7 +91,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected static LiteralExpressionSyntax TrueLiteral() => Literal(SyntaxKind.TrueLiteralExpression);
 
-        protected static PredefinedTypeSyntax PredefinedType(SyntaxKind kind) => SyntaxFactory.PredefinedType(kind.AsToken());
+        protected static PredefinedTypeSyntax PredefinedType(in SyntaxKind kind) => SyntaxFactory.PredefinedType(kind.AsToken());
 
         protected static MemberAccessExpressionSyntax SimpleMemberAccess(ExpressionSyntax syntax, string name)
         {
@@ -108,7 +108,7 @@ namespace MiKoSolutions.Analyzers.Rules
             return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, type, method);
         }
 
-        protected static TSyntaxNode GetSyntaxWithLeadingSpaces<TSyntaxNode>(TSyntaxNode syntaxNode, int spaces) where TSyntaxNode : SyntaxNode
+        protected static TSyntaxNode GetSyntaxWithLeadingSpaces<TSyntaxNode>(TSyntaxNode syntaxNode, in int spaces) where TSyntaxNode : SyntaxNode
         {
             var syntax = syntaxNode.WithLeadingSpaces(spaces);
 
@@ -125,9 +125,9 @@ namespace MiKoSolutions.Analyzers.Rules
             return syntax.WithAdditionalLeadingSpacesOnDescendants(startingNodes, additionalSpaces);
         }
 
-        protected static StatementSyntax GetUpdatedStatement(StatementSyntax statement, int spaces) => GetSyntaxWithLeadingSpaces(statement, spaces);
+        protected static StatementSyntax GetUpdatedStatement(StatementSyntax statement, in int spaces) => GetSyntaxWithLeadingSpaces(statement, spaces);
 
-        protected static BlockSyntax GetUpdatedBlock(BlockSyntax block, int spaces)
+        protected static BlockSyntax GetUpdatedBlock(BlockSyntax block, in int spaces)
         {
             if (block is null)
             {
@@ -143,17 +143,17 @@ namespace MiKoSolutions.Analyzers.Rules
 
 //// ncrunch: rdi off
 
-        protected virtual bool IsApplicable(ImmutableArray<Diagnostic> diagnostics) => diagnostics.Any();
+        protected virtual bool IsApplicable(in ImmutableArray<Diagnostic> diagnostics) => diagnostics.Any();
 
         protected virtual SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.FirstOrDefault();
 
-        protected virtual SyntaxToken GetToken(SyntaxTrivia trivia, Diagnostic issue) => trivia.Token;
+        protected virtual SyntaxToken GetToken(in SyntaxTrivia trivia, Diagnostic issue) => trivia.Token;
 
         protected virtual SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => null;
 
-        protected virtual SyntaxToken GetUpdatedToken(SyntaxToken token, Diagnostic issue) => token;
+        protected virtual SyntaxToken GetUpdatedToken(in SyntaxToken token, Diagnostic issue) => token;
 
-        protected virtual SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxTrivia trivia, Diagnostic issue) => null;
+        protected virtual SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, in SyntaxTrivia trivia, Diagnostic issue) => null;
 
         protected virtual SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue) => root.WithoutAnnotations(annotationOfSyntax);
 
@@ -263,7 +263,7 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
-        private CodeAction CreateCodeFix(CodeFixContext context, SyntaxNode root, Diagnostic issue)
+        private CodeAction CreateCodeFix(in CodeFixContext context, SyntaxNode root, Diagnostic issue)
         {
             var document = context.Document;
 

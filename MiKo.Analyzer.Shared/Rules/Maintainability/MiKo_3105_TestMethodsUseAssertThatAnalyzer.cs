@@ -45,7 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private Diagnostic[] AnalyzeSimpleMemberAccessExpression(SyntaxNodeAnalysisContext context, MemberAccessExpressionSyntax node)
+        private Diagnostic[] AnalyzeSimpleMemberAccessExpression(in SyntaxNodeAnalysisContext context, MemberAccessExpressionSyntax node)
         {
             if (node.Expression is IdentifierNameSyntax invokedClass)
             {

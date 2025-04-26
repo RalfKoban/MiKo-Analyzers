@@ -17,6 +17,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IReadOnlyCollection<IParameterSymbol> GetMatchingParameters(ImmutableArray<IParameterSymbol> parameterSymbols) => parameterSymbols.Where(_ => _.Type.IsReferenceType || _.Type.IsNullable()).ToList();
+        protected override IReadOnlyCollection<IParameterSymbol> GetMatchingParameters(in ImmutableArray<IParameterSymbol> parameterSymbols) => parameterSymbols.Where(_ => _.Type.IsReferenceType || _.Type.IsNullable()).ToList();
     }
 }

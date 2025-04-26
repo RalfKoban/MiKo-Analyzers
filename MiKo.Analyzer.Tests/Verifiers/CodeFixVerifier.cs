@@ -96,7 +96,7 @@ namespace TestHelper
         /// <param name="assertResult">
         /// A bool controlling whether or not the test will assert the result of the CodeFix after being applied.
         /// </param>
-        protected void VerifyCSharpFix(string oldSource, string newSource, LanguageVersion languageVersion = LanguageVersion.Default, int? codeFixIndex = null, bool allowNewCompilerDiagnostics = false, bool assertResult = true)
+        protected void VerifyCSharpFix(string oldSource, string newSource, in LanguageVersion languageVersion = LanguageVersion.Default, int? codeFixIndex = null, in bool allowNewCompilerDiagnostics = false, in bool assertResult = true)
         {
             VerifyFix(GetObjectUnderTest(), GetCSharpCodeFixProvider(), oldSource, newSource, languageVersion, codeFixIndex, allowNewCompilerDiagnostics, assertResult);
         }
@@ -131,7 +131,7 @@ namespace TestHelper
         /// <param name="assertResult">
         /// A bool controlling whether or not the test will assert the result of the CodeFix after being applied.
         /// </param>
-        private static void VerifyFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFixProvider, string oldSource, string newSource, LanguageVersion languageVersion, int? codeFixIndex, bool allowNewCompilerDiagnostics, bool assertResult)
+        private static void VerifyFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFixProvider, string oldSource, string newSource, in LanguageVersion languageVersion, int? codeFixIndex, in bool allowNewCompilerDiagnostics, in bool assertResult)
         {
             Assert.That(analyzer, Is.Not.Null, "Missing Analyzer");
             Assert.That(codeFixProvider, Is.Not.Null, "Missing CodeFixProvider");
@@ -141,53 +141,56 @@ namespace TestHelper
             var compilerDiagnostics = GetCompilerDiagnostics(document);
             var attempts = analyzerDiagnostics.Length;
 
-            for (var i = 0; i < attempts; i++)
+            if (attempts > 0)
             {
-                Assert.That(analyzerDiagnostics[i].Id, Is.Not.EqualTo("AD0001"));
-            }
-
-            for (var i = 0; i < attempts; ++i)
-            {
-                var actions = new List<CodeAction>();
-                var context = new CodeFixContext(document, analyzerDiagnostics[0], (a, _) => actions.Add(a), CancellationToken.None);
-                codeFixProvider.RegisterCodeFixesAsync(context).Wait();
-
-                if (actions.Count == 0)
+                for (var i = 0; i < attempts; i++)
                 {
-                    break;
+                    Assert.That(analyzerDiagnostics[i].Id, Is.Not.EqualTo("AD0001"));
                 }
 
-                if (codeFixIndex is not null)
+                for (var i = 0; i < attempts; ++i)
                 {
-                    document = ApplyFix(document, actions[(int)codeFixIndex]);
+                    var actions = new List<CodeAction>();
+                    var context = new CodeFixContext(document, analyzerDiagnostics[0], (a, _) => actions.Add(a), CancellationToken.None);
+                    codeFixProvider.RegisterCodeFixesAsync(context).Wait();
 
-                    break;
-                }
+                    if (actions.Count == 0)
+                    {
+                        break;
+                    }
 
-                document = ApplyFix(document, actions[0]);
-                analyzerDiagnostics = GetSortedDiagnosticsFromDocument(analyzer, document);
+                    if (codeFixIndex is not null)
+                    {
+                        document = ApplyFix(document, actions[(int)codeFixIndex]);
 
-                var newCompilerDiagnostics = GetNewDiagnostics(compilerDiagnostics, GetCompilerDiagnostics(document));
+                        break;
+                    }
 
-                // check if applying the code fix introduced any new compiler diagnostics
-                if (allowNewCompilerDiagnostics is false && newCompilerDiagnostics.Any())
-                {
-                    // Format and get the compiler diagnostics again so that the locations make sense in the output
-                    document = document.WithSyntaxRoot(Formatter.Format(document.GetSyntaxRootAsync().Result, Formatter.Annotation, document.Project.Solution.Workspace));
-                    newCompilerDiagnostics = GetNewDiagnostics(compilerDiagnostics, GetCompilerDiagnostics(document));
+                    document = ApplyFix(document, actions[0]);
+                    analyzerDiagnostics = GetSortedDiagnosticsFromDocument(analyzer, document);
 
-                    Assert.Fail($@"Fix introduced new compiler diagnostics:
+                    var newCompilerDiagnostics = GetNewDiagnostics(compilerDiagnostics, GetCompilerDiagnostics(document));
+
+                    // check if applying the code fix introduced any new compiler diagnostics
+                    if (allowNewCompilerDiagnostics is false && newCompilerDiagnostics.Any())
+                    {
+                        // Format and get the compiler diagnostics again so that the locations make sense in the output
+                        document = document.WithSyntaxRoot(Formatter.Format(document.GetSyntaxRootAsync().Result, Formatter.Annotation, document.Project.Solution.Workspace));
+                        newCompilerDiagnostics = GetNewDiagnostics(compilerDiagnostics, GetCompilerDiagnostics(document));
+
+                        Assert.Fail($@"Fix introduced new compiler diagnostics:
 {string.Join("\r\n", newCompilerDiagnostics.Select(d => d.ToString()))}
 
 New document:
 {document.GetSyntaxRootAsync().Result.ToFullString()}
 ");
-                }
+                    }
 
-                // check if there are analyzer diagnostics left after the code fix
-                if (analyzerDiagnostics.Length == 0)
-                {
-                    break;
+                    // check if there are analyzer diagnostics left after the code fix
+                    if (analyzerDiagnostics.Length == 0)
+                    {
+                        break;
+                    }
                 }
             }
 

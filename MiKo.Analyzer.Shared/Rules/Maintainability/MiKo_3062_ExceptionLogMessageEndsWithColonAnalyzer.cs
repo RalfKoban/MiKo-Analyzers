@@ -139,7 +139,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return Issue(location);
         }
 
-        private Diagnostic CreateIssue(SyntaxToken token)
+        private Diagnostic CreateIssue(in SyntaxToken token)
         {
             var end = token.Span.End;
             var start = Math.Max(token.SpanStart, end - 2); // we want to underline the last 2 characters

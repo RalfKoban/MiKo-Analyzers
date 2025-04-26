@@ -244,6 +244,16 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("maintains", ExpectedResult = "maintains")]
         public static string MakeThirdPersonSingularVerb_finds_proper_3rd_person_singular_verb_(string name) => Verbalizer.MakeThirdPersonSingularVerb(name);
 
+        [TestCase("", ExpectedResult = "")]
+        [TestCase("   ", ExpectedResult = "   ")]
+        [TestCase("Maintains something whatever it takes", ExpectedResult = "Maintain something whatever it takes")]
+        [TestCase("maintains something whatever it takes", ExpectedResult = "maintain something whatever it takes")]
+        [TestCase(" Maintain something whatever it takes", ExpectedResult = " Maintain something whatever it takes")]
+        [TestCase(" maintain something whatever it takes", ExpectedResult = " maintain something whatever it takes")]
+        [TestCase("   Maintains something whatever it takes", ExpectedResult = "Maintain something whatever it takes")]
+        [TestCase("   maintains something whatever it takes", ExpectedResult = "maintain something whatever it takes")]
+        public static string MakeFirstWordInfiniteVerb_finds_proper_infinite_verb_(string name) => Verbalizer.MakeFirstWordInfiniteVerb(name);
+
         [TestCase("access", ExpectedResult = false)]
         [TestCase("accesses", ExpectedResult = true)]
         [TestCase("adapts", ExpectedResult = true)]

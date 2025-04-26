@@ -68,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
         }
 
-        private static SyntaxNode UpdateInvocation(InvocationExpressionSyntax invocation, SyntaxNode root, int additionalSpaces)
+        private static SyntaxNode UpdateInvocation(InvocationExpressionSyntax invocation, SyntaxNode root, in int additionalSpaces)
         {
             var argumentList = invocation.ArgumentList;
 

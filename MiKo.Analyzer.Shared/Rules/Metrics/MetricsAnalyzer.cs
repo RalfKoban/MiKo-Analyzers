@@ -72,7 +72,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
             }
         }
 
-        private Diagnostic AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context, ISymbol symbol)
+        private Diagnostic AnalyzeSyntaxNode(in SyntaxNodeAnalysisContext context, ISymbol symbol)
         {
             var body = GetBody(context);
 

@@ -7,11 +7,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         protected override bool IsTrivia => true;
 
-        protected sealed override SyntaxToken GetUpdatedToken(SyntaxToken token, Diagnostic issue)
+        protected sealed override SyntaxToken GetUpdatedToken(in SyntaxToken token, Diagnostic issue)
         {
-            return token.ReplaceTrivia(token.GetComment(), ComputeReplacementTrivia);
+            return token.ReplaceTrivia(token.GetComment(), (original, rewritten) => ComputeReplacementTrivia(original, rewritten));
         }
 
-        protected abstract SyntaxTrivia ComputeReplacementTrivia(SyntaxTrivia original, SyntaxTrivia rewritten);
+        protected abstract SyntaxTrivia ComputeReplacementTrivia(in SyntaxTrivia original, in SyntaxTrivia rewritten);
     }
 }

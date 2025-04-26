@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Performance
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_5013_EmptyArrayAnalyzer : ArrayCreationExpressionMaintainabilityAnalyzer
+    public sealed class MiKo_5013_EmptyArrayAnalyzer : ArrayCreationExpressionPerformanceAnalyzer
     {
         public const string Id = "MiKo_5013";
 

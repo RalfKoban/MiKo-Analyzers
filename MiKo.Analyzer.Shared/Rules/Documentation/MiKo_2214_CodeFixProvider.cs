@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return syntax.ReplaceNodes(texts, GetReplacements);
         }
 
-        private static bool IsEmptyLine(SyntaxToken token, SyntaxToken nextToken)
+        private static bool IsEmptyLine(in SyntaxToken token, in SyntaxToken nextToken)
         {
             if (nextToken.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
             {

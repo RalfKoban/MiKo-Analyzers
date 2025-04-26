@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase("test", "test", StringComparison.Ordinal, ExpectedResult = true)]
         [TestCase(" test", "test", StringComparison.Ordinal, ExpectedResult = true)]
         [TestCase("Some_test", "test", StringComparison.Ordinal, ExpectedResult = true)]
-        public static bool EndsWith_detects_ending_(string builderValue, string ending, StringComparison comparison) => new StringBuilder(builderValue).EndsWith(ending, comparison);
+        public static bool EndsWith_detects_ending_(string builderValue, string ending, in StringComparison comparison) => new StringBuilder(builderValue).EndsWith(ending, comparison);
 
         [TestCase("", -1)]
         [TestCase("", 1)]
@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase("test", 2, ExpectedResult = "te")]
         [TestCase("test", 3, ExpectedResult = "t")]
         [TestCase("test", 4, ExpectedResult = "")]
-        public static string TrimEndBy_trims_string_(string s, int count) => new StringBuilder(s).TrimEndBy(count).ToString();
+        public static string TrimEndBy_trims_string_(string s, in int count) => new StringBuilder(s).TrimEndBy(count).ToString();
 
         [TestCase("", ExpectedResult = "")]
         [TestCase(" ", ExpectedResult = "")]
@@ -118,7 +118,7 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase("message", FirstWordHandling.MakePlural | FirstWordHandling.KeepLeadingSpace, "messages")]
         [TestCase(" message", FirstWordHandling.MakePlural | FirstWordHandling.KeepLeadingSpace, " messages")]
         [TestCase("   message", FirstWordHandling.MakePlural | FirstWordHandling.KeepLeadingSpace, " messages")]
-        public static void AdjustFirstWordHandling(string s, FirstWordHandling handling, string expectedResult)
+        public static void AdjustFirstWordHandling(string s, in FirstWordHandling handling, string expectedResult)
         {
             var resultFromSB = new StringBuilder(s).AdjustFirstWord(handling).ToString();
             var resultFromS = s.AdjustFirstWord(handling);
@@ -136,5 +136,14 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase("SomeValueWithNumber1234InBetween", ExpectedResult = "Some_value_with_number_1234_in_between")]
         [TestCase("SomeValueWithNumber1234AfterWhatever", ExpectedResult = "Some_value_with_number_1234_after_whatever")]
         public static string SeparateWords_separates_words_at_underscores_(string s) => new StringBuilder(s).SeparateWords(Constants.Underscore).ToString();
+
+        [TestCase("", ExpectedResult = "")]
+        [TestCase(" ", ExpectedResult = " ")]
+        [TestCase("  ", ExpectedResult = " ")]
+        [TestCase("   ", ExpectedResult = " ")]
+        [TestCase("    ", ExpectedResult = " ")]
+        [TestCase("a    ", ExpectedResult = "a ")]
+        [TestCase("a    b", ExpectedResult = "a b")]
+        public static string WithoutMultipleWhiteSpaces_shortens_multiple_whitespaces_to_single(string s) => new StringBuilder(s).WithoutMultipleWhiteSpaces().ToString();
     }
 }

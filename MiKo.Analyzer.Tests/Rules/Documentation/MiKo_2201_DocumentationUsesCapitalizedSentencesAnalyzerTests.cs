@@ -54,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         [Test]
         public void No_issue_is_reported_for_documentation_starting_with_upper_case_after_dot_(
                                                                                            [ValueSource(nameof(XmlTags))] string xmlTag,
-                                                                                           [ValueSource(nameof(UpperCaseLetters))] char startingChar)
+                                                                                           [ValueSource(nameof(UpperCaseLetters))] in char startingChar)
             => No_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// Documentation. " + startingChar + @" something.
@@ -65,7 +65,7 @@ public sealed class TestMe { }
         [Test]
         public void No_issue_is_reported_for_documentation_starting_with_upper_case_after_dot_in_para_(
                                                                                                    [ValueSource(nameof(XmlTags))] string xmlTag,
-                                                                                                   [ValueSource(nameof(UpperCaseLetters))] char startingChar)
+                                                                                                   [ValueSource(nameof(UpperCaseLetters))] in char startingChar)
             => No_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// Documentation.
@@ -77,7 +77,7 @@ public sealed class TestMe { }
         [Test]
         public void No_issue_is_reported_for_documentation_starting_with_upper_case_after_dot_in_para_with_line_break_(
                                                                                                                    [ValueSource(nameof(XmlTags))] string xmlTag,
-                                                                                                                   [ValueSource(nameof(UpperCaseLetters))] char startingChar)
+                                                                                                                   [ValueSource(nameof(UpperCaseLetters))] in char startingChar)
             => No_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// Documentation.
@@ -91,7 +91,7 @@ public sealed class TestMe { }
         [Test]
         public void An_issue_is_reported_for_documentation_starting_with_lower_case_after_dot_(
                                                                                            [ValueSource(nameof(XmlTags))] string xmlTag,
-                                                                                           [ValueSource(nameof(LowerCaseLetters))] char startingChar)
+                                                                                           [ValueSource(nameof(LowerCaseLetters))] in char startingChar)
             => An_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// Documentation. " + startingChar + @" something.
@@ -102,7 +102,7 @@ public sealed class TestMe { }
         [Test]
         public void An_issue_is_reported_for_documentation_starting_with_lower_case_after_dot_in_para_(
                                                                                                    [ValueSource(nameof(XmlTags))] string xmlTag,
-                                                                                                   [ValueSource(nameof(LowerCaseLetters))] char startingChar)
+                                                                                                   [ValueSource(nameof(LowerCaseLetters))] in char startingChar)
             => An_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// Documentation.
@@ -114,7 +114,7 @@ public sealed class TestMe { }
         [Test]
         public void An_issue_is_reported_for_documentation_starting_with_lower_case_after_dot_in_para_with_line_break_(
                                                                                                                    [ValueSource(nameof(XmlTags))] string xmlTag,
-                                                                                                                   [ValueSource(nameof(LowerCaseLetters))] char startingChar)
+                                                                                                                   [ValueSource(nameof(LowerCaseLetters))] in char startingChar)
             => An_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// Documentation.

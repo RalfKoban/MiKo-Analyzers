@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers
         [ThreadStatic]
         private static StringBuilder s_cachedInstance;
 
-        public static StringBuilder Acquire(int capacity = DefaultCapacity)
+        public static StringBuilder Acquire(in int capacity = DefaultCapacity)
         {
             if (capacity <= MaxBuilderSize)
             {

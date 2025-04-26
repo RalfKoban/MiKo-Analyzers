@@ -39,6 +39,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase('>', ExpectedResult = "CLOSING_CHEVRON")]
         [TestCase('§', ExpectedResult = "PARAGRAPH")]
         [TestCase('a', ExpectedResult = null)]
-        public static string FindDescribingWord_returns_describing_word_for_(char input) => NamesFinder.FindDescribingWord(input);
+        public static string FindDescribingWord_returns_describing_word_for_(in char input) => NamesFinder.FindDescribingWord(input);
     }
 }

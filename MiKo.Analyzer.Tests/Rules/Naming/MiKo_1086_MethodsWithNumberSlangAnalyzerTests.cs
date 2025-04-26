@@ -28,7 +28,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_slang_number_([Values(2, 4)] int number) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_slang_number_([Values(2, 4)] in int number) => An_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -37,7 +37,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_slang_number_suffix_([Values(2, 4)] int number) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_slang_number_suffix_([Values(2, 4)] in int number) => No_issue_is_reported_for(@"
 
 public class TestMe
 {

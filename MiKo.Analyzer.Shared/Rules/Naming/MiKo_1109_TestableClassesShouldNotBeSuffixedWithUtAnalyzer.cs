@@ -34,8 +34,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return Array.Empty<Diagnostic>();
         }
 
-        private static string FindBetterName(ReadOnlySpan<char> symbolName) => symbolName.StartsWith(Prefix, StringComparison.Ordinal)
-                                                                               ? symbolName.WithoutSuffix(Suffix).ToString()
-                                                                               : Prefix.ConcatenatedWith(symbolName.WithoutSuffix(Suffix));
+        private static string FindBetterName(in ReadOnlySpan<char> symbolName) => symbolName.StartsWith(Prefix, StringComparison.Ordinal)
+                                                                                  ? symbolName.WithoutSuffix(Suffix).ToString()
+                                                                                  : Prefix.ConcatenatedWith(symbolName.WithoutSuffix(Suffix));
     }
 }

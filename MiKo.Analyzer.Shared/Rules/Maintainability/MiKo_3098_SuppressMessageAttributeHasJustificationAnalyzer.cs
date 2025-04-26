@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeAttributeArgument, SyntaxKind.AttributeArgument);
 
-        private static bool HasIssue(ReadOnlySpan<char> text)
+        private static bool HasIssue(in ReadOnlySpan<char> text)
         {
             if (text.IsNullOrWhiteSpace())
             {

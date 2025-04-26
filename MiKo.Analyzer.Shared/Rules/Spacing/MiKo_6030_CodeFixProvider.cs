@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     {
         public override string FixableDiagnosticId => "MiKo_6030";
 
-        protected override TSyntaxNode GetUpdatedSyntax<TSyntaxNode>(TSyntaxNode node, int leadingSpaces)
+        protected override TSyntaxNode GetUpdatedSyntax<TSyntaxNode>(TSyntaxNode node, in int leadingSpaces)
         {
             // such as for dictionaries
             if (node is InitializerExpressionSyntax initializer
@@ -42,11 +42,11 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
         }
 
-        private InitializerExpressionSyntax GetUpdatedSyntax(InitializerExpressionSyntax initializer, int spaces) => initializer.WithOpenBraceToken(initializer.OpenBraceToken.WithLeadingSpaces(spaces))
+        private InitializerExpressionSyntax GetUpdatedSyntax(InitializerExpressionSyntax initializer, in int spaces) => initializer.WithOpenBraceToken(initializer.OpenBraceToken.WithLeadingSpaces(spaces))
                                                                                                                                 .WithExpressions(GetUpdatedSyntax(initializer.Expressions, spaces + Constants.Indentation))
                                                                                                                                 .WithCloseBraceToken(initializer.CloseBraceToken.WithLeadingSpaces(spaces));
 
-        private AnonymousObjectCreationExpressionSyntax GetUpdatedSyntax(AnonymousObjectCreationExpressionSyntax anonymous, int spaces) => anonymous.WithOpenBraceToken(anonymous.OpenBraceToken.WithLeadingSpaces(spaces))
+        private AnonymousObjectCreationExpressionSyntax GetUpdatedSyntax(AnonymousObjectCreationExpressionSyntax anonymous, in int spaces) => anonymous.WithOpenBraceToken(anonymous.OpenBraceToken.WithLeadingSpaces(spaces))
                                                                                                                                                     .WithInitializers(GetUpdatedSyntax(anonymous.Initializers, spaces + Constants.Indentation))
                                                                                                                                                     .WithCloseBraceToken(anonymous.CloseBraceToken.WithLeadingSpaces(spaces));
     }

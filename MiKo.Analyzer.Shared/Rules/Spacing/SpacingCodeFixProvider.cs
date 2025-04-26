@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         }
 #pragma warning restore CA1002
 
-        protected static SeparatedSyntaxList<T> PlacedOnSameLine<T>(SeparatedSyntaxList<T> syntax) where T : SyntaxNode
+        protected static SeparatedSyntaxList<T> PlacedOnSameLine<T>(in SeparatedSyntaxList<T> syntax) where T : SyntaxNode
         {
             var updatedItems = syntax.GetWithSeparators()
                                      .Select(_ =>
@@ -184,7 +184,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                                                                                               .WithWhenKeyword(clause.WhenKeyword.WithLeadingSpace().WithoutTrailingTrivia())
                                                                                               .WithCondition(PlacedOnSameLine(clause.Condition));
 
-        protected SeparatedSyntaxList<TSyntaxNode> GetUpdatedSyntax<TSyntaxNode>(SeparatedSyntaxList<TSyntaxNode> expressions, int leadingSpaces) where TSyntaxNode : SyntaxNode
+        protected SeparatedSyntaxList<TSyntaxNode> GetUpdatedSyntax<TSyntaxNode>(SeparatedSyntaxList<TSyntaxNode> expressions, in int leadingSpaces) where TSyntaxNode : SyntaxNode
         {
             if (expressions.Count == 0)
             {
@@ -218,6 +218,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return SyntaxFactory.SeparatedList(updatedExpressions, expressions.GetSeparators());
         }
 
-        protected virtual TSyntaxNode GetUpdatedSyntax<TSyntaxNode>(TSyntaxNode node, int leadingSpaces) where TSyntaxNode : SyntaxNode => node.WithLeadingSpaces(leadingSpaces);
+        protected virtual TSyntaxNode GetUpdatedSyntax<TSyntaxNode>(TSyntaxNode node, in int leadingSpaces) where TSyntaxNode : SyntaxNode => node.WithLeadingSpaces(leadingSpaces);
     }
 }
