@@ -121,8 +121,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Array.Empty<Diagnostic>();
         }
 
-        private Diagnostic[] ReportIssueContainsPhrase(ISymbol symbol, ReadOnlySpan<char> phrase) => new[] { Issue(symbol, "contain", phrase.HumanizedTakeFirst(200)) };
+        private Diagnostic[] ReportIssueContainsPhrase(ISymbol symbol, in ReadOnlySpan<char> phrase) => new[] { Issue(symbol, "contain", phrase.HumanizedTakeFirst(200)) };
 
-        private Diagnostic[] ReportIssueStartingPhrase(ISymbol symbol, ReadOnlySpan<char> phrase) => new[] { Issue(symbol, "start with", phrase.HumanizedTakeFirst(200)) };
+        private Diagnostic[] ReportIssueStartingPhrase(ISymbol symbol, in ReadOnlySpan<char> phrase) => new[] { Issue(symbol, "start with", phrase.HumanizedTakeFirst(200)) };
     }
 }

@@ -114,7 +114,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             Analyze(context, methodBody, parameters);
         }
 
-        private void Analyze(SyntaxNodeAnalysisContext context, SyntaxNode methodBody, SeparatedSyntaxList<ParameterSyntax> parameters, string methodName = null)
+        private void Analyze(in SyntaxNodeAnalysisContext context, SyntaxNode methodBody, in SeparatedSyntaxList<ParameterSyntax> parameters, string methodName = null)
         {
             if (methodBody is null)
             {

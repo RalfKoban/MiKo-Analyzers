@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             return false;
         }
 
-        private static bool IsObjectEqualsInsideOwnOperator(ISymbol containingSymbol, SemanticModel semanticModel, SeparatedSyntaxList<ArgumentSyntax> arguments)
+        private static bool IsObjectEqualsInsideOwnOperator(ISymbol containingSymbol, SemanticModel semanticModel, in SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
             if (arguments.Count == 2 && containingSymbol is IMethodSymbol enclosingMethod && enclosingMethod.MethodKind == MethodKind.UserDefinedOperator)
             {
@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             return false;
         }
 
-        private static bool IsOwnEqualsInsideOwnOperator(ISymbol containingSymbol, SemanticModel semanticModel, SeparatedSyntaxList<ArgumentSyntax> arguments)
+        private static bool IsOwnEqualsInsideOwnOperator(ISymbol containingSymbol, SemanticModel semanticModel, in SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
             if (arguments.Count == 1 && containingSymbol is IMethodSymbol enclosingMethod && enclosingMethod.MethodKind == MethodKind.UserDefinedOperator)
             {
@@ -56,24 +56,24 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             return false;
         }
 
-        private static bool IsDynamicOrGeneric(SeparatedSyntaxList<ArgumentSyntax> arguments, SemanticModel semanticModel) => arguments.Any(_ =>
-                                                                                                                                                {
-                                                                                                                                                    switch (_.GetTypeSymbol(semanticModel)?.TypeKind)
-                                                                                                                                                    {
-                                                                                                                                                        case TypeKind.Dynamic:
-                                                                                                                                                        case TypeKind.TypeParameter:
-                                                                                                                                                            return true;
+        private static bool IsDynamicOrGeneric(in SeparatedSyntaxList<ArgumentSyntax> arguments, SemanticModel semanticModel) => arguments.Any(_ =>
+                                                                                                                                                   {
+                                                                                                                                                       switch (_.GetTypeSymbol(semanticModel)?.TypeKind)
+                                                                                                                                                       {
+                                                                                                                                                           case TypeKind.Dynamic:
+                                                                                                                                                           case TypeKind.TypeParameter:
+                                                                                                                                                               return true;
 
-                                                                                                                                                        default:
-                                                                                                                                                            return false;
-                                                                                                                                                    }
-                                                                                                                                                });
+                                                                                                                                                           default:
+                                                                                                                                                               return false;
+                                                                                                                                                       }
+                                                                                                                                                   });
 
         private static bool IsEnumEqualsMethod(IMethodSymbol method) => method.ContainingType.SpecialType == SpecialType.System_Enum;
 
         private static bool IsStringEqualsMethod(IMethodSymbol method) => method.ContainingType.SpecialType == SpecialType.System_String && method.Parameters.All(_ => _.Type.SpecialType == SpecialType.System_String || _.Type.TypeKind == TypeKind.Enum);
 
-        private static bool IsStruct(SeparatedSyntaxList<ArgumentSyntax> arguments, SemanticModel semanticModel) => arguments.Any(_ => _.Expression.IsStruct(semanticModel));
+        private static bool IsStruct(in SeparatedSyntaxList<ArgumentSyntax> arguments, SemanticModel semanticModel) => arguments.Any(_ => _.Expression.IsStruct(semanticModel));
 
         private static bool IsSameType(ArgumentSyntax argument, SemanticModel semanticModel, IMethodSymbol method) => method.ContainingType.Equals(argument.GetTypeSymbol(semanticModel), SymbolEqualityComparer.Default);
 
@@ -128,7 +128,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             }
         }
 
-        private Diagnostic AnalyzeMethod(InvocationExpressionSyntax node, ISymbol containingSymbol, SemanticModel semanticModel, SeparatedSyntaxList<ArgumentSyntax> arguments)
+        private Diagnostic AnalyzeMethod(InvocationExpressionSyntax node, ISymbol containingSymbol, SemanticModel semanticModel, in SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
             var symbol = node.GetSymbol(semanticModel);
 
@@ -140,7 +140,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             return null;
         }
 
-        private Diagnostic AnalyzeMethod(InvocationExpressionSyntax node, ISymbol containingSymbol, SemanticModel semanticModel, SeparatedSyntaxList<ArgumentSyntax> arguments, IMethodSymbol nodeSymbol)
+        private Diagnostic AnalyzeMethod(InvocationExpressionSyntax node, ISymbol containingSymbol, SemanticModel semanticModel, in SeparatedSyntaxList<ArgumentSyntax> arguments, IMethodSymbol nodeSymbol)
         {
             if (IsOwnEqualsInsideOwnOperator(containingSymbol, semanticModel, arguments))
             {

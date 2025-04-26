@@ -40,21 +40,21 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                                                                      (int)SyntaxKind.ConditionalAccessExpression,
                                                                  };
 
-        public static int CountCyclomaticComplexity(BlockSyntax body, SyntaxKind syntaxKindToIgnore = SyntaxKind.None)
+        public static int CountCyclomaticComplexity(BlockSyntax body, in SyntaxKind syntaxKindToIgnore = SyntaxKind.None)
         {
             var count = SyntaxNodeCollector.Collect<SyntaxNode>(body, syntaxKindToIgnore).Count(_ => CCSyntaxKinds.Contains(_.RawKind));
 
             return 1 + count;
         }
 
-        public static int CountCyclomaticComplexity(ArrowExpressionClauseSyntax body, SyntaxKind syntaxKindToIgnore = SyntaxKind.None)
+        public static int CountCyclomaticComplexity(ArrowExpressionClauseSyntax body, in SyntaxKind syntaxKindToIgnore = SyntaxKind.None)
         {
             var count = SyntaxNodeCollector.Collect<SyntaxNode>(body, syntaxKindToIgnore).Count(_ => CCSyntaxKinds.Contains(_.RawKind));
 
             return 1 + count;
         }
 
-        internal static int CountLinesOfCode(SyntaxNode body, SyntaxKind syntaxKindToIgnore = SyntaxKind.None)
+        internal static int CountLinesOfCode(SyntaxNode body, in SyntaxKind syntaxKindToIgnore = SyntaxKind.None)
         {
             var nodes = SyntaxNodeCollector.Collect<StatementSyntax>(body, syntaxKindToIgnore);
 
@@ -80,7 +80,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
             }
         }
 
-        private static void CountLinesOfCode<T>(SeparatedSyntaxList<T> nodes, ISet<int> lines) where T : SyntaxNode
+        private static void CountLinesOfCode<T>(in SeparatedSyntaxList<T> nodes, ISet<int> lines) where T : SyntaxNode
         {
             var count = nodes.Count;
 
@@ -93,7 +93,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
             }
         }
 
-        private static void CountLinesOfCode<T>(SyntaxList<T> nodes, ISet<int> lines) where T : SyntaxNode
+        private static void CountLinesOfCode<T>(in SyntaxList<T> nodes, ISet<int> lines) where T : SyntaxNode
         {
             var count = nodes.Count;
 
@@ -222,7 +222,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void CountLinesOfCode(LinePosition position, ISet<int> lines) => CountLinesOfCode(position.Line, lines);
+        private static void CountLinesOfCode(in LinePosition position, ISet<int> lines) => CountLinesOfCode(position.Line, lines);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void CountLinesOfCode(Location location, ISet<int> lines)
@@ -234,6 +234,6 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void CountLinesOfCode(int line, ISet<int> lines) => lines.Add(line);
+        private static void CountLinesOfCode(in int line, ISet<int> lines) => lines.Add(line);
     }
 }

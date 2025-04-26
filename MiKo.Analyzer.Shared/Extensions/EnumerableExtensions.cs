@@ -24,7 +24,7 @@ namespace System.Linq
             set.UnionWith(values);
         }
 
-        internal static bool All(this SyntaxTriviaList value, Func<SyntaxTrivia, bool> filter)
+        internal static bool All(this in SyntaxTriviaList value, Func<SyntaxTrivia, bool> filter)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
@@ -43,7 +43,7 @@ namespace System.Linq
             return true;
         }
 
-        internal static bool All<T>(this SyntaxList<T> value, Func<T, bool> predicate) where T : SyntaxNode
+        internal static bool All<T>(this in SyntaxList<T> value, Func<T, bool> predicate) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
@@ -62,7 +62,7 @@ namespace System.Linq
             return true;
         }
 
-        internal static bool All<T>(this SeparatedSyntaxList<T> value, Func<T, bool> predicate) where T : SyntaxNode
+        internal static bool All<T>(this in SeparatedSyntaxList<T> value, Func<T, bool> predicate) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
@@ -81,7 +81,7 @@ namespace System.Linq
             return true;
         }
 
-        internal static bool All(this ReadOnlySpan<char> value, Func<char, bool> callback)
+        internal static bool All(this in ReadOnlySpan<char> value, Func<char, bool> callback)
         {
             var valueLength = value.Length;
 
@@ -99,7 +99,7 @@ namespace System.Linq
             return true;
         }
 
-        internal static bool All(this SyntaxTokenList value, Func<SyntaxToken, bool> predicate)
+        internal static bool All(this in SyntaxTokenList value, Func<SyntaxToken, bool> predicate)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
@@ -118,7 +118,7 @@ namespace System.Linq
             return true;
         }
 
-        internal static bool Any(this SyntaxTriviaList value, Func<SyntaxTrivia, bool> filter)
+        internal static bool Any(this in SyntaxTriviaList value, Func<SyntaxTrivia, bool> filter)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
@@ -137,7 +137,7 @@ namespace System.Linq
             return false;
         }
 
-        internal static bool Any<T>(this SyntaxList<T> value, Func<T, bool> predicate) where T : SyntaxNode
+        internal static bool Any<T>(this in SyntaxList<T> value, Func<T, bool> predicate) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
@@ -156,7 +156,7 @@ namespace System.Linq
             return false;
         }
 
-        internal static bool Any<T>(this SeparatedSyntaxList<T> value, Func<T, bool> predicate) where T : SyntaxNode
+        internal static bool Any<T>(this in SeparatedSyntaxList<T> value, Func<T, bool> predicate) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
@@ -175,7 +175,7 @@ namespace System.Linq
             return false;
         }
 
-        internal static bool Any(this ReadOnlySpan<char> value, Func<char, bool> filter)
+        internal static bool Any(this in ReadOnlySpan<char> value, Func<char, bool> filter)
         {
             var valueLength = value.Length;
 
@@ -193,7 +193,7 @@ namespace System.Linq
             return false;
         }
 
-        internal static bool Any(this SyntaxTokenList value, Func<SyntaxToken, bool> predicate)
+        internal static bool Any(this in SyntaxTokenList value, Func<SyntaxToken, bool> predicate)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
@@ -250,8 +250,8 @@ namespace System.Linq
             }
         }
 
-        internal static bool Contains<TSource, TTarget>(this ImmutableArray<TSource> source, TTarget value, SymbolEqualityComparer comparer) where TSource : class, ISymbol
-                                                                                                                                             where TTarget : class, ISymbol
+        internal static bool Contains<TSource, TTarget>(this in ImmutableArray<TSource> source, TTarget value, SymbolEqualityComparer comparer) where TSource : class, ISymbol
+                                                                                                                                                where TTarget : class, ISymbol
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceLength = source.Length;
@@ -270,7 +270,7 @@ namespace System.Linq
             return false;
         }
 
-        internal static int Count<T>(this ImmutableArray<T> source, Func<T, bool> filter) where T : class, ISymbol
+        internal static int Count<T>(this in ImmutableArray<T> source, Func<T, bool> filter) where T : class, ISymbol
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceLength = source.Length;
@@ -293,7 +293,7 @@ namespace System.Linq
             return count;
         }
 
-        internal static int Count<T>(this SeparatedSyntaxList<T> value, Func<T, bool> filter) where T : SyntaxNode
+        internal static int Count<T>(this in SeparatedSyntaxList<T> value, Func<T, bool> filter) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
@@ -316,7 +316,7 @@ namespace System.Linq
             return count;
         }
 
-        internal static int Count(this SyntaxTriviaList value, Func<SyntaxTrivia, bool> filter)
+        internal static int Count(this in SyntaxTriviaList value, Func<SyntaxTrivia, bool> filter)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
@@ -453,7 +453,7 @@ namespace System.Linq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T Find<T>(this T[] value, Predicate<T> match) => value.Length > 0 ? Array.Find(value, match) : default;
 
-        internal static SyntaxToken First(this SyntaxTokenList source, Func<SyntaxToken, bool> predicate)
+        internal static SyntaxToken First(this in SyntaxTokenList source, Func<SyntaxToken, bool> predicate)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
@@ -474,7 +474,7 @@ namespace System.Linq
             throw new InvalidOperationException("nothing found");
         }
 
-        internal static T First<T>(this SyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode
+        internal static T First<T>(this in SyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
@@ -495,7 +495,7 @@ namespace System.Linq
             throw new InvalidOperationException("nothing found");
         }
 
-        internal static T First<T>(this SeparatedSyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode
+        internal static T First<T>(this in SeparatedSyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
@@ -516,7 +516,7 @@ namespace System.Linq
             throw new InvalidOperationException("nothing found");
         }
 
-        internal static SyntaxToken FirstOrDefault(this SyntaxTokenList source, Func<SyntaxToken, bool> predicate)
+        internal static SyntaxToken FirstOrDefault(this in SyntaxTokenList source, Func<SyntaxToken, bool> predicate)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
@@ -537,7 +537,7 @@ namespace System.Linq
             return default;
         }
 
-        internal static SyntaxToken FirstOrDefault(this SyntaxTokenList.Reversed source, Func<SyntaxToken, bool> predicate)
+        internal static SyntaxToken FirstOrDefault(this in SyntaxTokenList.Reversed source, Func<SyntaxToken, bool> predicate)
         {
             // ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
             foreach (var value in source)
@@ -551,7 +551,7 @@ namespace System.Linq
             return default;
         }
 
-        internal static T FirstOrDefault<T>(this SyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode
+        internal static T FirstOrDefault<T>(this in SyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
@@ -572,7 +572,7 @@ namespace System.Linq
             return default;
         }
 
-        internal static T FirstOrDefault<T>(this SeparatedSyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode
+        internal static T FirstOrDefault<T>(this in SeparatedSyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
@@ -626,16 +626,16 @@ namespace System.Linq
         internal static bool IsEmptyArray<T>(this IEnumerable<T> source) => source is T[] array && array.Length == 0;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool None(this SyntaxTriviaList source) => source.Count == 0;
+        internal static bool None(this in SyntaxTriviaList source) => source.Count == 0;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool None<T>(this SyntaxList<T> source) where T : SyntaxNode => source.Count == 0;
+        internal static bool None<T>(this in SyntaxList<T> source) where T : SyntaxNode => source.Count == 0;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool None<T>(this SeparatedSyntaxList<T> source) where T : SyntaxNode => source.Count == 0;
+        internal static bool None<T>(this in SeparatedSyntaxList<T> source) where T : SyntaxNode => source.Count == 0;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool None(this SyntaxTokenList source) => source.Count == 0;
+        internal static bool None(this in SyntaxTokenList source) => source.Count == 0;
 
         internal static bool None<T>(this IEnumerable<T> source) => source.Any() is false;
 
@@ -643,24 +643,24 @@ namespace System.Linq
         internal static bool None<T>(this IReadOnlyCollection<T> source) => source.Count == 0;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool None<T>(this ImmutableArray<T> source) => source.Length == 0;
+        internal static bool None<T>(this in ImmutableArray<T> source) => source.Length == 0;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool None<T>(this SyntaxList<T> source, SyntaxKind kind) where T : SyntaxNode => source.IndexOf(kind) == -1;
+        internal static bool None<T>(this in SyntaxList<T> source, in SyntaxKind kind) where T : SyntaxNode => source.IndexOf(kind) == -1;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool None(this SyntaxTokenList source, SyntaxKind kind) => source.Any(kind) is false;
+        internal static bool None(this in SyntaxTokenList source, in SyntaxKind kind) => source.Any(kind) is false;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool None<T>(this SeparatedSyntaxList<T> source, SyntaxKind kind) where T : SyntaxNode => source.IndexOf(kind) == -1;
+        internal static bool None<T>(this in SeparatedSyntaxList<T> source, in SyntaxKind kind) where T : SyntaxNode => source.IndexOf(kind) == -1;
 
-        internal static bool None<T>(this SyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode => source.All(_ => predicate(_) is false);
+        internal static bool None<T>(this in SyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode => source.All(_ => predicate(_) is false);
 
-        internal static bool None<T>(this SeparatedSyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode => source.All(_ => predicate(_) is false);
+        internal static bool None<T>(this in SeparatedSyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode => source.All(_ => predicate(_) is false);
 
         internal static bool None<T>(this IEnumerable<T> source, Func<T, bool> predicate) => source.All(_ => predicate(_) is false);
 
-        internal static bool MoreThan<T>(this IEnumerable<T> source, int count)
+        internal static bool MoreThan<T>(this IEnumerable<T> source, in int count)
         {
             switch (source)
             {
@@ -690,7 +690,7 @@ namespace System.Linq
             }
         }
 
-        internal static SyntaxToken Last(this SyntaxTokenList source, Func<SyntaxToken, bool> predicate)
+        internal static SyntaxToken Last(this in SyntaxTokenList source, Func<SyntaxToken, bool> predicate)
         {
             for (var index = source.Count - 1; index >= 0; --index)
             {
@@ -705,7 +705,7 @@ namespace System.Linq
             throw new InvalidOperationException("nothing found");
         }
 
-        internal static T Last<T>(this SyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode
+        internal static T Last<T>(this in SyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode
         {
             for (var index = source.Count - 1; index >= 0; --index)
             {
@@ -720,7 +720,7 @@ namespace System.Linq
             throw new InvalidOperationException("nothing found");
         }
 
-        internal static T Last<T>(this SeparatedSyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode
+        internal static T Last<T>(this in SeparatedSyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode
         {
             for (var index = source.Count - 1; index >= 0; --index)
             {
@@ -735,7 +735,7 @@ namespace System.Linq
             throw new InvalidOperationException("nothing found");
         }
 
-        internal static SyntaxToken LastOrDefault(this SyntaxTokenList source, Func<SyntaxToken, bool> predicate)
+        internal static SyntaxToken LastOrDefault(this in SyntaxTokenList source, Func<SyntaxToken, bool> predicate)
         {
             for (var index = source.Count - 1; index >= 0; --index)
             {
@@ -750,7 +750,7 @@ namespace System.Linq
             return default;
         }
 
-        internal static T LastOrDefault<T>(this SyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode
+        internal static T LastOrDefault<T>(this in SyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode
         {
             for (var index = source.Count - 1; index >= 0; --index)
             {
@@ -765,7 +765,7 @@ namespace System.Linq
             return default;
         }
 
-        internal static T LastOrDefault<T>(this SeparatedSyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode
+        internal static T LastOrDefault<T>(this in SeparatedSyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode
         {
             for (var index = source.Count - 1; index >= 0; --index)
             {
@@ -990,7 +990,7 @@ namespace System.Linq
             }
         }
 
-        internal static IEnumerable<T> Skip<T>(this SyntaxList<T> source, int count) where T : SyntaxNode
+        internal static IEnumerable<T> Skip<T>(this in SyntaxList<T> source, in int count) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
@@ -1012,7 +1012,7 @@ namespace System.Linq
             return result;
         }
 
-        internal static T[] Skip<T>(this SeparatedSyntaxList<T> source, int count) where T : SyntaxNode
+        internal static T[] Skip<T>(this in SeparatedSyntaxList<T> source, in int count) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
@@ -1034,7 +1034,7 @@ namespace System.Linq
             return result;
         }
 
-        internal static SyntaxToken[] Skip(this SyntaxTokenList source, int count)
+        internal static SyntaxToken[] Skip(this in SyntaxTokenList source, in int count)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
@@ -1056,7 +1056,7 @@ namespace System.Linq
             return result;
         }
 
-        internal static SyntaxToken[] ToArray(this SyntaxTokenList source)
+        internal static SyntaxToken[] ToArray(this in SyntaxTokenList source)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
@@ -1076,7 +1076,7 @@ namespace System.Linq
             return Array.Empty<SyntaxToken>();
         }
 
-        internal static T[] ToArray<T>(this SyntaxList<T> source) where T : SyntaxNode
+        internal static T[] ToArray<T>(this in SyntaxList<T> source) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
@@ -1096,7 +1096,7 @@ namespace System.Linq
             return Array.Empty<T>();
         }
 
-        internal static T[] ToArray<T>(this SeparatedSyntaxList<T> source) where T : SyntaxNode
+        internal static T[] ToArray<T>(this in SeparatedSyntaxList<T> source) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
@@ -1118,7 +1118,7 @@ namespace System.Linq
 
         internal static T[] ToArray<T>(this IEnumerable<T> source, IComparer<T> comparer) => source.ToArray(_ => _, comparer);
 
-        internal static TKey[] ToArray<TKey, TSource>(this SeparatedSyntaxList<TSource> source, Func<TSource, TKey> keySelector) where TSource : SyntaxNode
+        internal static TKey[] ToArray<TKey, TSource>(this in SeparatedSyntaxList<TSource> source, Func<TSource, TKey> keySelector) where TSource : SyntaxNode
         {
             var length = source.Count;
 
@@ -1254,7 +1254,7 @@ namespace System.Linq
             return result;
         }
 
-        internal static HashSet<TResult> ToHashSet<TSource, TResult>(this SyntaxList<TSource> source, Func<TSource, TResult> selector) where TSource : SyntaxNode
+        internal static HashSet<TResult> ToHashSet<TSource, TResult>(this in SyntaxList<TSource> source, Func<TSource, TResult> selector) where TSource : SyntaxNode
         {
             var result = new HashSet<TResult>();
             var length = source.Count;
@@ -1270,7 +1270,7 @@ namespace System.Linq
             return result;
         }
 
-        internal static HashSet<TResult> ToHashSet<TSource, TResult>(this SeparatedSyntaxList<TSource> source, Func<TSource, TResult> selector) where TSource : SyntaxNode
+        internal static HashSet<TResult> ToHashSet<TSource, TResult>(this in SeparatedSyntaxList<TSource> source, Func<TSource, TResult> selector) where TSource : SyntaxNode
         {
             var result = new HashSet<TResult>();
             var length = source.Count;
@@ -1286,7 +1286,7 @@ namespace System.Linq
             return result;
         }
 
-        internal static HashSet<TResult> ToHashSet<TSource, TResult>(this ImmutableArray<TSource> source, Func<TSource, TResult> selector)
+        internal static HashSet<TResult> ToHashSet<TSource, TResult>(this in ImmutableArray<TSource> source, Func<TSource, TResult> selector)
         {
             var result = new HashSet<TResult>();
             var length = source.Length;
@@ -1302,7 +1302,7 @@ namespace System.Linq
             return result;
         }
 
-        internal static List<SyntaxToken> ToList(this SyntaxTokenList source)
+        internal static List<SyntaxToken> ToList(this in SyntaxTokenList source)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
@@ -1322,7 +1322,7 @@ namespace System.Linq
 
 //// ncrunch: no coverage end
 
-        internal static List<T> ToList<T>(this SyntaxList<T> source) where T : SyntaxNode
+        internal static List<T> ToList<T>(this in SyntaxList<T> source) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
@@ -1340,7 +1340,7 @@ namespace System.Linq
             return target;
         }
 
-        internal static List<T> ToList<T>(this SeparatedSyntaxList<T> source) where T : SyntaxNode
+        internal static List<T> ToList<T>(this in SeparatedSyntaxList<T> source) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;

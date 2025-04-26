@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static string GetText(this Location value) => value.SourceTree?.GetText().ToString(value.SourceSpan);
 
-        internal static string GetText(this Location value, int length)
+        internal static string GetText(this Location value, in int length)
         {
             var tree = value.SourceTree;
 

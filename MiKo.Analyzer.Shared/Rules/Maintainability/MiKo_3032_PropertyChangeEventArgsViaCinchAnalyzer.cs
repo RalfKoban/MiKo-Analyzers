@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private void ReportIssue(SyntaxNodeAnalysisContext context, SyntaxNode node, string issueId, string issueTemplate)
+        private void ReportIssue(in SyntaxNodeAnalysisContext context, SyntaxNode node, string issueId, string issueTemplate)
         {
             var descendantNodes = node.DescendantNodes().ToList();
 

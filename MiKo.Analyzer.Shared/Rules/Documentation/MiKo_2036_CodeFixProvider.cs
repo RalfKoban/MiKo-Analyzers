@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => "MiKo_2036";
 
-        protected override bool IsApplicable(ImmutableArray<Diagnostic> diagnostics)
+        protected override bool IsApplicable(in ImmutableArray<Diagnostic> diagnostics)
         {
             // ReSharper disable once LoopCanBeConvertedToQuery
             // ReSharper disable once ForCanBeConvertedToForeach

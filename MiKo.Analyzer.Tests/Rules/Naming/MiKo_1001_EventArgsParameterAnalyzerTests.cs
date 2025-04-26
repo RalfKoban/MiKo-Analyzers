@@ -61,7 +61,7 @@ public class TestMe
         [TestCase("DependencyPropertyChangedEventArgs e, DependencyPropertyChangedEventArgs a", 2)]
         [TestCase("object s, DependencyPropertyChangedEventArgs args, object whatever", 1)]
         [TestCase("object whatever, object s, DependencyPropertyChangedEventArgs args", 1)]
-        public void An_issue_is_reported_for_matching_parameters_on_method_(string parameters, int violations) => An_issue_is_reported_for(violations, @"
+        public void An_issue_is_reported_for_matching_parameters_on_method_(string parameters, in int violations) => An_issue_is_reported_for(violations, @"
 namespace System.Windows
 {
     public struct DependencyPropertyChangedEventArgs
@@ -92,7 +92,7 @@ namespace Bla
         [TestCase("DependencyPropertyChangedEventArgs e, DependencyPropertyChangedEventArgs a", 2)]
         [TestCase("object s, DependencyPropertyChangedEventArgs args, object whatever", 1)]
         [TestCase("object whatever, object s, DependencyPropertyChangedEventArgs args", 1)]
-        public void An_issue_is_reported_for_matching_parameters_on_local_function_(string parameters, int violations) => An_issue_is_reported_for(violations, @"
+        public void An_issue_is_reported_for_matching_parameters_on_local_function_(string parameters, in int violations) => An_issue_is_reported_for(violations, @"
 namespace System.Windows
 {
     public struct DependencyPropertyChangedEventArgs

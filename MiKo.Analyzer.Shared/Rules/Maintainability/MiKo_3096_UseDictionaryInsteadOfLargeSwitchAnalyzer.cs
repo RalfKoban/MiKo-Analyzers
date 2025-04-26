@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSwitchStatement, SyntaxKind.SwitchStatement, SyntaxKind.SwitchExpression);
 
-        private static bool IsAcceptable(SyntaxNodeAnalysisContext context, StatementSyntax syntax)
+        private static bool IsAcceptable(in SyntaxNodeAnalysisContext context, StatementSyntax syntax)
         {
             switch (syntax)
             {
@@ -40,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static bool IsAcceptable(SyntaxNodeAnalysisContext context, ExpressionSyntax syntax)
+        private static bool IsAcceptable(in SyntaxNodeAnalysisContext context, ExpressionSyntax syntax)
         {
             switch (syntax)
             {
@@ -64,7 +64,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static bool IsAcceptable(SyntaxNodeAnalysisContext context, MemberAccessExpressionSyntax member)
+        private static bool IsAcceptable(in SyntaxNodeAnalysisContext context, MemberAccessExpressionSyntax member)
         {
             if (member.IsKind(SyntaxKind.SimpleMemberAccessExpression))
             {
@@ -81,7 +81,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return false;
         }
 
-        private static bool HasIssue(SyntaxNodeAnalysisContext context, SyntaxList<SwitchSectionSyntax> sections)
+        private static bool HasIssue(in SyntaxNodeAnalysisContext context, in SyntaxList<SwitchSectionSyntax> sections)
         {
             var sectionsCount = sections.Count;
 
@@ -123,7 +123,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return true;
         }
 
-        private static bool HasIssue(SyntaxNodeAnalysisContext context, SeparatedSyntaxList<SwitchExpressionArmSyntax> arms)
+        private static bool HasIssue(in SyntaxNodeAnalysisContext context, in SeparatedSyntaxList<SwitchExpressionArmSyntax> arms)
         {
             var armsCount = arms.Count;
 
@@ -174,7 +174,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private void AnalyzeSwitchStatement(SyntaxNodeAnalysisContext context, SwitchStatementSyntax syntax)
+        private void AnalyzeSwitchStatement(in SyntaxNodeAnalysisContext context, SwitchStatementSyntax syntax)
         {
             if (HasIssue(context, syntax.Sections))
             {
@@ -182,7 +182,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private void AnalyzeSwitchExpression(SyntaxNodeAnalysisContext context, SwitchExpressionSyntax syntax)
+        private void AnalyzeSwitchExpression(in SyntaxNodeAnalysisContext context, SwitchExpressionSyntax syntax)
         {
             if (HasIssue(context, syntax.Arms))
             {

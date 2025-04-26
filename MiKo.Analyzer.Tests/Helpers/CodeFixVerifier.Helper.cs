@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Globalization;
 using System.Linq;
 using System.Threading;
 
@@ -20,21 +19,6 @@ namespace TestHelper
     /// </summary>
     public abstract partial class CodeFixVerifier : DiagnosticVerifier
     {
-        protected static string ToNoun(string value)
-        {
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                return value;
-            }
-
-            if (char.IsLower(value[0]))
-            {
-                return char.ToUpper(value[0], CultureInfo.CurrentCulture) + value[1..];
-            }
-
-            return value;
-        }
-
         /// <summary>
         /// Apply the inputted CodeAction to the inputted document.
         /// Meant to be used to apply codefixes.

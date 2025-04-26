@@ -119,7 +119,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return null;
         }
 
-        private Diagnostic Analyze(AssignmentExpressionSyntax assignment, SyntaxList<StatementSyntax> statements)
+        private Diagnostic Analyze(AssignmentExpressionSyntax assignment, in SyntaxList<StatementSyntax> statements)
         {
             var callLineSpan = assignment.GetLocation().GetLineSpan();
 

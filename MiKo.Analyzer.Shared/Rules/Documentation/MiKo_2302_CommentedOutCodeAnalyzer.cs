@@ -16,6 +16,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool CanRunConcurrently => true;
 
-        protected override bool CommentHasIssue(ReadOnlySpan<char> comment, SemanticModel semanticModel) => CodeDetector.IsCommentedOutCodeLine(comment, semanticModel);
+        protected override bool CommentHasIssue(in ReadOnlySpan<char> comment, SemanticModel semanticModel) => CodeDetector.IsCommentedOutCodeLine(comment, semanticModel);
     }
 }

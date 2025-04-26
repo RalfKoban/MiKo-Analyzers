@@ -63,7 +63,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_variable_with_OS_bit_number_suffix_if_its_type_has_a_number_suffix_([Values(32, 64)] int number) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_variable_with_OS_bit_number_suffix_if_its_type_has_a_number_suffix_([Values(32, 64)] in int number) => No_issue_is_reported_for(@"
 
 public class TestMe
 {

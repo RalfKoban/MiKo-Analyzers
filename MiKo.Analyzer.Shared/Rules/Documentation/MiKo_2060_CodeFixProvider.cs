@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public static void LoadData() => GC.KeepAlive(MappedData.Value);
 
-        internal static bool CanFix(ReadOnlySpan<char> text)
+        internal static bool CanFix(in ReadOnlySpan<char> text)
         {
             var mappedData = MappedData.Value;
 

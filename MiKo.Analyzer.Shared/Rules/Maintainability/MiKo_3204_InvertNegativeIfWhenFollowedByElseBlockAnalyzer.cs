@@ -17,9 +17,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeIfStatement(IfStatementSyntax node, SyntaxNodeAnalysisContext context) => HasIssue(node)
-                                                                                                                                    ? new[] { Issue(node) }
-                                                                                                                                    : Array.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeIfStatement(IfStatementSyntax node, in SyntaxNodeAnalysisContext context) => HasIssue(node)
+                                                                                                                                       ? new[] { Issue(node) }
+                                                                                                                                       : Array.Empty<Diagnostic>();
 
         private static bool HasIssue(IfStatementSyntax node)
         {

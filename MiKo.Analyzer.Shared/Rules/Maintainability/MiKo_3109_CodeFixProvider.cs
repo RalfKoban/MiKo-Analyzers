@@ -102,7 +102,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static List<string> GetFinalText(SeparatedSyntaxList<ArgumentSyntax> arguments, int index, out string suffix)
+        private static List<string> GetFinalText(in SeparatedSyntaxList<ArgumentSyntax> arguments, in int index, out string suffix)
         {
             var foundSuffix = string.Empty;
 
@@ -170,7 +170,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             // let's see if we have the special case 'Is.Not.Null'
-            private static string GetStartingWord(SeparatedSyntaxList<ArgumentSyntax> arguments)
+            private static string GetStartingWord(in SeparatedSyntaxList<ArgumentSyntax> arguments)
             {
                 if (arguments.Count > 1 && arguments[1].Expression.ToString() == "Is.Not.Null")
                 {
@@ -183,7 +183,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static class OldAssertFixer
         {
-            internal static ArgumentListSyntax Fix(ArgumentListSyntax args, int index)
+            internal static ArgumentListSyntax Fix(ArgumentListSyntax args, in int index)
             {
                 var arguments = args.Arguments;
 

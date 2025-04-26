@@ -172,7 +172,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool IsMefAggregateCatalog(string typeName) => typeName == "AssemblyCatalog";
 
-        private static string GetPluralName(ReadOnlySpan<char> originalName, out string name)
+        private static string GetPluralName(in ReadOnlySpan<char> originalName, out string name)
         {
             if (originalName.EndsWith('s'))
             {
