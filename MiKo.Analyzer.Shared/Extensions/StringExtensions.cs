@@ -719,6 +719,7 @@ namespace System
             {
                 var valueSpan = value.AsSpan();
                 var phrasesLength = phrases.Length;
+                var ordinalComparison = comparison == StringComparison.Ordinal;
 
                 for (var index = 0; index < phrasesLength; index++)
                 {
@@ -728,9 +729,19 @@ namespace System
                     // no separate handling for StringComparison.Ordinal here as that happens around 30 times out of 90_000_000 times; so almost never
                     if (QuickCompare(valueSpan, phraseSpan, comparison))
                     {
-                        if (value.Contains(phrase, comparison))
+                        if (ordinalComparison)
                         {
-                            return true;
+                            if (valueSpan.Contains(phraseSpan))
+                            {
+                                return true;
+                            }
+                        }
+                        else
+                        {
+                            if (value.Contains(phrase, comparison))
+                            {
+                                return true;
+                            }
                         }
                     }
                 }
@@ -1533,11 +1544,6 @@ namespace System
 
         public static bool StartsWith(this in ReadOnlySpan<char> value, string characters, in StringComparison comparison)
         {
-            if (characters.IsNullOrEmpty())
-            {
-                return false;
-            }
-
             var others = characters.AsSpan();
 
             // perform quick check
