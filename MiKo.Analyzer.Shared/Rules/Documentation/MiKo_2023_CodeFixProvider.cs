@@ -819,7 +819,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     var order = orders[i];
 
-                    if (text.StartsWith(order.AsSpan(), StringComparison.Ordinal))
+                    if (text.StartsWith(order.AsSpan()))
                     {
                         return i;
                     }
