@@ -633,7 +633,7 @@ namespace System
                         var valueSpan = value.AsSpan(valueLength - QuickInspectionChars, QuickInspectionChars);
                         var findingSpan = finding.AsSpan(finding.Length - QuickInspectionChars, QuickInspectionChars);
 
-                        if (valueSpan.CompareTo(findingSpan, c) != 0)
+                        if (valueSpan.Equals(findingSpan, c) is false)
                         {
                             return false;
                         }

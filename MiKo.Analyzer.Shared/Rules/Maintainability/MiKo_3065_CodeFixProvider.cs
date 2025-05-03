@@ -91,7 +91,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 pairs[i] = new Pair("{" + indexString + "}", "{" + identifier + "}");
             }
 
-            var updatedText = token.ValueText.AsCachedBuilder().ReplaceAllWithCheck(pairs).ToStringAndRelease();
+            var updatedText = token.ValueText.AsCachedBuilder().ReplaceAllWithProbe(pairs).ToStringAndRelease();
 
             return StringLiteral(updatedText);
         }

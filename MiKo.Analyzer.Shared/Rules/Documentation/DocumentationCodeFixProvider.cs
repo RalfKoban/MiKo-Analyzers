@@ -184,7 +184,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         if (originalText.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase))
                         {
                             var replacedText = originalText.AsCachedBuilder()
-                                                           .ReplaceAllWithCheck(map)
+                                                           .ReplaceAllWithProbe(map)
                                                            .AdjustFirstWord(handling)
                                                            .ToStringAndRelease();
 

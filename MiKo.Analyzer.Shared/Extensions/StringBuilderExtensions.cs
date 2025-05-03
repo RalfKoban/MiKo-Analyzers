@@ -67,7 +67,7 @@ namespace System.Text
             {
                 var end = value.ToString(valueLength - endingLength, endingLength);
 
-                return end.Equals(ending, comparison);
+                return end.AsSpan().Equals(ending.AsSpan(), comparison);
             }
 
             return false;
@@ -133,7 +133,7 @@ namespace System.Text
 
         public static bool IsSingleWord(this StringBuilder value) => value?.HasWhitespaces() is false;
 
-        public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, in ReadOnlySpan<Pair> replacementPairs)
+        public static StringBuilder ReplaceAllWithProbe(this StringBuilder value, in ReadOnlySpan<Pair> replacementPairs)
         {
             var count = replacementPairs.Length;
 
@@ -142,7 +142,7 @@ namespace System.Text
                 var pair = replacementPairs[index];
                 var oldValue = pair.Key;
 
-                if (QuickCompare(ref value, ref oldValue))
+                if (QuickSubstringProbe(ref value, ref oldValue))
                 {
                     // can be part in the replacement as value seems to fit
                     value.Replace(oldValue, pair.Value);
@@ -152,7 +152,7 @@ namespace System.Text
             return value;
         }
 
-        public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, string[] texts, string replacement)
+        public static StringBuilder ReplaceAllWithProbe(this StringBuilder value, string[] texts, string replacement)
         {
             var length = texts.Length;
 
@@ -160,13 +160,7 @@ namespace System.Text
             {
                 var oldValue = texts[index];
 
-                if (string.IsNullOrEmpty(oldValue))
-                {
-                    // cannot replace any empty value
-                    continue;
-                }
-
-                if (QuickCompare(ref value, ref oldValue))
+                if (QuickSubstringProbe(ref value, ref oldValue))
                 {
                     // can be part in the replacement as value seems to fit
                     value.Replace(oldValue, replacement);
@@ -176,7 +170,7 @@ namespace System.Text
             return value;
         }
 
-        public static StringBuilder ReplaceWithCheck(this StringBuilder value, string oldValue, string newValue)
+        public static StringBuilder ReplaceWithProbe(this StringBuilder value, string oldValue, string newValue)
         {
             if (oldValue.IsNullOrEmpty())
             {
@@ -184,7 +178,7 @@ namespace System.Text
                 return value;
             }
 
-            if (QuickCompare(ref value, ref oldValue))
+            if (QuickSubstringProbe(ref value, ref oldValue))
             {
                 return value.Replace(oldValue, newValue);
             }
@@ -452,7 +446,7 @@ namespace System.Text
             return value.Remove(length - end, end);
         }
 
-        public static StringBuilder WithoutMultipleWhiteSpaces(this StringBuilder value) => value.ReplaceAllWithCheck(Constants.Comments.MultiWhitespaceStrings, Constants.Comments.SingleWhitespaceString);
+        public static StringBuilder WithoutMultipleWhiteSpaces(this StringBuilder value) => value.ReplaceAllWithProbe(Constants.Comments.MultiWhitespaceStrings, Constants.Comments.SingleWhitespaceString);
 
         public static StringBuilder WithoutNewLines(this StringBuilder value) => value.Without('\r', '\n');
 
@@ -469,6 +463,10 @@ namespace System.Text
             return value;
         }
 
+        public static StringBuilder Without(this StringBuilder value, string phrase) => value.ReplaceWithProbe(phrase, string.Empty);
+
+        public static StringBuilder Without(this StringBuilder value, string[] phrases) => value.ReplaceAllWithProbe(phrases, string.Empty);
+
         public static StringBuilder Without(this StringBuilder value, in char c1, in char c2)
         {
             for (var position = value.Length - 1; position > -1; position--)
@@ -484,16 +482,12 @@ namespace System.Text
             return value;
         }
 
-        public static StringBuilder Without(this StringBuilder value, string phrase) => value.ReplaceWithCheck(phrase, string.Empty);
-
-        public static StringBuilder Without(this StringBuilder value, string[] phrases) => value.ReplaceAllWithCheck(phrases, string.Empty);
-
         public static StringBuilder WithoutAbbreviations(this StringBuilder value) => AbbreviationDetector.FindAndReplaceAllAbbreviations(value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static StringBuilder WithoutParaTags(this StringBuilder value) => value.Without(Constants.ParaTags);
 
-        private static bool QuickCompare(ref StringBuilder current, ref string other)
+        private static bool QuickSubstringProbe(ref StringBuilder current, ref string other)
         {
             var otherValueLength = other.Length;
             var difference = current.Length - otherValueLength;
@@ -518,11 +512,11 @@ namespace System.Text
                     if (difference >= QuickCompareRentLengthThreshold)
                     {
                         // use rented arrays here (if we have larger differences, the start and end may be in different chunks)
-                        return QuickCompareAtIndicesWithRent(ref current, otherFirst, otherLast, length, lastIndex);
+                        return QuickSubstringProbeAtIndicesWithRent(ref current, otherFirst, otherLast, length, lastIndex);
                     }
 
                     // could be part in the replacement only if characters match
-                    return QuickCompareAtIndices(ref current, otherFirst, otherLast, length, lastIndex);
+                    return QuickSubstringProbeAtIndices(ref current, otherFirst, otherLast, length, lastIndex);
                 }
 
                 // can be part in the replacement as other value is smaller and could fit current value
@@ -543,43 +537,38 @@ namespace System.Text
             }
         }
 
-        private static bool QuickCompareAtIndices(ref StringBuilder current, in char first, in char last, in int length, in int lastIndex)
+        private static bool QuickSubstringProbeAtIndices(ref StringBuilder text, in char startChar, in char endChar, in int lengthToCompare, in int endIndex)
         {
-            for (var i = 0; i < length; i++)
+            for (var position = 0; position < lengthToCompare; position++)
             {
-                if (current[i] == first)
+                if (text[position] == startChar && text[endIndex + position] == endChar)
                 {
-                    if (current[lastIndex + i] == last)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
 
             return false;
         }
 
-        private static bool QuickCompareAtIndicesWithRent(ref StringBuilder current, in char first, in char last, in int length, in int lastIndex)
+        private static bool QuickSubstringProbeAtIndicesWithRent(ref StringBuilder text, in char startChar, in char endChar, in int lengthToCompare, in int endIndex)
         {
-            // use a rented shared pool for performance reasons
-            var shared = ArrayPool<char>.Shared;
-            var begin = shared.Rent(length);
-            var end = shared.Rent(length);
+            // Use a rented shared pool for performance reasons
+            var pool = ArrayPool<char>.Shared;
+            var startChars = pool.Rent(lengthToCompare);
+            var endChars = pool.Rent(lengthToCompare);
 
             try
             {
-                current.CopyTo(0, begin, 0, length);
-                current.CopyTo(lastIndex, end, 0, length);
+                // Copy the start and end segments from the text
+                text.CopyTo(0, startChars, 0, lengthToCompare);
+                text.CopyTo(endIndex, endChars, 0, lengthToCompare);
 
-                // could be part in the replacement only if characters match
-                for (var i = 0; i < length; i++)
+                // Compare the segments
+                for (var position = 0; position < lengthToCompare; position++)
                 {
-                    if (begin[i] == first)
+                    if (startChars[position] == startChar && endChars[position] == endChar)
                     {
-                        if (end[i] == last)
-                        {
-                            return true;
-                        }
+                        return true;
                     }
                 }
 
@@ -587,8 +576,8 @@ namespace System.Text
             }
             finally
             {
-                shared.Return(begin);
-                shared.Return(end);
+                pool.Return(startChars);
+                pool.Return(endChars);
             }
         }
 
