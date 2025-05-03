@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var pair in ReplacementMap)
             {
-                result.ReplaceWithCheck(pair.Key, pair.Value);
+                result.ReplaceWithProbe(pair.Key, pair.Value);
             }
 
             return result.ToStringAndRelease();

@@ -243,7 +243,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 commentContinuation.Append(continuation);
             }
 
-            commentContinuation.ReplaceAllWithCheck(info.Map);
+            commentContinuation.ReplaceAllWithProbe(info.Map);
 
             var finalCommentContinuation = StringBuilderCache.GetStringAndRelease(commentContinuation);
 
@@ -819,7 +819,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     var order = orders[i];
 
-                    if (text.StartsWith(order.AsSpan(), StringComparison.Ordinal))
+                    if (text.StartsWith(order.AsSpan()))
                     {
                         return i;
                     }

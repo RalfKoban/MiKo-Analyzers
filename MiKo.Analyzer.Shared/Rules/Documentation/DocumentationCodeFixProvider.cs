@@ -126,7 +126,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return syntax.ReplaceNodes(textMap.Keys, (_, __) => textMap[_]);
 
 //// ncrunch: no coverage start
-            int MinLength(string[] source)
+            int MinLength(ReadOnlySpan<string> source)
             {
                 var sourceLength = source.Length;
 
@@ -139,9 +139,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 for (var index = 0; index < sourceLength; index++)
                 {
-                    var value = source[index];
-
-                    var length = value.Length;
+                    var length = source[index].Length;
 
                     if (length < minimum)
                     {
@@ -186,7 +184,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         if (originalText.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase))
                         {
                             var replacedText = originalText.AsCachedBuilder()
-                                                           .ReplaceAllWithCheck(map)
+                                                           .ReplaceAllWithProbe(map)
                                                            .AdjustFirstWord(handling)
                                                            .ToStringAndRelease();
 

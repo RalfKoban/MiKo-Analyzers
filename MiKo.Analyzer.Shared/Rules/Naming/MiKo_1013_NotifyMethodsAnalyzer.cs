@@ -35,8 +35,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 if (symbolName.Without(StartingPhrase).Length != 0)
                 {
                     var proposal = symbolName.AsCachedBuilder()
-                                             .ReplaceWithCheck(StartingPhrase, CorrectStartingPhrase)
-                                             .ReplaceWithCheck(CorrectStartingPhrase + CorrectStartingPhrase, CorrectStartingPhrase)
+                                             .ReplaceWithProbe(StartingPhrase, CorrectStartingPhrase)
+                                             .ReplaceWithProbe(CorrectStartingPhrase + CorrectStartingPhrase, CorrectStartingPhrase)
                                              .ToStringAndRelease(); // may happen for "OnNotifyXyz"
 
                     return new[] { Issue(symbol, CreateBetterNameProposal(proposal)) };

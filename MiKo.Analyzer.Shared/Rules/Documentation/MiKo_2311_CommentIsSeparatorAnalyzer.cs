@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        internal static bool CommentContainsSeparator(in ReadOnlySpan<char> comment) => comment.ToString().ContainsAny(Separators);
+        internal static bool CommentContainsSeparator(string comment) => comment.ContainsAny(Separators);
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeComment, SyntaxKind.CompilationUnit);
 
@@ -28,14 +28,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             foreach (var trivia in node.DescendantTrivia())
             {
-                if (trivia.IsSingleLineComment())
+                if (trivia.IsSingleLineComment() && CommentContainsSeparator(trivia.ToString()))
                 {
-                    var comment = trivia.ToString();
-
-                    if (CommentContainsSeparator(comment.AsSpan()))
-                    {
-                        yield return Issue(trivia);
-                    }
+                    yield return Issue(trivia);
                 }
             }
         }

@@ -2402,7 +2402,7 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<InvocationExpressionSyntax> LinqExtensionMethods(this SyntaxNode value, SemanticModel semanticModel) => value.DescendantNodes<InvocationExpressionSyntax>(_ => IsLinqExtensionMethod(_, semanticModel));
 
         internal static IReadOnlyList<TResult> OfKind<TResult, TSyntaxNode>(this in SeparatedSyntaxList<TSyntaxNode> source, in SyntaxKind kind) where TSyntaxNode : SyntaxNode
-                                                                                                                                           where TResult : TSyntaxNode
+                                                                                                                                                 where TResult : TSyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
@@ -2621,7 +2621,7 @@ namespace MiKoSolutions.Analyzers
 
                 if (text.Contains(phrase))
                 {
-                    result = result.AsCachedBuilder().ReplaceWithCheck(phrase, replacement).ToStringAndRelease();
+                    result = result.AsCachedBuilder().ReplaceWithProbe(phrase, replacement).ToStringAndRelease();
 
                     replaced = true;
                 }
@@ -2677,7 +2677,7 @@ namespace MiKoSolutions.Analyzers
 
                     if (text.Contains(phrase))
                     {
-                        result.ReplaceWithCheck(phrase, replacement);
+                        result.ReplaceWithProbe(phrase, replacement);
 
                         replaced = true;
                     }
@@ -3239,7 +3239,7 @@ namespace MiKoSolutions.Analyzers
                                                                                                         .WithTrailingTriviaFrom(node);
 
         internal static T WithTriviaFrom<T>(this T value, in SyntaxToken token) where T : SyntaxNode => value.WithLeadingTriviaFrom(token)
-                                                                                                          .WithTrailingTriviaFrom(token);
+                                                                                                             .WithTrailingTriviaFrom(token);
 
         internal static T WithAdditionalLeadingTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode
         {

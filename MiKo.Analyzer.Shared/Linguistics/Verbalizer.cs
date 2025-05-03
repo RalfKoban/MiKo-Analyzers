@@ -369,10 +369,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
                 var gerundVerb = word.AsCachedBuilder()
                                      .Append("ing")
-                                     .ReplaceWithCheck("ping", "pping")
-                                     .ReplaceWithCheck("eing", "ing")
-                                     .ReplaceWithCheck("uring", "urring")
-                                     .ReplaceWithCheck("uting", "utting")
+                                     .ReplaceWithProbe("ping", "pping")
+                                     .ReplaceWithProbe("eing", "ing")
+                                     .ReplaceWithProbe("uring", "urring")
+                                     .ReplaceWithProbe("uting", "utting")
                                      .ToStringAndRelease();
 
                 return gerundVerb;

@@ -188,7 +188,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             foreach (var part in KnownParts)
             {
-                finalName.ReplaceWithCheck(part, "#");
+                finalName.ReplaceWithProbe(part, "#");
             }
 
             foreach (var ending in KnownEndings)
