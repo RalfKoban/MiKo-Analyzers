@@ -175,7 +175,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected virtual void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind);
 
-        protected void InitializeCore(CompilationStartAnalysisContext context, SymbolKind symbolKind)
+        protected void InitializeCore(CompilationStartAnalysisContext context, in SymbolKind symbolKind)
         {
             var action = GetAnalyzeMethod(symbolKind);
 
@@ -189,11 +189,12 @@ namespace MiKoSolutions.Analyzers.Rules
         {
             var length = symbolKinds.Length;
 
-            for (var index = 0; index < length; index++)
+            if (length > 0)
             {
-                var symbolKind = symbolKinds[index];
-
-                InitializeCore(context, symbolKind);
+                for (var index = 0; index < length; index++)
+                {
+                    InitializeCore(context, symbolKinds[index]);
+                }
             }
         }
 
