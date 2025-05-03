@@ -1601,7 +1601,6 @@ namespace System
                 {
                     var prefix = prefixes[index];
 
-                    // TODO RKN: Add Quick compare ?
                     if (value.StartsWith(prefix, comparison))
                     {
                         return true;
