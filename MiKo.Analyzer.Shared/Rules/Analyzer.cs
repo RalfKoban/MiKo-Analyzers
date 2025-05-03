@@ -16,6 +16,8 @@ namespace MiKoSolutions.Analyzers.Rules
     {
         private static readonly ConcurrentDictionary<string, DiagnosticDescriptor> KnownRules = new ConcurrentDictionary<string, DiagnosticDescriptor>();
 
+        private readonly DiagnosticDescriptor m_rule;
+
         private Func<INamespaceSymbol, Compilation, IEnumerable<Diagnostic>> m_analyzeNamespaceCallback; // cached to prevent creation of multiple delegates
         private Func<INamedTypeSymbol, Compilation, IEnumerable<Diagnostic>> m_analyzeTypeCallback; // cached to prevent creation of multiple delegates
         private Func<IEventSymbol, Compilation, IEnumerable<Diagnostic>> m_analyzeEventCallback; // cached to prevent creation of multiple delegates
@@ -36,26 +38,24 @@ namespace MiKoSolutions.Analyzers.Rules
         {
             DiagnosticId = diagnosticId;
 
-            Rule = KnownRules.GetOrAdd(
-                                   diagnosticId,
-                                   id => new DiagnosticDescriptor(
-                                                              id,
-                                                              LocalizableResource(id, "Title"),
-                                                              LocalizableResource(id, "MessageFormat"),
-                                                              category,
-                                                              Severity,
-                                                              IsEnabledByDefault,
-                                                              LocalizableResource(id, "Description"),
-                                                              LocalizableResource(id, "HelpLinkUri")?.ToString()));
+            m_rule = KnownRules.GetOrAdd(
+                                     diagnosticId,
+                                     id => new DiagnosticDescriptor(
+                                                                id,
+                                                                LocalizableResource(id, "Title"),
+                                                                LocalizableResource(id, "MessageFormat"),
+                                                                category,
+                                                                Severity,
+                                                                IsEnabledByDefault,
+                                                                LocalizableResource(id, "Description"),
+                                                                LocalizableResource(id, "HelpLinkUri")?.ToString()));
         }
 
         protected Analyzer(string category, string diagnosticId, in SymbolKind symbolKind) : this(category, diagnosticId) => SymbolKind = symbolKind;
 
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(m_rule);
 
         public string DiagnosticId { get; }
-
-        protected DiagnosticDescriptor Rule { get; }
 
         protected SymbolKind SymbolKind { get; } = SymbolKind.Alias;
 
@@ -101,22 +101,7 @@ namespace MiKoSolutions.Analyzers.Rules
                 context.EnableConcurrentExecution();
             }
 
-            context.RegisterCompilationStartAction(_ =>
-                                                       {
-                                                           if (IsUnitTestAnalyzer)
-                                                           {
-                                                               if (ReferencesTestAssemblies(_.Compilation) is false)
-                                                               {
-                                                                   // do not run analyzer if there are no tests contained
-                                                                   return;
-                                                               }
-                                                           }
-
-                                                           if (IsApplicable(_))
-                                                           {
-                                                               InitializeCore(_);
-                                                           }
-                                                       });
+            context.RegisterCompilationStartAction(CompilationStartAction);
         }
 
         protected static Location CreateLocation(SyntaxNode node, in int start, in int end) => CreateLocation(node.SyntaxTree, start, end);
@@ -522,7 +507,7 @@ namespace MiKoSolutions.Analyzers.Rules
                                       ? ImmutableDictionary<string, string>.Empty
                                       : ImmutableDictionary.CreateRange(properties.Select(_ => new KeyValuePair<string, string>(_.Key, _.Value)));
 
-            return Diagnostic.Create(Rule, location, immutableProperties, args);
+            return Diagnostic.Create(m_rule, location, immutableProperties, args);
         }
 
         private Action<SymbolAnalysisContext> GetAnalyzeMethod(SymbolKind symbolKind)
@@ -538,6 +523,23 @@ namespace MiKoSolutions.Analyzers.Rules
                 case SymbolKind.Parameter: return m_analyzeParameterContextCallback;
 
                 default: return null;
+            }
+        }
+
+        private void CompilationStartAction(CompilationStartAnalysisContext context)
+        {
+            if (IsUnitTestAnalyzer)
+            {
+                if (ReferencesTestAssemblies(context.Compilation) is false)
+                {
+                    // do not run analyzer if there are no tests contained
+                    return;
+                }
+            }
+
+            if (IsApplicable(context))
+            {
+                InitializeCore(context);
             }
         }
 
