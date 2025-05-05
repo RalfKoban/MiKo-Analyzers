@@ -56,7 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return GetAllLocations(textToken.ValueText, textToken.SyntaxTree, textToken.SpanStart, value, comparison, startOffset, endOffset);
         }
 
-        protected static IReadOnlyList<Location> GetAllLocations(in SyntaxToken textToken, string[] values, StringComparison comparison = StringComparison.Ordinal, in int startOffset = 0, in int endOffset = 0)
+        protected static IReadOnlyList<Location> GetAllLocations(in SyntaxToken textToken, in ReadOnlySpan<string> values, StringComparison comparison = StringComparison.Ordinal, in int startOffset = 0, in int endOffset = 0)
         {
             return GetAllLocations(textToken.ValueText, textToken.SyntaxTree, textToken.SpanStart, values, comparison, startOffset, endOffset);
         }
@@ -66,7 +66,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return GetAllLocations(trivia.ToFullString(), trivia.SyntaxTree, trivia.SpanStart, value, comparison, startOffset, endOffset);
         }
 
-        protected static IReadOnlyList<Location> GetAllLocations(in SyntaxTrivia trivia, string[] values, StringComparison comparison = StringComparison.Ordinal, in int startOffset = 0, in int endOffset = 0)
+        protected static IReadOnlyList<Location> GetAllLocations(in SyntaxTrivia trivia, in ReadOnlySpan<string> values, StringComparison comparison = StringComparison.Ordinal, in int startOffset = 0, in int endOffset = 0)
         {
             return GetAllLocations(trivia.ToFullString(), trivia.SyntaxTree, trivia.SpanStart, values, comparison, startOffset, endOffset);
         }
@@ -185,7 +185,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var allIndices = text.AllIndicesOf(value, comparison);
 
-            if (allIndices is int[] array && array.Length == 0)
+            if (allIndices.Length == 0)
             {
                 // nothing to inspect
                 return Array.Empty<Location>();
@@ -194,7 +194,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return GetAllLocationsWithLoop(syntaxTree, spanStart, value, startOffset, endOffset, allIndices);
         }
 
-        private static IReadOnlyList<Location> GetAllLocations(string text, SyntaxTree syntaxTree, in int spanStart, string[] values, StringComparison comparison, in int startOffset, in int endOffset)
+        private static IReadOnlyList<Location> GetAllLocations(string text, SyntaxTree syntaxTree, in int spanStart, in ReadOnlySpan<string> values, StringComparison comparison, in int startOffset, in int endOffset)
         {
             var textLength = text.Length;
 
@@ -225,7 +225,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var allIndices = text.AllIndicesOf(value, comparison);
 
-            if (allIndices is int[] array && array.Length == 0)
+            if (allIndices.Length == 0)
             {
                 // nothing to inspect
                 return Array.Empty<Location>();
@@ -234,14 +234,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return GetAllLocationsWithLoop(text, syntaxTree, spanStart, value, nextCharValidationCallback, startOffset, endOffset, textLength, allIndices);
         }
 
-        private static IReadOnlyList<Location> GetAllLocationsWithLoop(SyntaxTree syntaxTree, in int spanStart, string value, in int startOffset, in int endOffset, IReadOnlyList<int> allIndices)
+        private static IReadOnlyList<Location> GetAllLocationsWithLoop(SyntaxTree syntaxTree, in int spanStart, string value, in int startOffset, in int endOffset, in ReadOnlySpan<int> allIndices)
         {
             List<Location> alreadyReportedLocations = null;
-            var count = allIndices.Count;
+            var length = allIndices.Length;
 
             List<Location> results = null;
 
-            for (var index = 0; index < count; index++)
+            for (var index = 0; index < length; index++)
             {
                 var position = allIndices[index];
 
@@ -278,7 +278,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return results ?? (IReadOnlyList<Location>)Array.Empty<Location>();
         }
 
-        private static IReadOnlyList<Location> GetAllLocationsWithLoop(string text, SyntaxTree syntaxTree, in int spanStart, string[] values, StringComparison comparison, in int startOffset, in int endOffset, in int textLength)
+        private static IReadOnlyList<Location> GetAllLocationsWithLoop(string text, SyntaxTree syntaxTree, in int spanStart, in ReadOnlySpan<string> values, StringComparison comparison, in int startOffset, in int endOffset, in int textLength)
         {
             List<Location> alreadyReportedLocations = null;
             var valuesCount = values.Length;
@@ -297,15 +297,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 var allIndices = text.AllIndicesOf(value, comparison);
 
-                if (allIndices is int[] array && array.Length == 0)
+                if (allIndices.Length == 0)
                 {
                     // nothing to inspect
                     continue;
                 }
 
-                var count = allIndices.Count;
+                var length = allIndices.Length;
 
-                for (var index = 0; index < count; index++)
+                for (var index = 0; index < length; index++)
                 {
                     var position = allIndices[index];
 

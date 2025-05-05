@@ -152,7 +152,7 @@ namespace System.Text
             return value;
         }
 
-        public static StringBuilder ReplaceAllWithProbe(this StringBuilder value, string[] texts, string replacement)
+        public static StringBuilder ReplaceAllWithProbe(this StringBuilder value, in ReadOnlySpan<string> texts, string replacement)
         {
             var length = texts.Length;
 
@@ -465,7 +465,7 @@ namespace System.Text
 
         public static StringBuilder Without(this StringBuilder value, string phrase) => value.ReplaceWithProbe(phrase, string.Empty);
 
-        public static StringBuilder Without(this StringBuilder value, string[] phrases) => value.ReplaceAllWithProbe(phrases, string.Empty);
+        public static StringBuilder Without(this StringBuilder value, in ReadOnlySpan<string> phrases) => value.ReplaceAllWithProbe(phrases, string.Empty);
 
         public static StringBuilder Without(this StringBuilder value, in char c1, in char c2)
         {

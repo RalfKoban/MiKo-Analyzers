@@ -252,7 +252,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return FixComment(prepared, info.Keys, info.Map, finalCommentContinuation);
         }
 
-        private static XmlElementSyntax FixComment(XmlElementSyntax prepared, string[] replacementMapKeys, in ReadOnlySpan<Pair> replacementMap, string commentContinue = null)
+        private static XmlElementSyntax FixComment(XmlElementSyntax prepared, in ReadOnlySpan<string> replacementMapKeys, in ReadOnlySpan<Pair> replacementMap, string commentContinue = null)
         {
             var startFixed = CommentStartingWith(prepared, StartPhraseParts0, SeeLangword_True(), commentContinue ?? StartPhraseParts1);
             var bothFixed = CommentEndingWith(startFixed, EndPhraseParts0, SeeLangword_False(), EndPhraseParts1);

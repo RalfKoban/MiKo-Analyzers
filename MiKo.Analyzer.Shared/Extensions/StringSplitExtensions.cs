@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 // ncrunch: rdi off
 // ReSharper disable once CheckNamespace
@@ -12,9 +13,10 @@ namespace System
 
         public static SplitReadOnlySpanEnumerator SplitBy(this in ReadOnlySpan<char> value, in ReadOnlySpan<char> separatorChars, StringSplitOptions options) => new SplitReadOnlySpanEnumerator(value, separatorChars, options);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SplitReadOnlySpanEnumerator SplitBy(this in ReadOnlySpan<char> value, char[] separatorChars, StringSplitOptions options) => SplitBy(value, separatorChars.AsSpan(), options);
 
-        public static IReadOnlyList<string> SplitBy(this in ReadOnlySpan<char> value, string[] findings, StringComparison comparison = StringComparison.OrdinalIgnoreCase, StringSplitOptions options = StringSplitOptions.None)
+        public static IReadOnlyList<string> SplitBy(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> findings, StringComparison comparison = StringComparison.OrdinalIgnoreCase, StringSplitOptions options = StringSplitOptions.None)
         {
             if (value.IsNullOrWhiteSpace())
             {
@@ -30,12 +32,11 @@ namespace System
                 var finding = findings[findingsIndex];
 
                 var indices = value.AllIndicesOf(finding, comparison);
+                var indicesLength = indices.Length;
 
-                tuples.Capacity += indices.Count;
+                tuples.Capacity += indicesLength;
 
-                var indicesCount = indices.Count;
-
-                for (var i = 0; i < indicesCount; i++)
+                for (var i = 0; i < indicesLength; i++)
                 {
                     var index = indices[i];
 
@@ -71,7 +72,7 @@ namespace System
             return results;
         }
 
-        public static IReadOnlyList<string> SplitBy(this string value, string[] findings, StringComparison comparison = StringComparison.OrdinalIgnoreCase, StringSplitOptions options = StringSplitOptions.None)
+        public static IReadOnlyList<string> SplitBy(this string value, in ReadOnlySpan<string> findings, StringComparison comparison = StringComparison.OrdinalIgnoreCase, StringSplitOptions options = StringSplitOptions.None)
         {
             if (value is null)
             {

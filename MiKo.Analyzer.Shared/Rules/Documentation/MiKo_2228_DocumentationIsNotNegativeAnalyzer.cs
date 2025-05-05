@@ -48,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     var problematicIndices = sentenceText.AllIndicesOf(problematicWord, StringComparison.Ordinal);
 
-                    if (problematicIndices.Count > 0)
+                    if (problematicIndices.Length > 0)
                     {
                         indices.AddRange(problematicIndices);
 
