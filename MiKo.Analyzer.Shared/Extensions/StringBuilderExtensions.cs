@@ -13,155 +13,49 @@ namespace System.Text
 {
     internal static class StringBuilderExtensions
     {
-        private const int QuickCompareLengthThreshold = 4;
-        private const int QuickCompareRentLengthThreshold = 22;
-
-        public static bool IsNullOrWhiteSpace(this StringBuilder value) => value is null || value.CountLeadingWhitespaces() == value.Length;
+        private const int QuickCompareLengthThreshold = 6;
+        private const int QuickCompareRentLengthThreshold = 24;
 
         public static StringBuilder AdjustFirstWord(this StringBuilder value, in FirstWordHandling handling)
         {
-            if (value is null)
-            {
-                return null;
-            }
-
-            var valueLength = value.Length;
-
-            if (valueLength == 0)
+            if (value.IsNullOrEmpty() || value[0] == '<')
             {
                 return value;
             }
-
-            if (value[0] == '<')
-            {
-                return value;
-            }
-
-            var spacesToKeep = StringExtensions.HasFlag(handling, FirstWordHandling.KeepLeadingSpace) ? 1 : 0;
 
             // only keep it if there is already a leading space (otherwise it may be on the same line without any leading space, and we would fix it in a wrong way)
-            TrimLeadingSpacesTo(spacesToKeep);
+            value.TrimLeadingSpacesTo(handling.HasSet(FirstWordHandling.KeepLeadingSpace) ? 1 : 0);
 
-            if (StringExtensions.HasFlag(handling, FirstWordHandling.MakeLowerCase))
+            if (handling.HasSet(FirstWordHandling.MakeLowerCase))
             {
-                MakeLowerCase();
+                value.MakeLowerCase();
             }
-            else if (StringExtensions.HasFlag(handling, FirstWordHandling.MakeUpperCase))
+            else if (handling.HasSet(FirstWordHandling.MakeUpperCase))
             {
-                MakeUpperCase();
-            }
-
-            if (StringExtensions.HasFlag(handling, FirstWordHandling.MakeInfinite))
-            {
-                MakeInfinite();
+                value.MakeUpperCase();
             }
 
-            if (StringExtensions.HasFlag(handling, FirstWordHandling.MakePlural))
+            if (handling.HasSet(FirstWordHandling.MakeInfinite))
             {
-                MakePlural();
+                value.MakeInfinite();
             }
 
-            if (StringExtensions.HasFlag(handling, FirstWordHandling.MakeThirdPersonSingular))
+            if (handling.HasSet(FirstWordHandling.MakePlural))
             {
-                MakeThirdPersonSingular();
+                value.MakePlural();
+            }
+
+            if (handling.HasSet(FirstWordHandling.MakeThirdPersonSingular))
+            {
+                value.MakeThirdPersonSingular();
             }
 
             return value;
-
-            void MakeLowerCase()
-            {
-                for (var i = 0; i < valueLength; i++)
-                {
-                    var c = value[i];
-
-                    if (c.IsWhiteSpace())
-                    {
-                        continue;
-                    }
-
-                    if (c.IsUpperCase())
-                    {
-                        value[i] = c.ToLowerCase();
-                    }
-
-                    // we found it, so nothing more to do
-                    return;
-                }
-            }
-
-            void MakeUpperCase()
-            {
-                for (var i = 0; i < valueLength; i++)
-                {
-                    var c = value[i];
-
-                    if (c.IsWhiteSpace())
-                    {
-                        continue;
-                    }
-
-                    if (c.IsLowerCase())
-                    {
-                        value[i] = c.ToUpperCase();
-                    }
-
-                    // we found it, so nothing more to do
-                    return;
-                }
-            }
-
-            void MakeInfinite()
-            {
-                var word = FirstWord(value, out var whitespacesBefore);
-
-                value.Remove(whitespacesBefore, word.Length);
-
-                var infiniteWord = Verbalizer.MakeInfiniteVerb(word);
-
-                value.Insert(whitespacesBefore, infiniteWord);
-            }
-
-            void MakePlural()
-            {
-                var word = FirstWord(value, out var whitespacesBefore);
-
-                value.Remove(whitespacesBefore, word.Length);
-
-                var pluralWord = Pluralizer.MakePluralName(word);
-
-                value.Insert(whitespacesBefore, pluralWord);
-            }
-
-            void MakeThirdPersonSingular()
-            {
-                var word = FirstWord(value, out var whitespacesBefore);
-
-                value.Remove(whitespacesBefore, word.Length);
-
-                var pluralWord = Verbalizer.MakeThirdPersonSingularVerb(word);
-
-                value.Insert(whitespacesBefore, pluralWord);
-            }
-
-            void TrimLeadingSpacesTo(in int count)
-            {
-                if (value[0] == ' ')
-                {
-                    var whitespaces = value.CountLeadingWhitespaces();
-
-                    if (whitespaces > count)
-                    {
-                        value.Remove(count, whitespaces - count);
-
-                        valueLength = value.Length;
-                    }
-                }
-            }
         }
 
         public static bool EndsWith(this StringBuilder value, string ending, in StringComparison comparison = StringComparison.Ordinal)
         {
-            if (ending is null)
+            if (ending.IsNullOrEmpty())
             {
                 return false;
             }
@@ -173,7 +67,7 @@ namespace System.Text
             {
                 var end = value.ToString(valueLength - endingLength, endingLength);
 
-                return end.Equals(ending, comparison);
+                return end.AsSpan().Equals(ending.AsSpan(), comparison);
             }
 
             return false;
@@ -181,7 +75,7 @@ namespace System.Text
 
         public static string FirstWord(this StringBuilder value, out int whitespacesBefore)
         {
-            if (value is null)
+            if (value.IsNullOrEmpty())
             {
                 whitespacesBefore = 0;
 
@@ -214,7 +108,7 @@ namespace System.Text
 
         public static bool HasWhitespaces(this StringBuilder value, int start = 0)
         {
-            if (value is null)
+            if (value.IsNullOrEmpty())
             {
                 return false;
             }
@@ -233,11 +127,13 @@ namespace System.Text
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsNullOrEmpty(this StringBuilder value) => value is null || value.Length == 0; // ncrunch: no coverage
+        public static bool IsNullOrEmpty(this StringBuilder value) => value is null || value.Length == 0;
+
+        public static bool IsNullOrWhiteSpace(this StringBuilder value) => value is null || value.CountLeadingWhitespaces() == value.Length;
 
         public static bool IsSingleWord(this StringBuilder value) => value?.HasWhitespaces() is false;
 
-        public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, in ReadOnlySpan<Pair> replacementPairs)
+        public static StringBuilder ReplaceAllWithProbe(this StringBuilder value, in ReadOnlySpan<Pair> replacementPairs)
         {
             var count = replacementPairs.Length;
 
@@ -246,13 +142,7 @@ namespace System.Text
                 var pair = replacementPairs[index];
                 var oldValue = pair.Key;
 
-                if (oldValue.IsNullOrEmpty())
-                {
-                    // cannot replace any empty value
-                    continue;
-                }
-
-                if (QuickCompare(ref value, ref oldValue))
+                if (QuickSubstringProbe(ref value, ref oldValue))
                 {
                     // can be part in the replacement as value seems to fit
                     value.Replace(oldValue, pair.Value);
@@ -262,7 +152,7 @@ namespace System.Text
             return value;
         }
 
-        public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, string[] texts, string replacement)
+        public static StringBuilder ReplaceAllWithProbe(this StringBuilder value, in ReadOnlySpan<string> texts, string replacement)
         {
             var length = texts.Length;
 
@@ -270,13 +160,7 @@ namespace System.Text
             {
                 var oldValue = texts[index];
 
-                if (string.IsNullOrEmpty(oldValue))
-                {
-                    // cannot replace any empty value
-                    continue;
-                }
-
-                if (QuickCompare(ref value, ref oldValue))
+                if (QuickSubstringProbe(ref value, ref oldValue))
                 {
                     // can be part in the replacement as value seems to fit
                     value.Replace(oldValue, replacement);
@@ -286,7 +170,7 @@ namespace System.Text
             return value;
         }
 
-        public static StringBuilder ReplaceWithCheck(this StringBuilder value, string oldValue, string newValue)
+        public static StringBuilder ReplaceWithProbe(this StringBuilder value, string oldValue, string newValue)
         {
             if (oldValue.IsNullOrEmpty())
             {
@@ -294,7 +178,7 @@ namespace System.Text
                 return value;
             }
 
-            if (QuickCompare(ref value, ref oldValue))
+            if (QuickSubstringProbe(ref value, ref oldValue))
             {
                 return value.Replace(oldValue, newValue);
             }
@@ -562,9 +446,9 @@ namespace System.Text
             return value.Remove(length - end, end);
         }
 
-        public static StringBuilder WithoutMultipleWhiteSpaces(this StringBuilder value) => value.ReplaceAllWithCheck(Constants.Comments.MultiWhitespaceStrings, Constants.Comments.SingleWhitespaceString); // ncrunch: no coverage
+        public static StringBuilder WithoutMultipleWhiteSpaces(this StringBuilder value) => value.ReplaceAllWithProbe(Constants.Comments.MultiWhitespaceStrings, Constants.Comments.SingleWhitespaceString);
 
-        public static StringBuilder WithoutNewLines(this StringBuilder value) => value.Without('\r', '\n'); // ncrunch: no coverage
+        public static StringBuilder WithoutNewLines(this StringBuilder value) => value.Without('\r', '\n');
 
         public static StringBuilder Without(this StringBuilder value, in char c)
         {
@@ -578,6 +462,10 @@ namespace System.Text
 
             return value;
         }
+
+        public static StringBuilder Without(this StringBuilder value, string phrase) => value.ReplaceWithProbe(phrase, string.Empty);
+
+        public static StringBuilder Without(this StringBuilder value, in ReadOnlySpan<string> phrases) => value.ReplaceAllWithProbe(phrases, string.Empty);
 
         public static StringBuilder Without(this StringBuilder value, in char c1, in char c2)
         {
@@ -594,21 +482,15 @@ namespace System.Text
             return value;
         }
 
-        public static StringBuilder Without(this StringBuilder value, string phrase) => value.ReplaceWithCheck(phrase, string.Empty); // ncrunch: no coverage
-
-        public static StringBuilder Without(this StringBuilder value, string[] phrases) => value.ReplaceAllWithCheck(phrases, string.Empty); // ncrunch: no coverage
-
-        public static StringBuilder WithoutAbbreviations(this StringBuilder value) => AbbreviationDetector.FindAndReplaceAllAbbreviations(value); // ncrunch: no coverage
+        public static StringBuilder WithoutAbbreviations(this StringBuilder value) => AbbreviationDetector.FindAndReplaceAllAbbreviations(value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static StringBuilder WithoutParaTags(this StringBuilder value) => value.Without(Constants.ParaTags); // ncrunch: no coverage
+        public static StringBuilder WithoutParaTags(this StringBuilder value) => value.Without(Constants.ParaTags);
 
-        private static bool QuickCompare(ref StringBuilder current, ref string other)
+        private static bool QuickSubstringProbe(ref StringBuilder current, ref string other)
         {
             var otherValueLength = other.Length;
-            var currentValueLength = current.Length;
-
-            var difference = currentValueLength - otherValueLength;
+            var difference = current.Length - otherValueLength;
 
             if (difference < 0)
             {
@@ -630,11 +512,11 @@ namespace System.Text
                     if (difference >= QuickCompareRentLengthThreshold)
                     {
                         // use rented arrays here (if we have larger differences, the start and end may be in different chunks)
-                        return QuickCompareAtIndicesWithRent(ref current, otherFirst, otherLast, length, lastIndex);
+                        return QuickSubstringProbeAtIndicesWithRent(ref current, otherFirst, otherLast, length, lastIndex);
                     }
 
                     // could be part in the replacement only if characters match
-                    return QuickCompareAtIndices(ref current, otherFirst, otherLast, length, lastIndex);
+                    return QuickSubstringProbeAtIndices(ref current, otherFirst, otherLast, length, lastIndex);
                 }
 
                 // can be part in the replacement as other value is smaller and could fit current value
@@ -655,43 +537,38 @@ namespace System.Text
             }
         }
 
-        private static bool QuickCompareAtIndices(ref StringBuilder current, in char first, in char last, in int length, in int lastIndex)
+        private static bool QuickSubstringProbeAtIndices(ref StringBuilder text, in char startChar, in char endChar, in int lengthToCompare, in int endIndex)
         {
-            for (var i = 0; i < length; i++)
+            for (var position = 0; position < lengthToCompare; position++)
             {
-                if (current[i] == first)
+                if (text[position] == startChar && text[endIndex + position] == endChar)
                 {
-                    if (current[lastIndex + i] == last)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
 
             return false;
         }
 
-        private static bool QuickCompareAtIndicesWithRent(ref StringBuilder current, in char first, in char last, in int length, in int lastIndex)
+        private static bool QuickSubstringProbeAtIndicesWithRent(ref StringBuilder text, in char startChar, in char endChar, in int lengthToCompare, in int endIndex)
         {
-            // use a rented shared pool for performance reasons
-            var shared = ArrayPool<char>.Shared;
-            var begin = shared.Rent(length);
-            var end = shared.Rent(length);
+            // Use a rented shared pool for performance reasons
+            var pool = ArrayPool<char>.Shared;
+            var startChars = pool.Rent(lengthToCompare);
+            var endChars = pool.Rent(lengthToCompare);
 
             try
             {
-                current.CopyTo(0, begin, 0, length);
-                current.CopyTo(lastIndex, end, 0, length);
+                // Copy the start and end segments from the text
+                text.CopyTo(0, startChars, 0, lengthToCompare);
+                text.CopyTo(endIndex, endChars, 0, lengthToCompare);
 
-                // could be part in the replacement only if characters match
-                for (var i = 0; i < length; i++)
+                // Compare the segments
+                for (var position = 0; position < lengthToCompare; position++)
                 {
-                    if (begin[i] == first)
+                    if (startChars[position] == startChar && endChars[position] == endChar)
                     {
-                        if (end[i] == last)
-                        {
-                            return true;
-                        }
+                        return true;
                     }
                 }
 
@@ -699,8 +576,8 @@ namespace System.Text
             }
             finally
             {
-                shared.Return(begin);
-                shared.Return(end);
+                pool.Return(startChars);
+                pool.Return(endChars);
             }
         }
 
@@ -741,6 +618,98 @@ namespace System.Text
             }
 
             return whitespaces;
+        }
+
+        private static void MakeLowerCase(this StringBuilder value)
+        {
+            var valueLength = value.Length;
+
+            for (var i = 0; i < valueLength; i++)
+            {
+                var c = value[i];
+
+                if (c.IsWhiteSpace())
+                {
+                    continue;
+                }
+
+                if (c.IsUpperCase())
+                {
+                    value[i] = c.ToLowerCase();
+                }
+
+                // we found it, so nothing more to do
+                return;
+            }
+        }
+
+        private static void MakeUpperCase(this StringBuilder value)
+        {
+            var valueLength = value.Length;
+
+            for (var i = 0; i < valueLength; i++)
+            {
+                var c = value[i];
+
+                if (c.IsWhiteSpace())
+                {
+                    continue;
+                }
+
+                if (c.IsLowerCase())
+                {
+                    value[i] = c.ToUpperCase();
+                }
+
+                // we found it, so nothing more to do
+                return;
+            }
+        }
+
+        private static void MakeInfinite(this StringBuilder value)
+        {
+            var word = FirstWord(value, out var whitespacesBefore);
+
+            value.Remove(whitespacesBefore, word.Length);
+
+            var infiniteWord = Verbalizer.MakeInfiniteVerb(word);
+
+            value.Insert(whitespacesBefore, infiniteWord);
+        }
+
+        private static void MakePlural(this StringBuilder value)
+        {
+            var word = FirstWord(value, out var whitespacesBefore);
+
+            value.Remove(whitespacesBefore, word.Length);
+
+            var pluralWord = Pluralizer.MakePluralName(word);
+
+            value.Insert(whitespacesBefore, pluralWord);
+        }
+
+        private static void MakeThirdPersonSingular(this StringBuilder value)
+        {
+            var word = FirstWord(value, out var whitespacesBefore);
+
+            value.Remove(whitespacesBefore, word.Length);
+
+            var pluralWord = Verbalizer.MakeThirdPersonSingularVerb(word);
+
+            value.Insert(whitespacesBefore, pluralWord);
+        }
+
+        private static void TrimLeadingSpacesTo(this StringBuilder value, in int count)
+        {
+            if (value[0] == ' ')
+            {
+                var whitespaces = value.CountLeadingWhitespaces();
+
+                if (whitespaces > count)
+                {
+                    value.Remove(count, whitespaces - count);
+                }
+            }
         }
 
         // TODO RKN: StringReplace with StringComparison http://stackoverflow.com/a/244933/84852
