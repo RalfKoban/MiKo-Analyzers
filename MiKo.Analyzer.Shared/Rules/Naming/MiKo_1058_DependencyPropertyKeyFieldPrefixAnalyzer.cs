@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return Array.Empty<Diagnostic>();
             }
 
-            var betterNames = propertyNames.Select(_ => _ + Constants.DependencyPropertyKey.FieldSuffix).ToList();
+            var betterNames = propertyNames.ToArray(_ => _ + Constants.DependencyPropertyKey.FieldSuffix);
             var betterName = betterNames[0];
 
             return new[] { Issue(symbol, betterNames.HumanizedConcatenated(), CreateBetterNameProposal(betterName)) };

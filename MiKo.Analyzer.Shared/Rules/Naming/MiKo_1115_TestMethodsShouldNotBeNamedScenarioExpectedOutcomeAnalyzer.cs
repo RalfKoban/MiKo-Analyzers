@@ -195,7 +195,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             FixPart(builder, part0);
 
-            builder.ReplaceWithCheck(When, If).ReplaceWithCheck(If + If, If);
+            builder.ReplaceWithProbe(When, If).ReplaceWithProbe(If + If, If);
 
             result = StringBuilderCache.GetStringAndRelease(builder);
 
@@ -238,7 +238,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             FixPart(builder, part1);
 
-            builder.ReplaceWithCheck(When, If).ReplaceWithCheck(If + If, If);
+            builder.ReplaceWithProbe(When, If).ReplaceWithProbe(If + If, If);
 
             result = StringBuilderCache.GetStringAndRelease(builder);
 
@@ -296,7 +296,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 FixPart(builder, part1);
             }
 
-            builder.ReplaceWithCheck(When, If).ReplaceWithCheck(If + If, If);
+            builder.ReplaceWithProbe(When, If).ReplaceWithProbe(If + If, If);
 
             result = StringBuilderCache.GetStringAndRelease(builder);
 

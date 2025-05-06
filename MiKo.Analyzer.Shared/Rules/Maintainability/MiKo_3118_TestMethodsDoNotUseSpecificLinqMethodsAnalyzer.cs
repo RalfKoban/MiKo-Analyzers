@@ -40,26 +40,35 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var methodSyntax = symbol.GetSyntax();
 
-            foreach (var maes in methodSyntax.DescendantNodes<MemberAccessExpressionSyntax>(_ => _.Parent is InvocationExpressionSyntax))
+            foreach (var maes in methodSyntax.DescendantNodes<MemberAccessExpressionSyntax>())
             {
-                var node = maes.Name;
-                var name = node.GetName();
-
-                if (ProblematicMethods.Contains(name))
+                if (maes.Parent is InvocationExpressionSyntax invocation)
                 {
-                    var expressionName = maes.Expression.GetName();
+                    var node = maes.Name;
+                    var name = node.GetName();
 
-                    if (Constants.Names.AssertionTypes.Contains(expressionName))
+                    if (ProblematicMethods.Contains(name))
                     {
-                        continue;
-                    }
+                        var expressionName = maes.Expression.GetName();
 
-                    if (maes.AncestorsWithinMethods<InvocationExpressionSyntax>().Any(_ => _.IsMoqItIsConditionMatcher()))
-                    {
-                        continue;
-                    }
+                        if (Constants.Names.AssertionTypes.Contains(expressionName))
+                        {
+                            continue;
+                        }
 
-                    yield return Issue(name, node);
+                        if (invocation.GetIdentifierName() == "Arg")
+                        {
+                            // ignore NSubstitute arguments
+                            continue;
+                        }
+
+                        if (maes.AncestorsWithinMethods<InvocationExpressionSyntax>().Any(_ => _.IsMoqItIsConditionMatcher()))
+                        {
+                            continue;
+                        }
+
+                        yield return Issue(name, node);
+                    }
                 }
             }
         }

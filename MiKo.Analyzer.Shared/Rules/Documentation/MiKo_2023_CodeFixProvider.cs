@@ -243,7 +243,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 commentContinuation.Append(continuation);
             }
 
-            commentContinuation.ReplaceAllWithCheck(info.Map);
+            commentContinuation.ReplaceAllWithProbe(info.Map);
 
             var finalCommentContinuation = StringBuilderCache.GetStringAndRelease(commentContinuation);
 
@@ -252,7 +252,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return FixComment(prepared, info.Keys, info.Map, finalCommentContinuation);
         }
 
-        private static XmlElementSyntax FixComment(XmlElementSyntax prepared, string[] replacementMapKeys, in ReadOnlySpan<Pair> replacementMap, string commentContinue = null)
+        private static XmlElementSyntax FixComment(XmlElementSyntax prepared, in ReadOnlySpan<string> replacementMapKeys, in ReadOnlySpan<Pair> replacementMap, string commentContinue = null)
         {
             var startFixed = CommentStartingWith(prepared, StartPhraseParts0, SeeLangword_True(), commentContinue ?? StartPhraseParts1);
             var bothFixed = CommentEndingWith(startFixed, EndPhraseParts0, SeeLangword_False(), EndPhraseParts1);
@@ -533,7 +533,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return results;
                 }
 
-                Pair[] ToMapArray(ReadOnlySpan<Pair> map, HashSet<string> keys, Pair[] others)
+                Pair[] ToMapArray(in ReadOnlySpan<Pair> map, HashSet<string> keys, Pair[] others)
                 {
                     var resultIndex = 0;
                     var results = new Pair[keys.Count + others.Length];
@@ -819,7 +819,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     var order = orders[i];
 
-                    if (text.StartsWith(order.AsSpan(), StringComparison.Ordinal))
+                    if (text.StartsWith(order.AsSpan()))
                     {
                         return i;
                     }
