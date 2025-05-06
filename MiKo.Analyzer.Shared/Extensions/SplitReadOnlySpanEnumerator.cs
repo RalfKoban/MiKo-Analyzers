@@ -12,7 +12,7 @@ namespace System
         private readonly ReadOnlySpan<char> m_initialText;
         private ReadOnlySpan<char> m_spanAfterMoveNext;
 
-        public SplitReadOnlySpanEnumerator(in ReadOnlySpan<char> text, in ReadOnlySpan<char> separatorChars, StringSplitOptions options)
+        public SplitReadOnlySpanEnumerator(in ReadOnlySpan<char> text, in ReadOnlySpan<char> separatorChars, in StringSplitOptions options)
         {
             m_initialText = text;
             m_spanAfterMoveNext = text;

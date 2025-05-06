@@ -206,17 +206,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var builder = StringBuilderCache.Acquire(startingPhrase.Length + remainingText.Length)
                                             .Append(startingPhrase)
                                             .Append(remainingText.ToLowerCaseAt(0))
-                                            .ReplaceWithCheck("Gets or sets a value indicating get or set ", "Gets or sets a value indicating ")
-                                            .ReplaceWithCheck("Gets or sets a value indicating get ", "Gets or sets a value indicating ")
-                                            .ReplaceWithCheck("Gets or sets a value indicating set ", "Gets or sets a value indicating ")
-                                            .ReplaceWithCheck("Gets or sets get or set ", "Gets or sets ")
-                                            .ReplaceWithCheck("Gets or sets get ", "Gets or sets ")
-                                            .ReplaceWithCheck("Gets or sets set ", "Gets or sets ")
-                                            .ReplaceWithCheck("Gets a value indicating get ", "Gets a value indicating ")
-                                            .ReplaceWithCheck("Gets get ", "Gets ")
-                                            .ReplaceWithCheck("Sets a value indicating set ", "Sets a value indicating ")
-                                            .ReplaceWithCheck("Sets set ", "Sets ")
-                                            .ReplaceWithCheck("value indicating the value indicating", "value indicating the");
+                                            .ReplaceWithProbe("Gets or sets a value indicating get or set ", "Gets or sets a value indicating ")
+                                            .ReplaceWithProbe("Gets or sets a value indicating get ", "Gets or sets a value indicating ")
+                                            .ReplaceWithProbe("Gets or sets a value indicating set ", "Gets or sets a value indicating ")
+                                            .ReplaceWithProbe("Gets or sets get or set ", "Gets or sets ")
+                                            .ReplaceWithProbe("Gets or sets get ", "Gets or sets ")
+                                            .ReplaceWithProbe("Gets or sets set ", "Gets or sets ")
+                                            .ReplaceWithProbe("Gets a value indicating get ", "Gets a value indicating ")
+                                            .ReplaceWithProbe("Gets get ", "Gets ")
+                                            .ReplaceWithProbe("Sets a value indicating set ", "Sets a value indicating ")
+                                            .ReplaceWithProbe("Sets set ", "Sets ")
+                                            .ReplaceWithProbe("value indicating the value indicating", "value indicating the");
 
             var replacedFixedText = builder.ToStringAndRelease();
 

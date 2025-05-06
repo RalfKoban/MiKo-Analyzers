@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var tokenText = token.Text;
 
             var text = tokenText.AsCachedBuilder()
-                                .ReplaceAllWithCheck(XmlEntities)
+                                .ReplaceAllWithProbe(XmlEntities)
                                 .ToStringAndRelease();
 
             return syntax.ReplaceToken(token, token.WithText(text));
@@ -66,7 +66,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var text = StringBuilderCache.Acquire(capacity)
                                          .Append(startTagFullString)
                                          .Append(contentFullString)
-                                         .ReplaceAllWithCheck(XmlEntities)
+                                         .ReplaceAllWithProbe(XmlEntities)
                                          .Insert(0, someText)
                                          .Insert(0, XmlCommentExterior)
                                          .AppendLine(endTagFullString)

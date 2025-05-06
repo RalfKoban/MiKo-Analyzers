@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                        };
         }
 
-        private static string[] AdjustPhrases(IParameterSymbol parameter, string[] phrases)
+        private static string[] AdjustPhrases(IParameterSymbol parameter, in ReadOnlySpan<string> phrases)
         {
             var parameterType = parameter.Type;
             var qualifiedName = parameterType.FullyQualifiedName();
