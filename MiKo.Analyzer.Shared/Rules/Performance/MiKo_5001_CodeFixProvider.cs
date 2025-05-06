@@ -131,7 +131,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             return root;
         }
 
-        private static SyntaxNode MoveIntoIfStatement(SyntaxNode root, IfStatementSyntax insertedIf, SyntaxAnnotation annotation, SyntaxNode otherChild, MovePosition position)
+        private static SyntaxNode MoveIntoIfStatement(SyntaxNode root, IfStatementSyntax insertedIf, SyntaxAnnotation annotation, SyntaxNode otherChild, in MovePosition position)
         {
             if (insertedIf.Statement is BlockSyntax insertedBlock)
             {
@@ -146,7 +146,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             return root;
         }
 
-        private static SyntaxNode MoveIntoIfStatement(SyntaxNode root, IEnumerable<StatementSyntax> insertedStatements, SyntaxAnnotation annotation, SyntaxNode otherChild, MovePosition position)
+        private static SyntaxNode MoveIntoIfStatement(SyntaxNode root, IEnumerable<StatementSyntax> insertedStatements, SyntaxAnnotation annotation, SyntaxNode otherChild, in MovePosition position)
         {
             if (otherChild is IfStatementSyntax ifStatement && IsDebugEnabledCall(ifStatement))
             {
