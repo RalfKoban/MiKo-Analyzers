@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<T> Ancestors<T>(this SyntaxNode value) where T : SyntaxNode => value.Ancestors().OfType<T>(); // value.AncestorsAndSelf().OfType<T>();
 
-        // TODO RKN: Use properties, fields etc. as well?
+        // TODO RKN: Use types, fields etc. as well?
         internal static IEnumerable<T> AncestorsWithinMethods<T>(this SyntaxNode value) where T : SyntaxNode
         {
             // ReSharper disable once LoopCanBePartlyConvertedToQuery
@@ -63,9 +63,12 @@ namespace MiKoSolutions.Analyzers
                     yield return t;
                 }
 
-                if (ancestor is BaseMethodDeclarationSyntax)
+                switch (ancestor)
                 {
-                    yield break;
+                    case BaseMethodDeclarationSyntax _: // found the surrounding method
+                    case LocalFunctionStatementSyntax _: // found the surrounding local function
+                    case BasePropertyDeclarationSyntax _: // found the surrounding property, so we already skipped the getters or setters
+                        yield break;
                 }
             }
         }
@@ -2402,7 +2405,7 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<InvocationExpressionSyntax> LinqExtensionMethods(this SyntaxNode value, SemanticModel semanticModel) => value.DescendantNodes<InvocationExpressionSyntax>(_ => IsLinqExtensionMethod(_, semanticModel));
 
         internal static IReadOnlyList<TResult> OfKind<TResult, TSyntaxNode>(this in SeparatedSyntaxList<TSyntaxNode> source, in SyntaxKind kind) where TSyntaxNode : SyntaxNode
-                                                                                                                                           where TResult : TSyntaxNode
+                                                                                                                                                 where TResult : TSyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
@@ -2566,7 +2569,7 @@ namespace MiKoSolutions.Analyzers
             return source.ReplaceText(new[] { phrase }, replacement);
         }
 
-        internal static SyntaxList<XmlNodeSyntax> ReplaceText(this in SyntaxList<XmlNodeSyntax> source, string[] phrases, string replacement)
+        internal static SyntaxList<XmlNodeSyntax> ReplaceText(this in SyntaxList<XmlNodeSyntax> source, in ReadOnlySpan<string> phrases, string replacement)
         {
             var resultLength = source.Count;
 
@@ -2621,7 +2624,7 @@ namespace MiKoSolutions.Analyzers
 
                 if (text.Contains(phrase))
                 {
-                    result = result.AsCachedBuilder().ReplaceWithCheck(phrase, replacement).ToStringAndRelease();
+                    result = result.AsCachedBuilder().ReplaceWithProbe(phrase, replacement).ToStringAndRelease();
 
                     replaced = true;
                 }
@@ -2640,7 +2643,7 @@ namespace MiKoSolutions.Analyzers
             return value.ReplaceTokens(map.Keys, (original, rewritten) => map[original]);
         }
 
-        internal static XmlTextSyntax ReplaceText(this XmlTextSyntax value, string[] phrases, string replacement)
+        internal static XmlTextSyntax ReplaceText(this XmlTextSyntax value, in ReadOnlySpan<string> phrases, string replacement)
         {
             var textTokens = value.TextTokens;
 
@@ -2677,7 +2680,7 @@ namespace MiKoSolutions.Analyzers
 
                     if (text.Contains(phrase))
                     {
-                        result.ReplaceWithCheck(phrase, replacement);
+                        result.ReplaceWithProbe(phrase, replacement);
 
                         replaced = true;
                     }
@@ -3240,7 +3243,7 @@ namespace MiKoSolutions.Analyzers
                                                                                                         .WithTrailingTriviaFrom(node);
 
         internal static T WithTriviaFrom<T>(this T value, in SyntaxToken token) where T : SyntaxNode => value.WithLeadingTriviaFrom(token)
-                                                                                                          .WithTrailingTriviaFrom(token);
+                                                                                                             .WithTrailingTriviaFrom(token);
 
         internal static T WithAdditionalLeadingTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode
         {

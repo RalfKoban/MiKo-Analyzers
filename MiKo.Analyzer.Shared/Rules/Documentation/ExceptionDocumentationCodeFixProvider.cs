@@ -189,7 +189,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private static string[] SplitCommentsOnParametersInText(string comment, string[] parametersAsTextReferences)
+        private static string[] SplitCommentsOnParametersInText(string comment, in ReadOnlySpan<string> parametersAsTextReferences)
         {
             var parametersAsTextReferencesLength = parametersAsTextReferences.Length;
 

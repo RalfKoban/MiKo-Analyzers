@@ -95,11 +95,12 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// </param>
         /// <param name="comparison">
         /// One of the <see cref="StringComparison"/> values that specifies the rules for comparison.
+        /// The default is <see cref="StringComparison.OrdinalIgnoreCase"/>.
         /// </param>
         /// <returns>
         /// A <see cref="string"/> that contains the plural for the given <paramref name="name"/>.
         /// </returns>
-        public static string GetPluralName(string name, StringComparison comparison = StringComparison.OrdinalIgnoreCase) => GetPluralName(name, name, comparison);
+        public static string GetPluralName(string name, in StringComparison comparison = StringComparison.OrdinalIgnoreCase) => GetPluralName(name, name, comparison);
 
         /// <summary>
         /// Attempts to create a plural name for a given proposed name, but (in contrast to <see cref="MakePluralName"/>) returns <see langword="null"/> in case if fails to do so.
@@ -112,6 +113,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// </param>
         /// <param name="comparison">
         /// One of the <see cref="StringComparison"/> values that specifies the rules for comparison.
+        /// The default is <see cref="StringComparison.OrdinalIgnoreCase"/>.
         /// </param>
         /// <returns>
         /// A <see cref="string"/> that contains the plural for the given <paramref name="name"/>.
@@ -134,6 +136,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// </param>
         /// <param name="comparison">
         /// One of the <see cref="StringComparison"/> values that specifies the rules for comparison.
+        /// The default is <see cref="StringComparison.OrdinalIgnoreCase"/>.
         /// </param>
         /// <param name="suffixes">
         /// The suffixes to remove from the plural name.
@@ -141,7 +144,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// <returns>
         /// A <see cref="string"/> that contains the plural for the given <paramref name="name"/>.
         /// </returns>
-        public static string GetPluralName(string name, StringComparison comparison = StringComparison.OrdinalIgnoreCase, params string[] suffixes)
+        public static string GetPluralName(string name, in StringComparison comparison = StringComparison.OrdinalIgnoreCase, params string[] suffixes)
         {
             if (IsAllowedListName(name, comparison))
             {
@@ -163,9 +166,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return null;
         }
 
-        private static bool IsAllowedListName(string symbolName, StringComparison comparison = StringComparison.OrdinalIgnoreCase) => symbolName.EqualsAny(AllowedListNames, comparison);
+        private static bool IsAllowedListName(string symbolName, in StringComparison comparison = StringComparison.OrdinalIgnoreCase) => symbolName.EqualsAny(AllowedListNames, comparison);
 
-        private static string CreatePluralName(in ReadOnlySpan<char> proposedName, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        private static string CreatePluralName(in ReadOnlySpan<char> proposedName, in StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             if (proposedName.EqualsAny(SpecialPluralWords, StringComparison.OrdinalIgnoreCase))
             {

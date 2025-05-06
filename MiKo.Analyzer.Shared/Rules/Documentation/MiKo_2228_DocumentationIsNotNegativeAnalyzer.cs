@@ -41,15 +41,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var sentence in text.AsSpan().SplitBy(Constants.SentenceMarkers))
             {
+                var sentenceText = sentence.Text;
                 var indices = new HashSet<int>();
 
                 foreach (var problematicWord in ProblematicWords)
                 {
-                    indices.AddRange(sentence.Text.AllIndicesOf(problematicWord, StringComparison.Ordinal));
+                    var problematicIndices = sentenceText.AllIndicesOf(problematicWord, StringComparison.Ordinal);
 
-                    if (indices.Count > 1)
+                    if (problematicIndices.Length > 0)
                     {
-                        return true;
+                        indices.AddRange(problematicIndices);
+
+                        if (indices.Count > 1)
+                        {
+                            return true;
+                        }
                     }
                 }
             }

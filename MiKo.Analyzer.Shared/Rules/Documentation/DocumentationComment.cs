@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                         && comment.EndsWith("etc.", StringComparison.OrdinalIgnoreCase) is false;
 
         internal static bool ContainsDoublePeriod(in ReadOnlySpan<char> comment) => comment.Contains("..", _ => AllowedChars.Contains(_) is false, StringComparison.Ordinal)
-                                                                              && comment.EndsWith("...", StringComparison.Ordinal) is false;
+                                                                                 && comment.EndsWith("...", StringComparison.Ordinal) is false;
 
         internal static bool ContainsPhrase(string phrase, in ReadOnlySpan<char> comment)
         {
@@ -40,6 +40,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return comment.Slice(indexAfterPhrase).StartsWithAny(Constants.Comments.Delimiters);
         }
 
-        internal static bool ContainsPhrases(string[] phrases, in ReadOnlySpan<char> comment) => comment.ToString().ContainsAny(phrases, StringComparison.OrdinalIgnoreCase);
+        internal static bool ContainsPhrases(in ReadOnlySpan<string> phrases, in ReadOnlySpan<char> comment) => comment.ToString().ContainsAny(phrases, StringComparison.OrdinalIgnoreCase);
     }
 }
