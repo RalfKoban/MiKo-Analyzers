@@ -90,6 +90,22 @@ public class TestMe
 }
 ");
 
+        [TestCase("Any")]
+        public void No_issue_is_reported_for_NSubstitute_argument_(string call) => No_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+using NSubstitute;
+
+public class TestMe
+{
+    [Fact]
+    public void DoSomething()
+    {
+        Arg." + call + @"<int>();
+    }
+}
+");
+
         [Test]
         public void No_issue_is_reported_for_test_method_using_Linq_in_Moq_matcher() => No_issue_is_reported_for(@"
 using System.Collections.Generic;
