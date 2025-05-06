@@ -90,7 +90,7 @@ namespace System
             return word.ConcatenatedWith(continuation);
         }
 
-        public static IReadOnlyList<int> AllIndicesOf(this string value, string finding, in StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        public static int[] AllIndicesOf(this string value, string finding, in StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             // Perf: This code sits on the hot path and is invoked quite often (several million times), so we directly use 'string.IsNullOrWhiteSpace(value)'
             //       (otherwise, it would cost about 1/10 of the overall time here which is - given the several million times - recognizable)
@@ -113,7 +113,7 @@ namespace System
             return AllIndicesNonOrdinal(value, finding, comparison);
         }
 
-        public static IReadOnlyList<int> AllIndicesOf(this in ReadOnlySpan<char> value, string finding, in StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        public static int[] AllIndicesOf(this in ReadOnlySpan<char> value, string finding, in StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             if (value.IsNullOrWhiteSpace())
             {
@@ -711,9 +711,9 @@ namespace System
         public static bool ContainsAny(this in ReadOnlySpan<char> value, in ReadOnlySpan<char> characters) => value.Length > 0 && value.IndexOfAny(characters) >= 0;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ContainsAny(this string value, string[] phrases) => value.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase);
+        public static bool ContainsAny(this string value, in ReadOnlySpan<string> phrases) => value.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase);
 
-        public static bool ContainsAny(this string value, string[] phrases, in StringComparison comparison)
+        public static bool ContainsAny(this string value, in ReadOnlySpan<string> phrases, in StringComparison comparison)
         {
             if (value.HasCharacters())
             {
@@ -806,7 +806,7 @@ namespace System
         public static bool EndsWithAny(this string value, in ReadOnlySpan<char> suffixCharacters) => value.HasCharacters() && suffixCharacters.Contains(value[value.Length - 1]);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool EndsWithAny(this string value, string[] suffixes) => value.EndsWithAny(suffixes, StringComparison.OrdinalIgnoreCase);
+        public static bool EndsWithAny(this string value, in ReadOnlySpan<string> suffixes) => value.EndsWithAny(suffixes, StringComparison.OrdinalIgnoreCase);
 
         public static bool EndsWithAny(this in ReadOnlySpan<char> value, in ReadOnlySpan<char> suffixCharacters)
         {
@@ -829,9 +829,9 @@ namespace System
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool EndsWithAny(this in ReadOnlySpan<char> value, string[] suffixes) => value.EndsWithAny(suffixes, StringComparison.OrdinalIgnoreCase);
+        public static bool EndsWithAny(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> suffixes) => value.EndsWithAny(suffixes, StringComparison.OrdinalIgnoreCase);
 
-        public static bool EndsWithAny(this string value, string[] suffixes, in StringComparison comparison)
+        public static bool EndsWithAny(this string value, in ReadOnlySpan<string> suffixes, in StringComparison comparison)
         {
             if (value.HasCharacters())
             {
@@ -883,7 +883,7 @@ namespace System
             return false;
         }
 
-        public static bool EndsWithAny(this in ReadOnlySpan<char> value, string[] suffixes, in StringComparison comparison)
+        public static bool EndsWithAny(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> suffixes, in StringComparison comparison)
         {
             var valueLength = value.Length;
             var suffixesLength = suffixes.Length;
@@ -927,9 +927,9 @@ namespace System
         public static bool EqualsAny(this string value, IEnumerable<string> phrases) => EqualsAny(value, phrases, StringComparison.OrdinalIgnoreCase);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool EqualsAny(this in ReadOnlySpan<char> value, string[] phrases) => EqualsAny(value, phrases, StringComparison.OrdinalIgnoreCase);
+        public static bool EqualsAny(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> phrases) => EqualsAny(value, phrases, StringComparison.OrdinalIgnoreCase);
 
-        public static bool EqualsAny(this string value, string[] phrases, in StringComparison comparison)
+        public static bool EqualsAny(this string value, in ReadOnlySpan<string> phrases, in StringComparison comparison)
         {
             if (value.HasCharacters())
             {
@@ -953,7 +953,7 @@ namespace System
         {
             if (phrases is string[] array)
             {
-                return value.EqualsAny(array, comparison);
+                return value.EqualsAny(array.AsSpan(), comparison);
             }
 
             if (value.HasCharacters())
@@ -970,7 +970,7 @@ namespace System
             return false;
         }
 
-        public static bool EqualsAny(this in ReadOnlySpan<char> value, string[] phrases, in StringComparison comparison)
+        public static bool EqualsAny(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> phrases, in StringComparison comparison)
         {
             if (value.Length > 0)
             {
@@ -1286,7 +1286,7 @@ namespace System
             }
         }
 
-        public static int IndexOfAny(this in ReadOnlySpan<char> value, string[] phrases, in StringComparison comparison)
+        public static int IndexOfAny(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> phrases, in StringComparison comparison)
         {
             if (value.Length > 0)
             {
@@ -1317,7 +1317,7 @@ namespace System
             return -1;
         }
 
-        public static int IndexOfAny(this string value, string[] phrases, in StringComparison comparison)
+        public static int IndexOfAny(this string value, in ReadOnlySpan<string> phrases, in StringComparison comparison)
         {
             if (value.HasCharacters())
             {
@@ -1344,7 +1344,7 @@ namespace System
             return -1;
         }
 
-        public static int LastIndexOfAny(this string value, string[] phrases, in StringComparison comparison)
+        public static int LastIndexOfAny(this string value, in ReadOnlySpan<string> phrases, in StringComparison comparison)
         {
             if (value is null)
             {
@@ -1562,12 +1562,12 @@ namespace System
         public static bool StartsWithAny(this in ReadOnlySpan<char> value, IEnumerable<char> characters) => value.Length > 0 && characters.Contains(value[0]);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool StartsWithAny(this string value, string[] prefixes) => value.StartsWithAny(prefixes, StringComparison.OrdinalIgnoreCase);
+        public static bool StartsWithAny(this string value, in ReadOnlySpan<string> prefixes) => value.StartsWithAny(prefixes, StringComparison.OrdinalIgnoreCase);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool StartsWithAny(this in ReadOnlySpan<char> value, string[] prefixes) => value.StartsWithAny(prefixes, StringComparison.OrdinalIgnoreCase);
+        public static bool StartsWithAny(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> prefixes) => value.StartsWithAny(prefixes, StringComparison.OrdinalIgnoreCase);
 
-        public static bool StartsWithAny(this string value, string[] prefixes, in StringComparison comparison)
+        public static bool StartsWithAny(this string value, in ReadOnlySpan<string> prefixes, in StringComparison comparison)
         {
             if (value.HasCharacters())
             {
@@ -1591,7 +1591,7 @@ namespace System
             return false;
         }
 
-        public static bool StartsWithAny(this in ReadOnlySpan<char> value, string[] prefixes, in StringComparison comparison)
+        public static bool StartsWithAny(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> prefixes, in StringComparison comparison)
         {
             if (value.Length > 0)
             {
@@ -1679,7 +1679,7 @@ namespace System
 
 #pragma warning restore CA1308
 
-            return MakeLowerCaseAt(source.AsSpan(), index);
+            return source.AsSpan().MakeLowerCaseAt(index);
         }
 
         /// <summary>
@@ -1754,7 +1754,7 @@ namespace System
                 return source;
             }
 
-            return MakeUpperCaseAt(source.AsSpan(), index);
+            return source.AsSpan().MakeUpperCaseAt(index);
         }
 
         /// <summary>
@@ -1831,7 +1831,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string Without(this string value, string phrase) => value.Replace(phrase, string.Empty);
 
-        public static string Without(this string value, string[] phrases) => value.AsCachedBuilder().Without(phrases).Trimmed().ToStringAndRelease();
+        public static string Without(this string value, in ReadOnlySpan<string> phrases) => value.AsCachedBuilder().Without(phrases).Trimmed().ToStringAndRelease();
 
         public static string WithoutFirstWord(this string value) => WithoutFirstWord(value.AsSpan()).ToString();
 
@@ -1850,9 +1850,9 @@ namespace System
             return text.Slice(firstSpace);
         }
 
-        public static ReadOnlySpan<char> WithoutFirstWords(this string value, params string[] words) => WithoutFirstWords(value.AsSpan(), words);
+        public static ReadOnlySpan<char> WithoutFirstWords(this string value, in ReadOnlySpan<string> words) => WithoutFirstWords(value.AsSpan(), words);
 
-        public static ReadOnlySpan<char> WithoutFirstWords(this in ReadOnlySpan<char> value, params string[] words)
+        public static ReadOnlySpan<char> WithoutFirstWords(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> words)
         {
             var text = value.TrimStart();
 
@@ -1985,37 +1985,45 @@ namespace System
             return value;
         }
 
-        public static ReadOnlySpan<char> WithoutSuffixes(this in ReadOnlySpan<char> value, string[] suffixes)
+        public static ReadOnlySpan<char> WithoutSuffixes(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> suffixes)
         {
-            return RemoveSuffixes(RemoveSuffixes(value)); // do it twice to remove consecutive suffixes
-
-            ReadOnlySpan<char> RemoveSuffixes(ReadOnlySpan<char> slice)
-            {
-                var suffixesLength = suffixes.Length;
-
-                // ReSharper disable once ForCanBeConvertedToForeach
-                for (var index = 0; index < suffixesLength; index++)
-                {
-                    var suffix = suffixes[index].AsSpan();
-
-                    if (slice.EndsWith(suffix))
-                    {
-                        var length = slice.Length - suffix.Length;
-
-                        if (length <= 0)
-                        {
-                            return ReadOnlySpan<char>.Empty;
-                        }
-
-                        slice = slice.Slice(0, length);
-                    }
-                }
-
-                return slice;
-            }
+            // do it twice to remove consecutive suffixes
+            return value.RemoveSuffixes(suffixes)
+                        .RemoveSuffixes(suffixes);
         }
 
         public static WordsReadOnlySpanEnumerator WordsAsSpan(this in ReadOnlySpan<char> value) => new WordsReadOnlySpanEnumerator(value);
+
+        private static ReadOnlySpan<char> RemoveSuffixes(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> suffixes)
+        {
+            if (value.Length <= 0)
+            {
+                return ReadOnlySpan<char>.Empty;
+            }
+
+            var slice = value;
+            var suffixesLength = suffixes.Length;
+
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var index = 0; index < suffixesLength; index++)
+            {
+                var suffix = suffixes[index].AsSpan();
+
+                if (slice.EndsWith(suffix))
+                {
+                    var length = slice.Length - suffix.Length;
+
+                    if (length <= 0)
+                    {
+                        return ReadOnlySpan<char>.Empty;
+                    }
+
+                    slice = slice.Slice(0, length);
+                }
+            }
+
+            return slice;
+        }
 
         private static bool HasWhitespaces(this in ReadOnlySpan<char> value, int start = 0)
         {
@@ -2032,7 +2040,7 @@ namespace System
             return false;
         }
 
-        private static string MakeUpperCaseAt(in ReadOnlySpan<char> source, in int index)
+        private static string MakeUpperCaseAt(this in ReadOnlySpan<char> source, in int index)
         {
             unsafe
             {
@@ -2049,7 +2057,7 @@ namespace System
             }
         }
 
-        private static string MakeLowerCaseAt(in ReadOnlySpan<char> source, in int index)
+        private static string MakeLowerCaseAt(this in ReadOnlySpan<char> source, in int index)
         {
             unsafe
             {
@@ -2279,11 +2287,11 @@ namespace System
             }
         }
 
-        private static IReadOnlyList<int> AllIndicesOrdinal(in ReadOnlySpan<char> span, in ReadOnlySpan<char> other)
+        private static int[] AllIndicesOrdinal(in ReadOnlySpan<char> span, in ReadOnlySpan<char> other)
         {
             var otherLength = other.Length;
 
-            List<int> indices = null;
+            int[] indices = null;
 
             for (var index = 0; ; index += otherLength)
             {
@@ -2299,20 +2307,24 @@ namespace System
 
                 if (indices is null)
                 {
-                    indices = new List<int>(1);
+                    indices = new int[1];
+                }
+                else
+                {
+                    Array.Resize(ref indices, indices.Length + 1);
                 }
 
-                indices.Add(index);
+                indices[indices.Length - 1] = index;
             }
 
-            return indices ?? (IReadOnlyList<int>)Array.Empty<int>();
+            return indices ?? Array.Empty<int>();
         }
 
-        private static IReadOnlyList<int> AllIndicesNonOrdinal(string value, string finding, in StringComparison comparison)
+        private static int[] AllIndicesNonOrdinal(string value, string finding, in StringComparison comparison)
         {
             var findingLength = finding.Length;
 
-            List<int> indices = null;
+            int[] indices = null;
 
             for (var index = 0; ; index += findingLength)
             {
@@ -2326,13 +2338,17 @@ namespace System
 
                 if (indices is null)
                 {
-                    indices = new List<int>(1);
+                    indices = new int[1];
+                }
+                else
+                {
+                    Array.Resize(ref indices, indices.Length + 1);
                 }
 
-                indices.Add(index);
+                indices[indices.Length - 1] = index;
             }
 
-            return indices ?? (IReadOnlyList<int>)Array.Empty<int>();
+            return indices ?? Array.Empty<int>();
         }
     }
 }

@@ -2566,7 +2566,7 @@ namespace MiKoSolutions.Analyzers
             return source.ReplaceText(new[] { phrase }, replacement);
         }
 
-        internal static SyntaxList<XmlNodeSyntax> ReplaceText(this in SyntaxList<XmlNodeSyntax> source, string[] phrases, string replacement)
+        internal static SyntaxList<XmlNodeSyntax> ReplaceText(this in SyntaxList<XmlNodeSyntax> source, in ReadOnlySpan<string> phrases, string replacement)
         {
             var resultLength = source.Count;
 
@@ -2640,7 +2640,7 @@ namespace MiKoSolutions.Analyzers
             return value.ReplaceTokens(map.Keys, (original, rewritten) => map[original]);
         }
 
-        internal static XmlTextSyntax ReplaceText(this XmlTextSyntax value, string[] phrases, string replacement)
+        internal static XmlTextSyntax ReplaceText(this XmlTextSyntax value, in ReadOnlySpan<string> phrases, string replacement)
         {
             var textTokens = value.TextTokens;
 
