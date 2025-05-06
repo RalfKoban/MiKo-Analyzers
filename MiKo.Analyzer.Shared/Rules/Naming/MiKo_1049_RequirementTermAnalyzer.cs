@@ -85,7 +85,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             foreach (var pair in ReplacementMap)
             {
-                result.ReplaceWithCheck(pair.Key, pair.Value);
+                result.ReplaceWithProbe(pair.Key, pair.Value);
             }
 
             return result.ToStringAndRelease();
@@ -96,11 +96,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var symbolName = symbol.Name;
 
             var name = symbolName.AsCachedBuilder()
-                                 .ReplaceWithCheck("efresh", "#") // filter 'refresh' and 'Refresh'
-                                 .ReplaceWithCheck("hallow", "#") // filter 'shallow' and 'Shallow'
-                                 .ReplaceWithCheck("icenseNeed", "#") // filter 'licenseNeed' and 'LicenseNeed'
-                                 .ReplaceWithCheck("eeded", "#") // filter 'needed' and 'Needed'
-                                 .ReplaceWithCheck("eeds", "#") // filter 'needs' and 'Needs'
+                                 .ReplaceWithProbe("efresh", "#") // filter 'refresh' and 'Refresh'
+                                 .ReplaceWithProbe("hallow", "#") // filter 'shallow' and 'Shallow'
+                                 .ReplaceWithProbe("icenseNeed", "#") // filter 'licenseNeed' and 'LicenseNeed'
+                                 .ReplaceWithProbe("eeded", "#") // filter 'needed' and 'Needed'
+                                 .ReplaceWithProbe("eeds", "#") // filter 'needs' and 'Needs'
                                  .ToStringAndRelease();
 
             List<string> findings = null;

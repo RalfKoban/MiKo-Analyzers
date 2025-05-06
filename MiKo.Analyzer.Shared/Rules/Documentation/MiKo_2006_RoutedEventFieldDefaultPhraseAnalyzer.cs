@@ -70,13 +70,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return issues;
         }
 
-        private static List<string> Phrases(string[] phrases, string typeName, string eventName)
+        private static List<string> Phrases(in ReadOnlySpan<string> phrases, string typeName, string eventName)
         {
+            var phrasesLength = phrases.Length;
+
             var eventFullName = typeName + "." + eventName;
 
-            var results = new List<string>(2 * phrases.Length);
-            results.AddRange(phrases.Select(_ => _.FormatWith(eventName))); // output as message to user
-            results.AddRange(phrases.Select(_ => _.FormatWith(eventFullName)));
+            var results = new List<string>(2 * phrasesLength);
+
+            foreach (var phrase in phrases)
+            {
+                results.Add(phrase.FormatWith(eventName)); // output as message to user
+                results.Add(phrase.FormatWith(eventFullName));
+            }
 
             return results;
         }

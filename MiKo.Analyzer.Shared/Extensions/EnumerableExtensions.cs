@@ -660,6 +660,24 @@ namespace System.Linq
 
         internal static bool None<T>(this IEnumerable<T> source, Func<T, bool> predicate) => source.All(_ => predicate(_) is false);
 
+        internal static bool None<T>(this in ReadOnlySpan<T> source, Func<T, bool> predicate)
+        {
+            var sourceLength = source.Length;
+
+            if (sourceLength > 0)
+            {
+                for (var index = 0; index < sourceLength; index++)
+                {
+                    if (predicate(source[index]))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
         internal static bool MoreThan<T>(this IEnumerable<T> source, in int count)
         {
             switch (source)

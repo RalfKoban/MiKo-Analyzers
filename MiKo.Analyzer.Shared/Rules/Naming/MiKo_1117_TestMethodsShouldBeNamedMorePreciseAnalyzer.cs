@@ -62,7 +62,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod();
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation) => HasIssue(symbol.Name.AsCachedBuilder().ReplaceAllWithCheck(KnownExceptions, "#").ToStringAndRelease())
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation) => HasIssue(symbol.Name.AsCachedBuilder().ReplaceAllWithProbe(KnownExceptions, "#").ToStringAndRelease())
                                                                                                                  ? new[] { Issue(symbol) }
                                                                                                                  : Array.Empty<Diagnostic>();
 

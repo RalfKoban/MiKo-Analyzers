@@ -90,18 +90,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static void EscapeValidPhrases(StringBuilder methodName)
         {
-            methodName.ReplaceWithCheck("Doc", EscapedPhrase + "c")
-                      .ReplaceWithCheck("Dog", EscapedPhrase + "g")
-                      .ReplaceWithCheck("Dot", EscapedPhrase + "t")
-                      .ReplaceWithCheck("Done", EscapedPhrase + "ne")
-                      .ReplaceWithCheck("Dont", EscapedPhrase + "nt")
-                      .ReplaceWithCheck("DoEvents", EscapedPhrase + "Events")
-                      .ReplaceWithCheck("Domain", EscapedPhrase + "main")
-                      .ReplaceWithCheck("Double", EscapedPhrase + "uble")
-                      .ReplaceWithCheck("Doubt", EscapedPhrase + "ubt")
-                      .ReplaceWithCheck("Down", EscapedPhrase + "wn");
+            methodName.ReplaceWithProbe("Doc", EscapedPhrase + "c")
+                      .ReplaceWithProbe("Dog", EscapedPhrase + "g")
+                      .ReplaceWithProbe("Dot", EscapedPhrase + "t")
+                      .ReplaceWithProbe("Done", EscapedPhrase + "ne")
+                      .ReplaceWithProbe("Dont", EscapedPhrase + "nt")
+                      .ReplaceWithProbe("DoEvents", EscapedPhrase + "Events")
+                      .ReplaceWithProbe("Domain", EscapedPhrase + "main")
+                      .ReplaceWithProbe("Double", EscapedPhrase + "uble")
+                      .ReplaceWithProbe("Doubt", EscapedPhrase + "ubt")
+                      .ReplaceWithProbe("Down", EscapedPhrase + "wn");
         }
 
-        private static void UnescapeValidPhrases(StringBuilder methodName) => methodName.ReplaceWithCheck(EscapedPhrase, DoPhrase);
+        private static void UnescapeValidPhrases(StringBuilder methodName) => methodName.ReplaceWithProbe(EscapedPhrase, DoPhrase);
     }
 }

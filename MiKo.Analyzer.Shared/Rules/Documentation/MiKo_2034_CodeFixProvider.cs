@@ -91,7 +91,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static SyntaxList<XmlNodeSyntax> RemoveStartingWord(XmlElementSyntax comment) => RemoveStartingWord(comment.WithoutFirstXmlNewLine(), Constants.Comments.ParameterStartingCodefixPhrase);
 
-        private static SyntaxList<XmlNodeSyntax> RemoveStartingWord(XmlElementSyntax comment, params string[] words)
+        private static SyntaxList<XmlNodeSyntax> RemoveStartingWord(XmlElementSyntax comment, in ReadOnlySpan<string> words)
         {
             var contents = comment.Content;
 
