@@ -31,12 +31,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static Pair[] CreatePhraseProposal(string phrase) => new[] { new Pair(Constants.AnalyzerCodeFixSharedData.Phrase, phrase) };
 
-        protected static Location GetFirstLocation(in SyntaxToken textToken, string value, StringComparison comparison = StringComparison.Ordinal, in int startOffset = 0, in int endOffset = 0)
+        protected static Location GetFirstLocation(in SyntaxToken textToken, string value, in StringComparison comparison = StringComparison.Ordinal, in int startOffset = 0, in int endOffset = 0)
         {
             return CreateLocation(value, textToken.SyntaxTree, textToken.SpanStart, textToken.ValueText.IndexOf(value, comparison), startOffset, endOffset);
         }
 
-        protected static Location GetFirstLocation(in SyntaxTrivia trivia, string value, StringComparison comparison = StringComparison.Ordinal, in int startOffset = 0, in int endOffset = 0)
+        protected static Location GetFirstLocation(in SyntaxTrivia trivia, string value, in StringComparison comparison = StringComparison.Ordinal, in int startOffset = 0, in int endOffset = 0)
         {
             return CreateLocation(value, trivia.SyntaxTree, trivia.SpanStart, trivia.ToFullString().IndexOf(value, comparison), startOffset, endOffset);
         }
@@ -46,32 +46,32 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return CreateLocation(value, trivia.SyntaxTree, trivia.SpanStart, trivia.ToFullString().LastIndexOf(value), startOffset, endOffset);
         }
 
-        protected static Location GetLastLocation(in SyntaxToken textToken, string value, StringComparison comparison = StringComparison.Ordinal, in int startOffset = 0, in int endOffset = 0)
+        protected static Location GetLastLocation(in SyntaxToken textToken, string value, in StringComparison comparison = StringComparison.Ordinal, in int startOffset = 0, in int endOffset = 0)
         {
             return CreateLocation(value, textToken.SyntaxTree, textToken.SpanStart, textToken.ValueText.LastIndexOf(value, comparison), startOffset, endOffset);
         }
 
-        protected static IReadOnlyList<Location> GetAllLocations(in SyntaxToken textToken, string value, StringComparison comparison = StringComparison.Ordinal, in int startOffset = 0, in int endOffset = 0)
+        protected static IReadOnlyList<Location> GetAllLocations(in SyntaxToken textToken, string value, in StringComparison comparison = StringComparison.Ordinal, in int startOffset = 0, in int endOffset = 0)
         {
             return GetAllLocations(textToken.ValueText, textToken.SyntaxTree, textToken.SpanStart, value, comparison, startOffset, endOffset);
         }
 
-        protected static IReadOnlyList<Location> GetAllLocations(in SyntaxToken textToken, in ReadOnlySpan<string> values, StringComparison comparison = StringComparison.Ordinal, in int startOffset = 0, in int endOffset = 0)
+        protected static IReadOnlyList<Location> GetAllLocations(in SyntaxToken textToken, in ReadOnlySpan<string> values, in StringComparison comparison = StringComparison.Ordinal, in int startOffset = 0, in int endOffset = 0)
         {
             return GetAllLocations(textToken.ValueText, textToken.SyntaxTree, textToken.SpanStart, values, comparison, startOffset, endOffset);
         }
 
-        protected static IReadOnlyList<Location> GetAllLocations(in SyntaxTrivia trivia, string value, StringComparison comparison = StringComparison.Ordinal, in int startOffset = 0, in int endOffset = 0)
+        protected static IReadOnlyList<Location> GetAllLocations(in SyntaxTrivia trivia, string value, in StringComparison comparison = StringComparison.Ordinal, in int startOffset = 0, in int endOffset = 0)
         {
             return GetAllLocations(trivia.ToFullString(), trivia.SyntaxTree, trivia.SpanStart, value, comparison, startOffset, endOffset);
         }
 
-        protected static IReadOnlyList<Location> GetAllLocations(in SyntaxTrivia trivia, in ReadOnlySpan<string> values, StringComparison comparison = StringComparison.Ordinal, in int startOffset = 0, in int endOffset = 0)
+        protected static IReadOnlyList<Location> GetAllLocations(in SyntaxTrivia trivia, in ReadOnlySpan<string> values, in StringComparison comparison = StringComparison.Ordinal, in int startOffset = 0, in int endOffset = 0)
         {
             return GetAllLocations(trivia.ToFullString(), trivia.SyntaxTree, trivia.SpanStart, values, comparison, startOffset, endOffset);
         }
 
-        protected static IReadOnlyList<Location> GetAllLocations(in SyntaxToken textToken, string value, Func<char, bool> nextCharValidationCallback, StringComparison comparison = StringComparison.Ordinal, in int startOffset = 0, in int endOffset = 0)
+        protected static IReadOnlyList<Location> GetAllLocations(in SyntaxToken textToken, string value, Func<char, bool> nextCharValidationCallback, in StringComparison comparison = StringComparison.Ordinal, in int startOffset = 0, in int endOffset = 0)
         {
             return GetAllLocations(textToken.ValueText, textToken.SyntaxTree, textToken.SpanStart, value, nextCharValidationCallback, comparison, startOffset, endOffset);
         }
@@ -167,7 +167,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual bool ConsiderEmptyTextAsIssue(ISymbol symbol) => true;
 
-        private static IReadOnlyList<Location> GetAllLocations(string text, SyntaxTree syntaxTree, in int spanStart, string value, StringComparison comparison, in int startOffset, in int endOffset)
+        private static IReadOnlyList<Location> GetAllLocations(string text, SyntaxTree syntaxTree, in int spanStart, string value, in StringComparison comparison, in int startOffset, in int endOffset)
         {
             var textLength = text.Length;
 
@@ -194,7 +194,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return GetAllLocationsWithLoop(syntaxTree, spanStart, value, startOffset, endOffset, allIndices);
         }
 
-        private static IReadOnlyList<Location> GetAllLocations(string text, SyntaxTree syntaxTree, in int spanStart, in ReadOnlySpan<string> values, StringComparison comparison, in int startOffset, in int endOffset)
+        private static IReadOnlyList<Location> GetAllLocations(string text, SyntaxTree syntaxTree, in int spanStart, in ReadOnlySpan<string> values, in StringComparison comparison, in int startOffset, in int endOffset)
         {
             var textLength = text.Length;
 
@@ -207,7 +207,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return GetAllLocationsWithLoop(text, syntaxTree, spanStart, values, comparison, startOffset, endOffset, textLength);
         }
 
-        private static IReadOnlyList<Location> GetAllLocations(string text, SyntaxTree syntaxTree, in int spanStart, string value, Func<char, bool> nextCharValidationCallback, StringComparison comparison, in int startOffset, in int endOffset)
+        private static IReadOnlyList<Location> GetAllLocations(string text, SyntaxTree syntaxTree, in int spanStart, string value, Func<char, bool> nextCharValidationCallback, in StringComparison comparison, in int startOffset, in int endOffset)
         {
             var textLength = text.Length;
 
@@ -278,7 +278,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return results ?? (IReadOnlyList<Location>)Array.Empty<Location>();
         }
 
-        private static IReadOnlyList<Location> GetAllLocationsWithLoop(string text, SyntaxTree syntaxTree, in int spanStart, in ReadOnlySpan<string> values, StringComparison comparison, in int startOffset, in int endOffset, in int textLength)
+        private static IReadOnlyList<Location> GetAllLocationsWithLoop(string text, SyntaxTree syntaxTree, in int spanStart, in ReadOnlySpan<string> values, in StringComparison comparison, in int startOffset, in int endOffset, in int textLength)
         {
             List<Location> alreadyReportedLocations = null;
             var valuesCount = values.Length;
@@ -343,16 +343,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return results ?? (IReadOnlyList<Location>)Array.Empty<Location>();
         }
 
-        private static IReadOnlyList<Location> GetAllLocationsWithLoop(string text, SyntaxTree syntaxTree, in int spanStart, string value, Func<char, bool> nextCharValidationCallback, in int startOffset, in int endOffset, in int textLength, IReadOnlyList<int> allIndices)
+        private static IReadOnlyList<Location> GetAllLocationsWithLoop(string text, SyntaxTree syntaxTree, in int spanStart, string value, Func<char, bool> nextCharValidationCallback, in int startOffset, in int endOffset, in int textLength, in ReadOnlySpan<int> allIndices)
         {
             var lastPosition = textLength - 1;
 
             List<Location> alreadyReportedLocations = null;
-            var count = allIndices.Count;
+            var length = allIndices.Length;
 
             List<Location> results = null;
 
-            for (var index = 0; index < count; index++)
+            for (var index = 0; index < length; index++)
             {
                 var position = allIndices[index];
                 var afterPosition = position + value.Length;

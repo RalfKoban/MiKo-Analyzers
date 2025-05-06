@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<T> Ancestors<T>(this SyntaxNode value) where T : SyntaxNode => value.Ancestors().OfType<T>(); // value.AncestorsAndSelf().OfType<T>();
 
-        // TODO RKN: Use properties, fields etc. as well?
+        // TODO RKN: Use types, fields etc. as well?
         internal static IEnumerable<T> AncestorsWithinMethods<T>(this SyntaxNode value) where T : SyntaxNode
         {
             // ReSharper disable once LoopCanBePartlyConvertedToQuery
@@ -63,9 +63,12 @@ namespace MiKoSolutions.Analyzers
                     yield return t;
                 }
 
-                if (ancestor is BaseMethodDeclarationSyntax)
+                switch (ancestor)
                 {
-                    yield break;
+                    case BaseMethodDeclarationSyntax _: // found the surrounding method
+                    case LocalFunctionStatementSyntax _: // found the surrounding local function
+                    case BasePropertyDeclarationSyntax _: // found the surrounding property, so we already skipped the getters or setters
+                        yield break;
                 }
             }
         }
