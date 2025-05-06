@@ -216,7 +216,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                    "turn",
                                                                };
 
-        public static bool IsAdjectiveOrAdverb(in ReadOnlySpan<char> value, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        public static bool IsAdjectiveOrAdverb(in ReadOnlySpan<char> value, in StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             if (value.EndsWith("ly", comparison))
             {

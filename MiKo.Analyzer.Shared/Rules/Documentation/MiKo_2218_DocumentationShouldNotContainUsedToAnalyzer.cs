@@ -408,7 +408,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return issues;
         }
 
-        private void AnalyzeForPhrases(List<Diagnostic> issues, in SyntaxToken token, in ReadOnlySpan<string> phrases, string replacement, StringComparison comparison = StringComparison.Ordinal)
+        private void AnalyzeForPhrases(List<Diagnostic> issues, in SyntaxToken token, in ReadOnlySpan<string> phrases, string replacement, in StringComparison comparison = StringComparison.Ordinal)
         {
             var locations = GetAllLocations(token, phrases, comparison);
 
@@ -418,7 +418,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private void AnalyzeForPhrases(List<Diagnostic> issues, in SyntaxToken token, string phrase, string replacement, StringComparison comparison = StringComparison.Ordinal)
+        private void AnalyzeForPhrases(List<Diagnostic> issues, in SyntaxToken token, string phrase, string replacement, in StringComparison comparison = StringComparison.Ordinal)
         {
             var locations = GetAllLocations(token, phrase, comparison);
 

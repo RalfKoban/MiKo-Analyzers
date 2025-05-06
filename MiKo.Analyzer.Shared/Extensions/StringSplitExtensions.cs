@@ -11,12 +11,12 @@ namespace System
     {
         public static SplitReadOnlySpanEnumerator SplitBy(this in ReadOnlySpan<char> value, in ReadOnlySpan<char> separatorChars) => SplitBy(value, separatorChars, StringSplitOptions.None);
 
-        public static SplitReadOnlySpanEnumerator SplitBy(this in ReadOnlySpan<char> value, in ReadOnlySpan<char> separatorChars, StringSplitOptions options) => new SplitReadOnlySpanEnumerator(value, separatorChars, options);
+        public static SplitReadOnlySpanEnumerator SplitBy(this in ReadOnlySpan<char> value, in ReadOnlySpan<char> separatorChars, in StringSplitOptions options) => new SplitReadOnlySpanEnumerator(value, separatorChars, options);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SplitReadOnlySpanEnumerator SplitBy(this in ReadOnlySpan<char> value, char[] separatorChars, StringSplitOptions options) => SplitBy(value, separatorChars.AsSpan(), options);
+        public static SplitReadOnlySpanEnumerator SplitBy(this in ReadOnlySpan<char> value, char[] separatorChars, in StringSplitOptions options) => SplitBy(value, separatorChars.AsSpan(), options);
 
-        public static IReadOnlyList<string> SplitBy(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> findings, StringComparison comparison = StringComparison.OrdinalIgnoreCase, StringSplitOptions options = StringSplitOptions.None)
+        public static IReadOnlyList<string> SplitBy(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> findings, in StringComparison comparison = StringComparison.OrdinalIgnoreCase, in StringSplitOptions options = StringSplitOptions.None)
         {
             if (value.IsNullOrWhiteSpace())
             {
@@ -72,7 +72,7 @@ namespace System
             return results;
         }
 
-        public static IReadOnlyList<string> SplitBy(this string value, in ReadOnlySpan<string> findings, StringComparison comparison = StringComparison.OrdinalIgnoreCase, StringSplitOptions options = StringSplitOptions.None)
+        public static IReadOnlyList<string> SplitBy(this string value, in ReadOnlySpan<string> findings, in StringComparison comparison = StringComparison.OrdinalIgnoreCase, in StringSplitOptions options = StringSplitOptions.None)
         {
             if (value is null)
             {
