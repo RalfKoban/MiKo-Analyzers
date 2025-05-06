@@ -150,8 +150,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 var finalText = continuation.Insert(0, startingPhrase)
                                             .Append(trimmedExistingTextEnd)
-                                            .ReplaceWithCheck(" kinds of state ", " states of ")
-                                            .ReplaceWithCheck(" of of ", " of ")
+                                            .ReplaceWithProbe(" kinds of state ", " states of ")
+                                            .ReplaceWithProbe(" of of ", " of ")
                                             .ToStringAndRelease();
 
                 textTokens.RemoveAt(0);

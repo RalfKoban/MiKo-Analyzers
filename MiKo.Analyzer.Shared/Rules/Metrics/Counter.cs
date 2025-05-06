@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
 
 using Microsoft.CodeAnalysis;
@@ -42,21 +41,54 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         public static int CountCyclomaticComplexity(BlockSyntax body, in SyntaxKind syntaxKindToIgnore = SyntaxKind.None)
         {
-            var count = SyntaxNodeCollector.Collect<SyntaxNode>(body, syntaxKindToIgnore).Count(_ => CCSyntaxKinds.Contains(_.RawKind));
+            var count = 1;
 
-            return 1 + count;
+            var list = SyntaxNodeCollector.Collect<SyntaxNode>(body, syntaxKindToIgnore);
+            var listCount = list.Count;
+
+            if (listCount > 0)
+            {
+                for (var index = 0; index < listCount; index++)
+                {
+                    if (CCSyntaxKinds.Contains(list[index].RawKind))
+                    {
+                        count++;
+                    }
+                }
+            }
+
+            return count;
         }
 
         public static int CountCyclomaticComplexity(ArrowExpressionClauseSyntax body, in SyntaxKind syntaxKindToIgnore = SyntaxKind.None)
         {
-            var count = SyntaxNodeCollector.Collect<SyntaxNode>(body, syntaxKindToIgnore).Count(_ => CCSyntaxKinds.Contains(_.RawKind));
+            var count = 1;
 
-            return 1 + count;
+            var list = SyntaxNodeCollector.Collect<SyntaxNode>(body, syntaxKindToIgnore);
+            var listCount = list.Count;
+
+            if (listCount > 0)
+            {
+                for (var index = 0; index < listCount; index++)
+                {
+                    if (CCSyntaxKinds.Contains(list[index].RawKind))
+                    {
+                        count++;
+                    }
+                }
+            }
+
+            return count;
         }
 
         internal static int CountLinesOfCode(SyntaxNode body, in SyntaxKind syntaxKindToIgnore = SyntaxKind.None)
         {
             var nodes = SyntaxNodeCollector.Collect<StatementSyntax>(body, syntaxKindToIgnore);
+
+            if (nodes.Count == 0)
+            {
+                return 0;
+            }
 
             var lines = new HashSet<int>();
 
