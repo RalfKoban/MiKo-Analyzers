@@ -46,12 +46,12 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
         {
             switch (context.Node)
             {
+                case MethodDeclarationSyntax m: return m.Body;
                 case AccessorDeclarationSyntax a: return a.Body;
                 case ConstructorDeclarationSyntax c: return c.Body;
-                case DestructorDeclarationSyntax d: return d.Body;
-                case MethodDeclarationSyntax m: return m.Body;
                 case OperatorDeclarationSyntax o: return o.Body;
                 case ConversionOperatorDeclarationSyntax co: return co.Body;
+                case DestructorDeclarationSyntax d: return d.Body;
                 case LocalFunctionStatementSyntax l: return l.Body;
                 default: return null;
             }
@@ -62,11 +62,11 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
             switch (context.Node)
             {
                 case AccessorDeclarationSyntax a: return a.ExpressionBody;
-                case ConstructorDeclarationSyntax c: return c.ExpressionBody;
-                case DestructorDeclarationSyntax d: return d.ExpressionBody;
                 case MethodDeclarationSyntax m: return m.ExpressionBody;
                 case OperatorDeclarationSyntax o: return o.ExpressionBody;
                 case ConversionOperatorDeclarationSyntax co: return co.ExpressionBody;
+                case ConstructorDeclarationSyntax c: return c.ExpressionBody;
+                case DestructorDeclarationSyntax d: return d.ExpressionBody;
                 case LocalFunctionStatementSyntax l: return l.ExpressionBody;
                 default: return null;
             }

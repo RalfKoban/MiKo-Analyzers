@@ -209,17 +209,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                    : AnalyzeParameter(symbol, commentXml, comment, phrases);
         }
 
-        private Diagnostic[] AnalyzeParameter(IParameterSymbol symbol, string commentXml, DocumentationCommentTriviaSyntax comment, string[] phrase)
+        private Diagnostic[] AnalyzeParameter(IParameterSymbol symbol, string commentXml, DocumentationCommentTriviaSyntax comment, in ReadOnlySpan<string> phrases)
         {
             var parameterCommentXml = symbol.GetComment(commentXml);
 
-            if (phrase.None(_ => _ == parameterCommentXml))
+            if (phrases.None(_ => _ == parameterCommentXml))
             {
                 var parameterComment = comment.GetParameterComment(symbol.Name);
 
                 var issue = parameterComment is null
-                            ? Issue(symbol, Constants.XmlTag.Param, phrase[0])
-                            : Issue(symbol.Name, parameterComment, Constants.XmlTag.Param, phrase[0]);
+                            ? Issue(symbol, Constants.XmlTag.Param, phrases[0])
+                            : Issue(symbol.Name, parameterComment, Constants.XmlTag.Param, phrases[0]);
 
                 return new[] { issue };
             }

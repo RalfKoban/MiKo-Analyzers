@@ -21,16 +21,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual bool ShallAnalyzeReturnType(ITypeSymbol returnType) => true;
 
-        protected Diagnostic[] AnalyzeStartingPhrase(ISymbol symbol, DocumentationCommentTriviaSyntax comment, string commentXml, string xmlTag, string[] phrase)
+        protected Diagnostic[] AnalyzeStartingPhrase(ISymbol symbol, DocumentationCommentTriviaSyntax comment, string commentXml, string xmlTag, in ReadOnlySpan<string> phrases)
         {
-            if (commentXml.StartsWithAny(phrase, StringComparison.Ordinal) is false)
+            if (commentXml.StartsWithAny(phrases, StringComparison.Ordinal) is false)
             {
                 var nodes = comment.GetXmlSyntax(xmlTag);
 
                 if (nodes.Count > 0)
                 {
                     var symbolName = symbol.Name;
-                    var text = phrase[0];
+                    var text = phrases[0];
 
                     return nodes.Select(_ => Issue(symbolName, _.GetContentsLocation(), xmlTag, text)).ToArray();
                 }
@@ -39,16 +39,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Array.Empty<Diagnostic>();
         }
 
-        protected Diagnostic[] AnalyzePhrase(ISymbol symbol, DocumentationCommentTriviaSyntax comment, string commentXml, string xmlTag, params string[] phrase)
+        protected Diagnostic[] AnalyzePhrase(ISymbol symbol, DocumentationCommentTriviaSyntax comment, string commentXml, string xmlTag, params string[] phrases)
         {
-            if (phrase.None(_ => _.Equals(commentXml, StringComparison.Ordinal)))
+            if (phrases.None(_ => _.Equals(commentXml, StringComparison.Ordinal)))
             {
                 var nodes = comment.GetXmlSyntax(xmlTag);
 
                 if (nodes.Count > 0)
                 {
                     var symbolName = symbol.Name;
-                    var text = phrase[0];
+                    var text = phrases[0];
 
                     return nodes.Select(_ => Issue(symbolName, _.GetContentsLocation(), xmlTag, text)).ToArray();
                 }

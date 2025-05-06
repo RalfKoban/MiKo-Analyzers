@@ -87,13 +87,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return (IReadOnlyList<Diagnostic>)issues ?? Array.Empty<Diagnostic>();
         }
 
-        private static List<string> Phrases(string[] phrases, string typeName, string propertyName)
+        private static List<string> Phrases(in ReadOnlySpan<string> phrases, string typeName, string propertyName)
         {
-            var propertyFullName = typeName + "." + propertyName;
+            var phrasesLength = phrases.Length;
 
-            var results = new List<string>(2 * phrases.Length);
-            results.AddRange(phrases.Select(_ => _.FormatWith(propertyName))); // output as message to user
-            results.AddRange(phrases.Select(_ => _.FormatWith(propertyFullName)));
+            var propertyFullName = typeName + "." + propertyName;
+            var results = new List<string>(2 * phrasesLength);
+
+            for (var index = 0; index < phrasesLength; index++)
+            {
+                var phrase = phrases[index];
+
+                results.Add(phrase.FormatWith(propertyName)); // output as message to user
+                results.Add(phrase.FormatWith(propertyFullName));
+            }
 
             return results;
         }

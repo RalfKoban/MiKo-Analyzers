@@ -34,9 +34,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Array.Empty<Diagnostic>();
         }
 
-        private Diagnostic[] AnalyzeParameterComment(string parameterName, XmlElementSyntax parameterComment, string comment, string[] phrases)
+        private Diagnostic[] AnalyzeParameterComment(string parameterName, XmlElementSyntax parameterComment, string comment, in ReadOnlySpan<string> phrases)
         {
-            if (comment.EqualsAny(phrases))
+            if (comment.AsSpan().EqualsAny(phrases))
             {
                 return Array.Empty<Diagnostic>();
             }

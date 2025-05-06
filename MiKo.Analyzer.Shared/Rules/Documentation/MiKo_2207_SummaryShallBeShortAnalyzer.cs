@@ -79,15 +79,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var builder = StringBuilderCache.Acquire();
 
             var summary = xml.GetTextWithoutTrivia(builder)
-                             .ReplaceWithCheck(" - ", " ")
-                             .ReplaceWithCheck(" />", "/>")
-                             .ReplaceWithCheck(" </", "</")
-                             .ReplaceWithCheck("> <", "><")
-                             .ReplaceWithCheck(" cref=", "cref=")
-                             .ReplaceWithCheck(" href=", "href=")
-                             .ReplaceWithCheck(" type=", "type=")
-                             .ReplaceWithCheck(" langref=", "langref=")
-                             .ReplaceWithCheck(" langword=", "langword=")
+                             .ReplaceWithProbe(" - ", " ")
+                             .ReplaceWithProbe(" />", "/>")
+                             .ReplaceWithProbe(" </", "</")
+                             .ReplaceWithProbe("> <", "><")
+                             .ReplaceWithProbe(" cref=", "cref=")
+                             .ReplaceWithProbe(" href=", "href=")
+                             .ReplaceWithProbe(" type=", "type=")
+                             .ReplaceWithProbe(" langref=", "langref=")
+                             .ReplaceWithProbe(" langword=", "langword=")
                              .Trim();
 
             StringBuilderCache.Release(builder);

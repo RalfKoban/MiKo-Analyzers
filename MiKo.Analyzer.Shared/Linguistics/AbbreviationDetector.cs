@@ -372,7 +372,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         {
             if (findings.Length > 0)
             {
-                return value.ReplaceAllWithCheck(findings);
+                return value.ReplaceAllWithProbe(findings);
             }
 
             return value;
