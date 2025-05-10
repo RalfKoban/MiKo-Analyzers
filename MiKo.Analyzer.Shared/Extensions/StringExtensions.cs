@@ -21,7 +21,7 @@ namespace System
 {
     internal static class StringExtensions
     {
-        private const int QuickCompareLengthThreshold = 4;
+        private const int QuickSubstringProbeLengthThreshold = 4;
 
         private const int DifferenceBetweenUpperAndLowerCaseAscii = 0x20; // valid for Roman ASCII characters ('A' ... 'Z')
 
@@ -131,7 +131,7 @@ namespace System
                 return AllIndicesOrdinal(value, finding.AsSpan());
             }
 
-            return AllIndicesOf(value.ToString(), finding, comparison);
+            return AllIndicesNonOrdinal(value.ToString(), finding, comparison);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -727,7 +727,7 @@ namespace System
                     var phraseSpan = phrase.AsSpan();
 
                     // no separate handling for StringComparison.Ordinal here as that happens around 30 times out of 90_000_000 times; so almost never
-                    if (QuickCompare(valueSpan, phraseSpan, comparison))
+                    if (QuickSubstringProbe(valueSpan, phraseSpan, comparison))
                     {
                         if (ordinalComparison)
                         {
@@ -1137,16 +1137,6 @@ namespace System
             return name.GetPartAfterLastDot().ToString();
         }
 
-        public static string GetPartAfterLastDot(this string value)
-        {
-            if (value.IsNullOrEmpty())
-            {
-                return value;
-            }
-
-            return GetPartAfterLastDot(value.AsSpan()).ToString();
-        }
-
         public static ReadOnlySpan<char> GetPartAfterLastDot(this in ReadOnlySpan<char> value) => value.Slice(value.LastIndexOf('.') + 1);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1547,7 +1537,7 @@ namespace System
             var others = characters.AsSpan();
 
             // perform quick check
-            if (QuickCompare(value, others, comparison))
+            if (QuickSubstringProbe(value, others, comparison))
             {
                 return value.StartsWith(others, comparison);
             }
@@ -1578,7 +1568,7 @@ namespace System
                 {
                     var prefix = prefixes[index];
 
-                    if (QuickCompare(valueSpan, prefix.AsSpan(), comparison))
+                    if (QuickSubstringProbe(valueSpan, prefix.AsSpan(), comparison))
                     {
                         if (value.StartsWith(prefix, comparison))
                         {
@@ -2074,7 +2064,7 @@ namespace System
             }
         }
 
-        private static bool QuickCompare(in ReadOnlySpan<char> value, in ReadOnlySpan<char> others, in StringComparison comparison)
+        private static bool QuickSubstringProbe(in ReadOnlySpan<char> value, in ReadOnlySpan<char> others, in StringComparison comparison)
         {
             var valueLength = value.Length;
             var othersLength = others.Length;
@@ -2092,15 +2082,15 @@ namespace System
             }
 
             // both are same length, so perform a quick compare first
-            if (valueLength > QuickCompareLengthThreshold)
+            if (valueLength > QuickSubstringProbeLengthThreshold)
             {
                 switch (comparison)
                 {
                     case StringComparison.Ordinal:
-                        return QuickCompareOrdinal(value, others);
+                        return QuickSubstringProbeOrdinal(value, others);
 
                     case StringComparison.OrdinalIgnoreCase:
-                        return QuickCompareOrdinalIgnoreCase(value, others);
+                        return QuickSubstringProbeOrdinalIgnoreCase(value, others);
                 }
             }
 
@@ -2108,7 +2098,7 @@ namespace System
             return true;
         }
 
-        private static bool QuickCompareOrdinal(in ReadOnlySpan<char> value, in ReadOnlySpan<char> others)
+        private static bool QuickSubstringProbeOrdinal(in ReadOnlySpan<char> value, in ReadOnlySpan<char> others)
         {
             var length = value.Length;
 
@@ -2135,11 +2125,11 @@ namespace System
             return true;
         }
 
-        private static unsafe bool QuickCompareOrdinalIgnoreCase(in ReadOnlySpan<char> value, in ReadOnlySpan<char> others)
+        private static unsafe bool QuickSubstringProbeOrdinalIgnoreCase(in ReadOnlySpan<char> value, in ReadOnlySpan<char> others)
         {
             var length = value.Length;
 
-            if (length != others.Length && length < QuickCompareLengthThreshold)
+            if (length != others.Length && length < QuickSubstringProbeLengthThreshold)
             {
                 return true;
             }

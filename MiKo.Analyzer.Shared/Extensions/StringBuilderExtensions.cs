@@ -13,8 +13,8 @@ namespace System.Text
 {
     internal static class StringBuilderExtensions
     {
-        private const int QuickCompareLengthThreshold = 6;
-        private const int QuickCompareRentLengthThreshold = 24;
+        private const int QuickSubstringProbeLengthThreshold = 6;
+        private const int QuickSubstringProbeRentLengthThreshold = 24;
 
         public static StringBuilder AdjustFirstWord(this StringBuilder value, in FirstWordHandling handling)
         {
@@ -500,7 +500,7 @@ namespace System.Text
 
             if (difference > 0)
             {
-                if (otherValueLength > QuickCompareLengthThreshold)
+                if (otherValueLength > QuickSubstringProbeLengthThreshold)
                 {
                     var otherFirst = other[0];
 
@@ -509,7 +509,7 @@ namespace System.Text
 
                     var length = difference + 1; // increased by 1 to have the complete difference investigated
 
-                    if (difference >= QuickCompareRentLengthThreshold)
+                    if (difference >= QuickSubstringProbeRentLengthThreshold)
                     {
                         // use rented arrays here (if we have larger differences, the start and end may be in different chunks)
                         return QuickSubstringProbeAtIndicesWithRent(ref current, otherFirst, otherLast, length, lastIndex);
