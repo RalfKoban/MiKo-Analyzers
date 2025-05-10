@@ -21,12 +21,12 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// <summary>
         /// Attempt to make the word starting with an upper case.
         /// </summary>
-        MakeUpperCase = 1 << 1,
+        StartUpperCase = 1 << 1,
 
         /// <summary>
         /// Attempt to make the word starting with a lower case.
         /// </summary>
-        MakeLowerCase = 1 << 2,
+        StartLowerCase = 1 << 2,
 
         /// <summary>
         /// Attempt to make it an infinite verb.

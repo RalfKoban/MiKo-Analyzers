@@ -26,13 +26,13 @@ namespace System.Text
             // only keep it if there is already a leading space (otherwise it may be on the same line without any leading space, and we would fix it in a wrong way)
             value.TrimLeadingSpacesTo(handling.HasSet(FirstWordHandling.KeepLeadingSpace) ? 1 : 0);
 
-            if (handling.HasSet(FirstWordHandling.MakeLowerCase))
+            if (handling.HasSet(FirstWordHandling.StartLowerCase))
             {
-                value.MakeLowerCase();
+                value.StartLowerCase();
             }
-            else if (handling.HasSet(FirstWordHandling.MakeUpperCase))
+            else if (handling.HasSet(FirstWordHandling.StartUpperCase))
             {
-                value.MakeUpperCase();
+                value.StartUpperCase();
             }
 
             if (handling.HasSet(FirstWordHandling.MakeInfinite))
@@ -620,7 +620,7 @@ namespace System.Text
             return whitespaces;
         }
 
-        private static void MakeLowerCase(this StringBuilder value)
+        private static void StartLowerCase(this StringBuilder value)
         {
             var valueLength = value.Length;
 
@@ -643,7 +643,7 @@ namespace System.Text
             }
         }
 
-        private static void MakeUpperCase(this StringBuilder value)
+        private static void StartUpperCase(this StringBuilder value)
         {
             var valueLength = value.Length;
 

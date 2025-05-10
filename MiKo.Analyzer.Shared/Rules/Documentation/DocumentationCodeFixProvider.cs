@@ -371,19 +371,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, in ReadOnlySpan<string> phrases, in FirstWordHandling firstWordHandling = FirstWordHandling.MakeLowerCase)
+        protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, in ReadOnlySpan<string> phrases, in FirstWordHandling firstWordHandling = FirstWordHandling.StartLowerCase)
         {
             return CommentStartingWith(comment, phrases[0], firstWordHandling);
         }
 
-        protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string phrase, in FirstWordHandling firstWordHandling = FirstWordHandling.MakeLowerCase)
+        protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string phrase, in FirstWordHandling firstWordHandling = FirstWordHandling.StartLowerCase)
         {
             var content = CommentStartingWith(comment.Content, phrase, firstWordHandling);
 
             return CommentWithContent(comment, content);
         }
 
-        protected static SyntaxList<XmlNodeSyntax> CommentStartingWith(SyntaxList<XmlNodeSyntax> content, string phrase, in FirstWordHandling firstWordHandling = FirstWordHandling.MakeLowerCase)
+        protected static SyntaxList<XmlNodeSyntax> CommentStartingWith(SyntaxList<XmlNodeSyntax> content, string phrase, in FirstWordHandling firstWordHandling = FirstWordHandling.StartLowerCase)
         {
             // when necessary adjust beginning text
             // Note: when on new line, then the text is not the 1st one but the 2nd one

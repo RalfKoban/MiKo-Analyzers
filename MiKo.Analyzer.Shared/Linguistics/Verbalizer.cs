@@ -501,8 +501,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
                 switch (handling)
                 {
-                    case FirstWordHandling.MakeLowerCase: return word.ToLowerCaseAt(0);
-                    case FirstWordHandling.MakeUpperCase: return word.ToUpperCaseAt(0);
+                    case FirstWordHandling.StartLowerCase: return word.ToLowerCaseAt(0);
+                    case FirstWordHandling.StartUpperCase: return word.ToUpperCaseAt(0);
                     default:
                         return word.ToString();
                 }
