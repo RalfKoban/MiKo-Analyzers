@@ -46,9 +46,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             return A(firstWordHandling);
 
-            string A(in FirstWordHandling handling) => handling.HasSet(FirstWordHandling.MakeLowerCase) ? "a " : "A ";
+            string A(in FirstWordHandling handling) => handling.HasSet(FirstWordHandling.StartLowerCase) ? "a " : "A ";
 
-            string An(in FirstWordHandling handling) => handling.HasSet(FirstWordHandling.MakeLowerCase) ? "an " : "An ";
+            string An(in FirstWordHandling handling) => handling.HasSet(FirstWordHandling.StartLowerCase) ? "an " : "An ";
         }
     }
 }

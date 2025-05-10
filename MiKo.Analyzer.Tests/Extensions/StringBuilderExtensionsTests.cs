@@ -79,19 +79,19 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase("This is a test", FirstWordHandling.KeepLeadingSpace, "This is a test")]
         [TestCase(" This is a test", FirstWordHandling.KeepLeadingSpace, " This is a test")]
         [TestCase("   This is a test", FirstWordHandling.KeepLeadingSpace, " This is a test")]
-        [TestCase("This is a test", FirstWordHandling.MakeLowerCase, "this is a test")]
-        [TestCase("this is a test", FirstWordHandling.MakeLowerCase, "this is a test")]
-        [TestCase(" THis is a Test", FirstWordHandling.MakeLowerCase, "tHis is a Test")]
-        [TestCase("   THis is a Test", FirstWordHandling.MakeLowerCase, "tHis is a Test")]
-        [TestCase(" THis is a Test", FirstWordHandling.MakeLowerCase | FirstWordHandling.KeepLeadingSpace, " tHis is a Test")]
-        [TestCase("   THis is a Test", FirstWordHandling.MakeLowerCase | FirstWordHandling.KeepLeadingSpace, " tHis is a Test")]
-        [TestCase("This is a test", FirstWordHandling.MakeUpperCase, "This is a test")]
-        [TestCase("this is a test", FirstWordHandling.MakeUpperCase, "This is a test")]
-        [TestCase(" this is a test", FirstWordHandling.MakeUpperCase, "This is a test")]
-        [TestCase("   this is a test", FirstWordHandling.MakeUpperCase, "This is a test")]
-        [TestCase("this is a test", FirstWordHandling.MakeUpperCase | FirstWordHandling.KeepLeadingSpace, "This is a test")]
-        [TestCase(" this is a test", FirstWordHandling.MakeUpperCase | FirstWordHandling.KeepLeadingSpace, " This is a test")]
-        [TestCase("   this is a test", FirstWordHandling.MakeUpperCase | FirstWordHandling.KeepLeadingSpace, " This is a test")]
+        [TestCase("This is a test", FirstWordHandling.StartLowerCase, "this is a test")]
+        [TestCase("this is a test", FirstWordHandling.StartLowerCase, "this is a test")]
+        [TestCase(" THis is a Test", FirstWordHandling.StartLowerCase, "tHis is a Test")]
+        [TestCase("   THis is a Test", FirstWordHandling.StartLowerCase, "tHis is a Test")]
+        [TestCase(" THis is a Test", FirstWordHandling.StartLowerCase | FirstWordHandling.KeepLeadingSpace, " tHis is a Test")]
+        [TestCase("   THis is a Test", FirstWordHandling.StartLowerCase | FirstWordHandling.KeepLeadingSpace, " tHis is a Test")]
+        [TestCase("This is a test", FirstWordHandling.StartUpperCase, "This is a test")]
+        [TestCase("this is a test", FirstWordHandling.StartUpperCase, "This is a test")]
+        [TestCase(" this is a test", FirstWordHandling.StartUpperCase, "This is a test")]
+        [TestCase("   this is a test", FirstWordHandling.StartUpperCase, "This is a test")]
+        [TestCase("this is a test", FirstWordHandling.StartUpperCase | FirstWordHandling.KeepLeadingSpace, "This is a test")]
+        [TestCase(" this is a test", FirstWordHandling.StartUpperCase | FirstWordHandling.KeepLeadingSpace, " This is a test")]
+        [TestCase("   this is a test", FirstWordHandling.StartUpperCase | FirstWordHandling.KeepLeadingSpace, " This is a test")]
         [TestCase("represents someone", FirstWordHandling.MakeInfinite, "represent someone")]
         [TestCase(" represents someone", FirstWordHandling.MakeInfinite, "represent someone")]
         [TestCase("   represents someone", FirstWordHandling.MakeInfinite, "represent someone")]
@@ -118,6 +118,20 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase("message", FirstWordHandling.MakePlural | FirstWordHandling.KeepLeadingSpace, "messages")]
         [TestCase(" message", FirstWordHandling.MakePlural | FirstWordHandling.KeepLeadingSpace, " messages")]
         [TestCase("   message", FirstWordHandling.MakePlural | FirstWordHandling.KeepLeadingSpace, " messages")]
+
+        [TestCase("Abc", FirstWordHandling.StartLowerCase, "abc")] // just as clarification, situation is tested by other tests as well
+        [TestCase("abc", FirstWordHandling.StartLowerCase, "abc")] // just as clarification, situation is tested by other tests as well
+        [TestCase("ABC", FirstWordHandling.StartLowerCase, "aBC")] // just as clarification, situation is tested by other tests as well
+        [TestCase("aBC", FirstWordHandling.StartLowerCase, "aBC")] // just as clarification, situation is tested by other tests as well
+        [TestCase("AbC", FirstWordHandling.StartLowerCase, "abC")] // just as clarification, situation is tested by other tests as well
+        [TestCase("abC", FirstWordHandling.StartLowerCase, "abC")] // just as clarification, situation is tested by other tests as well
+
+        [TestCase("Abc", FirstWordHandling.StartUpperCase, "Abc")] // just as clarification, situation is tested by other tests as well
+        [TestCase("abc", FirstWordHandling.StartUpperCase, "Abc")] // just as clarification, situation is tested by other tests as well
+        [TestCase("ABC", FirstWordHandling.StartUpperCase, "ABC")] // just as clarification, situation is tested by other tests as well
+        [TestCase("aBC", FirstWordHandling.StartUpperCase, "ABC")] // just as clarification, situation is tested by other tests as well
+        [TestCase("AbC", FirstWordHandling.StartUpperCase, "AbC")] // just as clarification, situation is tested by other tests as well
+        [TestCase("abC", FirstWordHandling.StartUpperCase, "AbC")] // just as clarification, situation is tested by other tests as well
         public static void AdjustFirstWordHandling(string s, in FirstWordHandling handling, string expectedResult)
         {
             var resultFromSB = new StringBuilder(s).AdjustFirstWord(handling).ToString();

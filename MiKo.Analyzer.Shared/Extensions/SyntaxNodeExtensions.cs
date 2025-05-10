@@ -3695,9 +3695,9 @@ namespace MiKoSolutions.Analyzers
             return value;
         }
 
-        internal static SyntaxList<XmlNodeSyntax> WithStartText(this XmlElementSyntax value, string startText, in FirstWordHandling firstWordHandling = FirstWordHandling.MakeLowerCase) => value.Content.WithStartText(startText, firstWordHandling);
+        internal static SyntaxList<XmlNodeSyntax> WithStartText(this XmlElementSyntax value, string startText, in FirstWordHandling firstWordHandling = FirstWordHandling.StartLowerCase) => value.Content.WithStartText(startText, firstWordHandling);
 
-        internal static SyntaxList<XmlNodeSyntax> WithStartText(this in SyntaxList<XmlNodeSyntax> values, string startText, in FirstWordHandling firstWordHandling = FirstWordHandling.MakeLowerCase)
+        internal static SyntaxList<XmlNodeSyntax> WithStartText(this in SyntaxList<XmlNodeSyntax> values, string startText, in FirstWordHandling firstWordHandling = FirstWordHandling.StartLowerCase)
         {
             if (values.Count > 0)
             {
@@ -3709,7 +3709,7 @@ namespace MiKoSolutions.Analyzers
             return XmlText(startText).ToSyntaxList<XmlNodeSyntax>();
         }
 
-        internal static XmlTextSyntax WithStartText(this XmlTextSyntax value, string startText, in FirstWordHandling firstWordHandling = FirstWordHandling.MakeLowerCase)
+        internal static XmlTextSyntax WithStartText(this XmlTextSyntax value, string startText, in FirstWordHandling firstWordHandling = FirstWordHandling.StartLowerCase)
         {
             var tokens = value.TextTokens;
 

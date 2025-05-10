@@ -85,7 +85,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     var text = typeName.AsCachedBuilder()
                                        .AdjustFirstWord(FirstWordHandling.MakePlural)
-                                       .SeparateWords(' ', FirstWordHandling.MakeLowerCase)
+                                       .SeparateWords(' ', FirstWordHandling.StartLowerCase)
                                        .ToStringAndRelease();
 
                     if (text.Length > 0)

@@ -78,12 +78,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         }
                         else
                         {
-                            article = ArticleProvider.GetArticleFor(unsuffixedSpan, FirstWordHandling.MakeLowerCase);
+                            article = ArticleProvider.GetArticleFor(unsuffixedSpan, FirstWordHandling.StartLowerCase);
                         }
 
                         unsuffixed = unsuffixed.ToLowerCaseAt(0);
 
-                        var firstWordHandling = FirstWordHandling.MakeLowerCase;
+                        var firstWordHandling = FirstWordHandling.StartLowerCase;
 
                         if (isPlural)
                         {
@@ -106,7 +106,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            return Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordHandling.MakeUpperCase | FirstWordHandling.KeepLeadingSpace);
+            return Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordHandling.StartUpperCase | FirstWordHandling.KeepLeadingSpace);
         }
 
 //// ncrunch: rdi off

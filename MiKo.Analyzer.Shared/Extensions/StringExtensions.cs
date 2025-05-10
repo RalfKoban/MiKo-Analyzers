@@ -42,7 +42,7 @@ namespace System
 
             string word;
 
-            if (handling.HasSet(FirstWordHandling.MakeLowerCase))
+            if (handling.HasSet(FirstWordHandling.StartLowerCase))
             {
                 var firstWord = valueSpan.FirstWord();
 
@@ -51,7 +51,7 @@ namespace System
                        ? firstWord.ToString()
                        : firstWord.ToLowerCaseAt(0);
             }
-            else if (handling.HasSet(FirstWordHandling.MakeUpperCase))
+            else if (handling.HasSet(FirstWordHandling.StartUpperCase))
             {
                 word = valueSpan.FirstWord().ToUpperCaseAt(0);
             }
