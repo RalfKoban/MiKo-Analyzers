@@ -13,7 +13,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/18917.svg)](https://scan.coverity.com/projects/ralfkoban-miko-analyzers)
 
 ## Available Rules
-The following tables lists all the 493 rules that are currently provided by the analyzer.
+The following tables lists all the 494 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -145,6 +145,7 @@ The following tables lists all the 493 rules that are currently provided by the 
 |MiKo_1114|Test methods should not be named 'HappyPath' or 'BadPath'|&#x2713;|\-|
 |MiKo_1115|Test methods should be named in a fluent way|&#x2713;|&#x2713;|
 |MiKo_1117|Test methods should be named more precisely|&#x2713;|\-|
+|MiKo_1118|Test methods should not end with 'Async'|&#x2713;|&#x2713;|
 |MiKo_1200|Name exceptions in catch blocks consistently|&#x2713;|&#x2713;|
 |MiKo_1201|Name exceptions as parameters consistently|&#x2713;|&#x2713;|
 |MiKo_1300|Unimportant identifiers in lambda statements should be named '_'|&#x2713;|&#x2713;|

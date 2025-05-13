@@ -4273,6 +4273,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;Async&apos; suffix.
+        /// </summary>
+        internal static string MiKo_1118_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1118_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test method names should be clear and describe the intended scenario. They should focus on readability rather than technical details of the .NET API. Avoid adding the &apos;Async&apos; suffix to test methods, as it is an implementation detail that does not contribute to understanding the test&apos;s purpose..
+        /// </summary>
+        internal static string MiKo_1118_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1118_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1118_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1118_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test methods should not end with &apos;Async&apos;.
+        /// </summary>
+        internal static string MiKo_1118_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1118_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rename exception.
         /// </summary>
         internal static string MiKo_1200_CodeFixTitle {
