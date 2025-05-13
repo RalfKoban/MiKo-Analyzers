@@ -1563,6 +1563,18 @@ To make them clearer and more descriptive, the names should include details abou
   <data name="MiKo_1117_Title" xml:space="preserve">
     <value>Test methods should be named more precisely</value>
   </data>
+  <data name="MiKo_1118_CodeFixTitle" xml:space="preserve">
+    <value>Remove 'Async' suffix</value>
+  </data>
+  <data name="MiKo_1118_Description" xml:space="preserve">
+    <value>Test method names should be clear and describe the intended scenario. They should focus on readability rather than technical details of the .NET API. Avoid adding the 'Async' suffix to test methods, as it is an implementation detail that does not contribute to understanding the test's purpose.</value>
+  </data>
+  <data name="MiKo_1118_MessageFormat" xml:space="preserve">
+    <value>Name it '{1}'</value>
+  </data>
+  <data name="MiKo_1118_Title" xml:space="preserve">
+    <value>Test methods should not end with 'Async'</value>
+  </data>
   <data name="MiKo_1200_CodeFixTitle" xml:space="preserve">
     <value>Rename exception</value>
   </data>
