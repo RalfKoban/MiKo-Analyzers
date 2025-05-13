@@ -782,7 +782,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private sealed class StringStartComparer : IComparer<string>
         {
-            private readonly Memory<string> m_specialOrder;
+            private readonly string[] m_specialOrder;
 
             internal StringStartComparer(params string[] specialOrder) => m_specialOrder = specialOrder;
 
@@ -793,7 +793,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (notNullX && notNullY)
                 {
-                    var orders = m_specialOrder.Span;
+                    var orders = m_specialOrder.AsSpan();
 
                     return GetOrder(x.AsSpan(), orders) - GetOrder(y.AsSpan(), orders);
                 }
@@ -817,9 +817,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 for (var i = 0; i < length; i++)
                 {
-                    var order = orders[i];
-
-                    if (text.StartsWith(order.AsSpan()))
+                    if (text.StartsWith(orders[i].AsSpan()))
                     {
                         return i;
                     }
