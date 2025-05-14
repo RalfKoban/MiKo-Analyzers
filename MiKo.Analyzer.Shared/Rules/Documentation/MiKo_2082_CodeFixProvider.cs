@@ -106,7 +106,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            return Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordHandling.StartUpperCase | FirstWordHandling.KeepLeadingSpace);
+            return Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordHandling.StartUpperCase | FirstWordHandling.KeepSingleLeadingSpace);
         }
 
 //// ncrunch: rdi off

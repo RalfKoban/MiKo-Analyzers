@@ -104,14 +104,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, XmlText(text + additionalComment));
         }
 
-        protected static XmlElementSyntax Comment(XmlElementSyntax syntax, in ReadOnlySpan<string> terms, in ReadOnlySpan<Pair> replacementMap, in FirstWordHandling firstWordHandling = FirstWordHandling.KeepLeadingSpace)
+        protected static XmlElementSyntax Comment(XmlElementSyntax syntax, in ReadOnlySpan<string> terms, in ReadOnlySpan<Pair> replacementMap, in FirstWordHandling firstWordHandling = FirstWordHandling.KeepSingleLeadingSpace)
         {
             var result = Comment<XmlElementSyntax>(syntax, terms, replacementMap, firstWordHandling);
 
             return CombineTexts(result);
         }
 
-        protected static T Comment<T>(T syntax, in ReadOnlySpan<string> terms, in ReadOnlySpan<Pair> replacementMap, in FirstWordHandling firstWordHandling = FirstWordHandling.KeepLeadingSpace) where T : SyntaxNode
+        protected static T Comment<T>(T syntax, in ReadOnlySpan<string> terms, in ReadOnlySpan<Pair> replacementMap, in FirstWordHandling firstWordHandling = FirstWordHandling.KeepSingleLeadingSpace) where T : SyntaxNode
         {
             var minimumLength = MinLength(terms);
 

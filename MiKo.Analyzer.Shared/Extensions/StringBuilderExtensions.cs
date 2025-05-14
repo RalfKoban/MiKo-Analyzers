@@ -24,7 +24,7 @@ namespace System.Text
             }
 
             // only keep it if there is already a leading space (otherwise it may be on the same line without any leading space, and we would fix it in a wrong way)
-            value.TrimLeadingSpacesTo(handling.HasSet(FirstWordHandling.KeepLeadingSpace) ? 1 : 0);
+            value.TrimLeadingSpacesTo(handling.HasSet(FirstWordHandling.KeepSingleLeadingSpace) ? 1 : 0);
 
             if (handling.HasSet(FirstWordHandling.StartLowerCase))
             {

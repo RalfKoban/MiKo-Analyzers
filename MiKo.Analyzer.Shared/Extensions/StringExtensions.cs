@@ -78,7 +78,7 @@ namespace System
                 word = Verbalizer.MakeThirdPersonSingularVerb(word);
             }
 
-            if (handling.HasSet(FirstWordHandling.KeepLeadingSpace))
+            if (handling.HasSet(FirstWordHandling.KeepSingleLeadingSpace))
             {
                 // only keep it if there is already a leading space (otherwise it may be on the same line without any leading space, and we would fix it in a wrong way)
                 if (value.StartsWith(' '))

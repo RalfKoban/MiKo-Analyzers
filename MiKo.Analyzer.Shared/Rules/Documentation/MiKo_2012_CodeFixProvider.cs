@@ -77,7 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (text.StartsWithAny(EmptyReplacementsMapKeys, StringComparison.Ordinal))
             {
-                return Comment(comment, EmptyReplacementsMapKeys, EmptyReplacementsMap, FirstWordHandling.StartUpperCase | FirstWordHandling.MakeThirdPersonSingular | FirstWordHandling.KeepLeadingSpace);
+                return Comment(comment, EmptyReplacementsMapKeys, EmptyReplacementsMap, FirstWordHandling.StartUpperCase | FirstWordHandling.MakeThirdPersonSingular | FirstWordHandling.KeepSingleLeadingSpace);
             }
 
             if (comment.GetEnclosing(Declarations) is MemberDeclarationSyntax member)
