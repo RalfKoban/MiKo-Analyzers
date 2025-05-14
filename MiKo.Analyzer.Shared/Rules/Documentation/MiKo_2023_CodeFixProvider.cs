@@ -817,9 +817,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 for (var i = 0; i < length; i++)
                 {
-                    var order = orders[i];
-
-                    if (text.StartsWith(order.AsSpan()))
+                    if (text.StartsWith(orders[i].AsSpan()))
                     {
                         return i;
                     }
