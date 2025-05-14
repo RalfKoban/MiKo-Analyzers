@@ -524,7 +524,7 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static SyntaxNode GetEnclosing(this SyntaxNode value, params SyntaxKind[] syntaxKinds)
+        internal static SyntaxNode GetEnclosing(this SyntaxNode value, in ReadOnlySpan<SyntaxKind> syntaxKinds)
         {
             var node = value;
 
@@ -1651,9 +1651,12 @@ namespace MiKoSolutions.Analyzers
             return value.InsertNodesBefore(nodeInList, new[] { modifiedNode });
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool IsKind(this SyntaxNode value, in SyntaxKind kind) => value?.RawKind == (int)kind;
+
         internal static bool IsAnyKind(this SyntaxNode value, ISet<SyntaxKind> kinds) => kinds.Contains(value.Kind());
 
-        internal static bool IsAnyKind(this SyntaxNode value, params SyntaxKind[] kinds)
+        internal static bool IsAnyKind(this SyntaxNode value, in ReadOnlySpan<SyntaxKind> kinds)
         {
             var kindsLength = kinds.Length;
 
@@ -3430,9 +3433,9 @@ namespace MiKoSolutions.Analyzers
             return contents.ToSyntaxList();
         }
 
-        internal static SyntaxList<XmlNodeSyntax> WithoutText(this XmlElementSyntax value, params string[] texts) => value.Content.WithoutText(texts);
+        internal static SyntaxList<XmlNodeSyntax> WithoutText(this XmlElementSyntax value, in ReadOnlySpan<string> texts) => value.Content.WithoutText(texts);
 
-        internal static SyntaxList<XmlNodeSyntax> WithoutText(this in SyntaxList<XmlNodeSyntax> values, params string[] texts)
+        internal static SyntaxList<XmlNodeSyntax> WithoutText(this in SyntaxList<XmlNodeSyntax> values, in ReadOnlySpan<string> texts)
         {
             var length = texts.Length;
 
@@ -3453,7 +3456,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static XmlTextSyntax WithoutTrailing(this XmlTextSyntax value, string text) => value.WithoutTrailing(new[] { text });
 
-        internal static XmlTextSyntax WithoutTrailing(this XmlTextSyntax value, params string[] texts)
+        internal static XmlTextSyntax WithoutTrailing(this XmlTextSyntax value, in ReadOnlySpan<string> texts)
         {
             var textTokens = value.TextTokens.ToList();
 
@@ -3502,7 +3505,7 @@ namespace MiKoSolutions.Analyzers
             return value;
         }
 
-        internal static XmlTextSyntax WithoutTrailingCharacters(this XmlTextSyntax value, char[] characters)
+        internal static XmlTextSyntax WithoutTrailingCharacters(this XmlTextSyntax value, in ReadOnlySpan<char> characters)
         {
             var textTokens = value.TextTokens.ToList();
 
@@ -3633,9 +3636,9 @@ namespace MiKoSolutions.Analyzers
             return trimmed;
         }
 
-        internal static SyntaxList<XmlNodeSyntax> WithoutStartText(this XmlElementSyntax value, params string[] startTexts) => value.Content.WithoutStartText(startTexts);
+        internal static SyntaxList<XmlNodeSyntax> WithoutStartText(this XmlElementSyntax value, in ReadOnlySpan<string> startTexts) => value.Content.WithoutStartText(startTexts);
 
-        internal static SyntaxList<XmlNodeSyntax> WithoutStartText(this in SyntaxList<XmlNodeSyntax> values, params string[] startTexts)
+        internal static SyntaxList<XmlNodeSyntax> WithoutStartText(this in SyntaxList<XmlNodeSyntax> values, in ReadOnlySpan<string> startTexts)
         {
             if (values.Count > 0 && values[0] is XmlTextSyntax textSyntax)
             {
@@ -3645,9 +3648,9 @@ namespace MiKoSolutions.Analyzers
             return values;
         }
 
-        internal static XmlTextSyntax WithoutStartText(this XmlTextSyntax value, params string[] startTexts)
+        internal static XmlTextSyntax WithoutStartText(this XmlTextSyntax value, in ReadOnlySpan<string> startTexts)
         {
-            if (startTexts is null || startTexts.Length == 0)
+            if (startTexts.Length == 0)
             {
                 return value;
             }
@@ -4060,7 +4063,7 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        private static bool Is(this SyntaxNode value, string tagName, params string[] contents)
+        private static bool Is(this SyntaxNode value, string tagName, in ReadOnlySpan<string> contents)
         {
             if (value is XmlElementSyntax syntax && string.Equals(tagName, syntax.GetName(), StringComparison.OrdinalIgnoreCase))
             {
@@ -4154,7 +4157,7 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        private static SyntaxTrivia[] CalculateWhitespaceTriviaWithComment(in int count, SyntaxTrivia[] finalTrivia)
+        private static SyntaxTrivia[] CalculateWhitespaceTriviaWithComment(in int count, in SyntaxTrivia[] finalTrivia)
         {
             var triviaGroupedByLines = finalTrivia.GroupBy(_ => _.GetStartingLine());
 

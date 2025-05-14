@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -15,6 +16,9 @@ namespace MiKoSolutions.Analyzers
     internal static class SyntaxTokenExtensions
     {
         internal static IEnumerable<T> Ancestors<T>(this in SyntaxToken value) where T : SyntaxNode => value.Parent.Ancestors<T>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool IsKind(this in SyntaxToken value, in SyntaxKind kind) => value.RawKind == (int)kind;
 
         internal static SyntaxToken AsToken(this SyntaxKind value) => SyntaxFactory.Token(value);
 
@@ -165,7 +169,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsAnyKind(this in SyntaxToken value, ISet<SyntaxKind> kinds) => kinds.Contains(value.Kind());
 
-        internal static bool IsAnyKind(this in SyntaxToken value, params SyntaxKind[] kinds)
+        internal static bool IsAnyKind(this in SyntaxToken value, in ReadOnlySpan<SyntaxKind> kinds)
         {
             var valueKind = value.Kind();
 

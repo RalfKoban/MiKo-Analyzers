@@ -156,7 +156,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Array.Empty<Diagnostic>();
         }
 
-        private Diagnostic[] AnalyzeOverloadsSummaryPhrase(IMethodSymbol symbol, DocumentationCommentTriviaSyntax comment, params string[] defaultPhrases)
+        private Diagnostic[] AnalyzeOverloadsSummaryPhrase(IMethodSymbol symbol, DocumentationCommentTriviaSyntax comment, string[] defaultPhrases)
         {
             var summaries = symbol.GetOverloadSummaries();
 
@@ -180,7 +180,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return AnalyzeStartingPhrase(symbol, Constants.XmlTag.Remarks, comments, comment, defaultPhrases);
         }
 
-        private Diagnostic[] AnalyzeStartingPhrase(ISymbol symbol, string xmlTag, IEnumerable<string> comments, DocumentationCommentTriviaSyntax comment, params string[] phrases)
+        private Diagnostic[] AnalyzeStartingPhrase(ISymbol symbol, string xmlTag, IEnumerable<string> comments, DocumentationCommentTriviaSyntax comment, string[] phrases)
         {
             if (comments.None(_ => phrases.Exists(__ => _.StartsWith(__, StringComparison.Ordinal))))
             {
