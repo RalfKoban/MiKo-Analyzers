@@ -15,6 +15,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        protected override bool IsUnitTestAnalyzer => true;
+
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod();
 
         protected override bool ShallAnalyzeLocalFunctions(IMethodSymbol symbol) => false;
