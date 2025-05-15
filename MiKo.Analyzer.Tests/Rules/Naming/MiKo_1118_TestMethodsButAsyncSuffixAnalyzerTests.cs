@@ -105,20 +105,42 @@ public class TestMe
         [Test]
         public void An_issue_is_reported_for_test_method_with_incorrect_name_(
                                                                           [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                          [ValueSource(nameof(Tests))] string test)
+                                                                          [ValueSource(nameof(Tests))] string test,
+                                                                          [Values("DoSomethingAsync", "Do_something_async", "DoSomethingAsync_", "Do_something_async_")] string methodName)
         => An_issue_is_reported_for(@"
 [" + fixture + @"]
 public class TestMe
 {
     [" + test + @"]
-    public Task DoSomethingAsync() { }
+    public Task " + methodName + @"() { }
 }
 ");
 
+        [TestCase("DoSomethingAsync", "DoSomething")]
+        [TestCase("DoSomethingAsync_", "DoSomething_")]
+        [TestCase("Do_something_async", "Do_something")]
+        [TestCase("Do_something_async_", "Do_something_")]
+        public void Code_gets_fixed_for_method_(string originalName, string fixedName)
+        {
+            const string Template = @"
+
+using NUnit.Framework;
+
+[TestFixture]
+public class TestMe
+{
+    [Test]
+    public Task ###() { }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalName), Template.Replace("###", fixedName));
+        }
+
         [Test]
-        public void Code_gets_fixed_for_method_(
-                                            [ValueSource(nameof(TestFixtures))] string fixture,
-                                            [ValueSource(nameof(Tests))] string test)
+        public void Code_gets_fixed_for_lower_case_method_(
+                                                       [ValueSource(nameof(TestFixtures))] string fixture,
+                                                       [ValueSource(nameof(Tests))] string test)
         {
             var template = @"
 [" + fixture + @"]
@@ -129,7 +151,7 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(template.Replace("###", "DoSomethingAsync"), template.Replace("###", "DoSomething"));
+            VerifyCSharpFix(template.Replace("###", "Do_something_async"), template.Replace("###", "Do_something"));
         }
 
         protected override string GetDiagnosticId() => MiKo_1118_TestMethodsButAsyncSuffixAnalyzer.Id;
