@@ -35,17 +35,41 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static string FindBetterName(in ReadOnlySpan<char> symbolName)
         {
-            if (symbolName.EndsWith(Constants.AsyncSuffix, StringComparison.Ordinal))
+            if (symbolName.EndsWith(Constants.Underscore))
             {
-                return symbolName.WithoutSuffix(Constants.AsyncSuffix).ToString();
-            }
+                var betterName = FindBetterNameCore(symbolName.Slice(0, symbolName.Length - 1));
 
-            if (symbolName.EndsWith(Constants.AsyncCoreSuffix, StringComparison.Ordinal))
+                if (betterName.Length > 0)
+                {
+                    return betterName.ConcatenatedWith(Constants.Underscore);
+                }
+            }
+            else
             {
-                return symbolName.WithoutSuffix(Constants.AsyncCoreSuffix).ConcatenatedWith(Constants.Core);
+                var betterName = FindBetterNameCore(symbolName);
+
+                if (betterName.Length > 0)
+                {
+                    return betterName.ToString();
+                }
             }
 
             return null;
+        }
+
+        private static ReadOnlySpan<char> FindBetterNameCore(in ReadOnlySpan<char> symbolName)
+        {
+            if (symbolName.EndsWith(Constants.AsyncSuffix, StringComparison.Ordinal))
+            {
+                return symbolName.WithoutSuffix(Constants.AsyncSuffix);
+            }
+
+            if (symbolName.EndsWith("_async", StringComparison.Ordinal))
+            {
+                return symbolName.WithoutSuffix("_async");
+            }
+
+            return ReadOnlySpan<char>.Empty;
         }
     }
 }
