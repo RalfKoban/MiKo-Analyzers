@@ -32,41 +32,45 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private static void CollectDots(ExpressionSyntax expression, Stack<SyntaxToken> dots)
         {
-            switch (expression)
+            while (true)
             {
-                case MemberAccessExpressionSyntax a:
+                switch (expression)
                 {
-                    dots.Push(a.OperatorToken);
+                    case MemberAccessExpressionSyntax a:
+                    {
+                        dots.Push(a.OperatorToken);
 
-                    CollectDots(a.Expression, dots);
+                        expression = a.Expression;
 
-                    return;
+                        continue;
+                    }
+
+                    case InvocationExpressionSyntax i:
+                    {
+                        expression = i.Expression;
+
+                        continue;
+                    }
+
+                    case ConditionalAccessExpressionSyntax ca:
+                    {
+                        CollectDots(ca.WhenNotNull, dots);
+
+                        expression = ca.Expression;
+
+                        continue;
+                    }
+
+                    case MemberBindingExpressionSyntax b:
+                    {
+                        dots.Push(b.OperatorToken);
+
+                        return;
+                    }
+
+                    default:
+                        return;
                 }
-
-                case MemberBindingExpressionSyntax b:
-                {
-                    dots.Push(b.OperatorToken);
-
-                    return;
-                }
-
-                case InvocationExpressionSyntax i:
-                {
-                    CollectDots(i.Expression, dots);
-
-                    return;
-                }
-
-                case ConditionalAccessExpressionSyntax ca:
-                {
-                    CollectDots(ca.WhenNotNull, dots);
-                    CollectDots(ca.Expression, dots);
-
-                    return;
-                }
-
-                default:
-                    return;
             }
         }
 
@@ -88,6 +92,11 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 return;
             }
 
+            if (context.CancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
+
             var firstDot = dots.Pop();
             var startPosition = firstDot.GetStartPosition();
             var startLine = startPosition.Line;
@@ -95,6 +104,11 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             while (dots.Count > 0)
             {
+                if (context.CancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
+
                 var dot = dots.Pop();
 
                 if (dot.HasLeadingTrivia is false)
