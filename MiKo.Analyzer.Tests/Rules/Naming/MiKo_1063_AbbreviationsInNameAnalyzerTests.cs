@@ -157,6 +157,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "Doc",
                                                            "Dst",
                                                            "Ef",
+                                                           "El",
                                                            "Encr",
                                                            "Env",
                                                            "Environ",

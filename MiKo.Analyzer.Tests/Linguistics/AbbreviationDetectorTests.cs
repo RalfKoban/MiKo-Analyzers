@@ -176,6 +176,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("DTO", ExpectedResult = "")]
         [TestCase("Ef", ExpectedResult = "EntityFramework")]
         [TestCase("EF", ExpectedResult = "EntityFramework")]
+        [TestCase("El", ExpectedResult = "Element")]
         [TestCase("Encr", ExpectedResult = "Encrypt")]
         [TestCase("Env", ExpectedResult = "Environment")]
         [TestCase("Environ", ExpectedResult = "Environment")]

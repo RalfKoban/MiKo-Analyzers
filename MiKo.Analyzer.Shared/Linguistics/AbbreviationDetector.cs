@@ -181,6 +181,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("DTO", string.Empty),
                                                           new Pair("Ef", "EntityFramework"),
                                                           new Pair("EF", "EntityFramework"),
+                                                          new Pair("El", "Element"),
                                                           new Pair("Encr", "Encrypt"),
                                                           new Pair("Env", "Environment"),
                                                           new Pair("Environ", "Environment"),
