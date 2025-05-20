@@ -25,18 +25,18 @@ namespace TestHelper
         internal static Diagnostic[] GetDiagnostics(in ReadOnlySpan<string> sources, in LanguageVersion languageVersion, in ReadOnlySpan<DiagnosticAnalyzer> analyzers, in bool profileAnalysis) => GetSortedDiagnostics(sources, languageVersion, analyzers, profileAnalysis);
 
         /// <summary>
-        /// Gets the CSharp analyzer being tested - to be implemented in non-abstract class.
+        /// Gets the C# analyzer being tested - to be implemented in non-abstract class.
         /// </summary>
         /// <returns>
-        /// The CSharp analyzer under test.
+        /// The C# analyzer under test.
         /// </returns>
         protected virtual DiagnosticAnalyzer GetObjectUnderTest() => null;
 
         /// <summary>
-        /// Gets the identifier of the CSharp analyzer being tested - to be implemented in non-abstract class.
+        /// Gets the identifier of the C# analyzer being tested - to be implemented in non-abstract class.
         /// </summary>
         /// <returns>
-        /// The identifier of the CSharp analyzer under test.
+        /// The identifier of the C# analyzer under test.
         /// </returns>
         protected virtual string GetDiagnosticId() => null;
 
@@ -81,7 +81,7 @@ namespace TestHelper
         {
             var results = GetDiagnostics(fileContent, languageVersion);
 
-            // performance optimization to avoid the string creation for the message in case we do not have any issue and therefore do not need to report anythings
+            // performance optimization to avoid the string creation for the message in case we do not have any issue and therefore do not need to report anything
             if (results.Length > 0)
             {
                 Assert.That(results, Is.Empty, message ?? Environment.NewLine + string.Join(Environment.NewLine, results.Select(_ => _.Location + ":" + _)));
