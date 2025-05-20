@@ -152,7 +152,7 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            return results;
+            return results ?? Array.Empty<DocumentationCommentTriviaSyntax>();
         }
 
         internal static SyntaxTrivia[] GetComment(this in SyntaxToken value) => value.GetAllTrivia().Where(_ => _.IsComment()).ToArray();
