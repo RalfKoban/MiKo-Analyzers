@@ -39,13 +39,11 @@ namespace System.Text
             {
                 value.MakeInfinite();
             }
-
-            if (handling.HasSet(FirstWordHandling.MakePlural))
+            else if (handling.HasSet(FirstWordHandling.MakePlural))
             {
                 value.MakePlural();
             }
-
-            if (handling.HasSet(FirstWordHandling.MakeThirdPersonSingular))
+            else if (handling.HasSet(FirstWordHandling.MakeThirdPersonSingular))
             {
                 value.MakeThirdPersonSingular();
             }

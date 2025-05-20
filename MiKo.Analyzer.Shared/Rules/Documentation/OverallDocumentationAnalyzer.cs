@@ -60,7 +60,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     // let's find the end of the next word in the source code (but keep in mind the offset of the starting phrase)
                     var offset = start + startingPhrase.Length;
-                    var end = textAfterStartingPhrase.IndexOf(nextWord, StringComparison.Ordinal) + nextWord.Length + offset;
+                    var end = textAfterStartingPhrase.IndexOf(nextWord) + nextWord.Length + offset;
 
                     var replacement = replacementCallback(nextWord.ToString());
 
