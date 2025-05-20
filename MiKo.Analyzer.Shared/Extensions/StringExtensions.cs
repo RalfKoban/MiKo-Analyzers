@@ -51,13 +51,13 @@ namespace System
                        ? firstWord.ToString()
                        : firstWord.ToLowerCaseAt(0);
             }
-            else if (handling.HasSet(FirstWordHandling.StartUpperCase))
-            {
-                word = valueSpan.FirstWord().ToUpperCaseAt(0);
-            }
             else
             {
-                word = valueSpan.FirstWord().ToString();
+                var firstWord = valueSpan.FirstWord();
+
+                word = handling.HasSet(FirstWordHandling.StartUpperCase)
+                           ? firstWord.ToUpperCaseAt(0)
+                           : firstWord.ToString();
             }
 
             // build continuation here because the word length may change based on the infinite term
@@ -67,13 +67,11 @@ namespace System
             {
                 word = Verbalizer.MakeInfiniteVerb(word);
             }
-
-            if (handling.HasSet(FirstWordHandling.MakePlural))
+            else if (handling.HasSet(FirstWordHandling.MakePlural))
             {
                 word = Pluralizer.MakePluralName(word);
             }
-
-            if (handling.HasSet(FirstWordHandling.MakeThirdPersonSingular))
+            else if (handling.HasSet(FirstWordHandling.MakeThirdPersonSingular))
             {
                 word = Verbalizer.MakeThirdPersonSingularVerb(word);
             }
@@ -1289,7 +1287,7 @@ namespace System
                     {
                         var phrase = phrases[i];
 
-                        var index = value.IndexOf(phrase.AsSpan(), StringComparison.Ordinal);
+                        var index = value.IndexOf(phrase.AsSpan()); // performs ordinal comparison
 
                         if (index > -1)
                         {
@@ -2064,18 +2062,18 @@ namespace System
             }
         }
 
-        private static bool QuickSubstringProbe(in ReadOnlySpan<char> value, in ReadOnlySpan<char> others, in StringComparison comparison)
+        private static bool QuickSubstringProbe(in ReadOnlySpan<char> value, in ReadOnlySpan<char> other, in StringComparison comparison)
         {
             var valueLength = value.Length;
-            var othersLength = others.Length;
+            var otherLength = other.Length;
 
-            if (valueLength > othersLength)
+            if (valueLength > otherLength)
             {
                 // continue to check
                 return true;
             }
 
-            if (valueLength < othersLength)
+            if (valueLength < otherLength)
             {
                 // cannot match
                 return false;
@@ -2087,10 +2085,10 @@ namespace System
                 switch (comparison)
                 {
                     case StringComparison.Ordinal:
-                        return QuickSubstringProbeOrdinal(value, others);
+                        return QuickSubstringProbeOrdinal(value, other);
 
                     case StringComparison.OrdinalIgnoreCase:
-                        return QuickSubstringProbeOrdinalIgnoreCase(value, others);
+                        return QuickSubstringProbeOrdinalIgnoreCase(value, other);
                 }
             }
 
@@ -2098,16 +2096,16 @@ namespace System
             return true;
         }
 
-        private static bool QuickSubstringProbeOrdinal(in ReadOnlySpan<char> value, in ReadOnlySpan<char> others)
+        private static bool QuickSubstringProbeOrdinal(in ReadOnlySpan<char> value, in ReadOnlySpan<char> other)
         {
             var length = value.Length;
 
-            if (length != others.Length && length < 2)
+            if (length != other.Length && length < 2)
             {
                 return true;
             }
 
-            if (value[0] != others[0])
+            if (value[0] != other[0])
             {
                 // they do not fit as characters do not match
                 return false;
@@ -2115,7 +2113,7 @@ namespace System
 
             var lastIndex = length - 1;
 
-            if (value[lastIndex] != others[lastIndex])
+            if (value[lastIndex] != other[lastIndex])
             {
                 // they do not fit as characters do not match
                 return false;
@@ -2125,11 +2123,11 @@ namespace System
             return true;
         }
 
-        private static unsafe bool QuickSubstringProbeOrdinalIgnoreCase(in ReadOnlySpan<char> value, in ReadOnlySpan<char> others)
+        private static unsafe bool QuickSubstringProbeOrdinalIgnoreCase(in ReadOnlySpan<char> value, in ReadOnlySpan<char> other)
         {
             var length = value.Length;
 
-            if (length != others.Length && length < QuickSubstringProbeLengthThreshold)
+            if (length != other.Length && length < QuickSubstringProbeLengthThreshold)
             {
                 return true;
             }
@@ -2137,7 +2135,7 @@ namespace System
             // compare in-memory for performance reasons
             fixed (char* ap = &MemoryMarshal.GetReference(value))
             {
-                fixed (char* bp = &MemoryMarshal.GetReference(others))
+                fixed (char* bp = &MemoryMarshal.GetReference(other))
                 {
                     var a = ap;
                     var b = bp;
@@ -2285,7 +2283,7 @@ namespace System
 
             for (var index = 0; ; index += otherLength)
             {
-                var newIndex = span.Slice(index).IndexOf(other, StringComparison.Ordinal);
+                var newIndex = span.Slice(index).IndexOf(other); // performs ordinal comparison
 
                 if (newIndex == -1)
                 {
