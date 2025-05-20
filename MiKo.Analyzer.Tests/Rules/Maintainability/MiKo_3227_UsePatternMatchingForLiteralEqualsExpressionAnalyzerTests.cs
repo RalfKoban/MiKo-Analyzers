@@ -1,0 +1,96 @@
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Diagnostics;
+
+using NUnit.Framework;
+
+using TestHelper;
+
+//// ncrunch: rdi off
+namespace MiKoSolutions.Analyzers.Rules.Maintainability
+{
+    [TestFixture]
+    public sealed class MiKo_3227_UsePatternMatchingForLiteralEqualsExpressionAnalyzerTests : CodeFixVerifier
+    {
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = Justifications.StyleCop.SA1116)]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = Justifications.StyleCop.SA1117)]
+        [Test, Combinatorial]
+        public void No_issue_is_reported_for_comparisons_of_2_variables_of_type_(
+                                                                             [Values("bool", "char", "int", "string", "object")] string type,
+                                                                             [Values("==", "!=")] string @operator)
+            => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(" + type + " a, " + type + @" b)
+    {
+        if (a " + @operator + @" b)
+            return true;
+        else
+            return false;
+    }
+}
+", languageVersion: LanguageVersion.CSharp9);
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = Justifications.StyleCop.SA1116)]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = Justifications.StyleCop.SA1117)]
+        [TestCase("int", "42")]
+        [TestCase("char", "'X'")]
+        public void An_issue_is_reported_for_a_left_sided_comparison_of_(string type, string value) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(" + type + @" a)
+    {
+        if (" + value + @" == a)
+            return true;
+        else
+            return false;
+    }
+}
+", languageVersion: LanguageVersion.CSharp9);
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = Justifications.StyleCop.SA1116)]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = Justifications.StyleCop.SA1117)]
+        [TestCase("int", "42")]
+        [TestCase("char", "'X'")]
+        public void An_issue_is_reported_for_a_right_sided_comparison_of_(string type, string value) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(" + type + @" a)
+    {
+        if (a == " + value + @")
+            return true;
+        else
+            return false;
+    }
+}
+", languageVersion: LanguageVersion.CSharp9);
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = Justifications.StyleCop.SA1116)]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = Justifications.StyleCop.SA1117)]
+
+        [TestCase("class TestMe { bool Do(int a) { return (a == 42); } }", "class TestMe { bool Do(int a) { return (a is 42); } }")]
+        [TestCase("class TestMe { bool Do(int a) { return (42 == a); } }", "class TestMe { bool Do(int a) { return (a is 42); } }")]
+        [TestCase("class TestMe { bool Do(int a) => a == 42; }", "class TestMe { bool Do(int a) => a is 42; }")]
+        [TestCase("class TestMe { bool Do(int a) => 42 == a; }", "class TestMe { bool Do(int a) => a is 42; }")]
+
+        [TestCase("class TestMe { bool Do(char a) { return (a == 'X'); } }", "class TestMe { bool Do(char a) { return (a is 'X'); } }")]
+        [TestCase("class TestMe { bool Do(char a) { return ('X' == a); } }", "class TestMe { bool Do(char a) { return (a is 'X'); } }")]
+        [TestCase("class TestMe { bool Do(char a) => a == 'X'; }", "class TestMe { bool Do(char a) => a is 'X'; }")]
+        [TestCase("class TestMe { bool Do(char a) => 'X' == a; }", "class TestMe { bool Do(char a) => a is 'X'; }")]
+        public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode, languageVersion: LanguageVersion.CSharp9);
+
+        protected override string GetDiagnosticId() => MiKo_3227_UsePatternMatchingForLiteralEqualsExpressionAnalyzer.Id;
+
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3227_UsePatternMatchingForLiteralEqualsExpressionAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3227_CodeFixProvider();
+    }
+}
