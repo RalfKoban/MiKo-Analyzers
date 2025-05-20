@@ -34,6 +34,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("ctlg", "catalog"),
                                                       new Pair("ctrl", "control"),
                                                       new Pair("ctx", "context"),
+                                                      new Pair("cur", "current"),
                                                       new Pair("db", "database"),
                                                       new Pair("ddl", "dropDownList"),
                                                       new Pair("decl", "declaration"),
@@ -96,6 +97,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("plausi", "plausibility"),
                                                       new Pair("pos", "position"),
                                                       new Pair("pow", "power"),
+                                                      new Pair("prev", "previous"),
                                                       new Pair("proc", "process"),
                                                       new Pair("procs", "processes"),
                                                       new Pair("prop", "property"),
@@ -157,6 +159,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Ctlg", "Catalog"),
                                                           new Pair("Ctrl", "Control"),
                                                           new Pair("Ctx", "Context"),
+                                                          new Pair("Cur", "Current"),
                                                           new Pair("Db", "Database"),
                                                           new Pair("Ddl", "DropDownList"),
                                                           new Pair("Decl", "Declaration"),
@@ -224,6 +227,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Plausi", "Plausibility"),
                                                           new Pair("Pos", "Position"),
                                                           new Pair("Pow", "Power"),
+                                                          new Pair("Prev", "Previous"),
                                                           new Pair("Proc", "Process"),
                                                           new Pair("Procs", "Processes"),
                                                           new Pair("Prop", "Property"),
@@ -490,7 +494,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             do
             {
-                var newIndex = value.Slice(index).IndexOf(key, StringComparison.Ordinal);
+                var newIndex = value.Slice(index).IndexOf(key); // performs ordinal comparison
 
                 if (newIndex <= -1)
                 {
