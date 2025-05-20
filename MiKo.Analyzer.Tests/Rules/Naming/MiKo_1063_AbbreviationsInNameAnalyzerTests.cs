@@ -515,6 +515,8 @@ namespace Bla
         [TestCase("Min", "Minimum")]
         [TestCase("MinLength", "MinimumLength")]
         [TestCase("MaxVer", "MaximumVersion")]
+        [TestCase("Cur", "Current")]
+        [TestCase("Prev", "Previous")]
         public void Code_gets_fixed_for_incorrectly_named_property_(string originalName, string fixedName)
         {
             const string Template = @"
@@ -535,6 +537,8 @@ namespace Bla
         [TestCase("app", "application")]
         [TestCase("appVariable", "applicationVariable")]
         [TestCase("appVar", "applicationVariable")]
+        [TestCase("cur", "current")]
+        [TestCase("prev", "previous")]
         public void Code_gets_fixed_for_incorrectly_named_foreach_variable_(string originalName, string fixedName)
         {
             const string Template = @"
@@ -558,6 +562,8 @@ namespace Bla
         }
 
         [TestCase("config", "configuration")]
+        [TestCase("cur", "current")]
+        [TestCase("prev", "previous")]
         public void Code_gets_fixed_for_incorrectly_named_field_(string originalName, string fixedName)
         {
             const string Template = @"
