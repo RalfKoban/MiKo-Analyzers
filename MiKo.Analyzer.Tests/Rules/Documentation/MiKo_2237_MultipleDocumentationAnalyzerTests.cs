@@ -132,6 +132,35 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_commented_out_const_field_with_multiline_documentation() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /** This is some text for field 1. It is important to have this field here! */
+    private const MyField1 = ""42"";
+
+    /** This is some text for commented out field 2. */
+    // private const MyField2 = ""42"";
+
+    /** This is some text for field 3. */
+    private const MyField3 = ""42"";
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_gaps_between_multiline_documentation() => No_issue_is_reported_for(@"
+using System;
+
+/** This is some text before the gap. */
+
+/** This is some text after the gap. */
+public class TestMe
+{
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_gaps_between_([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
 using System;
 
