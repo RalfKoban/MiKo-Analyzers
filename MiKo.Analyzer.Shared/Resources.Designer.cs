@@ -1490,7 +1490,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Using &apos;Enum&apos; as a suffix to indicate a type an Enum is unnecessary. This also goes for suffixes in general, whether for interfaces, classes, records, or structs. Keeping names clear and straightforward without these suffixes makes the code cleaner and easier to understand..
+        ///   Looks up a localized string similar to Avoid suffixes like Type, Enum, Class, or Interface in type names. They add no real value and make names longer. Clear, meaningful names are better and easier to read..
         /// </summary>
         internal static string MiKo_1037_Description {
             get {
