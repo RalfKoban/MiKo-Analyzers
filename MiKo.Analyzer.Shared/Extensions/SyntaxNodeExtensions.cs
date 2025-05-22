@@ -1886,27 +1886,65 @@ namespace MiKoSolutions.Analyzers
         {
             switch (value)
             {
-                case IdentifierNameSyntax i:
-                {
-                    var type = context.FindContainingType();
-                    var isConst = type.GetFields(i.GetName()).Any(_ => _.IsConst);
-
-                    return isConst;
-                }
-
-                case MemberAccessExpressionSyntax m when m.IsKind(SyntaxKind.SimpleMemberAccessExpression):
-                {
-                    var type = m.GetTypeSymbol(context.SemanticModel);
-
-                    // only get the real enum members, no local variables or something
-                    return type?.IsEnum() is true;
-                }
+                case IdentifierNameSyntax i: return i.IsConst(context);
+                case MemberAccessExpressionSyntax m: return m.IsConst(context.SemanticModel);
 
                 default:
+                    return false;
+            }
+        }
+
+        internal static bool IsConst(this IdentifierNameSyntax value, ITypeSymbol type)
+        {
+            var isConst = type.GetFields(value.GetName()).Any(_ => _.IsConst);
+
+            return isConst;
+        }
+
+        internal static bool IsConst(this IdentifierNameSyntax value, in SyntaxNodeAnalysisContext context) => value.IsConst(context.FindContainingType());
+
+        internal static bool IsConst(this MemberAccessExpressionSyntax value, SemanticModel semanticModel)
+        {
+            if (value.IsKind(SyntaxKind.SimpleMemberAccessExpression))
+            {
+                var type = value.GetTypeSymbol(semanticModel);
+
+                if (type is null)
                 {
+                    // we do not know, so we assume it's not
                     return false;
                 }
+
+                if (type.IsEnum())
+                {
+                    // only get the real enum members, no local variables or something
+                    return true;
+                }
+
+                if (value.Name is IdentifierNameSyntax identifierName)
+                {
+                    // find out whether the identifier is a const field
+                    return identifierName.IsConst(type);
+                }
             }
+
+            return false;
+        }
+
+        internal static bool IsEnum(this IsPatternExpressionSyntax value, SemanticModel semanticModel) => value.Expression.IsEnum(semanticModel);
+
+        internal static bool IsEnum(this MemberAccessExpressionSyntax value, SemanticModel semanticModel) => value.Expression.IsEnum(semanticModel);
+
+        internal static bool IsEnum(this ExpressionSyntax value, SemanticModel semanticModel)
+        {
+            if (value is MemberAccessExpressionSyntax maes)
+            {
+                return maes.IsEnum(semanticModel);
+            }
+
+            var type = value.GetTypeSymbol(semanticModel);
+
+            return type.IsEnum();
         }
 
         internal static bool IsEventRegistration(this StatementSyntax value, SemanticModel semanticModel)
@@ -1970,7 +2008,7 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        internal static bool IsExpression(this SyntaxNode value, SemanticModel semanticModel)
+        internal static bool IsExpressionTree(this SyntaxNode value, SemanticModel semanticModel)
         {
             foreach (var a in value.AncestorsWithinMethods<ArgumentSyntax>())
             {
@@ -3542,6 +3580,29 @@ namespace MiKoSolutions.Analyzers
             }
 
             return value;
+        }
+
+        internal static T WithoutTrailingSpaces<T>(this T value) where T : SyntaxNode
+        {
+            var trivia = value.GetTrailingTrivia();
+            var triviaCount = trivia.Count;
+
+            if (triviaCount <= 0)
+            {
+                return value;
+            }
+
+            var i = triviaCount - 1;
+
+            for (; i > -1; i--)
+            {
+                if (trivia[i].IsKind(SyntaxKind.WhitespaceTrivia) is false)
+                {
+                    break;
+                }
+            }
+
+            return value.WithTrailingTrivia(i > 0 ? trivia.Take(i) : SyntaxTriviaList.Empty);
         }
 
         internal static SyntaxList<XmlNodeSyntax> WithoutTrailingXmlComment(this in SyntaxList<XmlNodeSyntax> value)

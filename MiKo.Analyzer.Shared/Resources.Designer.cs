@@ -13822,6 +13822,78 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Apply &apos;is&apos; pattern.
+        /// </summary>
+        internal static string MiKo_3227_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3227_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Equality checks using &apos;is&apos; pattern matching are more intuitive and easier to read than the &apos;==&apos; equality operator. This makes them the preferred choice for clarity and comprehension..
+        /// </summary>
+        internal static string MiKo_3227_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3227_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;is&apos; instead of &apos;==&apos;.
+        /// </summary>
+        internal static string MiKo_3227_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3227_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prefer pattern matching for equality checks.
+        /// </summary>
+        internal static string MiKo_3227_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3227_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apply &apos;is not&apos; pattern.
+        /// </summary>
+        internal static string MiKo_3228_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3228_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inequality checks using &apos;is not&apos; pattern matching are more intuitive and easier to read than the &apos;!=&apos; inequality operator. This makes them the preferred choice for clarity and comprehension..
+        /// </summary>
+        internal static string MiKo_3228_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3228_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;is not&apos; instead of &apos;!=&apos;.
+        /// </summary>
+        internal static string MiKo_3228_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3228_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prefer pattern matching for inequality checks.
+        /// </summary>
+        internal static string MiKo_3228_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3228_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         internal static string MiKo_3301_CodeFixTitle {

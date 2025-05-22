@@ -19,18 +19,57 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var binary = (BinaryExpressionSyntax)syntax;
 
-            var operand = GetOperand(binary);
-            var literal = GetLiteral(binary).WithoutTrailingTrivia(); // avoid unnecessary spaces at the end
+            var operand = binary.Left;
+            var expression = binary.Right;
 
-            return GetUpdatedPatternSyntax(operand, literal);
+            if (SwapSides(operand, expression))
+            {
+                var temp = operand;
+
+                operand = expression.WithTriviaFrom(operand);
+                expression = temp.WithTriviaFrom(expression)
+                                 .WithoutTrailingSpaces();
+            }
+
+            return GetUpdatedPatternSyntax(operand, expression);
         }
 
-        protected virtual IsPatternExpressionSyntax GetUpdatedPatternSyntax(ExpressionSyntax operand, LiteralExpressionSyntax literal) => IsPattern(operand, literal);
+        protected virtual IsPatternExpressionSyntax GetUpdatedPatternSyntax(ExpressionSyntax operand, ExpressionSyntax expression) => IsPattern(operand, expression);
 
-        private static ExpressionSyntax GetOperand(BinaryExpressionSyntax binary) => binary.Right is LiteralExpressionSyntax
-                                                                                     ? binary.Left
-                                                                                     : binary.Right;
+        private static bool SwapSides(ExpressionSyntax operand, ExpressionSyntax expression)
+        {
+            if (expression is LiteralExpressionSyntax)
+            {
+                return false; // we are already on the correct part
+            }
 
-        private static LiteralExpressionSyntax GetLiteral(BinaryExpressionSyntax binary) => binary.Right as LiteralExpressionSyntax ?? (LiteralExpressionSyntax)binary.Left;
+            if (operand is LiteralExpressionSyntax)
+            {
+                return true; // literal is on wrong side, so swap sides
+            }
+
+            if (expression is PrefixUnaryExpressionSyntax)
+            {
+                return false; // we are already on the correct part
+            }
+
+            if (operand is PrefixUnaryExpressionSyntax)
+            {
+                return true; // literal is on wrong side, so swap sides
+            }
+
+            // we probably have an enum
+            if (expression is MemberAccessExpressionSyntax)
+            {
+                return false; // we are already on the correct sides
+            }
+
+            if (operand is MemberAccessExpressionSyntax)
+            {
+                return true; // enum is on wrong side, so swap sides
+            }
+
+            return false;
+        }
     }
 }

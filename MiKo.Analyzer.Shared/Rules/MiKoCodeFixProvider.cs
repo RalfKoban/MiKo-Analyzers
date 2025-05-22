@@ -75,7 +75,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected static IsPatternExpressionSyntax IsPattern(ExpressionSyntax operand, PatternSyntax pattern) => SyntaxFactory.IsPatternExpression(operand, pattern);
 
-        protected static IsPatternExpressionSyntax IsPattern(ExpressionSyntax operand, LiteralExpressionSyntax literal) => IsPattern(operand, SyntaxFactory.ConstantPattern(literal));
+        protected static IsPatternExpressionSyntax IsPattern(ExpressionSyntax operand, ExpressionSyntax expression) => IsPattern(operand, SyntaxFactory.ConstantPattern(expression));
 
         protected static IsPatternExpressionSyntax IsFalsePattern(ExpressionSyntax operand) => IsPattern(operand, FalseLiteral());
 
