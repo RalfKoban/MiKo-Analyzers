@@ -180,12 +180,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
             for (var index = 0; index < issuesLength; index++)
             {
-                var issue = issues[index];
-
-                if (issue != null)
-                {
-                    context.ReportDiagnostic(issue);
-                }
+                ReportDiagnostics(context, issues[index]);
             }
         }
 
@@ -201,12 +196,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
             for (var index = 0; index < issuesCount; index++)
             {
-                var issue = issues[index];
-
-                if (issue != null)
-                {
-                    context.ReportDiagnostic(issue);
-                }
+                ReportDiagnostics(context, issues[index]);
             }
         }
 
@@ -435,12 +425,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
             for (var index = 0; index < arrayLength; index++)
             {
-                var issue = array[index];
-
-                if (issue != null)
-                {
-                    context.ReportDiagnostic(issue);
-                }
+                ReportDiagnostics(context, array[index]);
             }
         }
 
@@ -456,12 +441,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
             for (var index = 0; index < listCount; index++)
             {
-                var issue = list[index];
-
-                if (issue != null)
-                {
-                    context.ReportDiagnostic(issue);
-                }
+                ReportDiagnostics(context, list[index]);
             }
         }
 
@@ -475,10 +455,7 @@ namespace MiKoSolutions.Analyzers.Rules
                     return;
                 }
 
-                if (issue != null)
-                {
-                    context.ReportDiagnostic(issue);
-                }
+                ReportDiagnostics(context, issue);
             }
         }
 
@@ -492,10 +469,7 @@ namespace MiKoSolutions.Analyzers.Rules
                     return;
                 }
 
-                if (issue != null)
-                {
-                    context.ReportDiagnostic(issue);
-                }
+                ReportDiagnostics(context, issue);
             }
         }
 
