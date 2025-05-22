@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var summaryXmls = comment.GetSummaryXmls();
             var remarksXmls = comment.GetRemarksXmls();
 
-            if (summaryXmls.Count == 0 && remarksXmls.Count == 0)
+            if (summaryXmls.Count is 0 && remarksXmls.Count is 0)
             {
                 return Array.Empty<Diagnostic>();
             }

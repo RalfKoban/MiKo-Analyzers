@@ -112,7 +112,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected static Location CreateLocation(in char value, SyntaxTree syntaxTree, in int spanStart, in int position, in int startOffset = 0, in int endOffset = 0)
         {
-            if (position == -1)
+            if (position is -1)
             {
                 return null;
             }
@@ -125,7 +125,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected static Location CreateLocation(string value, SyntaxTree syntaxTree, in int spanStart, in int position, in int startOffset = 0, in int endOffset = 0)
         {
-            if (position == -1)
+            if (position is -1)
             {
                 return null;
             }
@@ -146,7 +146,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected static void ReportDiagnostics(in SyntaxNodeAnalysisContext context, IEnumerable<Diagnostic> issues)
         {
-            if (issues is IReadOnlyList<Diagnostic> emptyList && emptyList.Count == 0)
+            if (issues is IReadOnlyList<Diagnostic> emptyList && emptyList.Count is 0)
             {
                 return;
             }
@@ -504,7 +504,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         private Diagnostic CreateIssue(Location location, Pair[] properties, params object[] args)
         {
-            var immutableProperties = properties.Length == 0
+            var immutableProperties = properties.Length is 0
                                       ? ImmutableDictionary<string, string>.Empty
                                       : ImmutableDictionary.CreateRange(properties.Select(_ => new KeyValuePair<string, string>(_.Key, _.Value)));
 

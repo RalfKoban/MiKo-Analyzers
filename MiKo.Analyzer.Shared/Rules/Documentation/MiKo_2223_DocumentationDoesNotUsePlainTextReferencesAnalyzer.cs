@@ -131,7 +131,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     continue;
                 }
 
-                if (c == '.')
+                if (c is '.')
                 {
                     // we found a dot which symbols a method or property call
                     findings++;
@@ -152,17 +152,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static bool IsCompoundWord(in ReadOnlySpan<char> trimmed)
         {
-            if (trimmed.Length == 0)
+            if (trimmed.Length is 0)
             {
                 return false;
             }
 
             if (trimmed[0].IsNumber())
             {
-                return trimmed.Any(_ => _ == '.') && trimmed[1].IsLetter();
+                return trimmed.Any(_ => _ is '.') && trimmed[1].IsLetter();
             }
 
-            if (trimmed.Length == 3 && trimmed.Equals("e.g", StringComparison.OrdinalIgnoreCase))
+            if (trimmed.Length is 3 && trimmed.Equals("e.g", StringComparison.OrdinalIgnoreCase))
             {
                 return false;
             }
@@ -205,7 +205,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return false;
             }
 
-            if (trimmed.Any(_ => _ == '!'))
+            if (trimmed.Any(_ => _ is '!'))
             {
                 return false;
             }

@@ -131,12 +131,12 @@ namespace MiKoSolutions.Analyzers
         {
             switch (value)
             {
-                case XmlEmptyElementSyntax element when element.GetName() == Constants.XmlTag.See:
+                case XmlEmptyElementSyntax element when element.GetName() is Constants.XmlTag.See:
                 {
                     return IsCref(element.Attributes);
                 }
 
-                case XmlElementSyntax element when element.GetName() == Constants.XmlTag.See:
+                case XmlElementSyntax element when element.GetName() is Constants.XmlTag.See:
                 {
                     return IsCref(element.StartTag.Attributes);
                 }
@@ -154,12 +154,12 @@ namespace MiKoSolutions.Analyzers
         {
             switch (value)
             {
-                case XmlEmptyElementSyntax element when element.GetName() == Constants.XmlTag.See:
+                case XmlEmptyElementSyntax element when element.GetName() is Constants.XmlTag.See:
                 {
                     return IsCref(element.Attributes, type);
                 }
 
-                case XmlElementSyntax element when element.GetName() == Constants.XmlTag.See:
+                case XmlElementSyntax element when element.GetName() is Constants.XmlTag.See:
                 {
                     return IsCref(element.StartTag.Attributes, type);
                 }
@@ -177,12 +177,12 @@ namespace MiKoSolutions.Analyzers
         {
             switch (value)
             {
-                case XmlEmptyElementSyntax element when element.GetName() == Constants.XmlTag.See:
+                case XmlEmptyElementSyntax element when element.GetName() is Constants.XmlTag.See:
                 {
                     return IsCref(element.Attributes, type);
                 }
 
-                case XmlElementSyntax element when element.GetName() == Constants.XmlTag.See:
+                case XmlElementSyntax element when element.GetName() is Constants.XmlTag.See:
                 {
                     return IsCref(element.StartTag.Attributes, type);
                 }
@@ -213,12 +213,12 @@ namespace MiKoSolutions.Analyzers
         {
             switch (value)
             {
-                case XmlEmptyElementSyntax element when element.GetName() == Constants.XmlTag.See:
+                case XmlEmptyElementSyntax element when element.GetName() is Constants.XmlTag.See:
                 {
                     return IsCref(element.Attributes, type, member);
                 }
 
-                case XmlElementSyntax element when element.GetName() == Constants.XmlTag.See:
+                case XmlElementSyntax element when element.GetName() is Constants.XmlTag.See:
                 {
                     return IsCref(element.StartTag.Attributes, type, member);
                 }

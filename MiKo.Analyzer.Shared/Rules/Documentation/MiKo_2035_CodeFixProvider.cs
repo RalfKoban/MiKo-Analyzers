@@ -77,7 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var startingPhrase = Constants.Comments.CollectionReturnTypeStartingPhrase;
 
-            if (returnType.TypeArgumentList.Arguments.Count == 1)
+            if (returnType.TypeArgumentList.Arguments.Count is 1)
             {
                 var typeName = GetGenericTypeArgumentTypeName(returnType);
 

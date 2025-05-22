@@ -56,7 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                             continue;
                         }
 
-                        if (invocation.GetIdentifierName() == "Arg")
+                        if (invocation.GetIdentifierName() is "Arg")
                         {
                             // ignore NSubstitute arguments
                             continue;

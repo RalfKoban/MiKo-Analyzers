@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var argumentList = node.ArgumentList;
 
-            if (argumentList != null && argumentList.Arguments.Count == 0)
+            if (argumentList != null && argumentList.Arguments.Count is 0)
             {
                 return new[] { Issue(node.Type.ToString(), argumentList) };
             }

@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var summaries = syntax.GetXmlSyntax(Constants.XmlTag.Summary);
 
             // add remarks into summary
-            if (summaries.Count == 0)
+            if (summaries.Count is 0)
             {
                 var newSummary = SyntaxFactory.XmlSummaryElement(remarks.Content.ToArray());
 

@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var tagName = xml.GetName();
 
-                if (tagName == Constants.XmlTag.Code && xml.Attributes.Any(_ => _.GetName() == "source"))
+                if (tagName is Constants.XmlTag.Code && xml.Attributes.Any(_ => _.GetName() is "source"))
                 {
                     // ignore <code> tags with a 'source' attribute as that attribute refers to the coding snippet
                     continue;

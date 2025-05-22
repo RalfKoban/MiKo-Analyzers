@@ -56,7 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var arguments = invocation.ArgumentList.Arguments;
 
-                    if (arguments.Count == 1)
+                    if (arguments.Count is 1)
                     {
                         // seems like a normal Equals() method
                         return IsPropertyName(invocation);
@@ -86,14 +86,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var name = expression.GetIdentifierName();
 
-            return name == "PropertyName";
+            return name is "PropertyName";
         }
 
         private static bool IsPropertyName(MemberAccessExpressionSyntax expression)
         {
             var name = expression.GetName();
 
-            return name == "PropertyName";
+            return name is "PropertyName";
         }
 
         private static bool IsPropertyNameAccess(ExpressionSyntax expression) => expression is MemberAccessExpressionSyntax syntax && syntax.IsKind(SyntaxKind.SimpleMemberAccessExpression) && IsPropertyName(syntax);

@@ -75,7 +75,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return newComment;
                 }
             }
-            else if (content.Count == 5)
+            else if (content.Count is 5)
             {
                 if (content[0] is XmlTextSyntax start && content[1].IsSeeCref() && content[2] is XmlTextSyntax middle && content[3].IsSeeCref() && content[4] is XmlTextSyntax)
                 {

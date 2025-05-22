@@ -68,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             AddList(result, listItemText);
             AddXmlText(result, normalText);
 
-            if (result.Count == 0)
+            if (result.Count is 0)
             {
                 // nothing to replace, so use original code
                 result.Add(text);

@@ -454,7 +454,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 //// ncrunch: rdi default
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool IndicatesNewWord(in char c) => c.IsUpperCase() || c == Constants.Underscore;
+        private static bool IndicatesNewWord(in char c) => c.IsUpperCase() || c is Constants.Underscore;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool CompleteTermHasIssue(in ReadOnlySpan<char> key, in ReadOnlySpan<char> value) => key.SequenceEqual(value);

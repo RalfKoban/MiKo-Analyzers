@@ -256,9 +256,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static InvocationExpressionSyntax FixCollectionAssertDoesNotContain(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Does("Not", "Contain", args[1]), args);
 
-        private static InvocationExpressionSyntax FixContains(string typeName, in SeparatedSyntaxList<ArgumentSyntax> args) => typeName == "CollectionAssert" ? FixCollectionAssertContains(args) : FixStringAssertContains(args);
+        private static InvocationExpressionSyntax FixContains(string typeName, in SeparatedSyntaxList<ArgumentSyntax> args) => typeName is "CollectionAssert" ? FixCollectionAssertContains(args) : FixStringAssertContains(args);
 
-        private static InvocationExpressionSyntax FixDoesNotContain(in SeparatedSyntaxList<ArgumentSyntax> args, string typeName) => typeName == "CollectionAssert" ? FixCollectionAssertDoesNotContain(args) : FixStringAssertDoesNotContain(args);
+        private static InvocationExpressionSyntax FixDoesNotContain(in SeparatedSyntaxList<ArgumentSyntax> args, string typeName) => typeName is "CollectionAssert" ? FixCollectionAssertDoesNotContain(args) : FixStringAssertDoesNotContain(args);
 
         private static InvocationExpressionSyntax FixDoesNotEndWith(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("Not", "EndWith", args[0]), args);
 
@@ -513,7 +513,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var genericArguments = generic.TypeArgumentList.Arguments;
 
-                if (genericArguments.Count == 1)
+                if (genericArguments.Count is 1)
                 {
                     return AssertThat(args[0], GetExceptionArgument(genericArguments[0]), args, 1);
                 }

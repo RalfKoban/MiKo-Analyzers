@@ -167,7 +167,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static XmlEmptyElementSyntax GetUpdatedSyntaxWithInheritdoc(in SyntaxList<XmlNodeSyntax> content)
         {
-            var inheritdoc = content.OfType<XmlEmptyElementSyntax>().FirstOrDefault(_ => _.GetName() == Constants.XmlTag.Inheritdoc);
+            var inheritdoc = content.OfType<XmlEmptyElementSyntax>().FirstOrDefault(_ => _.GetName() is Constants.XmlTag.Inheritdoc);
 
             if (inheritdoc != null)
             {

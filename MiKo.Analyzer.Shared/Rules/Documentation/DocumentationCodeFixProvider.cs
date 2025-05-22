@@ -450,7 +450,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
             else
             {
-                if (index == 1 && content[0].IsWhiteSpaceOnlyText())
+                if (index is 1 && content[0].IsWhiteSpaceOnlyText())
                 {
                     // seems that the non-text element is the first element, so we should remove the empty text element before
                     content = content.RemoveAt(0);
@@ -715,7 +715,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlTextSyntax XmlText(in SyntaxTokenList textTokens)
         {
-            if (textTokens.Count == 0)
+            if (textTokens.Count is 0)
             {
                 return SyntaxFactory.XmlText();
             }
@@ -783,7 +783,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var contentCount = content.Count;
 
-            if (contentCount == 0)
+            if (contentCount is 0)
             {
                 return -1;
             }

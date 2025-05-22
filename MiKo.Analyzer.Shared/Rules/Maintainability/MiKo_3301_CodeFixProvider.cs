@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var parameterList = parenthesized.ParameterList;
             var parameters = parameterList.Parameters;
 
-            if (parameters.Count == 1)
+            if (parameters.Count is 1)
             {
                 return SyntaxFactory.SimpleLambdaExpression(parameters.First(), body).WithModifiers(parenthesized.Modifiers);
             }

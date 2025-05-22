@@ -94,7 +94,7 @@ namespace MiKoSolutions.Analyzers
             // Perf: quick check to avoid costly loop
             if (count >= 2)
             {
-                if (leadingTrivia[count == 4 ? 2 : 1].IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
+                if (leadingTrivia[count is 4 ? 2 : 1].IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
                 {
                     return true;
                 }
@@ -119,7 +119,7 @@ namespace MiKoSolutions.Analyzers
             // Perf: quick check to avoid costly loop
             if (count >= 2)
             {
-                var trivia = leadingTrivia[count == 4 ? 2 : 1];
+                var trivia = leadingTrivia[count is 4 ? 2 : 1];
 
                 if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
                 {
@@ -221,7 +221,7 @@ namespace MiKoSolutions.Analyzers
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            if (sourceCount == 0)
+            if (sourceCount is 0)
             {
                 return Array.Empty<SyntaxToken>();
             }

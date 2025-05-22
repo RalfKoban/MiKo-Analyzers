@@ -56,7 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 }
                 else if (name.EndsWith(Constants.Element, Comparison))
                 {
-                    var proposal = name == Constants.frameworkElement ? Constants.element : name.WithoutSuffix(Constants.Element);
+                    var proposal = name is Constants.frameworkElement ? Constants.element : name.WithoutSuffix(Constants.Element);
 
                     yield return Issue(name, location, proposal, CreateBetterNameProposal(proposal));
                 }

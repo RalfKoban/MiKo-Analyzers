@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.MethodKind == MethodKind.Ordinary && symbol.IsTestMethod() is false;
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.MethodKind is MethodKind.Ordinary && symbol.IsTestMethod() is false;
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {
@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             switch (parameters.Length)
             {
                 case 0:
-                case 1 when symbol.Name == nameof(IDisposable.Dispose) && parameters[0].Name == "disposing":
+                case 1 when symbol.Name == nameof(IDisposable.Dispose) && parameters[0].Name is "disposing":
                 case 2 when symbol.HasDependencyObjectParameter():
                     return Array.Empty<Diagnostic>();
             }

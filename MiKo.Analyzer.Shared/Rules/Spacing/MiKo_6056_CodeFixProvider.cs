@@ -63,7 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
         {
-            if (syntax is CollectionExpressionSyntax expression && expression.Parent is ArgumentSyntax argument && argument.Parent is ArgumentListSyntax argumentList && argumentList.Arguments.IndexOf(argument) == 0)
+            if (syntax is CollectionExpressionSyntax expression && expression.Parent is ArgumentSyntax argument && argument.Parent is ArgumentListSyntax argumentList && argumentList.Arguments.IndexOf(argument) is 0)
             {
                 var updatedArgumentList = argumentList.ReplaceNode(argument, argument.WithoutLeadingTrivia());
 

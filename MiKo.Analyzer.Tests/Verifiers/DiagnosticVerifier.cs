@@ -122,7 +122,7 @@ namespace TestHelper
             {
                 var results = GetDiagnostics(File.ReadAllText(file), languageVersion);
 
-                if (results.Length != 0)
+                if (results.Length is not 0)
                 {
                     yield return file;
                 }

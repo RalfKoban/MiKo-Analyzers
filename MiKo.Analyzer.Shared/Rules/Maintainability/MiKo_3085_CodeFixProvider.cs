@@ -386,7 +386,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var declarationType = declaration.Type;
 
-            if (declarationType is IdentifierNameSyntax identifier && identifier.Identifier.ValueText == "var")
+            if (declarationType is IdentifierNameSyntax identifier && identifier.Identifier.ValueText is "var")
             {
                 var updatedType = GetTypeSyntax(declarationType.GetTypeSymbol(document));
 

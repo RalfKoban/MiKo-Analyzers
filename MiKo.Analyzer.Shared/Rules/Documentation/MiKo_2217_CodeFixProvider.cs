@@ -79,7 +79,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     // problem on parent, so get ancestor list and replace all description with term nodes
                     var list = GetListElement(node);
-                    var itemsToReplace = list.DescendantNodes<XmlElementSyntax>(_ => _.GetName() == Constants.XmlTag.Description);
+                    var itemsToReplace = list.DescendantNodes<XmlElementSyntax>(_ => _.GetName() is Constants.XmlTag.Description);
 
                     return syntax.ReplaceNodes(itemsToReplace, (_, rewritten) => SyntaxFactory.XmlElement(Constants.XmlTag.Term, rewritten.Content));
                 }
@@ -90,11 +90,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     // it's either a <term> or a <description>, so first sub item should be a term, second a description
                     var nodes = node.ChildNodes<XmlElementSyntax>().ToList();
 
-                    if (nodes.Count == 2)
+                    if (nodes.Count is 2)
                     {
                         return syntax.ReplaceNodes(nodes, (original, rewritten) =>
                                                                                   {
-                                                                                      var newName = nodes.IndexOf(original) == 0
+                                                                                      var newName = nodes.IndexOf(original) is 0
                                                                                                     ? Constants.XmlTag.Term
                                                                                                     : Constants.XmlTag.Description;
 
@@ -113,6 +113,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static DocumentationCommentTriviaSyntax ReplaceNode(DocumentationCommentTriviaSyntax syntax, SyntaxNode node, XmlElementSyntax replacement) => syntax.ReplaceNode(node, replacement.WithoutWhitespaceOnlyComment());
 
-        private static XmlElementSyntax GetListElement(SyntaxNode node) => node.FirstAncestorOrSelf<XmlElementSyntax>(_ => _.GetName() == Constants.XmlTag.List);
+        private static XmlElementSyntax GetListElement(SyntaxNode node) => node.FirstAncestorOrSelf<XmlElementSyntax>(_ => _.GetName() is Constants.XmlTag.List);
     }
 }
