@@ -1886,27 +1886,49 @@ namespace MiKoSolutions.Analyzers
         {
             switch (value)
             {
-                case IdentifierNameSyntax i:
-                {
-                    var type = context.FindContainingType();
-                    var isConst = type.GetFields(i.GetName()).Any(_ => _.IsConst);
-
-                    return isConst;
-                }
-
-                case MemberAccessExpressionSyntax m when m.IsKind(SyntaxKind.SimpleMemberAccessExpression):
-                {
-                    var type = m.GetTypeSymbol(context.SemanticModel);
-
-                    // only get the real enum members, no local variables or something
-                    return type?.IsEnum() is true;
-                }
+                case IdentifierNameSyntax i: return i.IsConst(context);
+                case MemberAccessExpressionSyntax m: return m.IsConst(context.SemanticModel);
 
                 default:
+                    return false;
+            }
+        }
+
+        internal static bool IsConst(this IdentifierNameSyntax value, ITypeSymbol type)
+        {
+            var isConst = type.GetFields(value.GetName()).Any(_ => _.IsConst);
+
+            return isConst;
+        }
+
+        internal static bool IsConst(this IdentifierNameSyntax value, in SyntaxNodeAnalysisContext context) => value.IsConst(context.FindContainingType());
+
+        internal static bool IsConst(this MemberAccessExpressionSyntax value, SemanticModel semanticModel)
+        {
+            if (value.IsKind(SyntaxKind.SimpleMemberAccessExpression))
+            {
+                var type = value.GetTypeSymbol(semanticModel);
+
+                if (type is null)
                 {
+                    // we do not know, so we assume it's not
                     return false;
                 }
+
+                if (type.IsEnum())
+                {
+                    // only get the real enum members, no local variables or something
+                    return true;
+                }
+
+                if (value.Name is IdentifierNameSyntax identifierName)
+                {
+                    // find out whether the identifier is a const field
+                    return identifierName.IsConst(type);
+                }
             }
+
+            return false;
         }
 
         internal static bool IsEnum(this IsPatternExpressionSyntax value, SemanticModel semanticModel) => value.Expression.IsEnum(semanticModel);

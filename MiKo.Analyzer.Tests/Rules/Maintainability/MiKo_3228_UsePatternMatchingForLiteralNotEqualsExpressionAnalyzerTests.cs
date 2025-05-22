@@ -95,6 +95,7 @@ public class TestMe
         [TestCase("int", "42")]
         [TestCase("int", "-42")]
         [TestCase("char", "'X'")]
+        [TestCase("string", @"""some text""")]
         [TestCase("StringComparison", "StringComparison.Ordinal")]
         public void An_issue_is_reported_for_a_left_sided_comparison_of_(string type, string value) => An_issue_is_reported_for(@"
 using System;
@@ -116,6 +117,7 @@ public class TestMe
         [TestCase("int", "42")]
         [TestCase("int", "-42")]
         [TestCase("char", "'X'")]
+        [TestCase("string", @"""some text""")]
         [TestCase("StringComparison", "StringComparison.Ordinal")]
         public void An_issue_is_reported_for_a_right_sided_comparison_of_(string type, string value) => An_issue_is_reported_for(@"
 using System;
@@ -149,6 +151,11 @@ public class TestMe
         [TestCase("class TestMe { bool Do(char a) => a != 'X'; }", "class TestMe { bool Do(char a) => a is not 'X'; }")]
         [TestCase("class TestMe { bool Do(char a) => 'X' != a; }", "class TestMe { bool Do(char a) => a is not 'X'; }")]
 
+        [TestCase(@"class TestMe { bool Do(string a) { return (a != ""some text""); } }", @"class TestMe { bool Do(string a) { return (a is not ""some text""); } }")]
+        [TestCase(@"class TestMe { bool Do(string a) { return (""some text"" != a); } }", @"class TestMe { bool Do(string a) { return (a is not ""some text""); } }")]
+        [TestCase(@"class TestMe { bool Do(string a) => a != ""some text""; }", @"class TestMe { bool Do(string a) => a is not ""some text""; }")]
+        [TestCase(@"class TestMe { bool Do(string a) => ""some text"" != a; }", @"class TestMe { bool Do(string a) => a is not ""some text""; }")]
+
         [TestCase("using System; class TestMe { bool Do(StringComparison a) { return (a != StringComparison.Ordinal); } }", "using System; class TestMe { bool Do(StringComparison a) { return (a is not StringComparison.Ordinal); } }")]
         [TestCase("using System; class TestMe { bool Do(StringComparison a) { return (StringComparison.Ordinal != a); } }", "using System; class TestMe { bool Do(StringComparison a) { return (a is not StringComparison.Ordinal); } }")]
         [TestCase("using System; class TestMe { bool Do(StringComparison a) => a != StringComparison.Ordinal; }", "using System; class TestMe { bool Do(StringComparison a) => a is not StringComparison.Ordinal; }")]
@@ -177,6 +184,40 @@ public class TestMe
     public bool DoSomething(StringComparison comparison, object o1, object o2) => o1 == null
                                                                                && comparison is not StringComparison.Ordinal
                                                                                && o2 == null;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode, languageVersion: LanguageVersion.CSharp9);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_const_string()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class Constants
+{
+    public const string SomeValue = ""Some text"";
+}
+
+public class TestMe
+{
+    public bool DoSomething(string s) => s != Constants.SomeValue;
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class Constants
+{
+    public const string SomeValue = ""Some text"";
+}
+
+public class TestMe
+{
+    public bool DoSomething(string s) => s is not Constants.SomeValue;
 }
 ";
 

@@ -20,6 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 case SyntaxKind.CharacterLiteralExpression:
                 case SyntaxKind.NumericLiteralExpression:
+                case SyntaxKind.StringLiteralExpression:
                     return true;
 
                 default:
@@ -33,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 case LiteralExpressionSyntax literal: return IsResponsibleNode(literal.Kind());
                 case PrefixUnaryExpressionSyntax unary: return IsResponsibleNode(unary.Operand.Kind());
-                case MemberAccessExpressionSyntax maes: return maes.IsEnum(semanticModel);
+                case MemberAccessExpressionSyntax maes: return maes.IsConst(semanticModel);
                 default:
                     return false;
             }
