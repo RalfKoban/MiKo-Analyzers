@@ -1490,7 +1490,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Avoid suffixes like Type, Enum, Class, or Interface in type names. They add no real value and make names longer. Clear, meaningful names are better and easier to read..
+        ///   Looks up a localized string similar to Avoid using suffixes such as &apos;Type&apos;, &apos;Enum&apos;, &apos;Class&apos;, &apos;Struct&apos;, &apos;Record&apos;, or &apos;Interface&apos; in type names. These suffixes do not add value and only make names longer. Prefer concise, meaningful names that clearly indicate the type&apos;s purpose..
         /// </summary>
         internal static string MiKo_1037_Description {
             get {

@@ -599,7 +599,7 @@ This naming convention helps ensure clarity and consistency in method functional
     <value>Remove type suffix</value>
   </data>
   <data name="MiKo_1037_Description" xml:space="preserve">
-    <value>Avoid suffixes like Type, Enum, Class, or Interface in type names. They add no real value and make names longer. Clear, meaningful names are better and easier to read.</value>
+    <value>Avoid using suffixes such as 'Type', 'Enum', 'Class', 'Struct', 'Record', or 'Interface' in type names. These suffixes do not add value and only make names longer. Prefer concise, meaningful names that clearly indicate the type's purpose.</value>
   </data>
   <data name="MiKo_1037_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
