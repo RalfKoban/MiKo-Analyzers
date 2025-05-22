@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var returnType = symbol.ReturnType;
 
-            if (returnType.SpecialType == SpecialType.System_Void)
+            if (returnType.SpecialType is SpecialType.System_Void)
             {
                 return false;
             }

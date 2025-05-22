@@ -116,7 +116,7 @@ namespace System
         {
             var spanBeforeMoveNext = m_spanAfterMoveNext;
 
-            if (spanBeforeMoveNext.Length == 0)
+            if (spanBeforeMoveNext.Length is 0)
             {
                 // we reached the end of the string
                 return false;
@@ -124,7 +124,7 @@ namespace System
 
             var index = spanBeforeMoveNext.IndexOfAny(m_separatorChars);
 
-            if (index == -1)
+            if (index is -1)
             {
                 // The remaining string is an empty string
                 m_spanAfterMoveNext = ReadOnlySpan<char>.Empty;

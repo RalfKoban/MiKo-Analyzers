@@ -152,7 +152,7 @@ namespace MiKoSolutions.Analyzers
                 return Array.Empty<string>();
             }
 
-            if (cleanedComments.Count == 1)
+            if (cleanedComments.Count is 1)
             {
                 return new[] { TrimComment(cleanedComments[0]) };
             }

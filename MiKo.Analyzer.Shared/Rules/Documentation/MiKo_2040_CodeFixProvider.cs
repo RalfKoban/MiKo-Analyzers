@@ -85,7 +85,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            if (nodes.Count == 0)
+            if (nodes.Count is 0)
             {
                 return comment;
             }

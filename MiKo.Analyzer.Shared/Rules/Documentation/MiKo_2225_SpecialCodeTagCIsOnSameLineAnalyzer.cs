@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var node = (XmlElementSyntax)context.Node;
 
-            if (node.GetXmlTagName() == Constants.XmlTag.C)
+            if (node.GetXmlTagName() is Constants.XmlTag.C)
             {
                 var start = node.StartTag.GetStartingLine();
                 var end = node.EndTag.GetStartingLine();

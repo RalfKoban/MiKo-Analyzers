@@ -102,7 +102,7 @@ namespace System
                 return Array.Empty<int>();
             }
 
-            if (comparison == StringComparison.Ordinal)
+            if (comparison is StringComparison.Ordinal)
             {
                 // Perf: about 1/3 the times the strings are compared ordinal, so splitting this up increases the overall performance significantly
                 return AllIndicesOrdinal(value.AsSpan(), finding.AsSpan());
@@ -123,7 +123,7 @@ namespace System
                 return Array.Empty<int>();
             }
 
-            if (comparison == StringComparison.Ordinal)
+            if (comparison is StringComparison.Ordinal)
             {
                 // performance optimization for 'StringComparison.Ordinal' to avoid multiple strings from being created (see 'IndexOf' method inside 'MemoryExtensions')
                 return AllIndicesOrdinal(value, finding.AsSpan());
@@ -141,7 +141,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SyntaxToken AsToken(this string source, in SyntaxKind kind = SyntaxKind.StringLiteralToken)
         {
-            if (kind == SyntaxKind.IdentifierToken)
+            if (kind is SyntaxKind.IdentifierToken)
             {
                 return SyntaxFactory.Identifier(source);
             }
@@ -205,14 +205,14 @@ namespace System
         {
             var spanLength = span.Length;
 
-            if (spanLength == 0)
+            if (spanLength is 0)
             {
                 return value;
             }
 
             var valueLength = value?.Length ?? 0;
 
-            if (valueLength == 0)
+            if (valueLength is 0)
             {
                 return span.ToString();
             }
@@ -277,14 +277,14 @@ namespace System
         {
             var spanLength = value.Length;
 
-            if (spanLength == 0)
+            if (spanLength is 0)
             {
                 return arg0;
             }
 
             var arg0Length = arg0?.Length ?? 0;
 
-            if (arg0Length == 0)
+            if (arg0Length is 0)
             {
                 return value.ToString();
             }
@@ -376,7 +376,7 @@ namespace System
         {
             var valueLength = value.Length;
 
-            if (valueLength == 0)
+            if (valueLength is 0)
             {
                 return string.Concat(arg0, arg1);
             }
@@ -402,7 +402,7 @@ namespace System
         {
             var valueLength = value.Length;
 
-            if (valueLength == 0)
+            if (valueLength is 0)
             {
                 return string.Concat(arg0, arg1);
             }
@@ -429,7 +429,7 @@ namespace System
         {
             var valueLength = value.Length;
 
-            if (valueLength == 0)
+            if (valueLength is 0)
             {
                 return arg0.ConcatenatedWith(arg1);
             }
@@ -461,7 +461,7 @@ namespace System
 
             var valueLength = value.Length;
 
-            if (value.Length == 0)
+            if (value.Length is 0)
             {
                 return arg0.ConcatenatedWith(arg1);
             }
@@ -493,7 +493,7 @@ namespace System
 
             var valueLength = value.Length;
 
-            if (value.Length == 0)
+            if (value.Length is 0)
             {
                 return arg0.ConcatenatedWith(arg1);
             }
@@ -525,7 +525,7 @@ namespace System
 
             var valueLength = value.Length;
 
-            if (value.Length == 0)
+            if (value.Length is 0)
             {
                 return arg0.ConcatenatedWith(arg1);
             }
@@ -608,7 +608,7 @@ namespace System
 
             if (difference < 0)
             {
-                if (comparison == StringComparison.Ordinal)
+                if (comparison is StringComparison.Ordinal)
                 {
                     return value.AsSpan().IndexOf(finding.AsSpan()) >= 0;
                 }
@@ -616,7 +616,7 @@ namespace System
                 return value.IndexOf(finding, comparison) >= 0;
             }
 
-            if (difference == 0)
+            if (difference is 0)
             {
                 return QuickEquals(comparison);
 
@@ -717,7 +717,7 @@ namespace System
             {
                 var valueSpan = value.AsSpan();
                 var phrasesLength = phrases.Length;
-                var ordinalComparison = comparison == StringComparison.Ordinal;
+                var ordinalComparison = comparison is StringComparison.Ordinal;
 
                 for (var index = 0; index < phrasesLength; index++)
                 {
@@ -1279,7 +1279,7 @@ namespace System
             if (value.Length > 0)
             {
                 // performance optimization to avoid unnecessary 'ToString' calls on 'ReadOnlySpan' (see implementation inside MemoryExtensions)
-                if (comparison == StringComparison.Ordinal)
+                if (comparison is StringComparison.Ordinal)
                 {
                     var phrasesLength = phrases.Length;
 
@@ -1309,7 +1309,7 @@ namespace System
         {
             if (value.HasCharacters())
             {
-                if (comparison == StringComparison.Ordinal)
+                if (comparison is StringComparison.Ordinal)
                 {
                     return IndexOfAny(value.AsSpan(), phrases, comparison);
                 }
@@ -1890,7 +1890,7 @@ namespace System
 
         public static ReadOnlySpan<char> WithoutNumberSuffix(this in ReadOnlySpan<char> value)
         {
-            if (value.Length == 0)
+            if (value.Length is 0)
             {
                 return ReadOnlySpan<char>.Empty;
             }
@@ -2285,7 +2285,7 @@ namespace System
             {
                 var newIndex = span.Slice(index).IndexOf(other); // performs ordinal comparison
 
-                if (newIndex == -1)
+                if (newIndex is -1)
                 {
                     // nothing more to find
                     break;
@@ -2318,7 +2318,7 @@ namespace System
             {
                 index = value.IndexOf(finding, index, comparison);
 
-                if (index == -1)
+                if (index is -1)
                 {
                     // nothing more to find
                     break;

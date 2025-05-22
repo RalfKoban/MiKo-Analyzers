@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var summaries = comment.GetXmlSyntax(Constants.XmlTag.Summary);
 
-            if (summaries.Count == 0)
+            if (summaries.Count is 0)
             {
                 var newSummary = Comment(SyntaxFactory.XmlSummaryElement(), Phrase).WithTrailingXmlComment();
 

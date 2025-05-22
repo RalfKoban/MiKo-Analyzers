@@ -70,7 +70,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var parameters = exceptionComment.GetParameterNames();
 
-            if (parameters.Length == 0)
+            if (parameters.Length is 0)
             {
                 return exceptionComment;
             }

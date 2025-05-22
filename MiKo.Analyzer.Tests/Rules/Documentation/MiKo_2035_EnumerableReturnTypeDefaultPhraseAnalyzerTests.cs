@@ -59,7 +59,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         [TearDown]
         public void TearDown()
         {
-            if (s_testNumber % 5000 == 0)
+            if (s_testNumber % 5000 is 0)
             {
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
             }

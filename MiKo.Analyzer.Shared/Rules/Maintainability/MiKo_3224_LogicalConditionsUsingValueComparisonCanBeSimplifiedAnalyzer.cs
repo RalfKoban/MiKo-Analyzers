@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool IsApplicable(IReadOnlyList<ArgumentSyntax> arguments) => arguments.Count == 1;
+        protected override bool IsApplicable(IReadOnlyList<ArgumentSyntax> arguments) => arguments.Count is 1;
 
         protected override bool IsApplicable(ITypeSymbol typeSymbol) => typeSymbol.IsValueType;
     }

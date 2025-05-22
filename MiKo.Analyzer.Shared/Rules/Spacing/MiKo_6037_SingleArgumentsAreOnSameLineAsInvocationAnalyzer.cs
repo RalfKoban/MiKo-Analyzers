@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             var arguments = invocation.ArgumentList.Arguments;
 
-            if (arguments.Count == 1)
+            if (arguments.Count is 1)
             {
                 AnalyzeArgument(context, arguments[0], invocation);
             }

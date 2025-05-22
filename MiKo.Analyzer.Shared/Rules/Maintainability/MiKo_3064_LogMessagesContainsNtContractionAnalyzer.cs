@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var arguments = node.ArgumentList.Arguments;
 
-            if (arguments.Count == 0)
+            if (arguments.Count is 0)
             {
                 return Array.Empty<Diagnostic>();
             }
@@ -115,7 +115,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var type = methodCall.GetTypeSymbol(semanticModel);
 
             // it may happen that in some broken code Roslyn is unable to detect a type (e.g. due to missing code paths), hence 'type' could be null here
-            if (type?.Name == Constants.ILog.TypeName)
+            if (type?.Name is Constants.ILog.TypeName)
             {
                 var syntaxTree = argument.SyntaxTree;
                 var phrases = Constants.Comments.NotContractionPhrase;

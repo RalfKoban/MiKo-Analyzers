@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 case IMethodSymbol method:
                     return method.ContainingType.IsFactory()
-                        && method.MethodKind == MethodKind.Ordinary
+                        && method.MethodKind is MethodKind.Ordinary
                         && method.IsPubliclyVisible()
                         && method.ReturnsVoid is false
                         && method.ReturnType.SpecialType != SpecialType.System_Boolean;

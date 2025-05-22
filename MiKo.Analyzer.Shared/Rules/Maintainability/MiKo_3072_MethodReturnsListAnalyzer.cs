@@ -18,12 +18,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol)
                                                                    && symbol.ReturnsVoid is false
                                                                    && symbol.DeclaredAccessibility != Accessibility.Private
-                                                                   && symbol.ReturnType.TypeKind == TypeKind.Class
+                                                                   && symbol.ReturnType.TypeKind is TypeKind.Class
                                                                    && symbol.IsInterfaceImplementation() is false;
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {
-            if (symbol.ReturnType.ContainingNamespace.FullyQualifiedName() == "System.Collections.Generic")
+            if (symbol.ReturnType.ContainingNamespace.FullyQualifiedName() is "System.Collections.Generic")
             {
                 var name = symbol.ReturnType.Name;
 

@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IFieldSymbol symbol)
         {
-            if (symbol.Type.TypeKind == TypeKind.Struct && symbol.Name.EndsWith(Constants.Names.Counter, StringComparison.OrdinalIgnoreCase))
+            if (symbol.Type.TypeKind is TypeKind.Struct && symbol.Name.EndsWith(Constants.Names.Counter, StringComparison.OrdinalIgnoreCase))
             {
                 if (symbol.ContainingType.IsTestClass())
                 {

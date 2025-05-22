@@ -18,7 +18,7 @@ namespace System.Text
 
         public static StringBuilder AdjustFirstWord(this StringBuilder value, in FirstWordHandling handling)
         {
-            if (value.IsNullOrEmpty() || value[0] == '<')
+            if (value.IsNullOrEmpty() || value[0] is '<')
             {
                 return value;
             }
@@ -125,7 +125,7 @@ namespace System.Text
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsNullOrEmpty(this StringBuilder value) => value is null || value.Length == 0;
+        public static bool IsNullOrEmpty(this StringBuilder value) => value is null || value.Length is 0;
 
         public static bool IsNullOrWhiteSpace(this StringBuilder value) => value is null || value.CountLeadingWhitespaces() == value.Length;
 
@@ -221,7 +221,7 @@ namespace System.Text
                     if (multipleUpperCases)
                     {
                         // let's see if we start with an IXyz interface
-                        if (previousC == 'I')
+                        if (previousC is 'I')
                         {
                             // seems we are in an IXyz interface
                             multipleUpperCases = false;
@@ -241,7 +241,7 @@ namespace System.Text
                     }
 
                     // let's consider an upper-case 'A' as a special situation as that is a single word
-                    var isSpecialCharA = c == 'A';
+                    var isSpecialCharA = c is 'A';
 
                     multipleUpperCases = isSpecialCharA is false;
 
@@ -293,7 +293,7 @@ namespace System.Text
         {
             var length = value.Length;
 
-            if (length == 0)
+            if (length is 0)
             {
                 return value;
             }
@@ -318,7 +318,7 @@ namespace System.Text
         {
             var length = value.Length;
 
-            if (length == 0)
+            if (length is 0)
             {
                 return string.Empty;
             }
@@ -333,7 +333,7 @@ namespace System.Text
         {
             var length = value.Length;
 
-            if (length == 0)
+            if (length is 0)
             {
                 return value;
             }
@@ -347,7 +347,7 @@ namespace System.Text
         {
             var length = value.Length;
 
-            if (length == 0)
+            if (length is 0)
             {
                 return string.Empty;
             }
@@ -376,7 +376,7 @@ namespace System.Text
         {
             var length = value.Length;
 
-            if (length == 0)
+            if (length is 0)
             {
                 return string.Empty;
             }
@@ -405,7 +405,7 @@ namespace System.Text
 
         public static StringBuilder TrimEndBy(this StringBuilder value, in int count)
         {
-            if (count == 0)
+            if (count is 0)
             {
                 return value;
             }
@@ -429,14 +429,14 @@ namespace System.Text
         {
             var length = value.Length;
 
-            if (length == 0)
+            if (length is 0)
             {
                 return value;
             }
 
             var end = value.CountTrailingWhitespaces();
 
-            if (end == 0)
+            if (end is 0)
             {
                 return value;
             }
@@ -699,7 +699,7 @@ namespace System.Text
 
         private static void TrimLeadingSpacesTo(this StringBuilder value, in int count)
         {
-            if (value[0] == ' ')
+            if (value[0] is ' ')
             {
                 var whitespaces = value.CountLeadingWhitespaces();
 

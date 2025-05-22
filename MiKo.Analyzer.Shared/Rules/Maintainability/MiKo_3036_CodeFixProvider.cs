@@ -146,7 +146,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static bool IsZero(ArgumentSyntax argument) => argument.Expression is LiteralExpressionSyntax literal && literal.IsKind(SyntaxKind.NumericLiteralExpression) && double.TryParse(literal.Token.Text, out var number) && number == 0d;
+        private static bool IsZero(ArgumentSyntax argument) => argument.Expression is LiteralExpressionSyntax literal && literal.IsKind(SyntaxKind.NumericLiteralExpression) && double.TryParse(literal.Token.Text, out var number) && number is 0d;
 
         private static InvocationExpressionSyntax FromDays(ArgumentSyntax argument) => Invocation(nameof(TimeSpan), nameof(TimeSpan.FromDays), argument);
 
