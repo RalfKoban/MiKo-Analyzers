@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comments = GetExceptionComments(comment);
 
-            if (comments is XmlElementSyntax[] array && array.Length == 0)
+            if (comments is XmlElementSyntax[] array && array.Length is 0)
             {
                 return Array.Empty<Diagnostic>();
             }
@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var exceptionXmls = documentation.GetExceptionXmls();
 
-            if (exceptionXmls.Count == 0)
+            if (exceptionXmls.Count is 0)
             {
                 return Array.Empty<XmlElementSyntax>();
             }

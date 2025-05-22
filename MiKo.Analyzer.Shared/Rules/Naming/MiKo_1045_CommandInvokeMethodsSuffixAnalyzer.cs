@@ -107,7 +107,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var arguments = argumentList.Arguments;
 
-            if (arguments.Count == 0)
+            if (arguments.Count is 0)
             {
                 yield break;
             }

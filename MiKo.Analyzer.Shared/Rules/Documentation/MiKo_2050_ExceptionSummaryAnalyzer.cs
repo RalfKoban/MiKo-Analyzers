@@ -70,20 +70,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private static bool IsParameterlessCtor(IMethodSymbol symbol) => symbol.Parameters.Length == 0;
+        private static bool IsParameterlessCtor(IMethodSymbol symbol) => symbol.Parameters.Length is 0;
 
         private static bool IsMessageCtor(IMethodSymbol symbol)
         {
             var parameters = symbol.Parameters;
 
-            return parameters.Length == 1 && IsMessageParameter(parameters[0]);
+            return parameters.Length is 1 && IsMessageParameter(parameters[0]);
         }
 
         private static bool IsMessageExceptionCtor(IMethodSymbol symbol)
         {
             var parameters = symbol.Parameters;
 
-            return parameters.Length == 2 && IsMessageParameter(parameters[0]) && IsExceptionParameter(parameters[1]);
+            return parameters.Length is 2 && IsMessageParameter(parameters[0]) && IsExceptionParameter(parameters[1]);
         }
 
         private static bool IsMessageParameter(IParameterSymbol parameter) => parameter.Type.IsString();
@@ -160,7 +160,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var summaries = symbol.GetOverloadSummaries();
 
-            if (summaries.Count == 0)
+            if (summaries.Count is 0)
             {
                 return Array.Empty<Diagnostic>();
             }
@@ -172,7 +172,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comments = symbol.GetRemarks();
 
-            if (comments.Count == 0)
+            if (comments.Count is 0)
             {
                 return Array.Empty<Diagnostic>();
             }
@@ -187,7 +187,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 // find XML
                 var problematicComments = comment.GetXmlSyntax(xmlTag);
 
-                var issue = problematicComments.Count == 0
+                var issue = problematicComments.Count is 0
                             ? Issue(symbol, xmlTag, phrases[0])
                             : Issue(symbol.Name, problematicComments[0], xmlTag, phrases[0]);
 
@@ -204,7 +204,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var phrases = GetParameterPhrases(symbol);
 
-            return phrases.Length == 0
+            return phrases.Length is 0
                    ? Array.Empty<Diagnostic>()
                    : AnalyzeParameter(symbol, commentXml, comment, phrases);
         }

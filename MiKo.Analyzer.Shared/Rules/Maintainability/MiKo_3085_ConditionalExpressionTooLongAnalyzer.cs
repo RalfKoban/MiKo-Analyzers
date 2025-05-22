@@ -50,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var arguments = argumentList.Arguments;
 
-            if (arguments.Count == 0)
+            if (arguments.Count is 0)
             {
                 // ignore as it cannot be shorted anymore
                 return true;

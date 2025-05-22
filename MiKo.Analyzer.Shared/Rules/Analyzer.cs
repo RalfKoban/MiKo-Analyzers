@@ -113,7 +113,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected static Location CreateLocation(in char value, SyntaxTree syntaxTree, in int spanStart, in int position, in int startOffset = 0, in int endOffset = 0)
         {
-            if (position == -1)
+            if (position is -1)
             {
                 return null;
             }
@@ -126,7 +126,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected static Location CreateLocation(string value, SyntaxTree syntaxTree, in int spanStart, in int position, in int startOffset = 0, in int endOffset = 0)
         {
-            if (position == -1)
+            if (position is -1)
             {
                 return null;
             }
@@ -175,26 +175,16 @@ namespace MiKoSolutions.Analyzers.Rules
             switch (issuesLength)
             {
                 case 0: return;
-                case 1:
+                case 1: ReportDiagnostics(context, issues[0]); return;
+            }
+
+            for (var index = 0; index < issuesLength; index++)
+            {
+                var issue = issues[index];
+
+                if (issue != null)
                 {
-                    ReportDiagnostics(context, issues[0]);
-
-                    return;
-                }
-
-                default:
-                {
-                    for (var index = 0; index < issuesLength; index++)
-                    {
-                        var issue = issues[index];
-
-                        if (issue != null)
-                        {
-                            context.ReportDiagnostic(issue);
-                        }
-                    }
-
-                    return;
+                    context.ReportDiagnostic(issue);
                 }
             }
         }
@@ -206,26 +196,16 @@ namespace MiKoSolutions.Analyzers.Rules
             switch (issuesCount)
             {
                 case 0: return;
-                case 1:
+                case 1: ReportDiagnostics(context, issues[0]); return;
+            }
+
+            for (var index = 0; index < issuesCount; index++)
+            {
+                var issue = issues[index];
+
+                if (issue != null)
                 {
-                    ReportDiagnostics(context, issues[0]);
-
-                    return;
-                }
-
-                default:
-                {
-                    for (var index = 0; index < issuesCount; index++)
-                    {
-                        var issue = issues[index];
-
-                        if (issue != null)
-                        {
-                            context.ReportDiagnostic(issue);
-                        }
-                    }
-
-                    return;
+                    context.ReportDiagnostic(issue);
                 }
             }
         }
@@ -434,20 +414,32 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static void ReportDiagnostics(in SymbolAnalysisContext context, Diagnostic issue)
+        {
+            if (issue != null)
+            {
+                context.ReportDiagnostic(issue);
+            }
+        }
+
         private static void ReportDiagnostics(in SymbolAnalysisContext context, Diagnostic[] array)
         {
             var arrayLength = array.Length;
 
-            if (arrayLength > 0)
+            switch (arrayLength)
             {
-                for (var index = 0; index < arrayLength; index++)
-                {
-                    var issue = array[index];
+                case 0: return;
+                case 1: ReportDiagnostics(context, array[0]); return;
+            }
 
-                    if (issue != null)
-                    {
-                        context.ReportDiagnostic(issue);
-                    }
+            for (var index = 0; index < arrayLength; index++)
+            {
+                var issue = array[index];
+
+                if (issue != null)
+                {
+                    context.ReportDiagnostic(issue);
                 }
             }
         }
@@ -456,16 +448,19 @@ namespace MiKoSolutions.Analyzers.Rules
         {
             var listCount = list.Count;
 
-            if (listCount > 0)
+            switch (listCount)
             {
-                for (var index = 0; index < listCount; index++)
-                {
-                    var issue = list[index];
+                case 0: return;
+                case 1: ReportDiagnostics(context, list[0]); return;
+            }
 
-                    if (issue != null)
-                    {
-                        context.ReportDiagnostic(issue);
-                    }
+            for (var index = 0; index < listCount; index++)
+            {
+                var issue = list[index];
+
+                if (issue != null)
+                {
+                    context.ReportDiagnostic(issue);
                 }
             }
         }
@@ -527,7 +522,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         private Diagnostic CreateIssue(Location location, Pair[] properties, params object[] args)
         {
-            var immutableProperties = properties.Length == 0
+            var immutableProperties = properties.Length is 0
                                       ? ImmutableDictionary<string, string>.Empty
                                       : ImmutableDictionary.CreateRange(properties.Select(_ => new KeyValuePair<string, string>(_.Key, _.Value)));
 

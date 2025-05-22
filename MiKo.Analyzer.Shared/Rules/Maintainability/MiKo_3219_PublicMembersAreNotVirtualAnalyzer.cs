@@ -51,7 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var member = members[index];
 
-                if (member.IsVirtual && member.DeclaredAccessibility == Accessibility.Public)
+                if (member.IsVirtual && member.DeclaredAccessibility is Accessibility.Public)
                 {
                     if (member is IMethodSymbol method && method.MethodKind != MethodKind.Ordinary)
                     {

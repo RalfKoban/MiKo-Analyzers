@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyze(ISymbol symbol) => symbol.Kind == SymbolKind.Property;
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol.Kind is SymbolKind.Property;
 
         protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(
                                                                   DocumentationCommentTriviaSyntax comment,

@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyze(ISymbol symbol) => symbol.Kind == SymbolKind.Event;
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol.Kind is SymbolKind.Event;
 
         protected override Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location, StartingPhrase);
 

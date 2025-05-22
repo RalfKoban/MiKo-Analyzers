@@ -8,7 +8,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         internal static string GetArticleFor(in ReadOnlySpan<char> text, in FirstWordHandling firstWordHandling = FirstWordHandling.None)
         {
-            if (text.Length == 0)
+            if (text.Length is 0)
             {
                 return string.Empty;
             }
@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
             {
                 if (text.StartsWith("uni", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (text.Length > 3 && text[3].ToUpperCase() == 'N')
+                    if (text.Length > 3 && text[3].ToUpperCase() is 'N')
                     {
                         // something like 'uninformed', so is a vowel sound
                         return An(firstWordHandling);

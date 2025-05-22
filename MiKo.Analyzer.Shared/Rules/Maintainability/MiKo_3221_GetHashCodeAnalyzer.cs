@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     expressionsCount++;
                 }
 
-                if (expressionsCount == 0)
+                if (expressionsCount is 0)
                 {
                     // we do not have any members to combine
                     yield break;

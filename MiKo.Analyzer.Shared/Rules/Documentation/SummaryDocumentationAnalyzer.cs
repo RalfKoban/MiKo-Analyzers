@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var summaryXmls = comment.GetSummaryXmls();
 
-            if (summaryXmls.Count == 0)
+            if (summaryXmls.Count is 0)
             {
                 return Array.Empty<Diagnostic>();
             }

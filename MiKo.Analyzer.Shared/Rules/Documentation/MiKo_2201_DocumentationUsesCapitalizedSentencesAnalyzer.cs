@@ -80,7 +80,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         var comment = e.Value.AsSpan().TrimStart();
 
                         // sentence starts lower case
-                        if (name == Constants.XmlTag.Para && comment.Length > 0 && comment[0].IsLowerCaseLetter())
+                        if (name is Constants.XmlTag.Para && comment.Length > 0 && comment[0].IsLowerCaseLetter())
                         {
                             return true;
                         }
@@ -142,7 +142,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var next = i + Gap;
 
-                if (next < last && comment[i + 1] == '.')
+                if (next < last && comment[i + 1] is '.')
                 {
                     i = next;
                     c = comment[i];

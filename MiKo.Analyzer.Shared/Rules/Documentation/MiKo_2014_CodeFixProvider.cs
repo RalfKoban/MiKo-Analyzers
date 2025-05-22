@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var parameters = method.ParameterList.Parameters;
 
-            if (parameters.Count == 0)
+            if (parameters.Count is 0)
             {
                 return SyntaxFactory.DocumentationComment(summary.WithEndOfLine());
             }

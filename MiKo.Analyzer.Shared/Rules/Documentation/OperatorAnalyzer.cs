@@ -47,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var issueCount = violationsInSummaries.Length + violationsInReturns.Length + violationsInParameters.Length;
 
-            if (issueCount == 0)
+            if (issueCount is 0)
             {
                 return Array.Empty<Diagnostic>();
             }
@@ -64,7 +64,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var summaryXmls = comment.GetSummaryXmls();
 
-            if (summaryXmls.Count == 0)
+            if (summaryXmls.Count is 0)
             {
                 return Array.Empty<Diagnostic>();
             }
