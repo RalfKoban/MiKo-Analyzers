@@ -45,13 +45,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             // loop over phrases for summaries and values
             var summaries = CommentExtensions.GetSummaries(commentXml);
+            var summariesLength = summaries.Length;
 
-            if (summaries.Count != 0)
+            if (summariesLength > 0)
             {
                 var summaryPhrases = Phrases(Constants.Comments.DependencyPropertyFieldSummaryPhrase, containingTypeFullName, propertyName);
 
-                foreach (var summary in summaries)
+                for (var index = 0; index < summariesLength; index++)
                 {
+                    var summary = summaries[index];
+
                     if (summaryPhrases.None(_ => summary.StartsWith(_, StringComparison.Ordinal)))
                     {
                         if (issues is null)
@@ -65,13 +68,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             var values = CommentExtensions.GetValue(commentXml);
+            var valuesLength = values.Length;
 
-            if (values.Count != 0)
+            if (valuesLength > 0)
             {
                 var valuePhrases = Phrases(Constants.Comments.DependencyPropertyFieldValuePhrase, containingTypeFullName, propertyName);
 
-                foreach (var value in values)
+                for (var index = 0; index < valuesLength; index++)
                 {
+                    var value = values[index];
+
                     if (valuePhrases.None(_ => value.StartsWith(_, StringComparison.Ordinal)))
                     {
                         if (issues is null)

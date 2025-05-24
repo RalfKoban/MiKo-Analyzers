@@ -3496,11 +3496,11 @@ namespace MiKoSolutions.Analyzers
 
         internal static XmlTextSyntax WithoutTrailing(this XmlTextSyntax value, in ReadOnlySpan<string> texts)
         {
-            var textTokens = value.TextTokens.ToList();
+            var textTokens = value.TextTokens.ToArray();
 
             var replaced = false;
 
-            for (var i = textTokens.Count - 1; i >= 0; i--)
+            for (var i = textTokens.Length - 1; i >= 0; i--)
             {
                 var token = textTokens[i];
 
@@ -4304,7 +4304,7 @@ namespace MiKoSolutions.Analyzers
 
         private static XmlTextSyntax XmlText(in SyntaxTokenList textTokens) => SyntaxFactory.XmlText(textTokens);
 
-        private static XmlTextSyntax XmlText(List<SyntaxToken> textTokens) => XmlText(textTokens.ToTokenList());
+        private static XmlTextSyntax XmlText(IEnumerable<SyntaxToken> textTokens) => XmlText(textTokens.ToTokenList());
 
         private static SyntaxTrivia WhiteSpaces(in int count) => SyntaxFactory.Whitespace(new string(' ', count));
     }

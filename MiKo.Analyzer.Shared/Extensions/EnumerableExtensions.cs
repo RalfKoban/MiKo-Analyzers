@@ -660,6 +660,26 @@ namespace System.Linq
 
         internal static bool None<T>(this IEnumerable<T> source, Func<T, bool> predicate) => source.All(_ => predicate(_) is false);
 
+        internal static bool None<T>(this T[] source, Func<T, bool> predicate)
+        {
+            var length = source.Length;
+
+            if (length is 0)
+            {
+                return true;
+            }
+
+            for (var index = 0; index < length; index++)
+            {
+                if (predicate(source[index]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         internal static bool None<T>(this in ReadOnlySpan<T> source, Func<T, bool> predicate)
         {
             var sourceLength = source.Length;
