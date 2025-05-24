@@ -7,8 +7,8 @@ namespace MiKoSolutions.Analyzers
 {
     internal static class StringBuilderCache
     {
-        public const int DefaultCapacity = 16;
-        private const int MaxBuilderSize = 1000;
+        public const int DefaultCapacity = 32;
+        private const int MaxBuilderSize = 1024;
 
         [ThreadStatic]
         private static StringBuilder s_cachedInstance;
