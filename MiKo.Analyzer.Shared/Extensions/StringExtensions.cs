@@ -1646,26 +1646,10 @@ namespace System
         /// </returns>
         public static string ToLowerCaseAt(this string source, in int index)
         {
-            if (source is null)
-            {
-                return null;
-            }
-
-            if (index >= source.Length)
+            if (source is null || index >= source.Length || source[index].IsLowerCase())
             {
                 return source;
             }
-
-            var character = source[index];
-
-#pragma warning disable CA1308
-
-            if (character.IsLowerCase())
-            {
-                return source;
-            }
-
-#pragma warning restore CA1308
 
             return source.AsSpan().MakeLowerCaseAt(index);
         }
@@ -1725,19 +1709,7 @@ namespace System
         /// </returns>
         public static string ToUpperCaseAt(this string source, in int index)
         {
-            if (source is null)
-            {
-                return null;
-            }
-
-            if (index >= source.Length)
-            {
-                return source;
-            }
-
-            var character = source[index];
-
-            if (character.IsUpperCase())
+            if (source is null || index >= source.Length || source[index].IsUpperCase())
             {
                 return source;
             }
