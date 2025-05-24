@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -136,6 +137,7 @@ namespace MiKoSolutions.Analyzers.Rules
             return CreateLocation(syntaxTree, start, end);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static void ReportDiagnostics(in SyntaxNodeAnalysisContext context, Diagnostic issue)
         {
             if (issue != null)
@@ -146,11 +148,6 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected static void ReportDiagnostics(in SyntaxNodeAnalysisContext context, IEnumerable<Diagnostic> issues)
         {
-            if (issues is IReadOnlyList<Diagnostic> emptyList && emptyList.Count is 0)
-            {
-                return;
-            }
-
             if (context.CancellationToken.IsCancellationRequested)
             {
                 // seems that we should cancel and not report further issues
@@ -168,6 +165,38 @@ namespace MiKoSolutions.Analyzers.Rules
             else
             {
                 ReportDiagnosticsEnumerable(context, issues);
+            }
+        }
+
+        protected static void ReportDiagnostics(in SyntaxNodeAnalysisContext context, Diagnostic[] issues)
+        {
+            var issuesLength = issues.Length;
+
+            switch (issuesLength)
+            {
+                case 0: return;
+                case 1: ReportDiagnostics(context, issues[0]); return;
+            }
+
+            for (var index = 0; index < issuesLength; index++)
+            {
+                ReportDiagnostics(context, issues[index]);
+            }
+        }
+
+        protected static void ReportDiagnostics(in SyntaxNodeAnalysisContext context, IReadOnlyList<Diagnostic> issues)
+        {
+            var issuesCount = issues.Count;
+
+            switch (issuesCount)
+            {
+                case 0: return;
+                case 1: ReportDiagnostics(context, issues[0]); return;
+            }
+
+            for (var index = 0; index < issuesCount; index++)
+            {
+                ReportDiagnostics(context, issues[index]);
             }
         }
 
@@ -375,21 +404,28 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static void ReportDiagnostics(in SymbolAnalysisContext context, Diagnostic issue)
+        {
+            if (issue != null)
+            {
+                context.ReportDiagnostic(issue);
+            }
+        }
+
         private static void ReportDiagnostics(in SymbolAnalysisContext context, Diagnostic[] array)
         {
             var arrayLength = array.Length;
 
-            if (arrayLength > 0)
+            switch (arrayLength)
             {
-                for (var index = 0; index < arrayLength; index++)
-                {
-                    var issue = array[index];
+                case 0: return;
+                case 1: ReportDiagnostics(context, array[0]); return;
+            }
 
-                    if (issue != null)
-                    {
-                        context.ReportDiagnostic(issue);
-                    }
-                }
+            for (var index = 0; index < arrayLength; index++)
+            {
+                ReportDiagnostics(context, array[index]);
             }
         }
 
@@ -397,53 +433,15 @@ namespace MiKoSolutions.Analyzers.Rules
         {
             var listCount = list.Count;
 
-            if (listCount > 0)
+            switch (listCount)
             {
-                for (var index = 0; index < listCount; index++)
-                {
-                    var issue = list[index];
-
-                    if (issue != null)
-                    {
-                        context.ReportDiagnostic(issue);
-                    }
-                }
+                case 0: return;
+                case 1: ReportDiagnostics(context, list[0]); return;
             }
-        }
 
-        private static void ReportDiagnostics(in SyntaxNodeAnalysisContext context, Diagnostic[] issues)
-        {
-            var issuesLength = issues.Length;
-
-            if (issuesLength > 0)
+            for (var index = 0; index < listCount; index++)
             {
-                for (var index = 0; index < issuesLength; index++)
-                {
-                    var issue = issues[index];
-
-                    if (issue != null)
-                    {
-                        context.ReportDiagnostic(issue);
-                    }
-                }
-            }
-        }
-
-        private static void ReportDiagnostics(in SyntaxNodeAnalysisContext context, IReadOnlyList<Diagnostic> issues)
-        {
-            var issuesCount = issues.Count;
-
-            if (issuesCount > 0)
-            {
-                for (var index = 0; index < issuesCount; index++)
-                {
-                    var issue = issues[index];
-
-                    if (issue != null)
-                    {
-                        context.ReportDiagnostic(issue);
-                    }
-                }
+                ReportDiagnostics(context, list[index]);
             }
         }
 
@@ -457,10 +455,7 @@ namespace MiKoSolutions.Analyzers.Rules
                     return;
                 }
 
-                if (issue != null)
-                {
-                    context.ReportDiagnostic(issue);
-                }
+                ReportDiagnostics(context, issue);
             }
         }
 
@@ -474,10 +469,7 @@ namespace MiKoSolutions.Analyzers.Rules
                     return;
                 }
 
-                if (issue != null)
-                {
-                    context.ReportDiagnostic(issue);
-                }
+                ReportDiagnostics(context, issue);
             }
         }
 
@@ -511,9 +503,9 @@ namespace MiKoSolutions.Analyzers.Rules
             return Diagnostic.Create(m_rule, location, immutableProperties, args);
         }
 
-        private Action<SymbolAnalysisContext> GetAnalyzeMethod(SymbolKind symbolKind)
+        private Action<SymbolAnalysisContext> GetAnalyzeMethod(in SymbolKind kind)
         {
-            switch (symbolKind)
+            switch (kind)
             {
                 case SymbolKind.Method: return m_analyzeMethodContextCallback;
                 case SymbolKind.NamedType: return m_analyzeTypeContextCallback;
