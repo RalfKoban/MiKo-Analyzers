@@ -45,7 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   ISymbol symbol,
                                                                   IReadOnlyList<XmlElementSyntax> summaryXmls,
                                                                   Lazy<string> commentXml,
-                                                                  Lazy<IReadOnlyCollection<string>> summaries)
+                                                                  Lazy<string[]> summaries)
         {
             var symbolName = symbol.Name;
             var obviousComments = GetObviousComments(symbolName);

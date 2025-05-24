@@ -56,8 +56,8 @@ namespace System
                 var firstWord = valueSpan.FirstWord();
 
                 word = handling.HasSet(FirstWordHandling.StartUpperCase)
-                           ? firstWord.ToUpperCaseAt(0)
-                           : firstWord.ToString();
+                       ? firstWord.ToUpperCaseAt(0)
+                       : firstWord.ToString();
             }
 
             // build continuation here because the word length may change based on the infinite term

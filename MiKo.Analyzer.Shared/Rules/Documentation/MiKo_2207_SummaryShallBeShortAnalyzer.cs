@@ -50,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   ISymbol symbol,
                                                                   IReadOnlyList<XmlElementSyntax> summaryXmls,
                                                                   Lazy<string> commentXml,
-                                                                  Lazy<IReadOnlyCollection<string>> summaries)
+                                                                  Lazy<string[]> summaries)
         {
             var count = summaryXmls.Count;
 
@@ -99,16 +99,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var whitespaces = 0;
 
-            foreach (var c in summary)
-            {
-                if (c.IsWhiteSpace())
-                {
-                    whitespaces++;
-                }
+            var length = summary.Length;
 
-                if (whitespaces > MaxAllowedWhitespaces)
+            if (length > 0)
+            {
+                for (var index = 0; index < length; index++)
                 {
-                    return true;
+                    var c = summary[index];
+
+                    if (c.IsWhiteSpace())
+                    {
+                        whitespaces++;
+                    }
+
+                    if (whitespaces > MaxAllowedWhitespaces)
+                    {
+                        return true;
+                    }
                 }
             }
 

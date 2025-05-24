@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   ISymbol symbol,
                                                                   IReadOnlyList<XmlElementSyntax> summaryXmls,
                                                                   Lazy<string> commentXml,
-                                                                  Lazy<IReadOnlyCollection<string>> summaries)
+                                                                  Lazy<string[]> summaries)
         {
             switch (symbol)
             {
@@ -72,7 +72,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                    : startingPhrases.Select(_ => _.FormatWith(argumentType));
         }
 
-        private Diagnostic[] AnalyzeStartingPhrase(ISymbol symbol, IReadOnlyList<XmlElementSyntax> summaryXmls, IEnumerable<string> summaries, params string[] phrases)
+        private Diagnostic[] AnalyzeStartingPhrase(ISymbol symbol, IReadOnlyList<XmlElementSyntax> summaryXmls, ReadOnlySpan<string> summaries, params string[] phrases)
         {
             if (summaries.None(_ => phrases.Exists(__ => _.StartsWith(__, StringComparison.Ordinal))))
             {
