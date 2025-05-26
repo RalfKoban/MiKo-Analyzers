@@ -56,8 +56,8 @@ namespace System
                 var firstWord = valueSpan.FirstWord();
 
                 word = handling.HasSet(FirstWordHandling.StartUpperCase)
-                           ? firstWord.ToUpperCaseAt(0)
-                           : firstWord.ToString();
+                       ? firstWord.ToUpperCaseAt(0)
+                       : firstWord.ToString();
             }
 
             // build continuation here because the word length may change based on the infinite term
@@ -1478,12 +1478,12 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsUpperCase(this in char value)
         {
-            if ((uint)(value - 'a') <= 'z' - 'a')
+            if (value.IsAsciiLetterLower())
             {
                 return false;
             }
 
-            if ((uint)(value - 'A') <= 'Z' - 'A')
+            if (value.IsAsciiLetterUpper())
             {
                 return true;
             }
@@ -1619,12 +1619,12 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static char ToLowerCase(this in char source)
         {
-            if ((uint)(source - 'A') <= 'Z' - 'A')
+            if (source.IsAsciiLetterUpper())
             {
                 return (char)(source + DifferenceBetweenUpperAndLowerCaseAscii);
             }
 
-            if ((uint)(source - 'a') <= 'z' - 'a')
+            if (source.IsAsciiLetterLower())
             {
                 return source;
             }
@@ -1646,26 +1646,10 @@ namespace System
         /// </returns>
         public static string ToLowerCaseAt(this string source, in int index)
         {
-            if (source is null)
-            {
-                return null;
-            }
-
-            if (index >= source.Length)
+            if (source is null || index >= source.Length || source[index].IsLowerCase())
             {
                 return source;
             }
-
-            var character = source[index];
-
-#pragma warning disable CA1308
-
-            if (character.IsLowerCase())
-            {
-                return source;
-            }
-
-#pragma warning restore CA1308
 
             return source.AsSpan().MakeLowerCaseAt(index);
         }
@@ -1695,12 +1679,12 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static char ToUpperCase(this in char source)
         {
-            if ((uint)(source - 'a') <= 'z' - 'a')
+            if (source.IsAsciiLetterLower())
             {
                 return (char)(source - DifferenceBetweenUpperAndLowerCaseAscii);
             }
 
-            if ((uint)(source - 'A') <= 'Z' - 'A')
+            if (source.IsAsciiLetterUpper())
             {
                 return source;
             }
@@ -1725,19 +1709,7 @@ namespace System
         /// </returns>
         public static string ToUpperCaseAt(this string source, in int index)
         {
-            if (source is null)
-            {
-                return null;
-            }
-
-            if (index >= source.Length)
-            {
-                return source;
-            }
-
-            var character = source[index];
-
-            if (character.IsUpperCase())
+            if (source is null || index >= source.Length || source[index].IsUpperCase())
             {
                 return source;
             }
@@ -2140,119 +2112,62 @@ namespace System
                     var a = ap;
                     var b = bp;
 
-                    int charA = *a;
-                    int charB = *b;
+                    if (QuickDiff(a, b, 0)) // uppercase both chars - notice that we need just one compare per char
                     {
-                        // uppercase both chars - notice that we need just one compare per char
-                        if ((uint)(charA - 'a') <= 'z' - 'a')
-                        {
-                            charA -= DifferenceBetweenUpperAndLowerCaseAscii;
-                        }
-
-                        if ((uint)(charB - 'a') <= 'z' - 'a')
-                        {
-                            charB -= DifferenceBetweenUpperAndLowerCaseAscii;
-                        }
-
-                        if (charA != charB)
-                        {
-                            // they do not fit as characters do not match
-                            return false;
-                        }
+                        // they do not fit as characters do not match
+                        return false;
                     }
 
-                    var lastIndex = length - 1;
-                    charA = *(a + lastIndex);
-                    charB = *(b + lastIndex);
+                    if (QuickDiff(a, b, length - 1)) // uppercase both chars - notice that we need just one compare per char
                     {
-                        // uppercase both chars - notice that we need just one compare per char
-                        if ((uint)(charA - 'a') <= 'z' - 'a')
-                        {
-                            charA -= DifferenceBetweenUpperAndLowerCaseAscii;
-                        }
-
-                        if ((uint)(charB - 'a') <= 'z' - 'a')
-                        {
-                            charB -= DifferenceBetweenUpperAndLowerCaseAscii;
-                        }
-
-                        if (charA != charB)
-                        {
-                            // they do not fit as characters do not match
-                            return false;
-                        }
+                        // they do not fit as characters do not match
+                        return false;
                     }
 
-                    var middleIndex = length / 2;
-                    charA = *(a + middleIndex);
-                    charB = *(b + middleIndex);
+                    if (QuickDiff(a, b, length / 2)) // uppercase both chars - notice that we need just one compare per char
                     {
-                        // uppercase both chars - notice that we need just one compare per char
-                        if ((uint)(charA - 'a') <= 'z' - 'a')
-                        {
-                            charA -= DifferenceBetweenUpperAndLowerCaseAscii;
-                        }
-
-                        if ((uint)(charB - 'a') <= 'z' - 'a')
-                        {
-                            charB -= DifferenceBetweenUpperAndLowerCaseAscii;
-                        }
-
-                        if (charA != charB)
-                        {
-                            // they do not fit as characters do not match
-                            return false;
-                        }
+                        // they do not fit as characters do not match
+                        return false;
                     }
 
-                    var indexPart1 = length / 3;
-                    charA = *(a + indexPart1);
-                    charB = *(b + indexPart1);
+                    var third = length / 3;
+
+                    if (QuickDiff(a, b, third)) // uppercase both chars - notice that we need just one compare per char
                     {
-                        // uppercase both chars - notice that we need just one compare per char
-                        if ((uint)(charA - 'a') <= 'z' - 'a')
-                        {
-                            charA -= DifferenceBetweenUpperAndLowerCaseAscii;
-                        }
-
-                        if ((uint)(charB - 'a') <= 'z' - 'a')
-                        {
-                            charB -= DifferenceBetweenUpperAndLowerCaseAscii;
-                        }
-
-                        if (charA != charB)
-                        {
-                            // they do not fit as characters do not match
-                            return false;
-                        }
+                        // they do not fit as characters do not match
+                        return false;
                     }
 
-                    var indexPart2 = 2 * indexPart1;
-                    charA = *(a + indexPart2);
-                    charB = *(b + indexPart2);
+                    if (QuickDiff(a, b, 2 * third)) // uppercase both chars - notice that we need just one compare per char
                     {
-                        // uppercase both chars - notice that we need just one compare per char
-                        if ((uint)(charA - 'a') <= 'z' - 'a')
-                        {
-                            charA -= DifferenceBetweenUpperAndLowerCaseAscii;
-                        }
-
-                        if ((uint)(charB - 'a') <= 'z' - 'a')
-                        {
-                            charB -= DifferenceBetweenUpperAndLowerCaseAscii;
-                        }
-
-                        if (charA != charB)
-                        {
-                            // they do not fit as characters do not match
-                            return false;
-                        }
+                        // they do not fit as characters do not match
+                        return false;
                     }
                 }
             }
 
             // continue to check
             return true;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static unsafe bool QuickDiff(char* a, char* b, in int index)
+        {
+            int charA = *(a + index);
+
+            if (charA.IsAsciiLetterLower())
+            {
+                charA -= DifferenceBetweenUpperAndLowerCaseAscii;
+            }
+
+            int charB = *(b + index);
+
+            if (charB.IsAsciiLetterLower())
+            {
+                charB -= DifferenceBetweenUpperAndLowerCaseAscii;
+            }
+
+            return charA != charB;
         }
 
         private static bool IsUpperCaseWithSwitch(in char value)
@@ -2338,5 +2253,17 @@ namespace System
 
             return indices ?? Array.Empty<int>();
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool IsAsciiLetterLower(this in char value) => IsAsciiLetterLower((int)value); // notice that we need just one compare per char
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool IsAsciiLetterLower(this in int value) => (uint)(value - 'a') <= 'z' - 'a'; // notice that we need just one compare per char
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool IsAsciiLetterUpper(this in char value) => IsAsciiLetterUpper((int)value); // notice that we need just one compare per char
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool IsAsciiLetterUpper(this in int value) => (uint)(value - 'A') <= 'Z' - 'A'; // notice that we need just one compare per char
     }
 }

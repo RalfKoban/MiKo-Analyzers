@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   ISymbol symbol,
                                                                   IReadOnlyList<XmlElementSyntax> summaryXmls,
                                                                   Lazy<string> commentXml,
-                                                                  Lazy<IReadOnlyCollection<string>> summaries)
+                                                                  Lazy<string[]> summaries)
         {
             if (symbol.IsSealed is false && summaries.Value.Any(_ => _.Contains(Constants.Comments.SealedClassPhrase)))
             {
