@@ -11,6 +11,8 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 
+using NCrunch.Framework;
+
 using NUnit.Framework;
 
 using TestHelper;
@@ -18,7 +20,7 @@ using TestHelper;
 //// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Rules
 {
-    [TestFixture, Category("Always impacted")]
+    [TestFixture, Category("Always impacted"), Isolated]
     public static class AnalyzerTests
     {
         private static readonly Analyzer[] AllAnalyzers = CreateAllAnalyzers();
