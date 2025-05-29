@@ -1156,6 +1156,21 @@ namespace MiKoSolutions.Analyzers
 
         internal static ITypeSymbol GetTypeSymbol(this VariableDeclarationSyntax value, SemanticModel semanticModel) => value?.Type.GetTypeSymbol(semanticModel);
 
+        internal static ITypeSymbol GetTypeSymbol(this VariableDesignationSyntax value, SemanticModel semanticModel)
+        {
+            if (value is null)
+            {
+                return null;
+            }
+
+            if (semanticModel.GetDeclaredSymbol(value) is ILocalSymbol symbol)
+            {
+                return symbol.Type;
+            }
+
+            return null;
+        }
+
         internal static ITypeSymbol GetTypeSymbol(this SyntaxNode value, SemanticModel semanticModel)
         {
             if (value is null)
