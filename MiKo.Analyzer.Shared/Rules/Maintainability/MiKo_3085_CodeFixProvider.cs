@@ -58,6 +58,54 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return root;
         }
 
+        private static SyntaxNode UpdateArgument(Document document, SyntaxNode root, ConditionalExpressionSyntax conditional, ArgumentSyntax argument)
+        {
+            if (argument.Parent is ArgumentListSyntax argumentList && argumentList.Parent is InvocationExpressionSyntax invocation)
+            {
+                var symbol = invocation.GetSymbol(document);
+
+                if (symbol is IMethodSymbol methodSymbol)
+                {
+                    var argumentIndex = argumentList.Arguments.IndexOf(argument);
+                    var parameterSymbol = methodSymbol.Parameters[argumentIndex];
+
+                    var typeSyntax = GetTypeSyntax(parameterSymbol.Type);
+                    var variableName = parameterSymbol.Name;
+
+                    var declarator = SyntaxFactory.VariableDeclarator(variableName);
+                    var declaration = SyntaxFactory.VariableDeclaration(typeSyntax, declarator.ToSeparatedSyntaxList());
+
+                    var ifStatement = ConvertToIfStatement(conditional, trueCase => AssignmentStatement(declarator, trueCase), falseCase => AssignmentStatement(declarator, falseCase));
+
+                    var updatedInvocation = invocation.ReplaceNode(argument, Argument(variableName).WithTriviaFrom(argument));
+
+                    switch (invocation.Parent)
+                    {
+                        case ReturnStatementSyntax returnStatement:
+                        {
+                            var localDeclaration = SyntaxFactory.LocalDeclarationStatement(declaration).WithLeadingTriviaFrom(returnStatement);
+                            var updatedReturnStatement = returnStatement.ReplaceNode(invocation, updatedInvocation);
+
+                            return root.ReplaceNode(returnStatement, new SyntaxNode[] { localDeclaration, ifStatement, updatedReturnStatement });
+                        }
+
+                        case ArrowExpressionClauseSyntax arrowClause:
+                        {
+                            var localDeclaration = SyntaxFactory.LocalDeclarationStatement(declaration);
+
+                            var statement = arrowClause.HasReturnValue()
+                                                ? (StatementSyntax)SyntaxFactory.ReturnStatement(updatedInvocation)
+                                                : SyntaxFactory.ExpressionStatement(updatedInvocation);
+
+                            return UpdateArrowExpressionClause(root, arrowClause, SyntaxFactory.Block(localDeclaration, ifStatement, statement));
+                        }
+                    }
+                }
+            }
+
+            return root;
+        }
+
         private static SyntaxNode UpdateArrowExpressionClause(SyntaxNode root, ConditionalExpressionSyntax conditional, ArrowExpressionClauseSyntax arrowClause)
         {
             var ifStatement = ConvertToIfStatement(conditional, SyntaxFactory.ReturnStatement);
@@ -96,52 +144,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static SyntaxNode UpdateArgument(Document document, SyntaxNode root, ConditionalExpressionSyntax conditional, ArgumentSyntax argument)
+        private static SyntaxNode UpdateArrowExpressionClause(SyntaxNode root, ConditionalExpressionSyntax conditional, AssignmentExpressionSyntax assignment, AccessorDeclarationSyntax accessor)
         {
-            if (argument.Parent is ArgumentListSyntax argumentList && argumentList.Parent is InvocationExpressionSyntax invocation)
-            {
-                var symbol = invocation.GetSymbol(document);
+            var ifStatement = ConvertToIfStatement(conditional, trueCase => AssignmentStatement(assignment, trueCase), falseCase => AssignmentStatement(assignment, falseCase));
 
-                if (symbol is IMethodSymbol methodSymbol)
-                {
-                    var argumentIndex = argumentList.Arguments.IndexOf(argument);
-                    var parameterSymbol = methodSymbol.Parameters[argumentIndex];
+            var updatedAccessor = accessor.WithBody(SyntaxFactory.Block(ifStatement)).WithoutExpressionBody();
 
-                    var typeSyntax = GetTypeSyntax(parameterSymbol.Type);
-                    var variableName = parameterSymbol.Name;
-
-                    var declarator = SyntaxFactory.VariableDeclarator(variableName);
-                    var declaration = SyntaxFactory.VariableDeclaration(typeSyntax, declarator.ToSeparatedSyntaxList());
-
-                    var ifStatement = ConvertToIfStatement(conditional, trueCase => AssignmentStatement(declarator, trueCase), falseCase => AssignmentStatement(declarator, falseCase));
-
-                    var updatedInvocation = invocation.ReplaceNode(argument, Argument(variableName).WithTriviaFrom(argument));
-
-                    switch (invocation.Parent)
-                    {
-                        case ReturnStatementSyntax returnStatement:
-                        {
-                            var localDeclaration = SyntaxFactory.LocalDeclarationStatement(declaration).WithLeadingTriviaFrom(returnStatement);
-                            var updatedReturnStatement = returnStatement.ReplaceNode(invocation, updatedInvocation);
-
-                            return root.ReplaceNode(returnStatement, new SyntaxNode[] { localDeclaration, ifStatement, updatedReturnStatement });
-                        }
-
-                        case ArrowExpressionClauseSyntax arrowClause:
-                        {
-                            var localDeclaration = SyntaxFactory.LocalDeclarationStatement(declaration);
-
-                            var statement = arrowClause.HasReturnValue()
-                                            ? (StatementSyntax)SyntaxFactory.ReturnStatement(updatedInvocation)
-                                            : SyntaxFactory.ExpressionStatement(updatedInvocation);
-
-                            return UpdateArrowExpressionClause(root, arrowClause, SyntaxFactory.Block(localDeclaration, ifStatement, statement));
-                        }
-                    }
-                }
-            }
-
-            return root;
+            return root.ReplaceNode(accessor, updatedAccessor);
         }
 
         private static SyntaxNode UpdateAssignment(Document document, SyntaxNode root, ConditionalExpressionSyntax conditional, AssignmentExpressionSyntax assignment)
@@ -149,28 +158,65 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             switch (assignment.Parent)
             {
                 case ArrowExpressionClauseSyntax clause when clause.Parent is AccessorDeclarationSyntax accessor:
-                {
-                    var ifStatement = ConvertToIfStatement(conditional, trueCase => AssignmentStatement(assignment, trueCase), falseCase => AssignmentStatement(assignment, falseCase));
-
-                    var updatedAccessor = accessor.WithBody(SyntaxFactory.Block(ifStatement)).WithoutExpressionBody();
-
-                    return root.ReplaceNode(accessor, updatedAccessor);
-                }
+                    return UpdateArrowExpressionClause(root, conditional, assignment, accessor);
 
                 case ExpressionStatementSyntax expression:
-                {
-                    var ifStatement = ConvertToIfStatement(conditional, trueCase => AssignmentStatement(assignment, trueCase), falseCase => AssignmentStatement(assignment, falseCase));
-
-                    return root.ReplaceNode(expression, ifStatement.WithTriviaFrom(expression));
-                }
+                    return UpdateExpressionStatement(document, root, conditional, assignment, expression);
 
                 case InitializerExpressionSyntax initializer:
-                {
                     return UpdateInitializer(document, root, conditional, assignment, initializer);
-                }
 
                 default:
                     return root;
+            }
+        }
+
+        private static SyntaxNode UpdateDeclarationExpression(Document document, SyntaxNode root, ConditionalExpressionSyntax conditional, AssignmentExpressionSyntax assignment, DeclarationExpressionSyntax declaration, ExpressionStatementSyntax expression)
+        {
+            var designations = new List<SingleVariableDesignationSyntax>();
+            CollectSingleVariableDesignations(declaration.Designation, designations);
+
+            var arguments = designations.Select(_ => Argument(_.Identifier.ValueText)).ToSeparatedSyntaxList();
+            var updatedAssignment = assignment.WithLeft(SyntaxFactory.TupleExpression(arguments).WithTrailingTriviaFrom(declaration));
+
+            var ifStatement = ConvertToIfStatement(conditional, trueCase => AssignmentStatement(updatedAssignment, trueCase), falseCase => AssignmentStatement(updatedAssignment, falseCase));
+
+            var updatedNodes = new List<SyntaxNode>(designations.Select(ConvertToLocalDeclarationStatement)) { ifStatement };
+
+            return root.ReplaceNode(expression, updatedNodes);
+
+            void CollectSingleVariableDesignations(VariableDesignationSyntax designation, List<SingleVariableDesignationSyntax> nodes)
+            {
+                switch (designation)
+                {
+                    case SingleVariableDesignationSyntax single:
+                    {
+                        nodes.Add(single);
+
+                        break;
+                    }
+
+                    case ParenthesizedVariableDesignationSyntax parenthesized:
+                    {
+                        foreach (var variable in parenthesized.Variables)
+                        {
+                            CollectSingleVariableDesignations(variable, nodes);
+                        }
+
+                        break;
+                    }
+                }
+            }
+
+            LocalDeclarationStatementSyntax ConvertToLocalDeclarationStatement(SingleVariableDesignationSyntax variable)
+            {
+                var typeSyntax = GetTypeSyntax(variable, document);
+
+                var updatedDeclarator = SyntaxFactory.VariableDeclarator(variable.Identifier).WithLeadingTriviaFrom(declaration);
+                var updatedDeclaration = SyntaxFactory.VariableDeclaration(typeSyntax, updatedDeclarator.ToSeparatedSyntaxList()).WithLeadingTriviaFrom(declaration);
+                var updatedLocalDeclaration = SyntaxFactory.LocalDeclarationStatement(updatedDeclaration).WithLeadingTriviaFrom(declaration);
+
+                return updatedLocalDeclaration;
             }
         }
 
@@ -190,6 +236,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             return root;
+        }
+
+        private static SyntaxNode UpdateExpressionStatement(Document document, SyntaxNode root, ConditionalExpressionSyntax conditional, AssignmentExpressionSyntax assignment, ExpressionStatementSyntax expression)
+        {
+            if (assignment.Left is DeclarationExpressionSyntax declaration)
+            {
+                return UpdateDeclarationExpression(document, root, conditional, assignment, declaration, expression);
+            }
+
+            var ifStatement = ConvertToIfStatement(conditional, trueCase => AssignmentStatement(assignment, trueCase), falseCase => AssignmentStatement(assignment, falseCase));
+
+            return root.ReplaceNode(expression, ifStatement.WithTriviaFrom(expression));
         }
 
         private static SyntaxNode UpdateInitializer(Document document, SyntaxNode root, ConditionalExpressionSyntax conditional, AssignmentExpressionSyntax assignment, InitializerExpressionSyntax initializer)
@@ -394,6 +452,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             return declarationType;
+        }
+
+        private static TypeSyntax GetTypeSyntax(VariableDesignationSyntax designation, Document document)
+        {
+            var updatedType = GetTypeSyntax(designation.GetTypeSymbol(document));
+
+            return updatedType.WithTriviaFrom(designation);
         }
     }
 }
