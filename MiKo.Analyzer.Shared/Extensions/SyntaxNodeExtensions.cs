@@ -1042,6 +1042,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static int GetPositionWithinStartLine(this SyntaxNode value) => value.GetLocation().GetPositionWithinStartLine();
 
+        internal static int GetPositionWithinEndLine(this SyntaxNode value) => value.GetLocation().GetPositionWithinEndLine();
+
         internal static int GetStartingLine(this SyntaxNode value) => value.GetLocation().GetStartingLine();
 
         internal static int GetEndingLine(this SyntaxNode value) => value.GetLocation().GetEndingLine();
