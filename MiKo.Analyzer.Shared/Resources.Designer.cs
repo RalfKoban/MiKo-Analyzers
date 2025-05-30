@@ -16159,7 +16159,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Consecutive invocations spaning multiple lines should be aligned by their dots.
+        ///   Looks up a localized string similar to Consecutive invocations spanning multiple lines should be aligned by their dots.
         /// </summary>
         internal static string MiKo_6040_Title {
             get {
@@ -17028,6 +17028,42 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_6064_Title {
             get {
                 return ResourceManager.GetString("MiKo_6064_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Indent dot.
+        /// </summary>
+        internal static string MiKo_6065_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6065_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code readability improves when invocations spanning multiple lines are vertically indented. This makes the code clearer and easier to follow..
+        /// </summary>
+        internal static string MiKo_6065_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6065_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Indent dot.
+        /// </summary>
+        internal static string MiKo_6065_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6065_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consecutive invocations spanning multiple lines should be indented and not outdented.
+        /// </summary>
+        internal static string MiKo_6065_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6065_Title", resourceCulture);
             }
         }
         
