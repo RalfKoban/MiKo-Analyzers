@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,7 +25,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static string[] GetTermsForQuickLookup(IReadOnlyCollection<string> terms)
         {
-            var result = new string[terms.Count];
+            var pool = ArrayPool<string>.Shared;
+
+            var rentedArray = pool.Rent(terms.Count);
 
             var resultIndex = 0;
 
@@ -39,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 for (var index = 0; index < resultIndex; index++)
                 {
-                    if (span.StartsWith(result[index].AsSpan()))
+                    if (span.StartsWith(rentedArray[index].AsSpan()))
                     {
                         found = true;
 
@@ -52,17 +55,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     continue;
                 }
 
-                result[resultIndex] = term;
+                rentedArray[resultIndex] = term;
                 resultIndex++;
             }
 
-            Array.Resize(ref result, resultIndex);
+            var result = new string[resultIndex];
+
+            Array.Copy(rentedArray, result, resultIndex);
+
+            pool.Return(rentedArray, true);
 
             return result;
         }
-
-//// ncrunch: no coverage end
-//// ncrunch: rdi default
+        //// ncrunch: no coverage end
+        //// ncrunch: rdi default
 
         protected static XmlElementSyntax C(string text)
         {

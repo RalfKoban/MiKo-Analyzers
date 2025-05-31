@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
@@ -516,7 +517,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     var length = keys.Length;
 
                     var indexInResult = 0;
-                    var results = new string[length];
+
+                    var pool = ArrayPool<string>.Shared;
+                    var rentedArray = pool.Rent(length);
 
                     for (var index = 0; index < length; index++)
                     {
@@ -524,11 +527,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         if (key.StartsWith(text, StringComparison.Ordinal))
                         {
-                            results[indexInResult++] = key;
+                            rentedArray[indexInResult++] = key;
                         }
                     }
 
-                    Array.Resize(ref results, indexInResult);
+                    var results = new string[indexInResult];
+
+                    Array.Copy(rentedArray, results, indexInResult);
+
+                    pool.Return(rentedArray, true);
 
                     return results;
                 }
@@ -536,7 +543,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 Pair[] ToMapArray(in ReadOnlySpan<Pair> map, HashSet<string> keys, Pair[] others)
                 {
                     var resultIndex = 0;
-                    var results = new Pair[keys.Count + others.Length];
+
+                    var pool = ArrayPool<Pair>.Shared;
+                    var rentedArray = pool.Rent(keys.Count + others.Length);
 
                     var count = map.Length;
 
@@ -546,13 +555,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         if (keys.Contains(key.Key))
                         {
-                            results[resultIndex++] = key;
+                            rentedArray[resultIndex++] = key;
                         }
                     }
 
-                    others.CopyTo(results, resultIndex);
+                    others.CopyTo(rentedArray, resultIndex);
 
-                    Array.Resize(ref results, resultIndex + others.Length);
+                    var results = new Pair[resultIndex + others.Length];
+
+                    Array.Copy(rentedArray, results, results.Length);
+
+                    pool.Return(rentedArray, true);
 
                     return results;
                 }

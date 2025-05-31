@@ -555,28 +555,26 @@ namespace System.Text
             var startChars = pool.Rent(lengthToCompare);
             var endChars = pool.Rent(lengthToCompare);
 
-            try
-            {
-                // Copy the start and end segments from the text
-                text.CopyTo(0, startChars, 0, lengthToCompare);
-                text.CopyTo(endIndex, endChars, 0, lengthToCompare);
+            // Copy the start and end segments from the text
+            text.CopyTo(0, startChars, 0, lengthToCompare);
+            text.CopyTo(endIndex, endChars, 0, lengthToCompare);
 
-                // Compare the segments
-                for (var position = 0; position < lengthToCompare; position++)
+            // Compare the segments
+            for (var position = 0; position < lengthToCompare; position++)
+            {
+                if (startChars[position] == startChar && endChars[position] == endChar)
                 {
-                    if (startChars[position] == startChar && endChars[position] == endChar)
-                    {
-                        return true;
-                    }
-                }
+                    pool.Return(startChars);
+                    pool.Return(endChars);
 
-                return false;
+                    return true;
+                }
             }
-            finally
-            {
-                pool.Return(startChars);
-                pool.Return(endChars);
-            }
+
+            pool.Return(startChars);
+            pool.Return(endChars);
+
+            return false;
         }
 
         private static int CountLeadingWhitespaces(this StringBuilder value, int start = 0)
