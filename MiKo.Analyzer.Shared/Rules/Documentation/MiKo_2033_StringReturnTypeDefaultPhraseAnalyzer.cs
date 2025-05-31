@@ -18,10 +18,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var symbolName = symbol.Name;
 
-            if (symbolName.Length > 2 && symbolName[0] == 'T' && symbolName[1] == 'o' && symbolName[2].IsUpperCase())
+            if (symbolName.Length > 2 && symbolName[0] is 'T' && symbolName[1] is 'o' && symbolName[2].IsUpperCase())
             {
                 // do not report for conversion methods
-                return symbolName == "ToString";
+                return symbolName is "ToString";
             }
 
             return base.ShallAnalyze(symbol);

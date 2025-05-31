@@ -66,7 +66,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
                 {
                     // skip empty lines in commented out code, but keep normal lines
-                    if (commentedOutCode.Count == 0)
+                    if (commentedOutCode.Count is 0)
                     {
                         normalText.Add(token);
                     }
@@ -106,7 +106,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // we found some normal code at the end
             AddXmlText(result, normalText);
 
-            if (result.Count == 0)
+            if (result.Count is 0)
             {
                 // nothing to replace, so use original code
                 result.Add(text);

@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return Array.Empty<Diagnostic>();
             }
 
-            if (symbol.IsStatic && methodName == "Main")
+            if (symbol.IsStatic && methodName is "Main")
             {
                 // nothing to report here for the main method as that is the entry point of an application and as to be named 'Main'
                 return Array.Empty<Diagnostic>();

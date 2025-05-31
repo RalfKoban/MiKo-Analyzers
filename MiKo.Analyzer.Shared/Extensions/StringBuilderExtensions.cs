@@ -13,39 +13,37 @@ namespace System.Text
 {
     internal static class StringBuilderExtensions
     {
-        private const int QuickCompareLengthThreshold = 6;
-        private const int QuickCompareRentLengthThreshold = 24;
+        private const int QuickSubstringProbeLengthThreshold = 6;
+        private const int QuickSubstringProbeRentLengthThreshold = 24;
 
         public static StringBuilder AdjustFirstWord(this StringBuilder value, in FirstWordHandling handling)
         {
-            if (value.IsNullOrEmpty() || value[0] == '<')
+            if (value.IsNullOrEmpty() || value[0] is '<')
             {
                 return value;
             }
 
             // only keep it if there is already a leading space (otherwise it may be on the same line without any leading space, and we would fix it in a wrong way)
-            value.TrimLeadingSpacesTo(handling.HasSet(FirstWordHandling.KeepLeadingSpace) ? 1 : 0);
+            value.TrimLeadingSpacesTo(handling.HasSet(FirstWordHandling.KeepSingleLeadingSpace) ? 1 : 0);
 
-            if (handling.HasSet(FirstWordHandling.MakeLowerCase))
+            if (handling.HasSet(FirstWordHandling.StartLowerCase))
             {
-                value.MakeLowerCase();
+                value.StartLowerCase();
             }
-            else if (handling.HasSet(FirstWordHandling.MakeUpperCase))
+            else if (handling.HasSet(FirstWordHandling.StartUpperCase))
             {
-                value.MakeUpperCase();
+                value.StartUpperCase();
             }
 
             if (handling.HasSet(FirstWordHandling.MakeInfinite))
             {
                 value.MakeInfinite();
             }
-
-            if (handling.HasSet(FirstWordHandling.MakePlural))
+            else if (handling.HasSet(FirstWordHandling.MakePlural))
             {
                 value.MakePlural();
             }
-
-            if (handling.HasSet(FirstWordHandling.MakeThirdPersonSingular))
+            else if (handling.HasSet(FirstWordHandling.MakeThirdPersonSingular))
             {
                 value.MakeThirdPersonSingular();
             }
@@ -127,7 +125,7 @@ namespace System.Text
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsNullOrEmpty(this StringBuilder value) => value is null || value.Length == 0;
+        public static bool IsNullOrEmpty(this StringBuilder value) => value is null || value.Length is 0;
 
         public static bool IsNullOrWhiteSpace(this StringBuilder value) => value is null || value.CountLeadingWhitespaces() == value.Length;
 
@@ -223,7 +221,7 @@ namespace System.Text
                     if (multipleUpperCases)
                     {
                         // let's see if we start with an IXyz interface
-                        if (previousC == 'I')
+                        if (previousC is 'I')
                         {
                             // seems we are in an IXyz interface
                             multipleUpperCases = false;
@@ -243,7 +241,7 @@ namespace System.Text
                     }
 
                     // let's consider an upper-case 'A' as a special situation as that is a single word
-                    var isSpecialCharA = c == 'A';
+                    var isSpecialCharA = c is 'A';
 
                     multipleUpperCases = isSpecialCharA is false;
 
@@ -295,7 +293,7 @@ namespace System.Text
         {
             var length = value.Length;
 
-            if (length == 0)
+            if (length is 0)
             {
                 return value;
             }
@@ -320,7 +318,7 @@ namespace System.Text
         {
             var length = value.Length;
 
-            if (length == 0)
+            if (length is 0)
             {
                 return string.Empty;
             }
@@ -335,7 +333,7 @@ namespace System.Text
         {
             var length = value.Length;
 
-            if (length == 0)
+            if (length is 0)
             {
                 return value;
             }
@@ -349,7 +347,7 @@ namespace System.Text
         {
             var length = value.Length;
 
-            if (length == 0)
+            if (length is 0)
             {
                 return string.Empty;
             }
@@ -378,7 +376,7 @@ namespace System.Text
         {
             var length = value.Length;
 
-            if (length == 0)
+            if (length is 0)
             {
                 return string.Empty;
             }
@@ -407,7 +405,7 @@ namespace System.Text
 
         public static StringBuilder TrimEndBy(this StringBuilder value, in int count)
         {
-            if (count == 0)
+            if (count is 0)
             {
                 return value;
             }
@@ -431,14 +429,14 @@ namespace System.Text
         {
             var length = value.Length;
 
-            if (length == 0)
+            if (length is 0)
             {
                 return value;
             }
 
             var end = value.CountTrailingWhitespaces();
 
-            if (end == 0)
+            if (end is 0)
             {
                 return value;
             }
@@ -500,7 +498,7 @@ namespace System.Text
 
             if (difference > 0)
             {
-                if (otherValueLength > QuickCompareLengthThreshold)
+                if (otherValueLength > QuickSubstringProbeLengthThreshold)
                 {
                     var otherFirst = other[0];
 
@@ -509,7 +507,7 @@ namespace System.Text
 
                     var length = difference + 1; // increased by 1 to have the complete difference investigated
 
-                    if (difference >= QuickCompareRentLengthThreshold)
+                    if (difference >= QuickSubstringProbeRentLengthThreshold)
                     {
                         // use rented arrays here (if we have larger differences, the start and end may be in different chunks)
                         return QuickSubstringProbeAtIndicesWithRent(ref current, otherFirst, otherLast, length, lastIndex);
@@ -620,7 +618,7 @@ namespace System.Text
             return whitespaces;
         }
 
-        private static void MakeLowerCase(this StringBuilder value)
+        private static void StartLowerCase(this StringBuilder value)
         {
             var valueLength = value.Length;
 
@@ -643,7 +641,7 @@ namespace System.Text
             }
         }
 
-        private static void MakeUpperCase(this StringBuilder value)
+        private static void StartUpperCase(this StringBuilder value)
         {
             var valueLength = value.Length;
 
@@ -701,7 +699,7 @@ namespace System.Text
 
         private static void TrimLeadingSpacesTo(this StringBuilder value, in int count)
         {
-            if (value[0] == ' ')
+            if (value[0] is ' ')
             {
                 var whitespaces = value.CountLeadingWhitespaces();
 

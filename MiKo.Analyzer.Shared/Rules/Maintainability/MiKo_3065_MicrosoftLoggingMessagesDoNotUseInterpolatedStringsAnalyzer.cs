@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         var type = methodCall.GetTypeSymbol(semanticModel);
 
-                        if (type.Name == Constants.MicrosoftLogging.TypeName && type.ContainingNamespace.FullyQualifiedName() == Constants.MicrosoftLogging.NamespaceName)
+                        if (type.Name is Constants.MicrosoftLogging.TypeName && type.ContainingNamespace.FullyQualifiedName() is Constants.MicrosoftLogging.NamespaceName)
                         {
                             var argumentSymbol = a.GetTypeSymbol(semanticModel);
 

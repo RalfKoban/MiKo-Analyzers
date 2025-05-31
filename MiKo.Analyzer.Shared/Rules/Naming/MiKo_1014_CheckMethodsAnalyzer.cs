@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var prefix = FindBetterPrefix(method);
 
-            var phrase = prefix == "Has" && method.Name != SpecialHasPhrase
+            var phrase = prefix is "Has" && method.Name != SpecialHasPhrase
                          ? HasPhrase
                          : Phrase;
 

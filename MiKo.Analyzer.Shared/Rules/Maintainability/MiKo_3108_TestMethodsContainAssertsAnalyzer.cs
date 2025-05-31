@@ -120,7 +120,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 switch (node.GetName())
                 {
                     // we assume that this is an fluent assertion
-                    case "Should" when argumentsCount == 0:
+                    case "Should" when argumentsCount is 0:
                     case "ShouldNotRaise":
                     case "ShouldRaise":
                     case "ShouldRaisePropertyChangeFor":
@@ -132,20 +132,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     // we assume that this is a Moq call
                     case Constants.Moq.VerifyGet when argumentsCount > 0:
                     case Constants.Moq.VerifySet when argumentsCount > 0:
-                    case Constants.Moq.VerifyAll when argumentsCount == 0:
+                    case Constants.Moq.VerifyAll when argumentsCount is 0:
                     case Constants.Moq.Verify when argumentsCount > 0:
                     {
                         return true;
                     }
 
-                    case Constants.Moq.Verify when argumentsCount == 0:
+                    case Constants.Moq.Verify when argumentsCount is 0:
                     {
                         if (node.Expression is IdentifierNameSyntax ins)
                         {
                             var mockName = ins.GetName();
 
                             // no arguments, so check for a 'Verifiable' call on the same mock object
-                            return nodes.Where(_ => _.GetName() == Constants.Moq.Verifiable && _.Parent is InvocationExpressionSyntax)
+                            return nodes.Where(_ => _.GetName() is Constants.Moq.Verifiable && _.Parent is InvocationExpressionSyntax)
                                         .SelectMany(_ => _.DescendantNodes<MemberAccessExpressionSyntax>())
                                         .Any(_ => _.Expression is IdentifierNameSyntax e && e.GetName() == mockName);
                         }
@@ -155,10 +155,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     }
 
                     // we assume that this is a NSubstitute call
-                    case "Received" when argumentsCount == 0 || argumentsCount == 1:
-                    case "ReceivedWithAnyArgs" when argumentsCount == 0:
-                    case "DidNotReceive" when argumentsCount == 0:
-                    case "DidNotReceiveWithAnyArgs" when argumentsCount == 0:
+                    case "Received" when argumentsCount is 0 || argumentsCount is 1:
+                    case "ReceivedWithAnyArgs" when argumentsCount is 0:
+                    case "DidNotReceive" when argumentsCount is 0:
+                    case "DidNotReceiveWithAnyArgs" when argumentsCount is 0:
                     {
                         return true;
                     }

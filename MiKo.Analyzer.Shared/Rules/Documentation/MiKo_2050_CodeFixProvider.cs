@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var summaries = comment.GetXmlSyntax(Constants.XmlTag.Summary);
 
-            if (summaries.Count == 0)
+            if (summaries.Count is 0)
             {
                 var newSummary = Comment(SyntaxFactory.XmlSummaryElement(), Phrase).WithTrailingXmlComment();
 
@@ -51,7 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             else
             {
                 var summary = summaries[0];
-                var preparedSummary = Comment(summary, TypeReplacementMapKeys, TypeReplacementMap, FirstWordHandling.MakeLowerCase);
+                var preparedSummary = Comment(summary, TypeReplacementMapKeys, TypeReplacementMap, FirstWordHandling.StartLowerCase);
                 var newSummary = CommentStartingWith(preparedSummary, Phrase);
 
                 return comment.ReplaceNode(summary, newSummary);

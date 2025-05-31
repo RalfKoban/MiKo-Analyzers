@@ -49,9 +49,12 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsWhiteSpace(this in SyntaxTrivia value) => value.IsKind(SyntaxKind.WhitespaceTrivia);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool IsKind(this in SyntaxTrivia value, in SyntaxKind kind) => value.RawKind == (int)kind;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsAnyKind(this in SyntaxTrivia value, ISet<SyntaxKind> kinds) => kinds.Contains(value.Kind());
 
-        internal static bool IsAnyKind(this in SyntaxTrivia value, params SyntaxKind[] kinds)
+        internal static bool IsAnyKind(this in SyntaxTrivia value, in ReadOnlySpan<SyntaxKind> kinds)
         {
             var valueKind = value.Kind();
 

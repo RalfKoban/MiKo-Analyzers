@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (node.Expression is MemberAccessExpressionSyntax m)
             {
-                if (m.Expression.ToString() == "Has.Count")
+                if (m.Expression.ToString() is "Has.Count")
                 {
                     return MemberIs("Empty");
                 }

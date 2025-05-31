@@ -104,14 +104,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, XmlText(text + additionalComment));
         }
 
-        protected static XmlElementSyntax Comment(XmlElementSyntax syntax, in ReadOnlySpan<string> terms, in ReadOnlySpan<Pair> replacementMap, in FirstWordHandling firstWordHandling = FirstWordHandling.KeepLeadingSpace)
+        protected static XmlElementSyntax Comment(XmlElementSyntax syntax, in ReadOnlySpan<string> terms, in ReadOnlySpan<Pair> replacementMap, in FirstWordHandling firstWordHandling = FirstWordHandling.KeepSingleLeadingSpace)
         {
             var result = Comment<XmlElementSyntax>(syntax, terms, replacementMap, firstWordHandling);
 
             return CombineTexts(result);
         }
 
-        protected static T Comment<T>(T syntax, in ReadOnlySpan<string> terms, in ReadOnlySpan<Pair> replacementMap, in FirstWordHandling firstWordHandling = FirstWordHandling.KeepLeadingSpace) where T : SyntaxNode
+        protected static T Comment<T>(T syntax, in ReadOnlySpan<string> terms, in ReadOnlySpan<Pair> replacementMap, in FirstWordHandling firstWordHandling = FirstWordHandling.KeepSingleLeadingSpace) where T : SyntaxNode
         {
             var minimumLength = MinLength(terms);
 
@@ -371,19 +371,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, in ReadOnlySpan<string> phrases, in FirstWordHandling firstWordHandling = FirstWordHandling.MakeLowerCase)
+        protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, in ReadOnlySpan<string> phrases, in FirstWordHandling firstWordHandling = FirstWordHandling.StartLowerCase)
         {
             return CommentStartingWith(comment, phrases[0], firstWordHandling);
         }
 
-        protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string phrase, in FirstWordHandling firstWordHandling = FirstWordHandling.MakeLowerCase)
+        protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string phrase, in FirstWordHandling firstWordHandling = FirstWordHandling.StartLowerCase)
         {
             var content = CommentStartingWith(comment.Content, phrase, firstWordHandling);
 
             return CommentWithContent(comment, content);
         }
 
-        protected static SyntaxList<XmlNodeSyntax> CommentStartingWith(SyntaxList<XmlNodeSyntax> content, string phrase, in FirstWordHandling firstWordHandling = FirstWordHandling.MakeLowerCase)
+        protected static SyntaxList<XmlNodeSyntax> CommentStartingWith(SyntaxList<XmlNodeSyntax> content, string phrase, in FirstWordHandling firstWordHandling = FirstWordHandling.StartLowerCase)
         {
             // when necessary adjust beginning text
             // Note: when on new line, then the text is not the 1st one but the 2nd one
@@ -450,7 +450,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
             else
             {
-                if (index == 1 && content[0].IsWhiteSpaceOnlyText())
+                if (index is 1 && content[0].IsWhiteSpaceOnlyText())
                 {
                     // seems that the non-text element is the first element, so we should remove the empty text element before
                     content = content.RemoveAt(0);
@@ -487,11 +487,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlCrefAttributeSyntax GetSeeCref(SyntaxNode value) => value.GetCref(Constants.XmlTag.See);
 
-        protected static DocumentationCommentTriviaSyntax GetXmlSyntax(IEnumerable<SyntaxNode> syntaxNodes)
+        protected static DocumentationCommentTriviaSyntax GetXmlSyntax(IEnumerable<SyntaxNode> syntaxNodes, in SyntaxKind kind = SyntaxKind.SingleLineDocumentationCommentTrivia)
         {
             foreach (var node in syntaxNodes)
             {
-                var comments = node.GetDocumentationCommentTriviaSyntax();
+                var comments = node.GetDocumentationCommentTriviaSyntax(kind);
 
                 if (comments.Length > 0)
                 {
@@ -715,7 +715,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlTextSyntax XmlText(in SyntaxTokenList textTokens)
         {
-            if (textTokens.Count == 0)
+            if (textTokens.Count is 0)
             {
                 return SyntaxFactory.XmlText();
             }
@@ -783,7 +783,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var contentCount = content.Count;
 
-            if (contentCount == 0)
+            if (contentCount is 0)
             {
                 return -1;
             }

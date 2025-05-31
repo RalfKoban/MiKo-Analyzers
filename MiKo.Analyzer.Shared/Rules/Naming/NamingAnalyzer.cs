@@ -111,7 +111,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var localFunctions = symbol.GetLocalFunctions();
 
-            if (localFunctions.Count == 0)
+            if (localFunctions.Count is 0)
             {
                 return Array.Empty<Diagnostic>();
             }

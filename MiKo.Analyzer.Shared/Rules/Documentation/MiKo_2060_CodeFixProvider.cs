@@ -67,7 +67,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             var template = Constants.Comments.FactoryCreateMethodSummaryStartingPhraseTemplate;
                             var returnType = ((MethodDeclarationSyntax)ancestor).ReturnType;
 
-                            if (returnType is GenericNameSyntax g && g.TypeArgumentList.Arguments.Count == 1)
+                            if (returnType is GenericNameSyntax g && g.TypeArgumentList.Arguments.Count is 1)
                             {
                                 template = Constants.Comments.FactoryCreateCollectionMethodSummaryStartingPhraseTemplate;
                                 returnType = g.TypeArgumentList.Arguments[0];
@@ -208,7 +208,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         case 'T':
                         case 't':
-                            var list = typeKey[2] == 'e' ? typeKeysWithThe : typeKeysWithThis;
+                            var list = typeKey[2] is 'e' ? typeKeysWithThe : typeKeysWithThis;
                             list.Add(typeKey);
 
                             break;

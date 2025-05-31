@@ -64,7 +64,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             // we either nave no correct event handler or too few/less type arguments, so try to guess the EventArgs
-            var eventArgsType = type?.TypeArguments.Length == 1 ? type.TypeArguments[0] : null;
+            var eventArgsType = type?.TypeArguments.Length is 1 ? type.TypeArguments[0] : null;
             var expectedName = eventName + nameof(EventArgs);
 
             if (IsProperlyNamed(eventArgsType, expectedName))

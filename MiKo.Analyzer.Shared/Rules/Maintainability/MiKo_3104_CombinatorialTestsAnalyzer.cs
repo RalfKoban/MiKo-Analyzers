@@ -97,7 +97,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var parameters = method.Parameters;
             var parametersLength = parameters.Length;
 
-            if (parametersLength == 0)
+            if (parametersLength is 0)
             {
                 return 0;
             }

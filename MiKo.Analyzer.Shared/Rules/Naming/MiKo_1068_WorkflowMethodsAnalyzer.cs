@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.DeclaredAccessibility == Accessibility.Public && symbol.ContainingType.Name.EndsWith("Workflow", StringComparison.OrdinalIgnoreCase);
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.DeclaredAccessibility is Accessibility.Public && symbol.ContainingType.Name.EndsWith("Workflow", StringComparison.OrdinalIgnoreCase);
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {

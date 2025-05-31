@@ -104,7 +104,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         {
             var symbolInfo = semanticModel.GetSymbolInfo(identifier);
 
-            if (symbolInfo.CandidateReason == CandidateReason.OverloadResolutionFailure)
+            if (symbolInfo.CandidateReason is CandidateReason.OverloadResolutionFailure)
             {
                 var arguments = invocation.ArgumentList.Arguments;
                 var argumentsCount = arguments.Count;

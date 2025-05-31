@@ -72,7 +72,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return false;
         }
 
-        private static bool IsStringFormatExtension(IMethodSymbol method) => method.ReturnType.SpecialType == SpecialType.System_String && method.Name.StartsWith("Format", StringComparison.Ordinal);
+        private static bool IsStringFormatExtension(IMethodSymbol method) => method.ReturnType.SpecialType is SpecialType.System_String && method.Name.StartsWith("Format", StringComparison.Ordinal);
 
         private static string FindBetterName(IParameterSymbol symbol)
         {
@@ -81,7 +81,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return Source;
             }
 
-            if (IsStringFormatExtension(symbol) && symbol.Type.SpecialType == SpecialType.System_String)
+            if (IsStringFormatExtension(symbol) && symbol.Type.SpecialType is SpecialType.System_String)
             {
                 return Format;
             }

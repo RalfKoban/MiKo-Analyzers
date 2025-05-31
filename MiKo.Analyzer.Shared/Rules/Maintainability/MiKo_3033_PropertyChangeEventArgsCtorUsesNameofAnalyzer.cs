@@ -39,7 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var arguments = argumentList.Arguments;
 
-                if (arguments.Count == 1)
+                if (arguments.Count is 1)
                 {
                     var argument = arguments[0];
 
@@ -57,7 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             switch (argumentExpression)
             {
-                case InvocationExpressionSyntax i when i.Expression is IdentifierNameSyntax sa && sa.GetName() == "nameof":
+                case InvocationExpressionSyntax i when i.Expression is IdentifierNameSyntax sa && sa.GetName() is "nameof":
                     return NameofHasIssue(node, i.ArgumentList.Arguments, semanticModel);
 
                 case IdentifierNameSyntax s when node.EnclosingMethodHasParameter(s.GetName(), semanticModel):

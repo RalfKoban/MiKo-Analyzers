@@ -39,7 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (method?.Parameters.Length > 0)
                 {
-                    var names = method.Parameters.Where(_ => _.RefKind == RefKind.None).ToHashSet(_ => _.Name);
+                    var names = method.Parameters.Where(_ => _.RefKind is RefKind.None).ToHashSet(_ => _.Name);
 
                     var name = node.Left.ToCleanedUpString();
 

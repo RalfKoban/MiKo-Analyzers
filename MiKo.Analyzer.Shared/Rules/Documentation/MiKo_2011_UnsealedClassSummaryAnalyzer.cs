@@ -17,14 +17,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyze(ISymbol symbol) => symbol is INamedTypeSymbol type && type.IsReferenceType && type.DeclaredAccessibility == Accessibility.Public && type.IsTestClass() is false;
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol is INamedTypeSymbol type && type.IsReferenceType && type.DeclaredAccessibility is Accessibility.Public && type.IsTestClass() is false;
 
         protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(
                                                                   DocumentationCommentTriviaSyntax comment,
                                                                   ISymbol symbol,
                                                                   IReadOnlyList<XmlElementSyntax> summaryXmls,
                                                                   Lazy<string> commentXml,
-                                                                  Lazy<IReadOnlyCollection<string>> summaries)
+                                                                  Lazy<string[]> summaries)
         {
             if (symbol.IsSealed is false && summaries.Value.Any(_ => _.Contains(Constants.Comments.SealedClassPhrase)))
             {

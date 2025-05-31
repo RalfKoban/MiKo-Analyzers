@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             if (symbol.Type.Name.EndsWithNumber())
             {
-                if (symbol.Type.TypeKind == TypeKind.Struct && symbol.ContainingType.IsTestClass())
+                if (symbol.Type.TypeKind is TypeKind.Struct && symbol.ContainingType.IsTestClass())
                 {
                     // ignore only structs in tests
                     return false;
