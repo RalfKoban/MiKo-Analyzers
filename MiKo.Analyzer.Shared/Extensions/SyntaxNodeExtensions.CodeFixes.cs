@@ -51,7 +51,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static ISymbol GetSymbol(this InvocationExpressionSyntax syntax, Document document) => syntax.GetSymbol(document.GetSemanticModel());
 
-        internal static ITypeSymbol GetTypeSymbol(this ArgumentSyntax value, Document document) => value?.Expression.GetTypeSymbol(GetSemanticModel(document));
+        internal static ITypeSymbol GetTypeSymbol(this ArgumentSyntax value, Document document) => value?.GetTypeSymbol(GetSemanticModel(document));
 
         internal static ITypeSymbol GetTypeSymbol(this ExpressionSyntax value, Document document)
         {
@@ -66,28 +66,19 @@ namespace MiKoSolutions.Analyzers
             return typeInfo.Type;
         }
 
-        internal static ITypeSymbol GetTypeSymbol(this MemberAccessExpressionSyntax value, Document document) => value?.Expression.GetTypeSymbol(GetSemanticModel(document));
+        internal static ITypeSymbol GetTypeSymbol(this MemberAccessExpressionSyntax value, Document document) => value?.GetTypeSymbol(GetSemanticModel(document));
 
-        internal static ITypeSymbol GetTypeSymbol(this BaseTypeSyntax value, Document document) => value?.Type.GetTypeSymbol(GetSemanticModel(document));
+        internal static ITypeSymbol GetTypeSymbol(this BaseTypeSyntax value, Document document) => value?.GetTypeSymbol(GetSemanticModel(document));
 
-        internal static ITypeSymbol GetTypeSymbol(this ClassDeclarationSyntax value, Document document) => value?.Identifier.GetSymbol(GetSemanticModel(document)) as ITypeSymbol;
+        internal static ITypeSymbol GetTypeSymbol(this ClassDeclarationSyntax value, Document document) => value?.GetTypeSymbol(GetSemanticModel(document));
 
-        internal static ITypeSymbol GetTypeSymbol(this RecordDeclarationSyntax value, Document document) => value?.Identifier.GetSymbol(GetSemanticModel(document)) as ITypeSymbol;
+        internal static ITypeSymbol GetTypeSymbol(this RecordDeclarationSyntax value, Document document) => value?.GetTypeSymbol(GetSemanticModel(document));
 
-        internal static ITypeSymbol GetTypeSymbol(this VariableDeclarationSyntax value, Document document) => value?.Type.GetTypeSymbol(GetSemanticModel(document));
+        internal static ITypeSymbol GetTypeSymbol(this VariableDeclarationSyntax value, Document document) => value?.GetTypeSymbol(GetSemanticModel(document));
 
-        internal static ITypeSymbol GetTypeSymbol(this TypeSyntax value, Document document)
-        {
-            if (value is null)
-            {
-                return null;
-            }
+        internal static ITypeSymbol GetTypeSymbol(this VariableDesignationSyntax value, Document document) => value?.GetTypeSymbol(GetSemanticModel(document));
 
-            var semanticModel = GetSemanticModel(document);
-            var typeInfo = semanticModel.GetTypeInfo(value);
-
-            return typeInfo.Type;
-        }
+        internal static ITypeSymbol GetTypeSymbol(this TypeSyntax value, Document document) => value?.GetTypeSymbol(GetSemanticModel(document));
 
         internal static bool HasMinimumCSharpVersion(this Document document, LanguageVersion wantedVersion) => document.TryGetSyntaxTree(out var syntaxTree) && syntaxTree.HasMinimumCSharpVersion(wantedVersion);
 
@@ -131,12 +122,12 @@ namespace MiKoSolutions.Analyzers
         {
             switch (value)
             {
-                case XmlEmptyElementSyntax element when element.GetName() == Constants.XmlTag.See:
+                case XmlEmptyElementSyntax element when element.GetName() is Constants.XmlTag.See:
                 {
                     return IsCref(element.Attributes);
                 }
 
-                case XmlElementSyntax element when element.GetName() == Constants.XmlTag.See:
+                case XmlElementSyntax element when element.GetName() is Constants.XmlTag.See:
                 {
                     return IsCref(element.StartTag.Attributes);
                 }
@@ -154,12 +145,12 @@ namespace MiKoSolutions.Analyzers
         {
             switch (value)
             {
-                case XmlEmptyElementSyntax element when element.GetName() == Constants.XmlTag.See:
+                case XmlEmptyElementSyntax element when element.GetName() is Constants.XmlTag.See:
                 {
                     return IsCref(element.Attributes, type);
                 }
 
-                case XmlElementSyntax element when element.GetName() == Constants.XmlTag.See:
+                case XmlElementSyntax element when element.GetName() is Constants.XmlTag.See:
                 {
                     return IsCref(element.StartTag.Attributes, type);
                 }
@@ -177,12 +168,12 @@ namespace MiKoSolutions.Analyzers
         {
             switch (value)
             {
-                case XmlEmptyElementSyntax element when element.GetName() == Constants.XmlTag.See:
+                case XmlEmptyElementSyntax element when element.GetName() is Constants.XmlTag.See:
                 {
                     return IsCref(element.Attributes, type);
                 }
 
-                case XmlElementSyntax element when element.GetName() == Constants.XmlTag.See:
+                case XmlElementSyntax element when element.GetName() is Constants.XmlTag.See:
                 {
                     return IsCref(element.StartTag.Attributes, type);
                 }
@@ -213,12 +204,12 @@ namespace MiKoSolutions.Analyzers
         {
             switch (value)
             {
-                case XmlEmptyElementSyntax element when element.GetName() == Constants.XmlTag.See:
+                case XmlEmptyElementSyntax element when element.GetName() is Constants.XmlTag.See:
                 {
                     return IsCref(element.Attributes, type, member);
                 }
 
-                case XmlElementSyntax element when element.GetName() == Constants.XmlTag.See:
+                case XmlElementSyntax element when element.GetName() is Constants.XmlTag.See:
                 {
                     return IsCref(element.StartTag.Attributes, type, member);
                 }

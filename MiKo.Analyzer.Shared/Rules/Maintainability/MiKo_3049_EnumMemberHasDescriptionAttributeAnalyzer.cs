@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var attributes = field.GetAttributes();
 
-                if (attributes.Length == 0)
+                if (attributes.Length is 0)
                 {
                     yield return Issue(field);
                 }
@@ -43,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var descriptionAttributes = attributes.Where(_ => _.AttributeClass.InheritsFrom(DescriptionAttributeName)).ToList();
 
-                    if (descriptionAttributes.Count == 0)
+                    if (descriptionAttributes.Count is 0)
                     {
                         yield return Issue(field);
                     }
@@ -51,7 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         foreach (var attribute in descriptionAttributes)
                         {
-                            if (attribute.ConstructorArguments.Length == 0)
+                            if (attribute.ConstructorArguments.Length is 0)
                             {
                                 yield return Issue(field);
                             }

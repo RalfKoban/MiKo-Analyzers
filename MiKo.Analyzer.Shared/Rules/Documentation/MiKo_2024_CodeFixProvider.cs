@@ -40,8 +40,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             // TODO RKN: Update comment base on whether we have a Flags enum or not (defined as part of the properties of the reported issue)
             var updatedComment = isFlagged
-                                 ? Comment(comment, FlagsReplacementMapKeys, FlagsReplacementMap, FirstWordHandling.MakeLowerCase | FirstWordHandling.MakeThirdPersonSingular)
-                                 : Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordHandling.MakeLowerCase);
+                                 ? Comment(comment, FlagsReplacementMapKeys, FlagsReplacementMap, FirstWordHandling.StartLowerCase | FirstWordHandling.MakeThirdPersonSingular)
+                                 : Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordHandling.StartLowerCase);
 
             return CommentStartingWith(updatedComment, phrase);
         }

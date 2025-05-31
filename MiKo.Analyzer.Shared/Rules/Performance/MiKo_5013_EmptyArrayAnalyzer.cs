@@ -47,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
             switch (size)
             {
-                case LiteralExpressionSyntax literal when literal.Token.ValueText == "0":
+                case LiteralExpressionSyntax literal when literal.Token.ValueText is "0":
                 case OmittedArraySizeExpressionSyntax _ when node.Initializer?.ChildNodes().Any() is false:
                 {
                     // it's an empty array
@@ -61,6 +61,6 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             }
         }
 
-        private static bool HasIssue(InitializerExpressionSyntax node) => node.Expressions.Count == 0; // seems we do not have any contents
+        private static bool HasIssue(InitializerExpressionSyntax node) => node.Expressions.Count is 0; // seems we do not have any contents
     }
 }

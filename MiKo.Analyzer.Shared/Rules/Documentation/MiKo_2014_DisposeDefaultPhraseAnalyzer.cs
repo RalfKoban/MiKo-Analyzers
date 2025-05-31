@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   ISymbol symbol,
                                                                   IReadOnlyList<XmlElementSyntax> summaryXmls,
                                                                   Lazy<string> commentXml,
-                                                                  Lazy<IReadOnlyCollection<string>> summaries)
+                                                                  Lazy<string[]> summaries)
         {
             var method = (IMethodSymbol)symbol;
 

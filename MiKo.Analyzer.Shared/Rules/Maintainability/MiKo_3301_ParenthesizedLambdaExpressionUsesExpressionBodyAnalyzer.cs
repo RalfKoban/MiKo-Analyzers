@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var statements = node.Block.DescendantNodes<StatementSyntax>().Take(Threshold).ToList();
 
             // simplification works only if it is a single statement
-            if (statements.Count == 1)
+            if (statements.Count is 1)
             {
                 switch (statements[0])
                 {

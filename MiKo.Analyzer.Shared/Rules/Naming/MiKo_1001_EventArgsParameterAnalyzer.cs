@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return false;
             }
 
-            if (symbol.MethodKind == MethodKind.PropertySet)
+            if (symbol.MethodKind is MethodKind.PropertySet)
             {
                 return false; // ignore the setter as the name there has to be 'value'
             }
@@ -79,7 +79,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var parameter = parameters[index];
 
-                var expected = count == 1
+                var expected = count is 1
                                ? symbol.Name == nameof(Equals) ? "other" : "e"
                                : GetNameForIndex(index);
 
@@ -117,7 +117,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var applicableParameters = method.Parameters.Where(_ => IsApplicable(_.Type)).ToList();
 
-            if (applicableParameters.Count == 1)
+            if (applicableParameters.Count is 1)
             {
                 return method.Name == nameof(Equals) ? "other" : "e";
             }

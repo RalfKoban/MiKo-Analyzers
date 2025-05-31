@@ -80,13 +80,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     tokensForTexts.Remove(token);
 
-                    if (i == 0)
+                    if (i is 0)
                     {
                         // skip first line as that shall not be replaced with a <para/> tag
                         // (this happens in case the comment does not start with any XML tag)
                         noXmlTagOnCommentStart = true;
                     }
-                    else if (i == 1)
+                    else if (i is 1)
                     {
                         // skip second line as that shall not be replaced with a <para/> tag
                         // (this is the next line e.g. after a <summary> tag)
@@ -114,7 +114,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         if (syntaxToken.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
                         {
-                            if (noXmlTagOnCommentStart && i == 4)
+                            if (noXmlTagOnCommentStart && i is 4)
                             {
                                 tokensForTexts.Remove(syntaxToken);
                             }
@@ -159,11 +159,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             replacements.Add(XmlText(tokensForTexts));
 
             // get rid of all texts that do not have any contents as they would cause a NullReferenceException inside Roslyn
-            replacements.RemoveAll(_ => _ is XmlTextSyntax t && t.TextTokens.Count == 0);
+            replacements.RemoveAll(_ => _ is XmlTextSyntax t && t.TextTokens.Count is 0);
 
             var replacementsCount = replacements.Count;
 
-            if (replacementsCount == 0)
+            if (replacementsCount is 0)
             {
                 // nothing to replace
                 return new[] { text };

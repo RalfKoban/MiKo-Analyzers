@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyze(ISymbol symbol) => symbol is IMethodSymbol method && method.IsOverride && method.Parameters.IsEmpty && method.ReturnType.SpecialType == SpecialType.System_Int32 && method.Name == nameof(GetHashCode);
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol is IMethodSymbol method && method.IsOverride && method.Parameters.IsEmpty && method.ReturnType.SpecialType is SpecialType.System_Int32 && method.Name == nameof(GetHashCode);
 
         protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {

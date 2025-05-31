@@ -599,7 +599,7 @@ This naming convention helps ensure clarity and consistency in method functional
     <value>Remove type suffix</value>
   </data>
   <data name="MiKo_1037_Description" xml:space="preserve">
-    <value>Using 'Enum' as a suffix to indicate a type an Enum is unnecessary. This also goes for suffixes in general, whether for interfaces, classes, records, or structs. Keeping names clear and straightforward without these suffixes makes the code cleaner and easier to understand.</value>
+    <value>Avoid using suffixes such as 'Type', 'Enum', 'Class', 'Struct', 'Record', or 'Interface' in type names. These suffixes do not add value and only make names longer. Prefer concise, meaningful names that clearly indicate the type's purpose.</value>
   </data>
   <data name="MiKo_1037_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -1562,6 +1562,18 @@ To make them clearer and more descriptive, the names should include details abou
   </data>
   <data name="MiKo_1117_Title" xml:space="preserve">
     <value>Test methods should be named more precisely</value>
+  </data>
+  <data name="MiKo_1118_CodeFixTitle" xml:space="preserve">
+    <value>Remove 'Async' suffix</value>
+  </data>
+  <data name="MiKo_1118_Description" xml:space="preserve">
+    <value>Test method names should be clear and describe the intended scenario. They should focus on readability rather than technical details of the .NET API. Avoid adding the 'Async' suffix to test methods, as it is an implementation detail that does not contribute to understanding the test's purpose.</value>
+  </data>
+  <data name="MiKo_1118_MessageFormat" xml:space="preserve">
+    <value>Name it '{1}'</value>
+  </data>
+  <data name="MiKo_1118_Title" xml:space="preserve">
+    <value>Test methods should not end with 'Async'</value>
   </data>
   <data name="MiKo_1200_CodeFixTitle" xml:space="preserve">
     <value>Rename exception</value>
@@ -3145,6 +3157,19 @@ Such documentation also undermines tool integration and usability, as IDEs rely 
   </data>
   <data name="MiKo_2238_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation shall not start with 'Make sure to call this'</value>
+  </data>
+  <data name="MiKo_2239_CodeFixTitle" xml:space="preserve">
+    <value>Convert into '/// &lt;summary&gt;' comment</value>
+  </data>
+  <data name="MiKo_2239_Description" xml:space="preserve">
+    <value>API documentation should use '///' instead of '/** */' because '///' creates XML comments that the .NET compiler understands. These comments show up in IntelliSense, help generate external documentation, and follow a structured format.
+'/** */' is just for general comments and will not be used by tools or IDEs to provide helpful info.</value>
+  </data>
+  <data name="MiKo_2239_MessageFormat" xml:space="preserve">
+    <value>Use '///' with XML tags instead of '/** */'</value>
+  </data>
+  <data name="MiKo_2239_Title" xml:space="preserve">
+    <value>Documentation should use '///' and not '/** */'</value>
   </data>
   <data name="MiKo_2300_Description" xml:space="preserve">
     <value>Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works—let the code itself do that.
@@ -4824,6 +4849,30 @@ Instead, use non-generic types as type arguments. This approach makes the code's
   <data name="MiKo_3226_Title" xml:space="preserve">
     <value>Read-only fields with initializers should be const</value>
   </data>
+  <data name="MiKo_3227_CodeFixTitle" xml:space="preserve">
+    <value>Apply 'is' pattern</value>
+  </data>
+  <data name="MiKo_3227_Description" xml:space="preserve">
+    <value>Equality checks using 'is' pattern matching are more intuitive and easier to read than the '==' equality operator. This makes them the preferred choice for clarity and comprehension.</value>
+  </data>
+  <data name="MiKo_3227_MessageFormat" xml:space="preserve">
+    <value>Use 'is' instead of '=='</value>
+  </data>
+  <data name="MiKo_3227_Title" xml:space="preserve">
+    <value>Prefer pattern matching for equality checks</value>
+  </data>
+  <data name="MiKo_3228_CodeFixTitle" xml:space="preserve">
+    <value>Apply 'is not' pattern</value>
+  </data>
+  <data name="MiKo_3228_Description" xml:space="preserve">
+    <value>Inequality checks using 'is not' pattern matching are more intuitive and easier to read than the '!=' inequality operator. This makes them the preferred choice for clarity and comprehension.</value>
+  </data>
+  <data name="MiKo_3228_MessageFormat" xml:space="preserve">
+    <value>Use 'is not' instead of '!='</value>
+  </data>
+  <data name="MiKo_3228_Title" xml:space="preserve">
+    <value>Prefer pattern matching for inequality checks</value>
+  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>
@@ -5584,7 +5633,7 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Indent dots</value>
   </data>
   <data name="MiKo_6040_Title" xml:space="preserve">
-    <value>Consecutive invocations spaning multiple lines should be aligned by their dots</value>
+    <value>Consecutive invocations spanning multiple lines should be aligned by their dots</value>
   </data>
   <data name="MiKo_6041_CodeFixTitle" xml:space="preserve">
     <value>Place assignment on same line</value>
@@ -5873,6 +5922,18 @@ This organization ensures clarity and makes the code easier to find, understand 
   </data>
   <data name="MiKo_6064_Title" xml:space="preserve">
     <value>Identifier invocations should be placed on same line</value>
+  </data>
+  <data name="MiKo_6065_CodeFixTitle" xml:space="preserve">
+    <value>Indent dot</value>
+  </data>
+  <data name="MiKo_6065_Description" xml:space="preserve">
+    <value>Code readability improves when invocations spanning multiple lines are vertically indented. This makes the code clearer and easier to follow.</value>
+  </data>
+  <data name="MiKo_6065_MessageFormat" xml:space="preserve">
+    <value>Indent dot</value>
+  </data>
+  <data name="MiKo_6065_Title" xml:space="preserve">
+    <value>Consecutive invocations spanning multiple lines should be indented and not outdented</value>
   </data>
   <data name="MiKo_6070_CodeFixTitle" xml:space="preserve">
     <value>Surround with blank lines</value>

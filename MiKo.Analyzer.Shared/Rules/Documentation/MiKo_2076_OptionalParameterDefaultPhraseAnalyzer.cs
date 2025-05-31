@@ -147,7 +147,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 case TypeKind.Enum:
                 {
-                    var defaultFieldValue = parameterType.GetFields().FirstOrDefault(_ => _.ConstantValue is null || _.ConstantValue.ToString() == "0")?.Name;
+                    var defaultFieldValue = parameterType.GetFields().FirstOrDefault(_ => _.ConstantValue is null || _.ConstantValue.ToString() is "0")?.Name;
 
                     var defaultValue = defaultFieldValue != null
                                        ? parameterType.Name + "." + defaultFieldValue

@@ -47,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private IEnumerable<Diagnostic> AnalyzeMethodOverloads(IReadOnlyCollection<IMethodSymbol> methods)
         {
-            var methodWithoutParameters = methods.FirstOrDefault(_ => _.Parameters.Length == 0);
+            var methodWithoutParameters = methods.FirstOrDefault(_ => _.Parameters.Length is 0);
 
             if (methodWithoutParameters != null)
             {

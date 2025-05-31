@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   ISymbol symbol,
                                                                   IReadOnlyList<XmlElementSyntax> summaryXmls,
                                                                   Lazy<string> commentXml,
-                                                                  Lazy<IReadOnlyCollection<string>> summaries)
+                                                                  Lazy<string[]> summaries)
         {
             var count = summaryXmls.Count;
 
@@ -65,7 +65,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         var tagName = startTag.GetName();
 
-                        if (tagName == tag || tagName == Constants.XmlTag.Para)
+                        if (tagName == tag || tagName is Constants.XmlTag.Para)
                         {
                             continue; // skip over the start tag and name syntax
                         }
@@ -77,7 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         var tagName = endTag.GetName();
 
-                        if (tagName == Constants.XmlTag.Para)
+                        if (tagName is Constants.XmlTag.Para)
                         {
                             continue; // skip over the start tag and name syntax
                         }
@@ -96,8 +96,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
 
                     case XmlNameSyntax _:
-                    case XmlElementSyntax e when e.GetName() == Constants.XmlTag.Para:
-                    case XmlEmptyElementSyntax ee when ee.GetName() == Constants.XmlTag.Para:
+                    case XmlElementSyntax e when e.GetName() is Constants.XmlTag.Para:
+                    case XmlEmptyElementSyntax ee when ee.GetName() is Constants.XmlTag.Para:
                         continue; // skip over the start tag and name syntax
 
                     case XmlTextSyntax text:
@@ -125,7 +125,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                 continue;
                             }
 
-                            if (valueText.Length == 1 && Constants.Comments.Delimiters.Contains(valueText[0]))
+                            if (valueText.Length is 1 && Constants.Comments.Delimiters.Contains(valueText[0]))
                             {
                                 // this is a dot or something directly after the XML tag, so ignore that
                                 continue;

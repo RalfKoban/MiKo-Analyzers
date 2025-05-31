@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 // ncrunch: rdi off
 // ReSharper disable once CheckNamespace
@@ -12,9 +11,6 @@ namespace System
         public static SplitReadOnlySpanEnumerator SplitBy(this in ReadOnlySpan<char> value, in ReadOnlySpan<char> separatorChars) => SplitBy(value, separatorChars, StringSplitOptions.None);
 
         public static SplitReadOnlySpanEnumerator SplitBy(this in ReadOnlySpan<char> value, in ReadOnlySpan<char> separatorChars, in StringSplitOptions options) => new SplitReadOnlySpanEnumerator(value, separatorChars, options);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SplitReadOnlySpanEnumerator SplitBy(this in ReadOnlySpan<char> value, char[] separatorChars, in StringSplitOptions options) => SplitBy(value, separatorChars.AsSpan(), options);
 
         public static IReadOnlyList<string> SplitBy(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> findings, in StringComparison comparison = StringComparison.OrdinalIgnoreCase, in StringSplitOptions options = StringSplitOptions.None)
         {

@@ -59,7 +59,7 @@ namespace MiKoSolutions.Analyzers
 
             var lastIndexOfFirstSpace = text.LastIndexOfAny(Constants.WhiteSpaceCharacters);
 
-            if (lastIndexOfFirstSpace == -1)
+            if (lastIndexOfFirstSpace is -1)
             {
                 return null;
             }
@@ -70,7 +70,7 @@ namespace MiKoSolutions.Analyzers
                                         ? 0
                                         : followUpText.IndexOfAny(Constants.WhiteSpaceCharacters);
 
-            if (firstIndexOfNextSpace == -1)
+            if (firstIndexOfNextSpace is -1)
             {
                 return null;
             }

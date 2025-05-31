@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var usedVariables = switchStatement.Sections.Select(_ => _.Statements.SelectMany(GetAssignmentIdentifierCandidates).ToHashSet()).ToList();
 
-            if (usedVariables.Count == 0)
+            if (usedVariables.Count is 0)
             {
                 // for whatever reason we do not have any variables
                 return false;
