@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -15,6 +16,9 @@ namespace MiKoSolutions.Analyzers
     internal static class SyntaxTokenExtensions
     {
         internal static IEnumerable<T> Ancestors<T>(this in SyntaxToken value) where T : SyntaxNode => value.Parent.Ancestors<T>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool IsKind(this in SyntaxToken value, in SyntaxKind kind) => value.RawKind == (int)kind;
 
         internal static SyntaxToken AsToken(this SyntaxKind value) => SyntaxFactory.Token(value);
 
@@ -90,7 +94,7 @@ namespace MiKoSolutions.Analyzers
             // Perf: quick check to avoid costly loop
             if (count >= 2)
             {
-                if (leadingTrivia[count == 4 ? 2 : 1].IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
+                if (leadingTrivia[count is 4 ? 2 : 1].IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
                 {
                     return true;
                 }
@@ -107,7 +111,7 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        internal static DocumentationCommentTriviaSyntax[] GetDocumentationCommentTriviaSyntax(this in SyntaxToken value)
+        internal static DocumentationCommentTriviaSyntax[] GetDocumentationCommentTriviaSyntax(this in SyntaxToken value, in SyntaxKind kind = SyntaxKind.SingleLineDocumentationCommentTrivia)
         {
             var leadingTrivia = value.LeadingTrivia;
             var count = leadingTrivia.Count;
@@ -115,9 +119,9 @@ namespace MiKoSolutions.Analyzers
             // Perf: quick check to avoid costly loop
             if (count >= 2)
             {
-                var trivia = leadingTrivia[count == 4 ? 2 : 1];
+                var trivia = leadingTrivia[count is 4 ? 2 : 1];
 
-                if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
+                if (trivia.IsKind(kind) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
                 {
                     return new[] { syntax };
                 }
@@ -130,7 +134,7 @@ namespace MiKoSolutions.Analyzers
             {
                 var trivia = leadingTrivia[index];
 
-                if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
+                if (trivia.IsKind(kind) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
                 {
                     if (results is null)
                     {
@@ -148,7 +152,7 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            return results;
+            return results ?? Array.Empty<DocumentationCommentTriviaSyntax>();
         }
 
         internal static SyntaxTrivia[] GetComment(this in SyntaxToken value) => value.GetAllTrivia().Where(_ => _.IsComment()).ToArray();
@@ -165,7 +169,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsAnyKind(this in SyntaxToken value, ISet<SyntaxKind> kinds) => kinds.Contains(value.Kind());
 
-        internal static bool IsAnyKind(this in SyntaxToken value, params SyntaxKind[] kinds)
+        internal static bool IsAnyKind(this in SyntaxToken value, in ReadOnlySpan<SyntaxKind> kinds)
         {
             var valueKind = value.Kind();
 
@@ -217,7 +221,7 @@ namespace MiKoSolutions.Analyzers
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            if (sourceCount == 0)
+            if (sourceCount is 0)
             {
                 return Array.Empty<SyntaxToken>();
             }
@@ -372,6 +376,8 @@ namespace MiKoSolutions.Analyzers
         }
 
         internal static SyntaxToken WithLeadingXmlComment(this in SyntaxToken value) => value.WithLeadingTrivia(SyntaxNodeExtensions.XmlCommentStart);
+
+        internal static SyntaxToken WithLeadingXmlCommentExterior(this SyntaxToken value) => value.WithLeadingTrivia(SyntaxNodeExtensions.XmlCommentExterior);
 
         internal static SyntaxToken WithTriviaFrom(this in SyntaxToken value, SyntaxNode node) => value.WithLeadingTriviaFrom(node)
                                                                                                        .WithTrailingTriviaFrom(node);

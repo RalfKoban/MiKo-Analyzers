@@ -85,7 +85,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var findings = AbbreviationDetector.Find(symbolName);
             var findingsLength = findings.Length;
 
-            if (findingsLength == 0)
+            if (findingsLength is 0)
             {
                 return Array.Empty<Diagnostic>();
             }

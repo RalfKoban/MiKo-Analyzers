@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var textTokens = comment.GetXmlTextTokens();
             var textTokensCount = textTokens.Count;
 
-            if (textTokensCount == 0)
+            if (textTokensCount is 0)
             {
                 return Array.Empty<Diagnostic>();
             }

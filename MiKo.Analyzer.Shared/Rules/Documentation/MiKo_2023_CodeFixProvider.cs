@@ -229,7 +229,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 commentContinuation.Append(ReplacementTo);
 
-                var continuation = Verbalizer.MakeFirstWordInfiniteVerb(subText, FirstWordHandling.MakeLowerCase);
+                var continuation = Verbalizer.MakeFirstWordInfiniteVerb(subText, FirstWordHandling.StartLowerCase);
 
                 commentContinuation.Append(continuation);
             }
@@ -319,37 +319,37 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (text.Length > 0)
             {
-                if (text.StartsWith(StartWithArticleA, StringComparison.Ordinal))
+                if (text.StartsWith(StartWithArticleA))
                 {
                     return new ConcreteMapInfo(mappedDataValue.ReplacementMapForA, mappedDataValue.ReplacementMapKeysForA, mappedDataValue.UniqueReplacementMapKeysForA);
                 }
 
-                if (text.StartsWith(StartWithArticleAn, StringComparison.Ordinal))
+                if (text.StartsWith(StartWithArticleAn))
                 {
                     return new ConcreteMapInfo(mappedDataValue.ReplacementMapForAn, mappedDataValue.ReplacementMapKeysForAn, mappedDataValue.UniqueReplacementMapKeysForAn);
                 }
 
-                if (text.StartsWith(StartWithArticleThe, StringComparison.Ordinal))
+                if (text.StartsWith(StartWithArticleThe))
                 {
                     return new ConcreteMapInfo(mappedDataValue.ReplacementMapForThe, mappedDataValue.ReplacementMapKeysForThe, mappedDataValue.UniqueReplacementMapKeysForThe);
                 }
 
-                if (text.StartsWith(StartWithParenthesis, StringComparison.Ordinal))
+                if (text.StartsWith(StartWithParenthesis))
                 {
                     return new ConcreteMapInfo(mappedDataValue.ReplacementMapForParenthesis, mappedDataValue.ReplacementMapKeysForParenthesis, mappedDataValue.UniqueReplacementMapKeysForParenthesis);
                 }
 
-                if (text.StartsWith(StartWithArticleLowerCaseA, StringComparison.Ordinal))
+                if (text.StartsWith(StartWithArticleLowerCaseA))
                 {
                     return new ConcreteMapInfo(mappedDataValue.ReplacementMapForLowerCaseA, mappedDataValue.ReplacementMapKeysForLowerCaseA, mappedDataValue.UniqueReplacementMapKeysForA);
                 }
 
-                if (text.StartsWith(StartWithArticleLowerCaseAn, StringComparison.Ordinal))
+                if (text.StartsWith(StartWithArticleLowerCaseAn))
                 {
                     return new ConcreteMapInfo(mappedDataValue.ReplacementMapForLowerCaseAn, mappedDataValue.ReplacementMapKeysForLowerCaseAn, mappedDataValue.UniqueReplacementMapKeysForAn);
                 }
 
-                if (text.StartsWith(StartWithArticleLowerCaseThe, StringComparison.Ordinal))
+                if (text.StartsWith(StartWithArticleLowerCaseThe))
                 {
                     return new ConcreteMapInfo(mappedDataValue.ReplacementMapForLowerCaseThe, mappedDataValue.ReplacementMapKeysForLowerCaseThe, mappedDataValue.UniqueReplacementMapKeysForThe);
                 }
@@ -817,9 +817,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 for (var i = 0; i < length; i++)
                 {
-                    var order = orders[i];
-
-                    if (text.StartsWith(order.AsSpan()))
+                    if (text.StartsWith(orders[i].AsSpan()))
                     {
                         return i;
                     }

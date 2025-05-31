@@ -170,7 +170,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static bool IsDocument(string typeName) => typeName.EndsWith("Document", StringComparison.Ordinal);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool IsMefAggregateCatalog(string typeName) => typeName == "AssemblyCatalog";
+        private static bool IsMefAggregateCatalog(string typeName) => typeName is "AssemblyCatalog";
 
         private static string GetPluralName(in ReadOnlySpan<char> originalName, out string name)
         {

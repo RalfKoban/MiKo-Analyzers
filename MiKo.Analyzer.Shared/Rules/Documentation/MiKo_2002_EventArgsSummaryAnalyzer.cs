@@ -31,26 +31,33 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   ISymbol symbol,
                                                                   IReadOnlyList<XmlElementSyntax> summaryXmls,
                                                                   Lazy<string> commentXml,
-                                                                  Lazy<IReadOnlyCollection<string>> summaries)
+                                                                  Lazy<string[]> summaries)
         {
             return HasEventSummary(summaries.Value)
                    ? Array.Empty<Diagnostic>()
                    : new[] { Issue(summaryXmls[0].GetContentsLocation(), StartingPhraseConcrete, "\"" + EndingPhraseConcrete) };
         }
 
-        private static bool HasEventSummary(IEnumerable<string> summaries)
+        private static bool HasEventSummary(string[] summaries)
         {
-            foreach (var summary in summaries)
+            var summariesLength = summaries.Length;
+
+            if (summariesLength > 0)
             {
-                var trimmedSummary = summary.Without(Constants.Comments.SealedClassPhrase).AsSpan().Trim();
-
-                if (trimmedSummary.StartsWith(StartingPhrase, Comparison))
+                for (var index = 0; index < summariesLength; index++)
                 {
-                    var phrase = trimmedSummary.StartsWith(StartingPhraseConcrete, Comparison)
-                                 ? EndingPhraseConcrete
-                                 : EndingPhraseMultiple;
+                    var summary = summaries[index];
 
-                    return trimmedSummary.EndsWith(phrase, Comparison);
+                    var trimmedSummary = summary.Without(Constants.Comments.SealedClassPhrase).AsSpan().Trim();
+
+                    if (trimmedSummary.StartsWith(StartingPhrase, Comparison))
+                    {
+                        var phrase = trimmedSummary.StartsWith(StartingPhraseConcrete, Comparison)
+                                     ? EndingPhraseConcrete
+                                     : EndingPhraseMultiple;
+
+                        return trimmedSummary.EndsWith(phrase, Comparison);
+                    }
                 }
             }
 

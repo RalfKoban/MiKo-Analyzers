@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var textTokens = comment.GetXmlTextTokens(_ => CodeTags.Contains(_.GetName()) is false);
             var textTokensCount = textTokens.Count;
 
-            if (textTokensCount == 0)
+            if (textTokensCount is 0)
             {
                 return Array.Empty<Diagnostic>();
             }

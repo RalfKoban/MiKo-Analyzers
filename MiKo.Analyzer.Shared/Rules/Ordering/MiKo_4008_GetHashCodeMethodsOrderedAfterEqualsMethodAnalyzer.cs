@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation)
         {
-            var methods = GetMethodsOrderedByLocation(symbol).Where(_ => _.DeclaredAccessibility == Accessibility.Public).ToList();
+            var methods = GetMethodsOrderedByLocation(symbol).Where(_ => _.DeclaredAccessibility is Accessibility.Public).ToList();
             var methodNames = methods.ToHashSet(_ => _.Name);
 
             return methodNames.Contains(nameof(GetHashCode)) && methodNames.Contains(nameof(Equals))

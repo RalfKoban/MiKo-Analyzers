@@ -18,6 +18,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => Resources.MiKo_2016_CodeFixTitle.FormatWith(Phrase);
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => CommentStartingWith((XmlElementSyntax)syntax, Phrase, FirstWordHandling.MakeLowerCase | FirstWordHandling.MakeThirdPersonSingular);
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => CommentStartingWith((XmlElementSyntax)syntax, Phrase, FirstWordHandling.StartLowerCase | FirstWordHandling.MakeThirdPersonSingular);
     }
 }

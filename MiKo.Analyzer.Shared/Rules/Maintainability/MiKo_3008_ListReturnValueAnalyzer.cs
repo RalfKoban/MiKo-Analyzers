@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.TypeKind == TypeKind.Interface;
+        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.TypeKind is TypeKind.Interface;
 
         protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol, Compilation compilation) => symbol.GetMethods(MethodKind.Ordinary).Select(AnalyzeOrdinaryMethod).WhereNotNull();
 
@@ -55,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var returnTypeString = returnType.ToString();
 
-            if (returnTypeString == "byte[]")
+            if (returnTypeString is "byte[]")
             {
                 return null;
             }

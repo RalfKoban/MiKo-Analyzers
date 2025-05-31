@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return;
             }
 
-            if (node.IsExpression(semanticModel))
+            if (node.IsExpressionTree(semanticModel))
             {
                 // ignore expression trees
                 return;

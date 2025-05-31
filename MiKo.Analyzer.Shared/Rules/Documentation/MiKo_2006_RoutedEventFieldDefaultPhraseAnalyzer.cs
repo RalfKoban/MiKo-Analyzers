@@ -45,7 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var commentXml = symbol.GetDocumentationCommentXml();
             var summaries = CommentExtensions.GetSummaries(commentXml);
 
-            if (summaries.Count != 0)
+            if (summaries.Length > 0)
             {
                 var summaryPhrases = Phrases(Constants.Comments.RoutedEventFieldSummaryPhrase, containingTypeFullName, eventName);
 
@@ -57,7 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var values = CommentExtensions.GetValue(commentXml);
 
-            if (values.Count != 0)
+            if (values.Length > 0)
             {
                 var valuePhrases = Phrases(Constants.Comments.RoutedEventFieldValuePhrase, containingTypeFullName, eventName);
 

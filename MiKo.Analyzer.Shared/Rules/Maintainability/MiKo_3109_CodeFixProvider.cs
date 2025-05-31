@@ -87,7 +87,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var name = method.GetName();
 
-                    if (name == "Parse")
+                    if (name is "Parse")
                     {
                         return method.ArgumentList?.Arguments.FirstOrDefault()?.GetName();
                     }
@@ -172,7 +172,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             // let's see if we have the special case 'Is.Not.Null'
             private static string GetStartingWord(in SeparatedSyntaxList<ArgumentSyntax> arguments)
             {
-                if (arguments.Count > 1 && arguments[1].Expression.ToString() == "Is.Not.Null")
+                if (arguments.Count > 1 && arguments[1].Expression.ToString() is "Is.Not.Null")
                 {
                     return "missing";
                 }

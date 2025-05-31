@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -12,20 +12,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3099";
 
-        private static readonly SyntaxKind[] EqualityOperators = { SyntaxKind.EqualsEqualsToken, SyntaxKind.ExclamationEqualsToken };
+        private static readonly SyntaxKind[] EqualityExpressions = { SyntaxKind.EqualsExpression, SyntaxKind.NotEqualsExpression };
 
         public MiKo_3099_DoNotCompareEnumsWithNullAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(Analyze, SyntaxKind.NullLiteralExpression);
-
-        private static bool IsEnum(ExpressionSyntax value, in SyntaxNodeAnalysisContext context)
-        {
-            var type = value.GetTypeSymbol(context.SemanticModel);
-
-            return type.IsEnum();
-        }
 
         private void Analyze(SyntaxNodeAnalysisContext context)
         {
@@ -37,37 +30,33 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private IEnumerable<Diagnostic> Analyze(LiteralExpressionSyntax node, SyntaxNodeAnalysisContext context)
+        private Diagnostic[] Analyze(LiteralExpressionSyntax node, in SyntaxNodeAnalysisContext context)
         {
             var parent = node.Parent;
 
             switch (parent)
             {
-                case BinaryExpressionSyntax binary when binary.OperatorToken.IsAnyKind(EqualityOperators) && IsEnum(binary.Left, context):
+                case BinaryExpressionSyntax binary when binary.IsAnyKind(EqualityExpressions) && binary.Left.IsEnum(context.SemanticModel):
                 {
-                    yield return Issue(binary);
-
-                    break;
+                    return new[] { Issue(binary) };
                 }
 
                 case ConstantPatternSyntax pattern:
                 {
                     switch (pattern.Parent)
                     {
-                        case IsPatternExpressionSyntax isPattern when IsEnum(isPattern.Expression, context):
-                            yield return Issue(isPattern);
+                        case IsPatternExpressionSyntax isPattern when isPattern.IsEnum(context.SemanticModel):
+                            return new[] { Issue(isPattern) };
 
-                            break;
-
-                        case UnaryPatternSyntax unary when unary.Parent is IsPatternExpressionSyntax isPattern && IsEnum(isPattern.Expression, context):
-                            yield return Issue(isPattern);
-
-                            break;
+                        case UnaryPatternSyntax unary when unary.Parent is IsPatternExpressionSyntax isPattern && isPattern.IsEnum(context.SemanticModel):
+                            return new[] { Issue(isPattern) };
                     }
 
                     break;
                 }
             }
+
+            return Array.Empty<Diagnostic>();
         }
     }
 }

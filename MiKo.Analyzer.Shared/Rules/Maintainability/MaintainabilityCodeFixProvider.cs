@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static ArgumentSyntax Argument(MemberAccessExpressionSyntax expression, params ArgumentSyntax[] arguments)
         {
-            var syntax = arguments.Length == 0
+            var syntax = arguments.Length is 0
                          ? (ExpressionSyntax)expression // we do not want to have any empty argument list
                          : Invocation(expression, arguments);
 

@@ -45,7 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var method = node.GetEnclosingMethod(semanticModel);
 
-            if (method is null || method.Parameters.Length == 0)
+            if (method is null || method.Parameters.Length is 0)
             {
                 return Array.Empty<Diagnostic>();
             }
