@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var map = new Pair[3];
 
-            if (firstWord == Constants.Comments.Asynchronously)
+            if (firstWord is Constants.Comments.Asynchronously)
             {
                 firstWord = startText.SecondWord();
 

@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             }
         }
 
-        private Diagnostic AnalyzeInvocation(InvocationExpressionSyntax node, SemanticModel semanticModel) => node.Expression is MemberAccessExpressionSyntax methodCall && node.ArgumentList.Arguments.Count == 1
+        private Diagnostic AnalyzeInvocation(InvocationExpressionSyntax node, SemanticModel semanticModel) => node.Expression is MemberAccessExpressionSyntax methodCall && node.ArgumentList.Arguments.Count is 1
                                                                                                               ? Analyze(methodCall, semanticModel)
                                                                                                               : null;
 

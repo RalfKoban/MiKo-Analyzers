@@ -65,7 +65,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         internal static string FindBetterName(string name)
         {
-            if (name == "Model")
+            if (name is "Model")
             {
                 return Pluralizer.GetPluralName(Constants.Entity);
             }

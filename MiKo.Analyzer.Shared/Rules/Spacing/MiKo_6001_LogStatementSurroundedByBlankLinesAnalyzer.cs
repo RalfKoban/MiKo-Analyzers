@@ -37,9 +37,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             switch (type?.Name)
             {
-                case Constants.ILog.TypeName when type.ContainingNamespace.Name == Constants.ILog.NamespaceName:
-                case Constants.SeriLog.TypeName when type.ContainingNamespace.Name == Constants.SeriLog.NamespaceName:
-                case Constants.MicrosoftLogging.TypeName when type.ContainingNamespace.FullyQualifiedName() == Constants.MicrosoftLogging.NamespaceName:
+                case Constants.ILog.TypeName when type.ContainingNamespace.Name is Constants.ILog.NamespaceName:
+                case Constants.SeriLog.TypeName when type.ContainingNamespace.Name is Constants.SeriLog.NamespaceName:
+                case Constants.MicrosoftLogging.TypeName when type.ContainingNamespace.FullyQualifiedName() is Constants.MicrosoftLogging.NamespaceName:
                     return true;
 
                 default:

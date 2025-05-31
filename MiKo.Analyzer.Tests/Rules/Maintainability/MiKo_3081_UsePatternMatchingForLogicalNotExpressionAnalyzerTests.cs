@@ -190,8 +190,8 @@ public class TestMe
 ");
 
         [TestCase(
-                     "class TestMe { bool DoSomething(bool a) { if (!a) return true; return false; } }",
-                     "class TestMe { bool DoSomething(bool a) { if (a is false) return true; return false; } }")]
+             "class TestMe { bool DoSomething(bool a) { if (!a) return true; return false; } }",
+             "class TestMe { bool DoSomething(bool a) { if (a is false) return true; return false; } }")]
         [TestCase(
              "class TestMe { bool DoSomething(bool a) { return !a; } }",
              "class TestMe { bool DoSomething(bool a) { return a is false; } }")]

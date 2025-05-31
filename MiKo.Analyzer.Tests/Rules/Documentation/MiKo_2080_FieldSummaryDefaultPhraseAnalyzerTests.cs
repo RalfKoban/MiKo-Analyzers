@@ -23,11 +23,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         [OneTimeSetUp]
         public static void PrepareTestEnvironment() => MiKo_2080_CodeFixProvider.LoadData();
 
-#else
-
-        [OneTimeTearDown]
-        public static void CleanupTestEnvironment() => GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
-
 #endif
 
         [Test]

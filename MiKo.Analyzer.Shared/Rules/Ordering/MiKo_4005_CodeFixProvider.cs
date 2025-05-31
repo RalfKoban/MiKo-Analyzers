@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
             var types = new List<BaseTypeSyntax>();
 
-            if (type?.TypeKind == TypeKind.Class)
+            if (type?.TypeKind is TypeKind.Class)
             {
                 // the base type, if any
                 types.Add(baseType);

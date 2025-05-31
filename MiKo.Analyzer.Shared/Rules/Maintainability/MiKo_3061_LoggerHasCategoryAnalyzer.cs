@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSimpleMemberAccessExpression, SyntaxKind.SimpleMemberAccessExpression);
 
-        private static bool IsLogManagerGetLoggerCall(MemberAccessExpressionSyntax node) => node.GetName() == "GetLogger"
+        private static bool IsLogManagerGetLoggerCall(MemberAccessExpressionSyntax node) => node.GetName() is "GetLogger"
                                                                                          && node.Expression is IdentifierNameSyntax i
                                                                                          && i.GetName().EndsWith("LogManager", StringComparison.Ordinal);
 
@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var arguments = s.ArgumentList.Arguments;
 
-                if (arguments.Count == 1 && IsLogManagerGetLoggerCall(node))
+                if (arguments.Count is 1 && IsLogManagerGetLoggerCall(node))
                 {
                     var argument = arguments[0];
 

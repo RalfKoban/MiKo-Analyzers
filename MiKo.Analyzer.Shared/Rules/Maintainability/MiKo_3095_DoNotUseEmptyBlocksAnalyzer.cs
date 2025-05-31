@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return;
             }
 
-            if (block.Statements.Count == 0 && block.DescendantTrivia().None(_ => _.IsComment()))
+            if (block.Statements.Count is 0 && block.DescendantTrivia().None(_ => _.IsComment()))
             {
                 ReportDiagnostics(context, Issue(block));
             }

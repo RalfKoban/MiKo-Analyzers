@@ -21,14 +21,14 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeInvocation, SyntaxKind.InvocationExpression);
 
-        private static bool IsObjectEqualsStaticMethod(IMethodSymbol method) => method.ContainingType.SpecialType == SpecialType.System_Object && method.IsStatic;
+        private static bool IsObjectEqualsStaticMethod(IMethodSymbol method) => method.ContainingType.SpecialType is SpecialType.System_Object && method.IsStatic;
 
         private static bool IsObjectEqualsOnStructMethod(IMethodSymbol method)
         {
             var parameters = method.Parameters;
 
             // find out whether it is the non-static 'Equals(object)' method
-            if (parameters.Length == 1 && parameters[0].Type.IsObject())
+            if (parameters.Length is 1 && parameters[0].Type.IsObject())
             {
                 return method.ContainingType.IsValueType;
             }
@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         private static bool IsObjectEqualsInsideOwnOperator(ISymbol containingSymbol, SemanticModel semanticModel, in SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
-            if (arguments.Count == 2 && containingSymbol is IMethodSymbol enclosingMethod && enclosingMethod.MethodKind == MethodKind.UserDefinedOperator)
+            if (arguments.Count is 2 && containingSymbol is IMethodSymbol enclosingMethod && enclosingMethod.MethodKind is MethodKind.UserDefinedOperator)
             {
                 return IsSameType(arguments[0], semanticModel, enclosingMethod) || IsSameType(arguments[1], semanticModel, enclosingMethod);
             }
@@ -48,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         private static bool IsOwnEqualsInsideOwnOperator(ISymbol containingSymbol, SemanticModel semanticModel, in SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
-            if (arguments.Count == 1 && containingSymbol is IMethodSymbol enclosingMethod && enclosingMethod.MethodKind == MethodKind.UserDefinedOperator)
+            if (arguments.Count is 1 && containingSymbol is IMethodSymbol enclosingMethod && enclosingMethod.MethodKind is MethodKind.UserDefinedOperator)
             {
                 return IsSameType(arguments[0], semanticModel, enclosingMethod);
             }
@@ -69,9 +69,9 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                                                                                                                                                        }
                                                                                                                                                    });
 
-        private static bool IsEnumEqualsMethod(IMethodSymbol method) => method.ContainingType.SpecialType == SpecialType.System_Enum;
+        private static bool IsEnumEqualsMethod(IMethodSymbol method) => method.ContainingType.SpecialType is SpecialType.System_Enum;
 
-        private static bool IsStringEqualsMethod(IMethodSymbol method) => method.ContainingType.SpecialType == SpecialType.System_String && method.Parameters.All(_ => _.Type.SpecialType == SpecialType.System_String || _.Type.TypeKind == TypeKind.Enum);
+        private static bool IsStringEqualsMethod(IMethodSymbol method) => method.ContainingType.SpecialType is SpecialType.System_String && method.Parameters.All(_ => _.Type.SpecialType is SpecialType.System_String || _.Type.TypeKind is TypeKind.Enum);
 
         private static bool IsStruct(in SeparatedSyntaxList<ArgumentSyntax> arguments, SemanticModel semanticModel) => arguments.Any(_ => _.Expression.IsStruct(semanticModel));
 
@@ -172,7 +172,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 if (IsStruct(arguments, semanticModel))
                 {
                     // let's see who this method is that invokes Equals
-                    if (containingSymbol is IMethodSymbol enclosingMethod && enclosingMethod.MethodKind == MethodKind.UserDefinedOperator)
+                    if (containingSymbol is IMethodSymbol enclosingMethod && enclosingMethod.MethodKind is MethodKind.UserDefinedOperator)
                     {
                         return Issue(nodeSymbol.Name, node.Expression, "object.Equals", new[] { new Pair("dummy", "dummy") }); // marker to see that we have to handle an operator
                     }
@@ -203,7 +203,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             }
 
             // seems specific Equals, so let's see if it is the negative one
-            if (node.Parent.IsAnyKind(StrangeMarkers) && node.ArgumentList.Arguments.Count == 1)
+            if (node.Parent.IsAnyKind(StrangeMarkers) && node.ArgumentList.Arguments.Count is 1)
             {
                 if (node.Expression is MemberAccessExpressionSyntax syntax)
                 {

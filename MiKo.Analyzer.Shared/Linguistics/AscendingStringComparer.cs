@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             var result = string.Compare(x, 0, y, 0, Math.Min(x.Length, y.Length), StringComparison.OrdinalIgnoreCase);
 
-            if (result == 0)
+            if (result is 0)
             {
                 // same sub string, so investigate into length (if y is longer, prefer y but if x is longer, prefer x)
                 return y.Length - x.Length;

@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var remarks = comment.GetRemarksXmls();
 
-            if (remarks.Count == 0)
+            if (remarks.Count is 0)
             {
                 return Array.Empty<Diagnostic>();
             }

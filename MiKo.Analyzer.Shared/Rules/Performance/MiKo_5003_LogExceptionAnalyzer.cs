@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         {
             var arguments = node.ArgumentList.Arguments;
 
-            if (arguments.Count == 0)
+            if (arguments.Count is 0)
             {
                 return null;
             }
@@ -53,7 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                     case Constants.ILog.Error:
                     case Constants.ILog.Fatal:
                     {
-                        return arguments.Count == 1
+                        return arguments.Count is 1
                                ? AnalyzeCall(methodCall, arguments, semanticModel, methodName)
                                : null;
                     }
@@ -78,7 +78,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             var type = methodCall.GetTypeSymbol(semanticModel);
 
             // it may happen that in some broken code Roslyn is unable to detect a type (e.g. due to missing code paths), hence 'type' could be null here
-            if (type?.Name == Constants.ILog.TypeName && arguments.Any(_ => _.IsException(semanticModel)))
+            if (type?.Name is Constants.ILog.TypeName && arguments.Any(_ => _.IsException(semanticModel)))
             {
                 var enclosingMethod = methodCall.GetEnclosingMethod(semanticModel);
 

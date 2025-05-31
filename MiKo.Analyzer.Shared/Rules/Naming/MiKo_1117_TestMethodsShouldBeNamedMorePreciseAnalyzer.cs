@@ -45,13 +45,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                nameof(ArgumentNullException),
                                                                nameof(ArgumentOutOfRangeException),
                                                                nameof(InvalidOperationException),
-                                                               nameof(TaskCanceledException),
-                                                               nameof(NotSupportedException),
-                                                               nameof(OperationCanceledException),
-                                                               nameof(ObjectDisposedException),
-                                                               nameof(NotImplementedException),
-                                                               nameof(NullReferenceException),
+                                                               "JsonException",
                                                                nameof(KeyNotFoundException),
+                                                               nameof(NotImplementedException),
+                                                               nameof(NotSupportedException),
+                                                               nameof(NullReferenceException),
+                                                               nameof(ObjectDisposedException),
+                                                               nameof(OperationCanceledException),
+                                                               nameof(TaskCanceledException),
+                                                               nameof(UnauthorizedAccessException),
+                                                               "ValidationException",
                                                            };
 
         public MiKo_1117_TestMethodsShouldBeNamedMorePreciseAnalyzer() : base(Id)

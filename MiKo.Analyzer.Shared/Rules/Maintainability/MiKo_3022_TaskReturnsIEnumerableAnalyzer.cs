@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var typeArguments = ((INamedTypeSymbol)symbol.ReturnType).TypeArguments;
 
-            if (typeArguments.Length == 1 && typeArguments[0] is INamedTypeSymbol typeArgument)
+            if (typeArguments.Length is 1 && typeArguments[0] is INamedTypeSymbol typeArgument)
             {
                 var specialType = typeArgument.SpecialType;
 
@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     }
                 }
 
-                if (typeArgument.TypeKind == TypeKind.Interface && typeArgument.ConstructedFrom.SpecialType == SpecialType.System_Collections_Generic_IEnumerable_T)
+                if (typeArgument.TypeKind is TypeKind.Interface && typeArgument.ConstructedFrom.SpecialType is SpecialType.System_Collections_Generic_IEnumerable_T)
                 {
                     return new[] { ReportIssue(symbol) };
                 }

@@ -69,7 +69,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     return null; // ignore inherited events that we cannot change anymore
                 }
 
-                if (eventArgsType.FullyQualifiedName() == "System.EventArgs")
+                if (eventArgsType.FullyQualifiedName() is "System.EventArgs")
                 {
                     return null; // ignore special event args
                 }

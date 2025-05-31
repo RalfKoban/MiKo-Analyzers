@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // identify the now-empty summaries and remove those
             var emptySummaries = updatedSyntax.GetSummaryXmls().Where(_ => _.GetTextTrimmed().IsNullOrEmpty()).ToList();
 
-            if (emptySummaries.Count == 0)
+            if (emptySummaries.Count is 0)
             {
                 return updatedSyntax.AddContent(syntaxNodes.ToArray(_ => _.WithLeadingXmlCommentExterior().WithEndOfLine()));
             }

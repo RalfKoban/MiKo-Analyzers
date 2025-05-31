@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         var argumentType = arguments[index].GetTypeSymbol(semanticModel);
 
-                        if (argumentType.SpecialType == SpecialType.System_Int32 || argumentType.FullyQualifiedName() == TypeNames.TimeSpan)
+                        if (argumentType.SpecialType is SpecialType.System_Int32 || argumentType.FullyQualifiedName() == TypeNames.TimeSpan)
                         {
                             // we use a timeout parameter (int or TimeSpan)
                             return false;
