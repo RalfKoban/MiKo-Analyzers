@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,7 +25,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static string[] GetTermsForQuickLookup(IReadOnlyCollection<string> terms)
         {
-            var result = new string[terms.Count];
+            var pool = ArrayPool<string>.Shared;
+
+            var rentedArray = pool.Rent(terms.Count);
 
             var resultIndex = 0;
 
@@ -39,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 for (var index = 0; index < resultIndex; index++)
                 {
-                    if (span.StartsWith(result[index].AsSpan()))
+                    if (span.StartsWith(rentedArray[index].AsSpan()))
                     {
                         found = true;
 
@@ -52,11 +55,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     continue;
                 }
 
-                result[resultIndex] = term;
+                rentedArray[resultIndex] = term;
                 resultIndex++;
             }
 
-            Array.Resize(ref result, resultIndex);
+            var result = new string[resultIndex];
+
+            Array.Copy(rentedArray, result, resultIndex);
+
+            pool.Return(rentedArray);
 
             return result;
         }
@@ -64,10 +71,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 //// ncrunch: no coverage end
 //// ncrunch: rdi default
 
-        protected static XmlElementSyntax C(string text)
-        {
-            return SyntaxFactory.XmlElement(Constants.XmlTag.C, XmlText(text).ToSyntaxList<XmlNodeSyntax>());
-        }
+        protected static XmlElementSyntax C(string text) => SyntaxFactory.XmlElement(Constants.XmlTag.C, XmlText(text).ToSyntaxList<XmlNodeSyntax>());
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, in SyntaxList<XmlNodeSyntax> content)
         {
@@ -80,17 +84,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, IEnumerable<XmlNodeSyntax> nodes) => Comment(comment, nodes.ToSyntaxList());
 
-        protected static XmlElementSyntax Comment(XmlElementSyntax comment, in ReadOnlySpan<string> text, string additionalComment = null)
-        {
-            return Comment(comment, text[0], additionalComment);
-        }
+        protected static XmlElementSyntax Comment(XmlElementSyntax comment, in ReadOnlySpan<string> text, string additionalComment = null) => Comment(comment, text[0], additionalComment);
 
-        protected static XmlElementSyntax Comment(XmlElementSyntax comment, in ReadOnlySpan<string> text, in SyntaxList<XmlNodeSyntax> additionalComment)
-        {
-            return Comment(comment, text[0], additionalComment);
-        }
+        protected static XmlElementSyntax Comment(XmlElementSyntax comment, in ReadOnlySpan<string> text, in SyntaxList<XmlNodeSyntax> additionalComment) => Comment(comment, text[0], additionalComment);
 
-//// ncrunch: rdi off
+        //// ncrunch: rdi off
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string text, in SyntaxList<XmlNodeSyntax> additionalComment)
         {
@@ -99,10 +97,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, end);
         }
 
-        protected static XmlElementSyntax Comment(XmlElementSyntax comment, string text, string additionalComment = null)
-        {
-            return Comment(comment, XmlText(text + additionalComment));
-        }
+        protected static XmlElementSyntax Comment(XmlElementSyntax comment, string text, string additionalComment = null) => Comment(comment, XmlText(text + additionalComment));
 
         protected static XmlElementSyntax Comment(XmlElementSyntax syntax, in ReadOnlySpan<string> terms, in ReadOnlySpan<Pair> replacementMap, in FirstWordHandling firstWordHandling = FirstWordHandling.KeepSingleLeadingSpace)
         {
@@ -188,7 +183,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                            .AdjustFirstWord(handling)
                                                            .ToStringAndRelease();
 
-                            if (originalText.Equals(replacedText, StringComparison.Ordinal))
+                            if (originalText.AsSpan().SequenceEqual(replacedText.AsSpan()))
                             {
                                 // replacement with itself does not make any sense
                                 continue;
@@ -708,8 +703,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlTextSyntax NewLineXmlText() => XmlText(string.Empty).WithLeadingXmlComment();
 
         protected static XmlTextSyntax TrailingNewLineXmlText() => XmlText(string.Empty).WithTrailingXmlComment();
-
-        protected static XmlTextSyntax XmlText(in ReadOnlySpan<char> text) => XmlText(text.ToString());
 
         protected static XmlTextSyntax XmlText(string text) => SyntaxFactory.XmlText(text);
 
