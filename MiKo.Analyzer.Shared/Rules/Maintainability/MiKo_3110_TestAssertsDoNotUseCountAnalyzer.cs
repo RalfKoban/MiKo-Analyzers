@@ -40,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool IsFixableAssertionForLinqCall(InvocationExpressionSyntax invocation)
         {
-            if (invocation.GetIdentifierName() == "Is")
+            if (invocation.GetIdentifierName() is "Is")
             {
                 switch (invocation.GetName())
                 {
@@ -133,7 +133,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                     // we can only fix "Assert.That(xyz.Count(), Is.EqualTo(42)"
                                     return Issue(token);
 
-                                case MemberAccessExpressionSyntax am when am.GetName() == "Zero":
+                                case MemberAccessExpressionSyntax am when am.GetName() is "Zero":
                                     // we can only fix "Assert.That(xyz.Count(), Is.Zero"
                                     return Issue(token);
                             }

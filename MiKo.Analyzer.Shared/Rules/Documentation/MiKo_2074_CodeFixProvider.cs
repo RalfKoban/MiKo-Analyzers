@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var phrase = GetPhraseProposal(issue);
 
-            if (comment.Content.Count == 0)
+            if (comment.Content.Count is 0)
             {
                 // we do not have a comment
                 return comment.WithContent(XmlText("The item" + phrase));

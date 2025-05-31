@@ -185,7 +185,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var allIndices = text.AllIndicesOf(value, comparison);
 
-            if (allIndices.Length == 0)
+            if (allIndices.Length is 0)
             {
                 // nothing to inspect
                 return Array.Empty<Location>();
@@ -225,7 +225,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var allIndices = text.AllIndicesOf(value, comparison);
 
-            if (allIndices.Length == 0)
+            if (allIndices.Length is 0)
             {
                 // nothing to inspect
                 return Array.Empty<Location>();
@@ -297,7 +297,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 var allIndices = text.AllIndicesOf(value, comparison);
 
-                if (allIndices.Length == 0)
+                if (allIndices.Length is 0)
                 {
                     // nothing to inspect
                     continue;

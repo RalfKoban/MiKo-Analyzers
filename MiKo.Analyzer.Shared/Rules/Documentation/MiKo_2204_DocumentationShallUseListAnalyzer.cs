@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var textTokens = comment.GetXmlTextTokens();
             var textTokensCount = textTokens.Count;
 
-            if (textTokensCount == 0)
+            if (textTokensCount is 0)
             {
                 return Array.Empty<Diagnostic>();
             }
@@ -60,7 +60,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
 
                 // we do not want to find a ' - ' in the middle of the text (except it contains lots of whitespaces)
-                if (token.HasLeadingTrivia && text.AsSpan().TrimStart().StartsWith("- ", StringComparison.Ordinal))
+                if (token.HasLeadingTrivia && text.AsSpan().TrimStart().StartsWith("- "))
                 {
                     if (results is null)
                     {

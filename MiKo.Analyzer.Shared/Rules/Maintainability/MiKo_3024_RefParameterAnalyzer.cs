@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {
-            foreach (var parameter in symbol.Parameters.Where(_ => _.RefKind == RefKind.Ref && _.Type.TypeKind != TypeKind.Struct))
+            foreach (var parameter in symbol.Parameters.Where(_ => _.RefKind is RefKind.Ref && _.Type.TypeKind != TypeKind.Struct))
             {
                 var keyword = parameter.GetModifier(SyntaxKind.RefKeyword);
 

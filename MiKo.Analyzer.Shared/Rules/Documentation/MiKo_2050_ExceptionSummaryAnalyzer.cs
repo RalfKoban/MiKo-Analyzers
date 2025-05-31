@@ -44,7 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   ISymbol symbol,
                                                                   IReadOnlyList<XmlElementSyntax> summaryXmls,
                                                                   Lazy<string> commentXml,
-                                                                  Lazy<IReadOnlyCollection<string>> summaries)
+                                                                  Lazy<string[]> summaries)
         {
             switch (symbol)
             {
@@ -70,20 +70,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private static bool IsParameterlessCtor(IMethodSymbol symbol) => symbol.Parameters.Length == 0;
+        private static bool IsParameterlessCtor(IMethodSymbol symbol) => symbol.Parameters.Length is 0;
 
         private static bool IsMessageCtor(IMethodSymbol symbol)
         {
             var parameters = symbol.Parameters;
 
-            return parameters.Length == 1 && IsMessageParameter(parameters[0]);
+            return parameters.Length is 1 && IsMessageParameter(parameters[0]);
         }
 
         private static bool IsMessageExceptionCtor(IMethodSymbol symbol)
         {
             var parameters = symbol.Parameters;
 
-            return parameters.Length == 2 && IsMessageParameter(parameters[0]) && IsExceptionParameter(parameters[1]);
+            return parameters.Length is 2 && IsMessageParameter(parameters[0]) && IsExceptionParameter(parameters[1]);
         }
 
         private static bool IsMessageParameter(IParameterSymbol parameter) => parameter.Type.IsString();
@@ -115,9 +115,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Array.Empty<string>();
         }
 
-        private Diagnostic[] AnalyzeTypeSummary(INamedTypeSymbol symbol, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment) => AnalyzeSummaryPhrase(symbol, summaries, comment, Constants.Comments.ExceptionTypeSummaryStartingPhrase);
+        private Diagnostic[] AnalyzeTypeSummary(INamedTypeSymbol symbol, ReadOnlySpan<string> summaries, DocumentationCommentTriviaSyntax comment) => AnalyzeSummaryPhrase(symbol, summaries, comment, Constants.Comments.ExceptionTypeSummaryStartingPhrase);
 
-        private IReadOnlyList<Diagnostic> AnalyzeMethodSummary(IMethodSymbol symbol, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment)
+        private Diagnostic[] AnalyzeMethodSummary(IMethodSymbol symbol, ReadOnlySpan<string> summaries, DocumentationCommentTriviaSyntax comment)
         {
             var defaultPhrases = Constants.Comments.ExceptionCtorSummaryStartingPhrase.ToArray(_ => _.FormatWith(symbol.ContainingType));
 
@@ -150,17 +150,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 issues.AddRange(AnalyzeSummaryPhrase(symbol, summaries, comment, defaultPhrases.ToArray(_ => _ + Constants.Comments.ExceptionCtorSerializationParamSummaryContinuingPhrase)));
                 issues.AddRange(AnalyzeRemarksPhrase(symbol, comment, Constants.Comments.ExceptionCtorSerializationParamRemarksPhrase));
 
-                return issues;
+                return issues.ToArray();
             }
 
             return Array.Empty<Diagnostic>();
         }
 
-        private Diagnostic[] AnalyzeOverloadsSummaryPhrase(IMethodSymbol symbol, DocumentationCommentTriviaSyntax comment, params string[] defaultPhrases)
+        private Diagnostic[] AnalyzeOverloadsSummaryPhrase(IMethodSymbol symbol, DocumentationCommentTriviaSyntax comment, string[] defaultPhrases)
         {
             var summaries = symbol.GetOverloadSummaries();
 
-            if (summaries.Count == 0)
+            if (summaries.Length is 0)
             {
                 return Array.Empty<Diagnostic>();
             }
@@ -172,7 +172,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comments = symbol.GetRemarks();
 
-            if (comments.Count == 0)
+            if (comments.Length is 0)
             {
                 return Array.Empty<Diagnostic>();
             }
@@ -180,14 +180,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return AnalyzeStartingPhrase(symbol, Constants.XmlTag.Remarks, comments, comment, defaultPhrases);
         }
 
-        private Diagnostic[] AnalyzeStartingPhrase(ISymbol symbol, string xmlTag, IEnumerable<string> comments, DocumentationCommentTriviaSyntax comment, params string[] phrases)
+        private Diagnostic[] AnalyzeStartingPhrase(ISymbol symbol, string xmlTag, ReadOnlySpan<string> comments, DocumentationCommentTriviaSyntax comment, string[] phrases)
         {
             if (comments.None(_ => phrases.Exists(__ => _.StartsWith(__, StringComparison.Ordinal))))
             {
                 // find XML
                 var problematicComments = comment.GetXmlSyntax(xmlTag);
 
-                var issue = problematicComments.Count == 0
+                var issue = problematicComments.Count is 0
                             ? Issue(symbol, xmlTag, phrases[0])
                             : Issue(symbol.Name, problematicComments[0], xmlTag, phrases[0]);
 
@@ -198,13 +198,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Array.Empty<Diagnostic>();
         }
 
-        private Diagnostic[] AnalyzeSummaryPhrase(ISymbol symbol, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment, params string[] phrases) => AnalyzeStartingPhrase(symbol, Constants.XmlTag.Summary, summaries, comment, phrases);
+        private Diagnostic[] AnalyzeSummaryPhrase(ISymbol symbol, ReadOnlySpan<string> summaries, DocumentationCommentTriviaSyntax comment, params string[] phrases) => AnalyzeStartingPhrase(symbol, Constants.XmlTag.Summary, summaries, comment, phrases);
 
         private Diagnostic[] AnalyzeParameter(IParameterSymbol symbol, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
             var phrases = GetParameterPhrases(symbol);
 
-            return phrases.Length == 0
+            return phrases.Length is 0
                    ? Array.Empty<Diagnostic>()
                    : AnalyzeParameter(symbol, commentXml, comment, phrases);
         }

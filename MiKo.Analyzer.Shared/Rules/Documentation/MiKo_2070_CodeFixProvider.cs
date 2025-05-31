@@ -42,14 +42,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var falseIndex = comment.IndexOf("false", StringComparison.OrdinalIgnoreCase);
 
-            if (falseIndex == -1)
+            if (falseIndex is -1)
             {
                 return true;
             }
 
             var trueIndex = comment.IndexOf("true", StringComparison.OrdinalIgnoreCase);
 
-            if (trueIndex == -1)
+            if (trueIndex is -1)
             {
                 // cannot fix currently (false case comes as only case)
                 if (comment.Contains("otherwise", StringComparison.OrdinalIgnoreCase) is false)

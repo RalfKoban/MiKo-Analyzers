@@ -307,6 +307,7 @@ namespace MiKoSolutions.Analyzers
             internal const string WhenAnyTaskReturnTypeStartingPhraseTemplate = "A {0} that represents the completion of one of the supplied tasks. Its {1} is the task that completed first.";
             internal const string XmlElementEndingTag = "/>";
             internal const string XmlElementStartingTag = "<";
+            internal const char XmlElementStartingTagChar = '<';
 
             internal const string SingleWhitespaceString = " ";
 

@@ -44,25 +44,25 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<string> GetComments(string commentXml, string xmlTag, string xmlSubElement) => Cleaned(GetCommentElements(commentXml, xmlTag).Descendants(xmlSubElement));
 
-        internal static IReadOnlyCollection<string> GetSummaries(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Summary));
+        internal static string[] GetSummaries(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Summary));
 
-        internal static IReadOnlyCollection<string> GetOverloadSummaries(this IMethodSymbol value) => GetOverloadSummaries(value.GetDocumentationCommentXml());
+        internal static string[] GetOverloadSummaries(this IMethodSymbol value) => GetOverloadSummaries(value.GetDocumentationCommentXml());
 
-        internal static IReadOnlyCollection<string> GetOverloadSummaries(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Overloads, Constants.XmlTag.Summary));
+        internal static string[] GetOverloadSummaries(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Overloads, Constants.XmlTag.Summary));
 
-        internal static IReadOnlyCollection<string> GetRemarks(this ISymbol value) => GetRemarks(value.GetDocumentationCommentXml());
+        internal static string[] GetRemarks(this ISymbol value) => GetRemarks(value.GetDocumentationCommentXml());
 
-        internal static IReadOnlyCollection<string> GetRemarks(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Remarks));
+        internal static string[] GetRemarks(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Remarks));
 
-        internal static IReadOnlyCollection<string> GetReturns(this IMethodSymbol value) => GetReturns(value.GetDocumentationCommentXml());
+        internal static string[] GetReturns(this IMethodSymbol value) => GetReturns(value.GetDocumentationCommentXml());
 
-        internal static IReadOnlyCollection<string> GetReturns(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Returns));
+        internal static string[] GetReturns(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Returns));
 
-        internal static IReadOnlyCollection<string> GetValue(this IMethodSymbol value) => GetValue(value.GetDocumentationCommentXml());
+        internal static string[] GetValue(this IMethodSymbol value) => GetValue(value.GetDocumentationCommentXml());
 
-        internal static IReadOnlyCollection<string> GetValue(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Value));
+        internal static string[] GetValue(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Value));
 
-        internal static IReadOnlyCollection<string> GetExamples(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Example));
+        internal static string[] GetExamples(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Example));
 
         internal static XElement GetCommentElement(this ISymbol value) => GetCommentElement(value.GetDocumentationCommentXml());
 
@@ -127,7 +127,7 @@ namespace MiKoSolutions.Analyzers
             return GetExceptionCommentElements(commentXml).Select(_ => _.Attribute(Constants.XmlTag.Attribute.Cref)?.Value).WhereNotNull();
         }
 
-        internal static IReadOnlyCollection<string> Cleaned(IEnumerable<string> comments)
+        internal static string[] Cleaned(IEnumerable<string> comments)
         {
             List<string> cleanedComments = null;
 
@@ -152,12 +152,12 @@ namespace MiKoSolutions.Analyzers
                 return Array.Empty<string>();
             }
 
-            if (cleanedComments.Count == 1)
+            if (cleanedComments.Count is 1)
             {
                 return new[] { TrimComment(cleanedComments[0]) };
             }
 
-            return cleanedComments.ToHashSet(TrimComment);
+            return cleanedComments.ToHashSet(TrimComment).ToArray();
 
             string TrimComment(string comment) => comment.AsCachedBuilder().WithoutParaTags().Trimmed().ToStringAndRelease();
         }

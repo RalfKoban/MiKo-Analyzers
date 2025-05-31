@@ -177,7 +177,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 yield break;
             }
 
-            if (elementName == Constants.XmlTag.Para && element.GetTextTrimmed().Equals(Constants.Comments.SpecialOrPhrase.AsSpan(), StringComparison.OrdinalIgnoreCase))
+            if (elementName is Constants.XmlTag.Para && element.GetTextTrimmed().Equals(Constants.Comments.SpecialOrPhrase.AsSpan(), StringComparison.OrdinalIgnoreCase))
             {
                 // that is allowed
                 yield break;

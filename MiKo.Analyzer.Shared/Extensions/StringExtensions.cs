@@ -21,7 +21,7 @@ namespace System
 {
     internal static class StringExtensions
     {
-        private const int QuickCompareLengthThreshold = 4;
+        private const int QuickSubstringProbeLengthThreshold = 4;
 
         private const int DifferenceBetweenUpperAndLowerCaseAscii = 0x20; // valid for Roman ASCII characters ('A' ... 'Z')
 
@@ -42,7 +42,7 @@ namespace System
 
             string word;
 
-            if (handling.HasSet(FirstWordHandling.MakeLowerCase))
+            if (handling.HasSet(FirstWordHandling.StartLowerCase))
             {
                 var firstWord = valueSpan.FirstWord();
 
@@ -51,13 +51,13 @@ namespace System
                        ? firstWord.ToString()
                        : firstWord.ToLowerCaseAt(0);
             }
-            else if (handling.HasSet(FirstWordHandling.MakeUpperCase))
-            {
-                word = valueSpan.FirstWord().ToUpperCaseAt(0);
-            }
             else
             {
-                word = valueSpan.FirstWord().ToString();
+                var firstWord = valueSpan.FirstWord();
+
+                word = handling.HasSet(FirstWordHandling.StartUpperCase)
+                       ? firstWord.ToUpperCaseAt(0)
+                       : firstWord.ToString();
             }
 
             // build continuation here because the word length may change based on the infinite term
@@ -67,18 +67,16 @@ namespace System
             {
                 word = Verbalizer.MakeInfiniteVerb(word);
             }
-
-            if (handling.HasSet(FirstWordHandling.MakePlural))
+            else if (handling.HasSet(FirstWordHandling.MakePlural))
             {
                 word = Pluralizer.MakePluralName(word);
             }
-
-            if (handling.HasSet(FirstWordHandling.MakeThirdPersonSingular))
+            else if (handling.HasSet(FirstWordHandling.MakeThirdPersonSingular))
             {
                 word = Verbalizer.MakeThirdPersonSingularVerb(word);
             }
 
-            if (handling.HasSet(FirstWordHandling.KeepLeadingSpace))
+            if (handling.HasSet(FirstWordHandling.KeepSingleLeadingSpace))
             {
                 // only keep it if there is already a leading space (otherwise it may be on the same line without any leading space, and we would fix it in a wrong way)
                 if (value.StartsWith(' '))
@@ -104,7 +102,7 @@ namespace System
                 return Array.Empty<int>();
             }
 
-            if (comparison == StringComparison.Ordinal)
+            if (comparison is StringComparison.Ordinal)
             {
                 // Perf: about 1/3 the times the strings are compared ordinal, so splitting this up increases the overall performance significantly
                 return AllIndicesOrdinal(value.AsSpan(), finding.AsSpan());
@@ -125,13 +123,13 @@ namespace System
                 return Array.Empty<int>();
             }
 
-            if (comparison == StringComparison.Ordinal)
+            if (comparison is StringComparison.Ordinal)
             {
                 // performance optimization for 'StringComparison.Ordinal' to avoid multiple strings from being created (see 'IndexOf' method inside 'MemoryExtensions')
                 return AllIndicesOrdinal(value, finding.AsSpan());
             }
 
-            return AllIndicesOf(value.ToString(), finding, comparison);
+            return AllIndicesNonOrdinal(value.ToString(), finding, comparison);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -143,7 +141,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SyntaxToken AsToken(this string source, in SyntaxKind kind = SyntaxKind.StringLiteralToken)
         {
-            if (kind == SyntaxKind.IdentifierToken)
+            if (kind is SyntaxKind.IdentifierToken)
             {
                 return SyntaxFactory.Identifier(source);
             }
@@ -207,14 +205,14 @@ namespace System
         {
             var spanLength = span.Length;
 
-            if (spanLength == 0)
+            if (spanLength is 0)
             {
                 return value;
             }
 
             var valueLength = value?.Length ?? 0;
 
-            if (valueLength == 0)
+            if (valueLength is 0)
             {
                 return span.ToString();
             }
@@ -279,14 +277,14 @@ namespace System
         {
             var spanLength = value.Length;
 
-            if (spanLength == 0)
+            if (spanLength is 0)
             {
                 return arg0;
             }
 
             var arg0Length = arg0?.Length ?? 0;
 
-            if (arg0Length == 0)
+            if (arg0Length is 0)
             {
                 return value.ToString();
             }
@@ -378,7 +376,7 @@ namespace System
         {
             var valueLength = value.Length;
 
-            if (valueLength == 0)
+            if (valueLength is 0)
             {
                 return string.Concat(arg0, arg1);
             }
@@ -404,7 +402,7 @@ namespace System
         {
             var valueLength = value.Length;
 
-            if (valueLength == 0)
+            if (valueLength is 0)
             {
                 return string.Concat(arg0, arg1);
             }
@@ -431,7 +429,7 @@ namespace System
         {
             var valueLength = value.Length;
 
-            if (valueLength == 0)
+            if (valueLength is 0)
             {
                 return arg0.ConcatenatedWith(arg1);
             }
@@ -463,7 +461,7 @@ namespace System
 
             var valueLength = value.Length;
 
-            if (value.Length == 0)
+            if (value.Length is 0)
             {
                 return arg0.ConcatenatedWith(arg1);
             }
@@ -495,7 +493,7 @@ namespace System
 
             var valueLength = value.Length;
 
-            if (value.Length == 0)
+            if (value.Length is 0)
             {
                 return arg0.ConcatenatedWith(arg1);
             }
@@ -527,7 +525,7 @@ namespace System
 
             var valueLength = value.Length;
 
-            if (value.Length == 0)
+            if (value.Length is 0)
             {
                 return arg0.ConcatenatedWith(arg1);
             }
@@ -610,7 +608,7 @@ namespace System
 
             if (difference < 0)
             {
-                if (comparison == StringComparison.Ordinal)
+                if (comparison is StringComparison.Ordinal)
                 {
                     return value.AsSpan().IndexOf(finding.AsSpan()) >= 0;
                 }
@@ -618,7 +616,7 @@ namespace System
                 return value.IndexOf(finding, comparison) >= 0;
             }
 
-            if (difference == 0)
+            if (difference is 0)
             {
                 return QuickEquals(comparison);
 
@@ -719,7 +717,7 @@ namespace System
             {
                 var valueSpan = value.AsSpan();
                 var phrasesLength = phrases.Length;
-                var ordinalComparison = comparison == StringComparison.Ordinal;
+                var ordinalComparison = comparison is StringComparison.Ordinal;
 
                 for (var index = 0; index < phrasesLength; index++)
                 {
@@ -727,7 +725,7 @@ namespace System
                     var phraseSpan = phrase.AsSpan();
 
                     // no separate handling for StringComparison.Ordinal here as that happens around 30 times out of 90_000_000 times; so almost never
-                    if (QuickCompare(valueSpan, phraseSpan, comparison))
+                    if (QuickSubstringProbe(valueSpan, phraseSpan, comparison))
                     {
                         if (ordinalComparison)
                         {
@@ -1137,16 +1135,6 @@ namespace System
             return name.GetPartAfterLastDot().ToString();
         }
 
-        public static string GetPartAfterLastDot(this string value)
-        {
-            if (value.IsNullOrEmpty())
-            {
-                return value;
-            }
-
-            return GetPartAfterLastDot(value.AsSpan()).ToString();
-        }
-
         public static ReadOnlySpan<char> GetPartAfterLastDot(this in ReadOnlySpan<char> value) => value.Slice(value.LastIndexOf('.') + 1);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1291,7 +1279,7 @@ namespace System
             if (value.Length > 0)
             {
                 // performance optimization to avoid unnecessary 'ToString' calls on 'ReadOnlySpan' (see implementation inside MemoryExtensions)
-                if (comparison == StringComparison.Ordinal)
+                if (comparison is StringComparison.Ordinal)
                 {
                     var phrasesLength = phrases.Length;
 
@@ -1299,7 +1287,7 @@ namespace System
                     {
                         var phrase = phrases[i];
 
-                        var index = value.IndexOf(phrase.AsSpan(), StringComparison.Ordinal);
+                        var index = value.IndexOf(phrase.AsSpan()); // performs ordinal comparison
 
                         if (index > -1)
                         {
@@ -1321,7 +1309,7 @@ namespace System
         {
             if (value.HasCharacters())
             {
-                if (comparison == StringComparison.Ordinal)
+                if (comparison is StringComparison.Ordinal)
                 {
                     return IndexOfAny(value.AsSpan(), phrases, comparison);
                 }
@@ -1490,12 +1478,12 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsUpperCase(this in char value)
         {
-            if ((uint)(value - 'a') <= 'z' - 'a')
+            if (value.IsAsciiLetterLower())
             {
                 return false;
             }
 
-            if ((uint)(value - 'A') <= 'Z' - 'A')
+            if (value.IsAsciiLetterUpper())
             {
                 return true;
             }
@@ -1547,7 +1535,7 @@ namespace System
             var others = characters.AsSpan();
 
             // perform quick check
-            if (QuickCompare(value, others, comparison))
+            if (QuickSubstringProbe(value, others, comparison))
             {
                 return value.StartsWith(others, comparison);
             }
@@ -1578,7 +1566,7 @@ namespace System
                 {
                     var prefix = prefixes[index];
 
-                    if (QuickCompare(valueSpan, prefix.AsSpan(), comparison))
+                    if (QuickSubstringProbe(valueSpan, prefix.AsSpan(), comparison))
                     {
                         if (value.StartsWith(prefix, comparison))
                         {
@@ -1631,12 +1619,12 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static char ToLowerCase(this in char source)
         {
-            if ((uint)(source - 'A') <= 'Z' - 'A')
+            if (source.IsAsciiLetterUpper())
             {
                 return (char)(source + DifferenceBetweenUpperAndLowerCaseAscii);
             }
 
-            if ((uint)(source - 'a') <= 'z' - 'a')
+            if (source.IsAsciiLetterLower())
             {
                 return source;
             }
@@ -1658,26 +1646,10 @@ namespace System
         /// </returns>
         public static string ToLowerCaseAt(this string source, in int index)
         {
-            if (source is null)
-            {
-                return null;
-            }
-
-            if (index >= source.Length)
+            if (source is null || index >= source.Length || source[index].IsLowerCase())
             {
                 return source;
             }
-
-            var character = source[index];
-
-#pragma warning disable CA1308
-
-            if (character.IsLowerCase())
-            {
-                return source;
-            }
-
-#pragma warning restore CA1308
 
             return source.AsSpan().MakeLowerCaseAt(index);
         }
@@ -1707,12 +1679,12 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static char ToUpperCase(this in char source)
         {
-            if ((uint)(source - 'a') <= 'z' - 'a')
+            if (source.IsAsciiLetterLower())
             {
                 return (char)(source - DifferenceBetweenUpperAndLowerCaseAscii);
             }
 
-            if ((uint)(source - 'A') <= 'Z' - 'A')
+            if (source.IsAsciiLetterUpper())
             {
                 return source;
             }
@@ -1737,19 +1709,7 @@ namespace System
         /// </returns>
         public static string ToUpperCaseAt(this string source, in int index)
         {
-            if (source is null)
-            {
-                return null;
-            }
-
-            if (index >= source.Length)
-            {
-                return source;
-            }
-
-            var character = source[index];
-
-            if (character.IsUpperCase())
+            if (source is null || index >= source.Length || source[index].IsUpperCase())
             {
                 return source;
             }
@@ -1902,7 +1862,7 @@ namespace System
 
         public static ReadOnlySpan<char> WithoutNumberSuffix(this in ReadOnlySpan<char> value)
         {
-            if (value.Length == 0)
+            if (value.Length is 0)
             {
                 return ReadOnlySpan<char>.Empty;
             }
@@ -2074,33 +2034,33 @@ namespace System
             }
         }
 
-        private static bool QuickCompare(in ReadOnlySpan<char> value, in ReadOnlySpan<char> others, in StringComparison comparison)
+        private static bool QuickSubstringProbe(in ReadOnlySpan<char> value, in ReadOnlySpan<char> other, in StringComparison comparison)
         {
             var valueLength = value.Length;
-            var othersLength = others.Length;
+            var otherLength = other.Length;
 
-            if (valueLength > othersLength)
+            if (valueLength > otherLength)
             {
                 // continue to check
                 return true;
             }
 
-            if (valueLength < othersLength)
+            if (valueLength < otherLength)
             {
                 // cannot match
                 return false;
             }
 
             // both are same length, so perform a quick compare first
-            if (valueLength > QuickCompareLengthThreshold)
+            if (valueLength > QuickSubstringProbeLengthThreshold)
             {
                 switch (comparison)
                 {
                     case StringComparison.Ordinal:
-                        return QuickCompareOrdinal(value, others);
+                        return QuickSubstringProbeOrdinal(value, other);
 
                     case StringComparison.OrdinalIgnoreCase:
-                        return QuickCompareOrdinalIgnoreCase(value, others);
+                        return QuickSubstringProbeOrdinalIgnoreCase(value, other);
                 }
             }
 
@@ -2108,16 +2068,16 @@ namespace System
             return true;
         }
 
-        private static bool QuickCompareOrdinal(in ReadOnlySpan<char> value, in ReadOnlySpan<char> others)
+        private static bool QuickSubstringProbeOrdinal(in ReadOnlySpan<char> value, in ReadOnlySpan<char> other)
         {
             var length = value.Length;
 
-            if (length != others.Length && length < 2)
+            if (length != other.Length && length < 2)
             {
                 return true;
             }
 
-            if (value[0] != others[0])
+            if (value[0] != other[0])
             {
                 // they do not fit as characters do not match
                 return false;
@@ -2125,7 +2085,7 @@ namespace System
 
             var lastIndex = length - 1;
 
-            if (value[lastIndex] != others[lastIndex])
+            if (value[lastIndex] != other[lastIndex])
             {
                 // they do not fit as characters do not match
                 return false;
@@ -2135,11 +2095,11 @@ namespace System
             return true;
         }
 
-        private static unsafe bool QuickCompareOrdinalIgnoreCase(in ReadOnlySpan<char> value, in ReadOnlySpan<char> others)
+        private static unsafe bool QuickSubstringProbeOrdinalIgnoreCase(in ReadOnlySpan<char> value, in ReadOnlySpan<char> other)
         {
             var length = value.Length;
 
-            if (length != others.Length && length < QuickCompareLengthThreshold)
+            if (length != other.Length && length < QuickSubstringProbeLengthThreshold)
             {
                 return true;
             }
@@ -2147,124 +2107,67 @@ namespace System
             // compare in-memory for performance reasons
             fixed (char* ap = &MemoryMarshal.GetReference(value))
             {
-                fixed (char* bp = &MemoryMarshal.GetReference(others))
+                fixed (char* bp = &MemoryMarshal.GetReference(other))
                 {
                     var a = ap;
                     var b = bp;
 
-                    int charA = *a;
-                    int charB = *b;
+                    if (QuickDiff(a, b, 0)) // uppercase both chars - notice that we need just one compare per char
                     {
-                        // uppercase both chars - notice that we need just one compare per char
-                        if ((uint)(charA - 'a') <= 'z' - 'a')
-                        {
-                            charA -= DifferenceBetweenUpperAndLowerCaseAscii;
-                        }
-
-                        if ((uint)(charB - 'a') <= 'z' - 'a')
-                        {
-                            charB -= DifferenceBetweenUpperAndLowerCaseAscii;
-                        }
-
-                        if (charA != charB)
-                        {
-                            // they do not fit as characters do not match
-                            return false;
-                        }
+                        // they do not fit as characters do not match
+                        return false;
                     }
 
-                    var lastIndex = length - 1;
-                    charA = *(a + lastIndex);
-                    charB = *(b + lastIndex);
+                    if (QuickDiff(a, b, length - 1)) // uppercase both chars - notice that we need just one compare per char
                     {
-                        // uppercase both chars - notice that we need just one compare per char
-                        if ((uint)(charA - 'a') <= 'z' - 'a')
-                        {
-                            charA -= DifferenceBetweenUpperAndLowerCaseAscii;
-                        }
-
-                        if ((uint)(charB - 'a') <= 'z' - 'a')
-                        {
-                            charB -= DifferenceBetweenUpperAndLowerCaseAscii;
-                        }
-
-                        if (charA != charB)
-                        {
-                            // they do not fit as characters do not match
-                            return false;
-                        }
+                        // they do not fit as characters do not match
+                        return false;
                     }
 
-                    var middleIndex = length / 2;
-                    charA = *(a + middleIndex);
-                    charB = *(b + middleIndex);
+                    if (QuickDiff(a, b, length / 2)) // uppercase both chars - notice that we need just one compare per char
                     {
-                        // uppercase both chars - notice that we need just one compare per char
-                        if ((uint)(charA - 'a') <= 'z' - 'a')
-                        {
-                            charA -= DifferenceBetweenUpperAndLowerCaseAscii;
-                        }
-
-                        if ((uint)(charB - 'a') <= 'z' - 'a')
-                        {
-                            charB -= DifferenceBetweenUpperAndLowerCaseAscii;
-                        }
-
-                        if (charA != charB)
-                        {
-                            // they do not fit as characters do not match
-                            return false;
-                        }
+                        // they do not fit as characters do not match
+                        return false;
                     }
 
-                    var indexPart1 = length / 3;
-                    charA = *(a + indexPart1);
-                    charB = *(b + indexPart1);
+                    var third = length / 3;
+
+                    if (QuickDiff(a, b, third)) // uppercase both chars - notice that we need just one compare per char
                     {
-                        // uppercase both chars - notice that we need just one compare per char
-                        if ((uint)(charA - 'a') <= 'z' - 'a')
-                        {
-                            charA -= DifferenceBetweenUpperAndLowerCaseAscii;
-                        }
-
-                        if ((uint)(charB - 'a') <= 'z' - 'a')
-                        {
-                            charB -= DifferenceBetweenUpperAndLowerCaseAscii;
-                        }
-
-                        if (charA != charB)
-                        {
-                            // they do not fit as characters do not match
-                            return false;
-                        }
+                        // they do not fit as characters do not match
+                        return false;
                     }
 
-                    var indexPart2 = 2 * indexPart1;
-                    charA = *(a + indexPart2);
-                    charB = *(b + indexPart2);
+                    if (QuickDiff(a, b, 2 * third)) // uppercase both chars - notice that we need just one compare per char
                     {
-                        // uppercase both chars - notice that we need just one compare per char
-                        if ((uint)(charA - 'a') <= 'z' - 'a')
-                        {
-                            charA -= DifferenceBetweenUpperAndLowerCaseAscii;
-                        }
-
-                        if ((uint)(charB - 'a') <= 'z' - 'a')
-                        {
-                            charB -= DifferenceBetweenUpperAndLowerCaseAscii;
-                        }
-
-                        if (charA != charB)
-                        {
-                            // they do not fit as characters do not match
-                            return false;
-                        }
+                        // they do not fit as characters do not match
+                        return false;
                     }
                 }
             }
 
             // continue to check
             return true;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static unsafe bool QuickDiff(char* a, char* b, in int index)
+        {
+            int charA = *(a + index);
+
+            if (charA.IsAsciiLetterLower())
+            {
+                charA -= DifferenceBetweenUpperAndLowerCaseAscii;
+            }
+
+            int charB = *(b + index);
+
+            if (charB.IsAsciiLetterLower())
+            {
+                charB -= DifferenceBetweenUpperAndLowerCaseAscii;
+            }
+
+            return charA != charB;
         }
 
         private static bool IsUpperCaseWithSwitch(in char value)
@@ -2295,9 +2198,9 @@ namespace System
 
             for (var index = 0; ; index += otherLength)
             {
-                var newIndex = span.Slice(index).IndexOf(other, StringComparison.Ordinal);
+                var newIndex = span.Slice(index).IndexOf(other); // performs ordinal comparison
 
-                if (newIndex == -1)
+                if (newIndex is -1)
                 {
                     // nothing more to find
                     break;
@@ -2330,7 +2233,7 @@ namespace System
             {
                 index = value.IndexOf(finding, index, comparison);
 
-                if (index == -1)
+                if (index is -1)
                 {
                     // nothing more to find
                     break;
@@ -2350,5 +2253,17 @@ namespace System
 
             return indices ?? Array.Empty<int>();
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool IsAsciiLetterLower(this in char value) => IsAsciiLetterLower((int)value); // notice that we need just one compare per char
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool IsAsciiLetterLower(this in int value) => (uint)(value - 'a') <= 'z' - 'a'; // notice that we need just one compare per char
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool IsAsciiLetterUpper(this in char value) => IsAsciiLetterUpper((int)value); // notice that we need just one compare per char
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool IsAsciiLetterUpper(this in int value) => (uint)(value - 'A') <= 'Z' - 'A'; // notice that we need just one compare per char
     }
 }

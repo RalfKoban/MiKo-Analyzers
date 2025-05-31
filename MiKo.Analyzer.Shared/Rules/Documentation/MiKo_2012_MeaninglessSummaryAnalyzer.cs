@@ -39,7 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   ISymbol symbol,
                                                                   IReadOnlyList<XmlElementSyntax> summaryXmls,
                                                                   Lazy<string> commentXml,
-                                                                  Lazy<IReadOnlyCollection<string>> summaries)
+                                                                  Lazy<string[]> summaries)
         {
             var symbolNames = GetSelfSymbolNames(symbol);
             var phrases = GetPhrases(symbol);
@@ -93,28 +93,41 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return names.ToHashSet(_ => _ + " ");
         }
 
-        private Diagnostic[] AnalyzeSummaryPhrases(ISymbol symbol, IEnumerable<string> summaries, IEnumerable<string> phrases)
+        private Diagnostic[] AnalyzeSummaryPhrases(ISymbol symbol, ReadOnlySpan<string> summaries, IEnumerable<string> phrases)
         {
-            const StringComparison Comparison = StringComparison.OrdinalIgnoreCase;
+            var summariesLength = summaries.Length;
 
-            foreach (var summary in summaries)
+            if (summariesLength is 0)
             {
-                foreach (var phrase in phrases.Where(_ => summary.StartsWith(_, Comparison)))
+                return Array.Empty<Diagnostic>();
+            }
+
+            for (var index = 0; index < summariesLength; index++)
+            {
+                var summary = summaries[index];
+
+                foreach (var phrase in phrases)
                 {
-                    return ReportIssueStartingPhrase(symbol, phrase.AsSpan());
+                    if (summary.StartsWith(phrase, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return ReportIssueStartingPhrase(symbol, phrase.AsSpan());
+                    }
                 }
 
-                if (summary.StartsWith(Constants.Comments.XmlElementStartingTag, Comparison))
+                if (summary.StartsWith(Constants.Comments.XmlElementStartingTagChar))
                 {
-                    var index = summary.IndexOf(Constants.Comments.XmlElementEndingTag, Comparison);
-                    var phrase = index > 0 ? summary.AsSpan(0, index + 2) : Constants.Comments.XmlElementStartingTag.AsSpan();
+                    var i = summary.AsSpan().IndexOf(Constants.Comments.XmlElementEndingTag.AsSpan());
+                    var phrase = i > 0 ? summary.AsSpan(0, i + 2) : Constants.Comments.XmlElementStartingTag.AsSpan();
 
                     return ReportIssueStartingPhrase(symbol, phrase);
                 }
 
-                foreach (var phrase in Constants.Comments.MeaninglessPhrase.Where(_ => summary.Contains(_, Comparison)))
+                foreach (var phrase in Constants.Comments.MeaninglessPhrase)
                 {
-                    return ReportIssueContainsPhrase(symbol, phrase.AsSpan());
+                    if (summary.Contains(phrase, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return ReportIssueContainsPhrase(symbol, phrase.AsSpan());
+                    }
                 }
             }
 

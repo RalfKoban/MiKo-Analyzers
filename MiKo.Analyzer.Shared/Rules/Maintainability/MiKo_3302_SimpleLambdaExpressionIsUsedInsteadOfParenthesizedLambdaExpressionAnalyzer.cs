@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var parameterList = node.ParameterList;
                 var parameters = parameterList.Parameters;
 
-                if (parameters.Count == 1 && parameters.First().Type is null)
+                if (parameters.Count is 1 && parameters.First().Type is null)
                 {
                     ReportDiagnostics(context, Issue(parameterList));
                 }

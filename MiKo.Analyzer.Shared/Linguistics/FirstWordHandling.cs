@@ -14,19 +14,21 @@ namespace MiKoSolutions.Analyzers.Linguistics
         None = 0,
 
         /// <summary>
-        /// Keep the leading space of the word if there is any.
+        /// Keep a single leading space of the word if there is any.
+        /// Trims multiple leading spaces to one leading space.
+        /// Does not add a leading space in case there is none.
         /// </summary>
-        KeepLeadingSpace = 1 << 0,
+        KeepSingleLeadingSpace = 1 << 0,
 
         /// <summary>
         /// Attempt to make the word starting with an upper case.
         /// </summary>
-        MakeUpperCase = 1 << 1,
+        StartUpperCase = 1 << 1,
 
         /// <summary>
         /// Attempt to make the word starting with a lower case.
         /// </summary>
-        MakeLowerCase = 1 << 2,
+        StartLowerCase = 1 << 2,
 
         /// <summary>
         /// Attempt to make it an infinite verb.
