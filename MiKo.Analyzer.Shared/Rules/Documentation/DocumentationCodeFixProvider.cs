@@ -39,7 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 for (var index = 0; index < resultIndex; index++)
                 {
-                    if (span.StartsWith(result[index].AsSpan()))
+                    if (span.StartsWithQuickProbe(result[index].AsSpan()))
                     {
                         found = true;
 

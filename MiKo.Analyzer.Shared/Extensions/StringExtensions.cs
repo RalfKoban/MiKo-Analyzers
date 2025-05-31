@@ -1515,24 +1515,54 @@ namespace System
             }
         }
 
+        public static bool StartsWithQuickProbe(this in ReadOnlySpan<char> value, in ReadOnlySpan<char> phrase)
+        {
+            if (value.Length < phrase.Length)
+            {
+                return false;
+            }
+
+            if (QuickSubstringProbeOrdinal(value, phrase))
+            {
+                return value.StartsWith(phrase);
+            }
+
+            return false;
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWith(this string value, in char character) => value.HasCharacters() && value[0] == character;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool StartsWith(this string value, in ReadOnlySpan<char> characters) => value.HasCharacters() && value.AsSpan().StartsWith(characters);
+        public static bool StartsWith(this string value, in ReadOnlySpan<char> characters) => value.HasCharacters() && value.AsSpan().StartsWithQuickProbe(characters);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWith(this in ReadOnlySpan<char> value, in char character) => value.Length > 0 && value[0] == character;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool StartsWith(this in ReadOnlySpan<char> value, string characters) => characters.HasCharacters() && value.StartsWith(characters.AsSpan());
+        public static bool StartsWith(this in ReadOnlySpan<char> value, string characters) => characters.HasCharacters() && value.StartsWithQuickProbe(characters.AsSpan());
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool StartsWith(this string value, in ReadOnlySpan<char> characters, in StringComparison comparison) => value.HasCharacters() && value.AsSpan().StartsWith(characters, comparison);
+        public static bool StartsWith(this string value, in ReadOnlySpan<char> characters, in StringComparison comparison)
+        {
+            if (value.HasCharacters())
+            {
+                return comparison is StringComparison.Ordinal
+                       ? value.AsSpan().StartsWithQuickProbe(characters)
+                       : value.AsSpan().StartsWith(characters, comparison);
+            }
+
+            return false;
+        }
 
         public static bool StartsWith(this in ReadOnlySpan<char> value, string characters, in StringComparison comparison)
         {
             var others = characters.AsSpan();
+
+            if (comparison is StringComparison.Ordinal)
+            {
+                return value.StartsWithQuickProbe(others);
+            }
 
             // perform quick check
             if (QuickSubstringProbe(value, others, comparison))
@@ -2036,14 +2066,14 @@ namespace System
 
         private static bool QuickSubstringProbe(in ReadOnlySpan<char> value, in ReadOnlySpan<char> other, in StringComparison comparison)
         {
-            var valueLength = value.Length;
-            var otherLength = other.Length;
-
-            if (valueLength > otherLength)
+            if (value.Length > other.Length)
             {
-                // continue to check
+                // this is the hot path, so continue to check
                 return true;
             }
+
+            var valueLength = value.Length;
+            var otherLength = other.Length;
 
             if (valueLength < otherLength)
             {
@@ -2070,9 +2100,10 @@ namespace System
 
         private static bool QuickSubstringProbeOrdinal(in ReadOnlySpan<char> value, in ReadOnlySpan<char> other)
         {
-            var length = value.Length;
+            var valueLength = value.Length;
+            var otherLength = other.Length;
 
-            if (length != other.Length && length < 2)
+            if (valueLength < 2 && valueLength < otherLength)
             {
                 return true;
             }
@@ -2083,12 +2114,23 @@ namespace System
                 return false;
             }
 
-            var lastIndex = length - 1;
+            var lastIndex = otherLength - 1;
 
             if (value[lastIndex] != other[lastIndex])
             {
                 // they do not fit as characters do not match
                 return false;
+            }
+
+            var middleIndex = lastIndex / 2;
+
+            if (middleIndex != 0 && middleIndex != lastIndex)
+            {
+                if (value[middleIndex] != other[middleIndex])
+                {
+                    // they do not fit as characters do not match
+                    return false;
+                }
             }
 
             // continue to check
@@ -2097,9 +2139,10 @@ namespace System
 
         private static unsafe bool QuickSubstringProbeOrdinalIgnoreCase(in ReadOnlySpan<char> value, in ReadOnlySpan<char> other)
         {
-            var length = value.Length;
+            var valueLength = value.Length;
+            var otherLength = other.Length;
 
-            if (length != other.Length && length < QuickSubstringProbeLengthThreshold)
+            if (valueLength < QuickSubstringProbeLengthThreshold && valueLength < otherLength)
             {
                 return true;
             }
@@ -2118,19 +2161,19 @@ namespace System
                         return false;
                     }
 
-                    if (QuickDiff(a, b, length - 1)) // uppercase both chars - notice that we need just one compare per char
+                    if (QuickDiff(a, b, otherLength - 1)) // uppercase both chars - notice that we need just one compare per char
                     {
                         // they do not fit as characters do not match
                         return false;
                     }
 
-                    if (QuickDiff(a, b, length / 2)) // uppercase both chars - notice that we need just one compare per char
+                    if (QuickDiff(a, b, otherLength / 2)) // uppercase both chars - notice that we need just one compare per char
                     {
                         // they do not fit as characters do not match
                         return false;
                     }
 
-                    var third = length / 3;
+                    var third = otherLength / 3;
 
                     if (QuickDiff(a, b, third)) // uppercase both chars - notice that we need just one compare per char
                     {
