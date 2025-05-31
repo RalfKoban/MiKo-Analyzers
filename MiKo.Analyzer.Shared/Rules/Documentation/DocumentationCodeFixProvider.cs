@@ -63,7 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             Array.Copy(rentedArray, result, resultIndex);
 
-            pool.Return(rentedArray, true);
+            pool.Return(rentedArray);
 
             return result;
         }
@@ -194,7 +194,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                            .AdjustFirstWord(handling)
                                                            .ToStringAndRelease();
 
-                            if (originalText.Equals(replacedText, StringComparison.Ordinal))
+                            if (originalText.AsSpan().SequenceEqual(replacedText.AsSpan()))
                             {
                                 // replacement with itself does not make any sense
                                 continue;
