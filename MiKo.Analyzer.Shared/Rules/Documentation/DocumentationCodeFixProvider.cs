@@ -487,11 +487,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlCrefAttributeSyntax GetSeeCref(SyntaxNode value) => value.GetCref(Constants.XmlTag.See);
 
-        protected static DocumentationCommentTriviaSyntax GetXmlSyntax(IEnumerable<SyntaxNode> syntaxNodes)
+        protected static DocumentationCommentTriviaSyntax GetXmlSyntax(IEnumerable<SyntaxNode> syntaxNodes, in SyntaxKind kind = SyntaxKind.SingleLineDocumentationCommentTrivia)
         {
             foreach (var node in syntaxNodes)
             {
-                var comments = node.GetDocumentationCommentTriviaSyntax();
+                var comments = node.GetDocumentationCommentTriviaSyntax(kind);
 
                 if (comments.Length > 0)
                 {

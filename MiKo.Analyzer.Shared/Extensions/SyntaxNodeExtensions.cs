@@ -1196,13 +1196,13 @@ namespace MiKoSolutions.Analyzers
             return token.HasStructuredTrivia && token.HasDocumentationCommentTriviaSyntax();
         }
 
-        internal static DocumentationCommentTriviaSyntax[] GetDocumentationCommentTriviaSyntax(this SyntaxNode value)
+        internal static DocumentationCommentTriviaSyntax[] GetDocumentationCommentTriviaSyntax(this SyntaxNode value, in SyntaxKind kind = SyntaxKind.SingleLineDocumentationCommentTrivia)
         {
             var token = value.FindStructuredTriviaToken();
 
             if (token.HasStructuredTrivia)
             {
-                var comment = token.GetDocumentationCommentTriviaSyntax();
+                var comment = token.GetDocumentationCommentTriviaSyntax(kind);
 
                 if (comment != null)
                 {

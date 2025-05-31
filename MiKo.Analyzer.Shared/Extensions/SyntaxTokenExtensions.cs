@@ -111,7 +111,7 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        internal static DocumentationCommentTriviaSyntax[] GetDocumentationCommentTriviaSyntax(this in SyntaxToken value)
+        internal static DocumentationCommentTriviaSyntax[] GetDocumentationCommentTriviaSyntax(this in SyntaxToken value, in SyntaxKind kind = SyntaxKind.SingleLineDocumentationCommentTrivia)
         {
             var leadingTrivia = value.LeadingTrivia;
             var count = leadingTrivia.Count;
@@ -121,7 +121,7 @@ namespace MiKoSolutions.Analyzers
             {
                 var trivia = leadingTrivia[count is 4 ? 2 : 1];
 
-                if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
+                if (trivia.IsKind(kind) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
                 {
                     return new[] { syntax };
                 }
@@ -134,7 +134,7 @@ namespace MiKoSolutions.Analyzers
             {
                 var trivia = leadingTrivia[index];
 
-                if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
+                if (trivia.IsKind(kind) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
                 {
                     if (results is null)
                     {
@@ -376,6 +376,8 @@ namespace MiKoSolutions.Analyzers
         }
 
         internal static SyntaxToken WithLeadingXmlComment(this in SyntaxToken value) => value.WithLeadingTrivia(SyntaxNodeExtensions.XmlCommentStart);
+
+        internal static SyntaxToken WithLeadingXmlCommentExterior(this SyntaxToken value) => value.WithLeadingTrivia(SyntaxNodeExtensions.XmlCommentExterior);
 
         internal static SyntaxToken WithTriviaFrom(this in SyntaxToken value, SyntaxNode node) => value.WithLeadingTriviaFrom(node)
                                                                                                        .WithTrailingTriviaFrom(node);
