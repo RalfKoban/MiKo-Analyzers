@@ -184,7 +184,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                                                                                               .WithWhenKeyword(clause.WhenKeyword.WithLeadingSpace().WithoutTrailingTrivia())
                                                                                               .WithCondition(PlacedOnSameLine(clause.Condition));
 
-        protected static SeparatedSyntaxList<TSyntaxNode> GetUpdatedSyntax<TSyntaxNode>(in SeparatedSyntaxList<TSyntaxNode> expressions, in int leadingSpaces) where TSyntaxNode : SyntaxNode
+        protected SeparatedSyntaxList<TSyntaxNode> GetUpdatedSyntax<TSyntaxNode>(SeparatedSyntaxList<TSyntaxNode> expressions, in int leadingSpaces) where TSyntaxNode : SyntaxNode
         {
             if (expressions.Count is 0)
             {
@@ -209,11 +209,15 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     currentLine = startingLine;
 
                     // it seems to be on a different line, so add with spaces
-                    updatedExpressions.Add(expression.WithLeadingSpaces(leadingSpaces));
+                    var updatedExpression = GetUpdatedSyntax(expression, leadingSpaces);
+
+                    updatedExpressions.Add(updatedExpression);
                 }
             }
 
             return SyntaxFactory.SeparatedList(updatedExpressions, expressions.GetSeparators());
         }
+
+        protected virtual TSyntaxNode GetUpdatedSyntax<TSyntaxNode>(TSyntaxNode node, in int leadingSpaces) where TSyntaxNode : SyntaxNode => node.WithLeadingSpaces(leadingSpaces);
     }
 }
