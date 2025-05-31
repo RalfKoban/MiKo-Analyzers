@@ -316,59 +316,59 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static ConcreteMapInfo FindMatchingReplacementMapKeys(in ReadOnlySpan<char> text)
         {
             // now get all data
-            var mappedDataValue = MappedData.Value;
+            var data = MappedData.Value;
 
             if (text.Length > 0)
             {
                 if (text.StartsWith(StartWithArticleA))
                 {
-                    return new ConcreteMapInfo(mappedDataValue.ReplacementMapForA, mappedDataValue.ReplacementMapKeysForA, mappedDataValue.UniqueReplacementMapKeysForA);
+                    return new ConcreteMapInfo(data.ReplacementMapForA, data.ReplacementMapKeysForA, data.UniqueReplacementMapKeysForA);
                 }
 
                 if (text.StartsWith(StartWithArticleAn))
                 {
-                    return new ConcreteMapInfo(mappedDataValue.ReplacementMapForAn, mappedDataValue.ReplacementMapKeysForAn, mappedDataValue.UniqueReplacementMapKeysForAn);
+                    return new ConcreteMapInfo(data.ReplacementMapForAn, data.ReplacementMapKeysForAn, data.UniqueReplacementMapKeysForAn);
                 }
 
                 if (text.StartsWith(StartWithArticleThe))
                 {
-                    return new ConcreteMapInfo(mappedDataValue.ReplacementMapForThe, mappedDataValue.ReplacementMapKeysForThe, mappedDataValue.UniqueReplacementMapKeysForThe);
+                    return new ConcreteMapInfo(data.ReplacementMapForThe, data.ReplacementMapKeysForThe, data.UniqueReplacementMapKeysForThe);
                 }
 
                 if (text.StartsWith(StartWithParenthesis))
                 {
-                    return new ConcreteMapInfo(mappedDataValue.ReplacementMapForParenthesis, mappedDataValue.ReplacementMapKeysForParenthesis, mappedDataValue.UniqueReplacementMapKeysForParenthesis);
+                    return new ConcreteMapInfo(data.ReplacementMapForParenthesis, data.ReplacementMapKeysForParenthesis, data.UniqueReplacementMapKeysForParenthesis);
                 }
 
                 if (text.StartsWith(StartWithArticleLowerCaseA))
                 {
-                    return new ConcreteMapInfo(mappedDataValue.ReplacementMapForLowerCaseA, mappedDataValue.ReplacementMapKeysForLowerCaseA, mappedDataValue.UniqueReplacementMapKeysForA);
+                    return new ConcreteMapInfo(data.ReplacementMapForLowerCaseA, data.ReplacementMapKeysForLowerCaseA, data.UniqueReplacementMapKeysForA);
                 }
 
                 if (text.StartsWith(StartWithArticleLowerCaseAn))
                 {
-                    return new ConcreteMapInfo(mappedDataValue.ReplacementMapForLowerCaseAn, mappedDataValue.ReplacementMapKeysForLowerCaseAn, mappedDataValue.UniqueReplacementMapKeysForAn);
+                    return new ConcreteMapInfo(data.ReplacementMapForLowerCaseAn, data.ReplacementMapKeysForLowerCaseAn, data.UniqueReplacementMapKeysForAn);
                 }
 
                 if (text.StartsWith(StartWithArticleLowerCaseThe))
                 {
-                    return new ConcreteMapInfo(mappedDataValue.ReplacementMapForLowerCaseThe, mappedDataValue.ReplacementMapKeysForLowerCaseThe, mappedDataValue.UniqueReplacementMapKeysForThe);
+                    return new ConcreteMapInfo(data.ReplacementMapForLowerCaseThe, data.ReplacementMapKeysForLowerCaseThe, data.UniqueReplacementMapKeysForThe);
                 }
             }
 
-            return new ConcreteMapInfo(mappedDataValue.ReplacementMapForOthers, mappedDataValue.ReplacementMapKeysForOthers, mappedDataValue.UniqueReplacementMapKeysForOthers);
+            return new ConcreteMapInfo(data.ReplacementMapForOthers, data.ReplacementMapKeysForOthers, data.UniqueReplacementMapKeysForOthers);
         }
 
         private readonly ref struct ConcreteMapInfo
         {
-            public ConcreteMapInfo(in ReadOnlySpan<Pair> map, string[] keys, string[] uniqueKeys)
+            public ConcreteMapInfo(Pair[] map, string[] keys, string[] uniqueKeys)
             {
                 Map = map;
                 Keys = keys;
                 UniqueKeys = uniqueKeys;
             }
 
-            public ReadOnlySpan<Pair> Map { get; }
+            public Pair[] Map { get; }
 
             public string[] Keys { get; }
 
@@ -506,13 +506,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 ReplacementMapKeysForA = GetTermsForQuickLookup(UniqueReplacementMapKeysForA);
                 ReplacementMapKeysForAn = GetTermsForQuickLookup(UniqueReplacementMapKeysForAn);
                 ReplacementMapKeysForThe = GetTermsForQuickLookup(UniqueReplacementMapKeysForThe);
-                ReplacementMapKeysForLowerCaseA = ReplacementMapKeysForA;
-                ReplacementMapKeysForLowerCaseAn = ReplacementMapKeysForAn;
-                ReplacementMapKeysForLowerCaseThe = ReplacementMapKeysForThe;
                 ReplacementMapKeysForParenthesis = GetTermsForQuickLookup(UniqueReplacementMapKeysForParenthesis);
                 ReplacementMapKeysForOthers = GetTermsForQuickLookup(UniqueReplacementMapKeysForOthers);
 
-                string[] ToKeyArray(string[] keys, string text)
+                string[] ToKeyArray(ReadOnlySpan<string> keys, string text)
                 {
                     var length = keys.Length;
 
@@ -521,11 +518,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     var pool = ArrayPool<string>.Shared;
                     var rentedArray = pool.Rent(length);
 
+                    var textSpan = text.AsSpan();
+
                     for (var index = 0; index < length; index++)
                     {
                         var key = keys[index];
 
-                        if (key.StartsWith(text, StringComparison.Ordinal))
+                        if (key.AsSpan().StartsWith(textSpan))
                         {
                             rentedArray[indexInResult++] = key;
                         }
@@ -535,7 +534,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     Array.Copy(rentedArray, results, indexInResult);
 
-                    pool.Return(rentedArray, true);
+                    pool.Return(rentedArray);
 
                     return results;
                 }
@@ -565,7 +564,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     Array.Copy(rentedArray, results, results.Length);
 
-                    pool.Return(rentedArray, true);
+                    pool.Return(rentedArray);
 
                     return results;
                 }
@@ -599,11 +598,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             public string[] ReplacementMapKeysForOthers { get; }
 
-            public string[] ReplacementMapKeysForLowerCaseA { get; }
+            public string[] ReplacementMapKeysForLowerCaseA => ReplacementMapKeysForA;
 
-            public string[] ReplacementMapKeysForLowerCaseAn { get; }
+            public string[] ReplacementMapKeysForLowerCaseAn => ReplacementMapKeysForAn;
 
-            public string[] ReplacementMapKeysForLowerCaseThe { get; }
+            public string[] ReplacementMapKeysForLowerCaseThe => ReplacementMapKeysForThe;
 
             public string[] UniqueReplacementMapKeysForA { get; }
 

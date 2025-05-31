@@ -67,13 +67,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return result;
         }
-        //// ncrunch: no coverage end
-        //// ncrunch: rdi default
 
-        protected static XmlElementSyntax C(string text)
-        {
-            return SyntaxFactory.XmlElement(Constants.XmlTag.C, XmlText(text).ToSyntaxList<XmlNodeSyntax>());
-        }
+//// ncrunch: no coverage end
+//// ncrunch: rdi default
+
+        protected static XmlElementSyntax C(string text) => SyntaxFactory.XmlElement(Constants.XmlTag.C, XmlText(text).ToSyntaxList<XmlNodeSyntax>());
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, in SyntaxList<XmlNodeSyntax> content)
         {
@@ -86,17 +84,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, IEnumerable<XmlNodeSyntax> nodes) => Comment(comment, nodes.ToSyntaxList());
 
-        protected static XmlElementSyntax Comment(XmlElementSyntax comment, in ReadOnlySpan<string> text, string additionalComment = null)
-        {
-            return Comment(comment, text[0], additionalComment);
-        }
+        protected static XmlElementSyntax Comment(XmlElementSyntax comment, in ReadOnlySpan<string> text, string additionalComment = null) => Comment(comment, text[0], additionalComment);
 
-        protected static XmlElementSyntax Comment(XmlElementSyntax comment, in ReadOnlySpan<string> text, in SyntaxList<XmlNodeSyntax> additionalComment)
-        {
-            return Comment(comment, text[0], additionalComment);
-        }
+        protected static XmlElementSyntax Comment(XmlElementSyntax comment, in ReadOnlySpan<string> text, in SyntaxList<XmlNodeSyntax> additionalComment) => Comment(comment, text[0], additionalComment);
 
-//// ncrunch: rdi off
+        //// ncrunch: rdi off
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string text, in SyntaxList<XmlNodeSyntax> additionalComment)
         {
@@ -105,10 +97,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, end);
         }
 
-        protected static XmlElementSyntax Comment(XmlElementSyntax comment, string text, string additionalComment = null)
-        {
-            return Comment(comment, XmlText(text + additionalComment));
-        }
+        protected static XmlElementSyntax Comment(XmlElementSyntax comment, string text, string additionalComment = null) => Comment(comment, XmlText(text + additionalComment));
 
         protected static XmlElementSyntax Comment(XmlElementSyntax syntax, in ReadOnlySpan<string> terms, in ReadOnlySpan<Pair> replacementMap, in FirstWordHandling firstWordHandling = FirstWordHandling.KeepSingleLeadingSpace)
         {
@@ -714,8 +703,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlTextSyntax NewLineXmlText() => XmlText(string.Empty).WithLeadingXmlComment();
 
         protected static XmlTextSyntax TrailingNewLineXmlText() => XmlText(string.Empty).WithTrailingXmlComment();
-
-        protected static XmlTextSyntax XmlText(in ReadOnlySpan<char> text) => XmlText(text.ToString());
 
         protected static XmlTextSyntax XmlText(string text) => SyntaxFactory.XmlText(text);
 
