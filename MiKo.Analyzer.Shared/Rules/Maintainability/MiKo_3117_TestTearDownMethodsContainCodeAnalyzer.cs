@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var method = (MethodDeclarationSyntax)context.Node;
             var methodBody = method.Body;
 
-            if (methodBody != null && methodBody.Statements.Count == 0 && method.IsTestTearDownMethod() && method.IsAbstract() is false)
+            if (methodBody != null && methodBody.Statements.Count is 0 && method.IsTestTearDownMethod() && method.IsAbstract() is false)
             {
                 ReportDiagnostics(context, Issue(method));
             }

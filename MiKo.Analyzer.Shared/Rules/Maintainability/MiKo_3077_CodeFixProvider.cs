@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             // fix auto getter and setter
             var accessors = propertySyntax.AccessorList?.Accessors;
 
-            if (accessors?.Count == 2 && accessors.Value[0].Body is null && accessors.Value[0].ExpressionBody is null && accessors.Value[1].Body is null && accessors.Value[1].ExpressionBody is null)
+            if (accessors?.Count is 2 && accessors.Value[0].Body is null && accessors.Value[0].ExpressionBody is null && accessors.Value[1].Body is null && accessors.Value[1].ExpressionBody is null)
             {
                 // append a semicolon to the end
                 var initializer = CreateInitializer(document, propertySyntax.Type);

@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol)
         {
-            if (symbol.TypeKind == TypeKind.Class)
+            if (symbol.TypeKind is TypeKind.Class)
             {
                 switch (symbol.DeclaredAccessibility)
                 {
@@ -48,14 +48,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return Array.Empty<Diagnostic>();
             }
 
-            if (symbol.DeclaredAccessibility == Accessibility.Private)
+            if (symbol.DeclaredAccessibility is Accessibility.Private)
             {
                 // find other symbols that inherit from this one
                 var privateTypes = symbol.ContainingType.GetMembers<INamedTypeSymbol>();
 
                 if (privateTypes.Count > 0)
                 {
-                    var privateClasses = privateTypes.Where(_ => _.TypeKind == TypeKind.Class).ToList();
+                    var privateClasses = privateTypes.Where(_ => _.TypeKind is TypeKind.Class).ToList();
                     privateClasses.Remove(symbol);
 
                     foreach (var otherClass in privateClasses)

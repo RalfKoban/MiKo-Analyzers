@@ -241,7 +241,7 @@ namespace TestHelper
         /// </returns>
         private static Diagnostic[] SortDiagnostics(List<Diagnostic> diagnostics)
         {
-            if (diagnostics.Count == 0)
+            if (diagnostics.Count is 0)
             {
                 return [];
             }
@@ -299,7 +299,7 @@ namespace TestHelper
 
             var length = sources.Length;
 
-            if (length == 1)
+            if (length is 1)
             {
                 const string FileName = "Test.cs";
                 var documentId = DocumentId.CreateNewId(projectId, debugName: FileName);

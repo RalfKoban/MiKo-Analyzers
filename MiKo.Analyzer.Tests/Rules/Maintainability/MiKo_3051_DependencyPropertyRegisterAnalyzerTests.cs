@@ -248,6 +248,90 @@ namespace Bla
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_DependencyProperty_field_that_is_registered_with_StringLiteral_spanning_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int MyField { get; set; }
+        
+        private static readonly DependencyProperty m_fieldProperty = DependencyProperty.Register(
+                                                                                            ""MyField"",
+                                                                                            typeof(int),
+                                                                                            typeof(TestMe),
+                                                                                            new PropertyMetadata(default(int)));
+    }
+}
+";
+
+            const string FixedCode = @"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int MyField { get; set; }
+        
+        private static readonly DependencyProperty m_fieldProperty = DependencyProperty.Register(
+                                                                                            nameof(MyField),
+                                                                                            typeof(int),
+                                                                                            typeof(TestMe),
+                                                                                            new PropertyMetadata(default(int)));
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_DependencyProperty_field_that_is_registered_with_wrong_owning_type_spanning_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int MyField { get; set; }
+        
+        private static readonly DependencyProperty m_fieldProperty = DependencyProperty.Register(
+                                                                                            nameof(MyField),
+                                                                                            typeof(int),
+                                                                                            typeof(int),
+                                                                                            new PropertyMetadata(default(int)));
+    }
+}
+";
+
+            const string FixedCode = @"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int MyField { get; set; }
+        
+        private static readonly DependencyProperty m_fieldProperty = DependencyProperty.Register(
+                                                                                            nameof(MyField),
+                                                                                            typeof(int),
+                                                                                            typeof(TestMe),
+                                                                                            new PropertyMetadata(default(int)));
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3051_DependencyPropertyRegisterAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3051_DependencyPropertyRegisterAnalyzer();

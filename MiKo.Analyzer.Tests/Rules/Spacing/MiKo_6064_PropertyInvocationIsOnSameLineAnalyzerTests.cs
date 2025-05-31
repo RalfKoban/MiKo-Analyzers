@@ -33,11 +33,11 @@ using System.Threading.Tasks;
 
 public class TestMe
 {
-    public void DoSomething(TestMe someObject)
+    public async void DoSomething(TestMe someObject)
     {
-        var result = await someObject
-                                .DoSomething(1, 2, 3)
-                                .ConfigureAwait(false);
+        await someObject
+                   .DoSomething(1, 2, 3)
+                   .ConfigureAwait(false);
     }
 
     private Task DoSomething(int i, int j, int k) => Task.CompletedTask;

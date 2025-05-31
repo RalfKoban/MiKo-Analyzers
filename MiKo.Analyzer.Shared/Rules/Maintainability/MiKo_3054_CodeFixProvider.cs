@@ -54,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         {
                             var args = nameofExpression.ArgumentList.Arguments;
 
-                            if (args.Count == 1 && args[0].Expression is IdentifierNameSyntax identifier)
+                            if (args.Count is 1 && args[0].Expression is IdentifierNameSyntax identifier)
                             {
                                 return identifier.GetName();
                             }

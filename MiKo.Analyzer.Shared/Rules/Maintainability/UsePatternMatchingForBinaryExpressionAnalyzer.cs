@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -14,13 +15,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (context.Node is BinaryExpressionSyntax node)
             {
-                if (node.IsExpression(context.SemanticModel))
+                var semanticModel = context.SemanticModel;
+
+                if (node.IsExpressionTree(semanticModel))
                 {
                     // ignore expression trees
                     return;
                 }
 
-                if (IsResponsibleNode(node.Right) || IsResponsibleNode(node.Left))
+                if (IsResponsibleNode(node.Right, semanticModel) || IsResponsibleNode(node.Left, semanticModel))
                 {
                     ReportIssue(context, node.OperatorToken);
                 }
@@ -29,6 +32,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected abstract bool IsResponsibleNode(in SyntaxKind kind);
 
-        private bool IsResponsibleNode(CSharpSyntaxNode syntax) => syntax != null && IsResponsibleNode(syntax.Kind());
+        protected virtual bool IsResponsibleNode(ExpressionSyntax node, SemanticModel semanticModel) => node != null && IsResponsibleNode(node.Kind());
     }
 }

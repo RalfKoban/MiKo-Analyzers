@@ -34,12 +34,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private Diagnostic[] Analyze(InvocationExpressionSyntax node)
         {
-            if (node.Expression is MemberAccessExpressionSyntax maes && maes.Name.GetName() == "EqualTo")
+            if (node.Expression is MemberAccessExpressionSyntax maes && maes.Name.GetName() is "EqualTo")
             {
                 var argumentList = node.ArgumentList;
                 var arguments = argumentList.Arguments;
 
-                if (arguments.Count == 1 && arguments[0].Expression is LiteralExpressionSyntax literal && literal.Token.ValueText == "0")
+                if (arguments.Count is 1 && arguments[0].Expression is LiteralExpressionSyntax literal && literal.Token.ValueText is "0")
                 {
                     var location = CreateLocation(node, maes.Name.Span.Start, argumentList.Span.End);
 

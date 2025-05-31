@@ -75,7 +75,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected static IsPatternExpressionSyntax IsPattern(ExpressionSyntax operand, PatternSyntax pattern) => SyntaxFactory.IsPatternExpression(operand, pattern);
 
-        protected static IsPatternExpressionSyntax IsPattern(ExpressionSyntax operand, LiteralExpressionSyntax literal) => IsPattern(operand, SyntaxFactory.ConstantPattern(literal));
+        protected static IsPatternExpressionSyntax IsPattern(ExpressionSyntax operand, ExpressionSyntax expression) => IsPattern(operand, SyntaxFactory.ConstantPattern(expression));
 
         protected static IsPatternExpressionSyntax IsFalsePattern(ExpressionSyntax operand) => IsPattern(operand, FalseLiteral());
 
@@ -117,7 +117,7 @@ namespace MiKoSolutions.Analyzers.Rules
             // collect all descendant nodes that are the first ones starting on a new line, then adjust leading space for each of those
             var startingNodes = GetNodesAndTokensStartingOnSeparateLines(syntax).ToList();
 
-            if (startingNodes.Count == 0)
+            if (startingNodes.Count is 0)
             {
                 return syntax;
             }

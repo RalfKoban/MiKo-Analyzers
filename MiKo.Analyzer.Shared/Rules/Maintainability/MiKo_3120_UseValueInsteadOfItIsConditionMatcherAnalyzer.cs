@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var arguments = node.ArgumentList.Arguments;
 
-                if (arguments.Count == 1)
+                if (arguments.Count is 1)
                 {
                     var issues = AnalyzeSimpleMemberAccessExpression(node, arguments[0], context);
 

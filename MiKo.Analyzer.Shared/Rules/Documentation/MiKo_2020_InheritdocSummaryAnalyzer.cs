@@ -60,7 +60,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     var index = content.IndexOf(xmlTag);
 
-                    if (index == 0)
+                    if (index is 0)
                     {
                         // is it the first inside the comment
                         if (HasIssue(symbol, semanticModel, cref))

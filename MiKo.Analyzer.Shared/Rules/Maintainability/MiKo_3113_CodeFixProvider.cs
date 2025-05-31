@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var shouldNode = statement.GetFluentAssertionShouldNode();
                 var shouldName = shouldNode.GetName();
 
-                var assertThat = shouldName == Constants.FluentAssertions.ShouldBeEquivalentTo
+                var assertThat = shouldName is Constants.FluentAssertions.ShouldBeEquivalentTo
                                  ? ConvertShouldBeEquivalentToToAssertThat(document, shouldNode)
                                  : ConvertShouldToAssertThat(document, shouldNode);
 
@@ -174,7 +174,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                         if (type != null)
                         {
-                            if (count == 1 && type.IsString())
+                            if (count is 1 && type.IsString())
                             {
                                 // we have found the extension method that uses strings
                                 return AssertThat(expression, Is("EqualTo", argument, "IgnoreCase"), arguments, removeNameColon: true);
@@ -206,7 +206,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                         if (type != null)
                         {
-                            if (count == 1 && type.IsString())
+                            if (count is 1 && type.IsString())
                             {
                                 // we have found the extension method that uses strings
                                 return AssertThat(expression, Is("Not", "EqualTo", argument, "IgnoreCase"), arguments, removeNameColon: true);

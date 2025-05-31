@@ -43,12 +43,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   ISymbol symbol,
                                                                   IReadOnlyList<XmlElementSyntax> summaryXmls,
                                                                   Lazy<string> commentXml,
-                                                                  Lazy<IReadOnlyCollection<string>> summaries)
+                                                                  Lazy<string[]> summaries)
         {
             var textTokens = comment.GetXmlTextTokens();
             var textTokensCount = textTokens.Count;
 
-            if (textTokensCount == 0)
+            if (textTokensCount is 0)
             {
                 return Array.Empty<Diagnostic>();
             }

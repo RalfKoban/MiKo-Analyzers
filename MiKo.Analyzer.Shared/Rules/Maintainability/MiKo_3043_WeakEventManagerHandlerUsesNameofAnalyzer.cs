@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         var typeName = invocation.GetIdentifierName();
 
-                        if (typeName == "WeakEventManager")
+                        if (typeName is "WeakEventManager")
                         {
                             var arguments = invocation.ArgumentList.Arguments;
 

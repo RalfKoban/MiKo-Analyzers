@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             return betterName.ToString();
 
-            bool StartsWithCan(in ReadOnlySpan<char> name) => name.Length > 4 && name[3].IsUpperCaseLetter() && name.StartsWith("Can", StringComparison.Ordinal);
+            bool StartsWithCan(in ReadOnlySpan<char> name) => name.Length > 4 && name[3].IsUpperCaseLetter() && name.StartsWith("Can");
 
             ReadOnlySpan<char> WithoutIsHasArePrefix(in ReadOnlySpan<char> name)
             {
@@ -107,7 +107,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var arguments = argumentList.Arguments;
 
-            if (arguments.Count == 0)
+            if (arguments.Count is 0)
             {
                 yield break;
             }

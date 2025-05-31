@@ -186,7 +186,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected SeparatedSyntaxList<TSyntaxNode> GetUpdatedSyntax<TSyntaxNode>(SeparatedSyntaxList<TSyntaxNode> expressions, in int leadingSpaces) where TSyntaxNode : SyntaxNode
         {
-            if (expressions.Count == 0)
+            if (expressions.Count is 0)
             {
                 return SyntaxFactory.SeparatedList<TSyntaxNode>();
             }

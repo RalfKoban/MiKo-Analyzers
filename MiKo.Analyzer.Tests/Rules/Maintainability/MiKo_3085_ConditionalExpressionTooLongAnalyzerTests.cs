@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -253,6 +255,24 @@ public class TestMe
     internal static ArgumentOutOfRangeException ArgumentOutOfRange(string paramName, string[] messages, object value) => messages.Any()
                                                                                                                           ? new ArgumentOutOfRangeException(paramName, 0815, messages.Where(_ => _.Length > 1).FirstOrDefault())
                                                                                                                           : new ArgumentOutOfRangeException(paramName, 0815, string.Empty);
+}");
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
+        [Test]
+        public void An_issue_is_reported_for_object_creation_with_decoration_expression() => An_issue_is_reported_for(2, @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public async void DoSomething(bool isPending, TestMe somethingWithLongName)
+    {
+        var (succeed, message) = isPending ? await DoSomethingWithLogName(somethingWithLongName).ConfigureAwait(false) : await DoSomethingElseWithLogName(somethingWithLongName).ConfigureAwait(false);
+    }
+
+    private Task<(bool Succeed, string Message)> DoSomethingWithLogName(TestMe testMe) => null;
+
+    private Task<(bool Succeed, string Message)> DoSomethingElseWithLogName(TestMe testMe) => null;
 }");
 
         [Test]
@@ -1532,6 +1552,65 @@ public class TestMe
                    };
     }
 }";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_object_creation_with_decoration_expression_and_parenthesized_variable_designation()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public async void DoSomething(bool isPending, TestMe somethingWithLongName)
+    {
+        var (succeed, message) = isPending ? await DoSomethingWithLogName(somethingWithLongName).ConfigureAwait(false) : await DoSomethingElseWithLogName(somethingWithLongName).ConfigureAwait(false);
+
+        if (succeed)
+        {
+            throw new NotSupportedException(message);
+        }
+    }
+
+    private Task<(bool Succeed, string Message)> DoSomethingWithLogName(TestMe testMe) => null;
+
+    private Task<(bool Succeed, string Message)> DoSomethingElseWithLogName(TestMe testMe) => null;
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public async void DoSomething(bool isPending, TestMe somethingWithLongName)
+    {
+        bool succeed;
+        string message;
+        if (isPending)
+        {
+            (succeed, message) = await DoSomethingWithLogName(somethingWithLongName).ConfigureAwait(false);
+        }
+        else
+        {
+            (succeed, message) = await DoSomethingElseWithLogName(somethingWithLongName).ConfigureAwait(false);
+        }
+
+        if (succeed)
+        {
+            throw new NotSupportedException(message);
+        }
+    }
+
+    private Task<(bool Succeed, string Message)> DoSomethingWithLogName(TestMe testMe) => null;
+
+    private Task<(bool Succeed, string Message)> DoSomethingElseWithLogName(TestMe testMe) => null;
+}
+";
 
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
