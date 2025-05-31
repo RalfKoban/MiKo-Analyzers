@@ -559,22 +559,23 @@ namespace System.Text
             text.CopyTo(0, startChars, 0, lengthToCompare);
             text.CopyTo(endIndex, endChars, 0, lengthToCompare);
 
+            var found = false;
+
             // Compare the segments
             for (var position = 0; position < lengthToCompare; position++)
             {
                 if (startChars[position] == startChar && endChars[position] == endChar)
                 {
-                    pool.Return(startChars);
-                    pool.Return(endChars);
+                    found = true;
 
-                    return true;
+                    break;
                 }
             }
 
             pool.Return(startChars);
             pool.Return(endChars);
 
-            return false;
+            return found;
         }
 
         private static int CountLeadingWhitespaces(this StringBuilder value, int start = 0)
