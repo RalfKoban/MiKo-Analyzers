@@ -136,16 +136,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                    .Without("Enum")
                                                    .WithoutAbbreviations()
                                                    .AdjustFirstWord(FirstWordHandling.MakePlural)
-                                                   .SeparateWords(' ', FirstWordHandling.MakeLowerCase);
+                                                   .SeparateWords(' ', FirstWordHandling.StartLowerCase);
                     }
                     else
                     {
-                        continuation = continuation.AdjustFirstWord(FirstWordHandling.MakeLowerCase);
+                        continuation = continuation.AdjustFirstWord(FirstWordHandling.StartLowerCase);
                     }
                 }
                 else
                 {
-                    continuation = continuation.AdjustFirstWord(FirstWordHandling.MakeLowerCase);
+                    continuation = continuation.AdjustFirstWord(FirstWordHandling.StartLowerCase);
                 }
 
                 var finalText = continuation.Insert(0, startingPhrase)

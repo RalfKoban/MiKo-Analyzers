@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             var symbol = syntax.Identifier.GetSymbol(semanticModel);
 
-            return symbol?.Kind == SymbolKind.Local;
+            return symbol?.Kind is SymbolKind.Local;
         }
 
         private void Analyze(SyntaxNodeAnalysisContext context)

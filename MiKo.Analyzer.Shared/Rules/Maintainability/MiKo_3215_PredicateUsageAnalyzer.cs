@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var type = parameter.Type;
 
-                if (type.TypeKind == TypeKind.Delegate && type.Name == "Predicate" && type.TryGetGenericArgumentType(out var genericType))
+                if (type.TypeKind is TypeKind.Delegate && type.Name is "Predicate" && type.TryGetGenericArgumentType(out var genericType))
                 {
                     yield return Issue(parameter.GetSyntax<ParameterSyntax>().Type, genericType.Name);
                 }

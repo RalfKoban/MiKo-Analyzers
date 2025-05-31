@@ -99,7 +99,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
             }
 
-            if (calls == 0)
+            if (calls is 0)
             {
                 return null;
             }

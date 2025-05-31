@@ -48,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var names = parameters.ToHashSet(_ => _.Name);
 
-            if (names.Count == 0)
+            if (names.Count is 0)
             {
                 return Array.Empty<Diagnostic>();
             }

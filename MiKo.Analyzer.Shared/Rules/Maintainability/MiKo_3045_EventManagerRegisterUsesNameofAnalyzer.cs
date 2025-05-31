@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var arguments = symbol.GetInvocationArgumentsFrom(Constants.EventManager.RegisterRoutedEvent);
 
-            if (arguments.Count == 4)
+            if (arguments.Count is 4)
             {
                 var expression = arguments[0].Expression;
 

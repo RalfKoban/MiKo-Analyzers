@@ -77,7 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var startingPhrase = Constants.Comments.CollectionReturnTypeStartingPhrase;
 
-            if (returnType.TypeArgumentList.Arguments.Count == 1)
+            if (returnType.TypeArgumentList.Arguments.Count is 1)
             {
                 var typeName = GetGenericTypeArgumentTypeName(returnType);
 
@@ -85,7 +85,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     var text = typeName.AsCachedBuilder()
                                        .AdjustFirstWord(FirstWordHandling.MakePlural)
-                                       .SeparateWords(' ', FirstWordHandling.MakeLowerCase)
+                                       .SeparateWords(' ', FirstWordHandling.StartLowerCase)
                                        .ToStringAndRelease();
 
                     if (text.Length > 0)

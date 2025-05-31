@@ -240,7 +240,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return false;
             }
 
-            if (length == 4 && value.Equals("will", StringComparison.OrdinalIgnoreCase))
+            if (length is 4 && value.Equals("will", StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }
@@ -274,7 +274,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             if (length >= 2)
             {
-                return value[length.Value - 1] == 's' && CharsForTwoCharacterEndingsWithS.Contains(value[length.Value - 2]);
+                return value[length.Value - 1] is 's' && CharsForTwoCharacterEndingsWithS.Contains(value[length.Value - 2]);
             }
 
             return false;
@@ -424,7 +424,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 {
                     var wordLength = word.Length;
 
-                    if (wordLength == 4)
+                    if (wordLength is 4)
                     {
                         // ignore short word such as "ping" or "thing"
                         return word;
@@ -501,8 +501,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
                 switch (handling)
                 {
-                    case FirstWordHandling.MakeLowerCase: return word.ToLowerCaseAt(0);
-                    case FirstWordHandling.MakeUpperCase: return word.ToUpperCaseAt(0);
+                    case FirstWordHandling.StartLowerCase: return word.ToLowerCaseAt(0);
+                    case FirstWordHandling.StartUpperCase: return word.ToUpperCaseAt(0);
                     default:
                         return word.ToString();
                 }
@@ -718,7 +718,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 {
                     var remaining = value.Slice(phrase.Length);
 
-                    return remaining.Length == 0 || remaining[0].IsUpperCase();
+                    return remaining.Length is 0 || remaining[0].IsUpperCase();
                 }
             }
 

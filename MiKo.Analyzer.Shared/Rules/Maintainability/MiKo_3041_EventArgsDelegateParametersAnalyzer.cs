@@ -34,12 +34,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var parameters = symbol.Parameters;
 
-                    if (parameters.Length == 0)
+                    if (parameters.Length is 0)
                     {
                         return Array.Empty<Diagnostic>();
                     }
 
-                    return parameters.Where(_ => _.Type.TypeKind == TypeKind.Delegate)
+                    return parameters.Where(_ => _.Type.TypeKind is TypeKind.Delegate)
                                      .Select(_ => Issue(_.Type))
                                      .ToList();
                 }
@@ -53,7 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var returnType = symbol.GetReturnType();
 
-            return returnType?.TypeKind == TypeKind.Delegate
+            return returnType?.TypeKind is TypeKind.Delegate
                    ? new[] { Issue(returnType) }
                    : Array.Empty<Diagnostic>();
         }

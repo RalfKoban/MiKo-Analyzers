@@ -77,7 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (text.StartsWithAny(EmptyReplacementsMapKeys, StringComparison.Ordinal))
             {
-                return Comment(comment, EmptyReplacementsMapKeys, EmptyReplacementsMap, FirstWordHandling.MakeUpperCase | FirstWordHandling.MakeThirdPersonSingular | FirstWordHandling.KeepLeadingSpace);
+                return Comment(comment, EmptyReplacementsMapKeys, EmptyReplacementsMap, FirstWordHandling.StartUpperCase | FirstWordHandling.MakeThirdPersonSingular | FirstWordHandling.KeepSingleLeadingSpace);
             }
 
             if (comment.GetEnclosing(Declarations) is MemberDeclarationSyntax member)
@@ -162,12 +162,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return GetUpdatedSyntax(comment, t);
             }
 
-            return Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordHandling.MakeLowerCase);
+            return Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordHandling.StartLowerCase);
         }
 
         private static XmlEmptyElementSyntax GetUpdatedSyntaxWithInheritdoc(in SyntaxList<XmlNodeSyntax> content)
         {
-            var inheritdoc = content.OfType<XmlEmptyElementSyntax>().FirstOrDefault(_ => _.GetName() == Constants.XmlTag.Inheritdoc);
+            var inheritdoc = content.OfType<XmlEmptyElementSyntax>().FirstOrDefault(_ => _.GetName() is Constants.XmlTag.Inheritdoc);
 
             if (inheritdoc != null)
             {

@@ -18,10 +18,10 @@ using System.Threading.Tasks;
 
 public class TestMe
 {
-    public void DoSomething(TestMe someObject)
+    public async void DoSomething(TestMe someObject)
     {
-        var result = await someObject.DoSomething(1, 2, 3)
-                                .ConfigureAwait(false);
+        await someObject.DoSomething(1, 2, 3)
+                        .ConfigureAwait(false);
     }
 
     private Task DoSomething(int i, int j, int k) => Task.CompletedTask;
@@ -35,9 +35,9 @@ using System.Threading.Tasks;
 
 public class TestMe
 {
-    public void DoSomething(TestMe someObject)
+    public async void DoSomething(TestMe someObject)
     {
-        var result = await someObject.SomeProperty
+        await someObject.SomeProperty
             .DoSomething(1, 2, 3)
             .ConfigureAwait(false);
     }
@@ -50,11 +50,25 @@ public class TestMe
         public void An_issue_is_reported_if_invocation_is_on_different_line() => An_issue_is_reported_for(@"
 public class TestMe
 {
-    public void DoSomething(TestMe someObject)
+    public async void DoSomething(TestMe someObject)
     {
-        var result = await someObject
-                                .DoSomething(1, 2, 3)
-                                .ConfigureAwait(false);
+        await someObject
+                   .DoSomething(1, 2, 3)
+                   .ConfigureAwait(false);
+    }
+
+    private Task DoSomething(int i, int j, int k) => Task.CompletedTask;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_if_invocation_on_method_is_on_different_line() => An_issue_is_reported_for(@"
+public class TestMe
+{
+    public async void DoSomething(int x, int y, int z)
+    {
+        await DoSomething(1, 2, 3)
+                         .ConfigureAwait(false);
     }
 
     private Task DoSomething(int i, int j, int k) => Task.CompletedTask;
@@ -70,11 +84,11 @@ using System.Threading.Tasks;
 
 public class TestMe
 {
-    public void DoSomething(TestMe someObject)
+    public async void DoSomething(TestMe someObject)
     {
-        var result = await someObject
-                                .DoSomething(1, 2, 3)
-                                .ConfigureAwait(false);
+        await someObject
+                    .DoSomething(1, 2, 3)
+                    .ConfigureAwait(false);
     }
 
     private Task DoSomething(int i, int j, int k) => Task.CompletedTask;
@@ -87,10 +101,10 @@ using System.Threading.Tasks;
 
 public class TestMe
 {
-    public void DoSomething(TestMe someObject)
+    public async void DoSomething(TestMe someObject)
     {
-        var result = await someObject.DoSomething(1, 2, 3)
-                                .ConfigureAwait(false);
+        await someObject.DoSomething(1, 2, 3)
+                    .ConfigureAwait(false);
     }
 
     private Task DoSomething(int i, int j, int k) => Task.CompletedTask;
@@ -143,6 +157,37 @@ public class TestMe
     private static Task DoSomething(int i, int j, int k) => Task.CompletedTask;
 
     private void DoSomethingCore(Action<object> callback) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_invocation_on_method_is_on_different_line()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public async void DoSomething(int x, int y, int z)
+    {
+        await DoSomething(1, 2, 3)
+                         .ConfigureAwait(false);
+    }
+
+    private Task DoSomething(int i, int j, int k) => Task.CompletedTask;
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public async void DoSomething(int x, int y, int z)
+    {
+        await DoSomething(1, 2, 3).ConfigureAwait(false);
+    }
+
+    private Task DoSomething(int i, int j, int k) => Task.CompletedTask;
 }
 ";
 

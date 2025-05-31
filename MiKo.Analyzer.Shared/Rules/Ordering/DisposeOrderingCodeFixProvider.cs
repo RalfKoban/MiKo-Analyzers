@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             {
                 var relatedDirectives = regionTrivia.GetRelatedDirectives();
 
-                if (relatedDirectives.Count == 2)
+                if (relatedDirectives.Count is 2)
                 {
                     var endRegionTrivia = relatedDirectives[1].ParentTrivia;
                     var parent = endRegionTrivia.Token.Parent;

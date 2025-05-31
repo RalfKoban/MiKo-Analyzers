@@ -22,13 +22,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyze(ISymbol symbol) => symbol.Kind == SymbolKind.Method;
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol.Kind is SymbolKind.Method;
 
         protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
             var method = (IMethodSymbol)symbol;
 
-            if (method.Parameters.Length == 0)
+            if (method.Parameters.Length is 0)
             {
                 return Array.Empty<Diagnostic>();
             }

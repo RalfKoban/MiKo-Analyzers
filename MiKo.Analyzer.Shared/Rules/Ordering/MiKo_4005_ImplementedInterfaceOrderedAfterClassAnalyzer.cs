@@ -68,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             }
 
             // interface should be first after base type
-            return types.Contains(baseTypeName) && index == 1;
+            return types.Contains(baseTypeName) && index is 1;
         }
 
         private static BaseListSyntax GetBaseListSyntax(INamedTypeSymbol symbol)

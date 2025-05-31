@@ -40,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 var type = identifier.GetTypeSymbol(semanticModel);
 
-                if (type?.TypeKind == TypeKind.Delegate)
+                if (type?.TypeKind is TypeKind.Delegate)
                 {
                     if (token.GetSymbol(semanticModel) is IEventSymbol)
                     {

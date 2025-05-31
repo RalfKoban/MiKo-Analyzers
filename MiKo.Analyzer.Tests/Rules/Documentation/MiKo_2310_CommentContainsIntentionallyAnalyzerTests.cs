@@ -42,6 +42,13 @@ public class TestMe
 }");
 
         [Test]
+        public void No_issue_is_reported_for_undocumented_field() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    private int _myField;
+}");
+
+        [Test]
         public void No_issue_is_reported_for_correct_comment() => No_issue_is_reported_for(@"
 public class TestMe
 {
@@ -106,6 +113,34 @@ public class TestMe
 }");
 
         [Test]
+        public void No_issue_is_reported_for_intentionally_comment_with_reason_on_property_([ValueSource(nameof(IntentionalPhrases))] string comment) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public int SomeValue
+    {
+        get
+        {
+            // " + comment + @" because we like it this way
+            return 42;
+        }
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_intentionally_comment_with_because_on_property_([ValueSource(nameof(IntentionalPhrases))] string comment) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public int SomeValue
+    {
+        get
+        {
+            // " + comment + @" because we like it this way
+            return 42;
+        }
+    }
+}");
+
+        [Test]
         public void No_issue_is_reported_for_intentionally_comment_with_reason_on_field_([ValueSource(nameof(IntentionalPhrases))] string comment) => No_issue_is_reported_for(@"
 public class TestMe
 {
@@ -142,6 +177,20 @@ public class TestMe
         catch
         {
             // " + comment + @"
+        }
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_wrong_comment_on_property_([ValueSource(nameof(IntentionalPhrases))] string comment) => An_issue_is_reported_for(@"
+public class TestMe
+{
+    public int SomeValue
+    {
+        get
+        {
+            // " + comment + @"
+            return 42;
         }
     }
 }");

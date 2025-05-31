@@ -45,7 +45,7 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<IMethodSymbol> GetMethods(this ITypeSymbol value, MethodKind kind)
         {
             // note that methods with MethodKind.Constructor cannot be referenced by name
-            var methods = kind == MethodKind.Ordinary
+            var methods = kind is MethodKind.Ordinary
                           ? value.GetNamedMethods()
                           : value.GetMethods();
 
@@ -171,7 +171,7 @@ namespace MiKoSolutions.Analyzers
             return functions ?? (IReadOnlyList<LocalFunctionStatementSyntax>)Array.Empty<LocalFunctionStatementSyntax>();
         }
 
-        internal static bool ContainsExtensionMethods(this INamedTypeSymbol value) => value.TypeKind == TypeKind.Class && value.IsStatic && value.MightContainExtensionMethods && value.GetExtensionMethods().Any();
+        internal static bool ContainsExtensionMethods(this INamedTypeSymbol value) => value.TypeKind is TypeKind.Class && value.IsStatic && value.MightContainExtensionMethods && value.GetExtensionMethods().Any();
 
         internal static INamedTypeSymbol FindContainingType(this in SyntaxNodeAnalysisContext value) => FindContainingType(value.ContainingSymbol);
 
@@ -322,7 +322,7 @@ namespace MiKoSolutions.Analyzers
             var members = value.GetMembers();
             var length = members.Length;
 
-            if (length == 0)
+            if (length is 0)
             {
                 return Array.Empty<TSymbol>();
             }
@@ -664,7 +664,7 @@ namespace MiKoSolutions.Analyzers
         {
             var attributes = value.GetAttributes();
 
-            if (attributes.Length == 0)
+            if (attributes.Length is 0)
             {
                 return false;
             }
@@ -676,7 +676,7 @@ namespace MiKoSolutions.Analyzers
         {
             var attributes = value.GetAttributes();
 
-            if (attributes.Length == 0)
+            if (attributes.Length is 0)
             {
                 return false;
             }
@@ -688,7 +688,7 @@ namespace MiKoSolutions.Analyzers
         {
             var attributes = value.GetAttributes();
 
-            if (attributes.Length == 0)
+            if (attributes.Length is 0)
             {
                 return false;
             }
@@ -700,7 +700,7 @@ namespace MiKoSolutions.Analyzers
         {
             var parameters = value.Parameters;
 
-            if (parameters.Length == 0)
+            if (parameters.Length is 0)
             {
                 return false;
             }
@@ -1089,12 +1089,12 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsAspNetCoreController(this IMethodSymbol value)
         {
-            if (value.DeclaredAccessibility == Accessibility.Public)
+            if (value.DeclaredAccessibility is Accessibility.Public)
             {
                 var returnType = value.ReturnType;
 
-                return returnType.TypeKind == TypeKind.Interface
-                    && returnType.FullyQualifiedName() == "Microsoft.AspNetCore.Mvc.IActionResult"
+                return returnType.TypeKind is TypeKind.Interface
+                    && returnType.FullyQualifiedName() is "Microsoft.AspNetCore.Mvc.IActionResult"
                     && value.ContainingType.InheritsFrom("ControllerBase", "Microsoft.AspNetCore.Mvc.ControllerBase");
             }
 
@@ -1107,7 +1107,7 @@ namespace MiKoSolutions.Analyzers
             {
                 case "Configure":
                 case "ConfigureServices":
-                    return value.ReturnsVoid && value.ContainingType?.Name == "Startup";
+                    return value.ReturnsVoid && value.ContainingType?.Name is "Startup";
 
                 default:
                     return false;
@@ -1125,22 +1125,22 @@ namespace MiKoSolutions.Analyzers
                 return false;
             }
 
-            if (value.SpecialType == SpecialType.System_Boolean)
+            if (value.SpecialType is SpecialType.System_Boolean)
             {
                 return true;
             }
 
-            return value.IsNullable() && value is INamedTypeSymbol type && type.TypeArguments[0].SpecialType == SpecialType.System_Boolean;
+            return value.IsNullable() && value is INamedTypeSymbol type && type.TypeArguments[0].SpecialType is SpecialType.System_Boolean;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsByte(this ITypeSymbol value) => value.SpecialType == SpecialType.System_Byte;
+        internal static bool IsByte(this ITypeSymbol value) => value.SpecialType is SpecialType.System_Byte;
 
         internal static bool IsByteArray(this ITypeSymbol value) => value is IArrayTypeSymbol array && array.ElementType.IsByte();
 
         internal static bool IsIGrouping(this ITypeSymbol value)
         {
-            if (value.TypeKind == TypeKind.Interface)
+            if (value.TypeKind is TypeKind.Interface)
             {
                 switch (value.Name)
                 {
@@ -1154,7 +1154,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsCancellationToken(this ITypeSymbol value) => value.TypeKind == TypeKind.Struct && value.ToString() == TypeNames.CancellationToken;
+        internal static bool IsCancellationToken(this ITypeSymbol value) => value.TypeKind is TypeKind.Struct && value.ToString() == TypeNames.CancellationToken;
 
         internal static bool IsCoerceValueCallback(this IMethodSymbol value)
         {
@@ -1162,7 +1162,7 @@ namespace MiKoSolutions.Analyzers
             {
                 var parameters = value.Parameters;
 
-                return parameters.Length == 2 && parameters[0].Type.IsDependencyObject() && parameters[1].Type.IsObject();
+                return parameters.Length is 2 && parameters[0].Type.IsDependencyObject() && parameters[1].Type.IsObject();
             }
 
             return false;
@@ -1174,7 +1174,7 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsConstructor(this ISymbol value) => value is IMethodSymbol m && m.IsConstructor();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsConstructor(this IMethodSymbol value) => value.MethodKind == MethodKind.Constructor;
+        internal static bool IsConstructor(this IMethodSymbol value) => value.MethodKind is MethodKind.Constructor;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsPrimaryConstructor(this ISymbol value) => value is IMethodSymbol m && m.IsPrimaryConstructor();
@@ -1199,11 +1199,11 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsDependencyObject(this ITypeSymbol value) => value.InheritsFrom("DependencyObject", "System.Windows.DependencyObject");
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsDependencyProperty(this ITypeSymbol value) => value.Name == Constants.DependencyProperty.TypeName || value.Name == Constants.DependencyProperty.FullyQualifiedTypeName;
+        internal static bool IsDependencyProperty(this ITypeSymbol value) => value.Name is Constants.DependencyProperty.TypeName || value.Name is Constants.DependencyProperty.FullyQualifiedTypeName;
 
         internal static bool IsDependencyPropertyChangedEventArgs(this ITypeSymbol value)
         {
-            if (value.TypeKind == TypeKind.Struct && value.SpecialType == SpecialType.None)
+            if (value.TypeKind is TypeKind.Struct && value.SpecialType is SpecialType.None)
             {
                 switch (value.Name)
                 {
@@ -1220,29 +1220,29 @@ namespace MiKoSolutions.Analyzers
         {
             var parameters = value.Parameters;
 
-            return parameters.Length == 2 && parameters[0].Type.IsDependencyObject() && parameters[1].Type.IsDependencyPropertyChangedEventArgs();
+            return parameters.Length is 2 && parameters[0].Type.IsDependencyObject() && parameters[1].Type.IsDependencyPropertyChangedEventArgs();
         }
 
         internal static bool IsDependencyPropertyEventHandler(this IMethodSymbol value)
         {
             var parameters = value.Parameters;
 
-            return parameters.Length == 2 && parameters[0].Type.IsObject() && parameters[1].Type.IsDependencyPropertyChangedEventArgs();
+            return parameters.Length is 2 && parameters[0].Type.IsObject() && parameters[1].Type.IsDependencyPropertyChangedEventArgs();
         }
 
-        internal static bool IsDependencyPropertyKey(this ITypeSymbol value) => value.Name == Constants.DependencyPropertyKey.TypeName || value.Name == Constants.DependencyPropertyKey.FullyQualifiedTypeName;
+        internal static bool IsDependencyPropertyKey(this ITypeSymbol value) => value.Name is Constants.DependencyPropertyKey.TypeName || value.Name is Constants.DependencyPropertyKey.FullyQualifiedTypeName;
 
         internal static bool IsDisposable(this ITypeSymbol value)
         {
             var interfaces = value.AllInterfaces;
 
-            return interfaces.Length > 0 && interfaces.Any(_ => _.SpecialType == SpecialType.System_IDisposable);
+            return interfaces.Length > 0 && interfaces.Any(_ => _.SpecialType is SpecialType.System_IDisposable);
         }
 
         internal static bool IsEnhancedByPostSharpAdvice(this ISymbol value) => value.HasAttributeApplied("PostSharp.Aspects.Advices.Advice");
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsEnum(this ITypeSymbol value) => value?.TypeKind == TypeKind.Enum;
+        internal static bool IsEnum(this ITypeSymbol value) => value?.TypeKind is TypeKind.Enum;
 
         internal static bool IsEnumerable(this ITypeSymbol value)
         {
@@ -1277,7 +1277,7 @@ namespace MiKoSolutions.Analyzers
                         return true;
                     }
 
-                    if (value.TypeKind == TypeKind.Array)
+                    if (value.TypeKind is TypeKind.Array)
                     {
                         return true;
                     }
@@ -1316,13 +1316,13 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool IsPrismEvent(this ITypeSymbol value) => value.TypeKind == TypeKind.Class
-                                                                  && value.SpecialType == SpecialType.None
+        internal static bool IsPrismEvent(this ITypeSymbol value) => value.TypeKind is TypeKind.Class
+                                                                  && value.SpecialType is SpecialType.None
                                                                   && value.ToString() != "Microsoft.Practices.Prism.Events.EventBase"
                                                                   && value.InheritsFrom("Microsoft.Practices.Prism.Events.EventBase");
 
-        internal static bool IsEventArgs(this ITypeSymbol value) => value.TypeKind == TypeKind.Class
-                                                                 && value.SpecialType == SpecialType.None
+        internal static bool IsEventArgs(this ITypeSymbol value) => value.TypeKind is TypeKind.Class
+                                                                 && value.SpecialType is SpecialType.None
                                                                  && value.InheritsFrom<EventArgs>();
 
         internal static bool IsEventHandler(this IMethodSymbol value)
@@ -1345,7 +1345,7 @@ namespace MiKoSolutions.Analyzers
                 {
                     var parameters = value.Parameters;
 
-                    return parameters.Length == 2 && parameters[0].Type.IsObject() && parameters[1].Type.IsEventArgs();
+                    return parameters.Length is 2 && parameters[0].Type.IsObject() && parameters[1].Type.IsEventArgs();
                 }
             }
         }
@@ -1370,8 +1370,8 @@ namespace MiKoSolutions.Analyzers
         }
 
         internal static bool IsException(this ITypeSymbol value) => value != null
-                                                                 && value.TypeKind == TypeKind.Class
-                                                                 && value.SpecialType == SpecialType.None
+                                                                 && value.TypeKind is TypeKind.Class
+                                                                 && value.SpecialType is SpecialType.None
                                                                  && value.OriginalDefinition.InheritsFrom<Exception>();
 
         internal static bool IsException(this ArgumentSyntax value, SemanticModel semanticModel)
@@ -1405,7 +1405,7 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool IsGenerated(this ITypeSymbol value) => value?.TypeKind == TypeKind.Class && value.HasAttribute(Constants.Names.GeneratedAttributeNames);
+        internal static bool IsGenerated(this ITypeSymbol value) => value?.TypeKind is TypeKind.Class && value.HasAttribute(Constants.Names.GeneratedAttributeNames);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsGeneric(this ITypeSymbol value) => value is INamedTypeSymbol type && type.TypeArguments.Length > 0;
@@ -1599,10 +1599,10 @@ namespace MiKoSolutions.Analyzers
 
         // ignore special situation for task factory
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsNullable(this ITypeSymbol value) => value.IsValueType && value.OriginalDefinition.SpecialType == SpecialType.System_Nullable_T;
+        internal static bool IsNullable(this ITypeSymbol value) => value.IsValueType && value.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsObject(this ITypeSymbol value) => value.SpecialType == SpecialType.System_Object;
+        internal static bool IsObject(this ITypeSymbol value) => value.SpecialType is SpecialType.System_Object;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsPartial(this ITypeSymbol value) => value.Locations.Length > 1;
@@ -1625,7 +1625,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsRoutedEvent(this ITypeSymbol value)
         {
-            if (value.TypeKind == TypeKind.Class && value.IsSealed)
+            if (value.TypeKind is TypeKind.Class && value.IsSealed)
             {
                 switch (value.Name)
                 {
@@ -1638,7 +1638,7 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        internal static bool IsSerializationConstructor(this IMethodSymbol value) => value.IsConstructor() && value.Parameters.Length == 2 && value.Parameters[0].IsSerializationInfoParameter() && value.Parameters[1].IsStreamingContextParameter();
+        internal static bool IsSerializationConstructor(this IMethodSymbol value) => value.IsConstructor() && value.Parameters.Length is 2 && value.Parameters[0].IsSerializationInfoParameter() && value.Parameters[1].IsStreamingContextParameter();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsSerializationInfoParameter(this IParameterSymbol value) => value.Type.Name == nameof(SerializationInfo);
@@ -1663,12 +1663,12 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsStreamingContextParameter(this IParameterSymbol value) => value.Type.Name == nameof(StreamingContext);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsString(this ITypeSymbol value) => value?.SpecialType == SpecialType.System_String;
+        internal static bool IsString(this ITypeSymbol value) => value?.SpecialType is SpecialType.System_String;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsTask(this ITypeSymbol value) => value?.Name == nameof(Task);
 
-        internal static bool IsTestClass(this ITypeSymbol value) => value?.TypeKind == TypeKind.Class && value.IsRecord is false && value.HasAttribute(Constants.Names.TestClassAttributeNames);
+        internal static bool IsTestClass(this ITypeSymbol value) => value?.TypeKind is TypeKind.Class && value.IsRecord is false && value.HasAttribute(Constants.Names.TestClassAttributeNames);
 
         internal static bool IsTestMethod(this IMethodSymbol value) => value.IsTestSpecificMethod(Constants.Names.TestMethodAttributeNames);
 
@@ -1688,7 +1688,7 @@ namespace MiKoSolutions.Analyzers
             {
                 var parameters = value.Parameters;
 
-                return parameters.Length == 1 && parameters[0].Type.IsObject();
+                return parameters.Length is 1 && parameters[0].Type.IsObject();
             }
 
             return false;
@@ -1811,7 +1811,7 @@ namespace MiKoSolutions.Analyzers
         {
             var typeName = value.Name.AsSpan();
 
-            if (value.TypeKind == TypeKind.Interface && typeName.Length > 1 && typeName[0] == 'I')
+            if (value.TypeKind is TypeKind.Interface && typeName.Length > 1 && typeName[0] is 'I')
             {
                 return typeName.Slice(1);
             }
@@ -1896,7 +1896,7 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        private static bool IsTestSpecificMethod(this IMethodSymbol value, ISet<string> attributeNames) => value?.MethodKind == MethodKind.Ordinary && value.IsPubliclyVisible() && value.HasAttribute(attributeNames);
+        private static bool IsTestSpecificMethod(this IMethodSymbol value, ISet<string> attributeNames) => value?.MethodKind is MethodKind.Ordinary && value.IsPubliclyVisible() && value.HasAttribute(attributeNames);
 
         private static List<T> GetNamedSymbols<T>(IReadOnlyList<T> symbols) where T : ISymbol
         {

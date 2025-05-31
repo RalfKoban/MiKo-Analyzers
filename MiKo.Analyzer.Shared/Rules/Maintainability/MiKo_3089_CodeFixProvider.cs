@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var subPatterns = clause.Subpatterns;
 
-                    if (subPatterns.Count == 1)
+                    if (subPatterns.Count is 1)
                     {
                         var subPattern = subPatterns[0];
 

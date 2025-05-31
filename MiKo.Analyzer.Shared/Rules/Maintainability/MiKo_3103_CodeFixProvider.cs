@@ -48,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     if (IsToStringCall(i.Expression))
                     {
                         var arguments = i.ArgumentList.Arguments;
-                        var format = arguments.Count == 1
+                        var format = arguments.Count is 1
                                      ? arguments[0].Expression.ToString().WithoutQuotes()
                                      : DefaultFormat;
 

@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var condition = node.Condition;
                 var conditions = GetConditionParts(condition);
 
-                if (condition.IsKind(SyntaxKind.LogicalAndExpression) && conditions.Count == 2 && conditions[0].IsKind(SyntaxKind.IsPatternExpression) && IsNegative(conditions[1]))
+                if (condition.IsKind(SyntaxKind.LogicalAndExpression) && conditions.Count is 2 && conditions[0].IsKind(SyntaxKind.IsPatternExpression) && IsNegative(conditions[1]))
                 {
                     // we do not want to report is-pattern checks for false because the inverted code looks much difficult to understand
                     return Array.Empty<Diagnostic>();

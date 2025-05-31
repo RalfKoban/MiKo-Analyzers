@@ -39,7 +39,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Array.Empty<Diagnostic>();
         }
 
-        protected Diagnostic[] AnalyzePhrase(ISymbol symbol, DocumentationCommentTriviaSyntax comment, string commentXml, string xmlTag, params string[] phrases)
+        protected Diagnostic[] AnalyzePhrase(ISymbol symbol, DocumentationCommentTriviaSyntax comment, string commentXml, string xmlTag, string phrase) => AnalyzePhrase(symbol, comment, commentXml, xmlTag, new[] { phrase });
+
+        protected Diagnostic[] AnalyzePhrase(ISymbol symbol, DocumentationCommentTriviaSyntax comment, string commentXml, string xmlTag, in ReadOnlySpan<string> phrases)
         {
             if (phrases.None(_ => _.Equals(commentXml, StringComparison.Ordinal)))
             {

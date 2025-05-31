@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(ITypeSymbol symbol) => base.ShallAnalyze(symbol) && symbol.TypeKind == TypeKind.Struct;
+        protected override bool ShallAnalyze(ITypeSymbol symbol) => base.ShallAnalyze(symbol) && symbol.TypeKind is TypeKind.Struct;
 
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers)
         {

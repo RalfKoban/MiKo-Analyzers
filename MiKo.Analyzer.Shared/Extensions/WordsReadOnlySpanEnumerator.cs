@@ -84,7 +84,7 @@ namespace System
 
         public ReadOnlySpanEnumeratorEntry First()
         {
-            if (m_text.Length == 0)
+            if (m_text.Length is 0)
             {
                 throw new InvalidOperationException("No item available");
             }
@@ -99,7 +99,7 @@ namespace System
 
         public ReadOnlySpanEnumeratorEntry Last()
         {
-            if (m_text.Length == 0)
+            if (m_text.Length is 0)
             {
                 throw new InvalidOperationException("No item available");
             }

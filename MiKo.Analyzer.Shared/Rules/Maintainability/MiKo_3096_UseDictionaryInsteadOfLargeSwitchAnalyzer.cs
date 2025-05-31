@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var statements = block.Statements;
 
-                    return statements.Count == 1 && IsAcceptable(context, statements[0]);
+                    return statements.Count is 1 && IsAcceptable(context, statements[0]);
                 }
 
                 default:

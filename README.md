@@ -13,7 +13,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/18917.svg)](https://scan.coverity.com/projects/ralfkoban-miko-analyzers)
 
 ## Available Rules
-The following tables lists all the 494 rules that are currently provided by the analyzer.
+The following tables lists all the 499 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -146,6 +146,7 @@ The following tables lists all the 494 rules that are currently provided by the 
 |MiKo_1115|Test methods should be named in a fluent way|&#x2713;|&#x2713;|
 |MiKo_1116|Test methods shall be named in present tense|&#x2713;|\-|
 |MiKo_1117|Test methods should be named more precisely|&#x2713;|\-|
+|MiKo_1118|Test methods should not end with 'Async'|&#x2713;|&#x2713;|
 |MiKo_1200|Name exceptions in catch blocks consistently|&#x2713;|&#x2713;|
 |MiKo_1201|Name exceptions as parameters consistently|&#x2713;|&#x2713;|
 |MiKo_1300|Unimportant identifiers in lambda statements should be named '_'|&#x2713;|&#x2713;|
@@ -282,6 +283,7 @@ The following tables lists all the 494 rules that are currently provided by the 
 |MiKo_2236|Documentation should use 'for example' instead of abbreviation 'e.g.'|&#x2713;|&#x2713;|
 |MiKo_2237|Documentation should not be separated by empty lines|&#x2713;|&#x2713;|
 |MiKo_2238|&lt;summary&gt; documentation shall not start with 'Make sure to call this'|&#x2713;|\-|
+|MiKo_2239|Documentation should use '///' and not '/** */'|&#x2713;|&#x2713;|
 |MiKo_2300|Comments should explain the 'Why' and not the 'How'|&#x2713;|\-|
 |MiKo_2301|Do not use obvious comments in AAA-Tests|&#x2713;|&#x2713;|
 |MiKo_2302|Do not keep code that is commented out|&#x2713;|\-|
@@ -434,6 +436,8 @@ The following tables lists all the 494 rules that are currently provided by the 
 |MiKo_3224|Value comparisons can be simplified|&#x2713;|&#x2713;|
 |MiKo_3225|Redundant comparisons can be simplified|&#x2713;|&#x2713;|
 |MiKo_3226|Read-only fields with initializers should be const|&#x2713;|&#x2713;|
+|MiKo_3227|Prefer pattern matching for equality checks|&#x2713;|&#x2713;|
+|MiKo_3228|Prefer pattern matching for inequality checks|&#x2713;|&#x2713;|
 |MiKo_3301|Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements|&#x2713;|&#x2713;|
 |MiKo_3302|Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters|&#x2713;|&#x2713;|
 |MiKo_3401|Namespace hierarchies should not be too deep|&#x2713;|\-|
@@ -534,5 +538,6 @@ The following tables lists all the 494 rules that are currently provided by the 
 |MiKo_6062|Expressions within complex initializer expressions should be placed beside open brace|&#x2713;|&#x2713;|
 |MiKo_6063|Invocations should be placed on same line|&#x2713;|&#x2713;|
 |MiKo_6064|Identifier invocations should be placed on same line|&#x2713;|&#x2713;|
+|MiKo_6065|Consecutive invocations spanning multiple lines should be indented and not outdented|&#x2713;|&#x2713;|
 |MiKo_6070|Console statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6071|Local using statements should be surrounded by blank lines|&#x2713;|&#x2713;|

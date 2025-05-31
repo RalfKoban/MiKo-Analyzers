@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyze(ISymbol symbol) => symbol is INamedTypeSymbol type && type.TypeKind == TypeKind.Delegate;
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol is INamedTypeSymbol type && type.TypeKind is TypeKind.Delegate;
 
         protected override Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location, Constants.XmlTag.Summary, StartingPhrase);
 

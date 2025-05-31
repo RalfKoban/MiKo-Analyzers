@@ -16,10 +16,22 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.InvocationExpression);
 
-        private static bool HasIssue(MemberAccessExpressionSyntax member) => member.IsKind(SyntaxKind.SimpleMemberAccessExpression)
-                                                                          && member.Name is IdentifierNameSyntax name
-                                                                          && member.Expression is IdentifierNameSyntax expression
-                                                                          && name.GetStartingLine() != expression.GetStartingLine();
+        private static bool HasIssue(MemberAccessExpressionSyntax member)
+        {
+            if (member.IsKind(SyntaxKind.SimpleMemberAccessExpression) && member.Name is IdentifierNameSyntax name)
+            {
+                switch (member.Expression)
+                {
+                    case IdentifierNameSyntax expression:
+                        return name.GetStartingLine() != expression.GetStartingLine();
+
+                    case InvocationExpressionSyntax invocation when invocation.Expression is IdentifierNameSyntax:
+                        return name.GetStartingLine() != invocation.GetStartingLine();
+                }
+            }
+
+            return false;
+        }
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
