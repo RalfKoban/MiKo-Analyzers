@@ -3158,6 +3158,19 @@ Such documentation also undermines tool integration and usability, as IDEs rely 
   <data name="MiKo_2238_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation shall not start with 'Make sure to call this'</value>
   </data>
+  <data name="MiKo_2239_CodeFixTitle" xml:space="preserve">
+    <value>Convert into '/// &lt;summary&gt;' comment</value>
+  </data>
+  <data name="MiKo_2239_Description" xml:space="preserve">
+    <value>API documentation should use '///' instead of '/** */' because '///' creates XML comments that the .NET compiler understands. These comments show up in IntelliSense, help generate external documentation, and follow a structured format.
+'/** */' is just for general comments and will not be used by tools or IDEs to provide helpful info.</value>
+  </data>
+  <data name="MiKo_2239_MessageFormat" xml:space="preserve">
+    <value>Use '///' with XML tags instead of '/** */'</value>
+  </data>
+  <data name="MiKo_2239_Title" xml:space="preserve">
+    <value>Documentation should use '///' and not '/** */'</value>
+  </data>
   <data name="MiKo_2300_Description" xml:space="preserve">
     <value>Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works—let the code itself do that.
 This approach ensures comments are insightful and add real value by giving context and rationale, helping developers understand the reasoning behind the implementation.</value>

@@ -8948,6 +8948,43 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Convert into &apos;/// &lt;summary&gt;&apos; comment.
+        /// </summary>
+        internal static string MiKo_2239_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2239_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to API documentation should use &apos;///&apos; instead of &apos;/** */&apos; because &apos;///&apos; creates XML comments that the .NET compiler understands. These comments show up in IntelliSense, help generate external documentation, and follow a structured format.
+        ///&apos;/** */&apos; is just for general comments and will not be used by tools or IDEs to provide helpful info..
+        /// </summary>
+        internal static string MiKo_2239_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2239_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;///&apos; with XML tags instead of &apos;/** */&apos;.
+        /// </summary>
+        internal static string MiKo_2239_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2239_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should use &apos;///&apos; and not &apos;/** */&apos;.
+        /// </summary>
+        internal static string MiKo_2239_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2239_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works—let the code itself do that.
         ///This approach ensures comments are insightful and add real value by giving context and rationale, helping developers understand the reasoning behind the implementation..
         /// </summary>
