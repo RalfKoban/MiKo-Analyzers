@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         [Ignore("Shall be run manually")]
         [Explicit]
-        [TestCase("TODO"), Timeout(4 * 60 * 60 * 1000)] // 4h
+        [TestCase("TODO"), Timeout(1 * 60 * 60 * 1000)] // 1h
         public static void Performance_(string path)
         {
 //// ncrunch: no coverage start

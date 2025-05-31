@@ -13,7 +13,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/18917.svg)](https://scan.coverity.com/projects/ralfkoban-miko-analyzers)
 
 ## Available Rules
-The following tables lists all the 496 rules that are currently provided by the analyzer.
+The following tables lists all the 498 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -282,6 +282,7 @@ The following tables lists all the 496 rules that are currently provided by the 
 |MiKo_2236|Documentation should use 'for example' instead of abbreviation 'e.g.'|&#x2713;|&#x2713;|
 |MiKo_2237|Documentation should not be separated by empty lines|&#x2713;|&#x2713;|
 |MiKo_2238|&lt;summary&gt; documentation shall not start with 'Make sure to call this'|&#x2713;|\-|
+|MiKo_2239|Documentation should use '///' and not '/** */'|&#x2713;|&#x2713;|
 |MiKo_2300|Comments should explain the 'Why' and not the 'How'|&#x2713;|\-|
 |MiKo_2301|Do not use obvious comments in AAA-Tests|&#x2713;|&#x2713;|
 |MiKo_2302|Do not keep code that is commented out|&#x2713;|\-|
@@ -536,5 +537,6 @@ The following tables lists all the 496 rules that are currently provided by the 
 |MiKo_6062|Expressions within complex initializer expressions should be placed beside open brace|&#x2713;|&#x2713;|
 |MiKo_6063|Invocations should be placed on same line|&#x2713;|&#x2713;|
 |MiKo_6064|Identifier invocations should be placed on same line|&#x2713;|&#x2713;|
+|MiKo_6065|Consecutive invocations spanning multiple lines should be indented and not outdented|&#x2713;|&#x2713;|
 |MiKo_6070|Console statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6071|Local using statements should be surrounded by blank lines|&#x2713;|&#x2713;|

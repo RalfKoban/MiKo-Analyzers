@@ -1042,6 +1042,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static int GetPositionWithinStartLine(this SyntaxNode value) => value.GetLocation().GetPositionWithinStartLine();
 
+        internal static int GetPositionWithinEndLine(this SyntaxNode value) => value.GetLocation().GetPositionWithinEndLine();
+
         internal static int GetStartingLine(this SyntaxNode value) => value.GetLocation().GetStartingLine();
 
         internal static int GetEndingLine(this SyntaxNode value) => value.GetLocation().GetEndingLine();
@@ -1156,6 +1158,21 @@ namespace MiKoSolutions.Analyzers
 
         internal static ITypeSymbol GetTypeSymbol(this VariableDeclarationSyntax value, SemanticModel semanticModel) => value?.Type.GetTypeSymbol(semanticModel);
 
+        internal static ITypeSymbol GetTypeSymbol(this VariableDesignationSyntax value, SemanticModel semanticModel)
+        {
+            if (value is null)
+            {
+                return null;
+            }
+
+            if (semanticModel.GetDeclaredSymbol(value) is ILocalSymbol symbol)
+            {
+                return symbol.Type;
+            }
+
+            return null;
+        }
+
         internal static ITypeSymbol GetTypeSymbol(this SyntaxNode value, SemanticModel semanticModel)
         {
             if (value is null)
@@ -1179,13 +1196,13 @@ namespace MiKoSolutions.Analyzers
             return token.HasStructuredTrivia && token.HasDocumentationCommentTriviaSyntax();
         }
 
-        internal static DocumentationCommentTriviaSyntax[] GetDocumentationCommentTriviaSyntax(this SyntaxNode value)
+        internal static DocumentationCommentTriviaSyntax[] GetDocumentationCommentTriviaSyntax(this SyntaxNode value, in SyntaxKind kind = SyntaxKind.SingleLineDocumentationCommentTrivia)
         {
             var token = value.FindStructuredTriviaToken();
 
             if (token.HasStructuredTrivia)
             {
-                var comment = token.GetDocumentationCommentTriviaSyntax();
+                var comment = token.GetDocumentationCommentTriviaSyntax(kind);
 
                 if (comment != null)
                 {

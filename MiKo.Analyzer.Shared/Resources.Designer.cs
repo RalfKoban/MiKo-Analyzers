@@ -8948,6 +8948,43 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Convert into &apos;/// &lt;summary&gt;&apos; comment.
+        /// </summary>
+        internal static string MiKo_2239_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2239_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to API documentation should use &apos;///&apos; instead of &apos;/** */&apos; because &apos;///&apos; creates XML comments that the .NET compiler understands. These comments show up in IntelliSense, help generate external documentation, and follow a structured format.
+        ///&apos;/** */&apos; is just for general comments and will not be used by tools or IDEs to provide helpful info..
+        /// </summary>
+        internal static string MiKo_2239_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2239_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;///&apos; with XML tags instead of &apos;/** */&apos;.
+        /// </summary>
+        internal static string MiKo_2239_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2239_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should use &apos;///&apos; and not &apos;/** */&apos;.
+        /// </summary>
+        internal static string MiKo_2239_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2239_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works—let the code itself do that.
         ///This approach ensures comments are insightful and add real value by giving context and rationale, helping developers understand the reasoning behind the implementation..
         /// </summary>
@@ -16159,7 +16196,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Consecutive invocations spaning multiple lines should be aligned by their dots.
+        ///   Looks up a localized string similar to Consecutive invocations spanning multiple lines should be aligned by their dots.
         /// </summary>
         internal static string MiKo_6040_Title {
             get {
@@ -17028,6 +17065,42 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_6064_Title {
             get {
                 return ResourceManager.GetString("MiKo_6064_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Indent dot.
+        /// </summary>
+        internal static string MiKo_6065_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6065_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code readability improves when invocations spanning multiple lines are vertically indented. This makes the code clearer and easier to follow..
+        /// </summary>
+        internal static string MiKo_6065_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6065_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Indent dot.
+        /// </summary>
+        internal static string MiKo_6065_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6065_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consecutive invocations spanning multiple lines should be indented and not outdented.
+        /// </summary>
+        internal static string MiKo_6065_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6065_Title", resourceCulture);
             }
         }
         
