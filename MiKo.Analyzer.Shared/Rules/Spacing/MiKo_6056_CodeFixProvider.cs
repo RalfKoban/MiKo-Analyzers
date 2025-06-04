@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 if (openBracketToken.IsLocatedAt(issueLocation))
                 {
                     return expression.WithOpenBracketToken(openBracketToken.WithLeadingSpaces(spaces))
-                                     .WithElements(GetUpdatedSyntax(elements, spaces + Constants.Indentation))
+                                     .WithElements(GetUpdatedSyntax(elements, openBracketToken, spaces + Constants.Indentation))
                                      .WithCloseBracketToken(closeBracketToken.WithLeadingSpaces(spaces));
                 }
 
