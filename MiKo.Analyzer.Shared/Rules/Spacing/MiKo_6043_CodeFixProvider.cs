@@ -87,7 +87,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                                 .WithNewKeyword(aoces.NewKeyword.WithoutTrivia().WithTrailingSpace())
                                 .WithOpenBraceToken(aoces.OpenBraceToken.WithoutTrivia().WithLeadingSpace()) // remove the spaces or line breaks around the opening bracket
                                 .WithCloseBraceToken(aoces.CloseBraceToken.WithoutTrivia().WithLeadingSpace()) // remove the spaces or line breaks around the closing bracket
-                                .WithInitializers(GetUpdatedSyntax(aoces.Initializers, Constants.Indentation));
+                                .WithInitializers(GetUpdatedSyntax(aoces.Initializers, aoces.OpenBraceToken, Constants.Indentation));
 
                 case ConditionalAccessExpressionSyntax conditional:
                     return conditional.WithoutTrivia()

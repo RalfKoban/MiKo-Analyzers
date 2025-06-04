@@ -22,15 +22,16 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             var returnValue = node.Expression;
 
-            if (returnValue != null)
+            if (returnValue is null)
             {
-                var startLine = node.ReturnKeyword.GetStartingLine();
-                var returnValueLine = returnValue.GetStartingLine();
+                return;
+            }
 
-                if (startLine != returnValueLine)
-                {
-                    ReportDiagnostics(context, Issue(node.ReturnKeyword));
-                }
+            var returnKeyword = node.ReturnKeyword;
+
+            if (returnKeyword.IsOnSameLineAs(returnValue) is false)
+            {
+                ReportDiagnostics(context, Issue(returnKeyword));
             }
         }
     }
