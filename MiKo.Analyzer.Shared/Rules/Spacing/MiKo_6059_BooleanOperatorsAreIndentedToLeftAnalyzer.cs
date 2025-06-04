@@ -110,10 +110,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 {
                     var orientationToken = GetOutdentedOrientationToken(binary);
 
-                    var orientationStartingLine = orientationToken.GetStartingLine();
-                    var operatorTokenStartingLine = operatorToken.GetStartingLine();
-
-                    if (orientationStartingLine != operatorTokenStartingLine)
+                    if (orientationToken.IsOnSameLineAs(operatorToken) is false)
                     {
                         var spaces = GetOutdentedPosition(binary);
 

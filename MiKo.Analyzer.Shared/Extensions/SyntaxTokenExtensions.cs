@@ -188,6 +188,12 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsLocatedAt(this in SyntaxToken value, Location location) => value.GetLocation().Equals(location);
 
+        internal static bool IsOnSameLineAs(this in SyntaxToken value, SyntaxNode other) => value.GetStartingLine() == other?.GetStartingLine();
+
+        internal static bool IsOnSameLineAs(this in SyntaxToken value, in SyntaxNodeOrToken other) => value.GetStartingLine() == other.GetStartingLine();
+
+        internal static bool IsOnSameLineAs(this in SyntaxToken value, in SyntaxToken other) => value.GetStartingLine() == other.GetStartingLine();
+
         internal static bool IsSpanningMultipleLines(this in SyntaxToken value)
         {
             var leadingTrivia = value.LeadingTrivia;
