@@ -40,90 +40,90 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                        "tenth",
                                                    };
 
-        private static readonly IEnumerable<string> KnownParts = new[]
-                                                                     {
-                                                                         "_one_",
-                                                                         "_first_",
-                                                                         "_second_",
-                                                                         "_third_",
-                                                                         "anyone",
-                                                                         "Anyone",
-                                                                         "bone",
-                                                                         "Bone",
-                                                                         "omponent", // 'component'
-                                                                         "OMPONENT",
-                                                                         "ondition", // prevent stuff like 'UseCondition' which contains the term 'seCond'
-                                                                         "cone",
-                                                                         "Cone",
-                                                                         "done",
-                                                                         "Done",
-                                                                         "etwork", // 'network'
-                                                                         "ETWORK",
-                                                                         "everyone",
-                                                                         "Everyone",
-                                                                         "forType",
-                                                                         "ForType",
-                                                                         "gone",
-                                                                         "Gone",
-                                                                         "height",
-                                                                         "Height",
-                                                                         "HEIGHT",
-                                                                         "hone",
-                                                                         "Hone",
-                                                                         "ione",
-                                                                         "ionE",
-                                                                         "IonE",
-                                                                         "late", // prevent stuff like 'CalculateLevenshtein' which contains the term 'eLeven'
-                                                                         "lone",
-                                                                         "Lone",
-                                                                         "mone",
-                                                                         "Mone",
-                                                                         "none",
-                                                                         "None",
-                                                                         "NONE",
-                                                                         "noOne",
-                                                                         "NoOne",
-                                                                         "onE", // 'SetupNonExistentDevice'
-                                                                         "OnE",
-                                                                         "oneTime",
-                                                                         "OneTime",
-                                                                         "Ones",
-                                                                         "oNeeded",
-                                                                         "oxone",
-                                                                         "Oxone",
-                                                                         "sEven", // 'isEvent'
-                                                                         "someone", // 'someone'
-                                                                         "Someone", // 'someone'
-                                                                         "sone",
-                                                                         "Sone",
-                                                                         "seconds",
-                                                                         "Seconds",
-                                                                         "tone",
-                                                                         "Tone",
-                                                                         "twoLetter", // 'twoLetterLanguageCode'
-                                                                         "TwoLetter", // 'TwoLetterLanguageCode'
-                                                                         "tName", // 'firstName'
-                                                                         "tWord", // 'firstWord'
-                                                                         "WaitOne",
-                                                                         "WAITONE",
-                                                                         "weight",
-                                                                         "Weight",
-                                                                         "WEIGHT",
-                                                                         "work", // 'ImportWorkflow'
-                                                                         "Work",
-                                                                         "zone",
-                                                                         "Zone",
-                                                                         "ZONE",
-                                                                         "xponent",
-                                                                     };
+        private static readonly string[] KnownParts =
+                                                      {
+                                                          "_one_",
+                                                          "_first_",
+                                                          "_second_",
+                                                          "_third_",
+                                                          "anyone",
+                                                          "Anyone",
+                                                          "bone",
+                                                          "Bone",
+                                                          "omponent", // 'component'
+                                                          "OMPONENT",
+                                                          "ondition", // prevent stuff like 'UseCondition' which contains the term 'seCond'
+                                                          "cone",
+                                                          "Cone",
+                                                          "done",
+                                                          "Done",
+                                                          "etwork", // 'network'
+                                                          "ETWORK",
+                                                          "everyone",
+                                                          "Everyone",
+                                                          "forType",
+                                                          "ForType",
+                                                          "gone",
+                                                          "Gone",
+                                                          "height",
+                                                          "Height",
+                                                          "HEIGHT",
+                                                          "hone",
+                                                          "Hone",
+                                                          "ione",
+                                                          "ionE",
+                                                          "IonE",
+                                                          "late", // prevent stuff like 'CalculateLevenshtein' which contains the term 'eLeven'
+                                                          "lone",
+                                                          "Lone",
+                                                          "mone",
+                                                          "Mone",
+                                                          "none",
+                                                          "None",
+                                                          "NONE",
+                                                          "noOne",
+                                                          "NoOne",
+                                                          "onE", // 'SetupNonExistentDevice'
+                                                          "OnE",
+                                                          "oneTime",
+                                                          "OneTime",
+                                                          "Ones",
+                                                          "oNeeded",
+                                                          "oxone",
+                                                          "Oxone",
+                                                          "sEven", // 'isEvent'
+                                                          "someone", // 'someone'
+                                                          "Someone", // 'someone'
+                                                          "sone",
+                                                          "Sone",
+                                                          "seconds",
+                                                          "Seconds",
+                                                          "tone",
+                                                          "Tone",
+                                                          "twoLetter", // 'twoLetterLanguageCode'
+                                                          "TwoLetter", // 'TwoLetterLanguageCode'
+                                                          "tName", // 'firstName'
+                                                          "tWord", // 'firstWord'
+                                                          "WaitOne",
+                                                          "WAITONE",
+                                                          "weight",
+                                                          "Weight",
+                                                          "WEIGHT",
+                                                          "work", // 'ImportWorkflow'
+                                                          "Work",
+                                                          "zone",
+                                                          "Zone",
+                                                          "ZONE",
+                                                          "xponent",
+                                                      };
 
-        private static readonly IEnumerable<string> KnownEndings = new[]
-                                                                       {
-                                                                           "_one",
-                                                                           "_first",
-                                                                           "_second",
-                                                                           "_third",
-                                                                       };
+        private static readonly string[] KnownEndings =
+                                                        {
+                                                            "_one",
+                                                            "_first",
+                                                            "_second",
+                                                            "_third",
+                                                        };
 
         public MiKo_1080_UseNumbersInsteadOfWordingAnalyzer() : base(Id)
         {
@@ -184,12 +184,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static string HandleKnownParts(string name)
         {
-            var finalName = name.AsCachedBuilder();
-
-            foreach (var part in KnownParts)
-            {
-                finalName.ReplaceWithProbe(part, "#");
-            }
+            var finalName = name.AsCachedBuilder()
+                                .ReplaceAllWithProbe(KnownParts, "#");
 
             foreach (var ending in KnownEndings)
             {
