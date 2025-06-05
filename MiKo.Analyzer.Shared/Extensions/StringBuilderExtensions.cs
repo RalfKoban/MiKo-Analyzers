@@ -13,6 +13,8 @@ namespace System.Text
 {
     internal static class StringBuilderExtensions
     {
+        private const int QuickSubstringProbeLengthThreshold = 6;
+
         private static readonly ArrayPool<char> SharedPool = ArrayPool<char>.Shared;
 
         public static StringBuilder AdjustFirstWord(this StringBuilder value, in FirstWordHandling handling)
@@ -534,7 +536,7 @@ namespace System.Text
 
             value.CopyTo(0, text, 0, size);
 
-            return text.AsSpan(0, size); // use the length of the string builder as the rented array itself may be longer than the requested size
+            return text.AsSpan(0, size); // use the length of the string builder as the rented array itself may be longer than the requested size, thus leading to unexpected behavior
         }
 
         private static int QuickSubstringProbe(in ReadOnlySpan<char> current, in ReadOnlySpan<char> other)
@@ -545,6 +547,12 @@ namespace System.Text
             {
                 // cannot be part in the replacement as other value is too long and cannot fit current value
                 return -1;
+            }
+
+            if (other.Length < QuickSubstringProbeLengthThreshold)
+            {
+                // can be part in the replacement as other value is smaller and could fit current value
+                return 0;
             }
 
             // Note:
@@ -696,7 +704,5 @@ namespace System.Text
                 }
             }
         }
-
-        // TODO RKN: StringReplace with StringComparison http://stackoverflow.com/a/244933/84852
     }
 }
