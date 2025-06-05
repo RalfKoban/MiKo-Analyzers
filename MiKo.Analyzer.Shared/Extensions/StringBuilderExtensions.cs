@@ -556,7 +556,6 @@ namespace System.Text
             }
 
             // Note:
-            // - do not use a threshold to limit the length check, as copying a big array is more costly than just iterating a few steps
             // - do not use a separate if condition for the delta being zero as that may not happen often and the conditional check therefore is too costly
             var lastIndex = other.Length - 1;
             var startChar = other[0];
