@@ -1705,7 +1705,7 @@ namespace MiKoSolutions.Analyzers
                 return predefined.Keyword.IsKind(SyntaxKind.BoolKeyword);
             }
 
-            switch (value.ToString())
+            switch (value?.ToString())
             {
                 case nameof(Boolean):
                 case nameof(System) + "." + nameof(Boolean):
@@ -1723,10 +1723,25 @@ namespace MiKoSolutions.Analyzers
                 return predefined.Keyword.IsKind(SyntaxKind.ByteKeyword);
             }
 
-            switch (value.ToString())
+            switch (value?.ToString())
             {
                 case nameof(Byte):
                 case nameof(System) + "." + nameof(Byte):
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        internal static bool IsGuid(this TypeSyntax value)
+        {
+            switch (value?.ToString())
+            {
+                case nameof(Guid):
+                case nameof(Guid) + "?":
+                case nameof(System) + "." + nameof(Guid):
+                case nameof(System) + "." + nameof(Guid) + "?":
                     return true;
 
                 default:

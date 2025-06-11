@@ -28,10 +28,8 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
 
             var colonToken = node.ColonToken;
-            var startLine = colonToken.GetStartingLine();
-            var baseTypeLine = firstBaseType.GetStartingLine();
 
-            if (startLine != baseTypeLine)
+            if (colonToken.IsOnSameLineAs(firstBaseType) is false)
             {
                 ReportDiagnostics(context, Issue(colonToken));
             }
