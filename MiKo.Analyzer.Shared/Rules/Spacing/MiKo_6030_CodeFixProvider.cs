@@ -2,6 +2,7 @@
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Spacing
@@ -10,6 +11,19 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     public sealed class MiKo_6030_CodeFixProvider : SpacingCodeFixProvider
     {
         public override string FixableDiagnosticId => "MiKo_6030";
+
+        protected override TSyntaxNode GetUpdatedSyntax<TSyntaxNode>(TSyntaxNode node, in int leadingSpaces)
+        {
+            // such as for dictionaries
+            if (node is InitializerExpressionSyntax initializer
+             && initializer.IsKind(SyntaxKind.ComplexElementInitializerExpression) // such as for dictionaries
+             && initializer.OpenBraceToken.GetStartingLine() != initializer.CloseBraceToken.GetStartingLine())
+            {
+                return GetUpdatedSyntax(initializer, leadingSpaces) as TSyntaxNode;
+            }
+
+            return base.GetUpdatedSyntax(node, leadingSpaces);
+        }
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
@@ -32,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
         }
 
-        private static AnonymousObjectCreationExpressionSyntax GetUpdatedSyntax(AnonymousObjectCreationExpressionSyntax anonymous, int spaces)
+        private AnonymousObjectCreationExpressionSyntax GetUpdatedSyntax(AnonymousObjectCreationExpressionSyntax anonymous, int spaces)
         {
             var openBraceToken = anonymous.OpenBraceToken;
             var closeBraceToken = anonymous.CloseBraceToken;
@@ -44,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                             .WithCloseBraceToken(closeBraceToken.WithLeadingSpaces(closeBraceTokenSpaces));
         }
 
-        private static InitializerExpressionSyntax GetUpdatedSyntax(InitializerExpressionSyntax initializer, int spaces)
+        private InitializerExpressionSyntax GetUpdatedSyntax(InitializerExpressionSyntax initializer, int spaces)
         {
             var openBraceToken = initializer.OpenBraceToken;
             var closeBraceToken = initializer.CloseBraceToken;
