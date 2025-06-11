@@ -30,21 +30,20 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
             var node = (BinaryExpressionSyntax)context.Node;
+            var operatorToken = node.OperatorToken;
 
-            var leftLine = node.Left.GetStartingLine();
-            var startLine = node.OperatorToken.GetStartingLine();
-            var rightLine = node.Right.GetStartingLine();
-
-            if (leftLine != startLine || startLine != rightLine)
+            if (operatorToken.IsOnSameLineAs(node.Left) && operatorToken.IsOnSameLineAs(node.Right))
             {
-                if (node.IsStringConcatenation(context.SemanticModel))
-                {
-                    // ignore string concatenations
-                }
-                else
-                {
-                    ReportDiagnostics(context, Issue(node.OperatorToken));
-                }
+                return;
+            }
+
+            if (node.IsStringConcatenation(context.SemanticModel))
+            {
+                // ignore string concatenations
+            }
+            else
+            {
+                ReportDiagnostics(context, Issue(operatorToken));
             }
         }
     }

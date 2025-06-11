@@ -21,10 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             var creation = (ObjectCreationExpressionSyntax)context.Node;
             var newKeyword = creation.NewKeyword;
 
-            var startLine = newKeyword.GetStartingLine();
-            var expressionLine = creation.Type.GetStartingLine();
-
-            if (startLine != expressionLine)
+            if (newKeyword.IsOnSameLineAs(creation.Type) is false)
             {
                 ReportDiagnostics(context, Issue(newKeyword));
             }

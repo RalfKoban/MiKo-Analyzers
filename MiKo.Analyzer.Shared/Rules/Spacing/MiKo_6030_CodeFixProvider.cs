@@ -19,16 +19,26 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             {
                 case InitializerExpressionSyntax initializer:
                 {
-                    return initializer.WithOpenBraceToken(initializer.OpenBraceToken.WithLeadingSpaces(spaces))
-                                      .WithExpressions(GetUpdatedSyntax(initializer.Expressions, spaces + Constants.Indentation))
-                                      .WithCloseBraceToken(initializer.CloseBraceToken.WithLeadingSpaces(spaces));
+                    var openBraceToken = initializer.OpenBraceToken;
+                    var closeBraceToken = initializer.CloseBraceToken;
+
+                    var closeBraceTokenSpaces = openBraceToken.IsOnSameLineAs(closeBraceToken) ? 0 : spaces;
+
+                    return initializer.WithOpenBraceToken(openBraceToken.WithLeadingSpaces(spaces))
+                                      .WithExpressions(GetUpdatedSyntax(initializer.Expressions, openBraceToken, spaces + Constants.Indentation))
+                                      .WithCloseBraceToken(closeBraceToken.WithLeadingSpaces(closeBraceTokenSpaces));
                 }
 
                 case AnonymousObjectCreationExpressionSyntax anonymous:
                 {
-                    return anonymous.WithOpenBraceToken(anonymous.OpenBraceToken.WithLeadingSpaces(spaces))
-                                    .WithInitializers(GetUpdatedSyntax(anonymous.Initializers, spaces + Constants.Indentation))
-                                    .WithCloseBraceToken(anonymous.CloseBraceToken.WithLeadingSpaces(spaces));
+                    var openBraceToken = anonymous.OpenBraceToken;
+                    var closeBraceToken = anonymous.CloseBraceToken;
+
+                    var closeBraceTokenSpaces = openBraceToken.IsOnSameLineAs(closeBraceToken) ? 0 : spaces;
+
+                    return anonymous.WithOpenBraceToken(openBraceToken.WithLeadingSpaces(spaces))
+                                    .WithInitializers(GetUpdatedSyntax(anonymous.Initializers, openBraceToken, spaces + Constants.Indentation))
+                                    .WithCloseBraceToken(closeBraceToken.WithLeadingSpaces(closeBraceTokenSpaces));
                 }
 
                 default:

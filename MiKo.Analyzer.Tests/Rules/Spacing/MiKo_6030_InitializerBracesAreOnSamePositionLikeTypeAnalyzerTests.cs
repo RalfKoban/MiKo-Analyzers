@@ -1242,6 +1242,82 @@ public class TestMe : IList<int>
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_implicit_field_object_initializer_with_arguments_when_placed_outdented_below_type_and_space_between_braces()
+        {
+            const string OriginalCode = @"
+using System;
+
+public record Item
+{
+    public string Name { get; set; }
+    public string FullName { get; set; }
+    public string Information { get; set; }
+}
+
+public class TestMe
+{
+    private readonly Item _item = new()
+        { Name = ""test name"", FullName = ""complete test name"", Information = ""some information"" };
+}
+";
+            const string FixedCode = @"
+using System;
+
+public record Item
+{
+    public string Name { get; set; }
+    public string FullName { get; set; }
+    public string Information { get; set; }
+}
+
+public class TestMe
+{
+    private readonly Item _item = new()
+                                      { Name = ""test name"", FullName = ""complete test name"", Information = ""some information"" };
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_implicit_field_object_initializer_with_arguments_when_placed_outdented_below_type_and_no_space_between_braces()
+        {
+            const string OriginalCode = @"
+using System;
+
+public record Item
+{
+    public string Name { get; set; }
+    public string FullName { get; set; }
+    public string Information { get; set; }
+}
+
+public class TestMe
+{
+    private readonly Item _item = new()
+        {Name = ""test name"", FullName = ""complete test name"", Information = ""some information""};
+}
+";
+            const string FixedCode = @"
+using System;
+
+public record Item
+{
+    public string Name { get; set; }
+    public string FullName { get; set; }
+    public string Information { get; set; }
+}
+
+public class TestMe
+{
+    private readonly Item _item = new()
+                                      {Name = ""test name"", FullName = ""complete test name"", Information = ""some information""};
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6030_InitializerBracesAreOnSamePositionLikeTypeAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6030_InitializerBracesAreOnSamePositionLikeTypeAnalyzer();
