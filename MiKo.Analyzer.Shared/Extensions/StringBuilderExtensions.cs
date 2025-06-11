@@ -13,7 +13,7 @@ namespace System.Text
 {
     internal static class StringBuilderExtensions
     {
-        private const int QuickSubstringProbeLengthThreshold = 6;
+        private const int QuickSubstringProbeLengthThreshold = 8;
 
         private static readonly ArrayPool<char> SharedPool = ArrayPool<char>.Shared;
 
