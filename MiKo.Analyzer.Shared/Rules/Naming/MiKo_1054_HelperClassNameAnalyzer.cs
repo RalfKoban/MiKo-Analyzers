@@ -14,6 +14,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private const string CorrectName = "Utilization";
 
+        private const string SpecialNameHandle = "Handle";
+        private const string SpecialNameHandler = "Handler";
+
         private static readonly string[] WrongNames = { "Helper", "Util", "Misc" };
 
         // sorted by intent so that the best match is found until a more generic is found
@@ -36,12 +39,24 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var wrongName = WrongNamesForConcreteLookup.First(_ => symbolName.Contains(_, StringComparison.OrdinalIgnoreCase));
 
-                var proposal = symbolName.WithoutSuffix(wrongName);
+                var proposal = FindBetterName(symbolName.AsSpan(), wrongName);
 
                 return new[] { Issue(symbol, wrongName, CreateBetterNameProposal(proposal)) };
             }
 
             return Array.Empty<Diagnostic>();
+        }
+
+        private static string FindBetterName(ReadOnlySpan<char> symbolName, string wrongName)
+        {
+            if (symbolName.Length > SpecialNameHandle.Length && symbolName.StartsWith(SpecialNameHandle, StringComparison.Ordinal))
+            {
+                return symbolName.WithoutSuffix(wrongName)
+                                 .Slice(SpecialNameHandle.Length)
+                                 .ConcatenatedWith(SpecialNameHandler);
+            }
+
+            return symbolName.WithoutSuffix(wrongName).ToString();
         }
     }
 }

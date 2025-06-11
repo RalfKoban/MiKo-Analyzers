@@ -1099,19 +1099,19 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            if (sourceCount > 0)
+            if (sourceCount is 0)
             {
-                var target = new SyntaxToken[sourceCount];
-
-                for (var index = 0; index < sourceCount; index++)
-                {
-                    target[index] = source[index];
-                }
-
-                return target;
+                return Array.Empty<SyntaxToken>();
             }
 
-            return Array.Empty<SyntaxToken>();
+            var target = new SyntaxToken[sourceCount];
+
+            for (var index = 0; index < sourceCount; index++)
+            {
+                target[index] = source[index];
+            }
+
+            return target;
         }
 
         internal static T[] ToArray<T>(this in SyntaxList<T> source) where T : SyntaxNode
@@ -1119,19 +1119,19 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            if (sourceCount > 0)
+            if (sourceCount is 0)
             {
-                var target = new T[sourceCount];
-
-                for (var index = 0; index < sourceCount; index++)
-                {
-                    target[index] = source[index];
-                }
-
-                return target;
+                return Array.Empty<T>();
             }
 
-            return Array.Empty<T>();
+            var target = new T[sourceCount];
+
+            for (var index = 0; index < sourceCount; index++)
+            {
+                target[index] = source[index];
+            }
+
+            return target;
         }
 
         internal static T[] ToArray<T>(this in SeparatedSyntaxList<T> source) where T : SyntaxNode
@@ -1139,79 +1139,79 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            if (sourceCount > 0)
+            if (sourceCount is 0)
             {
-                var target = new T[sourceCount];
-
-                for (var index = 0; index < sourceCount; index++)
-                {
-                    target[index] = source[index];
-                }
-
-                return target;
+                return Array.Empty<T>();
             }
 
-            return Array.Empty<T>();
+            var target = new T[sourceCount];
+
+            for (var index = 0; index < sourceCount; index++)
+            {
+                target[index] = source[index];
+            }
+
+            return target;
         }
 
         internal static T[] ToArray<T>(this IEnumerable<T> source, IComparer<T> comparer) => source.ToArray(_ => _, comparer);
 
         internal static TKey[] ToArray<TKey, TSource>(this in SeparatedSyntaxList<TSource> source, Func<TSource, TKey> keySelector) where TSource : SyntaxNode
         {
-            var length = source.Count;
+            var sourceCount = source.Count;
 
-            if (length > 0)
+            if (sourceCount is 0)
             {
-                var result = new TKey[length];
-
-                for (var index = 0; index < length; index++)
-                {
-                    result[index] = keySelector(source[index]);
-                }
-
-                return result;
+                return Array.Empty<TKey>();
             }
 
-            return Array.Empty<TKey>();
+            var result = new TKey[sourceCount];
+
+            for (var index = 0; index < sourceCount; index++)
+            {
+                result[index] = keySelector(source[index]);
+            }
+
+            return result;
         }
 
         internal static TKey[] ToArray<TKey, TSource>(this IReadOnlyList<TSource> source, Func<TSource, TKey> keySelector)
         {
-            var length = source.Count;
+            var sourceCount = source.Count;
 
-            if (length > 0)
+            if (sourceCount is 0)
             {
-                var result = new TKey[length];
-
-                for (var index = 0; index < length; index++)
-                {
-                    result[index] = keySelector(source[index]);
-                }
-
-                return result;
+                return Array.Empty<TKey>();
             }
 
-            return Array.Empty<TKey>();
+            var result = new TKey[sourceCount];
+
+            for (var index = 0; index < sourceCount; index++)
+            {
+                result[index] = keySelector(source[index]);
+            }
+
+            return result;
         }
 
         internal static TKey[] ToArray<TKey, TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, TKey> keySelector)
         {
-            var length = source.Count;
+            var sourceCount = source.Count;
 
-            if (length > 0)
+            if (sourceCount is 0)
             {
-                var result = new TKey[length];
-                var index = 0;
-
-                foreach (var item in source)
-                {
-                    result[index++] = keySelector(item);
-                }
-
-                return result;
+                return Array.Empty<TKey>();
             }
 
-            return Array.Empty<TKey>();
+            var index = 0;
+            var result = new TKey[sourceCount];
+
+            foreach (var item in source)
+            {
+                result[index++] = keySelector(item);
+            }
+
+            return result;
         }
 
         internal static TKey[] ToArray<TKey, TSource>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
