@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Text;
 
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
@@ -58,32 +59,31 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             {
                 case BinaryExpressionSyntax binary:
                 {
-                    var startLine = binary.OperatorToken.GetStartingLine();
-                    var rightPosition = binary.Right.GetStartPosition();
+                    var operatorToken = binary.OperatorToken;
+                    var expression = binary.Right;
 
-                    return startLine != rightPosition.Line
-                           ? Issue(binary.OperatorToken, CreateProposalForSpaces(rightPosition.Character))
-                           : null;
+                    if (operatorToken.IsOnSameLineAs(expression))
+                    {
+                        return null;
+                    }
+
+                    var spaces = expression.GetPositionWithinStartLine();
+
+                    return Issue(operatorToken, CreateProposalForSpaces(spaces));
                 }
 
                 case PrefixUnaryExpressionSyntax unary:
                 {
-                    var startLine = unary.Operand.GetStartingLine();
-                    var operatorLine = unary.OperatorToken.GetStartingLine();
+                    var operatorToken = unary.OperatorToken;
 
-                    return startLine != operatorLine
-                           ? Issue(unary.OperatorToken)
-                           : null;
+                    return operatorToken.IsOnSameLineAs(unary.Operand) ? null : Issue(operatorToken);
                 }
 
                 case PostfixUnaryExpressionSyntax unary:
                 {
-                    var startLine = unary.Operand.GetStartingLine();
-                    var operatorLine = unary.OperatorToken.GetStartingLine();
+                    var operatorToken = unary.OperatorToken;
 
-                    return startLine != operatorLine
-                           ? Issue(unary.OperatorToken)
-                           : null;
+                    return operatorToken.IsOnSameLineAs(unary.Operand) ? null : Issue(operatorToken);
                 }
 
                 default:

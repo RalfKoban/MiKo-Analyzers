@@ -45,7 +45,7 @@ public class " + name + @"
 ");
 
         [Test]
-        public void Code_gets_fixed_for_wrong_name_([ValueSource(nameof(WrongSuffixes))] string wrongSuffix)
+        public void Code_gets_fixed_for_name_with_suffix_([ValueSource(nameof(WrongSuffixes))] string wrongSuffix)
         {
             var originalCode = @"
 public class TestMe" + wrongSuffix + @"
@@ -55,6 +55,24 @@ public class TestMe" + wrongSuffix + @"
 
             const string FixedCode = @"
 public class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_Handle_type_name_with_suffix_([ValueSource(nameof(WrongSuffixes))] string wrongSuffix)
+        {
+            var originalCode = @"
+public class HandleTestMe" + wrongSuffix + @"
+{
+}
+";
+
+            const string FixedCode = @"
+public class TestMeHandler
 {
 }
 ";

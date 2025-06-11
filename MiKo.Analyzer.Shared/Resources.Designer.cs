@@ -13958,6 +13958,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Using &apos;Guid&apos; directly as an identifier type is considered a form of primitive obsession, which is generally discouraged. Instead, you should define custom types (e.g., CustomerId, OrderId) to represent identifiers.
+        ///This approach improves type safety and makes it harder to accidentally mix up different kinds of IDs, since the compiler will catch mismatches between unrelated types..
+        /// </summary>
+        internal static string MiKo_3230_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3230_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use type &apos;Guid&apos; for identifier.
+        /// </summary>
+        internal static string MiKo_3230_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3230_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use &apos;Guid&apos; as type for identifiers.
+        /// </summary>
+        internal static string MiKo_3230_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3230_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         internal static string MiKo_3301_CodeFixTitle {

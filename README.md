@@ -438,6 +438,7 @@ The following tables lists all the 499 rules that are currently provided by the 
 |MiKo_3226|Read-only fields with initializers should be const|&#x2713;|&#x2713;|
 |MiKo_3227|Prefer pattern matching for equality checks|&#x2713;|&#x2713;|
 |MiKo_3228|Prefer pattern matching for inequality checks|&#x2713;|&#x2713;|
+|MiKo_3230|Do not use 'Guid' as type for identifiers|&#x2713;|\-|
 |MiKo_3301|Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements|&#x2713;|&#x2713;|
 |MiKo_3302|Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters|&#x2713;|&#x2713;|
 |MiKo_3401|Namespace hierarchies should not be too deep|&#x2713;|\-|

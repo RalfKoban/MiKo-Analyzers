@@ -38,25 +38,20 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private void AnalyzeLambda(in SyntaxNodeAnalysisContext context, SyntaxNode parameter, in SyntaxToken arrowToken, ExpressionSyntax expressionBody)
         {
-            var parametersStartingLine = parameter.GetStartingLine();
-            var tokenStartingLine = arrowToken.GetStartingLine();
-
-            if (parametersStartingLine != tokenStartingLine)
-            {
-                ReportDiagnostics(context, Issue(arrowToken));
-            }
-            else
+            if (arrowToken.IsOnSameLineAs(parameter))
             {
                 // only consider expression bodies to be placed on same line as arrow token
                 if (expressionBody != null)
                 {
-                    var bodyStartingLine = expressionBody.GetStartingLine();
-
-                    if (bodyStartingLine != tokenStartingLine)
+                    if (arrowToken.IsOnSameLineAs(expressionBody) is false)
                     {
                         ReportDiagnostics(context, Issue(arrowToken));
                     }
                 }
+            }
+            else
+            {
+                ReportDiagnostics(context, Issue(arrowToken));
             }
         }
     }
