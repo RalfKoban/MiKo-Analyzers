@@ -1502,16 +1502,23 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsWhiteSpace(this in char value)
         {
+            if (value > ' ')
+            {
+                return value >= 127 && char.IsWhiteSpace(value);
+            }
+
             switch (value)
             {
                 case ' ':
                 case '\t':
                 case '\r':
                 case '\n':
+                case '\v':
+                case '\f':
                     return true;
 
                 default:
-                    return char.IsWhiteSpace(value);
+                    return false;
             }
         }
 
@@ -1528,7 +1535,11 @@ namespace System
         public static bool StartsWith(this in ReadOnlySpan<char> value, string characters) => characters.HasCharacters() && value.StartsWith(characters.AsSpan());
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool StartsWith(this string value, in ReadOnlySpan<char> characters, in StringComparison comparison) => value.HasCharacters() && value.AsSpan().StartsWith(characters, comparison);
+        public static bool StartsWith(this string value, in ReadOnlySpan<char> characters, in StringComparison comparison)
+        {
+            // for the moment this does not need a different handling for 'StringComparison' as it is used too few times to have any benefit
+            return value.HasCharacters() && value.AsSpan().StartsWith(characters, comparison);
+        }
 
         public static bool StartsWith(this in ReadOnlySpan<char> value, string characters, in StringComparison comparison)
         {
