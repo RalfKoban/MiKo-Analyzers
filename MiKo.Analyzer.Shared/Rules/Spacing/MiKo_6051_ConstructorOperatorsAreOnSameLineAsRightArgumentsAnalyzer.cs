@@ -28,10 +28,8 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
 
             var colonToken = node.ColonToken;
-            var startLine = colonToken.GetStartingLine();
-            var keywordLine = keyword.GetStartingLine();
 
-            if (startLine != keywordLine)
+            if (colonToken.IsOnSameLineAs(keyword) is false)
             {
                 ReportDiagnostics(context, Issue(colonToken));
             }

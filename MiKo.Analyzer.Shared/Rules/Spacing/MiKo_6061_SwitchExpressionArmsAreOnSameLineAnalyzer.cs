@@ -40,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 {
                     var token = arms.GetSeparator(index);
 
-                    if (token.GetStartingLine() != arm.GetStartingLine())
+                    if (token.IsOnSameLineAs(arm) is false)
                     {
                         return true;
                     }

@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Extensions
             var location1 = Location.Create(result.SyntaxTree, TextSpan.FromBounds(11, 22));
             var location2 = Location.Create(result.SyntaxTree, TextSpan.FromBounds(13, 25));
             var location3 = Location.Create(result.SyntaxTree, TextSpan.FromBounds(15, 17));
-            var location4 = Location.Create(result.SyntaxTree, TextSpan.FromBounds(25, 28));
+            var location4 = Location.Create(result.SyntaxTree, TextSpan.FromBounds(24, 28));
 
             Assert.Multiple(() =>
                                  {
@@ -48,6 +48,9 @@ namespace MiKoSolutions.Analyzers.Extensions
             var location2 = Location.Create(result.SyntaxTree, TextSpan.FromBounds(22, 25));
             var location3 = Location.Create(result.SyntaxTree, TextSpan.FromBounds(31, 37));
 
+            var location4 = Location.Create(result.SyntaxTree, TextSpan.FromBounds(0, 5));
+            var location5 = Location.Create(result.SyntaxTree, TextSpan.FromBounds(5, 10));
+
             Assert.Multiple(() =>
                                  {
                                      Assert.That(location1.IntersectsWith(location2), Is.False);
@@ -58,6 +61,9 @@ namespace MiKoSolutions.Analyzers.Extensions
 
                                      Assert.That(location3.IntersectsWith(location1), Is.False);
                                      Assert.That(location3.IntersectsWith(location2), Is.False);
+
+                                     Assert.That(location4.IntersectsWith(location5), Is.False);
+                                     Assert.That(location5.IntersectsWith(location4), Is.False);
                                  });
         }
     }
