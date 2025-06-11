@@ -158,6 +158,11 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase("    ", ExpectedResult = " ")]
         [TestCase("a    ", ExpectedResult = "a ")]
         [TestCase("a    b", ExpectedResult = "a b")]
-        public static string WithoutMultipleWhiteSpaces_shortens_multiple_whitespaces_to_single(string s) => new StringBuilder(s).WithoutMultipleWhiteSpaces().ToString();
+        public static string WithoutMultipleWhiteSpaces_shortens_multiple_whitespaces_to_single_(string s) => new StringBuilder(s).WithoutMultipleWhiteSpaces().ToString();
+
+        [TestCase("CallsDownloadWorkflowForMultipleParameterDownloadDevices", "DoEvents", "##Events", ExpectedResult = "CallsDownloadWorkflowForMultipleParameterDownloadDevices")]
+        [TestCase("CallsDownloadWorkflowForMultipleParameterDownloadDevices", "Download", "My", ExpectedResult = "CallsMyWorkflowForMultipleParameterMyDevices")]
+        [TestCase("CallsDownloadWorkflowForMultipleParameterDownloadDevices", "Workflow", "#", ExpectedResult = "CallsDownload#ForMultipleParameterDownloadDevices")]
+        public static string ReplaceWithProbe_above_threshold_uses_arrays_properly_to_adjust_(string start, string name, string other) => new StringBuilder(start).ReplaceWithProbe(name, other).ToString();
     }
 }

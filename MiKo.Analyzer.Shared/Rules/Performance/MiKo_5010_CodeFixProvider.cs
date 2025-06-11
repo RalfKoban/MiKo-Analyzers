@@ -96,7 +96,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
                     var operand = Invocation(SimpleMemberAccess(left, nameof(Equals)), argument1);
 
-                    if (kind == SyntaxKind.NotEqualsExpression)
+                    if (kind is SyntaxKind.NotEqualsExpression)
                     {
                         return IsFalsePattern(operand);
                     }

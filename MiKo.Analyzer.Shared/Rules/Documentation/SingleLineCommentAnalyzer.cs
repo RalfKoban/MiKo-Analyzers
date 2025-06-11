@@ -120,7 +120,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var triviaToAnalyze = FindTriviaToAnalyze(node);
 
-            if (triviaToAnalyze.Count == 0)
+            if (triviaToAnalyze.Count is 0)
             {
                 return Array.Empty<Diagnostic>();
             }

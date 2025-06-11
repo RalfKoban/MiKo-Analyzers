@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var parameterName = methodName.AsSpan(6);
 
-                if (parameterName.Length == 0)
+                if (parameterName.Length is 0)
                 {
                     return "value";
                 }
@@ -50,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var parameterName = GetPreferredParameterName(method.Name);
 
-            var outParameter = method.Parameters.FirstOrDefault(_ => _.RefKind == RefKind.Out);
+            var outParameter = method.Parameters.FirstOrDefault(_ => _.RefKind is RefKind.Out);
 
             if (outParameter != null && outParameter.Name != parameterName)
             {

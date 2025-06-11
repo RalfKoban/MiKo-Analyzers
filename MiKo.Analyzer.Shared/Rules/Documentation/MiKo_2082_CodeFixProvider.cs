@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var contents = comment.Content;
 
-            if (contents.Count == 1 && contents[0] is XmlTextSyntax txt)
+            if (contents.Count is 1 && contents[0] is XmlTextSyntax txt)
             {
                 var text = txt.GetTextWithoutTrivia();
 

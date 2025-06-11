@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyze(ISymbol symbol) => symbol.Kind == SymbolKind.Method;
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol.Kind is SymbolKind.Method;
 
         protected override bool ConsiderEmptyTextAsIssue(ISymbol symbol) => false;
 

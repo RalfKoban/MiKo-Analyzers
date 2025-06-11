@@ -16,8 +16,8 @@ namespace System.Linq
         {
             switch (values)
             {
-                case IReadOnlyCollection<T> rc when rc.Count == 0:
-                case ICollection<T> c when c.Count == 0:
+                case IReadOnlyCollection<T> rc when rc.Count is 0:
+                case ICollection<T> c when c.Count is 0:
                     return;
             }
 
@@ -593,11 +593,11 @@ namespace System.Linq
             return default;
         }
 
-        internal static int IndexOf<T>(this T[] source, T value) => source.Length == 0 ? -1 : Array.IndexOf(source, value);
+        internal static int IndexOf<T>(this T[] source, T value) => source.Length is 0 ? -1 : Array.IndexOf(source, value);
 
-        internal static int IndexOf<T>(this T[] source, Func<T, bool> predicate) => source.Length == 0 ? -1 : source.IndexOf(new Predicate<T>(predicate));
+        internal static int IndexOf<T>(this T[] source, Func<T, bool> predicate) => source.Length is 0 ? -1 : source.IndexOf(new Predicate<T>(predicate));
 
-        internal static int IndexOf<T>(this T[] source, Predicate<T> predicate) => source.Length == 0 ? -1 : Array.FindIndex(source, predicate);
+        internal static int IndexOf<T>(this T[] source, Predicate<T> predicate) => source.Length is 0 ? -1 : Array.FindIndex(source, predicate);
 
         internal static int IndexOf<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
@@ -623,42 +623,62 @@ namespace System.Linq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsEmptyArray<T>(this IEnumerable<T> source) => source is T[] array && array.Length == 0;
+        internal static bool IsEmptyArray<T>(this IEnumerable<T> source) => source is T[] array && array.Length is 0;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool None(this in SyntaxTriviaList source) => source.Count == 0;
+        internal static bool None(this in SyntaxTriviaList source) => source.Count is 0;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool None<T>(this in SyntaxList<T> source) where T : SyntaxNode => source.Count == 0;
+        internal static bool None<T>(this in SyntaxList<T> source) where T : SyntaxNode => source.Count is 0;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool None<T>(this in SeparatedSyntaxList<T> source) where T : SyntaxNode => source.Count == 0;
+        internal static bool None<T>(this in SeparatedSyntaxList<T> source) where T : SyntaxNode => source.Count is 0;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool None(this in SyntaxTokenList source) => source.Count == 0;
+        internal static bool None(this in SyntaxTokenList source) => source.Count is 0;
 
         internal static bool None<T>(this IEnumerable<T> source) => source.Any() is false;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool None<T>(this IReadOnlyCollection<T> source) => source.Count == 0;
+        internal static bool None<T>(this IReadOnlyCollection<T> source) => source.Count is 0;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool None<T>(this in ImmutableArray<T> source) => source.Length == 0;
+        internal static bool None<T>(this in ImmutableArray<T> source) => source.Length is 0;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool None<T>(this in SyntaxList<T> source, in SyntaxKind kind) where T : SyntaxNode => source.IndexOf(kind) == -1;
+        internal static bool None<T>(this in SyntaxList<T> source, in SyntaxKind kind) where T : SyntaxNode => source.IndexOf(kind) is -1;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool None(this in SyntaxTokenList source, in SyntaxKind kind) => source.Any(kind) is false;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool None<T>(this in SeparatedSyntaxList<T> source, in SyntaxKind kind) where T : SyntaxNode => source.IndexOf(kind) == -1;
+        internal static bool None<T>(this in SeparatedSyntaxList<T> source, in SyntaxKind kind) where T : SyntaxNode => source.IndexOf(kind) is -1;
 
         internal static bool None<T>(this in SyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode => source.All(_ => predicate(_) is false);
 
         internal static bool None<T>(this in SeparatedSyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode => source.All(_ => predicate(_) is false);
 
         internal static bool None<T>(this IEnumerable<T> source, Func<T, bool> predicate) => source.All(_ => predicate(_) is false);
+
+        internal static bool None<T>(this T[] source, Func<T, bool> predicate)
+        {
+            var length = source.Length;
+
+            if (length is 0)
+            {
+                return true;
+            }
+
+            for (var index = 0; index < length; index++)
+            {
+                if (predicate(source[index]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
 
         internal static bool None<T>(this in ReadOnlySpan<T> source, Func<T, bool> predicate)
         {
@@ -1079,19 +1099,19 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            if (sourceCount > 0)
+            if (sourceCount is 0)
             {
-                var target = new SyntaxToken[sourceCount];
-
-                for (var index = 0; index < sourceCount; index++)
-                {
-                    target[index] = source[index];
-                }
-
-                return target;
+                return Array.Empty<SyntaxToken>();
             }
 
-            return Array.Empty<SyntaxToken>();
+            var target = new SyntaxToken[sourceCount];
+
+            for (var index = 0; index < sourceCount; index++)
+            {
+                target[index] = source[index];
+            }
+
+            return target;
         }
 
         internal static T[] ToArray<T>(this in SyntaxList<T> source) where T : SyntaxNode
@@ -1099,19 +1119,19 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            if (sourceCount > 0)
+            if (sourceCount is 0)
             {
-                var target = new T[sourceCount];
-
-                for (var index = 0; index < sourceCount; index++)
-                {
-                    target[index] = source[index];
-                }
-
-                return target;
+                return Array.Empty<T>();
             }
 
-            return Array.Empty<T>();
+            var target = new T[sourceCount];
+
+            for (var index = 0; index < sourceCount; index++)
+            {
+                target[index] = source[index];
+            }
+
+            return target;
         }
 
         internal static T[] ToArray<T>(this in SeparatedSyntaxList<T> source) where T : SyntaxNode
@@ -1119,79 +1139,79 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            if (sourceCount > 0)
+            if (sourceCount is 0)
             {
-                var target = new T[sourceCount];
-
-                for (var index = 0; index < sourceCount; index++)
-                {
-                    target[index] = source[index];
-                }
-
-                return target;
+                return Array.Empty<T>();
             }
 
-            return Array.Empty<T>();
+            var target = new T[sourceCount];
+
+            for (var index = 0; index < sourceCount; index++)
+            {
+                target[index] = source[index];
+            }
+
+            return target;
         }
 
         internal static T[] ToArray<T>(this IEnumerable<T> source, IComparer<T> comparer) => source.ToArray(_ => _, comparer);
 
         internal static TKey[] ToArray<TKey, TSource>(this in SeparatedSyntaxList<TSource> source, Func<TSource, TKey> keySelector) where TSource : SyntaxNode
         {
-            var length = source.Count;
+            var sourceCount = source.Count;
 
-            if (length > 0)
+            if (sourceCount is 0)
             {
-                var result = new TKey[length];
-
-                for (var index = 0; index < length; index++)
-                {
-                    result[index] = keySelector(source[index]);
-                }
-
-                return result;
+                return Array.Empty<TKey>();
             }
 
-            return Array.Empty<TKey>();
+            var result = new TKey[sourceCount];
+
+            for (var index = 0; index < sourceCount; index++)
+            {
+                result[index] = keySelector(source[index]);
+            }
+
+            return result;
         }
 
         internal static TKey[] ToArray<TKey, TSource>(this IReadOnlyList<TSource> source, Func<TSource, TKey> keySelector)
         {
-            var length = source.Count;
+            var sourceCount = source.Count;
 
-            if (length > 0)
+            if (sourceCount is 0)
             {
-                var result = new TKey[length];
-
-                for (var index = 0; index < length; index++)
-                {
-                    result[index] = keySelector(source[index]);
-                }
-
-                return result;
+                return Array.Empty<TKey>();
             }
 
-            return Array.Empty<TKey>();
+            var result = new TKey[sourceCount];
+
+            for (var index = 0; index < sourceCount; index++)
+            {
+                result[index] = keySelector(source[index]);
+            }
+
+            return result;
         }
 
         internal static TKey[] ToArray<TKey, TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, TKey> keySelector)
         {
-            var length = source.Count;
+            var sourceCount = source.Count;
 
-            if (length > 0)
+            if (sourceCount is 0)
             {
-                var result = new TKey[length];
-                var index = 0;
-
-                foreach (var item in source)
-                {
-                    result[index++] = keySelector(item);
-                }
-
-                return result;
+                return Array.Empty<TKey>();
             }
 
-            return Array.Empty<TKey>();
+            var index = 0;
+            var result = new TKey[sourceCount];
+
+            foreach (var item in source)
+            {
+                result[index++] = keySelector(item);
+            }
+
+            return result;
         }
 
         internal static TKey[] ToArray<TKey, TSource>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)

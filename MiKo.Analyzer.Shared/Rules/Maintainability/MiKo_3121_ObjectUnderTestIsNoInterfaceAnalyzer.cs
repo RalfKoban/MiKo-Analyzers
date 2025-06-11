@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var type = member.GetReturnTypeSymbol();
 
-                if (type?.TypeKind == TypeKind.Interface)
+                if (type?.TypeKind is TypeKind.Interface)
                 {
                     var syntax = GetTypeSyntax(member);
 
@@ -73,7 +73,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var typeUnderTest = declaration.GetTypeSymbol(context.SemanticModel);
 
-                    if (typeUnderTest?.TypeKind == TypeKind.Interface)
+                    if (typeUnderTest?.TypeKind is TypeKind.Interface)
                     {
                         ReportDiagnostics(context, Issue(declaration.Type));
                     }

@@ -117,7 +117,7 @@ namespace MiKoSolutions.Analyzers.Rules
             // collect all descendant nodes that are the first ones starting on a new line, then adjust leading space for each of those
             var startingNodes = GetNodesAndTokensStartingOnSeparateLines(syntax).ToList();
 
-            if (startingNodes.Count == 0)
+            if (startingNodes.Count is 0)
             {
                 return syntax;
             }

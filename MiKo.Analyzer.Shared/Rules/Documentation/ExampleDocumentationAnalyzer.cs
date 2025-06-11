@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var examples = comment.GetExampleXmls();
 
-            return examples.Count == 0
+            return examples.Count is 0
                    ? Array.Empty<Diagnostic>()
                    : AnalyzeExample(symbol, examples);
         }

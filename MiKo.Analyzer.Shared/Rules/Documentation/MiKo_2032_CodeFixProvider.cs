@@ -196,14 +196,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var falseIndex = comment.IndexOf("false", StringComparison.OrdinalIgnoreCase);
 
-            if (falseIndex == -1)
+            if (falseIndex is -1)
             {
                 return true;
             }
 
             var trueIndex = comment.IndexOf("true", StringComparison.OrdinalIgnoreCase);
 
-            if (trueIndex == -1)
+            if (trueIndex is -1)
             {
                 // cannot fix currently (false case comes as only case)
                 if (comment.Contains("otherwise", StringComparison.OrdinalIgnoreCase) is false)
@@ -262,7 +262,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static IEnumerable<XmlNodeSyntax> CreateMiddlePart(XmlElementSyntax comment, string startingPhrase, string endingPhrase)
         {
-            if (comment.Content.Count == 0)
+            if (comment.Content.Count is 0)
             {
                 // we have no comment, hence we add a "TODO" into the resulting comment
                 return new[] { XmlText(startingPhrase + Constants.TODO + endingPhrase) };
@@ -281,7 +281,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                        .WithoutText(Phrases)
                                        .WithoutFirstXmlNewLine();
 
-            if (nodes.Count == 0)
+            if (nodes.Count is 0)
             {
                 // we have no comment, hence we add a "TODO" into the resulting comment
                 return new[] { XmlText(startingPhrase + Constants.TODO + endingPhrase) };

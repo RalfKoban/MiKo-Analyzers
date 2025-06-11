@@ -16,13 +16,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var summaryXmls = comment.GetSummaryXmls();
 
-            if (summaryXmls.Count == 0)
+            if (summaryXmls.Count is 0)
             {
                 return Array.Empty<Diagnostic>();
             }
 
             var lazyCommentXml = new Lazy<string>(() => symbol.GetDocumentationCommentXml());
-            var lazySummaries = new Lazy<IReadOnlyCollection<string>>(() => CommentExtensions.GetSummaries(lazyCommentXml.Value));
+            var lazySummaries = new Lazy<string[]>(() => CommentExtensions.GetSummaries(lazyCommentXml.Value));
 
             return AnalyzeSummaries(comment, symbol, summaryXmls, lazyCommentXml, lazySummaries);
         }
@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                  ISymbol symbol,
                                                                  IReadOnlyList<XmlElementSyntax> summaryXmls,
                                                                  Lazy<string> commentXml,
-                                                                 Lazy<IReadOnlyCollection<string>> summaries)
+                                                                 Lazy<string[]> summaries)
         {
             return Array.Empty<Diagnostic>();
         }

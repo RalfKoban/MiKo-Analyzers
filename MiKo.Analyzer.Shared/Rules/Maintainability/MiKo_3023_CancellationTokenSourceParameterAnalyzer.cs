@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     var parameter = parameters[index];
                     var parameterType = parameter.Type;
 
-                    if (parameterType.TypeKind == TypeKind.Class && parameterType.ToString() == TypeNames.CancellationTokenSource)
+                    if (parameterType.TypeKind is TypeKind.Class && parameterType.ToString() == TypeNames.CancellationTokenSource)
                     {
                         yield return Issue(parameter, nameof(CancellationToken));
                     }

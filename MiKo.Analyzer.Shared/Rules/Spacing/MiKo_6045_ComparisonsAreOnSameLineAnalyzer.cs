@@ -30,14 +30,13 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
             var node = (BinaryExpressionSyntax)context.Node;
+            var operatorToken = node.OperatorToken;
 
-            var leftLine = node.Left.GetStartingLine();
-            var startLine = node.OperatorToken.GetStartingLine();
-            var rightLine = node.Right.GetStartingLine();
+            var allOnSameLine = operatorToken.IsOnSameLineAs(node.Left) && operatorToken.IsOnSameLineAs(node.Right);
 
-            if (leftLine != startLine || startLine != rightLine)
+            if (allOnSameLine is false)
             {
-                ReportDiagnostics(context, Issue(node.OperatorToken));
+                ReportDiagnostics(context, Issue(operatorToken));
             }
         }
     }

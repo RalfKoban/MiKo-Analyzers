@@ -7,8 +7,8 @@ namespace MiKoSolutions.Analyzers
 {
     internal static class StringBuilderCache
     {
-        public const int DefaultCapacity = 16;
-        private const int MaxBuilderSize = 1000;
+        public const int DefaultCapacity = 64;
+        private const int MaxBuilderSize = 1024;
 
         [ThreadStatic]
         private static StringBuilder s_cachedInstance;
@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            return new StringBuilder(capacity);
+            return new StringBuilder(Math.Max(capacity, DefaultCapacity));
         }
 
         public static void Release(StringBuilder builder)

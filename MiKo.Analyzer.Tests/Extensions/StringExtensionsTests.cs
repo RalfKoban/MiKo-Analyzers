@@ -10,7 +10,9 @@ namespace MiKoSolutions.Analyzers.Extensions
     {
         private const string LowerCaseCharacters = "abcdefghijklmnopqrstuvwxyz";
         private const string UpperCaseCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        private const string SpecialCases = " \t.?!;:,-1234567890";
+        private const string Numbers = "1234567890";
+        private const string SentenceParts = ".?!;:,-";
+        private const string SpecialCases = " \t" + SentenceParts + Numbers;
 
         [TestCase(null, ExpectedResult = null)]
         [TestCase("", ExpectedResult = "")]
@@ -250,5 +252,14 @@ namespace MiKoSolutions.Analyzers.Extensions
 
         [TestCaseSource(nameof(UpperCaseCharacters))]
         public static void ToLowerCase_for_upper_case_(in char c) => Assert.That(c.ToLowerCase(), Is.EqualTo(char.ToLowerInvariant(c)));
+
+        [TestCaseSource(nameof(UpperCaseCharacters))]
+        [TestCaseSource(nameof(LowerCaseCharacters))]
+        [TestCaseSource(nameof(Numbers))]
+        [TestCaseSource(nameof(SentenceParts))]
+        public static void IsWhiteSpace_for_letter_(in char c) => Assert.That(c.IsWhiteSpace(), Is.False);
+
+        [Test]
+        public static void IsWhiteSpace_for_whitespace_([Values(' ', '\t', '\r', '\n', '\v', '\f')] in char c) => Assert.That(c.IsWhiteSpace(), Is.True);
     }
 }

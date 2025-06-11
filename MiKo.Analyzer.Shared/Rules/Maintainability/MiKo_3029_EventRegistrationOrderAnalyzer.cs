@@ -71,7 +71,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 // report violations only if we have both += and -= calls
                 if (addAssignmentsCount != 0 && subtractAssignmentsCount != 0)
                 {
-                    if (addAssignmentsCount == subtractAssignmentsCount && addAssignmentsCount == 1)
+                    if (addAssignmentsCount == subtractAssignmentsCount && addAssignmentsCount is 1)
                     {
                         var addAssignment = addAssignments[0];
                         var subtractAssignment = subtractAssignments[0];

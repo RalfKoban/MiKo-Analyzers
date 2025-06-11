@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var typeName = type.GetName();
 
-                if (typeName == "Assert")
+                if (typeName is "Assert")
                 {
                     var args = invocation.ArgumentList.Arguments;
 

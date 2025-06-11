@@ -85,7 +85,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
         {
             var nodes = SyntaxNodeCollector.Collect<StatementSyntax>(body, syntaxKindToIgnore);
 
-            if (nodes.Count == 0)
+            if (nodes.Count is 0)
             {
                 return 0;
             }

@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected bool IgnoreEmptyParameters { get; set; } = true;
 
-        protected override bool ShallAnalyze(ISymbol symbol) => symbol.Kind == SymbolKind.Method;
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol.Kind is SymbolKind.Method;
 
         protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {

@@ -47,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var argumentsCount = arguments.Count;
 
-            if (argumentsCount == 0)
+            if (argumentsCount is 0)
             {
                 // no arguments to check for
                 yield break;

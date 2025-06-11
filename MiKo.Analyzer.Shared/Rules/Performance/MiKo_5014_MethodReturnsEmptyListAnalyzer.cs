@@ -19,11 +19,11 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         protected override bool ShallAnalyze(IMethodSymbol symbol)
         {
-            if (symbol.ReturnsVoid is false && symbol.ContainingType.TypeKind == TypeKind.Class)
+            if (symbol.ReturnsVoid is false && symbol.ContainingType.TypeKind is TypeKind.Class)
             {
                 var returnType = symbol.ReturnType;
 
-                if (returnType.TypeKind == TypeKind.Interface)
+                if (returnType.TypeKind is TypeKind.Interface)
                 {
                     switch (returnType.SpecialType)
                     {
@@ -67,11 +67,11 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         private static bool HasIssue(ObjectCreationExpressionSyntax creation)
         {
-            if (creation.ArgumentList?.Arguments.Count == 0 || creation.Initializer?.Expressions.Count == 0)
+            if (creation.ArgumentList?.Arguments.Count is 0 || creation.Initializer?.Expressions.Count is 0)
             {
                 var name = creation.Type.GetNameOnlyPartWithoutGeneric();
 
-                return name == "List";
+                return name is "List";
             }
 
             return false;

@@ -57,7 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             var differenceBefore = callLineSpan.StartLinePosition.Line - endingLine;
 
-            return differenceBefore == 1;
+            return differenceBefore is 1;
         }
 
         protected static bool HasNoBlankLinesBefore(SyntaxNode node, SyntaxNode other)
@@ -71,7 +71,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             var differenceAfter = startingLine - callLineSpan.EndLinePosition.Line;
 
-            return differenceAfter == 1;
+            return differenceAfter is 1;
         }
 
         protected static bool HasNoBlankLinesAfter(SyntaxNode node, SyntaxNode other)

@@ -71,6 +71,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("itf", "interface"),
                                                       new Pair("lang", "language"),
                                                       new Pair("lbl", "label"),
+                                                      new Pair("len", "length"),
                                                       new Pair("lib", "library"),
                                                       new Pair("libs", "libraries"),
                                                       new Pair("lv", "listView"),
@@ -113,6 +114,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("res", "result"),
                                                       new Pair("resp", "response"),
                                                       new Pair("sem", "semantic"),
+                                                      new Pair("sess", "session"),
                                                       new Pair("spec", "specification"),
                                                       new Pair("specs", "specifications"),
                                                       new Pair("src", "source"),
@@ -200,6 +202,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Itf", "Interface"),
                                                           new Pair("Lang", "Language"),
                                                           new Pair("Lbl", "Label"),
+                                                          new Pair("Len", "Length"),
                                                           new Pair("Lib", "Library"),
                                                           new Pair("Libs", "Libraries"),
                                                           new Pair("Lv", "ListView"),
@@ -243,6 +246,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Res", "Result"),
                                                           new Pair("Resp", "Response"),
                                                           new Pair("Sem", "Semantic"),
+                                                          new Pair("Sess", "Session"),
                                                           new Pair("Spec", "Specification"),
                                                           new Pair("Src", "Source"),
                                                           new Pair("Std", "Standard"),
@@ -454,7 +458,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 //// ncrunch: rdi default
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool IndicatesNewWord(in char c) => c.IsUpperCase() || c == Constants.Underscore;
+        private static bool IndicatesNewWord(in char c) => c.IsUpperCase() || c is Constants.Underscore;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool CompleteTermHasIssue(in ReadOnlySpan<char> key, in ReadOnlySpan<char> value) => key.SequenceEqual(value);

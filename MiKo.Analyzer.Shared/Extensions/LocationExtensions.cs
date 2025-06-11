@@ -59,7 +59,7 @@ namespace MiKoSolutions.Analyzers
 
             var lastIndexOfFirstSpace = text.LastIndexOfAny(Constants.WhiteSpaceCharacters);
 
-            if (lastIndexOfFirstSpace == -1)
+            if (lastIndexOfFirstSpace is -1)
             {
                 return null;
             }
@@ -70,14 +70,12 @@ namespace MiKoSolutions.Analyzers
                                         ? 0
                                         : followUpText.IndexOfAny(Constants.WhiteSpaceCharacters);
 
-            if (firstIndexOfNextSpace == -1)
+            if (firstIndexOfNextSpace is -1)
             {
                 return null;
             }
 
-            var result = sourceText.ToString(TextSpan.FromBounds(lastIndexOfFirstSpace + 1, text.Length + firstIndexOfNextSpace));
-
-            return result;
+            return sourceText.ToString(TextSpan.FromBounds(lastIndexOfFirstSpace + 1, text.Length + firstIndexOfNextSpace));
         }
 
         internal static bool Contains(this Location value, Location other)
@@ -93,38 +91,7 @@ namespace MiKoSolutions.Analyzers
             var valueSpan = value.SourceSpan;
             var otherSpan = other.SourceSpan;
 
-            var a = valueSpan.Start;
-            var b = valueSpan.End;
-            var x = otherSpan.Start;
-            var y = otherSpan.End;
-
-            if (a <= x)
-            {
-                if (y <= b)
-                {
-                    return true; // axyb
-                }
-
-                if (b <= y)
-                {
-                    return x <= b; // axby
-                }
-            }
-
-            if (x <= a)
-            {
-                if (y <= b)
-                {
-                    return a <= y; // xayb
-                }
-
-                if (b <= y)
-                {
-                    return true; // xaby
-                }
-            }
-
-            return false;
+            return valueSpan.Start < otherSpan.End && otherSpan.Start < valueSpan.End;
         }
     }
 }

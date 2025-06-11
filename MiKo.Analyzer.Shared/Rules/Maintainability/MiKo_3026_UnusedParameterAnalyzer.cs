@@ -121,7 +121,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return;
             }
 
-            if (parameters.Count == 0)
+            if (parameters.Count is 0)
             {
                 return;
             }

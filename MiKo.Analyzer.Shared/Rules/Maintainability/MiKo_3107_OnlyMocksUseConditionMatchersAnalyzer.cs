@@ -49,7 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool IsConditionMatcher(MemberAccessExpressionSyntax node)
         {
-            if (node.Expression is IdentifierNameSyntax invokedType && invokedType.GetName() == Constants.Moq.ConditionMatcher.It)
+            if (node.Expression is IdentifierNameSyntax invokedType && invokedType.GetName() is Constants.Moq.ConditionMatcher.It)
             {
                 switch (node.GetName())
                 {

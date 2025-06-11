@@ -33,10 +33,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             switch (syntax)
             {
                 case LiteralExpressionSyntax literal:
-                    return NameOf(literal);
+                    return NameOf(literal).WithTriviaFrom(literal);
 
-                case TypeOfExpressionSyntax _ when issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.ParameterValue, out var value):
-                    return TypeOf(value);
+                case TypeOfExpressionSyntax expression when issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.ParameterValue, out var value):
+                    return TypeOf(value).WithTriviaFrom(expression);
 
                 default:
                     return null;

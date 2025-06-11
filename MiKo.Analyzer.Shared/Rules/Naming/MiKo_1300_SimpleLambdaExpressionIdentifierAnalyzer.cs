@@ -40,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                 break;
                             }
 
-                            if (lambda is ParenthesizedLambdaExpressionSyntax parenthesized && parenthesized.ParameterList.Parameters.Count == 1)
+                            if (lambda is ParenthesizedLambdaExpressionSyntax parenthesized && parenthesized.ParameterList.Parameters.Count is 1)
                             {
                                 count++;
 
@@ -129,7 +129,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 {
                     var parameters = parenthesized.ParameterList.Parameters;
 
-                    if (parameters.Count == 1)
+                    if (parameters.Count is 1)
                     {
                         return AnalyzeParameter(parameters[0]);
                     }

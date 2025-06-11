@@ -126,7 +126,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var arguments = invocation.ArgumentList.Arguments;
 
-                if (arguments.Count == 0)
+                if (arguments.Count is 0)
                 {
                     // we have no message
                     return false;
@@ -145,7 +145,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var count = arguments.Count;
 
-            if (expectedArgumentIndices.Length == 1)
+            if (expectedArgumentIndices.Length is 1)
             {
                 var expectedArgumentIndex = expectedArgumentIndices[0];
 

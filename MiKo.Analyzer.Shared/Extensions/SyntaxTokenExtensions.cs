@@ -94,7 +94,7 @@ namespace MiKoSolutions.Analyzers
             // Perf: quick check to avoid costly loop
             if (count >= 2)
             {
-                if (leadingTrivia[count == 4 ? 2 : 1].IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
+                if (leadingTrivia[count is 4 ? 2 : 1].IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
                 {
                     return true;
                 }
@@ -111,7 +111,7 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        internal static DocumentationCommentTriviaSyntax[] GetDocumentationCommentTriviaSyntax(this in SyntaxToken value)
+        internal static DocumentationCommentTriviaSyntax[] GetDocumentationCommentTriviaSyntax(this in SyntaxToken value, in SyntaxKind kind = SyntaxKind.SingleLineDocumentationCommentTrivia)
         {
             var leadingTrivia = value.LeadingTrivia;
             var count = leadingTrivia.Count;
@@ -119,9 +119,9 @@ namespace MiKoSolutions.Analyzers
             // Perf: quick check to avoid costly loop
             if (count >= 2)
             {
-                var trivia = leadingTrivia[count == 4 ? 2 : 1];
+                var trivia = leadingTrivia[count is 4 ? 2 : 1];
 
-                if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
+                if (trivia.IsKind(kind) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
                 {
                     return new[] { syntax };
                 }
@@ -134,7 +134,7 @@ namespace MiKoSolutions.Analyzers
             {
                 var trivia = leadingTrivia[index];
 
-                if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
+                if (trivia.IsKind(kind) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
                 {
                     if (results is null)
                     {
@@ -188,6 +188,12 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsLocatedAt(this in SyntaxToken value, Location location) => value.GetLocation().Equals(location);
 
+        internal static bool IsOnSameLineAs(this in SyntaxToken value, SyntaxNode other) => value.GetStartingLine() == other?.GetStartingLine();
+
+        internal static bool IsOnSameLineAs(this in SyntaxToken value, in SyntaxNodeOrToken other) => value.GetStartingLine() == other.GetStartingLine();
+
+        internal static bool IsOnSameLineAs(this in SyntaxToken value, in SyntaxToken other) => value.GetStartingLine() == other.GetStartingLine();
+
         internal static bool IsSpanningMultipleLines(this in SyntaxToken value)
         {
             var leadingTrivia = value.LeadingTrivia;
@@ -221,7 +227,7 @@ namespace MiKoSolutions.Analyzers
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            if (sourceCount == 0)
+            if (sourceCount is 0)
             {
                 return Array.Empty<SyntaxToken>();
             }
@@ -376,6 +382,8 @@ namespace MiKoSolutions.Analyzers
         }
 
         internal static SyntaxToken WithLeadingXmlComment(this in SyntaxToken value) => value.WithLeadingTrivia(SyntaxNodeExtensions.XmlCommentStart);
+
+        internal static SyntaxToken WithLeadingXmlCommentExterior(this SyntaxToken value) => value.WithLeadingTrivia(SyntaxNodeExtensions.XmlCommentExterior);
 
         internal static SyntaxToken WithTriviaFrom(this in SyntaxToken value, SyntaxNode node) => value.WithLeadingTriviaFrom(node)
                                                                                                        .WithTrailingTriviaFrom(node);

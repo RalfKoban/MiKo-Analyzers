@@ -94,7 +94,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
             var position = children.IndexOf(insertedIf);
 
-            if (position == 0)
+            if (position is 0)
             {
                 // first node
                 if (childrenCount > 1)
@@ -165,7 +165,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 {
                     statements.AddRange(block.Statements);
 
-                    if (position == MovePosition.Start)
+                    if (position is MovePosition.Start)
                     {
                         // statements have to be positioned after the already existing one, so insert the existing ones to the beginning
                         statements.InsertRange(0, statementsOfInsertedBlock);
@@ -181,7 +181,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                     // statement is no block, so add it as block
                     statements.AddRange(statementsOfInsertedBlock);
 
-                    if (position == MovePosition.Start)
+                    if (position is MovePosition.Start)
                     {
                         // statements have to be positioned before the already existing one, so add the existing one to the end
                         statements.Add(existingStatement);

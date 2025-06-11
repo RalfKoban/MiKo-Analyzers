@@ -1490,7 +1490,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Using &apos;Enum&apos; as a suffix to indicate a type an Enum is unnecessary. This also goes for suffixes in general, whether for interfaces, classes, records, or structs. Keeping names clear and straightforward without these suffixes makes the code cleaner and easier to understand..
+        ///   Looks up a localized string similar to Avoid using suffixes such as &apos;Type&apos;, &apos;Enum&apos;, &apos;Class&apos;, &apos;Struct&apos;, &apos;Record&apos;, or &apos;Interface&apos; in type names. These suffixes do not add value and only make names longer. Prefer concise, meaningful names that clearly indicate the type&apos;s purpose..
         /// </summary>
         internal static string MiKo_1037_Description {
             get {
@@ -8948,6 +8948,43 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Convert into &apos;/// &lt;summary&gt;&apos; comment.
+        /// </summary>
+        internal static string MiKo_2239_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2239_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to API documentation should use &apos;///&apos; instead of &apos;/** */&apos; because &apos;///&apos; creates XML comments that the .NET compiler understands. These comments show up in IntelliSense, help generate external documentation, and follow a structured format.
+        ///&apos;/** */&apos; is just for general comments and will not be used by tools or IDEs to provide helpful info..
+        /// </summary>
+        internal static string MiKo_2239_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2239_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;///&apos; with XML tags instead of &apos;/** */&apos;.
+        /// </summary>
+        internal static string MiKo_2239_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2239_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should use &apos;///&apos; and not &apos;/** */&apos;.
+        /// </summary>
+        internal static string MiKo_2239_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2239_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works—let the code itself do that.
         ///This approach ensures comments are insightful and add real value by giving context and rationale, helping developers understand the reasoning behind the implementation..
         /// </summary>
@@ -13894,6 +13931,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Using &apos;Guid&apos; directly as an identifier type is considered a form of primitive obsession, which is generally discouraged. Instead, you should define custom types (e.g., CustomerId, OrderId) to represent identifiers.
+        ///This approach improves type safety and makes it harder to accidentally mix up different kinds of IDs, since the compiler will catch mismatches between unrelated types..
+        /// </summary>
+        internal static string MiKo_3230_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3230_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use type &apos;Guid&apos; for identifier.
+        /// </summary>
+        internal static string MiKo_3230_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3230_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use &apos;Guid&apos; as type for identifiers.
+        /// </summary>
+        internal static string MiKo_3230_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3230_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         internal static string MiKo_3301_CodeFixTitle {
@@ -16159,7 +16224,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Consecutive invocations spaning multiple lines should be aligned by their dots.
+        ///   Looks up a localized string similar to Consecutive invocations spanning multiple lines should be aligned by their dots.
         /// </summary>
         internal static string MiKo_6040_Title {
             get {
@@ -17028,6 +17093,42 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_6064_Title {
             get {
                 return ResourceManager.GetString("MiKo_6064_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Indent dot.
+        /// </summary>
+        internal static string MiKo_6065_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6065_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code readability improves when invocations spanning multiple lines are vertically indented. This makes the code clearer and easier to follow..
+        /// </summary>
+        internal static string MiKo_6065_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6065_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Indent dot.
+        /// </summary>
+        internal static string MiKo_6065_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6065_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consecutive invocations spanning multiple lines should be indented and not outdented.
+        /// </summary>
+        internal static string MiKo_6065_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6065_Title", resourceCulture);
             }
         }
         

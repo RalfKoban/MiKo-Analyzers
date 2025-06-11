@@ -44,13 +44,13 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                 var methods = ordinaryMethods.Where(_ => _.DeclaredAccessibility == accessibility).ToList();
                 var disposeMethods = methods.Where(_ => _.Name == nameof(IDisposable.Dispose)).ToList();
 
-                if (accessibility == Accessibility.Public && disposeMethods.Count == 0)
+                if (accessibility is Accessibility.Public && disposeMethods.Count is 0)
                 {
                     var interfaceImplementations = GetMethodsOrderedByLocation(symbol, MethodKind.ExplicitInterfaceImplementation);
                     disposeMethods = interfaceImplementations.Where(_ => _.Parameters.None() && _.Name == nameof(System) + "." + nameof(IDisposable) + "." + nameof(IDisposable.Dispose)).ToList();
                 }
 
-                if (disposeMethods.Count == 0)
+                if (disposeMethods.Count is 0)
                 {
                     continue;
                 }
