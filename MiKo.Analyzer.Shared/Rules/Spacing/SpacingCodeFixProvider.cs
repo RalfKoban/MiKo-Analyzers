@@ -184,14 +184,14 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                                                                                               .WithWhenKeyword(clause.WhenKeyword.WithLeadingSpace().WithoutTrailingTrivia())
                                                                                               .WithCondition(PlacedOnSameLine(clause.Condition));
 
-        protected SeparatedSyntaxList<TSyntaxNode> GetUpdatedSyntax<TSyntaxNode>(SeparatedSyntaxList<TSyntaxNode> expressions, in int leadingSpaces) where TSyntaxNode : SyntaxNode
+        protected SeparatedSyntaxList<TSyntaxNode> GetUpdatedSyntax<TSyntaxNode>(in SeparatedSyntaxList<TSyntaxNode> expressions, in SyntaxToken openBraceToken, in int leadingSpaces) where TSyntaxNode : SyntaxNode
         {
             if (expressions.Count is 0)
             {
                 return SyntaxFactory.SeparatedList<TSyntaxNode>();
             }
 
-            int? currentLine = null;
+            int? currentLine = openBraceToken.GetStartingLine();
 
             var updatedExpressions = new List<TSyntaxNode>(expressions.Count);
 

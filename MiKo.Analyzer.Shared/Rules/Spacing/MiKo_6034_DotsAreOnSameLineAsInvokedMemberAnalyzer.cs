@@ -19,13 +19,11 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
             var maes = (MemberAccessExpressionSyntax)context.Node;
+            var operatorToken = maes.OperatorToken;
 
-            var dotLine = maes.OperatorToken.GetStartingLine();
-            var memberLine = maes.Name.GetStartingLine();
-
-            if (dotLine != memberLine)
+            if (operatorToken.IsOnSameLineAs(maes.Name) is false)
             {
-                ReportDiagnostics(context, Issue(maes.OperatorToken));
+                ReportDiagnostics(context, Issue(operatorToken));
             }
         }
     }

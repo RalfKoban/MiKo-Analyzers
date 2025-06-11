@@ -32,22 +32,42 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             switch (syntax)
             {
                 case InitializerExpressionSyntax initializer:
+                {
                     return GetUpdatedSyntax(initializer, spaces);
+                }
 
                 case AnonymousObjectCreationExpressionSyntax anonymous:
+                {
                     return GetUpdatedSyntax(anonymous, spaces);
+                }
 
                 default:
                     return syntax;
             }
         }
 
-        private InitializerExpressionSyntax GetUpdatedSyntax(InitializerExpressionSyntax initializer, in int spaces) => initializer.WithOpenBraceToken(initializer.OpenBraceToken.WithLeadingSpaces(spaces))
-                                                                                                                                .WithExpressions(GetUpdatedSyntax(initializer.Expressions, spaces + Constants.Indentation))
-                                                                                                                                .WithCloseBraceToken(initializer.CloseBraceToken.WithLeadingSpaces(spaces));
+        private AnonymousObjectCreationExpressionSyntax GetUpdatedSyntax(AnonymousObjectCreationExpressionSyntax anonymous, int spaces)
+        {
+            var openBraceToken = anonymous.OpenBraceToken;
+            var closeBraceToken = anonymous.CloseBraceToken;
 
-        private AnonymousObjectCreationExpressionSyntax GetUpdatedSyntax(AnonymousObjectCreationExpressionSyntax anonymous, in int spaces) => anonymous.WithOpenBraceToken(anonymous.OpenBraceToken.WithLeadingSpaces(spaces))
-                                                                                                                                                    .WithInitializers(GetUpdatedSyntax(anonymous.Initializers, spaces + Constants.Indentation))
-                                                                                                                                                    .WithCloseBraceToken(anonymous.CloseBraceToken.WithLeadingSpaces(spaces));
+            var closeBraceTokenSpaces = openBraceToken.IsOnSameLineAs(closeBraceToken) ? 0 : spaces;
+
+            return anonymous.WithOpenBraceToken(openBraceToken.WithLeadingSpaces(spaces))
+                            .WithInitializers(GetUpdatedSyntax(anonymous.Initializers, openBraceToken, spaces + Constants.Indentation))
+                            .WithCloseBraceToken(closeBraceToken.WithLeadingSpaces(closeBraceTokenSpaces));
+        }
+
+        private InitializerExpressionSyntax GetUpdatedSyntax(InitializerExpressionSyntax initializer, int spaces)
+        {
+            var openBraceToken = initializer.OpenBraceToken;
+            var closeBraceToken = initializer.CloseBraceToken;
+
+            var closeBraceTokenSpaces = openBraceToken.IsOnSameLineAs(closeBraceToken) ? 0 : spaces;
+
+            return initializer.WithOpenBraceToken(openBraceToken.WithLeadingSpaces(spaces))
+                              .WithExpressions(GetUpdatedSyntax(initializer.Expressions, openBraceToken, spaces + Constants.Indentation))
+                              .WithCloseBraceToken(closeBraceToken.WithLeadingSpaces(closeBraceTokenSpaces));
+        }
     }
 }

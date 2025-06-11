@@ -36,12 +36,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             if (argument.Expression is MemberAccessExpressionSyntax maes && maes.IsKind(SyntaxKind.SimpleMemberAccessExpression))
             {
                 var operatorToken = maes.OperatorToken;
+                var allOnSameLine = operatorToken.IsOnSameLineAs(maes.Expression) && operatorToken.IsOnSameLineAs(maes.Name);
 
-                var startingLine = maes.Expression.GetStartingLine();
-                var operatorLine = operatorToken.GetStartingLine();
-                var nameLine = maes.Name.GetStartingLine();
-
-                if (startingLine != operatorLine || operatorLine != nameLine)
+                if (allOnSameLine is false)
                 {
                     return new[] { Issue(argument) };
                 }
