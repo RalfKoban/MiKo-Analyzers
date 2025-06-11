@@ -13,8 +13,7 @@ namespace System.Text
 {
     internal static class StringBuilderExtensions
     {
-        private const int QuickSubstringProbeLengthThreshold = 6;
-        private const int QuickSubstringProbeRentLengthThreshold = 24;
+        private static readonly ArrayPool<char> SharedPool = ArrayPool<char>.Shared;
 
         public static StringBuilder AdjustFirstWord(this StringBuilder value, in FirstWordHandling handling)
         {
@@ -135,17 +134,29 @@ namespace System.Text
         {
             var count = replacementPairs.Length;
 
+            char[] text = null;
+            var textSpan = GetTextAsRentedArray(value, ref text, SharedPool);
+
             for (var index = 0; index < count; index++)
             {
                 var pair = replacementPairs[index];
                 var oldValue = pair.Key;
 
-                var replaceStartIndex = QuickSubstringProbe(ref value, oldValue.AsSpan());
+                var replaceStartIndex = QuickSubstringProbe(textSpan, oldValue.AsSpan());
+
                 if (replaceStartIndex > -1)
                 {
                     // can be part in the replacement as value seems to fit
                     value.Replace(oldValue, pair.Value, replaceStartIndex, value.Length - replaceStartIndex);
+
+                    // re-assign text as we might have replaced the string, but use a different array
+                    textSpan = GetTextAsRentedArray(value, ref text, SharedPool);
                 }
+            }
+
+            if (text != null)
+            {
+                SharedPool.Return(text);
             }
 
             return value;
@@ -155,17 +166,28 @@ namespace System.Text
         {
             var length = texts.Length;
 
+            char[] text = null;
+            var textSpan = GetTextAsRentedArray(value, ref text, SharedPool);
+
             for (var index = 0; index < length; index++)
             {
                 var oldValue = texts[index];
 
-                var replaceStartIndex = QuickSubstringProbe(ref value, oldValue.AsSpan());
+                var replaceStartIndex = QuickSubstringProbe(textSpan, oldValue.AsSpan());
 
                 if (replaceStartIndex > -1)
                 {
                     // can be part in the replacement as value seems to fit
                     value.Replace(oldValue, replacement, replaceStartIndex, value.Length - replaceStartIndex);
+
+                    // re-assign text as we might have replaced the string, but use a different array
+                    textSpan = GetTextAsRentedArray(value, ref text, SharedPool);
                 }
+            }
+
+            if (text != null)
+            {
+                SharedPool.Return(text);
             }
 
             return value;
@@ -179,7 +201,16 @@ namespace System.Text
                 return value;
             }
 
-            var replaceStartIndex = QuickSubstringProbe(ref value, oldValue.AsSpan());
+            char[] text = null;
+            var textSpan = GetTextAsRentedArray(value, ref text, SharedPool);
+
+            var replaceStartIndex = QuickSubstringProbe(textSpan, oldValue.AsSpan());
+
+            // we do not need the text anymore
+            if (text != null)
+            {
+                SharedPool.Return(text);
+            }
 
             if (replaceStartIndex > -1)
             {
@@ -490,106 +521,49 @@ namespace System.Text
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static StringBuilder WithoutParaTags(this StringBuilder value) => value.Without(Constants.ParaTags);
 
-        private static int QuickSubstringProbe(ref StringBuilder current, in ReadOnlySpan<char> other)
+        private static ReadOnlySpan<char> GetTextAsRentedArray(StringBuilder value, ref char[] text, ArrayPool<char> pool)
         {
-            var otherValueLength = other.Length;
-            var difference = current.Length - otherValueLength;
+            if (text != null)
+            {
+                pool.Return(text);
+            }
 
-            if (difference < 0)
+            var size = value.Length;
+
+            text = pool.Rent(size);
+
+            value.CopyTo(0, text, 0, size);
+
+            return text.AsSpan(0, size); // use the length of the string builder as the rented array itself may be longer than the requested size
+        }
+
+        private static int QuickSubstringProbe(in ReadOnlySpan<char> current, in ReadOnlySpan<char> other)
+        {
+            var delta = current.Length - other.Length;
+
+            if (delta < 0)
             {
                 // cannot be part in the replacement as other value is too long and cannot fit current value
                 return -1;
             }
 
-            if (difference > 0)
+            // Note:
+            // - do not use a threshold to limit the length check, as copying a big array is more costly than just iterating a few steps
+            // - do not use a separate if condition for the delta being zero as that may not happen often and the conditional check therefore is too costly
+            var lastIndex = other.Length - 1;
+            var startChar = other[0];
+            var endChar = other[lastIndex];
+
+            for (var position = 0; position <= delta; position++)
             {
-                if (otherValueLength > QuickSubstringProbeLengthThreshold)
-                {
-                    var lastIndex = otherValueLength - 1;
-
-                    if (difference >= QuickSubstringProbeRentLengthThreshold)
-                    {
-                        // use rented arrays here (if we have larger differences, the start and end may be in different chunks)
-                        return QuickSubstringProbeAtIndicesWithRent(ref current, other[0], other[lastIndex], lastIndex, difference + 1);
-                    }
-
-                    // could be part in the replacement only if characters match
-                    return QuickSubstringProbeAtIndices(ref current, other[0], other[lastIndex], lastIndex, difference + 1);
-                }
-
-                // can be part in the replacement as other value is smaller and could fit current value
-                return 0;
-            }
-
-            // if (difference == 0)
-            {
-                // both values have same length, so do the quick check on whether the characters fit the expected ones (do not limit length as there are only 3 values below length of 8)
-                if (current[0] == other[0] && current[otherValueLength - 1] == other[otherValueLength - 1])
-                {
-                    return 0;
-                }
-
-                return -1;
-            }
-        }
-
-        private static int QuickSubstringProbeAtIndices(ref StringBuilder text, in char startChar, in char endChar, in int endIndex, in int lengthToCompare)
-        {
-            for (var position = 0; position < lengthToCompare; position++)
-            {
-                if (text[position] == startChar && text[endIndex + position] == endChar)
+                // could be part in the replacement only if characters match both at start and end
+                if (current[position] == startChar && current[lastIndex + position] == endChar)
                 {
                     return position;
                 }
             }
 
             return -1;
-        }
-
-        private static int QuickSubstringProbeAtIndicesWithRent(ref StringBuilder text, in char startChar, in char endChar, in int endIndex, in int lengthToCompare)
-        {
-            // Use a rented shared pool for performance reasons
-            var pool = ArrayPool<char>.Shared;
-            var startChars = pool.Rent(lengthToCompare);
-
-            // do not use the chars from the beginning as we might not need it
-            char[] endChars = null;
-
-            // Copy the start and end segments from the text
-            text.CopyTo(0, startChars, 0, lengthToCompare);
-
-            var replaceIndex = -1;
-
-            // Compare the segments
-            for (var position = 0; position < lengthToCompare; position++)
-            {
-                if (startChars[position] == startChar)
-                {
-                    // seems we found a starting char, so fill the end chars now as we now know that we need them
-                    if (endChars is null)
-                    {
-                        endChars = pool.Rent(lengthToCompare);
-
-                        text.CopyTo(endIndex + position, endChars, position, lengthToCompare - position);
-                    }
-
-                    if (endChars[position] == endChar)
-                    {
-                        replaceIndex = position;
-
-                        break;
-                    }
-                }
-            }
-
-            pool.Return(startChars);
-
-            if (endChars != null)
-            {
-                pool.Return(endChars);
-            }
-
-            return replaceIndex;
         }
 
         private static int CountLeadingWhitespaces(this StringBuilder value, int start = 0)
