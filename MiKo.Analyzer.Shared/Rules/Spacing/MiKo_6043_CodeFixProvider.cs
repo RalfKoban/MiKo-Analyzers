@@ -42,6 +42,57 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
         }
 
+        private static GenericNameSyntax GetUpdatedSyntax(GenericNameSyntax syntax) => syntax.WithIdentifier(syntax.Identifier)
+                                                                                             .WithTypeArgumentList(GetUpdatedSyntax(syntax.TypeArgumentList));
+
+        private static IdentifierNameSyntax GetUpdatedSyntax(IdentifierNameSyntax syntax) => syntax?.WithoutTrivia();
+
+        private static InitializerExpressionSyntax GetUpdatedSyntax(InitializerExpressionSyntax syntax)
+        {
+            return syntax.WithoutTrivia()
+                         .WithOpenBraceToken(syntax.OpenBraceToken.WithoutTrivia().WithLeadingSpace()) // remove the spaces or line breaks around the opening bracket
+                         .WithCloseBraceToken(syntax.CloseBraceToken.WithoutTrivia().WithLeadingSpace()); // remove the spaces or line breaks around the closing bracket
+        }
+
+        private static ObjectCreationExpressionSyntax GetUpdatedSyntax(ObjectCreationExpressionSyntax syntax) => syntax.WithoutTrivia()
+                                                                                                                       .WithNewKeyword(syntax.NewKeyword.WithoutTrivia().WithTrailingSpace())
+                                                                                                                       .WithType(GetUpdatedSyntax(syntax.Type))
+                                                                                                                       .WithInitializer(GetUpdatedSyntax(syntax.Initializer));
+
+        private static ParameterSyntax GetUpdatedSyntax(ParameterSyntax syntax) => syntax.WithoutTrivia();
+
+        private static ParameterListSyntax GetUpdatedSyntax(ParameterListSyntax syntax) => syntax.WithoutTrivia();
+
+        private static SimpleNameSyntax GetUpdatedSyntax(SimpleNameSyntax syntax)
+        {
+            switch (syntax)
+            {
+                case IdentifierNameSyntax identifier: return GetUpdatedSyntax(identifier);
+                case GenericNameSyntax generic: return GetUpdatedSyntax(generic);
+                default:
+                    return syntax?.WithoutTrivia();
+            }
+        }
+
+        private static TypeSyntax GetUpdatedSyntax(TypeSyntax syntax) => syntax.WithoutTrivia();
+
+        private static TypeArgumentListSyntax GetUpdatedSyntax(TypeArgumentListSyntax syntax)
+        {
+            if (syntax is null)
+            {
+                return null;
+            }
+
+            var arguments = syntax.Arguments;
+
+            return syntax.WithoutTrivia()
+                         .WithLessThanToken(syntax.LessThanToken.WithoutTrivia()) // remove the spaces or line breaks around the opening bracket
+                         .WithArguments(SyntaxFactory.SeparatedList(arguments.Select(GetUpdatedSyntax), arguments.GetSeparators().Select(_ => _.WithoutTrivia().WithTrailingSpace()))) // fix separators
+                         .WithGreaterThanToken(syntax.GreaterThanToken.WithoutTrivia()); // remove the spaces or line breaks around the closing bracket
+        }
+
+        private static SyntaxToken GetUpdatedSyntax(in SyntaxToken token) => token.WithSurroundingSpace();
+
         private static AnonymousObjectCreationExpressionSyntax GetUpdatedSyntax(AnonymousObjectCreationExpressionSyntax syntax)
         {
             return syntax.WithoutTrivia()
@@ -98,18 +149,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
         }
 
-        private static GenericNameSyntax GetUpdatedSyntax(GenericNameSyntax syntax) => syntax.WithIdentifier(syntax.Identifier)
-                                                                                             .WithTypeArgumentList(GetUpdatedSyntax(syntax.TypeArgumentList));
-
-        private static IdentifierNameSyntax GetUpdatedSyntax(IdentifierNameSyntax syntax) => syntax?.WithoutTrivia();
-
-        private static InitializerExpressionSyntax GetUpdatedSyntax(InitializerExpressionSyntax syntax)
-        {
-            return syntax.WithoutTrivia()
-                         .WithOpenBraceToken(syntax.OpenBraceToken.WithoutTrivia().WithLeadingSpace()) // remove the spaces or line breaks around the opening bracket
-                         .WithCloseBraceToken(syntax.CloseBraceToken.WithoutTrivia().WithLeadingSpace()); // remove the spaces or line breaks around the closing bracket
-        }
-
         private static InvocationExpressionSyntax GetUpdatedSyntax(InvocationExpressionSyntax syntax) => syntax.WithoutTrivia()
                                                                                                                .WithExpression(GetUpdatedSyntax(syntax.Expression))
                                                                                                                .WithArgumentList(GetUpdatedSyntax(syntax.ArgumentList));
@@ -118,15 +157,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                                                                                                                    .WithName(GetUpdatedSyntax(syntax.Name))
                                                                                                                    .WithOperatorToken(syntax.OperatorToken.WithoutTrivia()) // remove the spaces or line breaks around the dot
                                                                                                                    .WithExpression(GetUpdatedSyntax(syntax.Expression));
-
-        private static ObjectCreationExpressionSyntax GetUpdatedSyntax(ObjectCreationExpressionSyntax syntax) => syntax.WithoutTrivia()
-                                                                                                                       .WithNewKeyword(syntax.NewKeyword.WithoutTrivia().WithTrailingSpace())
-                                                                                                                       .WithType(GetUpdatedSyntax(syntax.Type))
-                                                                                                                       .WithInitializer(GetUpdatedSyntax(syntax.Initializer));
-
-        private static ParameterSyntax GetUpdatedSyntax(ParameterSyntax syntax) => syntax.WithoutTrivia();
-
-        private static ParameterListSyntax GetUpdatedSyntax(ParameterListSyntax syntax) => syntax.WithoutTrivia();
 
         private static ParenthesizedLambdaExpressionSyntax GetUpdatedSyntax(ParenthesizedLambdaExpressionSyntax syntax) => syntax.WithParameterList(GetUpdatedSyntax(syntax.ParameterList))
                                                                                                                                  .WithArrowToken(GetUpdatedSyntax(syntax.ArrowToken))
@@ -137,35 +167,5 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                                                                                                                    .WithArrowToken(GetUpdatedSyntax(syntax.ArrowToken))
                                                                                                                    .WithExpressionBody(GetUpdatedSyntax(syntax.ExpressionBody))
                                                                                                                    .WithLeadingTriviaFrom(syntax);
-
-        private static SimpleNameSyntax GetUpdatedSyntax(SimpleNameSyntax syntax)
-        {
-            switch (syntax)
-            {
-                case IdentifierNameSyntax identifier: return GetUpdatedSyntax(identifier);
-                case GenericNameSyntax generic: return GetUpdatedSyntax(generic);
-                default:
-                    return syntax?.WithoutTrivia();
-            }
-        }
-
-        private static TypeSyntax GetUpdatedSyntax(TypeSyntax syntax) => syntax.WithoutTrivia();
-
-        private static TypeArgumentListSyntax GetUpdatedSyntax(TypeArgumentListSyntax syntax)
-        {
-            if (syntax is null)
-            {
-                return null;
-            }
-
-            var arguments = syntax.Arguments;
-
-            return syntax.WithoutTrivia()
-                         .WithLessThanToken(syntax.LessThanToken.WithoutTrivia()) // remove the spaces or line breaks around the opening bracket
-                         .WithArguments(SyntaxFactory.SeparatedList(arguments.Select(GetUpdatedSyntax), arguments.GetSeparators().Select(_ => _.WithoutTrivia().WithTrailingSpace()))) // fix separators
-                         .WithGreaterThanToken(syntax.GreaterThanToken.WithoutTrivia()); // remove the spaces or line breaks around the closing bracket
-        }
-
-        private static SyntaxToken GetUpdatedSyntax(in SyntaxToken token) => token.WithSurroundingSpace();
     }
 }
