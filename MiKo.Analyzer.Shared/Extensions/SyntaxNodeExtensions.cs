@@ -52,7 +52,6 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<T> Ancestors<T>(this SyntaxNode value) where T : SyntaxNode => value.Ancestors().OfType<T>(); // value.AncestorsAndSelf().OfType<T>();
 
-        // TODO RKN: Use types, fields etc. as well?
         internal static IEnumerable<T> AncestorsWithinMethods<T>(this SyntaxNode value) where T : SyntaxNode
         {
             // ReSharper disable once LoopCanBePartlyConvertedToQuery
@@ -972,28 +971,13 @@ namespace MiKoSolutions.Analyzers
                 switch (ancestor)
                 {
                     case BaseMethodDeclarationSyntax method:
-                    {
-                        var parameters = method.ParameterList.Parameters;
-
-                        if (parameters.Count is 0)
-                        {
-                            return Array.Empty<ParameterSyntax>();
-                        }
-
-                        return parameters.ToArray();
-                    }
+                        return method.ParameterList.Parameters.ToArray();
 
                     case IndexerDeclarationSyntax indexer:
-                    {
-                        var parameters = indexer.ParameterList.Parameters;
+                        return indexer.ParameterList.Parameters.ToArray();
 
-                        if (parameters.Count is 0)
-                        {
-                            return Array.Empty<ParameterSyntax>();
-                        }
-
-                        return parameters.ToArray();
-                    }
+                    case BaseTypeDeclarationSyntax _:
+                        return Array.Empty<ParameterSyntax>();
                 }
             }
 
@@ -1007,33 +991,18 @@ namespace MiKoSolutions.Analyzers
                 switch (ancestor)
                 {
                     case BaseMethodDeclarationSyntax method:
-                    {
-                        var parameters = method.ParameterList.Parameters;
-
-                        if (parameters.Count is 0)
-                        {
-                            return Array.Empty<string>();
-                        }
-
-                        return parameters.ToArray(_ => _.GetName());
-                    }
+                        return method.ParameterList.Parameters.ToArray(_ => _.GetName());
 
                     case IndexerDeclarationSyntax indexer:
-                    {
-                        var parameters = indexer.ParameterList.Parameters;
-
-                        if (parameters.Count is 0)
-                        {
-                            return Array.Empty<string>();
-                        }
-
-                        return parameters.ToArray(_ => _.GetName());
-                    }
+                        return indexer.ParameterList.Parameters.ToArray(_ => _.GetName());
 
                     case BasePropertyDeclarationSyntax property:
                         return property.AccessorList?.Accessors.Any(_ => _.IsKind(SyntaxKind.SetAccessorDeclaration)) is true
                                ? Constants.Names.DefaultPropertyParameterNames
                                : Array.Empty<string>();
+
+                    case BaseTypeDeclarationSyntax _:
+                        return Array.Empty<string>();
                 }
             }
 
@@ -1679,16 +1648,16 @@ namespace MiKoSolutions.Analyzers
 
             if (kindsLength > 0)
             {
-                var valueKind = value.Kind();
+                var valueKind = value.RawKind;
 
                 if (kindsLength is 2)
                 {
-                    return valueKind == kinds[0] || valueKind == kinds[1];
+                    return valueKind == (int)kinds[0] || valueKind == (int)kinds[1];
                 }
 
                 for (var index = 0; index < kindsLength; index++)
                 {
-                    if (kinds[index] == valueKind)
+                    if (valueKind == (int)kinds[index])
                     {
                         return true;
                     }
