@@ -1298,24 +1298,6 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool IsEnumerable(this SpecialType value)
-        {
-            switch (value)
-            {
-                case SpecialType.System_Array:
-                case SpecialType.System_Collections_IEnumerable:
-                case SpecialType.System_Collections_Generic_IEnumerable_T:
-                case SpecialType.System_Collections_Generic_IList_T:
-                case SpecialType.System_Collections_Generic_ICollection_T:
-                case SpecialType.System_Collections_Generic_IReadOnlyList_T:
-                case SpecialType.System_Collections_Generic_IReadOnlyCollection_T:
-                    return true;
-
-                default:
-                    return false;
-            }
-        }
-
         internal static bool IsPrismEvent(this ITypeSymbol value) => value.TypeKind is TypeKind.Class
                                                                   && value.SpecialType is SpecialType.None
                                                                   && value.ToString() != "Microsoft.Practices.Prism.Events.EventBase"
@@ -1924,6 +1906,24 @@ namespace MiKoSolutions.Analyzers
                 case (int)SyntaxKind.LocalFunctionStatement: // 8830
                 case (int)SyntaxKind.MethodDeclaration: // 8875,
                 case (int)SyntaxKind.ConstructorDeclaration: // 8878
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        private static bool IsEnumerable(in SpecialType type)
+        {
+            switch (type)
+            {
+                case SpecialType.System_Array:
+                case SpecialType.System_Collections_IEnumerable:
+                case SpecialType.System_Collections_Generic_IEnumerable_T:
+                case SpecialType.System_Collections_Generic_IList_T:
+                case SpecialType.System_Collections_Generic_ICollection_T:
+                case SpecialType.System_Collections_Generic_IReadOnlyList_T:
+                case SpecialType.System_Collections_Generic_IReadOnlyCollection_T:
                     return true;
 
                 default:

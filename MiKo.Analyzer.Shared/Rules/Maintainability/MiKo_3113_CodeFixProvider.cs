@@ -21,28 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (syntax is ExpressionStatementSyntax statement)
             {
-                var shouldNode = statement.GetFluentAssertionShouldNode();
-                var shouldName = shouldNode.GetName();
-
-                var assertThat = shouldName is Constants.FluentAssertions.ShouldBeEquivalentTo
-                                 ? ConvertShouldBeEquivalentToToAssertThat(document, shouldNode)
-                                 : ConvertShouldToAssertThat(document, shouldNode);
-
-                if (assertThat is null)
-                {
-                    return statement;
-                }
-
-                // find lambda
-                var lambda = shouldNode.FirstAncestor<LambdaExpressionSyntax>();
-
-                if (lambda != null && lambda.AncestorsWithinMethods<ExpressionStatementSyntax>().Any(_ => _ == statement))
-                {
-                    // we have a lambda expression, so replace that one
-                    return statement.ReplaceNode(lambda, lambda.WithExpressionBody(assertThat));
-                }
-
-                return statement.WithExpression(assertThat).WithTriviaFrom(statement);
+                return Convert(document, statement);
             }
 
             return syntax;
@@ -55,11 +34,35 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return root.WithUsing("NUnit.Framework");
         }
 
-        private static InvocationExpressionSyntax ConvertShouldBeEquivalentToToAssertThat(Document document, MemberAccessExpressionSyntax shouldNode)
+        private static ExpressionStatementSyntax Convert(Document document, ExpressionStatementSyntax statement)
         {
-            var originalExpression = shouldNode.Expression;
+            var shouldNode = statement.GetFluentAssertionShouldNode();
+            var shouldName = shouldNode.GetName();
 
-            var expression = originalExpression.WithoutLeadingTrivia();
+            var assertThat = shouldName is Constants.FluentAssertions.ShouldBeEquivalentTo
+                             ? ConvertShouldBeEquivalentTo(shouldNode)
+                             : ConvertShould(document, shouldNode);
+
+            if (assertThat is null)
+            {
+                return statement;
+            }
+
+            // find lambda
+            var lambda = shouldNode.FirstAncestor<LambdaExpressionSyntax>();
+
+            if (lambda != null && lambda.AncestorsWithinMethods<ExpressionStatementSyntax>().Any(_ => _ == statement))
+            {
+                // we have a lambda expression, so replace that one
+                return statement.ReplaceNode(lambda, lambda.WithExpressionBody(assertThat));
+            }
+
+            return statement.WithExpression(assertThat).WithTriviaFrom(statement);
+        }
+
+        private static InvocationExpressionSyntax ConvertShouldBeEquivalentTo(MemberAccessExpressionSyntax shouldNode)
+        {
+            var expression = shouldNode.Expression.WithoutLeadingTrivia();
 
             var invocation = shouldNode.FirstAncestor<InvocationExpressionSyntax>();
             var arguments = invocation.ArgumentList.Arguments;
@@ -67,7 +70,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return AssertThat(expression, Is("EquivalentTo", arguments[0]), arguments, 1, removeNameColon: true);
         }
 
-        private static InvocationExpressionSyntax ConvertShouldToAssertThat(Document document, MemberAccessExpressionSyntax shouldNode)
+        private static InvocationExpressionSyntax ConvertShould(Document document, MemberAccessExpressionSyntax shouldNode)
         {
             var originalExpression = shouldNode.Expression;
 
@@ -77,9 +80,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var invocation = constraintNode.FirstAncestor<InvocationExpressionSyntax>();
             var arguments = invocation.ArgumentList.Arguments;
 
-            var name = constraintNode.GetName();
-
-            switch (name)
+            switch (constraintNode.GetName())
             {
                 case "BeTrue": return AssertThat(expression, Is("True"), arguments, 0, removeNameColon: true);
                 case "BeFalse": return AssertThat(expression, Is("False"), arguments, 0, removeNameColon: true);
@@ -87,19 +88,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "BeNull": return AssertThat(expression, Is("Null"), arguments, 0, removeNameColon: true);
                 case "NotBeNull": return AssertThat(expression, Is("Not", "Null"), arguments, 0, removeNameColon: true);
 
-                case "BeEmpty": return ConvertBeEmpty();
-                case "NotBeEmpty": return ConvertNotBeEmpty();
+                case "BeEmpty": return ConvertBeEmpty(document, originalExpression, expression, arguments);
+                case "NotBeEmpty": return ConvertNotBeEmpty(document, originalExpression, expression, arguments);
 
                 case "BeNullOrEmpty": return AssertThat(expression, Is("Null", "Or", "Empty"), arguments, 0, removeNameColon: true);
                 case "NotBeNullOrEmpty": return AssertThat(expression, Is("Not", "Null", "And", "Not", "Empty"), arguments, 0, removeNameColon: true);
 
-                case "Be": return ConvertBe();
-                case "NotBe": return ConvertNotBe();
+                case "Be": return ConvertBe(expression, arguments);
+                case "NotBe": return ConvertNotBe(expression, arguments);
 
                 case "Equal": return AssertThat(expression, Is("EqualTo", arguments[0]), arguments, removeNameColon: true);
 
-                case "BeEquivalentTo": return ConvertBeEquivalentTo();
-                case "NotBeEquivalentTo": return ConvertNotBeEquivalentTo();
+                case "BeEquivalentTo": return ConvertBeEquivalentTo(document, expression, arguments);
+                case "NotBeEquivalentTo": return ConvertNotBeEquivalentTo(document, expression, arguments);
 
                 case "BeGreaterThan": return AssertThat(expression, Is("GreaterThan", arguments[0]), arguments, removeNameColon: true);
                 case "BeGreaterOrEqualTo":
@@ -149,13 +150,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "NotEndWith": return AssertThat(expression, Does("Not", "EndWith", arguments[0]), arguments, removeNameColon: true);
                 case "NotEndWithEquivalentOf": return AssertThat(expression, Does("Not", "EndWith", arguments[0], "IgnoreCase"), arguments, removeNameColon: true);
 
-                case "Contain" when arguments[0].Expression is SimpleLambdaExpressionSyntax: return AssertThatHasMatches("Some");
-                case "Contain": return ConvertContain();
+                case "Contain" when arguments[0].Expression is SimpleLambdaExpressionSyntax: return AssertThatHasMatches("Some", document, originalExpression, expression, arguments);
+                case "Contain": return ConvertContain(document, expression, arguments);
 
-                case "OnlyContain": return AssertThatHasMatches("All");
-                case "ContainSingle" when arguments.Count > 0: return AssertThatHasMatches("One");
+                case "OnlyContain": return AssertThatHasMatches("All", document, originalExpression, expression, arguments);
+                case "ContainSingle" when arguments.Count > 0: return AssertThatHasMatches("One", document, originalExpression, expression, arguments);
                 case "ContainSingle": return AssertThat(expression, Has("Exactly", Argument(Literal(1)), "Items"), arguments, removeNameColon: true);
-                case "NotContain" when arguments[0].Expression is SimpleLambdaExpressionSyntax: return AssertThatHasMatches("None");
+                case "NotContain" when arguments[0].Expression is SimpleLambdaExpressionSyntax: return AssertThatHasMatches("None", document, originalExpression, expression, arguments);
                 case "NotContain": return AssertThat(expression, Does("Not", "Contain", arguments[0]), arguments, removeNameColon: true);
                 case "NotContainEquivalentOf": return AssertThat(expression, Does("Not", "Contain", arguments[0], "IgnoreCase"), arguments, removeNameColon: true);
 
@@ -178,190 +179,181 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 default:
                     return null;
             }
+        }
 
-            InvocationExpressionSyntax AssertThatHasMatches(string match)
+        private static InvocationExpressionSyntax AssertThatHasMatches(string match, Document document, ExpressionSyntax originalExpression, ExpressionSyntax expression, SeparatedSyntaxList<ArgumentSyntax> arguments)
+        {
+            var argument = arguments[0];
+
+            if (argument.Expression is SimpleLambdaExpressionSyntax)
             {
-                var argument = arguments[0];
-
-                if (argument.Expression is SimpleLambdaExpressionSyntax)
-                {
-                    // we need to find out the type
-                    var type = originalExpression.GetTypeSymbol(document);
-
-                    if (type != null && type.TryGetGenericArgumentCount(out var genericArgumentsCount))
-                    {
-                        var types = new TypeSyntax[genericArgumentsCount];
-
-                        for (var i = 0; i < genericArgumentsCount; i++)
-                        {
-                            if (type.TryGetGenericArgumentType(out var genericType, i))
-                            {
-                                types[i] = SyntaxFactory.ParseTypeName(genericType.FullyQualifiedName());
-                            }
-                        }
-
-                        return AssertThat(expression, Has(match, "Matches", argument, types), arguments, removeNameColon: true);
-                    }
-                }
-
-                return null;
-            }
-
-            InvocationExpressionSyntax ConvertBeEmpty()
-            {
+                // we need to find out the type
                 var type = originalExpression.GetTypeSymbol(document);
 
-                if (type != null)
+                if (type != null && type.TryGetGenericArgumentCount(out var genericArgumentsCount))
                 {
-                    if (type.IsGuid())
+                    var types = new TypeSyntax[genericArgumentsCount];
+
+                    for (var i = 0; i < genericArgumentsCount; i++)
                     {
-                        return AssertThat(expression, Is("EqualTo", Argument(nameof(Guid), nameof(Guid.Empty))), arguments, 0, removeNameColon: true);
-                    }
-                }
-
-                return AssertThat(expression, Is("Empty"), arguments, 0, removeNameColon: true);
-            }
-
-            InvocationExpressionSyntax ConvertNotBeEmpty()
-            {
-                var type = originalExpression.GetTypeSymbol(document);
-
-                if (type != null)
-                {
-                    if (type.IsGuid())
-                    {
-                        return AssertThat(expression, Is("Not", "EqualTo", Argument(nameof(Guid), nameof(Guid.Empty))), arguments, 0, removeNameColon: true);
-                    }
-                }
-
-                return AssertThat(expression, Is("Not", "Empty"), arguments, 0, removeNameColon: true);
-            }
-
-            InvocationExpressionSyntax ConvertBe()
-            {
-                var argument = arguments[0];
-
-                if (argument.Expression is LiteralExpressionSyntax literal)
-                {
-                    switch (literal.Kind())
-                    {
-                        case SyntaxKind.NullLiteralExpression:
-                            return AssertThat(expression, Is("Null"), arguments, removeNameColon: true);
-
-                        case SyntaxKind.TrueLiteralExpression:
-                            return AssertThat(expression, Is("True"), arguments, removeNameColon: true);
-
-                        case SyntaxKind.FalseLiteralExpression:
-                            return AssertThat(expression, Is("False"), arguments, removeNameColon: true);
-                    }
-                }
-
-                return AssertThat(expression, Is("EqualTo", arguments[0]), arguments, removeNameColon: true);
-            }
-
-            InvocationExpressionSyntax ConvertNotBe()
-            {
-                var argument = arguments[0];
-
-                if (argument.Expression is LiteralExpressionSyntax literal)
-                {
-                    switch (literal.Kind())
-                    {
-                        case SyntaxKind.NullLiteralExpression:
-                            return AssertThat(expression, Is("Not", "Null"), arguments, removeNameColon: true);
-
-                        case SyntaxKind.TrueLiteralExpression:
-                            return AssertThat(expression, Is("False"), arguments, removeNameColon: true);
-
-                        case SyntaxKind.FalseLiteralExpression:
-                            return AssertThat(expression, Is("True"), arguments, removeNameColon: true);
-                    }
-                }
-
-                return AssertThat(expression, Is("Not", "EqualTo", argument), arguments, removeNameColon: true);
-            }
-
-            InvocationExpressionSyntax ConvertBeEquivalentTo()
-            {
-                var count = arguments.Count;
-
-                if (count > 0)
-                {
-                    var argument = arguments[0];
-
-                    var type = argument.GetTypeSymbol(document);
-
-                    if (type != null)
-                    {
-                        if (count is 1 && type.IsString())
+                        if (type.TryGetGenericArgumentType(out var genericType, i))
                         {
-                            // we have found the extension method that uses strings
-                            return AssertThat(expression, Is("EqualTo", argument, "IgnoreCase"), arguments, removeNameColon: true);
-                        }
-
-                        if (type.IsEnumerable())
-                        {
-                            // we have found the extension method that already gets an IEnumerable as first argument
-                            return AssertThat(expression, Is("EquivalentTo", argument), arguments, removeNameColon: true);
+                            types[i] = SyntaxFactory.ParseTypeName(genericType.FullyQualifiedName());
                         }
                     }
 
-                    // seems like we have found the extension method that uses a params array as arguments
-                    return AssertThat(expression, Is("EquivalentTo", GetAsArray(arguments)), arguments, count, removeNameColon: true);
+                    return AssertThat(expression, Has(match, "Matches", argument, types), arguments, removeNameColon: true);
                 }
+            }
 
+            return null;
+        }
+
+        private static InvocationExpressionSyntax ConvertBe(ExpressionSyntax expression, SeparatedSyntaxList<ArgumentSyntax> arguments)
+        {
+            var argument = arguments[0];
+
+            if (argument.Expression is LiteralExpressionSyntax literal)
+            {
+                switch (literal.Kind())
+                {
+                    case SyntaxKind.NullLiteralExpression:
+                        return AssertThat(expression, Is("Null"), arguments, removeNameColon: true);
+
+                    case SyntaxKind.TrueLiteralExpression:
+                        return AssertThat(expression, Is("True"), arguments, removeNameColon: true);
+
+                    case SyntaxKind.FalseLiteralExpression:
+                        return AssertThat(expression, Is("False"), arguments, removeNameColon: true);
+                }
+            }
+
+            return AssertThat(expression, Is("EqualTo", arguments[0]), arguments, removeNameColon: true);
+        }
+
+        private static InvocationExpressionSyntax ConvertNotBe(ExpressionSyntax expression, SeparatedSyntaxList<ArgumentSyntax> arguments)
+        {
+            var argument = arguments[0];
+
+            if (argument.Expression is LiteralExpressionSyntax literal)
+            {
+                switch (literal.Kind())
+                {
+                    case SyntaxKind.NullLiteralExpression:
+                        return AssertThat(expression, Is("Not", "Null"), arguments, removeNameColon: true);
+
+                    case SyntaxKind.TrueLiteralExpression:
+                        return AssertThat(expression, Is("False"), arguments, removeNameColon: true);
+
+                    case SyntaxKind.FalseLiteralExpression:
+                        return AssertThat(expression, Is("True"), arguments, removeNameColon: true);
+                }
+            }
+
+            return AssertThat(expression, Is("Not", "EqualTo", argument), arguments, removeNameColon: true);
+        }
+
+        private static InvocationExpressionSyntax ConvertBeEmpty(Document document, ExpressionSyntax originalExpression, ExpressionSyntax expression, SeparatedSyntaxList<ArgumentSyntax> arguments)
+        {
+            var type = originalExpression.GetTypeSymbol(document);
+
+            if (type != null && type.IsGuid())
+            {
+                return AssertThat(expression, Is("EqualTo", Argument(nameof(Guid), nameof(Guid.Empty))), arguments, 0, removeNameColon: true);
+            }
+
+            return AssertThat(expression, Is("Empty"), arguments, 0, removeNameColon: true);
+        }
+
+        private static InvocationExpressionSyntax ConvertNotBeEmpty(Document document, ExpressionSyntax originalExpression, ExpressionSyntax expression, SeparatedSyntaxList<ArgumentSyntax> arguments)
+        {
+            var type = originalExpression.GetTypeSymbol(document);
+
+            if (type != null && type.IsGuid())
+            {
+                return AssertThat(expression, Is("Not", "EqualTo", Argument(nameof(Guid), nameof(Guid.Empty))), arguments, 0, removeNameColon: true);
+            }
+
+            return AssertThat(expression, Is("Not", "Empty"), arguments, 0, removeNameColon: true);
+        }
+
+        private static InvocationExpressionSyntax ConvertBeEquivalentTo(Document document, ExpressionSyntax expression, SeparatedSyntaxList<ArgumentSyntax> arguments)
+        {
+            var count = arguments.Count;
+
+            if (count is 0)
+            {
                 return null;
             }
 
-            InvocationExpressionSyntax ConvertNotBeEquivalentTo()
+            var argument = arguments[0];
+
+            var type = argument.GetTypeSymbol(document);
+
+            if (type != null)
             {
-                var count = arguments.Count;
-
-                if (count > 0)
+                if (count is 1 && type.IsString())
                 {
-                    var argument = arguments[0];
-
-                    var type = argument.GetTypeSymbol(document);
-
-                    if (type != null)
-                    {
-                        if (count is 1 && type.IsString())
-                        {
-                            // we have found the extension method that uses strings
-                            return AssertThat(expression, Is("Not", "EqualTo", argument, "IgnoreCase"), arguments, removeNameColon: true);
-                        }
-
-                        if (type.IsEnumerable())
-                        {
-                            // we have found the extension method that already gets an IEnumerable as first argument
-                            return AssertThat(expression, Is("Not", "EquivalentTo", argument), arguments, removeNameColon: true);
-                        }
-                    }
-
-                    // seems like we have found the extension method that uses a params array as arguments
-                    return AssertThat(expression, Is("Not", "EquivalentTo", GetAsArray(arguments)), arguments, count, removeNameColon: true);
+                    // we have found the extension method that uses strings
+                    return AssertThat(expression, Is("EqualTo", argument, "IgnoreCase"), arguments, removeNameColon: true);
                 }
 
+                if (type.IsEnumerable())
+                {
+                    // we have found the extension method that already gets an IEnumerable as first argument
+                    return AssertThat(expression, Is("EquivalentTo", argument), arguments, removeNameColon: true);
+                }
+            }
+
+            // seems like we have found the extension method that uses a params array as arguments
+            return AssertThat(expression, Is("EquivalentTo", GetAsArray(arguments)), arguments, count, removeNameColon: true);
+        }
+
+        private static InvocationExpressionSyntax ConvertNotBeEquivalentTo(Document document, ExpressionSyntax expression, SeparatedSyntaxList<ArgumentSyntax> arguments)
+        {
+            var count = arguments.Count;
+
+            if (count is 0)
+            {
                 return null;
             }
 
-            InvocationExpressionSyntax ConvertContain()
+            var argument = arguments[0];
+
+            var type = argument.GetTypeSymbol(document);
+
+            if (type != null)
             {
-                var argument = arguments[0];
-
-                var type = argument.GetTypeSymbol(document);
-
-                if (type != null)
+                if (count is 1 && type.IsString())
                 {
-                    if (type.IsEnumerable())
-                    {
-                        // we have found the extension method that seems to compare 2 IEnumerables
-                        return AssertThat(expression, Is("SupersetOf", argument), arguments, removeNameColon: true);
-                    }
+                    // we have found the extension method that uses strings
+                    return AssertThat(expression, Is("Not", "EqualTo", argument, "IgnoreCase"), arguments, removeNameColon: true);
                 }
 
-                return AssertThat(expression, Does("Contain", argument), arguments, removeNameColon: true);
+                if (type.IsEnumerable())
+                {
+                    // we have found the extension method that already gets an IEnumerable as first argument
+                    return AssertThat(expression, Is("Not", "EquivalentTo", argument), arguments, removeNameColon: true);
+                }
             }
+
+            // seems like we have found the extension method that uses a params array as arguments
+            return AssertThat(expression, Is("Not", "EquivalentTo", GetAsArray(arguments)), arguments, count, removeNameColon: true);
+        }
+
+        private static InvocationExpressionSyntax ConvertContain(Document document, ExpressionSyntax expression, SeparatedSyntaxList<ArgumentSyntax> arguments)
+        {
+            var argument = arguments[0];
+
+            var type = argument.GetTypeSymbol(document);
+
+            if (type != null && type.IsEnumerable())
+            {
+                // we have found the extension method that seems to compare 2 IEnumerables
+                return AssertThat(expression, Is("SupersetOf", argument), arguments, removeNameColon: true);
+            }
+
+            return AssertThat(expression, Does("Contain", argument), arguments, removeNameColon: true);
         }
 
         private static ImplicitArrayCreationExpressionSyntax GetAsArray(in SeparatedSyntaxList<ArgumentSyntax> arguments)
