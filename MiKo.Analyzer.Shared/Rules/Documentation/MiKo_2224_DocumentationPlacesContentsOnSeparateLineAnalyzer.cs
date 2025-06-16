@@ -85,8 +85,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            foreach (var issue in emptyElements.Select(_ => AnalyzeEmptyXmlElement(_, lines)))
+            foreach (var element in emptyElements)
             {
+                var issue = AnalyzeEmptyXmlElement(element, lines);
+
+                if (issue is null)
+                {
+                    continue;
+                }
+
                 if (results is null)
                 {
                     results = new List<Diagnostic>(1);
