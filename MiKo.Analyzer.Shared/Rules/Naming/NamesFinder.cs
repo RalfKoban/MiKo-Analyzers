@@ -209,8 +209,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                    .ReplaceWithProbe("_does_alter_", "_alters_")
                                    .ReplaceWithProbe("_remove_", "_removes_")
                                    .ReplaceWithProbe("_not_removes_", "_not_remove_")
+                                   .ReplaceWithProbe("_will_removes_", "_will_remove_")
+                                   .ReplaceWithProbe("_to_removes_", "_to_remove_")
                                    .ReplaceWithProbe("_reject_", "_rejects_")
                                    .ReplaceWithProbe("_not_rejects_", "_not_reject_")
+                                   .ReplaceWithProbe("_will_rejects_", "_will_reject_")
+                                   .ReplaceWithProbe("_to_rejects_", "_to_reject_")
+                                   .ReplaceWithProbe("_accept_", "_accepts_")
+                                   .ReplaceWithProbe("_not_accepts_", "_not_accept_")
+                                   .ReplaceWithProbe("_will_accepts_", "_will_accept_")
+                                   .ReplaceWithProbe("_to_accepts_", "_to_accept_")
+                                   .ReplaceWithProbe("_not_keeps_", "_not_keep_")
+                                   .ReplaceWithProbe("_will_keeps_", "_will_keep_")
+                                   .ReplaceWithProbe("_to_keeps_", "_to_keep_")
                                    .ToStringAndRelease();
 
             return result;
