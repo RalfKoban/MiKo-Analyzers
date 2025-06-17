@@ -156,6 +156,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                    .ReplaceWithProbe("NoThrow", "ThrowsNo")
                                    .ReplaceWithProbe("NoError", "HasNoError")
                                    .ReplaceWithProbe("Already", "IsAlready")
+                                   .ReplaceWithProbe("Keep", "Keeps")
+                                   .ReplaceWithProbe("Keepss", "Keeps") // fix typo
                                    .ReplaceWithProbe(nameof(ArgumentException) + "Thrown", "Throws" + nameof(ArgumentException))
                                    .ReplaceWithProbe(nameof(ArgumentNullException) + "Thrown", "Throws" + nameof(ArgumentNullException))
                                    .ReplaceWithProbe(nameof(ArgumentOutOfRangeException) + "Thrown", "Throws" + nameof(ArgumentOutOfRangeException))
@@ -204,6 +206,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                    .ReplaceWithProbe("R_eference", "_reference")
                                    .ReplaceWithProbe("T_ype", "_type")
                                    .ReplaceWithProbe("_is_is_", "_is_")
+                                   .ReplaceWithProbe("_does_alter_", "_alters_")
+                                   .ReplaceWithProbe("_remove_", "_removes_")
+                                   .ReplaceWithProbe("_not_removes_", "_not_remove_")
+                                   .ReplaceWithProbe("_reject_", "_rejects_")
+                                   .ReplaceWithProbe("_not_rejects_", "_not_reject_")
                                    .ToStringAndRelease();
 
             return result;
