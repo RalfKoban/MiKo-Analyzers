@@ -63,6 +63,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 yield return new Pair(term + "_Return", "Returns");
                 yield return new Pair(term + "Throw", "Throws");
                 yield return new Pair(term + "_Throw", "Throws");
+                yield return new Pair(term + "Run", "Runs");
+                yield return new Pair(term + "_Run", "Runs");
                 yield return new Pair(term, "Does");
 
                 yield return new Pair("_" + lowerTerm + "_be_", "_is_");
@@ -74,6 +76,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 yield return new Pair("_" + lowerTerm + "_not_be_", "_is_not_");
                 yield return new Pair("_" + lowerTerm + "_return_", "_returns_");
                 yield return new Pair("_" + lowerTerm + "_returns_", "_returns_");
+                yield return new Pair("_" + lowerTerm + "_run", "_runs");
                 yield return new Pair("_" + lowerTerm + "_throw_", "_throws_");
                 yield return new Pair("_" + lowerTerm + "_", "_does_");
             }

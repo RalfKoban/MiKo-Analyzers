@@ -131,6 +131,8 @@ public class TestMe
         [TestCase("SomethingShouldNtBeAnything", "SomethingIsNotAnything")]
         [TestCase("SomethingShouldntBeAnything", "SomethingIsNotAnything")]
         [TestCase("SomethingShould_BeAnything", "SomethingIsAnything")]
+        [TestCase("SomethingShouldRunAnything", "SomethingRunsAnything")]
+        [TestCase("SomethingShould_RunAnything", "SomethingRunsAnything")]
         [TestCase("SomethingShouldReturnAnything", "SomethingReturnsAnything")]
         [TestCase("SomethingShouldReturnsAnything", "SomethingReturnsAnything")]
         [TestCase("SomethingShould_ReturnAnything", "SomethingReturnsAnything")]
@@ -151,6 +153,8 @@ public class TestMe
         [TestCase("Something_should_return_Anything", "Something_returns_Anything")]
         [TestCase("Something_should_returns_Anything", "Something_returns_Anything")]
         [TestCase("Something_should_throw_Anything", "Something_throws_Anything")]
+        [TestCase("Something_should_run_Anything", "Something_runs_Anything")]
+        [TestCase("Something_should_run", "Something_runs")]
         public void Code_gets_fixed_for_method_(string method, string wanted) => VerifyCSharpFix(
                                                                                              "using System; class TestMe { void " + method + "() { } }",
                                                                                              "using System; class TestMe { void " + wanted + "() { } }");
