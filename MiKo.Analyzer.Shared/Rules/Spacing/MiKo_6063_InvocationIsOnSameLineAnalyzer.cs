@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class MiKo_6063_InvocationIsOnSameLineAnalyzer : SpacingAnalyzer
+    public sealed class MiKo_6063_InvocationIsOnSameLineAnalyzer : SpacingAnalyzer
     {
         public const string Id = "MiKo_6063";
 

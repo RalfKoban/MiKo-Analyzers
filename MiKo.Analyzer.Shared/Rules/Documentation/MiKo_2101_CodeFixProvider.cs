@@ -151,9 +151,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comment = XmlText(commentedOutCode).WithTrailingXmlComment();
 
-            return XmlElement(Constants.XmlTag.Code, comment)
-                   .WithLeadingXmlComment()
-                   .WithTrailingNewLine();
+            return XmlElement(Constants.XmlTag.Code, comment).WithLeadingXmlComment()
+                                                             .WithTrailingNewLine();
         }
     }
 }

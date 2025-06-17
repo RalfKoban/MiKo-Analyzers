@@ -74,11 +74,33 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
         }
 
+        private static bool IsNested(ExpressionSyntax node)
+        {
+            foreach (var ancestor in node.Ancestors())
+            {
+                switch (ancestor)
+                {
+                    case StatementSyntax _: return false;
+                    case EqualsValueClauseSyntax _: return false;
+                    case InitializerExpressionSyntax _: return false;
+                    case MemberDeclarationSyntax _: return false;
+                    case ArrowExpressionClauseSyntax _: return false;
+                }
+
+                if (ancestor.IsAnyKind(Expressions))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
             var node = (ExpressionSyntax)context.Node;
 
-            if (node.Ancestors().Any(_ => _.IsAnyKind(Expressions)))
+            if (IsNested(node))
             {
                 // we are a nested one, hence we do not need to calculate and report again
                 return;

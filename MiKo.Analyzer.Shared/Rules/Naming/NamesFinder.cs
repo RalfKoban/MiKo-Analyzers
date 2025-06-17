@@ -156,6 +156,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                    .ReplaceWithProbe("NoThrow", "ThrowsNo")
                                    .ReplaceWithProbe("NoError", "HasNoError")
                                    .ReplaceWithProbe("Already", "IsAlready")
+                                   .ReplaceWithProbe("Keep", "Keeps")
+                                   .ReplaceWithProbe("Keepss", "Keeps") // fix typo
                                    .ReplaceWithProbe(nameof(ArgumentException) + "Thrown", "Throws" + nameof(ArgumentException))
                                    .ReplaceWithProbe(nameof(ArgumentNullException) + "Thrown", "Throws" + nameof(ArgumentNullException))
                                    .ReplaceWithProbe(nameof(ArgumentOutOfRangeException) + "Thrown", "Throws" + nameof(ArgumentOutOfRangeException))
@@ -204,6 +206,22 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                    .ReplaceWithProbe("R_eference", "_reference")
                                    .ReplaceWithProbe("T_ype", "_type")
                                    .ReplaceWithProbe("_is_is_", "_is_")
+                                   .ReplaceWithProbe("_does_alter_", "_alters_")
+                                   .ReplaceWithProbe("_remove_", "_removes_")
+                                   .ReplaceWithProbe("_not_removes_", "_not_remove_")
+                                   .ReplaceWithProbe("_will_removes_", "_will_remove_")
+                                   .ReplaceWithProbe("_to_removes_", "_to_remove_")
+                                   .ReplaceWithProbe("_reject_", "_rejects_")
+                                   .ReplaceWithProbe("_not_rejects_", "_not_reject_")
+                                   .ReplaceWithProbe("_will_rejects_", "_will_reject_")
+                                   .ReplaceWithProbe("_to_rejects_", "_to_reject_")
+                                   .ReplaceWithProbe("_accept_", "_accepts_")
+                                   .ReplaceWithProbe("_not_accepts_", "_not_accept_")
+                                   .ReplaceWithProbe("_will_accepts_", "_will_accept_")
+                                   .ReplaceWithProbe("_to_accepts_", "_to_accept_")
+                                   .ReplaceWithProbe("_not_keeps_", "_not_keep_")
+                                   .ReplaceWithProbe("_will_keeps_", "_will_keep_")
+                                   .ReplaceWithProbe("_to_keeps_", "_to_keep_")
                                    .ToStringAndRelease();
 
             return result;

@@ -13,7 +13,7 @@ namespace System.Text
 {
     internal static class StringBuilderExtensions
     {
-        private const int QuickSubstringProbeLengthThreshold = 6;
+        private const int QuickSubstringProbeLengthThreshold = 8;
 
         private static readonly ArrayPool<char> SharedPool = ArrayPool<char>.Shared;
 
@@ -555,7 +555,7 @@ namespace System.Text
                 return 0;
             }
 
-            // Note:
+            // Performance-Note:
             // - do not use a separate if condition for the delta being zero as that may not happen often and the conditional check therefore is too costly
             var lastIndex = other.Length - 1;
             var startChar = other[0];
@@ -563,9 +563,11 @@ namespace System.Text
 
             for (var position = 0; position <= delta; position++)
             {
-                // could be part in the replacement only if characters match both at start and end
+                // Performance-Note:
+                // - do not split or re-calculate last index position each time as this gets invoked millions of time and re-calculation is too costly in such situation
                 if (current[position] == startChar && current[lastIndex + position] == endChar)
                 {
+                    // could be part in the replacement as characters match both at start and end
                     return position;
                 }
             }
