@@ -65,6 +65,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 yield return new Pair(term + "_Throw", "Throws");
                 yield return new Pair(term + "Run", "Runs");
                 yield return new Pair(term + "_Run", "Runs");
+                yield return new Pair(term + "DoNothing", "DoesNothing");
+                yield return new Pair(term + "_DoNothing", "DoesNothing");
+                yield return new Pair(term + "Handle", "Handles");
+                yield return new Pair(term + "_Handle", "Handles");
                 yield return new Pair(term, "Does");
 
                 yield return new Pair("_" + lowerTerm + "_be_", "_is_");
@@ -78,21 +82,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 yield return new Pair("_" + lowerTerm + "_returns_", "_returns_");
                 yield return new Pair("_" + lowerTerm + "_run", "_runs");
                 yield return new Pair("_" + lowerTerm + "_throw_", "_throws_");
+                yield return new Pair("_" + lowerTerm + "_handle_", "_handles_");
                 yield return new Pair("_" + lowerTerm + "_", "_does_");
             }
         }
 
-        private static string FindBetterName(string symbolName)
-        {
-            var result = symbolName.AsCachedBuilder();
-
-            foreach (var pair in ReplacementMap)
-            {
-                result.ReplaceWithProbe(pair.Key, pair.Value);
-            }
-
-            return result.ToStringAndRelease();
-        }
+        private static string FindBetterName(string symbolName) => symbolName.AsCachedBuilder()
+                                                                             .ReplaceAllWithProbe(ReplacementMap)
+                                                                             .ToStringAndRelease();
 
         private Diagnostic[] AnalyzeName(ISymbol symbol)
         {
