@@ -1086,6 +1086,60 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_field_array_initializer_with_contained_object_creations()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class Dto
+{
+    public int Id { get; set; }
+    public int Value { get; set; }
+}
+
+public class TestMe
+{
+    private Dto[] MyField = new Dto[]
+                            {
+                              new Dto { Id = -1, Value = 4711 },
+                              new Dto
+                            {
+                                Id = 1,
+                                Value = 42,
+                            },
+                              new Dto { Id = 2, Value = 0815 },
+                            };
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class Dto
+{
+    public int Id { get; set; }
+    public int Value { get; set; }
+}
+
+public class TestMe
+{
+    private Dto[] MyField = new Dto[]
+                                {
+                                    new Dto { Id = -1, Value = 4711 },
+                                    new Dto
+                                        {
+                                            Id = 1,
+                                            Value = 42,
+                                        },
+                                    new Dto { Id = 2, Value = 0815 },
+                                };
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_implicit_field_collection_initializer_when_placed_on_position_before_position_of_type()
         {
             const string OriginalCode = @"
@@ -1236,6 +1290,187 @@ public class TestMe : IList<int>
                                      2,
                                      3,
                                  };
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_nested_dictionary_initializer_when_placed_on_position_after_position_of_type()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public record Testee
+{
+    public Dictionary<string, string[]> Headers { get; set; }
+}
+
+public class TestMe
+{
+    private Testee DoSomething()
+    {
+        var result = new Testee
+        {
+            Headers = new Dictionary(string, string[])
+            {
+                { ""key"", [""value""] },
+            },
+        };
+
+        return result;
+    }
+}
+";
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public record Testee
+{
+    public Dictionary<string, string[]> Headers { get; set; }
+}
+
+public class TestMe
+{
+    private Testee DoSomething()
+    {
+        var result = new Testee
+                         {
+                             Headers = new Dictionary(string, string[])
+                                           {
+                                               { ""key"", [""value""] },
+                                           },
+                         };
+
+        return result;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_nested_dictionary_initializer_spanning_multiple_lines_when_placed_on_position_after_position_of_type()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public record Testee
+{
+    public Dictionary<string, string[]> Headers { get; set; }
+}
+
+public class TestMe
+{
+    private Testee DoSomething()
+    {
+        var result = new Testee
+        {
+            Headers = new Dictionary(string, string[])
+            {
+                {
+                    ""key"", [""value""]
+                },
+            },
+        };
+
+        return result;
+    }
+}
+";
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public record Testee
+{
+    public Dictionary<string, string[]> Headers { get; set; }
+}
+
+public class TestMe
+{
+    private Testee DoSomething()
+    {
+        var result = new Testee
+                         {
+                             Headers = new Dictionary(string, string[])
+                                           {
+                                               {
+                                                   ""key"", [""value""]
+                                               },
+                                           },
+                         };
+
+        return result;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_nested_object_initializer_spanning_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public record Testee
+{
+    public Testee Nested { get; set; }
+
+    public string Name { get; set; }
+}
+
+public class TestMe
+{
+    private Testee DoSomething()
+    {
+        var result = new Testee
+        {
+            Nested = new Testeee
+            {
+                Name = ""nested""
+            },
+            Name = ""unnested""
+        };
+
+        return result;
+    }
+}
+";
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public record Testee
+{
+    public Testee Nested { get; set; }
+
+    public string Name { get; set; }
+}
+
+public class TestMe
+{
+    private Testee DoSomething()
+    {
+        var result = new Testee
+                         {
+                             Nested = new Testeee
+                                          {
+                                              Name = ""nested""
+                                          },
+                             Name = ""unnested""
+                         };
+
+        return result;
+    }
 }
 ";
 
