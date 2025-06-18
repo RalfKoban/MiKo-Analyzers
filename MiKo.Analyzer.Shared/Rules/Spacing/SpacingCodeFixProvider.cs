@@ -249,5 +249,34 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                          .WithExpressions(GetUpdatedSyntax(syntax.Expressions, openBraceToken, spaces + Constants.Indentation))
                          .WithCloseBraceToken(closeBraceToken.WithLeadingSpaces(closeBraceTokenSpaces));
         }
+
+        protected ObjectCreationExpressionSyntax GetUpdatedSyntax(ObjectCreationExpressionSyntax syntax, in int spaces)
+        {
+            if (syntax.Initializer is InitializerExpressionSyntax initializer)
+            {
+                return syntax.WithInitializer(GetUpdatedSyntax(initializer, spaces))
+                             .WithLeadingSpaces(spaces);
+            }
+
+            return syntax.WithLeadingSpaces(spaces);
+        }
+
+#if VS2022
+
+        protected CollectionExpressionSyntax GetUpdatedSyntax(CollectionExpressionSyntax syntax, in int spaces)
+        {
+            var openBracketToken = syntax.OpenBracketToken;
+            var closeBracketToken = syntax.CloseBracketToken;
+            var closeBracketTokenSpaces = openBracketToken.IsOnSameLineAs(closeBracketToken) ? 0 : spaces;
+
+            return syntax.WithOpenBracketToken(openBracketToken.WithLeadingSpaces(spaces))
+                         .WithElements(GetUpdatedSyntax(syntax.Elements, openBracketToken, spaces + Constants.Indentation))
+                         .WithCloseBracketToken(closeBracketToken.WithLeadingSpaces(closeBracketTokenSpaces));
+        }
+
+        protected ExpressionElementSyntax GetUpdatedSyntax(ExpressionElementSyntax syntax, in int spaces) => syntax.WithExpression(GetUpdatedSyntax(syntax.Expression, spaces + Constants.Indentation))
+                                                                                                                   .WithLeadingSpaces(spaces);
+
+#endif
     }
 }
