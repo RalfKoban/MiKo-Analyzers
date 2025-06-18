@@ -31,6 +31,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 case EqualsValueClauseSyntax clause:
                     return clause.EqualsToken.GetPositionAfterEnd();
 
+                case AssignmentExpressionSyntax assignment:
+                    return assignment.OperatorToken.GetPositionAfterEnd();
+
                 default:
                     return syntax.CloseBracketToken.GetStartPosition();
             }
