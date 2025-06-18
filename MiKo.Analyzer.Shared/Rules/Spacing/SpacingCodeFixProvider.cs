@@ -90,134 +90,164 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
         }
 
-        protected static ArgumentSyntax PlacedOnSameLine(ArgumentSyntax argument) => argument.WithoutTrivia()
-                                                                                             .WithRefKindKeyword(argument.RefKindKeyword.WithoutLeadingTrivia().WithTrailingSpace())
-                                                                                             .WithRefOrOutKeyword(argument.RefOrOutKeyword.WithoutLeadingTrivia().WithTrailingSpace())
-                                                                                             .WithNameColon(PlacedOnSameLine(argument.NameColon))
-                                                                                             .WithExpression(PlacedOnSameLine(argument.Expression));
+        protected static ArgumentSyntax PlacedOnSameLine(ArgumentSyntax node) => node.WithoutTrivia()
+                                                                                     .WithRefKindKeyword(node.RefKindKeyword.WithoutLeadingTrivia().WithTrailingSpace())
+                                                                                     .WithRefOrOutKeyword(node.RefOrOutKeyword.WithoutLeadingTrivia().WithTrailingSpace())
+                                                                                     .WithNameColon(PlacedOnSameLine(node.NameColon))
+                                                                                     .WithExpression(PlacedOnSameLine(node.Expression));
 
-        protected static ArgumentListSyntax PlacedOnSameLine(ArgumentListSyntax argumentList) => argumentList.WithoutTrivia()
-                                                                                                             .WithOpenParenToken(argumentList.OpenParenToken.WithoutTrivia())
-                                                                                                             .WithArguments(PlacedOnSameLine(argumentList.Arguments))
-                                                                                                             .WithCloseParenToken(argumentList.CloseParenToken.WithoutTrivia());
+        protected static ArgumentListSyntax PlacedOnSameLine(ArgumentListSyntax node) => node.WithoutTrivia()
+                                                                                             .WithOpenParenToken(node.OpenParenToken.WithoutTrivia())
+                                                                                             .WithArguments(PlacedOnSameLine(node.Arguments))
+                                                                                             .WithCloseParenToken(node.CloseParenToken.WithoutTrivia());
 
-        protected static BinaryExpressionSyntax PlacedOnSameLine(BinaryExpressionSyntax binary) => binary.WithoutTrivia()
-                                                                                                         .WithLeft(PlacedOnSameLine(binary.Left))
-                                                                                                         .WithOperatorToken(binary.OperatorToken.WithLeadingSpace().WithoutTrailingTrivia())
-                                                                                                         .WithRight(PlacedOnSameLine(binary.Right));
+        protected static BinaryExpressionSyntax PlacedOnSameLine(BinaryExpressionSyntax node) => node.WithoutTrivia()
+                                                                                                     .WithLeft(PlacedOnSameLine(node.Left))
+                                                                                                     .WithOperatorToken(node.OperatorToken.WithLeadingSpace().WithoutTrailingTrivia())
+                                                                                                     .WithRight(PlacedOnSameLine(node.Right));
 
-        protected static CasePatternSwitchLabelSyntax PlacedOnSameLine(CasePatternSwitchLabelSyntax patternLabel) => patternLabel.WithoutTrivia()
-                                                                                                                                 .WithKeyword(patternLabel.Keyword.WithoutTrailingTrivia())
-                                                                                                                                 .WithPattern(PlacedOnSameLine(patternLabel.Pattern).WithLeadingSpace().WithoutTrailingTrivia())
-                                                                                                                                 .WithWhenClause(PlacedOnSameLine(patternLabel.WhenClause))
-                                                                                                                                 .WithColonToken(patternLabel.ColonToken.WithoutLeadingTrivia());
+        protected static CasePatternSwitchLabelSyntax PlacedOnSameLine(CasePatternSwitchLabelSyntax node) => node.WithoutTrivia()
+                                                                                                                 .WithKeyword(node.Keyword.WithoutTrailingTrivia())
+                                                                                                                 .WithPattern(PlacedOnSameLine(node.Pattern).WithLeadingSpace().WithoutTrailingTrivia())
+                                                                                                                 .WithWhenClause(PlacedOnSameLine(node.WhenClause))
+                                                                                                                 .WithColonToken(node.ColonToken.WithoutLeadingTrivia());
 
-        protected static CaseSwitchLabelSyntax PlacedOnSameLine(CaseSwitchLabelSyntax label) => label.WithoutTrivia()
-                                                                                                     .WithKeyword(label.Keyword.WithoutTrailingTrivia())
-                                                                                                     .WithValue(PlacedOnSameLine(label.Value).WithLeadingSpace().WithoutTrailingTrivia())
-                                                                                                     .WithColonToken(label.ColonToken.WithoutLeadingTrivia());
+        protected static CaseSwitchLabelSyntax PlacedOnSameLine(CaseSwitchLabelSyntax node) => node.WithoutTrivia()
+                                                                                                   .WithKeyword(node.Keyword.WithoutTrailingTrivia())
+                                                                                                   .WithValue(PlacedOnSameLine(node.Value).WithLeadingSpace().WithoutTrailingTrivia())
+                                                                                                   .WithColonToken(node.ColonToken.WithoutLeadingTrivia());
 
-        protected static ConstantPatternSyntax PlacedOnSameLine(ConstantPatternSyntax constantPattern) => constantPattern.WithoutTrivia()
-                                                                                                                         .WithExpression(PlacedOnSameLine(constantPattern.Expression));
+        protected static ConstantPatternSyntax PlacedOnSameLine(ConstantPatternSyntax node) => node.WithoutTrivia()
+                                                                                                   .WithExpression(PlacedOnSameLine(node.Expression));
 
-        protected static DeclarationPatternSyntax PlacedOnSameLine(DeclarationPatternSyntax declaration) => declaration.WithoutTrivia()
-                                                                                                                       .WithType(declaration.Type.WithoutTrailingTrivia())
-                                                                                                                       .WithDesignation(PlacedOnSameLine(declaration.Designation));
+        protected static DeclarationPatternSyntax PlacedOnSameLine(DeclarationPatternSyntax node) => node.WithoutTrivia()
+                                                                                                         .WithType(node.Type.WithoutTrailingTrivia())
+                                                                                                         .WithDesignation(PlacedOnSameLine(node.Designation));
 
-        protected static InvocationExpressionSyntax PlacedOnSameLine(InvocationExpressionSyntax invocation) => invocation.WithoutTrivia()
-                                                                                                                         .WithExpression(PlacedOnSameLine(invocation.Expression))
-                                                                                                                         .WithArgumentList(PlacedOnSameLine(invocation.ArgumentList));
+        protected static InvocationExpressionSyntax PlacedOnSameLine(InvocationExpressionSyntax node) => node.WithoutTrivia()
+                                                                                                             .WithExpression(PlacedOnSameLine(node.Expression))
+                                                                                                             .WithArgumentList(PlacedOnSameLine(node.ArgumentList));
 
-        protected static IsPatternExpressionSyntax PlacedOnSameLine(IsPatternExpressionSyntax pattern) => pattern.WithoutTrivia()
-                                                                                                                 .WithPattern(PlacedOnSameLine(pattern.Pattern))
-                                                                                                                 .WithIsKeyword(pattern.IsKeyword.WithLeadingSpace().WithoutTrailingTrivia())
-                                                                                                                 .WithExpression(PlacedOnSameLine(pattern.Expression));
+        protected static IsPatternExpressionSyntax PlacedOnSameLine(IsPatternExpressionSyntax node) => node.WithoutTrivia()
+                                                                                                           .WithPattern(PlacedOnSameLine(node.Pattern))
+                                                                                                           .WithIsKeyword(node.IsKeyword.WithLeadingSpace().WithoutTrailingTrivia())
+                                                                                                           .WithExpression(PlacedOnSameLine(node.Expression));
 
-        protected static MemberAccessExpressionSyntax PlacedOnSameLine(MemberAccessExpressionSyntax maes) => maes.WithoutTrivia()
-                                                                                                                 .WithName(PlacedOnSameLine(maes.Name))
-                                                                                                                 .WithOperatorToken(maes.OperatorToken.WithoutTrivia())
-                                                                                                                 .WithExpression(PlacedOnSameLine(maes.Expression));
+        protected static MemberAccessExpressionSyntax PlacedOnSameLine(MemberAccessExpressionSyntax node) => node.WithoutTrivia()
+                                                                                                                 .WithName(PlacedOnSameLine(node.Name))
+                                                                                                                 .WithOperatorToken(node.OperatorToken.WithoutTrivia())
+                                                                                                                 .WithExpression(PlacedOnSameLine(node.Expression));
 
-        protected static NameSyntax PlacedOnSameLine(NameSyntax name)
+        protected static NameSyntax PlacedOnSameLine(NameSyntax node)
         {
-            switch (name)
+            switch (node)
             {
                 // note that 'GenericNameSyntax' inherits from 'SimpleNameSyntax', so we have to check that first
                 case GenericNameSyntax genericName:
+                {
                     return genericName.WithoutTrivia()
                                       .WithIdentifier(genericName.Identifier.WithoutTrivia())
                                       .WithTypeArgumentList(PlacedOnSameLine(genericName.TypeArgumentList));
+                }
 
                 case SimpleNameSyntax simpleName:
+                {
                     return simpleName.WithoutTrivia();
+                }
 
                 default:
-                    return name.WithoutTrivia();
+                {
+                    return node.WithoutTrivia();
+                }
             }
         }
 
-        protected static ObjectCreationExpressionSyntax PlacedOnSameLine(ObjectCreationExpressionSyntax creation) => creation.WithoutTrivia()
-                                                                                                                             .WithNewKeyword(creation.NewKeyword.WithoutTrivia())
-                                                                                                                             .WithType(PlacedOnSameLine(creation.Type).WithLeadingSpace())
-                                                                                                                             .WithArgumentList(PlacedOnSameLine(creation.ArgumentList))
-                                                                                                                             .WithInitializer(PlacedOnSameLine(creation.Initializer));
+        protected static ObjectCreationExpressionSyntax PlacedOnSameLine(ObjectCreationExpressionSyntax node) => node.WithoutTrivia()
+                                                                                                                     .WithNewKeyword(node.NewKeyword.WithoutTrivia())
+                                                                                                                     .WithType(PlacedOnSameLine(node.Type).WithLeadingSpace())
+                                                                                                                     .WithArgumentList(PlacedOnSameLine(node.ArgumentList))
+                                                                                                                     .WithInitializer(PlacedOnSameLine(node.Initializer));
 
-        protected static SingleVariableDesignationSyntax PlacedOnSameLine(SingleVariableDesignationSyntax singleVariable) => singleVariable.WithoutTrivia()
-                                                                                                                                           .WithIdentifier(singleVariable.Identifier.WithoutTrivia());
+        protected static SingleVariableDesignationSyntax PlacedOnSameLine(SingleVariableDesignationSyntax node) => node.WithoutTrivia()
+                                                                                                                       .WithIdentifier(node.Identifier.WithoutTrivia());
 
-        protected static SwitchExpressionArmSyntax PlacedOnSameLine(SwitchExpressionArmSyntax arm) => arm.WithoutTrailingTrivia()
-                                                                                                         .WithEqualsGreaterThanToken(arm.EqualsGreaterThanToken.WithLeadingSpace().WithoutTrailingTrivia())
-                                                                                                         .WithExpression(PlacedOnSameLine(arm.Expression))
-                                                                                                         .WithWhenClause(PlacedOnSameLine(arm.WhenClause))
-                                                                                                         .WithPattern(PlacedOnSameLine(arm.Pattern));
+        protected static SwitchExpressionArmSyntax PlacedOnSameLine(SwitchExpressionArmSyntax node) => node.WithoutTrailingTrivia()
+                                                                                                           .WithEqualsGreaterThanToken(node.EqualsGreaterThanToken.WithLeadingSpace().WithoutTrailingTrivia())
+                                                                                                           .WithExpression(PlacedOnSameLine(node.Expression))
+                                                                                                           .WithWhenClause(PlacedOnSameLine(node.WhenClause))
+                                                                                                           .WithPattern(PlacedOnSameLine(node.Pattern));
 
-        protected static ThrowExpressionSyntax PlacedOnSameLine(ThrowExpressionSyntax throwExpression) => throwExpression.WithoutTrivia()
-                                                                                                                         .WithThrowKeyword(throwExpression.ThrowKeyword.WithoutTrivia())
-                                                                                                                         .WithExpression(PlacedOnSameLine(throwExpression.Expression));
+        protected static ThrowExpressionSyntax PlacedOnSameLine(ThrowExpressionSyntax node) => node.WithoutTrivia()
+                                                                                                   .WithThrowKeyword(node.ThrowKeyword.WithoutTrivia())
+                                                                                                   .WithExpression(PlacedOnSameLine(node.Expression));
 
-        protected static TypeArgumentListSyntax PlacedOnSameLine(TypeArgumentListSyntax typeArgumentList) => typeArgumentList.WithoutTrivia()
-                                                                                                                             .WithArguments(PlacedOnSameLine(typeArgumentList.Arguments))
-                                                                                                                             .WithGreaterThanToken(typeArgumentList.GreaterThanToken.WithoutTrivia())
-                                                                                                                             .WithLessThanToken(typeArgumentList.LessThanToken.WithoutTrivia());
+        protected static TypeArgumentListSyntax PlacedOnSameLine(TypeArgumentListSyntax node) => node.WithoutTrivia()
+                                                                                                     .WithArguments(PlacedOnSameLine(node.Arguments))
+                                                                                                     .WithGreaterThanToken(node.GreaterThanToken.WithoutTrivia())
+                                                                                                     .WithLessThanToken(node.LessThanToken.WithoutTrivia());
 
-        protected static WhenClauseSyntax PlacedOnSameLine(WhenClauseSyntax clause) => clause?.WithoutTrivia()
-                                                                                              .WithWhenKeyword(clause.WhenKeyword.WithLeadingSpace().WithoutTrailingTrivia())
-                                                                                              .WithCondition(PlacedOnSameLine(clause.Condition));
+        protected static WhenClauseSyntax PlacedOnSameLine(WhenClauseSyntax node) => node?.WithoutTrivia()
+                                                                                          .WithWhenKeyword(node.WhenKeyword.WithLeadingSpace().WithoutTrailingTrivia())
+                                                                                          .WithCondition(PlacedOnSameLine(node.Condition));
 
-        protected SeparatedSyntaxList<TSyntaxNode> GetUpdatedSyntax<TSyntaxNode>(in SeparatedSyntaxList<TSyntaxNode> expressions, in SyntaxToken openBraceToken, in int leadingSpaces) where TSyntaxNode : SyntaxNode
+        protected SeparatedSyntaxList<TSyntaxNode> GetUpdatedSyntax<TSyntaxNode>(in SeparatedSyntaxList<TSyntaxNode> nodes, in SyntaxToken openBraceToken, in int leadingSpaces) where TSyntaxNode : SyntaxNode
         {
-            if (expressions.Count is 0)
+            if (nodes.Count is 0)
             {
                 return SyntaxFactory.SeparatedList<TSyntaxNode>();
             }
 
             int? currentLine = openBraceToken.GetStartingLine();
 
-            var updatedExpressions = new List<TSyntaxNode>(expressions.Count);
+            var updatedNodes = new List<TSyntaxNode>(nodes.Count);
 
-            foreach (var expression in expressions)
+            foreach (var node in nodes)
             {
-                var startingLine = expression.GetStartingLine();
+                var startingLine = node.GetStartingLine();
 
                 if (currentLine == startingLine)
                 {
                     // it is on same line, so do not add any additional space
-                    updatedExpressions.Add(expression);
+                    updatedNodes.Add(node);
                 }
                 else
                 {
                     currentLine = startingLine;
 
                     // it seems to be on a different line, so add with spaces
-                    var updatedExpression = GetUpdatedSyntax(expression, leadingSpaces);
+                    var updatedExpression = GetUpdatedSyntax(node, leadingSpaces);
 
-                    updatedExpressions.Add(updatedExpression);
+                    updatedNodes.Add(updatedExpression);
                 }
             }
 
-            return SyntaxFactory.SeparatedList(updatedExpressions, expressions.GetSeparators());
+            return SyntaxFactory.SeparatedList(updatedNodes, nodes.GetSeparators());
         }
 
         protected virtual TSyntaxNode GetUpdatedSyntax<TSyntaxNode>(TSyntaxNode node, in int leadingSpaces) where TSyntaxNode : SyntaxNode => node.WithLeadingSpaces(leadingSpaces);
+
+        protected AnonymousObjectCreationExpressionSyntax GetUpdatedSyntax(AnonymousObjectCreationExpressionSyntax node, in int spaces)
+        {
+            var openBraceToken = node.OpenBraceToken;
+            var closeBraceToken = node.CloseBraceToken;
+
+            var closeBraceTokenSpaces = openBraceToken.IsOnSameLineAs(closeBraceToken) ? 0 : spaces;
+
+            return node.WithOpenBraceToken(openBraceToken.WithLeadingSpaces(spaces))
+                       .WithInitializers(GetUpdatedSyntax(node.Initializers, openBraceToken, spaces + Constants.Indentation))
+                       .WithCloseBraceToken(closeBraceToken.WithLeadingSpaces(closeBraceTokenSpaces));
+        }
+
+        protected InitializerExpressionSyntax GetUpdatedSyntax(InitializerExpressionSyntax node, in int spaces)
+        {
+            var openBraceToken = node.OpenBraceToken;
+            var closeBraceToken = node.CloseBraceToken;
+
+            var closeBraceTokenSpaces = openBraceToken.IsOnSameLineAs(closeBraceToken) ? 0 : spaces;
+
+            return node.WithOpenBraceToken(openBraceToken.WithLeadingSpaces(spaces))
+                       .WithExpressions(GetUpdatedSyntax(node.Expressions, openBraceToken, spaces + Constants.Indentation))
+                       .WithCloseBraceToken(closeBraceToken.WithLeadingSpaces(closeBraceTokenSpaces));
+        }
     }
 }
