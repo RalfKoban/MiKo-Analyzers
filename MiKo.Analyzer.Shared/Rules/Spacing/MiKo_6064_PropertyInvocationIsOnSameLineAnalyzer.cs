@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return member.IsKind(SyntaxKind.SimpleMemberAccessExpression)
                 && member.Name is IdentifierNameSyntax name
                 && member.Expression is IdentifierNameSyntax expression
-                && name.GetStartingLine() != expression.GetStartingLine();
+                && name.IsOnSameLineAs(expression) is false;
         }
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)

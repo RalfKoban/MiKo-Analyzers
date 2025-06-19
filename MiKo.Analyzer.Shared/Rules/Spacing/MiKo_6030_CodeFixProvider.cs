@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             switch (node)
             {
                 case InitializerExpressionSyntax initializer when initializer.IsKind(SyntaxKind.ComplexElementInitializerExpression) // such as for dictionaries
-                                                               && initializer.OpenBraceToken.GetStartingLine() != initializer.CloseBraceToken.GetStartingLine():
+                                                               && initializer.OpenBraceToken.IsOnSameLineAs(initializer.CloseBraceToken) is false:
                     return GetUpdatedSyntax(initializer, leadingSpaces) as TSyntaxNode;
 
                 case ImplicitObjectCreationExpressionSyntax creation:

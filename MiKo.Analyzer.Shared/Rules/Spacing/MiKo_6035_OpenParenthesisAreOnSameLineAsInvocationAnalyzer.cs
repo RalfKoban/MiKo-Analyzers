@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private void AnalyzeNameSyntax(in SyntaxNodeAnalysisContext context, NameSyntax name, in SyntaxToken parenthesis)
         {
-            if (parenthesis.IsOnSameLineAs(name) is false)
+            if (name.IsOnSameLineAs(parenthesis) is false)
             {
                 ReportDiagnostics(context, Issue(parenthesis));
             }

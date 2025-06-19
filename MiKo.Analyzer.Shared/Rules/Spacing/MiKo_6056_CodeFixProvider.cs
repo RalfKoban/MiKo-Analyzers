@@ -21,17 +21,17 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             switch (node)
             {
-                case InitializerExpressionSyntax initializer when initializer.OpenBraceToken.GetStartingLine() != initializer.CloseBraceToken.GetStartingLine():
+                case InitializerExpressionSyntax initializer when initializer.OpenBraceToken.IsOnSameLineAs(initializer.CloseBraceToken) is false:
                 {
                     return GetUpdatedSyntax(initializer, leadingSpaces) as TSyntaxNode;
                 }
 
-                case AnonymousObjectCreationExpressionSyntax anonymous when anonymous.OpenBraceToken.GetStartingLine() != anonymous.CloseBraceToken.GetStartingLine():
+                case AnonymousObjectCreationExpressionSyntax anonymous when anonymous.OpenBraceToken.IsOnSameLineAs(anonymous.CloseBraceToken) is false:
                 {
                     return GetUpdatedSyntax(anonymous, leadingSpaces) as TSyntaxNode;
                 }
 
-                case CollectionExpressionSyntax expression when expression.OpenBracketToken.GetStartingLine() != expression.CloseBracketToken.GetStartingLine():
+                case CollectionExpressionSyntax expression when expression.OpenBracketToken.IsOnSameLineAs(expression.CloseBracketToken) is false:
                 {
                     return GetUpdatedSyntax(expression, leadingSpaces) as TSyntaxNode;
                 }
