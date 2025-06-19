@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            var issue = AnalyzeNode(context.Node);
+            var issue = AnalyzeNode(context.Node as CollectionExpressionSyntax);
 
             if (issue != null)
             {
@@ -49,9 +49,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
         }
 
-        private Diagnostic AnalyzeNode(SyntaxNode node)
+        private Diagnostic AnalyzeNode(CollectionExpressionSyntax syntax)
         {
-            if (node is CollectionExpressionSyntax syntax && syntax.Elements.None(SyntaxKind.SpreadElement))
+            if (syntax.Elements.None(SyntaxKind.SpreadElement))
             {
                 var openBracketToken = syntax.OpenBracketToken;
                 var openBracketPosition = openBracketToken.GetStartPosition();

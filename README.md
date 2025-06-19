@@ -13,7 +13,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/18917.svg)](https://scan.coverity.com/projects/ralfkoban-miko-analyzers)
 
 ## Available Rules
-The following tables lists all the 499 rules that are currently provided by the analyzer.
+The following tables lists all the 500 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -539,5 +539,6 @@ The following tables lists all the 499 rules that are currently provided by the 
 |MiKo_6063|Invocations should be placed on same line|&#x2713;|&#x2713;|
 |MiKo_6064|Identifier invocations should be placed on same line|&#x2713;|&#x2713;|
 |MiKo_6065|Consecutive invocations spanning multiple lines should be indented and not outdented|&#x2713;|&#x2713;|
+|MiKo_6066|Collection expression elements should be indented and not outdented|&#x2713;|&#x2713;|
 |MiKo_6070|Console statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6071|Local using statements should be surrounded by blank lines|&#x2713;|&#x2713;|

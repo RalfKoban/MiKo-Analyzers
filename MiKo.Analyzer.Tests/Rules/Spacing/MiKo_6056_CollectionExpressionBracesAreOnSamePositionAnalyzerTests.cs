@@ -1023,10 +1023,10 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_6056_CodeFixProvider();
-
         protected override string GetDiagnosticId() => MiKo_6056_CollectionExpressionBracesAreOnSamePositionAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6056_CollectionExpressionBracesAreOnSamePositionAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_6056_CodeFixProvider();
     }
 }
