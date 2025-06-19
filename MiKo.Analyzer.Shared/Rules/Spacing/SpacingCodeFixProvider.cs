@@ -245,7 +245,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             var openBraceToken = syntax.OpenBraceToken;
             var closeBraceToken = syntax.CloseBraceToken;
 
-            var closeBraceSpaces = openBraceToken.IsOnSameLineAs(closeBraceToken) ? 0 : spaces;
+            var closeBraceTokenSpaces = openBraceToken.IsOnSameLineAs(closeBraceToken) ? 0 : spaces;
 
             var updatedOpenBraceToken = openBraceToken.WithLeadingSpaces(spaces);
 
@@ -268,7 +268,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             return syntax.WithOpenBraceToken(updatedOpenBraceToken)
                          .WithExpressions(GetUpdatedSyntax(syntax.Expressions, openBraceToken, spaces + Constants.Indentation))
-                         .WithCloseBraceToken(closeBraceToken.WithLeadingSpaces(closeBraceSpaces));
+                         .WithCloseBraceToken(closeBraceToken.WithLeadingSpaces(closeBraceTokenSpaces));
         }
 
         protected ObjectCreationExpressionSyntax GetUpdatedSyntax(ObjectCreationExpressionSyntax syntax, in int spaces)
