@@ -23,6 +23,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 case ImplicitObjectCreationExpressionSyntax creation:
                     return GetUpdatedSyntax(creation, leadingSpaces) as TSyntaxNode;
 
+                case ObjectCreationExpressionSyntax creation:
+                    return GetUpdatedSyntax(creation, leadingSpaces) as TSyntaxNode;
+
                 default:
                     return base.GetUpdatedSyntax(node, leadingSpaces);
             }

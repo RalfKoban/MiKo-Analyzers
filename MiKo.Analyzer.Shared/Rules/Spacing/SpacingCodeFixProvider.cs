@@ -245,34 +245,64 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             var openBraceToken = syntax.OpenBraceToken;
             var closeBraceToken = syntax.CloseBraceToken;
 
-            var closeSpaces = openBraceToken.IsOnSameLineAs(closeBraceToken) ? 0 : spaces;
+            var closeBraceSpaces = openBraceToken.IsOnSameLineAs(closeBraceToken) ? 0 : spaces;
 
             var updatedOpenBraceToken = openBraceToken.WithLeadingSpaces(spaces);
 
-            if (syntax.Parent is BaseObjectCreationExpressionSyntax i && i.ArgumentList is ArgumentListSyntax argumentList)
+            if (syntax.Parent is BaseObjectCreationExpressionSyntax parent)
             {
-                if (openBraceToken.IsOnSameLineAs(argumentList.CloseParenToken))
+                if (openBraceToken.IsOnSameLineAs(parent.NewKeyword))
                 {
-                    updatedOpenBraceToken = openBraceToken.IsOnSameLineAs(closeBraceToken)
-                                            ? updatedOpenBraceToken.WithLeadingSpaces(1)
-                                            : updatedOpenBraceToken.WithLeadingEmptyLine();
+                    if (openBraceToken.IsOnSameLineAs(closeBraceToken))
+                    {
+                        var openBraceSpaces = parent is ObjectCreationExpressionSyntax creation && openBraceToken.IsOnSameLineAs(creation.Type) ? 0 : 1;
+
+                        updatedOpenBraceToken = updatedOpenBraceToken.WithLeadingSpaces(openBraceSpaces);
+                    }
+                    else
+                    {
+                        updatedOpenBraceToken = updatedOpenBraceToken.WithLeadingEmptyLine();
+                    }
                 }
             }
 
             return syntax.WithOpenBraceToken(updatedOpenBraceToken)
                          .WithExpressions(GetUpdatedSyntax(syntax.Expressions, openBraceToken, spaces + Constants.Indentation))
-                         .WithCloseBraceToken(closeBraceToken.WithLeadingSpaces(closeSpaces));
+                         .WithCloseBraceToken(closeBraceToken.WithLeadingSpaces(closeBraceSpaces));
         }
 
         protected ObjectCreationExpressionSyntax GetUpdatedSyntax(ObjectCreationExpressionSyntax syntax, in int spaces)
         {
+            var updatedSyntax = syntax;
+
             if (syntax.Initializer is InitializerExpressionSyntax initializer)
             {
-                return syntax.WithInitializer(GetUpdatedSyntax(initializer, spaces))
-                             .WithLeadingSpaces(spaces);
+                var argumentList = syntax.ArgumentList;
+
+                if (argumentList is null)
+                {
+                    updatedSyntax = syntax.WithInitializer(GetUpdatedSyntax(initializer, spaces));
+                }
+                else
+                {
+                    var openParenToken = argumentList.OpenParenToken;
+                    var closeParenToken = argumentList.CloseParenToken;
+                    var closeSpaces = openParenToken.IsOnSameLineAs(closeParenToken) ? 0 : spaces;
+
+                    var updatedCloseParenToken = closeParenToken.WithLeadingSpaces(closeSpaces)
+                                                                .WithoutTrailingTrivia();
+
+                    if (initializer.OpenBraceToken.IsOnSameLineAs(closeParenToken) is false)
+                    {
+                        updatedCloseParenToken = updatedCloseParenToken.WithTrailingNewLine();
+                    }
+
+                    updatedSyntax = syntax.WithArgumentList(argumentList.WithOpenParenToken(openParenToken.WithoutTrivia()).WithCloseParenToken(updatedCloseParenToken))
+                                          .WithInitializer(GetUpdatedSyntax(initializer, spaces + Constants.Indentation));
+                }
             }
 
-            return syntax.WithLeadingSpaces(spaces);
+            return updatedSyntax.WithLeadingSpaces(spaces);
         }
 
         protected ImplicitObjectCreationExpressionSyntax GetUpdatedSyntax(ImplicitObjectCreationExpressionSyntax syntax, in int spaces)
