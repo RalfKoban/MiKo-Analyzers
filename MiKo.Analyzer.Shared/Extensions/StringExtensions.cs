@@ -2083,27 +2083,12 @@ namespace System
         {
             var length = value.Length;
 
-            if (length != other.Length && length < 2)
+            if (length != other.Length && length < QuickSubstringProbeLengthThreshold)
             {
                 return true;
             }
 
-            if (value[0] != other[0])
-            {
-                // they do not fit as characters do not match
-                return false;
-            }
-
-            var lastIndex = length - 1;
-
-            if (value[lastIndex] != other[lastIndex])
-            {
-                // they do not fit as characters do not match
-                return false;
-            }
-
-            // continue to check
-            return true;
+            return value[0] == other[0] && value[length - 1] == other[length - 1];
         }
 
         private static unsafe bool QuickSubstringProbeOrdinalIgnoreCase(in ReadOnlySpan<char> value, in ReadOnlySpan<char> other)
@@ -2120,22 +2105,19 @@ namespace System
             {
                 fixed (char* bp = &MemoryMarshal.GetReference(other))
                 {
-                    var a = ap;
-                    var b = bp;
-
-                    if (QuickDiff(a, b, 0)) // uppercase both chars - notice that we need just one compare per char
+                    if (QuickDiff(ap, bp, 0)) // uppercase both chars - notice that we need just one compare per char
                     {
                         // they do not fit as characters do not match
                         return false;
                     }
 
-                    if (QuickDiff(a, b, length - 1)) // uppercase both chars - notice that we need just one compare per char
+                    if (QuickDiff(ap, bp, length - 1)) // uppercase both chars - notice that we need just one compare per char
                     {
                         // they do not fit as characters do not match
                         return false;
                     }
 
-                    if (QuickDiff(a, b, length / 2)) // uppercase both chars - notice that we need just one compare per char
+                    if (QuickDiff(ap, bp, length / 2)) // uppercase both chars - notice that we need just one compare per char
                     {
                         // they do not fit as characters do not match
                         return false;
@@ -2143,13 +2125,13 @@ namespace System
 
                     var third = length / 3;
 
-                    if (QuickDiff(a, b, third)) // uppercase both chars - notice that we need just one compare per char
+                    if (QuickDiff(ap, bp, third)) // uppercase both chars - notice that we need just one compare per char
                     {
                         // they do not fit as characters do not match
                         return false;
                     }
 
-                    if (QuickDiff(a, b, 2 * third)) // uppercase both chars - notice that we need just one compare per char
+                    if (QuickDiff(ap, bp, 2 * third)) // uppercase both chars - notice that we need just one compare per char
                     {
                         // they do not fit as characters do not match
                         return false;
