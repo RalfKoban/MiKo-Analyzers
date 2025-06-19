@@ -1496,6 +1496,7 @@ public class TestMe
         { Name = ""test name"", FullName = ""complete test name"", Information = ""some information"" };
 }
 ";
+
             const string FixedCode = @"
 using System;
 
@@ -1512,6 +1513,7 @@ public class TestMe
                                       { Name = ""test name"", FullName = ""complete test name"", Information = ""some information"" };
 }
 ";
+
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
@@ -1534,6 +1536,7 @@ public class TestMe
         {Name = ""test name"", FullName = ""complete test name"", Information = ""some information""};
 }
 ";
+
             const string FixedCode = @"
 using System;
 
@@ -1550,6 +1553,97 @@ public class TestMe
                                       {Name = ""test name"", FullName = ""complete test name"", Information = ""some information""};
 }
 ";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_list_of_dictionary_with_implicit_dictionary_creation()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var result = new List<Dictionary<string, object>>
+        {
+            new() {
+                { ""some"", ""value"" },
+                { ""another"", ""item"" },
+                { ""third"", ""entry"" }
+            }
+        };
+    }
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var result = new List<Dictionary<string, object>>
+                         {
+                             new()
+                                 {
+                                     { ""some"", ""value"" },
+                                     { ""another"", ""item"" },
+                                     { ""third"", ""entry"" }
+                                 }
+                         };
+    }
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_list_of_dictionary_with_explicit_dictionary_creation()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var result = new List<Dictionary<string, object>>
+        {
+            new Dictionary<string, object>() {
+                { ""some"", ""value"" },
+                { ""another"", ""item"" },
+                { ""third"", ""entry"" }
+            }
+        };
+    }
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var result = new List<Dictionary<string, object>>
+                         {
+                             new Dictionary<string, object>()
+                                 {
+                                     { ""some"", ""value"" },
+                                     { ""another"", ""item"" },
+                                     { ""third"", ""entry"" }
+                                 }
+                         };
+    }
+";
+
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 

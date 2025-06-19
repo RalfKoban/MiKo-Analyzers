@@ -14,14 +14,21 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override TSyntaxNode GetUpdatedSyntax<TSyntaxNode>(TSyntaxNode node, in int leadingSpaces)
         {
-            if (node is InitializerExpressionSyntax initializer
-             && initializer.IsKind(SyntaxKind.ComplexElementInitializerExpression) // such as for dictionaries
-             && initializer.OpenBraceToken.GetStartingLine() != initializer.CloseBraceToken.GetStartingLine())
+            switch (node)
             {
-                return GetUpdatedSyntax(initializer, leadingSpaces) as TSyntaxNode;
-            }
+                case InitializerExpressionSyntax initializer when initializer.IsKind(SyntaxKind.ComplexElementInitializerExpression) // such as for dictionaries
+                                                               && initializer.OpenBraceToken.GetStartingLine() != initializer.CloseBraceToken.GetStartingLine():
+                    return GetUpdatedSyntax(initializer, leadingSpaces) as TSyntaxNode;
 
-            return base.GetUpdatedSyntax(node, leadingSpaces);
+                case ImplicitObjectCreationExpressionSyntax creation:
+                    return GetUpdatedSyntax(creation, leadingSpaces) as TSyntaxNode;
+
+                case ObjectCreationExpressionSyntax creation:
+                    return GetUpdatedSyntax(creation, leadingSpaces) as TSyntaxNode;
+
+                default:
+                    return base.GetUpdatedSyntax(node, leadingSpaces);
+            }
         }
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
