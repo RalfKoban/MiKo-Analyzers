@@ -1718,6 +1718,10 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static bool IsOnSameLineAs(this SyntaxNode value, SyntaxNode other) => value?.GetStartingLine() == other?.GetStartingLine();
+
+        internal static bool IsOnSameLineAs(this SyntaxNode value, in SyntaxToken other) => value?.GetStartingLine() == other.GetStartingLine();
+
         internal static bool IsInside(this SyntaxNode value, ISet<SyntaxKind> kinds)
         {
             foreach (var ancestor in value.Ancestors())

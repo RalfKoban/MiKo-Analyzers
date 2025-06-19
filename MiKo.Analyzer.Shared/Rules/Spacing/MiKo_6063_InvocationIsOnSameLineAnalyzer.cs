@@ -23,10 +23,10 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 switch (member.Expression)
                 {
                     case IdentifierNameSyntax expression:
-                        return name.GetStartingLine() != expression.GetStartingLine();
+                        return name.IsOnSameLineAs(expression) is false;
 
                     case InvocationExpressionSyntax invocation when invocation.Expression is IdentifierNameSyntax:
-                        return name.GetStartingLine() != invocation.GetStartingLine();
+                        return name.IsOnSameLineAs(invocation) is false;
                 }
             }
 
