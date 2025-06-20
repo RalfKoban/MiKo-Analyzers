@@ -307,6 +307,8 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected ImplicitObjectCreationExpressionSyntax GetUpdatedSyntax(ImplicitObjectCreationExpressionSyntax syntax, in int spaces)
         {
+            var updatedSyntax = syntax;
+
             if (syntax.Initializer is InitializerExpressionSyntax initializer)
             {
                 var argumentList = syntax.ArgumentList;
@@ -323,12 +325,11 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     updatedCloseParenToken = updatedCloseParenToken.WithTrailingNewLine();
                 }
 
-                return syntax.WithArgumentList(argumentList.WithOpenParenToken(openParenToken.WithoutTrivia()).WithCloseParenToken(updatedCloseParenToken))
-                             .WithInitializer(GetUpdatedSyntax(initializer, spaces + Constants.Indentation))
-                             .WithLeadingSpaces(spaces);
+                updatedSyntax = syntax.WithArgumentList(argumentList.WithOpenParenToken(openParenToken.WithoutTrivia()).WithCloseParenToken(updatedCloseParenToken))
+                                      .WithInitializer(GetUpdatedSyntax(initializer, spaces + Constants.Indentation));
             }
 
-            return syntax.WithLeadingSpaces(spaces);
+            return updatedSyntax.WithLeadingSpaces(spaces);
         }
 
 #if VS2022

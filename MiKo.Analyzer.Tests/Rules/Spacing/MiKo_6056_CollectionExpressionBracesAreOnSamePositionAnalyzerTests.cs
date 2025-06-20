@@ -946,7 +946,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_instance_with_nested_instances()
+        public void Code_gets_fixed_for_instance_with_nested_object_creations()
         {
             const string OriginalCode = @"
 using System;
@@ -1016,6 +1016,84 @@ public class TestMe
                                                        }
                                                ]
                          };
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_instance_with_nested_implicit_object_creations()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<TestMe> NestedInstances { get; set; }
+
+    public static void Main()
+    {
+        TestMe testMe = new()
+                            {
+                                NestedInstances =
+                   [
+                           new()
+                               {
+                                   NestedInstances =
+                                           [
+                                               new TestMe(),
+                                               new TestMe()
+                                           ]
+                               },
+                           new()
+                               {
+                                   NestedInstances =
+                                                               [
+                                                                   new TestMe(),
+                                                                   new TestMe()
+                                                               ]
+                               }
+                   ]
+                            };
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<TestMe> NestedInstances { get; set; }
+
+    public static void Main()
+    {
+        TestMe testMe = new()
+                            {
+                                NestedInstances =
+                                                  [
+                                                      new()
+                                                          {
+                                                              NestedInstances =
+                                                                                [
+                                                                                    new TestMe(),
+                                                                                    new TestMe()
+                                                                                ]
+                                                          },
+                                                      new()
+                                                          {
+                                                              NestedInstances =
+                                                                                [
+                                                                                    new TestMe(),
+                                                                                    new TestMe()
+                                                                                ]
+                                                          }
+                                                  ]
+                            };
     }
 }
 ";
