@@ -2047,23 +2047,20 @@ namespace System
 
         private static bool QuickSubstringProbe(in ReadOnlySpan<char> value, in ReadOnlySpan<char> other, in StringComparison comparison)
         {
-            var valueLength = value.Length;
-            var otherLength = other.Length;
-
-            if (valueLength > otherLength)
+            if (value.Length > other.Length)
             {
                 // continue to check
                 return true;
             }
 
-            if (valueLength < otherLength)
+            if (value.Length < other.Length)
             {
                 // cannot match
                 return false;
             }
 
             // both are same length, so perform a quick compare first
-            if (valueLength > QuickSubstringProbeLengthThreshold)
+            if (value.Length > QuickSubstringProbeLengthThreshold)
             {
                 switch (comparison)
                 {
