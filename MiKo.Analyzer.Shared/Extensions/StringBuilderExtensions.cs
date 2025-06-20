@@ -541,9 +541,7 @@ namespace System.Text
 
         private static int QuickSubstringProbe(in ReadOnlySpan<char> current, in ReadOnlySpan<char> other)
         {
-            var delta = current.Length - other.Length;
-
-            if (delta < 0)
+            if (current.Length < other.Length)
             {
                 // cannot be part in the replacement as other value is too long and cannot fit current value
                 return -1;
@@ -560,6 +558,7 @@ namespace System.Text
             var lastIndex = other.Length - 1;
             var startChar = other[0];
             var endChar = other[lastIndex];
+            var delta = current.Length - other.Length;
 
             for (var position = 0; position <= delta; position++)
             {
