@@ -15,6 +15,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1070";
 
+        private static readonly string[] SpecialNames = { "actual", "expected" };
+
         private static readonly string[] Splitters = { "Of", "With", "To", "In", "From" };
 
         public MiKo_1070_CollectionLocalVariableAnalyzer() : base(Id)
@@ -55,13 +57,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var originalName = identifier.ValueText;
 
-                // skip all short names
                 if (IsShort(originalName))
                 {
+                    // skip all short names
                     continue;
                 }
 
                 if (originalName.EndsWith("Map", StringComparison.Ordinal))
+                {
+                    continue;
+                }
+
+                if (originalName.EqualsAny(SpecialNames, StringComparison.Ordinal))
                 {
                     continue;
                 }
@@ -178,7 +185,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 name = originalName.ToString();
 
-                return name;
+                return Pluralizer.GetPluralName(name, StringComparison.Ordinal);
             }
 
             var index = originalName.IndexOfAny(Splitters, StringComparison.Ordinal);
