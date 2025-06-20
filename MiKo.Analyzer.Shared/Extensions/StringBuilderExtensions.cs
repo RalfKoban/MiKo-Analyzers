@@ -565,7 +565,7 @@ namespace System.Text
             {
                 // Performance-Note:
                 // - do not split or re-calculate last index position each time as this gets invoked millions of time and re-calculation is too costly in such situation
-                if (current[position] == startChar && current[lastIndex + position] == endChar)
+                if (current[lastIndex + position] == endChar && current[position] == startChar)
                 {
                     // could be part in the replacement as characters match both at start and end
                     return position;
