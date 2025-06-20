@@ -1272,12 +1272,12 @@ namespace MiKoSolutions.Analyzers
 
                 default:
                 {
-                    if (IsEnumerable(specialType))
+                    if (value.TypeKind is TypeKind.Array)
                     {
                         return true;
                     }
 
-                    if (value.TypeKind is TypeKind.Array)
+                    if (IsEnumerable(specialType))
                     {
                         return true;
                     }
