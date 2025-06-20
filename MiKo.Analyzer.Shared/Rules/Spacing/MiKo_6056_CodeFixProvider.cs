@@ -26,11 +26,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     return GetUpdatedSyntax(initializer, leadingSpaces) as TSyntaxNode;
                 }
 
-                case AnonymousObjectCreationExpressionSyntax anonymous when anonymous.OpenBraceToken.IsOnSameLineAs(anonymous.CloseBraceToken) is false:
-                {
-                    return GetUpdatedSyntax(anonymous, leadingSpaces) as TSyntaxNode;
-                }
-
                 case CollectionExpressionSyntax expression when expression.OpenBracketToken.IsOnSameLineAs(expression.CloseBracketToken) is false:
                 {
                     return GetUpdatedSyntax(expression, leadingSpaces) as TSyntaxNode;
@@ -41,9 +36,19 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     return GetUpdatedSyntax(element, leadingSpaces) as TSyntaxNode;
                 }
 
+                case AnonymousObjectCreationExpressionSyntax anonymous when anonymous.OpenBraceToken.IsOnSameLineAs(anonymous.CloseBraceToken) is false:
+                {
+                    return GetUpdatedSyntax(anonymous, leadingSpaces) as TSyntaxNode;
+                }
+
                 case ObjectCreationExpressionSyntax creation:
                 {
                     return GetUpdatedSyntax(creation, leadingSpaces) as TSyntaxNode;
+                }
+
+                case ImplicitObjectCreationExpressionSyntax creation:
+                {
+                    return GetUpdatedSyntax(creation, leadingSpaces - Constants.Indentation) as TSyntaxNode;
                 }
 
                 default:
