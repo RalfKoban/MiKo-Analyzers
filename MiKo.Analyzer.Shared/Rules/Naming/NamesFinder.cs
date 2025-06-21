@@ -91,7 +91,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var propertyNames = symbol.ContainingType.GetProperties().ToHashSet(_ => _.Name);
 
             // there might be none available; in such case do not report anything
-            if (propertyNames.None())
+            if (propertyNames.Count is 0)
             {
                 return Array.Empty<string>();
             }

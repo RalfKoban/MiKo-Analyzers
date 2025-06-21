@@ -161,7 +161,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (trimmed[0].IsNumber())
             {
-                return trimmed.Any(_ => _ is '.') && trimmed[1].IsLetter();
+                return trimmed.Any('.') && trimmed[1].IsLetter();
             }
 
             if (trimmed.Length is 3 && trimmed.Equals("e.g", StringComparison.OrdinalIgnoreCase))
@@ -201,13 +201,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return false;
             }
 
-            if (trimmed.All(char.IsUpper))
+            if (trimmed.AllUpper())
             {
                 // seems like an abbreviation such as UML, so do not report
                 return false;
             }
 
-            if (trimmed.Any(_ => _ is '!'))
+            if (trimmed.Any('!'))
             {
                 return false;
             }
@@ -218,7 +218,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 var part = trimmed.Slice(0, trimmed.Length - characters);
 
-                if (part.All(char.IsUpper) || WellKnownWords.Contains(part.ToString()))
+                if (part.AllUpper() || WellKnownWords.Contains(part.ToString()))
                 {
                     // seems like an abbreviation (such as UIs) or a genitive tense of an abbreviation (such as UI's), so do not report
                     return false;
@@ -230,7 +230,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 var part = trimmed.Slice(0, trimmed.Length - characters);
 
-                if (part.All(char.IsUpper))
+                if (part.AllUpper())
                 {
                     // seems like an abbreviation in past tense (such as MEFed), so do not report
                     return false;

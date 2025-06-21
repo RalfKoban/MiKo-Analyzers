@@ -51,7 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                        .Where(_ => _.Type.IsReferenceType && _.Type.IsString() is false) // ignore value types and strings
                                        .ToHashSet(_ => _.Name);
 
-            if (parameterNames.None())
+            if (parameterNames.Count is 0)
             {
                 // nothing to analyze because there are no parameters
                 yield break;
