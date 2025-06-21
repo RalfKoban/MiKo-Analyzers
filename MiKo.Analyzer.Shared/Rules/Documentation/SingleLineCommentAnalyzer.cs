@@ -11,28 +11,30 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class SingleLineCommentAnalyzer : DocumentationAnalyzer
     {
+        private static readonly SyntaxKind[] Declarations =
+                                                            {
+                                                                SyntaxKind.MethodDeclaration,
+                                                                SyntaxKind.ConstructorDeclaration,
+                                                                SyntaxKind.DestructorDeclaration,
+
+                                                                SyntaxKind.OperatorDeclaration,
+                                                                SyntaxKind.ConversionOperatorDeclaration,
+
+                                                                SyntaxKind.GetAccessorDeclaration,
+                                                                SyntaxKind.SetAccessorDeclaration,
+
+                                                                SyntaxKind.AddAccessorDeclaration,
+                                                                SyntaxKind.RemoveAccessorDeclaration,
+
+                                                                SyntaxKind.FieldDeclaration,
+                                                                SyntaxKind.EventFieldDeclaration,
+                                                            };
+
         protected SingleLineCommentAnalyzer(string diagnosticId) : base(diagnosticId) => IgnoreMultipleLines = true;
 
         protected bool IgnoreMultipleLines { get; set; }
 
-        protected sealed override void InitializeCore(CompilationStartAnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeComment, SyntaxKind.MethodDeclaration);
-            context.RegisterSyntaxNodeAction(AnalyzeComment, SyntaxKind.ConstructorDeclaration);
-            context.RegisterSyntaxNodeAction(AnalyzeComment, SyntaxKind.DestructorDeclaration);
-
-            context.RegisterSyntaxNodeAction(AnalyzeComment, SyntaxKind.OperatorDeclaration);
-            context.RegisterSyntaxNodeAction(AnalyzeComment, SyntaxKind.ConversionOperatorDeclaration);
-
-            context.RegisterSyntaxNodeAction(AnalyzeComment, SyntaxKind.GetAccessorDeclaration);
-            context.RegisterSyntaxNodeAction(AnalyzeComment, SyntaxKind.SetAccessorDeclaration);
-
-            context.RegisterSyntaxNodeAction(AnalyzeComment, SyntaxKind.AddAccessorDeclaration);
-            context.RegisterSyntaxNodeAction(AnalyzeComment, SyntaxKind.RemoveAccessorDeclaration);
-
-            context.RegisterSyntaxNodeAction(AnalyzeComment, SyntaxKind.FieldDeclaration);
-            context.RegisterSyntaxNodeAction(AnalyzeComment, SyntaxKind.EventFieldDeclaration);
-        }
+        protected sealed override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeComment, Declarations);
 
         protected abstract bool CommentHasIssue(in ReadOnlySpan<char> comment, SemanticModel semanticModel);
 

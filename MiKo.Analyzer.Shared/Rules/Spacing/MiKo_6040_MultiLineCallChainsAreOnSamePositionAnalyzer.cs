@@ -80,11 +80,12 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             {
                 switch (ancestor)
                 {
-                    case StatementSyntax _: return false;
-                    case EqualsValueClauseSyntax _: return false;
-                    case InitializerExpressionSyntax _: return false;
-                    case MemberDeclarationSyntax _: return false;
-                    case ArrowExpressionClauseSyntax _: return false;
+                    case StatementSyntax _:
+                    case EqualsValueClauseSyntax _:
+                    case InitializerExpressionSyntax _:
+                    case MemberDeclarationSyntax _:
+                    case ArrowExpressionClauseSyntax _:
+                        return false;
                 }
 
                 if (ancestor.IsAnyKind(Expressions))
@@ -108,7 +109,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             var dots = CollectDots(node);
 
-            if (dots.None())
+            if (dots.Count is 0)
             {
                 // no dots found for whatever reason, hence we do not need to report anything
                 return;

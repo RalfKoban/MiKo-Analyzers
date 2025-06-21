@@ -1572,7 +1572,7 @@ namespace MiKoSolutions.Analyzers
 
                 if (nameAttribute != null)
                 {
-                    name = nameAttribute.TextTokens.First().ValueText;
+                    name = nameAttribute.TextTokens[0].ValueText;
                 }
             }
 
@@ -1581,11 +1581,11 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool HasComment(this SyntaxNode value) => value.HasLeadingComment() || value.HasTrailingComment();
 
-        internal static bool HasLeadingComment(this SyntaxNode value) => value.GetLeadingTrivia().Any(_ => _.IsComment());
+        internal static bool HasLeadingComment(this SyntaxNode value) => value.GetLeadingTrivia().HasComment();
 
-        internal static bool HasTrailingComment(this SyntaxNode value) => value != null && value.GetTrailingTrivia().Any(_ => _.IsComment());
+        internal static bool HasTrailingComment(this SyntaxNode value) => value != null && value.GetTrailingTrivia().HasComment();
 
-        internal static bool HasTrailingEndOfLine(this SyntaxNode value) => value != null && value.GetTrailingTrivia().Any(_ => _.IsEndOfLine());
+        internal static bool HasTrailingEndOfLine(this SyntaxNode value) => value != null && value.GetTrailingTrivia().HasEndOfLine();
 
         internal static bool HasMinimumCSharpVersion(this SyntaxTree value, LanguageVersion expectedVersion)
         {

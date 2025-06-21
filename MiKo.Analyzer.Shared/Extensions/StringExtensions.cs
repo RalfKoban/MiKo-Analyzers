@@ -132,6 +132,42 @@ namespace System
             return AllIndicesNonOrdinal(value.ToString(), finding, comparison);
         }
 
+        public static bool AllUpper(this in ReadOnlySpan<char> value)
+        {
+            var valueLength = value.Length;
+
+            if (valueLength > 0)
+            {
+                for (var index = 0; index < valueLength; index++)
+                {
+                    if (char.IsUpper(value[index]) is false)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public static bool Any(this in ReadOnlySpan<char> value, in char c)
+        {
+            var valueLength = value.Length;
+
+            if (valueLength > 0)
+            {
+                for (var index = 0; index < valueLength; index++)
+                {
+                    if (value[index] == c)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static StringBuilder AsCachedBuilder(this string value) => StringBuilderCache.Acquire(value.Length).Append(value);
 

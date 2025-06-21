@@ -81,24 +81,6 @@ namespace System.Linq
             return true;
         }
 
-        internal static bool All(this in ReadOnlySpan<char> value, Func<char, bool> callback)
-        {
-            var valueLength = value.Length;
-
-            if (valueLength > 0)
-            {
-                for (var index = 0; index < valueLength; index++)
-                {
-                    if (callback(value[index]) is false)
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
-
         internal static bool All(this in SyntaxTokenList value, Func<SyntaxToken, bool> predicate)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
@@ -166,24 +148,6 @@ namespace System.Linq
                 for (var index = 0; index < valueCount; index++)
                 {
                     if (predicate(value[index]))
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        internal static bool Any(this in ReadOnlySpan<char> value, Func<char, bool> filter)
-        {
-            var valueLength = value.Length;
-
-            if (valueLength > 0)
-            {
-                for (var index = 0; index < valueLength; index++)
-                {
-                    if (filter(value[index]))
                     {
                         return true;
                     }
