@@ -67,6 +67,19 @@ public class TestMe
     public bool DoSomething(object o1, object o2) => (o1 ?? o2) != null ? true : false;
 }");
 
+        [Test]
+        public void No_issue_is_reported_for_Argument_with_conditional_expression_inside_conditional_expression() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(object o1, object o2) => (o1 != null)
+                                                     ? DoSomething(o2 != null ? true : false)
+                                                     : DoSomething(o2 != null ? true : false);
+
+    public bool DoSomething(bool b) => b;
+}");
+
         protected override string GetDiagnosticId() => MiKo_3086_DoNotNestConditionalExpressionAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3086_DoNotNestConditionalExpressionAnalyzer();
