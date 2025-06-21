@@ -12,9 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool IsApplicable(in ImmutableArray<Diagnostic> diagnostics)
         {
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            // ReSharper disable once ForCanBeConvertedToForeach
-            for (var index = 0; index < diagnostics.Length; index++)
+            for (int index = 0, diagnosticsLength = diagnostics.Length; index < diagnosticsLength; index++)
             {
                 var diagnostic = diagnostics[index];
                 var properties = diagnostic.Properties;

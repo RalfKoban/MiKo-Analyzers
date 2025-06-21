@@ -190,40 +190,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                                                                                               .WithWhenKeyword(syntax.WhenKeyword.WithLeadingSpace().WithoutTrailingTrivia())
                                                                                               .WithCondition(PlacedOnSameLine(syntax.Condition));
 
-        protected SeparatedSyntaxList<TSyntaxNode> GetUpdatedSyntax<TSyntaxNode>(in SeparatedSyntaxList<TSyntaxNode> nodes, in SyntaxToken openBraceToken, in int leadingSpaces) where TSyntaxNode : SyntaxNode
-        {
-            if (nodes.Count is 0)
-            {
-                return SyntaxFactory.SeparatedList<TSyntaxNode>();
-            }
-
-            int? currentLine = openBraceToken.GetStartingLine();
-
-            var updatedNodes = new List<TSyntaxNode>(nodes.Count);
-
-            foreach (var node in nodes)
-            {
-                var startingLine = node.GetStartingLine();
-
-                if (currentLine == startingLine)
-                {
-                    // it is on same line, so do not add any additional space
-                    updatedNodes.Add(node);
-                }
-                else
-                {
-                    currentLine = startingLine;
-
-                    // it seems to be on a different line, so add with spaces
-                    var updatedExpression = GetUpdatedSyntax(node, leadingSpaces);
-
-                    updatedNodes.Add(updatedExpression);
-                }
-            }
-
-            return SyntaxFactory.SeparatedList(updatedNodes, nodes.GetSeparators());
-        }
-
         protected virtual TSyntaxNode GetUpdatedSyntax<TSyntaxNode>(TSyntaxNode syntax, in int leadingSpaces) where TSyntaxNode : SyntaxNode => syntax.WithLeadingSpaces(leadingSpaces);
 
         protected AnonymousObjectCreationExpressionSyntax GetUpdatedSyntax(AnonymousObjectCreationExpressionSyntax syntax, in int spaces)
@@ -352,5 +318,39 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                                                                                                                    .WithLeadingSpaces(spaces);
 
 #endif
+
+        protected SeparatedSyntaxList<TSyntaxNode> GetUpdatedSyntax<TSyntaxNode>(in SeparatedSyntaxList<TSyntaxNode> nodes, in SyntaxToken openBraceToken, in int leadingSpaces) where TSyntaxNode : SyntaxNode
+        {
+            if (nodes.Count is 0)
+            {
+                return SyntaxFactory.SeparatedList<TSyntaxNode>();
+            }
+
+            int? currentLine = openBraceToken.GetStartingLine();
+
+            var updatedNodes = new List<TSyntaxNode>(nodes.Count);
+
+            foreach (var node in nodes)
+            {
+                var startingLine = node.GetStartingLine();
+
+                if (currentLine == startingLine)
+                {
+                    // it is on same line, so do not add any additional space
+                    updatedNodes.Add(node);
+                }
+                else
+                {
+                    currentLine = startingLine;
+
+                    // it seems to be on a different line, so add with spaces
+                    var updatedExpression = GetUpdatedSyntax(node, leadingSpaces);
+
+                    updatedNodes.Add(updatedExpression);
+                }
+            }
+
+            return SyntaxFactory.SeparatedList(updatedNodes, nodes.GetSeparators());
+        }
     }
 }

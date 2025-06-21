@@ -1104,14 +1104,14 @@ namespace System.Linq
                 return Array.Empty<SyntaxToken>();
             }
 
-            var target = new SyntaxToken[sourceCount];
+            var result = new SyntaxToken[sourceCount];
 
             for (var index = 0; index < sourceCount; index++)
             {
-                target[index] = source[index];
+                result[index] = source[index];
             }
 
-            return target;
+            return result;
         }
 
         internal static T[] ToArray<T>(this in SyntaxList<T> source) where T : SyntaxNode
@@ -1124,14 +1124,14 @@ namespace System.Linq
                 return Array.Empty<T>();
             }
 
-            var target = new T[sourceCount];
+            var result = new T[sourceCount];
 
             for (var index = 0; index < sourceCount; index++)
             {
-                target[index] = source[index];
+                result[index] = source[index];
             }
 
-            return target;
+            return result;
         }
 
         internal static T[] ToArray<T>(this in SeparatedSyntaxList<T> source) where T : SyntaxNode
@@ -1144,14 +1144,14 @@ namespace System.Linq
                 return Array.Empty<T>();
             }
 
-            var target = new T[sourceCount];
+            var result = new T[sourceCount];
 
             for (var index = 0; index < sourceCount; index++)
             {
-                target[index] = source[index];
+                result[index] = source[index];
             }
 
-            return target;
+            return result;
         }
 
         internal static T[] ToArray<T>(this IEnumerable<T> source, IComparer<T> comparer) => source.ToArray(_ => _, comparer);
@@ -1345,17 +1345,17 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            var target = new List<SyntaxToken>(sourceCount);
+            var result = new List<SyntaxToken>(sourceCount);
 
             if (sourceCount > 0)
             {
                 for (var index = 0; index < sourceCount; index++)
                 {
-                    target.Add(source[index]);
+                    result.Add(source[index]);
                 }
             }
 
-            return target;
+            return result;
         }
 
 //// ncrunch: no coverage end
@@ -1365,17 +1365,17 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            var target = new List<T>(sourceCount);
+            var result = new List<T>(sourceCount);
 
             if (sourceCount > 0)
             {
                 for (var index = 0; index < sourceCount; index++)
                 {
-                    target.Add(source[index]);
+                    result.Add(source[index]);
                 }
             }
 
-            return target;
+            return result;
         }
 
         internal static List<T> ToList<T>(this in SeparatedSyntaxList<T> source) where T : SyntaxNode
@@ -1383,17 +1383,17 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            var target = new List<T>(sourceCount);
+            var result = new List<T>(sourceCount);
 
             if (sourceCount > 0)
             {
                 for (var index = 0; index < sourceCount; index++)
                 {
-                    target.Add(source[index]);
+                    result.Add(source[index]);
                 }
             }
 
-            return target;
+            return result;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

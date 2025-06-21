@@ -151,10 +151,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     var data = FindMatchingReplacementMapKeys(text);
                     var uniqueKeys = data.UniqueKeys;
-                    var length = uniqueKeys.Length;
 
 //// ncrunch: no coverage start
-                    for (var index = 0; index < length; index++)
+                    for (int index = 0, length = uniqueKeys.Length; index < length; index++)
                     {
                         var key = uniqueKeys[index];
 
@@ -207,9 +206,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             subText = ModifyOrNotPart(subText);
 
-            var length = Conditionals.Length;
-
-            for (var index = 0; index < length; index++)
+            for (int index = 0, length = Conditionals.Length; index < length; index++)
             {
                 var conditional = Conditionals[index];
 
@@ -377,6 +374,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private sealed class MapData
         {
+#pragma warning disable SA1401 // Fields should be private
+            public readonly Pair[] ReplacementMapForA;
+            public readonly Pair[] ReplacementMapForAn;
+            public readonly Pair[] ReplacementMapForThe;
+            public readonly Pair[] ReplacementMapForParenthesis;
+            public readonly Pair[] ReplacementMapForOthers;
+            public readonly Pair[] ReplacementMapForLowerCaseA;
+            public readonly Pair[] ReplacementMapForLowerCaseAn;
+            public readonly Pair[] ReplacementMapForLowerCaseThe;
+            public readonly string[] ReplacementMapKeysForA;
+            public readonly string[] ReplacementMapKeysForAn;
+            public readonly string[] ReplacementMapKeysForThe;
+            public readonly string[] ReplacementMapKeysForParenthesis;
+            public readonly string[] ReplacementMapKeysForOthers;
+            public readonly string[] UniqueReplacementMapKeysForA;
+            public readonly string[] UniqueReplacementMapKeysForAn;
+            public readonly string[] UniqueReplacementMapKeysForThe;
+            public readonly string[] UniqueReplacementMapKeysForParenthesis;
+            public readonly string[] UniqueReplacementMapKeysForOthers;
+#pragma warning restore SA1401 // Fields should be private
+
             public MapData()
             {
                 var replacementMapCommon = new[]
@@ -546,9 +564,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     var pool = ArrayPool<Pair>.Shared;
                     var rentedArray = pool.Rent(keys.Count + others.Length);
 
-                    var count = map.Length;
-
-                    for (var index = 0; index < count; index++)
+                    for (int index = 0, count = map.Length; index < count; index++)
                     {
                         var key = map[index];
 
@@ -572,47 +588,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 string[] ToUnique(IEnumerable<string> strings) => new HashSet<string>(strings, StringComparer.OrdinalIgnoreCase).ToArray();
             }
 
-            public Pair[] ReplacementMapForA { get; }
-
-            public Pair[] ReplacementMapForAn { get; }
-
-            public Pair[] ReplacementMapForThe { get; }
-
-            public Pair[] ReplacementMapForParenthesis { get; }
-
-            public Pair[] ReplacementMapForOthers { get; }
-
-            public Pair[] ReplacementMapForLowerCaseA { get; }
-
-            public Pair[] ReplacementMapForLowerCaseAn { get; }
-
-            public Pair[] ReplacementMapForLowerCaseThe { get; }
-
-            public string[] ReplacementMapKeysForA { get; }
-
-            public string[] ReplacementMapKeysForAn { get; }
-
-            public string[] ReplacementMapKeysForThe { get; }
-
-            public string[] ReplacementMapKeysForParenthesis { get; }
-
-            public string[] ReplacementMapKeysForOthers { get; }
-
             public string[] ReplacementMapKeysForLowerCaseA => ReplacementMapKeysForA;
 
             public string[] ReplacementMapKeysForLowerCaseAn => ReplacementMapKeysForAn;
 
             public string[] ReplacementMapKeysForLowerCaseThe => ReplacementMapKeysForThe;
-
-            public string[] UniqueReplacementMapKeysForA { get; }
-
-            public string[] UniqueReplacementMapKeysForAn { get; }
-
-            public string[] UniqueReplacementMapKeysForThe { get; }
-
-            public string[] UniqueReplacementMapKeysForParenthesis { get; }
-
-            public string[] UniqueReplacementMapKeysForOthers { get; }
 
             private static Pair[] CreateReplacementMap()
             {
@@ -825,9 +805,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             private static int GetOrder(in ReadOnlySpan<char> text, in ReadOnlySpan<string> orders)
             {
-                var length = orders.Length;
-
-                for (var i = 0; i < length; i++)
+                for (int i = 0, length = orders.Length; i < length; i++)
                 {
                     if (text.StartsWith(orders[i].AsSpan()))
                     {

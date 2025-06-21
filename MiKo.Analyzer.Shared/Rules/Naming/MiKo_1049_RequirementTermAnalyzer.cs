@@ -106,9 +106,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             List<string> findings = null;
 
             var requirements = Constants.Markers.Requirements;
-            var requirementsLength = requirements.Length;
 
-            for (var index = 0; index < requirementsLength; index++)
+            for (int index = 0, requirementsLength = requirements.Length; index < requirementsLength; index++)
             {
                 var requirement = requirements[index];
 

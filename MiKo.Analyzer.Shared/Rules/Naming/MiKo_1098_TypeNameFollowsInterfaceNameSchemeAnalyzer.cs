@@ -38,9 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var names = new List<string>();
 
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var length = directlyImplementedInterfaces.Length;
-
-            for (var index = 0; index < length; index++)
+            for (int index = 0, length = directlyImplementedInterfaces.Length; index < length; index++)
             {
                 var implementedInterface = directlyImplementedInterfaces[index];
                 var name = implementedInterface.Name

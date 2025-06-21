@@ -110,9 +110,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var textTokens = text.TextTokens;
 
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var textTokensCount = textTokens.Count;
-
-            for (var index = 0; index < textTokensCount; index++)
+            for (int index = 0, textTokensCount = textTokens.Count; index < textTokensCount; index++)
             {
                 var token = textTokens[index];
 
@@ -137,9 +135,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static bool IsOnSameLine(in SyntaxList<XmlNodeSyntax> contents, params int[] lines)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var contentsCount = contents.Count;
-
-            for (var index = 0; index < contentsCount; index++)
+            for (int index = 0, contentsCount = contents.Count; index < contentsCount; index++)
             {
                 var content = contents[index];
 
