@@ -217,10 +217,8 @@ namespace MiKoSolutions.Analyzers
             {
                 XmlNodeSyntax first = null;
 
-                var listCount = list.Count;
-
                 // try to find the first syntax that is not only an XmlCommentExterior
-                for (var index = 0; index < listCount; index++)
+                for (int index = 0, listCount = list.Count; index < listCount; index++)
                 {
                     first = list[index];
 
@@ -2619,16 +2617,16 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxList<XmlNodeSyntax> ReplaceText(this in SyntaxList<XmlNodeSyntax> source, in ReadOnlySpan<string> phrases, string replacement)
         {
-            var resultLength = source.Count;
+            var sourceCount = source.Count;
 
-            if (resultLength is 0)
+            if (sourceCount is 0)
             {
                 return source;
             }
 
             var result = source.ToArray();
 
-            for (var index = 0; index < resultLength; index++)
+            for (var index = 0; index < sourceCount; index++)
             {
                 var value = result[index];
 
@@ -3134,9 +3132,7 @@ namespace MiKoSolutions.Analyzers
 
             var resetFinalTrivia = false;
 
-            var length = finalTrivia.Length;
-
-            for (var index = 0; index < length; index++)
+            for (int index = 0, length = finalTrivia.Length; index < length; index++)
             {
                 var trivia = finalTrivia[index];
 
@@ -3524,9 +3520,7 @@ namespace MiKoSolutions.Analyzers
                     continue;
                 }
 
-                var textsLength = texts.Length;
-
-                for (var textIndex = 0; textIndex < textsLength; textIndex++)
+                for (int textIndex = 0, textsLength = texts.Length; textIndex < textsLength; textIndex++)
                 {
                     var text = texts[textIndex];
 
@@ -3731,9 +3725,8 @@ namespace MiKoSolutions.Analyzers
             }
 
             var textTokens = tokens.ToList();
-            var textTokensCount = textTokens.Count;
 
-            for (var i = 0; i < textTokensCount; i++)
+            for (int i = 0, textTokensCount = textTokens.Count; i < textTokensCount; i++)
             {
                 var token = textTokens[i];
 
@@ -3804,7 +3797,7 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            for (var i = 0; i < textTokens.Count; i++)
+            for (int i = 0, count = textTokens.Count; i < count; i++)
             {
                 var token = textTokens[i];
 
@@ -3982,22 +3975,13 @@ namespace MiKoSolutions.Analyzers
         {
             var attributeLists = value.AttributeLists;
 
-            // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var attributeListsCount = attributeLists.Count;
-
-            for (var i = 0; i < attributeListsCount; i++)
+            for (int i = 0, count = attributeLists.Count; i < count; i++)
             {
                 var attributes = attributeLists[i].Attributes;
 
-                // keep in local variable to avoid multiple requests (see Roslyn implementation)
-                var attributesCount = attributes.Count;
-
-                for (var index = 0; index < attributesCount; index++)
+                for (int index = 0, attributesCount = attributes.Count; index < attributesCount; index++)
                 {
-                    var attribute = attributes[index];
-                    var name = attribute.GetName();
-
-                    if (names.Contains(name))
+                    if (names.Contains(attributes[index].GetName()))
                     {
                         return true;
                     }
@@ -4011,22 +3995,13 @@ namespace MiKoSolutions.Analyzers
         {
             var attributeLists = value.AttributeLists;
 
-            // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var attributeListsCount = attributeLists.Count;
-
-            for (var i = 0; i < attributeListsCount; i++)
+            for (int i = 0, count = attributeLists.Count; i < count; i++)
             {
                 var attributes = attributeLists[i].Attributes;
 
-                // keep in local variable to avoid multiple requests (see Roslyn implementation)
-                var attributesCount = attributes.Count;
-
-                for (var index = 0; index < attributesCount; index++)
+                for (int index = 0, attributesCount = attributes.Count; index < attributesCount; index++)
                 {
-                    var attribute = attributes[index];
-                    var name = attribute.GetName();
-
-                    if (names.Contains(name))
+                    if (names.Contains(attributes[index].GetName()))
                     {
                         return true;
                     }
@@ -4091,9 +4066,7 @@ namespace MiKoSolutions.Analyzers
         private static XmlCrefAttributeSyntax GetCref(in SyntaxList<XmlAttributeSyntax> syntax)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var syntaxCount = syntax.Count;
-
-            for (var index = 0; index < syntaxCount; index++)
+            for (int index = 0, count = syntax.Count; index < count; index++)
             {
                 if (syntax[index] is XmlCrefAttributeSyntax a)
                 {
@@ -4106,9 +4079,7 @@ namespace MiKoSolutions.Analyzers
 
         private static IEnumerable<XmlNodeSyntax> GetSummaryXmlsCore(IReadOnlyList<XmlElementSyntax> summaryXmls, ISet<string> tags)
         {
-            var count = summaryXmls.Count;
-
-            for (var index = 0; index < count; index++)
+            for (int index = 0, count = summaryXmls.Count; index < count; index++)
             {
                 var summary = summaryXmls[index];
 

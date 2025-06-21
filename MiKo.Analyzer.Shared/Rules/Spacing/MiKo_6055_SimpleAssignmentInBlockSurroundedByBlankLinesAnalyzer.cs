@@ -131,9 +131,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private IEnumerable<Diagnostic> AnalyzeStatements(SyntaxList<StatementSyntax> statements)
         {
-            var statementsCount = statements.Count;
-
-            for (var index = 0; index < statementsCount; index++)
+            for (int index = 0, statementsCount = statements.Count; index < statementsCount; index++)
             {
                 var current = statements[index];
 

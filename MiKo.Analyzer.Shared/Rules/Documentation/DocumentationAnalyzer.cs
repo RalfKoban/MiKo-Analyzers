@@ -85,9 +85,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var textTokens = text.TextTokens;
 
                 // keep in local variable to avoid multiple requests (see Roslyn implementation)
-                var textTokensCount = textTokens.Count;
-
-                for (var index = 0; index < textTokensCount; index++)
+                for (int index = 0, textTokensCount = textTokens.Count; index < textTokensCount; index++)
                 {
                     var token = textTokens[index];
 
@@ -237,11 +235,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static IReadOnlyList<Location> GetAllLocationsWithLoop(SyntaxTree syntaxTree, in int spanStart, string value, in int startOffset, in int endOffset, in ReadOnlySpan<int> allIndices)
         {
             List<Location> alreadyReportedLocations = null;
-            var length = allIndices.Length;
-
             List<Location> results = null;
 
-            for (var index = 0; index < length; index++)
+            for (int index = 0, length = allIndices.Length; index < length; index++)
             {
                 var position = allIndices[index];
 
@@ -281,11 +277,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static IReadOnlyList<Location> GetAllLocationsWithLoop(string text, SyntaxTree syntaxTree, in int spanStart, in ReadOnlySpan<string> values, in StringComparison comparison, in int startOffset, in int endOffset, in int textLength)
         {
             List<Location> alreadyReportedLocations = null;
-            var valuesCount = values.Length;
-
             List<Location> results = null;
 
-            for (var valueIndex = 0; valueIndex < valuesCount; valueIndex++)
+            for (int valueIndex = 0, valuesCount = values.Length; valueIndex < valuesCount; valueIndex++)
             {
                 var value = values[valueIndex];
 
@@ -303,9 +297,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     continue;
                 }
 
-                var length = allIndices.Length;
-
-                for (var index = 0; index < length; index++)
+                for (int index = 0, length = allIndices.Length; index < length; index++)
                 {
                     var position = allIndices[index];
 
@@ -348,11 +340,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var lastPosition = textLength - 1;
 
             List<Location> alreadyReportedLocations = null;
-            var length = allIndices.Length;
-
             List<Location> results = null;
 
-            for (var index = 0; index < length; index++)
+            for (int index = 0, length = allIndices.Length; index < length; index++)
             {
                 var position = allIndices[index];
                 var afterPosition = position + value.Length;

@@ -102,8 +102,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static bool TryFindCompoundWord(string text, ref int startIndex, ref int endIndex)
         {
+            var textLength = text.Length;
+
             // jump over white-spaces at the beginning
-            for (; startIndex < text.Length; startIndex++)
+            for (; startIndex < textLength; startIndex++)
             {
                 var c = text[startIndex];
 
@@ -119,7 +121,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var findings = 0;
 
             // now find next white-space and count upper cases in between
-            for (; endIndex < text.Length; endIndex++)
+            for (; endIndex < textLength; endIndex++)
             {
                 var c = text[endIndex];
 

@@ -128,9 +128,8 @@ namespace MiKoSolutions.Analyzers
             }
 
             DocumentationCommentTriviaSyntax[] results = null;
-            var resultsIndex = 0;
 
-            for (var index = 0; index < count; index++)
+            for (int index = 0, resultsIndex = 0; index < count; index++)
             {
                 var trivia = leadingTrivia[index];
 
@@ -173,9 +172,7 @@ namespace MiKoSolutions.Analyzers
         {
             var valueKind = value.Kind();
 
-            var length = kinds.Length;
-
-            for (var index = 0; index < length; index++)
+            for (int index = 0, length = kinds.Length; index < length; index++)
             {
                 if (kinds[index] == valueKind)
                 {
@@ -277,13 +274,9 @@ namespace MiKoSolutions.Analyzers
             // remove existing empty lines
             var indicesToRemove = new Stack<int>();
 
-            var count = trivia.Count;
-
-            for (var index = 0; index < count; index++)
+            for (int index = 0, count = trivia.Count; index < count; index++)
             {
-                var t = trivia[index];
-
-                if (t.IsEndOfLine())
+                if (trivia[index].IsEndOfLine())
                 {
                     indicesToRemove.Push(index);
                 }
@@ -339,12 +332,11 @@ namespace MiKoSolutions.Analyzers
                 var additionalSpaces = count - value.GetPositionWithinStartLine();
 
                 var leadingTrivia = value.LeadingTrivia.ToList();
-                var triviaCount = leadingTrivia.Count;
 
                 // first collect all indices of the comments, for later reference
                 var indices = new List<int>(1);
 
-                for (var index = 0; index < triviaCount; index++)
+                for (int index = 0, triviaCount = leadingTrivia.Count; index < triviaCount; index++)
                 {
                     var trivia = leadingTrivia[index];
 

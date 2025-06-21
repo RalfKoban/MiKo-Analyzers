@@ -145,9 +145,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var used = methodBody.GetAllUsedVariables(semanticModel);
 
-            var count = parameters.Count;
-
-            for (var index = 0; index < count; index++)
+            for (int index = 0, count = parameters.Count; index < count; index++)
             {
                 var parameter = parameters[index];
                 var parameterName = parameter.GetName();

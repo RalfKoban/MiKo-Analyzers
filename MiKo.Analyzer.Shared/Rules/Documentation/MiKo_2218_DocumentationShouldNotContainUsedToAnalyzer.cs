@@ -430,9 +430,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private void AddIssues(List<Diagnostic> issues, string replacement, IReadOnlyList<Location> locations)
         {
-            var count = locations.Count;
-
-            for (var index = 0; index < count; index++)
+            for (int index = 0, count = locations.Count; index < count; index++)
             {
                 issues.Add(Issue(locations[index], replacement));
             }

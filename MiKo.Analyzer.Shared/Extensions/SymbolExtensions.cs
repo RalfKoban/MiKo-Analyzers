@@ -422,9 +422,8 @@ namespace MiKoSolutions.Analyzers
                             sb.Append('<');
 
                             var typeParameters = method.TypeParameters;
-                            var count = typeParameters.Length - 1;
 
-                            for (var i = 0; i <= count; i++)
+                            for (int i = 0, count = typeParameters.Length - 1; i <= count; i++)
                             {
                                 sb.Append(typeParameters[i].MinimalTypeName());
 
@@ -446,9 +445,7 @@ namespace MiKoSolutions.Analyzers
             {
                 sb.Append('(');
 
-                var count = parameters.Length - 1;
-
-                for (var i = 0; i <= count; i++)
+                for (int i = 0, count = parameters.Length - 1; i <= count; i++)
                 {
                     AppendParameterSignature(parameters[i], sb);
 
@@ -644,11 +641,14 @@ namespace MiKoSolutions.Analyzers
             {
                 var count = symbols.Count;
 
-                for (var index = 0; index < count; index++)
+                if (count > 0)
                 {
-                    if (symbols[index] is IMethodSymbol method && method.IsTypeUnderTestCreationMethod())
+                    for (var index = 0; index < count; index++)
                     {
-                        yield return method;
+                        if (symbols[index] is IMethodSymbol method && method.IsTypeUnderTestCreationMethod())
+                        {
+                            yield return method;
+                        }
                     }
                 }
             }
@@ -786,8 +786,7 @@ namespace MiKoSolutions.Analyzers
             {
                 for (var index = 0; index < length; index++)
                 {
-                    var implementedInterface = interfaces[index];
-                    var fullInterfaceName = implementedInterface.ToString();
+                    var fullInterfaceName = interfaces[index].ToString();
 
                     if (fullInterfaceName == interfaceTypeName)
                     {
@@ -1272,12 +1271,12 @@ namespace MiKoSolutions.Analyzers
 
                 default:
                 {
-                    if (IsEnumerable(specialType))
+                    if (value.TypeKind is TypeKind.Array)
                     {
                         return true;
                     }
 
-                    if (value.TypeKind is TypeKind.Array)
+                    if (IsEnumerable(specialType))
                     {
                         return true;
                     }
@@ -1700,9 +1699,11 @@ namespace MiKoSolutions.Analyzers
                     var parameterName = value.Name;
 
                     var prefixes = Constants.Markers.FieldPrefixes;
-                    fieldNames = new string[prefixes.Length];
+                    var prefixesLength = prefixes.Length;
 
-                    for (var index = 0; index < prefixes.Length; index++)
+                    fieldNames = new string[prefixesLength];
+
+                    for (var index = 0; index < prefixesLength; index++)
                     {
                         fieldNames[index] = prefixes[index] + parameterName;
                     }
@@ -1828,10 +1829,9 @@ namespace MiKoSolutions.Analyzers
         private static bool IsInterfaceImplementation<TSymbol>(this TSymbol value, ITypeSymbol typeSymbol, in ImmutableArray<INamedTypeSymbol> implementedInterfaces) where TSymbol : ISymbol
         {
             var name = value.Name;
-            var length = implementedInterfaces.Length;
 
             // Perf: do not use enumerable
-            for (var index = 0; index < length; index++)
+            for (int index = 0, length = implementedInterfaces.Length; index < length; index++)
             {
                 var members = implementedInterfaces[index].GetMembers(name);
                 var membersLength = members.Length;

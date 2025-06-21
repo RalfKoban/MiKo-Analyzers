@@ -40,9 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private IEnumerable<Diagnostic> Analyze(ImmutableArray<IParameterSymbol> parameters)
         {
-            var length = parameters.Length;
-
-            for (var index = 0; index < length; index++)
+            for (int index = 0, length = parameters.Length; index < length; index++)
             {
                 var parameter = parameters[index];
 

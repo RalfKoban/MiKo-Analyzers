@@ -95,10 +95,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static bool CommentHasIssue(in ReadOnlySpan<char> comment)
         {
-            var commentLength = comment.Length;
-            var last = commentLength - 1;
-
-            for (var i = 0; i < commentLength; i++)
+            for (int i = 0, last = comment.Length - 1; i <= last; i++)
             {
                 var c = comment[i];
 

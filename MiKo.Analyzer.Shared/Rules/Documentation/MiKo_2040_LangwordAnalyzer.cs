@@ -194,9 +194,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var textTokens = textNode.TextTokens;
 
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var textTokensCount = textTokens.Count;
-
-            for (var index = 0; index < textTokensCount; index++)
+            for (int index = 0, textTokensCount = textTokens.Count; index < textTokensCount; index++)
             {
                 var textToken = textTokens[index];
 

@@ -160,8 +160,8 @@ public class TestMe
         [TestCase("Something_ShouldHandleStuff", "Something_HandlesStuff")]
         [TestCase("Something_Should_HandleStuff", "Something_HandlesStuff")]
         public void Code_gets_fixed_for_method_(string method, string wanted) => VerifyCSharpFix(
-                                                                                                 "using System; class TestMe { void " + method + "() { } }",
-                                                                                                 "using System; class TestMe { void " + wanted + "() { } }");
+                                                                                             "using System; class TestMe { void " + method + "() { } }",
+                                                                                             "using System; class TestMe { void " + wanted + "() { } }");
 
         [TestCase("SomethingShouldFail", "SomethingFails")]
         [TestCase("SomethingShouldHaveAnything", "SomethingHaveAnything")]

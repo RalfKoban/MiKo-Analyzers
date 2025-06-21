@@ -21,9 +21,7 @@ namespace System
 
             var tuples = new List<(int, string)>();
 
-            var findingsLength = findings.Length;
-
-            for (var findingsIndex = 0; findingsIndex < findingsLength; findingsIndex++)
+            for (int findingsIndex = 0, length = findings.Length; findingsIndex < length; findingsIndex++)
             {
                 var finding = findings[findingsIndex];
 
