@@ -179,6 +179,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private sealed class MapData
         {
+#pragma warning disable SA1401 // Fields should be private
+            public readonly Pair[] ReplacementMap;
+            public readonly string[] ReplacementMapKeys;
+            public readonly Pair[] ByteArrayReplacementMap;
+            public readonly string[] ByteArrayReplacementMapKeys;
+            public readonly string[] ByteArrayContinueTexts;
+#pragma warning restore SA1401 // Fields should be private
+
 #pragma warning disable CA1861
             public MapData()
             {
@@ -246,16 +254,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                              };
             }
 #pragma warning restore CA1861
-
-            public Pair[] ReplacementMap { get; }
-
-            public string[] ReplacementMapKeys { get; }
-
-            public Pair[] ByteArrayReplacementMap { get; }
-
-            public string[] ByteArrayReplacementMapKeys { get; }
-
-            public string[] ByteArrayContinueTexts { get; }
 
             private static IEnumerable<string> CreatePhrases()
             {

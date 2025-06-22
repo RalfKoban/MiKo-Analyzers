@@ -20,21 +20,36 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var node = (ConditionalExpressionSyntax)context.Node;
 
-            foreach (var descendant in node.DescendantNodes())
+            if (node.Condition.FirstDescendant<BinaryExpressionSyntax>(SyntaxKind.CoalesceExpression) != null)
             {
-                if (context.CancellationToken.IsCancellationRequested)
+                ReportDiagnostics(context, Issue(node));
+            }
+            else
+            {
+                foreach (var ancestor in node.Ancestors())
                 {
-                    return;
-                }
-
-                switch (descendant.Kind())
-                {
-                    case SyntaxKind.ConditionalExpression:
-                    case SyntaxKind.CoalesceExpression:
+                    if (context.CancellationToken.IsCancellationRequested)
                     {
-                        ReportDiagnostics(context, Issue(descendant));
+                        return;
+                    }
 
-                        break;
+                    switch (ancestor)
+                    {
+                        case EqualsValueClauseSyntax _:
+                        case ArrowExpressionClauseSyntax _:
+                        case ReturnStatementSyntax _:
+                        case ArgumentSyntax _:
+                        case BaseMethodDeclarationSyntax _: // found the surrounding method
+                        case LocalFunctionStatementSyntax _: // found the surrounding local function
+                        case BasePropertyDeclarationSyntax _: // found the surrounding property, so we already skipped the getters or setters
+                            return; // no need to search further
+
+                        case ConditionalExpressionSyntax _:
+                        {
+                            ReportDiagnostics(context, Issue(node));
+
+                            return;
+                        }
                     }
                 }
             }

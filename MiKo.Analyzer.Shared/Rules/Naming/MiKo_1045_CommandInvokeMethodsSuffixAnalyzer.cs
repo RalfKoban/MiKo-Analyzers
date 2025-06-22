@@ -17,7 +17,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         internal const string Suffix = Constants.Names.Command;
 
         private const string IsPrefix = "Is";
-        private static readonly string[] HasArePrefix = { "Has", "Are" };
+        private const string CanPrefix = "Can";
+        private const string HasPrefix = "Has";
+
+        private static readonly string[] HasArePrefix = { HasPrefix, "Are" };
 
         public MiKo_1045_CommandInvokeMethodsSuffixAnalyzer() : base(Id, (SymbolKind)(-1))
         {
@@ -40,19 +43,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                         return betterName.ToString();
                     }
 
-                    return "Can".ConcatenatedWith(betterName);
+                    return CanPrefix.ConcatenatedWith(betterName);
                 }
 
                 // remove 'Can' at the beginning as the name already fits
                 if (StartsWithCan(betterName))
                 {
-                    return betterName.Slice(3).ToString();
+                    return betterName.Slice(CanPrefix.Length).ToString();
                 }
             }
 
             return betterName.ToString();
 
-            bool StartsWithCan(in ReadOnlySpan<char> name) => name.Length > 4 && name[3].IsUpperCaseLetter() && name.StartsWith("Can");
+            bool StartsWithCan(in ReadOnlySpan<char> name) => name.Length > CanPrefix.Length + 1 && name[CanPrefix.Length].IsUpperCaseLetter() && name.StartsWith(CanPrefix);
 
             ReadOnlySpan<char> WithoutIsHasArePrefix(in ReadOnlySpan<char> name)
             {
@@ -72,9 +75,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                             return name.Slice(IsPrefix.Length);
                         }
 
-                        if (nameLength > 3 && name[3].IsUpperCaseLetter() && name.Slice(0, 3).EqualsAny(HasArePrefix))
+                        if (nameLength > HasPrefix.Length && name[HasPrefix.Length].IsUpperCaseLetter() && name.Slice(0, HasPrefix.Length).EqualsAny(HasArePrefix))
                         {
-                            return name.Slice(3);
+                            return name.Slice(HasPrefix.Length);
                         }
 
                         return name;

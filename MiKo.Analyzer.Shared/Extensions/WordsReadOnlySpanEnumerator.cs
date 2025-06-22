@@ -16,11 +16,12 @@ namespace System
         public WordsReadOnlySpanEnumerator(in ReadOnlySpan<char> text)
         {
             m_text = text;
+            var textLength = text.Length;
 
             var words = 1;
 
             // start at index 1 to skip first upper case character (and avoid return of empty word)
-            for (var index = 1; index < text.Length; index++)
+            for (var index = 1; index < textLength; index++)
             {
                 if (text[index].IsUpperCase())
                 {
@@ -31,10 +32,8 @@ namespace System
             m_wordStartingPositions = new int[words];
             m_wordStartingPositions[0] = 0;
 
-            var i = 1;
-
             // start at index 1 to skip first upper case character (and avoid return of empty word)
-            for (var index = 1; index < text.Length; index++)
+            for (int index = 1, i = 1; index < textLength; index++)
             {
                 if (text[index].IsUpperCase())
                 {

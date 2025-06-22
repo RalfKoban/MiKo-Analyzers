@@ -17160,6 +17160,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Indent element.
+        /// </summary>
+        internal static string MiKo_6066_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6066_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code readability improves when elements of collection expressions are vertically indented. This makes the code clearer and easier to follow..
+        /// </summary>
+        internal static string MiKo_6066_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6066_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Indent element.
+        /// </summary>
+        internal static string MiKo_6066_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6066_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Collection expression elements should be indented and not outdented.
+        /// </summary>
+        internal static string MiKo_6066_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6066_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Surround with blank lines.
         /// </summary>
         internal static string MiKo_6070_CodeFixTitle {

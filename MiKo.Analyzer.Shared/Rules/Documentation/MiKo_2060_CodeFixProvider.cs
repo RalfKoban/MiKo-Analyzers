@@ -173,6 +173,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private sealed class MapData
         {
+#pragma warning disable SA1401 // Fields should be private
+            public readonly Pair[] TypeReplacementMapA;
+            public readonly string[] TypeReplacementMapKeysA;
+            public readonly Pair[] TypeReplacementMapCD;
+            public readonly string[] TypeReplacementMapKeysCD;
+            public readonly Pair[] TypeReplacementMapThe;
+            public readonly string[] TypeReplacementMapKeysThe;
+            public readonly Pair[] TypeReplacementMapThis;
+            public readonly string[] TypeReplacementMapKeysThis;
+            public readonly Pair[] TypeReplacementMapOthers;
+            public readonly string[] TypeReplacementMapKeysOthers;
+            public readonly Pair[] MethodReplacementMap;
+            public readonly string[] MethodReplacementMapKeys;
+            public readonly Pair[] InstancesReplacementMap;
+            public readonly string[] InstancesReplacementMapKeys;
+            public readonly Pair[] CleanupReplacementMap;
+            public readonly string[] CleanupReplacementMapKeys;
+#pragma warning restore SA1401 // Fields should be private
+
             public MapData()
             {
                 var typeKeys = CreateTypeReplacementMapKeys();
@@ -287,38 +306,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return pairs;
                 }
             }
-
-            public Pair[] TypeReplacementMapA { get; }
-
-            public string[] TypeReplacementMapKeysA { get; }
-
-            public Pair[] TypeReplacementMapCD { get; }
-
-            public string[] TypeReplacementMapKeysCD { get; }
-
-            public Pair[] TypeReplacementMapThe { get; }
-
-            public string[] TypeReplacementMapKeysThe { get; }
-
-            public Pair[] TypeReplacementMapThis { get; }
-
-            public string[] TypeReplacementMapKeysThis { get; }
-
-            public Pair[] TypeReplacementMapOthers { get; }
-
-            public string[] TypeReplacementMapKeysOthers { get; }
-
-            public Pair[] MethodReplacementMap { get; }
-
-            public string[] MethodReplacementMapKeys { get; }
-
-            public Pair[] InstancesReplacementMap { get; }
-
-            public string[] InstancesReplacementMapKeys { get; }
-
-            public Pair[] CleanupReplacementMap { get; }
-
-            public string[] CleanupReplacementMapKeys { get; }
 
             private static string[] CreateTypeReplacementMapKeys()
             {
@@ -626,9 +613,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                   };
 
                 var results = new HashSet<string>(phrases);
-                var phrasesLength = phrases.Length;
 
-                for (var index = 0; index < phrasesLength; index++)
+                for (int index = 0, phrasesLength = phrases.Length; index < phrasesLength; index++)
                 {
                     results.Add(phrases[index].Replace("actory", "actory class"));
                 }
@@ -662,9 +648,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                             "the new instances of the ",
                                         };
 
-                var continuationsLength = continuations.Length;
-
-                for (var index = 0; index < continuationsLength; index++)
+                for (int index = 0, continuationsLength = continuations.Length; index < continuationsLength; index++)
                 {
                     var continuation = continuations[index];
 

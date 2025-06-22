@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class MiKo_6063_InvocationIsOnSameLineAnalyzer : SpacingAnalyzer
+    public sealed class MiKo_6063_InvocationIsOnSameLineAnalyzer : SpacingAnalyzer
     {
         public const string Id = "MiKo_6063";
 
@@ -23,10 +23,10 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 switch (member.Expression)
                 {
                     case IdentifierNameSyntax expression:
-                        return name.GetStartingLine() != expression.GetStartingLine();
+                        return name.IsOnSameLineAs(expression) is false;
 
                     case InvocationExpressionSyntax invocation when invocation.Expression is IdentifierNameSyntax:
-                        return name.GetStartingLine() != invocation.GetStartingLine();
+                        return name.IsOnSameLineAs(invocation) is false;
                 }
             }
 

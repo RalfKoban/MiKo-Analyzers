@@ -132,6 +132,42 @@ namespace System
             return AllIndicesNonOrdinal(value.ToString(), finding, comparison);
         }
 
+        public static bool AllUpper(this in ReadOnlySpan<char> value)
+        {
+            var valueLength = value.Length;
+
+            if (valueLength > 0)
+            {
+                for (var index = 0; index < valueLength; index++)
+                {
+                    if (char.IsUpper(value[index]) is false)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public static bool Any(this in ReadOnlySpan<char> value, in char c)
+        {
+            var valueLength = value.Length;
+
+            if (valueLength > 0)
+            {
+                for (var index = 0; index < valueLength; index++)
+                {
+                    if (value[index] == c)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static StringBuilder AsCachedBuilder(this string value) => StringBuilderCache.Acquire(value.Length).Append(value);
 
@@ -390,8 +426,9 @@ namespace System
                 var buffer = stackalloc char[length];
                 var bufferSpan = new Span<char>(buffer, length);
 
-                value.CopyTo(bufferSpan);
                 buffer[valueLength] = arg0;
+
+                value.CopyTo(bufferSpan);
                 arg1.AsSpan().CopyTo(bufferSpan.Slice(valueLength + 1));
 
                 return new string(buffer, 0, length);
@@ -716,10 +753,9 @@ namespace System
             if (value.HasCharacters())
             {
                 var valueSpan = value.AsSpan();
-                var phrasesLength = phrases.Length;
                 var ordinalComparison = comparison is StringComparison.Ordinal;
 
-                for (var index = 0; index < phrasesLength; index++)
+                for (int index = 0, length = phrases.Length; index < length; index++)
                 {
                     var phrase = phrases[index];
                     var phraseSpan = phrase.AsSpan();
@@ -751,9 +787,8 @@ namespace System
         public static int CountLeadingWhitespaces(this string value, int start = 0)
         {
             var whitespaces = 0;
-            var valueLength = value.Length;
 
-            for (; start < valueLength; start++)
+            for (var length = value.Length; start < length; start++)
             {
                 if (value[start].IsWhiteSpace())
                 {
@@ -812,9 +847,7 @@ namespace System
             {
                 var lastChar = value[value.Length - 1];
 
-                var length = suffixCharacters.Length;
-
-                for (var index = 0; index < length; index++)
+                for (int index = 0, length = suffixCharacters.Length; index < length; index++)
                 {
                     if (lastChar == suffixCharacters[index])
                     {
@@ -834,9 +867,8 @@ namespace System
             if (value.HasCharacters())
             {
                 var valueLength = value.Length;
-                var suffixesLength = suffixes.Length;
 
-                for (var index = 0; index < suffixesLength; index++)
+                for (int index = 0, length = suffixes.Length; index < length; index++)
                 {
                     var suffix = suffixes[index];
 
@@ -860,9 +892,8 @@ namespace System
             if (value.HasCharacters())
             {
                 var valueLength = value.Length;
-                var suffixesLength = suffixes.Count;
 
-                for (var index = 0; index < suffixesLength; index++)
+                for (int index = 0, count = suffixes.Count; index < count; index++)
                 {
                     var suffix = suffixes[index];
 
@@ -931,9 +962,7 @@ namespace System
         {
             if (value.HasCharacters())
             {
-                var phrasesLength = phrases.Length;
-
-                for (var index = 0; index < phrasesLength; index++)
+                for (int index = 0, length = phrases.Length; index < length; index++)
                 {
                     var phrase = phrases[index];
 
@@ -972,9 +1001,7 @@ namespace System
         {
             if (value.Length > 0)
             {
-                var phrasesLength = phrases.Length;
-
-                for (var index = 0; index < phrasesLength; index++)
+                for (int index = 0, length = phrases.Length; index < length; index++)
                 {
                     var phrase = phrases[index];
 
@@ -1169,9 +1196,8 @@ namespace System
         public static bool HasUpperCaseLettersAbove(this in ReadOnlySpan<char> value, in ushort limit)
         {
             var count = 0;
-            var length = value.Length;
 
-            for (var index = 0; index < length; index++)
+            for (int index = 0, length = value.Length; index < length; index++)
             {
                 if (value[index].IsUpperCase())
                 {
@@ -1281,13 +1307,9 @@ namespace System
                 // performance optimization to avoid unnecessary 'ToString' calls on 'ReadOnlySpan' (see implementation inside MemoryExtensions)
                 if (comparison is StringComparison.Ordinal)
                 {
-                    var phrasesLength = phrases.Length;
-
-                    for (var i = 0; i < phrasesLength; i++)
+                    for (int i = 0, length = phrases.Length; i < length; i++)
                     {
-                        var phrase = phrases[i];
-
-                        var index = value.IndexOf(phrase.AsSpan()); // performs ordinal comparison
+                        var index = value.IndexOf(phrases[i].AsSpan()); // performs ordinal comparison
 
                         if (index > -1)
                         {
@@ -1314,13 +1336,9 @@ namespace System
                     return IndexOfAny(value.AsSpan(), phrases, comparison);
                 }
 
-                var phrasesLength = phrases.Length;
-
-                for (var i = 0; i < phrasesLength; i++)
+                for (int i = 0, length = phrases.Length; i < length; i++)
                 {
-                    var phrase = phrases[i];
-
-                    var index = value.IndexOf(phrase, comparison);
+                    var index = value.IndexOf(phrases[i], comparison);
 
                     if (index > -1)
                     {
@@ -1341,13 +1359,9 @@ namespace System
 
             if (value.Length > 0)
             {
-                var phrasesLength = phrases.Length;
-
-                for (var i = 0; i < phrasesLength; i++)
+                for (int i = 0, length = phrases.Length; i < length; i++)
                 {
-                    var phrase = phrases[i];
-
-                    var index = value.LastIndexOf(phrase, comparison);
+                    var index = value.LastIndexOf(phrases[i], comparison);
 
                     if (index > -1)
                     {
@@ -1571,9 +1585,8 @@ namespace System
             if (value.HasCharacters())
             {
                 var valueSpan = value.AsSpan();
-                var prefixesCount = prefixes.Length;
 
-                for (var index = 0; index < prefixesCount; index++)
+                for (int index = 0, length = prefixes.Length; index < length; index++)
                 {
                     var prefix = prefixes[index];
 
@@ -1594,13 +1607,9 @@ namespace System
         {
             if (value.Length > 0)
             {
-                var prefixesLength = prefixes.Length;
-
-                for (var index = 0; index < prefixesLength; index++)
+                for (int index = 0, length = prefixes.Length; index < length; index++)
                 {
-                    var prefix = prefixes[index];
-
-                    if (value.StartsWith(prefix, comparison))
+                    if (value.StartsWith(prefixes[index], comparison))
                     {
                         return true;
                     }
@@ -1827,9 +1836,7 @@ namespace System
         {
             var text = value.TrimStart();
 
-            var wordsLength = words.Length;
-
-            for (var index = 0; index < wordsLength; index++)
+            for (int index = 0, length = words.Length; index < length; index++)
             {
                 var word = words[index];
 
@@ -1973,10 +1980,8 @@ namespace System
             }
 
             var slice = value;
-            var suffixesLength = suffixes.Length;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            for (var index = 0; index < suffixesLength; index++)
+            for (int index = 0, suffixesLength = suffixes.Length; index < suffixesLength; index++)
             {
                 var suffix = suffixes[index].AsSpan();
 
@@ -1998,9 +2003,7 @@ namespace System
 
         private static bool HasWhitespaces(this in ReadOnlySpan<char> value, int start = 0)
         {
-            var valueLength = value.Length;
-
-            for (; start < valueLength; start++)
+            for (var valueLength = value.Length; start < valueLength; start++)
             {
                 if (value[start].IsWhiteSpace())
                 {
@@ -2047,23 +2050,20 @@ namespace System
 
         private static bool QuickSubstringProbe(in ReadOnlySpan<char> value, in ReadOnlySpan<char> other, in StringComparison comparison)
         {
-            var valueLength = value.Length;
-            var otherLength = other.Length;
-
-            if (valueLength > otherLength)
+            if (value.Length > other.Length)
             {
                 // continue to check
                 return true;
             }
 
-            if (valueLength < otherLength)
+            if (value.Length < other.Length)
             {
                 // cannot match
                 return false;
             }
 
             // both are same length, so perform a quick compare first
-            if (valueLength > QuickSubstringProbeLengthThreshold)
+            if (value.Length > QuickSubstringProbeLengthThreshold)
             {
                 switch (comparison)
                 {
@@ -2083,27 +2083,12 @@ namespace System
         {
             var length = value.Length;
 
-            if (length != other.Length && length < 2)
+            if (length != other.Length && length < QuickSubstringProbeLengthThreshold)
             {
                 return true;
             }
 
-            if (value[0] != other[0])
-            {
-                // they do not fit as characters do not match
-                return false;
-            }
-
-            var lastIndex = length - 1;
-
-            if (value[lastIndex] != other[lastIndex])
-            {
-                // they do not fit as characters do not match
-                return false;
-            }
-
-            // continue to check
-            return true;
+            return value[0] == other[0] && value[length - 1] == other[length - 1];
         }
 
         private static unsafe bool QuickSubstringProbeOrdinalIgnoreCase(in ReadOnlySpan<char> value, in ReadOnlySpan<char> other)
@@ -2120,22 +2105,19 @@ namespace System
             {
                 fixed (char* bp = &MemoryMarshal.GetReference(other))
                 {
-                    var a = ap;
-                    var b = bp;
-
-                    if (QuickDiff(a, b, 0)) // uppercase both chars - notice that we need just one compare per char
+                    if (QuickDiff(ap, bp, 0)) // uppercase both chars - notice that we need just one compare per char
                     {
                         // they do not fit as characters do not match
                         return false;
                     }
 
-                    if (QuickDiff(a, b, length - 1)) // uppercase both chars - notice that we need just one compare per char
+                    if (QuickDiff(ap, bp, length - 1)) // uppercase both chars - notice that we need just one compare per char
                     {
                         // they do not fit as characters do not match
                         return false;
                     }
 
-                    if (QuickDiff(a, b, length / 2)) // uppercase both chars - notice that we need just one compare per char
+                    if (QuickDiff(ap, bp, length / 2)) // uppercase both chars - notice that we need just one compare per char
                     {
                         // they do not fit as characters do not match
                         return false;
@@ -2143,13 +2125,13 @@ namespace System
 
                     var third = length / 3;
 
-                    if (QuickDiff(a, b, third)) // uppercase both chars - notice that we need just one compare per char
+                    if (QuickDiff(ap, bp, third)) // uppercase both chars - notice that we need just one compare per char
                     {
                         // they do not fit as characters do not match
                         return false;
                     }
 
-                    if (QuickDiff(a, b, 2 * third)) // uppercase both chars - notice that we need just one compare per char
+                    if (QuickDiff(ap, bp, 2 * third)) // uppercase both chars - notice that we need just one compare per char
                     {
                         // they do not fit as characters do not match
                         return false;
@@ -2203,11 +2185,9 @@ namespace System
 
         private static int[] AllIndicesOrdinal(in ReadOnlySpan<char> span, in ReadOnlySpan<char> other)
         {
-            var otherLength = other.Length;
-
             int[] indices = null;
 
-            for (var index = 0; ; index += otherLength)
+            for (int index = 0, otherLength = other.Length; ; index += otherLength)
             {
                 var newIndex = span.Slice(index).IndexOf(other); // performs ordinal comparison
 
@@ -2236,11 +2216,9 @@ namespace System
 
         private static int[] AllIndicesNonOrdinal(string value, string finding, in StringComparison comparison)
         {
-            var findingLength = finding.Length;
-
             int[] indices = null;
 
-            for (var index = 0; ; index += findingLength)
+            for (int index = 0, findingLength = finding.Length; ; index += findingLength)
             {
                 index = value.IndexOf(finding, index, comparison);
 

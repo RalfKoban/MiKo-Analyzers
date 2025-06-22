@@ -22,9 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers)
         {
-            var identifiersLength = identifiers.Length;
-
-            for (var index = 0; index < identifiersLength; index++)
+            for (int index = 0, identifiersLength = identifiers.Length; index < identifiersLength; index++)
             {
                 var identifier = identifiers[index];
                 var name = identifier.ValueText;

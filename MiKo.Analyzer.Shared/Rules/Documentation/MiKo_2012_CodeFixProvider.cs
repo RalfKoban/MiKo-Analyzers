@@ -84,21 +84,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var name = member.GetName();
 
-                if (name.Contains(Constants.Names.Command, StringComparison.OrdinalIgnoreCase))
+                if (name.Contains(Constants.Names.Command, StringComparison.OrdinalIgnoreCase) && MiKo_2038_CodeFixProvider.CanFix(text))
                 {
-                    if (MiKo_2038_CodeFixProvider.CanFix(text))
-                    {
-                        return MiKo_2038_CodeFixProvider.GetUpdatedSyntax(comment);
-                    }
+                    return MiKo_2038_CodeFixProvider.GetUpdatedSyntax(comment);
                 }
-                else if (name.Contains(Constants.Names.Factory, StringComparison.OrdinalIgnoreCase))
+
+                if (name.Contains(Constants.Names.Factory, StringComparison.OrdinalIgnoreCase) && MiKo_2060_CodeFixProvider.CanFix(text))
                 {
-                    if (MiKo_2060_CodeFixProvider.CanFix(text))
-                    {
-                        return MiKo_2060_CodeFixProvider.GetUpdatedSyntax(comment);
-                    }
+                    return MiKo_2060_CodeFixProvider.GetUpdatedSyntax(comment);
                 }
-                else if (name.Contains(nameof(EventArgs)))
+
+                if (name.Contains(nameof(EventArgs)))
                 {
                     return MiKo_2002_CodeFixProvider.GetUpdatedSyntax(comment);
                 }
