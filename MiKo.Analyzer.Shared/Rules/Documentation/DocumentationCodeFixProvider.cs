@@ -157,9 +157,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     var textTokens = text.TextTokens;
 
                     // keep in local variable to avoid multiple requests (see Roslyn implementation)
-                    var textTokensCount = textTokens.Count;
-
-                    for (var index = 0; index < textTokensCount; index++)
+                    for (int index = 0, textTokensCount = textTokens.Count; index < textTokensCount; index++)
                     {
                         var token = textTokens[index];
 
@@ -521,9 +519,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlTextSyntax MakeFirstWordInfiniteVerb(XmlTextSyntax text)
         {
             var textTokens = text.TextTokens;
-            var textTokensCount = textTokens.Count;
 
-            for (var index = 0; index < textTokensCount; index++)
+            for (int index = 0, textTokensCount = textTokens.Count; index < textTokensCount; index++)
             {
                 var token = textTokens[index];
 
@@ -612,18 +609,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var partsForOtherSentences = new List<XmlNodeSyntax>();
 
             var commentContents = comment.Content;
-            var commentContentsCount = commentContents.Count;
 
-            for (var index = 0; index < commentContentsCount; index++)
+            for (int index = 0, commentContentsCount = commentContents.Count; index < commentContentsCount; index++)
             {
                 var node = commentContents[index];
 
                 if (node is XmlTextSyntax text)
                 {
                     var textTokens = text.TextTokens;
-                    var textTokensCount = textTokens.Count;
 
-                    for (var tokenIndex = 0; tokenIndex < textTokensCount; tokenIndex++)
+                    for (int tokenIndex = 0, textTokensCount = textTokens.Count; tokenIndex < textTokensCount; tokenIndex++)
                     {
                         var token = textTokens[tokenIndex];
 

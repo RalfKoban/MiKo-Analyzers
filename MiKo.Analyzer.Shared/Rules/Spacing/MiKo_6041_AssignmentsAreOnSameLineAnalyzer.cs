@@ -71,21 +71,15 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private void AnalyzeAssignmentExpression(in SyntaxNodeAnalysisContext context, AssignmentExpressionSyntax node)
         {
-            var operatorToken = node.OperatorToken;
-            var allOnSameLine = operatorToken.IsOnSameLineAs(node.Left) && operatorToken.IsOnSameLineAs(node.Right);
-
-            if (allOnSameLine is false)
+            if (node.Left.IsOnSameLineAs(node.Right) is false)
             {
-                ReportIssue(context, operatorToken);
+                ReportIssue(context, node.OperatorToken);
             }
         }
 
         private void AnalyzeEqualsValueClause(in SyntaxNodeAnalysisContext context, EqualsValueClauseSyntax node)
         {
-            var equalsToken = node.EqualsToken;
-            var allOnSameLine = equalsToken.IsOnSameLineAs(node.Value) && equalsToken.IsOnSameLineAs(node.PreviousSiblingNodeOrToken());
-
-            if (allOnSameLine is false)
+            if (node.Value.IsOnSameLineAs(node.PreviousSiblingNodeOrToken()) is false)
             {
                 ReportIssue(context, node);
             }

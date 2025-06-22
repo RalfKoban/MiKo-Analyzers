@@ -60,7 +60,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var ctors = symbol.ContainingType.Constructors.Where(IsApplicableConstructor).ToList();
 
-            if (ctors.None())
+            if (ctors.Count is 0)
             {
                 // no ctor, so we assume that it is not assigned
                 return true;

@@ -45,9 +45,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol, Compilation compilation)
         {
             var members = symbol.GetMembers();
-            var count = members.Length;
 
-            for (var index = 0; index < count; index++)
+            for (int index = 0, count = members.Length; index < count; index++)
             {
                 var member = members[index];
 

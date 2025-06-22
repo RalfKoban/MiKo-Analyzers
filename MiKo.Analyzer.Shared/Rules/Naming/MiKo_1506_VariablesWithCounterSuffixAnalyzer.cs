@@ -9,7 +9,7 @@ using MiKoSolutions.Analyzers.Linguistics;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class MiKo_1506_VariablesWithCounterSuffixAnalyzer : NamingLocalVariableAnalyzer
+    public sealed class MiKo_1506_VariablesWithCounterSuffixAnalyzer : NamingLocalVariableAnalyzer
     {
         public const string Id = "MiKo_1506";
 

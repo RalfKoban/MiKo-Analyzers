@@ -36,9 +36,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected static string GetFieldPrefix(string fieldName)
         {
             var fieldPrefixes = Constants.Markers.FieldPrefixes;
-            var prefixesLength = fieldPrefixes.Length;
 
-            for (var index = 0; index < prefixesLength; index++)
+            for (int index = 0, prefixesLength = fieldPrefixes.Length; index < prefixesLength; index++)
             {
                 var prefix = fieldPrefixes[index];
 
@@ -348,9 +347,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     var index = 0;
 
                     var fieldPrefixes = Constants.Markers.FieldPrefixes;
-                    var length = fieldPrefixes.Length;
 
-                    for (var i = 0; i < length; i++)
+                    for (int i = 0, length = fieldPrefixes.Length; i < length; i++)
                     {
                         var prefix = fieldPrefixes[i];
 

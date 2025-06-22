@@ -19,18 +19,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (syntax is XmlElementSyntax element)
             {
-                var onSameLine = element.StartTag.GetStartingLine() == element.EndTag.GetStartingLine();
+                XmlTextSyntax startText;
+                XmlTextSyntax endText;
 
-                var startText = XmlText(onSameLine ? " " + Constants.Comments.DefaultStartingPhrase : Constants.Comments.DefaultStartingPhrase);
-                var endText = XmlText(".");
-
-                if (onSameLine)
+                if (element.StartTag.IsOnSameLineAs(element.EndTag))
                 {
-                    // no leading '///' to add because the text is located on the same line
+                    startText = XmlText(" " + Constants.Comments.DefaultStartingPhrase);
+
+                    // no trailing '///' to add because the text is located on the same line
+                    endText = XmlText(".");
                 }
                 else
                 {
-                    endText = endText.WithTrailingXmlComment();
+                    startText = XmlText(Constants.Comments.DefaultStartingPhrase);
+
+                    endText = XmlText(".").WithTrailingXmlComment();
                 }
 
                 var reference = GetDefaultValueReference(issue);

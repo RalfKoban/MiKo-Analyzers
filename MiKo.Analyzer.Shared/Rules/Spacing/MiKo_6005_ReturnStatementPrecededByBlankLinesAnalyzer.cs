@@ -12,14 +12,13 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     {
         public const string Id = "MiKo_6005";
 
+        private static readonly SyntaxKind[] Statements = { SyntaxKind.ReturnStatement, SyntaxKind.YieldReturnStatement };
+
         public MiKo_6005_ReturnStatementPrecededByBlankLinesAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeReturnStatementSyntax, SyntaxKind.ReturnStatement, SyntaxKind.YieldReturnStatement);
-        }
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeReturnStatementSyntax, Statements);
 
         private void AnalyzeReturnStatementSyntax(SyntaxNodeAnalysisContext context)
         {

@@ -78,9 +78,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var textTokens = text.TextTokens;
 
                 // keep in local variable to avoid multiple requests (see Roslyn implementation)
-                var textTokensCount = textTokens.Count;
-
-                for (var index = 0; index < textTokensCount; index++)
+                for (int index = 0, textTokensCount = textTokens.Count; index < textTokensCount; index++)
                 {
                     var token = textTokens[index];
                     var valueText = token.ValueText.Without(Constants.Comments.AsynchronouslyStartingPhrase).AsSpan().Trim();
@@ -141,9 +139,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 contents = summary.Content;
 
                 // keep in local variable to avoid multiple requests (see Roslyn implementation)
-                var count = contents.Count - 1;
-
-                for (var i = 0; i < count; i++)
+                for (int i = 0, count = contents.Count - 1; i < count; i++)
                 {
                     if (contents[i] is XmlTextSyntax t1 && contents[i + 1] is XmlTextSyntax t2)
                     {
@@ -191,9 +187,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var textTokens = sentenceEnding.TextTokens;
 
                 // keep in local variable to avoid multiple requests (see Roslyn implementation)
-                var textTokensCount = textTokens.Count;
-
-                for (var index = 0; index < textTokensCount; index++)
+                for (int index = 0, textTokensCount = textTokens.Count; index < textTokensCount; index++)
                 {
                     var token = textTokens[index];
 

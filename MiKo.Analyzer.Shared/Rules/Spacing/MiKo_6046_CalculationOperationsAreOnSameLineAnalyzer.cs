@@ -30,9 +30,8 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
             var node = (BinaryExpressionSyntax)context.Node;
-            var operatorToken = node.OperatorToken;
 
-            if (operatorToken.IsOnSameLineAs(node.Left) && operatorToken.IsOnSameLineAs(node.Right))
+            if (node.Left.IsOnSameLineAs(node.Right))
             {
                 return;
             }
@@ -43,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
             else
             {
-                ReportDiagnostics(context, Issue(operatorToken));
+                ReportDiagnostics(context, Issue(node.OperatorToken));
             }
         }
     }

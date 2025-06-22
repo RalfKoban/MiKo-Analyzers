@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class MiKo_1117_TestMethodsShouldBeNamedMorePreciseAnalyzer : NamingAnalyzer
+    public sealed class MiKo_1117_TestMethodsShouldBeNamedMorePreciseAnalyzer : NamingAnalyzer
     {
         public const string Id = "MiKo_1117";
 

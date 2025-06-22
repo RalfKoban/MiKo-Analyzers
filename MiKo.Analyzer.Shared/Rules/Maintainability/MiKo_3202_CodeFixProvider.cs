@@ -98,7 +98,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var applyCommentFromTrue = false;
 
             // seems we have different lines, so there might be comments to adjust as well
-            if (oldWhenTrue.GetStartingLine() != oldWhenFalse.GetStartingLine())
+            if (oldWhenTrue.IsOnSameLineAs(oldWhenFalse) is false)
             {
                 // different line, so apply comment from complete statement
                 applyCommentFromTrue = oldWhenTrue.HasTrailingComment();
