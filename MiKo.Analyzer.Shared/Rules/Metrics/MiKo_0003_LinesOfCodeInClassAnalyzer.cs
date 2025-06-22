@@ -48,9 +48,8 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
             var loc = 0;
 
             var members = declaration.Members;
-            var count = members.Count;
 
-            for (var index = 0; index < count; index++)
+            for (int index = 0, count = members.Count; index < count; index++)
             {
                 var member = members[index];
 

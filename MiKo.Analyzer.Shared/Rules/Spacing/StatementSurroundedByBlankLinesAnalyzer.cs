@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -9,17 +10,43 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     public abstract class StatementSurroundedByBlankLinesAnalyzer<T> : SurroundedByBlankLinesAnalyzer where T : StatementSyntax
     {
-        private readonly SyntaxKind m_syntaxKind;
+        private readonly SyntaxKind[] m_syntaxKinds;
 
-        protected StatementSurroundedByBlankLinesAnalyzer(in SyntaxKind syntaxKind, string id) : base(id) => m_syntaxKind = syntaxKind;
+        protected StatementSurroundedByBlankLinesAnalyzer(in SyntaxKind syntaxKind, string id) : base(id) => m_syntaxKinds = new[] { syntaxKind };
 
         protected abstract SyntaxToken GetKeyword(T node);
 
-        protected sealed override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeStatement, m_syntaxKind);
+        protected sealed override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeStatement, m_syntaxKinds);
 
         protected virtual bool ShallAnalyzeStatement(T node) => true;
 
         protected virtual bool ShallAnalyzeOtherStatement(StatementSyntax node) => true;
+
+        private static bool HasNoBlankLinesAfter(IReadOnlyList<StatementSyntax> otherStatements, in FileLinePositionSpan afterPosition)
+        {
+            for (int index = 0, count = otherStatements.Count; index < count; index++)
+            {
+                if (HasNoBlankLinesAfter(afterPosition, otherStatements[index]))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool HasNoBlankLinesBefore(IReadOnlyList<StatementSyntax> otherStatements, in FileLinePositionSpan beforePosition)
+        {
+            for (int index = 0, count = otherStatements.Count; index < count; index++)
+            {
+                if (HasNoBlankLinesBefore(beforePosition, otherStatements[index]))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         private void AnalyzeStatement(SyntaxNodeAnalysisContext context)
         {
@@ -77,8 +104,8 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             if (otherStatements.Count > 0)
             {
-                var noBlankLinesBefore = otherStatements.Any(_ => HasNoBlankLinesBefore(beforePosition, _));
-                var noBlankLinesAfter = otherStatements.Any(_ => HasNoBlankLinesAfter(afterPosition, _));
+                var noBlankLinesBefore = HasNoBlankLinesBefore(otherStatements, beforePosition);
+                var noBlankLinesAfter = HasNoBlankLinesAfter(otherStatements, afterPosition);
 
                 if (noBlankLinesBefore || noBlankLinesAfter)
                 {
@@ -97,8 +124,8 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             var statements = section.Statements;
             var otherStatements = statements.Except(node).Where(ShallAnalyzeOtherStatement).ToList();
 
-            var noBlankLinesBefore = otherStatements.Any(_ => HasNoBlankLinesBefore(beforePosition, _));
-            var noBlankLinesAfter = otherStatements.Any(_ => HasNoBlankLinesAfter(afterPosition, _));
+            var noBlankLinesBefore = HasNoBlankLinesBefore(otherStatements, beforePosition);
+            var noBlankLinesAfter = HasNoBlankLinesAfter(otherStatements, afterPosition);
 
             if (noBlankLinesAfter is false)
             {

@@ -20,13 +20,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private void AnalyzeField(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is FieldDeclarationSyntax declaration)
+            if (context.Node is FieldDeclarationSyntax field)
             {
-                var modifiers = declaration.Modifiers;
+                var modifiers = field.Modifiers;
 
                 if (modifiers.Any(SyntaxKind.StaticKeyword) && modifiers.None(SyntaxKind.ReadOnlyKeyword))
                 {
-                    foreach (var variable in declaration.Declaration.Variables)
+                    foreach (var variable in field.Declaration.Variables)
                     {
                         if (variable.Initializer != null)
                         {

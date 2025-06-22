@@ -52,7 +52,6 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<T> Ancestors<T>(this SyntaxNode value) where T : SyntaxNode => value.Ancestors().OfType<T>(); // value.AncestorsAndSelf().OfType<T>();
 
-        // TODO RKN: Use types, fields etc. as well?
         internal static IEnumerable<T> AncestorsWithinMethods<T>(this SyntaxNode value) where T : SyntaxNode
         {
             // ReSharper disable once LoopCanBePartlyConvertedToQuery
@@ -218,10 +217,8 @@ namespace MiKoSolutions.Analyzers
             {
                 XmlNodeSyntax first = null;
 
-                var listCount = list.Count;
-
                 // try to find the first syntax that is not only an XmlCommentExterior
-                for (var index = 0; index < listCount; index++)
+                for (int index = 0, listCount = list.Count; index < listCount; index++)
                 {
                     first = list[index];
 
@@ -972,28 +969,13 @@ namespace MiKoSolutions.Analyzers
                 switch (ancestor)
                 {
                     case BaseMethodDeclarationSyntax method:
-                    {
-                        var parameters = method.ParameterList.Parameters;
-
-                        if (parameters.Count is 0)
-                        {
-                            return Array.Empty<ParameterSyntax>();
-                        }
-
-                        return parameters.ToArray();
-                    }
+                        return method.ParameterList.Parameters.ToArray();
 
                     case IndexerDeclarationSyntax indexer:
-                    {
-                        var parameters = indexer.ParameterList.Parameters;
+                        return indexer.ParameterList.Parameters.ToArray();
 
-                        if (parameters.Count is 0)
-                        {
-                            return Array.Empty<ParameterSyntax>();
-                        }
-
-                        return parameters.ToArray();
-                    }
+                    case BaseTypeDeclarationSyntax _:
+                        return Array.Empty<ParameterSyntax>();
                 }
             }
 
@@ -1007,33 +989,18 @@ namespace MiKoSolutions.Analyzers
                 switch (ancestor)
                 {
                     case BaseMethodDeclarationSyntax method:
-                    {
-                        var parameters = method.ParameterList.Parameters;
-
-                        if (parameters.Count is 0)
-                        {
-                            return Array.Empty<string>();
-                        }
-
-                        return parameters.ToArray(_ => _.GetName());
-                    }
+                        return method.ParameterList.Parameters.ToArray(_ => _.GetName());
 
                     case IndexerDeclarationSyntax indexer:
-                    {
-                        var parameters = indexer.ParameterList.Parameters;
-
-                        if (parameters.Count is 0)
-                        {
-                            return Array.Empty<string>();
-                        }
-
-                        return parameters.ToArray(_ => _.GetName());
-                    }
+                        return indexer.ParameterList.Parameters.ToArray(_ => _.GetName());
 
                     case BasePropertyDeclarationSyntax property:
                         return property.AccessorList?.Accessors.Any(_ => _.IsKind(SyntaxKind.SetAccessorDeclaration)) is true
                                ? Constants.Names.DefaultPropertyParameterNames
                                : Array.Empty<string>();
+
+                    case BaseTypeDeclarationSyntax _:
+                        return Array.Empty<string>();
                 }
             }
 
@@ -1605,7 +1572,7 @@ namespace MiKoSolutions.Analyzers
 
                 if (nameAttribute != null)
                 {
-                    name = nameAttribute.TextTokens.First().ValueText;
+                    name = nameAttribute.TextTokens[0].ValueText;
                 }
             }
 
@@ -1614,11 +1581,11 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool HasComment(this SyntaxNode value) => value.HasLeadingComment() || value.HasTrailingComment();
 
-        internal static bool HasLeadingComment(this SyntaxNode value) => value.GetLeadingTrivia().Any(_ => _.IsComment());
+        internal static bool HasLeadingComment(this SyntaxNode value) => value.GetLeadingTrivia().HasComment();
 
-        internal static bool HasTrailingComment(this SyntaxNode value) => value != null && value.GetTrailingTrivia().Any(_ => _.IsComment());
+        internal static bool HasTrailingComment(this SyntaxNode value) => value != null && value.GetTrailingTrivia().HasComment();
 
-        internal static bool HasTrailingEndOfLine(this SyntaxNode value) => value != null && value.GetTrailingTrivia().Any(_ => _.IsEndOfLine());
+        internal static bool HasTrailingEndOfLine(this SyntaxNode value) => value != null && value.GetTrailingTrivia().HasEndOfLine();
 
         internal static bool HasMinimumCSharpVersion(this SyntaxTree value, LanguageVersion expectedVersion)
         {
@@ -1679,16 +1646,16 @@ namespace MiKoSolutions.Analyzers
 
             if (kindsLength > 0)
             {
-                var valueKind = value.Kind();
+                var valueKind = value.RawKind;
 
                 if (kindsLength is 2)
                 {
-                    return valueKind == kinds[0] || valueKind == kinds[1];
+                    return valueKind == (int)kinds[0] || valueKind == (int)kinds[1];
                 }
 
                 for (var index = 0; index < kindsLength; index++)
                 {
-                    if (kinds[index] == valueKind)
+                    if (valueKind == (int)kinds[index])
                     {
                         return true;
                     }
@@ -1748,6 +1715,12 @@ namespace MiKoSolutions.Analyzers
                     return false;
             }
         }
+
+        internal static bool IsOnSameLineAs(this SyntaxNode value, SyntaxNode other) => value?.GetStartingLine() == other?.GetStartingLine();
+
+        internal static bool IsOnSameLineAs(this SyntaxNode value, in SyntaxToken other) => value?.GetStartingLine() == other.GetStartingLine();
+
+        internal static bool IsOnSameLineAs(this SyntaxNode value, in SyntaxNodeOrToken other) => value?.GetStartingLine() == other.GetStartingLine();
 
         internal static bool IsInside(this SyntaxNode value, ISet<SyntaxKind> kinds)
         {
@@ -2644,16 +2617,16 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxList<XmlNodeSyntax> ReplaceText(this in SyntaxList<XmlNodeSyntax> source, in ReadOnlySpan<string> phrases, string replacement)
         {
-            var resultLength = source.Count;
+            var sourceCount = source.Count;
 
-            if (resultLength is 0)
+            if (sourceCount is 0)
             {
                 return source;
             }
 
             var result = source.ToArray();
 
-            for (var index = 0; index < resultLength; index++)
+            for (var index = 0; index < sourceCount; index++)
             {
                 var value = result[index];
 
@@ -3160,9 +3133,7 @@ namespace MiKoSolutions.Analyzers
 
             var resetFinalTrivia = false;
 
-            var length = finalTrivia.Length;
-
-            for (var index = 0; index < length; index++)
+            for (int index = 0, length = finalTrivia.Length; index < length; index++)
             {
                 var trivia = finalTrivia[index];
 
@@ -3550,9 +3521,7 @@ namespace MiKoSolutions.Analyzers
                     continue;
                 }
 
-                var textsLength = texts.Length;
-
-                for (var textIndex = 0; textIndex < textsLength; textIndex++)
+                for (int textIndex = 0, textsLength = texts.Length; textIndex < textsLength; textIndex++)
                 {
                     var text = texts[textIndex];
 
@@ -3757,9 +3726,8 @@ namespace MiKoSolutions.Analyzers
             }
 
             var textTokens = tokens.ToList();
-            var textTokensCount = textTokens.Count;
 
-            for (var i = 0; i < textTokensCount; i++)
+            for (int i = 0, textTokensCount = textTokens.Count; i < textTokensCount; i++)
             {
                 var token = textTokens[i];
 
@@ -3830,7 +3798,7 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            for (var i = 0; i < textTokens.Count; i++)
+            for (int i = 0, count = textTokens.Count; i < count; i++)
             {
                 var token = textTokens[i];
 
@@ -4008,22 +3976,13 @@ namespace MiKoSolutions.Analyzers
         {
             var attributeLists = value.AttributeLists;
 
-            // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var attributeListsCount = attributeLists.Count;
-
-            for (var i = 0; i < attributeListsCount; i++)
+            for (int i = 0, count = attributeLists.Count; i < count; i++)
             {
                 var attributes = attributeLists[i].Attributes;
 
-                // keep in local variable to avoid multiple requests (see Roslyn implementation)
-                var attributesCount = attributes.Count;
-
-                for (var index = 0; index < attributesCount; index++)
+                for (int index = 0, attributesCount = attributes.Count; index < attributesCount; index++)
                 {
-                    var attribute = attributes[index];
-                    var name = attribute.GetName();
-
-                    if (names.Contains(name))
+                    if (names.Contains(attributes[index].GetName()))
                     {
                         return true;
                     }
@@ -4037,22 +3996,13 @@ namespace MiKoSolutions.Analyzers
         {
             var attributeLists = value.AttributeLists;
 
-            // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var attributeListsCount = attributeLists.Count;
-
-            for (var i = 0; i < attributeListsCount; i++)
+            for (int i = 0, count = attributeLists.Count; i < count; i++)
             {
                 var attributes = attributeLists[i].Attributes;
 
-                // keep in local variable to avoid multiple requests (see Roslyn implementation)
-                var attributesCount = attributes.Count;
-
-                for (var index = 0; index < attributesCount; index++)
+                for (int index = 0, attributesCount = attributes.Count; index < attributesCount; index++)
                 {
-                    var attribute = attributes[index];
-                    var name = attribute.GetName();
-
-                    if (names.Contains(name))
+                    if (names.Contains(attributes[index].GetName()))
                     {
                         return true;
                     }
@@ -4117,9 +4067,7 @@ namespace MiKoSolutions.Analyzers
         private static XmlCrefAttributeSyntax GetCref(in SyntaxList<XmlAttributeSyntax> syntax)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var syntaxCount = syntax.Count;
-
-            for (var index = 0; index < syntaxCount; index++)
+            for (int index = 0, count = syntax.Count; index < count; index++)
             {
                 if (syntax[index] is XmlCrefAttributeSyntax a)
                 {
@@ -4132,9 +4080,7 @@ namespace MiKoSolutions.Analyzers
 
         private static IEnumerable<XmlNodeSyntax> GetSummaryXmlsCore(IReadOnlyList<XmlElementSyntax> summaryXmls, ISet<string> tags)
         {
-            var count = summaryXmls.Count;
-
-            for (var index = 0; index < count; index++)
+            for (int index = 0, count = summaryXmls.Count; index < count; index++)
             {
                 var summary = summaryXmls[index];
 

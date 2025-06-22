@@ -178,28 +178,46 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             switch (expression)
             {
+                case IdentifierNameSyntax identifier when identifier.Identifier.IsMissing:
+                {
+                    // code seems to be incomplete, so ignore that
+                    break;
+                }
+
                 case ConditionalExpressionSyntax conditional:
+                {
                     AnalyzeConditional(context, conditional);
 
                     break;
+                }
 
                 case BinaryExpressionSyntax b when b.IsKind(SyntaxKind.CoalesceExpression):
+                {
                     AnalyzeExpression(context, method, b.Right);
 
                     break;
+                }
 
                 default:
+                {
                     if (HasIssue(expression))
                     {
                         ReportIssue(context, expression);
                     }
 
                     break;
+                }
             }
         }
 
         private void AnalyzeExpression(in SyntaxNodeAnalysisContext context, MethodDeclarationSyntax method, ExpressionSyntax expression)
         {
+            if (expression is null)
+            {
+                // code seems to be incomplete, so ignore that
+                return;
+            }
+
             if (HasIssue(expression))
             {
                 ReportIssue(context, expression);

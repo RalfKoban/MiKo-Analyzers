@@ -77,9 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     var arguments = invocation.ArgumentList.Arguments;
 
                     // keep in local variable to avoid multiple requests (see Roslyn implementation)
-                    var argumentsCount = arguments.Count;
-
-                    for (var index = 0; index < argumentsCount; index++)
+                    for (int index = 0, argumentsCount = arguments.Count; index < argumentsCount; index++)
                     {
                         if (arguments[index].Expression is InvocationExpressionSyntax)
                         {

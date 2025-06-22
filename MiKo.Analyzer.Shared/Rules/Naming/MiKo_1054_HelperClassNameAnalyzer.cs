@@ -47,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return Array.Empty<Diagnostic>();
         }
 
-        private static string FindBetterName(ReadOnlySpan<char> symbolName, string wrongName)
+        private static string FindBetterName(in ReadOnlySpan<char> symbolName, string wrongName)
         {
             if (symbolName.Length > SpecialNameHandle.Length && symbolName.StartsWith(SpecialNameHandle, StringComparison.Ordinal))
             {

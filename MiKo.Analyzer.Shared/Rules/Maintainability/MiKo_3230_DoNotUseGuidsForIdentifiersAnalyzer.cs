@@ -36,10 +36,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 case PropertyDeclarationSyntax property:
                     Analyze(context, property);
+
                     break;
 
                 case ParameterSyntax parameter:
                     Analyze(context, parameter);
+
                     break;
             }
         }
