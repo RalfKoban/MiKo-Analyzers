@@ -109,6 +109,19 @@ public class TestMe
         [TestCase("DoSomethingDoesNotThrowException_but_return_something", "Do_something_does_not_throw_exception_but_returns_something")]
         [TestCase("DoSomething_ThrowException_InsteadToReturnSomething", "Do_something_throws_exception_instead_to_return_something")]
         [TestCase("DoSomething_ThrowException_InReturnSomething", "Do_something_throws_exception_in_return_something")]
+        [TestCase("DoSomething_ThrowException_RemoveSomething", "Do_something_throws_exception_removes_something")]
+        [TestCase("DoSomething_ThrowException_WillRemoveSomething", "Do_something_throws_exception_will_remove_something")]
+        [TestCase("DoSomething_ThrowException_ToRemoveSomething", "Do_something_throws_exception_to_remove_something")]
+        [TestCase("DoSomething_ThrowException_RejectSomething", "Do_something_throws_exception_rejects_something")]
+        [TestCase("DoSomething_ThrowException_WillRejectSomething", "Do_something_throws_exception_will_reject_something")]
+        [TestCase("DoSomething_ThrowException_ToRejectSomething", "Do_something_throws_exception_to_reject_something")]
+        [TestCase("DoSomething_ThrowException_AcceptSomething", "Do_something_throws_exception_accepts_something")]
+        [TestCase("DoSomething_ThrowException_WillAcceptSomething", "Do_something_throws_exception_will_accept_something")]
+        [TestCase("DoSomething_ThrowException_ToAcceptSomething", "Do_something_throws_exception_to_accept_something")]
+        [TestCase("DoSomething_ThrowException_KeepSomething", "Do_something_throws_exception_keeps_something")]
+        [TestCase("DoSomething_ThrowException_DoesNotKeepSomething", "Do_something_throws_exception_does_not_keep_something")]
+        [TestCase("DoSomething_ThrowException_WillKeepSomething", "Do_something_throws_exception_will_keep_something")]
+        [TestCase("DoSomething_ThrowException_ToKeepSomething", "Do_something_throws_exception_to_keep_something")]
         public void Code_gets_fixed_for_test_method_(string original, string fix)
         {
             const string Template = @"

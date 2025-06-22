@@ -123,9 +123,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         private static bool ParametersHaveSameTypes(in ImmutableArray<IParameterSymbol> candidateParameters, in SeparatedSyntaxList<ArgumentSyntax> arguments, SemanticModel semanticModel)
         {
-            var candidateParametersLength = candidateParameters.Length;
-
-            for (var index = 0; index < candidateParametersLength; index++)
+            for (int index = 0, length = candidateParameters.Length; index < length; index++)
             {
                 var c = candidateParameters[index];
 

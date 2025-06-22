@@ -94,8 +94,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                             var localDeclaration = SyntaxFactory.LocalDeclarationStatement(declaration);
 
                             var statement = arrowClause.HasReturnValue()
-                                                ? (StatementSyntax)SyntaxFactory.ReturnStatement(updatedInvocation)
-                                                : SyntaxFactory.ExpressionStatement(updatedInvocation);
+                                            ? (StatementSyntax)SyntaxFactory.ReturnStatement(updatedInvocation)
+                                            : SyntaxFactory.ExpressionStatement(updatedInvocation);
 
                             return UpdateArrowExpressionClause(root, arrowClause, SyntaxFactory.Block(localDeclaration, ifStatement, statement));
                         }

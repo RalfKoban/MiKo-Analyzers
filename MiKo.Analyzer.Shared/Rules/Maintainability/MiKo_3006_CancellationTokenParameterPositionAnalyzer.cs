@@ -18,9 +18,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {
             var methodParameters = symbol.Parameters;
-            var last = methodParameters.Length - 1;
 
-            for (var i = 0; i < methodParameters.Length; i++)
+            for (int i = 0, last = methodParameters.Length - 1; i <= last; i++)
             {
                 var parameter = methodParameters[i];
 

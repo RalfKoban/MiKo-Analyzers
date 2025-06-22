@@ -77,6 +77,27 @@ public class TestMe
 }");
 
         [Test]
+        public void No_issue_is_reported_for_incomplete_method() => No_issue_is_reported_for(@"
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething()
+    {
+        return ; // return value is still missing here
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_incomplete_method_body() => No_issue_is_reported_for(@"
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething() => ; // return value is still missing here
+}");
+
+        [Test]
         public void An_issue_is_reported_for_Task_method_returning_null() => An_issue_is_reported_for(@"
 using System.Threading.Tasks;
 

@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             var maes = (MemberAccessExpressionSyntax)context.Node;
             var operatorToken = maes.OperatorToken;
 
-            if (operatorToken.IsOnSameLineAs(maes.Name) is false)
+            if (maes.Name.IsOnSameLineAs(operatorToken) is false)
             {
                 ReportDiagnostics(context, Issue(operatorToken));
             }

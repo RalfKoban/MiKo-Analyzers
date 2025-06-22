@@ -25,6 +25,44 @@ namespace MiKoSolutions.Analyzers
 
         internal static LinePosition GetEndPosition(this in SyntaxTrivia value) => value.GetLocation().GetEndPosition();
 
+        internal static bool HasEndOfLine(this in SyntaxTriviaList value)
+        {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var valueCount = value.Count;
+
+            if (valueCount > 0)
+            {
+                for (var index = 0; index < valueCount; index++)
+                {
+                    if (value[index].IsEndOfLine())
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        internal static bool HasComment(this in SyntaxTriviaList value)
+        {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var valueCount = value.Count;
+
+            if (valueCount > 0)
+            {
+                for (var index = 0; index < valueCount; index++)
+                {
+                    if (value[index].IsComment())
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsEndOfLine(this in SyntaxTrivia value) => value.IsKind(SyntaxKind.EndOfLineTrivia);
 

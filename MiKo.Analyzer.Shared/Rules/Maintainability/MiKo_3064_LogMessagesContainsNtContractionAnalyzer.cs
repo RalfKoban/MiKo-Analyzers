@@ -125,15 +125,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var text = token.Text; // use 'Text' and not 'ValueText' here because otherwise the indices do not match (as 'Text' still contains the " )
 
-                    for (var i = 0; i < phrasesLength; i++)
+                    for (var phraseIndex = 0; phraseIndex < phrasesLength; phraseIndex++)
                     {
-                        var value = phrases[i];
+                        var value = phrases[phraseIndex];
 
-                        foreach (var index in text.AllIndicesOf(value))
+                        var allIndices = text.AllIndicesOf(value);
+                        var allIndicesLength = allIndices.Length;
+
+                        if (allIndicesLength > 0)
                         {
-                            var location = CreateLocation(value, syntaxTree, token.SpanStart, index);
-
-                            yield return Issue(location);
+                            for (var i = 0; i < allIndicesLength; i++)
+                            {
+                                yield return Issue(CreateLocation(value, syntaxTree, token.SpanStart, allIndices[i]));
+                            }
                         }
                     }
                 }

@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class MiKo_6064_PropertyInvocationIsOnSameLineAnalyzer : SpacingAnalyzer
+    public sealed class MiKo_6064_PropertyInvocationIsOnSameLineAnalyzer : SpacingAnalyzer
     {
         public const string Id = "MiKo_6064";
 
@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return member.IsKind(SyntaxKind.SimpleMemberAccessExpression)
                 && member.Name is IdentifierNameSyntax name
                 && member.Expression is IdentifierNameSyntax expression
-                && name.GetStartingLine() != expression.GetStartingLine();
+                && name.IsOnSameLineAs(expression) is false;
         }
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)

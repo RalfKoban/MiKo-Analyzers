@@ -48,9 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 var underlinesNr = symbolName.Count(_ => _ is Constants.Underscore);
                 var upperCasesNr = symbolName.Count(_ => _.IsUpperCase());
 
-                var diff = underlinesNr - upperCasesNr;
-
-                if (diff >= 0)
+                if (underlinesNr >= upperCasesNr)
                 {
                     return false;
                 }

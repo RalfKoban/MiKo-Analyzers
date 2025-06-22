@@ -766,6 +766,70 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_if_multi_line_call_chain_is_long()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public string DoSomething(object o)
+    {
+        return o.ToString()
+                   .ToString()
+                   .ToString()
+                   .ToString()
+                   .ToString()
+                   .ToString()
+                   .ToString()
+                   .ToString()
+                   .ToString()
+                   .ToString()
+                   .ToString()
+                   .ToString()
+                   .ToString()
+                   .ToString()
+                   .ToString()
+                   .ToString()
+                   .ToString()
+                   .ToString();
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public string DoSomething(object o)
+    {
+        return o.ToString()
+                .ToString()
+                .ToString()
+                .ToString()
+                .ToString()
+                .ToString()
+                .ToString()
+                .ToString()
+                .ToString()
+                .ToString()
+                .ToString()
+                .ToString()
+                .ToString()
+                .ToString()
+                .ToString()
+                .ToString()
+                .ToString()
+                .ToString();
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6040_MultiLineCallChainsAreOnSamePositionAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6040_MultiLineCallChainsAreOnSamePositionAnalyzer();
