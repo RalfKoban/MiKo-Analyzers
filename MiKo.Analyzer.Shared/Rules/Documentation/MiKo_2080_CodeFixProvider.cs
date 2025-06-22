@@ -45,6 +45,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private sealed class MapData
         {
+#pragma warning disable SA1401 // Fields should be private
+            public readonly Pair[] ReplacementMap;
+            public readonly string[] ReplacementMapKeys;
+            public readonly string[] TypeGuidReplacementMapKeys;
+            public readonly Pair[] TypeGuidReplacementMap;
+            public readonly string[] PreparationMapKeys;
+            public readonly Pair[] PreparationMap;
+            public readonly string[] CleanupMapKeys;
+            public readonly Pair[] CleanupMap;
+#pragma warning restore SA1401 // Fields should be private
+
 #pragma warning disable CA1861
             public MapData()
             {
@@ -114,22 +125,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 CleanupMapKeys = CleanupMap.ToArray(_ => _.Key);
             }
 #pragma warning restore CA1861
-
-            public Pair[] ReplacementMap { get; }
-
-            public string[] ReplacementMapKeys { get; }
-
-            public string[] TypeGuidReplacementMapKeys { get; }
-
-            public Pair[] TypeGuidReplacementMap { get; }
-
-            public string[] PreparationMapKeys { get; }
-
-            public Pair[] PreparationMap { get; }
-
-            public string[] CleanupMapKeys { get; }
-
-            public Pair[] CleanupMap { get; }
 
             private static HashSet<string> CreateReplacementMapKeys()
             {

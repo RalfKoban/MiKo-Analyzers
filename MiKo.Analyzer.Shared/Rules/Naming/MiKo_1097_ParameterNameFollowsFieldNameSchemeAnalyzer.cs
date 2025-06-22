@@ -27,8 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (symbolName.Length >= MinimalPrefixLength)
             {
-                // ReSharper disable once ForCanBeConvertedToForeach
-                for (var index = 0; index < WrongPrefixes.Length; index++)
+                for (int index = 0, length = WrongPrefixes.Length; index < length; index++)
                 {
                     var wrongPrefix = WrongPrefixes[index];
 
@@ -42,8 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 if (prefix[1].IsUpperCase())
                 {
-                    // ReSharper disable once ForCanBeConvertedToForeach
-                    for (var index = 0; index < WrongPrefixChars.Length; index++)
+                    for (int index = 0, length = WrongPrefixChars.Length; index < length; index++)
                     {
                         var wrongPrefixChar = WrongPrefixChars[index];
 

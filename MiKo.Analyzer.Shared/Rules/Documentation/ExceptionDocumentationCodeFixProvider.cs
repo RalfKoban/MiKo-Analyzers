@@ -154,7 +154,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static IEnumerable<XmlNodeSyntax> ParameterIsNull(params string[] parameters)
         {
-            for (var i = 0; i < parameters.Length; i++)
+            for (int i = 0, parametersLength = parameters.Length; i < parametersLength; i++)
             {
                 var parameter = parameters[i];
 
@@ -163,7 +163,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 yield return SeeLangword_Null();
                 yield return XmlText(".").WithTrailingXmlComment();
 
-                if (i < parameters.Length - 1)
+                if (i < parametersLength - 1)
                 {
                     yield return ParaOr();
                 }
@@ -195,10 +195,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             // split into parts, so that we can easily detect which part is a parameter and which is some normal text
             var parts = comment.SplitBy(parametersAsTextReferences).ToArray();
-            var partsLength = parts.Length;
 
             // now correct the parameters back
-            for (var i = 0; i < partsLength; i++)
+            for (int i = 0, last = parts.Length - 1; i <= last; i++)
             {
                 var part = parts[i];
 
@@ -212,7 +211,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             parts[i - 1] = parts[i - 1].ConcatenatedWith(part.First());
                         }
 
-                        if (i < partsLength - 1)
+                        if (i < last)
                         {
                             // that's text after the parameter, so add the missing character before
                             parts[i + 1] = part.Last().ConcatenatedWith(parts[i + 1]);

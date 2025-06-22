@@ -74,11 +74,34 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
         }
 
+        private static bool IsNested(ExpressionSyntax node)
+        {
+            foreach (var ancestor in node.Ancestors())
+            {
+                switch (ancestor)
+                {
+                    case StatementSyntax _:
+                    case EqualsValueClauseSyntax _:
+                    case InitializerExpressionSyntax _:
+                    case MemberDeclarationSyntax _:
+                    case ArrowExpressionClauseSyntax _:
+                        return false;
+                }
+
+                if (ancestor.IsAnyKind(Expressions))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
             var node = (ExpressionSyntax)context.Node;
 
-            if (node.Ancestors().Any(_ => _.IsAnyKind(Expressions)))
+            if (IsNested(node))
             {
                 // we are a nested one, hence we do not need to calculate and report again
                 return;
@@ -86,7 +109,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             var dots = CollectDots(node);
 
-            if (dots.None())
+            if (dots.Count is 0)
             {
                 // no dots found for whatever reason, hence we do not need to report anything
                 return;

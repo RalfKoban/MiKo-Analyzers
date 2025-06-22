@@ -13,7 +13,7 @@ namespace System.Text
 {
     internal static class StringBuilderExtensions
     {
-        private const int QuickSubstringProbeLengthThreshold = 6;
+        private const int QuickSubstringProbeLengthThreshold = 8;
 
         private static readonly ArrayPool<char> SharedPool = ArrayPool<char>.Shared;
 
@@ -81,15 +81,13 @@ namespace System.Text
                 return string.Empty;
             }
 
-            var length = value.Length;
-
             // 1. Find word begin
             whitespacesBefore = value.CountLeadingWhitespaces();
 
             // 2. Find word end
             var wordLength = 0;
 
-            for (var i = whitespacesBefore; i < length; i++)
+            for (int i = whitespacesBefore, length = value.Length; i < length; i++)
             {
                 var c = value[i];
 
@@ -112,9 +110,7 @@ namespace System.Text
                 return false;
             }
 
-            var valueLength = value.Length;
-
-            for (; start < valueLength; start++)
+            for (var length = value.Length; start < length; start++)
             {
                 if (value[start].IsWhiteSpace())
                 {
@@ -134,12 +130,10 @@ namespace System.Text
 
         public static StringBuilder ReplaceAllWithProbe(this StringBuilder value, in ReadOnlySpan<Pair> replacementPairs)
         {
-            var count = replacementPairs.Length;
-
             char[] text = null;
             var textSpan = GetTextAsRentedArray(value, ref text, SharedPool);
 
-            for (var index = 0; index < count; index++)
+            for (int index = 0, count = replacementPairs.Length; index < count; index++)
             {
                 var pair = replacementPairs[index];
                 var oldValue = pair.Key;
@@ -166,12 +160,10 @@ namespace System.Text
 
         public static StringBuilder ReplaceAllWithProbe(this StringBuilder value, in ReadOnlySpan<string> texts, string replacement)
         {
-            var length = texts.Length;
-
             char[] text = null;
             var textSpan = GetTextAsRentedArray(value, ref text, SharedPool);
 
-            for (var index = 0; index < length; index++)
+            for (int index = 0, length = texts.Length; index < length; index++)
             {
                 var oldValue = texts[index];
 
@@ -397,9 +389,7 @@ namespace System.Text
 
         public static StringBuilder TrimStart(this StringBuilder value, char[] characters)
         {
-            var charactersLength = characters.Length;
-
-            for (var index = 0; index < charactersLength; index++)
+            for (int index = 0, length = characters.Length; index < length; index++)
             {
                 if (value.Length > 0 && value[0] == characters[index])
                 {
@@ -426,9 +416,7 @@ namespace System.Text
 
         public static StringBuilder TrimEnd(this StringBuilder value, char[] characters)
         {
-            var charactersLength = characters.Length;
-
-            for (var index = 0; index < charactersLength; index++)
+            for (int index = 0, length = characters.Length; index < length; index++)
             {
                 var i = value.Length - 1;
 
@@ -541,9 +529,7 @@ namespace System.Text
 
         private static int QuickSubstringProbe(in ReadOnlySpan<char> current, in ReadOnlySpan<char> other)
         {
-            var delta = current.Length - other.Length;
-
-            if (delta < 0)
+            if (current.Length < other.Length)
             {
                 // cannot be part in the replacement as other value is too long and cannot fit current value
                 return -1;
@@ -555,17 +541,19 @@ namespace System.Text
                 return 0;
             }
 
-            // Note:
+            // Performance-Note:
             // - do not use a separate if condition for the delta being zero as that may not happen often and the conditional check therefore is too costly
             var lastIndex = other.Length - 1;
             var startChar = other[0];
             var endChar = other[lastIndex];
 
-            for (var position = 0; position <= delta; position++)
+            for (int position = 0, delta = current.Length - other.Length; position <= delta; position++)
             {
-                // could be part in the replacement only if characters match both at start and end
-                if (current[position] == startChar && current[lastIndex + position] == endChar)
+                // Performance-Note:
+                // - do not split or re-calculate last index position each time as this gets invoked millions of time and re-calculation is too costly in such situation
+                if (current[lastIndex + position] == endChar && current[position] == startChar)
                 {
+                    // could be part in the replacement as characters match both at start and end
                     return position;
                 }
             }
@@ -576,9 +564,8 @@ namespace System.Text
         private static int CountLeadingWhitespaces(this StringBuilder value, int start = 0)
         {
             var whitespaces = 0;
-            var valueLength = value.Length;
 
-            for (; start < valueLength; start++)
+            for (var valueLength = value.Length; start < valueLength; start++)
             {
                 if (value[start].IsWhiteSpace())
                 {
@@ -614,9 +601,7 @@ namespace System.Text
 
         private static void StartLowerCase(this StringBuilder value)
         {
-            var valueLength = value.Length;
-
-            for (var i = 0; i < valueLength; i++)
+            for (int i = 0, length = value.Length; i < length; i++)
             {
                 var c = value[i];
 
@@ -637,9 +622,7 @@ namespace System.Text
 
         private static void StartUpperCase(this StringBuilder value)
         {
-            var valueLength = value.Length;
-
-            for (var i = 0; i < valueLength; i++)
+            for (int i = 0, length = value.Length; i < length; i++)
             {
                 var c = value[i];
 

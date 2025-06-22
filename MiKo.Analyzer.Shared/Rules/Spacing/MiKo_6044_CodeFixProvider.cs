@@ -52,18 +52,17 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             var left = binary.Left;
             var operatorToken = binary.OperatorToken;
-            var right = binary.Right;
 
             var updatedLeft = left;
 
-            if (operatorToken.IsOnSameLineAs(left) || left.HasTrailingComment() is false)
+            if (left.IsOnSameLineAs(operatorToken) || left.HasTrailingComment() is false)
             {
                 // copy comment or line break
                 updatedLeft = left.WithTrailingTriviaFrom(operatorToken);
             }
 
             var updatedToken = operatorToken.WithLeadingSpaces(spaces).WithTrailingSpace();
-            var updatedRight = right.WithoutLeadingTrivia();
+            var updatedRight = binary.Right.WithoutLeadingTrivia();
 
             return binary.WithLeft(updatedLeft)
                          .WithOperatorToken(updatedToken)

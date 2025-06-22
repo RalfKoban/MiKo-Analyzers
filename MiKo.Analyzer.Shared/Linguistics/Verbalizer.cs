@@ -305,9 +305,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     return false;
                 }
 
-                var length = NounsWithGerundEnding.Length;
-
-                for (var index = 0; index < length; index++)
+                for (int index = 0, length = NounsWithGerundEnding.Length; index < length; index++)
                 {
                     var noun = NounsWithGerundEnding[index];
 
@@ -688,9 +686,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return false;
             }
 
-            var length = Endings.Length;
-
-            for (var index = 0; index < length; index++)
+            for (int index = 0, length = Endings.Length; index < length; index++)
             {
                 var pair = Endings[index];
                 var key = pair.Key;
@@ -708,9 +704,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static bool HasAcceptableStartingPhrase(in ReadOnlySpan<char> value)
         {
-            var length = StartingPhrases.Length;
-
-            for (var index = 0; index < length; index++)
+            for (int index = 0, length = StartingPhrases.Length; index < length; index++)
             {
                 var phrase = StartingPhrases[index];
 

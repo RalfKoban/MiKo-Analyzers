@@ -35,6 +35,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "textTokens",
                                                             "trivia",
                                                             "someMap",
+                                                            "actual",
+                                                            "expected",
                                                         ];
 
         private static readonly string[] WrongNames =

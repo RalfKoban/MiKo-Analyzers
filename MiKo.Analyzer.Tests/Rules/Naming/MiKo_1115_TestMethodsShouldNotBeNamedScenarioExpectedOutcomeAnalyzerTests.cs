@@ -151,8 +151,16 @@ public class TestMe
         [TestCase("MethodName_NotThrows_NullReferenceException", "Method_name_throws_no_NullReferenceException")]
         [TestCase("MethodName_ConsumedMessage_Publish", "Method_name_publish_consumed_message")]
         [TestCase("MethodName_ConsumedMessage_Publishes", "Method_name_publishes_consumed_message")]
+        [TestCase("MethodName_AcceptedConsumedMessage_DoesNotRejectMessage", "Method_name_does_not_reject_message_if_consumed_message_is_accepted")]
         [TestCase("MethodName_RejectedConsumedMessage_LogsWhenAboveCriticalThreshold", "Method_name_logs_if_above_critical_threshold_if_consumed_message_is_rejected")]
         [TestCase("MethodName_RejectedConsumedMessage_RejectsMessage", "Method_name_rejects_message_if_consumed_message_is_rejected")]
+        [TestCase("MethodName_RejectedConsumedMessage_DoesNotRemoveMessage", "Method_name_does_not_remove_message_if_consumed_message_is_rejected")]
+        [TestCase("MethodName_RejectedConsumedMessage_RemoveMessage", "Method_name_removes_message_if_consumed_message_is_rejected")]
+        [TestCase("MethodName_RejectedConsumedMessage_RemovesMessage", "Method_name_removes_message_if_consumed_message_is_rejected")]
+        [TestCase("MethodName_SomeCondition_KeepValue", "Method_name_keeps_value_if_some_condition")]
+        [TestCase("MethodName_SomeCondition_KeepsValue", "Method_name_keeps_value_if_some_condition")]
+        [TestCase("MethodName_SomeCondition_DoesAlter", "Method_name_alters_if_some_condition")]
+        [TestCase("MethodName_SomeCondition_DoesNotAlter", "Method_name_does_not_alter_if_some_condition")]
         public void Code_gets_fixed_for_2_slashes_in_(string originalName, string fixedName) => VerifyCSharpFix(
                                                                                                             "class TestMe { [Test] public void " + originalName + "() { } }",
                                                                                                             "class TestMe { [Test] public void " + fixedName + "() { } }");
