@@ -50,11 +50,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var symbolName = symbol.Name;
             var obviousComments = GetObviousComments(symbolName);
 
-            var count = summaryXmls.Count;
-
             List<Diagnostic> issues = null;
 
-            for (var index = 0; index < count; index++)
+            for (int index = 0, count = summaryXmls.Count; index < count; index++)
             {
                 var summary = summaryXmls[index];
                 var trimmed = summary.GetTextTrimmed();

@@ -17,45 +17,52 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<CollectionExpressionSyntax>().FirstOrDefault();
 
+        protected override TSyntaxNode GetUpdatedSyntax<TSyntaxNode>(TSyntaxNode node, in int leadingSpaces)
+        {
+            switch (node)
+            {
+                case InitializerExpressionSyntax initializer when initializer.OpenBraceToken.IsOnSameLineAs(initializer.CloseBraceToken) is false:
+                {
+                    return GetUpdatedSyntax(initializer, leadingSpaces) as TSyntaxNode;
+                }
+
+                case CollectionExpressionSyntax expression when expression.OpenBracketToken.IsOnSameLineAs(expression.CloseBracketToken) is false:
+                {
+                    return GetUpdatedSyntax(expression, leadingSpaces) as TSyntaxNode;
+                }
+
+                case ExpressionElementSyntax element:
+                {
+                    return GetUpdatedSyntax(element, leadingSpaces) as TSyntaxNode;
+                }
+
+                case AnonymousObjectCreationExpressionSyntax anonymous when anonymous.OpenBraceToken.IsOnSameLineAs(anonymous.CloseBraceToken) is false:
+                {
+                    return GetUpdatedSyntax(anonymous, leadingSpaces) as TSyntaxNode;
+                }
+
+                case ObjectCreationExpressionSyntax creation:
+                {
+                    return GetUpdatedSyntax(creation, leadingSpaces) as TSyntaxNode;
+                }
+
+                case ImplicitObjectCreationExpressionSyntax creation:
+                {
+                    return GetUpdatedSyntax(creation, leadingSpaces - Constants.Indentation) as TSyntaxNode;
+                }
+
+                default:
+                {
+                    return base.GetUpdatedSyntax(node, leadingSpaces);
+                }
+            }
+        }
+
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
             if (syntax is CollectionExpressionSyntax expression)
             {
-                var spaces = GetProposedSpaces(issue);
-
-                var issueLocation = issue.Location;
-
-                var openBracketToken = expression.OpenBracketToken;
-                var closeBracketToken = expression.CloseBracketToken;
-                var elements = expression.Elements;
-
-                if (openBracketToken.IsLocatedAt(issueLocation))
-                {
-                    return expression.WithOpenBracketToken(openBracketToken.WithLeadingSpaces(spaces))
-                                     .WithElements(GetUpdatedSyntax(elements, openBracketToken, spaces + Constants.Indentation))
-                                     .WithCloseBracketToken(closeBracketToken.WithLeadingSpaces(spaces));
-                }
-
-                if (closeBracketToken.IsLocatedAt(issueLocation))
-                {
-                    CollectionExpressionSyntax updatedExpression;
-
-                    if (elements.SeparatorCount == elements.Count)
-                    {
-                        // we have a separator at the last element
-                        var last = elements.GetSeparators().Last();
-
-                        updatedExpression = expression.WithElements(elements.ReplaceSeparator(last, last.WithTrailingNewLine()));
-                    }
-                    else
-                    {
-                        var last = elements.Last();
-
-                        updatedExpression = expression.WithElements(elements.Replace(last, last.WithTrailingNewLine()));
-                    }
-
-                    return updatedExpression.WithCloseBracketToken(closeBracketToken.WithLeadingSpaces(spaces));
-                }
+                return GetUpdatedSyntax(expression, issue);
             }
 
             return syntax;
@@ -78,6 +85,43 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
 
             return base.GetUpdatedSyntaxRoot(document, root, syntax, annotationOfSyntax, issue);
+        }
+
+        private CollectionExpressionSyntax GetUpdatedSyntax(CollectionExpressionSyntax expression, Diagnostic issue)
+        {
+            var spaces = GetProposedSpaces(issue);
+
+            var issueLocation = issue.Location;
+
+            if (expression.OpenBracketToken.IsLocatedAt(issueLocation))
+            {
+                return GetUpdatedSyntax(expression, spaces);
+            }
+
+            if (expression.CloseBracketToken.IsLocatedAt(issueLocation))
+            {
+                CollectionExpressionSyntax updatedExpression;
+
+                var elements = expression.Elements;
+
+                if (elements.SeparatorCount == elements.Count)
+                {
+                    // we have a separator at the last element
+                    var last = elements.GetSeparators().Last();
+
+                    updatedExpression = expression.WithElements(elements.ReplaceSeparator(last, last.WithTrailingNewLine()));
+                }
+                else
+                {
+                    var last = elements.Last();
+
+                    updatedExpression = expression.WithElements(elements.Replace(last, last.WithTrailingNewLine()));
+                }
+
+                return updatedExpression.WithCloseBracketToken(expression.CloseBracketToken.WithLeadingSpaces(spaces));
+            }
+
+            return expression;
         }
     }
 }

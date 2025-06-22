@@ -21,13 +21,16 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var listCount = list.Count;
 
-            for (var index = 0; index < listCount; index++)
+            if (listCount > 0)
             {
-                var trivia = list[index];
-
-                if (trivia.IsComment())
+                for (var index = 0; index < listCount; index++)
                 {
-                    return trivia.GetLocation();
+                    var trivia = list[index];
+
+                    if (trivia.IsComment())
+                    {
+                        return trivia.GetLocation();
+                    }
                 }
             }
 

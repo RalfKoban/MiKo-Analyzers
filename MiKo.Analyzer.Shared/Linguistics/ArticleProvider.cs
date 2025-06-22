@@ -51,7 +51,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return A(firstWordHandling);
         }
 
-        private static string ArticleForU(ReadOnlySpan<char> text, FirstWordHandling firstWordHandling)
+        private static string ArticleForU(in ReadOnlySpan<char> text, in FirstWordHandling firstWordHandling)
         {
             if (text.StartsWith("uni", StringComparison.OrdinalIgnoreCase))
             {
@@ -81,7 +81,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return An(firstWordHandling);
         }
 
-        private static string ArticleForE(ReadOnlySpan<char> text, FirstWordHandling firstWordHandling)
+        private static string ArticleForE(in ReadOnlySpan<char> text, in FirstWordHandling firstWordHandling)
         {
             if (text.StartsWith("eu", StringComparison.OrdinalIgnoreCase))
             {
@@ -92,7 +92,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return An(firstWordHandling);
         }
 
-        private static string ArticleForO(ReadOnlySpan<char> text, FirstWordHandling firstWordHandling)
+        private static string ArticleForO(in ReadOnlySpan<char> text, in FirstWordHandling firstWordHandling)
         {
             if (text.StartsWith("on", StringComparison.OrdinalIgnoreCase))
             {
@@ -103,7 +103,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return An(firstWordHandling);
         }
 
-        private static string ArticleForH(ReadOnlySpan<char> text, FirstWordHandling firstWordHandling)
+        private static string ArticleForH(in ReadOnlySpan<char> text, in FirstWordHandling firstWordHandling)
         {
             if (text.StartsWith("herb", StringComparison.OrdinalIgnoreCase) // in American English, 'h' is silent in 'herb', so it starts with a vowel sound
              || text.StartsWith("heir", StringComparison.OrdinalIgnoreCase) // 'h' is silent in 'heir', so it starts with a vowel sound

@@ -30,15 +30,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static string[] GetPhrases(string parameterName)
         {
             var startingPhrases = Constants.Comments.ParameterStartingPhrase;
+            var startingPhrasesLength = startingPhrases.Length;
 
-            var phrases = new string[2 * (startingPhrases.Length + 1)];
+            var phrases = new string[2 * (startingPhrasesLength + 1)];
 
-            for (var i = 0; i < startingPhrases.Length; i++)
+            for (var i = 0; i < startingPhrasesLength; i++)
             {
                 var phraseWithName = startingPhrases[i] + parameterName;
 
                 phrases[i] = phraseWithName;
-                phrases[i + startingPhrases.Length] = phraseWithName + ".";
+                phrases[i + startingPhrasesLength] = phraseWithName + ".";
             }
 
             phrases[phrases.Length - 2] = parameterName;

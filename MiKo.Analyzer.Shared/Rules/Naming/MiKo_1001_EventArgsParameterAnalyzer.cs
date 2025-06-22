@@ -73,9 +73,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var parameters = GetParameters(symbol);
 
-            var count = parameters.Count;
-
-            for (var index = 0; index < count; index++)
+            for (int index = 0, count = parameters.Count; index < count; index++)
             {
                 var parameter = parameters[index];
 

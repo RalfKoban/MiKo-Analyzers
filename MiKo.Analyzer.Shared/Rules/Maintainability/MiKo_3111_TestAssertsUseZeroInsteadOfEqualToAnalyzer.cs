@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (arguments.Count is 1 && arguments[0].Expression is LiteralExpressionSyntax literal && literal.Token.ValueText is "0")
                 {
-                    var location = CreateLocation(node, maes.Name.Span.Start, argumentList.Span.End);
+                    var location = CreateLocation(node, maes.Name.SpanStart, argumentList.Span.End);
 
                     return new[] { Issue(location) };
                 }

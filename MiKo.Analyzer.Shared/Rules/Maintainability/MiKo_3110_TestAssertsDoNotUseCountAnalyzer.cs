@@ -88,12 +88,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var arguments = methodCall.ArgumentList.Arguments;
 
                 // keep in local variable to avoid multiple requests (see Roslyn implementation)
-                var argumentsCount = arguments.Count;
-
-                for (var index = 0; index < argumentsCount; index++)
+                for (int index = 0, argumentsCount = arguments.Count; index < argumentsCount; index++)
                 {
-                    var argument = arguments[index];
-                    var issue = AnalyzeArgument(node, argument, arguments);
+                    var issue = AnalyzeArgument(node, arguments[index], arguments);
 
                     if (issue != null)
                     {
