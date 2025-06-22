@@ -14,7 +14,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1108";
 
-        private static readonly string[] MockNames = { "Mocked", "mocked", "Mock", "mock", "Stub", "stub", "Faked", "Fake", "faked", "fake", "Shim", "shim" };
+        private const string MockName = "mock";
+
+        private static readonly string[] MockNames = { "Mocked", "mocked", "Mock", MockName, "Stub", "stub", "Faked", "Fake", "faked", "fake", "Shim", "shim" };
 
         public MiKo_1108_MockNamingAnalyzer() : base(Id, (SymbolKind)(-1))
         {
@@ -59,7 +61,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var name = identifier.ValueText;
 
-                if (name.Length < 4)
+                if (name.Length < MockName.Length)
                 {
                     continue;
                 }
@@ -158,9 +160,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var type = context.FindContainingType();
 
-            if (ShallAnalyze(type))
+            if (context.Node is FieldDeclarationSyntax field && ShallAnalyze(type))
             {
-                AnalyzeIdentifiers(context, type, ((FieldDeclarationSyntax)context.Node).Declaration);
+                AnalyzeIdentifiers(context, type, field.Declaration);
             }
         }
 

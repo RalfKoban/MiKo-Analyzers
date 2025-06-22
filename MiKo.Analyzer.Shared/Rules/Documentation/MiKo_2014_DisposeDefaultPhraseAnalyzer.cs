@@ -32,9 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             List<Diagnostic> issues = null;
 
-            var summariesCount = summaryXmls.Count;
-
-            for (var index = 0; index < summariesCount; index++)
+            for (int index = 0, summariesCount = summaryXmls.Count; index < summariesCount; index++)
             {
                 if (IsEqual(summaryXmls[index], SummaryPhrase) is false)
                 {

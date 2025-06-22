@@ -39,9 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   Lazy<string> commentXml,
                                                                   Lazy<string[]> summaries)
         {
-            var count = summaryXmls.Count;
-
-            for (var index = 0; index < count; index++)
+            for (int index = 0, count = summaryXmls.Count; index < count; index++)
             {
                 var summary = summaryXmls[index];
                 var content = summary.Content;

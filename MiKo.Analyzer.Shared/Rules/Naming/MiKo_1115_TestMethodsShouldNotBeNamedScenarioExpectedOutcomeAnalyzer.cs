@@ -31,6 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private const string IsGiven = Is + Given;
         private const string Consumed = "Consumed";
         private const string Rejected = "Rejected";
+        private const string Accepted = "Accepted";
 
         private static readonly string[] ExpectedOutcomeMarkers =
                                                                   {
@@ -54,9 +55,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                       Rejected,
                                                                       Consumed,
                                                                       "Once",
-                                                                      "DoesNot",
+                                                                      "Does", // incl. 'DoesNot'
                                                                       "Create",
                                                                       "Append",
+                                                                      "Keep",
+                                                                      Accepted,
                                                                   };
 
         private static readonly string[] SpecialFirstPhrases =
@@ -324,6 +327,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             else if (original.StartsWith(Rejected, StringComparison.OrdinalIgnoreCase))
             {
                 builder.Append(original, Rejected.Length, original.Length - Rejected.Length).Append(Is).Append(Rejected);
+            }
+            else if (original.StartsWith(Accepted, StringComparison.OrdinalIgnoreCase))
+            {
+                builder.Append(original, Accepted.Length, original.Length - Accepted.Length).Append(Is).Append(Accepted);
             }
             else
             {

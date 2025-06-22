@@ -401,14 +401,12 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return ReplaceAllAbbreviations(value, findings);
         }
 
-        //// ncrunch: rdi off
+//// ncrunch: rdi off
         private static ReadOnlySpan<Pair> FindCore(in ReadOnlySpan<char> valueSpan)
         {
             var result = new HashSet<Pair>(KeyEqualityComparer.Instance);
 
-            var prefixesLength = Prefixes.Length;
-
-            for (var index = 0; index < prefixesLength; index++)
+            for (int index = 0, prefixesLength = Prefixes.Length; index < prefixesLength; index++)
             {
                 var pair = Prefixes[index];
 
@@ -427,9 +425,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             //// TODO RKN: replace prefixes to not find them again as middle terms or whatever?
 
-            var postfixesLength = Postfixes.Length;
-
-            for (var index = 0; index < postfixesLength; index++)
+            for (int index = 0, postfixesLength = Postfixes.Length; index < postfixesLength; index++)
             {
                 var pair = Postfixes[index];
 
@@ -439,9 +435,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 }
             }
 
-            var midTermsLength = MidTerms.Length;
-
-            for (var index = 0; index < midTermsLength; index++)
+            for (int index = 0, midTermsLength = MidTerms.Length; index < midTermsLength; index++)
             {
                 var pair = MidTerms[index];
 

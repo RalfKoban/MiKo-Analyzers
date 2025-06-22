@@ -88,7 +88,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var parameters = GetMatchingParameters(methodSymbol.Parameters);
 
-            return parameters.None()
+            return parameters.Count is 0
                    ? Array.Empty<Diagnostic>()
                    : AnalyzeException(owningSymbol, parameters, exceptionComment);
         }

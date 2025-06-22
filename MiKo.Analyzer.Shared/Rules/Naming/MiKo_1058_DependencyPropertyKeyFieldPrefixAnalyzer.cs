@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var propertyNames = NamesFinder.FindPropertyNames(symbol, Constants.DependencyPropertyKey.FieldSuffix, Constants.DependencyProperty.RegisterReadOnly);
 
-            if (propertyNames.None())
+            if (propertyNames.Count is 0)
             {
                 return Array.Empty<Diagnostic>();
             }

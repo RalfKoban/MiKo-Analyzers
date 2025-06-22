@@ -33,9 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private IEnumerable<Diagnostic> Analyze(ImmutableArray<IParameterSymbol> parameters, string commentXml)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var parametersLength = parameters.Length;
-
-            for (var index = 0; index < parametersLength; index++)
+            for (int index = 0, parametersLength = parameters.Length; index < parametersLength; index++)
             {
                 var parameter = parameters[index];
                 var comment = parameter.GetComment(commentXml);

@@ -21,8 +21,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var comment = (DocumentationCommentTriviaSyntax)syntax;
 
             var texts = comment.Content.OfType<XmlTextSyntax>()
-                                       .Select(CleanupText)
-                                       .ToSyntaxList<XmlNodeSyntax>();
+                               .Select(CleanupText)
+                               .ToSyntaxList<XmlNodeSyntax>();
 
             var summary = Comment(SyntaxFactory.XmlSummaryElement(), texts).WithLeadingXmlCommentExterior();
 
@@ -33,9 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static IEnumerable<SyntaxToken> CleanupTextTokens(SyntaxTokenList textTokens)
         {
-            var last = textTokens.Count - 1;
-
-            for (var index = 0; index <= last; index++)
+            for (int index = 0, last = textTokens.Count - 1; index <= last; index++)
             {
                 var textToken = textTokens[index];
 
