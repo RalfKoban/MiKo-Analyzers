@@ -375,7 +375,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxToken WithLeadingXmlComment(this in SyntaxToken value) => value.WithLeadingTrivia(SyntaxNodeExtensions.XmlCommentStart);
 
-        internal static SyntaxToken WithLeadingXmlCommentExterior(this SyntaxToken value) => value.WithLeadingTrivia(SyntaxNodeExtensions.XmlCommentExterior);
+        internal static SyntaxToken WithLeadingXmlCommentExterior(this in SyntaxToken value) => value.WithLeadingTrivia(SyntaxNodeExtensions.XmlCommentExterior);
 
         internal static SyntaxToken WithTriviaFrom(this in SyntaxToken value, SyntaxNode node) => value.WithLeadingTriviaFrom(node)
                                                                                                        .WithTrailingTriviaFrom(node);

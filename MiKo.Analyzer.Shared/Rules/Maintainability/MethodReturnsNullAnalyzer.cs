@@ -128,7 +128,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private bool CanBeIgnored(SyntaxNodeAnalysisContext context)
+        private bool CanBeIgnored(in SyntaxNodeAnalysisContext context)
         {
             if (context.CancellationToken.IsCancellationRequested)
             {
