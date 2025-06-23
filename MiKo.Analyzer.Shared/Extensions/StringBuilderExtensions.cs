@@ -140,14 +140,16 @@ namespace System.Text
 
                 var replaceStartIndex = QuickSubstringProbe(textSpan, oldValue.AsSpan());
 
-                if (replaceStartIndex > -1)
+                if (replaceStartIndex is -1)
                 {
-                    // can be part in the replacement as value seems to fit
-                    value.Replace(oldValue, pair.Value, replaceStartIndex, value.Length - replaceStartIndex);
-
-                    // re-assign text as we might have replaced the string, but use a different array
-                    textSpan = GetTextAsRentedArray(value, ref text, SharedPool);
+                    continue;
                 }
+
+                // can be part in the replacement as value seems to fit
+                value.Replace(oldValue, pair.Value, replaceStartIndex, value.Length - replaceStartIndex);
+
+                // re-assign text as we might have replaced the string, but use a different array
+                textSpan = GetTextAsRentedArray(value, ref text, SharedPool);
             }
 
             if (text != null)
@@ -169,14 +171,16 @@ namespace System.Text
 
                 var replaceStartIndex = QuickSubstringProbe(textSpan, oldValue.AsSpan());
 
-                if (replaceStartIndex > -1)
+                if (replaceStartIndex is -1)
                 {
-                    // can be part in the replacement as value seems to fit
-                    value.Replace(oldValue, replacement, replaceStartIndex, value.Length - replaceStartIndex);
-
-                    // re-assign text as we might have replaced the string, but use a different array
-                    textSpan = GetTextAsRentedArray(value, ref text, SharedPool);
+                    continue;
                 }
+
+                // can be part in the replacement as value seems to fit
+                value.Replace(oldValue, replacement, replaceStartIndex, value.Length - replaceStartIndex);
+
+                // re-assign text as we might have replaced the string, but use a different array
+                textSpan = GetTextAsRentedArray(value, ref text, SharedPool);
             }
 
             if (text != null)
@@ -206,13 +210,13 @@ namespace System.Text
                 SharedPool.Return(text);
             }
 
-            if (replaceStartIndex > -1)
+            if (replaceStartIndex is -1)
             {
-                return value.Replace(oldValue, newValue, replaceStartIndex, value.Length - replaceStartIndex);
+                // cannot be part in the replacement as value does not fit
+                return value;
             }
 
-            // cannot be part in the replacement as value does not fit
-            return value;
+            return value.Replace(oldValue, newValue, replaceStartIndex, value.Length - replaceStartIndex);
         }
 
         public static StringBuilder SeparateWords(this StringBuilder value, in char separator, in FirstWordHandling firstWordHandling = FirstWordHandling.None)
