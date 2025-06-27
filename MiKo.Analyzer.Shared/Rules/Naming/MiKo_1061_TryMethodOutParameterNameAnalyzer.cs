@@ -22,9 +22,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static string GetPreferredParameterName(string methodName)
         {
-            if (methodName.StartsWith("TryGet", StringComparison.Ordinal))
+            const string TryGet = "TryGet";
+
+            if (methodName.StartsWith(TryGet, StringComparison.Ordinal))
             {
-                var parameterName = methodName.AsSpan(6);
+                var parameterName = methodName.AsSpan(TryGet.Length);
 
                 if (parameterName.Length is 0)
                 {
@@ -48,16 +50,46 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private Diagnostic AnalyzeOutParameter(IMethodSymbol method)
         {
-            var parameterName = GetPreferredParameterName(method.Name);
+            var parameters = method.Parameters;
+            var parametersLength = parameters.Length;
 
-            var outParameter = method.Parameters.FirstOrDefault(_ => _.RefKind is RefKind.Out);
-
-            if (outParameter != null && outParameter.Name != parameterName)
+            if (parametersLength is 0)
             {
-                return Issue(outParameter, parameterName, CreateBetterNameProposal(parameterName));
+                return null;
             }
 
-            return null;
+            var outParameterIndex = -1;
+
+            for (var index = 0; index < parametersLength; index++)
+            {
+                if (parameters[index].RefKind is RefKind.Out)
+                {
+                    if (outParameterIndex is -1)
+                    {
+                        outParameterIndex = index;
+                    }
+                    else
+                    {
+                        // we do not support multiple out parameters
+                        return null;
+                    }
+                }
+            }
+
+            if (outParameterIndex is -1)
+            {
+                return null;
+            }
+
+            var outParameter = parameters[outParameterIndex];
+            var parameterName = GetPreferredParameterName(method.Name);
+
+            if (outParameter.Name == parameterName)
+            {
+                return null;
+            }
+
+            return Issue(outParameter, parameterName, CreateBetterNameProposal(parameterName));
         }
     }
 }
