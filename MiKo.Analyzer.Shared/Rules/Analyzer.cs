@@ -105,6 +105,18 @@ namespace MiKoSolutions.Analyzers.Rules
             context.RegisterCompilationStartAction(CompilationStartAction);
         }
 
+        protected static Location CreateLocation(in SyntaxTriviaList trivia)
+        {
+            if (trivia.Count > 0)
+            {
+                var span = trivia.FullSpan;
+
+                return CreateLocation(trivia[0].SyntaxTree, span.Start, span.End);
+            }
+
+            return Location.None;
+        }
+
         protected static Location CreateLocation(SyntaxNode node, in int start, in int end) => CreateLocation(node.SyntaxTree, start, end);
 
         protected static Location CreateLocation(in SyntaxToken token, in int start, in int end) => CreateLocation(token.SyntaxTree, start, end);
@@ -328,6 +340,8 @@ namespace MiKoSolutions.Analyzers.Rules
         protected Diagnostic Issue(in SyntaxToken token, params Pair[] properties) => CreateIssue(token.GetLocation(), properties, token.ValueText);
 
         protected Diagnostic Issue(in SyntaxTrivia trivia, params Pair[] properties) => CreateIssue(trivia.GetLocation(), properties);
+
+        protected Diagnostic Issue(in SyntaxTriviaList trivia, params Pair[] properties) => CreateIssue(CreateLocation(trivia), properties);
 
         protected Diagnostic Issue(Location location, params Pair[] properties) => CreateIssue(location, properties, location.GetText());
 

@@ -54,10 +54,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var contentFullString = element.Content.ToFullString();
             var endTagFullString = element.EndTag.ToFullString();
 
-            const string XmlCommentExterior = "///";
-
             var capacity = StringBuilderCache.DefaultCapacity // some buffer as we modify the contents
-                         + XmlCommentExterior.Length
+                         + Constants.Comments.XmlCommentExterior.Length
                          + someText.Length
                          + startTagFullString.Length
                          + contentFullString.Length
@@ -68,7 +66,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                          .Append(contentFullString)
                                          .ReplaceAllWithProbe(XmlEntities)
                                          .Insert(0, someText)
-                                         .Insert(0, XmlCommentExterior)
+                                         .Insert(0, Constants.Comments.XmlCommentExterior)
                                          .AppendLine(endTagFullString)
                                          .ToStringAndRelease();
 
