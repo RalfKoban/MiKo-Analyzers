@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers
     /// </summary>
     internal static partial class SyntaxNodeExtensions
     {
-        internal static readonly SyntaxTrivia XmlCommentExterior = SyntaxFactory.DocumentationCommentExterior("/// ");
+        internal static readonly SyntaxTrivia XmlCommentExterior = SyntaxFactory.DocumentationCommentExterior(Constants.Comments.XmlCommentExterior + " ");
 
         internal static readonly SyntaxTrivia[] XmlCommentStart =
                                                                   {
@@ -605,13 +605,13 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxTrivia[] GetComment(this SyntaxNode value) => value.GetLeadingTrivia().Concat(value.GetTrailingTrivia()).Where(_ => _.IsComment()).ToArray();
 
-        internal static SyntaxTrivia GetLeadingComment(this SyntaxNode value)
+        internal static SyntaxNode FindSyntaxNodeWithLeadingComment(this SyntaxNode value)
         {
             while (true)
             {
                 if (value is null)
                 {
-                    return default;
+                    return null;
                 }
 
                 var list = value.GetLeadingTrivia();
@@ -627,13 +627,33 @@ namespace MiKoSolutions.Analyzers
 
                         if (trivia.IsComment())
                         {
-                            return trivia;
+                            return value;
                         }
                     }
                 }
 
                 value = value.FirstChild();
             }
+        }
+
+        internal static string[] GetLeadingComments(this SyntaxNode value)
+        {
+            if (value is null)
+            {
+                return Array.Empty<string>();
+            }
+
+            var leadingTrivia = value.GetLeadingTrivia();
+
+            if (leadingTrivia.Count is 0)
+            {
+                return Array.Empty<string>();
+            }
+
+            return leadingTrivia.Where(_ => _.IsComment())
+                                .Select(_ => _.ToTextOnlyString())
+                                .Where(_ => _.Length > 0)
+                                .ToArray();
         }
 
         internal static XmlTextAttributeSyntax GetListType(this XmlElementSyntax list) => list.GetAttributes<XmlTextAttributeSyntax>()
@@ -3071,6 +3091,26 @@ namespace MiKoSolutions.Analyzers
 
         internal static T WithAdditionalLeadingEmptyLine<T>(this T value) where T : SyntaxNode => value.WithAdditionalLeadingTrivia(SyntaxFactory.CarriageReturnLineFeed);
 
+        internal static bool HasLeadingEmptyLine(this SyntaxNode value)
+        {
+            var trivia = value.GetLeadingTrivia();
+
+            if (trivia.Count > 1)
+            {
+                if (trivia[0].IsEndOfLine())
+                {
+                    return true;
+                }
+
+                if (trivia[0].IsWhiteSpace() && trivia.Count > 1 && trivia[1].IsEndOfLine())
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         internal static T WithLeadingEmptyLine<T>(this T value) where T : SyntaxNode => value.WithFirstLeadingTrivia(SyntaxFactory.CarriageReturnLineFeed); // do not use elastic one to prevent formatting it away again
 
         internal static T WithLeadingEndOfLine<T>(this T value) where T : SyntaxNode => value.WithFirstLeadingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
@@ -3089,6 +3129,16 @@ namespace MiKoSolutions.Analyzers
             var currentSpaces = value.GetPositionWithinStartLine();
 
             return value.WithLeadingSpaces(currentSpaces + additionalSpaces);
+        }
+
+        internal static T WithAdditionalLeadingSpacesAtEnd<T>(this T value, in int additionalSpaces) where T : SyntaxNode
+        {
+            if (additionalSpaces is 0)
+            {
+                return value;
+            }
+
+            return value.WithAdditionalLeadingTrivia(WhiteSpaces(additionalSpaces));
         }
 
         internal static T WithAdditionalLeadingSpacesOnDescendants<T>(this T value, IReadOnlyCollection<SyntaxNodeOrToken> descendants, int additionalSpaces) where T : SyntaxNode
@@ -3685,7 +3735,7 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static StringBuilder WithoutXmlCommentExterior(this StringBuilder value) => value.Without("///");
+        internal static StringBuilder WithoutXmlCommentExterior(this StringBuilder value) => value.Without(Constants.Comments.XmlCommentExterior);
 
         internal static string WithoutXmlCommentExterior(this SyntaxNode value)
         {
