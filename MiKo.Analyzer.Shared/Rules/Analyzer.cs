@@ -168,11 +168,10 @@ namespace MiKoSolutions.Analyzers.Rules
 
             if (issues is Diagnostic[] array)
             {
-                ReportDiagnostics(context, array);
-            }
-            else if (issues is IReadOnlyList<Diagnostic> list)
-            {
-                ReportDiagnostics(context, list);
+                if (array.Length > 0)
+                {
+                    ReportDiagnostics(context, array);
+                }
             }
             else
             {
@@ -182,31 +181,20 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected static void ReportDiagnostics(in SyntaxNodeAnalysisContext context, Diagnostic[] issues)
         {
-            var issuesLength = issues.Length;
-
-            switch (issuesLength)
+            for (int index = 0, length = issues.Length; index < length; index++)
             {
-                case 0: return;
-                case 1: ReportDiagnostics(context, issues[0]); return;
-            }
+                var issue = issues[index];
 
-            for (var index = 0; index < issuesLength; index++)
-            {
-                ReportDiagnostics(context, issues[index]);
+                if (issue != null)
+                {
+                    context.ReportDiagnostic(issue);
+                }
             }
         }
 
         protected static void ReportDiagnostics(in SyntaxNodeAnalysisContext context, IReadOnlyList<Diagnostic> issues)
         {
-            var issuesCount = issues.Count;
-
-            switch (issuesCount)
-            {
-                case 0: return;
-                case 1: ReportDiagnostics(context, issues[0]); return;
-            }
-
-            for (var index = 0; index < issuesCount; index++)
+            for (int index = 0, count = issues.Count; index < count; index++)
             {
                 ReportDiagnostics(context, issues[index]);
             }
@@ -228,14 +216,9 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected void InitializeCore(CompilationStartAnalysisContext context, params SymbolKind[] symbolKinds)
         {
-            var length = symbolKinds.Length;
-
-            if (length > 0)
+            for (int index = 0, length = symbolKinds.Length; index < length; index++)
             {
-                for (var index = 0; index < length; index++)
-                {
-                    InitializeCore(context, symbolKinds[index]);
-                }
+                InitializeCore(context, symbolKinds[index]);
             }
         }
 
@@ -404,58 +387,55 @@ namespace MiKoSolutions.Analyzers.Rules
                 return;
             }
 
-            if (issues is Diagnostic[] array)
+            switch (issues)
             {
-                ReportDiagnostics(context, array);
-            }
-            else if (issues is IReadOnlyList<Diagnostic> list)
-            {
-                ReportDiagnostics(context, list);
-            }
-            else
-            {
-                ReportDiagnosticsEnumerable(context, issues);
-            }
-        }
+                case Diagnostic[] array:
+                {
+                    if (array.Length > 0)
+                    {
+                        ReportDiagnostics(context, array);
+                    }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void ReportDiagnostics(in SymbolAnalysisContext context, Diagnostic issue)
-        {
-            if (issue != null)
-            {
-                context.ReportDiagnostic(issue);
+                    return;
+                }
+
+                case IReadOnlyList<Diagnostic> list:
+                {
+                    if (list.Count > 0)
+                    {
+                        ReportDiagnostics(context, list);
+                    }
+
+                    return;
+                }
             }
+
+            ReportDiagnosticsEnumerable(context, issues);
         }
 
         private static void ReportDiagnostics(in SymbolAnalysisContext context, Diagnostic[] array)
         {
-            var arrayLength = array.Length;
-
-            switch (arrayLength)
+            for (int index = 0, length = array.Length; index < length; index++)
             {
-                case 0: return;
-                case 1: ReportDiagnostics(context, array[0]); return;
-            }
+                var issue = array[index];
 
-            for (var index = 0; index < arrayLength; index++)
-            {
-                ReportDiagnostics(context, array[index]);
+                if (issue != null)
+                {
+                    context.ReportDiagnostic(issue);
+                }
             }
         }
 
         private static void ReportDiagnostics(in SymbolAnalysisContext context, IReadOnlyList<Diagnostic> list)
         {
-            var listCount = list.Count;
-
-            switch (listCount)
+            for (int index = 0, count = list.Count; index < count; index++)
             {
-                case 0: return;
-                case 1: ReportDiagnostics(context, list[0]); return;
-            }
+                var issue = list[index];
 
-            for (var index = 0; index < listCount; index++)
-            {
-                ReportDiagnostics(context, list[index]);
+                if (issue != null)
+                {
+                    context.ReportDiagnostic(issue);
+                }
             }
         }
 
@@ -469,7 +449,10 @@ namespace MiKoSolutions.Analyzers.Rules
                     return;
                 }
 
-                ReportDiagnostics(context, issue);
+                if (issue != null)
+                {
+                    context.ReportDiagnostic(issue);
+                }
             }
         }
 
@@ -483,7 +466,10 @@ namespace MiKoSolutions.Analyzers.Rules
                     return;
                 }
 
-                ReportDiagnostics(context, issue);
+                if (issue != null)
+                {
+                    context.ReportDiagnostic(issue);
+                }
             }
         }
 
