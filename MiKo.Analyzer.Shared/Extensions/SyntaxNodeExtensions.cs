@@ -4253,10 +4253,10 @@ namespace MiKoSolutions.Analyzers
             foreach (var triviaGroup in triviaGroupedByLines)
             {
                 var trivia1 = triviaGroup.ElementAt(0);
-                var index1 = finalTrivia.IndexOf(trivia1);
 
                 if (trivia1.IsWhiteSpace())
                 {
+                    var index1 = finalTrivia.IndexOf(trivia1);
                     var spaces = count;
 
                     if (triviaGroup.MoreThan(1))
