@@ -71,6 +71,12 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private Diagnostic AnalyzeStatements(in SyntaxList<StatementSyntax> statements, SyntaxNode returnStatement)
         {
+            if (returnStatement.ContainsDiagnostics)
+            {
+                // might be uncompilable code, so ignore it
+                return null;
+            }
+
             var callLineSpan = returnStatement.GetLocation().GetLineSpan();
 
             var noBlankLinesBefore = statements.Where(_ => _.IsKind(SyntaxKind.YieldReturnStatement) is false)

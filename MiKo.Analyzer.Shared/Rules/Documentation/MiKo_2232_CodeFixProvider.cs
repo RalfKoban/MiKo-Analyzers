@@ -14,26 +14,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => "MiKo_2232";
 
-        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
+        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic issue)
         {
-            var node = syntax.FindNode(diagnostic.Location.SourceSpan, true, true);
+            var node = syntax.FindNode(issue.Location.SourceSpan, true, true);
 
-            if (node is XmlElementSyntax issue)
+            if (node is XmlElementSyntax element && element.Parent == syntax)
             {
-                if (issue.Parent == syntax)
+                // we are directly within the DocumentationCommentTriviaSyntax
+                var updatedContent = GetUpdatedXmlContent(syntax.Content, element);
+
+                if (updatedContent.Count is 0)
                 {
-                    // we are directly within the DocumentationCommentTriviaSyntax
-                    var updatedContent = GetUpdatedXmlContent(syntax.Content, issue);
-
-                    if (updatedContent.Count != 0)
-                    {
-                        var updatedSyntax = syntax.WithContent(updatedContent.WithoutFirstXmlNewLine().WithLeadingXmlComment().WithIndentation());
-
-                        return updatedSyntax;
-                    }
-
                     return null;
                 }
+
+                return syntax.WithContent(updatedContent.WithoutFirstXmlNewLine().WithLeadingXmlComment().WithIndentation());
             }
 
             return syntax;
