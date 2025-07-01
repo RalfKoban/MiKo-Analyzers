@@ -538,7 +538,9 @@ namespace System.Text
 
         private static int QuickSubstringProbe(in ReadOnlySpan<char> current, in ReadOnlySpan<char> other)
         {
-            if (current.Length < other.Length)
+            var delta = current.Length - other.Length;
+
+            if (delta < 0)
             {
                 // cannot be part in the replacement as other value is too long and cannot fit current value
                 return -1;
@@ -550,13 +552,13 @@ namespace System.Text
                 return 0;
             }
 
-            // Performance-Note:
-            // - do not use a separate if condition for the delta being zero as that may not happen often and the conditional check therefore is too costly
             var lastIndex = other.Length - 1;
             var startChar = other[0];
             var endChar = other[lastIndex];
 
-            for (int position = 0, delta = current.Length - other.Length; position <= delta; position++)
+            // Performance-Note:
+            // - do not use a separate if condition for the delta being zero as that may not happen often and the conditional check therefore is too costly
+            for (var position = 0; position <= delta; position++)
             {
                 // Performance-Note:
                 // - do not split or re-calculate last index position each time as this gets invoked millions of time and re-calculation is too costly in such situation
