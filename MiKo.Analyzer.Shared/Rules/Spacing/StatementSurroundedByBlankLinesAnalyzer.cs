@@ -97,13 +97,13 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private Diagnostic AnalyzeStatement(BlockSyntax block, T node)
         {
-            var beforePosition = GetLocationOfNodeOrLeadingComment(node).GetLineSpan();
-            var afterPosition = GetLocationOfNodeOrTrailingComment(node).GetLineSpan();
-
             var otherStatements = block.Statements.Except(node).Where(ShallAnalyzeOtherStatement).ToList();
 
             if (otherStatements.Count > 0)
             {
+                var beforePosition = GetLocationOfNodeOrLeadingComment(node).GetLineSpan();
+                var afterPosition = GetLocationOfNodeOrTrailingComment(node).GetLineSpan();
+
                 var noBlankLinesBefore = HasNoBlankLinesBefore(otherStatements, beforePosition);
                 var noBlankLinesAfter = HasNoBlankLinesAfter(otherStatements, afterPosition);
 

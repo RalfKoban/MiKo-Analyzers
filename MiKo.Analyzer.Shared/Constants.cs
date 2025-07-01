@@ -221,6 +221,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static class Comments
         {
+            internal const string CommentExterior = "//";
+            internal const string XmlCommentExterior = "///";
             internal const string AlternativeStringReturnTypeStartingPhraseTemplate = "An interned copy of the {0} {1} ";
             internal const string ArrayReturnTypeStartingPhraseA = "An array of ";
             internal const string ArrayReturnTypeStartingPhraseALowerCase = "an array of ";
@@ -1528,6 +1530,7 @@ namespace MiKoSolutions.Analyzers
             internal const string ParameterValue = nameof(ParameterValue);
 
             internal const string Marker = nameof(Marker);
+            internal const string CommentTags = nameof(CommentTags);
         }
     }
 }

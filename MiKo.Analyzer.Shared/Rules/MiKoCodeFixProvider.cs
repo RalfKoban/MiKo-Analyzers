@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
             var diagnostics = context.Diagnostics;
 
-            if (IsApplicable(diagnostics))
+            if (diagnostics.Length > 0 && IsApplicable(diagnostics))
             {
                 var diagnostic = diagnostics[0];
 
@@ -112,8 +112,6 @@ namespace MiKoSolutions.Analyzers.Rules
         {
             var syntax = syntaxNode.WithLeadingSpaces(spaces);
 
-            var additionalSpaces = syntax.GetPositionWithinStartLine() - syntaxNode.GetPositionWithinStartLine();
-
             // collect all descendant nodes that are the first ones starting on a new line, then adjust leading space for each of those
             var startingNodes = GetNodesAndTokensStartingOnSeparateLines(syntax).ToList();
 
@@ -121,6 +119,8 @@ namespace MiKoSolutions.Analyzers.Rules
             {
                 return syntax;
             }
+
+            var additionalSpaces = syntax.GetPositionWithinStartLine() - syntaxNode.GetPositionWithinStartLine();
 
             return syntax.WithAdditionalLeadingSpacesOnDescendants(startingNodes, additionalSpaces);
         }
@@ -143,7 +143,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
 //// ncrunch: rdi off
 
-        protected virtual bool IsApplicable(in ImmutableArray<Diagnostic> diagnostics) => diagnostics.Any();
+        protected virtual bool IsApplicable(in ImmutableArray<Diagnostic> issues) => issues.Any();
 
         protected virtual SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.FirstOrDefault();
 

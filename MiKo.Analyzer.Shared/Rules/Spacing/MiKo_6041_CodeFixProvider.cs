@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
@@ -46,11 +47,14 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             // move comment to the end if it is a leading one
             if (syntax is StatementSyntax || syntax is MemberDeclarationSyntax)
             {
-                var leadingComment = clause.GetLeadingComment();
+                var leadingComment = clause.FindSyntaxNodeWithLeadingComment()
+                                           .GetLeadingComments();
 
-                if (leadingComment.IsComment())
+                if (leadingComment.Length > 0)
                 {
-                    updatedSyntax = updatedSyntax.WithTrailingTrivia(SyntaxFactory.Space, leadingComment, SyntaxFactory.CarriageReturnLineFeed);
+                    var comment = SyntaxFactory.Comment(Constants.Comments.CommentExterior + " " + leadingComment.ConcatenatedWith(" "));
+
+                    updatedSyntax = updatedSyntax.WithTrailingTrivia(SyntaxFactory.Space, comment, SyntaxFactory.CarriageReturnLineFeed);
                 }
             }
 
