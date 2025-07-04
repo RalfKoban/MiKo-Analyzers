@@ -24,6 +24,55 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                             "dictionary",
                                                         };
 
+        private static readonly string[] UncountableNouns =
+                                                            {
+                                                                "absence",
+                                                                "access",
+                                                                "advice",
+                                                                "arithmetic",
+                                                                "assistance",
+                                                                "attention",
+                                                                "behavior",
+                                                                "business",
+                                                                "cardboard",
+                                                                "cash",
+                                                                "commerce",
+                                                                "comprehension",
+                                                                "confidence",
+                                                                "confusion",
+                                                                "content",
+                                                                "damage",
+                                                                "data",
+                                                                "education",
+                                                                "energy",
+                                                                "equipment",
+                                                                "evidence",
+                                                                "help",
+                                                                "information",
+                                                                "intelligence",
+                                                                "knowledge",
+                                                                "money",
+                                                                "motivation",
+                                                                "music",
+                                                                "nature",
+                                                                "news",
+                                                                "paper",
+                                                                "progress",
+                                                                "proof",
+                                                                "research",
+                                                                "silence",
+                                                                "space",
+                                                                "spelling",
+                                                                "software",
+                                                                "time",
+                                                                "transport",
+                                                                "transportation",
+                                                                "travel",
+                                                                "understanding",
+                                                                "vision",
+                                                                "work",
+                                                            };
+
         private static readonly string[] AllowedListNames = Constants.Markers.FieldPrefixes.SelectMany(_ => AllowedNames, string.Concat).ToArray();
 
         private static readonly string[] PluralEndings = { "gers", "tchers", "pters", "stors", "ptors", "tures", "ties", "dges", "rges", "sages" };
@@ -34,7 +83,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         private static readonly string[] SingularOrPluralEndings = { "data", "heep", "moose", "trivia", "ircraft", "nformation", "nested" };
         private static readonly string[] SpecialPluralEndingsWithoutS = new[] { "cti", "men", "ngi", "dren", "eeth", "feet", "mena", "mice", "eople", "teria" }.Concat(SingularOrPluralEndings).ToArray();
 
-        public static bool IsSingularAndPlural(in ReadOnlySpan<char> value) => IsPlural(value) && value.EndsWithAny(SingularOrPluralEndings);
+        public static bool IsSingularAndPlural(in ReadOnlySpan<char> value) => value.EqualsAny(UncountableNouns) || (IsPlural(value) && value.EndsWithAny(SingularOrPluralEndings));
 
         public static bool IsPlural(in ReadOnlySpan<char> value)
         {
@@ -57,7 +106,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
                 if (CharsForTwoCharacterEndingsWithS.Contains(value[value.Length - 2]))
                 {
-                    return value.EndsWithAny(SpecialPluralEndingsWithS);
+                    return value.EndsWithAny(SpecialPluralEndingsWithS) || value.EqualsAny(UncountableNouns);
                 }
 
                 if (value.EndsWithAny(PluralEndings))
@@ -73,7 +122,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return true;
             }
 
-            return value.EndsWithAny(SpecialPluralEndingsWithoutS);
+            return value.EndsWithAny(SpecialPluralEndingsWithoutS) || value.EqualsAny(UncountableNouns);
         }
 
         /// <summary>
