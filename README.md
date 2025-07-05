@@ -13,7 +13,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/18917.svg)](https://scan.coverity.com/projects/ralfkoban-miko-analyzers)
 
 ## Available Rules
-The following tables lists all the 502 rules that are currently provided by the analyzer.
+The following tables lists all the 503 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -477,6 +477,7 @@ The following tables lists all the 502 rules that are currently provided by the 
 |MiKo_5015|Do not intern string literals|&#x2713;|&#x2713;|
 |MiKo_5016|Use a HashSet for lookups in 'List.RemoveAll'|&#x2713;|\-|
 |MiKo_5017|Fields or variables assigned with string literals should be constant|&#x2713;|&#x2713;|
+|MiKo_5018|Value comparisons should be performed before reference comparisons|&#x2713;|&#x2713;|
 
 ### Spacing
 |ID|Title|Enabled by default|CodeFix available|
