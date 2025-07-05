@@ -97,7 +97,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, end);
         }
 
-        protected static XmlElementSyntax Comment(XmlElementSyntax comment, string text, string additionalComment = null) => Comment(comment, XmlText(text + additionalComment));
+        protected static XmlElementSyntax Comment(XmlElementSyntax comment, string text, string additionalComment = null) => Comment(comment, additionalComment is null ? XmlText(text) : XmlText(text + additionalComment));
 
         protected static XmlElementSyntax Comment(XmlElementSyntax syntax, in ReadOnlySpan<string> terms, in ReadOnlySpan<Pair> replacementMap, in FirstWordHandling firstWordHandling = FirstWordHandling.KeepSingleLeadingSpace)
         {
@@ -461,6 +461,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         protected static XmlElementSyntax CommentWithContent(XmlElementSyntax value, in SyntaxList<XmlNodeSyntax> content) => SyntaxFactory.XmlElement(value.StartTag, content, value.EndTag).WithTagsOnSeparateLines();
+
+        protected static TypeCrefSyntax Cref(string typeName) => Cref(SyntaxFactory.ParseTypeName(typeName));
+
+        protected static TypeCrefSyntax Cref(TypeSyntax type)
+        {
+            // fix trivia, to avoid situation as reported in https://github.com/dotnet/roslyn/issues/47550
+            return SyntaxFactory.TypeCref(type.WithoutTrivia());
+        }
 
         protected static XmlEmptyElementSyntax Cref(string tag, TypeSyntax type)
         {

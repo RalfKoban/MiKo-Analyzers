@@ -9454,6 +9454,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Convert to XML documentation.
+        /// </summary>
+        internal static string MiKo_2313_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2313_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The API documentation for summaries should use &apos;/// &lt;summary&gt;&apos; instead of &apos;// Summary:&apos; because &apos;/// &lt;summary&gt;&apos; creates XML comments that the .NET compiler understands. These comments show up in IntelliSense, help generate external documentation, and follow a structured format..
+        /// </summary>
+        internal static string MiKo_2313_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2313_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use XML documentation instead.
+        /// </summary>
+        internal static string MiKo_2313_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2313_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plain documentation comments should be XML documentation.
+        /// </summary>
+        internal static string MiKo_2313_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2313_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to If #region directives are used, avoid any empty #region. They just clutter the code without adding any value. When regions are truly needed, keep them meaningful and populated to ensure the code remains clean and efficient. This approach maintains clarity and organization in the codebase..
         /// </summary>
         internal static string MiKo_3000_Description {

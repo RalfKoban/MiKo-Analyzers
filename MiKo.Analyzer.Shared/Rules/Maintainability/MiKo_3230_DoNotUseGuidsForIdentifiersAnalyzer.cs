@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private void Analyze(SyntaxNodeAnalysisContext context, PropertyDeclarationSyntax property)
+        private void Analyze(in SyntaxNodeAnalysisContext context, PropertyDeclarationSyntax property)
         {
             var type = property.Type;
 
@@ -56,7 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private void Analyze(SyntaxNodeAnalysisContext context, ParameterSyntax parameter)
+        private void Analyze(in SyntaxNodeAnalysisContext context, ParameterSyntax parameter)
         {
             var type = parameter.Type;
 
