@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static ExpressionSyntax GetCondition(SyntaxNodeAnalysisContext context)
+        private static ExpressionSyntax GetCondition(in SyntaxNodeAnalysisContext context)
         {
             switch (context.Node)
             {

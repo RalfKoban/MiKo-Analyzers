@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         protected override string Title => Resources.MiKo_2036_CodeFixTitle_Enum;
 
-        protected override bool IsApplicable(in ImmutableArray<Diagnostic> diagnostics) => base.IsApplicable(diagnostics) is false;
+        protected override bool IsApplicable(in ImmutableArray<Diagnostic> issues) => base.IsApplicable(issues) is false;
 
         protected override IEnumerable<XmlNodeSyntax> GetDefaultComment(Document document, TypeSyntax returnType)
         {

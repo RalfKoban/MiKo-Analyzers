@@ -115,9 +115,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Array.Empty<string>();
         }
 
-        private Diagnostic[] AnalyzeTypeSummary(INamedTypeSymbol symbol, ReadOnlySpan<string> summaries, DocumentationCommentTriviaSyntax comment) => AnalyzeSummaryPhrase(symbol, summaries, comment, Constants.Comments.ExceptionTypeSummaryStartingPhrase);
+        private Diagnostic[] AnalyzeTypeSummary(INamedTypeSymbol symbol, in ReadOnlySpan<string> summaries, DocumentationCommentTriviaSyntax comment) => AnalyzeSummaryPhrase(symbol, summaries, comment, Constants.Comments.ExceptionTypeSummaryStartingPhrase);
 
-        private Diagnostic[] AnalyzeMethodSummary(IMethodSymbol symbol, ReadOnlySpan<string> summaries, DocumentationCommentTriviaSyntax comment)
+        private Diagnostic[] AnalyzeMethodSummary(IMethodSymbol symbol, in ReadOnlySpan<string> summaries, DocumentationCommentTriviaSyntax comment)
         {
             var defaultPhrases = Constants.Comments.ExceptionCtorSummaryStartingPhrase.ToArray(_ => _.FormatWith(symbol.ContainingType));
 
@@ -180,7 +180,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return AnalyzeStartingPhrase(symbol, Constants.XmlTag.Remarks, comments, comment, defaultPhrases);
         }
 
-        private Diagnostic[] AnalyzeStartingPhrase(ISymbol symbol, string xmlTag, ReadOnlySpan<string> comments, DocumentationCommentTriviaSyntax comment, string[] phrases)
+        private Diagnostic[] AnalyzeStartingPhrase(ISymbol symbol, string xmlTag, in ReadOnlySpan<string> comments, DocumentationCommentTriviaSyntax comment, string[] phrases)
         {
             if (comments.None(_ => phrases.Exists(__ => _.StartsWith(__, StringComparison.Ordinal))))
             {
@@ -198,7 +198,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Array.Empty<Diagnostic>();
         }
 
-        private Diagnostic[] AnalyzeSummaryPhrase(ISymbol symbol, ReadOnlySpan<string> summaries, DocumentationCommentTriviaSyntax comment, params string[] phrases) => AnalyzeStartingPhrase(symbol, Constants.XmlTag.Summary, summaries, comment, phrases);
+        private Diagnostic[] AnalyzeSummaryPhrase(ISymbol symbol, in ReadOnlySpan<string> summaries, DocumentationCommentTriviaSyntax comment, params string[] phrases) => AnalyzeStartingPhrase(symbol, Constants.XmlTag.Summary, summaries, comment, phrases);
 
         private Diagnostic[] AnalyzeParameter(IParameterSymbol symbol, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
