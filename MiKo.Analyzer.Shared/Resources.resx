@@ -3171,6 +3171,18 @@ Such documentation also undermines tool integration and usability, as IDEs rely 
   <data name="MiKo_2239_Title" xml:space="preserve">
     <value>Documentation should use '///' and not '/** */'</value>
   </data>
+  <data name="MiKo_2240_CodeFixTitle" xml:space="preserve">
+    <value>Fix response documentation</value>
+  </data>
+  <data name="MiKo_2240_Description" xml:space="preserve">
+    <value>Documentation for a response value should start with a default phrase that provides a detailed description of what the response is. This approach helps clarify the purpose and use of the response value for developers.</value>
+  </data>
+  <data name="MiKo_2240_MessageFormat" xml:space="preserve">
+    <value>Start &lt;response&gt; with: '{0}'</value>
+  </data>
+  <data name="MiKo_2240_Title" xml:space="preserve">
+    <value>&lt;response&gt; documentation should not start with 'Returns'</value>
+  </data>
   <data name="MiKo_2300_Description" xml:space="preserve">
     <value>Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works—let the code itself do that.
 This approach ensures comments are insightful and add real value by giving context and rationale, helping developers understand the reasoning behind the implementation.</value>
