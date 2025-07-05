@@ -1649,7 +1649,24 @@ namespace MiKoSolutions.Analyzers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsTask(this ITypeSymbol value) => value?.Name == nameof(Task);
 
-        internal static bool IsTestClass(this ITypeSymbol value) => value?.TypeKind is TypeKind.Class && value.IsRecord is false && value.HasAttribute(Constants.Names.TestClassAttributeNames);
+        internal static bool IsTestClass(this ITypeSymbol value)
+        {
+            if (value?.TypeKind is TypeKind.Class && value.IsRecord is false)
+            {
+                var name = value.Name;
+
+                if (name.EndsWith("Tests", StringComparison.Ordinal)
+                 || name.EndsWith("Test", StringComparison.Ordinal)
+                 || name.EndsWith("test", StringComparison.Ordinal))
+                {
+                    return true;
+                }
+
+                return value.HasAttribute(Constants.Names.TestClassAttributeNames);
+            }
+
+            return false;
+        }
 
         internal static bool IsTestMethod(this IMethodSymbol value) => value.IsTestSpecificMethod(Constants.Names.TestMethodAttributeNames);
 
@@ -1794,7 +1811,7 @@ namespace MiKoSolutions.Analyzers
         {
             var typeName = value.Name.AsSpan();
 
-            if (value.TypeKind is TypeKind.Interface && typeName.Length > 1 && typeName[0] is 'I')
+            if (value.TypeKind is TypeKind.Interface && typeName.Length > 2 && typeName[0] is 'I' && typeName[1].IsUpperCase())
             {
                 return typeName.Slice(1);
             }

@@ -13,7 +13,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/18917.svg)](https://scan.coverity.com/projects/ralfkoban-miko-analyzers)
 
 ## Available Rules
-The following tables lists all the 501 rules that are currently provided by the analyzer.
+The following tables lists all the 503 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -284,6 +284,7 @@ The following tables lists all the 501 rules that are currently provided by the 
 |MiKo_2237|Documentation should not be separated by empty lines|&#x2713;|&#x2713;|
 |MiKo_2238|&lt;summary&gt; documentation shall not start with 'Make sure to call this'|&#x2713;|\-|
 |MiKo_2239|Documentation should use '///' and not '/** */'|&#x2713;|&#x2713;|
+|MiKo_2240|&lt;response&gt; documentation should not start with 'Returns'|&#x2713;|&#x2713;|
 |MiKo_2300|Comments should explain the 'Why' and not the 'How'|&#x2713;|\-|
 |MiKo_2301|Do not use obvious comments in AAA-Tests|&#x2713;|&#x2713;|
 |MiKo_2302|Do not keep code that is commented out|&#x2713;|\-|
