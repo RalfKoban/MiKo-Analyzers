@@ -13,9 +13,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => "MiKo_2213";
 
-        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
+        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic issue)
         {
-            var token = syntax.FindToken(diagnostic);
+            var token = syntax.FindToken(issue);
             var text = token.ValueText.AsCachedBuilder().ReplaceAllWithProbe(Constants.Comments.NotContractionReplacementMap.AsSpan()).ToStringAndRelease();
 
             return syntax.ReplaceToken(token, token.WithText(text));

@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context) => ReportDiagnostics(context, FindIssue(context));
 
-        private Diagnostic FindIssue(SyntaxNodeAnalysisContext context)
+        private Diagnostic FindIssue(in SyntaxNodeAnalysisContext context)
         {
             if (context.Node is InvocationExpressionSyntax invocation)
             {
@@ -84,7 +84,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return null;
         }
 
-        private Diagnostic FindIssue(SyntaxToken dot, IdentifierNameSyntax identifier)
+        private Diagnostic FindIssue(in SyntaxToken dot, IdentifierNameSyntax identifier)
         {
             var location = identifier.GetLocation();
             var position = location.GetPositionWithinEndLine();

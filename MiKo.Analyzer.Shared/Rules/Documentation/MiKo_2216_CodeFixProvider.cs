@@ -12,12 +12,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => "MiKo_2216";
 
-        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
+        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic issue)
         {
-            var issue = syntax.FindNode(diagnostic.Location.SourceSpan, true, true);
+            var node = syntax.FindNode(issue.Location.SourceSpan, true, true);
 
             // TODO RKN: use this for bulk replace: return syntax.ReplaceNodes(elements, (original, rewritten) => GetUpdatedSyntax(rewritten));
-            return syntax.ReplaceNode(issue, GetUpdatedSyntax(issue));
+            return syntax.ReplaceNode(node, GetUpdatedSyntax(node));
         }
 
         private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
