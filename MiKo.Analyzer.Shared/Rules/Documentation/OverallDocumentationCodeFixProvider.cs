@@ -9,13 +9,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         protected sealed override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes);
 
-        protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
-        {
-            var comment = (DocumentationCommentTriviaSyntax)syntax;
+        protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => GetUpdatedSyntax(document, (DocumentationCommentTriviaSyntax)syntax, issue);
 
-            return GetUpdatedSyntax(document, comment, issue);
-        }
-
-        protected abstract DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic);
+        protected abstract DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic issue);
     }
 }

@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System;
+
+using NUnit.Framework;
 
 //// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Linguistics
@@ -166,5 +168,62 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("women", ExpectedResult = true)]
         [TestCase("worms", ExpectedResult = true)]
         public static bool IsPlural_detects_plural_word_(string name) => Pluralizer.IsPlural(name);
+
+        [TestCase("absence")]
+        [TestCase("access")]
+        [TestCase("advice")]
+        [TestCase("arithmetic")]
+        [TestCase("assistance")]
+        [TestCase("attention")]
+        [TestCase("behavior")]
+        [TestCase("business")]
+        [TestCase("cardboard")]
+        [TestCase("cash")]
+        [TestCase("commerce")]
+        [TestCase("comprehension")]
+        [TestCase("confidence")]
+        [TestCase("confusion")]
+        [TestCase("content")]
+        [TestCase("damage")]
+        [TestCase("data")]
+        [TestCase("education")]
+        [TestCase("energy")]
+        [TestCase("equipment")]
+        [TestCase("evidence")]
+        [TestCase("help")]
+        [TestCase("information")]
+        [TestCase("intelligence")]
+        [TestCase("knowledge")]
+        [TestCase("money")]
+        [TestCase("motivation")]
+        [TestCase("music")]
+        [TestCase("nature")]
+        [TestCase("news")]
+        [TestCase("paper")]
+        [TestCase("progress")]
+        [TestCase("proof")]
+        [TestCase("research")]
+        [TestCase("silence")]
+        [TestCase("space")]
+        [TestCase("spelling")]
+        [TestCase("software")]
+        [TestCase("time")]
+        [TestCase("transport")]
+        [TestCase("transportation")]
+        [TestCase("travel")]
+        [TestCase("understanding")]
+        [TestCase("vision")]
+        [TestCase("work")]
+        public static void UncountableNoun_is_singular_and_plural_(string name)
+        {
+            Assert.Multiple(() =>
+                                 {
+                                     Assert.That(Pluralizer.IsSingularAndPlural(name), $"Uncountable noun '{name}' should be both singular and plural");
+
+                                     var noun = name.ToUpperCaseAt(0);
+
+                                     Assert.That(Pluralizer.IsSingularAndPlural(noun), $"Uncountable noun '{noun}' should be both singular and plural");
+                                 });
+        }
     }
 }

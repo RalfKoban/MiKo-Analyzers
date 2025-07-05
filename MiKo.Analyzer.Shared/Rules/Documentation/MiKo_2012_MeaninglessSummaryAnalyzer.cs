@@ -93,7 +93,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return names.ToHashSet(_ => _ + " ");
         }
 
-        private Diagnostic[] AnalyzeSummaryPhrases(ISymbol symbol, ReadOnlySpan<string> summaries, IEnumerable<string> phrases)
+        private Diagnostic[] AnalyzeSummaryPhrases(ISymbol symbol, in ReadOnlySpan<string> summaries, IEnumerable<string> phrases)
         {
             var summariesLength = summaries.Length;
 

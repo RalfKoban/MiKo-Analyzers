@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected virtual bool ShallAnalyzeOtherStatement(StatementSyntax node) => true;
 
-        private static bool HasNoBlankLinesAfter(IReadOnlyList<StatementSyntax> otherStatements, in FileLinePositionSpan afterPosition)
+        private static bool HasNoBlankLinesAfter(List<StatementSyntax> otherStatements, in FileLinePositionSpan afterPosition)
         {
             for (int index = 0, count = otherStatements.Count; index < count; index++)
             {
@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return false;
         }
 
-        private static bool HasNoBlankLinesBefore(IReadOnlyList<StatementSyntax> otherStatements, in FileLinePositionSpan beforePosition)
+        private static bool HasNoBlankLinesBefore(List<StatementSyntax> otherStatements, in FileLinePositionSpan beforePosition)
         {
             for (int index = 0, count = otherStatements.Count; index < count; index++)
             {
@@ -97,13 +97,13 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private Diagnostic AnalyzeStatement(BlockSyntax block, T node)
         {
-            var beforePosition = GetLocationOfNodeOrLeadingComment(node).GetLineSpan();
-            var afterPosition = GetLocationOfNodeOrTrailingComment(node).GetLineSpan();
-
             var otherStatements = block.Statements.Except(node).Where(ShallAnalyzeOtherStatement).ToList();
 
             if (otherStatements.Count > 0)
             {
+                var beforePosition = GetLocationOfNodeOrLeadingComment(node).GetLineSpan();
+                var afterPosition = GetLocationOfNodeOrTrailingComment(node).GetLineSpan();
+
                 var noBlankLinesBefore = HasNoBlankLinesBefore(otherStatements, beforePosition);
                 var noBlankLinesAfter = HasNoBlankLinesAfter(otherStatements, afterPosition);
 

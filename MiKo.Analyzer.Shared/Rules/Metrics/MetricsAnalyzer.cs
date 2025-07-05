@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         protected virtual Diagnostic AnalyzeExpressionBody(ArrowExpressionClauseSyntax body, ISymbol containingSymbol) => null;
 
-        private static BlockSyntax GetBody(SyntaxNodeAnalysisContext context)
+        private static BlockSyntax GetBody(in SyntaxNodeAnalysisContext context)
         {
             switch (context.Node)
             {
@@ -57,7 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
             }
         }
 
-        private static ArrowExpressionClauseSyntax GetExpressionBody(SyntaxNodeAnalysisContext context)
+        private static ArrowExpressionClauseSyntax GetExpressionBody(in SyntaxNodeAnalysisContext context)
         {
             switch (context.Node)
             {
