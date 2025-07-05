@@ -8985,6 +8985,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fix response documentation.
+        /// </summary>
+        internal static string MiKo_2240_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2240_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation for a response value should start with a default phrase that provides a detailed description of what the response is. This approach helps clarify the purpose and use of the response value for developers..
+        /// </summary>
+        internal static string MiKo_2240_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2240_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start &lt;response&gt; with: &apos;{0}&apos;.
+        /// </summary>
+        internal static string MiKo_2240_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2240_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;response&gt; documentation should not start with &apos;Returns&apos;.
+        /// </summary>
+        internal static string MiKo_2240_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2240_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works—let the code itself do that.
         ///This approach ensures comments are insightful and add real value by giving context and rationale, helping developers understand the reasoning behind the implementation..
         /// </summary>
