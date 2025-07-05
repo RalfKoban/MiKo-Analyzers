@@ -202,17 +202,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return bothFixed.WithTagsOnSeparateLines();
         }
 
-        private static XmlElementSyntax FixTextOnlyComment(XmlElementSyntax comment, XmlTextSyntax originalText, ReadOnlySpan<char> subText, string replacement, in ConcreteMapInfo info)
+        private static XmlElementSyntax FixTextOnlyComment(XmlElementSyntax comment, XmlTextSyntax originalText, in ReadOnlySpan<char> subText, string replacement, in ConcreteMapInfo info)
         {
-            subText = ModifyOrNotPart(subText);
+            var text = ModifyOrNotPart(subText);
 
             for (int index = 0, length = Conditionals.Length; index < length; index++)
             {
                 var conditional = Conditionals[index];
 
-                if (subText.StartsWith(conditional, StringComparison.OrdinalIgnoreCase))
+                if (text.StartsWith(conditional, StringComparison.OrdinalIgnoreCase))
                 {
-                    subText = subText.Slice(conditional.Length).TrimStart();
+                    text = text.Slice(conditional.Length).TrimStart();
 
                     replacement = ReplacementTo;
 
@@ -223,11 +223,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var commentContinuation = StringBuilderCache.Acquire();
 
             // be aware of a gerund verb
-            if (replacement == ReplacementTo || Verbalizer.IsGerundVerb(subText.FirstWord()))
+            if (replacement == ReplacementTo || Verbalizer.IsGerundVerb(text.FirstWord()))
             {
                 commentContinuation.Append(ReplacementTo);
 
-                var continuation = Verbalizer.MakeFirstWordInfiniteVerb(subText, FirstWordHandling.StartLowerCase);
+                var continuation = Verbalizer.MakeFirstWordInfiniteVerb(text, FirstWordHandling.StartLowerCase);
 
                 commentContinuation.Append(continuation);
             }
@@ -236,7 +236,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 commentContinuation.Append(replacement);
 
                 // do not try to make the first word a verb as it might not be one
-                var continuation = subText.TrimStart().ToLowerCaseAt(0);
+                var continuation = text.TrimStart().ToLowerCaseAt(0);
 
                 commentContinuation.Append(continuation);
             }

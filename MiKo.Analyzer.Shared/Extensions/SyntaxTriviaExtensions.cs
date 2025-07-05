@@ -236,5 +236,36 @@ namespace MiKoSolutions.Analyzers
 
             return Array.Empty<SyntaxTrivia>();
         }
+
+        internal static string ToTextOnlyString(this in SyntaxTrivia trivia)
+        {
+            if (trivia.IsComment() && trivia.SyntaxTree is SyntaxTree tree)
+            {
+                var sourceText = tree.GetText();
+
+                var span = trivia.Span;
+                var start = span.Start + 2; // the text '//' has 2 characters
+                var end = span.End;
+
+                while (sourceText[start].IsWhiteSpace())
+                {
+                    start++;
+                }
+
+                while (sourceText[end].IsWhiteSpace())
+                {
+                    end--;
+                }
+
+                if (start >= end)
+                {
+                    return string.Empty;
+                }
+
+                return sourceText.ToString(TextSpan.FromBounds(start, end + 1));
+            }
+
+            return trivia.ToString();
+        }
     }
 }

@@ -118,7 +118,7 @@ namespace MiKoSolutions.Analyzers.Rules
                 return true;
             }
 
-            if (line.Contains("//"))
+            if (line.Contains(Constants.Comments.CommentExterior))
             {
                 // comment in comment indicator
                 if (line.Contains("://"))
@@ -126,7 +126,7 @@ namespace MiKoSolutions.Analyzers.Rules
                     return false; // allow indicators such as http:// or ftp://
                 }
 
-                if (line.EndsWith("//", StringComparison.Ordinal))
+                if (line.EndsWith(Constants.Comments.CommentExterior, StringComparison.Ordinal))
                 {
                     return false; // ignore all framed comments
                 }
@@ -136,7 +136,7 @@ namespace MiKoSolutions.Analyzers.Rules
                     return false; // ignore '// ReSharper' comments
                 }
 
-                if (line.Contains("///"))
+                if (line.Contains(Constants.Comments.XmlCommentExterior))
                 {
                     return false; // allow triplets such as '///'
                 }
