@@ -420,6 +420,39 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_if_assignment_with_multiple_comments_spans_different_lines()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        int i =
+                // this is
+                // some comment
+                0;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        int i = 0; // this is some comment
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_if_field_assignment_with_comment_spans_different_lines()
         {
             const string OriginalCode = @"

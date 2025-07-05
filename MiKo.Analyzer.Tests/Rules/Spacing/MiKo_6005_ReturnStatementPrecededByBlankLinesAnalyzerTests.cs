@@ -658,6 +658,63 @@ namespace Bla
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void No_issue_is_reported_for_incomplete_code_with_return_statement_that_is_preceded_by_blank_line() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public int DoSomething(bool something)
+        {
+            return DoSomethingCore(something);
+
+            int DoSomethingCore(bool something)
+            {
+                var x = 0;
+
+                return x;
+
+                return x
+
+                return 
+
+                return
+
+                return 42
+            }
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incomplete_code_with_return_statement_that_is_preceded_by_no_blank_line() => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public int DoSomething(bool something)
+        {
+            return DoSomethingCore(something);
+
+            int DoSomethingCore(bool something)
+            {
+                var x = 0;
+                return x;
+
+                return x
+
+                return 
+
+                return
+
+                return 42
+            }
+        }
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_6005_ReturnStatementPrecededByBlankLinesAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6005_ReturnStatementPrecededByBlankLinesAnalyzer();

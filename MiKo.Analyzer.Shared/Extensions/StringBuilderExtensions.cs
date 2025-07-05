@@ -136,18 +136,25 @@ namespace System.Text
             for (int index = 0, count = replacementPairs.Length; index < count; index++)
             {
                 var pair = replacementPairs[index];
-                var oldValue = pair.Key;
 
-                var replaceStartIndex = QuickSubstringProbe(textSpan, oldValue.AsSpan());
-
-                if (replaceStartIndex > -1)
+                if (textSpan.Length < pair.Key.Length)
                 {
-                    // can be part in the replacement as value seems to fit
-                    value.Replace(oldValue, pair.Value, replaceStartIndex, value.Length - replaceStartIndex);
-
-                    // re-assign text as we might have replaced the string, but use a different array
-                    textSpan = GetTextAsRentedArray(value, ref text, SharedPool);
+                    // cannot be part in the replacement as other value is too long and cannot fit current value
+                    continue;
                 }
+
+                var replaceStartIndex = QuickSubstringProbe(textSpan, pair.Key.AsSpan());
+
+                if (replaceStartIndex is -1)
+                {
+                    continue;
+                }
+
+                // can be part in the replacement as value seems to fit
+                value.Replace(pair.Key, pair.Value, replaceStartIndex, value.Length - replaceStartIndex);
+
+                // re-assign text as we might have replaced the string, but use a different array
+                textSpan = GetTextAsRentedArray(value, ref text, SharedPool);
             }
 
             if (text != null)
@@ -169,14 +176,16 @@ namespace System.Text
 
                 var replaceStartIndex = QuickSubstringProbe(textSpan, oldValue.AsSpan());
 
-                if (replaceStartIndex > -1)
+                if (replaceStartIndex is -1)
                 {
-                    // can be part in the replacement as value seems to fit
-                    value.Replace(oldValue, replacement, replaceStartIndex, value.Length - replaceStartIndex);
-
-                    // re-assign text as we might have replaced the string, but use a different array
-                    textSpan = GetTextAsRentedArray(value, ref text, SharedPool);
+                    continue;
                 }
+
+                // can be part in the replacement as value seems to fit
+                value.Replace(oldValue, replacement, replaceStartIndex, value.Length - replaceStartIndex);
+
+                // re-assign text as we might have replaced the string, but use a different array
+                textSpan = GetTextAsRentedArray(value, ref text, SharedPool);
             }
 
             if (text != null)
@@ -206,13 +215,13 @@ namespace System.Text
                 SharedPool.Return(text);
             }
 
-            if (replaceStartIndex > -1)
+            if (replaceStartIndex is -1)
             {
-                return value.Replace(oldValue, newValue, replaceStartIndex, value.Length - replaceStartIndex);
+                // cannot be part in the replacement as value does not fit
+                return value;
             }
 
-            // cannot be part in the replacement as value does not fit
-            return value;
+            return value.Replace(oldValue, newValue, replaceStartIndex, value.Length - replaceStartIndex);
         }
 
         public static StringBuilder SeparateWords(this StringBuilder value, in char separator, in FirstWordHandling firstWordHandling = FirstWordHandling.None)
@@ -529,7 +538,9 @@ namespace System.Text
 
         private static int QuickSubstringProbe(in ReadOnlySpan<char> current, in ReadOnlySpan<char> other)
         {
-            if (current.Length < other.Length)
+            var delta = current.Length - other.Length;
+
+            if (delta < 0)
             {
                 // cannot be part in the replacement as other value is too long and cannot fit current value
                 return -1;
@@ -541,13 +552,13 @@ namespace System.Text
                 return 0;
             }
 
-            // Performance-Note:
-            // - do not use a separate if condition for the delta being zero as that may not happen often and the conditional check therefore is too costly
             var lastIndex = other.Length - 1;
             var startChar = other[0];
             var endChar = other[lastIndex];
 
-            for (int position = 0, delta = current.Length - other.Length; position <= delta; position++)
+            // Performance-Note:
+            // - do not use a separate if condition for the delta being zero as that may not happen often and the conditional check therefore is too costly
+            for (var position = 0; position <= delta; position++)
             {
                 // Performance-Note:
                 // - do not split or re-calculate last index position each time as this gets invoked millions of time and re-calculation is too costly in such situation

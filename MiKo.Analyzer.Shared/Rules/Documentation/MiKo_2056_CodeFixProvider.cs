@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => "MiKo_2056";
 
-        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
+        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic issue)
         {
             foreach (var ancestor in syntax.AncestorsAndSelf())
             {
@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     case PropertyDeclarationSyntax _:
                     case MethodDeclarationSyntax _:
                     {
-                        return FixComment(ancestor, syntax, diagnostic);
+                        return FixComment(ancestor, syntax, issue);
                     }
                 }
             }

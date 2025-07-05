@@ -296,6 +296,7 @@ The following tables lists all the 501 rules that are currently provided by the 
 |MiKo_2310|Comments should explain the 'Why' and not the 'That'|&#x2713;|\-|
 |MiKo_2311|Do not use separator comments|&#x2713;|&#x2713;|
 |MiKo_2312|Comments should use 'to' instead of 'that is to' or 'which is to'|&#x2713;|&#x2713;|
+|MiKo_2313|Plain documentation comments should be XML documentation|&#x2713;|&#x2713;|
 
 ### Maintainability
 |ID|Title|Enabled by default|CodeFix available|

@@ -3320,6 +3320,18 @@ Instead, comments should enhance understanding, giving context and reasoning for
   <data name="MiKo_2312_Title" xml:space="preserve">
     <value>Comments should use 'to' instead of 'that is to' or 'which is to'</value>
   </data>
+  <data name="MiKo_2313_CodeFixTitle" xml:space="preserve">
+    <value>Convert to XML documentation</value>
+  </data>
+  <data name="MiKo_2313_Description" xml:space="preserve">
+    <value>The API documentation for summaries should use '/// &lt;summary&gt;' instead of '// Summary:' because '/// &lt;summary&gt;' creates XML comments that the .NET compiler understands. These comments show up in IntelliSense, help generate external documentation, and follow a structured format.</value>
+  </data>
+  <data name="MiKo_2313_MessageFormat" xml:space="preserve">
+    <value>Use XML documentation instead</value>
+  </data>
+  <data name="MiKo_2313_Title" xml:space="preserve">
+    <value>Plain documentation comments should be XML documentation</value>
+  </data>
   <data name="MiKo_3000_Description" xml:space="preserve">
     <value>If #region directives are used, avoid any empty #region. They just clutter the code without adding any value. When regions are truly needed, keep them meaningful and populated to ensure the code remains clean and efficient. This approach maintains clarity and organization in the codebase.</value>
   </data>

@@ -17,8 +17,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         protected static Location GetLocationOfNodeOrLeadingComment(SyntaxNode node)
         {
             var list = node.GetLeadingTrivia();
-
-            // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var listCount = list.Count;
 
             if (listCount > 0)
@@ -40,14 +38,18 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         protected static Location GetLocationOfNodeOrTrailingComment(SyntaxNode node)
         {
             var list = node.GetTrailingTrivia();
+            var listCount = list.Count;
 
-            for (var index = list.Count - 1; index > -1; index--)
+            if (listCount > 0)
             {
-                var trivia = list[index];
-
-                if (trivia.IsComment())
+                for (var index = listCount - 1; index > -1; index--)
                 {
-                    return trivia.GetLocation();
+                    var trivia = list[index];
+
+                    if (trivia.IsComment())
+                    {
+                        return trivia.GetLocation();
+                    }
                 }
             }
 
