@@ -12,10 +12,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => "MiKo_2229";
 
-        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
+        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic issue)
         {
-            var token = syntax.FindToken(diagnostic);
-            var fragment = diagnostic.Location.GetText();
+            var token = syntax.FindToken(issue);
+            var fragment = issue.Location.GetText();
 
             return syntax.ReplaceToken(token, token.WithText(token.ValueText.Without(fragment)));
         }

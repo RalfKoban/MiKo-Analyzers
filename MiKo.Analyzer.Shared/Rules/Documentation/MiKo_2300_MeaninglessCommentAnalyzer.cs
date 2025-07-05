@@ -110,7 +110,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static bool CommentHasIssue(string comment)
         {
-            if (comment.StartsWith("//", StringComparison.Ordinal))
+            if (comment.StartsWith(Constants.Comments.CommentExterior, StringComparison.Ordinal))
             {
                 return false; // ignore all comments that have the "double comment" marker
             }

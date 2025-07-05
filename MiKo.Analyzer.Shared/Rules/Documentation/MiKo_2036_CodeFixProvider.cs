@@ -10,12 +10,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => "MiKo_2036";
 
-        protected override bool IsApplicable(in ImmutableArray<Diagnostic> diagnostics)
+        protected override bool IsApplicable(in ImmutableArray<Diagnostic> issues)
         {
-            for (int index = 0, diagnosticsLength = diagnostics.Length; index < diagnosticsLength; index++)
+            for (int index = 0, length = issues.Length; index < length; index++)
             {
-                var diagnostic = diagnostics[index];
-                var properties = diagnostic.Properties;
+                var properties = issues[index].Properties;
 
                 if (properties.Count > 0 && properties.ContainsKey(Constants.AnalyzerCodeFixSharedData.IsBoolean))
                 {

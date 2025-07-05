@@ -181,7 +181,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static InvocationExpressionSyntax AssertThatHasMatches(string match, Document document, ExpressionSyntax originalExpression, ExpressionSyntax expression, SeparatedSyntaxList<ArgumentSyntax> arguments)
+        private static InvocationExpressionSyntax AssertThatHasMatches(string match, Document document, ExpressionSyntax originalExpression, ExpressionSyntax expression, in SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
             var argument = arguments[0];
 
@@ -209,7 +209,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return null;
         }
 
-        private static InvocationExpressionSyntax ConvertBe(ExpressionSyntax expression, SeparatedSyntaxList<ArgumentSyntax> arguments)
+        private static InvocationExpressionSyntax ConvertBe(ExpressionSyntax expression, in SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
             var argument = arguments[0];
 
@@ -231,7 +231,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return AssertThat(expression, Is("EqualTo", arguments[0]), arguments, removeNameColon: true);
         }
 
-        private static InvocationExpressionSyntax ConvertNotBe(ExpressionSyntax expression, SeparatedSyntaxList<ArgumentSyntax> arguments)
+        private static InvocationExpressionSyntax ConvertNotBe(ExpressionSyntax expression, in SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
             var argument = arguments[0];
 
@@ -253,7 +253,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return AssertThat(expression, Is("Not", "EqualTo", argument), arguments, removeNameColon: true);
         }
 
-        private static InvocationExpressionSyntax ConvertBeEmpty(Document document, ExpressionSyntax originalExpression, ExpressionSyntax expression, SeparatedSyntaxList<ArgumentSyntax> arguments)
+        private static InvocationExpressionSyntax ConvertBeEmpty(Document document, ExpressionSyntax originalExpression, ExpressionSyntax expression, in SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
             var type = originalExpression.GetTypeSymbol(document);
 
@@ -265,7 +265,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return AssertThat(expression, Is("Empty"), arguments, 0, removeNameColon: true);
         }
 
-        private static InvocationExpressionSyntax ConvertNotBeEmpty(Document document, ExpressionSyntax originalExpression, ExpressionSyntax expression, SeparatedSyntaxList<ArgumentSyntax> arguments)
+        private static InvocationExpressionSyntax ConvertNotBeEmpty(Document document, ExpressionSyntax originalExpression, ExpressionSyntax expression, in SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
             var type = originalExpression.GetTypeSymbol(document);
 
@@ -277,7 +277,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return AssertThat(expression, Is("Not", "Empty"), arguments, 0, removeNameColon: true);
         }
 
-        private static InvocationExpressionSyntax ConvertBeEquivalentTo(Document document, ExpressionSyntax expression, SeparatedSyntaxList<ArgumentSyntax> arguments)
+        private static InvocationExpressionSyntax ConvertBeEquivalentTo(Document document, ExpressionSyntax expression, in SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
             var count = arguments.Count;
 
@@ -309,7 +309,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return AssertThat(expression, Is("EquivalentTo", GetAsArray(arguments)), arguments, count, removeNameColon: true);
         }
 
-        private static InvocationExpressionSyntax ConvertNotBeEquivalentTo(Document document, ExpressionSyntax expression, SeparatedSyntaxList<ArgumentSyntax> arguments)
+        private static InvocationExpressionSyntax ConvertNotBeEquivalentTo(Document document, ExpressionSyntax expression, in SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
             var count = arguments.Count;
 
@@ -341,7 +341,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return AssertThat(expression, Is("Not", "EquivalentTo", GetAsArray(arguments)), arguments, count, removeNameColon: true);
         }
 
-        private static InvocationExpressionSyntax ConvertContain(Document document, ExpressionSyntax expression, SeparatedSyntaxList<ArgumentSyntax> arguments)
+        private static InvocationExpressionSyntax ConvertContain(Document document, ExpressionSyntax expression, in SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
             var argument = arguments[0];
 
