@@ -15,9 +15,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => Resources.MiKo_2230_CodeFixTitle;
 
-        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
+        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic issue)
         {
-            var token = syntax.FindToken(diagnostic);
+            var token = syntax.FindToken(issue);
 
             // TODO RKN Apply list
             return syntax.ReplaceNode(token.Parent, UpdateText(token));
@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var text = token.Text.AsSpan();
 
             var index = text.IndexOf(Constants.Comments.ValueMeaningPhrase.AsSpan(), StringComparison.Ordinal);
-            var remainingText = text.Slice(0, index).Trim();
+            var remainingText = text.Slice(0, index).Trim().ToString();
 
             yield return XmlText(remainingText).WithLeadingXmlComment();
 
