@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             return root.ReplaceNode(typeSyntax, updatedTypeSyntax);
         }
 
-        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic diagnostic)
+        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic issue)
         {
             var disposeMethod = (MethodDeclarationSyntax)syntax;
             var targetMethod = FindTargetMethod(document, typeSyntax, disposeMethod);
