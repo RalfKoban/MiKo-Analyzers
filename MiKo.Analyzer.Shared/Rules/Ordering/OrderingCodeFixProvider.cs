@@ -30,6 +30,6 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             return root.ReplaceNode(typeSyntax, updatedTypeSyntax);
         }
 
-        protected abstract SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic diagnostic);
+        protected abstract SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic issue);
     }
 }
