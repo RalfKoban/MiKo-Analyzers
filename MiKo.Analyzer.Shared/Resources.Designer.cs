@@ -12596,7 +12596,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tests should be specific to be reproducible and easy to maintain. Generated GUIDs are not reproducible and hard to track if a test fails. Instead, use a hard-coded GUID for consistency. This ensures tests are clear and reliable..
+        ///   Looks up a localized string similar to Tests should be as specific as possible, to be reproducible and easy to maintain. Generated GUIDs are not reproducible and hard to track if a test fails. Instead, use a hard-coded GUID for consistency and as debugging aid. This ensures tests are clear and reliable and help you when you have to debug..
         /// </summary>
         internal static string MiKo_3103_Description {
             get {

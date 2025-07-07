@@ -120,12 +120,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return comment;
         }
 
-        protected DocumentationCommentTriviaSyntax FixComment(SyntaxNode syntax, DocumentationCommentTriviaSyntax comment, Diagnostic diagnostic)
+        protected DocumentationCommentTriviaSyntax FixComment(SyntaxNode syntax, DocumentationCommentTriviaSyntax comment, Diagnostic issue)
         {
             // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var exception in comment.Content.OfType<XmlElementSyntax>().Where(_ => _.IsException()))
             {
-                var fixedException = FixExceptionComment(syntax, exception, comment, diagnostic);
+                var fixedException = FixExceptionComment(syntax, exception, comment, issue);
 
                 if (fixedException != null)
                 {
@@ -136,7 +136,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return null;
         }
 
-        protected virtual DocumentationCommentTriviaSyntax FixExceptionComment(SyntaxNode syntax, XmlElementSyntax exception, DocumentationCommentTriviaSyntax comment, Diagnostic diagnostic) => null;
+        protected virtual DocumentationCommentTriviaSyntax FixExceptionComment(SyntaxNode syntax, XmlElementSyntax exception, DocumentationCommentTriviaSyntax comment, Diagnostic issue) => null;
 
         private static IEnumerable<string> GetParameterReferences(string parameterName)
         {
