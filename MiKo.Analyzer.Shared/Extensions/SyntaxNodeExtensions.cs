@@ -115,9 +115,9 @@ namespace MiKoSolutions.Analyzers
             return parameters.Length > 0 && parameters.Any(_ => _.Name == parameterName);
         }
 
-        internal static SyntaxToken FindToken<T>(this T value, Diagnostic diagnostic) where T : SyntaxNode
+        internal static SyntaxToken FindToken<T>(this T value, Diagnostic issue) where T : SyntaxNode
         {
-            var position = diagnostic.Location.SourceSpan.Start;
+            var position = issue.Location.SourceSpan.Start;
             var token = value.FindToken(position, true);
 
             return token;

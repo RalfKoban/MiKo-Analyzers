@@ -15,6 +15,6 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<FieldDeclarationSyntax>().FirstOrDefault();
 
-        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic diagnostic) => PlaceFirst<FieldDeclarationSyntax>(syntax, typeSyntax);
+        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic issue) => PlaceFirst<FieldDeclarationSyntax>(syntax, typeSyntax);
     }
 }
