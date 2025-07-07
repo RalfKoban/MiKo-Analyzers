@@ -11,6 +11,6 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
     {
         public override string FixableDiagnosticId => "MiKo_4007";
 
-        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic diagnostic) => PlaceFirst<MethodDeclarationSyntax>(syntax, typeSyntax); // place before all other methods
+        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic issue) => PlaceFirst<MethodDeclarationSyntax>(syntax, typeSyntax); // place before all other methods
     }
 }

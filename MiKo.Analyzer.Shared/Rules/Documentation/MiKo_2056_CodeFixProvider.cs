@@ -30,11 +30,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return null;
         }
 
-        protected override DocumentationCommentTriviaSyntax FixExceptionComment(SyntaxNode syntax, XmlElementSyntax exception, DocumentationCommentTriviaSyntax comment, Diagnostic diagnostic)
+        protected override DocumentationCommentTriviaSyntax FixExceptionComment(SyntaxNode syntax, XmlElementSyntax exception, DocumentationCommentTriviaSyntax comment, Diagnostic issue)
         {
             if (exception.IsExceptionCommentFor<ObjectDisposedException>())
             {
-                var phrase = GetPhraseProposal(diagnostic);
+                var phrase = GetPhraseProposal(issue);
 
                 var exceptionComment = CommentEndingWith(exception, phrase);
 

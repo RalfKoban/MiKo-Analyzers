@@ -11,9 +11,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     public abstract class SpacingCodeFixProvider : MiKoCodeFixProvider
     {
-        protected static LinePosition GetProposedLinePosition(Diagnostic diagnostic)
+        protected static LinePosition GetProposedLinePosition(Diagnostic issue)
         {
-            var properties = diagnostic.Properties;
+            var properties = issue.Properties;
 
             if (properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.LineNumber, out var lineNumber)
              && properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.CharacterPosition, out var characterPosition))
@@ -24,13 +24,13 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return LinePosition.Zero;
         }
 
-        protected static int GetProposedSpaces(Diagnostic diagnostic) => diagnostic.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.Spaces, out var s)
-                                                                         ? int.Parse(s)
-                                                                         : 0;
+        protected static int GetProposedSpaces(Diagnostic issue) => issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.Spaces, out var s)
+                                                                    ? int.Parse(s)
+                                                                    : 0;
 
-        protected static int GetProposedAdditionalSpaces(Diagnostic diagnostic) => diagnostic.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.AdditionalSpaces, out var s)
-                                                                                   ? int.Parse(s)
-                                                                                   : 0;
+        protected static int GetProposedAdditionalSpaces(Diagnostic issue) => issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.AdditionalSpaces, out var s)
+                                                                              ? int.Parse(s)
+                                                                              : 0;
 
 #pragma warning disable CA1002
         protected static List<SyntaxNodeOrToken> SelfAndDescendantsOnSeparateLines(SyntaxNode syntax)

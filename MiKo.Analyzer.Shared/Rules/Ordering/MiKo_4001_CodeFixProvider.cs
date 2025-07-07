@@ -14,9 +14,9 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
     {
         public override string FixableDiagnosticId => "MiKo_4001";
 
-        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic diagnostic)
+        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic issue)
         {
-            var method = diagnostic.Location.GetEnclosing<IMethodSymbol>(document.GetSemanticModel());
+            var method = issue.Location.GetEnclosing<IMethodSymbol>(document.GetSemanticModel());
             var methodName = method.Name;
 
             var methods = method.ContainingType.GetMethods(methodName);
