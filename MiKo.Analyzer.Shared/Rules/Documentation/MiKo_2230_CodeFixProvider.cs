@@ -19,34 +19,52 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var token = syntax.FindToken(issue);
 
-            // TODO RKN Apply list
             return syntax.ReplaceNode(token.Parent, UpdateText(token));
         }
 
-        private static IEnumerable<XmlNodeSyntax> UpdateText(SyntaxToken token)
+        private static XmlNodeSyntax[] UpdateText(SyntaxToken token)
         {
+            const string ValueMeaning = Constants.Comments.ValueMeaningPhrase;
+
             var text = token.Text.AsSpan();
+            var index = text.IndexOf(ValueMeaning.AsSpan(), StringComparison.Ordinal);
 
-            var index = text.IndexOf(Constants.Comments.ValueMeaningPhrase.AsSpan(), StringComparison.Ordinal);
-            var remainingText = text.Slice(0, index).Trim().ToString();
+            var xmlText = XmlText(text.Slice(0, index).Trim().ToString());
+            var xmlTable = XmlTable(text.Slice(index + ValueMeaning.Length));
 
-            yield return XmlText(remainingText).WithLeadingXmlComment();
-
-            /// <list type=""table"">
-            /// <listheader><term>Value</term><description>Meaning</description></listheader>
-            /// <item><term>Less than zero</term><description>Some text here.</description></item>
-            /// <item><term>Zero</term><description>Some other text here.</description></item>
-            /// <item><term>Greater than zero</term><description>Some even other text here.</description></item>
-            /// </list>
-            var term = XmlElement(Constants.XmlTag.Term, XmlText(Constants.Comments.ValuePhrase));
-            var description = XmlElement(Constants.XmlTag.Description, XmlText(Constants.Comments.MeaningPhrase));
-
-            var items = new List<XmlNodeSyntax>
-                            {
-                                XmlElement(Constants.XmlTag.ListHeader, new[] { term, description }),
-                            };
-
-            yield return XmlList(Constants.XmlTag.ListType.Table, items).WithTrailingXmlComment();
+            return new XmlNodeSyntax[]
+                   {
+                       xmlText.WithLeadingXmlComment(),
+                       xmlTable.WithTrailingXmlComment(),
+                   };
         }
+
+        private static XmlElementSyntax XmlTable(ReadOnlySpan<char> listTexts)
+        {
+            // try to find all sentences by splitting the texts at the dots (that should indicate a sentence ending)
+            var items = new List<XmlNodeSyntax>
+                        {
+                            XmlElement(Constants.XmlTag.ListHeader, Constants.Comments.ValuePhrase, Constants.Comments.MeaningPhrase),
+                        };
+
+            foreach (ReadOnlySpan<char> sentences in listTexts.SplitBy(".".AsSpan()))
+            {
+                var sentence = sentences.FirstSentence();
+                var remainingText = sentences.Slice(sentence.Length);
+
+                var term = sentence.Trim().ToString();
+                var description = remainingText.Trim().ConcatenatedWith('.'); // append a dot as we had split it by the dots which due to that gone missing
+
+                items.Add(XmlElement(Constants.XmlTag.Item, term, description));
+            }
+
+            return XmlList(Constants.XmlTag.ListType.Table, items);
+        }
+
+        private static XmlElementSyntax XmlElement(string tag, string term, string description) => XmlElement(tag, new[]
+                                                                                                                   {
+                                                                                                                       XmlElement(Constants.XmlTag.Term, XmlText(term)),
+                                                                                                                       XmlElement(Constants.XmlTag.Description, XmlText(description)),
+                                                                                                                   });
     }
 }
