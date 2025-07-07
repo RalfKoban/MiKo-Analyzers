@@ -4406,7 +4406,7 @@ This practice ensures clarity and transparency in your codebase.</value>
     <value>Use hard-coded GUID</value>
   </data>
   <data name="MiKo_3103_Description" xml:space="preserve">
-    <value>Tests should be specific to be reproducible and easy to maintain. Generated GUIDs are not reproducible and hard to track if a test fails. Instead, use a hard-coded GUID for consistency. This ensures tests are clear and reliable.</value>
+    <value>Tests should be as specific as possible, to be reproducible and easy to maintain. Generated GUIDs are not reproducible and hard to track if a test fails. Instead, use a hard-coded GUID for consistency and as debugging aid. This ensures tests are clear and reliable and help you when you have to debug.</value>
   </data>
   <data name="MiKo_3103_MessageFormat" xml:space="preserve">
     <value>Use a hard-coded GUID instead</value>

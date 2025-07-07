@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool IsSolutionWide => true;
 
-        protected sealed override async Task<Solution> ApplySolutionCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic diagnostic, CancellationToken cancellationToken)
+        protected sealed override async Task<Solution> ApplySolutionCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic issue, CancellationToken cancellationToken)
         {
             // Produce a new solution that has all references to that symbol renamed, including the declaration.
             var originalSolution = document.Project.Solution;
@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return originalSolution;
             }
 
-            var newName = GetNewName(diagnostic, symbol);
+            var newName = GetNewName(issue, symbol);
 
             if (newName.IsNullOrWhiteSpace() || newName.Equals(symbol.Name, StringComparison.Ordinal))
             {
@@ -53,7 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => throw new NotSupportedException("This code fix provider does not modify the syntax");
 
-        private static string GetNewName(Diagnostic diagnostic, ISymbol symbol) => diagnostic.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.BetterName, out var betterName) ? betterName : symbol.Name;
+        private static string GetNewName(Diagnostic issue, ISymbol symbol) => issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.BetterName, out var betterName) ? betterName : symbol.Name;
 
         private static bool IsMethodKindCore(SyntaxNode node)
         {

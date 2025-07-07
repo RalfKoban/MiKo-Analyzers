@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
     {
         public override string FixableDiagnosticId => "MiKo_4008";
 
-        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic diagnostic)
+        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic issue)
         {
             var modifiedType = typeSyntax.RemoveNodeAndAdjustOpenCloseBraces(syntax);
             var method = modifiedType.ChildNodes<MethodDeclarationSyntax>().Last(_ => _.GetName() == nameof(Equals) && _.Modifiers.Any(SyntaxKind.PublicKeyword));
