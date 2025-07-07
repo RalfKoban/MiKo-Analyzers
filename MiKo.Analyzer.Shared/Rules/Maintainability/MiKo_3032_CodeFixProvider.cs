@@ -37,11 +37,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return syntax;
         }
 
-        private static InvocationExpressionSyntax NameOf(Diagnostic diagnostic)
+        private static InvocationExpressionSyntax NameOf(Diagnostic issue)
         {
-            diagnostic.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.PropertyName, out var propertyName);
+            issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.PropertyName, out var propertyName);
 
-            if (diagnostic.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.PropertyTypeName, out var propertyTypeName))
+            if (issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.PropertyTypeName, out var propertyTypeName))
             {
                 return NameOf(propertyTypeName, propertyName);
             }
