@@ -39,7 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (contents.Count is 1 && contents[0] is XmlTextSyntax txt)
             {
-                var text = txt.GetTextWithoutTrivia();
+                var text = txt.GetTextTrimmed();
 
                 if (text.StartsWith("Enum", StringComparison.Ordinal))
                 {
