@@ -180,6 +180,75 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_problematic_text_in_comparer_on_single_line()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <returns>
+    /// A value that indicates something being compared. The return value has these meanings: Value Meaning Less than zero x is less than y. Zero x equals y. Greater than zero x is greater than y.
+    /// </returns>
+    public int Compare(int x, int y) => 42;
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <returns>
+    /// A value that indicates something being compared. The return value has these meanings:
+    /// <list type=""table"">
+    /// <listheader><term>Value</term><description>Meaning</description></listheader>
+    /// <item><term>Less than zero</term><description>x is less than y.</description></item>
+    /// <item><term>Zero</term><description>x equals y.</description></item>
+    /// <item><term>Greater than zero</term><description>x is greater than y.</description></item>
+    /// </list>
+    /// </returns>
+    public int Compare(int x, int y) => 42;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_problematic_text_in_comparer_on_separate_lines()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <returns>
+    /// A value that indicates something being compared.
+    /// The return value has these meanings:
+    /// Value Meaning
+    /// Less than zero x is less than y.
+    /// Zero x equals y.
+    /// Greater than zero x is greater than y.
+    /// </returns>
+    public int Compare(int x, int y) => 42;
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <returns>
+    /// A value that indicates something being compared. The return value has these meanings:
+    /// <list type=""table"">
+    /// <listheader><term>Value</term><description>Meaning</description></listheader>
+    /// <item><term>Less than zero</term><description>x is less than y.</description></item>
+    /// <item><term>Zero</term><description>x equals y.</description></item>
+    /// <item><term>Greater than zero</term><description>x is greater than y.</description></item>
+    /// </list>
+    /// </returns>
+    public int Compare(int x, int y) => 42;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2230_ReturnValueUsesListAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2230_ReturnValueUsesListAnalyzer();

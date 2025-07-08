@@ -304,6 +304,9 @@ namespace MiKoSolutions.Analyzers
             internal const string ValuePhrase = "Value";
             internal const string MeaningPhrase = "Meaning";
             internal const string ValueMeaningPhrase = ValuePhrase + " " + MeaningPhrase;
+            internal const string LessThanZero = "Less than zero";
+            internal const string Zero = "Zero";
+            internal const string GreaterThanZero = "Greater than zero";
             internal const string WasNotSuccessfulPhrase = "was not successful";
             internal const string WhenAllTaskReturnTypeStartingPhrase = "A task that represents the completion of all of the supplied tasks.";
             internal const string WhenAnyTaskReturnTypeStartingPhraseTemplate = "A {0} that represents the completion of one of the supplied tasks. Its {1} is the task that completed first.";
