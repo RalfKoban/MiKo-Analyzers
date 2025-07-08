@@ -67,7 +67,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         internal static SyntaxNode GetUpdatedSyntax(XmlElementSyntax comment, XmlTextSyntax textSyntax)
         {
-            var text = textSyntax.GetTextWithoutTrivia().AsSpan();
+            var text = textSyntax.GetTextTrimmed().AsSpan();
 
             if (text.StartsWith("Interaction logic for", StringComparison.Ordinal))
             {
@@ -174,7 +174,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // maybe it is a documentation that should be an inherit documentation instead
             if (content.FirstOrDefault() is XmlTextSyntax t)
             {
-                var text = t.GetTextWithoutTrivia();
+                var text = t.GetTextTrimmed();
 
                 if (text.IsNullOrWhiteSpace() && content.Count > 1 && content[1].IsSeeCref())
                 {

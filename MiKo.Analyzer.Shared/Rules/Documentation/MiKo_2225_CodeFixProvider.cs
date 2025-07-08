@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (syntax is XmlElementSyntax element && element.Content.FirstOrDefault() is XmlTextSyntax text)
             {
-                var code = text.GetTextWithoutTrivia();
+                var code = text.GetTextTrimmed();
 
                 return element.WithContent(XmlText(code));
             }
