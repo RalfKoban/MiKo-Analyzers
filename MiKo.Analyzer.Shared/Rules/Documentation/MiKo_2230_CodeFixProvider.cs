@@ -80,7 +80,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var zeroStart = text.IndexOf(Zero.AsSpan());
             var greaterThanZeroStart = text.IndexOf(GreaterThanZero.AsSpan());
 
-            if (lessThanZeroStart < 0 || zeroStart <= 0 || greaterThanZeroStart <= 0)
+            if (lessThanZeroStart < 0 || zeroStart <= lessThanZeroStart || greaterThanZeroStart <= zeroStart)
             {
                 return false;
             }
