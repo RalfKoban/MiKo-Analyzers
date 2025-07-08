@@ -1,9 +1,9 @@
-﻿// for performance reasons we switch of RDI and NCrunch instrumentation
+﻿using System;
+
+// for performance reasons we switch of RDI and NCrunch instrumentation
 //// ncrunch: rdi off
 //// ncrunch: no coverage start
-// ReSharper disable once CheckNamespace
-#pragma warning disable IDE0130
-namespace System
+namespace MiKoSolutions.Analyzers
 {
     public readonly struct Pair : IEquatable<Pair>
     {

@@ -1240,6 +1240,26 @@ namespace MiKoSolutions.Analyzers
             return trimmed;
         }
 
+        internal static string GetTextTrimmed(this XmlTextSyntax value)
+        {
+            if (value is null)
+            {
+                return string.Empty;
+            }
+
+            var builder = StringBuilderCache.Acquire();
+
+            var trimmed = value.GetTextWithoutTrivia(builder)
+                               .WithoutParaTags()
+                               .WithoutNewLines()
+                               .WithoutMultipleWhiteSpaces()
+                               .Trim();
+
+            StringBuilderCache.Release(builder);
+
+            return trimmed;
+        }
+
         internal static string GetTextWithoutTrivia(this XmlTextAttributeSyntax value)
         {
             if (value is null)

@@ -13,7 +13,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/18917.svg)](https://scan.coverity.com/projects/ralfkoban-miko-analyzers)
 
 ## Available Rules
-The following tables lists all the 503 rules that are currently provided by the analyzer.
+The following tables lists all the 504 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -274,6 +274,7 @@ The following tables lists all the 503 rules that are currently provided by the 
 |MiKo_2227|Documentation should not contain ReSharper suppressions|&#x2713;|\-|
 |MiKo_2228|Documentation should use positive wording instead of negative|&#x2713;|\-|
 |MiKo_2229|Documentation should not contain left-over XML fragments|&#x2713;|&#x2713;|
+|MiKo_2230|Documentation of return value should use &lt;list&gt; when there are values with specific meanings|&#x2713;|&#x2713;|
 |MiKo_2231|Documentation of overridden 'GetHashCode()' methods shall use '&lt;inheritdoc /&gt;' marker|&#x2713;|&#x2713;|
 |MiKo_2232|&lt;summary&gt; documentation should not be empty|&#x2713;|&#x2713;|
 |MiKo_2233|XML tags should be placed on single line|&#x2713;|&#x2713;|
