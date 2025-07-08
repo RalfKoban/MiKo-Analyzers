@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (token.Parent is XmlTextSyntax node)
             {
-                var text = node.GetTextWithoutTrivia();
+                var text = node.GetTextTrimmed();
 
                 return syntax.ReplaceNode(node, UpdateText(text.AsSpan()));
             }

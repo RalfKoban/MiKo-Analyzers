@@ -137,7 +137,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 case 1 when contents[0] is XmlTextSyntax t:
                 {
-                    var text = t.GetTextWithoutTrivia().AsSpan();
+                    var text = t.GetTextTrimmed().AsSpan();
 
                     if (text.IsEmpty)
                     {

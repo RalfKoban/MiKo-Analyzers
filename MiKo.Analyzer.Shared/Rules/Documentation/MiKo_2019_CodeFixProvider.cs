@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (content.Count > 0 && content[0] is XmlTextSyntax textSyntax)
                 {
-                    var startText = textSyntax.GetTextWithoutTrivia();
+                    var startText = textSyntax.GetTextTrimmed();
 
                     if (startText.StartsWith("Given ", StringComparison.Ordinal))
                     {
