@@ -8666,6 +8666,44 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use &lt;list&gt; for values and meaning.
+        /// </summary>
+        internal static string MiKo_2230_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2230_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When return values with specific meanings are documented via &quot;Value Meaning&quot;, that documentation should be part of a &lt;list&gt;.
+        ///This makes it easier to read because the XML documentation renderer will place the contents in a list.
+        ///In contrast, when the documentation is just some plain text then that is very difficult to read and understand because all text is place behind each other in a single paragraph..
+        /// </summary>
+        internal static string MiKo_2230_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2230_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &lt;list&gt; instead for values and their meaning.
+        /// </summary>
+        internal static string MiKo_2230_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2230_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation of return value should use &lt;list&gt; when there are values with specific meanings.
+        /// </summary>
+        internal static string MiKo_2230_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2230_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use &lt;inheritdoc/&gt;.
         /// </summary>
         internal static string MiKo_2231_CodeFixTitle {

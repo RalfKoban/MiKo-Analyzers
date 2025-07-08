@@ -1015,6 +1015,43 @@ namespace System
             return false;
         }
 
+        public static string FirstSentence(this string value)
+        {
+            if (value.IsNullOrEmpty())
+            {
+                return value;
+            }
+
+            var span = value.AsSpan();
+            var word = FirstSentence(span);
+
+            return word != span
+                       ? word.ToString()
+                       : value;
+        }
+
+        public static ReadOnlySpan<char> FirstSentence(this in ReadOnlySpan<char> value)
+        {
+            var text = value.TrimStart();
+            var textLength = text.Length;
+
+            if (textLength > 0)
+            {
+                // start at index 1 to skip first upper case character (and avoid return of empty word)
+                for (var index = 1; index < textLength; index++)
+                {
+                    var c = text[index];
+
+                    if (c.IsUpperCase() || c.IsSentenceEnding())
+                    {
+                        return text.Slice(0, index);
+                    }
+                }
+            }
+
+            return text;
+        }
+
         public static string FirstWord(this string value)
         {
             if (value.IsNullOrEmpty())

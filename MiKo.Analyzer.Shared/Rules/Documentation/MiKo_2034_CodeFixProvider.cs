@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (contents.First() is XmlTextSyntax t)
             {
-                var text = t.GetTextWithoutTrivia();
+                var text = t.GetTextTrimmed();
 
                 if (text.StartsWith("If ", StringComparison.OrdinalIgnoreCase) && text.ContainsAny(UnwantedResultTexts))
                 {

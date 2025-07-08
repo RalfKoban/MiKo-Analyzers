@@ -49,7 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (content.Count > 0 && content[0] is XmlTextSyntax node)
                     {
-                        var text = node.GetTextWithoutTrivia();
+                        var text = node.GetTextTrimmed();
 
                         if (text.StartsWithAny(WrongStartingPhrases, StringComparison.Ordinal))
                         {
