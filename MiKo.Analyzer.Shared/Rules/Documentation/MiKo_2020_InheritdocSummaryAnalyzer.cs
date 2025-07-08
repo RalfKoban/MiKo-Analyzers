@@ -78,7 +78,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         // we seem to have an issue here, so inspect the code
                         if (HasIssue(symbol, semanticModel, cref))
                         {
-                            var text = t.GetTextWithoutTrivia();
+                            var text = t.GetTextTrimmed();
 
                             if (text.IsNullOrWhiteSpace())
                             {
