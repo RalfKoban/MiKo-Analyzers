@@ -72,7 +72,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return false;
         }
 
-        private static bool IsStringFormatExtension(IMethodSymbol method) => method.ReturnType.SpecialType is SpecialType.System_String && method.Name.StartsWith("Format", StringComparison.Ordinal);
+        private static bool IsStringFormatExtension(IMethodSymbol method) => method.ReturnType.SpecialType is SpecialType.System_String && method.Name.StartsWith(nameof(string.Format), StringComparison.Ordinal);
 
         private static string FindBetterName(IParameterSymbol symbol)
         {
@@ -91,7 +91,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private Diagnostic[] AnalyzeName(IParameterSymbol parameter, params string[] names)
         {
-            if (names.Any(_ => _ == parameter.Name))
+            var parameterName = parameter.Name;
+
+            if (parameterName.IsNullOrEmpty() || names.Any(_ => _ == parameterName))
             {
                 return Array.Empty<Diagnostic>();
             }
