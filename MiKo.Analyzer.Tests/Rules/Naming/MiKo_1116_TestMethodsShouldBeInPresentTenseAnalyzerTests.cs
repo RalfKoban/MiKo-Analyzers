@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1116_TestMethodsShouldBeInPresentTenseAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] NonPresentPhrases = ["Was", "Returned", "Will", "Threw"];
+        private static readonly string[] NonPresentPhrases = ["Was", "Returned", "Will", "Threw", "Got", "Had"];
 
         [Test]
         public void No_issue_is_reported_for_non_test_method_with_present_tense() => No_issue_is_reported_for(@"

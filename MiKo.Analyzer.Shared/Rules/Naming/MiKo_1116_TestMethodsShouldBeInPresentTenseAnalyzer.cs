@@ -15,8 +15,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private const string Threw = "Threw";
         private const string Was = "Was";
         private const string Will = "Will";
+        private const string Got = "Got";
+        private const string Had = "Had";
 
-        private static readonly string[] NonPresentPhrases = { Returned, Threw, Was, Will };
+        private static readonly string[] NonPresentPhrases = { Got, Had, Returned, Threw, Was, Will };
 
         public MiKo_1116_TestMethodsShouldBeInPresentTenseAnalyzer() : base(Id)
         {
@@ -34,6 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 if (HasIssue(methodName))
                 {
+                    // TODO RKN: Add codefix, consider replacements for 'Got' and 'Had'
                     var betterName = NamesFinder.FindBetterTestName(symbol.Name, symbol);
 
                     yield return Issue(symbol, betterName, CreateBetterNameProposal(betterName));
