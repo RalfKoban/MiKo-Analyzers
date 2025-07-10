@@ -216,6 +216,26 @@ namespace MiKoSolutions.Analyzers.Rules
                                  });
         }
 
+        [Ignore("Shall be run manually")]
+        [Explicit]
+        [TestCase(@"<TODO>\MiKo.Analyzer.Tests\", "*Tests.cs"), Timeout(60 * 1000)]
+        public static void Files_are_RDI_excluded_(string path, string searchPattern)
+        {
+            const string NcrunchRdiMarker = "//// ncrunch: rdi off";
+
+            var files = Directory.EnumerateFiles(path, searchPattern, SearchOption.AllDirectories);
+
+            Assert.Multiple(() =>
+                                 {
+                                     foreach (var file in files)
+                                     {
+                                         var hasMarker = File.ReadLines(file).Any(_ => _.AsSpan().Trim().Equals(NcrunchRdiMarker.AsSpan(), StringComparison.Ordinal));
+
+                                         Assert.That(hasMarker, Is.True, Path.GetFileName(file));
+                                     }
+                                 });
+        }
+
         [Test]
         public static void Analyzers_are_available() => Assert.That(AllAnalyzers.Length, Is.Not.Zero);
 
