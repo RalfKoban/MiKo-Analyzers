@@ -554,8 +554,8 @@ namespace Bla
              @"public void Do(IEnumerable e, object o) => CollectionAssert.DoesNotContain(e, o, ""my message"");",
              @"public void Do(IEnumerable e, object o) => Assert.That(e, Does.Not.Contain(o), ""my message"");")]
         [TestCase(
-             @"public void Do(IEnumerable e, object o) => CollectionAssert.Contains(e, o, ""my message"");",
-             @"public void Do(IEnumerable e, object o) => Assert.That(e, Does.Contain(o), ""my message"");")]
+             @"public void Do(IEnumerable e, Object o) => CollectionAssert.Contains(e, o, ""my message"");",
+             @"public void Do(IEnumerable e, Object o) => Assert.That(e, Does.Contain(o), ""my message"");")]
         [TestCase(
              @"public void Do(string s) => StringAssert.StartsWith(""abc"", s, ""my message"");",
              @"public void Do(string s) => Assert.That(s, Does.StartWith(""abc""), ""my message"");")]
