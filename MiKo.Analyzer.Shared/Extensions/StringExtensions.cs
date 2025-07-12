@@ -784,6 +784,8 @@ namespace System
             return false;
         }
 
+        public static bool ContainsXml(this string value) => value.Contains('<') && value.Contains("/>");
+
         public static int CountLeadingWhitespaces(this string value, int start = 0)
         {
             var whitespaces = 0;
