@@ -26,9 +26,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return Array.Empty<Diagnostic>();
             }
 
-            return xmlSyntax.SelectMany(_ => _.Content.OfType<XmlTextSyntax>())
-                            .Where(_ => _.GetTextTrimmed().Contains(Constants.Comments.ValueMeaningPhrase, StringComparison.Ordinal))
-                            .Select(_ => Issue(_))
+            return xmlSyntax.Where(_ => _.GetTextTrimmed().Contains(Constants.Comments.ValueMeaningPhrase, StringComparison.Ordinal))
+                            .Select(_ => Issue(_.GetContentsLocation()))
                             .ToArray();
         }
     }
