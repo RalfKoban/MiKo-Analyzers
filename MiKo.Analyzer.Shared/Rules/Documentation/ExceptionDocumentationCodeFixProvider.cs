@@ -314,6 +314,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 #pragma warning restore CA1861
 
-        //// ncrunch: rdi default
+//// ncrunch: rdi default
     }
 }
