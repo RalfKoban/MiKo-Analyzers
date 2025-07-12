@@ -320,6 +320,38 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_problematic_text_in_comparer_on_separate_lines_with_paramref_texts()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <returns>
+    /// A signed integer that indicates the relative values of <paramref name=""x""/> and <paramref name=""y""/>, as shown in the following table.Value Meaning Less than zero<paramref name=""x""/> is less than <paramref name=""y""/>.Zero<paramref name=""x""/> equals <paramref name=""y""/>.Greater than zero<paramref name=""x""/> is greater than <paramref name=""y""/>.
+    /// </returns>
+    public int Compare(int x, int y) => 42;
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <returns>
+    /// A signed integer that indicates the relative values of <paramref name=""x""/> and <paramref name=""y""/>, as shown in the following table.
+    /// <list type=""table"">
+    /// <listheader><term>Value</term><description>Meaning</description></listheader>
+    /// <item><term>Less than zero</term><description><paramref name=""x""/> is less than <paramref name=""y""/>.</description></item>
+    /// <item><term>Zero</term><description><paramref name=""x""/> equals <paramref name=""y""/>.</description></item>
+    /// <item><term>Greater than zero</term><description><paramref name=""x""/> is greater than <paramref name=""y""/>.</description></item>
+    /// </list>
+    /// </returns>
+    public int Compare(int x, int y) => 42;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2230_ReturnValueUsesListAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2230_ReturnValueUsesListAnalyzer();

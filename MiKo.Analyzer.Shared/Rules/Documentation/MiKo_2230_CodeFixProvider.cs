@@ -4,6 +4,7 @@ using System.Composition;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -19,30 +20,44 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var token = syntax.FindToken(issue);
 
-            if (token.Parent is XmlTextSyntax node)
+            if (token.Parent is XmlTextSyntax node && node.Parent is XmlElementSyntax element)
             {
-                var text = node.GetTextTrimmed();
+                var text = element.GetTextTrimmed();
 
-                return syntax.ReplaceNode(node, UpdateText(text.AsSpan()));
+                return syntax.ReplaceNode(element, element.WithContent(UpdateText(text.AsSpan())));
             }
 
             return syntax;
         }
 
-        private static XmlNodeSyntax[] UpdateText(ReadOnlySpan<char> text)
+        private static SyntaxList<XmlNodeSyntax> UpdateText(ReadOnlySpan<char> text)
         {
             const string ValueMeaning = Constants.Comments.ValueMeaningPhrase;
 
             var index = text.IndexOf(ValueMeaning.AsSpan(), StringComparison.Ordinal);
 
-            var xmlText = XmlText(text.Slice(0, index).Trim().ToString());
+            var xmlNodes = XmlNodes(text.Slice(0, index).Trim().ToString());
             var xmlTable = XmlTable(text.Slice(index + ValueMeaning.Length));
 
-            return new XmlNodeSyntax[]
-                       {
-                           xmlText.WithLeadingXmlComment(),
-                           xmlTable.WithTrailingXmlComment(),
-                       };
+            return xmlNodes.Add(xmlTable.WithTrailingXmlComment());
+        }
+
+        private static SyntaxList<XmlNodeSyntax> XmlNodes(string text)
+        {
+            if (text.ContainsXml())
+            {
+                // the tag we use here is not relevant, as we are interested in the contents
+                var element = ParseAsXmlElement(Constants.XmlTag.Returns, text);
+
+                if (element != null)
+                {
+                    var content = element.Content;
+
+                    return content.Replace(content[0], content[0].WithLeadingXmlComment());
+                }
+            }
+
+            return SyntaxFactory.List<XmlNodeSyntax>().Add(XmlText(text).WithLeadingXmlComment());
         }
 
         private static XmlElementSyntax XmlTable(ReadOnlySpan<char> text)
@@ -50,24 +65,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // try to find all sentences by splitting the texts at the dots (that should indicate a sentence ending)
             var nodes = new List<XmlNodeSyntax>
                             {
-                                XmlElement(Constants.XmlTag.ListHeader, Constants.Comments.ValuePhrase, Constants.Comments.MeaningPhrase),
+                                XmlListHeader(Constants.Comments.ValuePhrase, Constants.Comments.MeaningPhrase),
                             };
 
-            if (TryCreateItems(text, nodes) is false)
+            if (TryCreateItems(text, nodes))
             {
-                foreach (ReadOnlySpan<char> sentences in text.SplitBy(".".AsSpan()))
-                {
-                    var sentence = sentences.FirstSentence();
-                    var remainingText = sentences.Slice(sentence.Length);
-
-                    var term = sentence.Trim().ToString();
-                    var description = remainingText.Trim().ConcatenatedWith('.'); // append a dot as we had split it by the dots which due to that gone missing
-
-                    nodes.Add(XmlElement(Constants.XmlTag.Item, term, description));
-                }
+                return XmlList(Constants.XmlTag.ListType.Table, nodes);
             }
 
-            return XmlList(Constants.XmlTag.ListType.Table, nodes);
+            return XmlElement(Constants.XmlTag.ListType.Table, XmlText(Constants.TODO));
         }
 
         private static bool TryCreateItems(ReadOnlySpan<char> text, List<XmlNodeSyntax> nodes)
@@ -93,17 +99,58 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var zeroText = text.Slice(zeroEnd, greaterThanZeroStart - zeroEnd).Trim().ToString();
             var greaterThanZeroText = text.Slice(greaterThanZeroEnd).Trim().ToString();
 
-            nodes.Add(XmlElement(Constants.XmlTag.Item, LessThanZero, lessThanZeroText));
-            nodes.Add(XmlElement(Constants.XmlTag.Item, Zero, zeroText));
-            nodes.Add(XmlElement(Constants.XmlTag.Item, GreaterThanZero, greaterThanZeroText));
+            nodes.Add(XmlItem(LessThanZero, lessThanZeroText));
+            nodes.Add(XmlItem(Zero, zeroText));
+            nodes.Add(XmlItem(GreaterThanZero, greaterThanZeroText));
 
             return true;
         }
 
-        private static XmlElementSyntax XmlElement(string tag, string term, string description) => XmlElement(tag, new[]
-                                                                                                                       {
-                                                                                                                           XmlElement(Constants.XmlTag.Term, XmlText(term)),
-                                                                                                                           XmlElement(Constants.XmlTag.Description, XmlText(description)),
-                                                                                                                       });
+        private static XmlElementSyntax XmlListHeader(string term, string description) => XmlElement(Constants.XmlTag.ListHeader, new[] { XmlTerm(term), XmlDescription(description) });
+
+        private static XmlElementSyntax XmlItem(string term, string description) => XmlElement(Constants.XmlTag.Item, new[] { XmlTerm(term), XmlDescription(description) });
+
+        private static XmlElementSyntax XmlTerm(string term) => XmlElement(Constants.XmlTag.Term, XmlText(term));
+
+        private static XmlElementSyntax XmlDescription(string description)
+        {
+            if (description.ContainsXml())
+            {
+                var element = ParseAsXmlElement(Constants.XmlTag.Description, description);
+
+                if (element != null)
+                {
+                    return element;
+                }
+            }
+
+            return XmlElement(Constants.XmlTag.Description, XmlText(description));
+        }
+
+        private static XmlElementSyntax ParseAsXmlElement(string tag, string description)
+        {
+            var text = StringBuilderCache.Acquire(Constants.Comments.XmlCommentExterior.Length + (2 * tag.Length) + 6 + description.Length)
+                                         .Append(Constants.Comments.XmlCommentExterior)
+                                         .Append(' ')
+                                         .Append('<').Append(tag).Append('>')
+                                         .Append(description)
+                                         .Append('<').Append('/').Append(tag).Append('>')
+                                         .ToStringAndRelease();
+
+            var tree = CSharpSyntaxTree.ParseText(text);
+            var documentation = tree.GetRoot().GetDocumentationCommentTriviaSyntax();
+
+            if (documentation.Length is 1)
+            {
+                var elements = documentation[0].Content.OfType<XmlElementSyntax>();
+
+                if (elements.Count > 0)
+                {
+                    return elements[0];
+                }
+            }
+
+            return null;
+        }
     }
 }
