@@ -27,8 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return xmlSyntax.Where(_ => _.GetTextTrimmed().Contains(Constants.Comments.ValueMeaningPhrase, StringComparison.Ordinal))
-                            .Select(_ => Issue(_.GetContentsLocation()))
-                            .ToArray();
+                            .ToArray(_ => Issue(_.GetContentsLocation()));
         }
     }
 }

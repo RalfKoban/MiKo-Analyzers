@@ -184,6 +184,117 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_code_sample_with_introduction_text()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Some documentation.
+    /// </summary>
+    /// <example>
+    /// Some example:
+    /// <code>
+    /// some code here
+    /// </code>
+    /// </example>
+    public void DoSomething() { }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Some documentation.
+    /// </summary>
+    /// <example>
+    /// The following example demonstrates some example:
+    /// <code>
+    /// some code here
+    /// </code>
+    /// </example>
+    public void DoSomething() { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_code_sample_without_introduction_text()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Some documentation.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// some code here
+    /// </code>
+    /// </example>
+    public void DoSomething() { }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Some documentation.
+    /// </summary>
+    /// <example>
+    /// The following example demonstrates its usage.
+    /// <code>
+    /// some code here
+    /// </code>
+    /// </example>
+    public void DoSomething() { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_code_sample_without_introduction_text_and_placed_on_single_line()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Some documentation.
+    /// </summary>
+    /// <example><code>
+    /// some code here
+    /// </code>
+    /// </example>
+    public void DoSomething() { }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Some documentation.
+    /// </summary>
+    /// <example>
+    /// The following example demonstrates its usage.
+    /// <code>
+    /// some code here
+    /// </code>
+    /// </example>
+    public void DoSomething() { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2100_ExampleDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2100_ExampleDefaultPhraseAnalyzer();
