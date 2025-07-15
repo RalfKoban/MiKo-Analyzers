@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers
                                                                                                                   SymbolDisplayGenericsOptions.IncludeTypeParameters,
                                                                                                                   miscellaneousOptions: SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers);
 
-        private static readonly Func<SyntaxNode, bool> IsLocalFunctionContainerSyntaxKind = IsLocalFunctionContainerSyntaxKindCore;
+        private static readonly Func<SyntaxNode, bool> IsLocalFunctionContainer = IsLocalFunctionContainerCore;
 
         internal static IEnumerable<IMethodSymbol> GetExtensionMethods(this ITypeSymbol value) => value.GetMethods().Where(_ => _.IsExtensionMethod);
 
@@ -73,10 +73,10 @@ namespace MiKoSolutions.Analyzers
 
             if (length > 0)
             {
-                var result = new List<IMethodSymbol>(length);
-                result.AddRange(members.OfType<IMethodSymbol>());
+                var results = new List<IMethodSymbol>(length);
+                results.AddRange(members.OfType<IMethodSymbol>());
 
-                return result;
+                return results;
             }
 
             return Array.Empty<IMethodSymbol>();
@@ -155,7 +155,7 @@ namespace MiKoSolutions.Analyzers
 
             List<LocalFunctionStatementSyntax> functions = null;
 
-            foreach (var descendantNode in node.DescendantNodes(IsLocalFunctionContainerSyntaxKind))
+            foreach (var descendantNode in node.DescendantNodes(IsLocalFunctionContainer))
             {
                 if (descendantNode is LocalFunctionStatementSyntax function)
                 {
@@ -1915,7 +1915,7 @@ namespace MiKoSolutions.Analyzers
             return results;
         }
 
-        private static bool IsLocalFunctionContainerSyntaxKindCore(SyntaxNode node)
+        private static bool IsLocalFunctionContainerCore(SyntaxNode node)
         {
             switch (node.RawKind)
             {
