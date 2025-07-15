@@ -1553,6 +1553,9 @@ A clearer name would be "Send_sends_email_to_valid_address", which is easier to 
   <data name="MiKo_1115_Title" xml:space="preserve">
     <value>Test methods should be named in a fluent way</value>
   </data>
+  <data name="MiKo_1116_CodeFixTitle" xml:space="preserve">
+    <value>Use present tense in test name</value>
+  </data>
   <data name="MiKo_1116_Description" xml:space="preserve">
     <value>Test methods should be named as statements in present tense. So they can used as a kind of checked list that describes functionality which either passes or fails.</value>
   </data>
