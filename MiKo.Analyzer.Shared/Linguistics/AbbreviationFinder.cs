@@ -7,7 +7,7 @@ using System.Text;
 
 namespace MiKoSolutions.Analyzers.Linguistics
 {
-    internal static class AbbreviationDetector
+    internal static class AbbreviationFinder
     {
         private static readonly Pair[] Prefixes =
                                                   {
@@ -90,6 +90,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("num", "number"),
                                                       new Pair("nums", "numbers"),
                                                       new Pair("obj", "object"),
+                                                      new Pair("opt", "option"),
+                                                      new Pair("opts", "options"),
+                                                      new Pair("op", "operation"),
+                                                      new Pair("ops", "operations"),
                                                       new Pair("para", "parameter"),
                                                       new Pair("param", "parameter"),
                                                       new Pair("params", "parameters"),
@@ -226,6 +230,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Objs", "Objects"),
                                                           new Pair("Op", "Operation"),
                                                           new Pair("Ops", "Operations"),
+                                                          new Pair("Opt", "Option"),
+                                                          new Pair("Opts", "Options"),
                                                           new Pair("Para", "Parameter"),
                                                           new Pair("Param", "Parameter"),
                                                           new Pair("Params", "Parameters"),
@@ -270,7 +276,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Vol", "Volume"),
                                                       };
 
-        private static readonly Pair[] MidTerms = Prefixes.Concat(OnlyMidTerms).ToArray();
+        private static readonly Pair[] MidTerms = OnlyMidTerms.Concat(Prefixes).ToArray();
 
         private static readonly Pair[] Postfixes = OnlyMidTerms;
 
@@ -407,7 +413,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 //// ncrunch: rdi off
         private static ReadOnlySpan<Pair> FindCore(in ReadOnlySpan<char> valueSpan)
         {
-            var result = new HashSet<Pair>(KeyEqualityComparer.Instance);
+            var results = new HashSet<Pair>(KeyComparer.Instance);
 
             for (int index = 0, prefixesLength = Prefixes.Length; index < prefixesLength; index++)
             {
@@ -417,12 +423,12 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
                 if (PrefixHasIssue(keySpan, valueSpan))
                 {
-                    result.Add(pair);
+                    results.Add(pair);
                 }
 
                 if (CompleteTermHasIssue(keySpan, valueSpan))
                 {
-                    result.Add(pair);
+                    results.Add(pair);
                 }
             }
 
@@ -434,7 +440,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
                 if (PostFixHasIssue(pair.Key.AsSpan(), valueSpan))
                 {
-                    result.Add(pair);
+                    results.Add(pair);
                 }
             }
 
@@ -444,13 +450,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
                 if (MidTermHasIssue(pair.Key.AsSpan(), valueSpan))
                 {
-                    result.Add(pair);
+                    results.Add(pair);
                 }
             }
 
-            return result.Count > 0
-                   ? result.ToArray()
-                   : ReadOnlySpan<Pair>.Empty;
+            return results.Count is 0 ? ReadOnlySpan<Pair>.Empty : results.ToArray();
         }
 //// ncrunch: rdi default
 
@@ -532,17 +536,33 @@ namespace MiKoSolutions.Analyzers.Linguistics
             while (true);
         }
 
-        private sealed class KeyEqualityComparer : IEqualityComparer<Pair>
+        private sealed class KeyComparer : IEqualityComparer<Pair>
         {
-            internal static readonly KeyEqualityComparer Instance = new KeyEqualityComparer();
+            internal static readonly KeyComparer Instance = new KeyComparer();
 
-            private KeyEqualityComparer()
+            private KeyComparer()
             {
             }
 
-            public bool Equals(Pair x, Pair y) => x.Key.AsSpan().SequenceEqual(y.Key.AsSpan());
+            public bool Equals(Pair x, Pair y)
+            {
+                var spanX = x.Key.AsSpan();
+                var spanY = y.Key.AsSpan();
 
-            public int GetHashCode(Pair obj) => obj.Key.GetHashCode();
+                if (spanX.Length == spanY.Length)
+                {
+                    return spanX.SequenceEqual(spanY);
+                }
+
+                if (spanX.Length > spanY.Length)
+                {
+                    return spanX.Contains(spanY);
+                }
+
+                return spanY.Contains(spanX);
+            }
+
+            public int GetHashCode(Pair obj) => 42; // we have to rely on 'Equals', so we have to provide the same hash to cause 'Equals' to be invoked
         }
     }
 }
