@@ -19,7 +19,7 @@ namespace System
                 return Array.Empty<string>();
             }
 
-            var tuples = new List<(int, string)>();
+            var substringIndices = new List<(int, string)>();
 
             for (int findingsIndex = 0, length = findings.Length; findingsIndex < length; findingsIndex++)
             {
@@ -28,22 +28,22 @@ namespace System
                 var indices = value.AllIndicesOf(finding, comparison);
                 var indicesLength = indices.Length;
 
-                tuples.Capacity += indicesLength;
+                substringIndices.Capacity += indicesLength;
 
                 for (var i = 0; i < indicesLength; i++)
                 {
                     var index = indices[i];
 
-                    tuples.Add((index, finding));
+                    substringIndices.Add((index, finding));
                 }
             }
 
-            var results = new List<string>((tuples.Count * 2) + 1);
+            var results = new List<string>((substringIndices.Count * 2) + 1);
 
             var remainingString = value;
 
             // get substrings by tuple indices and remember all parts (in reverse order)
-            foreach (var (index, finding) in tuples.OrderByDescending(_ => _.Item1))
+            foreach (var (index, finding) in substringIndices.OrderByDescending(_ => _.Item1))
             {
                 var lastPart = remainingString.Slice(index + finding.Length).ToString();
 

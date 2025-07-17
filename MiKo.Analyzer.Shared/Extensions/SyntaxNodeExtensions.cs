@@ -40,15 +40,15 @@ namespace MiKoSolutions.Analyzers
 
         private static readonly SyntaxKind[] MethodNameSyntaxKinds = { SyntaxKind.MethodDeclaration, SyntaxKind.ConstructorDeclaration };
 
-        private static readonly SyntaxList<TypeParameterConstraintClauseSyntax> Empty = SyntaxFactory.List<TypeParameterConstraintClauseSyntax>();
+        private static readonly SyntaxList<TypeParameterConstraintClauseSyntax> EmptyConstraintClauses = SyntaxFactory.List<TypeParameterConstraintClauseSyntax>();
 
-        private static readonly Func<SyntaxNode, bool> DescendIntoChildren = _ => true;
+        private static readonly Func<SyntaxNode, bool> AlwaysDescendIntoChildren = _ => true;
 
-        internal static IEnumerable<SyntaxNode> AllDescendantNodes(this SyntaxNode value) => value?.DescendantNodes(DescendIntoChildren, true) ?? Array.Empty<SyntaxNode>();
+        internal static IEnumerable<SyntaxNode> AllDescendantNodes(this SyntaxNode value) => value?.DescendantNodes(AlwaysDescendIntoChildren, true) ?? Array.Empty<SyntaxNode>();
 
         internal static IEnumerable<T> AllDescendantNodes<T>(this SyntaxNode value) where T : SyntaxNode => value.AllDescendantNodes().OfType<T>();
 
-        internal static IEnumerable<SyntaxNodeOrToken> AllDescendantNodesAndTokens(this SyntaxNode value) => value.DescendantNodesAndTokens(DescendIntoChildren);
+        internal static IEnumerable<SyntaxNodeOrToken> AllDescendantNodesAndTokens(this SyntaxNode value) => value.DescendantNodesAndTokens(AlwaysDescendIntoChildren);
 
         internal static IEnumerable<T> Ancestors<T>(this SyntaxNode value) where T : SyntaxNode => value.Ancestors().OfType<T>(); // value.AncestorsAndSelf().OfType<T>();
 
@@ -167,7 +167,7 @@ namespace MiKoSolutions.Analyzers
                 case LocalFunctionStatementSyntax f: return f.ConstraintClauses;
 
                 default:
-                    return Empty;
+                    return EmptyConstraintClauses;
             }
         }
 
