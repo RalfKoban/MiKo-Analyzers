@@ -7,10 +7,50 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
+using MiKoSolutions.Analyzers.Linguistics;
+
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     public static class NamesFinder
     {
+        private const string If = "If";
+        private const string IfIt = "If_It";
+        private const string Is = "Is";
+        private const string When = "When";
+        private const string And = "And";
+        private const string Returned = "Returned";
+        private const string Returns = "Returns";
+        private const string Throws = "Throws";
+        private const string Throw = "Throw";
+        private const string Threw = "Threw";
+        private const string NoLongerThrows = "NoLongerThrows";
+        private const string NoLongerThrow = "NoLongerThrow";
+        private const string NotThrows = "NotThrows";
+        private const string NotThrow = "NotThrow";
+        private const string Given = "Given";
+        private const string IsGiven = Is + Given;
+        private const string Consumed = "Consumed";
+        private const string Rejected = "Rejected";
+        private const string Accepted = "Accepted";
+
+        private static readonly string[] SpecialThrowPhrases =
+                                                               {
+                                                                   Throws,
+                                                                   Throw,
+                                                                   NotThrows,
+                                                                   NotThrow,
+                                                                   NoLongerThrows,
+                                                                   NoLongerThrow,
+                                                                   Threw,
+                                                               };
+
+        private static readonly string[] SpecialNotPhrases =
+                                                             {
+                                                                 "DoesNot",
+                                                                 "WillNot",
+                                                                 "Wont",
+                                                             };
+
         internal static string FindBetterTestName(string name, ISymbol symbol)
         {
             var betterName = FindBetterTestName(name);
@@ -41,6 +81,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             return betterName;
+        }
+
+        internal static string FindBetterTestNameWithReorder(string symbolName, ISymbol symbol)
+        {
+            var name = symbolName.Replace("_Expect_", "_");
+
+            var nameToImprove = TryGetInOrder(name, out var nameInOrder)
+                                    ? nameInOrder
+                                    : name;
+
+            return FindBetterTestName(nameToImprove, symbol);
         }
 
         internal static string FindDescribingWord(in char c, string defaultValue = null)
@@ -129,102 +180,128 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return symbolName;
             }
 
-            var result = symbolName.AsCachedBuilder()
-                                   .ReplaceWithProbe("MustBe", "Is")
-                                   .ReplaceWithProbe("MustNotBe", "IsNot")
-                                   .ReplaceWithProbe("ShallBe", "Is")
-                                   .ReplaceWithProbe("ShallNotBe", "IsNot")
-                                   .ReplaceWithProbe("ShouldBe", "Is")
-                                   .ReplaceWithProbe("ShouldNotBe", "IsNot")
-                                   .ReplaceWithProbe("ShouldFail", "Fails")
-                                   .ReplaceWithProbe("ShouldReturn", "Returns")
-                                   .ReplaceWithProbe("ShouldThrow", "Throws")
-                                   .ReplaceWithProbe("ReturnNull", "ReturnsNull")
-                                   .ReplaceWithProbe("ReturnTrue", "ReturnsTrue")
-                                   .ReplaceWithProbe("ReturnFalse", "ReturnsFalse")
-                                   .ReplaceWithProbe("NullReturned", "ReturnsNull")
-                                   .ReplaceWithProbe("TrueReturned", "ReturnsTrue")
-                                   .ReplaceWithProbe("FalseReturned", "ReturnsFalse")
-                                   .ReplaceWithProbe("IsExceptional", "ThrowsException")
-                                   .ReplaceWithProbe("ingFine", "ingIsFine")
-                                   .ReplaceWithProbe("NoLongerThrows", "ThrowsNo")
-                                   .ReplaceWithProbe("NoLongerThrow", "ThrowsNo")
-                                   .ReplaceWithProbe("DoesNotThrow", "_does_not_throw_")
-                                   .ReplaceWithProbe("NotThrows", "ThrowsNo")
-                                   .ReplaceWithProbe("NotThrow", "ThrowsNo")
-                                   .ReplaceWithProbe("NoThrows", "ThrowsNo")
-                                   .ReplaceWithProbe("NoThrow", "ThrowsNo")
-                                   .ReplaceWithProbe("NoError", "HasNoError")
-                                   .ReplaceWithProbe("Already", "IsAlready")
-                                   .ReplaceWithProbe("Keep", "Keeps")
-                                   .ReplaceWithProbe("Keepss", "Keeps") // fix typo
-                                   .ReplaceWithProbe(nameof(ArgumentException) + "Thrown", "Throws" + nameof(ArgumentException))
-                                   .ReplaceWithProbe(nameof(ArgumentNullException) + "Thrown", "Throws" + nameof(ArgumentNullException))
-                                   .ReplaceWithProbe(nameof(ArgumentOutOfRangeException) + "Thrown", "Throws" + nameof(ArgumentOutOfRangeException))
-                                   .ReplaceWithProbe(nameof(InvalidOperationException) + "Thrown", "Throws" + nameof(InvalidOperationException))
-                                   .ReplaceWithProbe("JsonExceptionThrown", "ThrowsJsonException")
-                                   .ReplaceWithProbe(nameof(KeyNotFoundException) + "Thrown", "Throws" + nameof(KeyNotFoundException))
-                                   .ReplaceWithProbe(nameof(NotImplementedException) + "Thrown", "Throws" + nameof(NotImplementedException))
-                                   .ReplaceWithProbe(nameof(NotSupportedException) + "Thrown", "Throws" + nameof(NotSupportedException))
-                                   .ReplaceWithProbe(nameof(NullReferenceException) + "Thrown", "Throws" + nameof(NullReferenceException))
-                                   .ReplaceWithProbe(nameof(ObjectDisposedException) + "Thrown", "Throws" + nameof(ObjectDisposedException))
-                                   .ReplaceWithProbe(nameof(OperationCanceledException) + "Thrown", "Throws" + nameof(OperationCanceledException))
-                                   .ReplaceWithProbe(nameof(TaskCanceledException) + "Thrown", "Throws" + nameof(TaskCanceledException))
-                                   .ReplaceWithProbe("ValidationExceptionThrown", "ThrowsValidationException")
-                                   .ReplaceWithProbe(nameof(UnauthorizedAccessException) + "Thrown", "Throws" + nameof(UnauthorizedAccessException))
-                                   .ReplaceWithProbe(nameof(Exception) + "Thrown", "Throws" + nameof(Exception))
-                                   .SeparateWords(Constants.Underscore)
-                                   .ReplaceWithProbe("argument_exception", nameof(ArgumentException))
-                                   .ReplaceWithProbe("argument_null_exception", nameof(ArgumentNullException)) // fix some corrections, such as for known exceptions
-                                   .ReplaceWithProbe("argument_out_of_range_exception", nameof(ArgumentOutOfRangeException))
-                                   .ReplaceWithProbe("invalid_operation_exception", nameof(InvalidOperationException))
-                                   .ReplaceWithProbe("json_exception", "JsonException")
-                                   .ReplaceWithProbe("key_not_found_exception", nameof(KeyNotFoundException))
-                                   .ReplaceWithProbe("not_implemented_exception", nameof(NotImplementedException))
-                                   .ReplaceWithProbe("not_supported_exception", nameof(NotSupportedException))
-                                   .ReplaceWithProbe("null_reference_exception", nameof(NullReferenceException))
-                                   .ReplaceWithProbe("object_disposed_exception", nameof(ObjectDisposedException))
-                                   .ReplaceWithProbe("operation_canceled_exception", nameof(OperationCanceledException))
-                                   .ReplaceWithProbe("task_canceled_exception", nameof(TaskCanceledException))
-                                   .ReplaceWithProbe("unauthorized_access_exception", nameof(UnauthorizedAccessException))
-                                   .ReplaceWithProbe("validation_exception", "ValidationException")
-                                   .ReplaceWithProbe("_guid_empty", "_empty_guid")
-                                   .ReplaceWithProbe("_string_empty", "_empty_string")
-                                   .ReplaceWithProbe("_in_return_", "<1>")
-                                   .ReplaceWithProbe("_to_return_", "<2>")
-                                   .ReplaceWithProbe("_not_throw_", "<3>")
-                                   .ReplaceWithProbe("_return_", "_returns_")
-                                   .ReplaceWithProbe("_throw_", "_throws_")
-                                   .ReplaceWithProbe("<1>", "_in_return_")
-                                   .ReplaceWithProbe("<2>", "_to_return_")
-                                   .ReplaceWithProbe("<3>", "_not_throw_")
-                                   .ReplaceWithProbe("_not_throws_", "_throws_no_")
-                                   .ReplaceWithProbe("_no_throws_", "_throws_no_")
-                                   .ReplaceWithProbe("_has_has_", "_has_")
-                                   .ReplaceWithProbe("D_oes", "_does")
-                                   .ReplaceWithProbe("O_bject", "_object")
-                                   .ReplaceWithProbe("R_eference", "_reference")
-                                   .ReplaceWithProbe("T_ype", "_type")
-                                   .ReplaceWithProbe("_is_is_", "_is_")
-                                   .ReplaceWithProbe("_does_alter_", "_alters_")
-                                   .ReplaceWithProbe("_remove_", "_removes_")
-                                   .ReplaceWithProbe("_not_removes_", "_not_remove_")
-                                   .ReplaceWithProbe("_will_removes_", "_will_remove_")
-                                   .ReplaceWithProbe("_to_removes_", "_to_remove_")
-                                   .ReplaceWithProbe("_reject_", "_rejects_")
-                                   .ReplaceWithProbe("_not_rejects_", "_not_reject_")
-                                   .ReplaceWithProbe("_will_rejects_", "_will_reject_")
-                                   .ReplaceWithProbe("_to_rejects_", "_to_reject_")
-                                   .ReplaceWithProbe("_accept_", "_accepts_")
-                                   .ReplaceWithProbe("_not_accepts_", "_not_accept_")
-                                   .ReplaceWithProbe("_will_accepts_", "_will_accept_")
-                                   .ReplaceWithProbe("_to_accepts_", "_to_accept_")
-                                   .ReplaceWithProbe("_not_keeps_", "_not_keep_")
-                                   .ReplaceWithProbe("_will_keeps_", "_will_keep_")
-                                   .ReplaceWithProbe("_to_keeps_", "_to_keep_")
-                                   .ToStringAndRelease();
+            var sb = symbolName.AsCachedBuilder();
 
-            return result;
+            if (symbolName.StartsWith("Test", StringComparison.Ordinal))
+            {
+                sb.Without("TestIf")
+                  .Without("TestThat")
+                  .Without("TestWhether");
+            }
+
+            var result = sb.ReplaceWithProbe("MustBe", "Is")
+                           .ReplaceWithProbe("MustNotBe", "IsNot")
+                           .ReplaceWithProbe("ShallBe", "Is")
+                           .ReplaceWithProbe("ShallNotBe", "IsNot")
+                           .ReplaceWithProbe("ShouldBe", "Is")
+                           .ReplaceWithProbe("ShouldNotBe", "IsNot")
+                           .ReplaceWithProbe("ShouldFail", "Fails")
+                           .ReplaceWithProbe("ShouldReturn", "Returns")
+                           .ReplaceWithProbe("ShouldThrow", "Throws")
+                           .ReplaceWithProbe("ReturnNull", "ReturnsNull")
+                           .ReplaceWithProbe("ReturnTrue", "ReturnsTrue")
+                           .ReplaceWithProbe("ReturnFalse", "ReturnsFalse")
+                           .ReplaceWithProbe("NullReturned", "ReturnsNull")
+                           .ReplaceWithProbe("TrueReturned", "ReturnsTrue")
+                           .ReplaceWithProbe("FalseReturned", "ReturnsFalse")
+                           .ReplaceWithProbe("IsExceptional", "ThrowsException")
+                           .ReplaceWithProbe("ingFine", "ingIsFine")
+                           .ReplaceWithProbe(Threw, Throw)
+                           .ReplaceWithProbe("NoLongerThrows", "ThrowsNo")
+                           .ReplaceWithProbe("NoLongerThrow", "ThrowsNo")
+                           .ReplaceWithProbe("DoesNotThrow", "_does_not_throw_")
+                           .ReplaceWithProbe("NotThrows", "ThrowsNo")
+                           .ReplaceWithProbe("NotThrow", "ThrowsNo")
+                           .ReplaceWithProbe("NoThrows", "ThrowsNo")
+                           .ReplaceWithProbe("NoThrow", "ThrowsNo")
+                           .ReplaceWithProbe("NoError", "HasNoError")
+                           .ReplaceWithProbe("Already", "IsAlready")
+                           .ReplaceWithProbe("Keep", "Keeps")
+                           .ReplaceWithProbe("Keepss", "Keeps") // fix typo
+                           .ReplaceWithProbe("Wont", "Does_Not_")
+                           .ReplaceWithProbe(nameof(ArgumentException) + "Thrown", "Throws" + nameof(ArgumentException))
+                           .ReplaceWithProbe(nameof(ArgumentNullException) + "Thrown", "Throws" + nameof(ArgumentNullException))
+                           .ReplaceWithProbe(nameof(ArgumentOutOfRangeException) + "Thrown", "Throws" + nameof(ArgumentOutOfRangeException))
+                           .ReplaceWithProbe(nameof(InvalidOperationException) + "Thrown", "Throws" + nameof(InvalidOperationException))
+                           .ReplaceWithProbe("JsonExceptionThrown", "ThrowsJsonException")
+                           .ReplaceWithProbe(nameof(KeyNotFoundException) + "Thrown", "Throws" + nameof(KeyNotFoundException))
+                           .ReplaceWithProbe(nameof(NotImplementedException) + "Thrown", "Throws" + nameof(NotImplementedException))
+                           .ReplaceWithProbe(nameof(NotSupportedException) + "Thrown", "Throws" + nameof(NotSupportedException))
+                           .ReplaceWithProbe(nameof(NullReferenceException) + "Thrown", "Throws" + nameof(NullReferenceException))
+                           .ReplaceWithProbe(nameof(ObjectDisposedException) + "Thrown", "Throws" + nameof(ObjectDisposedException))
+                           .ReplaceWithProbe(nameof(OperationCanceledException) + "Thrown", "Throws" + nameof(OperationCanceledException))
+                           .ReplaceWithProbe(nameof(TaskCanceledException) + "Thrown", "Throws" + nameof(TaskCanceledException))
+                           .ReplaceWithProbe("ValidationExceptionThrown", "ThrowsValidationException")
+                           .ReplaceWithProbe(nameof(UnauthorizedAccessException) + "Thrown", "Throws" + nameof(UnauthorizedAccessException))
+                           .ReplaceWithProbe(nameof(Exception) + "Thrown", "Throws" + nameof(Exception))
+                           .SeparateWords(Constants.Underscore)
+                           .ReplaceWithProbe("argument_exception", nameof(ArgumentException))
+                           .ReplaceWithProbe("argument_null_exception", nameof(ArgumentNullException)) // fix some corrections, such as for known exceptions
+                           .ReplaceWithProbe("argument_out_of_range_exception", nameof(ArgumentOutOfRangeException))
+                           .ReplaceWithProbe("invalid_operation_exception", nameof(InvalidOperationException))
+                           .ReplaceWithProbe("json_exception", "JsonException")
+                           .ReplaceWithProbe("key_not_found_exception", nameof(KeyNotFoundException))
+                           .ReplaceWithProbe("not_implemented_exception", nameof(NotImplementedException))
+                           .ReplaceWithProbe("not_supported_exception", nameof(NotSupportedException))
+                           .ReplaceWithProbe("null_reference_exception", nameof(NullReferenceException))
+                           .ReplaceWithProbe("object_disposed_exception", nameof(ObjectDisposedException))
+                           .ReplaceWithProbe("operation_canceled_exception", nameof(OperationCanceledException))
+                           .ReplaceWithProbe("task_canceled_exception", nameof(TaskCanceledException))
+                           .ReplaceWithProbe("unauthorized_access_exception", nameof(UnauthorizedAccessException))
+                           .ReplaceWithProbe("validation_exception", "ValidationException")
+                           .ReplaceWithProbe("_guid_empty", "_empty_guid")
+                           .ReplaceWithProbe("_string_empty", "_empty_string")
+                           .ReplaceWithProbe("_in_return_", "<1>")
+                           .ReplaceWithProbe("_to_return_", "<2>")
+                           .ReplaceWithProbe("_not_throw_", "<3>")
+                           .ReplaceWithProbe("_return_", "_returns_")
+                           .ReplaceWithProbe("_throw_", "_throws_")
+                           .ReplaceWithProbe("<1>", "_in_return_")
+                           .ReplaceWithProbe("<2>", "_to_return_")
+                           .ReplaceWithProbe("<3>", "_not_throw_")
+                           .ReplaceWithProbe("_not_throws_", "_throws_no_")
+                           .ReplaceWithProbe("_no_throws_", "_throws_no_")
+                           .ReplaceWithProbe("_has_has_", "_has_")
+                           .ReplaceWithProbe("D_oes", "_does")
+                           .ReplaceWithProbe("O_bject", "_object")
+                           .ReplaceWithProbe("R_eference", "_reference")
+                           .ReplaceWithProbe("T_ype", "_type")
+                           .ReplaceWithProbe("_is_is_", "_is_")
+                           .ReplaceWithProbe("_does_alter_", "_alters_")
+                           .ReplaceWithProbe("_remove_", "_removes_")
+                           .ReplaceWithProbe("_not_removes_", "_not_remove_")
+                           .ReplaceWithProbe("_will_removes_", "_will_remove_")
+                           .ReplaceWithProbe("_to_removes_", "_to_remove_")
+                           .ReplaceWithProbe("_reject_", "_rejects_")
+                           .ReplaceWithProbe("_not_rejects_", "_not_reject_")
+                           .ReplaceWithProbe("_will_rejects_", "_will_reject_")
+                           .ReplaceWithProbe("_to_rejects_", "_to_reject_")
+                           .ReplaceWithProbe("_accept_", "_accepts_")
+                           .ReplaceWithProbe("_not_accepts_", "_not_accept_")
+                           .ReplaceWithProbe("_will_accepts_", "_will_accept_")
+                           .ReplaceWithProbe("_to_accepts_", "_to_accept_")
+                           .ReplaceWithProbe("_not_keeps_", "_not_keep_")
+                           .ReplaceWithProbe("_will_keeps_", "_will_keep_")
+                           .ReplaceWithProbe("_to_keeps_", "_to_keep_")
+                           .ReplaceWithProbe("_returned_from_", "_of_")
+                           .ReplaceWithProbe("_returns_gets_if_", "_returns_")
+                           .ReplaceWithProbe("_returns_got_if_", "_returns_")
+                           .ReplaceWithProbe("_returns_had_if_", "_returns_")
+                           .ReplaceWithProbe("_returns_has_if_", "_returns_")
+                           .ReplaceWithProbe("_returns_is_if_", "_returns_")
+                           .ReplaceWithProbe("_returns_was_if_", "_returns_")
+                           .ReplaceWithProbe("_will_not_be", "_does_not_")
+                           .ReplaceWithProbe("_will_not_", "_does_not_")
+                           .ReplaceWithProbe("_wont_", "_does_not_")
+                           .ReplaceWithProbe("_will_returns_if_", "_returns_")
+                           .ReplaceWithProbe("_will_returns_", "_returns_")
+                           .ReplaceWithProbe("_was_", "_is_")
+                           .ReplaceWithProbe("_will_be_", "_is_")
+                           .ReplaceWithProbe("_will_", "_does_")
+                           .Replace("__", "_");
+
+            // TODO RKN: find '_does_' and use change the following word to 3rd person singular in case it is not 'not'
+            return result.ToStringAndRelease();
         }
 
         private static string GetRegisteredName(IFieldSymbol symbol, string invocation)
@@ -237,6 +314,201 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             return null;
+        }
+
+        private static bool TryGetInOrder(string name, out string result)
+        {
+            var parts = name.Split(Constants.Underscores, StringSplitOptions.RemoveEmptyEntries);
+
+            switch (parts.Length)
+            {
+                case 2: return TryGetInOrder(parts[0], parts[1], out result);
+                case 3: return TryGetInOrder(parts[0], parts[1], parts[2], out result);
+                case 4: return TryGetInOrder(parts[0], parts[1], parts[2], parts[3], out result);
+
+                default:
+                {
+                    result = null;
+
+                    return false;
+                }
+            }
+        }
+
+        private static bool TryGetInOrder(string part0, string part1, out string result)
+        {
+            result = null;
+
+            if (part1.StartsWithAny(SpecialNotPhrases, StringComparison.Ordinal))
+            {
+                // it seems like this is in normal order, so do not change the order
+                return false;
+            }
+
+            if (part1.StartsWithAny(SpecialThrowPhrases, StringComparison.OrdinalIgnoreCase) && part1.Contains(If, StringComparison.Ordinal))
+            {
+                // it seems like this is in normal order, so do not change the order
+                return false;
+            }
+
+            var addIf = IsIfRequired(part0, part1);
+            var ifToAdd = Verbalizer.IsThirdPersonSingularVerb(part0.AsSpan().FirstWord()) ? IfIt : If;
+
+            var capacity = part0.Length + part1.Length;
+
+            if (addIf)
+            {
+                capacity += ifToAdd.Length;
+            }
+
+            var builder = StringBuilderCache.Acquire(capacity);
+            FixPart(builder, part1);
+
+            if (addIf)
+            {
+                builder.Append(ifToAdd);
+            }
+
+            FixPart(builder, part0);
+
+            builder.ReplaceWithProbe(When, If).ReplaceWithProbe(If + If, If);
+
+            result = StringBuilderCache.GetStringAndRelease(builder);
+
+            return true;
+        }
+
+        private static bool TryGetInOrder(string part0, string part1, string part2, out string result)
+        {
+            if (part1.StartsWithAny(SpecialThrowPhrases, StringComparison.OrdinalIgnoreCase))
+            {
+                // it seems like this is in normal order, so do not change the order
+                result = null;
+
+                return false;
+            }
+
+            var addIf = IsIfRequired(part1, part2);
+            var ifToAdd = Verbalizer.IsThirdPersonSingularVerb(part1.AsSpan().FirstWord()) ? IfIt : If;
+
+            var capacity = part0.Length + part1.Length + part2.Length;
+
+            if (addIf)
+            {
+                capacity += ifToAdd.Length;
+            }
+
+            var builder = StringBuilderCache.Acquire(capacity);
+            FixPart(builder, part0);
+            FixPart(builder, part2);
+
+            if (addIf)
+            {
+                builder.Append(ifToAdd);
+            }
+
+            if (part1.StartsWith(Given, StringComparison.OrdinalIgnoreCase))
+            {
+                part1 = part1.AsSpan(Given.Length).ConcatenatedWith(IsGiven);
+            }
+
+            FixPart(builder, part1);
+
+            builder.ReplaceWithProbe(When, If).ReplaceWithProbe(If + If, If);
+
+            result = StringBuilderCache.GetStringAndRelease(builder);
+
+            return true;
+        }
+
+        private static bool TryGetInOrder(string part0, string part1, string part2, string part3, out string result)
+        {
+            if (part2.StartsWith(And, StringComparison.Ordinal))
+            {
+                // it seems like this is in normal order and a combination of 2 scenarios, so do not change the order
+                result = null;
+
+                return false;
+            }
+
+            if (part1.StartsWithAny(SpecialThrowPhrases, StringComparison.OrdinalIgnoreCase))
+            {
+                // it seems like this is in normal order, so do not change the order
+                result = null;
+
+                return false;
+            }
+
+            var useWhen = part1.StartsWith(When, StringComparison.Ordinal);
+
+            var addIf = useWhen is false && IsIfRequired(part2, part3);
+            var ifToAdd = Verbalizer.IsThirdPersonSingularVerb((useWhen ? part1 : part2).AsSpan().FirstWord()) ? IfIt : If;
+
+            var capacity = part0.Length + part1.Length + part2.Length + part3.Length + And.Length;
+
+            if (addIf)
+            {
+                capacity += ifToAdd.Length;
+            }
+
+            var builder = StringBuilderCache.Acquire(capacity);
+            FixPart(builder, part0);
+            FixPart(builder, part3);
+
+            if (addIf)
+            {
+                builder.Append(ifToAdd);
+            }
+
+            if (useWhen)
+            {
+                FixPart(builder, part1);
+                FixPart(builder, part2);
+            }
+            else
+            {
+                FixPart(builder, part2);
+                builder.Append(And);
+                FixPart(builder, part1);
+            }
+
+            builder.ReplaceWithProbe(When, If).ReplaceWithProbe(If + If, If);
+
+            result = StringBuilderCache.GetStringAndRelease(builder);
+
+            return true;
+        }
+
+        private static bool IsIfRequired(string part1, string part2)
+        {
+            if (part1.StartsWith(If, StringComparison.OrdinalIgnoreCase)
+             || part1.StartsWith(Consumed, StringComparison.OrdinalIgnoreCase)
+             || part2.Equals(Returned, StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private static void FixPart(StringBuilder builder, string original)
+        {
+            if (original.EndsWith(Returned, StringComparison.OrdinalIgnoreCase))
+            {
+                builder.Append(Returns).Append(original, 0, original.Length - Returned.Length);
+            }
+            else if (original.StartsWith(Rejected, StringComparison.OrdinalIgnoreCase))
+            {
+                builder.Append(original, Rejected.Length, original.Length - Rejected.Length).Append(Is).Append(Rejected);
+            }
+            else if (original.StartsWith(Accepted, StringComparison.OrdinalIgnoreCase))
+            {
+                builder.Append(original, Accepted.Length, original.Length - Accepted.Length).Append(Is).Append(Accepted);
+            }
+            else
+            {
+                builder.Append(original);
+            }
         }
     }
 }

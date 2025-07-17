@@ -90,6 +90,7 @@ public class TestMe
         [TestCase("Method_ThrowsExceptionIfNull", "Method_throws_exception_if_null")]
         [TestCase("Method_ThrowsArgumentNullExceptionIfNull", "Method_throws_ArgumentNullException_if_null")]
         [TestCase("Method_ThrowsKeyNotFoundExceptionIfKeyIsMissing", "Method_throws_KeyNotFoundException_if_key_is_missing")]
+        [TestCase("Method_DoesNotAlterResult", "Method_does_not_alter_result")]
         public void Code_gets_fixed_for_1_slash_in_(string originalName, string fixedName) => VerifyCSharpFix(
                                                                                                           "class TestMe { [Test] public void " + originalName + "() { } }",
                                                                                                           "class TestMe { [Test] public void " + fixedName + "() { } }");
