@@ -4,7 +4,7 @@
 namespace MiKoSolutions.Analyzers.Linguistics
 {
     [TestFixture]
-    public static class AbbreviationDetectorTests
+    public static class AbbreviationFinderTests
     {
         [TestCase("alt", ExpectedResult = "alternative")]
         [TestCase("app", ExpectedResult = "application")]
@@ -82,6 +82,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("num", ExpectedResult = "number")]
         [TestCase("nums", ExpectedResult = "numbers")]
         [TestCase("obj", ExpectedResult = "object")]
+        [TestCase("op", ExpectedResult = "operation")]
+        [TestCase("ops", ExpectedResult = "operations")]
+        [TestCase("opt", ExpectedResult = "option")]
+        [TestCase("opts", ExpectedResult = "options")]
         [TestCase("para", ExpectedResult = "parameter")]
         [TestCase("param", ExpectedResult = "parameter")]
         [TestCase("params", ExpectedResult = "parameters")]
@@ -123,7 +127,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("vol", ExpectedResult = "volume")]
         public static string Finds_prefix_abbreviation_in_(string value)
         {
-            var findings = AbbreviationDetector.Find(value + "SomeName");
+            var findings = AbbreviationFinder.Find(value + "SomeName");
 
             Assert.That(findings.Length, Is.EqualTo(1));
 
@@ -221,6 +225,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("Objs", ExpectedResult = "Objects")]
         [TestCase("Op", ExpectedResult = "Operation")]
         [TestCase("Ops", ExpectedResult = "Operations")]
+        [TestCase("Opt", ExpectedResult = "Option")]
+        [TestCase("Opts", ExpectedResult = "Options")]
         [TestCase("Para", ExpectedResult = "Parameter")]
         [TestCase("Param", ExpectedResult = "Parameter")]
         [TestCase("Params", ExpectedResult = "Parameters")]
@@ -265,7 +271,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("Vol", ExpectedResult = "Volume")]
         public static string Finds_postfix_abbreviation_in_(string value)
         {
-            var findings = AbbreviationDetector.Find("someName" + value);
+            var findings = AbbreviationFinder.Find("someName" + value);
 
             Assert.That(findings.Length, Is.EqualTo(1));
 
@@ -388,7 +394,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("varSomeName", ExpectedResult = "variableSomeName")]
         [TestCase("verSomeName", ExpectedResult = "versionSomeName")]
         [TestCase("volSomeName", ExpectedResult = "volumeSomeName")]
-        public static string Finds_prefix_abbreviations_and_fixes_them_in_(string value) => AbbreviationDetector.FindAndReplaceAllAbbreviations(value);
+        public static string Finds_prefix_abbreviations_and_fixes_them_in_(string value) => AbbreviationFinder.FindAndReplaceAllAbbreviations(value);
 
         [TestCase("someAppName", ExpectedResult = "someApplicationName")]
         [TestCase("someAppsName", ExpectedResult = "someApplicationsName")]
@@ -476,6 +482,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("someObjsName", ExpectedResult = "someObjectsName")]
         [TestCase("someOpName", ExpectedResult = "someOperationName")]
         [TestCase("someOpsName", ExpectedResult = "someOperationsName")]
+        [TestCase("someOptName", ExpectedResult = "someOptionName")]
+        [TestCase("someOptsName", ExpectedResult = "someOptionsName")]
         [TestCase("someParamName", ExpectedResult = "someParameterName")]
         [TestCase("someParamsName", ExpectedResult = "someParametersName")]
         [TestCase("someParaName", ExpectedResult = "someParameterName")]
@@ -516,7 +524,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("someVmsName", ExpectedResult = "someViewModelsName")]
         [TestCase("someVMsName", ExpectedResult = "someViewModelsName")]
         [TestCase("someVolName", ExpectedResult = "someVolumeName")]
-        public static string Finds_midterm_abbreviations_and_fixes_them_in_(string value) => AbbreviationDetector.FindAndReplaceAllAbbreviations(value);
+        [TestCase("some_op_name", ExpectedResult = "some_operation_name")]
+        [TestCase("some_ops_name", ExpectedResult = "some_operations_name")]
+        [TestCase("some_opt_name", ExpectedResult = "some_option_name")]
+        [TestCase("some_opts_name", ExpectedResult = "some_options_name")]
+        public static string Finds_midterm_abbreviations_and_fixes_them_in_(string value) => AbbreviationFinder.FindAndReplaceAllAbbreviations(value);
 
         [TestCase("someNameApp", ExpectedResult = "someNameApplication")]
         [TestCase("someNameApps", ExpectedResult = "someNameApplications")]
@@ -604,6 +616,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("someNameObjs", ExpectedResult = "someNameObjects")]
         [TestCase("someNameOp", ExpectedResult = "someNameOperation")]
         [TestCase("someNameOps", ExpectedResult = "someNameOperations")]
+        [TestCase("someNameOpt", ExpectedResult = "someNameOption")]
+        [TestCase("someNameOpts", ExpectedResult = "someNameOptions")]
         [TestCase("someNamePara", ExpectedResult = "someNameParameter")]
         [TestCase("someNameParam", ExpectedResult = "someNameParameter")]
         [TestCase("someNameParams", ExpectedResult = "someNameParameters")]
@@ -645,40 +659,44 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("someNameVms", ExpectedResult = "someNameViewModels")]
         [TestCase("someNameVMs", ExpectedResult = "someNameViewModels")]
         [TestCase("someNameVol", ExpectedResult = "someNameVolume")]
-        public static string Finds_postfix_abbreviations_and_fixes_them_in_(string value) => AbbreviationDetector.FindAndReplaceAllAbbreviations(value);
+        public static string Finds_postfix_abbreviations_and_fixes_them_in_(string value) => AbbreviationFinder.FindAndReplaceAllAbbreviations(value);
 
-        [TestCase("BIBLE", ExpectedResult = "BIBLE")]
-        [TestCase("BLOCK", ExpectedResult = "BLOCK")]
-        [TestCase("BLUE_SKY", ExpectedResult = "BLUE_SKY")]
-        [TestCase("CLICK", ExpectedResult = "CLICK")]
-        [TestCase("COMPATIBLE", ExpectedResult = "COMPATIBLE")]
-        [TestCase("CYCLIC", ExpectedResult = "CYCLIC")]
-        [TestCase("DEFAULT", ExpectedResult = "DEFAULT")]
-        [TestCase("DOUBLE", ExpectedResult = "DOUBLE")]
-        [TestCase("HOVER", ExpectedResult = "HOVER")]
-        [TestCase("hovering", ExpectedResult = "hovering")]
-        [TestCase("hoverSomeName", ExpectedResult = "hoverSomeName")]
-        [TestCase("LEFT", ExpectedResult = "LEFT")]
-        [TestCase("OVERLAY", ExpectedResult = "OVERLAY")]
-        [TestCase("overSomeName", ExpectedResult = "overSomeName")]
-        [TestCase("preview", ExpectedResult = "preview")]
-        [TestCase("Preview", ExpectedResult = "Preview")]
-        [TestCase("previewSomething", ExpectedResult = "previewSomething")]
-        [TestCase("REFACTOR", ExpectedResult = "REFACTOR")]
-        [TestCase("REFACTORING", ExpectedResult = "REFACTORING")]
-        [TestCase("REFER", ExpectedResult = "REFER")]
-        [TestCase("REFERENCE", ExpectedResult = "REFERENCE")]
-        [TestCase("REFRESH", ExpectedResult = "REFRESH")]
-        [TestCase("REFRIGERATOR", ExpectedResult = "REFRIGERATOR")]
-        [TestCase("SOME_HOVERCRAFT", ExpectedResult = "SOME_HOVERCRAFT")]
-        [TestCase("someBlueValue", ExpectedResult = "someBlueValue")]
-        [TestCase("someNameHover", ExpectedResult = "someNameHover")]
-        [TestCase("someNameOver", ExpectedResult = "someNameOver")]
-        [TestCase("someOverSomeName", ExpectedResult = "someOverSomeName")]
-        [TestCase("somePreview", ExpectedResult = "somePreview")]
-        [TestCase("TABLE", ExpectedResult = "TABLE")]
-        [TestCase("USEFUL", ExpectedResult = "USEFUL")]
-        [TestCase("VARIABLE", ExpectedResult = "VARIABLE")]
-        public static string Ignores_(string value) => AbbreviationDetector.FindAndReplaceAllAbbreviations(value);
+        [TestCase("adoptSomething")]
+        [TestCase("some_adoption_name")]
+        [TestCase("some_option_name")]
+        [TestCase("somethingToAdopt")]
+        [TestCase("BIBLE")]
+        [TestCase("BLOCK")]
+        [TestCase("BLUE_SKY")]
+        [TestCase("CLICK")]
+        [TestCase("COMPATIBLE")]
+        [TestCase("CYCLIC")]
+        [TestCase("DEFAULT")]
+        [TestCase("DOUBLE")]
+        [TestCase("HOVER")]
+        [TestCase("hovering")]
+        [TestCase("hoverSomeName")]
+        [TestCase("LEFT")]
+        [TestCase("OVERLAY")]
+        [TestCase("overSomeName")]
+        [TestCase("preview")]
+        [TestCase("Preview")]
+        [TestCase("previewSomething")]
+        [TestCase("REFACTOR")]
+        [TestCase("REFACTORING")]
+        [TestCase("REFER")]
+        [TestCase("REFERENCE")]
+        [TestCase("REFRESH")]
+        [TestCase("REFRIGERATOR")]
+        [TestCase("SOME_HOVERCRAFT")]
+        [TestCase("someBlueValue")]
+        [TestCase("someNameHover")]
+        [TestCase("someNameOver")]
+        [TestCase("someOverSomeName")]
+        [TestCase("somePreview")]
+        [TestCase("TABLE")]
+        [TestCase("USEFUL")]
+        [TestCase("VARIABLE")]
+        public static void Ignores_(string value) => Assert.That(AbbreviationFinder.FindAndReplaceAllAbbreviations(value), Is.EqualTo(value));
     }
 }

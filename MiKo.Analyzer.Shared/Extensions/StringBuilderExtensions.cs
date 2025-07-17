@@ -515,7 +515,7 @@ namespace System.Text
             return value;
         }
 
-        public static StringBuilder WithoutAbbreviations(this StringBuilder value) => AbbreviationDetector.FindAndReplaceAllAbbreviations(value);
+        public static StringBuilder WithoutAbbreviations(this StringBuilder value) => AbbreviationFinder.FindAndReplaceAllAbbreviations(value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static StringBuilder WithoutParaTags(this StringBuilder value) => value.Without(Constants.ParaTags);
