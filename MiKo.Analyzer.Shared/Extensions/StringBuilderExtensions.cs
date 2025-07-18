@@ -52,6 +52,63 @@ namespace System.Text
             return value;
         }
 
+        public static StringBuilder AdjustWordAfter(this StringBuilder value, string substring, in FirstWordHandling handling)
+        {
+            if (substring.IsNullOrEmpty() is false)
+            {
+                var first = substring[0];
+
+                var startIndex = IndexOf(value, first);
+
+                if (startIndex > -1)
+                {
+                    var substringLength = substring.Length;
+                    var last = substring[substringLength - 1];
+
+                    for (int index = startIndex, length = value.Length; index < length; index++)
+                    {
+                        if (value[index] == first)
+                        {
+                            var endIndex = index + substringLength - 1;
+
+                            if (endIndex < length)
+                            {
+                                if (value[endIndex] == last)
+                                {
+                                    var part = value.ToString(index, substringLength);
+
+                                    if (part.Equals(substring, StringComparison.Ordinal))
+                                    {
+                                        // get next word (separated by '_' or by ' ') as string builder
+                                        var startNextWordIndex = endIndex + 1;
+                                        var endNextWordIndex = value.IndexOf('_', ' ', startNextWordIndex) - 1;
+
+                                        if (endNextWordIndex > 0)
+                                        {
+                                            var nextWordLength = endNextWordIndex - startNextWordIndex + 1;
+
+                                            var nextWord = value.ToString(startNextWordIndex, nextWordLength);
+                                            var adjustedWord = nextWord.AdjustFirstWord(handling);
+
+                                            // cut it out
+                                            value.Remove(startNextWordIndex, nextWordLength);
+
+                                            // insert word adjusted by 'handling' using 'AdjustFirstWord'
+                                            value.Insert(startNextWordIndex, adjustedWord);
+
+                                            return value;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return value;
+        }
+
         public static bool EndsWith(this StringBuilder value, string ending, in StringComparison comparison = StringComparison.Ordinal)
         {
             if (ending.IsNullOrEmpty())
@@ -696,6 +753,34 @@ namespace System.Text
                     value.Remove(count, whitespaces - count);
                 }
             }
+        }
+
+        private static int IndexOf(this StringBuilder value, in char c, in int start = 0)
+        {
+            for (int index = start, length = value.Length; index < length; index++)
+            {
+                if (value[index] == c)
+                {
+                    return index;
+                }
+            }
+
+            return -1;
+        }
+
+        private static int IndexOf(this StringBuilder value, in char c1, in char c2, in int start = 0)
+        {
+            for (int index = start, length = value.Length; index < length; index++)
+            {
+                var c = value[index];
+
+                if (c == c1 || c == c2)
+                {
+                    return index;
+                }
+            }
+
+            return -1;
         }
     }
 }

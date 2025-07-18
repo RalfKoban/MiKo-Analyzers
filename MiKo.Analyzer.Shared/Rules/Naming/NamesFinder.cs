@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -219,35 +218,38 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                            .ReplaceWithProbe("Keep", "Keeps")
                            .ReplaceWithProbe("Keepss", "Keeps") // fix typo
                            .ReplaceWithProbe("Wont", "Does_Not_")
-                           .ReplaceWithProbe(nameof(ArgumentException) + "Thrown", "Throws" + nameof(ArgumentException))
-                           .ReplaceWithProbe(nameof(ArgumentNullException) + "Thrown", "Throws" + nameof(ArgumentNullException))
-                           .ReplaceWithProbe(nameof(ArgumentOutOfRangeException) + "Thrown", "Throws" + nameof(ArgumentOutOfRangeException))
-                           .ReplaceWithProbe(nameof(InvalidOperationException) + "Thrown", "Throws" + nameof(InvalidOperationException))
+                           .ReplaceWithProbe("ArgumentExceptionThrown", "ThrowsArgumentException")
+                           .ReplaceWithProbe("ArgumentsExceptionThrown", "ThrowsArgumentException")
+                           .ReplaceWithProbe("ArgumentNullExceptionThrown", "ThrowsArgumentNullException")
+                           .ReplaceWithProbe("ArgumentsNullExceptionThrown", "ThrowsArgumentNullException")
+                           .ReplaceWithProbe("ArgumentOutOfRangeExceptionThrown", "ThrowsArgumentOutOfRangeException")
+                           .ReplaceWithProbe("ArgumentsOutOfRangeExceptionThrown", "ThrowsArgumentOutOfRangeException")
+                           .ReplaceWithProbe("InvalidOperationExceptionThrown", "ThrowsInvalidOperationException")
                            .ReplaceWithProbe("JsonExceptionThrown", "ThrowsJsonException")
-                           .ReplaceWithProbe(nameof(KeyNotFoundException) + "Thrown", "Throws" + nameof(KeyNotFoundException))
-                           .ReplaceWithProbe(nameof(NotImplementedException) + "Thrown", "Throws" + nameof(NotImplementedException))
-                           .ReplaceWithProbe(nameof(NotSupportedException) + "Thrown", "Throws" + nameof(NotSupportedException))
-                           .ReplaceWithProbe(nameof(NullReferenceException) + "Thrown", "Throws" + nameof(NullReferenceException))
-                           .ReplaceWithProbe(nameof(ObjectDisposedException) + "Thrown", "Throws" + nameof(ObjectDisposedException))
-                           .ReplaceWithProbe(nameof(OperationCanceledException) + "Thrown", "Throws" + nameof(OperationCanceledException))
-                           .ReplaceWithProbe(nameof(TaskCanceledException) + "Thrown", "Throws" + nameof(TaskCanceledException))
+                           .ReplaceWithProbe("KeyNotFoundExceptionThrown", "ThrowsKeyNotFoundException")
+                           .ReplaceWithProbe("NotImplementedExceptionThrown", "ThrowsNotImplementedException")
+                           .ReplaceWithProbe("NotSupportedExceptionThrown", "ThrowsNotSupportedException")
+                           .ReplaceWithProbe("NullReferenceExceptionThrown", "ThrowsNullReferenceException")
+                           .ReplaceWithProbe("ObjectDisposedExceptionThrown", "ThrowsObjectDisposedException")
+                           .ReplaceWithProbe("OperationCanceledExceptionThrown", "ThrowsOperationCanceledException")
+                           .ReplaceWithProbe("TaskCanceledExceptionThrown", "ThrowsTaskCanceledException")
                            .ReplaceWithProbe("ValidationExceptionThrown", "ThrowsValidationException")
-                           .ReplaceWithProbe(nameof(UnauthorizedAccessException) + "Thrown", "Throws" + nameof(UnauthorizedAccessException))
-                           .ReplaceWithProbe(nameof(Exception) + "Thrown", "Throws" + nameof(Exception))
+                           .ReplaceWithProbe("UnauthorizedAccessExceptionThrown", "ThrowsUnauthorizedAccessException")
+                           .ReplaceWithProbe("ExceptionThrown", "ThrowsException")
                            .SeparateWords(Constants.Underscore)
-                           .ReplaceWithProbe("argument_exception", nameof(ArgumentException))
-                           .ReplaceWithProbe("argument_null_exception", nameof(ArgumentNullException)) // fix some corrections, such as for known exceptions
-                           .ReplaceWithProbe("argument_out_of_range_exception", nameof(ArgumentOutOfRangeException))
-                           .ReplaceWithProbe("invalid_operation_exception", nameof(InvalidOperationException))
+                           .ReplaceWithProbe("argument_exception", "ArgumentException")
+                           .ReplaceWithProbe("argument_null_exception", "ArgumentNullException") // fix some corrections, such as for known exceptions
+                           .ReplaceWithProbe("argument_out_of_range_exception", "ArgumentOutOfRangeException")
+                           .ReplaceWithProbe("invalid_operation_exception", "InvalidOperationException")
                            .ReplaceWithProbe("json_exception", "JsonException")
-                           .ReplaceWithProbe("key_not_found_exception", nameof(KeyNotFoundException))
-                           .ReplaceWithProbe("not_implemented_exception", nameof(NotImplementedException))
-                           .ReplaceWithProbe("not_supported_exception", nameof(NotSupportedException))
-                           .ReplaceWithProbe("null_reference_exception", nameof(NullReferenceException))
-                           .ReplaceWithProbe("object_disposed_exception", nameof(ObjectDisposedException))
-                           .ReplaceWithProbe("operation_canceled_exception", nameof(OperationCanceledException))
-                           .ReplaceWithProbe("task_canceled_exception", nameof(TaskCanceledException))
-                           .ReplaceWithProbe("unauthorized_access_exception", nameof(UnauthorizedAccessException))
+                           .ReplaceWithProbe("key_not_found_exception", "KeyNotFoundException")
+                           .ReplaceWithProbe("not_implemented_exception", "NotImplementedException")
+                           .ReplaceWithProbe("not_supported_exception", "NotSupportedException")
+                           .ReplaceWithProbe("null_reference_exception", "NullReferenceException")
+                           .ReplaceWithProbe("object_disposed_exception", "ObjectDisposedException")
+                           .ReplaceWithProbe("operation_canceled_exception", "OperationCanceledException")
+                           .ReplaceWithProbe("task_canceled_exception", "TaskCanceledException")
+                           .ReplaceWithProbe("unauthorized_access_exception", "UnauthorizedAccessException")
                            .ReplaceWithProbe("validation_exception", "ValidationException")
                            .ReplaceWithProbe("_guid_empty", "_empty_guid")
                            .ReplaceWithProbe("_string_empty", "_empty_string")
@@ -263,26 +265,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                            .ReplaceWithProbe("_no_throws_", "_throws_no_")
                            .ReplaceWithProbe("_has_has_", "_has_")
                            .ReplaceWithProbe("D_oes", "_does")
+                           .ReplaceWithProbe("M_akes", "_makes")
                            .ReplaceWithProbe("O_bject", "_object")
                            .ReplaceWithProbe("R_eference", "_reference")
                            .ReplaceWithProbe("T_ype", "_type")
                            .ReplaceWithProbe("_is_is_", "_is_")
-                           .ReplaceWithProbe("_does_alter_", "_alters_")
-                           .ReplaceWithProbe("_remove_", "_removes_")
-                           .ReplaceWithProbe("_not_removes_", "_not_remove_")
-                           .ReplaceWithProbe("_will_removes_", "_will_remove_")
-                           .ReplaceWithProbe("_to_removes_", "_to_remove_")
-                           .ReplaceWithProbe("_reject_", "_rejects_")
-                           .ReplaceWithProbe("_not_rejects_", "_not_reject_")
-                           .ReplaceWithProbe("_will_rejects_", "_will_reject_")
-                           .ReplaceWithProbe("_to_rejects_", "_to_reject_")
-                           .ReplaceWithProbe("_accept_", "_accepts_")
-                           .ReplaceWithProbe("_not_accepts_", "_not_accept_")
-                           .ReplaceWithProbe("_will_accepts_", "_will_accept_")
-                           .ReplaceWithProbe("_to_accepts_", "_to_accept_")
-                           .ReplaceWithProbe("_not_keeps_", "_not_keep_")
-                           .ReplaceWithProbe("_will_keeps_", "_will_keep_")
-                           .ReplaceWithProbe("_to_keeps_", "_to_keep_")
                            .ReplaceWithProbe("_returned_from_", "_of_")
                            .ReplaceWithProbe("_returns_gets_if_", "_returns_")
                            .ReplaceWithProbe("_returns_got_if_", "_returns_")
@@ -298,9 +285,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                            .ReplaceWithProbe("_was_", "_is_")
                            .ReplaceWithProbe("_will_be_", "_is_")
                            .ReplaceWithProbe("_will_", "_does_")
-                           .Replace("__", "_");
+                           .Replace("__", "_")
+                           .AdjustWordAfter("_does_not_", FirstWordHandling.MakeInfinite)
+                           .ReplaceWithProbe("_does_not_", "<4>")
+                           .AdjustWordAfter("_does_", FirstWordHandling.MakeThirdPersonSingular)
+                           .Replace("_does_", "_")
+                           .ReplaceWithProbe("<4>", "_does_not_")
+                           .AdjustWordAfter("_to_", FirstWordHandling.MakeInfinite);
 
-            // TODO RKN: find '_does_' and use change the following word to 3rd person singular in case it is not 'not'
             return result.ToStringAndRelease();
         }
 
@@ -388,10 +380,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return false;
             }
 
-            var addIf = IsIfRequired(part1, part2);
+            var adjustedPart2 = part2.AdjustFirstWord(FirstWordHandling.MakeThirdPersonSingular);
+
+            var addIf = IsIfRequired(part1, adjustedPart2);
             var ifToAdd = Verbalizer.IsThirdPersonSingularVerb(part1.AsSpan().FirstWord()) ? IfIt : If;
 
-            var capacity = part0.Length + part1.Length + part2.Length;
+            var capacity = part0.Length + part1.Length + adjustedPart2.Length;
 
             if (addIf)
             {
@@ -400,7 +394,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var builder = StringBuilderCache.Acquire(capacity);
             FixPart(builder, part0);
-            FixPart(builder, part2);
+            FixPart(builder, adjustedPart2);
 
             if (addIf)
             {

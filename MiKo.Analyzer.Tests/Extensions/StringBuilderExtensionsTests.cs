@@ -144,6 +144,11 @@ namespace MiKoSolutions.Analyzers.Extensions
                                  });
         }
 
+        [TestCase("The next word kill me.", " word ", FirstWordHandling.MakeThirdPersonSingular, ExpectedResult = "The next word kills me.")]
+        [TestCase("The next word kills me.", " word ", FirstWordHandling.MakeThirdPersonSingular, ExpectedResult = "The next word kills me.")]
+        [TestCase("Method_does_not_added_something", "_does_not_", FirstWordHandling.MakeInfinite, ExpectedResult = "Method_does_not_add_something")]
+        public static string AdjustWordAfter(string s, string phrase, in FirstWordHandling handling) => new StringBuilder(s).AdjustWordAfter(phrase, handling).ToString();
+
         [TestCase("", ExpectedResult = "")]
         [TestCase("SomeValue", ExpectedResult = "Some_value")]
         [TestCase("SomeValueWithNumber1234", ExpectedResult = "Some_value_with_number_1234")]
