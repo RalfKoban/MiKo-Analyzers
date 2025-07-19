@@ -75,7 +75,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return syntax;
         }
 
-        private static DocumentationCommentTriviaSyntax CreateDocumentationComment(MemberDeclarationSyntax member, int spaces, string[] foundCommentTags)
+        private static DocumentationCommentTriviaSyntax CreateDocumentationComment(MemberDeclarationSyntax member, in int spaces, string[] foundCommentTags)
         {
             var leadingComments = member.GetLeadingComments();
             var comments = leadingComments.ToList();

@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return syntax;
         }
 
-        private static SyntaxList<XmlNodeSyntax> UpdateText(ReadOnlySpan<char> text)
+        private static SyntaxList<XmlNodeSyntax> UpdateText(in ReadOnlySpan<char> text)
         {
             const string ValueMeaning = Constants.Comments.ValueMeaningPhrase;
 
