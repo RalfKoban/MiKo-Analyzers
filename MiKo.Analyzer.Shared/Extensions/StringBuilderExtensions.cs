@@ -52,57 +52,57 @@ namespace System.Text
             return value;
         }
 
-        public static StringBuilder AdjustWordAfter(this StringBuilder value, string substring, in FirstWordHandling handling)
+        public static StringBuilder AdjustWordAfter(this StringBuilder value, string phrase, in FirstWordHandling handling)
         {
-            if (substring.IsNullOrEmpty())
+            if (phrase.IsNullOrEmpty())
             {
                 return value;
             }
 
-            var first = substring[0];
+            var phraseStartCharacter = phrase[0];
 
-            var startIndex = IndexOf(value, first);
+            var phraseStartIndex = IndexOf(value, phraseStartCharacter);
 
-            if (startIndex <= -1)
+            if (phraseStartIndex <= -1)
             {
                 return value;
             }
 
-            var substringLength = substring.Length;
-            var last = substring[substringLength - 1];
+            var phraseLength = phrase.Length;
+            var phraseEndCharacter = phrase[phraseLength - 1];
 
-            for (int index = startIndex, length = value.Length; index < length; index++)
+            for (int index = phraseStartIndex, length = value.Length; index < length; index++)
             {
-                if (value[index] != first)
+                if (value[index] != phraseStartCharacter)
                 {
                     continue;
                 }
 
-                var endIndex = index + substringLength - 1;
+                var phraseEndIndex = index + phraseLength - 1;
 
-                if (endIndex >= length || value[endIndex] != last)
+                if (phraseEndIndex >= length || value[phraseEndIndex] != phraseEndCharacter)
                 {
                     continue;
                 }
 
-                if (value.ToString(index, substringLength).Equals(substring, StringComparison.Ordinal))
+                if (value.ToString(index, phraseLength).Equals(phrase, StringComparison.Ordinal))
                 {
-                    // get next word (separated by '_' or by ' ') as string builder
-                    var startNextWordIndex = endIndex + 1;
-                    var endNextWordIndex = value.IndexOf('_', ' ', startNextWordIndex) - 1;
+                    // get next word (separated by '_', or by ' ' for sentences)
+                    var nextWordStartIndex = phraseEndIndex + 1;
+                    var nextWordEndIndex = value.IndexOf('_', ' ', nextWordStartIndex) - 1;
 
-                    if (endNextWordIndex > 0)
+                    if (nextWordEndIndex > 0)
                     {
-                        var nextWordLength = endNextWordIndex - startNextWordIndex + 1;
+                        var nextWordLength = nextWordEndIndex - nextWordStartIndex + 1;
 
-                        var nextWord = value.ToString(startNextWordIndex, nextWordLength);
+                        var nextWord = value.ToString(nextWordStartIndex, nextWordLength);
                         var adjustedWord = nextWord.AdjustFirstWord(handling);
 
                         // cut it out
-                        value.Remove(startNextWordIndex, nextWordLength);
+                        value.Remove(nextWordStartIndex, nextWordLength);
 
                         // insert word adjusted by 'handling' using 'AdjustFirstWord'
-                        value.Insert(startNextWordIndex, adjustedWord);
+                        value.Insert(nextWordStartIndex, adjustedWord);
 
                         return value;
                     }
