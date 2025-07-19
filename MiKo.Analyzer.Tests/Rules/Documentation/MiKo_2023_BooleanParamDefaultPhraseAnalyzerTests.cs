@@ -58,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                            "'TRUE': if some condition. Otherwise 'FALSE'.",
                                                        ];
 
-        //// ncrunch: no coverage end
+//// ncrunch: no coverage end
 
 #if NCRUNCH
 

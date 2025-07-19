@@ -17,7 +17,7 @@ namespace System.Text
 
         private static readonly ArrayPool<char> SharedPool = ArrayPool<char>.Shared;
 
-        public static StringBuilder AdjustFirstWord(this StringBuilder value, in FirstWordHandling handling)
+        public static StringBuilder AdjustFirstWord(this StringBuilder value, in FirstWordAdjustment adjustment)
         {
             if (value.IsNullOrEmpty() || value[0] is '<')
             {
@@ -25,28 +25,88 @@ namespace System.Text
             }
 
             // only keep it if there is already a leading space (otherwise it may be on the same line without any leading space, and we would fix it in a wrong way)
-            value.TrimLeadingSpacesTo(handling.HasSet(FirstWordHandling.KeepSingleLeadingSpace) ? 1 : 0);
+            value.TrimLeadingSpacesTo(adjustment.HasSet(FirstWordAdjustment.KeepSingleLeadingSpace) ? 1 : 0);
 
-            if (handling.HasSet(FirstWordHandling.StartLowerCase))
+            if (adjustment.HasSet(FirstWordAdjustment.StartLowerCase))
             {
                 value.StartLowerCase();
             }
-            else if (handling.HasSet(FirstWordHandling.StartUpperCase))
+            else if (adjustment.HasSet(FirstWordAdjustment.StartUpperCase))
             {
                 value.StartUpperCase();
             }
 
-            if (handling.HasSet(FirstWordHandling.MakeInfinite))
+            if (adjustment.HasSet(FirstWordAdjustment.MakeInfinite))
             {
                 value.MakeInfinite();
             }
-            else if (handling.HasSet(FirstWordHandling.MakePlural))
+            else if (adjustment.HasSet(FirstWordAdjustment.MakePlural))
             {
                 value.MakePlural();
             }
-            else if (handling.HasSet(FirstWordHandling.MakeThirdPersonSingular))
+            else if (adjustment.HasSet(FirstWordAdjustment.MakeThirdPersonSingular))
             {
                 value.MakeThirdPersonSingular();
+            }
+
+            return value;
+        }
+
+        public static StringBuilder AdjustWordAfter(this StringBuilder value, string phrase, in FirstWordAdjustment adjustment)
+        {
+            if (phrase.IsNullOrEmpty())
+            {
+                return value;
+            }
+
+            var phraseStartCharacter = phrase[0];
+
+            var phraseStartIndex = IndexOf(value, phraseStartCharacter);
+
+            if (phraseStartIndex <= -1)
+            {
+                return value;
+            }
+
+            var phraseLength = phrase.Length;
+            var phraseEndCharacter = phrase[phraseLength - 1];
+
+            for (int index = phraseStartIndex, length = value.Length; index < length; index++)
+            {
+                if (value[index] != phraseStartCharacter)
+                {
+                    continue;
+                }
+
+                var phraseEndIndex = index + phraseLength - 1;
+
+                if (phraseEndIndex >= length || value[phraseEndIndex] != phraseEndCharacter)
+                {
+                    continue;
+                }
+
+                if (value.ToString(index, phraseLength).Equals(phrase, StringComparison.Ordinal))
+                {
+                    // get next word (separated by '_', or by ' ' for sentences)
+                    var nextWordStartIndex = phraseEndIndex + 1;
+                    var nextWordEndIndex = value.IndexOf('_', ' ', nextWordStartIndex) - 1;
+
+                    if (nextWordEndIndex > 0)
+                    {
+                        var nextWordLength = nextWordEndIndex - nextWordStartIndex + 1;
+
+                        var nextWord = value.ToString(nextWordStartIndex, nextWordLength);
+                        var adjustedWord = nextWord.AdjustFirstWord(adjustment);
+
+                        // cut it out
+                        value.Remove(nextWordStartIndex, nextWordLength);
+
+                        // insert word adjusted by 'handling' using 'AdjustFirstWord'
+                        value.Insert(nextWordStartIndex, adjustedWord);
+
+                        return value;
+                    }
+                }
             }
 
             return value;
@@ -224,7 +284,7 @@ namespace System.Text
             return value.Replace(oldValue, newValue, replaceStartIndex, value.Length - replaceStartIndex);
         }
 
-        public static StringBuilder SeparateWords(this StringBuilder value, in char separator, in FirstWordHandling firstWordHandling = FirstWordHandling.None)
+        public static StringBuilder SeparateWords(this StringBuilder value, in char separator, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.None)
         {
             if (value.IsNullOrEmpty())
             {
@@ -325,7 +385,7 @@ namespace System.Text
                 }
             }
 
-            return value.AdjustFirstWord(firstWordHandling);
+            return value.AdjustFirstWord(firstWordAdjustment);
         }
 
         public static StringBuilder Trimmed(this StringBuilder value)
@@ -515,7 +575,7 @@ namespace System.Text
             return value;
         }
 
-        public static StringBuilder WithoutAbbreviations(this StringBuilder value) => AbbreviationDetector.FindAndReplaceAllAbbreviations(value);
+        public static StringBuilder WithoutAbbreviations(this StringBuilder value) => AbbreviationFinder.FindAndReplaceAllAbbreviations(value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static StringBuilder WithoutParaTags(this StringBuilder value) => value.Without(Constants.ParaTags);
@@ -696,6 +756,34 @@ namespace System.Text
                     value.Remove(count, whitespaces - count);
                 }
             }
+        }
+
+        private static int IndexOf(this StringBuilder value, in char c, in int start = 0)
+        {
+            for (int index = start, length = value.Length; index < length; index++)
+            {
+                if (value[index] == c)
+                {
+                    return index;
+                }
+            }
+
+            return -1;
+        }
+
+        private static int IndexOf(this StringBuilder value, in char c1, in char c2, in int start = 0)
+        {
+            for (int index = start, length = value.Length; index < length; index++)
+            {
+                var c = value[index];
+
+                if (c == c1 || c == c2)
+                {
+                    return index;
+                }
+            }
+
+            return -1;
         }
     }
 }

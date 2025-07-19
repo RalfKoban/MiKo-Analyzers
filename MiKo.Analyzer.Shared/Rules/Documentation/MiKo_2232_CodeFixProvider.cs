@@ -89,7 +89,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             void RemoveEmptyText(int i)
             {
-                if (content.Count > i && content[i] is XmlTextSyntax text && text.GetTextTrimmed().IsNullOrEmpty())
+                if (content.Count > i && content[i].IsWhiteSpaceOnlyText())
                 {
                     content.RemoveAt(i);
                 }

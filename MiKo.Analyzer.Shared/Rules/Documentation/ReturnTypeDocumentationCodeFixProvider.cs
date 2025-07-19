@@ -90,7 +90,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected virtual SyntaxNode Comment(Document document, XmlElementSyntax comment, PropertyDeclarationSyntax property) => Comment(document, comment, property.GetName(), property.Type);
 #pragma warning restore CA1716
 
-        //// ncrunch: rdi off
+//// ncrunch: rdi off
         private static IEnumerable<string> CreateAlmostCorrectTaskReturnTypeStartingPhrases()
         {
             var starts = new[] { "a task", "an task" };
