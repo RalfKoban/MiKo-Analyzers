@@ -87,8 +87,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var name = symbolName.Replace("_Expect_", "_");
 
             var nameToImprove = TryGetInOrder(name, out var nameInOrder)
-                                    ? nameInOrder
-                                    : name;
+                                ? nameInOrder
+                                : name;
 
             return FindBetterTestName(nameToImprove, symbol);
         }
