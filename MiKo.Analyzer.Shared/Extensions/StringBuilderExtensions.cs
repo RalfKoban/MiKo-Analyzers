@@ -54,54 +54,57 @@ namespace System.Text
 
         public static StringBuilder AdjustWordAfter(this StringBuilder value, string substring, in FirstWordHandling handling)
         {
-            if (substring.IsNullOrEmpty() is false)
+            if (substring.IsNullOrEmpty())
             {
-                var first = substring[0];
+                return value;
+            }
 
-                var startIndex = IndexOf(value, first);
+            var first = substring[0];
 
-                if (startIndex > -1)
+            var startIndex = IndexOf(value, first);
+
+            if (startIndex <= -1)
+            {
+                return value;
+            }
+
+            var substringLength = substring.Length;
+            var last = substring[substringLength - 1];
+
+            for (int index = startIndex, length = value.Length; index < length; index++)
+            {
+                if (value[index] != first)
                 {
-                    var substringLength = substring.Length;
-                    var last = substring[substringLength - 1];
+                    continue;
+                }
 
-                    for (int index = startIndex, length = value.Length; index < length; index++)
+                var endIndex = index + substringLength - 1;
+
+                if (endIndex >= length || value[endIndex] != last)
+                {
+                    continue;
+                }
+
+                if (value.ToString(index, substringLength).Equals(substring, StringComparison.Ordinal))
+                {
+                    // get next word (separated by '_' or by ' ') as string builder
+                    var startNextWordIndex = endIndex + 1;
+                    var endNextWordIndex = value.IndexOf('_', ' ', startNextWordIndex) - 1;
+
+                    if (endNextWordIndex > 0)
                     {
-                        if (value[index] == first)
-                        {
-                            var endIndex = index + substringLength - 1;
+                        var nextWordLength = endNextWordIndex - startNextWordIndex + 1;
 
-                            if (endIndex < length)
-                            {
-                                if (value[endIndex] == last)
-                                {
-                                    var part = value.ToString(index, substringLength);
+                        var nextWord = value.ToString(startNextWordIndex, nextWordLength);
+                        var adjustedWord = nextWord.AdjustFirstWord(handling);
 
-                                    if (part.Equals(substring, StringComparison.Ordinal))
-                                    {
-                                        // get next word (separated by '_' or by ' ') as string builder
-                                        var startNextWordIndex = endIndex + 1;
-                                        var endNextWordIndex = value.IndexOf('_', ' ', startNextWordIndex) - 1;
+                        // cut it out
+                        value.Remove(startNextWordIndex, nextWordLength);
 
-                                        if (endNextWordIndex > 0)
-                                        {
-                                            var nextWordLength = endNextWordIndex - startNextWordIndex + 1;
+                        // insert word adjusted by 'handling' using 'AdjustFirstWord'
+                        value.Insert(startNextWordIndex, adjustedWord);
 
-                                            var nextWord = value.ToString(startNextWordIndex, nextWordLength);
-                                            var adjustedWord = nextWord.AdjustFirstWord(handling);
-
-                                            // cut it out
-                                            value.Remove(startNextWordIndex, nextWordLength);
-
-                                            // insert word adjusted by 'handling' using 'AdjustFirstWord'
-                                            value.Insert(startNextWordIndex, adjustedWord);
-
-                                            return value;
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        return value;
                     }
                 }
             }
