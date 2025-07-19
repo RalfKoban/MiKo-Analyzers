@@ -286,12 +286,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                            .ReplaceWithProbe("_will_be_", "_is_")
                            .ReplaceWithProbe("_will_", "_does_")
                            .Replace("__", "_")
-                           .AdjustWordAfter("_does_not_", FirstWordHandling.MakeInfinite)
+                           .AdjustWordAfter("_does_not_", FirstWordAdjustment.MakeInfinite)
                            .ReplaceWithProbe("_does_not_", "<4>")
-                           .AdjustWordAfter("_does_", FirstWordHandling.MakeThirdPersonSingular)
+                           .AdjustWordAfter("_does_", FirstWordAdjustment.MakeThirdPersonSingular)
                            .Replace("_does_", "_")
                            .ReplaceWithProbe("<4>", "_does_not_")
-                           .AdjustWordAfter("_to_", FirstWordHandling.MakeInfinite);
+                           .AdjustWordAfter("_to_", FirstWordAdjustment.MakeInfinite);
 
             return result.ToStringAndRelease();
         }
@@ -380,7 +380,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return false;
             }
 
-            var adjustedPart2 = part2.AdjustFirstWord(FirstWordHandling.MakeThirdPersonSingular);
+            var adjustedPart2 = part2.AdjustFirstWord(FirstWordAdjustment.MakeThirdPersonSingular);
 
             var addIf = IsIfRequired(part1, adjustedPart2);
             var ifToAdd = Verbalizer.IsThirdPersonSingularVerb(part1.AsSpan().FirstWord()) ? IfIt : If;

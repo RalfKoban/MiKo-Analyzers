@@ -3829,21 +3829,21 @@ namespace MiKoSolutions.Analyzers
             return value;
         }
 
-        internal static SyntaxList<XmlNodeSyntax> WithStartText(this XmlElementSyntax value, string startText, in FirstWordHandling firstWordHandling = FirstWordHandling.StartLowerCase) => value.Content.WithStartText(startText, firstWordHandling);
+        internal static SyntaxList<XmlNodeSyntax> WithStartText(this XmlElementSyntax value, string startText, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.StartLowerCase) => value.Content.WithStartText(startText, firstWordAdjustment);
 
-        internal static SyntaxList<XmlNodeSyntax> WithStartText(this in SyntaxList<XmlNodeSyntax> values, string startText, in FirstWordHandling firstWordHandling = FirstWordHandling.StartLowerCase)
+        internal static SyntaxList<XmlNodeSyntax> WithStartText(this in SyntaxList<XmlNodeSyntax> values, string startText, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.StartLowerCase)
         {
             if (values.Count > 0)
             {
                 return values[0] is XmlTextSyntax textSyntax
-                       ? values.Replace(textSyntax, textSyntax.WithStartText(startText, firstWordHandling))
+                       ? values.Replace(textSyntax, textSyntax.WithStartText(startText, firstWordAdjustment))
                        : values.Insert(0, XmlText(startText));
             }
 
             return XmlText(startText).ToSyntaxList<XmlNodeSyntax>();
         }
 
-        internal static XmlTextSyntax WithStartText(this XmlTextSyntax value, string startText, in FirstWordHandling firstWordHandling = FirstWordHandling.StartLowerCase)
+        internal static XmlTextSyntax WithStartText(this XmlTextSyntax value, string startText, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.StartLowerCase)
         {
             var tokens = value.TextTokens;
 
@@ -3887,7 +3887,7 @@ namespace MiKoSolutions.Analyzers
                 var space = i is 0 ? string.Empty : " ";
 
                 // replace 3rd person word by infinite word if configured
-                var continuation = originalText.AdjustFirstWord(firstWordHandling);
+                var continuation = originalText.AdjustFirstWord(firstWordAdjustment);
 
                 var modifiedText = space + startText + continuation;
 
