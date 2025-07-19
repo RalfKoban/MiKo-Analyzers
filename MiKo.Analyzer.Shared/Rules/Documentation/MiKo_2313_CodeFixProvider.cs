@@ -102,7 +102,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return SyntaxFactory.DocumentationComment(contents.ToArray<XmlNodeSyntax>());
         }
 
-        private static XmlElementSyntax Create(string commentTag, string xmlTag, List<string> comments, int spaces, string[] otherFoundCommentTags)
+        private static XmlElementSyntax Create(string commentTag, string xmlTag, List<string> comments, in int spaces, string[] otherFoundCommentTags)
         {
             if (TryFindComments(comments, commentTag, otherFoundCommentTags, out var index, out var count))
             {
@@ -137,7 +137,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static XmlElementSyntax CreateParamTag(string name, string text) => Comment(SyntaxFactory.XmlParamElement(name), text);
 
-        private static XmlElementSyntax[] CreateMultiple(string xmlTag, int spaces, List<Pair> pairs)
+        private static XmlElementSyntax[] CreateMultiple(string xmlTag, in int spaces, List<Pair> pairs)
         {
             var results = new XmlElementSyntax[pairs.Count];
 
@@ -158,7 +158,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return results;
         }
 
-        private static XmlElementSyntax[] CreateMultiple(string commentTag, string xmlTag, List<string> comments, int spaces, string[] otherFoundCommentTags)
+        private static XmlElementSyntax[] CreateMultiple(string commentTag, string xmlTag, List<string> comments, in int spaces, string[] otherFoundCommentTags)
         {
             if (TryFindComments(comments, commentTag, otherFoundCommentTags, out var index, out var count))
             {
