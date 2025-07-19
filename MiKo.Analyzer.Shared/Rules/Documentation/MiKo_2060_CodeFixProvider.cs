@@ -199,10 +199,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 //// Array.Sort(typeKeys, AscendingStringComparer.Default);
 
-                var typeKeysWithA = new List<string>(57228); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysWithCD = new List<string>(30362); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysWithThe = new List<string>(54490); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysWithThis = new List<string>(16660); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithA = new List<string>(57228); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithCD = new List<string>(30362); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithThe = new List<string>(54490); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysStartingWithThis = new List<string>(16660); // TODO RKN: Adjust number as soon as there are other texts
                 var typeKeysOther = new List<string>(47532); // TODO RKN: Adjust number as soon as there are other texts
 
                 for (var index = 0; index < typeKeysLength; index++)
@@ -213,7 +213,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         case 'A':
                         case 'a':
-                            typeKeysWithA.Add(typeKey);
+                            typeKeysStartingWithA.Add(typeKey);
 
                             break;
 
@@ -221,13 +221,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         case 'D':
                         case 'c':
                         case 'd':
-                            typeKeysWithCD.Add(typeKey);
+                            typeKeysStartingWithCD.Add(typeKey);
 
                             break;
 
                         case 'T':
                         case 't':
-                            var list = typeKey[2] is 'e' ? typeKeysWithThe : typeKeysWithThis;
+                            var list = typeKey[2] is 'e' ? typeKeysStartingWithThe : typeKeysStartingWithThis;
                             list.Add(typeKey);
 
                             break;
@@ -239,23 +239,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                 }
 
-                typeKeysWithA.Sort(AscendingStringComparer.Default);
-                typeKeysWithCD.Sort(AscendingStringComparer.Default);
-                typeKeysWithThe.Sort(AscendingStringComparer.Default);
-                typeKeysWithThis.Sort(AscendingStringComparer.Default);
+                typeKeysStartingWithA.Sort(AscendingStringComparer.Default);
+                typeKeysStartingWithCD.Sort(AscendingStringComparer.Default);
+                typeKeysStartingWithThe.Sort(AscendingStringComparer.Default);
+                typeKeysStartingWithThis.Sort(AscendingStringComparer.Default);
                 typeKeysOther.Sort(AscendingStringComparer.Default);
 
-                TypeReplacementMapA = ToArray(typeKeysWithA);
-                TypeReplacementMapKeysA = GetTermsForQuickLookup(typeKeysWithA);
+                TypeReplacementMapA = ToArray(typeKeysStartingWithA);
+                TypeReplacementMapKeysA = GetTermsForQuickLookup(typeKeysStartingWithA);
 
-                TypeReplacementMapCD = ToArray(typeKeysWithCD);
-                TypeReplacementMapKeysCD = GetTermsForQuickLookup(typeKeysWithCD);
+                TypeReplacementMapCD = ToArray(typeKeysStartingWithCD);
+                TypeReplacementMapKeysCD = GetTermsForQuickLookup(typeKeysStartingWithCD);
 
-                TypeReplacementMapThe = ToArray(typeKeysWithThe);
-                TypeReplacementMapKeysThe = GetTermsForQuickLookup(typeKeysWithThe);
+                TypeReplacementMapThe = ToArray(typeKeysStartingWithThe);
+                TypeReplacementMapKeysThe = GetTermsForQuickLookup(typeKeysStartingWithThe);
 
-                TypeReplacementMapThis = ToArray(typeKeysWithThis);
-                TypeReplacementMapKeysThis = GetTermsForQuickLookup(typeKeysWithThis);
+                TypeReplacementMapThis = ToArray(typeKeysStartingWithThis);
+                TypeReplacementMapKeysThis = GetTermsForQuickLookup(typeKeysStartingWithThis);
 
                 TypeReplacementMapOthers = ToArray(typeKeysOther);
                 TypeReplacementMapKeysOthers = GetTermsForQuickLookup(typeKeysOther);

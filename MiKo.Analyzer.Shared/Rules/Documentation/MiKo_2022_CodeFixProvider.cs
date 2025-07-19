@@ -34,8 +34,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 case 0:
                     return CommentStartingWith(preparedComment, phrase + Constants.TODO + ".");
 
-                case 1 when contents[0] is XmlTextSyntax text && text.GetTextTrimmed().IsNullOrEmpty():
-                    return comment.ReplaceNode(text, XmlText(phrase + Constants.TODO + ".").WithLeadingXmlComment().WithTrailingXmlComment());
+                case 1 when contents[0].IsWhiteSpaceOnlyText():
+                    return comment.ReplaceNode(contents[0], XmlText(phrase + Constants.TODO + ".").WithLeadingXmlComment().WithTrailingXmlComment());
 
                 default:
                     return CommentStartingWith(preparedComment, phrase);
@@ -317,6 +317,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   "returns ",
                                                               };
 
-        //// ncrunch: rdi default
+//// ncrunch: rdi default
     }
 }

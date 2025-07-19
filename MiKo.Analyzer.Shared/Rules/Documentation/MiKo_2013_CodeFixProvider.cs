@@ -135,17 +135,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                    .Without("Kind")
                                                    .Without("Enum")
                                                    .WithoutAbbreviations()
-                                                   .AdjustFirstWord(FirstWordHandling.MakePlural)
-                                                   .SeparateWords(' ', FirstWordHandling.StartLowerCase);
+                                                   .AdjustFirstWord(FirstWordAdjustment.MakePlural)
+                                                   .SeparateWords(' ', FirstWordAdjustment.StartLowerCase);
                     }
                     else
                     {
-                        continuation = continuation.AdjustFirstWord(FirstWordHandling.StartLowerCase);
+                        continuation = continuation.AdjustFirstWord(FirstWordAdjustment.StartLowerCase);
                     }
                 }
                 else
                 {
-                    continuation = continuation.AdjustFirstWord(FirstWordHandling.StartLowerCase);
+                    continuation = continuation.AdjustFirstWord(FirstWordAdjustment.StartLowerCase);
                 }
 
                 var finalText = continuation.Insert(0, startingPhrase)

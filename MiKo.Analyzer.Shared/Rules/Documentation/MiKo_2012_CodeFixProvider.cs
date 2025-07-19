@@ -77,7 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (text.StartsWithAny(EmptyReplacementsMapKeys, StringComparison.Ordinal))
             {
-                return Comment(comment, EmptyReplacementsMapKeys, EmptyReplacementsMap, FirstWordHandling.StartUpperCase | FirstWordHandling.MakeThirdPersonSingular | FirstWordHandling.KeepSingleLeadingSpace);
+                return Comment(comment, EmptyReplacementsMapKeys, EmptyReplacementsMap, FirstWordAdjustment.StartUpperCase | FirstWordAdjustment.MakeThirdPersonSingular | FirstWordAdjustment.KeepSingleLeadingSpace);
             }
 
             if (comment.GetEnclosing(Declarations) is MemberDeclarationSyntax member)
@@ -158,7 +158,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return GetUpdatedSyntax(comment, t);
             }
 
-            return Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordHandling.StartLowerCase);
+            return Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordAdjustment.StartLowerCase);
         }
 
         private static XmlEmptyElementSyntax GetUpdatedSyntaxWithInheritdoc(in SyntaxList<XmlNodeSyntax> content)

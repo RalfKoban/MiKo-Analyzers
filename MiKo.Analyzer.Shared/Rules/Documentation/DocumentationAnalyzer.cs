@@ -76,11 +76,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return GetAllLocations(textToken.ValueText, textToken.SyntaxTree, textToken.SpanStart, value, nextCharValidationCallback, comparison, startOffset, endOffset);
         }
 
-        protected static Location GetFirstTextIssueLocation(in SyntaxList<XmlNodeSyntax> content)
+        protected static Location GetFirstTextIssueLocation(in SyntaxList<XmlNodeSyntax> nodes)
         {
-            var item = content[0];
+            var node = nodes[0];
 
-            if (item is XmlTextSyntax text)
+            if (node is XmlTextSyntax text)
             {
                 var textTokens = text.TextTokens;
 
@@ -96,29 +96,29 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            return item.GetLocation();
+            return node.GetLocation();
         }
 
-        protected static IEnumerable<string> GetStartingPhrases(ITypeSymbol symbolReturnType, string[] startingPhrases)
+        protected static IEnumerable<string> GetStartingPhrases(ITypeSymbol returnTypeSymbol, string[] startingPhrases)
         {
-            var returnType = symbolReturnType.ToString();
+            var returnType = returnTypeSymbol.ToString();
 
-            var returnTypeFullyQualified = symbolReturnType.FullyQualifiedName();
+            var returnTypeFullyQualified = returnTypeSymbol.FullyQualifiedName();
 
             if (returnTypeFullyQualified.Contains('.') is false)
             {
-                returnTypeFullyQualified = symbolReturnType.FullyQualifiedName(false);
+                returnTypeFullyQualified = returnTypeSymbol.FullyQualifiedName(false);
             }
 
-            if (symbolReturnType.TryGetGenericArgumentCount(out var count) && count > 0)
+            if (returnTypeSymbol.TryGetGenericArgumentCount(out var count) && count > 0)
             {
-                var ts = symbolReturnType.GetGenericArgumentsAsTs();
+                var genericArguments = returnTypeSymbol.GetGenericArgumentsAsTs();
 
                 var length = returnType.IndexOf('<'); // just until the first one
 
                 var firstPart = returnType.AsSpan(0, length);
 
-                var returnTypeWithTs = firstPart.ConcatenatedWith('{', ts, '}');
+                var returnTypeWithTs = firstPart.ConcatenatedWith('{', genericArguments, '}');
                 var returnTypeWithGenericCount = firstPart.ConcatenatedWith('`', count.ToString());
 
 //// ncrunch: rdi off

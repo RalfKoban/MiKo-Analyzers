@@ -51,7 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return fixedComment;
         }
 
-        private static XmlElementSyntax PrepareComment(XmlElementSyntax comment) => Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordHandling.StartLowerCase);
+        private static XmlElementSyntax PrepareComment(XmlElementSyntax comment) => Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordAdjustment.StartLowerCase);
 
 //// ncrunch: rdi off
 

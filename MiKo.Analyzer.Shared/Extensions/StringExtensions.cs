@@ -31,7 +31,7 @@ namespace System
 
         private static readonly Regex PascalCasingRegex = new Regex("[a-z]+[A-Z]+", RegexOptions.Compiled, 100.Milliseconds());
 
-        public static string AdjustFirstWord(this string value, in FirstWordHandling handling)
+        public static string AdjustFirstWord(this string value, in FirstWordAdjustment adjustment)
         {
             if (value.StartsWith('<'))
             {
@@ -42,7 +42,7 @@ namespace System
 
             string word;
 
-            if (handling.HasSet(FirstWordHandling.StartLowerCase))
+            if (adjustment.HasSet(FirstWordAdjustment.StartLowerCase))
             {
                 var firstWord = valueSpan.FirstWord();
 
@@ -55,7 +55,7 @@ namespace System
             {
                 var firstWord = valueSpan.FirstWord();
 
-                word = handling.HasSet(FirstWordHandling.StartUpperCase)
+                word = adjustment.HasSet(FirstWordAdjustment.StartUpperCase)
                        ? firstWord.ToUpperCaseAt(0)
                        : firstWord.ToString();
             }
@@ -63,20 +63,20 @@ namespace System
             // build continuation here because the word length may change based on the infinite term
             var continuation = valueSpan.TrimStart().Slice(word.Length);
 
-            if (handling.HasSet(FirstWordHandling.MakeInfinite))
+            if (adjustment.HasSet(FirstWordAdjustment.MakeInfinite))
             {
                 word = Verbalizer.MakeInfiniteVerb(word);
             }
-            else if (handling.HasSet(FirstWordHandling.MakePlural))
+            else if (adjustment.HasSet(FirstWordAdjustment.MakePlural))
             {
                 word = Pluralizer.MakePluralName(word);
             }
-            else if (handling.HasSet(FirstWordHandling.MakeThirdPersonSingular))
+            else if (adjustment.HasSet(FirstWordAdjustment.MakeThirdPersonSingular))
             {
                 word = Verbalizer.MakeThirdPersonSingularVerb(word);
             }
 
-            if (handling.HasSet(FirstWordHandling.KeepSingleLeadingSpace))
+            if (adjustment.HasSet(FirstWordAdjustment.KeepSingleLeadingSpace))
             {
                 // only keep it if there is already a leading space (otherwise it may be on the same line without any leading space, and we would fix it in a wrong way)
                 if (value.StartsWith(' '))
