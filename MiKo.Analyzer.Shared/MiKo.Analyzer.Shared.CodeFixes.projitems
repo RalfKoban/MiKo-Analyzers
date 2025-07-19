@@ -13,7 +13,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Constants.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\CommentExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EnumerableExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\FirstWordHandlingExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\FirstWordAdjustmentExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\LocationExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ReadOnlySpanEnumeratorEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\SplitReadOnlySpanEnumerator.cs" />
@@ -29,10 +29,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\TimeSpanExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\WordsReadOnlySpanEnumerator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\WordsReadOnlySpanEnumeratorSelectDelegate.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Linguistics\AbbreviationDetector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Linguistics\AbbreviationFinder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Linguistics\ArticleProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Linguistics\AscendingStringComparer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Linguistics\FirstWordHandling.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Linguistics\FirstWordAdjustment.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Linguistics\Pluralizer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Linguistics\Verbalizer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Pair.cs" />
@@ -315,6 +315,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1111_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1112_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1115_CodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1116_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1118_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1200_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1201_CodeFixProvider.cs" />

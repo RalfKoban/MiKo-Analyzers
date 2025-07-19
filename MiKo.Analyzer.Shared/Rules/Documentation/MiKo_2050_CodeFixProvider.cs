@@ -51,7 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             else
             {
                 var summary = summaries[0];
-                var preparedSummary = Comment(summary, TypeReplacementMapKeys, TypeReplacementMap, FirstWordHandling.StartLowerCase);
+                var preparedSummary = Comment(summary, TypeReplacementMapKeys, TypeReplacementMap, FirstWordAdjustment.StartLowerCase);
                 var newSummary = CommentStartingWith(preparedSummary, Phrase);
 
                 return comment.ReplaceNode(summary, newSummary);

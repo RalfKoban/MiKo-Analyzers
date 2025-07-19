@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected virtual string Title => Resources.ResourceManager.GetString(FixableDiagnosticId + "_CodeFixTitle", Resources.Culture);
 
-        //// ncrunch: rdi off
+//// ncrunch: rdi off
 
         protected virtual bool IsSolutionWide => false;
 

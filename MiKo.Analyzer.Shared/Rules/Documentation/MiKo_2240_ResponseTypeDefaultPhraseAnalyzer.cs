@@ -68,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var betterText = text.AsCachedBuilder()
                                  .ReplaceAllWithProbe(Replacements)
-                                 .AdjustFirstWord(FirstWordHandling.StartUpperCase)
+                                 .AdjustFirstWord(FirstWordAdjustment.StartUpperCase)
                                  .ToStringAndRelease();
 
             return betterText;
