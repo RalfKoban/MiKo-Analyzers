@@ -294,7 +294,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
                                          var expectedTitle = Resources.ResourceManager.GetString(resourceKey, CultureInfo.CurrentUICulture) ?? "< - missing title - >";
 
-                                         var codeFixTitle = provider.GetType().GetProperty("Title", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(provider).ToString();
+                                         var codeFixTitle = provider.GetType().GetProperty("Title", BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(provider)?.ToString();
 
                                          var parts = expectedTitle.FormatWith("|").Split('|');
 

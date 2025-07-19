@@ -8,9 +8,9 @@ using MiKoSolutions.Analyzers.Linguistics;
 #pragma warning disable IDE0130
 namespace System
 {
-    internal static class FirstWordHandlingExtensions
+    internal static class FirstWordAdjustmentExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool HasSet(this FirstWordHandling value, in FirstWordHandling flag) => (value & flag) == flag;
+        public static bool HasSet(this FirstWordAdjustment value, in FirstWordAdjustment flag) => (value & flag) == flag;
     }
 }

@@ -3,10 +3,10 @@
 namespace MiKoSolutions.Analyzers.Linguistics
 {
     /// <summary>
-    /// Defines values that specify how to handle the first word of a comment.
+    /// Defines values that specify how to handle the first word of a comment or name.
     /// </summary>
     [Flags]
-    public enum FirstWordHandling
+    public enum FirstWordAdjustment
     {
         /// <summary>
         /// Keep it, do NOT touch it.

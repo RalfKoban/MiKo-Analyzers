@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly string[] NonThirdPersonSingularEndingsWithS = { "pters", "tors", "gers", "chers" };
 
-        private static readonly string[] SpecialPastEndings = { "ated", "dled", "ced", "ged", "ied", "red", "sed", "ved" };
+        private static readonly string[] SpecialPastEndings = { "ated", "dled", "ced", "ged", "ied", "red", "rized", "sed", "ved" };
 
         private static readonly string[] PastEndings = SpecialPastEndings.Concat(new[] { "led", "eed", "ted", "ded" }).ToArray();
 
@@ -26,7 +26,49 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly ConcurrentDictionary<string, string> InfiniteVerbs = new ConcurrentDictionary<string, string>();
 
-        private static readonly ConcurrentDictionary<string, string> ThirdPersonSingularVerbs = new ConcurrentDictionary<string, string>();
+        private static readonly ConcurrentDictionary<string, string> ThirdPersonSingularVerbs = new ConcurrentDictionary<string, string>(new[]
+                                                                                                                                             {
+                                                                                                                                                 new KeyValuePair<string, string>("Are", "Is"),
+                                                                                                                                                 new KeyValuePair<string, string>("are", "is"),
+                                                                                                                                                 new KeyValuePair<string, string>("got", "gets"),
+                                                                                                                                                 new KeyValuePair<string, string>("Got", "Gets"),
+                                                                                                                                                 new KeyValuePair<string, string>("Had", "Has"),
+                                                                                                                                                 new KeyValuePair<string, string>("had", "has"),
+                                                                                                                                                 new KeyValuePair<string, string>("Has", "Has"),
+                                                                                                                                                 new KeyValuePair<string, string>("has", "has"),
+                                                                                                                                                 new KeyValuePair<string, string>("Is", "Is"),
+                                                                                                                                                 new KeyValuePair<string, string>("is", "is"),
+                                                                                                                                                 new KeyValuePair<string, string>("frozen", "freezes"),
+                                                                                                                                                 new KeyValuePair<string, string>("Frozen", "Freezes"),
+                                                                                                                                                 new KeyValuePair<string, string>("Were", "Is"),
+                                                                                                                                                 new KeyValuePair<string, string>("were", "is"),
+                                                                                                                                                 new KeyValuePair<string, string>("Was", "Is"),
+                                                                                                                                                 new KeyValuePair<string, string>("was", "is"),
+                                                                                                                                             });
+
+        private static readonly string[] ThirdPersonalSingularVerbExceptions =
+                                                                               {
+                                                                                   "argument", "Argument",
+                                                                                   "exception", "Exception",
+                                                                                   "false", "False",
+                                                                                   "guid", "Guid",
+                                                                                   "int", "Int",
+                                                                                   "invalid", "Invalid",
+                                                                                   "json", "Json",
+                                                                                   "key", "Key",
+                                                                                   "no", "No",
+                                                                                   "not", "Not",
+                                                                                   "null", "Null",
+                                                                                   "object", "Object",
+                                                                                   "Operation",
+                                                                                   "should", "Should",
+                                                                                   "string", "String",
+                                                                                   "task", "Task",
+                                                                                   "true", "True",
+                                                                                   "unauthorized", "Unauthorized",
+                                                                                   "valid", "Valid",
+                                                                                   "validation", "Validation",
+                                                                               };
 
         private static readonly string[] NounsWithGerundEnding =
                                                                  {
@@ -451,21 +493,51 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     return word.Substring(0, wordLength - 3);
                 }
 
+                if (IsPastTense(word))
+                {
+                    return CreateFromPast(word);
+                }
+
                 return word;
+            }
+
+            string CreateFromPast(string word)
+            {
+                if (word.EndsWith("dded", StringComparison.Ordinal))
+                {
+                    return word.AsSpan(0, word.Length - 2).ToString();
+                }
+
+                if (word.EndsWith("tted", StringComparison.Ordinal))
+                {
+                    return word.AsSpan(0, word.Length - 3).ToString();
+                }
+
+                if (word.EndsWith("eed", StringComparison.Ordinal))
+                {
+                    return word;
+                }
+
+                if (word.EndsWithAny(SpecialPastEndings, StringComparison.Ordinal))
+                {
+                    return word.AsSpan(0, word.Length - 1).ToString();
+                }
+
+                return word.AsSpan(0, word.Length - 2).ToString();
             }
         }
 
-        public static string MakeFirstWordInfiniteVerb(string text, in FirstWordHandling handling = FirstWordHandling.None)
+        public static string MakeFirstWordInfiniteVerb(string text, in FirstWordAdjustment adjustment = FirstWordAdjustment.None)
         {
             if (text.IsNullOrWhiteSpace())
             {
                 return text;
             }
 
-            return MakeFirstWordInfiniteVerb(text.AsSpan(), handling);
+            return MakeFirstWordInfiniteVerb(text.AsSpan(), adjustment);
         }
 
-        public static string MakeFirstWordInfiniteVerb(in ReadOnlySpan<char> text, in FirstWordHandling firstWordHandling = FirstWordHandling.None)
+        public static string MakeFirstWordInfiniteVerb(in ReadOnlySpan<char> text, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.None)
         {
             if (text.IsNullOrWhiteSpace())
             {
@@ -482,7 +554,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
             }
 
             // first word
-            var firstWord = GetFirstWord(valueText, firstWordHandling);
+            var firstWord = GetFirstWord(valueText, firstWordAdjustment);
 
             var infiniteVerb = MakeInfiniteVerb(firstWord);
 
@@ -493,14 +565,14 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             return text.ToString();
 
-            string GetFirstWord(in ReadOnlySpan<char> span, in FirstWordHandling handling)
+            string GetFirstWord(in ReadOnlySpan<char> span, in FirstWordAdjustment adjustment)
             {
                 var word = span.FirstWord();
 
-                switch (handling)
+                switch (adjustment)
                 {
-                    case FirstWordHandling.StartLowerCase: return word.ToLowerCaseAt(0);
-                    case FirstWordHandling.StartUpperCase: return word.ToUpperCaseAt(0);
+                    case FirstWordAdjustment.StartLowerCase: return word.ToLowerCaseAt(0);
+                    case FirstWordAdjustment.StartUpperCase: return word.ToUpperCaseAt(0);
                     default:
                         return word.ToString();
                 }
@@ -510,6 +582,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
         public static string MakeThirdPersonSingularVerb(string value)
         {
             if (value.IsNullOrWhiteSpace())
+            {
+                return value;
+            }
+
+            if (value.EqualsAny(ThirdPersonalSingularVerbExceptions))
             {
                 return value;
             }

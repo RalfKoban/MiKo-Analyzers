@@ -227,7 +227,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 commentContinuation.Append(ReplacementTo);
 
-                var continuation = Verbalizer.MakeFirstWordInfiniteVerb(text, FirstWordHandling.StartLowerCase);
+                var continuation = Verbalizer.MakeFirstWordInfiniteVerb(text, FirstWordAdjustment.StartLowerCase);
 
                 commentContinuation.Append(continuation);
             }
