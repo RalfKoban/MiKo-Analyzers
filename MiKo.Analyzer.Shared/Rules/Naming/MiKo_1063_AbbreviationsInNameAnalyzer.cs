@@ -82,7 +82,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private Diagnostic[] AnalyzeName(string symbolName, ISymbol symbol, string prefix = "")
         {
-            var findings = AbbreviationDetector.Find(symbolName);
+            var findings = AbbreviationFinder.Find(symbolName);
             var findingsLength = findings.Length;
 
             if (findingsLength is 0)
@@ -90,7 +90,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return Array.Empty<Diagnostic>();
             }
 
-            var betterName = AbbreviationDetector.ReplaceAllAbbreviations(symbolName, findings);
+            var betterName = AbbreviationFinder.ReplaceAllAbbreviations(symbolName, findings);
             var betterNameProposal = CreateBetterNameProposal(prefix.Length > 0 ? prefix + betterName : betterName);
 
             var issues = new Diagnostic[findingsLength];

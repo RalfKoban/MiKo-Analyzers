@@ -88,7 +88,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, in ReadOnlySpan<string> text, in SyntaxList<XmlNodeSyntax> additionalComment) => Comment(comment, text[0], additionalComment);
 
-        //// ncrunch: rdi off
+//// ncrunch: rdi off
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string text, in SyntaxList<XmlNodeSyntax> additionalComment)
         {
@@ -99,18 +99,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string text, string additionalComment = null) => Comment(comment, additionalComment is null ? XmlText(text) : XmlText(text + additionalComment));
 
-        protected static XmlElementSyntax Comment(XmlElementSyntax syntax, in ReadOnlySpan<string> terms, in ReadOnlySpan<Pair> replacementMap, in FirstWordHandling firstWordHandling = FirstWordHandling.KeepSingleLeadingSpace)
+        protected static XmlElementSyntax Comment(XmlElementSyntax syntax, in ReadOnlySpan<string> terms, in ReadOnlySpan<Pair> replacementMap, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.KeepSingleLeadingSpace)
         {
-            var result = Comment<XmlElementSyntax>(syntax, terms, replacementMap, firstWordHandling);
+            var result = Comment<XmlElementSyntax>(syntax, terms, replacementMap, firstWordAdjustment);
 
             return CombineTexts(result);
         }
 
-        protected static T Comment<T>(T syntax, in ReadOnlySpan<string> terms, in ReadOnlySpan<Pair> replacementMap, in FirstWordHandling firstWordHandling = FirstWordHandling.KeepSingleLeadingSpace) where T : SyntaxNode
+        protected static T Comment<T>(T syntax, in ReadOnlySpan<string> terms, in ReadOnlySpan<Pair> replacementMap, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.KeepSingleLeadingSpace) where T : SyntaxNode
         {
             var minimumLength = MinLength(terms);
 
-            var textMap = CreateReplacementTextMap(minimumLength, terms, replacementMap, firstWordHandling);
+            var textMap = CreateReplacementTextMap(minimumLength, terms, replacementMap, firstWordAdjustment);
 
             if (textMap is null)
             {
@@ -145,7 +145,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return minimum;
             }
 
-            Dictionary<XmlTextSyntax, XmlTextSyntax> CreateReplacementTextMap(in int minLength, in ReadOnlySpan<string> phrases, in ReadOnlySpan<Pair> map, in FirstWordHandling handling)
+            Dictionary<XmlTextSyntax, XmlTextSyntax> CreateReplacementTextMap(in int minLength, in ReadOnlySpan<string> phrases, in ReadOnlySpan<Pair> map, in FirstWordAdjustment adjustment)
             {
                 Dictionary<XmlTextSyntax, XmlTextSyntax> result = null;
 
@@ -178,7 +178,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         {
                             var replacedText = originalText.AsCachedBuilder()
                                                            .ReplaceAllWithProbe(map)
-                                                           .AdjustFirstWord(handling)
+                                                           .AdjustFirstWord(adjustment)
                                                            .ToStringAndRelease();
 
                             if (originalText.AsSpan().SequenceEqual(replacedText.AsSpan()))
@@ -364,19 +364,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, in ReadOnlySpan<string> phrases, in FirstWordHandling firstWordHandling = FirstWordHandling.StartLowerCase)
+        protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, in ReadOnlySpan<string> phrases, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.StartLowerCase)
         {
-            return CommentStartingWith(comment, phrases[0], firstWordHandling);
+            return CommentStartingWith(comment, phrases[0], firstWordAdjustment);
         }
 
-        protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string phrase, in FirstWordHandling firstWordHandling = FirstWordHandling.StartLowerCase)
+        protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string phrase, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.StartLowerCase)
         {
-            var content = CommentStartingWith(comment.Content, phrase, firstWordHandling);
+            var content = CommentStartingWith(comment.Content, phrase, firstWordAdjustment);
 
             return CommentWithContent(comment, content);
         }
 
-        protected static SyntaxList<XmlNodeSyntax> CommentStartingWith(SyntaxList<XmlNodeSyntax> content, string phrase, in FirstWordHandling firstWordHandling = FirstWordHandling.StartLowerCase)
+        protected static SyntaxList<XmlNodeSyntax> CommentStartingWith(SyntaxList<XmlNodeSyntax> content, string phrase, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.StartLowerCase)
         {
             // when necessary adjust beginning text
             // Note: when on new line, then the text is not the 1st one but the 2nd one
@@ -397,7 +397,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     text = text.WithoutTrailingXmlComment();
                 }
 
-                var newText = text.WithStartText(phrase, firstWordHandling);
+                var newText = text.WithStartText(phrase, firstWordAdjustment);
 
                 return content.Insert(index, newText);
             }

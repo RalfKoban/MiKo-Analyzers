@@ -47,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 switch (content.Count)
                 {
                     case 0:
-                    case 1 when content[0] is XmlTextSyntax text && text.GetTextTrimmed().IsNullOrEmpty():
+                    case 1 when content[0].IsWhiteSpaceOnlyText():
                         return new[] { Issue(summary) };
                 }
             }

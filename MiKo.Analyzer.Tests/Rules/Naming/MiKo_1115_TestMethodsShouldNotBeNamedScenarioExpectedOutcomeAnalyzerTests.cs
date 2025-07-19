@@ -64,7 +64,7 @@ public class TestMe
 }
 ");
 
-        [TestCase("DoesSomething_IsExceptional", "Throws_exception_if_it_does_something")]
+        [TestCase("MakesSomething_IsExceptional", "Throws_exception_if_it_makes_something")]
         [TestCase("IfLoadFails_ReturnNull", "Returns_null_if_load_fails")]
         [TestCase("IfLoadFails_ReturnsNull", "Returns_null_if_load_fails")]
         [TestCase("NoDocumentIsDirty_ProjectIsNotDirty", "Project_is_not_dirty_if_no_document_is_dirty")]
@@ -90,6 +90,7 @@ public class TestMe
         [TestCase("Method_ThrowsExceptionIfNull", "Method_throws_exception_if_null")]
         [TestCase("Method_ThrowsArgumentNullExceptionIfNull", "Method_throws_ArgumentNullException_if_null")]
         [TestCase("Method_ThrowsKeyNotFoundExceptionIfKeyIsMissing", "Method_throws_KeyNotFoundException_if_key_is_missing")]
+        [TestCase("Method_DoesNotAlterResult", "Method_does_not_alter_result")]
         public void Code_gets_fixed_for_1_slash_in_(string originalName, string fixedName) => VerifyCSharpFix(
                                                                                                           "class TestMe { [Test] public void " + originalName + "() { } }",
                                                                                                           "class TestMe { [Test] public void " + fixedName + "() { } }");
@@ -121,18 +122,18 @@ public class TestMe
         [TestCase("MethodName_SomeCondition_ObjectReturned", "Method_name_returns_object_if_some_condition")]
         [TestCase("MethodName_SomeCondition_GuidEmptyReturned", "Method_name_returns_empty_guid_if_some_condition")]
         [TestCase("MethodName_SomeCondition_StringEmptyReturned", "Method_name_returns_empty_string_if_some_condition")]
-        [TestCase("MethodName_SomeCondition_Returned", "Method_name_returns_some_condition")]
-        [TestCase("MethodName_SomeCondition_TryToDoStuff", "Method_name_try_to_do_stuff_if_some_condition")]
+        [TestCase("MethodName_SomeCondition_Returned", "Method_name_returns_if_some_condition")]
+        [TestCase("MethodName_SomeCondition_TryToDoStuff", "Method_name_tries_to_do_stuff_if_some_condition")]
         [TestCase("MethodName_SomeCondition_TriesToDoStuff", "Method_name_tries_to_do_stuff_if_some_condition")]
-        [TestCase("MethodName_SomeCondition_CallStuff", "Method_name_call_stuff_if_some_condition")]
+        [TestCase("MethodName_SomeCondition_CallStuff", "Method_name_calls_stuff_if_some_condition")]
         [TestCase("MethodName_SomeCondition_CallsStuff", "Method_name_calls_stuff_if_some_condition")]
-        [TestCase("MethodName_SomeCondition_InvokeStuff", "Method_name_invoke_stuff_if_some_condition")]
+        [TestCase("MethodName_SomeCondition_InvokeStuff", "Method_name_invokes_stuff_if_some_condition")]
         [TestCase("MethodName_SomeCondition_InvokesStuff", "Method_name_invokes_stuff_if_some_condition")]
         [TestCase("MethodName_WhenSomeCondition_ThrowsException", "Method_name_throws_exception_if_some_condition")]
         [TestCase("MethodName_XYZObject_ThrowsException", "Method_name_throws_exception_if_XYZ_object")]
         [TestCase("MethodName_XYZType_ThrowsException", "Method_name_throws_exception_if_XYZ_type")]
         [TestCase("MethodName_XYZReference_ThrowsException", "Method_name_throws_exception_if_XYZ_reference")]
-        [TestCase("MethodName_XYZDoesSomething_ThrowsException", "Method_name_throws_exception_if_XYZ_does_something")]
+        [TestCase("MethodName_XYZMakesSomething_ThrowsException", "Method_name_throws_exception_if_XYZ_makes_something")]
         [TestCase("MethodName_SomeConditionIsMet_ThrowsException", "Method_name_throws_exception_if_some_condition_is_met")]
         [TestCase("MethodName_SomeConditionIsMet_RethrowsException", "Method_name_rethrows_exception_if_some_condition_is_met")]
         [TestCase("MethodName_ThrowsException_IfSomeConditionIsMet", "Method_name_throws_exception_if_some_condition_is_met")]
@@ -149,7 +150,7 @@ public class TestMe
         [TestCase("MethodName_NoLongerThrows_NullReferenceException", "Method_name_throws_no_NullReferenceException")]
         [TestCase("MethodName_NotThrow_NullReferenceException", "Method_name_throws_no_NullReferenceException")]
         [TestCase("MethodName_NotThrows_NullReferenceException", "Method_name_throws_no_NullReferenceException")]
-        [TestCase("MethodName_ConsumedMessage_Publish", "Method_name_publish_consumed_message")]
+        [TestCase("MethodName_ConsumedMessage_Publish", "Method_name_publishes_consumed_message")]
         [TestCase("MethodName_ConsumedMessage_Publishes", "Method_name_publishes_consumed_message")]
         [TestCase("MethodName_AcceptedConsumedMessage_DoesNotRejectMessage", "Method_name_does_not_reject_message_if_consumed_message_is_accepted")]
         [TestCase("MethodName_RejectedConsumedMessage_LogsWhenAboveCriticalThreshold", "Method_name_logs_if_above_critical_threshold_if_consumed_message_is_rejected")]

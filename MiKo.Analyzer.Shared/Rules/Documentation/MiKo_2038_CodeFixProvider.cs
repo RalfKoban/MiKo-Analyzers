@@ -50,9 +50,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (syntax is XmlElementSyntax element)
             {
-                var comment = Comment(element, CommandReplacementMapKeys, CommandReplacementMap, FirstWordHandling.StartLowerCase);
+                var comment = Comment(element, CommandReplacementMapKeys, CommandReplacementMap, FirstWordAdjustment.StartLowerCase);
 
-                return CommentStartingWith(comment, Constants.Comments.CommandSummaryStartingPhrase, FirstWordHandling.StartLowerCase | FirstWordHandling.MakeInfinite);
+                return CommentStartingWith(comment, Constants.Comments.CommandSummaryStartingPhrase, FirstWordAdjustment.StartLowerCase | FirstWordAdjustment.MakeInfinite);
             }
 
             return syntax;

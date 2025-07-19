@@ -24,9 +24,9 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxToken First(this in SyntaxTokenList value, in SyntaxKind kind)
         {
-            var list = value.OfKind(kind);
+            var tokens = value.OfKind(kind);
 
-            return list.Count > 0 ? list[0] : default;
+            return tokens.Count > 0 ? tokens[0] : default;
         }
 
         internal static T GetEnclosing<T>(this in SyntaxToken value) where T : SyntaxNode => value.Parent.GetEnclosing<T>();
@@ -272,17 +272,17 @@ namespace MiKoSolutions.Analyzers
             var trivia = value.LeadingTrivia;
 
             // remove existing empty lines
-            var indicesToRemove = new Stack<int>();
+            var emptyLineIndices = new Stack<int>();
 
             for (int index = 0, count = trivia.Count; index < count; index++)
             {
                 if (trivia[index].IsEndOfLine())
                 {
-                    indicesToRemove.Push(index);
+                    emptyLineIndices.Push(index);
                 }
             }
 
-            foreach (var index in indicesToRemove)
+            foreach (var index in emptyLineIndices)
             {
                 trivia = trivia.RemoveAt(index);
             }
@@ -334,7 +334,7 @@ namespace MiKoSolutions.Analyzers
                 var leadingTrivia = value.LeadingTrivia.ToList();
 
                 // first collect all indices of the comments, for later reference
-                var indices = new List<int>(1);
+                var commentIndices = new List<int>(1);
 
                 for (int index = 0, triviaCount = leadingTrivia.Count; index < triviaCount; index++)
                 {
@@ -342,17 +342,17 @@ namespace MiKoSolutions.Analyzers
 
                     if (trivia.IsComment())
                     {
-                        indices.Add(index);
+                        commentIndices.Add(index);
                     }
                 }
 
                 // ensure proper size to avoid multiple resizes
-                leadingTrivia.Capacity += additionalSpaces * indices.Count;
+                leadingTrivia.Capacity += additionalSpaces * commentIndices.Count;
 
                 // now update the comments, but adjust the offset to remember the already added spaces (trivia indices change due to that)
                 var offset = 0;
 
-                foreach (var index in indices)
+                foreach (var index in commentIndices)
                 {
                     leadingTrivia.InsertRange(index + offset, Spaces(additionalSpaces));
 

@@ -84,8 +84,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 if (WellKnownTypeNames.Contains(typeName) is false)
                 {
                     var text = typeName.AsCachedBuilder()
-                                       .AdjustFirstWord(FirstWordHandling.MakePlural)
-                                       .SeparateWords(' ', FirstWordHandling.StartLowerCase)
+                                       .AdjustFirstWord(FirstWordAdjustment.MakePlural)
+                                       .SeparateWords(' ', FirstWordAdjustment.StartLowerCase)
                                        .ToStringAndRelease();
 
                     if (text.Length > 0)
