@@ -17,7 +17,7 @@ namespace System.Text
 
         private static readonly ArrayPool<char> SharedPool = ArrayPool<char>.Shared;
 
-        public static StringBuilder AdjustFirstWord(this StringBuilder value, in FirstWordHandling handling)
+        public static StringBuilder AdjustFirstWord(this StringBuilder value, in FirstWordAdjustment adjustment)
         {
             if (value.IsNullOrEmpty() || value[0] is '<')
             {
@@ -25,26 +25,26 @@ namespace System.Text
             }
 
             // only keep it if there is already a leading space (otherwise it may be on the same line without any leading space, and we would fix it in a wrong way)
-            value.TrimLeadingSpacesTo(handling.HasSet(FirstWordHandling.KeepSingleLeadingSpace) ? 1 : 0);
+            value.TrimLeadingSpacesTo(adjustment.HasSet(FirstWordAdjustment.KeepSingleLeadingSpace) ? 1 : 0);
 
-            if (handling.HasSet(FirstWordHandling.StartLowerCase))
+            if (adjustment.HasSet(FirstWordAdjustment.StartLowerCase))
             {
                 value.StartLowerCase();
             }
-            else if (handling.HasSet(FirstWordHandling.StartUpperCase))
+            else if (adjustment.HasSet(FirstWordAdjustment.StartUpperCase))
             {
                 value.StartUpperCase();
             }
 
-            if (handling.HasSet(FirstWordHandling.MakeInfinite))
+            if (adjustment.HasSet(FirstWordAdjustment.MakeInfinite))
             {
                 value.MakeInfinite();
             }
-            else if (handling.HasSet(FirstWordHandling.MakePlural))
+            else if (adjustment.HasSet(FirstWordAdjustment.MakePlural))
             {
                 value.MakePlural();
             }
-            else if (handling.HasSet(FirstWordHandling.MakeThirdPersonSingular))
+            else if (adjustment.HasSet(FirstWordAdjustment.MakeThirdPersonSingular))
             {
                 value.MakeThirdPersonSingular();
             }
@@ -52,7 +52,7 @@ namespace System.Text
             return value;
         }
 
-        public static StringBuilder AdjustWordAfter(this StringBuilder value, string phrase, in FirstWordHandling handling)
+        public static StringBuilder AdjustWordAfter(this StringBuilder value, string phrase, in FirstWordAdjustment adjustment)
         {
             if (phrase.IsNullOrEmpty())
             {
@@ -96,7 +96,7 @@ namespace System.Text
                         var nextWordLength = nextWordEndIndex - nextWordStartIndex + 1;
 
                         var nextWord = value.ToString(nextWordStartIndex, nextWordLength);
-                        var adjustedWord = nextWord.AdjustFirstWord(handling);
+                        var adjustedWord = nextWord.AdjustFirstWord(adjustment);
 
                         // cut it out
                         value.Remove(nextWordStartIndex, nextWordLength);
@@ -284,7 +284,7 @@ namespace System.Text
             return value.Replace(oldValue, newValue, replaceStartIndex, value.Length - replaceStartIndex);
         }
 
-        public static StringBuilder SeparateWords(this StringBuilder value, in char separator, in FirstWordHandling firstWordHandling = FirstWordHandling.None)
+        public static StringBuilder SeparateWords(this StringBuilder value, in char separator, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.None)
         {
             if (value.IsNullOrEmpty())
             {
@@ -385,7 +385,7 @@ namespace System.Text
                 }
             }
 
-            return value.AdjustFirstWord(firstWordHandling);
+            return value.AdjustFirstWord(firstWordAdjustment);
         }
 
         public static StringBuilder Trimmed(this StringBuilder value)

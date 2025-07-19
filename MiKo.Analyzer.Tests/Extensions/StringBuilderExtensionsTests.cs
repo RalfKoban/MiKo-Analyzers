@@ -72,70 +72,70 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase("    This is a test     ", ExpectedResult = "    This is a test")]
         public static string TrimEnd_trims_string_at_end_(string s) => new StringBuilder(s).TrimEnd();
 
-        [TestCase("", FirstWordHandling.KeepSingleLeadingSpace, "")]
-        [TestCase(" ", FirstWordHandling.KeepSingleLeadingSpace, " ")]
-        [TestCase("  ", FirstWordHandling.KeepSingleLeadingSpace, " ")]
-        [TestCase("   ", FirstWordHandling.KeepSingleLeadingSpace, " ")]
-        [TestCase("This is a test", FirstWordHandling.KeepSingleLeadingSpace, "This is a test")]
-        [TestCase(" This is a test", FirstWordHandling.KeepSingleLeadingSpace, " This is a test")]
-        [TestCase("   This is a test", FirstWordHandling.KeepSingleLeadingSpace, " This is a test")]
-        [TestCase("This is a test", FirstWordHandling.StartLowerCase, "this is a test")]
-        [TestCase("this is a test", FirstWordHandling.StartLowerCase, "this is a test")]
-        [TestCase(" THis is a Test", FirstWordHandling.StartLowerCase, "tHis is a Test")]
-        [TestCase("   THis is a Test", FirstWordHandling.StartLowerCase, "tHis is a Test")]
-        [TestCase(" THis is a Test", FirstWordHandling.StartLowerCase | FirstWordHandling.KeepSingleLeadingSpace, " tHis is a Test")]
-        [TestCase("   THis is a Test", FirstWordHandling.StartLowerCase | FirstWordHandling.KeepSingleLeadingSpace, " tHis is a Test")]
-        [TestCase("This is a test", FirstWordHandling.StartUpperCase, "This is a test")]
-        [TestCase("this is a test", FirstWordHandling.StartUpperCase, "This is a test")]
-        [TestCase(" this is a test", FirstWordHandling.StartUpperCase, "This is a test")]
-        [TestCase("   this is a test", FirstWordHandling.StartUpperCase, "This is a test")]
-        [TestCase("this is a test", FirstWordHandling.StartUpperCase | FirstWordHandling.KeepSingleLeadingSpace, "This is a test")]
-        [TestCase(" this is a test", FirstWordHandling.StartUpperCase | FirstWordHandling.KeepSingleLeadingSpace, " This is a test")]
-        [TestCase("   this is a test", FirstWordHandling.StartUpperCase | FirstWordHandling.KeepSingleLeadingSpace, " This is a test")]
-        [TestCase("represents someone", FirstWordHandling.MakeInfinite, "represent someone")]
-        [TestCase(" represents someone", FirstWordHandling.MakeInfinite, "represent someone")]
-        [TestCase("   represents someone", FirstWordHandling.MakeInfinite, "represent someone")]
-        [TestCase(" represents someone", FirstWordHandling.MakeInfinite | FirstWordHandling.KeepSingleLeadingSpace, " represent someone")]
-        [TestCase("   represents someone", FirstWordHandling.MakeInfinite | FirstWordHandling.KeepSingleLeadingSpace, " represent someone")]
-        [TestCase("represents", FirstWordHandling.MakeInfinite, "represent")]
-        [TestCase("represents", FirstWordHandling.MakeInfinite | FirstWordHandling.KeepSingleLeadingSpace, "represent")]
-        [TestCase(" represents", FirstWordHandling.MakeInfinite, "represent")]
-        [TestCase(" represents", FirstWordHandling.MakeInfinite | FirstWordHandling.KeepSingleLeadingSpace, " represent")]
-        [TestCase("   represents", FirstWordHandling.MakeInfinite, "represent")]
-        [TestCase("   represents", FirstWordHandling.MakeInfinite | FirstWordHandling.KeepSingleLeadingSpace, " represent")]
-        [TestCase("represent someone", FirstWordHandling.MakeInfinite, "represent someone")]
-        [TestCase(" represent someone", FirstWordHandling.MakeInfinite, "represent someone")]
-        [TestCase("   represent someone", FirstWordHandling.MakeInfinite, "represent someone")]
-        [TestCase(" represent someone", FirstWordHandling.MakeInfinite | FirstWordHandling.KeepSingleLeadingSpace, " represent someone")]
-        [TestCase("   represent someone", FirstWordHandling.MakeInfinite | FirstWordHandling.KeepSingleLeadingSpace, " represent someone")]
-        [TestCase("represent", FirstWordHandling.MakeInfinite, "represent")]
-        [TestCase("represent", FirstWordHandling.MakeInfinite | FirstWordHandling.KeepSingleLeadingSpace, "represent")]
-        [TestCase(" represent", FirstWordHandling.MakeInfinite, "represent")]
-        [TestCase(" represent", FirstWordHandling.MakeInfinite | FirstWordHandling.KeepSingleLeadingSpace, " represent")]
-        [TestCase("   represent", FirstWordHandling.MakeInfinite, "represent")]
-        [TestCase("   represent", FirstWordHandling.MakeInfinite | FirstWordHandling.KeepSingleLeadingSpace, " represent")]
-        [TestCase("message", FirstWordHandling.MakePlural, "messages")]
-        [TestCase("message", FirstWordHandling.MakePlural | FirstWordHandling.KeepSingleLeadingSpace, "messages")]
-        [TestCase(" message", FirstWordHandling.MakePlural | FirstWordHandling.KeepSingleLeadingSpace, " messages")]
-        [TestCase("   message", FirstWordHandling.MakePlural | FirstWordHandling.KeepSingleLeadingSpace, " messages")]
+        [TestCase("", FirstWordAdjustment.KeepSingleLeadingSpace, "")]
+        [TestCase(" ", FirstWordAdjustment.KeepSingleLeadingSpace, " ")]
+        [TestCase("  ", FirstWordAdjustment.KeepSingleLeadingSpace, " ")]
+        [TestCase("   ", FirstWordAdjustment.KeepSingleLeadingSpace, " ")]
+        [TestCase("This is a test", FirstWordAdjustment.KeepSingleLeadingSpace, "This is a test")]
+        [TestCase(" This is a test", FirstWordAdjustment.KeepSingleLeadingSpace, " This is a test")]
+        [TestCase("   This is a test", FirstWordAdjustment.KeepSingleLeadingSpace, " This is a test")]
+        [TestCase("This is a test", FirstWordAdjustment.StartLowerCase, "this is a test")]
+        [TestCase("this is a test", FirstWordAdjustment.StartLowerCase, "this is a test")]
+        [TestCase(" THis is a Test", FirstWordAdjustment.StartLowerCase, "tHis is a Test")]
+        [TestCase("   THis is a Test", FirstWordAdjustment.StartLowerCase, "tHis is a Test")]
+        [TestCase(" THis is a Test", FirstWordAdjustment.StartLowerCase | FirstWordAdjustment.KeepSingleLeadingSpace, " tHis is a Test")]
+        [TestCase("   THis is a Test", FirstWordAdjustment.StartLowerCase | FirstWordAdjustment.KeepSingleLeadingSpace, " tHis is a Test")]
+        [TestCase("This is a test", FirstWordAdjustment.StartUpperCase, "This is a test")]
+        [TestCase("this is a test", FirstWordAdjustment.StartUpperCase, "This is a test")]
+        [TestCase(" this is a test", FirstWordAdjustment.StartUpperCase, "This is a test")]
+        [TestCase("   this is a test", FirstWordAdjustment.StartUpperCase, "This is a test")]
+        [TestCase("this is a test", FirstWordAdjustment.StartUpperCase | FirstWordAdjustment.KeepSingleLeadingSpace, "This is a test")]
+        [TestCase(" this is a test", FirstWordAdjustment.StartUpperCase | FirstWordAdjustment.KeepSingleLeadingSpace, " This is a test")]
+        [TestCase("   this is a test", FirstWordAdjustment.StartUpperCase | FirstWordAdjustment.KeepSingleLeadingSpace, " This is a test")]
+        [TestCase("represents someone", FirstWordAdjustment.MakeInfinite, "represent someone")]
+        [TestCase(" represents someone", FirstWordAdjustment.MakeInfinite, "represent someone")]
+        [TestCase("   represents someone", FirstWordAdjustment.MakeInfinite, "represent someone")]
+        [TestCase(" represents someone", FirstWordAdjustment.MakeInfinite | FirstWordAdjustment.KeepSingleLeadingSpace, " represent someone")]
+        [TestCase("   represents someone", FirstWordAdjustment.MakeInfinite | FirstWordAdjustment.KeepSingleLeadingSpace, " represent someone")]
+        [TestCase("represents", FirstWordAdjustment.MakeInfinite, "represent")]
+        [TestCase("represents", FirstWordAdjustment.MakeInfinite | FirstWordAdjustment.KeepSingleLeadingSpace, "represent")]
+        [TestCase(" represents", FirstWordAdjustment.MakeInfinite, "represent")]
+        [TestCase(" represents", FirstWordAdjustment.MakeInfinite | FirstWordAdjustment.KeepSingleLeadingSpace, " represent")]
+        [TestCase("   represents", FirstWordAdjustment.MakeInfinite, "represent")]
+        [TestCase("   represents", FirstWordAdjustment.MakeInfinite | FirstWordAdjustment.KeepSingleLeadingSpace, " represent")]
+        [TestCase("represent someone", FirstWordAdjustment.MakeInfinite, "represent someone")]
+        [TestCase(" represent someone", FirstWordAdjustment.MakeInfinite, "represent someone")]
+        [TestCase("   represent someone", FirstWordAdjustment.MakeInfinite, "represent someone")]
+        [TestCase(" represent someone", FirstWordAdjustment.MakeInfinite | FirstWordAdjustment.KeepSingleLeadingSpace, " represent someone")]
+        [TestCase("   represent someone", FirstWordAdjustment.MakeInfinite | FirstWordAdjustment.KeepSingleLeadingSpace, " represent someone")]
+        [TestCase("represent", FirstWordAdjustment.MakeInfinite, "represent")]
+        [TestCase("represent", FirstWordAdjustment.MakeInfinite | FirstWordAdjustment.KeepSingleLeadingSpace, "represent")]
+        [TestCase(" represent", FirstWordAdjustment.MakeInfinite, "represent")]
+        [TestCase(" represent", FirstWordAdjustment.MakeInfinite | FirstWordAdjustment.KeepSingleLeadingSpace, " represent")]
+        [TestCase("   represent", FirstWordAdjustment.MakeInfinite, "represent")]
+        [TestCase("   represent", FirstWordAdjustment.MakeInfinite | FirstWordAdjustment.KeepSingleLeadingSpace, " represent")]
+        [TestCase("message", FirstWordAdjustment.MakePlural, "messages")]
+        [TestCase("message", FirstWordAdjustment.MakePlural | FirstWordAdjustment.KeepSingleLeadingSpace, "messages")]
+        [TestCase(" message", FirstWordAdjustment.MakePlural | FirstWordAdjustment.KeepSingleLeadingSpace, " messages")]
+        [TestCase("   message", FirstWordAdjustment.MakePlural | FirstWordAdjustment.KeepSingleLeadingSpace, " messages")]
 
-        [TestCase("Abc", FirstWordHandling.StartLowerCase, "abc")] // just as clarification, situation is tested by other tests as well
-        [TestCase("abc", FirstWordHandling.StartLowerCase, "abc")] // just as clarification, situation is tested by other tests as well
-        [TestCase("ABC", FirstWordHandling.StartLowerCase, "aBC")] // just as clarification, situation is tested by other tests as well
-        [TestCase("aBC", FirstWordHandling.StartLowerCase, "aBC")] // just as clarification, situation is tested by other tests as well
-        [TestCase("AbC", FirstWordHandling.StartLowerCase, "abC")] // just as clarification, situation is tested by other tests as well
-        [TestCase("abC", FirstWordHandling.StartLowerCase, "abC")] // just as clarification, situation is tested by other tests as well
+        [TestCase("Abc", FirstWordAdjustment.StartLowerCase, "abc")] // just as clarification, situation is tested by other tests as well
+        [TestCase("abc", FirstWordAdjustment.StartLowerCase, "abc")] // just as clarification, situation is tested by other tests as well
+        [TestCase("ABC", FirstWordAdjustment.StartLowerCase, "aBC")] // just as clarification, situation is tested by other tests as well
+        [TestCase("aBC", FirstWordAdjustment.StartLowerCase, "aBC")] // just as clarification, situation is tested by other tests as well
+        [TestCase("AbC", FirstWordAdjustment.StartLowerCase, "abC")] // just as clarification, situation is tested by other tests as well
+        [TestCase("abC", FirstWordAdjustment.StartLowerCase, "abC")] // just as clarification, situation is tested by other tests as well
 
-        [TestCase("Abc", FirstWordHandling.StartUpperCase, "Abc")] // just as clarification, situation is tested by other tests as well
-        [TestCase("abc", FirstWordHandling.StartUpperCase, "Abc")] // just as clarification, situation is tested by other tests as well
-        [TestCase("ABC", FirstWordHandling.StartUpperCase, "ABC")] // just as clarification, situation is tested by other tests as well
-        [TestCase("aBC", FirstWordHandling.StartUpperCase, "ABC")] // just as clarification, situation is tested by other tests as well
-        [TestCase("AbC", FirstWordHandling.StartUpperCase, "AbC")] // just as clarification, situation is tested by other tests as well
-        [TestCase("abC", FirstWordHandling.StartUpperCase, "AbC")] // just as clarification, situation is tested by other tests as well
-        public static void AdjustFirstWordHandling(string s, in FirstWordHandling handling, string expectedResult)
+        [TestCase("Abc", FirstWordAdjustment.StartUpperCase, "Abc")] // just as clarification, situation is tested by other tests as well
+        [TestCase("abc", FirstWordAdjustment.StartUpperCase, "Abc")] // just as clarification, situation is tested by other tests as well
+        [TestCase("ABC", FirstWordAdjustment.StartUpperCase, "ABC")] // just as clarification, situation is tested by other tests as well
+        [TestCase("aBC", FirstWordAdjustment.StartUpperCase, "ABC")] // just as clarification, situation is tested by other tests as well
+        [TestCase("AbC", FirstWordAdjustment.StartUpperCase, "AbC")] // just as clarification, situation is tested by other tests as well
+        [TestCase("abC", FirstWordAdjustment.StartUpperCase, "AbC")] // just as clarification, situation is tested by other tests as well
+        public static void AdjustFirstWord_(string s, in FirstWordAdjustment adjustment, string expectedResult)
         {
-            var resultFromSB = new StringBuilder(s).AdjustFirstWord(handling).ToString();
-            var resultFromS = s.AdjustFirstWord(handling);
+            var resultFromSB = new StringBuilder(s).AdjustFirstWord(adjustment).ToString();
+            var resultFromS = s.AdjustFirstWord(adjustment);
 
             Assert.Multiple(() =>
                                  {
@@ -144,10 +144,10 @@ namespace MiKoSolutions.Analyzers.Extensions
                                  });
         }
 
-        [TestCase("The next word kill me.", " word ", FirstWordHandling.MakeThirdPersonSingular, ExpectedResult = "The next word kills me.")]
-        [TestCase("The next word kills me.", " word ", FirstWordHandling.MakeThirdPersonSingular, ExpectedResult = "The next word kills me.")]
-        [TestCase("Method_does_not_added_something", "_does_not_", FirstWordHandling.MakeInfinite, ExpectedResult = "Method_does_not_add_something")]
-        public static string AdjustWordAfter(string s, string phrase, in FirstWordHandling handling) => new StringBuilder(s).AdjustWordAfter(phrase, handling).ToString();
+        [TestCase("The next word kill me.", " word ", FirstWordAdjustment.MakeThirdPersonSingular, ExpectedResult = "The next word kills me.")]
+        [TestCase("The next word kills me.", " word ", FirstWordAdjustment.MakeThirdPersonSingular, ExpectedResult = "The next word kills me.")]
+        [TestCase("Method_does_not_added_something", "_does_not_", FirstWordAdjustment.MakeInfinite, ExpectedResult = "Method_does_not_add_something")]
+        public static string AdjustWordAfter_(string s, string phrase, in FirstWordAdjustment adjustment) => new StringBuilder(s).AdjustWordAfter(phrase, adjustment).ToString();
 
         [TestCase("", ExpectedResult = "")]
         [TestCase("SomeValue", ExpectedResult = "Some_value")]

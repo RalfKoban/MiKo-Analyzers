@@ -527,17 +527,17 @@ namespace MiKoSolutions.Analyzers.Linguistics
             }
         }
 
-        public static string MakeFirstWordInfiniteVerb(string text, in FirstWordHandling handling = FirstWordHandling.None)
+        public static string MakeFirstWordInfiniteVerb(string text, in FirstWordAdjustment adjustment = FirstWordAdjustment.None)
         {
             if (text.IsNullOrWhiteSpace())
             {
                 return text;
             }
 
-            return MakeFirstWordInfiniteVerb(text.AsSpan(), handling);
+            return MakeFirstWordInfiniteVerb(text.AsSpan(), adjustment);
         }
 
-        public static string MakeFirstWordInfiniteVerb(in ReadOnlySpan<char> text, in FirstWordHandling firstWordHandling = FirstWordHandling.None)
+        public static string MakeFirstWordInfiniteVerb(in ReadOnlySpan<char> text, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.None)
         {
             if (text.IsNullOrWhiteSpace())
             {
@@ -554,7 +554,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
             }
 
             // first word
-            var firstWord = GetFirstWord(valueText, firstWordHandling);
+            var firstWord = GetFirstWord(valueText, firstWordAdjustment);
 
             var infiniteVerb = MakeInfiniteVerb(firstWord);
 
@@ -565,14 +565,14 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             return text.ToString();
 
-            string GetFirstWord(in ReadOnlySpan<char> span, in FirstWordHandling handling)
+            string GetFirstWord(in ReadOnlySpan<char> span, in FirstWordAdjustment adjustment)
             {
                 var word = span.FirstWord();
 
-                switch (handling)
+                switch (adjustment)
                 {
-                    case FirstWordHandling.StartLowerCase: return word.ToLowerCaseAt(0);
-                    case FirstWordHandling.StartUpperCase: return word.ToUpperCaseAt(0);
+                    case FirstWordAdjustment.StartLowerCase: return word.ToLowerCaseAt(0);
+                    case FirstWordAdjustment.StartUpperCase: return word.ToUpperCaseAt(0);
                     default:
                         return word.ToString();
                 }

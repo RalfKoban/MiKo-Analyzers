@@ -78,16 +78,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         }
                         else
                         {
-                            article = ArticleProvider.GetArticleFor(unsuffixedSpan, FirstWordHandling.StartLowerCase);
+                            article = ArticleProvider.GetArticleFor(unsuffixedSpan, FirstWordAdjustment.StartLowerCase);
                         }
 
                         unsuffixed = unsuffixed.ToLowerCaseAt(0);
 
-                        var firstWordHandling = FirstWordHandling.StartLowerCase;
+                        var firstWordHandling = FirstWordAdjustment.StartLowerCase;
 
                         if (isPlural)
                         {
-                            firstWordHandling |= FirstWordHandling.MakePlural;
+                            firstWordHandling |= FirstWordAdjustment.MakePlural;
                         }
 
                         var replacement = enumType.AsCachedBuilder()
@@ -106,7 +106,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            return Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordHandling.StartUpperCase | FirstWordHandling.KeepSingleLeadingSpace);
+            return Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordAdjustment.StartUpperCase | FirstWordAdjustment.KeepSingleLeadingSpace);
         }
 
 //// ncrunch: rdi off
