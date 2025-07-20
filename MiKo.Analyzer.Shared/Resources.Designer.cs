@@ -15155,6 +15155,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add [in] modifier.
+        /// </summary>
+        internal static string MiKo_5019_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_5019_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Using the [in] modifier for read-only struct parameters helps improve performance. It prevents the struct from being copied by value, which reduces the workload on the garbage collector..
+        /// </summary>
+        internal static string MiKo_5019_Description {
+            get {
+                return ResourceManager.GetString("MiKo_5019_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add [in] modifier.
+        /// </summary>
+        internal static string MiKo_5019_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_5019_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Read-only struct parameters should have the [in] modifier.
+        /// </summary>
+        internal static string MiKo_5019_Title {
+            get {
+                return ResourceManager.GetString("MiKo_5019_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Surround with blank lines.
         /// </summary>
         internal static string MiKo_6001_CodeFixTitle {
