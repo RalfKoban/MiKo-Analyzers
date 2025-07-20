@@ -1028,8 +1028,8 @@ namespace System
             var word = FirstSentence(span);
 
             return word != span
-                       ? word.ToString()
-                       : value;
+                   ? word.ToString()
+                   : value;
         }
 
         public static ReadOnlySpan<char> FirstSentence(this in ReadOnlySpan<char> value)
