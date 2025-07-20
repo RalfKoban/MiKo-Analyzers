@@ -16,8 +16,8 @@ namespace System
         public WordsReadOnlySpanEnumerator(in ReadOnlySpan<char> text)
         {
             m_text = text;
-            var textLength = text.Length;
 
+            var textLength = text.Length;
             var words = 1;
 
             // start at index 1 to skip first upper case character (and avoid return of empty word)
