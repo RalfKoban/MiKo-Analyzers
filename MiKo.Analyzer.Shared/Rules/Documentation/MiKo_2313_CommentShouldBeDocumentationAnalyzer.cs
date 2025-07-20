@@ -60,7 +60,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeComment, Declarations);
 
-        private static IReadOnlyCollection<string> FindCommentTags(ReadOnlySpan<string> comments)
+        private static IReadOnlyCollection<string> FindCommentTags(in ReadOnlySpan<string> comments)
         {
             var length = DocumentationCommentTags.Length;
             var commentsLength = comments.Length;
