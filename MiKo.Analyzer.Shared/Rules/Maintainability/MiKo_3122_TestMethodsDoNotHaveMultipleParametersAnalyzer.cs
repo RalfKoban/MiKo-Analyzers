@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {
-            if (symbol.Parameters.Length > 2)
+            if (symbol.Parameters.Length > 3)
             {
                 var syntax = symbol.GetSyntax<MethodDeclarationSyntax>();
 
