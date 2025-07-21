@@ -5264,13 +5264,13 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Use a HashSet for lookups in 'List.RemoveAll'</value>
   </data>
   <data name="MiKo_5017_CodeFixTitle" xml:space="preserve">
-    <value>Convert to constant</value>
+    <value>Convert to const</value>
   </data>
   <data name="MiKo_5017_Description" xml:space="preserve">
     <value>To avoid unnecessary memory consumption, make string literals used as field or variable values constant. This keeps memory usage efficient and ensures better performance.</value>
   </data>
   <data name="MiKo_5017_MessageFormat" xml:space="preserve">
-    <value>Convert to constant</value>
+    <value>Convert to const</value>
   </data>
   <data name="MiKo_5017_Title" xml:space="preserve">
     <value>Fields or variables assigned with string literals should be constant</value>
