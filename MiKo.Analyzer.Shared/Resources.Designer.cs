@@ -15083,7 +15083,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Convert to constant.
+        ///   Looks up a localized string similar to Convert to const.
         /// </summary>
         internal static string MiKo_5017_CodeFixTitle {
             get {
@@ -15101,7 +15101,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Convert to constant.
+        ///   Looks up a localized string similar to Convert to const.
         /// </summary>
         internal static string MiKo_5017_MessageFormat {
             get {
