@@ -24,45 +24,61 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         {
             if (syntax is BinaryExpressionSyntax binary)
             {
-                var left = FindProblematicNode(binary.Left); // TODO RKN: left will be "values.Length == 8"
-                var right = FindProblematicNode(binary.Right);
-
-                var updatedSyntax = binary.ReplaceNodes(new[] { left, right }, (original, rewritten) => ReferenceEquals(original, left) ? right.WithTriviaFrom(original) : left.WithTriviaFrom(original));
-
-                return binary.Parent.IsAnyKind(SpecialParents)
-                       ? updatedSyntax.WithoutTrailingTrivia() // only remove trailing trivia if condition is direct child of 'if/return/arrow clause' so that semicolon fits
-                       : updatedSyntax;
+                return GetUpdatedSyntax(binary, document.GetSemanticModel());
             }
 
             return syntax;
         }
 
-        private static ExpressionSyntax FindProblematicNode(ExpressionSyntax expression)
+        private static BinaryExpressionSyntax GetUpdatedSyntax(BinaryExpressionSyntax binary, SemanticModel semanticModel)
         {
-            var node = expression;
+            var originalBinaryLeft = binary.Left;
+            var originalBinaryRight = binary.Right;
 
-            while (true)
+            var updatedBinaryLeft = originalBinaryLeft;
+            var updatedBinaryRight = originalBinaryRight;
+
+            if (updatedBinaryRight is BinaryExpressionSyntax right && right.IsAnyKind(LogicalConditions))
             {
-                if (node is BinaryExpressionSyntax binary && binary.IsAnyKind(LogicalConditions))
-                {
-                    var next = binary.Right;
+                updatedBinaryRight = GetUpdatedSyntax(right, semanticModel);
+            }
 
-                    if (next is BinaryExpressionSyntax nested)
-                    {
-                        if (nested.Left is ElementAccessExpressionSyntax || nested.Right is ElementAccessExpressionSyntax)
-                        {
-                            // we have some null checks or some element access, so we need to replace the complete node
-                            return expression;
-                        }
-                    }
-
-                    node = next;
-                }
-                else
+            if (updatedBinaryLeft is ParenthesizedExpressionSyntax)
+            {
+                // ignore these
+            }
+            else if (updatedBinaryLeft is InvocationExpressionSyntax)
+            {
+                // ignore these
+            }
+            else if (updatedBinaryLeft is BinaryExpressionSyntax b1 && b1.Left is ConditionalAccessExpressionSyntax)
+            {
+                // skip these
+                return binary;
+            }
+            else if (updatedBinaryLeft is BinaryExpressionSyntax b2 && b2.IsNullCheck())
+            {
+                // nothing to inverse
+                return binary.ReplaceNode(originalBinaryRight, updatedBinaryRight);
+            }
+            else if (updatedBinaryLeft is BinaryExpressionSyntax b3)
+            {
+                // ignore these
+            }
+            else
+            {
+                if (originalBinaryLeft.IsValueType(semanticModel))
                 {
-                    return node;
+                    // nothing to inverse
+                    return binary.ReplaceNode(originalBinaryRight, updatedBinaryRight);
                 }
             }
+
+            var updatedSyntax = binary.ReplaceNodes(new[] { originalBinaryLeft, originalBinaryRight }, (original, rewritten) => ReferenceEquals(original, originalBinaryLeft) ? updatedBinaryRight.WithTriviaFrom(original) : updatedBinaryLeft.WithTriviaFrom(original));
+
+            return binary.Parent.IsAnyKind(SpecialParents)
+                   ? updatedSyntax.WithoutTrailingTrivia() // only remove trailing trivia if condition is direct child of 'if/return/arrow clause' so that semicolon fits
+                   : updatedSyntax;
         }
     }
 }
