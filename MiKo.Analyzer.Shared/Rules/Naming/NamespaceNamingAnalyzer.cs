@@ -8,9 +8,9 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
-    public abstract class NamingNamespaceAnalyzer : NamingAnalyzer
+    public abstract class NamespaceNamingAnalyzer : NamingAnalyzer
     {
-        protected NamingNamespaceAnalyzer(string diagnosticId) : base(diagnosticId, (SymbolKind)(-1))
+        protected NamespaceNamingAnalyzer(string diagnosticId) : base(diagnosticId, (SymbolKind)(-1))
         {
         }
 

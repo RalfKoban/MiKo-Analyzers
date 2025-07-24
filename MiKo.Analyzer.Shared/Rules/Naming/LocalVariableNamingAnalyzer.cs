@@ -4,9 +4,9 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
-    public abstract class NamingLocalVariableAnalyzer : NamingAnalyzer
+    public abstract class LocalVariableNamingAnalyzer : NamingAnalyzer
     {
-        protected NamingLocalVariableAnalyzer(string diagnosticId) : base(diagnosticId, (SymbolKind)(-1))
+        protected LocalVariableNamingAnalyzer(string diagnosticId) : base(diagnosticId, (SymbolKind)(-1))
         {
         }
 
