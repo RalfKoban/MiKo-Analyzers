@@ -233,6 +233,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\UsePatternMatchingCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\MiKoCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\FieldNamingCodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\LocalVariableNamingCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1000_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1001_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1002_CodeFixProvider.cs" />
@@ -326,7 +327,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1506_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1507_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\NamingCodeFixProvider.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\NamingLocalVariableCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\ParameterNamingCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\PropertyNamingCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\DisposeOrderingCodeFixProvider.cs" />

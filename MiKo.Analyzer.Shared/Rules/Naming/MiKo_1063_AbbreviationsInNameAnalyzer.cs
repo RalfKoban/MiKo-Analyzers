@@ -10,7 +10,7 @@ using MiKoSolutions.Analyzers.Linguistics;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_1063_AbbreviationsInNameAnalyzer : NamingLocalVariableAnalyzer
+    public sealed class MiKo_1063_AbbreviationsInNameAnalyzer : LocalVariableNamingAnalyzer
     {
         public const string Id = "MiKo_1063";
 

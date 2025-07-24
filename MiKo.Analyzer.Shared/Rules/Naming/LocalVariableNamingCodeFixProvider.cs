@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
-    public abstract class NamingLocalVariableCodeFixProvider : NamingCodeFixProvider
+    public abstract class LocalVariableNamingCodeFixProvider : NamingCodeFixProvider
     {
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes)
         {
