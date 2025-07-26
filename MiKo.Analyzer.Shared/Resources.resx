@@ -4923,6 +4923,18 @@ Instead, use non-generic types as type arguments. This approach makes the code's
   <data name="MiKo_3228_Title" xml:space="preserve">
     <value>Prefer pattern matching for inequality checks</value>
   </data>
+  <data name="MiKo_3229_CodeFixTitle" xml:space="preserve">
+    <value>Use 'KeyValuePair.Create'</value>
+  </data>
+  <data name="MiKo_3229_Description" xml:space="preserve">
+    <value>Prefer 'KeyValuePair.Create(...)' over the constructor to benefit from type inference, reduce verbosity, and improve code readability. This approach aligns with modern C# practices and promotes consistency with other factory methods like 'Tuple.Create'. It also simplifies usage in 'var' declarations by avoiding redundant type specifications.</value>
+  </data>
+  <data name="MiKo_3229_MessageFormat" xml:space="preserve">
+    <value>Use 'KeyValuePair.Create' instead</value>
+  </data>
+  <data name="MiKo_3229_Title" xml:space="preserve">
+    <value>'KeyValuePair.Create' should be used instead of constructors</value>
+  </data>
   <data name="MiKo_3230_Description" xml:space="preserve">
     <value>Using 'Guid' directly as an identifier type is considered a form of primitive obsession, which is generally discouraged. Instead, you should define custom types (e.g., CustomerId, OrderId) to represent identifiers.
 This approach improves type safety and makes it harder to accidentally mix up different kinds of IDs, since the compiler will catch mismatches between unrelated types.</value>
