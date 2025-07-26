@@ -14077,6 +14077,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use &apos;KeyValuePair.Create&apos;.
+        /// </summary>
+        internal static string MiKo_3229_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3229_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prefer &apos;KeyValuePair.Create(...)&apos; over the constructor to benefit from type inference, reduce verbosity, and improve code readability. This approach aligns with modern C# practices and promotes consistency with other factory methods like &apos;Tuple.Create&apos;. It also simplifies usage in &apos;var&apos; declarations by avoiding redundant type specifications..
+        /// </summary>
+        internal static string MiKo_3229_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3229_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;KeyValuePair.Create&apos; instead.
+        /// </summary>
+        internal static string MiKo_3229_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3229_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;KeyValuePair.Create&apos; should be used instead of constructors.
+        /// </summary>
+        internal static string MiKo_3229_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3229_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Using &apos;Guid&apos; directly as an identifier type is considered a form of primitive obsession, which is generally discouraged. Instead, you should define custom types (e.g., CustomerId, OrderId) to represent identifiers.
         ///This approach improves type safety and makes it harder to accidentally mix up different kinds of IDs, since the compiler will catch mismatches between unrelated types..
         /// </summary>
