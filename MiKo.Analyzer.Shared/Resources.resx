@@ -1804,6 +1804,32 @@ So they should be named accordingly.</value>
   <data name="MiKo_1507_Title" xml:space="preserve">
     <value>Parameters should not be suffixed with 'Counter'</value>
   </data>
+  <data name="MiKo_1508_CodeFixTitle" xml:space="preserve">
+    <value>Fix name</value>
+  </data>
+  <data name="MiKo_1508_Description" xml:space="preserve">
+    <value>Prefer naming variables using prefixes to describe their role rather than suffixes to describe their type.
+This improves code readability, avoids confusion with class names and helps developers quickly understand the purpose of the variable in context.</value>
+  </data>
+  <data name="MiKo_1508_MessageFormat" xml:space="preserve">
+    <value>Rename '{0}' to '{1}'</value>
+  </data>
+  <data name="MiKo_1508_Title" xml:space="preserve">
+    <value>Local variables should not be suffixed with pattern names</value>
+  </data>
+  <data name="MiKo_1509_CodeFixTitle" xml:space="preserve">
+    <value>Fix name</value>
+  </data>
+  <data name="MiKo_1509_Description" xml:space="preserve">
+    <value>Prefer naming parameters using prefixes to describe their role rather than suffixes to describe their type.
+This improves code readability, avoids confusion with class names and helps developers quickly understand the purpose of the parameter in context.</value>
+  </data>
+  <data name="MiKo_1509_MessageFormat" xml:space="preserve">
+    <value>Rename '{0}' to '{1}'</value>
+  </data>
+  <data name="MiKo_1509_Title" xml:space="preserve">
+    <value>Parameters should not be suffixed with pattern names</value>
+  </data>
   <data name="MiKo_2000_CodeFixTitle" xml:space="preserve">
     <value>Fix malformed XML</value>
   </data>

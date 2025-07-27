@@ -4976,6 +4976,80 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fix name.
+        /// </summary>
+        internal static string MiKo_1508_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1508_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prefer naming variables using prefixes to describe their role rather than suffixes to describe their type.
+        ///This improves code readability, avoids confusion with class names and helps developers quickly understand the purpose of the variable in context..
+        /// </summary>
+        internal static string MiKo_1508_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1508_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1508_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1508_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local variables should not be suffixed with pattern names.
+        /// </summary>
+        internal static string MiKo_1508_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1508_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fix name.
+        /// </summary>
+        internal static string MiKo_1509_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1509_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prefer naming parameters using prefixes to describe their role rather than suffixes to describe their type.
+        ///This improves code readability, avoids confusion with class names and helps developers quickly understand the purpose of the parameter in context..
+        /// </summary>
+        internal static string MiKo_1509_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1509_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1509_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1509_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameters should not be suffixed with pattern names.
+        /// </summary>
+        internal static string MiKo_1509_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1509_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fix malformed XML.
         /// </summary>
         internal static string MiKo_2000_CodeFixTitle {
