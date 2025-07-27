@@ -13,11 +13,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public const string Id = "MiKo_1508";
 
         private static readonly Dictionary<string, string> StructuralDesignPatternNames = new Dictionary<string, string>
-                                                                                          {
-                                                                                              { Constants.Names.Patterns.Adapter, "adapted" },
-                                                                                              { Constants.Names.Patterns.Wrapper, "wrapped" },
-                                                                                              { Constants.Names.Patterns.Decorator, "decorated" },
-                                                                                          };
+                                                                                              {
+                                                                                                  { Constants.Names.Patterns.Adapter, "adapted" },
+                                                                                                  { Constants.Names.Patterns.Wrapper, "wrapped" },
+                                                                                                  { Constants.Names.Patterns.Decorator, "decorated" },
+                                                                                              };
 
         public MiKo_1508_VariablesWithStructuralDesignPatternSuffixAnalyzer() : base(Id)
         {
@@ -57,10 +57,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                         return pair.Value;
                     }
 
-                    return pair.Value.AsCachedBuilder()
-                                     .Append(name, 0, count)
-                                     .ToUpperCaseAt(pair.Value.Length)
-                                     .ToString();
+                    return pair.Value
+                               .AsCachedBuilder()
+                               .Append(name, 0, count)
+                               .ToUpperCaseAt(pair.Value.Length)
+                               .ToString();
                 }
             }
 
