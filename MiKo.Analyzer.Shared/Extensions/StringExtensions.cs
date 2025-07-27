@@ -641,9 +641,7 @@ namespace System
 
         public static bool Contains(this string value, string finding, in StringComparison comparison)
         {
-            var difference = finding.Length - value.Length;
-
-            if (difference < 0)
+            if (finding.Length < value.Length)
             {
                 if (comparison is StringComparison.Ordinal)
                 {
@@ -653,7 +651,7 @@ namespace System
                 return value.IndexOf(finding, comparison) >= 0;
             }
 
-            if (difference is 0)
+            if (finding.Length == value.Length)
             {
                 return QuickEquals(comparison);
 
@@ -1599,12 +1597,7 @@ namespace System
             var others = characters.AsSpan();
 
             // perform quick check
-            if (QuickSubstringProbe(value, others, comparison))
-            {
-                return value.StartsWith(others, comparison);
-            }
-
-            return false;
+            return QuickSubstringProbe(value, others, comparison) && value.StartsWith(others, comparison);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
