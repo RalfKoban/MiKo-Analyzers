@@ -887,6 +887,29 @@ namespace System
             return false;
         }
 
+        public static bool EndsWithAny(this string value, Dictionary<string, string>.KeyCollection suffixes, in StringComparison comparison)
+        {
+            if (value.HasCharacters())
+            {
+                var valueLength = value.Length;
+
+                foreach (var suffix in suffixes)
+                {
+                    if (suffix.Length > valueLength)
+                    {
+                        continue;
+                    }
+
+                    if (value.EndsWith(suffix, comparison))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         public static bool EndsWithAny(this string value, List<string> suffixes, in StringComparison comparison)
         {
             if (value.HasCharacters())
