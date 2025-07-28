@@ -13,7 +13,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/18917.svg)](https://scan.coverity.com/projects/ralfkoban-miko-analyzers)
 
 ## Available Rules
-The following tables lists all the 508 rules that are currently provided by the analyzer.
+The following tables lists all the 509 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -169,6 +169,7 @@ The following tables lists all the 508 rules that are currently provided by the 
 |MiKo_1507|Parameters should not be suffixed with 'Counter'|&#x2713;|&#x2713;|
 |MiKo_1508|Local variables should not be suffixed with pattern names|&#x2713;|&#x2713;|
 |MiKo_1509|Parameters should not be suffixed with pattern names|&#x2713;|&#x2713;|
+|MiKo_1510|Types should not be suffixed with 'Info'|&#x2713;|\-|
 
 ### Documentation
 |ID|Title|Enabled by default|CodeFix available|

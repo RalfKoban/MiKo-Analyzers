@@ -1830,6 +1830,16 @@ This improves code readability, avoids confusion with class names and helps deve
   <data name="MiKo_1509_Title" xml:space="preserve">
     <value>Parameters should not be suffixed with pattern names</value>
   </data>
+  <data name="MiKo_1510_Description" xml:space="preserve">
+    <value>The 'Info' suffix is too generic and does not clearly convey the purpose or structure of a type.
+Replacing it with more descriptive and intent-revealing names (such as 'Data', 'Descriptor', 'Details', 'Metadata', 'Overview', 'Profile', 'Settings', 'Snapshot', 'Status' or 'Summary') improves code readability, simplifies maintenance, and enhances discoverability through better IntelliSense support. It also reduces confusion, so developers don’t have to guess what the type represents.</value>
+  </data>
+  <data name="MiKo_1510_MessageFormat" xml:space="preserve">
+    <value>Change suffix 'Info' to a more intent-revealing name</value>
+  </data>
+  <data name="MiKo_1510_Title" xml:space="preserve">
+    <value>Types should not be suffixed with 'Info'</value>
+  </data>
   <data name="MiKo_2000_CodeFixTitle" xml:space="preserve">
     <value>Fix malformed XML</value>
   </data>
