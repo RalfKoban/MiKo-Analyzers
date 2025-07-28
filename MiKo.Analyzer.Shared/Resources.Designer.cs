@@ -5050,6 +5050,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The &apos;Info&apos; suffix is too generic and does not clearly convey the purpose or structure of a type.
+        ///Replacing it with more descriptive and intent-revealing names (such as &apos;Data&apos;, &apos;Descriptor&apos;, &apos;Details&apos;, &apos;Metadata&apos;, &apos;Overview&apos;, &apos;Profile&apos;, &apos;Settings&apos;, &apos;Snapshot&apos;, &apos;Status&apos; or &apos;Summary&apos;) improves code readability, simplifies maintenance, and enhances discoverability through better IntelliSense support. It also reduces confusion, so developers don’t have to guess what the type represents..
+        /// </summary>
+        internal static string MiKo_1510_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1510_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change suffix &apos;Info&apos; to a more intent-revealing name.
+        /// </summary>
+        internal static string MiKo_1510_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1510_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Types should not be suffixed with &apos;Info&apos;.
+        /// </summary>
+        internal static string MiKo_1510_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1510_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fix malformed XML.
         /// </summary>
         internal static string MiKo_2000_CodeFixTitle {
