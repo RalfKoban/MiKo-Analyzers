@@ -1840,6 +1840,32 @@ Replacing it with more descriptive and intent-revealing names (such as 'Data', '
   <data name="MiKo_1510_Title" xml:space="preserve">
     <value>Types should not be suffixed with 'Info'</value>
   </data>
+  <data name="MiKo_1511_CodeFixTitle" xml:space="preserve">
+    <value>Remove 'proxy' from name</value>
+  </data>
+  <data name="MiKo_1511_Description" xml:space="preserve">
+    <value>The purpose of the Proxy Pattern is to control access to another object (e.g., for lazy loading, access control, logging), without directly exposing the real object. However, from the developer's perspective, the proxy is used *as if* it were the real object.
+Therefore, names should reflect the intended role rather than the implementation detail, avoiding prefixes or suffixes like 'Proxy'.</value>
+  </data>
+  <data name="MiKo_1511_MessageFormat" xml:space="preserve">
+    <value>Rename '{0}' to '{1}'</value>
+  </data>
+  <data name="MiKo_1511_Title" xml:space="preserve">
+    <value>Local variables should not be prefixed or suffixed with 'proxy'</value>
+  </data>
+  <data name="MiKo_1512_CodeFixTitle" xml:space="preserve">
+    <value>Remove 'proxy' from name</value>
+  </data>
+  <data name="MiKo_1512_Description" xml:space="preserve">
+    <value>The purpose of the Proxy Pattern is to control access to another object (e.g., for lazy loading, access control, logging), without directly exposing the real object. However, from the developer's perspective, the proxy is used *as if* it were the real object.
+Therefore, names should reflect the intended role rather than the implementation detail, avoiding prefixes or suffixes like 'Proxy'.</value>
+  </data>
+  <data name="MiKo_1512_MessageFormat" xml:space="preserve">
+    <value>Rename '{0}' to '{1}'</value>
+  </data>
+  <data name="MiKo_1512_Title" xml:space="preserve">
+    <value>Parameters should not be prefixed or suffixed with 'proxy'</value>
+  </data>
   <data name="MiKo_2000_CodeFixTitle" xml:space="preserve">
     <value>Fix malformed XML</value>
   </data>

@@ -5078,6 +5078,80 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;proxy&apos; from name.
+        /// </summary>
+        internal static string MiKo_1511_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1511_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The purpose of the Proxy Pattern is to control access to another object (e.g., for lazy loading, access control, logging), without directly exposing the real object. However, from the developer&apos;s perspective, the proxy is used *as if* it were the real object.
+        ///Therefore, names should reflect the intended role rather than the implementation detail, avoiding prefixes or suffixes like &apos;Proxy&apos;..
+        /// </summary>
+        internal static string MiKo_1511_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1511_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1511_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1511_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local variables should not be prefixed or suffixed with &apos;proxy&apos;.
+        /// </summary>
+        internal static string MiKo_1511_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1511_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;proxy&apos; from name.
+        /// </summary>
+        internal static string MiKo_1512_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1512_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The purpose of the Proxy Pattern is to control access to another object (e.g., for lazy loading, access control, logging), without directly exposing the real object. However, from the developer&apos;s perspective, the proxy is used *as if* it were the real object.
+        ///Therefore, names should reflect the intended role rather than the implementation detail, avoiding prefixes or suffixes like &apos;Proxy&apos;..
+        /// </summary>
+        internal static string MiKo_1512_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1512_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1512_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1512_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameters should not be prefixed or suffixed with &apos;proxy&apos;.
+        /// </summary>
+        internal static string MiKo_1512_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1512_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fix malformed XML.
         /// </summary>
         internal static string MiKo_2000_CodeFixTitle {
