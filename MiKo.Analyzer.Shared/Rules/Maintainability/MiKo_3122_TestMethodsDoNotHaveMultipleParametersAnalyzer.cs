@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -17,15 +16,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool IsUnitTestAnalyzer => true;
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsTestMethod();
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeMethodDeclaration, SyntaxKind.MethodDeclaration);
 
-        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
+        private void AnalyzeMethodDeclaration(SyntaxNodeAnalysisContext context)
         {
-            if (symbol.Parameters.Length > 2)
+            if (context.Node is MethodDeclarationSyntax method && method.IsTestMethod())
             {
-                var syntax = symbol.GetSyntax<MethodDeclarationSyntax>();
+                var parameterList = method.ParameterList;
 
-                yield return Issue(syntax.ParameterList);
+                if (parameterList.Parameters.Count > 2)
+                {
+                    ReportDiagnostics(context, Issue(parameterList));
+                }
             }
         }
     }

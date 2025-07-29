@@ -22,12 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool IsApplicable(CompilationStartAnalysisContext context) => context.Compilation.GetTypeByMetadataName(Constants.Moq.MockFullQualified) != null;
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context)
-        {
-            base.InitializeCore(context);
-
-            context.RegisterSyntaxNodeAction(AnalyzeInvocationExpression, SyntaxKind.InvocationExpression);
-        }
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeInvocationExpression, SyntaxKind.InvocationExpression);
 
         private void AnalyzeInvocationExpression(SyntaxNodeAnalysisContext context)
         {
