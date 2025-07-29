@@ -30,8 +30,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
         {
             // only remove assertions if there are no more diagnostics
-            // return root.WithUsing("NUnit.Framework").WithoutUsing("FluentAssertions");
-            return root.WithUsing("NUnit.Framework");
+            // return root.WithUsing(Constants.Names.DefaultNUnitNamespace).WithoutUsing(Constants.FluentAssertions.Namespace);
+            return root.WithUsing(Constants.Names.DefaultNUnitNamespace);
         }
 
         private static ExpressionStatementSyntax Convert(Document document, ExpressionStatementSyntax statement)

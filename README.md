@@ -13,7 +13,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/18917.svg)](https://scan.coverity.com/projects/ralfkoban-miko-analyzers)
 
 ## Available Rules
-The following tables lists all the 511 rules that are currently provided by the analyzer.
+The following tables lists all the 512 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -423,6 +423,7 @@ The following tables lists all the 511 rules that are currently provided by the 
 |MiKo_3120|Moq mocks should use values instead of 'It.Is&lt;&gt;(...)' condition matcher to verify exact values|&#x2713;|&#x2713;|
 |MiKo_3121|Tests should test concrete implementations and no interfaces|&#x2713;|\-|
 |MiKo_3122|Test methods should not use more than 2 parameters|&#x2713;|\-|
+|MiKo_3123|Test methods should not catch exceptions|&#x2713;|\-|
 |MiKo_3201|If statements can be inverted in short methods|&#x2713;|&#x2713;|
 |MiKo_3202|Use positive conditions when returning in all paths|&#x2713;|&#x2713;|
 |MiKo_3203|If-continue statements can be inverted when followed by single line|&#x2713;|&#x2713;|
