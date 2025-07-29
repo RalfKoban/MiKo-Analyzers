@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_1091_VariableWrongSuffixedAnalyzer : NamingLocalVariableAnalyzer
+    public sealed class MiKo_1091_VariableWrongSuffixedAnalyzer : LocalVariableNamingAnalyzer
     {
         public const string Id = "MiKo_1091";
 

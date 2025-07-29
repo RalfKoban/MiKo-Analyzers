@@ -147,8 +147,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2226_DocumentationContainsIntentionallyAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2227_DocumentationDoesNotContainReSharperMarkerAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2228_DocumentationIsNotNegativeAnalyzer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2230_ReturnValueUsesListAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2229_XmlFragmentAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2230_ReturnValueUsesListAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2231_InheritdocGetHashCodeAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2232_EmptySummaryAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2233_EmptyXmlTagIsOnSameLineAnalyzer.cs" />
@@ -325,6 +325,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3226_AssignedReadOnlyFieldsCanBeConstAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3227_UsePatternMatchingForLiteralEqualsExpressionAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3228_UsePatternMatchingForLiteralNotEqualsExpressionAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3229_KeyValuePairCreateAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3230_DoNotUseGuidsForIdentifiersAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3301_ParenthesizedLambdaExpressionUsesExpressionBodyAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3302_SimpleLambdaExpressionIsUsedInsteadOfParenthesizedLambdaExpressionAnalyzer.cs" />
@@ -344,6 +345,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Metrics\MiKo_0005_LocalFunctionLinesOfCodeAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Metrics\MiKo_0006_LocalFunctionCyclomaticComplexityAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Metrics\MiKo_0007_LocalFunctionParameterCountAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\LocalVariableNamingAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1000_EventArgsTypeAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1001_EventArgsParameterAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1002_EventHandlingMethodParametersAnalyzer.cs" />
@@ -482,11 +484,15 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1505_FieldsWithCounterSuffixAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1506_VariablesWithCounterSuffixAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1507_ParametersWithCounterSuffixAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1508_VariablesWithStructuralDesignPatternSuffixAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1509_ParametersWithStructuralDesignPatternSuffixAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1510_TypesWithInfoSuffixAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1511_ProxyVariablesAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1512_ProxyParametersAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\NamesFinder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\NamespaceNamingAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\NamingAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\NamingLengthAnalyzer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\NamingLocalVariableAnalyzer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\NamingNamespaceAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\MiKo_4001_MethodsWithSameNameOrderedPerParametersAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\MiKo_4002_MethodsWithSameNameOrderedSideBySideAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\MiKo_4003_DisposeMethodsOrderedAfterCtorsAndFinalizersAnalyzer.cs" />

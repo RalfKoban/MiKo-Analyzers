@@ -4976,6 +4976,182 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fix name.
+        /// </summary>
+        internal static string MiKo_1508_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1508_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prefer naming variables using prefixes to describe their role rather than suffixes to describe their type.
+        ///This improves code readability, avoids confusion with class names and helps developers quickly understand the purpose of the variable in context..
+        /// </summary>
+        internal static string MiKo_1508_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1508_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1508_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1508_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local variables should not be suffixed with pattern names.
+        /// </summary>
+        internal static string MiKo_1508_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1508_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fix name.
+        /// </summary>
+        internal static string MiKo_1509_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1509_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prefer naming parameters using prefixes to describe their role rather than suffixes to describe their type.
+        ///This improves code readability, avoids confusion with class names and helps developers quickly understand the purpose of the parameter in context..
+        /// </summary>
+        internal static string MiKo_1509_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1509_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1509_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1509_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameters should not be suffixed with pattern names.
+        /// </summary>
+        internal static string MiKo_1509_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1509_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;Info&apos; suffix is too generic and does not clearly convey the purpose or structure of a type.
+        ///Replacing it with more descriptive and intent-revealing names (such as &apos;Data&apos;, &apos;Descriptor&apos;, &apos;Details&apos;, &apos;Metadata&apos;, &apos;Overview&apos;, &apos;Profile&apos;, &apos;Settings&apos;, &apos;Snapshot&apos;, &apos;Status&apos; or &apos;Summary&apos;) improves code readability, simplifies maintenance, and enhances discoverability through better IntelliSense support. It also reduces confusion, so developers don’t have to guess what the type represents..
+        /// </summary>
+        internal static string MiKo_1510_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1510_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change suffix &apos;Info&apos; to a more intent-revealing name.
+        /// </summary>
+        internal static string MiKo_1510_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1510_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Types should not be suffixed with &apos;Info&apos;.
+        /// </summary>
+        internal static string MiKo_1510_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1510_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;proxy&apos; from name.
+        /// </summary>
+        internal static string MiKo_1511_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1511_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The purpose of the Proxy Pattern is to control access to another object (e.g., for lazy loading, access control, logging), without directly exposing the real object. However, from the developer&apos;s perspective, the proxy is used *as if* it were the real object.
+        ///Therefore, names should reflect the intended role rather than the implementation detail, avoiding prefixes or suffixes like &apos;Proxy&apos;..
+        /// </summary>
+        internal static string MiKo_1511_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1511_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1511_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1511_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local variables should not be prefixed or suffixed with &apos;proxy&apos;.
+        /// </summary>
+        internal static string MiKo_1511_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1511_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;proxy&apos; from name.
+        /// </summary>
+        internal static string MiKo_1512_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1512_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The purpose of the Proxy Pattern is to control access to another object (e.g., for lazy loading, access control, logging), without directly exposing the real object. However, from the developer&apos;s perspective, the proxy is used *as if* it were the real object.
+        ///Therefore, names should reflect the intended role rather than the implementation detail, avoiding prefixes or suffixes like &apos;Proxy&apos;..
+        /// </summary>
+        internal static string MiKo_1512_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1512_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1512_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1512_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameters should not be prefixed or suffixed with &apos;proxy&apos;.
+        /// </summary>
+        internal static string MiKo_1512_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1512_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fix malformed XML.
         /// </summary>
         internal static string MiKo_2000_CodeFixTitle {
@@ -14077,6 +14253,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use &apos;KeyValuePair.Create&apos;.
+        /// </summary>
+        internal static string MiKo_3229_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3229_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prefer &apos;KeyValuePair.Create(...)&apos; over the constructor to benefit from type inference, reduce verbosity, and improve code readability. This approach aligns with modern C# practices and promotes consistency with other factory methods like &apos;Tuple.Create&apos;. It also simplifies usage in &apos;var&apos; declarations by avoiding redundant type specifications..
+        /// </summary>
+        internal static string MiKo_3229_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3229_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;KeyValuePair.Create&apos; instead.
+        /// </summary>
+        internal static string MiKo_3229_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3229_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;KeyValuePair.Create&apos; should be used instead of constructors.
+        /// </summary>
+        internal static string MiKo_3229_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3229_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Using &apos;Guid&apos; directly as an identifier type is considered a form of primitive obsession, which is generally discouraged. Instead, you should define custom types (e.g., CustomerId, OrderId) to represent identifiers.
         ///This approach improves type safety and makes it harder to accidentally mix up different kinds of IDs, since the compiler will catch mismatches between unrelated types..
         /// </summary>
@@ -15083,7 +15295,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Convert to constant.
+        ///   Looks up a localized string similar to Convert to const.
         /// </summary>
         internal static string MiKo_5017_CodeFixTitle {
             get {
@@ -15101,7 +15313,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Convert to constant.
+        ///   Looks up a localized string similar to Convert to const.
         /// </summary>
         internal static string MiKo_5017_MessageFormat {
             get {

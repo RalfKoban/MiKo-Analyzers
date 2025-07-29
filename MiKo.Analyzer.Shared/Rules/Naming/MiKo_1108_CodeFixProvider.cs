@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_1108_CodeFixProvider)), Shared]
-    public sealed class MiKo_1108_CodeFixProvider : NamingLocalVariableCodeFixProvider
+    public sealed class MiKo_1108_CodeFixProvider : LocalVariableNamingCodeFixProvider
     {
         public override string FixableDiagnosticId => "MiKo_1108";
 
