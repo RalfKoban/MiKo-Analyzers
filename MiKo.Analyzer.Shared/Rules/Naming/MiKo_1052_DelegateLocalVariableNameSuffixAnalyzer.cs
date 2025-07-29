@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_1052_DelegateLocalVariableNameSuffixAnalyzer : NamingLocalVariableAnalyzer
+    public sealed class MiKo_1052_DelegateLocalVariableNameSuffixAnalyzer : LocalVariableNamingAnalyzer
     {
         public const string Id = "MiKo_1052";
 

@@ -1495,6 +1495,13 @@ namespace MiKoSolutions.Analyzers
                                                                                       "WritingPrintTicketRequiredEventHandler",
                                                                                       "WritingProgressChangedEventHandler",
                                                                                   };
+
+            internal static class Patterns
+            {
+                internal const string Adapter = "Adapter";
+                internal const string Wrapper = "Wrapper";
+                internal const string Decorator = "Decorator";
+            }
         }
 
         internal static class AnalyzerCodeFixSharedData

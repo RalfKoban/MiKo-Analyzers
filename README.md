@@ -13,7 +13,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/18917.svg)](https://scan.coverity.com/projects/ralfkoban-miko-analyzers)
 
 ## Available Rules
-The following tables lists all the 505 rules that are currently provided by the analyzer.
+The following tables lists all the 511 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -167,6 +167,11 @@ The following tables lists all the 505 rules that are currently provided by the 
 |MiKo_1505|Fields should not be suffixed with 'Counter'|&#x2713;|&#x2713;|
 |MiKo_1506|Local variables should not be suffixed with 'Counter'|&#x2713;|&#x2713;|
 |MiKo_1507|Parameters should not be suffixed with 'Counter'|&#x2713;|&#x2713;|
+|MiKo_1508|Local variables should not be suffixed with pattern names|&#x2713;|&#x2713;|
+|MiKo_1509|Parameters should not be suffixed with pattern names|&#x2713;|&#x2713;|
+|MiKo_1510|Types should not be suffixed with 'Info'|&#x2713;|\-|
+|MiKo_1511|Local variables should not be prefixed or suffixed with 'proxy'|&#x2713;|&#x2713;|
+|MiKo_1512|Parameters should not be prefixed or suffixed with 'proxy'|&#x2713;|&#x2713;|
 
 ### Documentation
 |ID|Title|Enabled by default|CodeFix available|
@@ -441,6 +446,7 @@ The following tables lists all the 505 rules that are currently provided by the 
 |MiKo_3226|Read-only fields with initializers should be const|&#x2713;|&#x2713;|
 |MiKo_3227|Prefer pattern matching for equality checks|&#x2713;|&#x2713;|
 |MiKo_3228|Prefer pattern matching for inequality checks|&#x2713;|&#x2713;|
+|MiKo_3229|'KeyValuePair.Create' should be used instead of constructors|&#x2713;|&#x2713;|
 |MiKo_3230|Do not use 'Guid' as type for identifiers|&#x2713;|\-|
 |MiKo_3301|Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements|&#x2713;|&#x2713;|
 |MiKo_3302|Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters|&#x2713;|&#x2713;|

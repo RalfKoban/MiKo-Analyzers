@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -73,7 +74,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 }
             }
 
-            return name.Without(Constants.Underscore).ToUpperCaseAt(0);
+            return name.AsCachedBuilder().Without(Constants.Underscore).ToUpperCaseAt(0).ToString();
         }
 
         private static string FindProperNameInClass(IMethodSymbol method)
