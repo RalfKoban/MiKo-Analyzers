@@ -10,7 +10,7 @@ using MiKoSolutions.Analyzers.Linguistics;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_1400_NamespacesInPluralAnalyzer : NamingNamespaceAnalyzer
+    public sealed class MiKo_1400_NamespacesInPluralAnalyzer : NamespaceNamingAnalyzer
     {
         public const string Id = "MiKo_1400";
 
