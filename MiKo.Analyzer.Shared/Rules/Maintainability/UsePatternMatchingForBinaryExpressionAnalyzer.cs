@@ -17,15 +17,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var semanticModel = context.SemanticModel;
 
-                if (node.IsExpressionTree(semanticModel))
-                {
-                    // ignore expression trees
-                    return;
-                }
-
                 if (IsResponsibleNode(node.Right, semanticModel) || IsResponsibleNode(node.Left, semanticModel))
                 {
-                    ReportIssue(context, node.OperatorToken);
+                    // ignore expression trees
+                    if (node.IsExpressionTree(semanticModel) is false)
+                    {
+                        ReportIssue(context, node.OperatorToken);
+                    }
                 }
             }
         }
