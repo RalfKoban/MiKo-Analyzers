@@ -1137,6 +1137,7 @@ namespace MiKoSolutions.Analyzers
             internal const string Factory = "Factory";
 
             internal const string DefaultNUnitNamespace = "NUnit.Framework";
+            internal const string DefaultXUnitNamespace = "Xunit";
 
             internal const string DefaultPropertyParameterName = "value";
 

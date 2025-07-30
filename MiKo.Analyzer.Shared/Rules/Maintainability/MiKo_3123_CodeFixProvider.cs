@@ -25,26 +25,31 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
         {
-            if (syntax is TryStatementSyntax statement)
+            if (syntax is TryStatementSyntax statement && root is CompilationUnitSyntax compilationUnit)
             {
-                if (root is CompilationUnitSyntax compilationUnit && compilationUnit.Usings.Any(_ => _.GetName() == Constants.Names.DefaultNUnitNamespace))
+                var usingDirectives = compilationUnit.Usings;
+
+                if (usingDirectives.Any(_ => _.GetName() is Constants.Names.DefaultNUnitNamespace))
                 {
                     return GetUpdatedSyntaxRootForNUnit(root, statement);
                 }
 
-                return GetUpdatedSyntaxRoot(root, statement);
+                if (usingDirectives.Any(_ => _.GetName() is Constants.Names.DefaultXUnitNamespace))
+                {
+                    return GetUpdatedSyntaxRootForXunit(root, statement);
+                }
             }
 
             return syntax;
         }
 
-        private static SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root, TryStatementSyntax statement)
+        private static SyntaxNode GetUpdatedSyntaxRootForXunit(SyntaxNode root, TryStatementSyntax statement)
         {
             if (statement.Finally is null)
             {
                 var spaces = statement.GetPositionWithinStartLine();
 
-                return root.ReplaceNode(statement, statement.Block.Statements.Select(_ => _.WithLeadingSpaces(spaces)));
+                return root.ReplaceNode(statement, statement.Block.Statements.Where(_ => IsAssertFail(_) is false).Select(_ => _.WithLeadingSpaces(spaces)));
             }
 
             return root.ReplaceNode(statement, statement.Without(statement.Catches));
@@ -56,28 +61,88 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (statement.Finally is null)
             {
-                var assertionStatement = CreateAssertionStatement(statement, spaces + Constants.Indentation);
+                var assertionStatement = CreateNUnitAssertionStatement(statement, spaces + Constants.Indentation);
 
                 return root.ReplaceNode(statement, assertionStatement.WithTriviaFrom(statement));
             }
             else
             {
-                var assertionStatement = CreateAssertionStatement(statement, spaces + Constants.Indentation + Constants.Indentation);
+                var assertionStatement = CreateNUnitAssertionStatement(statement, spaces + Constants.Indentation + Constants.Indentation);
 
                 return root.ReplaceNode(statement, statement.Without(statement.Catches).WithBlock(SyntaxFactory.Block(assertionStatement)));
             }
         }
 
-        private static ExpressionStatementSyntax CreateAssertionStatement(TryStatementSyntax statement, int spaces)
+        private static ExpressionStatementSyntax CreateNUnitAssertionStatement(TryStatementSyntax statement, int spaces)
         {
+            var statements = statement.Block.Statements;
+            var assertFailStatements = statements.OfType<ExpressionStatementSyntax>().Where(IsAssertFail).ToList();
+
             var updatedBlock = SyntaxFactory.Block(
                                                SyntaxKind.OpenBraceToken.AsToken().WithEndOfLine(),
-                                               statement.Block.Statements.Select(_ => _.WithoutLeadingTrivia().WithLeadingSpaces(spaces)).ToSyntaxList(),
+                                               statements.Except(assertFailStatements).Select(_ => _.WithoutLeadingTrivia().WithLeadingSpaces(spaces)).ToSyntaxList(),
                                                SyntaxKind.CloseBraceToken.AsToken());
 
-            var assertion = AssertThat(Argument(SyntaxFactory.ParenthesizedLambdaExpression(updatedBlock)), Throws("Nothing").WithLeadingSpace());
+            var arguments = new List<ArgumentSyntax>
+                                {
+                                    Argument(SyntaxFactory.ParenthesizedLambdaExpression(updatedBlock)),
+                                    ThrowsArgument(statement.Catches, assertFailStatements).WithLeadingSpace(),
+                                };
 
-            return SyntaxFactory.ExpressionStatement(assertion);
+            if (assertFailStatements.Count > 0)
+            {
+                if (assertFailStatements[0].Expression is InvocationExpressionSyntax i && i.ArgumentList?.Arguments is SeparatedSyntaxList<ArgumentSyntax> args && args.Count > 0)
+                {
+                    arguments.Add(args[0].WithLeadingSpace());
+                }
+            }
+            else
+            {
+                // TODO RKN: Append more?
+            }
+
+            return SyntaxFactory.ExpressionStatement(AssertThat(arguments.ToArray()));
+        }
+
+        private static bool IsAssertFail(StatementSyntax statement) => statement is ExpressionStatementSyntax node && IsAssertFail(node);
+
+        private static bool IsAssertFail(ExpressionStatementSyntax statement) => statement.Expression is InvocationExpressionSyntax i && i.GetIdentifierName() is "Assert" && i.Expression.GetName() is "Fail";
+
+        private static ArgumentSyntax ThrowsArgument(in SyntaxList<CatchClauseSyntax> catches, List<ExpressionStatementSyntax> assertFailStatements)
+        {
+            var needsException = assertFailStatements.Count > 0;
+
+            if (catches.Count > 0)
+            {
+                var catchClause = catches[0];
+
+                if (catchClause.Declaration is CatchDeclarationSyntax catchDeclaration)
+                {
+                    if (catchClause.Block.Statements.Count is 0 && needsException is false)
+                    {
+                        return Throws("Nothing");
+                    }
+
+                    var exceptionType = catchDeclaration.Type;
+                    var name = exceptionType.GetName();
+
+                    // TODO RKN: check for assertions in catch block, and use those
+                    switch (name)
+                    {
+                        case "ArgumentException":
+                        case "ArgumentNullException":
+                        case "Exception":
+                        case "InvalidOperationException":
+                        case "TargetInvocationException":
+                            return Throws(name);
+
+                        default:
+                            return Throws("TypeOf", exceptionType);
+                    }
+                }
+            }
+
+            return Throws(needsException ? "Exception" : "Nothing");
         }
     }
 }

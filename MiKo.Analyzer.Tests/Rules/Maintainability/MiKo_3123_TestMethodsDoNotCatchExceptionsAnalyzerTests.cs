@@ -1,4 +1,7 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System;
+using System.Reflection;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -196,7 +199,7 @@ namespace Bla
 ");
 
         [Test]
-        public void Code_gets_fixed_for_NUnit_test_method_with_catch_exception_ex_block()
+        public void Code_gets_fixed_for_NUnit_test_method_with_assertion_in_catch_block()
         {
             const string OriginalCode = @"
 using System;
@@ -213,12 +216,17 @@ namespace Bla
         {
             try
             {
-                var x = 123;
-                var y = x.ToString();
+                var a = 123;
+                var b = a.ToString();
             }
-            catch (Exception ex)
+            catch (CustomException ex)
             {
-                Console.Out.WriteLine(ex.Message);
+                // verify
+                Assert.That(ex.InnerException, Is.EqualTo(innerOperationException));
+                Assert.That(ex.Severity, Is.EqualTo(Severity.Fatal));
+                Assert.That(_transactionCreationCounter, Is.EqualTo(1));
+                Assert.That(_closeTransactionCounter, Is.EqualTo(1));
+                Assert.That(_rollbackCounter, Is.EqualTo(1));
             }
         }
     }
@@ -240,8 +248,353 @@ namespace Bla
         {
             Assert.That(() =>
             {
-                var x = 123;
-                var y = x.ToString();
+                var a = 123;
+                var b = a.ToString();
+            }, Throws.TypeOf<CustomException>().With.InnerException.EqualTo(innerOperationException).And.Property(nameof(CustomException.Severity)).EqualTo(Severity.Fatal));
+
+            Assert.That(_transactionCreationCounter, Is.EqualTo(1));
+            Assert.That(_closeTransactionCounter, Is.EqualTo(1));
+            Assert.That(_rollbackCounter, Is.EqualTo(1));
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_NUnit_test_method_with_Assert_Fail_in_catch_block()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(String s)
+        {
+            try
+            {
+                var a = 123;
+                var b = a.ToString();
+            }
+            catch
+            {
+                Assert.Fail(""should never happen"");
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(String s)
+        {
+            Assert.That(() =>
+            {
+                var a = 123;
+                var b = a.ToString();
+            }, Throws.Nothing);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_NUnit_test_method_with_Assert_Fail_in_try_block_and_no_exception_in_catch_block()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(String s)
+        {
+            try
+            {
+                var a = 123;
+                var b = a.ToString();
+
+                Assert.Fail(""some error message"");
+            }
+            catch
+            {
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(String s)
+        {
+            Assert.That(() =>
+            {
+                var a = 123;
+                var b = a.ToString();
+            }, Throws.Exception, ""some error message"");
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_NUnit_test_method_with_Assert_Fail_in_try_block_and_catch_block_with_custom_exception()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(String s)
+        {
+            try
+            {
+                var a = 123;
+                var b = a.ToString();
+
+                Assert.Fail(""should never happen"");
+            }
+            catch (NotSupportedException)
+            {
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(String s)
+        {
+            Assert.That(() =>
+            {
+                var a = 123;
+                var b = a.ToString();
+            }, Throws.TypeOf<NotSupportedException>(), ""should never happen"");
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [TestCase(nameof(Exception))]
+        [TestCase(nameof(ArgumentException))]
+        [TestCase(nameof(ArgumentNullException))]
+        [TestCase(nameof(InvalidOperationException))]
+        [TestCase(nameof(TargetInvocationException))]
+        public void Code_gets_fixed_for_NUnit_test_method_with_Assert_Fail_in_try_block_and_catch_block_with_well_known_exception_(string exceptionName)
+        {
+            var originalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(String s)
+        {
+            try
+            {
+                var a = 123;
+                var b = a.ToString();
+
+                Assert.Fail(""should never happen"");
+            }
+            catch (" + exceptionName + @")
+            {
+            }
+        }
+    }
+}
+";
+
+            var fixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(String s)
+        {
+            Assert.That(() =>
+            {
+                var a = 123;
+                var b = a.ToString();
+            }, Throws." + exceptionName + @", ""should never happen"");
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_NUnit_test_method_with_catch_exception_block()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(String s)
+        {
+            try
+            {
+                var a = 123;
+                var b = a.ToString();
+            }
+            catch (Exception)
+            {
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(String s)
+        {
+            Assert.That(() =>
+            {
+                var a = 123;
+                var b = a.ToString();
+            }, Throws.Nothing);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_NUnit_test_method_with_catch_exception_ex_block()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(String s)
+        {
+            try
+            {
+                var a = 123;
+                var b = a.ToString();
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(String s)
+        {
+            Assert.That(() =>
+            {
+                var a = 123;
+                var b = a.ToString();
             }, Throws.Nothing);
         }
     }
@@ -269,16 +622,16 @@ namespace Bla
         {
             try
             {
-                var x = 123;
-                var y = x.ToString();
+                var a = 123;
+                var b = a.ToString();
             }
             catch (Exception ex)
             {
-                Console.Out.WriteLine(ex.Message);
             }
             finally
             {
-                var z = 567;
+                var c = 567;
+                var d = c.ToString();
             }
         }
     }
@@ -302,14 +655,279 @@ namespace Bla
             {
                 Assert.That(() =>
                 {
-                    var x = 123;
-                    var y = x.ToString();
+                    var a = 123;
+                    var b = a.ToString();
                 }, Throws.Nothing);
             }
             finally
             {
-                var z = 567;
+                var c = 567;
+                var d = c.ToString();
             }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_xUnit_test_method_with_assertion_in_catch_block()
+        {
+            const string OriginalCode = @"
+using System;
+
+using Xunit;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Fact]
+        public void DoSomething(String s)
+        {
+            try
+            {
+                var a = 123;
+                var b = a.ToString();
+            }
+            catch (CustomException ex)
+            {
+                // verify
+                Assert.Equal(s, ex.Message);
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using Xunit;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Fact]
+        public async Task DoSomething(String s)
+        {
+            var ex = await Assert.ThrowsAsync<CustomException>(() =>
+            {
+                var a = 123;
+                var b = a.ToString();
+            });
+
+            Assert.Equal(s, ex.Message);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_xUnit_test_method_with_Assert_Fail_in_catch_block()
+        {
+            const string OriginalCode = @"
+using Xunit;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Fact]
+        public void DoSomething(string s)
+        {
+            try
+            {
+                var a = 123;
+                var b = a.ToString();
+            }
+            catch
+            {
+                Assert.Fail(""should never happen"");
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using Xunit;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Fact]
+        public void DoSomething(string s)
+        {
+            var a = 123;
+            var b = a.ToString();
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_xUnit_test_method_with_Assert_Fail_in_try_block_and_no_exception_in_catch_block()
+        {
+            const string OriginalCode = @"
+using System;
+
+using Xunit;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Fact]
+        public void DoSomething(String s)
+        {
+            try
+            {
+                var a = 123;
+                var b = a.ToString();
+
+                Assert.Fail(""some error message"");
+            }
+            catch
+            {
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using Xunit;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Fact]
+        public void DoSomething(String s)
+        {
+            Assert.Throws<Exception>(() =>
+            {
+                var a = 123;
+                var b = a.ToString();
+            });
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_xUnit_test_method_with_Assert_Fail_in_try_block_and_catch_block_with_custom_exception()
+        {
+            const string OriginalCode = @"
+using System;
+
+using Xunit;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Fact]
+        public void DoSomething(String s)
+        {
+            try
+            {
+                var a = 123;
+                var b = a.ToString();
+
+                Assert.Fail(""should never happen"");
+            }
+            catch (NotSupportedException)
+            {
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using Xunit;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Fact]
+        public void DoSomething(String s)
+        {
+            Assert.Throws<NotSupportedException>(() =>
+            {
+                var a = 123;
+                var b = a.ToString();
+            });
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_xUnit_test_method_with_catch_exception_block()
+        {
+            const string OriginalCode = @"
+using System;
+
+using Xunit;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Fact]
+        public void DoSomething(String s)
+        {
+            try
+            {
+                var a = 123;
+                var b = a.ToString();
+            }
+            catch (Exception)
+            {
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using Xunit;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Fact]
+        public void DoSomething(String s)
+        {
+            var a = 123;
+            var b = a.ToString();
         }
     }
 }
@@ -335,12 +953,11 @@ namespace Bla
         {
             try
             {
-                var x = 123;
-                var y = x.ToString();
+                var a = 123;
+                var b = a.ToString();
             }
             catch (Exception ex)
             {
-                Console.Out.WriteLine(ex.Message);
             }
         }
     }
@@ -359,8 +976,8 @@ namespace Bla
         [Fact]
         public void DoSomething(String s)
         {
-            var x = 123;
-            var y = x.ToString();
+            var a = 123;
+            var b = a.ToString();
         }
     }
 }
@@ -386,16 +1003,16 @@ namespace Bla
         {
             try
             {
-                var x = 123;
-                var y = x.ToString();
+                var a = 123;
+                var b = a.ToString();
             }
             catch (Exception ex)
             {
-                Console.Out.WriteLine(ex.Message);
             }
             finally
             {
-                var z = 567;
+                var c = 567;
+                var d = c.ToString();
             }
         }
     }
@@ -416,12 +1033,13 @@ namespace Bla
         {
             try
             {
-                var x = 123;
-                var y = x.ToString();
+                var a = 123;
+                var b = a.ToString();
             }
             finally
             {
-                var z = 567;
+                var c = 567;
+                var d = c.ToString();
             }
         }
     }
@@ -430,6 +1048,9 @@ namespace Bla
 
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
+
+        //// TODO RKN: add xUnit tests for exceptions that already exist for NUnit
+        //// for xUnit use 'Assert.ThrowsAsync()' and change method to 'async Task' (incl. adjustment of using)
 
         protected override string GetDiagnosticId() => MiKo_3123_TestMethodsDoNotCatchExceptionsAnalyzer.Id;
 
