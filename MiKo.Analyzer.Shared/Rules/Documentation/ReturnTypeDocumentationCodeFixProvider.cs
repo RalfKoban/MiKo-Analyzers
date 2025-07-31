@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlEmptyElementSyntax SeeCrefTaskResult()
         {
-            var type = SyntaxFactory.ParseTypeName("Task<TResult>");
+            var type = "Task<TResult>".AsTypeSyntax();
             var member = SyntaxFactory.ParseName(nameof(Task<object>.Result));
 
             return Cref(Constants.XmlTag.See, type, member);

@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected static ArgumentListSyntax ArgumentList(params ArgumentSyntax[] arguments) => SyntaxFactory.ArgumentList(arguments.ToSeparatedSyntaxList());
 
-        protected static InvocationExpressionSyntax Invocation(MemberAccessExpressionSyntax member, params ArgumentSyntax[] arguments)
+        protected static InvocationExpressionSyntax Invocation(ExpressionSyntax member, params ArgumentSyntax[] arguments)
         {
             // that's for the argument
             var argumentList = ArgumentList(arguments);
@@ -64,7 +64,7 @@ namespace MiKoSolutions.Analyzers.Rules
         protected static InvocationExpressionSyntax Invocation(string typeName, string methodName, params TypeSyntax[] items)
         {
             // that's for the method call
-            var member = SimpleMemberAccess(typeName, methodName, items);
+            var member = Member(typeName, methodName, items);
 
             return Invocation(member);
         }
@@ -93,20 +93,33 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected static PredefinedTypeSyntax PredefinedType(in SyntaxKind kind) => SyntaxFactory.PredefinedType(kind.AsToken());
 
-        protected static MemberAccessExpressionSyntax SimpleMemberAccess(ExpressionSyntax syntax, string name)
+        protected static MemberAccessExpressionSyntax Member(ExpressionSyntax expression, SimpleNameSyntax name)
         {
-            var identifierName = SyntaxFactory.IdentifierName(name);
-
-            return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, syntax, identifierName);
+            return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, expression, name);
         }
 
-        protected static MemberAccessExpressionSyntax SimpleMemberAccess(string typeName, string methodName, TypeSyntax[] items)
+        protected static MemberAccessExpressionSyntax Member(ExpressionSyntax syntax, string name)
         {
-            var type = SyntaxFactory.IdentifierName(typeName);
-            var method = SyntaxFactory.GenericName(methodName).AddTypeArgumentListArguments(items);
+            var identifierName = IdentifierName(name);
 
-            return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, type, method);
+            return Member(syntax, identifierName);
         }
+
+        protected static MemberAccessExpressionSyntax Member(string typeName, string methodName, TypeSyntax[] items)
+        {
+            var type = IdentifierName(typeName);
+            var method = GenericName(methodName, items);
+
+            return Member(type, method);
+        }
+
+        protected static IdentifierNameSyntax IdentifierName(string name) => SyntaxFactory.IdentifierName(name);
+
+        protected static IdentifierNameSyntax IdentifierName(in SyntaxToken token) => SyntaxFactory.IdentifierName(token);
+
+        protected static GenericNameSyntax GenericName(string name, TypeSyntax[] items) => SyntaxFactory.GenericName(name).AddTypeArgumentListArguments(items);
+
+        protected static GenericNameSyntax GenericName(string name, TypeArgumentListSyntax types) => SyntaxFactory.GenericName(name).WithTypeArgumentList(types);
 
         protected static TSyntaxNode GetSyntaxWithLeadingSpaces<TSyntaxNode>(TSyntaxNode syntaxNode, in int spaces) where TSyntaxNode : SyntaxNode
         {

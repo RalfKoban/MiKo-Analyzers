@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     var argument1 = Argument(left.Left);
                     var argument2 = Argument(left.Right);
 
-                    var access = SimpleMemberAccess(PredefinedType(PredefinedTypeKind), nameof(Equals));
+                    var access = Member(PredefinedType(PredefinedTypeKind), nameof(Equals));
 
                     var updatedSyntax = arguments?.Count > 1
                                         ? Invocation(access, argument1, argument2, arguments.Value[1])

@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
             var name = identifier.GetName().WithoutSuffix("Format");
 
-            return SyntaxFactory.IdentifierName(name);
+            return IdentifierName(name);
         }
     }
 }

@@ -198,7 +198,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         if (type.TryGetGenericArgumentType(out var genericType, i))
                         {
-                            types[i] = SyntaxFactory.ParseTypeName(genericType.FullyQualifiedName());
+                            types[i] = genericType.FullyQualifiedName().AsTypeSyntax();
                         }
                     }
 

@@ -35,8 +35,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case SyntaxKind.BoolKeyword: return FalseLiteral();
                 case SyntaxKind.CharKeyword: return Literal(char.MinValue);
                 case SyntaxKind.DecimalKeyword: return Literal(decimal.Zero);
-                case SyntaxKind.DoubleKeyword: return SimpleMemberAccess(PredefinedType(kind), nameof(double.NaN));
-                case SyntaxKind.FloatKeyword: return SimpleMemberAccess(PredefinedType(kind), nameof(float.NaN));
+                case SyntaxKind.DoubleKeyword: return Member(PredefinedType(kind), nameof(double.NaN));
+                case SyntaxKind.FloatKeyword: return Member(PredefinedType(kind), nameof(float.NaN));
                 case SyntaxKind.ObjectKeyword: return NullLiteral();
                 case SyntaxKind.StringKeyword: return NullLiteral();
                 default: return Literal(0);
@@ -68,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (type.IsEnum())
                 {
                     // take the first value
-                    return SimpleMemberAccess(typeSyntax, type.GetFields()[0].Name);
+                    return Member(typeSyntax, type.GetFields()[0].Name);
                 }
 
                 // we have a struct
