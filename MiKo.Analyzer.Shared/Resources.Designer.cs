@@ -13480,7 +13480,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Delete catch block.
+        ///   Looks up a localized string similar to Fix catch block.
         /// </summary>
         internal static string MiKo_3123_CodeFixTitle {
             get {

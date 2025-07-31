@@ -682,6 +682,10 @@ using Xunit;
 
 namespace Bla
 {
+    public class CustomException : Exception
+    {
+    }
+
     public class TestMe
     {
         [Fact]
@@ -709,17 +713,22 @@ using Xunit;
 
 namespace Bla
 {
+    public class CustomException : Exception
+    {
+    }
+
     public class TestMe
     {
         [Fact]
-        public async Task DoSomething(String s)
+        public void DoSomething(String s)
         {
-            var ex = await Assert.ThrowsAsync<CustomException>(() =>
+            CustomException ex = Assert.Throws<CustomException>(() =>
             {
                 var a = 123;
                 var b = a.ToString();
             });
 
+            // verify
             Assert.Equal(s, ex.Message);
         }
     }

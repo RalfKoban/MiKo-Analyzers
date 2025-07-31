@@ -56,12 +56,25 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return Invocation(member, arguments);
         }
 
-        protected static InvocationExpressionSyntax Invocation(string typeName, string propertyName, string methodName, params TypeSyntax[] items)
+        protected static InvocationExpressionSyntax Invocation(string typeName, string propertyName, string methodName, params TypeSyntax[] types)
         {
             // that's for the method call
-            var member = SimpleMemberAccess(typeName, propertyName, methodName, items);
+            var member = SimpleMemberAccess(typeName, propertyName, methodName, types);
 
             return Invocation(member);
+        }
+
+        protected static InvocationExpressionSyntax Invocation(string typeName, string methodName, TypeSyntax type, params ArgumentSyntax[] arguments)
+        {
+            return Invocation(typeName, methodName, new[] { type }, arguments);
+        }
+
+        protected static InvocationExpressionSyntax Invocation(string typeName, string methodName, TypeSyntax[] types, params ArgumentSyntax[] arguments)
+        {
+            // that's for the method call
+            var member = SimpleMemberAccess(typeName, methodName, types);
+
+            return Invocation(member, arguments);
         }
 
         protected static MemberAccessExpressionSyntax SimpleMemberAccess(PredefinedTypeSyntax type, string methodName)
@@ -190,6 +203,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             return NameOf(typeName, identifierName);
         }
+
+        protected static ParenthesizedLambdaExpressionSyntax ParenthesizedLambda(BlockSyntax block) => SyntaxFactory.ParenthesizedLambdaExpression(block);
 
         private static InvocationExpressionSyntax NameOf(ExpressionSyntax syntax)
         {
