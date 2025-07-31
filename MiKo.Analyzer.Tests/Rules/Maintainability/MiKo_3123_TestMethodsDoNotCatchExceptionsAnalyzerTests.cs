@@ -208,9 +208,21 @@ using NUnit.Framework;
 
 namespace Bla
 {
+    public enum Severity { None, Fatal, Whatever }
+
+    public class CustomException : Exception
+    {
+        public Severity Severity { get; }
+    }
+
     [TestFixture]
     public class TestMe
     {
+        private int _transactionCreationCounter = 0;
+        private int _closeTransactionCounter = 0;
+        private int _rollbackCounter = 0;
+        private Exception innerOperationException = null;
+
         [Test]
         public void DoSomething(String s)
         {
@@ -240,9 +252,21 @@ using NUnit.Framework;
 
 namespace Bla
 {
+    public enum Severity { None, Fatal, Whatever }
+
+    public class CustomException : Exception
+    {
+        public Severity Severity { get; }
+    }
+
     [TestFixture]
     public class TestMe
     {
+        private int _transactionCreationCounter = 0;
+        private int _closeTransactionCounter = 0;
+        private int _rollbackCounter = 0;
+        private Exception innerOperationException = null;
+
         [Test]
         public void DoSomething(String s)
         {
@@ -682,9 +706,7 @@ using Xunit;
 
 namespace Bla
 {
-    public class CustomException : Exception
-    {
-    }
+    public class CustomException : Exception { }
 
     public class TestMe
     {
@@ -713,9 +735,7 @@ using Xunit;
 
 namespace Bla
 {
-    public class CustomException : Exception
-    {
-    }
+    public class CustomException : Exception { }
 
     public class TestMe
     {
@@ -1058,7 +1078,7 @@ namespace Bla
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        //// TODO RKN: add xUnit tests for exceptions that already exist for NUnit
+        //// TODO RKN:
         //// for xUnit use 'Assert.ThrowsAsync()' and change method to 'async Task' (incl. adjustment of using)
 
         protected override string GetDiagnosticId() => MiKo_3123_TestMethodsDoNotCatchExceptionsAnalyzer.Id;

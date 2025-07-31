@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
@@ -75,7 +76,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static IEnumerable<StatementSyntax> CreateStatementsForXunit(TryStatementSyntax tryStatement)
         {
-            var statements = tryStatement.Block.Statements.Where(_ => IsAssertFail(_) is false);
+            var statements = tryStatement.Block.Statements;
+            var assertFailStatements = statements.Where(IsAssertFail).ToList();
+            var statementsWithoutAssertFails = statements.Except(assertFailStatements);
 
             var catches = tryStatement.Catches;
 
@@ -85,22 +88,29 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (additionalStatements.Any(IsAssertFail))
                 {
-                    return statements;
+                    return statementsWithoutAssertFails;
                 }
 
                 if (additionalStatements.Any(IsAssert))
                 {
-                    var assertionStatement = CreateXunitAssertionStatement(tryStatement, catches, statements);
+                    var assertionStatement = CreateXunitAssertionStatement(tryStatement, catches[0], statementsWithoutAssertFails);
 
                     additionalStatements.Insert(0, assertionStatement);
 
                     return additionalStatements;
                 }
 
-                return statements.Concat(additionalStatements);
+                if (assertFailStatements.Count > 0)
+                {
+                    var assertionStatement = CreateXunitAssertionStatement(tryStatement, catches[0], statementsWithoutAssertFails);
+
+                    return new[] { assertionStatement };
+                }
+
+                return statementsWithoutAssertFails.Concat(additionalStatements);
             }
 
-            return statements;
+            return statementsWithoutAssertFails;
         }
 
         private static ExpressionStatementSyntax CreateNUnitAssertionStatement(TryStatementSyntax tryStatement, int spaces)
@@ -129,18 +139,23 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return SyntaxFactory.ExpressionStatement(AssertThat(arguments.ToArray()));
         }
 
-        private static StatementSyntax CreateXunitAssertionStatement(TryStatementSyntax tryStatement, SyntaxList<CatchClauseSyntax> catches, IEnumerable<StatementSyntax> statements)
+        private static StatementSyntax CreateXunitAssertionStatement(TryStatementSyntax tryStatement, CatchClauseSyntax catchClause, IEnumerable<StatementSyntax> statements)
         {
-            var catchDeclaration = catches[0].Declaration;
-            var exceptionType = catchDeclaration.Type;
-            var exceptionIdentifier = catchDeclaration.Identifier;
-
             var spaces = tryStatement.GetPositionWithinStartLine();
-
             var lambda = Argument(ParenthesizedLambda(Block(statements, spaces + Constants.Indentation)));
+
+            var catchClauseDeclaration = catchClause.Declaration;
+            var exceptionType = catchClauseDeclaration?.Type ?? SyntaxFactory.ParseTypeName(nameof(Exception));
+            var exceptionIdentifier = catchClauseDeclaration.GetName();
+
             var invocation = Invocation("Assert", "Throws", exceptionType, lambda);
 
-            var declarator = SyntaxFactory.VariableDeclarator(exceptionIdentifier, null, SyntaxFactory.EqualsValueClause(invocation));
+            if (exceptionIdentifier.IsNullOrEmpty())
+            {
+                return SyntaxFactory.ExpressionStatement(invocation).WithTriviaFrom(tryStatement);
+            }
+
+            var declarator = SyntaxFactory.VariableDeclarator(exceptionIdentifier).WithInitializer(SyntaxFactory.EqualsValueClause(invocation));
             var declaration = SyntaxFactory.VariableDeclaration(exceptionType, declarator.ToSeparatedSyntaxList());
             var localDeclaration = SyntaxFactory.LocalDeclarationStatement(declaration);
 

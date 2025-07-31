@@ -755,6 +755,9 @@ namespace MiKoSolutions.Analyzers
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static string GetName(this CatchDeclarationSyntax value) => value?.Identifier.ValueText;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this ClassDeclarationSyntax value) => value?.Identifier.ValueText;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
