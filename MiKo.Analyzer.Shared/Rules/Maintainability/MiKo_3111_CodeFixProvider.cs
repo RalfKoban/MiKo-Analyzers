@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return MemberIs("Empty");
                 }
 
-                return SimpleMemberAccess(m.Expression, "Zero");
+                return Member(m.Expression, "Zero");
             }
 
             return node;

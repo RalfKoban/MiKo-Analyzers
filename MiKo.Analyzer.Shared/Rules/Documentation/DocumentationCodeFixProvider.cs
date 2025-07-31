@@ -462,7 +462,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlElementSyntax CommentWithContent(XmlElementSyntax value, in SyntaxList<XmlNodeSyntax> content) => SyntaxFactory.XmlElement(value.StartTag, content, value.EndTag).WithTagsOnSeparateLines();
 
-        protected static TypeCrefSyntax Cref(string typeName) => Cref(SyntaxFactory.ParseTypeName(typeName));
+        protected static TypeCrefSyntax Cref(string typeName) => Cref(typeName.AsTypeSyntax());
 
         protected static TypeCrefSyntax Cref(TypeSyntax type)
         {
@@ -590,7 +590,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                    : comment.ReplaceNode(text, modifiedText);
         }
 
-        protected static XmlEmptyElementSyntax SeeCref(string typeName) => Cref(Constants.XmlTag.See, SyntaxFactory.ParseTypeName(typeName));
+        protected static XmlEmptyElementSyntax SeeCref(string typeName) => Cref(Constants.XmlTag.See, typeName.AsTypeSyntax());
 
         protected static XmlEmptyElementSyntax SeeCref(TypeSyntax type) => Cref(Constants.XmlTag.See, type);
 

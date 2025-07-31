@@ -263,7 +263,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var ifStatement = ConvertToIfStatement(conditional, trueCase => AssignmentStatement(declarator, trueCase), falseCase => AssignmentStatement(declarator, falseCase));
 
-            var identifier = SyntaxFactory.IdentifierName(variableName).WithTriviaFrom(expression);
+            var identifier = IdentifierName(variableName).WithTriviaFrom(expression);
             var updatedInitializer = initializer.ReplaceNode(expression, identifier);
 
             if (initializer.FirstAncestor<StatementSyntax>() is StatementSyntax statement)
@@ -362,7 +362,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static ExpressionStatementSyntax AssignmentStatement(VariableDeclaratorSyntax declarator, ExpressionSyntax expression)
         {
-            return SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName(declarator.Identifier), expression));
+            return SyntaxFactory.ExpressionStatement(SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, IdentifierName(declarator.Identifier), expression));
         }
 
         private static IfStatementSyntax ConvertToIfStatement(ConditionalExpressionSyntax conditional, Func<ExpressionSyntax, StatementSyntax> callback)
@@ -437,7 +437,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                        ? type.FullyQualifiedName().GetNameOnlyPart()
                        : type.Name;
 
-            return SyntaxFactory.ParseTypeName(name);
+            return name.AsTypeSyntax();
         }
 
         private static TypeSyntax GetTypeSyntax(VariableDeclarationSyntax declaration, Document document)

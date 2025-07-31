@@ -189,6 +189,8 @@ namespace System
 
         public static InterpolatedStringTextSyntax AsInterpolatedString(this string value) => SyntaxFactory.InterpolatedStringText(value.AsToken(SyntaxKind.InterpolatedStringTextToken));
 
+        public static TypeSyntax AsTypeSyntax(this string value) => SyntaxFactory.ParseTypeName(value);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatenatedWith(this IEnumerable<string> values) => string.Concat(values.WhereNotNull());
 
