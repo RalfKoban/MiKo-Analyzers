@@ -80,7 +80,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return ArgumentList(
                                     ParamName(identifier),
                                     ArgumentWithCast(SyntaxKind.IntKeyword, identifier),
-                                    Argument(Invocation(SimpleMemberAccess(identifier, nameof(GetType))))); // use .GetType() call as we are not sure which type the identifier has
+                                    Argument(Invocation(Member(identifier, nameof(GetType))))); // use .GetType() call as we are not sure which type the identifier has
             }
 
             return null;

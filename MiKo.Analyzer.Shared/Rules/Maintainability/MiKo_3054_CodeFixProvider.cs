@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var prefix = ExtractFieldNamePrefix(declarator);
             var identifier = prefix + Constants.DependencyProperty.FieldSuffix;
 
-            var assignment = SimpleMemberAccess(declarator.Identifier.Text, Constants.DependencyProperty.TypeName);
+            var assignment = Member(declarator.Identifier.Text, Constants.DependencyProperty.TypeName);
             var variableDeclarator = SyntaxFactory.VariableDeclarator(SyntaxFactory.Identifier(identifier), default, SyntaxFactory.EqualsValueClause(assignment));
 
             var type = SyntaxFactory.ParseTypeName(Constants.DependencyProperty.TypeName);

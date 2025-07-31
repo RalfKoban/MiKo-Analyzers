@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static ArgumentSyntax Argument(string typeName, string methodName, params ArgumentSyntax[] arguments)
         {
-            return Argument(SimpleMemberAccess(typeName, methodName), arguments);
+            return Argument(Member(typeName, methodName), arguments);
         }
 
         protected static ArgumentSyntax ArgumentWithCast(in SyntaxKind kind, ParameterSyntax parameter) => ArgumentWithCast(PredefinedType(kind), parameter);
@@ -51,7 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected static InvocationExpressionSyntax Invocation(string typeName, string methodName, params ArgumentSyntax[] arguments)
         {
             // that's for the method call
-            var member = SimpleMemberAccess(typeName, methodName);
+            var member = Member(typeName, methodName);
 
             return Invocation(member, arguments);
         }
@@ -59,7 +59,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected static InvocationExpressionSyntax Invocation(string typeName, string propertyName, string methodName, params TypeSyntax[] types)
         {
             // that's for the method call
-            var member = SimpleMemberAccess(typeName, propertyName, methodName, types);
+            var member = Member(typeName, propertyName, methodName, types);
 
             return Invocation(member);
         }
@@ -72,41 +72,41 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected static InvocationExpressionSyntax Invocation(string typeName, string methodName, TypeSyntax[] types, params ArgumentSyntax[] arguments)
         {
             // that's for the method call
-            var member = SimpleMemberAccess(typeName, methodName, types);
+            var member = Member(typeName, methodName, types);
 
             return Invocation(member, arguments);
         }
 
-        protected static MemberAccessExpressionSyntax SimpleMemberAccess(PredefinedTypeSyntax type, string methodName)
+        protected static MemberAccessExpressionSyntax Member(PredefinedTypeSyntax type, string methodName)
         {
             var method = SyntaxFactory.IdentifierName(methodName);
 
-            return SimpleMemberAccess(type, method);
+            return Member(type, method);
         }
 
-        protected static MemberAccessExpressionSyntax SimpleMemberAccess(string typeName, string methodName)
+        protected static MemberAccessExpressionSyntax Member(string typeName, string methodName)
         {
             var type = SyntaxFactory.IdentifierName(typeName);
             var method = SyntaxFactory.IdentifierName(methodName);
 
-            return SimpleMemberAccess(type, method);
+            return Member(type, method);
         }
 
-        protected static MemberAccessExpressionSyntax SimpleMemberAccess(string typeName, string middlePart, string methodName, TypeSyntax[] items)
+        protected static MemberAccessExpressionSyntax Member(string typeName, string middlePart, string methodName, TypeSyntax[] items)
         {
             var type = SyntaxFactory.IdentifierName(typeName);
             var method = SyntaxFactory.GenericName(methodName).AddTypeArgumentListArguments(items);
 
-            var expression = SimpleMemberAccess(type, middlePart);
+            var expression = Member(type, middlePart);
 
-            return SimpleMemberAccess(expression, method);
+            return Member(expression, method);
         }
 
-        protected static MemberAccessExpressionSyntax SimpleMemberAccess(string typeName, params string[] methodNames)
+        protected static MemberAccessExpressionSyntax Member(string typeName, params string[] methodNames)
         {
-            var start = SimpleMemberAccess(typeName, methodNames[0]);
+            var start = Member(typeName, methodNames[0]);
 
-            var result = methodNames.Skip(1).Aggregate(start, SimpleMemberAccess);
+            var result = methodNames.Skip(1).Aggregate(start, Member);
 
             return result;
         }
@@ -183,7 +183,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static InvocationExpressionSyntax NameOf(string typeName, string identifierName)
         {
-            var syntax = SimpleMemberAccess(typeName, identifierName);
+            var syntax = Member(typeName, identifierName);
 
             return NameOf(syntax);
         }
