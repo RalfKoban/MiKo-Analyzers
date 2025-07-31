@@ -82,7 +82,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         {
             var identifier = GetIdentifier(expression);
             var method = SyntaxFactory.IdentifierName(Constants.ILog.IsDebugEnabled);
-            var condition = SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, identifier, method);
+            var condition = SimpleMemberAccess(identifier, method);
 
             return condition;
         }

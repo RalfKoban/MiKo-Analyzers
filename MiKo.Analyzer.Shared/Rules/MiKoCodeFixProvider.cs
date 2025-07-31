@@ -97,7 +97,7 @@ namespace MiKoSolutions.Analyzers.Rules
         {
             var identifierName = SyntaxFactory.IdentifierName(name);
 
-            return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, syntax, identifierName);
+            return SimpleMemberAccess(syntax, identifierName);
         }
 
         protected static MemberAccessExpressionSyntax SimpleMemberAccess(string typeName, string methodName, TypeSyntax[] items)
@@ -105,7 +105,12 @@ namespace MiKoSolutions.Analyzers.Rules
             var type = SyntaxFactory.IdentifierName(typeName);
             var method = SyntaxFactory.GenericName(methodName).AddTypeArgumentListArguments(items);
 
-            return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, type, method);
+            return SimpleMemberAccess(type, method);
+        }
+
+        protected static MemberAccessExpressionSyntax SimpleMemberAccess(ExpressionSyntax expression, SimpleNameSyntax name)
+        {
+            return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, expression, name);
         }
 
         protected static TSyntaxNode GetSyntaxWithLeadingSpaces<TSyntaxNode>(TSyntaxNode syntaxNode, in int spaces) where TSyntaxNode : SyntaxNode

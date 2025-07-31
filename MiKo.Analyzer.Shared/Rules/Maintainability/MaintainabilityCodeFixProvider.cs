@@ -81,7 +81,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var method = SyntaxFactory.IdentifierName(methodName);
 
-            return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, type, method);
+            return SimpleMemberAccess(type, method);
         }
 
         protected static MemberAccessExpressionSyntax SimpleMemberAccess(string typeName, string methodName)
@@ -89,7 +89,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var type = SyntaxFactory.IdentifierName(typeName);
             var method = SyntaxFactory.IdentifierName(methodName);
 
-            return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, type, method);
+            return SimpleMemberAccess(type, method);
         }
 
         protected static MemberAccessExpressionSyntax SimpleMemberAccess(string typeName, string middlePart, string methodName, TypeSyntax[] items)
@@ -99,7 +99,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var expression = SimpleMemberAccess(type, middlePart);
 
-            return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, expression, method);
+            return SimpleMemberAccess(expression, method);
         }
 
         protected static MemberAccessExpressionSyntax SimpleMemberAccess(string typeName, params string[] methodNames)
