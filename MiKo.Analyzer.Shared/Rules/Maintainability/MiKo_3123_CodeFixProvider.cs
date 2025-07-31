@@ -123,22 +123,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         return Throws("Nothing");
                     }
 
-                    var exceptionType = catchDeclaration.Type;
-                    var name = exceptionType.GetName();
-
                     // TODO RKN: check for assertions in catch block, and use those
-                    switch (name)
-                    {
-                        case "ArgumentException":
-                        case "ArgumentNullException":
-                        case "Exception":
-                        case "InvalidOperationException":
-                        case "TargetInvocationException":
-                            return Throws(name);
-
-                        default:
-                            return Throws("TypeOf", exceptionType);
-                    }
+                    return Throws(catchDeclaration.Type);
                 }
             }
 

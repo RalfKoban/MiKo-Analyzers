@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -144,9 +145,25 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static ArgumentSyntax Throws(string name) => Argument("Throws", name);
 
-        protected static ArgumentSyntax Throws(string name, ArgumentSyntax argument) => Argument(Invocation("Throws", name, argument));
+        protected static ArgumentSyntax Throws(TypeSyntax type)
+        {
+            var exceptionName = type.GetName();
 
-        protected static ArgumentSyntax Throws(string name, params TypeSyntax[] types) => Argument(Invocation("Throws", name, types));
+            switch (exceptionName)
+            {
+                case nameof(ArgumentException):
+                case nameof(ArgumentNullException):
+                case nameof(Exception):
+                case nameof(InvalidOperationException):
+                case nameof(TargetInvocationException):
+                    return Throws(exceptionName);
+
+                default:
+                    return Argument(Invocation("Throws", "TypeOf", type));
+            }
+        }
+
+        protected static ArgumentSyntax Throws(ArgumentSyntax argument) => Argument(Invocation("Throws", "TypeOf", argument));
 
         protected static TypeSyntax[] GetTypeSyntaxes(InvocationExpressionSyntax i, SimpleNameSyntax name)
         {

@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -720,6 +722,9 @@ namespace Bla
         [TestCase(
              @"public void Do() => Assert.Throws<ArgumentException>(() => throw new Exception(), ""some message"");",
              @"public void Do() => Assert.That(() => throw new Exception(), Throws.ArgumentException, ""some message"");")]
+        [TestCase(
+             "public void Do() => Assert.Throws<Exception>(() => throw new Exception());",
+             "public void Do() => Assert.That(() => throw new Exception(), Throws.Exception);")]
         [TestCase(
              "public void Do() => Assert.Throws<InvalidOperationException>(() => throw new Exception());",
              "public void Do() => Assert.That(() => throw new Exception(), Throws.InvalidOperationException);")]
