@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
         {
-            if (node.Type.GetName() == "KeyValuePair")
+            if (node.Type.GetName() is "KeyValuePair")
             {
                 yield return Issue(node);
             }

@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (syntax is ParameterSyntax parameter && parameter.Type is GenericNameSyntax generic)
             {
-                return parameter.WithType(SyntaxFactory.GenericName("Func").WithTypeArgumentList(generic.TypeArgumentList.AddArguments(PredefinedType(SyntaxKind.BoolKeyword))));
+                return parameter.WithType(GenericName("Func", generic.TypeArgumentList.AddArguments(PredefinedType(SyntaxKind.BoolKeyword))));
             }
 
             return syntax;

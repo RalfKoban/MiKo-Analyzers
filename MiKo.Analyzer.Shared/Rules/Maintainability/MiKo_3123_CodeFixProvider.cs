@@ -113,16 +113,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return statementsWithoutAssertFails;
         }
 
-        private static ExpressionStatementSyntax CreateNUnitAssertionStatement(TryStatementSyntax tryStatement, int spaces)
+        private static ExpressionStatementSyntax CreateNUnitAssertionStatement(TryStatementSyntax tryStatement, in int spaces)
         {
             var statements = tryStatement.Block.Statements;
             var assertFailStatements = statements.OfType<ExpressionStatementSyntax>().Where(IsAssertFail).ToList();
 
             var arguments = new List<ArgumentSyntax>
-                            {
-                                Argument(ParenthesizedLambda(Block(statements.Except(assertFailStatements), spaces))),
-                                ThrowsArgument(tryStatement.Catches, assertFailStatements).WithLeadingSpace(),
-                            };
+                                {
+                                    Argument(ParenthesizedLambda(Block(statements.Except(assertFailStatements), spaces))),
+                                    ThrowsArgument(tryStatement.Catches, assertFailStatements).WithLeadingSpace(),
+                                };
 
             if (assertFailStatements.Count > 0)
             {

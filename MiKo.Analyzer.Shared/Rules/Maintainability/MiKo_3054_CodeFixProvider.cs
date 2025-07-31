@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
@@ -30,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var assignment = Member(declarator.Identifier.Text, Constants.DependencyProperty.TypeName);
             var variableDeclarator = SyntaxFactory.VariableDeclarator(SyntaxFactory.Identifier(identifier), default, SyntaxFactory.EqualsValueClause(assignment));
 
-            var type = SyntaxFactory.ParseTypeName(Constants.DependencyProperty.TypeName);
+            var type = Constants.DependencyProperty.TypeName.AsTypeSyntax();
             var variableDeclaration = SyntaxFactory.VariableDeclaration(type, variableDeclarator.ToSeparatedSyntaxList());
 
             var field = SyntaxFactory.FieldDeclaration(default, PublicStaticReadOnly.ToTokenList(), variableDeclaration);

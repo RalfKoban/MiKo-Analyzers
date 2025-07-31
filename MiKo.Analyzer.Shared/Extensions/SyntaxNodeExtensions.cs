@@ -3142,7 +3142,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static T WithTrailingSpace<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(SyntaxFactory.ElasticSpace); // use elastic one to allow formatting to be done automatically
 
-        internal static T WithTrailingSpaces<T>(this T value, int spaces) where T : SyntaxNode => value.WithTrailingTrivia(Enumerable.Repeat(SyntaxFactory.ElasticSpace, spaces)); // use elastic one to allow formatting to be done automatically
+        internal static T WithTrailingSpaces<T>(this T value, in int spaces) where T : SyntaxNode => value.WithTrailingTrivia(Enumerable.Repeat(SyntaxFactory.ElasticSpace, spaces)); // use elastic one to allow formatting to be done automatically
 
         internal static T WithAdditionalLeadingSpaces<T>(this T value, in int additionalSpaces) where T : SyntaxNode
         {

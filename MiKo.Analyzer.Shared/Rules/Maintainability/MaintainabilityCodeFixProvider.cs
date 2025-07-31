@@ -20,9 +20,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                                   { SyntaxKind.LessThanToken, SyntaxKind.GreaterThanEqualsToken },
                                                                                               };
 
-        protected static ArgumentSyntax Argument(string identifier) => Argument(SyntaxFactory.IdentifierName(identifier));
+        protected static ArgumentSyntax Argument(string identifier) => Argument(IdentifierName(identifier));
 
-        protected static ArgumentSyntax Argument(ParameterSyntax parameter) => Argument(SyntaxFactory.IdentifierName(parameter.GetName()));
+        protected static ArgumentSyntax Argument(ParameterSyntax parameter) => Argument(IdentifierName(parameter.GetName()));
 
         protected static ArgumentSyntax Argument(ExpressionSyntax expression) => SyntaxFactory.Argument(expression);
 
@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static ArgumentSyntax ArgumentWithCast(in SyntaxKind kind, ParameterSyntax parameter) => ArgumentWithCast(PredefinedType(kind), parameter);
 
-        protected static ArgumentSyntax ArgumentWithCast(TypeSyntax type, ParameterSyntax parameter) => ArgumentWithCast(type, SyntaxFactory.IdentifierName(parameter.GetName()));
+        protected static ArgumentSyntax ArgumentWithCast(TypeSyntax type, ParameterSyntax parameter) => ArgumentWithCast(type, IdentifierName(parameter.GetName()));
 
         protected static ArgumentSyntax ArgumentWithCast(in SyntaxKind kind, IdentifierNameSyntax identifier) => ArgumentWithCast(PredefinedType(kind), identifier);
 
@@ -79,23 +79,23 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static MemberAccessExpressionSyntax Member(PredefinedTypeSyntax type, string methodName)
         {
-            var method = SyntaxFactory.IdentifierName(methodName);
+            var method = IdentifierName(methodName);
 
             return Member(type, method);
         }
 
         protected static MemberAccessExpressionSyntax Member(string typeName, string methodName)
         {
-            var type = SyntaxFactory.IdentifierName(typeName);
-            var method = SyntaxFactory.IdentifierName(methodName);
+            var type = IdentifierName(typeName);
+            var method = IdentifierName(methodName);
 
             return Member(type, method);
         }
 
         protected static MemberAccessExpressionSyntax Member(string typeName, string middlePart, string methodName, TypeSyntax[] items)
         {
-            var type = SyntaxFactory.IdentifierName(typeName);
-            var method = SyntaxFactory.GenericName(methodName).AddTypeArgumentListArguments(items);
+            var type = IdentifierName(typeName);
+            var method = GenericName(methodName, items);
 
             var expression = Member(type, middlePart);
 
@@ -163,7 +163,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static TypeOfExpressionSyntax TypeOf(in SyntaxKind kind) => TypeOf(PredefinedType(kind));
 
-        protected static TypeOfExpressionSyntax TypeOf(string typeName) => TypeOf(SyntaxFactory.ParseTypeName(typeName));
+        protected static TypeOfExpressionSyntax TypeOf(string typeName) => TypeOf(typeName.AsTypeSyntax());
 
         protected static TypeOfExpressionSyntax TypeOf(TypeSyntax type) => SyntaxFactory.TypeOfExpression(type);
 
@@ -176,7 +176,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static InvocationExpressionSyntax NameOf(string identifierName)
         {
-            var syntax = SyntaxFactory.IdentifierName(identifierName);
+            var syntax = IdentifierName(identifierName);
 
             return NameOf(syntax);
         }
@@ -210,9 +210,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             // nameof has a special RawContextualKind, hence we have to create it via its specific SyntaxKind
             // (see https://stackoverflow.com/questions/46259039/constructing-nameof-expression-via-syntaxfactory-roslyn)
-            var nameofSyntax = SyntaxFactory.IdentifierName(SyntaxFactory.Identifier(SyntaxFactory.TriviaList(), SyntaxKind.NameOfKeyword, "nameof", "nameof", SyntaxFactory.TriviaList()));
+            var nameofSyntax = SyntaxFactory.Identifier(SyntaxFactory.TriviaList(), SyntaxKind.NameOfKeyword, "nameof", "nameof", SyntaxFactory.TriviaList());
 
-            return SyntaxFactory.InvocationExpression(nameofSyntax, ArgumentList(SyntaxFactory.Argument(syntax)));
+            return Invocation(IdentifierName(nameofSyntax), Argument(syntax));
         }
 
         private static ExpressionSyntax InvertCondition(PrefixUnaryExpressionSyntax prefixed)

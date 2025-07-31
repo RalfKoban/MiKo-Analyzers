@@ -1321,11 +1321,11 @@ namespace MiKoSolutions.Analyzers
                                                                        };
 
             internal static readonly ISet<string> AssertionNamespaces = new HashSet<string>
-                                                                        {
-                                                                            DefaultNUnitNamespace,
-                                                                            DefaultNUnitNamespace + ".Constraints",
-                                                                            DefaultNUnitNamespace + ".Legacy",
-                                                                        };
+                                                                            {
+                                                                                DefaultNUnitNamespace,
+                                                                                DefaultNUnitNamespace + ".Constraints",
+                                                                                DefaultNUnitNamespace + ".Legacy",
+                                                                            };
 
             internal static readonly ISet<string> KnownWindowsEventHandlers = new HashSet<string>
                                                                                   {
