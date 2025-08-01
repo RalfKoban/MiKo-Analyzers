@@ -25,7 +25,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
-            if (Verbalizer.TryMakeVerb(symbol.Name, out var betterName))
+            var symbolName = symbol.Name;
+
+            if (symbolName.StartsWith("Throw", StringComparison.Ordinal) is false && Verbalizer.TryMakeVerb(symbolName, out var betterName))
             {
                 return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
             }

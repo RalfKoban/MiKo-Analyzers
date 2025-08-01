@@ -110,8 +110,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                      new Pair("allation", "all"),
                                                      new Pair("ellation", "el"),
                                                      new Pair("stration", "ster"),
-                                                     new Pair("ration", "re"),
+                                                     new Pair("eration", "erate"),
+                                                     new Pair("iration", "ire"),
+                                                     new Pair("uration", "ure"),
                                                      new Pair("isition", "ire"),
+                                                     new Pair("osition", "ose"),
                                                      new Pair("isation", "ise"),
                                                      new Pair("ization", "ize"),
                                                      new Pair("vocation", "voke"),
@@ -796,8 +799,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return false;
         }
 
-        private static bool HasAcceptableMiddlePhrase(string value) => value.ContainsAny(MiddlePhrases);
+        private static bool HasAcceptableMiddlePhrase(string value) => value.ContainsAny(MiddlePhrases, StringComparison.Ordinal);
 
-        private static bool HasAcceptableEndingPhrase(in ReadOnlySpan<char> value) => value.EndsWithAny(EndingPhrases);
+        private static bool HasAcceptableEndingPhrase(in ReadOnlySpan<char> value) => value.EndsWithAny(EndingPhrases, StringComparison.Ordinal);
     }
 }
