@@ -553,6 +553,11 @@ namespace MiKoSolutions.Analyzers.Rules
                 return SupportsXUnit;
             }
 
+            if (compilation.GetTypeByMetadataName("Xunit.TheoryAttribute") != null)
+            {
+                return SupportsXUnit;
+            }
+
             return false;
         }
     }

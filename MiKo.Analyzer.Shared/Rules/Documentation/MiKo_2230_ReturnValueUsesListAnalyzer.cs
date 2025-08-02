@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var xmlSyntax = comment.GetXmlSyntax(xmlTag);
 
-            if (xmlSyntax.Count == 0)
+            if (xmlSyntax.Count is 0)
             {
                 return Array.Empty<Diagnostic>();
             }
