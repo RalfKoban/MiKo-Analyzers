@@ -166,9 +166,24 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
             else
             {
+                var catches = tryStatement.Catches;
+
+                // we have a finally block, so we need to ensure that the catch statements are added to the try block
+                var additionalStatements = catches.SelectMany(_ => _.Block.Statements).ToList();
+
+                additionalStatements.RemoveAll(IsAssertFail);
+
                 var assertionStatement = CreateNUnitAssertionStatement(tryStatement, spaces + Constants.Indentation + Constants.Indentation);
 
-                return root.ReplaceNode(tryStatement, tryStatement.Without(tryStatement.Catches).WithBlock(SyntaxFactory.Block(assertionStatement)));
+                additionalStatements.Insert(0, assertionStatement);
+
+                if (additionalStatements.Skip(1).Any(IsAssert))
+                {
+                    // ensure that the first additional statement is separated by an empty line
+                    additionalStatements[1] = additionalStatements[1].WithLeadingEmptyLine();
+                }
+
+                return root.ReplaceNode(tryStatement, tryStatement.Without(tryStatement.Catches).WithBlock(SyntaxFactory.Block(additionalStatements)));
             }
         }
 

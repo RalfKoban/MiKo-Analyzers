@@ -719,7 +719,7 @@ namespace Bla
             }
             catch (Exception ex)
             {
-                Assert.That(s, Is.EqualTo(""Some value"");
+                Assert.That(s, Is.EqualTo(""Some value""));
             }
             finally
             {
@@ -751,8 +751,7 @@ namespace Bla
                     var a = 123;
                     var b = a.ToString();
                 }, Throws.Exception);
-
-                Assert.That(s, Is.EqualTo(""Some value"");
+                Assert.That(s, Is.EqualTo(""Some value""));
             }
             finally
             {
