@@ -697,7 +697,78 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_xUnit_test_method_with_assertion_in_catch_block()
+        public void Code_gets_fixed_for_NUnit_test_method_with_assertion_in_catch_block_and_an_additional_finally_block()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(String s)
+        {
+            try
+            {
+                var a = 123;
+                var b = a.ToString();
+            }
+            catch (Exception ex)
+            {
+                Assert.That(s, Is.EqualTo(""Some value"");
+            }
+            finally
+            {
+                var c = 567;
+                var d = c.ToString();
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(String s)
+        {
+            try
+            {
+                Assert.That(() =>
+                {
+                    var a = 123;
+                    var b = a.ToString();
+                }, Throws.Exception);
+
+                Assert.That(s, Is.EqualTo(""Some value"");
+            }
+            finally
+            {
+                var c = 567;
+                var d = c.ToString();
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_Xunit_test_method_with_assertion_in_catch_block()
         {
             const string OriginalCode = @"
 using System;
@@ -759,7 +830,7 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_xUnit_test_method_with_Assert_Fail_in_catch_block()
+        public void Code_gets_fixed_for_Xunit_test_method_with_Assert_Fail_in_catch_block()
         {
             const string OriginalCode = @"
 using Xunit;
@@ -806,7 +877,7 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_xUnit_test_method_with_Assert_Fail_in_try_block_and_no_exception_in_catch_block()
+        public void Code_gets_fixed_for_Xunit_test_method_with_Assert_Fail_in_try_block_and_no_exception_in_catch_block()
         {
             const string OriginalCode = @"
 using System;
@@ -861,7 +932,7 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_xUnit_test_method_with_Assert_Fail_in_try_block_and_catch_block_with_custom_exception()
+        public void Code_gets_fixed_for_Xunit_test_method_with_Assert_Fail_in_try_block_and_catch_block_with_custom_exception()
         {
             const string OriginalCode = @"
 using System;
@@ -916,7 +987,7 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_xUnit_test_method_with_catch_exception_block()
+        public void Code_gets_fixed_for_Xunit_test_method_with_catch_exception_block()
         {
             const string OriginalCode = @"
 using System;
@@ -966,7 +1037,7 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_xUnit_test_method_with_catch_exception_ex_block()
+        public void Code_gets_fixed_for_Xunit_test_method_with_catch_exception_ex_block()
         {
             const string OriginalCode = @"
 using System;
@@ -1016,7 +1087,7 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_xUnit_test_method_with_catch_exception_ex_and_finally_block()
+        public void Code_gets_fixed_for_Xunit_test_method_with_catch_exception_ex_and_finally_block()
         {
             const string OriginalCode = @"
 using System;
@@ -1078,8 +1149,328 @@ namespace Bla
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        //// TODO RKN:
-        //// for xUnit use 'Assert.ThrowsAsync()' and change method to 'async Task' (incl. adjustment of using)
+        [Test]
+        public void Code_gets_fixed_for_Xunit_test_method_with_assertion_in_catch_block_and_an_additional_finally_block()
+        {
+            const string OriginalCode = @"
+using System;
+
+using Xunit;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Fact]
+        public void DoSomething(String s)
+        {
+            try
+            {
+                var a = 123;
+                var b = a.ToString();
+            }
+            catch (Exception ex)
+            {
+                Assert.Equal(""Some value"", s);
+            }
+            finally
+            {
+                var c = 567;
+                var d = c.ToString();
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using Xunit;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Fact]
+        public void DoSomething(String s)
+        {
+            try
+            {
+                Exception ex = Assert.Throws<Exception>(() =>
+                {
+                    var a = 123;
+                    var b = a.ToString();
+                });
+                Assert.Equal(""Some value"", s);
+            }
+            finally
+            {
+                var c = 567;
+                var d = c.ToString();
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_Xunit_async_test_method_with_assertion_in_catch_block()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+using Xunit;
+
+namespace Bla
+{
+    public class CustomException : Exception { }
+
+    public class TestMe
+    {
+        [Fact]
+        public async Task DoSomething(String s)
+        {
+            try
+            {
+                var a = 123;
+                var b = a.ToString();
+            }
+            catch (CustomException ex)
+            {
+                // verify
+                Assert.Equal(s, ex.Message);
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+using Xunit;
+
+namespace Bla
+{
+    public class CustomException : Exception { }
+
+    public class TestMe
+    {
+        [Fact]
+        public async Task DoSomething(String s)
+        {
+            CustomException ex = await Assert.ThrowsAsync<CustomException>(() =>
+            {
+                var a = 123;
+                var b = a.ToString();
+            });
+
+            // verify
+            Assert.Equal(s, ex.Message);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_Xunit_async_test_method_with_Assert_Fail_in_try_block_and_no_exception_in_catch_block()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+using Xunit;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Fact]
+        public async Task DoSomething(String s)
+        {
+            try
+            {
+                var a = 123;
+                var b = a.ToString();
+
+                Assert.Fail(""some error message"");
+            }
+            catch
+            {
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+using Xunit;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Fact]
+        public async Task DoSomething(String s)
+        {
+            await Assert.ThrowsAsync<Exception>(() =>
+            {
+                var a = 123;
+                var b = a.ToString();
+            });
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_Xunit_test_method_with_throw_statement()
+        {
+            const string OriginalCode = @"
+using System;
+
+using Xunit;
+
+namespace Bla
+{
+    public class CustomException : Exception { }
+
+    public class TestMe
+    {
+        [Fact]
+        public void DoSomething(String s)
+        {
+            try
+            {
+                var a = 123;
+                var b = a.ToString();
+
+                throw new CustomException();
+            }
+            catch (CustomException ex)
+            {
+                // verify
+                Assert.Equal(s, ex.Message);
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+using Xunit;
+
+namespace Bla
+{
+    public class CustomException : Exception { }
+
+    public class TestMe
+    {
+        [Fact]
+        public async Task DoSomething(String s)
+        {
+            CustomException ex = await Assert.ThrowsAsync<CustomException>(() =>
+            {
+                var a = 123;
+                var b = a.ToString();
+
+                throw new CustomException();
+            });
+
+            // verify
+            Assert.Equal(s, ex.Message);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_Xunit_async_test_method_with_throw_statement()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+using Xunit;
+
+namespace Bla
+{
+    public class CustomException : Exception { }
+
+    public class TestMe
+    {
+        [Fact]
+        public async Task DoSomething(String s)
+        {
+            try
+            {
+                var a = 123;
+                var b = a.ToString();
+
+                throw new CustomException();
+            }
+            catch (CustomException ex)
+            {
+                // verify
+                Assert.Equal(s, ex.Message);
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+using Xunit;
+
+namespace Bla
+{
+    public class CustomException : Exception { }
+
+    public class TestMe
+    {
+        [Fact]
+        public async Task DoSomething(String s)
+        {
+            CustomException ex = await Assert.ThrowsAsync<CustomException>(() =>
+            {
+                var a = 123;
+                var b = a.ToString();
+
+                throw new CustomException();
+            });
+
+            // verify
+            Assert.Equal(s, ex.Message);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
 
         protected override string GetDiagnosticId() => MiKo_3123_TestMethodsDoNotCatchExceptionsAnalyzer.Id;
 

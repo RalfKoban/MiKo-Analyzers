@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -30,18 +31,127 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var usingDirectives = compilationUnit.Usings;
 
-                if (usingDirectives.Any(_ => _.GetName() is Constants.Names.DefaultNUnitNamespace))
+                for (int index = 0, count = usingDirectives.Count; index < count; index++)
                 {
-                    return GetUpdatedSyntaxRootForNUnit(root, statement);
-                }
+                    var usingName = usingDirectives[index].GetName();
 
-                if (usingDirectives.Any(_ => _.GetName() is Constants.Names.DefaultXUnitNamespace))
-                {
-                    return GetUpdatedSyntaxRootForXunit(root, statement);
+                    switch (usingName)
+                    {
+                        case Constants.Names.DefaultNUnitNamespace: return GetUpdatedSyntaxRootForNUnit(root, statement);
+                        case Constants.Names.DefaultXUnitNamespace: return GetUpdatedSyntaxRootForXunit(root, statement);
+                    }
                 }
             }
 
             return syntax;
+        }
+
+        private static SyntaxNode GetUpdatedSyntaxRootForXunit(SyntaxNode root, TryStatementSyntax tryStatement)
+        {
+            var testMethod = tryStatement.FirstAncestor<MethodDeclarationSyntax>();
+            var spaces = tryStatement.GetPositionWithinStartLine();
+
+            IReadOnlyList<StatementSyntax> statementsForXunit;
+            MethodDeclarationSyntax updatedTestMethod;
+
+            if (tryStatement.Finally is null)
+            {
+                statementsForXunit = CreateStatementsForXunit(tryStatement, testMethod, spaces + Constants.Indentation);
+
+                updatedTestMethod = testMethod.ReplaceNode(tryStatement, statementsForXunit.Select(_ => _.WithLeadingSpaces(spaces)));
+            }
+            else
+            {
+                // we have a finally block, so we need to ensure that the catch statements are added to the try block
+                statementsForXunit = CreateStatementsForXunit(tryStatement, testMethod, spaces + Constants.Indentation + Constants.Indentation);
+
+                var block = tryStatement.Block.WithStatements(statementsForXunit.Select(_ => _.WithLeadingSpaces(spaces + Constants.Indentation)).ToSyntaxList());
+
+                updatedTestMethod = testMethod.ReplaceNode(tryStatement, tryStatement.Without(tryStatement.Catches).WithBlock(block));
+            }
+
+            if (statementsForXunit.SelectMany(_ => _.DescendantNodes()).OfType<AwaitExpressionSyntax>().Any())
+            {
+                // seems we added an await expression, so we need to ensure that the method is async
+                if (testMethod.Modifiers.None(SyntaxKind.AsyncKeyword))
+                {
+                    return root.ReplaceNode(testMethod, updatedTestMethod.WithReturnType(nameof(Task).AsTypeSyntax()).WithAdditionalModifier(SyntaxKind.AsyncKeyword))
+                               .WithUsing("System.Threading.Tasks");
+                }
+            }
+
+            return root.ReplaceNode(testMethod, updatedTestMethod);
+        }
+
+        private static IReadOnlyList<StatementSyntax> CreateStatementsForXunit(TryStatementSyntax tryStatement, MethodDeclarationSyntax testMethod, int spaces)
+        {
+            var statements = tryStatement.Block.Statements;
+            var assertFailStatements = statements.Where(IsAssertFail).ToList();
+            var statementsWithoutAssertFails = statements.Except(assertFailStatements).ToList();
+
+            var catches = tryStatement.Catches;
+
+            if (catches.Count > 0)
+            {
+                var additionalStatements = catches.SelectMany(_ => _.Block.Statements).ToList();
+
+                if (additionalStatements.Any(IsAssertFail))
+                {
+                    return statementsWithoutAssertFails;
+                }
+
+                if (additionalStatements.Any(IsAssert))
+                {
+                    var assertionStatement = CreateXunitAssertionStatement(tryStatement, catches[0], statementsWithoutAssertFails, testMethod, spaces);
+
+                    additionalStatements.Insert(0, assertionStatement);
+
+                    // ensure that the first additional statement is separated by an empty line
+                    additionalStatements[1] = additionalStatements[1].WithLeadingEmptyLine();
+
+                    return additionalStatements;
+                }
+
+                if (assertFailStatements.Count > 0)
+                {
+                    var assertionStatement = CreateXunitAssertionStatement(tryStatement, catches[0], statementsWithoutAssertFails, testMethod, spaces);
+
+                    return new[] { assertionStatement };
+                }
+
+                statementsWithoutAssertFails.AddRange(additionalStatements);
+            }
+
+            return statementsWithoutAssertFails;
+        }
+
+        private static StatementSyntax CreateXunitAssertionStatement(TryStatementSyntax tryStatement, CatchClauseSyntax catchClause, IEnumerable<StatementSyntax> statements, MethodDeclarationSyntax testMethod, int spaces)
+        {
+            var lambda = Argument(ParenthesizedLambda(Block(statements, spaces)));
+
+            var catchClauseDeclaration = catchClause.Declaration;
+            var exceptionType = catchClauseDeclaration?.Type ?? SyntaxFactory.ParseTypeName(nameof(Exception));
+            var exceptionIdentifier = catchClauseDeclaration.GetName();
+
+            var useAwait = testMethod.Modifiers.Any(SyntaxKind.AsyncKeyword) || tryStatement.Block.Statements.Any(SyntaxKind.ThrowStatement);
+
+            ExpressionSyntax expression = Invocation("Assert", useAwait ? "ThrowsAsync" : "Throws", exceptionType, lambda);
+
+            if (useAwait)
+            {
+                expression = SyntaxFactory.AwaitExpression(expression);
+            }
+
+            if (exceptionIdentifier.IsNullOrEmpty())
+            {
+                return SyntaxFactory.ExpressionStatement(expression).WithTriviaFrom(tryStatement);
+            }
+
+            var declarator = SyntaxFactory.VariableDeclarator(exceptionIdentifier).WithInitializer(SyntaxFactory.EqualsValueClause(expression));
+            var declaration = SyntaxFactory.VariableDeclaration(exceptionType, declarator.ToSeparatedSyntaxList());
+            var localDeclaration = SyntaxFactory.LocalDeclarationStatement(declaration);
+
+            return localDeclaration.WithLeadingTriviaFrom(tryStatement);
         }
 
         private static SyntaxNode GetUpdatedSyntaxRootForNUnit(SyntaxNode root, TryStatementSyntax tryStatement)
@@ -62,67 +172,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static SyntaxNode GetUpdatedSyntaxRootForXunit(SyntaxNode root, TryStatementSyntax tryStatement)
-        {
-            if (tryStatement.Finally is null)
-            {
-                var spaces = tryStatement.GetPositionWithinStartLine();
-
-                return root.ReplaceNode(tryStatement, CreateStatementsForXunit(tryStatement).Select(_ => _.WithLeadingSpaces(spaces)));
-            }
-
-            return root.ReplaceNode(tryStatement, tryStatement.Without(tryStatement.Catches));
-        }
-
-        private static IEnumerable<StatementSyntax> CreateStatementsForXunit(TryStatementSyntax tryStatement)
-        {
-            var statements = tryStatement.Block.Statements;
-            var assertFailStatements = statements.Where(IsAssertFail).ToList();
-            var statementsWithoutAssertFails = statements.Except(assertFailStatements);
-
-            var catches = tryStatement.Catches;
-
-            if (catches.Count > 0)
-            {
-                var additionalStatements = catches.SelectMany(_ => _.Block.Statements).ToList();
-
-                if (additionalStatements.Any(IsAssertFail))
-                {
-                    return statementsWithoutAssertFails;
-                }
-
-                if (additionalStatements.Any(IsAssert))
-                {
-                    var assertionStatement = CreateXunitAssertionStatement(tryStatement, catches[0], statementsWithoutAssertFails);
-
-                    additionalStatements.Insert(0, assertionStatement);
-
-                    return additionalStatements;
-                }
-
-                if (assertFailStatements.Count > 0)
-                {
-                    var assertionStatement = CreateXunitAssertionStatement(tryStatement, catches[0], statementsWithoutAssertFails);
-
-                    return new[] { assertionStatement };
-                }
-
-                return statementsWithoutAssertFails.Concat(additionalStatements);
-            }
-
-            return statementsWithoutAssertFails;
-        }
-
         private static ExpressionStatementSyntax CreateNUnitAssertionStatement(TryStatementSyntax tryStatement, in int spaces)
         {
             var statements = tryStatement.Block.Statements;
             var assertFailStatements = statements.OfType<ExpressionStatementSyntax>().Where(IsAssertFail).ToList();
 
+            var catchClauses = tryStatement.Catches;
+
             var arguments = new List<ArgumentSyntax>
-                                {
-                                    Argument(ParenthesizedLambda(Block(statements.Except(assertFailStatements), spaces))),
-                                    ThrowsArgument(tryStatement.Catches, assertFailStatements).WithLeadingSpace(),
-                                };
+                            {
+                                Argument(ParenthesizedLambda(Block(statements.Except(assertFailStatements), spaces))),
+                                ThrowsArgument(catchClauses, assertFailStatements).WithLeadingSpace(),
+                            };
 
             if (assertFailStatements.Count > 0)
             {
@@ -134,45 +195,29 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             else
             {
                 // TODO RKN: Append more?
+                // foreach (var clause in catchClauses)
+                // {
+                //     foreach (var statement in clause.Block.Statements)
+                //     {
+                //     }
+                // }
             }
 
             return SyntaxFactory.ExpressionStatement(AssertThat(arguments.ToArray()));
-        }
-
-        private static StatementSyntax CreateXunitAssertionStatement(TryStatementSyntax tryStatement, CatchClauseSyntax catchClause, IEnumerable<StatementSyntax> statements)
-        {
-            var spaces = tryStatement.GetPositionWithinStartLine();
-            var lambda = Argument(ParenthesizedLambda(Block(statements, spaces + Constants.Indentation)));
-
-            var catchClauseDeclaration = catchClause.Declaration;
-            var exceptionType = catchClauseDeclaration?.Type ?? SyntaxFactory.ParseTypeName(nameof(Exception));
-            var exceptionIdentifier = catchClauseDeclaration.GetName();
-
-            var invocation = Invocation("Assert", "Throws", exceptionType, lambda);
-
-            if (exceptionIdentifier.IsNullOrEmpty())
-            {
-                return SyntaxFactory.ExpressionStatement(invocation).WithTriviaFrom(tryStatement);
-            }
-
-            var declarator = SyntaxFactory.VariableDeclarator(exceptionIdentifier).WithInitializer(SyntaxFactory.EqualsValueClause(invocation));
-            var declaration = SyntaxFactory.VariableDeclaration(exceptionType, declarator.ToSeparatedSyntaxList());
-            var localDeclaration = SyntaxFactory.LocalDeclarationStatement(declaration);
-
-            return localDeclaration.WithLeadingTriviaFrom(tryStatement).WithTrailingEmptyLine();
         }
 
         private static BlockSyntax Block(IEnumerable<StatementSyntax> statements, int spaces)
         {
             return SyntaxFactory.Block(
                                    SyntaxKind.OpenBraceToken.AsToken().WithEndOfLine(),
-                                   statements.Select(_ => _.WithoutLeadingTrivia().WithLeadingSpaces(spaces)).ToSyntaxList(),
+                                   statements.Select(_ => _.WithLeadingSpaces(spaces)).ToSyntaxList(),
                                    SyntaxKind.CloseBraceToken.AsToken());
         }
 
-        private static bool IsAssert(StatementSyntax statement) => statement is ExpressionStatementSyntax node && IsAssert(node);
-
-        private static bool IsAssert(ExpressionStatementSyntax statement) => statement.Expression is InvocationExpressionSyntax i && i.GetIdentifierName() is "Assert" && i.Expression.GetName() != "Fail";
+        private static bool IsAssert(StatementSyntax statement) => statement is ExpressionStatementSyntax e
+                                                                && e.Expression is InvocationExpressionSyntax i
+                                                                && i.GetIdentifierName().EndsWith("Assert", StringComparison.Ordinal)
+                                                                && i.Expression.GetName() != "Fail";
 
         private static bool IsAssertFail(StatementSyntax statement) => statement is ExpressionStatementSyntax node && IsAssertFail(node);
 

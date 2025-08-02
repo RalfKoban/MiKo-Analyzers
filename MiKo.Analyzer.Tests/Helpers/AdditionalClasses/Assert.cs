@@ -1,9 +1,10 @@
-﻿#pragma warning disable IDE0060 // Remove unused parameter
+﻿using System;
+using System.Threading.Tasks;
+
+#pragma warning disable IDE0060 // Remove unused parameter
 #pragma warning disable IDE0130 // Namespace does not match folder structure
 
 // ReSharper disable once CheckNamespace : Fake for Xunit Assert
-using System;
-
 namespace Xunit
 {
     public static class Assert
@@ -21,6 +22,8 @@ namespace Xunit
         }
 
         public static T Throws<T>(Action testCode) where T : Exception => null;
+
+        public static Task<T> ThrowsAsync<T>(Action testCode) where T : Exception => null;
     }
 }
 
