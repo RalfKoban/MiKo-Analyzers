@@ -95,7 +95,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected static ArgumentSyntax Is(params string[] names) => Argument(MemberIs(names));
 
         protected static bool IsNumeric(ArgumentSyntax argument) => argument.Expression.IsKind(SyntaxKind.NumericLiteralExpression)
-                                                                  || (argument.Expression is MemberAccessExpressionSyntax mae && mae.Expression.IsKind(SyntaxKind.PredefinedType));
+                                                                 || (argument.Expression is MemberAccessExpressionSyntax mae && mae.Expression.IsKind(SyntaxKind.PredefinedType));
+
+        protected static bool IsAssert(StatementSyntax statement) => statement is ExpressionStatementSyntax node && IsAssert(node);
+
+        protected static bool IsAssert(ExpressionStatementSyntax statement) => statement.Expression is InvocationExpressionSyntax i && i.GetIdentifierName().EndsWith("Assert", StringComparison.Ordinal) && i.Expression.GetName() != "Fail";
+
+        protected static bool IsAssertFail(StatementSyntax statement) => statement is ExpressionStatementSyntax node && IsAssertFail(node);
+
+        protected static bool IsAssertFail(ExpressionStatementSyntax statement) => statement.Expression is InvocationExpressionSyntax i && i.GetIdentifierName() is "Assert" && i.Expression.GetName() is "Fail";
 
         protected static ArgumentSyntax Does(string name, ArgumentSyntax argument) => Argument(Invocation("Does", name, argument));
 

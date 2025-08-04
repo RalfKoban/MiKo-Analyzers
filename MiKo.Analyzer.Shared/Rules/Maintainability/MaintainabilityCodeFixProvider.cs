@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -47,6 +48,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected static ArgumentSyntax ArgumentWithCast(in SyntaxKind kind, IdentifierNameSyntax identifier) => ArgumentWithCast(PredefinedType(kind), identifier);
 
         protected static ArgumentSyntax ArgumentWithCast(TypeSyntax type, IdentifierNameSyntax identifier) => Argument(SyntaxFactory.CastExpression(type, identifier));
+
+        protected static InvocationExpressionSyntax Invocation(ExpressionSyntax expression, string name, params ArgumentSyntax[] arguments)
+        {
+            // that's for the method call
+            var member = Member(expression, name);
+
+            return Invocation(member, arguments);
+        }
 
         protected static InvocationExpressionSyntax Invocation(string typeName, string methodName, params ArgumentSyntax[] arguments)
         {
@@ -107,6 +116,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var start = Member(typeName, methodNames[0]);
 
             var result = methodNames.Skip(1).Aggregate(start, Member);
+
+            return result;
+        }
+
+        protected static MemberAccessExpressionSyntax Member(ExpressionSyntax syntax, params string[] names)
+        {
+            var start = Member(syntax, IdentifierName(names[0]));
+
+            var result = names.Skip(1).Aggregate(start, Member);
 
             return result;
         }
@@ -186,6 +204,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var syntax = Member(typeName, identifierName);
 
             return NameOf(syntax);
+        }
+
+        protected static InvocationExpressionSyntax NameOf(TypeSyntax type, string identifierName)
+        {
+            var typeName = type.GetNameOnlyPart();
+
+            return NameOf(typeName, identifierName);
         }
 
         protected static InvocationExpressionSyntax NameOf(TypeSyntax type, LiteralExpressionSyntax literal)

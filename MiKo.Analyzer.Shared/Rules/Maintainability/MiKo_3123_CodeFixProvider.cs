@@ -158,41 +158,41 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var spaces = tryStatement.GetPositionWithinStartLine();
 
-            if (tryStatement.Finally is null)
+            var catchClauses = tryStatement.Catches;
+
+            var exceptionIdentifiers = catchClauses.ToHashSet(_ => _.Declaration?.Identifier.ToString());
+
+            // we have a finally block, so we need to ensure that the catch statements are added to the try block
+            var additionalStatements = catchClauses.SelectMany(_ => _.Block.Statements).ToList();
+
+            additionalStatements.RemoveAll(IsAssertFail);
+
+            // remove all that are assertions on the exceptions inside the catch blocks as we create our own assertion
+            additionalStatements.RemoveAll(_ => IsAssert(_) && _.DescendantTokens().Any(__ => exceptionIdentifiers.Contains(__.ToString())));
+
+            var statements = tryStatement.Block.Statements;
+
+            var assertion = tryStatement.Finally is null
+                            ? CreateNUnitAssertionStatement(statements, catchClauses, spaces + Constants.Indentation).WithTriviaFrom(tryStatement)
+                            : CreateNUnitAssertionStatement(statements, catchClauses, spaces + Constants.Indentation + Constants.Indentation);
+
+            additionalStatements.Insert(0, assertion);
+
+            if (additionalStatements.Skip(1).Any(IsAssert))
             {
-                var assertionStatement = CreateNUnitAssertionStatement(tryStatement, spaces + Constants.Indentation);
-
-                return root.ReplaceNode(tryStatement, assertionStatement.WithTriviaFrom(tryStatement));
+                // ensure that the first additional statement is separated by an empty line
+                additionalStatements[1] = additionalStatements[1].WithLeadingEmptyLine();
             }
-            else
-            {
-                var catches = tryStatement.Catches;
 
-                // we have a finally block, so we need to ensure that the catch statements are added to the try block
-                var additionalStatements = catches.SelectMany(_ => _.Block.Statements).ToList();
-
-                additionalStatements.RemoveAll(IsAssertFail);
-
-                var assertionStatement = CreateNUnitAssertionStatement(tryStatement, spaces + Constants.Indentation + Constants.Indentation);
-
-                additionalStatements.Insert(0, assertionStatement);
-
-                if (additionalStatements.Skip(1).Any(IsAssert))
-                {
-                    // ensure that the first additional statement is separated by an empty line
-                    additionalStatements[1] = additionalStatements[1].WithLeadingEmptyLine();
-                }
-
-                return root.ReplaceNode(tryStatement, tryStatement.Without(tryStatement.Catches).WithBlock(SyntaxFactory.Block(additionalStatements)));
-            }
+            return tryStatement.Finally is null
+                   ? root.ReplaceNode(tryStatement, additionalStatements.Select(_ => _.WithLeadingSpaces(spaces)))
+                   : root.ReplaceNode(tryStatement, tryStatement.Without(catchClauses).WithBlock(SyntaxFactory.Block(additionalStatements)));
         }
 
-        private static ExpressionStatementSyntax CreateNUnitAssertionStatement(TryStatementSyntax tryStatement, in int spaces)
+        private static ExpressionStatementSyntax CreateNUnitAssertionStatement(SyntaxList<StatementSyntax> statements, SyntaxList<CatchClauseSyntax> catchClauses, in int spaces)
         {
-            var statements = tryStatement.Block.Statements;
-            var assertFailStatements = statements.OfType<ExpressionStatementSyntax>().Where(IsAssertFail).ToList();
-
-            var catchClauses = tryStatement.Catches;
+            var expressionStatements = statements.OfType<ExpressionStatementSyntax>().ToList();
+            var assertFailStatements = expressionStatements.Where(IsAssertFail).ToList();
 
             var arguments = new List<ArgumentSyntax>
                             {
@@ -200,22 +200,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                 ThrowsArgument(catchClauses, assertFailStatements).WithLeadingSpace(),
                             };
 
-            if (assertFailStatements.Count > 0)
+            if (assertFailStatements.Count > 0 && assertFailStatements[0].Expression is InvocationExpressionSyntax i && i.ArgumentList?.Arguments is SeparatedSyntaxList<ArgumentSyntax> args && args.Count > 0)
             {
-                if (assertFailStatements[0].Expression is InvocationExpressionSyntax i && i.ArgumentList?.Arguments is SeparatedSyntaxList<ArgumentSyntax> args && args.Count > 0)
-                {
-                    arguments.Add(args[0].WithLeadingSpace());
-                }
-            }
-            else
-            {
-                // TODO RKN: Append more?
-                // foreach (var clause in catchClauses)
-                // {
-                //     foreach (var statement in clause.Block.Statements)
-                //     {
-                //     }
-                // }
+                arguments.Add(args[0].WithLeadingSpace());
             }
 
             return SyntaxFactory.ExpressionStatement(AssertThat(arguments.ToArray()));
@@ -229,15 +216,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                    SyntaxKind.CloseBraceToken.AsToken());
         }
 
-        private static bool IsAssert(StatementSyntax statement) => statement is ExpressionStatementSyntax e
-                                                                && e.Expression is InvocationExpressionSyntax i
-                                                                && i.GetIdentifierName().EndsWith("Assert", StringComparison.Ordinal)
-                                                                && i.Expression.GetName() != "Fail";
-
-        private static bool IsAssertFail(StatementSyntax statement) => statement is ExpressionStatementSyntax node && IsAssertFail(node);
-
-        private static bool IsAssertFail(ExpressionStatementSyntax statement) => statement.Expression is InvocationExpressionSyntax i && i.GetIdentifierName() is "Assert" && i.Expression.GetName() is "Fail";
-
         private static ArgumentSyntax ThrowsArgument(in SyntaxList<CatchClauseSyntax> catches, List<ExpressionStatementSyntax> assertFailStatements)
         {
             var needsException = assertFailStatements.Count > 0;
@@ -248,17 +226,85 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (catchClause.Declaration is CatchDeclarationSyntax catchDeclaration)
                 {
-                    if (catchClause.Block.Statements.Count is 0 && needsException is false)
+                    var statements = catchClause.Block.Statements;
+
+                    if (statements.Count is 0 && needsException is false)
                     {
                         return Throws("Nothing");
                     }
 
-                    // TODO RKN: check for assertions in catch block, and use those
-                    return Throws(catchDeclaration.Type);
+                    var asserts = statements.Where(IsAssert).ToList();
+
+                    if (asserts.Count is 0)
+                    {
+                        return Throws(catchDeclaration.Type);
+                    }
+
+                    return Throws(catchDeclaration, asserts);
                 }
             }
 
             return Throws(needsException ? "Exception" : "Nothing");
+        }
+
+        private static ArgumentSyntax Throws(CatchDeclarationSyntax catchDeclaration, IEnumerable<StatementSyntax> asserts)
+        {
+            var exceptionType = catchDeclaration.Type;
+            var exceptionIdentifier = catchDeclaration.GetName();
+
+            var exceptionSpecificAsserts = asserts.OfType<ExpressionStatementSyntax>().Where(_ => _.DescendantTokens().Any(__ => __.ToString() == exceptionIdentifier)).ToList();
+
+            // check for assertions in catch block, and use those
+            if (exceptionSpecificAsserts.Count > 0)
+            {
+                ExpressionSyntax expression = Invocation("Throws", "TypeOf", exceptionType);
+
+                var continuation = "With";
+
+                foreach (var assert in exceptionSpecificAsserts)
+                {
+                    if (assert.Expression is InvocationExpressionSyntax i)
+                    {
+                        if (i.GetName() is "That")
+                        {
+                            var arguments = i.ArgumentList.Arguments;
+
+                            if (arguments.Count > 1)
+                            {
+                                var argument = arguments[0];
+
+                                if (argument.Expression is MemberAccessExpressionSyntax maes && maes.GetIdentifierName() == exceptionIdentifier)
+                                {
+                                    var name = maes.GetName();
+
+                                    if (name is "InnerException")
+                                    {
+                                        expression = Member(expression, continuation, "InnerException");
+                                    }
+                                    else
+                                    {
+                                        expression = Invocation(Member(expression, continuation), "Property", Argument(NameOf(exceptionType, name)));
+                                    }
+
+                                    // get invocation from other argument
+                                    var other = arguments.FirstOrDefault(_ => _.GetName() != name);
+
+                                    if (other?.Expression is InvocationExpressionSyntax otherInvocation)
+                                    {
+                                        expression = Invocation(expression, otherInvocation.GetName(), otherInvocation.ArgumentList.Arguments.ToArray());
+                                    }
+
+                                    continuation = "And";
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return Argument(expression);
+            }
+
+            return Throws(exceptionType);
         }
     }
 }

@@ -579,6 +579,9 @@ namespace MiKoSolutions.Analyzers
                 case IdentifierNameSyntax identifier:
                     return identifier;
 
+                case MemberAccessExpressionSyntax maes:
+                    return maes.Expression;
+
                 default:
                     return null;
             }
@@ -598,6 +601,8 @@ namespace MiKoSolutions.Analyzers
                     return null;
             }
         }
+
+        internal static string GetIdentifierName(this ArgumentSyntax value) => value.Expression.GetIdentifierName();
 
         internal static string GetIdentifierName(this ExpressionSyntax value) => value.GetIdentifierExpression().GetName();
 
