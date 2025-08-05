@@ -170,11 +170,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             // remove all that are assertions on the exceptions inside the catch blocks as we create our own assertion
             additionalStatements.RemoveAll(_ => IsAssert(_) && _.DescendantTokens().Any(__ => exceptionIdentifiers.Contains(__.ToString())));
 
-            var statements = tryStatement.Block.Statements;
-
             var assertion = tryStatement.Finally is null
-                            ? CreateNUnitAssertionStatement(statements, catchClauses, spaces + Constants.Indentation).WithTriviaFrom(tryStatement)
-                            : CreateNUnitAssertionStatement(statements, catchClauses, spaces + Constants.Indentation + Constants.Indentation);
+                            ? CreateNUnitAssertionStatement(tryStatement, catchClauses, spaces + Constants.Indentation).WithTriviaFrom(tryStatement)
+                            : CreateNUnitAssertionStatement(tryStatement, catchClauses, spaces + Constants.Indentation + Constants.Indentation);
 
             additionalStatements.Insert(0, assertion);
 
@@ -189,20 +187,33 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                    : root.ReplaceNode(tryStatement, tryStatement.Without(catchClauses).WithBlock(SyntaxFactory.Block(additionalStatements)));
         }
 
-        private static ExpressionStatementSyntax CreateNUnitAssertionStatement(SyntaxList<StatementSyntax> statements, SyntaxList<CatchClauseSyntax> catchClauses, in int spaces)
+        private static ExpressionStatementSyntax CreateNUnitAssertionStatement(TryStatementSyntax tryStatement, in SyntaxList<CatchClauseSyntax> catchClauses, in int spaces)
         {
-            var expressionStatements = statements.OfType<ExpressionStatementSyntax>().ToList();
-            var assertFails = expressionStatements.Where(IsAssertFail).ToList();
+            var statements = tryStatement.Block.Statements;
+            var tryAssertFails = statements.OfType<ExpressionStatementSyntax>().Where(IsAssertFail).ToList();
 
             var arguments = new List<ArgumentSyntax>
                             {
-                                Argument(ParenthesizedLambda(Block(statements.Except(assertFails), spaces))),
-                                Throws(catchClauses, assertFails).WithLeadingSpace(),
+                                Argument(ParenthesizedLambda(Block(statements.Except(tryAssertFails), spaces))),
+                                Throws(catchClauses, tryAssertFails).WithLeadingSpace(),
                             };
 
-            if (assertFails.Count > 0 && assertFails[0].Expression is InvocationExpressionSyntax i && i.ArgumentList?.Arguments is SeparatedSyntaxList<ArgumentSyntax> args && args.Count > 0)
+            if (tryAssertFails.Count > 0)
             {
-                arguments.Add(args[0].WithLeadingSpace());
+                if (tryAssertFails[0].Expression is InvocationExpressionSyntax i && i.ArgumentList?.Arguments is SeparatedSyntaxList<ArgumentSyntax> args && args.Count > 0)
+                {
+                    arguments.AddRange(args.Select(_ => _.WithLeadingSpace()));
+                }
+            }
+            else
+            {
+                // maybe we have an 'Assert.Fail' in the catch block, so we need to check those
+                var catchAssertFail = catchClauses.SelectMany(_ => _.Block.Statements).OfType<ExpressionStatementSyntax>().FirstOrDefault(IsAssertFail);
+
+                if (catchAssertFail?.Expression is InvocationExpressionSyntax i && i.ArgumentList?.Arguments is SeparatedSyntaxList<ArgumentSyntax> args && args.Count > 0)
+                {
+                    arguments.AddRange(args.Select(_ => _.WithLeadingSpace()));
+                }
             }
 
             return SyntaxFactory.ExpressionStatement(AssertThat(arguments.ToArray()));
@@ -216,9 +227,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                    SyntaxKind.CloseBraceToken.AsToken());
         }
 
-        private static ArgumentSyntax Throws(in SyntaxList<CatchClauseSyntax> catches, List<ExpressionStatementSyntax> assertFails)
+        private static ArgumentSyntax Throws(in SyntaxList<CatchClauseSyntax> catches, List<ExpressionStatementSyntax> tryAssertFails)
         {
-            var needsException = assertFails.Count > 0;
+            var needsException = tryAssertFails.Count > 0;
 
             if (catches.Count > 0)
             {
@@ -229,6 +240,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     var statements = catchClause.Block.Statements;
 
                     if (statements.Count is 0 && needsException is false)
+                    {
+                        return Throws("Nothing");
+                    }
+
+                    if (statements.Any(IsAssertFail))
                     {
                         return Throws("Nothing");
                     }

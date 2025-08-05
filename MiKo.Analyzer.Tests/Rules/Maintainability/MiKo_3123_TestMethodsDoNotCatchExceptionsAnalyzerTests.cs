@@ -709,7 +709,7 @@ namespace Bla
             }
             catch
             {
-                Assert.Fail(""should never happen"");
+                Assert.Fail(""unexpected exception"");
             }
         }
     }
@@ -733,13 +733,181 @@ namespace Bla
             {
                 var a = 123;
                 var b = a.ToString();
-            }, Throws.Nothing);
+            }, Throws.Nothing, ""unexpected exception"");
         }
     }
 }
 ";
 
             VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_NUnit_test_method_with_Assert_Fail_in_catch_exception_block()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(String s)
+        {
+            try
+            {
+                var a = 123;
+                var b = a.ToString();
+            }
+            catch (Exception)
+            {
+                Assert.Fail(""unexpected exception"");
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(String s)
+        {
+            Assert.That(() =>
+            {
+                var a = 123;
+                var b = a.ToString();
+            }, Throws.Nothing, ""unexpected exception"");
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_NUnit_test_method_with_Assert_Fail_in_catch_exception_ex_block()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(String s)
+        {
+            try
+            {
+                var a = 123;
+                var b = a.ToString();
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(""unexpected exception"");
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(String s)
+        {
+            Assert.That(() =>
+            {
+                var a = 123;
+                var b = a.ToString();
+            }, Throws.Nothing, ""unexpected exception"");
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_NUnit_test_method_with_Assert_Fail_in_catch_exception_ex_block_and_usage_of_exception_in_failure_message()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(String s)
+        {
+            try
+            {
+                var a = 123;
+                var b = a.ToString();
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(""unexpected exception:\n{0}\n{1}\n{2}"", ex.GetType().Name, ex.Message, ex.Stacktrace);
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(String s)
+        {
+            Assert.That(() =>
+            {
+                var a = 123;
+                var b = a.ToString();
+            }, Throws.Nothing, ""unexpected exception:\n{0}\n{1}\n{2}"", ex.GetType().Name, ex.Message, ex.Stacktrace);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode, allowNewCompilerDiagnostics: true); // 'ex' is no longer valid, needs to be manually fixed by developers
         }
 
         [Test]
@@ -820,7 +988,7 @@ namespace Bla
                 var a = 123;
                 var b = a.ToString();
 
-                Assert.Fail(""should never happen"");
+                Assert.Fail(""unexpected exception"");
             }
             catch (NotSupportedException)
             {
@@ -847,7 +1015,7 @@ namespace Bla
             {
                 var a = 123;
                 var b = a.ToString();
-            }, Throws.TypeOf<NotSupportedException>(), ""should never happen"");
+            }, Throws.TypeOf<NotSupportedException>(), ""unexpected exception"");
         }
     }
 }
@@ -881,7 +1049,7 @@ namespace Bla
                 var a = 123;
                 var b = a.ToString();
 
-                Assert.Fail(""should never happen"");
+                Assert.Fail(""unexpected exception"");
             }
             catch (" + exceptionName + @")
             {
@@ -908,7 +1076,7 @@ namespace Bla
             {
                 var a = 123;
                 var b = a.ToString();
-            }, Throws." + exceptionName + @", ""should never happen"");
+            }, Throws." + exceptionName + @", ""unexpected exception"");
         }
     }
 }
@@ -1247,7 +1415,7 @@ namespace Bla
             }
             catch
             {
-                Assert.Fail(""should never happen"");
+                Assert.Fail(""unexpected exception"");
             }
         }
     }
@@ -1349,7 +1517,7 @@ namespace Bla
                 var a = 123;
                 var b = a.ToString();
 
-                Assert.Fail(""should never happen"");
+                Assert.Fail(""unexpected exception"");
             }
             catch (NotSupportedException)
             {
