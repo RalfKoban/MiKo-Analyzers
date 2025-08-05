@@ -94,7 +94,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                         return SyntaxFactory.BinaryExpression(kind, left, right).WithTriviaFrom(syntax);
                     }
 
-                    var operand = Invocation(Member(left, nameof(Equals)), argument1);
+                    var operand = Invocation(left, nameof(Equals), argument1);
 
                     if (kind is SyntaxKind.NotEqualsExpression)
                     {

@@ -61,6 +61,30 @@ namespace MiKoSolutions.Analyzers.Rules
             return SyntaxFactory.InvocationExpression(member, argumentList);
         }
 
+        protected static InvocationExpressionSyntax Invocation(ExpressionSyntax expression, string name, params ArgumentSyntax[] arguments)
+        {
+            // that's for the method call
+            var member = Member(expression, name);
+
+            return Invocation(member, arguments);
+        }
+
+        protected static InvocationExpressionSyntax Invocation(ExpressionSyntax expression, string name1, string name2, params ArgumentSyntax[] arguments)
+        {
+            // that's for the method call
+            var member = Member(Member(expression, name1), name2);
+
+            return Invocation(member, arguments);
+        }
+
+        protected static InvocationExpressionSyntax Invocation(ExpressionSyntax expression, string[] names, params ArgumentSyntax[] arguments)
+        {
+            // that's for the method calls
+            var member = Member(expression, names);
+
+            return Invocation(member, arguments);
+        }
+
         protected static InvocationExpressionSyntax Invocation(string typeName, string methodName, params TypeSyntax[] items)
         {
             // that's for the method call
@@ -111,6 +135,15 @@ namespace MiKoSolutions.Analyzers.Rules
             var method = GenericName(methodName, items);
 
             return Member(type, method);
+        }
+
+        protected static MemberAccessExpressionSyntax Member(ExpressionSyntax syntax, params string[] names)
+        {
+            var start = Member(syntax, IdentifierName(names[0]));
+
+            var result = names.Skip(1).Aggregate(start, Member);
+
+            return result;
         }
 
         protected static IdentifierNameSyntax IdentifierName(string name) => SyntaxFactory.IdentifierName(name);

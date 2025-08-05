@@ -199,7 +199,7 @@ namespace Bla
 ");
 
         [Test]
-        public void Code_gets_fixed_for_NUnit_test_method_with_assertion_in_catch_block()
+        public void Code_gets_fixed_for_NUnit_test_method_with_Assert_That_EqualTo_assertions_in_catch_block()
         {
             const string OriginalCode = @"
 using System;
@@ -236,6 +236,7 @@ namespace Bla
                 // verify
                 Assert.That(ex.InnerException, Is.EqualTo(innerOperationException));
                 Assert.That(ex.Severity, Is.EqualTo(Severity.Fatal));
+                Assert.That(ex.HResult, Is.EqualTo(42));
                 Assert.That(_transactionCreationCounter, Is.EqualTo(1));
                 Assert.That(_closeTransactionCounter, Is.EqualTo(1));
                 Assert.That(_rollbackCounter, Is.EqualTo(1));
@@ -274,11 +275,409 @@ namespace Bla
             {
                 var a = 123;
                 var b = a.ToString();
-            }, Throws.TypeOf<CustomException>().With.InnerException.EqualTo(innerOperationException).And.Property(nameof(CustomException.Severity)).EqualTo(Severity.Fatal));
+            }, Throws.TypeOf<CustomException>().With.InnerException.EqualTo(innerOperationException).And.Property(nameof(CustomException.Severity)).EqualTo(Severity.Fatal).And.Property(nameof(CustomException.HResult)).EqualTo(42));
 
             Assert.That(_transactionCreationCounter, Is.EqualTo(1));
             Assert.That(_closeTransactionCounter, Is.EqualTo(1));
             Assert.That(_rollbackCounter, Is.EqualTo(1));
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_NUnit_test_method_with_Assert_That_Not_EqualTo_assertions_in_catch_block()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public enum Severity { None, Fatal, Whatever }
+
+    public class CustomException : Exception
+    {
+        public Severity Severity { get; }
+    }
+
+    [TestFixture]
+    public class TestMe
+    {
+        private int _transactionCreationCounter = 0;
+        private int _closeTransactionCounter = 0;
+        private int _rollbackCounter = 0;
+        private Exception innerOperationException = null;
+
+        [Test]
+        public void DoSomething(String s)
+        {
+            try
+            {
+                var a = 123;
+                var b = a.ToString();
+            }
+            catch (CustomException ex)
+            {
+                // verify
+                Assert.That(ex.InnerException, Is.Not.EqualTo(innerOperationException));
+                Assert.That(ex.Severity, Is.Not.EqualTo(Severity.Fatal));
+                Assert.That(ex.HResult, Is.EqualTo(42));
+                Assert.That(_transactionCreationCounter, Is.EqualTo(1));
+                Assert.That(_closeTransactionCounter, Is.EqualTo(1));
+                Assert.That(_rollbackCounter, Is.EqualTo(1));
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public enum Severity { None, Fatal, Whatever }
+
+    public class CustomException : Exception
+    {
+        public Severity Severity { get; }
+    }
+
+    [TestFixture]
+    public class TestMe
+    {
+        private int _transactionCreationCounter = 0;
+        private int _closeTransactionCounter = 0;
+        private int _rollbackCounter = 0;
+        private Exception innerOperationException = null;
+
+        [Test]
+        public void DoSomething(String s)
+        {
+            Assert.That(() =>
+            {
+                var a = 123;
+                var b = a.ToString();
+            }, Throws.TypeOf<CustomException>().With.InnerException.Not.EqualTo(innerOperationException).And.Property(nameof(CustomException.Severity)).Not.EqualTo(Severity.Fatal).And.Property(nameof(CustomException.HResult)).EqualTo(42));
+
+            Assert.That(_transactionCreationCounter, Is.EqualTo(1));
+            Assert.That(_closeTransactionCounter, Is.EqualTo(1));
+            Assert.That(_rollbackCounter, Is.EqualTo(1));
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_NUnit_test_method_with_Assert_AreEqual_assertions_in_catch_block()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public enum Severity { None, Fatal, Whatever }
+
+    public class CustomException : Exception
+    {
+        public Severity Severity { get; }
+    }
+
+    [TestFixture]
+    public class TestMe
+    {
+        private Exception innerOperationException = null;
+
+        [Test]
+        public void DoSomething(String s)
+        {
+            try
+            {
+                var a = 123;
+                var b = a.ToString();
+            }
+            catch (CustomException ex)
+            {
+                // verify
+                Assert.AreEqual(innerOperationException, ex.InnerException);
+                Assert.AreEqual(Severity.Fatal, ex.Severity);
+                Assert.AreEqual(42, ex.HResult);
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public enum Severity { None, Fatal, Whatever }
+
+    public class CustomException : Exception
+    {
+        public Severity Severity { get; }
+    }
+
+    [TestFixture]
+    public class TestMe
+    {
+        private Exception innerOperationException = null;
+
+        [Test]
+        public void DoSomething(String s)
+        {
+            Assert.That(() =>
+            {
+                var a = 123;
+                var b = a.ToString();
+            }, Throws.TypeOf<CustomException>().With.InnerException.EqualTo(innerOperationException).And.Property(nameof(CustomException.Severity)).EqualTo(Severity.Fatal).And.Property(nameof(CustomException.HResult)).EqualTo(42));
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_NUnit_test_method_with_Assert_AreNotEqual_assertions_in_catch_block()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public enum Severity { None, Fatal, Whatever }
+
+    public class CustomException : Exception
+    {
+        public Severity Severity { get; }
+    }
+
+    [TestFixture]
+    public class TestMe
+    {
+        private Exception innerOperationException = null;
+
+        [Test]
+        public void DoSomething(String s)
+        {
+            try
+            {
+                var a = 123;
+                var b = a.ToString();
+            }
+            catch (CustomException ex)
+            {
+                // verify
+                Assert.AreNotEqual(innerOperationException, ex.InnerException);
+                Assert.AreNotEqual(Severity.Fatal, ex.Severity);
+                Assert.AreNotEqual(42, ex.HResult);
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public enum Severity { None, Fatal, Whatever }
+
+    public class CustomException : Exception
+    {
+        public Severity Severity { get; }
+    }
+
+    [TestFixture]
+    public class TestMe
+    {
+        private Exception innerOperationException = null;
+
+        [Test]
+        public void DoSomething(String s)
+        {
+            Assert.That(() =>
+            {
+                var a = 123;
+                var b = a.ToString();
+            }, Throws.TypeOf<CustomException>().With.InnerException.Not.EqualTo(innerOperationException).And.Property(nameof(CustomException.Severity)).Not.EqualTo(Severity.Fatal).And.Property(nameof(CustomException.HResult)).Not.EqualTo(42));
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_NUnit_test_method_with_swapped_Assert_AreEqual_assertions_in_catch_block()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public enum Severity { None, Fatal, Whatever }
+
+    public class CustomException : Exception
+    {
+        public Severity Severity { get; }
+    }
+
+    [TestFixture]
+    public class TestMe
+    {
+        private Exception innerOperationException = null;
+
+        [Test]
+        public void DoSomething(String s)
+        {
+            try
+            {
+                var a = 123;
+                var b = a.ToString();
+            }
+            catch (CustomException ex)
+            {
+                // verify
+                Assert.AreEqual(ex.InnerException, innerOperationException);
+                Assert.AreEqual(ex.Severity, Severity.Fatal);
+                Assert.AreEqual(ex.HResult, 42);
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public enum Severity { None, Fatal, Whatever }
+
+    public class CustomException : Exception
+    {
+        public Severity Severity { get; }
+    }
+
+    [TestFixture]
+    public class TestMe
+    {
+        private Exception innerOperationException = null;
+
+        [Test]
+        public void DoSomething(String s)
+        {
+            Assert.That(() =>
+            {
+                var a = 123;
+                var b = a.ToString();
+            }, Throws.TypeOf<CustomException>().With.InnerException.EqualTo(innerOperationException).And.Property(nameof(CustomException.Severity)).EqualTo(Severity.Fatal).And.Property(nameof(CustomException.HResult)).EqualTo(42));
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_NUnit_test_method_with_swapped_Assert_AreNotEqual_assertions_in_catch_block()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public enum Severity { None, Fatal, Whatever }
+
+    public class CustomException : Exception
+    {
+        public Severity Severity { get; }
+    }
+
+    [TestFixture]
+    public class TestMe
+    {
+        private Exception innerOperationException = null;
+
+        [Test]
+        public void DoSomething(String s)
+        {
+            try
+            {
+                var a = 123;
+                var b = a.ToString();
+            }
+            catch (CustomException ex)
+            {
+                // verify
+                Assert.AreNotEqual(ex.InnerException, innerOperationException);
+                Assert.AreNotEqual(ex.Severity, Severity.Fatal);
+                Assert.AreNotEqual(ex.HResult, 42);
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public enum Severity { None, Fatal, Whatever }
+
+    public class CustomException : Exception
+    {
+        public Severity Severity { get; }
+    }
+
+    [TestFixture]
+    public class TestMe
+    {
+        private Exception innerOperationException = null;
+
+        [Test]
+        public void DoSomething(String s)
+        {
+            Assert.That(() =>
+            {
+                var a = 123;
+                var b = a.ToString();
+            }, Throws.TypeOf<CustomException>().With.InnerException.Not.EqualTo(innerOperationException).And.Property(nameof(CustomException.Severity)).Not.EqualTo(Severity.Fatal).And.Property(nameof(CustomException.HResult)).Not.EqualTo(42));
         }
     }
 }

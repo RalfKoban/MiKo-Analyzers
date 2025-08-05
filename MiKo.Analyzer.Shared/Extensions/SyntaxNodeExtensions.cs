@@ -956,6 +956,22 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<string> GetNames(this in SeparatedSyntaxList<VariableDeclaratorSyntax> value) => value.Select(_ => _.GetName());
 
+        internal static string[] GetNames(this InvocationExpressionSyntax value)
+        {
+            var names = new Stack<string>();
+
+            var expression = value.Expression;
+
+            while (expression is MemberAccessExpressionSyntax maes)
+            {
+                names.Push(maes.GetName());
+
+                expression = maes.Expression;
+            }
+
+            return names.ToArray();
+        }
+
         internal static string GetXmlTagName(this SyntaxNode value)
         {
             switch (value)
