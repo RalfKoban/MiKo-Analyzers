@@ -61,12 +61,44 @@ namespace MiKoSolutions.Analyzers.Rules
             return SyntaxFactory.InvocationExpression(member, argumentList);
         }
 
-        protected static InvocationExpressionSyntax Invocation(ExpressionSyntax expression, string name, params ArgumentSyntax[] arguments)
+        protected static InvocationExpressionSyntax Invocation(ExpressionSyntax expression, string name)
+        {
+            // that's for the method call
+            var member = Member(expression, name);
+
+            return Invocation(member);
+        }
+
+        protected static InvocationExpressionSyntax Invocation(ExpressionSyntax expression, string name, ArgumentSyntax argument)
+        {
+            // that's for the method call
+            var member = Member(expression, name);
+
+            return Invocation(member, argument);
+        }
+
+        protected static InvocationExpressionSyntax Invocation(ExpressionSyntax expression, string name, ArgumentSyntax[] arguments)
         {
             // that's for the method call
             var member = Member(expression, name);
 
             return Invocation(member, arguments);
+        }
+
+        protected static InvocationExpressionSyntax Invocation(ExpressionSyntax expression, string name, TypeSyntax item)
+        {
+            // that's for the method call
+            var member = Member(expression, name, item);
+
+            return Invocation(member);
+        }
+
+        protected static InvocationExpressionSyntax Invocation(ExpressionSyntax expression, string name, TypeSyntax[] items)
+        {
+            // that's for the method call
+            var member = Member(expression, name, items);
+
+            return Invocation(member);
         }
 
         protected static InvocationExpressionSyntax Invocation(ExpressionSyntax expression, string name1, string name2, params ArgumentSyntax[] arguments)
@@ -77,12 +109,12 @@ namespace MiKoSolutions.Analyzers.Rules
             return Invocation(member, arguments);
         }
 
-        protected static InvocationExpressionSyntax Invocation(ExpressionSyntax expression, string[] names, params ArgumentSyntax[] arguments)
+        protected static InvocationExpressionSyntax Invocation(ExpressionSyntax expression, string name1, string name2, params TypeSyntax[] items)
         {
-            // that's for the method calls
-            var member = Member(expression, names);
+            // that's for the method call
+            var member = Member(Member(expression, name1), name2, items);
 
-            return Invocation(member, arguments);
+            return Invocation(member);
         }
 
         protected static InvocationExpressionSyntax Invocation(string typeName, string methodName, params TypeSyntax[] items)
@@ -91,6 +123,25 @@ namespace MiKoSolutions.Analyzers.Rules
             var member = Member(typeName, methodName, items);
 
             return Invocation(member);
+        }
+
+        protected static InvocationExpressionSyntax Invocation(ExpressionSyntax expression, string[] names, params TypeSyntax[] items)
+        {
+            var length = names.Length;
+
+            switch (length)
+            {
+                case 0: return Invocation(expression);
+                case 1: return Invocation(expression, names[0], items);
+                case 2: return Invocation(expression, names[0], names[1], items);
+                default:
+                {
+                    var member = Member(expression, names.Take(length - 1).ToArray());
+                    var method = Member(member, names[length - 1], items);
+
+                    return Invocation(method);
+                }
+            }
         }
 
         protected static IsPatternExpressionSyntax IsNotPattern(IsPatternExpressionSyntax syntax) => IsNotPattern(syntax.Expression, syntax.Pattern);
@@ -124,12 +175,20 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected static MemberAccessExpressionSyntax Member(ExpressionSyntax syntax, string name)
         {
-            var identifierName = IdentifierName(name);
-
-            return Member(syntax, identifierName);
+            return Member(syntax, IdentifierName(name));
         }
 
-        protected static MemberAccessExpressionSyntax Member(string typeName, string methodName, TypeSyntax[] items)
+        protected static MemberAccessExpressionSyntax Member(ExpressionSyntax syntax, string name, params TypeSyntax[] items)
+        {
+            if (items is null || items.Length == 0)
+            {
+                return Member(syntax, IdentifierName(name));
+            }
+
+            return Member(syntax, GenericName(name, items));
+        }
+
+        protected static MemberAccessExpressionSyntax Member(string typeName, string methodName, params TypeSyntax[] items)
         {
             var type = IdentifierName(typeName);
             var method = GenericName(methodName, items);

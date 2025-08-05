@@ -972,6 +972,32 @@ namespace MiKoSolutions.Analyzers
             return names.ToArray();
         }
 
+        internal static TypeSyntax[] GetTypes(this MemberAccessExpressionSyntax value)
+        {
+            if (value.Name is GenericNameSyntax generic)
+            {
+                return generic.TypeArgumentList.Arguments.ToArray();
+            }
+
+            return Array.Empty<TypeSyntax>();
+        }
+
+        internal static TypeSyntax[] GetTypes(this InvocationExpressionSyntax value)
+        {
+            var types = new List<TypeSyntax>();
+
+            var expression = value.Expression;
+
+            while (expression is MemberAccessExpressionSyntax maes)
+            {
+                types.AddRange(maes.GetTypes());
+
+                expression = maes.Expression;
+            }
+
+            return types.ToArray();
+        }
+
         internal static string GetXmlTagName(this SyntaxNode value)
         {
             switch (value)
@@ -3050,6 +3076,11 @@ namespace MiKoSolutions.Analyzers
         internal static T WithAdditionalTrailingTrivia<T>(this T value, params SyntaxTrivia[] trivia) where T : SyntaxNode
         {
             return value.WithTrailingTrivia(value.GetTrailingTrivia().AddRange(trivia));
+        }
+
+        internal static InvocationExpressionSyntax WithArgument(this InvocationExpressionSyntax value, ArgumentSyntax argument)
+        {
+            return value.WithArgumentList(value.ArgumentList.AddArguments(argument));
         }
 
         internal static T WithAttribute<T>(this T value, XmlAttributeSyntax attribute) where T : XmlNodeSyntax

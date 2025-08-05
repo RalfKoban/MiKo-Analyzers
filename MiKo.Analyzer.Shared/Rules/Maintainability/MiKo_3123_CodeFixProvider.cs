@@ -275,17 +275,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 if (exceptionSpecificAsserts.All(_ => _.Expression.GetName() is "That"))
                 {
-                    return ArgumentForNUnitThat(exceptionSpecificAsserts, exceptionType, exceptionIdentifier);
+                    return ThrowsForNUnitThat(exceptionSpecificAsserts, exceptionType, exceptionIdentifier);
                 }
 
                 // we have assertions that are not 'That', so we need to handle those differently
-                return ArgumentForNUnitClassic(exceptionType, exceptionIdentifier, exceptionSpecificAsserts);
+                return ThrowsForNUnitClassic(exceptionType, exceptionIdentifier, exceptionSpecificAsserts);
             }
 
             return Throws(exceptionType);
         }
 
-        private static ArgumentSyntax ArgumentForNUnitThat(IEnumerable<ExpressionStatementSyntax> exceptionSpecificAsserts, TypeSyntax exceptionType, string exceptionIdentifier)
+        private static ArgumentSyntax ThrowsForNUnitThat(IEnumerable<ExpressionStatementSyntax> exceptionSpecificAsserts, TypeSyntax exceptionType, string exceptionIdentifier)
         {
             var invocation = Invocation("Throws", "TypeOf", exceptionType);
 
@@ -318,14 +318,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (other?.Expression is InvocationExpressionSyntax otherInvocation)
                 {
-                    return Invocation(nested, otherInvocation.GetNames(), otherInvocation.ArgumentList.Arguments.ToArray());
+                    return Invocation(nested, otherInvocation.GetNames(), otherInvocation.GetTypes()).WithArgumentList(otherInvocation.ArgumentList);
                 }
             }
 
             return invocationToBuild;
         }
 
-        private static ArgumentSyntax ArgumentForNUnitClassic(TypeSyntax exceptionType, string exceptionIdentifier, List<ExpressionStatementSyntax> exceptionSpecificAsserts)
+        private static ArgumentSyntax ThrowsForNUnitClassic(TypeSyntax exceptionType, string exceptionIdentifier, List<ExpressionStatementSyntax> exceptionSpecificAsserts)
         {
             var invocation = Invocation("Throws", "TypeOf", exceptionType);
 
@@ -334,23 +334,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             // we have assertions that are not 'That', so we need to handle those differently
             foreach (var assert in exceptionSpecificAsserts)
             {
-                if (assert.Expression is InvocationExpressionSyntax i && i.ArgumentList is ArgumentListSyntax argumentList)
+                if (assert.Expression is InvocationExpressionSyntax i)
                 {
-                    var arguments = argumentList.Arguments;
-
-                    var assertionMethod = i.GetName();
-
-                    if (arguments.Count > 1)
-                    {
-                        switch (assertionMethod)
-                        {
-                            case "AreEqual":
-                            case "AreNotEqual":
-                                invocation = InvocationForNUnitClassic(assertionMethod, continuation, invocation, arguments, exceptionType, exceptionIdentifier);
-
-                                break;
-                        }
-                    }
+                    invocation = InvocationForNUnitClassic(invocation, continuation, i, exceptionType, exceptionIdentifier);
                 }
 
                 continuation = "And";
@@ -359,41 +345,50 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return Argument(invocation);
         }
 
-        private static InvocationExpressionSyntax InvocationForNUnitClassic(string assertionMethod, string continuation, InvocationExpressionSyntax invocationToBuild, in SeparatedSyntaxList<ArgumentSyntax> arguments, TypeSyntax exceptionType, string exceptionIdentifier)
+        private static InvocationExpressionSyntax InvocationForNUnitClassic(InvocationExpressionSyntax invocationToBuild, string continuation, InvocationExpressionSyntax original, TypeSyntax exceptionType, string exceptionIdentifier)
         {
-            var argument1 = arguments[1];
+            var arguments = original.ArgumentList.Arguments;
 
-            if (argument1.Expression is MemberAccessExpressionSyntax maes1 && maes1.GetIdentifierName() == exceptionIdentifier)
+            if (arguments.Count > 1)
             {
-                return InvocationForNUnitClassic(assertionMethod, continuation, invocationToBuild, arguments, argument1, exceptionType, exceptionIdentifier);
+                var argument1 = arguments[1];
+
+                if (argument1.Expression.GetIdentifierName() == exceptionIdentifier)
+                {
+                    return InvocationForNUnitClassic(invocationToBuild, continuation, original, exceptionType, argument1);
+                }
             }
 
+            // maybe swapped arguments, so check them
             var argument0 = arguments[0];
 
-            // maybe swapped arguments, so check them
-            if (argument0.Expression is MemberAccessExpressionSyntax maes0 && maes0.GetIdentifierName() == exceptionIdentifier)
+            if (argument0.Expression.GetIdentifierName() == exceptionIdentifier)
             {
-                return InvocationForNUnitClassic(assertionMethod, continuation, invocationToBuild, arguments, argument0, exceptionType, exceptionIdentifier);
+                return InvocationForNUnitClassic(invocationToBuild, continuation, original, exceptionType, argument0);
             }
 
             return invocationToBuild;
         }
 
-        private static InvocationExpressionSyntax InvocationForNUnitClassic(string assertionMethod, string continuation, InvocationExpressionSyntax invocationToBuild, in SeparatedSyntaxList<ArgumentSyntax> arguments, ArgumentSyntax argument, TypeSyntax exceptionType, string exceptionIdentifier)
+        private static InvocationExpressionSyntax InvocationForNUnitClassic(InvocationExpressionSyntax invocationToBuild, string continuation, InvocationExpressionSyntax original, TypeSyntax exceptionType, ArgumentSyntax argument)
         {
-            if (argument.Expression is MemberAccessExpressionSyntax maes && maes.GetIdentifierName() == exceptionIdentifier)
+            var name = argument.GetName();
+            var nested = NestedExpression(invocationToBuild, continuation, exceptionType, name);
+
+            // get invocation from other argument
+            var arguments = original.ArgumentList.Arguments;
+            var other = arguments.FirstOrDefault(_ => _.GetName() != name);
+
+            // get types
+            var types = original.GetTypes();
+            var assertionMethod = original.GetName();
+
+            switch (assertionMethod)
             {
-                var name = maes.GetName();
-                var nested = NestedExpression(invocationToBuild, continuation, exceptionType, name);
-
-                // get invocation from other argument
-                var other = arguments.FirstOrDefault(_ => _.GetName() != name);
-
-                switch (assertionMethod)
-                {
-                    case "AreEqual": return Invocation(nested, "EqualTo", other);
-                    case "AreNotEqual": return Invocation(nested, "Not", "EqualTo", other);
-                }
+                case "AreEqual": return Invocation(nested, "EqualTo", types).WithArgument(other);
+                case "AreNotEqual": return Invocation(nested, "Not", "EqualTo", types).WithArgument(other);
+                case "IsInstanceOf": return Invocation(nested, "InstanceOf", types).WithArgument(other);
+                case "IsNotInstanceOf": return Invocation(nested, "Not", "InstanceOf", types).WithArgument(other);
             }
 
             return invocationToBuild;
