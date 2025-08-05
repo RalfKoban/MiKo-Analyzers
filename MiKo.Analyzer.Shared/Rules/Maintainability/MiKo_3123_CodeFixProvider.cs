@@ -293,36 +293,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             foreach (var assert in exceptionSpecificAsserts)
             {
-                if (assert.Expression is InvocationExpressionSyntax i && i.ArgumentList is ArgumentListSyntax argumentList)
+                if (assert.Expression is InvocationExpressionSyntax i)
                 {
-                    invocation = InvocationForNUnitThat(continuation, invocation, argumentList.Arguments, 0, exceptionType, exceptionIdentifier);
+                    invocation = InvocationForNUnitThat(invocation, continuation, i, exceptionType, exceptionIdentifier);
                 }
 
                 continuation = "And";
             }
 
             return Argument(invocation);
-        }
-
-        private static InvocationExpressionSyntax InvocationForNUnitThat(string continuation, InvocationExpressionSyntax invocationToBuild, in SeparatedSyntaxList<ArgumentSyntax> arguments, in int argumentIndex, TypeSyntax exceptionType, string exceptionIdentifier)
-        {
-            var argument = arguments[argumentIndex];
-
-            if (argument.Expression is MemberAccessExpressionSyntax maes && maes.GetIdentifierName() == exceptionIdentifier)
-            {
-                var name = maes.GetName();
-                var nested = NestedExpression(invocationToBuild, continuation, exceptionType, name);
-
-                // get invocation from other argument
-                var other = arguments.FirstOrDefault(_ => _.GetName() != name);
-
-                if (other?.Expression is InvocationExpressionSyntax otherInvocation)
-                {
-                    return Invocation(nested, otherInvocation.GetNames(), otherInvocation.GetTypes()).WithArgumentList(otherInvocation.ArgumentList);
-                }
-            }
-
-            return invocationToBuild;
         }
 
         private static ArgumentSyntax ThrowsForNUnitClassic(TypeSyntax exceptionType, string exceptionIdentifier, List<ExpressionStatementSyntax> exceptionSpecificAsserts)
@@ -343,6 +322,28 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             return Argument(invocation);
+        }
+
+        private static InvocationExpressionSyntax InvocationForNUnitThat(InvocationExpressionSyntax invocationToBuild, string continuation, InvocationExpressionSyntax original, TypeSyntax exceptionType, string exceptionIdentifier)
+        {
+            var arguments = original.ArgumentList.Arguments;
+            var argument = arguments[0];
+
+            if (argument.Expression is MemberAccessExpressionSyntax maes && maes.GetIdentifierName() == exceptionIdentifier)
+            {
+                var name = maes.GetName();
+                var nested = NestedExpression(invocationToBuild, continuation, exceptionType, name);
+
+                // get invocation from other argument
+                var other = arguments.FirstOrDefault(_ => _.GetName() != name);
+
+                if (other?.Expression is InvocationExpressionSyntax otherInvocation)
+                {
+                    return Invocation(nested, otherInvocation.GetNames(), otherInvocation.GetTypes()).WithArgumentList(otherInvocation.ArgumentList);
+                }
+            }
+
+            return invocationToBuild;
         }
 
         private static InvocationExpressionSyntax InvocationForNUnitClassic(InvocationExpressionSyntax invocationToBuild, string continuation, InvocationExpressionSyntax original, TypeSyntax exceptionType, string exceptionIdentifier)
