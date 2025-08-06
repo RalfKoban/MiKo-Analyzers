@@ -13516,6 +13516,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Move assertion outside finally block.
+        /// </summary>
+        internal static string MiKo_3124_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3124_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avoid asserting in finally blocks as failing assertions can hide the original test failures. Do the assertions after the finally blocks to ensure accurate and reliable test results..
+        /// </summary>
+        internal static string MiKo_3124_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3124_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not assert in finally block.
+        /// </summary>
+        internal static string MiKo_3124_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3124_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test methods should not assert in finally blocks.
+        /// </summary>
+        internal static string MiKo_3124_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3124_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invert if to simplify.
         /// </summary>
         internal static string MiKo_3201_CodeFixTitle {

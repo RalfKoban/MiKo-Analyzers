@@ -4734,6 +4734,18 @@ This ensures precision in your tests and maintains clear expectations.</value>
   <data name="MiKo_3123_Title" xml:space="preserve">
     <value>Test methods should not catch exceptions</value>
   </data>
+  <data name="MiKo_3124_CodeFixTitle" xml:space="preserve">
+    <value>Move assertion outside finally block</value>
+  </data>
+  <data name="MiKo_3124_Description" xml:space="preserve">
+    <value>Avoid asserting in finally blocks as failing assertions can hide the original test failures. Do the assertions after the finally blocks to ensure accurate and reliable test results.</value>
+  </data>
+  <data name="MiKo_3124_MessageFormat" xml:space="preserve">
+    <value>Do not assert in finally block</value>
+  </data>
+  <data name="MiKo_3124_Title" xml:space="preserve">
+    <value>Test methods should not assert in finally blocks</value>
+  </data>
   <data name="MiKo_3201_CodeFixTitle" xml:space="preserve">
     <value>Invert if to simplify</value>
   </data>

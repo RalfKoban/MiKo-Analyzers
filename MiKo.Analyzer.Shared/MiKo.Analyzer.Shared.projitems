@@ -303,6 +303,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3121_ObjectUnderTestIsNoInterfaceAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3122_TestMethodsDoNotHaveMultipleParametersAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3123_TestMethodsDoNotCatchExceptionsAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3124_TestMethodsDoNotAssertInFinallyClauseAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3201_InvertIfWhenFollowedByFewCodeLinesAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3202_InvertNegativeIfWhenReturningOnAllPathsAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3203_InvertNegativeIfInsideBlockWhenFollowedBySingleCodeLinesAnalyzer.cs" />

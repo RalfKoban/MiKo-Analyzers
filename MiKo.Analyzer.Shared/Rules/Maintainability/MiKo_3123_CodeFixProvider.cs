@@ -43,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
             }
 
-            return syntax;
+            return root;
         }
 
         private static SyntaxNode GetUpdatedSyntaxRootForXunit(SyntaxNode root, TryStatementSyntax tryStatement)
