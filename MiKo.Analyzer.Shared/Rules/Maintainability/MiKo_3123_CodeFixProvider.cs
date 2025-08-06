@@ -378,7 +378,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             // get invocation from other argument
             var arguments = original.ArgumentList.Arguments;
-            var other = arguments.FirstOrDefault(_ => _.GetName() != name);
 
             // get types
             var types = original.GetTypes();
@@ -386,10 +385,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             switch (assertionMethod)
             {
-                case "AreEqual": return Invocation(nested, "EqualTo", types).WithArgument(other);
-                case "AreNotEqual": return Invocation(nested, "Not", "EqualTo", types).WithArgument(other);
-                case "IsInstanceOf": return Invocation(nested, "InstanceOf", types).WithArgument(other);
-                case "IsNotInstanceOf": return Invocation(nested, "Not", "InstanceOf", types).WithArgument(other);
+                case "AreEqual": return Invocation(nested, "EqualTo", types).WithArguments(arguments.Remove(argument));
+                case "AreNotEqual": return Invocation(nested, "Not", "EqualTo", types).WithArguments(arguments.Remove(argument));
+                case "IsInstanceOf": return Invocation(nested, "InstanceOf", types).WithArguments(arguments.Remove(argument));
+                case "IsNotInstanceOf": return Invocation(nested, "Not", "InstanceOf", types).WithArguments(arguments.Remove(argument));
+                case "IsInstanceOfType" when arguments[0].Expression is TypeOfExpressionSyntax isT: return Invocation(nested, "InstanceOf", isT.Type).WithArguments(arguments.Remove(argument).RemoveAt(0));
+                case "IsNotInstanceOfType" when arguments[0].Expression is TypeOfExpressionSyntax isNotT: return Invocation(nested, "Not", "InstanceOf", isNotT.Type).WithArguments(arguments.Remove(argument).RemoveAt(0));
             }
 
             return invocationToBuild;
