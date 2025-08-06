@@ -149,7 +149,7 @@ namespace Bla
 ");
 
         [Test]
-        public void Ano_issue_is_reported_for_test_method_with_catch_exception_block() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_test_method_with_catch_exception_block() => An_issue_is_reported_for(@"
 using System;
 
 using NUnit.Framework;

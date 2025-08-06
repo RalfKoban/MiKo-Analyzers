@@ -2105,6 +2105,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsExpressionTree(this SyntaxNode value, SemanticModel semanticModel)
         {
+            // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var a in value.AncestorsWithinMethods<ArgumentSyntax>())
             {
                 var convertedType = semanticModel.GetTypeInfo(a.Expression).ConvertedType;
@@ -2233,6 +2234,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsWhiteSpaceOnlyText(this XmlTextSyntax value)
         {
+            // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var text in value.GetTextWithoutTriviaLazy())
             {
                 if (text.IsNullOrWhiteSpace() is false)
@@ -2917,10 +2919,10 @@ namespace MiKoSolutions.Analyzers
 
             if (parent is null)
             {
-                return default;
+                return null;
             }
 
-            SyntaxNode previousChild = default;
+            SyntaxNode previousChild = null;
 
             foreach (var child in parent.ChildNodes())
             {
@@ -2932,7 +2934,7 @@ namespace MiKoSolutions.Analyzers
                 previousChild = child;
             }
 
-            return default;
+            return null;
         }
 
         internal static SyntaxNodeOrToken PreviousSiblingNodeOrToken(this SyntaxNode value)
@@ -2965,7 +2967,7 @@ namespace MiKoSolutions.Analyzers
 
             if (parent is null)
             {
-                return default;
+                return null;
             }
 
             using (var enumerator = parent.ChildNodes().GetEnumerator())
@@ -2976,14 +2978,14 @@ namespace MiKoSolutions.Analyzers
                     {
                         var nextSibling = enumerator.MoveNext()
                                           ? enumerator.Current
-                                          : default;
+                                          : null;
 
                         return nextSibling;
                     }
                 }
             }
 
-            return default;
+            return null;
         }
 
         internal static IList<SyntaxNode> Siblings(this SyntaxNode value) => Siblings<SyntaxNode>(value);
