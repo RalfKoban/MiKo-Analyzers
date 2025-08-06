@@ -83,7 +83,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return root.ReplaceNode(testMethod, updatedTestMethod);
         }
 
-        private static IReadOnlyList<StatementSyntax> CreateStatementsForXunit(TryStatementSyntax tryStatement, MethodDeclarationSyntax testMethod, int spaces)
+        private static IReadOnlyList<StatementSyntax> CreateStatementsForXunit(TryStatementSyntax tryStatement, MethodDeclarationSyntax testMethod, in int spaces)
         {
             var statements = tryStatement.Block.Statements;
             var assertFails = statements.Where(IsAssertFail).ToList();
@@ -125,7 +125,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return nonAssertFails;
         }
 
-        private static StatementSyntax CreateXunitAssertionStatement(TryStatementSyntax tryStatement, CatchClauseSyntax catchClause, IEnumerable<StatementSyntax> statements, MethodDeclarationSyntax testMethod, int spaces)
+        private static StatementSyntax CreateXunitAssertionStatement(TryStatementSyntax tryStatement, CatchClauseSyntax catchClause, IEnumerable<StatementSyntax> statements, MethodDeclarationSyntax testMethod, in int spaces)
         {
             var lambda = Argument(ParenthesizedLambda(Block(statements, spaces)));
 
@@ -193,10 +193,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var tryAssertFails = statements.OfType<ExpressionStatementSyntax>().Where(IsAssertFail).ToList();
 
             var arguments = new List<ArgumentSyntax>
-                            {
-                                Argument(ParenthesizedLambda(Block(statements.Except(tryAssertFails), spaces))),
-                                Throws(catchClauses, tryAssertFails).WithLeadingSpace(),
-                            };
+                                {
+                                    Argument(ParenthesizedLambda(Block(statements.Except(tryAssertFails), spaces))),
+                                    Throws(catchClauses, tryAssertFails).WithLeadingSpace(),
+                                };
 
             if (tryAssertFails.Count > 0)
             {
