@@ -4729,7 +4729,7 @@ This ensures precision in your tests and maintains clear expectations.</value>
     <value>Avoid catching exceptions in test methods. Catching exceptions can hide test failures and lead to false positives. Let the test framework handle unexpected exceptions to ensure accurate and reliable test results.</value>
   </data>
   <data name="MiKo_3123_MessageFormat" xml:space="preserve">
-    <value>Do not catch exception</value>
+    <value>Do not catch exception in test</value>
   </data>
   <data name="MiKo_3123_Title" xml:space="preserve">
     <value>Test methods should not catch exceptions</value>

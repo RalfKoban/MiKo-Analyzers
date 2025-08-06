@@ -13498,7 +13498,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not catch exception.
+        ///   Looks up a localized string similar to Do not catch exception in test.
         /// </summary>
         internal static string MiKo_3123_MessageFormat {
             get {
