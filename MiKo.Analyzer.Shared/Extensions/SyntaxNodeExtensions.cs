@@ -579,6 +579,9 @@ namespace MiKoSolutions.Analyzers
                 case IdentifierNameSyntax identifier:
                     return identifier;
 
+                case MemberAccessExpressionSyntax maes:
+                    return maes.Expression;
+
                 default:
                     return null;
             }
@@ -598,6 +601,8 @@ namespace MiKoSolutions.Analyzers
                     return null;
             }
         }
+
+        internal static string GetIdentifierName(this ArgumentSyntax value) => value.Expression.GetIdentifierName();
 
         internal static string GetIdentifierName(this ExpressionSyntax value) => value.GetIdentifierExpression().GetName();
 
@@ -753,6 +758,9 @@ namespace MiKoSolutions.Analyzers
                     return string.Empty;
             }
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static string GetName(this CatchDeclarationSyntax value) => value?.Identifier.ValueText;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this ClassDeclarationSyntax value) => value?.Identifier.ValueText;
@@ -947,6 +955,48 @@ namespace MiKoSolutions.Analyzers
         }
 
         internal static IEnumerable<string> GetNames(this in SeparatedSyntaxList<VariableDeclaratorSyntax> value) => value.Select(_ => _.GetName());
+
+        internal static string[] GetNames(this InvocationExpressionSyntax value)
+        {
+            var names = new Stack<string>();
+
+            var expression = value.Expression;
+
+            while (expression is MemberAccessExpressionSyntax maes)
+            {
+                names.Push(maes.GetName());
+
+                expression = maes.Expression;
+            }
+
+            return names.ToArray();
+        }
+
+        internal static TypeSyntax[] GetTypes(this MemberAccessExpressionSyntax value)
+        {
+            if (value.Name is GenericNameSyntax generic)
+            {
+                return generic.TypeArgumentList.Arguments.ToArray();
+            }
+
+            return Array.Empty<TypeSyntax>();
+        }
+
+        internal static TypeSyntax[] GetTypes(this InvocationExpressionSyntax value)
+        {
+            var types = new List<TypeSyntax>();
+
+            var expression = value.Expression;
+
+            while (expression is MemberAccessExpressionSyntax maes)
+            {
+                types.AddRange(maes.GetTypes());
+
+                expression = maes.Expression;
+            }
+
+            return types.ToArray();
+        }
 
         internal static string GetXmlTagName(this SyntaxNode value)
         {
@@ -3028,6 +3078,16 @@ namespace MiKoSolutions.Analyzers
             return value.WithTrailingTrivia(value.GetTrailingTrivia().AddRange(trivia));
         }
 
+        internal static InvocationExpressionSyntax WithArguments(this InvocationExpressionSyntax value, params ArgumentSyntax[] arguments)
+        {
+            return value.WithArguments(arguments.ToSeparatedSyntaxList());
+        }
+
+        internal static InvocationExpressionSyntax WithArguments(this InvocationExpressionSyntax value, in SeparatedSyntaxList<ArgumentSyntax> arguments)
+        {
+            return value.WithArgumentList(SyntaxFactory.ArgumentList(arguments));
+        }
+
         internal static T WithAttribute<T>(this T value, XmlAttributeSyntax attribute) where T : XmlNodeSyntax
         {
             switch (value)
@@ -3138,6 +3198,8 @@ namespace MiKoSolutions.Analyzers
         internal static T WithLeadingSpace<T>(this T value) where T : SyntaxNode => value.WithLeadingTrivia(SyntaxFactory.ElasticSpace); // use elastic one to allow formatting to be done automatically
 
         internal static T WithTrailingSpace<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(SyntaxFactory.ElasticSpace); // use elastic one to allow formatting to be done automatically
+
+        internal static T WithTrailingSpaces<T>(this T value, in int spaces) where T : SyntaxNode => value.WithTrailingTrivia(Enumerable.Repeat(SyntaxFactory.ElasticSpace, spaces)); // use elastic one to allow formatting to be done automatically
 
         internal static T WithAdditionalLeadingSpaces<T>(this T value, in int additionalSpaces) where T : SyntaxNode
         {

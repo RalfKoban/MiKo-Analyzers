@@ -56,12 +56,25 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return Invocation(member, arguments);
         }
 
-        protected static InvocationExpressionSyntax Invocation(string typeName, string propertyName, string methodName, params TypeSyntax[] items)
+        protected static InvocationExpressionSyntax Invocation(string typeName, string propertyName, string methodName, params TypeSyntax[] types)
         {
             // that's for the method call
-            var member = Member(typeName, propertyName, methodName, items);
+            var member = Member(typeName, propertyName, methodName, types);
 
             return Invocation(member);
+        }
+
+        protected static InvocationExpressionSyntax Invocation(string typeName, string methodName, TypeSyntax type, params ArgumentSyntax[] arguments)
+        {
+            return Invocation(typeName, methodName, new[] { type }, arguments);
+        }
+
+        protected static InvocationExpressionSyntax Invocation(string typeName, string methodName, TypeSyntax[] types, params ArgumentSyntax[] arguments)
+        {
+            // that's for the method call
+            var member = Member(typeName, methodName, types);
+
+            return Invocation(member, arguments);
         }
 
         protected static MemberAccessExpressionSyntax Member(PredefinedTypeSyntax type, string methodName)
@@ -175,6 +188,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return NameOf(syntax);
         }
 
+        protected static InvocationExpressionSyntax NameOf(TypeSyntax type, string identifierName)
+        {
+            var typeName = type.GetNameOnlyPart();
+
+            return NameOf(typeName, identifierName);
+        }
+
         protected static InvocationExpressionSyntax NameOf(TypeSyntax type, LiteralExpressionSyntax literal)
         {
             var typeName = type.GetNameOnlyPart();
@@ -190,6 +210,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             return NameOf(typeName, identifierName);
         }
+
+        protected static ParenthesizedLambdaExpressionSyntax ParenthesizedLambda(BlockSyntax block) => SyntaxFactory.ParenthesizedLambdaExpression(block);
 
         private static InvocationExpressionSyntax NameOf(ExpressionSyntax syntax)
         {

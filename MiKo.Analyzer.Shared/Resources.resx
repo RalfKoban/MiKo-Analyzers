@@ -4722,6 +4722,18 @@ This ensures precision in your tests and maintains clear expectations.</value>
   <data name="MiKo_3122_Title" xml:space="preserve">
     <value>Test methods should not use more than 2 parameters</value>
   </data>
+  <data name="MiKo_3123_CodeFixTitle" xml:space="preserve">
+    <value>Fix catch block</value>
+  </data>
+  <data name="MiKo_3123_Description" xml:space="preserve">
+    <value>Avoid catching exceptions in test methods. Catching exceptions can hide test failures and lead to false positives. Let the test framework handle unexpected exceptions to ensure accurate and reliable test results.</value>
+  </data>
+  <data name="MiKo_3123_MessageFormat" xml:space="preserve">
+    <value>Do not catch exception in test</value>
+  </data>
+  <data name="MiKo_3123_Title" xml:space="preserve">
+    <value>Test methods should not catch exceptions</value>
+  </data>
   <data name="MiKo_3201_CodeFixTitle" xml:space="preserve">
     <value>Invert if to simplify</value>
   </data>

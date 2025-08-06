@@ -13480,6 +13480,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fix catch block.
+        /// </summary>
+        internal static string MiKo_3123_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3123_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avoid catching exceptions in test methods. Catching exceptions can hide test failures and lead to false positives. Let the test framework handle unexpected exceptions to ensure accurate and reliable test results..
+        /// </summary>
+        internal static string MiKo_3123_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3123_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not catch exception in test.
+        /// </summary>
+        internal static string MiKo_3123_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3123_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test methods should not catch exceptions.
+        /// </summary>
+        internal static string MiKo_3123_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3123_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invert if to simplify.
         /// </summary>
         internal static string MiKo_3201_CodeFixTitle {

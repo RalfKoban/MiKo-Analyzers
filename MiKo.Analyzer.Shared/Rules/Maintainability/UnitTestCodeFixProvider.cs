@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -94,7 +95,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected static ArgumentSyntax Is(params string[] names) => Argument(MemberIs(names));
 
         protected static bool IsNumeric(ArgumentSyntax argument) => argument.Expression.IsKind(SyntaxKind.NumericLiteralExpression)
-                                                                  || (argument.Expression is MemberAccessExpressionSyntax mae && mae.Expression.IsKind(SyntaxKind.PredefinedType));
+                                                                 || (argument.Expression is MemberAccessExpressionSyntax mae && mae.Expression.IsKind(SyntaxKind.PredefinedType));
+
+        protected static bool IsAssert(StatementSyntax statement) => statement is ExpressionStatementSyntax node && IsAssert(node);
+
+        protected static bool IsAssert(ExpressionStatementSyntax statement) => statement.Expression is InvocationExpressionSyntax i && i.GetIdentifierName().EndsWith("Assert", StringComparison.Ordinal) && i.Expression.GetName() != "Fail";
+
+        protected static bool IsAssertFail(StatementSyntax statement) => statement is ExpressionStatementSyntax node && IsAssertFail(node);
+
+        protected static bool IsAssertFail(ExpressionStatementSyntax statement) => statement.Expression is InvocationExpressionSyntax i && i.GetIdentifierName() is "Assert" && i.Expression.GetName() is "Fail";
 
         protected static ArgumentSyntax Does(string name, ArgumentSyntax argument) => Argument(Invocation("Does", name, argument));
 
@@ -144,9 +153,25 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static ArgumentSyntax Throws(string name) => Argument("Throws", name);
 
-        protected static ArgumentSyntax Throws(string name, ArgumentSyntax argument) => Argument(Invocation("Throws", name, argument));
+        protected static ArgumentSyntax Throws(TypeSyntax type)
+        {
+            var exceptionName = type.GetName();
 
-        protected static ArgumentSyntax Throws(string name, params TypeSyntax[] types) => Argument(Invocation("Throws", name, types));
+            switch (exceptionName)
+            {
+                case nameof(ArgumentException):
+                case nameof(ArgumentNullException):
+                case nameof(Exception):
+                case nameof(InvalidOperationException):
+                case nameof(TargetInvocationException):
+                    return Throws(exceptionName);
+
+                default:
+                    return Argument(Invocation("Throws", "TypeOf", type));
+            }
+        }
+
+        protected static ArgumentSyntax Throws(ArgumentSyntax argument) => Argument(Invocation("Throws", "TypeOf", argument));
 
         protected static TypeSyntax[] GetTypeSyntaxes(InvocationExpressionSyntax i, SimpleNameSyntax name)
         {

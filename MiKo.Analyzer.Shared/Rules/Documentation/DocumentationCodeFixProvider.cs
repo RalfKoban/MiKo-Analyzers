@@ -701,9 +701,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// <remarks>
         /// Adds leading XML comments (<c>/// </c>) to each item and a trailing XML comment (<c>/// </c>) to the last one.
         /// </remarks>
-        /// <param name="listType">The type of the list.</param>
-        /// <param name="listItems">The items of the list.</param>
-        /// <returns>The created XML list.</returns>
+        /// <param name="listType">
+        /// The type of the list.
+        /// </param>
+        /// <param name="listItems">
+        /// The items of the list.
+        /// </param>
+        /// <returns>
+        /// The created XML list.
+        /// </returns>
         protected static XmlElementSyntax XmlList(string listType, IEnumerable<XmlNodeSyntax> listItems)
         {
             var items = listItems.ToList();
