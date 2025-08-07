@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using MiKoSolutions.Analyzers.Linguistics;
@@ -10,7 +10,7 @@ using MiKoSolutions.Analyzers.Linguistics;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_1037_TypeSuffixAnalyzer : NamingAnalyzer
+    public sealed class MiKo_1037_TypeSuffixAnalyzer : TypeSyntaxNamingAnalyzer
     {
         public const string Id = "MiKo_1037";
 
@@ -27,51 +27,47 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly string[] AllowedEnumSuffixes = { "Interfaces", "Interface", "Classes", "Class" };
 
-        public MiKo_1037_TypeSuffixAnalyzer() : base(Id, SymbolKind.NamedType)
+        public MiKo_1037_TypeSuffixAnalyzer() : base(Id)
         {
         }
 
-        protected override bool ShallAnalyze(ITypeSymbol symbol)
+        protected override bool ShallAnalyze(string typeName, BaseTypeDeclarationSyntax declaration)
         {
-            var symbolName = symbol.Name;
-
-            if (symbol.IsEnum() && symbolName.EndsWithAny(AllowedEnumSuffixes, StringComparison.Ordinal))
+            if (declaration is EnumDeclarationSyntax && typeName.EndsWithAny(AllowedEnumSuffixes, StringComparison.Ordinal))
             {
                 return false;
             }
 
-            return symbolName.EndsWithAny(WrongSuffixes);
+            return typeName.EndsWithAny(WrongSuffixes);
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
+        protected override Diagnostic[] AnalyzeName(string typeName, in SyntaxToken typeNameIdentifier, BaseTypeDeclarationSyntax declaration)
         {
-            var betterName = FindBetterName(symbol);
+            var betterName = FindBetterName(typeName, declaration);
 
             if (betterName.IsNullOrWhiteSpace())
             {
                 return Array.Empty<Diagnostic>();
             }
 
-            return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
+            return new[] { Issue(typeNameIdentifier, betterName) };
         }
 
-        private static string FindBetterName(ITypeSymbol symbol)
+        private static string FindBetterName(string typeName, BaseTypeDeclarationSyntax declaration)
         {
-            var symbolName = symbol.Name;
-
-            var betterName = symbolName.AsCachedBuilder()
-                                       .ReplaceWithProbe("TypeEnum", "Kind")
-                                       .Without(WrongSuffixes)
-                                       .ToStringAndRelease();
+            var betterName = typeName.AsCachedBuilder()
+                                     .ReplaceWithProbe("TypeEnum", "Kind")
+                                     .Without(WrongSuffixes)
+                                     .ToStringAndRelease();
 
             if (betterName.IsNullOrWhiteSpace())
             {
                 return string.Empty;
             }
 
-            if (symbol.IsEnum() && betterName.EndsWith('s') is false && symbol.HasAttribute(Constants.Names.FlagsAttributeNames))
+            if (declaration is EnumDeclarationSyntax && betterName.EndsWith('s') is false && declaration.HasAttributeName(Constants.Names.FlagsAttributeNames))
             {
-                betterName = Pluralizer.GetPluralName(symbolName, betterName);
+                betterName = Pluralizer.GetPluralName(typeName, betterName);
             }
 
             return betterName;

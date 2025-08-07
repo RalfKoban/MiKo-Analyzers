@@ -801,10 +801,10 @@ So, use meaningful names instead of vague ones like 'ret', 'retVal', or 'returnV
     <value>Do not suffix fields with delegate types</value>
   </data>
   <data name="MiKo_1054_CodeFixTitle" xml:space="preserve">
-    <value>Remove 'Utility' marker suffix</value>
+    <value>Remove utility marker suffix</value>
   </data>
   <data name="MiKo_1054_Description" xml:space="preserve">
-    <value>Names like 'helper' or 'utility' are too vague and do not follow the Single Responsibility Principle (SRP). These types often end up having too broad a scope and do not clearly define what they do.
+    <value>Names like 'Helper' or 'Utility' are too vague and do not follow the Single Responsibility Principle (SRP). These types often end up having too broad a scope and do not clearly define what they do.
 Instead, use specific names that describe their exact purpose, making the code easier to understand and maintain.</value>
   </data>
   <data name="MiKo_1054_MessageFormat" xml:space="preserve">
