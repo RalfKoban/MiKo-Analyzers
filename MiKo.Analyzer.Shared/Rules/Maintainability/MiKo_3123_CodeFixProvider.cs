@@ -147,11 +147,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return SyntaxFactory.ExpressionStatement(expression).WithTriviaFrom(tryStatement);
             }
 
-            var declarator = SyntaxFactory.VariableDeclarator(exceptionIdentifier).WithInitializer(SyntaxFactory.EqualsValueClause(expression));
-            var declaration = SyntaxFactory.VariableDeclaration(exceptionType, declarator.ToSeparatedSyntaxList());
-            var localDeclaration = SyntaxFactory.LocalDeclarationStatement(declaration);
-
-            return localDeclaration.WithLeadingTriviaFrom(tryStatement);
+            return LocalVariable(exceptionType, exceptionIdentifier, expression).WithLeadingTriviaFrom(tryStatement);
         }
 
         private static SyntaxNode GetUpdatedSyntaxRootForNUnit(SyntaxNode root, TryStatementSyntax tryStatement)
@@ -249,7 +245,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         return Throws("Nothing");
                     }
 
-                    var asserts = statements.Where(IsAssert).ToList();
+                    var asserts = statements.OfType<ExpressionStatementSyntax>().Where(IsAssert).ToList();
 
                     if (asserts.Count is 0)
                     {
@@ -263,30 +259,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return Throws(needsException ? "Exception" : "Nothing");
         }
 
-        private static ArgumentSyntax Throws(CatchDeclarationSyntax catchDeclaration, IEnumerable<StatementSyntax> asserts)
+        private static ArgumentSyntax Throws(CatchDeclarationSyntax catchDeclaration, IEnumerable<ExpressionStatementSyntax> asserts)
         {
             var exceptionType = catchDeclaration.Type;
             var exceptionIdentifier = catchDeclaration.GetName();
 
-            var exceptionSpecificAsserts = asserts.OfType<ExpressionStatementSyntax>().Where(_ => _.DescendantTokens().Any(__ => __.ToString() == exceptionIdentifier)).ToList();
+            var exceptionSpecificAsserts = asserts.Where(_ => _.DescendantTokens().Any(__ => __.ToString() == exceptionIdentifier)).ToList();
 
-            // check for assertions in catch block, and use those
-            if (exceptionSpecificAsserts.Count > 0)
+            if (exceptionSpecificAsserts.Count is 0)
             {
-                if (exceptionSpecificAsserts.All(_ => _.Expression.GetName() is "That"))
-                {
-                    return ThrowsForNUnitThat(exceptionSpecificAsserts, exceptionType, exceptionIdentifier);
-                }
-
-                // we have assertions that are not 'That', so we need to handle those differently
-                return ThrowsForNUnitClassic(exceptionType, exceptionIdentifier, exceptionSpecificAsserts);
+                return Throws(exceptionType);
             }
 
-            return Throws(exceptionType);
-        }
+            var useAssertThat = exceptionSpecificAsserts.All(_ => _.Expression.GetName() is "That");
 
-        private static ArgumentSyntax ThrowsForNUnitThat(IEnumerable<ExpressionStatementSyntax> exceptionSpecificAsserts, TypeSyntax exceptionType, string exceptionIdentifier)
-        {
             var invocation = Invocation("Throws", "TypeOf", exceptionType);
 
             var continuation = "With";
@@ -295,27 +281,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 if (assert.Expression is InvocationExpressionSyntax i)
                 {
-                    invocation = InvocationForNUnitThat(invocation, continuation, i, exceptionType, exceptionIdentifier);
-                }
-
-                continuation = "And";
-            }
-
-            return Argument(invocation);
-        }
-
-        private static ArgumentSyntax ThrowsForNUnitClassic(TypeSyntax exceptionType, string exceptionIdentifier, List<ExpressionStatementSyntax> exceptionSpecificAsserts)
-        {
-            var invocation = Invocation("Throws", "TypeOf", exceptionType);
-
-            var continuation = "With";
-
-            // we have assertions that are not 'That', so we need to handle those differently
-            foreach (var assert in exceptionSpecificAsserts)
-            {
-                if (assert.Expression is InvocationExpressionSyntax i)
-                {
-                    invocation = InvocationForNUnitClassic(invocation, continuation, i, exceptionType, exceptionIdentifier);
+                    // we have assertions that are not 'That', so we need to handle those differently
+                    invocation = useAssertThat
+                                 ? InvocationForNUnitThat(invocation, continuation, i, exceptionType, exceptionIdentifier)
+                                 : InvocationForNUnitClassic(invocation, continuation, i, exceptionType, exceptionIdentifier);
                 }
 
                 continuation = "And";

@@ -129,6 +129,24 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
+#pragma warning disable CA1021
+        protected static LocalDeclarationStatementSyntax LocalVariable(TypeSyntax type, string variableName, out VariableDeclaratorSyntax declarator)
+        {
+            declarator = SyntaxFactory.VariableDeclarator(variableName);
+            var declaration = SyntaxFactory.VariableDeclaration(type, declarator.ToSeparatedSyntaxList());
+
+            return SyntaxFactory.LocalDeclarationStatement(declaration);
+        }
+#pragma warning restore CA1021
+
+        protected static LocalDeclarationStatementSyntax LocalVariable(TypeSyntax type, string variableName, ExpressionSyntax value)
+        {
+            var declarator = SyntaxFactory.VariableDeclarator(variableName).WithInitializer(SyntaxFactory.EqualsValueClause(value));
+            var declaration = SyntaxFactory.VariableDeclaration(type, declarator.ToSeparatedSyntaxList());
+
+            return SyntaxFactory.LocalDeclarationStatement(declaration);
+        }
+
         protected static ExpressionSyntax LogicalNot(ExpressionSyntax expression) => SyntaxFactory.PrefixUnaryExpression(SyntaxKind.LogicalNotExpression, SyntaxFactory.ParenthesizedExpression(expression));
 
         protected static IsPatternExpressionSyntax UnaryNot(IsPatternExpressionSyntax expression) => expression.WithPattern(UnaryNot(expression.Pattern));
