@@ -72,8 +72,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     var typeSyntax = GetTypeSyntax(parameterSymbol.Type);
                     var variableName = parameterSymbol.Name;
 
-                    var declarator = SyntaxFactory.VariableDeclarator(variableName);
-                    var declaration = SyntaxFactory.VariableDeclaration(typeSyntax, declarator.ToSeparatedSyntaxList());
+                    var localDeclaration = LocalVariable(typeSyntax, variableName, out var declarator);
 
                     var ifStatement = ConvertToIfStatement(conditional, trueCase => AssignmentStatement(declarator, trueCase), falseCase => AssignmentStatement(declarator, falseCase));
 
@@ -83,16 +82,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         case ReturnStatementSyntax returnStatement:
                         {
-                            var localDeclaration = SyntaxFactory.LocalDeclarationStatement(declaration).WithLeadingTriviaFrom(returnStatement);
                             var updatedReturnStatement = returnStatement.ReplaceNode(invocation, updatedInvocation);
 
-                            return root.ReplaceNode(returnStatement, new SyntaxNode[] { localDeclaration, ifStatement, updatedReturnStatement });
+                            return root.ReplaceNode(returnStatement, new SyntaxNode[] { localDeclaration.WithLeadingTriviaFrom(returnStatement), ifStatement, updatedReturnStatement });
                         }
 
                         case ArrowExpressionClauseSyntax arrowClause:
                         {
-                            var localDeclaration = SyntaxFactory.LocalDeclarationStatement(declaration);
-
                             var statement = arrowClause.HasReturnValue()
                                             ? (StatementSyntax)SyntaxFactory.ReturnStatement(updatedInvocation)
                                             : SyntaxFactory.ExpressionStatement(updatedInvocation);
@@ -257,9 +253,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var typeSyntax = GetTypeSyntax(expression.GetTypeSymbol(document));
             var variableName = assignment.Left.GetName().ToLowerCaseAt(0);
 
-            var declarator = SyntaxFactory.VariableDeclarator(variableName);
-            var declaration = SyntaxFactory.VariableDeclaration(typeSyntax, declarator.ToSeparatedSyntaxList());
-            var localDeclaration = SyntaxFactory.LocalDeclarationStatement(declaration).WithLeadingTriviaFrom(initializer).WithLeadingEmptyLine();
+            var localDeclaration = LocalVariable(typeSyntax, variableName, out var declarator).WithLeadingTriviaFrom(initializer).WithLeadingEmptyLine();
 
             var ifStatement = ConvertToIfStatement(conditional, trueCase => AssignmentStatement(declarator, trueCase), falseCase => AssignmentStatement(declarator, falseCase));
 
