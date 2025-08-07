@@ -247,12 +247,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                     var asserts = statements.OfType<ExpressionStatementSyntax>().Where(IsAssert).ToList();
 
-                    if (asserts.Count is 0)
-                    {
-                        return Throws(catchDeclaration.Type);
-                    }
-
-                    return Throws(catchDeclaration, asserts);
+                    return asserts.Count is 0
+                           ? Throws(catchDeclaration.Type)
+                           : Throws(catchDeclaration, asserts);
                 }
             }
 
@@ -273,7 +270,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var useAssertThat = exceptionSpecificAsserts.All(_ => _.Expression.GetName() is "That");
 
-            var invocation = Invocation("Throws", "TypeOf", exceptionType);
+            var invocation = useAssertThat
+                             ? StartInvocationForNUnitThat(exceptionType)
+                             : StartInvocationForNUnitClassic(exceptionType, exceptionIdentifier, exceptionSpecificAsserts);
 
             var continuation = "With";
 
@@ -292,6 +291,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             return Argument(invocation);
         }
+
+        private static InvocationExpressionSyntax StartInvocationForNUnitThat(TypeSyntax exceptionType) => Invocation("Throws", "TypeOf", exceptionType);
 
         private static InvocationExpressionSyntax InvocationForNUnitThat(InvocationExpressionSyntax invocationToBuild, string continuation, InvocationExpressionSyntax original, TypeSyntax exceptionType, string exceptionIdentifier)
         {
@@ -313,6 +314,44 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             return invocationToBuild;
+        }
+
+        private static InvocationExpressionSyntax StartInvocationForNUnitClassic(TypeSyntax exceptionType, string exceptionIdentifier, List<ExpressionStatementSyntax> exceptionSpecificAsserts)
+        {
+            foreach (var assert in exceptionSpecificAsserts)
+            {
+                if (assert.Expression is InvocationExpressionSyntax i)
+                {
+                    var arguments = i.ArgumentList.Arguments;
+
+                    if (arguments.Count >= 2)
+                    {
+                        var a0 = arguments[0];
+                        var a1 = arguments[1];
+
+                        if (a0.Expression is TypeOfExpressionSyntax t0 && a1.Expression is InvocationExpressionSyntax i1 && i1.GetName() == nameof(GetType) && i1.GetIdentifierName() == exceptionIdentifier)
+                        {
+                            // !!! Side effect !!! : remove first assert as we handled that already
+                            exceptionSpecificAsserts.Remove(assert);
+
+                            // we have an invocation, so we can use that
+                            return Invocation("Throws", "TypeOf", t0.Type);
+                        }
+
+                        // maybe arguments are switched
+                        if (a1.Expression is TypeOfExpressionSyntax t1 && a0.Expression is InvocationExpressionSyntax i0 && i0.GetName() == nameof(GetType) && i0.GetIdentifierName() == exceptionIdentifier)
+                        {
+                            // !!! Side effect !!! : remove first assert as we handled that already
+                            exceptionSpecificAsserts.Remove(assert);
+
+                            // we have an invocation, so we can use that
+                            return Invocation("Throws", "TypeOf", t1.Type);
+                        }
+                    }
+                }
+            }
+
+            return Invocation("Throws", "TypeOf", exceptionType);
         }
 
         private static InvocationExpressionSyntax InvocationForNUnitClassic(InvocationExpressionSyntax invocationToBuild, string continuation, InvocationExpressionSyntax original, TypeSyntax exceptionType, string exceptionIdentifier)
@@ -342,8 +381,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static InvocationExpressionSyntax InvocationForNUnitClassic(InvocationExpressionSyntax invocationToBuild, string continuation, InvocationExpressionSyntax original, TypeSyntax exceptionType, ArgumentSyntax argument)
         {
-            var name = argument.GetName();
-            var nested = NestedExpression(invocationToBuild, continuation, exceptionType, name);
+            var nested = NestedExpression(invocationToBuild, continuation, exceptionType, argument.GetName());
 
             // get invocation from other argument
             var arguments = original.ArgumentList.Arguments;
@@ -365,14 +403,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return invocationToBuild;
         }
 
-        private static ExpressionSyntax NestedExpression(InvocationExpressionSyntax invocationToBuild, string continuation, TypeSyntax exceptionType, string propertyName)
+        private static ExpressionSyntax NestedExpression(ExpressionSyntax invocationToBuild, string continuation, TypeSyntax exceptionType, string propertyName)
         {
-            if (propertyName is "InnerException")
+            switch (propertyName)
             {
-                return Member(invocationToBuild, continuation, "InnerException");
-            }
+                case "InnerException":
+                case "Message":
+                    return Member(invocationToBuild, continuation, propertyName);
 
-            return Invocation(invocationToBuild, continuation, "Property", Argument(NameOf(exceptionType, propertyName)));
+                default:
+                    return Invocation(invocationToBuild, continuation, "Property", Argument(NameOf(exceptionType, propertyName)));
+            }
         }
     }
 }

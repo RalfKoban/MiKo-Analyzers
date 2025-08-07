@@ -947,6 +947,236 @@ namespace Bla
         }
 
         [Test]
+        public void Code_gets_fixed_for_NUnit_test_method_with_Assert_AreEqual_GetType_assertions_in_catch_block()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(String s)
+        {
+            try
+            {
+                var a = 123;
+                var b = a.ToString();
+            }
+            catch (Exception ex)
+            {
+                // verify
+                Assert.AreEqual(typeof(DivideByZeroException), ex.GetType());
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(String s)
+        {
+            Assert.That(() =>
+            {
+                var a = 123;
+                var b = a.ToString();
+            }, Throws.TypeOf<DivideByZeroException>());
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_NUnit_test_method_with_Assert_AreEqual_Message_and_GetType_assertions_in_catch_block()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(String s)
+        {
+            try
+            {
+                var a = 123;
+                var b = a.ToString();
+            }
+            catch (Exception ex)
+            {
+                // verify
+                Assert.AreEqual(""some message"", ex.Message);
+                Assert.AreEqual(typeof(DivideByZeroException), ex.GetType());
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(String s)
+        {
+            Assert.That(() =>
+            {
+                var a = 123;
+                var b = a.ToString();
+            }, Throws.TypeOf<DivideByZeroException>().With.Message.EqualTo(""some message""));
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_NUnit_test_method_with_swapped_Assert_AreEqual_GetType_assertions_in_catch_block()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(String s)
+        {
+            try
+            {
+                var a = 123;
+                var b = a.ToString();
+            }
+            catch (Exception ex)
+            {
+                // verify
+                Assert.AreEqual(ex.GetType(), typeof(DivideByZeroException));
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(String s)
+        {
+            Assert.That(() =>
+            {
+                var a = 123;
+                var b = a.ToString();
+            }, Throws.TypeOf<DivideByZeroException>());
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_NUnit_test_method_with_swapped_Assert_AreEqual_Message_and_GetType_assertions_in_catch_block()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(String s)
+        {
+            try
+            {
+                var a = 123;
+                var b = a.ToString();
+            }
+            catch (Exception ex)
+            {
+                // verify
+                Assert.AreEqual(ex.Message, ""some message"");
+                Assert.AreEqual(ex.GetType(), typeof(DivideByZeroException));
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(String s)
+        {
+            Assert.That(() =>
+            {
+                var a = 123;
+                var b = a.ToString();
+            }, Throws.TypeOf<DivideByZeroException>().With.Message.EqualTo(""some message""));
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_NUnit_test_method_with_Assert_That_TypeOf_assertions_in_catch_block()
         {
             const string OriginalCode = @"
