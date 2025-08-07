@@ -5152,6 +5152,43 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change suffix into prefix.
+        /// </summary>
+        internal static string MiKo_1513_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1513_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prefer prefixing type names with descriptive modifiers like &apos;Advanced&apos; or &apos;Simplified&apos; instead of suffixing them.
+        ///Prefixes improve IntelliSense grouping and readability, while also making related types easier to discover and maintain across large codebases..
+        /// </summary>
+        internal static string MiKo_1513_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1513_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1513_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1513_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Types should not be suffixed with &apos;Advanced&apos;, &apos;Complex&apos;, &apos;Enhanced&apos;, &apos;Extended&apos;, &apos;Simple&apos; or &apos;Simplified&apos;.
+        /// </summary>
+        internal static string MiKo_1513_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1513_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fix malformed XML.
         /// </summary>
         internal static string MiKo_2000_CodeFixTitle {
