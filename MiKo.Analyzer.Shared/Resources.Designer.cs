@@ -2094,7 +2094,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove &apos;Utility&apos; marker suffix.
+        ///   Looks up a localized string similar to Remove utility marker suffix.
         /// </summary>
         internal static string MiKo_1054_CodeFixTitle {
             get {
@@ -2103,7 +2103,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Names like &apos;helper&apos; or &apos;utility&apos; are too vague and do not follow the Single Responsibility Principle (SRP). These types often end up having too broad a scope and do not clearly define what they do.
+        ///   Looks up a localized string similar to Names like &apos;Helper&apos; or &apos;Utility&apos; are too vague and do not follow the Single Responsibility Principle (SRP). These types often end up having too broad a scope and do not clearly define what they do.
         ///Instead, use specific names that describe their exact purpose, making the code easier to understand and maintain..
         /// </summary>
         internal static string MiKo_1054_Description {

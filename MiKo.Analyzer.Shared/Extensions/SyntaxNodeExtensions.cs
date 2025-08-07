@@ -2490,7 +2490,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsInsideTestClass(this SyntaxNode value) => value.Ancestors<ClassDeclarationSyntax>().Any(_ => _.IsTestClass());
 
-        internal static bool IsTestClass(this TypeDeclarationSyntax value) => value is ClassDeclarationSyntax declaration && IsTestClass(declaration);
+        internal static bool IsTestClass(this BaseTypeDeclarationSyntax value) => value is ClassDeclarationSyntax declaration && IsTestClass(declaration);
 
         internal static bool IsTestClass(this ClassDeclarationSyntax value) => value.HasAttributeName(Constants.Names.TestClassAttributeNames);
 
@@ -4105,27 +4105,7 @@ namespace MiKoSolutions.Analyzers
                        .FirstOrDefault();
         }
 
-        internal static bool HasAttributeName(this TypeDeclarationSyntax value, IEnumerable<string> names)
-        {
-            var attributeLists = value.AttributeLists;
-
-            for (int i = 0, count = attributeLists.Count; i < count; i++)
-            {
-                var attributes = attributeLists[i].Attributes;
-
-                for (int index = 0, attributesCount = attributes.Count; index < attributesCount; index++)
-                {
-                    if (names.Contains(attributes[index].GetName()))
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        internal static bool HasAttributeName(this MethodDeclarationSyntax value, IEnumerable<string> names)
+        internal static bool HasAttributeName(this MemberDeclarationSyntax value, IEnumerable<string> names)
         {
             var attributeLists = value.AttributeLists;
 
