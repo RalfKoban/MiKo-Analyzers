@@ -333,9 +333,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1509_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1511_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1512_CodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1513_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\NamingCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\ParameterNamingCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\PropertyNamingCodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\TypeNamingCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\DisposeOrderingCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\MiKo_4001_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\MiKo_4002_CodeFixProvider.cs" />

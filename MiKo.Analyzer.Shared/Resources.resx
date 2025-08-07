@@ -1866,6 +1866,19 @@ Therefore, names should reflect the intended role rather than the implementation
   <data name="MiKo_1512_Title" xml:space="preserve">
     <value>Parameters should not be prefixed or suffixed with 'proxy'</value>
   </data>
+  <data name="MiKo_1513_CodeFixTitle" xml:space="preserve">
+    <value>Change suffix into prefix</value>
+  </data>
+  <data name="MiKo_1513_Description" xml:space="preserve">
+    <value>Prefer prefixing type names with descriptive modifiers like 'Advanced' or 'Simplified' instead of suffixing them.
+Prefixes improve IntelliSense grouping and readability, while also making related types easier to discover and maintain across large codebases.</value>
+  </data>
+  <data name="MiKo_1513_MessageFormat" xml:space="preserve">
+    <value>Rename '{0}' to '{1}'</value>
+  </data>
+  <data name="MiKo_1513_Title" xml:space="preserve">
+    <value>Types should not be suffixed with 'Advanced', 'Complex', 'Enhanced', 'Extended', 'Simple' or 'Simplified'</value>
+  </data>
   <data name="MiKo_2000_CodeFixTitle" xml:space="preserve">
     <value>Fix malformed XML</value>
   </data>
