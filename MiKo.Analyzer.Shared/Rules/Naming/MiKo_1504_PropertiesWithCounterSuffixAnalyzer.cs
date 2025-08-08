@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -33,14 +34,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return Array.Empty<Diagnostic>();
         }
 
-        private static string FindBetterName(string symbolName)
+        private static string FindBetterName(string name)
         {
-            if (symbolName.Equals(Constants.Names.Counter, StringComparison.OrdinalIgnoreCase))
+            if (name.Equals(Constants.Names.Counter, StringComparison.OrdinalIgnoreCase))
             {
                 return "Count";
             }
 
-            return "Counted" + Pluralizer.MakePluralName(symbolName.WithoutSuffix(Constants.Names.Counter).ToUpperCaseAt(0));
+            var length = Constants.Names.Counter.Length;
+
+            return "Counted" + Pluralizer.MakePluralName(name.AsCachedBuilder().Remove(name.Length - length, length).ToUpperCaseAt(0).ToString());
         }
     }
 }
