@@ -198,7 +198,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var formatMessage = literal.Token.ValueText;
 
-                if (formatMessage.ContainsAny(FormatIdentifiers))
+                if (formatMessage.ContainsAny(FormatIdentifiers, StringComparison.OrdinalIgnoreCase))
                 {
                     return Argument(ConvertToInterpolatedString(formatMessage.AsSpan(), otherArguments));
                 }
@@ -213,7 +213,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             int index;
 
-            while ((index = formatMessage.IndexOfAny(FormatIdentifiers, StringComparison.Ordinal)) > -1)
+            while ((index = formatMessage.IndexOfAny(FormatIdentifiers)) > -1)
             {
                 if (index > 0)
                 {

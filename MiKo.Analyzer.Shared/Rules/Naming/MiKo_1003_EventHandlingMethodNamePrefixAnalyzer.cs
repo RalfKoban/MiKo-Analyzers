@@ -60,11 +60,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                    ? methodName.AsSpan(Prefix.Length)
                                    : methodName.AsSpan();
 
-                if (adjustedName.EndsWith(OnCanExecuteSuffix, StringComparison.Ordinal))
+                if (adjustedName.EndsWith(OnCanExecuteSuffix))
                 {
                     name = "CanExecute".ConcatenatedWith(adjustedName.Slice(0, adjustedName.Length - OnCanExecuteSuffix.Length));
                 }
-                else if (adjustedName.EndsWith(OnExecutedSuffix, StringComparison.Ordinal))
+                else if (adjustedName.EndsWith(OnExecutedSuffix))
                 {
                     name = "Executed".ConcatenatedWith(adjustedName.Slice(0, adjustedName.Length - OnExecutedSuffix.Length));
                 }

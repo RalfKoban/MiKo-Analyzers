@@ -43,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return Array.Empty<Diagnostic>();
             }
 
-            if (name.StartsWithAny(Prefixes, StringComparison.Ordinal) && name.HasUpperCaseLettersAbove(2) && name.StartsWithAny(AllowedPrefixes, StringComparison.Ordinal) is false)
+            if (name.StartsWithAny(Prefixes) && name.HasUpperCaseLettersAbove(2) && name.StartsWithAny(AllowedPrefixes) is false)
             {
                 return new[] { Issue(symbol) };
             }

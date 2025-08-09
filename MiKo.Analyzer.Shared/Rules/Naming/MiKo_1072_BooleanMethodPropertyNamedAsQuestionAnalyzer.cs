@@ -88,9 +88,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return Array.Empty<Diagnostic>();
             }
 
-            if (name.StartsWithAny(Prefixes, StringComparison.Ordinal) && name.HasUpperCaseLettersAbove(2))
+            if (name.StartsWithAny(Prefixes) && name.HasUpperCaseLettersAbove(2))
             {
-                if (WellKnownNames.Contains(name) || name.StartsWithAny(WellKnownPrefixes, StringComparison.Ordinal) || name.EndsWithAny(WellKnownPostfixes, StringComparison.Ordinal))
+                if (WellKnownNames.Contains(name) || name.StartsWithAny(WellKnownPrefixes) || name.EndsWithAny(WellKnownPostfixes))
                 {
                     // skip all well known names
                     return Array.Empty<Diagnostic>();

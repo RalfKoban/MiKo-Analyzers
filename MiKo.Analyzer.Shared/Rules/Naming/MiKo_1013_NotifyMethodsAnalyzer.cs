@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var symbolName = symbol.Name;
 
-            if (symbolName.StartsWithAny(StartingPhrases))
+            if (symbolName.StartsWithAny(StartingPhrases, StringComparison.OrdinalIgnoreCase))
             {
                 // avoid situation that method has no name
                 if (symbolName.Without(StartingPhrase).Length != 0)

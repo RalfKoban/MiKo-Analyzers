@@ -71,7 +71,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             // maybe it's a number, so we have to check for that
-            if (name.EndsWithNumber() || name.IsAcronym() || name.EndsWithAny(AllowedSuffixes))
+            if (name.EndsWithNumber() || name.IsAcronym() || name.EndsWithAny(AllowedSuffixes, StringComparison.OrdinalIgnoreCase))
             {
                 // nothing to do here
                 return name;

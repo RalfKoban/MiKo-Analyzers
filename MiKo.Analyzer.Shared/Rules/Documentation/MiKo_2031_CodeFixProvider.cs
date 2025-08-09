@@ -84,7 +84,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         // might be an almost complete text
                         var text = continueText.GetTextTrimmed();
 
-                        if (text.StartsWithAny(ContinueTextParts))
+                        if (text.StartsWithAny(ContinueTextParts, StringComparison.OrdinalIgnoreCase))
                         {
                             var newText = text.Without(ContinueTextParts);
 

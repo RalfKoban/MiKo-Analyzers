@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic issue)
         {
-            var list = syntax.DescendantNodes<XmlTextSyntax>(_ => _.TextTokens.Any(__ => __.ValueText.AsSpan().TrimStart().StartsWithAny(Markers)));
+            var list = syntax.DescendantNodes<XmlTextSyntax>(_ => _.TextTokens.Any(__ => __.ValueText.AsSpan().TrimStart().StartsWithAny(Markers, StringComparison.OrdinalIgnoreCase)));
 
             return syntax.ReplaceNodes(list, GetReplacements);
         }
@@ -45,7 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 var adjustedToken = token.WithText(valueText).WithLeadingXmlComment();
 
-                if (valueText.StartsWithAny(Markers))
+                if (valueText.StartsWithAny(Markers, StringComparison.OrdinalIgnoreCase))
                 {
                     // we already have some text
                     AddXmlText(result, normalText);

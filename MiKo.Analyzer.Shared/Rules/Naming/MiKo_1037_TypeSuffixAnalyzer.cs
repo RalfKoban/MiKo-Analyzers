@@ -33,12 +33,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(string typeName, BaseTypeDeclarationSyntax declaration)
         {
-            if (declaration is EnumDeclarationSyntax && typeName.EndsWithAny(AllowedEnumSuffixes, StringComparison.Ordinal))
+            if (declaration is EnumDeclarationSyntax && typeName.EndsWithAny(AllowedEnumSuffixes))
             {
                 return false;
             }
 
-            return typeName.EndsWithAny(WrongSuffixes);
+            return typeName.EndsWithAny(WrongSuffixes, StringComparison.OrdinalIgnoreCase);
         }
 
         protected override Diagnostic[] AnalyzeName(string typeName, in SyntaxToken typeNameIdentifier, BaseTypeDeclarationSyntax declaration)

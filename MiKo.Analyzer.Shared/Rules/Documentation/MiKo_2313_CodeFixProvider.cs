@@ -235,7 +235,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return false;
             }
 
-            var nextIndex = comments.FindIndex(index + 1, _ => _.ContainsAny(otherFoundCommentTags, StringComparison.Ordinal));
+            var nextIndex = comments.FindIndex(index + 1, _ => _.ContainsAny(otherFoundCommentTags));
 
             if (nextIndex is -1)
             {

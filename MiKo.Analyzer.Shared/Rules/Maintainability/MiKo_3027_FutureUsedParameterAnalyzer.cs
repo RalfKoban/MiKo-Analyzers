@@ -43,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     continue;
                 }
 
-                if (comment.ContainsAny(Constants.Comments.FuturePhrase))
+                if (comment.ContainsAny(Constants.Comments.FuturePhrase, StringComparison.OrdinalIgnoreCase))
                 {
                     yield return Issue(parameter);
                 }

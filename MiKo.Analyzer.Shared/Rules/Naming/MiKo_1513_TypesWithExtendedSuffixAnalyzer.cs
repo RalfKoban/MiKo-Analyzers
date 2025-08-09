@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var symbolName = typeName.AsSpan();
 
-                if (symbolName.EndsWith(suffix, StringComparison.Ordinal))
+                if (symbolName.EndsWith(suffix))
                 {
                     var proposal = suffix.ConcatenatedWith(symbolName.WithoutSuffix(suffix));
 

@@ -50,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                             .SelectMany(_ => Constants.Comments.DefaultCrefPhrases, (symbol, phrase) => phrase.FormatWith(symbol))
                                             .ToArray();
 
-            if (commentXml.EndsWithAny(endingPhrases, StringComparison.Ordinal))
+            if (commentXml.EndsWithAny(endingPhrases))
             {
                 return Array.Empty<Diagnostic>();
             }

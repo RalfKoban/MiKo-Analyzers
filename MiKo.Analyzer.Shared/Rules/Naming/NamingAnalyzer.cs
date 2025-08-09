@@ -43,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var prefix = fieldPrefixes[index];
 
-                if (prefix.Length > 0 && fieldName.StartsWith(prefix, StringComparison.Ordinal))
+                if (prefix.Length > 0 && fieldName.StartsWith(prefix))
                 {
                     return prefix;
                 }

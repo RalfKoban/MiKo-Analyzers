@@ -168,7 +168,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return false;
             }
 
-            if (trimmed.Length > 3 && trimmed[2].IsNumber() && trimmed.StartsWithAny(CompilerWarningIndicators, StringComparison.Ordinal))
+            if (trimmed.Length > 3 && trimmed[2].IsNumber() && trimmed.StartsWithAny(CompilerWarningIndicators))
             {
                 return false;
             }
@@ -213,7 +213,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (trimmed.EndsWith('s'))
             {
-                var characters = trimmed.EndsWith("'s", StringComparison.Ordinal) ? 2 : 1;
+                var characters = trimmed.EndsWith("'s") ? 2 : 1;
 
                 var part = trimmed.Slice(0, trimmed.Length - characters);
 
@@ -225,7 +225,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
             else if (trimmed.EndsWith('d'))
             {
-                var characters = trimmed.EndsWith("ed", StringComparison.Ordinal) ? 2 : 1;
+                var characters = trimmed.EndsWith("ed") ? 2 : 1;
 
                 var part = trimmed.Slice(0, trimmed.Length - characters);
 
@@ -275,7 +275,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     var compoundWord = IsCompoundWord(trimmed);
 
-                    if (compoundWord && trimmed.StartsWith("default(", StringComparison.Ordinal) && trimmed.EndsWith(')') is false)
+                    if (compoundWord && trimmed.StartsWith("default(") && trimmed.EndsWith(')') is false)
                     {
                         // adjust the default to include the brace as it had been trimmed above
                         var i = text.IndexOf(')');

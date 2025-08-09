@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.TypeKind is TypeKind.Class
                                                                       && symbol.IsRecord is false
-                                                                      && symbol.Name.EndsWithAny(Constants.Markers.ViewModels, StringComparison.Ordinal)
+                                                                      && symbol.Name.EndsWithAny(Constants.Markers.ViewModels)
                                                                       && symbol.IsTestClass() is false;
 
         protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol, Compilation compilation) => symbol.Implements<INotifyPropertyChanged>()
