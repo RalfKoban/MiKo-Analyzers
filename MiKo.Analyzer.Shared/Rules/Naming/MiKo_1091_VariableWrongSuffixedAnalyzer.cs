@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var name = identifier.ValueText;
 
-                if (name.StartsWithAny(AcceptedPrefixes, Comparison))
+                if (name.StartsWithAny(AcceptedPrefixes))
                 {
                     continue;
                 }

@@ -105,7 +105,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // perform 'ToString' here to avoid multiple calls later on
             var commentString = comment.ToString();
 
-            return CommentHasIssue(commentString) && commentString.ContainsAny(ReasoningMarkers) is false;
+            return CommentHasIssue(commentString) && commentString.ContainsAny(ReasoningMarkers, StringComparison.OrdinalIgnoreCase) is false;
         }
 
         private static bool CommentHasIssue(string comment)
@@ -127,7 +127,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var commentSpan = comment.AsSpan();
 
-            if (commentSpan.StartsWithAny(MeaninglessPhrases) && commentSpan.StartsWithAny(AllowedMarkers) is false)
+            if (commentSpan.StartsWithAny(MeaninglessPhrases, StringComparison.OrdinalIgnoreCase) && commentSpan.StartsWithAny(AllowedMarkers, StringComparison.OrdinalIgnoreCase) is false)
             {
                 return true;
             }
@@ -150,7 +150,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (spaces < 3)
             {
                 // 3 or fewer words
-                if (comment.ContainsAny(AllowedMarkers))
+                if (comment.ContainsAny(AllowedMarkers, StringComparison.OrdinalIgnoreCase))
                 {
                     return false;
                 }

@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var text = valueText.AsSpan().TrimStart();
 
-            if (text.StartsWith(Phrase, comparison))
+            if (text.StartsWith(Phrase))
             {
                 problematicText = Phrase;
 

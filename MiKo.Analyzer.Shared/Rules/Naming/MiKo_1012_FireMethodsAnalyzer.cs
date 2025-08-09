@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var methodName = symbol.Name;
 
-            if (methodName.ContainsAny(FirePhrases) && methodName.ContainsAny(FirewallPhrases) is false)
+            if (methodName.ContainsAny(FirePhrases, StringComparison.OrdinalIgnoreCase) && methodName.ContainsAny(FirewallPhrases, StringComparison.OrdinalIgnoreCase) is false)
             {
                 var proposal = FindBetterName(symbol);
 

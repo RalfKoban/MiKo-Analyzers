@@ -536,14 +536,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var name = syntax.Expression.GetName();
 
-            return name.ContainsAny(ActualMarkers);
+            return name.ContainsAny(ActualMarkers, StringComparison.OrdinalIgnoreCase);
         }
 
         private static bool IsExpected(ArgumentSyntax syntax)
         {
             var name = syntax.Expression.GetName();
 
-            return name.ContainsAny(ExpectedMarkers);
+            return name.ContainsAny(ExpectedMarkers, StringComparison.OrdinalIgnoreCase);
         }
     }
 }

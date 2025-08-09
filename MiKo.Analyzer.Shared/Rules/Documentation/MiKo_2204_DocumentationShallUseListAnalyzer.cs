@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var commentXml = textTokens.GetTextTrimmedWithParaTags();
 
-            if (commentXml.ContainsAny(Triggers, StringComparison.Ordinal) is false)
+            if (commentXml.ContainsAny(Triggers) is false)
             {
                 return Array.Empty<Diagnostic>();
             }

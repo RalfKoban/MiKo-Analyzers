@@ -108,7 +108,7 @@ namespace System
                 return AllIndicesOrdinal(value.AsSpan(), finding.AsSpan());
             }
 
-            return AllIndicesNonOrdinal(value, finding, comparison);
+            return AllIndicesNonOrdinal(value, finding);
         }
 
         public static int[] AllIndicesOf(this in ReadOnlySpan<char> value, string finding, in StringComparison comparison = StringComparison.OrdinalIgnoreCase)
@@ -129,7 +129,7 @@ namespace System
                 return AllIndicesOrdinal(value, finding.AsSpan());
             }
 
-            return AllIndicesNonOrdinal(value.ToString(), finding, comparison);
+            return AllIndicesNonOrdinal(value.ToString(), finding);
         }
 
         public static bool AllUpper(this in ReadOnlySpan<char> value)
@@ -641,7 +641,7 @@ namespace System
             return value.Contains(finding.AsSpan());
         }
 
-        public static bool Contains(this string value, string finding, in StringComparison comparison)
+        public static bool Contains(this string value, string finding, in StringComparison comparison) // TODO RKN: Use default value 'StringComparison.Ordinal'
         {
             if (finding.Length < value.Length)
             {
@@ -690,9 +690,9 @@ namespace System
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Contains(this in ReadOnlySpan<char> value, string finding, Func<char, bool> nextCharValidationCallback, in StringComparison comparison) => value.Contains(finding.AsSpan(), nextCharValidationCallback, comparison);
+        public static bool Contains(this in ReadOnlySpan<char> value, string finding, Func<char, bool> nextCharValidationCallback, in StringComparison comparison = StringComparison.Ordinal) => value.Contains(finding.AsSpan(), nextCharValidationCallback, comparison);
 
-        public static bool Contains(this in ReadOnlySpan<char> value, in ReadOnlySpan<char> finding, Func<char, bool> nextCharValidationCallback, in StringComparison comparison)
+        public static bool Contains(this in ReadOnlySpan<char> value, in ReadOnlySpan<char> finding, Func<char, bool> nextCharValidationCallback, in StringComparison comparison = StringComparison.Ordinal)
         {
             var index = 0;
             var valueLength = value.Length;
@@ -745,10 +745,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ContainsAny(this in ReadOnlySpan<char> value, in ReadOnlySpan<char> characters) => value.Length > 0 && value.IndexOfAny(characters) >= 0;
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ContainsAny(this string value, in ReadOnlySpan<string> phrases) => value.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase);
-
-        public static bool ContainsAny(this string value, in ReadOnlySpan<string> phrases, in StringComparison comparison)
+        public static bool ContainsAny(this string value, in ReadOnlySpan<string> phrases, in StringComparison comparison = StringComparison.Ordinal)
         {
             if (value.HasCharacters())
             {
@@ -830,7 +827,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool EndsWith(this in ReadOnlySpan<char> value, in char character) => value.Length > 0 && value[value.Length - 1] == character;
 
-        public static bool EndsWith(this in ReadOnlySpan<char> value, string characters, in StringComparison comparison)
+        public static bool EndsWith(this in ReadOnlySpan<char> value, string characters, in StringComparison comparison = StringComparison.Ordinal)
         {
             var span = characters.AsSpan();
 
@@ -839,9 +836,6 @@ namespace System
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool EndsWithAny(this string value, in ReadOnlySpan<char> suffixCharacters) => value.HasCharacters() && suffixCharacters.Contains(value[value.Length - 1]);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool EndsWithAny(this string value, in ReadOnlySpan<string> suffixes) => value.EndsWithAny(suffixes, StringComparison.OrdinalIgnoreCase);
 
         public static bool EndsWithAny(this in ReadOnlySpan<char> value, in ReadOnlySpan<char> suffixCharacters)
         {
@@ -861,10 +855,7 @@ namespace System
             return false;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool EndsWithAny(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> suffixes) => value.EndsWithAny(suffixes, StringComparison.OrdinalIgnoreCase);
-
-        public static bool EndsWithAny(this string value, in ReadOnlySpan<string> suffixes, in StringComparison comparison)
+        public static bool EndsWithAny(this string value, in ReadOnlySpan<string> suffixes, in StringComparison comparison = StringComparison.Ordinal)
         {
             if (value.HasCharacters())
             {
@@ -889,7 +880,7 @@ namespace System
             return false;
         }
 
-        public static bool EndsWithAny(this string value, Dictionary<string, string>.KeyCollection suffixes, in StringComparison comparison)
+        public static bool EndsWithAny(this string value, Dictionary<string, string>.KeyCollection suffixes, in StringComparison comparison = StringComparison.Ordinal)
         {
             if (value.HasCharacters())
             {
@@ -912,7 +903,7 @@ namespace System
             return false;
         }
 
-        public static bool EndsWithAny(this string value, List<string> suffixes, in StringComparison comparison)
+        public static bool EndsWithAny(this string value, List<string> suffixes, in StringComparison comparison = StringComparison.Ordinal)
         {
             if (value.HasCharacters())
             {
@@ -937,7 +928,7 @@ namespace System
             return false;
         }
 
-        public static bool EndsWithAny(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> suffixes, in StringComparison comparison)
+        public static bool EndsWithAny(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> suffixes, in StringComparison comparison = StringComparison.Ordinal)
         {
             var valueLength = value.Length;
             var suffixesLength = suffixes.Length;
@@ -963,27 +954,21 @@ namespace System
             return false;
         }
 
-        public static bool EndsWithCommonNumber(this string value) => value.EndsWithNumber() && value.EndsWithAny(Constants.Markers.OSBitNumbers) is false;
+        public static bool EndsWithCommonNumber(this string value) => value.EndsWithNumber() && value.EndsWithAny(Constants.Markers.OSBitNumbers, StringComparison.OrdinalIgnoreCase) is false;
 
-        public static bool EndsWithCommonNumber(this in ReadOnlySpan<char> value) => value.EndsWithNumber() && value.EndsWithAny(Constants.Markers.OSBitNumbers) is false;
+        public static bool EndsWithCommonNumber(this in ReadOnlySpan<char> value) => value.EndsWithNumber() && value.EndsWithAny(Constants.Markers.OSBitNumbers, StringComparison.OrdinalIgnoreCase) is false;
 
         public static bool EndsWithNumber(this string value) => value.HasCharacters() && value[value.Length - 1].IsNumber();
 
         public static bool EndsWithNumber(this in ReadOnlySpan<char> value) => value.Length > 0 && value[value.Length - 1].IsNumber();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Equals(this string value, in ReadOnlySpan<char> other, in StringComparison comparison) => value != null && value.AsSpan().Equals(other, comparison);
+        public static bool Equals(this string value, in ReadOnlySpan<char> other, in StringComparison comparison = StringComparison.Ordinal) => value != null && value.AsSpan().Equals(other, comparison);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Equals(this in ReadOnlySpan<char> value, string other, in StringComparison comparison) => other != null && value.Equals(other.AsSpan(), comparison);
+        public static bool Equals(this in ReadOnlySpan<char> value, string other, in StringComparison comparison = StringComparison.Ordinal) => other != null && value.Equals(other.AsSpan(), comparison);
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool EqualsAny(this string value, IEnumerable<string> phrases) => EqualsAny(value, phrases, StringComparison.OrdinalIgnoreCase);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool EqualsAny(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> phrases) => EqualsAny(value, phrases, StringComparison.OrdinalIgnoreCase);
-
-        public static bool EqualsAny(this string value, in ReadOnlySpan<string> phrases, in StringComparison comparison)
+        public static bool EqualsAny(this string value, in ReadOnlySpan<string> phrases, in StringComparison comparison = StringComparison.Ordinal)
         {
             if (value.HasCharacters())
             {
@@ -1001,7 +986,7 @@ namespace System
             return false;
         }
 
-        public static bool EqualsAny(this string value, IEnumerable<string> phrases, in StringComparison comparison)
+        public static bool EqualsAny(this string value, IEnumerable<string> phrases, in StringComparison comparison = StringComparison.Ordinal)
         {
             if (phrases is string[] array)
             {
@@ -1022,7 +1007,7 @@ namespace System
             return false;
         }
 
-        public static bool EqualsAny(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> phrases, in StringComparison comparison)
+        public static bool EqualsAny(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> phrases, in StringComparison comparison = StringComparison.Ordinal)
         {
             if (value.Length > 0)
             {
@@ -1227,7 +1212,7 @@ namespace System
         public static ReadOnlySpan<char> GetPartAfterLastDot(this in ReadOnlySpan<char> value) => value.Slice(value.LastIndexOf('.') + 1);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool HasCollectionMarker(this string value) => value.EndsWithAny(Constants.Markers.Collections);
+        public static bool HasCollectionMarker(this string value) => value.EndsWithAny(Constants.Markers.Collections, StringComparison.OrdinalIgnoreCase);
 
         public static bool HasEntityMarker(this string value)
         {
@@ -1362,7 +1347,7 @@ namespace System
             }
         }
 
-        public static int IndexOfAny(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> phrases, in StringComparison comparison)
+        public static int IndexOfAny(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> phrases, in StringComparison comparison = StringComparison.Ordinal)
         {
             if (value.Length > 0)
             {
@@ -1389,7 +1374,7 @@ namespace System
             return -1;
         }
 
-        public static int IndexOfAny(this string value, in ReadOnlySpan<string> phrases, in StringComparison comparison)
+        public static int IndexOfAny(this string value, in ReadOnlySpan<string> phrases, in StringComparison comparison = StringComparison.Ordinal)
         {
             if (value.HasCharacters())
             {
@@ -1412,7 +1397,7 @@ namespace System
             return -1;
         }
 
-        public static int LastIndexOfAny(this string value, in ReadOnlySpan<string> phrases, in StringComparison comparison)
+        public static int LastIndexOfAny(this string value, in ReadOnlySpan<string> phrases, in StringComparison comparison = StringComparison.Ordinal)
         {
             if (value is null)
             {
@@ -1631,13 +1616,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWithAny(this in ReadOnlySpan<char> value, IEnumerable<char> characters) => value.Length > 0 && characters.Contains(value[0]);
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool StartsWithAny(this string value, in ReadOnlySpan<string> prefixes) => value.StartsWithAny(prefixes, StringComparison.OrdinalIgnoreCase);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool StartsWithAny(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> prefixes) => value.StartsWithAny(prefixes, StringComparison.OrdinalIgnoreCase);
-
-        public static bool StartsWithAny(this string value, in ReadOnlySpan<string> prefixes, in StringComparison comparison)
+        public static bool StartsWithAny(this string value, in ReadOnlySpan<string> prefixes, in StringComparison comparison = StringComparison.Ordinal)
         {
             if (value.HasCharacters())
             {
@@ -1660,7 +1639,7 @@ namespace System
             return false;
         }
 
-        public static bool StartsWithAny(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> prefixes, in StringComparison comparison)
+        public static bool StartsWithAny(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> prefixes, in StringComparison comparison = StringComparison.Ordinal)
         {
             if (value.Length > 0)
             {
@@ -2271,13 +2250,13 @@ namespace System
             return indices ?? Array.Empty<int>();
         }
 
-        private static int[] AllIndicesNonOrdinal(string value, string finding, in StringComparison comparison)
+        private static int[] AllIndicesNonOrdinal(string value, string finding)
         {
             int[] indices = null;
 
             for (int index = 0, findingLength = finding.Length; ; index += findingLength)
             {
-                index = value.IndexOf(finding, index, comparison);
+                index = value.IndexOf(finding, index, StringComparison.OrdinalIgnoreCase);
 
                 if (index is -1)
                 {

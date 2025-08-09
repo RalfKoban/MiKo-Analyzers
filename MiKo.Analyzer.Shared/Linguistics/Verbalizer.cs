@@ -302,7 +302,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             if (Pluralizer.IsPlural(value))
             {
-                if (value.EndsWithAny(NonThirdPersonSingularEndingsWithS))
+                if (value.EndsWithAny(NonThirdPersonSingularEndingsWithS, StringComparison.OrdinalIgnoreCase))
                 {
                     return false;
                 }
@@ -327,7 +327,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         public static bool IsPastTense(string value) => value != null && IsPastTense(value.AsSpan());
 
-        public static bool IsPastTense(in ReadOnlySpan<char> value) => value.EndsWithAny(PastEndings, StringComparison.Ordinal);
+        public static bool IsPastTense(in ReadOnlySpan<char> value) => value.EndsWithAny(PastEndings);
 
         public static bool IsGerundVerb(string value) => value != null && IsGerundVerb(value.AsSpan());
 
@@ -338,7 +338,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return false;
             }
 
-            if (value.EndsWith("ing", StringComparison.Ordinal))
+            if (value.EndsWith("ing"))
             {
                 if (value.EndsWith("ling", StringComparison.OrdinalIgnoreCase))
                 {
@@ -521,7 +521,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     return word;
                 }
 
-                if (word.EndsWithAny(SpecialPastEndings, StringComparison.Ordinal))
+                if (word.EndsWithAny(SpecialPastEndings))
                 {
                     return word.AsSpan(0, word.Length - 1).ToString();
                 }
@@ -589,7 +589,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return value;
             }
 
-            if (value.EqualsAny(ThirdPersonalSingularVerbExceptions))
+            if (StringExtensions.EqualsAny(value, ThirdPersonalSingularVerbExceptions, StringComparison.OrdinalIgnoreCase))
             {
                 return value;
             }
@@ -706,7 +706,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     return word.AsSpan().ConcatenatedWith('s');
                 }
 
-                if (word.EndsWithAny(SpecialPastEndings, StringComparison.Ordinal))
+                if (word.EndsWithAny(SpecialPastEndings))
                 {
                     return word.AsSpan(0, word.Length - 1).ConcatenatedWith('s');
                 }
@@ -771,7 +771,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 var pair = Endings[index];
                 var key = pair.Key;
 
-                if (span.EndsWith(key, StringComparison.Ordinal))
+                if (span.EndsWith(key))
                 {
                     result = span.Slice(0, span.Length - key.Length).ConcatenatedWith(pair.Value);
 
@@ -788,7 +788,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
             {
                 var phrase = StartingPhrases[index];
 
-                if (value.StartsWith(phrase, StringComparison.Ordinal))
+                if (value.StartsWith(phrase))
                 {
                     var remaining = value.Slice(phrase.Length);
 
@@ -799,8 +799,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return false;
         }
 
-        private static bool HasAcceptableMiddlePhrase(string value) => value.ContainsAny(MiddlePhrases, StringComparison.Ordinal);
+        private static bool HasAcceptableMiddlePhrase(string value) => value.ContainsAny(MiddlePhrases);
 
-        private static bool HasAcceptableEndingPhrase(in ReadOnlySpan<char> value) => value.EndsWithAny(EndingPhrases, StringComparison.Ordinal);
+        private static bool HasAcceptableEndingPhrase(in ReadOnlySpan<char> value) => value.EndsWithAny(EndingPhrases);
     }
 }

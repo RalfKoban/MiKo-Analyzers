@@ -213,7 +213,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 // loop over text to see if we have to report at all
                 // (might be done a second time in case of report, but in case of no report we do not need to do all the other loops)
-                if (text.ContainsAny(Phrases) is false)
+                if (text.ContainsAny(Phrases, StringComparison.OrdinalIgnoreCase) is false)
                 {
                     // no need to loop further
                     continue;

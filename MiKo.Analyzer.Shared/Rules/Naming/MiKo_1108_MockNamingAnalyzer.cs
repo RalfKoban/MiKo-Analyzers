@@ -66,7 +66,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     continue;
                 }
 
-                if (name.ContainsAny(MockNames))
+                if (name.ContainsAny(MockNames, StringComparison.OrdinalIgnoreCase))
                 {
                     var symbol = identifier.GetSymbol(semanticModel);
 

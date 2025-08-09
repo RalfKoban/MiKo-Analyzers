@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var className = typeName.AsSpan();
 
-            if (className.EndsWith(Suffix, StringComparison.Ordinal))
+            if (className.EndsWith(Suffix))
             {
                 var betterName = FindBetterName(className);
 
@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return Array.Empty<Diagnostic>();
         }
 
-        private static string FindBetterName(in ReadOnlySpan<char> symbolName) => symbolName.StartsWith(Prefix, StringComparison.Ordinal)
+        private static string FindBetterName(in ReadOnlySpan<char> symbolName) => symbolName.StartsWith(Prefix)
                                                                                   ? symbolName.WithoutSuffix(Suffix).ToString()
                                                                                   : Prefix.ConcatenatedWith(symbolName.WithoutSuffix(Suffix));
     }

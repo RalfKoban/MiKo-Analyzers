@@ -3879,7 +3879,7 @@ namespace MiKoSolutions.Analyzers
 
                 foreach (var startText in startTexts)
                 {
-                    if (originalText.StartsWith(startText, StringComparison.Ordinal))
+                    if (originalText.StartsWith(startText))
                     {
                         var modifiedText = originalText.Slice(startText.Length);
 
@@ -4222,7 +4222,7 @@ namespace MiKoSolutions.Analyzers
             {
                 var content = syntax.Content.ToString().AsSpan().Trim();
 
-                return content.EqualsAny(contents);
+                return StringExtensions.EqualsAny(content, contents, StringComparison.OrdinalIgnoreCase);
             }
 
             return false;

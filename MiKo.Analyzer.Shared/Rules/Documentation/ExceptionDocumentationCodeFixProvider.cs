@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var comment = exceptionComment.ToString();
 
-                var ps = parameters.Where(_ => comment.ContainsAny(GetParameterReferences(_).ToArray())).ToArray();
+                var ps = parameters.Where(_ => comment.ContainsAny(GetParameterReferences(_).ToArray(), StringComparison.OrdinalIgnoreCase)).ToArray();
 
                 if (ps.Length != 0)
                 {
@@ -78,7 +78,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var parametersAsTextReferences = parameters.SelectMany(GetParameterAsTextReference).ToArray();
 
             // seems we found the reference in text, so we have to split the text into 2 separate ones and place a <paramref/> between
-            var textNodes = exceptionComment.DescendantNodes<XmlTextSyntax>(_ => _.GetTextWithoutTriviaLazy().Any(__ => __.ContainsAny(parametersAsTextReferences))).ToList();
+            var textNodes = exceptionComment.DescendantNodes<XmlTextSyntax>(_ => _.GetTextWithoutTriviaLazy().Any(__ => __.ContainsAny(parametersAsTextReferences, StringComparison.OrdinalIgnoreCase))).ToList();
 
             if (textNodes.Count != 0)
             {
@@ -176,7 +176,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var part in parts)
             {
-                if (part.ContainsAny(parametersAsTextReferences))
+                if (part.ContainsAny(parametersAsTextReferences, StringComparison.OrdinalIgnoreCase))
                 {
                     var parameterName = part.Substring(1, part.Length - 2);
 

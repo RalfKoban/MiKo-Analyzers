@@ -107,7 +107,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     otherIndex++;
 
                     if (otherParameterName == referenceParameterName
-                     || otherParameterName.Equals(referenceParameterName.AsSpan().WithoutNumberSuffix(), StringComparison.Ordinal))
+                     || otherParameterName.Equals(referenceParameterName.AsSpan().WithoutNumberSuffix()))
                     {
                         continue;
                     }

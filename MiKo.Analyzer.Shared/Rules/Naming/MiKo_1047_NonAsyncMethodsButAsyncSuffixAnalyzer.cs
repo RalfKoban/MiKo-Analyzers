@@ -35,12 +35,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static string FindBetterName(in ReadOnlySpan<char> symbolName)
         {
-            if (symbolName.EndsWith(Constants.AsyncSuffix, StringComparison.Ordinal))
+            if (symbolName.EndsWith(Constants.AsyncSuffix))
             {
                 return symbolName.WithoutSuffix(Constants.AsyncSuffix).ToString();
             }
 
-            if (symbolName.EndsWith(Constants.AsyncCoreSuffix, StringComparison.Ordinal))
+            if (symbolName.EndsWith(Constants.AsyncCoreSuffix))
             {
                 return symbolName.WithoutSuffix(Constants.AsyncCoreSuffix).ConcatenatedWith(Constants.Core);
             }

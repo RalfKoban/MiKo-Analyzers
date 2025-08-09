@@ -11,8 +11,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1092";
 
-        private const StringComparison Comparison = StringComparison.Ordinal;
-
         private static readonly string[] TypeSuffixes =
                                                         {
                                                             Constants.Element,
@@ -26,11 +24,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(string typeName, BaseTypeDeclarationSyntax declaration) => typeName.EndsWithAny(TypeSuffixes, Comparison);
+        protected override bool ShallAnalyze(string typeName, BaseTypeDeclarationSyntax declaration) => typeName.EndsWithAny(TypeSuffixes);
 
         protected override Diagnostic[] AnalyzeName(string typeName, in SyntaxToken typeNameIdentifier, BaseTypeDeclarationSyntax declaration)
         {
-            if (typeName.Contains("able") && typeName.EndsWithAny(TypeSuffixes, Comparison))
+            if (typeName.Contains("able") && typeName.EndsWithAny(TypeSuffixes))
             {
                 var proposedName = GetProposedName(typeName);
 
@@ -48,13 +46,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 foreach (var suffix in TypeSuffixes)
                 {
-                    if (proposedName.EndsWith(suffix, Comparison))
+                    if (proposedName.EndsWith(suffix))
                     {
                         proposedName = proposedName.WithoutSuffix(suffix);
                     }
                 }
             }
-            while (proposedName.EndsWithAny(TypeSuffixes, Comparison));
+            while (proposedName.EndsWithAny(TypeSuffixes));
 
             return proposedName.ToString();
         }

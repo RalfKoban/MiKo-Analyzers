@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var className = typeName.AsSpan();
 
-            if (className.EndsWith(Constants.TestsSuffix, StringComparison.Ordinal))
+            if (className.EndsWith(Constants.TestsSuffix))
             {
                 return Array.Empty<Diagnostic>();
             }
@@ -35,17 +35,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static string FindBetterName(in ReadOnlySpan<char> className)
         {
-            if (className.EndsWith("Test", StringComparison.Ordinal))
+            if (className.EndsWith("Test"))
             {
                 return className.ConcatenatedWith('s');
             }
 
-            if (className.EndsWith("TestBase", StringComparison.Ordinal))
+            if (className.EndsWith("TestBase"))
             {
                 return className.Slice(0, className.Length - 4).ConcatenatedWith('s');
             }
 
-            if (className.EndsWith("TestsBase", StringComparison.Ordinal))
+            if (className.EndsWith("TestsBase"))
             {
                 return className.Slice(0, className.Length - 4).ToString();
             }

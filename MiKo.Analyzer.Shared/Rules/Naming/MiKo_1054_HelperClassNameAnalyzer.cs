@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return Array.Empty<Diagnostic>();
             }
 
-            if (typeName.ContainsAny(WrongNames))
+            if (typeName.ContainsAny(WrongNames, StringComparison.OrdinalIgnoreCase))
             {
                 var wrongName = WrongNamesForConcreteLookup.First(_ => typeName.Contains(_, StringComparison.OrdinalIgnoreCase));
 
@@ -47,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static string FindBetterName(in ReadOnlySpan<char> typeName, string wrongName)
         {
-            if (typeName.Length > SpecialNameHandle.Length && typeName.StartsWith(SpecialNameHandle, StringComparison.Ordinal))
+            if (typeName.Length > SpecialNameHandle.Length && typeName.StartsWith(SpecialNameHandle))
             {
                 return typeName.WithoutSuffix(wrongName)
                                .Slice(SpecialNameHandle.Length)

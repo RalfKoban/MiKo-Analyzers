@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -19,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var phrases = GetPhrases(parameter.Name);
 
-            if (parameterComment.GetTextTrimmed().EqualsAny(phrases))
+            if (StringExtensions.EqualsAny(parameterComment.GetTextTrimmed(), phrases, StringComparison.OrdinalIgnoreCase))
             {
                 return new[] { Issue(parameter.Name, parameterComment.GetContentsLocation()) };
             }

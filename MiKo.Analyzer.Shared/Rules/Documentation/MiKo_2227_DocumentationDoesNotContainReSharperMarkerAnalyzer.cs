@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var trimmed = textTokens.GetTextTrimmedWithParaTags();
 
-            if (trimmed.ContainsAny(Phrases, StringComparison.Ordinal) is false)
+            if (trimmed.ContainsAny(Phrases) is false)
             {
                 return Array.Empty<Diagnostic>();
             }

@@ -67,7 +67,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var invocation = shouldNode.FirstAncestor<InvocationExpressionSyntax>();
             var arguments = invocation.ArgumentList.Arguments;
 
-            return AssertThat(expression, Is("EquivalentTo", arguments[0]), arguments, 1, removeNameColon: true);
+            return AssertThat(expression, Is("EquivalentTo", arguments[0]), arguments, removeNameColon: true);
         }
 
         private static InvocationExpressionSyntax ConvertShould(Document document, MemberAccessExpressionSyntax shouldNode)
@@ -166,7 +166,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "NotBeApproximately": return AssertThat(expression, Is("Not", "EqualTo", arguments[0], "Within", arguments[1]), arguments, 2, removeNameColon: true);
 
                 case "BeOfType" when constraintNode.Name is GenericNameSyntax g: return AssertThat(expression, Is("TypeOf", g.TypeArgumentList.Arguments.ToArray()), arguments, 0, removeNameColon: true);
-                case "BeOfType": return AssertThat(expression, Is("TypeOf", arguments[0]), arguments, 1, removeNameColon: true);
+                case "BeOfType": return AssertThat(expression, Is("TypeOf", arguments[0]), arguments, removeNameColon: true);
 
                 case "BeXmlSerializable": return AssertThat(expression, Is("XmlSerializable"), arguments, 0, removeNameColon: true);
                 case "BeBinarySerializable": return AssertThat(expression, Is("BinarySerializable"), arguments, 0, removeNameColon: true);
