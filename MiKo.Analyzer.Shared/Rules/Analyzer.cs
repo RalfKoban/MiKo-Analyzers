@@ -200,7 +200,7 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
-        protected virtual bool IsApplicable(CompilationStartAnalysisContext context) => true;
+        protected virtual bool IsApplicable(Compilation compilation) => true;
 
         protected virtual void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind);
 
@@ -521,16 +521,18 @@ namespace MiKoSolutions.Analyzers.Rules
 
         private void CompilationStartAction(CompilationStartAnalysisContext context)
         {
+            var compilation = context.Compilation;
+
             if (IsUnitTestAnalyzer)
             {
-                if (ReferencesTestAssemblies(context.Compilation) is false)
+                if (ReferencesTestAssemblies(compilation) is false)
                 {
                     // do not run analyzer if there are no tests contained
                     return;
                 }
             }
 
-            if (IsApplicable(context))
+            if (IsApplicable(compilation))
             {
                 InitializeCore(context);
             }
