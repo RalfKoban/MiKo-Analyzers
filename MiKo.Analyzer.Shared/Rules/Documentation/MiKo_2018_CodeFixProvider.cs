@@ -8,7 +8,8 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
-    //// <seealso cref="MiKo_2073_CodeFixProvider"/>
+    /// <inheritdoc />
+    /// <seealso cref="MiKo_2073_CodeFixProvider"/>
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2018_CodeFixProvider)), Shared]
     public sealed class MiKo_2018_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
