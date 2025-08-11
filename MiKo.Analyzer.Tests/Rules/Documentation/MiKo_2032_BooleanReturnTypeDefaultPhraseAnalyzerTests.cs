@@ -315,6 +315,8 @@ public class TestMe
         [TestCase(@"<see langword=""true""/> - If something; <see langword=""false""/> otherwise.")]
         [TestCase(@"<see langword=""true""/> something.")]
         [TestCase(@"<see langword=""true""/> - something.")]
+        [TestCase(@"<see langword=""true""/> when something else false")]
+        [TestCase(@"<see langword=""true""/> when something else false.")]
         [TestCase("true if something. Otherwise false.")]
         [TestCase("<b>true</b> if something. Otherwise <b>false</b>.")]
         [TestCase("<c>true</c> if something. Otherwise <c>false</c>.")]
@@ -339,6 +341,8 @@ public class TestMe
         [TestCase("true, if something, else it returns false.")]
         [TestCase("true if something, else with false.")]
         [TestCase("true, if something, false else.")]
+        [TestCase("true when something else false")]
+        [TestCase("true when something else false.")]
         public void Code_gets_fixed_for_almost_correct_comment_on_non_generic_method_(string comment)
         {
             var originalCode = @"
