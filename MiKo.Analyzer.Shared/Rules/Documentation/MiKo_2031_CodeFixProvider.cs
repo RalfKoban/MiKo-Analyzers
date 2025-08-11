@@ -75,6 +75,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var contents = comment.Content;
 
+            if (contents.Count is 0)
+            {
+                // nothing left, so we have to add a TODO
+                return comment.WithContent(XmlText(Constants.TODO));
+            }
+
             if (contents.FirstOrDefault() is XmlTextSyntax startText)
             {
                 if (contents.Count >= 3)
@@ -88,9 +94,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         {
                             var newText = text.Without(ContinueTextParts);
 
-                            if (newText.EndsWith('.') is false)
+                            if (newText.Length is 0)
                             {
-                                newText += " "; // add extra space so that next XML syntax node is placed well
+                                // nothing left, so we have to add a TODO
+                                newText = Constants.TODO;
+                            }
+                            else
+                            {
+                                if (newText.EndsWith('.') is false)
+                                {
+                                    newText += " "; // add extra space so that next XML syntax node is placed well
+                                }
                             }
 
                             var newContents = contents.Replace(continueText, XmlText(newText));
@@ -101,7 +115,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                 }
 
-                return ReplaceText(comment, startText, TextParts, string.Empty);
+                var preparedComment = ReplaceText(comment, startText, TextParts, string.Empty);
+                var preparedCommentContent = preparedComment.Content;
+
+                if (preparedCommentContent.Count == 1 && preparedCommentContent[0] is XmlTextSyntax t && t.GetTextTrimmed().IsNullOrWhiteSpace())
+                {
+                    // nothing left, so we have to add a TODO
+                    return preparedComment.WithContent(XmlText(Constants.TODO));
+                }
+
+                return preparedComment;
             }
 
             return comment;
@@ -122,6 +145,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                   "A task that can be used to await.",
                                   "A task that can be used to await and",
                                   "A task that can be used to await",
+                                  "An awaitable Task.",
+                                  "An awaitable Task and",
+                                  "An awaitable Task",
+                                  "A Task to await.",
+                                  "A Task to await and",
+                                  "A Task to await",
+                                  "A Task that can be used to await.",
+                                  "A Task that can be used to await and",
+                                  "A Task that can be used to await",
                               };
 
             foreach (var phrase in AlmostCorrectTaskReturnTypeStartingPhrases)
@@ -129,7 +161,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 results.Add(phrase);
             }
 
-            foreach (var start in new[] { "A result", "A task", "The task" })
+            foreach (var start in new[] { "A result", "A task", "The task", "A Task", "The Task" })
             {
                 foreach (var end in ContinueTextParts)
                 {

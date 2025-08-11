@@ -781,7 +781,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 textTokens.RemoveRange(0, removals + 1);
 
-                var replacementText = commentEnd + textToken.ValueText.AsSpan().TrimStart().ToLowerCaseAt(0);
+                var tokenText = textToken.ValueText;
+
+                var continuationText = tokenText is Constants.TODO ? tokenText : tokenText.AsSpan().TrimStart().ToLowerCaseAt(0);
+
+                var replacementText = commentEnd + continuationText;
                 var replacement = replacementText.AsToken();
                 textTokens.Insert(0, replacement);
 
