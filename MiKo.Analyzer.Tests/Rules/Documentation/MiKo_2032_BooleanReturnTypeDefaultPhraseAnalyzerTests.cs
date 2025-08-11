@@ -152,7 +152,7 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <" + xmlTag + @">
-    /// A task that will complete with a result of " + trueValue + " if something happens, otherwise with a result of " + falseValue + @".
+    /// A task that completes with a result of " + trueValue + " if something happens, otherwise with a result of " + falseValue + @".
     /// </" + xmlTag + @">
     public " + returnType + @" DoSomething(object o) => null;
 }
@@ -293,7 +293,7 @@ public class TestMe
 {
     /// <summary>Does something.</summary>
     /// <returns>
-    /// A task that will complete with a result of <see langword=""true""/> if " + fixedPhrase + @", otherwise with a result of <see langword=""false""/>.
+    /// A task that completes with a result of <see langword=""true""/> if " + fixedPhrase + @", otherwise with a result of <see langword=""false""/>.
     /// </returns>
     public Task<bool> DoSomething(object o) => throw new NotSupportedException();
 }
@@ -607,7 +607,7 @@ public class TestMe
 {
     /// <summary>Does something.</summary>
     /// <returns>
-    /// A task that will complete with a result of <see langword=""true""/> if something, otherwise with a result of <see langword=""false""/>.
+    /// A task that completes with a result of <see langword=""true""/> if something, otherwise with a result of <see langword=""false""/>.
     /// </returns>
     public Task<bool> DoSomething(object o) => throw new NotSupportedException();
 }
