@@ -9308,6 +9308,52 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use &lt;list&gt; to list items.
+        /// </summary>
+        internal static string MiKo_2244_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2244_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML documentation should use the &lt;list&gt; tag for enumerating items. Avoid using &lt;ul&gt; or &lt;ol&gt; because IntelliSense and XML documentation tools cannot recognize these and may format comments awkwardly.
+        ///Using &lt;list&gt; allows IntelliSense to format content as tables, numbered lists, ordered lists, etc., making documentation clear and easy to read..
+        /// </summary>
+        internal static string MiKo_2244_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2244_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/list.
+        /// </summary>
+        internal static string MiKo_2244_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_2244_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &lt;list&gt; to list items in documentation.
+        /// </summary>
+        internal static string MiKo_2244_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2244_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should use &lt;list&gt; instead of &lt;ul&gt; or &lt;ol&gt;.
+        /// </summary>
+        internal static string MiKo_2244_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2244_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works—let the code itself do that.
         ///This approach ensures comments are insightful and add real value by giving context and rationale, helping developers understand the reasoning behind the implementation..
         /// </summary>

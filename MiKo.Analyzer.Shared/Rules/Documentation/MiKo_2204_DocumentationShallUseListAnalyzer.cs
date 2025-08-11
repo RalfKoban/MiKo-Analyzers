@@ -10,6 +10,8 @@ using MiKoSolutions.Analyzers.Linguistics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
+    /// <inheritdoc />
+    /// <seealso cref="MiKo_2244_DocumentationShallUseListAnalyzer"/>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class MiKo_2204_DocumentationShallUseListAnalyzer : OverallDocumentationAnalyzer
     {
@@ -19,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] Delimiters = { ".)", ".", ")", ":" };
 
         private static readonly string[] Triggers = Array.Empty<string>()
-                                                         .Union(new[] { " -", "--", "---", "*" }.SelectMany(_ => Constants.Comments.Delimiters, (_, delimiter) => string.Concat(delimiter, _, " ")))
+                                                         .Union(new[] { " -", "--", "---", "*" }.SelectMany(_ => Constants.Comments.Delimiters, (_, delimiter) => delimiter.ConcatenatedWith(_, ' ')))
                                                          .Union(new[] { "1", "2", "3", "a", "b", "c", "A", "B", "C" }.SelectMany(_ => Delimiters, (_, delimiter) => string.Concat(" ", _, delimiter, " ")))
                                                          .Union(new[] { " -- ", " --- ", " * ", " ** ", " *** " })
                                                          .ToArray(AscendingStringComparer.Default);

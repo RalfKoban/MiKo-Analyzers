@@ -108,7 +108,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 items.Add(item);
             }
 
-            return XmlList(Constants.XmlTag.ListType.Bullet, items);
+            return XmlList(Constants.XmlTag.ListType.Bullet, items).WithLeadingXmlComment();
         }
     }
 }

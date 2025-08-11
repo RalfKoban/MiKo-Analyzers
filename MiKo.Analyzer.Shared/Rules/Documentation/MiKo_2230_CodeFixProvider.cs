@@ -52,8 +52,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 if (element != null)
                 {
                     var content = element.Content;
+                    var node = content[0];
 
-                    return content.Replace(content[0], content[0].WithLeadingXmlComment());
+                    return content.Replace(node, node.WithLeadingXmlComment());
                 }
             }
 
@@ -63,20 +64,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static XmlElementSyntax XmlTable(in ReadOnlySpan<char> text)
         {
             // try to find all sentences by splitting the texts at the dots (that should indicate a sentence ending)
-            var nodes = new List<XmlNodeSyntax>
+            var nodes = new List<XmlElementSyntax>
                             {
                                 XmlListHeader(Constants.Comments.ValuePhrase, Constants.Comments.MeaningPhrase),
                             };
 
             if (TryCreateItems(text, nodes))
             {
-                return XmlList(Constants.XmlTag.ListType.Table, nodes);
+                return XmlList(Constants.XmlTag.ListType.Table, nodes).WithLeadingXmlComment();
             }
 
             return XmlElement(Constants.XmlTag.ListType.Table, XmlText(Constants.TODO));
         }
 
-        private static bool TryCreateItems(in ReadOnlySpan<char> text, List<XmlNodeSyntax> nodes)
+        private static bool TryCreateItems(in ReadOnlySpan<char> text, List<XmlElementSyntax> nodes)
         {
             const string LessThanZero = Constants.Comments.LessThanZero;
             const string Zero = Constants.Comments.Zero;
