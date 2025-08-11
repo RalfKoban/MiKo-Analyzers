@@ -704,16 +704,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// <param name="listType">
         /// The type of the list.
         /// </param>
-        /// <param name="listItems">
+        /// <param name="items">
         /// The items of the list.
         /// </param>
         /// <returns>
         /// The created XML list.
         /// </returns>
-        protected static XmlElementSyntax XmlList(string listType, IEnumerable<XmlNodeSyntax> listItems)
+        protected static XmlElementSyntax XmlList(string listType, IList<XmlElementSyntax> items)
         {
-            var items = listItems.ToList();
-
             var itemsCount = items.Count;
 
             if (itemsCount > 0)
@@ -729,7 +727,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var list = XmlElement(Constants.XmlTag.List, items);
             var type = SyntaxFactory.XmlTextAttribute(Constants.XmlTag.Attribute.Type, listType.AsToken());
 
-            return list.AddStartTagAttributes(type).WithLeadingXmlComment();
+            return list.AddStartTagAttributes(type);
         }
 
         protected static XmlElementSyntax XmlElement(string tag) => SyntaxFactory.XmlElement(tag, default);

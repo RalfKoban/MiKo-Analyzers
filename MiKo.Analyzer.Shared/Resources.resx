@@ -3284,6 +3284,22 @@ Such documentation also undermines tool integration and usability, as IDEs rely 
   <data name="MiKo_2240_Title" xml:space="preserve">
     <value>&lt;response&gt; documentation should not start with 'Returns'</value>
   </data>
+  <data name="MiKo_2244_CodeFixTitle" xml:space="preserve">
+    <value>Use &lt;list&gt; to list items</value>
+  </data>
+  <data name="MiKo_2244_Description" xml:space="preserve">
+    <value>XML documentation should use the &lt;list&gt; tag for enumerating items. Avoid using &lt;ul&gt; or &lt;ol&gt; because IntelliSense and XML documentation tools cannot recognize these and may format comments awkwardly.
+Using &lt;list&gt; allows IntelliSense to format content as tables, numbered lists, ordered lists, etc., making documentation clear and easy to read.</value>
+  </data>
+  <data name="MiKo_2244_HelpLinkUri" xml:space="preserve">
+    <value>https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/list</value>
+  </data>
+  <data name="MiKo_2244_MessageFormat" xml:space="preserve">
+    <value>Use &lt;list&gt; to list items in documentation</value>
+  </data>
+  <data name="MiKo_2244_Title" xml:space="preserve">
+    <value>Documentation should use &lt;list&gt; instead of &lt;ul&gt; or &lt;ol&gt;</value>
+  </data>
   <data name="MiKo_2300_Description" xml:space="preserve">
     <value>Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works—let the code itself do that.
 This approach ensures comments are insightful and add real value by giving context and rationale, helping developers understand the reasoning behind the implementation.</value>
