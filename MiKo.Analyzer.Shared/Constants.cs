@@ -236,7 +236,7 @@ namespace MiKoSolutions.Analyzers
             internal const string BooleanReturnTypeEndingPhraseTemplate = "; otherwise, {0}.";
             internal const string BooleanReturnTypeStartingPhraseTemplate = "{0} if ";
             internal const string BooleanTaskReturnTypeEndingPhraseTemplate = ", otherwise with a result of {0}.";
-            internal const string BooleanTaskReturnTypeStartingPhraseTemplate = "A task that will complete with a result of {0} if ";
+            internal const string BooleanTaskReturnTypeStartingPhraseTemplate = "A task that completes with a result of {0} if ";
             internal const string CallbackTerm = "callback";
             internal const string CollectionReturnTypeStartingPhrase = "A collection of ";
             internal const string CollectionReturnTypeStartingPhraseLowerCase = "a collection of ";
