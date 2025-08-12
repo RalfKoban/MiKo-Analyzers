@@ -7,8 +7,9 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
-    //// <seealso cref="MiKo_3092_StatementInsideLockRaisesEventAnalyzer"/>
-    //// <seealso cref="MiKo_3093_StatementInsideLockTriggersActionAnalyzer"/>
+    /// <inheritdoc />
+    /// <seealso cref="MiKo_3092_StatementInsideLockRaisesEventAnalyzer"/>
+    /// <seealso cref="MiKo_3093_StatementInsideLockTriggersActionAnalyzer"/>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class MiKo_3094_StatementInsideLockCallsParameterAnalyzer : MaintainabilityAnalyzer
     {

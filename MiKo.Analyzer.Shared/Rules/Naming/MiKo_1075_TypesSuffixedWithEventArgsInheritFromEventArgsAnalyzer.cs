@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.TypeKind is TypeKind.Class && symbol.Name.EndsWithAny(EventArgSuffixes, StringComparison.Ordinal);
+        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.TypeKind is TypeKind.Class && symbol.Name.EndsWithAny(EventArgSuffixes);
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -40,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 
         private static string FindBetterName(string name) => name.Length > 5
-                                                             ? name.Without("proxy").Without("Proxy").ToLowerCaseAt(0) // simply remove both as we need to check them anyway (so we save some calls)
+                                                             ? name.AsCachedBuilder().Without("proxy").Without("Proxy").ToLowerCaseAt(0).ToString() // simply remove both as we need to check them anyway (so we save some calls)
                                                              : name;
     }
 }

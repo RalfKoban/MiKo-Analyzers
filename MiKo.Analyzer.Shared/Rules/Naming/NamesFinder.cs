@@ -331,7 +331,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             result = null;
 
-            if (part1.StartsWithAny(SpecialNotPhrases, StringComparison.Ordinal))
+            if (part1.StartsWithAny(SpecialNotPhrases))
             {
                 // it seems like this is in normal order, so do not change the order
                 return false;

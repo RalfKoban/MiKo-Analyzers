@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_1092_AbilityTypeWrongSuffixedAnalyzer : NamingAnalyzer
+    public sealed class MiKo_1092_AbilityTypeWrongSuffixedAnalyzer : TypeSyntaxNamingAnalyzer
     {
         public const string Id = "MiKo_1092";
-
-        private const StringComparison Comparison = StringComparison.Ordinal;
 
         private static readonly string[] TypeSuffixes =
                                                         {
@@ -22,21 +20,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "Information",
                                                         };
 
-        public MiKo_1092_AbilityTypeWrongSuffixedAnalyzer() : base(Id, SymbolKind.NamedType)
+        public MiKo_1092_AbilityTypeWrongSuffixedAnalyzer() : base(Id)
         {
         }
 
-        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.Name.EndsWithAny(TypeSuffixes, Comparison);
+        protected override bool ShallAnalyze(string typeName, BaseTypeDeclarationSyntax declaration) => typeName.EndsWithAny(TypeSuffixes);
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
+        protected override Diagnostic[] AnalyzeName(string typeName, in SyntaxToken typeNameIdentifier, BaseTypeDeclarationSyntax declaration)
         {
-            var name = symbol.Name;
-
-            if (name.Contains("able") && name.EndsWithAny(TypeSuffixes, Comparison))
+            if (typeName.Contains("able") && typeName.EndsWithAny(TypeSuffixes))
             {
-                var proposedName = GetProposedName(name);
+                var proposedName = GetProposedName(typeName);
 
-                return new[] { Issue(symbol, proposedName, CreateBetterNameProposal(proposedName)) };
+                return new[] { Issue(typeNameIdentifier, proposedName) };
             }
 
             return Array.Empty<Diagnostic>();
@@ -50,13 +46,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 foreach (var suffix in TypeSuffixes)
                 {
-                    if (proposedName.EndsWith(suffix, Comparison))
+                    if (proposedName.EndsWith(suffix))
                     {
                         proposedName = proposedName.WithoutSuffix(suffix);
                     }
                 }
             }
-            while (proposedName.EndsWithAny(TypeSuffixes, Comparison));
+            while (proposedName.EndsWithAny(TypeSuffixes));
 
             return proposedName.ToString();
         }

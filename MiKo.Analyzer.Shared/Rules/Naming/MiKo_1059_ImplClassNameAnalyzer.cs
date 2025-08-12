@@ -1,33 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_1059_ImplClassNameAnalyzer : NamingAnalyzer
+    public sealed class MiKo_1059_ImplClassNameAnalyzer : TypeSyntaxNamingAnalyzer
     {
         public const string Id = "MiKo_1059";
 
         private static readonly string[] WrongSuffixes = { "Impl", "Implementation", "Imp" };
 
-        public MiKo_1059_ImplClassNameAnalyzer() : base(Id, SymbolKind.NamedType)
+        public MiKo_1059_ImplClassNameAnalyzer() : base(Id)
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
+        protected override Diagnostic[] AnalyzeName(string typeName, in SyntaxToken typeNameIdentifier, BaseTypeDeclarationSyntax declaration)
         {
-            var symbolName = symbol.Name;
-
             foreach (var wrongSuffix in WrongSuffixes)
             {
-                if (symbolName.EndsWith(wrongSuffix, StringComparison.OrdinalIgnoreCase))
+                if (typeName.EndsWith(wrongSuffix, StringComparison.OrdinalIgnoreCase))
                 {
-                    var proposal = symbolName.WithoutSuffix(wrongSuffix);
+                    var proposal = typeName.WithoutSuffix(wrongSuffix);
 
-                    return new[] { Issue(symbol, wrongSuffix, CreateBetterNameProposal(proposal)) };
+                    return new[] { Issue(typeNameIdentifier, proposal, wrongSuffix) };
                 }
             }
 

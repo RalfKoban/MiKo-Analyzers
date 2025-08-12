@@ -18,8 +18,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private const string StartingPhraseConcrete = StartingPhrase + "the <see cref=\"";
         private const string EndingPhraseConcrete = "/> event.";
 
-        private const StringComparison Comparison = StringComparison.Ordinal;
-
         public MiKo_2002_EventArgsSummaryAnalyzer() : base(Id)
         {
         }
@@ -50,13 +48,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     var trimmedSummary = summary.Without(Constants.Comments.SealedClassPhrase).AsSpan().Trim();
 
-                    if (trimmedSummary.StartsWith(StartingPhrase, Comparison))
+                    if (trimmedSummary.StartsWith(StartingPhrase))
                     {
-                        var phrase = trimmedSummary.StartsWith(StartingPhraseConcrete, Comparison)
+                        var phrase = trimmedSummary.StartsWith(StartingPhraseConcrete)
                                      ? EndingPhraseConcrete
                                      : EndingPhraseMultiple;
 
-                        return trimmedSummary.EndsWith(phrase, Comparison);
+                        return trimmedSummary.EndsWith(phrase);
                     }
                 }
             }

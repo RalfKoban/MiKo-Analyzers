@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -59,7 +60,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var expression = InvocationIs(name, argument);
 
-            return Argument(SimpleMemberAccess(expression, name1));
+            return Argument(Member(expression, name1));
         }
 
         protected static ArgumentSyntax Is(string name, string name1, ExpressionSyntax expression) => Is(name, name1, Argument(expression));
@@ -71,13 +72,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var expression = MemberIs(name, name1);
             var invocation = Invocation(expression, argument);
 
-            return Argument(SimpleMemberAccess(invocation, name2));
+            return Argument(Member(invocation, name2));
         }
 
         protected static ArgumentSyntax Is(string name, ArgumentSyntax argument, string name1, ArgumentSyntax argument1)
         {
             var isCall = InvocationIs(name, argument);
-            var appendixCall = SimpleMemberAccess(isCall, name1);
+            var appendixCall = Member(isCall, name1);
 
             return Argument(appendixCall, argument1);
         }
@@ -86,7 +87,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var expression = MemberIs(name, name1);
             var isCall = Invocation(expression, argument);
-            var appendixCall = SimpleMemberAccess(isCall, name2);
+            var appendixCall = Member(isCall, name2);
 
             return Argument(appendixCall, argument1);
         }
@@ -94,14 +95,22 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected static ArgumentSyntax Is(params string[] names) => Argument(MemberIs(names));
 
         protected static bool IsNumeric(ArgumentSyntax argument) => argument.Expression.IsKind(SyntaxKind.NumericLiteralExpression)
-                                                                  || (argument.Expression is MemberAccessExpressionSyntax mae && mae.Expression.IsKind(SyntaxKind.PredefinedType));
+                                                                 || (argument.Expression is MemberAccessExpressionSyntax mae && mae.Expression.IsKind(SyntaxKind.PredefinedType));
+
+        protected static bool IsAssert(StatementSyntax statement) => statement is ExpressionStatementSyntax node && IsAssert(node);
+
+        protected static bool IsAssert(ExpressionStatementSyntax statement) => statement.Expression is InvocationExpressionSyntax i && i.GetIdentifierName().EndsWith("Assert", StringComparison.Ordinal) && i.Expression.GetName() != "Fail";
+
+        protected static bool IsAssertFail(StatementSyntax statement) => statement is ExpressionStatementSyntax node && IsAssertFail(node);
+
+        protected static bool IsAssertFail(ExpressionStatementSyntax statement) => statement.Expression is InvocationExpressionSyntax i && i.GetIdentifierName() is "Assert" && i.Expression.GetName() is "Fail";
 
         protected static ArgumentSyntax Does(string name, ArgumentSyntax argument) => Argument(Invocation("Does", name, argument));
 
         protected static ArgumentSyntax Does(string name, ArgumentSyntax argument, string name1)
         {
             var doesCall = Invocation(MemberDoes(name), argument);
-            var appendixCall = SimpleMemberAccess(doesCall, name1);
+            var appendixCall = Member(doesCall, name1);
 
             return Argument(appendixCall);
         }
@@ -111,7 +120,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected static ArgumentSyntax Does(string name, string name1, ArgumentSyntax argument, string name2)
         {
             var doesCall = Invocation(MemberDoes(name, name1), argument);
-            var appendixCall = SimpleMemberAccess(doesCall, name2);
+            var appendixCall = Member(doesCall, name2);
 
             return Argument(appendixCall);
         }
@@ -123,7 +132,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected static ArgumentSyntax Has(string name, ArgumentSyntax argument, string name1)
         {
             var hasCall = Invocation(MemberHas(name), argument);
-            var appendixCall = SimpleMemberAccess(hasCall, name1);
+            var appendixCall = Member(hasCall, name1);
 
             return Argument(appendixCall);
         }
@@ -134,19 +143,35 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static ArgumentSyntax Has(string name, string name1, string name2, ExpressionSyntax expression) => Argument(MemberHas(name, name1, name2), Argument(expression));
 
-        protected static ArgumentSyntax Has(string name, string name1, ArgumentSyntax argument, params TypeSyntax[] types) => Argument(SimpleMemberAccess("Has", name, name1, types), argument);
+        protected static ArgumentSyntax Has(string name, string name1, ArgumentSyntax argument, params TypeSyntax[] types) => Argument(Member("Has", name, name1, types), argument);
 
-        protected static MemberAccessExpressionSyntax MemberDoes(params string[] names) => SimpleMemberAccess("Does", names);
+        protected static MemberAccessExpressionSyntax MemberDoes(params string[] names) => Member("Does", names);
 
-        protected static MemberAccessExpressionSyntax MemberHas(params string[] names) => SimpleMemberAccess("Has", names);
+        protected static MemberAccessExpressionSyntax MemberHas(params string[] names) => Member("Has", names);
 
-        protected static MemberAccessExpressionSyntax MemberIs(params string[] names) => SimpleMemberAccess("Is", names);
+        protected static MemberAccessExpressionSyntax MemberIs(params string[] names) => Member("Is", names);
 
         protected static ArgumentSyntax Throws(string name) => Argument("Throws", name);
 
-        protected static ArgumentSyntax Throws(string name, ArgumentSyntax argument) => Argument(Invocation("Throws", name, argument));
+        protected static ArgumentSyntax Throws(TypeSyntax type)
+        {
+            var exceptionName = type.GetName();
 
-        protected static ArgumentSyntax Throws(string name, params TypeSyntax[] types) => Argument(Invocation("Throws", name, types));
+            switch (exceptionName)
+            {
+                case nameof(ArgumentException):
+                case nameof(ArgumentNullException):
+                case nameof(Exception):
+                case nameof(InvalidOperationException):
+                case nameof(TargetInvocationException):
+                    return Throws(exceptionName);
+
+                default:
+                    return Argument(Invocation("Throws", "TypeOf", type));
+            }
+        }
+
+        protected static ArgumentSyntax Throws(ArgumentSyntax argument) => Argument(Invocation("Throws", "TypeOf", argument));
 
         protected static TypeSyntax[] GetTypeSyntaxes(InvocationExpressionSyntax i, SimpleNameSyntax name)
         {
@@ -173,7 +198,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var formatMessage = literal.Token.ValueText;
 
-                if (formatMessage.ContainsAny(FormatIdentifiers))
+                if (formatMessage.ContainsAny(FormatIdentifiers, StringComparison.OrdinalIgnoreCase))
                 {
                     return Argument(ConvertToInterpolatedString(formatMessage.AsSpan(), otherArguments));
                 }
@@ -188,7 +213,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             int index;
 
-            while ((index = formatMessage.IndexOfAny(FormatIdentifiers, StringComparison.Ordinal)) > -1)
+            while ((index = formatMessage.IndexOfAny(FormatIdentifiers)) > -1)
             {
                 if (index > 0)
                 {

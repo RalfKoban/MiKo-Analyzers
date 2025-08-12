@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        internal static bool CommentContainsSeparator(string comment) => comment.ContainsAny(Separators);
+        internal static bool CommentContainsSeparator(string comment) => comment.ContainsAny(Separators, StringComparison.OrdinalIgnoreCase);
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeComment, SyntaxKind.CompilationUnit);
 

@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             problematicText = string.Empty;
             comparison = StringComparison.Ordinal;
 
-            if (valueText.AsSpan().TrimStart().StartsWith(Phrase, comparison))
+            if (valueText.AsSpan().TrimStart().StartsWith(Phrase))
             {
                 return false;
             }

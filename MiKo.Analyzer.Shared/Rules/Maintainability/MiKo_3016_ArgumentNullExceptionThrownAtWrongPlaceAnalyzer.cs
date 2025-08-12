@@ -48,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     case BinaryExpressionSyntax binary when binary.Left is IdentifierNameSyntax || binary.Right is IdentifierNameSyntax:
                     case IsPatternExpressionSyntax pattern when pattern.Expression is IdentifierNameSyntax:
-                    case InvocationExpressionSyntax invocation when invocation.GetName().EqualsAny(EqualsMethods):
+                    case InvocationExpressionSyntax invocation when StringExtensions.EqualsAny(invocation.GetName(), EqualsMethods, StringComparison.OrdinalIgnoreCase):
                     {
                         // seems like a correct usage
                         return Array.Empty<Diagnostic>();

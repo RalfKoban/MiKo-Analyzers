@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                       && symbol.IsTestMethod()
                                                                       && symbol.Name.Length >= 7; // consider only long names
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation) => symbol.Name.ContainsAny(WrongTerms)
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation) => symbol.Name.ContainsAny(WrongTerms, StringComparison.OrdinalIgnoreCase)
                                                                                                                  ? new[] { Issue(symbol) }
                                                                                                                  : Array.Empty<Diagnostic>();
     }

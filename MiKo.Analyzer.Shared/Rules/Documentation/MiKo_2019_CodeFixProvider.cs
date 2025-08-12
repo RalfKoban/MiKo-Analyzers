@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         return syntax;
                     }
 
-                    if (startText.StartsWithAny(RepresentsCandidates, StringComparison.Ordinal))
+                    if (startText.StartsWithAny(RepresentsCandidates))
                     {
                         return CommentStartingWith(summary, "Represents a ");
                     }
@@ -53,7 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     // only adjust in case there is no single letter
                     if (firstWord.Length > 1)
                     {
-                        if (firstWord.EndsWith("alled", StringComparison.Ordinal))
+                        if (firstWord.EndsWith("alled"))
                         {
                             // currently we cannot adjust "Called" text properly
                         }

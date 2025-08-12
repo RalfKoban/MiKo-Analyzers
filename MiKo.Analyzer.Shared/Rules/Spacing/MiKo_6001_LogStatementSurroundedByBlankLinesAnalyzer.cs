@@ -12,19 +12,19 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
         }
 
-        protected override bool IsApplicable(CompilationStartAnalysisContext context)
+        protected override bool IsApplicable(Compilation compilation)
         {
-            if (context.Compilation.GetTypeByMetadataName(Constants.ILog.FullTypeName) != null)
+            if (compilation.GetTypeByMetadataName(Constants.ILog.FullTypeName) != null)
             {
                 return true;
             }
 
-            if (context.Compilation.GetTypeByMetadataName(Constants.SeriLog.FullTypeName) != null)
+            if (compilation.GetTypeByMetadataName(Constants.SeriLog.FullTypeName) != null)
             {
                 return true;
             }
 
-            if (context.Compilation.GetTypeByMetadataName(Constants.MicrosoftLogging.FullTypeName) != null)
+            if (compilation.GetTypeByMetadataName(Constants.MicrosoftLogging.FullTypeName) != null)
             {
                 return true;
             }

@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected Diagnostic[] AnalyzeStartingPhrase(ISymbol symbol, DocumentationCommentTriviaSyntax comment, string commentXml, string xmlTag, in ReadOnlySpan<string> phrases)
         {
-            if (commentXml.StartsWithAny(phrases, StringComparison.Ordinal) is false)
+            if (commentXml.StartsWithAny(phrases) is false)
             {
                 var nodes = comment.GetXmlSyntax(xmlTag);
 

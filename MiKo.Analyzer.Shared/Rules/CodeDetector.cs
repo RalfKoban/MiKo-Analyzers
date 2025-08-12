@@ -106,14 +106,14 @@ namespace MiKoSolutions.Analyzers.Rules
                 return true;
             }
 
-            if (line.StartsWithAny(CodeStartMarkers, StringComparison.Ordinal))
+            if (line.StartsWithAny(CodeStartMarkers))
             {
                 return true;
             }
 
             var lineString = line.ToString();
 
-            if (lineString.ContainsAny(CodeConditionMarkers, StringComparison.Ordinal))
+            if (lineString.ContainsAny(CodeConditionMarkers))
             {
                 return true;
             }
@@ -126,12 +126,12 @@ namespace MiKoSolutions.Analyzers.Rules
                     return false; // allow indicators such as http:// or ftp://
                 }
 
-                if (line.EndsWith(Constants.Comments.CommentExterior, StringComparison.Ordinal))
+                if (line.EndsWith(Constants.Comments.CommentExterior))
                 {
                     return false; // ignore all framed comments
                 }
 
-                if (lineString.ContainsAny(Constants.Markers.ReSharper))
+                if (lineString.ContainsAny(Constants.Markers.ReSharper, StringComparison.OrdinalIgnoreCase))
                 {
                     return false; // ignore '// ReSharper' comments
                 }
@@ -159,7 +159,7 @@ namespace MiKoSolutions.Analyzers.Rules
                 return true; // found a construction or initialization
             }
 
-            if (lineString.ContainsAny(FrameMarkers))
+            if (lineString.ContainsAny(FrameMarkers, StringComparison.OrdinalIgnoreCase))
             {
                 return false;
             }
@@ -176,7 +176,7 @@ namespace MiKoSolutions.Analyzers.Rules
                     return true;
                 }
 
-                if (lineString.ContainsAny(Operators))
+                if (lineString.ContainsAny(Operators, StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
                 }
@@ -204,7 +204,7 @@ var convertedType = semanticModel.GetTypeInfo(node).ConvertedType;
                 return true;
             }
 
-            if (lineString.ContainsAny(LockStatements))
+            if (lineString.ContainsAny(LockStatements, StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }
