@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var text = valueText.AsSpan().TrimStart();
 
-            if (text.StartsWith(StartingPhrase, comparison))
+            if (text.StartsWith(StartingPhrase))
             {
                 return false;
             }

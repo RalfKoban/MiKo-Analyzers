@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_1094_NamespaceAsClassSuffixAnalyzer : NamingAnalyzer
+    public sealed class MiKo_1094_NamespaceAsClassSuffixAnalyzer : TypeSyntaxNamingAnalyzer
     {
         public const string Id = "MiKo_1094";
 
@@ -17,26 +18,32 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                               { "Handling", "Handler" },
                                                                           };
 
-        public MiKo_1094_NamespaceAsClassSuffixAnalyzer() : base(Id, SymbolKind.NamedType)
+        public MiKo_1094_NamespaceAsClassSuffixAnalyzer() : base(Id)
         {
         }
 
-        /// <inheritdoc />
-        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.IsTestClass() is false;
+        protected override bool ShallAnalyze(string typeName, BaseTypeDeclarationSyntax declaration) => declaration.IsTestClass() is false;
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
+        protected override Diagnostic[] AnalyzeName(string typeName, in SyntaxToken typeNameIdentifier, BaseTypeDeclarationSyntax declaration)
         {
-            var symbolName = symbol.Name;
+            List<Diagnostic> issues = null;
 
             foreach (var pair in Suffixes)
             {
-                if (symbolName.EndsWith(pair.Key, StringComparison.OrdinalIgnoreCase))
+                if (typeName.EndsWith(pair.Key, StringComparison.OrdinalIgnoreCase))
                 {
-                    var shortened = symbolName.AsSpan().WithoutSuffix(pair.Key);
+                    var shortened = typeName.AsSpan().WithoutSuffix(pair.Key);
 
-                    yield return Issue(symbol, shortened.ConcatenatedWith(pair.Value));
+                    if (issues is null)
+                    {
+                        issues = new List<Diagnostic>(1);
+                    }
+
+                    issues.Add(Issue(typeNameIdentifier, shortened.ConcatenatedWith(pair.Value)));
                 }
             }
+
+            return issues?.ToArray() ?? Array.Empty<Diagnostic>();
         }
     }
 }

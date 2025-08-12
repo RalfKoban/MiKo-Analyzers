@@ -145,7 +145,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             continue;
                         }
 
-                        if (parameterComment.GetTextTrimmed().EqualsAny(Phrases))
+                        if (StringExtensions.EqualsAny(parameterComment.GetTextTrimmed(), Phrases, StringComparison.OrdinalIgnoreCase))
                         {
                             yield return Issue(parameterName, parameterComment.GetContentsLocation());
                         }

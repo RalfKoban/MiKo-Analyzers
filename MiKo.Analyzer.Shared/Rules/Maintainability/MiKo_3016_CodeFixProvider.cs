@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                 ? nameof(InvalidOperationException)
                                 : nameof(ArgumentException);
 
-            return SyntaxFactory.ParseTypeName(exceptionName);
+            return exceptionName.AsTypeSyntax();
         }
 
         protected override ArgumentListSyntax GetUpdatedArgumentListSyntax(ObjectCreationExpressionSyntax syntax)

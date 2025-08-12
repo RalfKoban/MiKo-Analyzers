@@ -52,17 +52,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static ReadOnlySpan<char> GetNameWithoutSuffix(in ReadOnlySpan<char> name)
         {
-            if (name.EndsWith(Arg, StringComparison.Ordinal))
+            if (name.EndsWith(Arg))
             {
                 return GetNameWithoutSuffixes(name, EventArg, EventsArg, EventBaseArg, EventsBaseArg, BaseArg, Arg);
             }
 
-            if (name.EndsWith(Args, StringComparison.Ordinal))
+            if (name.EndsWith(Args))
             {
                 return GetNameWithoutSuffixes(name, EventsArgs, EventBaseArgs, EventsBaseArgs, BaseArgs, Args);
             }
 
-            if (name.EndsWith(Base, StringComparison.Ordinal))
+            if (name.EndsWith(Base))
             {
                 return GetNameWithoutSuffixes(name, EventArgBase, EventsArgBase, EventArgsBase, EventsArgsBase, Base);
             }
@@ -74,7 +74,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             foreach (var phrase in phrases)
             {
-                if (name.EndsWith(phrase, StringComparison.Ordinal))
+                if (name.EndsWith(phrase))
                 {
                     return name.WithoutSuffix(phrase);
                 }

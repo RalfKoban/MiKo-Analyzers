@@ -13,7 +13,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/18917.svg)](https://scan.coverity.com/projects/ralfkoban-miko-analyzers)
 
 ## Available Rules
-The following tables lists all the 511 rules that are currently provided by the analyzer.
+The following tables lists all the 515 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -172,6 +172,7 @@ The following tables lists all the 511 rules that are currently provided by the 
 |MiKo_1510|Types should not be suffixed with 'Info'|&#x2713;|\-|
 |MiKo_1511|Local variables should not be prefixed or suffixed with 'proxy'|&#x2713;|&#x2713;|
 |MiKo_1512|Parameters should not be prefixed or suffixed with 'proxy'|&#x2713;|&#x2713;|
+|MiKo_1513|Types should not be suffixed with 'Advanced', 'Complex', 'Enhanced', 'Extended', 'Simple' or 'Simplified'|&#x2713;|&#x2713;|
 
 ### Documentation
 |ID|Title|Enabled by default|CodeFix available|
@@ -291,6 +292,7 @@ The following tables lists all the 511 rules that are currently provided by the 
 |MiKo_2238|&lt;summary&gt; documentation shall not start with 'Make sure to call this'|&#x2713;|\-|
 |MiKo_2239|Documentation should use '///' and not '/** */'|&#x2713;|&#x2713;|
 |MiKo_2240|&lt;response&gt; documentation should not start with 'Returns'|&#x2713;|&#x2713;|
+|MiKo_2244|Documentation should use &lt;list&gt; instead of &lt;ul&gt; or &lt;ol&gt;|&#x2713;|&#x2713;|
 |MiKo_2300|Comments should explain the 'Why' and not the 'How'|&#x2713;|\-|
 |MiKo_2301|Do not use obvious comments in AAA-Tests|&#x2713;|&#x2713;|
 |MiKo_2302|Do not keep code that is commented out|&#x2713;|\-|
@@ -423,6 +425,8 @@ The following tables lists all the 511 rules that are currently provided by the 
 |MiKo_3120|Moq mocks should use values instead of 'It.Is&lt;&gt;(...)' condition matcher to verify exact values|&#x2713;|&#x2713;|
 |MiKo_3121|Tests should test concrete implementations and no interfaces|&#x2713;|\-|
 |MiKo_3122|Test methods should not use more than 3 parameters|&#x2713;|\-|
+|MiKo_3123|Test methods should not catch exceptions|&#x2713;|\-|
+|MiKo_3124|Test methods should not assert in finally blocks|&#x2713;|\-|
 |MiKo_3201|If statements can be inverted in short methods|&#x2713;|&#x2713;|
 |MiKo_3202|Use positive conditions when returning in all paths|&#x2713;|&#x2713;|
 |MiKo_3203|If-continue statements can be inverted when followed by single line|&#x2713;|&#x2713;|

@@ -66,7 +66,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     else
                     {
                         // seems like there is no exception inside the catch clause, so we have to add the missing ones
-                        var newCatchDeclaration = SyntaxFactory.CatchDeclaration(SyntaxFactory.ParseTypeName(nameof(Exception)), newExceptionIdentifier);
+                        var newCatchDeclaration = SyntaxFactory.CatchDeclaration(nameof(Exception).AsTypeSyntax(), newExceptionIdentifier);
                         var newBlock = catchClause.Block.ReplaceNode(argumentList, newArgumentList);
 
                         result.Add(catchClause, SyntaxFactory.CatchClause(newCatchDeclaration, null, newBlock));

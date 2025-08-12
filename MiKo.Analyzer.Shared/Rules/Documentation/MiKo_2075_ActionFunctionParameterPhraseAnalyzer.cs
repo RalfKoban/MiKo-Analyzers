@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var text = textTokens.GetTextTrimmedWithParaTags();
 
-            if (text.ContainsAny(Constants.Comments.ActionTerms, StringComparison.Ordinal) is false)
+            if (text.ContainsAny(Constants.Comments.ActionTerms) is false)
             {
                 return Array.Empty<Diagnostic>();
             }

@@ -52,6 +52,24 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_string_literal_as_local_variable_that_gets_reassigned() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var value = ""test me"";
+
+        for (var i = 0; i < 10; i++)
+        {
+            value = ""test me"" + i;
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_string_literal_as_static_readonly_field() => An_issue_is_reported_for(@"
 using System;
 

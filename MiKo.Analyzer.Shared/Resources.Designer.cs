@@ -2094,7 +2094,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove &apos;Utility&apos; marker suffix.
+        ///   Looks up a localized string similar to Remove utility marker suffix.
         /// </summary>
         internal static string MiKo_1054_CodeFixTitle {
             get {
@@ -2103,7 +2103,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Names like &apos;helper&apos; or &apos;utility&apos; are too vague and do not follow the Single Responsibility Principle (SRP). These types often end up having too broad a scope and do not clearly define what they do.
+        ///   Looks up a localized string similar to Names like &apos;Helper&apos; or &apos;Utility&apos; are too vague and do not follow the Single Responsibility Principle (SRP). These types often end up having too broad a scope and do not clearly define what they do.
         ///Instead, use specific names that describe their exact purpose, making the code easier to understand and maintain..
         /// </summary>
         internal static string MiKo_1054_Description {
@@ -5148,6 +5148,43 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_1512_Title {
             get {
                 return ResourceManager.GetString("MiKo_1512_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change suffix into prefix.
+        /// </summary>
+        internal static string MiKo_1513_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1513_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prefer prefixing type names with descriptive modifiers like &apos;Advanced&apos; or &apos;Simplified&apos; instead of suffixing them.
+        ///Prefixes improve IntelliSense grouping and readability, while also making related types easier to discover and maintain across large codebases..
+        /// </summary>
+        internal static string MiKo_1513_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1513_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1513_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1513_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Types should not be suffixed with &apos;Advanced&apos;, &apos;Complex&apos;, &apos;Enhanced&apos;, &apos;Extended&apos;, &apos;Simple&apos; or &apos;Simplified&apos;.
+        /// </summary>
+        internal static string MiKo_1513_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1513_Title", resourceCulture);
             }
         }
         
@@ -9267,6 +9304,52 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_2240_Title {
             get {
                 return ResourceManager.GetString("MiKo_2240_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &lt;list&gt; to list items.
+        /// </summary>
+        internal static string MiKo_2244_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2244_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML documentation should use the &lt;list&gt; tag for enumerating items. Avoid using &lt;ul&gt; or &lt;ol&gt; because IntelliSense and XML documentation tools cannot recognize these and may format comments awkwardly.
+        ///Using &lt;list&gt; allows IntelliSense to format content as tables, numbered lists, ordered lists, etc., making documentation clear and easy to read..
+        /// </summary>
+        internal static string MiKo_2244_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2244_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/list.
+        /// </summary>
+        internal static string MiKo_2244_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_2244_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &lt;list&gt; to list items in documentation.
+        /// </summary>
+        internal static string MiKo_2244_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2244_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should use &lt;list&gt; instead of &lt;ul&gt; or &lt;ol&gt;.
+        /// </summary>
+        internal static string MiKo_2244_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2244_Title", resourceCulture);
             }
         }
         
@@ -13476,6 +13559,78 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_3122_Title {
             get {
                 return ResourceManager.GetString("MiKo_3122_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fix catch block.
+        /// </summary>
+        internal static string MiKo_3123_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3123_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avoid catching exceptions in test methods. Catching exceptions can hide test failures and lead to false positives. Let the test framework handle unexpected exceptions to ensure accurate and reliable test results..
+        /// </summary>
+        internal static string MiKo_3123_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3123_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not catch exception in test.
+        /// </summary>
+        internal static string MiKo_3123_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3123_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test methods should not catch exceptions.
+        /// </summary>
+        internal static string MiKo_3123_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3123_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move assertion outside finally block.
+        /// </summary>
+        internal static string MiKo_3124_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3124_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avoid asserting in finally blocks as failing assertions can hide the original test failures. Do the assertions after the finally blocks to ensure accurate and reliable test results..
+        /// </summary>
+        internal static string MiKo_3124_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3124_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not assert in finally block.
+        /// </summary>
+        internal static string MiKo_3124_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3124_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test methods should not assert in finally blocks.
+        /// </summary>
+        internal static string MiKo_3124_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3124_Title", resourceCulture);
             }
         }
         

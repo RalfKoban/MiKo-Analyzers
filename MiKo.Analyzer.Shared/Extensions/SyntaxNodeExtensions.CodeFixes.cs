@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -239,7 +240,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsSeeCrefTaskResult(this SyntaxNode value)
         {
-            var type = SyntaxFactory.ParseTypeName("Task<TResult>");
+            var type = "Task<TResult>".AsTypeSyntax();
             var member = SyntaxFactory.ParseName(nameof(Task<object>.Result));
 
             return value.IsSeeCref(type, member);
@@ -247,12 +248,12 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsSeeCrefTask(this SyntaxNode value)
         {
-            if (value.IsSeeCref(SyntaxFactory.ParseTypeName("Task")))
+            if (value.IsSeeCref("Task".AsTypeSyntax()))
             {
                 return true;
             }
 
-            if (value.IsSeeCref(SyntaxFactory.ParseTypeName("Task<TResult>")))
+            if (value.IsSeeCref("Task<TResult>".AsTypeSyntax()))
             {
                 return true;
             }

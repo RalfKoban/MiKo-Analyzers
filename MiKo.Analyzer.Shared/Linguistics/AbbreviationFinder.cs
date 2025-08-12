@@ -366,7 +366,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return ReadOnlySpan<Pair>.Empty;
             }
 
-            if (value.EqualsAny(AllowedNames))
+            if (StringExtensions.EqualsAny(value, AllowedNames, StringComparison.OrdinalIgnoreCase))
             {
                 return ReadOnlySpan<Pair>.Empty;
             }
@@ -481,7 +481,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool PostFixHasIssue(in ReadOnlySpan<char> key, in ReadOnlySpan<char> value) => value.EndsWith(key, StringComparison.Ordinal) && value.EndsWithAny(AllowedPostFixTerms, StringComparison.Ordinal) is false;
+        private static bool PostFixHasIssue(in ReadOnlySpan<char> key, in ReadOnlySpan<char> value) => value.EndsWith(key, StringComparison.Ordinal) && value.EndsWithAny(AllowedPostFixTerms) is false;
 
         private static bool MidTermHasIssue(in ReadOnlySpan<char> key, in ReadOnlySpan<char> value)
         {

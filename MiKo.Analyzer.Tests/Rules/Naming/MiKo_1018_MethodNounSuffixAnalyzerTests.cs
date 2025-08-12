@@ -98,6 +98,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                 "SubscribeAction",
                                                                 "SuspendProgress",
                                                                 "ToComparison",
+                                                                "ThrowException",
+                                                                "ThrowInvalidOperation",
                                                                 "TraceInformation",
                                                                 "TranslateDocumentation",
                                                                 "TryConnection",

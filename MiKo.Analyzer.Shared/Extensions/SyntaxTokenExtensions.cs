@@ -347,23 +347,23 @@ namespace MiKoSolutions.Analyzers
                 }
 
                 // ensure proper size to avoid multiple resizes
-                leadingTrivia.Capacity += additionalSpaces * commentIndices.Count;
+                leadingTrivia.Capacity += commentIndices.Count;
 
                 // now update the comments, but adjust the offset to remember the already added spaces (trivia indices change due to that)
                 var offset = 0;
 
                 foreach (var index in commentIndices)
                 {
-                    leadingTrivia.InsertRange(index + offset, Spaces(additionalSpaces));
+                    leadingTrivia.Insert(index + offset, WhiteSpaces(additionalSpaces));
 
-                    offset += additionalSpaces;
+                    offset += 1;
                 }
 
                 return value.WithLeadingTrivia(leadingTrivia)
-                            .WithAdditionalLeadingTrivia(Spaces(additionalSpaces));
+                            .WithAdditionalLeadingTrivia(WhiteSpaces(additionalSpaces));
             }
 
-            return value.WithLeadingTrivia(Spaces(count));
+            return value.WithLeadingTrivia(WhiteSpaces(count));
         }
 
         internal static SyntaxToken WithAdditionalLeadingSpaces(this in SyntaxToken value, in int additionalSpaces)
@@ -371,6 +371,16 @@ namespace MiKoSolutions.Analyzers
             var currentSpaces = value.GetPositionWithinStartLine();
 
             return value.WithLeadingSpaces(currentSpaces + additionalSpaces);
+        }
+
+        internal static SyntaxToken WithAdditionalLeadingSpacesAtEnd(this in SyntaxToken value, in int additionalSpaces)
+        {
+            if (additionalSpaces is 0)
+            {
+                return value;
+            }
+
+            return value.WithAdditionalLeadingTrivia(WhiteSpaces(additionalSpaces));
         }
 
         internal static SyntaxToken WithLeadingXmlComment(this in SyntaxToken value) => value.WithLeadingTrivia(SyntaxNodeExtensions.XmlCommentStart);
@@ -502,6 +512,6 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxToken WithTrailingXmlComment(this in SyntaxToken value) => value.WithTrailingTrivia(SyntaxNodeExtensions.XmlCommentStart);
 
-        private static IEnumerable<SyntaxTrivia> Spaces(in int count) => Enumerable.Repeat(SyntaxFactory.Space, count); // use non-elastic one to prevent formatting to be done automatically
+        private static SyntaxTrivia WhiteSpaces(in int count) => SyntaxFactory.Whitespace(new string(' ', count));
     }
 }

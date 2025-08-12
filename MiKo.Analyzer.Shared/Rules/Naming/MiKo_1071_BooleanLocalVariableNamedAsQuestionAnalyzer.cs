@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     continue;
                 }
 
-                if (name.StartsWithAny(Prefixes, StringComparison.Ordinal) && name.HasUpperCaseLettersAbove(1) && name.StartsWith("isInDesign", StringComparison.Ordinal) is false)
+                if (name.StartsWithAny(Prefixes) && name.HasUpperCaseLettersAbove(1) && name.StartsWith("isInDesign", StringComparison.Ordinal) is false)
                 {
                     yield return Issue(name, identifier);
                 }

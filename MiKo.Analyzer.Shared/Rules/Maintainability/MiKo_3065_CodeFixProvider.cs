@@ -105,7 +105,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return syntax.Expression;
             }
 
-            return Invocation(SimpleMemberAccess(syntax.Expression, nameof(ToString)), Argument(StringLiteral(clause.FormatStringToken.ValueText)));
+            return Invocation(syntax.Expression, nameof(ToString), Argument(StringLiteral(clause.FormatStringToken.ValueText)));
         }
     }
 }

@@ -15,21 +15,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool IsApplicable(CompilationStartAnalysisContext context)
-        {
-            var type = context.Compilation.GetTypeByMetadataName("System.Collections.Generic.KeyValuePair");
-
-            if (type != null)
-            {
-                return type.GetMembers("Create").Length > 0;
-            }
-
-            return false;
-        }
+        protected override bool IsApplicable(Compilation compilation) => compilation.GetTypeByMetadataName("System.Collections.Generic.KeyValuePair")?.GetMembers("Create").Length > 0;
 
         protected override IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
         {
-            if (node.Type.GetName() == "KeyValuePair")
+            if (node.Type.GetName() is "KeyValuePair")
             {
                 yield return Issue(node);
             }
