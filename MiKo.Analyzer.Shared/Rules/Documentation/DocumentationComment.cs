@@ -13,11 +13,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                  };
 
         internal static bool EndsWithPeriod(in ReadOnlySpan<char> comment) => comment.EndsWith('.')
-                                                                        && comment.EndsWith("...", StringComparison.Ordinal) is false
+                                                                        && comment.EndsWith("...") is false
                                                                         && comment.EndsWith("etc.", StringComparison.OrdinalIgnoreCase) is false;
 
-        internal static bool ContainsDoublePeriod(in ReadOnlySpan<char> comment) => comment.Contains("..", _ => AllowedChars.Contains(_) is false, StringComparison.Ordinal)
-                                                                                 && comment.EndsWith("...", StringComparison.Ordinal) is false;
+        internal static bool ContainsDoublePeriod(in ReadOnlySpan<char> comment) => comment.Contains("..", _ => AllowedChars.Contains(_) is false)
+                                                                                 && comment.EndsWith("...") is false;
 
         internal static bool ContainsPhrase(string phrase, in ReadOnlySpan<char> comment)
         {

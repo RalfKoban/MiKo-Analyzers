@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Linq;
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -36,6 +38,17 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 {
                     case LocalDeclarationStatementSyntax localVariable when localVariable.IsConst is false:
                     {
+                        if (localVariable.Parent is BlockSyntax block)
+                        {
+                            var variableName = v.Identifier.ValueText;
+
+                            if (block.DescendantNodes<ExpressionStatementSyntax>().Any(_ => _.Expression is AssignmentExpressionSyntax a && a.Left is IdentifierNameSyntax i && i.GetName() == variableName))
+                            {
+                                // the variable gets reassigned, so we do not report an issue
+                                return null;
+                            }
+                        }
+
                         return Issue(localVariable);
                     }
 

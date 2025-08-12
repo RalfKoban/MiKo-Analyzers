@@ -24,8 +24,6 @@ namespace Bla
 
         [Test]
         public void An_issue_is_reported_for_type_with_suffix_Info_([ValueSource(nameof(TypeKinds))] string type) => An_issue_is_reported_for(@"
-using NUnit.Framework;
-
 namespace Bla
 {
     public " + type + @" TestMeInfo

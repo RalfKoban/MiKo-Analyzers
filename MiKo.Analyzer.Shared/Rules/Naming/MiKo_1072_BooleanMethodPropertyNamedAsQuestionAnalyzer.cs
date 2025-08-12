@@ -6,7 +6,9 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
-    //// <seealso cref="MiKo_1062_IsDetectionNameAnalyzer"/>
+    /// <inheritdoc />
+    /// <seealso cref="MiKo_1062_IsDetectionNameAnalyzer"/>
+    /// <seealso cref="MiKo_1073_BooleanFieldNamedAsQuestionAnalyzer"/>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class MiKo_1072_BooleanMethodPropertyNamedAsQuestionAnalyzer : NamingAnalyzer
     {
@@ -88,9 +90,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return Array.Empty<Diagnostic>();
             }
 
-            if (name.StartsWithAny(Prefixes, StringComparison.Ordinal) && name.HasUpperCaseLettersAbove(2))
+            if (name.StartsWithAny(Prefixes) && name.HasUpperCaseLettersAbove(2))
             {
-                if (WellKnownNames.Contains(name) || name.StartsWithAny(WellKnownPrefixes, StringComparison.Ordinal) || name.EndsWithAny(WellKnownPostfixes, StringComparison.Ordinal))
+                if (WellKnownNames.Contains(name) || name.StartsWithAny(WellKnownPrefixes) || name.EndsWithAny(WellKnownPostfixes))
                 {
                     // skip all well known names
                     return Array.Empty<Diagnostic>();

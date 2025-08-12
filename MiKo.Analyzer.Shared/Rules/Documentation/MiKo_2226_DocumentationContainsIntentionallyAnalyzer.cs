@@ -50,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     continue;
                 }
 
-                if (text.ContainsAny(Constants.Comments.ReasoningPhrases))
+                if (text.ContainsAny(Constants.Comments.ReasoningPhrases, StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }

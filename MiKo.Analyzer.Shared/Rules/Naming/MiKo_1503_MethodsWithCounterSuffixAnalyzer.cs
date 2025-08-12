@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (symbolName.EndsWith(Constants.Names.Counter, StringComparison.OrdinalIgnoreCase))
             {
-                var betterName = FindBetterName(symbolName);
+                var betterName = FindBetterName(symbolName.AsSpan());
 
                 return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
             }
@@ -35,16 +35,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return Array.Empty<Diagnostic>();
         }
 
-        private static string FindBetterName(string symbolName)
+        private static string FindBetterName(in ReadOnlySpan<char> symbolName)
         {
-            var nameSpan = symbolName.AsSpan();
+            var length = symbolName.Contains("Increment") || symbolName.Contains("Decrement")
+                         ? Constants.Names.Counter.Length
+                         : 2; // length of "er";
 
-            if (nameSpan.Contains("Increment") || nameSpan.Contains("Decrement"))
-            {
-                return symbolName.WithoutSuffix(Constants.Names.Counter);
-            }
-
-            return symbolName.WithoutSuffix("er");
+            return symbolName.Slice(0, symbolName.Length - length).ToString();
         }
     }
 }

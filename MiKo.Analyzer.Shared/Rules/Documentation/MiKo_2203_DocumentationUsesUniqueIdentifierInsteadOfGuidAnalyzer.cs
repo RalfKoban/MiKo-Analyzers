@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var trimmed = textTokens.GetTextTrimmedWithParaTags();
 
-            if (trimmed.ContainsAny(Constants.Comments.Guids, StringComparison.Ordinal) is false)
+            if (trimmed.ContainsAny(Constants.Comments.Guids) is false)
             {
                 return Array.Empty<Diagnostic>();
             }

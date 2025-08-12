@@ -35,11 +35,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static bool CommentHasIssue(string comment)
         {
-            const StringComparison Comparison = StringComparison.Ordinal;
-
-            if (comment.StartsWithAny(StartingPhrases, Comparison) && comment.ContainsAny(EndingPhrases, Comparison))
+            if (comment.StartsWithAny(StartingPhrases) && comment.ContainsAny(EndingPhrases))
             {
-                return comment.Contains("to value indicating", Comparison);
+                return comment.Contains("to value indicating", StringComparison.Ordinal);
             }
 
             return true;

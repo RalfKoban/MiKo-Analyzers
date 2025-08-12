@@ -44,11 +44,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var parameterIndicators = parameters.ToDictionary<IParameterSymbol, IParameterSymbol, string>(_ => _, _ => Constants.Comments.ParamRefBeginningPhrase.FormatWith(_.Name), SymbolEqualityComparer.Default);
             var allParameterIndicatorPhrases = parameterIndicators.Values.ToArray();
 
-            const StringComparison Comparison = StringComparison.Ordinal;
-
             var results = new List<Diagnostic>(1);
 
-            if (comment.ContainsAny(allParameterIndicatorPhrases, Comparison))
+            if (comment.ContainsAny(allParameterIndicatorPhrases))
             {
                 foreach (var parameter in parameters)
                 {
@@ -61,7 +59,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         {
                             var trimmed = part.AsSpan().Trim();
 
-                            if (trimmed.StartsWithAny(phrases, Comparison) is false && trimmed.StartsWithAny(allParameterIndicatorPhrases, Comparison) is false)
+                            if (trimmed.StartsWithAny(phrases) is false && trimmed.StartsWithAny(allParameterIndicatorPhrases) is false)
                             {
                                 results.Add(ExceptionIssue(exceptionComment, proposal));
                             }

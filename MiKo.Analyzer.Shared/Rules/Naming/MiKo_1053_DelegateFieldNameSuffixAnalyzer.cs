@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 case TypeKind.Delegate:
                 case TypeKind.Class when symbolType.IsRecord is false && symbolType.ToString() == TypeNames.Delegate:
                 {
-                    if (symbol.Name.EndsWithAny(WrongNames))
+                    if (symbol.Name.EndsWithAny(WrongNames, StringComparison.OrdinalIgnoreCase))
                     {
                         var betterName = FindBetterName(symbol);
 

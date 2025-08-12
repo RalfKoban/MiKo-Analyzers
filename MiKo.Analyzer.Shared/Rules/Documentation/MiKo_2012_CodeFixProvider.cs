@@ -69,13 +69,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var text = textSyntax.GetTextTrimmed().AsSpan();
 
-            if (text.StartsWith("Interaction logic for", StringComparison.Ordinal))
+            if (text.StartsWith("Interaction logic for"))
             {
                 // seems like this is the default comment for WPF controls
                 return Comment(comment, XmlText("Represents a TODO"));
             }
 
-            if (text.StartsWithAny(EmptyReplacementsMapKeys, StringComparison.Ordinal))
+            if (text.StartsWithAny(EmptyReplacementsMapKeys))
             {
                 return Comment(comment, EmptyReplacementsMapKeys, EmptyReplacementsMap, FirstWordAdjustment.StartUpperCase | FirstWordAdjustment.MakeThirdPersonSingular | FirstWordAdjustment.KeepSingleLeadingSpace);
             }
@@ -99,14 +99,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return MiKo_2002_CodeFixProvider.GetUpdatedSyntax(comment);
                 }
 
-                if (text.StartsWithAny(ReplacementMapKeys, StringComparison.Ordinal))
+                if (text.StartsWithAny(ReplacementMapKeys))
                 {
                     return Comment(comment, ReplacementMapKeys, ReplacementMap);
                 }
 
                 foreach (var phrase in UsedToPhrases)
                 {
-                    if (text.StartsWith(phrase, StringComparison.Ordinal))
+                    if (text.StartsWith(phrase))
                     {
                         var remainingText = text.Slice(phrase.Length);
 
@@ -125,7 +125,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                 }
 
-                if (text.StartsWithAny(Constants.Comments.AAnThePhraseWithSpaces, StringComparison.Ordinal))
+                if (text.StartsWithAny(Constants.Comments.AAnThePhraseWithSpaces))
                 {
                     switch (member)
                     {

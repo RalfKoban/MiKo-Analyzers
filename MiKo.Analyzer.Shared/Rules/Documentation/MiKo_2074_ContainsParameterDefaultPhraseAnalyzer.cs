@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override Diagnostic[] AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment)
         {
-            if (parameterComment.GetTextTrimmed().EndsWithAny(Phrases, StringComparison.Ordinal))
+            if (parameterComment.GetTextTrimmed().EndsWithAny(Phrases))
             {
                 return Array.Empty<Diagnostic>();
             }

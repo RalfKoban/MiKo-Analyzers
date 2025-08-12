@@ -540,7 +540,7 @@ namespace MiKoSolutions.Analyzers
                             // Perf: quick catch find another dot, as we do not need to check for additional extensions in case we do not have any other dot here
                             if (span.LastIndexOfAny('.', Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) >= 0)
                             {
-                                if (filePathSpan.EndsWithAny(Constants.GeneratedCSharpFileExtensions, StringComparison.Ordinal))
+                                if (filePathSpan.EndsWithAny(Constants.GeneratedCSharpFileExtensions))
                                 {
                                     // ignore generated code (might be part of partial classes)
                                     continue;
@@ -1378,7 +1378,7 @@ namespace MiKoSolutions.Analyzers
                 {
                     var valueName = value.Name.AsSpan();
 
-                    return valueName.EndsWith(Constants.Names.Factory, StringComparison.Ordinal) && valueName.EndsWith(nameof(TaskFactory), StringComparison.Ordinal) is false;
+                    return valueName.EndsWith(Constants.Names.Factory) && valueName.EndsWith(nameof(TaskFactory)) is false;
                 }
 
                 default:
@@ -1726,7 +1726,7 @@ namespace MiKoSolutions.Analyzers
                     }
                 }
 
-                if (field.Name.EqualsAny(fieldNames))
+                if (StringExtensions.EqualsAny(field.Name, fieldNames, StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
                 }

@@ -20,9 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var startingPhrases = GetStartingPhrases(owningSymbol, returnType);
             var endingPhrases = GetEndingPhrases(returnType);
 
-            const StringComparison Comparison = StringComparison.Ordinal;
-
-            if (commentXml.StartsWithAny(startingPhrases, Comparison) && commentXml.ContainsAny(endingPhrases, Comparison))
+            if (commentXml.StartsWithAny(startingPhrases) && commentXml.ContainsAny(endingPhrases))
             {
                 // nothing to do here
                 return Array.Empty<Diagnostic>();

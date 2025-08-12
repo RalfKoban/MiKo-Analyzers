@@ -38,6 +38,8 @@ public class TestMe
 
         [TestCase("[TestFixture] class TestMe { }", "[TestFixture] class TestMeTests { }")]
         [TestCase("[TestFixture] class TestMeTest { }", "[TestFixture] class TestMeTests { }")]
+        [TestCase("[TestFixture] class TestMeTestBase { }", "[TestFixture] class TestMeTests { }")]
+        [TestCase("[TestFixture] class TestMeTestsBase { }", "[TestFixture] class TestMeTests { }")]
         public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
 
         protected override string GetDiagnosticId() => MiKo_1101_TestClassesSuffixAnalyzer.Id;

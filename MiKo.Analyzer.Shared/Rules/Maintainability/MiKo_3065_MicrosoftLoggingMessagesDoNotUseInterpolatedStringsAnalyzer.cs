@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool IsApplicable(CompilationStartAnalysisContext context) => context.Compilation.GetTypeByMetadataName(Constants.MicrosoftLogging.FullTypeName) != null;
+        protected override bool IsApplicable(Compilation compilation) => compilation.GetTypeByMetadataName(Constants.MicrosoftLogging.FullTypeName) != null;
 
         protected override void InitializeCore(CompilationStartAnalysisContext context)
         {

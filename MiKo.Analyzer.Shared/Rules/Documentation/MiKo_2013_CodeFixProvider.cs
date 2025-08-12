@@ -98,7 +98,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var existingText = textTokens[0].ValueText.AsSpan();
                 var firstWord = existingText.FirstWord();
 
-                if (firstWord.EqualsAny(WrongStartingWords))
+                if (StringExtensions.EqualsAny(firstWord, WrongStartingWords, StringComparison.OrdinalIgnoreCase))
                 {
                     existingText = existingText.WithoutFirstWord();
                 }

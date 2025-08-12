@@ -83,7 +83,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         private static readonly string[] SingularOrPluralEndings = { "data", "heep", "moose", "trivia", "ircraft", "nformation", "nested" };
         private static readonly string[] SpecialPluralEndingsWithoutS = new[] { "cti", "men", "ngi", "dren", "eeth", "feet", "mena", "mice", "eople", "teria" }.Concat(SingularOrPluralEndings).ToArray();
 
-        public static bool IsSingularAndPlural(in ReadOnlySpan<char> value) => value.EqualsAny(UncountableNouns) || (IsPlural(value) && value.EndsWithAny(SingularOrPluralEndings));
+        public static bool IsSingularAndPlural(in ReadOnlySpan<char> value) => StringExtensions.EqualsAny(value, UncountableNouns, StringComparison.OrdinalIgnoreCase) || (IsPlural(value) && value.EndsWithAny(SingularOrPluralEndings, StringComparison.OrdinalIgnoreCase));
 
         public static bool IsPlural(in ReadOnlySpan<char> value)
         {
@@ -106,15 +106,15 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
                 if (CharsForTwoCharacterEndingsWithS.Contains(value[value.Length - 2]))
                 {
-                    return value.EndsWithAny(SpecialPluralEndingsWithS) || value.EqualsAny(UncountableNouns);
+                    return value.EndsWithAny(SpecialPluralEndingsWithS, StringComparison.OrdinalIgnoreCase) || StringExtensions.EqualsAny(value, UncountableNouns, StringComparison.OrdinalIgnoreCase);
                 }
 
-                if (value.EndsWithAny(PluralEndings))
+                if (value.EndsWithAny(PluralEndings, StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
                 }
 
-                if (value.EndsWithAny(NonPluralEndings))
+                if (value.EndsWithAny(NonPluralEndings, StringComparison.OrdinalIgnoreCase))
                 {
                     return false;
                 }
@@ -122,7 +122,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return true;
             }
 
-            return value.EndsWithAny(SpecialPluralEndingsWithoutS) || value.EqualsAny(UncountableNouns);
+            return value.EndsWithAny(SpecialPluralEndingsWithoutS, StringComparison.OrdinalIgnoreCase) || StringExtensions.EqualsAny(value, UncountableNouns, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -202,7 +202,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             var proposedName = name.AsSpan().WithoutSuffixes(suffixes);
 
-            if (proposedName.EndsWithAny(Constants.Markers.Models) && proposedName.EndsWithAny(Constants.Markers.ViewModels) is false)
+            if (proposedName.EndsWithAny(Constants.Markers.Models, StringComparison.OrdinalIgnoreCase) && proposedName.EndsWithAny(Constants.Markers.ViewModels, StringComparison.OrdinalIgnoreCase) is false)
             {
                 proposedName = proposedName.WithoutSuffixes(Constants.Markers.Models);
             }

@@ -81,8 +81,8 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         private static MemberAccessExpressionSyntax CreateCondition(MemberAccessExpressionSyntax expression)
         {
             var identifier = GetIdentifier(expression);
-            var method = SyntaxFactory.IdentifierName(Constants.ILog.IsDebugEnabled);
-            var condition = SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, identifier, method);
+            var method = IdentifierName(Constants.ILog.IsDebugEnabled);
+            var condition = Member(identifier, method);
 
             return condition;
         }
@@ -293,7 +293,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             switch (expression.Expression)
             {
                 case IdentifierNameSyntax i:
-                    return SyntaxFactory.IdentifierName(i.GetName());
+                    return IdentifierName(i.GetName());
 
                 case MemberAccessExpressionSyntax m:
                     return m.WithoutLeadingTrivia();
