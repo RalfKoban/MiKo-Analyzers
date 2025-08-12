@@ -50,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var type = property.Type;
 
-            if (type.IsGuid() && property.GetName().EndsWithAny(WrongNameSuffixes, StringComparison.Ordinal))
+            if (type.IsGuid() && property.GetName().EndsWithAny(WrongNameSuffixes))
             {
                 context.ReportDiagnostic(Issue(type));
             }
@@ -64,7 +64,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var name = parameter.GetName();
 
-                if (name == WrongParameterName || name.EndsWithAny(WrongNameSuffixes, StringComparison.Ordinal))
+                if (name == WrongParameterName || name.EndsWithAny(WrongNameSuffixes))
                 {
                     context.ReportDiagnostic(Issue(type));
                 }

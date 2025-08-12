@@ -7,7 +7,9 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
-    //// <seealso cref="MiKo_1062_IsDetectionNameAnalyzer"/>
+    /// <inheritdoc />
+    /// <seealso cref="MiKo_1062_IsDetectionNameAnalyzer"/>
+    /// <seealso cref="MiKo_1072_BooleanMethodPropertyNamedAsQuestionAnalyzer"/>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class MiKo_1073_BooleanFieldNamedAsQuestionAnalyzer : NamingAnalyzer
     {
@@ -43,7 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return Array.Empty<Diagnostic>();
             }
 
-            if (name.StartsWithAny(Prefixes, StringComparison.Ordinal) && name.HasUpperCaseLettersAbove(2) && name.StartsWithAny(AllowedPrefixes, StringComparison.Ordinal) is false)
+            if (name.StartsWithAny(Prefixes) && name.HasUpperCaseLettersAbove(2) && name.StartsWithAny(AllowedPrefixes) is false)
             {
                 return new[] { Issue(symbol) };
             }

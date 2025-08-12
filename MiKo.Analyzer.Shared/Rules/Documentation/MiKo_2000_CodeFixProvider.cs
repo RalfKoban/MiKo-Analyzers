@@ -70,7 +70,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                          .AppendLine(endTagFullString)
                                          .ToStringAndRelease();
 
-            var newParent = SyntaxFactory.ParseTypeName("###").WithLeadingTrivia(SyntaxFactory.ParseLeadingTrivia(text));
+            var newParent = "###".AsTypeSyntax().WithLeadingTrivia(SyntaxFactory.ParseLeadingTrivia(text));
 
             return newParent.GetDocumentationCommentTriviaSyntax().FirstOrDefault() ?? syntax;
         }

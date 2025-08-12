@@ -68,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var type = typeSyntax.GetTypeSymbol(document);
 
-            var memberAccess = SimpleMemberAccess(type.Name, type.GetFields()[0].Name);
+            var memberAccess = Member(type.Name, type.GetFields()[0].Name);
 
             return SyntaxFactory.EqualsValueClause(memberAccess);
         }

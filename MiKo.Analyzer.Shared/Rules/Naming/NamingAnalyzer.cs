@@ -33,7 +33,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return expected;
         }
 
-        protected static string GetFieldPrefix(string fieldName)
+        protected static string GetFieldPrefix(string fieldName) => GetFieldPrefix(fieldName.AsSpan());
+
+        protected static string GetFieldPrefix(in ReadOnlySpan<char> fieldName)
         {
             var fieldPrefixes = Constants.Markers.FieldPrefixes;
 
@@ -41,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var prefix = fieldPrefixes[index];
 
-                if (prefix.Length > 0 && fieldName.StartsWith(prefix, StringComparison.Ordinal))
+                if (prefix.Length > 0 && fieldName.StartsWith(prefix))
                 {
                     return prefix;
                 }

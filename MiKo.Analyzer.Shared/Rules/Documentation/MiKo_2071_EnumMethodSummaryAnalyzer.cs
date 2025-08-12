@@ -55,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var text = textTokens.GetTextTrimmedWithParaTags();
 
-            if (text.ContainsAny(BooleanPhrases, StringComparison.Ordinal) is false)
+            if (text.ContainsAny(BooleanPhrases) is false)
             {
                 return Array.Empty<Diagnostic>();
             }

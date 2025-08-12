@@ -68,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     continue;
                 }
 
-                if (originalName.EqualsAny(SpecialNames, StringComparison.Ordinal))
+                if (originalName.EqualsAny(SpecialNames))
                 {
                     continue;
                 }
@@ -188,7 +188,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return Pluralizer.GetPluralName(name, StringComparison.Ordinal);
             }
 
-            var index = originalName.IndexOfAny(Splitters, StringComparison.Ordinal);
+            var index = originalName.IndexOfAny(Splitters);
 
             if (index > 0)
             {
@@ -209,7 +209,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 name = pluralName.ToString();
 
-                if (pluralName.EndsWithAny(Constants.Markers.Collections))
+                if (pluralName.EndsWithAny(Constants.Markers.Collections, StringComparison.OrdinalIgnoreCase))
                 {
                     return Pluralizer.GetPluralName(name, StringComparison.OrdinalIgnoreCase, Constants.Markers.Collections);
                 }

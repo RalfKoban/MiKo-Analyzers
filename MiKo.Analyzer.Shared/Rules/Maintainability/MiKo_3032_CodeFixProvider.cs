@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Composition;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (issue.Properties.ContainsKey(Constants.AnalyzerCodeFixSharedData.CreateArgs))
             {
                 var argument = Argument(expression);
-                var typeSyntax = SyntaxFactory.ParseTypeName(nameof(PropertyChangedEventArgs));
+                var typeSyntax = nameof(PropertyChangedEventArgs).AsTypeSyntax();
 
                 return SyntaxFactory.ObjectCreationExpression(typeSyntax, ArgumentList(argument), null);
             }

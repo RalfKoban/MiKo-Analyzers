@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 using Microsoft.CodeAnalysis;
@@ -34,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             StringBuilderCache.Release(builder);
 
-            if (firstWord.EqualsAny(Constants.Comments.TryWords))
+            if (StringExtensions.EqualsAny(firstWord, Constants.Comments.TryWords, StringComparison.OrdinalIgnoreCase))
             {
                 problematicText = firstWord;
 

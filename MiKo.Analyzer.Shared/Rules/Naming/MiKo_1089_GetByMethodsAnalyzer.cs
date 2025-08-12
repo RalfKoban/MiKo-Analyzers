@@ -28,10 +28,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (Pluralizer.IsPlural(symbolName))
             {
-                return symbolName.EndsWithAny(Extensions, StringComparison.Ordinal) is false;
+                return symbolName.EndsWithAny(Extensions) is false;
             }
 
-            return symbolName.EndsWith("Repository", StringComparison.Ordinal);
+            return symbolName.EndsWith("Repository");
         }
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol)

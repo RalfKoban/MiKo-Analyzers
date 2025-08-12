@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -47,7 +48,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return "count";
             }
 
-            return "counted" + Pluralizer.MakePluralName(name.WithoutSuffix(Constants.Names.Counter).ToUpperCaseAt(0));
+            var length = Constants.Names.Counter.Length;
+
+            return "counted" + Pluralizer.MakePluralName(name.AsCachedBuilder().Remove(name.Length - length, length).ToUpperCaseAt(0).ToString());
         }
     }
 }

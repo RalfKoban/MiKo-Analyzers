@@ -581,6 +581,9 @@ namespace MiKoSolutions.Analyzers
                 case IdentifierNameSyntax identifier:
                     return identifier;
 
+                case MemberAccessExpressionSyntax maes:
+                    return maes.Expression;
+
                 default:
                     return null;
             }
@@ -600,6 +603,8 @@ namespace MiKoSolutions.Analyzers
                     return null;
             }
         }
+
+        internal static string GetIdentifierName(this ArgumentSyntax value) => value.Expression.GetIdentifierName();
 
         internal static string GetIdentifierName(this ExpressionSyntax value) => value.GetIdentifierExpression().GetName();
 
@@ -755,6 +760,9 @@ namespace MiKoSolutions.Analyzers
                     return string.Empty;
             }
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static string GetName(this CatchDeclarationSyntax value) => value?.Identifier.ValueText;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetName(this ClassDeclarationSyntax value) => value?.Identifier.ValueText;
@@ -949,6 +957,48 @@ namespace MiKoSolutions.Analyzers
         }
 
         internal static IEnumerable<string> GetNames(this in SeparatedSyntaxList<VariableDeclaratorSyntax> value) => value.Select(_ => _.GetName());
+
+        internal static string[] GetNames(this InvocationExpressionSyntax value)
+        {
+            var names = new Stack<string>();
+
+            var expression = value.Expression;
+
+            while (expression is MemberAccessExpressionSyntax maes)
+            {
+                names.Push(maes.GetName());
+
+                expression = maes.Expression;
+            }
+
+            return names.ToArray();
+        }
+
+        internal static TypeSyntax[] GetTypes(this MemberAccessExpressionSyntax value)
+        {
+            if (value.Name is GenericNameSyntax generic)
+            {
+                return generic.TypeArgumentList.Arguments.ToArray();
+            }
+
+            return Array.Empty<TypeSyntax>();
+        }
+
+        internal static TypeSyntax[] GetTypes(this InvocationExpressionSyntax value)
+        {
+            var types = new List<TypeSyntax>();
+
+            var expression = value.Expression;
+
+            while (expression is MemberAccessExpressionSyntax maes)
+            {
+                types.AddRange(maes.GetTypes());
+
+                expression = maes.Expression;
+            }
+
+            return types.ToArray();
+        }
 
         internal static string GetXmlTagName(this SyntaxNode value)
         {
@@ -2057,6 +2107,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsExpressionTree(this SyntaxNode value, SemanticModel semanticModel)
         {
+            // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var a in value.AncestorsWithinMethods<ArgumentSyntax>())
             {
                 var convertedType = semanticModel.GetTypeInfo(a.Expression).ConvertedType;
@@ -2185,6 +2236,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsWhiteSpaceOnlyText(this XmlTextSyntax value)
         {
+            // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var text in value.GetTextWithoutTriviaLazy())
             {
                 if (text.IsNullOrWhiteSpace() is false)
@@ -2440,7 +2492,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsInsideTestClass(this SyntaxNode value) => value.Ancestors<ClassDeclarationSyntax>().Any(_ => _.IsTestClass());
 
-        internal static bool IsTestClass(this TypeDeclarationSyntax value) => value is ClassDeclarationSyntax declaration && IsTestClass(declaration);
+        internal static bool IsTestClass(this BaseTypeDeclarationSyntax value) => value is ClassDeclarationSyntax declaration && IsTestClass(declaration);
 
         internal static bool IsTestClass(this ClassDeclarationSyntax value) => value.HasAttributeName(Constants.Names.TestClassAttributeNames);
 
@@ -2869,10 +2921,10 @@ namespace MiKoSolutions.Analyzers
 
             if (parent is null)
             {
-                return default;
+                return null;
             }
 
-            SyntaxNode previousChild = default;
+            SyntaxNode previousChild = null;
 
             foreach (var child in parent.ChildNodes())
             {
@@ -2884,7 +2936,7 @@ namespace MiKoSolutions.Analyzers
                 previousChild = child;
             }
 
-            return default;
+            return null;
         }
 
         internal static SyntaxNodeOrToken PreviousSiblingNodeOrToken(this SyntaxNode value)
@@ -2917,7 +2969,7 @@ namespace MiKoSolutions.Analyzers
 
             if (parent is null)
             {
-                return default;
+                return null;
             }
 
             using (var enumerator = parent.ChildNodes().GetEnumerator())
@@ -2928,14 +2980,14 @@ namespace MiKoSolutions.Analyzers
                     {
                         var nextSibling = enumerator.MoveNext()
                                           ? enumerator.Current
-                                          : default;
+                                          : null;
 
                         return nextSibling;
                     }
                 }
             }
 
-            return default;
+            return null;
         }
 
         internal static IList<SyntaxNode> Siblings(this SyntaxNode value) => Siblings<SyntaxNode>(value);
@@ -3028,6 +3080,16 @@ namespace MiKoSolutions.Analyzers
         internal static T WithAdditionalTrailingTrivia<T>(this T value, params SyntaxTrivia[] trivia) where T : SyntaxNode
         {
             return value.WithTrailingTrivia(value.GetTrailingTrivia().AddRange(trivia));
+        }
+
+        internal static InvocationExpressionSyntax WithArguments(this InvocationExpressionSyntax value, params ArgumentSyntax[] arguments)
+        {
+            return value.WithArguments(arguments.ToSeparatedSyntaxList());
+        }
+
+        internal static InvocationExpressionSyntax WithArguments(this InvocationExpressionSyntax value, in SeparatedSyntaxList<ArgumentSyntax> arguments)
+        {
+            return value.WithArgumentList(SyntaxFactory.ArgumentList(arguments));
         }
 
         internal static T WithAttribute<T>(this T value, XmlAttributeSyntax attribute) where T : XmlNodeSyntax
@@ -3140,6 +3202,8 @@ namespace MiKoSolutions.Analyzers
         internal static T WithLeadingSpace<T>(this T value) where T : SyntaxNode => value.WithLeadingTrivia(SyntaxFactory.ElasticSpace); // use elastic one to allow formatting to be done automatically
 
         internal static T WithTrailingSpace<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(SyntaxFactory.ElasticSpace); // use elastic one to allow formatting to be done automatically
+
+        internal static T WithTrailingSpaces<T>(this T value, in int spaces) where T : SyntaxNode => value.WithTrailingTrivia(Enumerable.Repeat(SyntaxFactory.ElasticSpace, spaces)); // use elastic one to allow formatting to be done automatically
 
         internal static T WithAdditionalLeadingSpaces<T>(this T value, in int additionalSpaces) where T : SyntaxNode
         {
@@ -3832,7 +3896,7 @@ namespace MiKoSolutions.Analyzers
 
                 foreach (var startText in startTexts)
                 {
-                    if (originalText.StartsWith(startText, StringComparison.Ordinal))
+                    if (originalText.StartsWith(startText))
                     {
                         var modifiedText = originalText.Slice(startText.Length);
 
@@ -4058,27 +4122,7 @@ namespace MiKoSolutions.Analyzers
                        .FirstOrDefault();
         }
 
-        internal static bool HasAttributeName(this TypeDeclarationSyntax value, IEnumerable<string> names)
-        {
-            var attributeLists = value.AttributeLists;
-
-            for (int i = 0, count = attributeLists.Count; i < count; i++)
-            {
-                var attributes = attributeLists[i].Attributes;
-
-                for (int index = 0, attributesCount = attributes.Count; index < attributesCount; index++)
-                {
-                    if (names.Contains(attributes[index].GetName()))
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        internal static bool HasAttributeName(this MethodDeclarationSyntax value, IEnumerable<string> names)
+        internal static bool HasAttributeName(this MemberDeclarationSyntax value, IEnumerable<string> names)
         {
             var attributeLists = value.AttributeLists;
 
@@ -4310,7 +4354,7 @@ namespace MiKoSolutions.Analyzers
             {
                 var content = syntax.Content.ToString().AsSpan().Trim();
 
-                return content.EqualsAny(contents);
+                return StringExtensions.EqualsAny(content, contents, StringComparison.OrdinalIgnoreCase);
             }
 
             return false;

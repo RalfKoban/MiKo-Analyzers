@@ -15,8 +15,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private const string StartingBooleanDefaultPhrase = "Indicates whether ";
         private const string StartingGuidDefaultPhrase = "The unique identifier for ";
 
-        private const StringComparison Comparison = StringComparison.OrdinalIgnoreCase;
-
         public MiKo_2080_FieldSummaryDefaultPhraseAnalyzer() : base(Id)
         {
         }
@@ -55,14 +53,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool AnalyzeTextStart(ISymbol symbol, string valueText, out string problematicText, out StringComparison comparison)
         {
-            comparison = Comparison;
+            comparison = StringComparison.OrdinalIgnoreCase;
 
             var comment = valueText.AsSpan().TrimStart();
 
             var fieldSymbol = (IFieldSymbol)symbol;
             var phrase = GetStartingPhrase(fieldSymbol);
 
-            if (comment.StartsWith(phrase, Comparison))
+            if (comment.StartsWith(phrase, comparison))
             {
                 // no issue
                 problematicText = string.Empty;

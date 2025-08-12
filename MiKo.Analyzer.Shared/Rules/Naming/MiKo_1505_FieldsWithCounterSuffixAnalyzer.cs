@@ -35,16 +35,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation)
         {
-            var betterName = FindBetterName(symbol.Name);
+            var betterName = FindBetterName(symbol.Name.AsSpan());
 
             return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
         }
 
-        private static string FindBetterName(string symbolName)
+        private static string FindBetterName(in ReadOnlySpan<char> symbolName)
         {
             // be aware of field prefixes, such as 'm_'
             var prefix = GetFieldPrefix(symbolName);
-            var name = symbolName.AsSpan().Slice(prefix.Length, symbolName.Length - prefix.Length - Constants.Names.Counter.Length).ToUpperCaseAt(0);
+            var name = symbolName.Slice(prefix.Length, symbolName.Length - prefix.Length - Constants.Names.Counter.Length).ToUpperCaseAt(0);
 
             if (name.IsNullOrEmpty())
             {

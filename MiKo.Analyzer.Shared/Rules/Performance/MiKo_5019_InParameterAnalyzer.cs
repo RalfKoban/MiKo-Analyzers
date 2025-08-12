@@ -72,7 +72,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
             if (IsReadOnlyStruct(type))
             {
-                if (symbol.RefKind == RefKind.None)
+                if (symbol.RefKind is RefKind.None)
                 {
                     if (symbol.HasAttribute("NUnit.Framework.RangeAttribute"))
                     {

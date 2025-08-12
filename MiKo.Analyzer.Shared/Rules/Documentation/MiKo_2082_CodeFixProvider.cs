@@ -68,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         var isPlural = Pluralizer.IsPlural(unsuffixedSpan) && Pluralizer.IsSingularAndPlural(unsuffixedSpan) is false;
 
                         if (isPlural
-                         || unsuffixed.EqualsAny(WordsThatPreventArticle)
+                         || StringExtensions.EqualsAny(unsuffixed, WordsThatPreventArticle, StringComparison.OrdinalIgnoreCase)
                          || Verbalizer.IsGerundVerb(unsuffixedSpan)
                          || Verbalizer.IsAdjectiveOrAdverb(unsuffixedSpan)
                          || Verbalizer.IsPastTense(unsuffixedSpan))
