@@ -59,12 +59,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static ReadOnlySpan<char> FindBetterNameCore(in ReadOnlySpan<char> symbolName)
         {
-            if (symbolName.EndsWith(Constants.AsyncSuffix, StringComparison.Ordinal))
+            if (symbolName.EndsWith(Constants.AsyncSuffix))
             {
                 return symbolName.WithoutSuffix(Constants.AsyncSuffix);
             }
 
-            if (symbolName.EndsWith("_async", StringComparison.Ordinal))
+            if (symbolName.EndsWith("_async"))
             {
                 return symbolName.WithoutSuffix("_async");
             }

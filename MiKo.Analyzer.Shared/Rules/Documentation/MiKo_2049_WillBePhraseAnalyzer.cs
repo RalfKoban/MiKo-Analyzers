@@ -160,7 +160,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     var text = issue.Location.GetText().ToLowerCase();
 
-                    if (text.Contains(AcceptedPhrase) is false && text.ContainsAny(PhrasesMapKeys) is false)
+                    if (text.Contains(AcceptedPhrase) is false && text.ContainsAny(PhrasesMapKeys, StringComparison.OrdinalIgnoreCase) is false)
                     {
                         issues.Add(issue);
                     }

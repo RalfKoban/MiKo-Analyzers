@@ -83,7 +83,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     var token = textTokens[index];
                     var valueText = token.ValueText.Without(Constants.Comments.AsynchronouslyStartingPhrase).AsSpan().Trim();
 
-                    if (valueText.StartsWithAny(Constants.Comments.ReturnWords))
+                    if (valueText.StartsWithAny(Constants.Comments.ReturnWords, StringComparison.OrdinalIgnoreCase))
                     {
                         var startText = GetCorrectStartText(summary);
                         var remainingText = valueText.WithoutFirstWord().WithoutFirstWords(BeginningConditions).ToString(); // TODO RKN: Use Span and create a ConcatenatedWith

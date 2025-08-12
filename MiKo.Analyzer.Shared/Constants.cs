@@ -174,6 +174,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static class FluentAssertions
         {
+            internal const string Namespace = "FluentAssertions";
             internal const string Should = nameof(Should);
             internal const string ShouldBeEquivalentTo = nameof(ShouldBeEquivalentTo);
         }
@@ -235,7 +236,7 @@ namespace MiKoSolutions.Analyzers
             internal const string BooleanReturnTypeEndingPhraseTemplate = "; otherwise, {0}.";
             internal const string BooleanReturnTypeStartingPhraseTemplate = "{0} if ";
             internal const string BooleanTaskReturnTypeEndingPhraseTemplate = ", otherwise with a result of {0}.";
-            internal const string BooleanTaskReturnTypeStartingPhraseTemplate = "A task that will complete with a result of {0} if ";
+            internal const string BooleanTaskReturnTypeStartingPhraseTemplate = "A task that completes with a result of {0} if ";
             internal const string CallbackTerm = "callback";
             internal const string CollectionReturnTypeStartingPhrase = "A collection of ";
             internal const string CollectionReturnTypeStartingPhraseLowerCase = "a collection of ";
@@ -1135,6 +1136,9 @@ namespace MiKoSolutions.Analyzers
             internal const string Create = "Create";
             internal const string Factory = "Factory";
 
+            internal const string DefaultNUnitNamespace = "NUnit.Framework";
+            internal const string DefaultXUnitNamespace = "Xunit";
+
             internal const string DefaultPropertyParameterName = "value";
 
             internal const string IMultiValueConverter = "IMultiValueConverter";
@@ -1318,9 +1322,9 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly ISet<string> AssertionNamespaces = new HashSet<string>
                                                                             {
-                                                                                "NUnit.Framework",
-                                                                                "NUnit.Framework.Constraints",
-                                                                                "NUnit.Framework.Legacy",
+                                                                                DefaultNUnitNamespace,
+                                                                                DefaultNUnitNamespace + ".Constraints",
+                                                                                DefaultNUnitNamespace + ".Legacy",
                                                                             };
 
             internal static readonly ISet<string> KnownWindowsEventHandlers = new HashSet<string>

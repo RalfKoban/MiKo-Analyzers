@@ -61,7 +61,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static DocumentationCommentTriviaSyntax FixCtorComment(ConstructorDeclarationSyntax ctor)
         {
             var typeDeclarationSyntax = ctor.FirstAncestorOrSelf<TypeDeclarationSyntax>();
-            var type = SyntaxFactory.ParseTypeName(typeDeclarationSyntax?.Identifier.ValueText ?? string.Empty);
+            var type = (typeDeclarationSyntax?.Identifier.ValueText ?? string.Empty).AsTypeSyntax();
 
             // we have a ctor
             var parameters = ctor.ParameterList.Parameters;

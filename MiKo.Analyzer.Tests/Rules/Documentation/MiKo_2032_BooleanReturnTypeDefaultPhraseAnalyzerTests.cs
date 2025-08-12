@@ -152,7 +152,7 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <" + xmlTag + @">
-    /// A task that will complete with a result of " + trueValue + " if something happens, otherwise with a result of " + falseValue + @".
+    /// A task that completes with a result of " + trueValue + " if something happens, otherwise with a result of " + falseValue + @".
     /// </" + xmlTag + @">
     public " + returnType + @" DoSomething(object o) => null;
 }
@@ -293,7 +293,7 @@ public class TestMe
 {
     /// <summary>Does something.</summary>
     /// <returns>
-    /// A task that will complete with a result of <see langword=""true""/> if " + fixedPhrase + @", otherwise with a result of <see langword=""false""/>.
+    /// A task that completes with a result of <see langword=""true""/> if " + fixedPhrase + @", otherwise with a result of <see langword=""false""/>.
     /// </returns>
     public Task<bool> DoSomething(object o) => throw new NotSupportedException();
 }
@@ -315,6 +315,8 @@ public class TestMe
         [TestCase(@"<see langword=""true""/> - If something; <see langword=""false""/> otherwise.")]
         [TestCase(@"<see langword=""true""/> something.")]
         [TestCase(@"<see langword=""true""/> - something.")]
+        [TestCase(@"<see langword=""true""/> when something else false")]
+        [TestCase(@"<see langword=""true""/> when something else false.")]
         [TestCase("true if something. Otherwise false.")]
         [TestCase("<b>true</b> if something. Otherwise <b>false</b>.")]
         [TestCase("<c>true</c> if something. Otherwise <c>false</c>.")]
@@ -339,6 +341,8 @@ public class TestMe
         [TestCase("true, if something, else it returns false.")]
         [TestCase("true if something, else with false.")]
         [TestCase("true, if something, false else.")]
+        [TestCase("true when something else false")]
+        [TestCase("true when something else false.")]
         public void Code_gets_fixed_for_almost_correct_comment_on_non_generic_method_(string comment)
         {
             var originalCode = @"
@@ -607,7 +611,7 @@ public class TestMe
 {
     /// <summary>Does something.</summary>
     /// <returns>
-    /// A task that will complete with a result of <see langword=""true""/> if something, otherwise with a result of <see langword=""false""/>.
+    /// A task that completes with a result of <see langword=""true""/> if something, otherwise with a result of <see langword=""false""/>.
     /// </returns>
     public Task<bool> DoSomething(object o) => throw new NotSupportedException();
 }

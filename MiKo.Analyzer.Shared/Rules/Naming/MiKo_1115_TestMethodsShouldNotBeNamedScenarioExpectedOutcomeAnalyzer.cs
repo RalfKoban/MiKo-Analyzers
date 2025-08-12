@@ -86,7 +86,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 }
 
                 // jump over first part
-                if (first && part.StartsWithAny(SpecialFirstPhrases, StringComparison.Ordinal))
+                if (first && part.StartsWithAny(SpecialFirstPhrases))
                 {
                     first = false;
 

@@ -54,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var text = t.GetTextTrimmed();
 
-                if (text.StartsWith("If ", StringComparison.OrdinalIgnoreCase) && text.ContainsAny(UnwantedResultTexts))
+                if (text.StartsWith("If ", StringComparison.OrdinalIgnoreCase) && text.ContainsAny(UnwantedResultTexts, StringComparison.OrdinalIgnoreCase))
                 {
                     // get rid of the unwanted phrases and switch text parts
                     var parts = text.SplitBy(UnwantedResultTexts, options: StringSplitOptions.RemoveEmptyEntries);

@@ -1,4 +1,5 @@
-﻿using System.Composition;
+﻿using System;
+using System.Composition;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -23,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var parameters = method.ParameterList.Parameters;
             var typeDeclarationSyntax = method.FirstAncestorOrSelf<TypeDeclarationSyntax>();
-            var type = SyntaxFactory.ParseTypeName(typeDeclarationSyntax?.Identifier.ValueText ?? string.Empty);
+            var type = (typeDeclarationSyntax?.Identifier.ValueText ?? string.Empty).AsTypeSyntax();
 
             var summary = Comment(SyntaxFactory.XmlSummaryElement(), "Determines whether the specified ", SeeCref(type), " instances are considered not equal.").WithTrailingXmlComment();
             var param1 = ParameterComment(parameters[0], "The first value to compare.").WithTrailingXmlComment();

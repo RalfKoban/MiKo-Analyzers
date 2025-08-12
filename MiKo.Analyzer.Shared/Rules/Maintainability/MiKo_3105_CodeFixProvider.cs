@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
-using System.Reflection;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -515,32 +514,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (genericArguments.Count is 1)
                 {
-                    return AssertThat(args[0], GetExceptionArgument(genericArguments[0]), args, 1);
+                    return AssertThat(args[0], Throws(genericArguments[0]), args, 1);
                 }
             }
 
             switch (args[0].Expression)
             {
                 case TypeOfExpressionSyntax typeOfExpression:
-                    return AssertThat(args[1], Throws("TypeOf", typeOfExpression.Type), args);
+                    return AssertThat(args[1], Throws(typeOfExpression.Type), args);
 
                 case IdentifierNameSyntax identifier:
-                    return AssertThat(args[1], Throws("TypeOf", Argument(identifier)), args);
+                    return AssertThat(args[1], Throws(Argument(identifier)), args);
             }
 
             return AssertThat(args[1], Throws("Nothing"), args);
-
-            ArgumentSyntax GetExceptionArgument(TypeSyntax exceptionType)
-            {
-                switch (exceptionType.GetName())
-                {
-                    case nameof(ArgumentNullException): return Throws(nameof(ArgumentNullException));
-                    case nameof(ArgumentException): return Throws(nameof(ArgumentException));
-                    case nameof(InvalidOperationException): return Throws(nameof(InvalidOperationException));
-                    case nameof(TargetInvocationException): return Throws(nameof(TargetInvocationException));
-                    default: return Throws("TypeOf", exceptionType);
-                }
-            }
         }
 
         private static InvocationExpressionSyntax FixZero(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Zero"), args, 1);
@@ -549,14 +536,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var name = syntax.Expression.GetName();
 
-            return name.ContainsAny(ActualMarkers);
+            return name.ContainsAny(ActualMarkers, StringComparison.OrdinalIgnoreCase);
         }
 
         private static bool IsExpected(ArgumentSyntax syntax)
         {
             var name = syntax.Expression.GetName();
 
-            return name.ContainsAny(ExpectedMarkers);
+            return name.ContainsAny(ExpectedMarkers, StringComparison.OrdinalIgnoreCase);
         }
     }
 }

@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var phrases = GetStartingPhrase((IPropertySymbol)symbol);
 
-            if (summaries.Value.None(_ => _.StartsWithAny(phrases, StringComparison.Ordinal)))
+            if (summaries.Value.None(_ => _.StartsWithAny(phrases)))
             {
                 return new[] { Issue(symbol, Constants.XmlTag.Summary, phrases[0]) };
             }

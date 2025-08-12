@@ -13,8 +13,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2081";
 
-        private const StringComparison Comparison = StringComparison.Ordinal;
-
         public MiKo_2081_ReadOnlyFieldAnalyzer() : base(Id)
         {
         }
@@ -41,7 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   Lazy<string> commentXml,
                                                                   Lazy<string[]> summaries)
         {
-            if (summaries.Value.None(_ => _.EndsWith(Constants.Comments.FieldIsReadOnly, Comparison)))
+            if (summaries.Value.None(_ => _.EndsWith(Constants.Comments.FieldIsReadOnly, StringComparison.Ordinal)))
             {
                 return new[] { Issue(symbol, Constants.Comments.FieldIsReadOnly) };
             }

@@ -158,7 +158,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     var token = continueText.TextTokens.First();
                     var text = token.ValueText;
 
-                    if (text.StartsWithAny(MappedData.Value.ByteArrayContinueTexts))
+                    if (text.StartsWithAny(MappedData.Value.ByteArrayContinueTexts, StringComparison.OrdinalIgnoreCase))
                     {
                         var fixedText = text.AsCachedBuilder().Without(MappedData.Value.ByteArrayContinueTexts).ToStringAndRelease();
                         var newContinueText = continueText.ReplaceToken(token, token.WithText(fixedText));

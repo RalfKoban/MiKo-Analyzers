@@ -51,7 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         var text = node.GetTextTrimmed();
 
-                        if (text.StartsWithAny(WrongStartingPhrases, StringComparison.Ordinal))
+                        if (text.StartsWithAny(WrongStartingPhrases))
                         {
                             var betterText = FindBetterText(text);
 

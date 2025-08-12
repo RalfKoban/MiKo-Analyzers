@@ -104,6 +104,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                      " otherwise not",
                                                                      " otherwise with a result of",
                                                                      " otherwise the task has the result",
+                                                                     " else",
                                                                      " else it",
                                                                      " else with",
                                                                      " in all of the other cases",
@@ -279,6 +280,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                        .WithoutStartText(OtherStartingPhrases)
                                        .ReplaceText(OrIfPhrase, OrIfReplacementPhrase)
                                        .WithoutText(Phrases)
+                                       .WithoutText(" else .")
                                        .WithoutFirstXmlNewLine();
 
             if (nodes.Count is 0)

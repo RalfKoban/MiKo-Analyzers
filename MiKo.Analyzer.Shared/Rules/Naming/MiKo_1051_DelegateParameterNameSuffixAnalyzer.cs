@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol, Compilation compilation) => symbol.Name.EndsWithAny(WrongNames)
+        protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol, Compilation compilation) => symbol.Name.EndsWithAny(WrongNames, StringComparison.OrdinalIgnoreCase)
                                                                                                                     ? new[] { Issue(symbol, CreateBetterNameProposal("callback")) }
                                                                                                                     : Array.Empty<Diagnostic>();
     }

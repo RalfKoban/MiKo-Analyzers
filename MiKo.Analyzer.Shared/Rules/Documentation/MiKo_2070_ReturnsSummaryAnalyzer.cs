@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -54,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var firstWord = valueText.Without(Constants.Comments.AsynchronouslyStartingPhrase) // skip over async starting phrase
                                      .FirstWord();
 
-            if (firstWord.EqualsAny(Constants.Comments.ReturnWords))
+            if (StringExtensions.EqualsAny(firstWord, Constants.Comments.ReturnWords, StringComparison.OrdinalIgnoreCase))
             {
                 problematicText = valueText.FirstWord();
 

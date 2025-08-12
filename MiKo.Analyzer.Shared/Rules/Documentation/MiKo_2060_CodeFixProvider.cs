@@ -341,7 +341,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                            "roviding provid", "rovides provid", "rovide provid",
                                        };
 
-                results.RemoveWhere(_ => _.ContainsAny(strangeTexts, StringComparison.Ordinal));
+                results.RemoveWhere(_ => _.ContainsAny(strangeTexts));
 
                 return results.ToArray();
             }

@@ -151,6 +151,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private static bool IsWellknownFileExtension(in ReadOnlySpan<char> comment, in int startIndex) => comment.Slice(startIndex).StartsWithAny(Constants.WellknownFileExtensions);
+        private static bool IsWellknownFileExtension(in ReadOnlySpan<char> comment, in int startIndex) => comment.Slice(startIndex).StartsWithAny(Constants.WellknownFileExtensions, StringComparison.OrdinalIgnoreCase);
     }
 }

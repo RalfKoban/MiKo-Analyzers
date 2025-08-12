@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private Diagnostic[] AnalyzeParameterComment(string parameterName, XmlElementSyntax parameterComment, string comment, in ReadOnlySpan<string> phrases)
         {
-            if (comment.AsSpan().EqualsAny(phrases))
+            if (StringExtensions.EqualsAny(comment.AsSpan(), phrases, StringComparison.OrdinalIgnoreCase))
             {
                 return Array.Empty<Diagnostic>();
             }

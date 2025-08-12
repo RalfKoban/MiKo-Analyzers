@@ -64,7 +64,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static ExpressionSyntax GetUpdatedCondition(ExpressionSyntax expression, string name, in SyntaxKind expressionKind, LiteralExpressionSyntax literal)
         {
-            var operand = SimpleMemberAccess(expression, name);
+            var operand = Member(expression, name);
 
             switch (literal.Kind())
             {
