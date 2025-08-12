@@ -9,11 +9,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2042_BrParaAnalyzer : OverallDocumentationAnalyzer
+    public sealed class MiKo_2042_ParaAnalyzer : OverallDocumentationAnalyzer
     {
         public const string Id = "MiKo_2042";
 
-        public MiKo_2042_BrParaAnalyzer() : base(Id)
+        public MiKo_2042_ParaAnalyzer() : base(Id)
         {
         }
 
@@ -25,40 +25,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 if (node is XmlElementStartTagSyntax || node is XmlEmptyElementSyntax)
                 {
-                    var issue = FindIssue(node);
+                    var tag = node.GetXmlTagName().ToLowerCase();
 
-                    if (issue is null)
+                    // <br/> is not an issue, see https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/recommended-tags#br
+                    if (tag is "p")
                     {
-                        continue;
-                    }
+                        if (results is null)
+                        {
+                            results = new List<Diagnostic>(1);
+                        }
 
-                    if (results is null)
-                    {
-                        results = new List<Diagnostic>(1);
+                        results.Add(Issue(node));
                     }
-
-                    results.Add(issue);
                 }
             }
 
             return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
-        }
-
-        private Diagnostic FindIssue(SyntaxNode node)
-        {
-            var tag = node.GetXmlTagName().ToLowerCase();
-
-            switch (tag)
-            {
-                case "br":
-                    return Issue(node, "<br/>");
-
-                case "p":
-                    return Issue(node, "<p>...</p>");
-
-                default:
-                    return null;
-            }
         }
     }
 }
