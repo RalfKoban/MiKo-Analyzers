@@ -3080,14 +3080,14 @@ namespace MiKoSolutions.Analyzers
             return value.WithTrailingTrivia(value.GetTrailingTrivia().AddRange(trivia));
         }
 
-        internal static InvocationExpressionSyntax WithArguments(this InvocationExpressionSyntax value, params ArgumentSyntax[] arguments)
-        {
-            return value.WithArguments(arguments.ToSeparatedSyntaxList());
-        }
-
         internal static InvocationExpressionSyntax WithArguments(this InvocationExpressionSyntax value, in SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
             return value.WithArgumentList(SyntaxFactory.ArgumentList(arguments));
+        }
+
+        internal static InvocationExpressionSyntax WithArguments(this InvocationExpressionSyntax value, params ArgumentSyntax[] arguments)
+        {
+            return value.WithArguments(arguments.ToSeparatedSyntaxList());
         }
 
         internal static T WithAttribute<T>(this T value, XmlAttributeSyntax attribute) where T : XmlNodeSyntax
