@@ -17,7 +17,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(ISymbol symbol) => symbol is IMethodSymbol method && method.Parameters.Length > 0 && method.Name.StartsWith("Contains", StringComparison.OrdinalIgnoreCase);
 
-        protected override bool ShallAnalyzeParameter(IParameterSymbol parameter) => parameter.ContainingSymbol is IMethodSymbol method && method.Parameters.IndexOf(parameter) is 0;
+        protected override bool ShallAnalyzeParameter(IParameterSymbol parameter)
+        {
+            if (parameter.ContainingSymbol is IMethodSymbol method)
+            {
+                var expectedIndex = method.IsExtensionMethod ? 1 : 0;
+
+                return method.Parameters.IndexOf(parameter) == expectedIndex;
+            }
+
+            return false;
+        }
 
         protected override Diagnostic[] AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment)
         {
