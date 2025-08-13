@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-using Microsoft.CodeAnalysis.CodeFixes;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -23,6 +21,69 @@ public class TestMe
 }
 ");
 
+        [Test, Combinatorial]
+        public void No_issue_is_reported_for_correctly_documented_method_(
+                                                                      [Values("Contains", "ContainsKey")] string methodName,
+                                                                      [Values("Something to seek.", "Something to locate.")] string comment)
+            => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <param name=""i"">
+    /// " + comment + @"
+    /// </param>
+    public bool " + methodName + @"(int i)
+    {
+    }
+}
+");
+
+        [Test, Combinatorial]
+        public void No_issue_is_reported_for_correctly_documented_method_with_multiple_parameters_(
+                                                                                               [Values("Contains", "ContainsKey")] string methodName,
+                                                                                               [Values("Something to seek.", "Something to locate.")] string comment)
+            => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <param name=""i"">
+    /// " + comment + @"
+    /// </param>
+    /// <param name=""j"">
+    /// Something to consider.
+    /// </param>
+    public bool " + methodName + @"(int i, int j)
+    {
+    }
+}
+");
+
+        [Test, Combinatorial]
+        public void No_issue_is_reported_for_correctly_documented_extension_method_(
+                                                                                [Values("Contains", "ContainsKey")] string methodName,
+                                                                                [Values("Something to seek.", "Something to locate.")] string comment)
+            => No_issue_is_reported_for(@"
+public static class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <param name=""array"">
+    /// The array to search.
+    /// </param>
+    /// <param name=""i"">
+    /// " + comment + @"
+    /// </param>
+    public static bool " + methodName + @"(this int[] array, int i)
+    {
+    }
+}
+");
+
         [Test]
         public void An_issue_is_reported_for_incorrectly_documented_method_([Values("Contains", "ContainsKey")] string methodName) => An_issue_is_reported_for(@"
 public class TestMe
@@ -39,9 +100,8 @@ public class TestMe
 }
 ");
 
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [Test]
-        public void An_issue_is_reported_for_first_parameter_of_incorrectly_documented_method_([Values("Contains", "ContainsKey")] string methodName) => An_issue_is_reported_for(1, @"
+        public void An_issue_is_reported_for_first_parameter_of_incorrectly_documented_method_([Values("Contains", "ContainsKey")] string methodName) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -54,6 +114,25 @@ public class TestMe
     /// Something to consider.
     /// </param>
     public bool " + methodName + @"(int i, int j)
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_second_parameter_of_incorrectly_documented_extension_method_([Values("Contains", "ContainsKey")] string methodName) => An_issue_is_reported_for(@"
+public static class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <param name=""array"">
+    /// The array to search.
+    /// </param>
+    /// <param name=""i"">
+    /// Something to find.
+    /// </param>
+    public static bool " + methodName + @"(this int[] array, int i)
     {
     }
 }
@@ -87,25 +166,6 @@ public class TestMe
     /// Something to find.
     /// </param>
     public void DoSomething(int i)
-    {
-    }
-}
-");
-
-        [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_documented_method_(
-                                                                      [Values("Contains", "ContainsKey")] string methodName,
-                                                                      [Values("Something to seek.", "Something to locate.")] string comment)
-            => No_issue_is_reported_for(@"
-public class TestMe
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    /// <param name=""i"">
-    /// " + comment + @"
-    /// </param>
-    public bool " + methodName + @"(int i)
     {
     }
 }
