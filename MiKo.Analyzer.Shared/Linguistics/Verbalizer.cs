@@ -589,7 +589,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return value;
             }
 
-            if (StringExtensions.EqualsAny(value, ThirdPersonalSingularVerbExceptions, StringComparison.OrdinalIgnoreCase))
+            if (value.EqualsAny(ThirdPersonalSingularVerbExceptions, StringComparison.OrdinalIgnoreCase))
             {
                 return value;
             }

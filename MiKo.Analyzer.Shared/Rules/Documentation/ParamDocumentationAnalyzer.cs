@@ -98,7 +98,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         continue;
                     }
 
-                    if (StringExtensions.EqualsAny(parameterCommentXml, Constants.Comments.UnusedPhrase, StringComparison.OrdinalIgnoreCase))
+                    if (parameterCommentXml.EqualsAny(Constants.Comments.UnusedPhrase, StringComparison.OrdinalIgnoreCase))
                     {
                         continue;
                     }
