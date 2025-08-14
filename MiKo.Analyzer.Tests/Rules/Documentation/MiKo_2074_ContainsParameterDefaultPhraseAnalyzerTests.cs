@@ -11,6 +11,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2074_ContainsParameterDefaultPhraseAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] MethodNames = ["Contains", "ContainsKey"];
+
+        private static readonly string[] CorrectComments = [
+                                                               "Something to seek",
+                                                               "Something to seek.",
+                                                               "Something to seek in the list.",
+                                                               "Something to seek in the array.",
+                                                               "Something to seek in the collection.",
+                                                               "Something to locate",
+                                                               "Something to locate.",
+                                                               "Something to locate in the list.",
+                                                               "Something to locate in the array.",
+                                                               "Something to locate in the collection.",
+                                                           ];
+
         [Test]
         public void No_issue_is_reported_for_undocumented_method() => No_issue_is_reported_for(@"
 public class TestMe
@@ -22,9 +37,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_documented_method_(
-                                                                      [Values("Contains", "ContainsKey")] string methodName,
-                                                                      [Values("Something to seek.", "Something to locate.")] string comment)
+        public void No_issue_is_reported_for_correctly_documented_method_([ValueSource(nameof(MethodNames))] string methodName, [ValueSource(nameof(CorrectComments))] string comment)
             => No_issue_is_reported_for(@"
 public class TestMe
 {
@@ -41,9 +54,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_documented_method_with_multiple_parameters_(
-                                                                                               [Values("Contains", "ContainsKey")] string methodName,
-                                                                                               [Values("Something to seek.", "Something to locate.")] string comment)
+        public void No_issue_is_reported_for_correctly_documented_method_with_multiple_parameters_([ValueSource(nameof(MethodNames))] string methodName, [ValueSource(nameof(CorrectComments))] string comment)
             => No_issue_is_reported_for(@"
 public class TestMe
 {
@@ -63,9 +74,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_documented_extension_method_(
-                                                                                [Values("Contains", "ContainsKey")] string methodName,
-                                                                                [Values("Something to seek.", "Something to locate.")] string comment)
+        public void No_issue_is_reported_for_correctly_documented_extension_method_([ValueSource(nameof(MethodNames))] string methodName, [ValueSource(nameof(CorrectComments))] string comment)
             => No_issue_is_reported_for(@"
 public static class TestMe
 {
@@ -85,7 +94,23 @@ public static class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_([Values("Contains", "ContainsKey")] string methodName) => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_incorrectly_documented_non_Contains_method() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <param name=""i"">
+    /// Something to find.
+    /// </param>
+    public void DoSomething(int i)
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_method_([ValueSource(nameof(MethodNames))] string methodName) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -101,7 +126,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_first_parameter_of_incorrectly_documented_method_([Values("Contains", "ContainsKey")] string methodName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_first_parameter_of_incorrectly_documented_method_([ValueSource(nameof(MethodNames))] string methodName) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -120,7 +145,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_second_parameter_of_incorrectly_documented_extension_method_([Values("Contains", "ContainsKey")] string methodName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_second_parameter_of_incorrectly_documented_extension_method_([ValueSource(nameof(MethodNames))] string methodName) => An_issue_is_reported_for(@"
 public static class TestMe
 {
     /// <summary>
@@ -140,7 +165,7 @@ public static class TestMe
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_empty_parameter_on_method_(
-                                                                    [Values("Contains", "ContainsKey")] string methodName,
+                                                                    [ValueSource(nameof(MethodNames))] string methodName,
                                                                     [Values(@"<param name=""i""></param>", @"<param name=""i"">     </param>")] string parameter)
             => An_issue_is_reported_for(@"
 public class TestMe
@@ -150,22 +175,6 @@ public class TestMe
     /// </summary>
     /// " + parameter + @"
     public bool " + methodName + @"(int i)
-    {
-    }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_incorrectly_documented_non_Contains_method() => No_issue_is_reported_for(@"
-public class TestMe
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    /// <param name=""i"">
-    /// Something to find.
-    /// </param>
-    public void DoSomething(int i)
     {
     }
 }

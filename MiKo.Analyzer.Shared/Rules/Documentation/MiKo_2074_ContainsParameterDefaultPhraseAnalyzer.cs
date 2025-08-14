@@ -11,7 +11,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2074";
 
-        private static readonly string[] Phrases = { " to seek.", " to locate." };
+        private static readonly string[] EndingPhrases = { " to seek.", " to locate.", " to seek", " to locate" };
+
+        private static readonly string[] MiddlePhrases = { " to seek in the ", " to locate in the" };
 
         public MiKo_2074_ContainsParameterDefaultPhraseAnalyzer() : base(Id) => IgnoreEmptyParameters = false;
 
@@ -31,12 +33,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override Diagnostic[] AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment)
         {
-            if (parameterComment.GetTextTrimmed().EndsWithAny(Phrases))
+            var text = parameterComment.GetTextTrimmed();
+
+            if (text.EndsWithAny(EndingPhrases) || text.ContainsAny(MiddlePhrases))
             {
                 return Array.Empty<Diagnostic>();
             }
 
-            return new[] { Issue(parameter.Name, parameterComment.GetContentsLocation(), Phrases[0], CreatePhraseProposal(Phrases[0])) };
+            return new[] { Issue(parameter.Name, parameterComment.GetContentsLocation(), EndingPhrases[0], CreatePhraseProposal(EndingPhrases[0])) };
         }
     }
 }
