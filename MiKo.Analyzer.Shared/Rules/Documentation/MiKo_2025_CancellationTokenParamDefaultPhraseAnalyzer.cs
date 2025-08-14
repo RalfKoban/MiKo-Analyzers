@@ -15,6 +15,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyzeParameter(IParameterSymbol parameter) => parameter.RefKind != RefKind.Out && parameter.Type.IsCancellationToken();
 
-        protected override Diagnostic[] AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment) => AnalyzePlainTextStartingPhrase(parameter, parameterComment, Constants.Comments.CancellationTokenParameterPhrase);
+        protected override Diagnostic[] AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment) => AnalyzePlainTextStartingPhrase(parameter, parameterComment, comment, Constants.Comments.CancellationTokenParameterPhrase);
     }
 }

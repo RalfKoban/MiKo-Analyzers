@@ -39,7 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override Diagnostic[] AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment)
         {
-            return AnalyzePlainTextStartingPhrase(parameter, parameterComment, Constants.Comments.ParameterStartingPhrase, StringComparison.OrdinalIgnoreCase);
+            return AnalyzePlainTextStartingPhrase(parameter, parameterComment, comment, Constants.Comments.ParameterStartingPhrase, StringComparison.OrdinalIgnoreCase);
         }
 
         protected override Location GetIssueLocation(XmlElementSyntax parameterComment)
