@@ -254,6 +254,7 @@ namespace MiKoSolutions.Analyzers
             internal const string DeterminesWhetherPhrase = "Determines whether";
             internal const string DisposeParameterPhrase = "Indicates whether unmanaged resources shall be freed.";
             internal const string DisposeSummaryPhrase = "Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.";
+            internal const string EnumerableReturnTypeStartingPhrase = "A sequence that contains ";
             internal const string EnumStartingPhrase = "Defines values that specify ";
             internal const string EnumReturnTypeStartingPhraseTemplate = "The enumerated constant that is the ";
             internal const string EnumTaskReturnTypeContinuePhraseTemplate = "the enumerated constant that is the ";
@@ -641,6 +642,15 @@ namespace MiKoSolutions.Analyzers
                                                                                       BooleanTaskReturnTypeEndingPhraseTemplate.FormatWith("<see langword=\"false\" />"),
                                                                                   };
 
+            internal static readonly string[] CollectionReturnTypeStartingPhrases =
+                                                                                    {
+                                                                                        CollectionReturnTypeStartingPhrase,
+                                                                                        "A <see cref=\"{0}\"/> that contains ",
+                                                                                        "A <see cref=\"{0}\" /> that contains ",
+                                                                                        "An <see cref=\"{0}\"/> that contains ",
+                                                                                        "An <see cref=\"{0}\" /> that contains ",
+                                                                                    };
+
             internal static readonly string[] StringReturnTypeStartingPhrase =
                                                                                {
                                                                                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\"/>", ThatContainsTerm), // this is just to have a proposal how to optimize
@@ -701,14 +711,15 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] EnumTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.ToArray(_ => _ + EnumTaskReturnTypeContinuePhraseTemplate + "the ");
 
-            internal static readonly string[] EnumerableReturnTypeStartingPhrase =
-                                                                                   {
-                                                                                       CollectionReturnTypeStartingPhrase,
-                                                                                       "A <see cref=\"{0}\"/> that contains ",
-                                                                                       "A <see cref=\"{0}\" /> that contains ",
-                                                                                       "An <see cref=\"{0}\"/> that contains ",
-                                                                                       "An <see cref=\"{0}\" /> that contains ",
-                                                                                   };
+            internal static readonly string[] EnumerableReturnTypeStartingPhrases =
+                                                                                    {
+                                                                                        EnumerableReturnTypeStartingPhrase,
+                                                                                        CollectionReturnTypeStartingPhrase,
+                                                                                        "A <see cref=\"{0}\"/> that contains ",
+                                                                                        "A <see cref=\"{0}\" /> that contains ",
+                                                                                        "An <see cref=\"{0}\"/> that contains ",
+                                                                                        "An <see cref=\"{0}\" /> that contains ",
+                                                                                    };
 
             internal static readonly string[] EnumerableTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.ToArray(_ => _ + CollectionReturnTypeStartingPhraseLowerCase);
 

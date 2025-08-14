@@ -106,8 +106,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_Byte_array_only_method()
-            => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_commented_Byte_array_only_method() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -123,9 +122,29 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
+        public void No_issue_is_reported_for_correctly_commented_Enumerable_only_method_([Values("returns", "value")] string xmlTag) => No_issue_is_reported_for(@"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <" + xmlTag + @">
+    /// A sequence that contains whatever.
+    /// </" + xmlTag + @">
+    public IEnumerable<int> DoSomething(object o) => null;
+}
+");
+
+        [Test, Combinatorial]
         public void No_issue_is_reported_for_correctly_commented_Enumerable_only_method_(
                                                                                      [Values("returns", "value")] string xmlTag,
-                                                                                     [ValueSource(nameof(EnumerableOnlyReturnValues))] string returnType) => No_issue_is_reported_for(@"
+                                                                                     [ValueSource(nameof(EnumerableOnlyReturnValues))] string returnType)
+            => No_issue_is_reported_for(@"
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -144,9 +163,8 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_List_method_(
-                                                                          [Values("returns", "value")] string xmlTag,
-                                                                          [Values("A", "An")] string startingWord) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_commented_List_method_([Values("returns", "value")] string xmlTag, [Values("A", "An")] string startingWord)
+            => No_issue_is_reported_for(@"
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -168,7 +186,8 @@ public class TestMe
         public void No_issue_is_reported_for_correctly_commented_Enumerable_Task_method_(
                                                                                      [Values("returns", "value")] string xmlTag,
                                                                                      [Values("", " ")] string space,
-                                                                                     [ValueSource(nameof(EnumerableTaskReturnValues))] string returnType) => No_issue_is_reported_for(@"
+                                                                                     [ValueSource(nameof(EnumerableTaskReturnValues))] string returnType)
+            => No_issue_is_reported_for(@"
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -190,7 +209,8 @@ public class TestMe
         public void An_issue_is_reported_for_wrong_commented_method_(
                                                                  [Values("returns", "value")] string xmlTag,
                                                                  [Values("A whatever", "An whatever", "The whatever")] string comment,
-                                                                 [ValueSource(nameof(EnumerableReturnValues))] string returnType) => An_issue_is_reported_for(@"
+                                                                 [ValueSource(nameof(EnumerableReturnValues))] string returnType)
+            => An_issue_is_reported_for(@"
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -325,7 +345,7 @@ public class TestMe
     /// <returns>
     /// ### some integers.
     /// </returns>
-    public IEnumerable DoSomething { get; set; }
+    public ICollection DoSomething { get; set; }
 }
 ";
 
@@ -348,7 +368,7 @@ public class TestMe
     /// <returns>
     /// ###
     /// </returns>
-    public IEnumerable DoSomething { get; set; }
+    public ICollection DoSomething { get; set; }
 }
 ";
 
@@ -371,7 +391,7 @@ public class TestMe
     /// <returns>
     /// ### some integers.
     /// </returns>
-    public IEnumerable<int> DoSomething { get; set; }
+    public ICollection<int> DoSomething { get; set; }
 }
 ";
 
@@ -395,7 +415,7 @@ public class TestMe
     /// <returns>
     /// ###
     /// </returns>
-    public IEnumerable<int> DoSomething { get; set; }
+    public ICollection<int> DoSomething { get; set; }
 }
 ";
 
@@ -405,6 +425,163 @@ public class TestMe
         [TestCase("Some integers.", "A collection of some integers.")]
         [TestCase("The mapping information.", "A collection of the mapping information.")]
         public void Code_gets_fixed_for_generic_collection_on_same_line_(string originalPhrase, string fixedPhrase)
+        {
+            var originalCode = @"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>" + originalPhrase + @"</returns>
+    public ICollection<int> DoSomething { get; set; }
+}
+";
+
+            var fixedCode = @"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// " + fixedPhrase + @"
+    /// </returns>
+    public ICollection<int> DoSomething { get; set; }
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_generic_collection_with_non_primitive_type()
+        {
+            const string Template = @"
+using System;
+using System.Collections.Generic;
+
+public record GroupedRow
+{
+}
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// ###.
+    /// </returns>
+    public ICollection<GroupedRow> DoSomething { get; set; }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", "Some data"), Template.Replace("###", "A collection of grouped rows that contains some data"));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_non_generic_enumerable_([ValueSource(nameof(StartingPhrases))] string originalPhrase)
+        {
+            const string Template = @"
+using System;
+using System.Collections;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// ### some integers.
+    /// </returns>
+    public IEnumerable DoSomething { get; set; }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", "A sequence that contains"));
+        }
+
+        [TestCase("Some integers.", "A sequence that contains some integers.")]
+        [TestCase("The mapping information.", "A sequence that contains the mapping information.")]
+        public void Code_gets_fixed_for_non_generic_enumerable_(string originalPhrase, string fixedPhrase)
+        {
+            const string Template = @"
+using System;
+using System.Collections;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// ###
+    /// </returns>
+    public IEnumerable DoSomething { get; set; }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_generic_enumerable_([ValueSource(nameof(StartingPhrases))] string originalPhrase)
+        {
+            const string Template = @"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// ### some integers.
+    /// </returns>
+    public IEnumerable<int> DoSomething { get; set; }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", "A sequence that contains"));
+        }
+
+        [TestCase("Some integers.", "A sequence that contains some integers.")]
+        [TestCase("The mapping information.", "A sequence that contains the mapping information.")]
+        public void Code_gets_fixed_for_generic_enumerable_(string originalPhrase, string fixedPhrase)
+        {
+            const string Template = @"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// ###
+    /// </returns>
+    public IEnumerable<int> DoSomething { get; set; }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
+        }
+
+        [TestCase("Some integers.", "A sequence that contains some integers.")]
+        [TestCase("The mapping information.", "A sequence that contains the mapping information.")]
+        public void Code_gets_fixed_for_generic_enumerable_on_same_line_(string originalPhrase, string fixedPhrase)
         {
             var originalCode = @"
 using System;
@@ -442,7 +619,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_generic_collection_with_non_primitive_type()
+        public void Code_gets_fixed_for_generic_enumerable_with_non_primitive_type()
         {
             const string Template = @"
 using System;
@@ -464,7 +641,7 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(Template.Replace("###", "Some data"), Template.Replace("###", "A collection of grouped rows that contains some data"));
+            VerifyCSharpFix(Template.Replace("###", "Some data"), Template.Replace("###", "A sequence that contains grouped rows that contains some data"));
         }
 
         [TestCase("Some integers.", "some integers.")]
