@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -25,23 +26,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string WillNeverPhraseStartUpperCase = WillNeverPhrase.ToUpperCaseAt(0);
         private static readonly string NeverPhraseStartUpperCase = NeverPhrase.ToUpperCaseAt(0);
 
-        private static readonly IDictionary<string, string> PhrasesMap = new Dictionary<string, string>
-                                                                             {
-                                                                                 { "will be", "is" },
-                                                                                 { "will also be", "is" },
-                                                                                 { "will as well be", "is" },
-                                                                                 { "will not be", "is not" },
-                                                                                 { "will not", "does not" },
-                                                                                 { "will never be", "is never" },
-                                                                                 { "will also never be", "is also never" },
-                                                                                 { "will base", "is based" },
-                                                                                 { "will all be", "all are" },
-                                                                                 { "will all", "all" },
-                                                                                 { "will always be", "is always" },
-                                                                                 { "will both be", "are both" },
-                                                                             };
+        private static readonly ConcurrentDictionary<string, string> PhrasesMap = new ConcurrentDictionary<string, string>(new[]
+                                                                                                                               {
+                                                                                                                                   new KeyValuePair<string, string>("will be", "is"),
+                                                                                                                                   new KeyValuePair<string, string>("will also be", "is"),
+                                                                                                                                   new KeyValuePair<string, string>("will as well be", "is"),
+                                                                                                                                   new KeyValuePair<string, string>("will not be", "is not"),
+                                                                                                                                   new KeyValuePair<string, string>("will not", "does not"),
+                                                                                                                                   new KeyValuePair<string, string>("will never be", "is never"),
+                                                                                                                                   new KeyValuePair<string, string>("will also never be", "is also never"),
+                                                                                                                                   new KeyValuePair<string, string>("will base", "is based"),
+                                                                                                                                   new KeyValuePair<string, string>("will all be", "all are"),
+                                                                                                                                   new KeyValuePair<string, string>("will all", "all"),
+                                                                                                                                   new KeyValuePair<string, string>("will always be", "is always"),
+                                                                                                                                   new KeyValuePair<string, string>("will both be", "are both"),
+                                                                                                                               });
 
-        private static readonly string[] PhrasesMapKeys = PhrasesMap.Keys.ToArray();
+        private static readonly string[] PhrasesMapKeys = PhrasesMap.Keys.OrderByDescending(_ => _.Length).ToArray();
 
         private static readonly string[] Phrases = PhrasesMapKeys.WithDelimiters();
 
