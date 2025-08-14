@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var phrases = GetPhrases(parameter.Name);
 
-            if (StringExtensions.EqualsAny(parameterComment.GetTextTrimmed(), phrases, StringComparison.OrdinalIgnoreCase))
+            if (parameterComment.GetTextTrimmed().EqualsAny(phrases, StringComparison.OrdinalIgnoreCase))
             {
                 return new[] { Issue(parameter.Name, parameterComment.GetContentsLocation()) };
             }

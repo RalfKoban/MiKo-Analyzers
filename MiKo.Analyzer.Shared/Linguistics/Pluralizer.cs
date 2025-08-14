@@ -83,7 +83,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         private static readonly string[] SingularOrPluralEndings = { "data", "heep", "moose", "trivia", "ircraft", "nformation", "nested" };
         private static readonly string[] SpecialPluralEndingsWithoutS = new[] { "cti", "men", "ngi", "dren", "eeth", "feet", "mena", "mice", "eople", "teria" }.Concat(SingularOrPluralEndings).ToArray();
 
-        public static bool IsSingularAndPlural(in ReadOnlySpan<char> value) => StringExtensions.EqualsAny(value, UncountableNouns, StringComparison.OrdinalIgnoreCase) || (IsPlural(value) && value.EndsWithAny(SingularOrPluralEndings, StringComparison.OrdinalIgnoreCase));
+        public static bool IsSingularAndPlural(in ReadOnlySpan<char> value) => value.EqualsAny(UncountableNouns, StringComparison.OrdinalIgnoreCase) || (IsPlural(value) && value.EndsWithAny(SingularOrPluralEndings, StringComparison.OrdinalIgnoreCase));
 
         public static bool IsPlural(in ReadOnlySpan<char> value)
         {
@@ -106,7 +106,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
                 if (CharsForTwoCharacterEndingsWithS.Contains(value[value.Length - 2]))
                 {
-                    return value.EndsWithAny(SpecialPluralEndingsWithS, StringComparison.OrdinalIgnoreCase) || StringExtensions.EqualsAny(value, UncountableNouns, StringComparison.OrdinalIgnoreCase);
+                    return value.EndsWithAny(SpecialPluralEndingsWithS, StringComparison.OrdinalIgnoreCase) || value.EqualsAny(UncountableNouns, StringComparison.OrdinalIgnoreCase);
                 }
 
                 if (value.EndsWithAny(PluralEndings, StringComparison.OrdinalIgnoreCase))
@@ -122,7 +122,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return true;
             }
 
-            return value.EndsWithAny(SpecialPluralEndingsWithoutS, StringComparison.OrdinalIgnoreCase) || StringExtensions.EqualsAny(value, UncountableNouns, StringComparison.OrdinalIgnoreCase);
+            return value.EndsWithAny(SpecialPluralEndingsWithoutS, StringComparison.OrdinalIgnoreCase) || value.EqualsAny(UncountableNouns, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>

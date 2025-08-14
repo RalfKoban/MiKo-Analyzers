@@ -4222,7 +4222,7 @@ namespace MiKoSolutions.Analyzers
             {
                 var content = syntax.Content.ToString().AsSpan().Trim();
 
-                return StringExtensions.EqualsAny(content, contents, StringComparison.OrdinalIgnoreCase);
+                return content.EqualsAny(contents, StringComparison.OrdinalIgnoreCase);
             }
 
             return false;

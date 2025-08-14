@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             StringBuilderCache.Release(builder);
 
-            if (StringExtensions.EqualsAny(firstWord, Constants.Comments.TryWords, StringComparison.OrdinalIgnoreCase))
+            if (firstWord.EqualsAny(Constants.Comments.TryWords, StringComparison.OrdinalIgnoreCase))
             {
                 problematicText = firstWord;
 
