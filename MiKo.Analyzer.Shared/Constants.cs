@@ -716,7 +716,7 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] EnumTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.ToArray(_ => _ + EnumTaskReturnTypeContinuePhraseTemplate + "the ");
 
-            internal static readonly string[] EnumerableReturnTypeStartingPhrases = new[] { EnumerableReturnTypeStartingPhrase }.Concat(CollectionReturnTypeStartingPhrases).ToArray();
+            internal static readonly string[] EnumerableReturnTypeStartingPhrases = new[] { EnumerableReturnTypeStartingPhrase, "A sequence of " }.Concat(CollectionReturnTypeStartingPhrases).ToArray();
 
             internal static readonly string[] EnumerableTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.ToArray(_ => _ + CollectionReturnTypeStartingPhraseLowerCase);
 
