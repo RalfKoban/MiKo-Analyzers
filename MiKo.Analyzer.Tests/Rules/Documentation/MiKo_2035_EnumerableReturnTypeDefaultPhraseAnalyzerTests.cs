@@ -205,6 +205,24 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_correctly_commented_Enumerable_Select_like_method_([Values("returns", "value")] string xmlTag) => No_issue_is_reported_for(@"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <" + xmlTag + @">
+    /// An <see cref=""IEnumerable{T}""/> whose elements are the result of something.
+    /// </" + xmlTag + @">
+    public IEnumerable<T> Select<T>(object o) => null;
+}
+");
+
         [Test, Combinatorial]
         public void An_issue_is_reported_for_wrong_commented_method_(
                                                                  [Values("returns", "value")] string xmlTag,
