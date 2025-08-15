@@ -166,7 +166,10 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_List_method_([Values("returns", "value")] string xmlTag, [Values("A", "An")] string startingWord)
+        public void No_issue_is_reported_for_correctly_commented_List_method_(
+                                                                          [Values("returns", "value")] string xmlTag,
+                                                                          [Values("A", "An")] string startingWord,
+                                                                          [Values("that contains", "containing")] string continuation)
             => No_issue_is_reported_for(@"
 using System;
 using System.Collections;
@@ -179,7 +182,7 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <" + xmlTag + @">
-    /// " + startingWord + @" <see cref=""List{T}"" /> that contains something.
+    /// " + startingWord + @" <see cref=""List{T}"" /> " + continuation + @" something.
     /// </" + xmlTag + @">
     public List<int> DoSomething(object o) => null;
 }
