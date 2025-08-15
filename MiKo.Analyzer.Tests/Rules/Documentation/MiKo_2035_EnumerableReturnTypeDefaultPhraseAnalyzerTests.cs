@@ -122,7 +122,10 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_Enumerable_only_method_([Values("returns", "value")] string xmlTag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_sequence_commented_Enumerable_only_method_(
+                                                                                              [Values("returns", "value")] string xmlTag,
+                                                                                              [Values("A sequence that contains", "A sequence of")] string startPhrase)
+            => No_issue_is_reported_for(@"
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -134,7 +137,7 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <" + xmlTag + @">
-    /// A sequence that contains whatever.
+    /// " + startPhrase + @" whatever.
     /// </" + xmlTag + @">
     public IEnumerable<int> DoSomething(object o) => null;
 }
