@@ -642,14 +642,19 @@ namespace MiKoSolutions.Analyzers
                                                                                       BooleanTaskReturnTypeEndingPhraseTemplate.FormatWith("<see langword=\"false\" />"),
                                                                                   };
 
-            internal static readonly string[] CollectionReturnTypeStartingPhrases =
-                                                                                    {
-                                                                                        CollectionReturnTypeStartingPhrase,
-                                                                                        "A <see cref=\"{0}\"/> that contains ",
-                                                                                        "A <see cref=\"{0}\" /> that contains ",
-                                                                                        "An <see cref=\"{0}\"/> that contains ",
-                                                                                        "An <see cref=\"{0}\" /> that contains ",
-                                                                                    };
+            internal static readonly string[] TypedCollectionReturnTypeStartingPhrases =
+                                                                                         {
+                                                                                             "A <see cref=\"{0}\"/> that contains ",
+                                                                                             "A <see cref=\"{0}\" /> that contains ",
+                                                                                             "An <see cref=\"{0}\"/> that contains ",
+                                                                                             "An <see cref=\"{0}\" /> that contains ",
+                                                                                             "A <see cref=\"{0}\"/> whose elements are the result of ",
+                                                                                             "A <see cref=\"{0}\" /> whose elements are the result of ",
+                                                                                             "An <see cref=\"{0}\"/> whose elements are the result of ",
+                                                                                             "An <see cref=\"{0}\" /> whose elements are the result of ",
+                                                                                         };
+
+            internal static readonly string[] CollectionReturnTypeStartingPhrases = new[] { CollectionReturnTypeStartingPhrase }.Concat(TypedCollectionReturnTypeStartingPhrases).ToArray();
 
             internal static readonly string[] StringReturnTypeStartingPhrase =
                                                                                {
@@ -711,15 +716,7 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] EnumTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.ToArray(_ => _ + EnumTaskReturnTypeContinuePhraseTemplate + "the ");
 
-            internal static readonly string[] EnumerableReturnTypeStartingPhrases =
-                                                                                    {
-                                                                                        EnumerableReturnTypeStartingPhrase,
-                                                                                        CollectionReturnTypeStartingPhrase,
-                                                                                        "A <see cref=\"{0}\"/> that contains ",
-                                                                                        "A <see cref=\"{0}\" /> that contains ",
-                                                                                        "An <see cref=\"{0}\"/> that contains ",
-                                                                                        "An <see cref=\"{0}\" /> that contains ",
-                                                                                    };
+            internal static readonly string[] EnumerableReturnTypeStartingPhrases = new[] { EnumerableReturnTypeStartingPhrase }.Concat(CollectionReturnTypeStartingPhrases).ToArray();
 
             internal static readonly string[] EnumerableTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.ToArray(_ => _ + CollectionReturnTypeStartingPhraseLowerCase);
 
