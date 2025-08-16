@@ -26,6 +26,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\SymbolExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\SyntaxListExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\SyntaxNodeExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\SyntaxNodeExtensions.Documentation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\SyntaxNodeExtensions.Naming.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\SyntaxNodeExtensions.Navigation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\SyntaxNodeExtensions.Spacing.cs" />
