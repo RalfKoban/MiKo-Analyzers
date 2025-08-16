@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 // ncrunch: rdi off
 // ReSharper disable once CheckNamespace
 #pragma warning disable IDE0130
-namespace Microsoft.CodeAnalysis
+namespace MiKoSolutions.Analyzers
 {
     internal static class SeparatedSyntaxListExtensions
     {
@@ -289,6 +291,8 @@ namespace Microsoft.CodeAnalysis
             return default;
         }
 
+        internal static IEnumerable<string> GetNames(this in SeparatedSyntaxList<VariableDeclaratorSyntax> value) => value.Select(_ => _.GetName());
+
         /// <summary>
         /// Determines whether the specified <see cref="SeparatedSyntaxList{T}"/> contains no elements.
         /// </summary>
@@ -400,6 +404,32 @@ namespace Microsoft.CodeAnalysis
             }
 
             return default;
+        }
+
+        internal static IReadOnlyList<TResult> OfKind<TResult, TSyntaxNode>(this in SeparatedSyntaxList<TSyntaxNode> source, in SyntaxKind kind) where TSyntaxNode : SyntaxNode
+                                                                                                                                                 where TResult : TSyntaxNode
+        {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
+            if (sourceCount is 0)
+            {
+                return Array.Empty<TResult>();
+            }
+
+            var results = new List<TResult>();
+
+            for (var index = 0; index < sourceCount; index++)
+            {
+                var item = source[index];
+
+                if (item.IsKind(kind))
+                {
+                    results.Add((TResult)item);
+                }
+            }
+
+            return results;
         }
 
         /// <summary>

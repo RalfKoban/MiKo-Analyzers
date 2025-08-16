@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Text;
 
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 // ncrunch: rdi off
 // ReSharper disable once CheckNamespace
 #pragma warning disable IDE0130
-namespace Microsoft.CodeAnalysis
+namespace MiKoSolutions.Analyzers
 {
-    public static class SyntaxTokenListExtensions
+    internal static class SyntaxTokenListExtensions
     {
         /// <summary>
         /// Determines whether all elements in the <see cref="SyntaxTokenList"/> satisfy the specified condition.
@@ -72,6 +75,8 @@ namespace Microsoft.CodeAnalysis
 
             return false;
         }
+
+        internal static XmlTextSyntax AsXmlText(this in SyntaxTokenList textTokens) => SyntaxFactory.XmlText(textTokens);
 
         /// <summary>
         /// Concatenates two <see cref="SyntaxTokenList"/> sequences into a single sequence.
@@ -199,32 +204,28 @@ namespace Microsoft.CodeAnalysis
             return default;
         }
 
-        /// <summary>
-        /// Determines whether the specified <see cref="SyntaxTokenList"/> contains no elements.
-        /// </summary>
-        /// <param name="source">
-        /// The list of syntax tokens to evaluate.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the list contains no elements; otherwise, <see langword="false"/>.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool None(this in SyntaxTokenList source) => source.Count is 0;
+        internal static StringBuilder GetTextWithoutTrivia(this in SyntaxTokenList textTokens, StringBuilder builder)
+        {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var textTokensCount = textTokens.Count;
 
-        /// <summary>
-        /// Determines whether the specified <see cref="SyntaxTokenList"/> contains no elements of the specified kind.
-        /// </summary>
-        /// <param name="source">
-        /// The list of syntax tokens to evaluate.
-        /// </param>
-        /// <param name="kind">
-        /// One of the enumeration members that specifies the kind of syntax token to check for.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the list contains no elements of the specified kind; otherwise, <see langword="false"/>.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool None(this in SyntaxTokenList source, in SyntaxKind kind) => source.Any(kind) is false;
+            if (textTokensCount > 0)
+            {
+                for (var index = 0; index < textTokensCount; index++)
+                {
+                    var token = textTokens[index];
+
+                    if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                    {
+                        continue;
+                    }
+
+                    builder.Append(token.ValueText);
+                }
+            }
+
+            return builder;
+        }
 
         /// <summary>
         /// Finds the last element in the <see cref="SyntaxTokenList"/> that satisfies the specified condition.
@@ -282,6 +283,33 @@ namespace Microsoft.CodeAnalysis
 
             return default;
         }
+
+        /// <summary>
+        /// Determines whether the specified <see cref="SyntaxTokenList"/> contains no elements.
+        /// </summary>
+        /// <param name="source">
+        /// The list of syntax tokens to evaluate.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the list contains no elements; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool None(this in SyntaxTokenList source) => source.Count is 0;
+
+        /// <summary>
+        /// Determines whether the specified <see cref="SyntaxTokenList"/> contains no elements of the specified kind.
+        /// </summary>
+        /// <param name="source">
+        /// The list of syntax tokens to evaluate.
+        /// </param>
+        /// <param name="kind">
+        /// One of the enumeration members that specifies the kind of syntax token to check for.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the list contains no elements of the specified kind; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool None(this in SyntaxTokenList source, in SyntaxKind kind) => source.Any(kind) is false;
 
         /// <summary>
         /// Projects each element of a <see cref="SyntaxTokenList"/> into a new form.

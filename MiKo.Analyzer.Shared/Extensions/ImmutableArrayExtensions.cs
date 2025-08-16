@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
 
+using Microsoft.CodeAnalysis;
+
 // ncrunch: rdi off
 // ReSharper disable once CheckNamespace
 #pragma warning disable IDE0130
-namespace Microsoft.CodeAnalysis
+namespace MiKoSolutions.Analyzers
 {
-    public static class ImmutableArrayExtensions
+    internal static class ImmutableArrayExtensions
     {
         /// <summary>
         /// Concatenates two <see cref="ImmutableArray{T}"/> sequences into a single sequence.
