@@ -1,14 +1,32 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
+
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 // ncrunch: rdi off
 // ReSharper disable once CheckNamespace
 #pragma warning disable IDE0130
-namespace System.Linq
+namespace MiKoSolutions.Analyzers
 {
     internal static class EnumerableExtensions
     {
+        /// <summary>
+        /// Converts a sequence of <see cref="SyntaxToken"/> instances into an <see cref="XmlTextSyntax"/> node.
+        /// </summary>
+        /// <param name="textTokens">
+        /// The sequence of <see cref="SyntaxToken"/> objects representing XML text content.
+        /// </param>
+        /// <returns>
+        /// An <see cref="XmlTextSyntax"/> node that contains the provided tokens as XML text.
+        /// </returns>
+        internal static XmlTextSyntax AsXmlText(this IEnumerable<SyntaxToken> textTokens) => textTokens.ToTokenList().AsXmlText();
+
         /// <summary>
         /// Removes the specified values from the <see cref="HashSet{T}"/> and returns the modified set.
         /// </summary>
@@ -151,6 +169,73 @@ namespace System.Linq
         internal static T Find<T>(this T[] value, Predicate<T> match) => value.Length > 0 ? Array.Find(value, match) : default;
 
         /// <summary>
+        /// Concatenates the text content of the specified <see cref="SyntaxToken"/> list, removes new lines and multiple white spaces,
+        /// trims the result, and returns it as a single string.
+        /// </summary>
+        /// <param name="values">
+        /// The list of <see cref="SyntaxToken"/> instances whose text content is to be concatenated and trimmed.
+        /// </param>
+        /// <returns>
+        /// A trimmed string containing the concatenated text of all tokens, with new lines and multiple white spaces removed;
+        /// or the <see cref="string.Empty"/> string ("") if the list is empty.
+        /// </returns>
+        internal static string GetTextTrimmedWithParaTags(this IReadOnlyList<SyntaxToken> values)
+        {
+            if (values.Count is 0)
+            {
+                return string.Empty;
+            }
+
+            var builder = StringBuilderCache.Acquire();
+
+            values.GetTextWithoutTrivia(builder);
+
+            var trimmed = builder.WithoutNewLines()
+                                 .WithoutMultipleWhiteSpaces()
+                                 .Trim();
+
+            StringBuilderCache.Release(builder);
+
+            return trimmed;
+        }
+
+        /// <summary>
+        /// Appends the text content of each syntax token in the specified list to the provided <see cref="StringBuilder"/>,
+        /// excluding those of kind <see cref="SyntaxKind.XmlTextLiteralNewLineToken"/>.
+        /// </summary>
+        /// <param name="textTokens">
+        /// The list of <see cref="SyntaxToken"/> instances whose text content is to be appended.
+        /// </param>
+        /// <param name="builder">
+        /// The <see cref="StringBuilder"/> to which the text content will be appended.
+        /// </param>
+        /// <returns>
+        /// The <see cref="StringBuilder"/> instance with the appended text content.
+        /// </returns>
+        internal static StringBuilder GetTextWithoutTrivia(this IReadOnlyList<SyntaxToken> textTokens, StringBuilder builder)
+        {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var textTokensCount = textTokens.Count;
+
+            if (textTokensCount > 0)
+            {
+                for (var index = 0; index < textTokensCount; index++)
+                {
+                    var token = textTokens[index];
+
+                    if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                    {
+                        continue;
+                    }
+
+                    builder.Append(token.ValueText);
+                }
+            }
+
+            return builder;
+        }
+
+        /// <summary>
         /// Finds the index of the first occurrence of the specified value in the array.
         /// </summary>
         /// <typeparam name="T">
@@ -163,7 +248,7 @@ namespace System.Linq
         /// The value to locate in the array.
         /// </param>
         /// <returns>
-        /// The zero-based index of the first occurrence of the value, or -1 if the value is not found.
+        /// The zero-based index of the first occurrence of the value, or <c>-1</c> if the value is not found.
         /// </returns>
         internal static int IndexOf<T>(this T[] source, T value) => source.Length is 0 ? -1 : Array.IndexOf(source, value);
 
@@ -180,7 +265,7 @@ namespace System.Linq
         /// The condition to test each element against.
         /// </param>
         /// <returns>
-        /// The zero-based index of the first element that satisfies the condition, or -1 if no such element is found.
+        /// The zero-based index of the first element that satisfies the condition, or <c>-1</c> if no such element is found.
         /// </returns>
         internal static int IndexOf<T>(this T[] source, Func<T, bool> predicate) => source.Length is 0 ? -1 : source.IndexOf(new Predicate<T>(predicate));
 
@@ -197,7 +282,7 @@ namespace System.Linq
         /// The condition to test each element against.
         /// </param>
         /// <returns>
-        /// The zero-based index of the first element that satisfies the condition, or -1 if no such element is found.
+        /// The zero-based index of the first element that satisfies the condition, or <c>-1</c> if no such element is found.
         /// </returns>
         internal static int IndexOf<T>(this T[] source, Predicate<T> predicate) => source.Length is 0 ? -1 : Array.FindIndex(source, predicate);
 
@@ -214,7 +299,7 @@ namespace System.Linq
         /// The condition to test each element against.
         /// </param>
         /// <returns>
-        /// The zero-based index of the first element that satisfies the condition, or -1 if no such element is found.
+        /// The zero-based index of the first element that satisfies the condition, or <c>-1</c> if no such element is found.
         /// </returns>
         internal static int IndexOf<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
@@ -253,6 +338,51 @@ namespace System.Linq
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsEmptyArray<T>(this IEnumerable<T> source) => source is T[] array && array.Length is 0;
+
+        /// <summary>
+        /// Determines whether the specified sequence contains more elements than the specified count.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of elements in the sequence.
+        /// </typeparam>
+        /// <param name="source">
+        /// The sequence to evaluate.
+        /// </param>
+        /// <param name="count">
+        /// The number of elements to compare against.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the sequence contains more elements than the specified count; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool MoreThan<T>(this IEnumerable<T> source, in int count)
+        {
+            switch (source)
+            {
+                case null:
+                    throw new ArgumentNullException(nameof(source));
+
+                case ICollection<T> c:
+                    return c.Count > count;
+
+                case IReadOnlyCollection<T> c:
+                    return c.Count > count;
+
+                default:
+
+                    using (var enumerator = source.GetEnumerator())
+                    {
+                        for (var index = 0; index <= count; index++)
+                        {
+                            if (enumerator.MoveNext() is false)
+                            {
+                                return false;
+                            }
+                        }
+
+                        return true;
+                    }
+            }
+        }
 
         /// <summary>
         /// Determines whether the specified sequence contains no elements.
@@ -369,47 +499,82 @@ namespace System.Linq
         }
 
         /// <summary>
-        /// Determines whether the specified sequence contains more elements than the specified count.
+        /// Returns a read-only list containing all elements of type <typeparamref name="T"/> from the source list
+        /// that have the specified <see cref="SyntaxKind"/>.
         /// </summary>
         /// <typeparam name="T">
-        /// The type of elements in the sequence.
+        /// The type of elements in the list, constrained to <see cref="SyntaxNode"/>.
         /// </typeparam>
         /// <param name="source">
-        /// The sequence to evaluate.
+        /// The read-only list to filter.
         /// </param>
-        /// <param name="count">
-        /// The number of elements to compare against.
+        /// <param name="kind">
+        /// The <see cref="SyntaxKind"/> to match.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the sequence contains more elements than the specified count; otherwise, <see langword="false"/>.
+        /// A collection of elements whose <see cref="SyntaxKind"/> matches the specified kind,
+        /// or an empty array if no elements match.
         /// </returns>
-        internal static bool MoreThan<T>(this IEnumerable<T> source, in int count)
+        internal static IReadOnlyList<T> OfKind<T>(this IReadOnlyList<T> source, in SyntaxKind kind) where T : SyntaxNode
         {
-            switch (source)
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
+            if (sourceCount is 0)
             {
-                case null:
-                    throw new ArgumentNullException(nameof(source));
+                return Array.Empty<T>();
+            }
 
-                case ICollection<T> c:
-                    return c.Count > count;
+            var results = new List<T>();
 
-                case IReadOnlyCollection<T> c:
-                    return c.Count > count;
+            for (var index = 0; index < sourceCount; index++)
+            {
+                var item = source[index];
 
-                default:
+                if (item.IsKind(kind))
+                {
+                    results.Add(item);
+                }
+            }
 
-                    using (var enumerator = source.GetEnumerator())
+            return results;
+        }
+
+        /// <summary>
+        /// Returns a sequence containing all elements of type <typeparamref name="T"/> from the source sequence
+        /// that have the specified <see cref="SyntaxKind"/>.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of elements in the sequence, constrained to <see cref="SyntaxNode"/>.
+        /// </typeparam>
+        /// <param name="source">
+        /// The sequence to filter.
+        /// </param>
+        /// <param name="kind">
+        /// The <see cref="SyntaxKind"/> to match.
+        /// </param>
+        /// <returns>
+        /// A sequence of elements whose <see cref="SyntaxNode.IsKind(SyntaxKind)"/> matches the specified kind.
+        /// </returns>
+        internal static IEnumerable<T> OfKind<T>(this IEnumerable<T> source, in SyntaxKind kind) where T : SyntaxNode
+        {
+            if (source is IReadOnlyList<T> list)
+            {
+                return list.OfKind(kind);
+            }
+
+            return OfKindLocal(kind);
+
+            IEnumerable<T> OfKindLocal(SyntaxKind itemKind)
+            {
+                // ReSharper disable once LoopCanBePartlyConvertedToQuery
+                foreach (var item in source)
+                {
+                    if (item.IsKind(itemKind))
                     {
-                        for (var index = 0; index <= count; index++)
-                        {
-                            if (enumerator.MoveNext() is false)
-                            {
-                                return false;
-                            }
-                        }
-
-                        return true;
+                        yield return item;
                     }
+                }
             }
         }
 
@@ -528,7 +693,7 @@ namespace System.Linq
             switch (source)
             {
                 case TSource[] array: return ToArray(array, keySelector);
-                case ImmutableArray<TSource> array: return Microsoft.CodeAnalysis.ImmutableArrayExtensions.ToArray(array, keySelector);
+                case ImmutableArray<TSource> array: return array.ToArray(keySelector);
                 case IReadOnlyList<TSource> list: return ToArray(list, keySelector);
                 case IReadOnlyCollection<TSource> collection: return ToArray(collection, keySelector);
                 default:
@@ -622,7 +787,7 @@ namespace System.Linq
             {
                 case TSource[] array: return array.ToHashSet(selector);
                 case List<TSource> list: return list.ToHashSet(selector);
-                case ImmutableArray<TSource> array: return Microsoft.CodeAnalysis.ImmutableArrayExtensions.ToHashSet(array, selector);
+                case ImmutableArray<TSource> array: return array.ToHashSet(selector);
             }
 
             var result = new HashSet<TResult>();

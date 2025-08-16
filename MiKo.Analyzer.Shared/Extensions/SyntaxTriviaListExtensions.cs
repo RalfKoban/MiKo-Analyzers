@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
+using Microsoft.CodeAnalysis;
+
 // ncrunch: rdi off
 // ReSharper disable once CheckNamespace
 #pragma warning disable IDE0130
-namespace Microsoft.CodeAnalysis
+namespace MiKoSolutions.Analyzers
 {
-    public static class SyntaxTriviaListExtensions
+    internal static class SyntaxTriviaListExtensions
     {
         /// <summary>
         /// Determines whether all elements in the <see cref="SyntaxTriviaList"/> satisfy the specified condition.

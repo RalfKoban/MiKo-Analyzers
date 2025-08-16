@@ -2,14 +2,18 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+
+using MiKoSolutions.Analyzers.Linguistics;
 
 // ncrunch: rdi off
 // ReSharper disable once CheckNamespace
 #pragma warning disable IDE0130
-namespace Microsoft.CodeAnalysis
+namespace MiKoSolutions.Analyzers
 {
-    public static class SyntaxListExtensions
+    internal static class SyntaxListExtensions
     {
         /// <summary>
         /// Determines whether all elements in the <see cref="SyntaxList{T}"/> satisfy the specified condition.
@@ -191,56 +195,6 @@ namespace Microsoft.CodeAnalysis
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="SyntaxList{T}"/> contains no elements.
-        /// </summary>
-        /// <typeparam name="T">
-        /// The type of syntax nodes in the list.
-        /// </typeparam>
-        /// <param name="source">
-        /// The list of syntax nodes to evaluate.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the list contains no elements; otherwise, <see langword="false"/>.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool None<T>(this in SyntaxList<T> source) where T : SyntaxNode => source.Count is 0;
-
-        /// <summary>
-        /// Determines whether the specified <see cref="SyntaxList{T}"/> contains no elements of the specified kind.
-        /// </summary>
-        /// <typeparam name="T">
-        /// The type of syntax nodes in the list.
-        /// </typeparam>
-        /// <param name="source">
-        /// The list of syntax nodes to evaluate.
-        /// </param>
-        /// <param name="kind">
-        /// One of the enumeration members that specifies the kind of syntax node to check for.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the list contains no elements of the specified kind; otherwise, <see langword="false"/>.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool None<T>(this in SyntaxList<T> source, in SyntaxKind kind) where T : SyntaxNode => source.IndexOf(kind) is -1;
-
-        /// <summary>
-        /// Determines whether the specified <see cref="SyntaxList{T}"/> contains no elements that satisfy the specified condition.
-        /// </summary>
-        /// <typeparam name="T">
-        /// The type of syntax nodes in the list.
-        /// </typeparam>
-        /// <param name="source">
-        /// The list of syntax nodes to evaluate.
-        /// </param>
-        /// <param name="predicate">
-        /// The condition to test each element against.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if no elements satisfy the condition; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool None<T>(this in SyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode => source.All(_ => predicate(_) is false);
-
-        /// <summary>
         /// Finds the last element in the <see cref="SyntaxList{T}"/> that satisfies the specified condition.
         /// </summary>
         /// <typeparam name="T">
@@ -301,6 +255,117 @@ namespace Microsoft.CodeAnalysis
             }
 
             return default;
+        }
+
+        /// <summary>
+        /// Determines whether the specified <see cref="SyntaxList{T}"/> contains no elements.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of syntax nodes in the list.
+        /// </typeparam>
+        /// <param name="source">
+        /// The list of syntax nodes to evaluate.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the list contains no elements; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool None<T>(this in SyntaxList<T> source) where T : SyntaxNode => source.Count is 0;
+
+        /// <summary>
+        /// Determines whether the specified <see cref="SyntaxList{T}"/> contains no elements of the specified kind.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of syntax nodes in the list.
+        /// </typeparam>
+        /// <param name="source">
+        /// The list of syntax nodes to evaluate.
+        /// </param>
+        /// <param name="kind">
+        /// One of the enumeration members that specifies the kind of syntax node to check for.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the list contains no elements of the specified kind; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool None<T>(this in SyntaxList<T> source, in SyntaxKind kind) where T : SyntaxNode => source.IndexOf(kind) is -1;
+
+        /// <summary>
+        /// Determines whether the specified <see cref="SyntaxList{T}"/> contains no elements that satisfy the specified condition.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of syntax nodes in the list.
+        /// </typeparam>
+        /// <param name="source">
+        /// The list of syntax nodes to evaluate.
+        /// </param>
+        /// <param name="predicate">
+        /// The condition to test each element against.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if no elements satisfy the condition; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool None<T>(this in SyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode => source.All(_ => predicate(_) is false);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static IReadOnlyList<TResult> OfType<TResult>(this in SyntaxList<XmlNodeSyntax> source) where TResult : XmlNodeSyntax => source.OfType<XmlNodeSyntax, TResult>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static IReadOnlyList<TResult> OfType<TResult>(this in SyntaxList<XmlAttributeSyntax> source) where TResult : XmlAttributeSyntax => source.OfType<XmlAttributeSyntax, TResult>();
+
+        internal static IReadOnlyList<TResult> OfType<T, TResult>(this in SyntaxList<T> source) where T : SyntaxNode
+                                                                                                where TResult : T
+        {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
+            if (sourceCount is 0)
+            {
+                return Array.Empty<TResult>();
+            }
+
+            List<TResult> results = null;
+
+            for (var index = 0; index < sourceCount; index++)
+            {
+                if (source[index] is TResult result)
+                {
+                    if (results is null)
+                    {
+                        results = new List<TResult>(1);
+                    }
+
+                    results.Add(result);
+                }
+            }
+
+            return results ?? (IReadOnlyList<TResult>)Array.Empty<TResult>();
+        }
+
+        internal static SyntaxList<XmlNodeSyntax> ReplaceText(this in SyntaxList<XmlNodeSyntax> source, string phrase, string replacement) => source.ReplaceText(new[] { phrase }, replacement);
+
+        internal static SyntaxList<XmlNodeSyntax> ReplaceText(this in SyntaxList<XmlNodeSyntax> source, in ReadOnlySpan<string> phrases, string replacement)
+        {
+            var sourceCount = source.Count;
+
+            if (sourceCount is 0)
+            {
+                return source;
+            }
+
+            var result = source.ToArray();
+
+            for (var index = 0; index < sourceCount; index++)
+            {
+                var value = result[index];
+
+                if (value is XmlTextSyntax text)
+                {
+                    result[index] = text.ReplaceText(phrases, replacement);
+                }
+            }
+
+            return result.ToSyntaxList();
         }
 
         /// <summary>
@@ -598,6 +663,207 @@ namespace Microsoft.CodeAnalysis
                     }
                 }
             }
+        }
+
+        internal static SyntaxList<T> WithIndentation<T>(this in SyntaxList<T> values) where T : SyntaxNode
+        {
+            var value = values[0];
+
+            return values.Replace(value, value.WithIndentation());
+        }
+
+        internal static SyntaxList<XmlNodeSyntax> WithLeadingXmlComment(this in SyntaxList<XmlNodeSyntax> values)
+        {
+            var value = values[0];
+
+            return values.Replace(value, value.WithoutLeadingTrivia().WithLeadingXmlComment());
+        }
+
+        internal static SyntaxList<XmlNodeSyntax> WithoutFirstXmlNewLine(this in SyntaxList<XmlNodeSyntax> values)
+        {
+            if (values.FirstOrDefault() is XmlTextSyntax text)
+            {
+                var newText = text.WithoutFirstXmlNewLine();
+
+                return newText.TextTokens.Count != 0
+                       ? values.Replace(text, newText)
+                       : values.Remove(text);
+            }
+
+            return values;
+        }
+
+        internal static SyntaxList<XmlNodeSyntax> WithoutLeadingTrivia(this in SyntaxList<XmlNodeSyntax> values)
+        {
+            var value = values[0];
+
+            return values.Replace(value, value.WithoutLeadingTrivia());
+        }
+
+        internal static SyntaxList<XmlNodeSyntax> WithoutLeadingXmlComment(this in SyntaxList<XmlNodeSyntax> value)
+        {
+            if (value.FirstOrDefault() is XmlTextSyntax text)
+            {
+                var replacement = text.WithoutLeadingXmlComment();
+
+                // ensure that we have some text tokens
+                if (replacement.TextTokens.Count > 0)
+                {
+                    return value.Replace(text, replacement.WithoutLeadingTrivia());
+                }
+
+                // remove text as no tokens remain
+                return value.Remove(text);
+            }
+
+            return value;
+        }
+
+        internal static SyntaxList<XmlNodeSyntax> WithoutText(this in SyntaxList<XmlNodeSyntax> values, string text)
+        {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var valuesCount = values.Count;
+
+            if (valuesCount is 0)
+            {
+                return values;
+            }
+
+            var contents = values.ToList();
+
+            for (var index = 0; index < valuesCount; index++)
+            {
+                if (values[index] is XmlTextSyntax s)
+                {
+                    var originalTextTokens = s.TextTokens;
+
+                    // keep in local variable to avoid multiple requests (see Roslyn implementation)
+                    var originalTextTokensCount = originalTextTokens.Count;
+
+                    if (originalTextTokensCount is 0)
+                    {
+                        continue;
+                    }
+
+                    var textTokens = originalTextTokens.ToList();
+
+                    var modified = false;
+
+                    for (var i = 0; i < originalTextTokensCount; i++)
+                    {
+                        var token = originalTextTokens[i];
+
+                        if (token.IsKind(SyntaxKind.XmlTextLiteralToken) && token.Text.Contains(text))
+                        {
+                            // do not trim the end as we want to have a space before <param> or other tags
+                            var modifiedText = token.Text
+                                                    .AsCachedBuilder()
+                                                    .Without(text)
+                                                    .WithoutMultipleWhiteSpaces()
+                                                    .ToStringAndRelease();
+
+                            if (modifiedText.IsNullOrWhiteSpace())
+                            {
+                                textTokens.Remove(token);
+
+                                if (i > 0)
+                                {
+                                    textTokens.Remove(originalTextTokens[i - 1]);
+                                }
+                            }
+                            else
+                            {
+                                textTokens[i] = token.WithText(modifiedText);
+                            }
+
+                            modified = true;
+                        }
+                    }
+
+                    if (modified)
+                    {
+                        contents[index] = textTokens.AsXmlText();
+                    }
+                }
+            }
+
+            return contents.ToSyntaxList();
+        }
+
+        internal static SyntaxList<XmlNodeSyntax> WithoutText(this in SyntaxList<XmlNodeSyntax> values, in ReadOnlySpan<string> texts)
+        {
+            var length = texts.Length;
+
+            if (length <= 0)
+            {
+                return values;
+            }
+
+            var result = values;
+
+            for (var index = 0; index < length; index++)
+            {
+                result = result.WithoutText(texts[index]);
+            }
+
+            return result;
+        }
+
+        internal static SyntaxList<XmlNodeSyntax> WithoutTrailingXmlComment(this in SyntaxList<XmlNodeSyntax> value)
+        {
+            if (value.LastOrDefault() is XmlTextSyntax text)
+            {
+                var replacement = text.WithoutTrailingXmlComment();
+
+                // ensure that we have some text tokens
+                if (replacement.TextTokens.Count > 0)
+                {
+                    return value.Replace(text, replacement);
+                }
+
+                // remove text as no tokens remain
+                return value.Remove(text);
+            }
+
+            return value;
+        }
+
+        internal static SyntaxList<XmlNodeSyntax> WithoutStartText(this in SyntaxList<XmlNodeSyntax> values, in ReadOnlySpan<string> startTexts)
+        {
+            if (values.Count > 0 && values[0] is XmlTextSyntax textSyntax)
+            {
+                return values.Replace(textSyntax, textSyntax.WithoutStartText(startTexts));
+            }
+
+            return values;
+        }
+
+        internal static SyntaxList<XmlNodeSyntax> WithStartText(this in SyntaxList<XmlNodeSyntax> values, string startText, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.StartLowerCase)
+        {
+            if (values.Count > 0)
+            {
+                return values[0] is XmlTextSyntax textSyntax
+                       ? values.Replace(textSyntax, textSyntax.WithStartText(startText, firstWordAdjustment))
+                       : values.Insert(0, startText.AsXmlText());
+            }
+
+            return startText.AsXmlText().ToSyntaxList<XmlNodeSyntax>();
+        }
+
+        internal static SyntaxList<XmlNodeSyntax> WithTrailingXmlComment(this in SyntaxList<XmlNodeSyntax> values) => values.Replace(values.Last(), values.Last().WithoutTrailingTrivia().WithTrailingXmlComment());
+
+        internal static XmlCrefAttributeSyntax GetCref(this in SyntaxList<XmlAttributeSyntax> value)
+        {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            for (int index = 0, count = value.Count; index < count; index++)
+            {
+                if (value[index] is XmlCrefAttributeSyntax a)
+                {
+                    return a;
+                }
+            }
+
+            return default;
         }
     }
 }
