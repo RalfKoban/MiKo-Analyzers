@@ -13,6 +13,9 @@ using Microsoft.CodeAnalysis.Diagnostics;
 #pragma warning disable CA1506
 namespace MiKoSolutions.Analyzers
 {
+    /// <summary>
+    /// Provides extensions for <see cref="SyntaxNode"/>s that focus on navigation.
+    /// </summary>
     internal static partial class SyntaxNodeExtensions
     {
         private static readonly Func<SyntaxNode, bool> AlwaysDescendIntoChildren = _ => true;
