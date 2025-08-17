@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
-using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -68,7 +67,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         var isPlural = Pluralizer.IsPlural(unsuffixedSpan) && Pluralizer.IsSingularAndPlural(unsuffixedSpan) is false;
 
                         if (isPlural
-                         || StringExtensions.EqualsAny(unsuffixed, WordsThatPreventArticle, StringComparison.OrdinalIgnoreCase)
+                         || unsuffixed.EqualsAny(WordsThatPreventArticle, StringComparison.OrdinalIgnoreCase)
                          || Verbalizer.IsGerundVerb(unsuffixedSpan)
                          || Verbalizer.IsAdjectiveOrAdverb(unsuffixedSpan)
                          || Verbalizer.IsPastTense(unsuffixedSpan))

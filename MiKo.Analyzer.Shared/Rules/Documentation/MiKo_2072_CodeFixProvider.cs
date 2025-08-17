@@ -1,6 +1,4 @@
-﻿using System;
-using System.Composition;
-using System.Linq;
+﻿using System.Composition;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;

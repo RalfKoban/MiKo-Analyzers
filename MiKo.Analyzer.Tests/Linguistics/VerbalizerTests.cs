@@ -1,6 +1,4 @@
-﻿using System;
-
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 //// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Linguistics

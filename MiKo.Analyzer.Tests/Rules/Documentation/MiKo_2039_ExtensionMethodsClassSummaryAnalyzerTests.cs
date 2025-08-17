@@ -70,11 +70,11 @@ public static class TestMeExtensions
         [TestCase("Contains extensions for", "")]
         [TestCase("Contains extensions to", "")]
         [TestCase("Doing", " doing")]
-        [TestCase("Extension mehtods used in", "")] // typo by intent
+        [TestCase("Extension mehtods used in", "")] // typo by intent because we want to test that as well as we want to test that as well
         [TestCase("Extension methods for", "")]
         [TestCase("Extension methods to", "")]
         [TestCase("Extension methods used in", "")]
-        [TestCase("Extension-mehtods for", "")] // typo by intent
+        [TestCase("Extension-mehtods for", "")] // typo by intent because we want to test that as well
         [TestCase("Extension-methods for", "")]
         [TestCase("Extensions for", "")]
         [TestCase("Extensions to", "")]
@@ -91,11 +91,11 @@ public static class TestMeExtensions
         [TestCase("Offers the extension to", "")]
         [TestCase("Provides different extension methods for", "")]
         [TestCase("Provides different extension methods to", "")]
-        [TestCase("Provides extension mehtods for", "")] // typo by intent
-        [TestCase("Provides extension mehtods to", "")] // typo by intent
+        [TestCase("Provides extension mehtods for", "")] // typo by intent because we want to test that as well
+        [TestCase("Provides extension mehtods to", "")] // typo by intent because we want to test that as well
         [TestCase("Provides extension methods for", "")]
         [TestCase("Provides extension methods to", "")]
-        [TestCase("Provides extension-mehtods for", "")] // typo by intent
+        [TestCase("Provides extension-mehtods for", "")] // typo by intent because we want to test that as well
         [TestCase("Provides extension-methods for", "")]
         [TestCase("Provides extensions for", "")]
         [TestCase("Provides extensions to", "")]
