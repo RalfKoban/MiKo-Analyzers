@@ -1726,7 +1726,7 @@ namespace MiKoSolutions.Analyzers
                     }
                 }
 
-                if (StringExtensions.EqualsAny(field.Name, fieldNames, StringComparison.OrdinalIgnoreCase))
+                if (field.Name.EqualsAny(fieldNames, StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
                 }

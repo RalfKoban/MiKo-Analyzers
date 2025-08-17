@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -73,7 +72,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var phrases = GetSummaryPhrases(symbol);
 
-            if (summaries.None(_ => StringExtensions.EqualsAny(_.AsSpan().Trim(), phrases, StringComparison.OrdinalIgnoreCase)))
+            if (summaries.None(_ => _.AsSpan().Trim().EqualsAny(phrases, StringComparison.OrdinalIgnoreCase)))
             {
                 return new[] { Issue(symbol, Constants.XmlTag.Summary, phrases[0]) };
             }
@@ -86,7 +85,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var phrases = GetReturnsPhrases(symbol);
             var comments = CommentExtensions.GetReturns(commentXml);
 
-            if (comments.None(_ => StringExtensions.EqualsAny(_.AsSpan().Trim(), phrases, StringComparison.OrdinalIgnoreCase)))
+            if (comments.None(_ => _.AsSpan().Trim().EqualsAny(phrases, StringComparison.OrdinalIgnoreCase)))
             {
                 return new[] { Issue(symbol, Constants.XmlTag.Returns, phrases[0]) };
             }

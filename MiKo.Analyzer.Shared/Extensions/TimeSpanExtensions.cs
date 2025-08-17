@@ -1,10 +1,10 @@
-﻿// ncrunch: rdi off
-// ReSharper disable once CheckNamespace
-
+﻿using System;
 using System.Runtime.CompilerServices;
 
+// ncrunch: rdi off
+// ReSharper disable once CheckNamespace
 #pragma warning disable IDE0130
-namespace System
+namespace MiKoSolutions.Analyzers
 {
     internal static class TimeSpanExtensions
     {

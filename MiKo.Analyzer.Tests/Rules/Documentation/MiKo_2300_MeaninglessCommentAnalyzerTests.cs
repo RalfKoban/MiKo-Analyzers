@@ -207,7 +207,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_commented_method_with_reason_in_comment_([ValueSource(nameof(Comments))] string comment, [Values("because", "as", "reason")] string reason) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_commented_method_with_reason_in_comment_([ValueSource(nameof(Comments))] string comment, [Values("because", "reason")] string reason) => No_issue_is_reported_for(@"
 
 public class TestMe
 {

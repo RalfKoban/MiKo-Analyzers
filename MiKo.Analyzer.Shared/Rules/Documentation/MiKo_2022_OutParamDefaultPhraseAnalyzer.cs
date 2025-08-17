@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var phrases = GetStartingPhrase(parameter);
 
-            return AnalyzePlainTextStartingPhrase(parameter, parameterComment, phrases);
+            return AnalyzePlainTextStartingPhrase(parameter, parameterComment, comment, phrases);
         }
 
         protected override Location GetIssueLocation(XmlElementSyntax parameterComment)
