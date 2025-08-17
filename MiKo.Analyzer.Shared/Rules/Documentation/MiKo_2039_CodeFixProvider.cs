@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
@@ -63,10 +62,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                   "extension methods",
                                   "extension-method",
                                   "extension-methods",
-                                  "extension mehtod", // typo by intent
-                                  "extension-mehtod", // typo by intent
-                                  "extension mehtods", // typo by intent
-                                  "extension-mehtods", // typo by intent
+                                  "extension mehtod", // typo by intent because we want to fix that as well
+                                  "extension-mehtod", // typo by intent because we want to fix that as well
+                                  "extension mehtods", // typo by intent because we want to fix that as well
+                                  "extension-mehtods", // typo by intent because we want to fix that as well
                               };
 
             var ends = new[]
