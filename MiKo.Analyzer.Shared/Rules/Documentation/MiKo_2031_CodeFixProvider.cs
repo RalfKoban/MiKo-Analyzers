@@ -118,7 +118,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var preparedComment = ReplaceText(comment, startText, TextParts, string.Empty);
                 var preparedCommentContent = preparedComment.Content;
 
-                if (preparedCommentContent.Count == 1 && preparedCommentContent[0] is XmlTextSyntax t && t.GetTextTrimmed().IsNullOrWhiteSpace())
+                if (preparedCommentContent.Count is 1 && preparedCommentContent[0] is XmlTextSyntax t && t.GetTextTrimmed().IsNullOrWhiteSpace())
                 {
                     // nothing left, so we have to add a TODO
                     return preparedComment.WithContent(XmlText(Constants.TODO));

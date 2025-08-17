@@ -1,6 +1,4 @@
-﻿using System;
-
-using BenchmarkDotNet.Attributes;
+﻿using BenchmarkDotNet.Attributes;
 
 namespace BenchmarkConsole
 {

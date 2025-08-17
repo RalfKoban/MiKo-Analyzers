@@ -1,5 +1,4 @@
-﻿using System;
-using System.Composition;
+﻿using System.Composition;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -25,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return syntax;
             }
 
-            var fieldName = fieldDeclaration.Declaration.Variables.First().Identifier.ValueText;
+            var fieldName = fieldDeclaration.Declaration.Variables[0].Identifier.ValueText;
             var name = fieldName.WithoutSuffix(Constants.RoutedEventFieldSuffix);
 
             var type = SyntaxFactory.ParseName(name);

@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 // ncrunch: rdi off
 // ReSharper disable once CheckNamespace
 #pragma warning disable IDE0130
-namespace System
+namespace MiKoSolutions.Analyzers
 {
     internal static class StringSplitExtensions
     {

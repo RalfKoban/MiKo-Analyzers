@@ -1,7 +1,8 @@
-﻿using System.Buffers;
+﻿using System;
+using System.Buffers;
 using System.Runtime.CompilerServices;
+using System.Text;
 
-using MiKoSolutions.Analyzers;
 using MiKoSolutions.Analyzers.Linguistics;
 
 // for performance reasons we switch of RDI and NCrunch instrumentation
@@ -9,7 +10,7 @@ using MiKoSolutions.Analyzers.Linguistics;
 //// ncrunch: no coverage start
 // ReSharper disable once CheckNamespace
 #pragma warning disable IDE0130
-namespace System.Text
+namespace MiKoSolutions.Analyzers
 {
     internal static class StringBuilderExtensions
     {
@@ -284,50 +285,6 @@ namespace System.Text
             return value.Replace(oldValue, newValue, replaceStartIndex, value.Length - replaceStartIndex);
         }
 
-        /// <summary>
-        /// Gets a <see cref="StringBuilder"/> where the specified character is lower-case.
-        /// </summary>
-        /// <param name="value">
-        /// The original text.
-        /// </param>
-        /// <param name="index">
-        /// The zero-based index inside <paramref name="value"/> that shall be changed into lower-case.
-        /// </param>
-        /// <returns>
-        /// A <see cref="StringBuilder"/> where the specified character at <paramref name="index"/> is lower-case.
-        /// </returns>
-        public static StringBuilder ToLowerCaseAt(this StringBuilder value, in int index)
-        {
-            if (value != null && index >= 0 && index < value.Length)
-            {
-                value[index] = value[index].ToLowerCase();
-            }
-
-            return value;
-        }
-
-        /// <summary>
-        /// Gets a <see cref="StringBuilder"/> where the specified character is upper-case.
-        /// </summary>
-        /// <param name="value">
-        /// The original text.
-        /// </param>
-        /// <param name="index">
-        /// The zero-based index inside <paramref name="value"/> that shall be changed into upper-case.
-        /// </param>
-        /// <returns>
-        /// A <see cref="StringBuilder"/> where the specified character at <paramref name="index"/> is upper-case.
-        /// </returns>
-        public static StringBuilder ToUpperCaseAt(this StringBuilder value, in int index)
-        {
-            if (value != null && index >= 0 && index < value.Length)
-            {
-                value[index] = value[index].ToUpperCase();
-            }
-
-            return value;
-        }
-
         public static StringBuilder SeparateWords(this StringBuilder value, in char separator, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.None)
         {
             if (value.IsNullOrEmpty())
@@ -430,6 +387,53 @@ namespace System.Text
             }
 
             return value.AdjustFirstWord(firstWordAdjustment);
+        }
+
+        /// <summary>
+        /// Gets a <see cref="StringBuilder"/> where the specified character is lower-case.
+        /// </summary>
+        /// <param name="value">
+        /// The original text.
+        /// </param>
+        /// <param name="index">
+        /// The zero-based index inside <paramref name="value"/> that shall be changed into lower-case.
+        /// </param>
+        /// <returns>
+        /// A <see cref="StringBuilder"/> where the specified character at <paramref name="index"/> is lower-case.
+        /// </returns>
+        public static StringBuilder ToLowerCaseAt(this StringBuilder value, in int index)
+        {
+            if (value != null && index >= 0 && index < value.Length)
+            {
+                value[index] = value[index].ToLowerCase();
+            }
+
+            return value;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string ToStringAndRelease(this StringBuilder value) => StringBuilderCache.GetStringAndRelease(value);
+
+        /// <summary>
+        /// Gets a <see cref="StringBuilder"/> where the specified character is upper-case.
+        /// </summary>
+        /// <param name="value">
+        /// The original text.
+        /// </param>
+        /// <param name="index">
+        /// The zero-based index inside <paramref name="value"/> that shall be changed into upper-case.
+        /// </param>
+        /// <returns>
+        /// A <see cref="StringBuilder"/> where the specified character at <paramref name="index"/> is upper-case.
+        /// </returns>
+        public static StringBuilder ToUpperCaseAt(this StringBuilder value, in int index)
+        {
+            if (value != null && index >= 0 && index < value.Length)
+            {
+                value[index] = value[index].ToUpperCase();
+            }
+
+            return value;
         }
 
         public static StringBuilder Trimmed(this StringBuilder value)
