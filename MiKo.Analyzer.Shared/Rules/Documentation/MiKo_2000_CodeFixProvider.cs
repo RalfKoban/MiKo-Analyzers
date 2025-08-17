@@ -1,7 +1,5 @@
-﻿using System;
-using System.Composition;
+﻿using System.Composition;
 using System.Linq;
-using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;

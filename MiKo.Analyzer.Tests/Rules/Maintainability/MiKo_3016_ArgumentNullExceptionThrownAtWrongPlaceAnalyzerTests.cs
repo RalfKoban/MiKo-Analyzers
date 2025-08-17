@@ -169,6 +169,22 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_on_switch_case_null_for_thrown_([ValueSource(nameof(ExceptionNames))] string exceptionName) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        switch (o)
+        {
+            case null: throw new " + exceptionName + @"();
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_on_pattern_based_parameter_property_comparison_for_thrown_([ValueSource(nameof(ExceptionNames))] string exceptionName) => An_issue_is_reported_for(@"
 using System;
 

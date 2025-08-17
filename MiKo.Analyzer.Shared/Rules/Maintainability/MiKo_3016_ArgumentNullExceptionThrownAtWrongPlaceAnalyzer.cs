@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -48,7 +50,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     case BinaryExpressionSyntax binary when binary.Left is IdentifierNameSyntax || binary.Right is IdentifierNameSyntax:
                     case IsPatternExpressionSyntax pattern when pattern.Expression is IdentifierNameSyntax:
-                    case InvocationExpressionSyntax invocation when StringExtensions.EqualsAny(invocation.GetName(), EqualsMethods, StringComparison.OrdinalIgnoreCase):
+                    case InvocationExpressionSyntax invocation when invocation.GetName().EqualsAny(EqualsMethods, StringComparison.OrdinalIgnoreCase):
+                    case IdentifierNameSyntax identifier when IsSwitchCaseNull(identifier, node, parameter.GetName()):
                     {
                         // seems like a correct usage
                         return Array.Empty<Diagnostic>();
@@ -57,6 +60,22 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             return new[] { Issue(node.Type) };
+        }
+
+        private static bool IsSwitchCaseNull(IdentifierNameSyntax identifier, SyntaxNode node, string parameterName)
+        {
+            if (identifier.Parent is SwitchStatementSyntax && identifier.GetName() == parameterName)
+            {
+                var switchSection = node.GetEnclosing<SwitchSectionSyntax>();
+
+                if (switchSection != null && switchSection.DescendantNodes<CaseSwitchLabelSyntax>().Any(_ => _.Value.IsKind(SyntaxKind.NullLiteralExpression)))
+                {
+                    // we are in the 'case null:' clause
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

@@ -366,7 +366,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return ReadOnlySpan<Pair>.Empty;
             }
 
-            if (StringExtensions.EqualsAny(value, AllowedNames, StringComparison.OrdinalIgnoreCase))
+            if (value.EqualsAny(AllowedNames, StringComparison.OrdinalIgnoreCase))
             {
                 return ReadOnlySpan<Pair>.Empty;
             }

@@ -1,8 +1,10 @@
-﻿// ncrunch: no coverage start
+﻿using System;
+
+// ncrunch: no coverage start
 // ncrunch: rdi off
 // ReSharper disable once CheckNamespace
 #pragma warning disable IDE0130
-namespace System
+namespace MiKoSolutions.Analyzers
 {
     internal readonly ref struct ReadOnlySpanEnumeratorEntry
     {
