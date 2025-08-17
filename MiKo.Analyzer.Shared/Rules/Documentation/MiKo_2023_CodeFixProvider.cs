@@ -3,7 +3,6 @@ using System.Buffers;
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
-using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;

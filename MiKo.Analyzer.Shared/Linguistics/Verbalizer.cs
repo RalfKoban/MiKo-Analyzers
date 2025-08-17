@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace MiKoSolutions.Analyzers.Linguistics
 {
@@ -589,7 +588,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return value;
             }
 
-            if (StringExtensions.EqualsAny(value, ThirdPersonalSingularVerbExceptions, StringComparison.OrdinalIgnoreCase))
+            if (value.EqualsAny(ThirdPersonalSingularVerbExceptions, StringComparison.OrdinalIgnoreCase))
             {
                 return value;
             }

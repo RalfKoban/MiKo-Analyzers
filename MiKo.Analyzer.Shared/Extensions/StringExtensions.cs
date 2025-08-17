@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -10,14 +11,13 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-using MiKoSolutions.Analyzers;
 using MiKoSolutions.Analyzers.Linguistics;
 
 //// ncrunch: rdi off
 //// ncrunch: no coverage start
 // ReSharper disable once CheckNamespace
 #pragma warning disable IDE0130
-namespace System
+namespace MiKoSolutions.Analyzers
 {
     internal static class StringExtensions
     {
@@ -172,9 +172,6 @@ namespace System
         public static StringBuilder AsCachedBuilder(this string value) => StringBuilderCache.Acquire(value.Length).Append(value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string ToStringAndRelease(this StringBuilder value) => StringBuilderCache.GetStringAndRelease(value);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SyntaxToken AsToken(this string source, in SyntaxKind kind = SyntaxKind.StringLiteralToken)
         {
             if (kind is SyntaxKind.IdentifierToken)
@@ -190,6 +187,8 @@ namespace System
         public static InterpolatedStringTextSyntax AsInterpolatedString(this string value) => SyntaxFactory.InterpolatedStringText(value.AsToken(SyntaxKind.InterpolatedStringTextToken));
 
         public static TypeSyntax AsTypeSyntax(this string value) => SyntaxFactory.ParseTypeName(value);
+
+        public static XmlTextSyntax AsXmlText(this string text) => SyntaxFactory.XmlText(text);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatenatedWith(this IEnumerable<string> values) => string.Concat(values.WhereNotNull());

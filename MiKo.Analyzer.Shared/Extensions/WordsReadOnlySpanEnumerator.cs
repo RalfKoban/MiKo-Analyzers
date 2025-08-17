@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 // ncrunch: rdi off
 // ncrunch: no coverage start
 // ReSharper disable once CheckNamespace
 #pragma warning disable IDE0130
-namespace System
+namespace MiKoSolutions.Analyzers
 {
     // Must be a ref struct as it contains a ReadOnlySpan<char>
     internal ref struct WordsReadOnlySpanEnumerator

@@ -83,7 +83,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         private static readonly string[] SingularOrPluralEndings = { "data", "heep", "moose", "trivia", "ircraft", "nformation", "nested" };
         private static readonly string[] SpecialPluralEndingsWithoutS = new[] { "cti", "men", "ngi", "dren", "eeth", "feet", "mena", "mice", "eople", "teria" }.Concat(SingularOrPluralEndings).ToArray();
 
-        public static bool IsSingularAndPlural(in ReadOnlySpan<char> value) => StringExtensions.EqualsAny(value, UncountableNouns, StringComparison.OrdinalIgnoreCase) || (IsPlural(value) && value.EndsWithAny(SingularOrPluralEndings, StringComparison.OrdinalIgnoreCase));
+        public static bool IsSingularAndPlural(in ReadOnlySpan<char> value) => value.EqualsAny(UncountableNouns, StringComparison.OrdinalIgnoreCase) || (IsPlural(value) && value.EndsWithAny(SingularOrPluralEndings, StringComparison.OrdinalIgnoreCase));
 
         public static bool IsPlural(in ReadOnlySpan<char> value)
         {
@@ -106,7 +106,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
                 if (CharsForTwoCharacterEndingsWithS.Contains(value[value.Length - 2]))
                 {
-                    return value.EndsWithAny(SpecialPluralEndingsWithS, StringComparison.OrdinalIgnoreCase) || StringExtensions.EqualsAny(value, UncountableNouns, StringComparison.OrdinalIgnoreCase);
+                    return value.EndsWithAny(SpecialPluralEndingsWithS, StringComparison.OrdinalIgnoreCase) || value.EqualsAny(UncountableNouns, StringComparison.OrdinalIgnoreCase);
                 }
 
                 if (value.EndsWithAny(PluralEndings, StringComparison.OrdinalIgnoreCase))
@@ -122,7 +122,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return true;
             }
 
-            return value.EndsWithAny(SpecialPluralEndingsWithoutS, StringComparison.OrdinalIgnoreCase) || StringExtensions.EqualsAny(value, UncountableNouns, StringComparison.OrdinalIgnoreCase);
+            return value.EndsWithAny(SpecialPluralEndingsWithoutS, StringComparison.OrdinalIgnoreCase) || value.EqualsAny(UncountableNouns, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -409,27 +409,29 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 }
             }
 
-            var pluralName = proposedName.ToString();
+            var pluralName = proposedName;
 
             if (proposedName.EndsWith("s", comparison) is false)
             {
                 if (proposedName.EndsWith("ToConvert", comparison))
                 {
-                    pluralName = proposedName.WithoutSuffix("ToConvert").ToString();
+                    pluralName = proposedName.WithoutSuffix("ToConvert");
                 }
                 else if (proposedName.EndsWith("ToModel", comparison))
                 {
-                    pluralName = proposedName.WithoutSuffix("ToModel").ToString();
+                    pluralName = proposedName.WithoutSuffix("ToModel");
                 }
             }
 
-            if (pluralName.HasEntityMarker())
+            var pluralNameString = pluralName.ToString();
+
+            if (pluralNameString.HasEntityMarker())
             {
-                pluralName = pluralName.Without(Constants.Markers.Models);
+                pluralNameString = pluralNameString.Without(Constants.Markers.Models);
             }
 
             // we might end with an 's' when shortened, so inspect for that as well
-            var candidate = pluralName.EndsWith("s", comparison) ? pluralName : pluralName + 's';
+            var candidate = pluralNameString.EndsWith("s", comparison) ? pluralNameString : pluralNameString + 's';
 
             if (candidate.Equals("bases", comparison))
             {
@@ -462,12 +464,12 @@ namespace MiKoSolutions.Analyzers.Linguistics
             }
 
             // it might be that the plural name consists of multiple words (such as 'TestMe'), so just pick up the first word
-            var firstWord = pluralName.FirstWord();
+            var firstWord = pluralNameString.AsSpan().FirstWord();
 
             if (firstWord.EndsWith("s", comparison))
             {
                 // TODO: RKN check MiKo_1070 for spelling mistakes
-                return pluralName;
+                return pluralNameString;
             }
 
             return candidate;

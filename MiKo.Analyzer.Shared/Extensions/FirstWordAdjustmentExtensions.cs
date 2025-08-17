@@ -6,7 +6,7 @@ using MiKoSolutions.Analyzers.Linguistics;
 //// ncrunch: no coverage start
 // ReSharper disable once CheckNamespace
 #pragma warning disable IDE0130
-namespace System
+namespace MiKoSolutions.Analyzers
 {
     internal static class FirstWordAdjustmentExtensions
     {

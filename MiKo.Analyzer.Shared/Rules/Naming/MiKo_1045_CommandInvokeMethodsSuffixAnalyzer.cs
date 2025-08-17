@@ -75,7 +75,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                             return name.Slice(IsPrefix.Length);
                         }
 
-                        if (nameLength > HasPrefix.Length && name[HasPrefix.Length].IsUpperCaseLetter() && StringExtensions.EqualsAny(name.Slice(0, HasPrefix.Length), HasArePrefix, StringComparison.OrdinalIgnoreCase))
+                        if (nameLength > HasPrefix.Length && name[HasPrefix.Length].IsUpperCaseLetter() && name.Slice(0, HasPrefix.Length).EqualsAny(HasArePrefix, StringComparison.OrdinalIgnoreCase))
                         {
                             return name.Slice(HasPrefix.Length);
                         }

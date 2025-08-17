@@ -10,8 +10,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2300";
 
-        private static readonly string[] ReasoningMarkers = { "because", " as ", "reason" };
-
         private static readonly string[] MeaninglessPhrases =
                                                               {
                                                                   "add ",
@@ -92,7 +90,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                               "nothing",
                                                               "special handling",
                                                               "initializer",
-                                                              "typo by intent",
                                                               "ncrunch:",
                                                           };
 
@@ -105,7 +102,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // perform 'ToString' here to avoid multiple calls later on
             var commentString = comment.ToString();
 
-            return CommentHasIssue(commentString) && commentString.ContainsAny(ReasoningMarkers, StringComparison.OrdinalIgnoreCase) is false;
+            return CommentHasIssue(commentString) && commentString.ContainsAny(Constants.Comments.ReasoningPhrases, StringComparison.OrdinalIgnoreCase) is false;
         }
 
         private static bool CommentHasIssue(string comment)

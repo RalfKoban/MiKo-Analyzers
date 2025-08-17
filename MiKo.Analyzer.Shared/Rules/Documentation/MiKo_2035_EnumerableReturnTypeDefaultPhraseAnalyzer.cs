@@ -50,7 +50,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                        : Constants.Comments.ArrayReturnTypeStartingPhrase;
             }
 
-            return Constants.Comments.EnumerableReturnTypeStartingPhrase;
+            if (returnType.Name is "IEnumerable")
+            {
+                return Constants.Comments.EnumerableReturnTypeStartingPhrases;
+            }
+
+            return Constants.Comments.CollectionReturnTypeStartingPhrases;
         }
     }
 }

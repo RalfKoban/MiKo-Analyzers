@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
@@ -75,7 +74,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return CommentStartingWith(preparedComment, TaskParts[0], SeeCrefTaskResult(), TaskParts[1] + middlePart);
             }
 
-            var startingPhrase = Constants.Comments.CollectionReturnTypeStartingPhrase;
+            var startingPhrase = GetCollectionStartingPhrase(returnType);
 
             if (returnType.TypeArgumentList.Arguments.Count is 1)
             {
@@ -110,7 +109,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return CommentStartingWith(PrepareComment(comment), Constants.Comments.ArrayReturnTypeStartingPhrase);
             }
 
-            return CommentStartingWith(PrepareComment(comment), Constants.Comments.CollectionReturnTypeStartingPhrase);
+            var startingPhrase = GetCollectionStartingPhrase(returnType);
+
+            return CommentStartingWith(PrepareComment(comment), startingPhrase);
+        }
+
+        private static string GetCollectionStartingPhrase(TypeSyntax returnType)
+        {
+            return returnType.GetName() is "IEnumerable"
+                   ? Constants.Comments.EnumerableReturnTypeStartingPhrase
+                   : Constants.Comments.CollectionReturnTypeStartingPhrase;
         }
 
         private static string GetGenericTypeArgumentTypeName(GenericNameSyntax returnType)
