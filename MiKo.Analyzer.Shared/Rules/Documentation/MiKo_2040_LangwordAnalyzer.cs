@@ -145,7 +145,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return results;
         }
 
-        private static string Proposal(string phrase) => string.Concat("<see " + Constants.XmlTag.Attribute.Langword + "=\"", phrase, "\"/>");
+        private static string Proposal(string phrase) => string.Intern(string.Concat("<see " + Constants.XmlTag.Attribute.Langword + "=\"", phrase, "\"/>"));
 
 //// ncrunch: rdi default
 
@@ -207,6 +207,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 if (text.Length <= Constants.MinimumCharactersThreshold && text.IsNullOrWhiteSpace())
                 {
                     // nothing to inspect as the text is too short and consists of whitespaces only
+                    continue;
+                }
+
+                if (text.Contains("nullable", StringComparison.OrdinalIgnoreCase))
+                {
+                    // ignore nullables
                     continue;
                 }
 
