@@ -6,9 +6,7 @@ using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-using MiKoSolutions.Analyzers.Linguistics;
-
-namespace MiKoSolutions.Analyzers.Rules.Naming
+namespace MiKoSolutions.Analyzers.Linguistics
 {
     public static class NamesFinder
     {
