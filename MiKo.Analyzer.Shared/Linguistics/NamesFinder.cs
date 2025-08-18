@@ -263,6 +263,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                            .ReplaceWithProbe("_no_throws_", "_throws_no_")
                            .ReplaceWithProbe("_has_has_", "_has_")
                            .ReplaceWithProbe("D_oes", "_does")
+                           .ReplaceWithProbe("F_actory", "_factory")
                            .ReplaceWithProbe("M_akes", "_makes")
                            .ReplaceWithProbe("O_bject", "_object")
                            .ReplaceWithProbe("R_eference", "_reference")

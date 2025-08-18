@@ -130,6 +130,8 @@ public class TestMe
         [TestCase("MethodName_SomeCondition_InvokeStuff", "Method_name_invokes_stuff_if_some_condition")]
         [TestCase("MethodName_SomeCondition_InvokesStuff", "Method_name_invokes_stuff_if_some_condition")]
         [TestCase("MethodName_WhenSomeCondition_ThrowsException", "Method_name_throws_exception_if_some_condition")]
+        [TestCase("MethodName_XYZDoesNotExit_ThrowsException", "Method_name_throws_exception_if_XYZ_does_not_exit")]
+        [TestCase("MethodName_XYZFactory_ThrowsException", "Method_name_throws_exception_if_XYZ_factory")]
         [TestCase("MethodName_XYZObject_ThrowsException", "Method_name_throws_exception_if_XYZ_object")]
         [TestCase("MethodName_XYZType_ThrowsException", "Method_name_throws_exception_if_XYZ_type")]
         [TestCase("MethodName_XYZReference_ThrowsException", "Method_name_throws_exception_if_XYZ_reference")]
