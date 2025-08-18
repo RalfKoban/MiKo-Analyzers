@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 
 //// ncrunch: rdi off
-namespace MiKoSolutions.Analyzers.Rules.Naming
+namespace MiKoSolutions.Analyzers.Linguistics
 {
     [TestFixture]
     public static class NamesFinderTests
