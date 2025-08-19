@@ -59,6 +59,19 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_commented_method_returning_a_([Values("XmlNode", "XmlElement", "XmlDocument")] string returnType) => No_issue_is_reported_for(@"
+using System.Xml;
+
+public class TestMe
+{
+    /// <returns>
+    /// The item
+    /// </returns>
+    public " + returnType + @" DoSomething(object o) => null;
+}
+");
+
         [Test, Combinatorial]
         public void No_issue_is_reported_for_method_that_returns_a_(
                                                                 [Values("returns", "value")] string xmlTag,
