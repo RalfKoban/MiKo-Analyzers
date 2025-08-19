@@ -99,7 +99,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return node.GetLocation();
         }
 
-        protected static IEnumerable<string> GetStartingPhrases(ITypeSymbol returnTypeSymbol, string[] startingPhrases)
+        protected static string[] GetStartingPhrases(ITypeSymbol returnTypeSymbol, string[] startingPhrases)
         {
             var returnType = returnTypeSymbol.ToString();
 
@@ -109,6 +109,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 returnTypeFullyQualified = returnTypeSymbol.FullyQualifiedName(false);
             }
+
+            var intermediateResult = Enumerable.Empty<string>();
 
             if (returnTypeSymbol.TryGetGenericArguments(out var arguments))
             {
@@ -124,15 +126,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var argument = arguments[0].FullyQualifiedName(false); // we are interested in the fully qualified name without any alias used, such as 'System.Int32' instead of 'int'
 
 //// ncrunch: rdi off
-                return Array.Empty<string>()
-                            .Concat(startingPhrases.Take(1).Select(_ => _.FormatWith(returnTypeWithTs, argument))) // for the phrases to show to the user
-                            .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeWithGenericCount, argument))); // for the real check
+                intermediateResult = intermediateResult.Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeWithTs, argument)).Take(1)) // for the phrases to show to the user
+                                                       .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeWithGenericCount, argument))); // for the real check
+            }
+            else
+            {
+                intermediateResult = intermediateResult.Concat(startingPhrases.Select(_ => _.FormatWith(returnType, Constants.TODO)).Take(1)) // for the phrases to show to the user
+                                                       .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeFullyQualified, Constants.TODO))); // for the real check
             }
 
-            return Array.Empty<string>()
-                        .Concat(startingPhrases.Take(1).Select(_ => _.FormatWith(returnType, Constants.TODO))) // for the phrases to show to the user
-                        .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeFullyQualified, Constants.TODO))); // for the real check
+            var result = intermediateResult.Distinct()
+                                           .ToArray();
+
 //// ncrunch: rdi default
+
+            return result;
         }
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeNamespace(INamespaceSymbol symbol, Compilation compilation) => throw new NotSupportedException("Namespaces are not supported.");

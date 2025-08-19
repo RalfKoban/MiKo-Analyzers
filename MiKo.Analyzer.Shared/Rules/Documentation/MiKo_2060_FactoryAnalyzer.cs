@@ -46,16 +46,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             switch (symbol)
             {
                 case INamedTypeSymbol type: return AnalyzeStartingPhrase(type, summaryXmls, summaries.Value, Constants.Comments.FactorySummaryPhrase);
-                case IMethodSymbol method: return AnalyzeStartingPhrase(method, summaryXmls, summaries.Value, GetPhrases(method).ToArray());
+                case IMethodSymbol method: return AnalyzeStartingPhrase(method, summaryXmls, summaries.Value, GetPhrases(method));
                 default: return Array.Empty<Diagnostic>();
             }
         }
 
-        private static IEnumerable<string> GetPhrases(IMethodSymbol symbol) => symbol.ReturnType.IsEnumerable() ? GetCollectionPhrases(symbol) : GetSimplePhrases(symbol);
+        private static string[] GetPhrases(IMethodSymbol symbol) => symbol.ReturnType.IsEnumerable() ? GetCollectionPhrases(symbol) : GetSimplePhrases(symbol);
 
-        private static IEnumerable<string> GetSimplePhrases(IMethodSymbol symbol) => GetStartingPhrases(symbol.ReturnType, Constants.Comments.FactoryCreateMethodSummaryStartingPhrase);
+        private static string[] GetSimplePhrases(IMethodSymbol symbol) => GetStartingPhrases(symbol.ReturnType, Constants.Comments.FactoryCreateMethodSummaryStartingPhrase);
 
-        private static IEnumerable<string> GetCollectionPhrases(IMethodSymbol symbol)
+        private static string[] GetCollectionPhrases(IMethodSymbol symbol)
         {
             if (symbol.ReturnType.TryGetGenericArguments(out var arguments))
             {

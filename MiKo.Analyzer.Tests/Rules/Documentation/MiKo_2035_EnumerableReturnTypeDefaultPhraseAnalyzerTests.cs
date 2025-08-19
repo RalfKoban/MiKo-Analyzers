@@ -185,7 +185,7 @@ public class TestMe
 }
 ");
 
-        [Test, Combinatorial]
+        [Test]
         public void No_issue_is_reported_for_correctly_commented_Enumerable_only_method_([Values("returns", "value")] string xmlTag)
             => No_issue_is_reported_for(@"
 using System;
