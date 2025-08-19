@@ -190,16 +190,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 // we need to find out the type
                 var type = originalExpression.GetTypeSymbol(document);
 
-                if (type != null && type.TryGetGenericArgumentCount(out var genericArgumentsCount))
+                if (type != null && type.TryGetGenericArguments(out var genericArguments))
                 {
-                    var types = new TypeSyntax[genericArgumentsCount];
+                    var types = new TypeSyntax[genericArguments.Length];
 
-                    for (var i = 0; i < genericArgumentsCount; i++)
+                    for (var i = 0; i < genericArguments.Length; i++)
                     {
-                        if (type.TryGetGenericArgumentType(out var genericType, i))
-                        {
-                            types[i] = genericType.FullyQualifiedName().AsTypeSyntax();
-                        }
+                        types[i] = genericArguments[i].FullyQualifiedName().AsTypeSyntax();
                     }
 
                     return AssertThat(expression, Has(match, "Matches", argument, types), arguments, removeNameColon: true);
