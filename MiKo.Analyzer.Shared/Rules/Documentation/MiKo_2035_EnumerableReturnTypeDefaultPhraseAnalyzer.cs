@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -14,7 +15,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool IsAcceptedType(ITypeSymbol returnType) => returnType.IsEnumerable();
+        protected override bool IsAcceptedType(ITypeSymbol returnType)
+        {
+            if (returnType is INamedTypeSymbol type && type.Name.StartsWith("Xml", StringComparison.Ordinal) && type.InheritsFrom<XmlNode>())
+            {
+                return false; // ignore XML nodes
+            }
+
+            return returnType.IsEnumerable();
+        }
 
         protected override string[] GetStartingPhrases(ISymbol owningSymbol, ITypeSymbol returnType)
         {
