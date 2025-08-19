@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -23,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var initialPhrases = GetNonGenericInitialPhrases(returnType);
 
-                return GetStartingPhrases(returnType, initialPhrases).ToArray();
+                return GetStartingPhrases(returnType, initialPhrases);
             }
 
             if (returnType.TryGetGenericArgumentType(out var argumentType))
