@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2304";
 
-        private static readonly string[] TODOs = { "TODO", "TODO:", "TO DO", "TO DO:" };
+        private static readonly string[] TODOs = { Constants.TODO, Constants.TODO + ":", "TO DO", "TO DO:" };
 
         public MiKo_2304_CommentDoesNotContainQuestionMarkAnalyzer() : base(Id)
         {

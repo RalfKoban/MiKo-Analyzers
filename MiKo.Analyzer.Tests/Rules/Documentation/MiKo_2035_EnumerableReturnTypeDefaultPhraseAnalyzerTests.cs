@@ -15,24 +15,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2035_EnumerableReturnTypeDefaultPhraseAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] EnumerableOnlyReturnValues =
-                                                                      [
-                                                                          "IEnumerable",
-                                                                          "IEnumerable<int>",
-                                                                          "IList<int>",
-                                                                          "ICollection<int>",
-                                                                          "List<int>",
-                                                                          "Dictionary<int, int>",
-                                                                      ];
+        private static readonly string[] NonTaskReturnTypes =
+                                                              [
+                                                                  "IEnumerable",
+                                                                  "IEnumerable<int>",
+                                                                  "IList<int>",
+                                                                  "ICollection<int>",
+                                                                  "List<int>",
+                                                                  "Dictionary<int, int>",
+                                                              ];
 
-        private static readonly string[] EnumerableTaskReturnValues =
-                                                                      [
-                                                                          "Task<int[]>",
-                                                                          "Task<IEnumerable>",
-                                                                          "Task<List<int>>",
-                                                                      ];
+        private static readonly string[] TaskReturnTypes =
+                                                           [
+                                                               "Task<int[]>",
+                                                               "Task<IEnumerable>",
+                                                               "Task<List<int>>",
+                                                           ];
 
-        private static readonly string[] EnumerableReturnValues = [.. EnumerableOnlyReturnValues, .. EnumerableTaskReturnValues];
+        private static readonly string[] ReturnTypes = [.. NonTaskReturnTypes, .. TaskReturnTypes];
 
         private static readonly string[] StartingPhrases = [.. Enumerable.ToHashSet(CreateStartingPhrases().Take(TestLimit))];
 
@@ -44,7 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 #endif
 
         [Test]
-        public void No_issue_is_reported_for_uncommented_method_([ValueSource(nameof(EnumerableReturnValues))] string returnType) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_uncommented_method_([ValueSource(nameof(ReturnTypes))] string returnType) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public " + returnType + @" DoSomething(object o) => null;
@@ -52,7 +52,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_uncommented_property_([ValueSource(nameof(EnumerableReturnValues))] string returnType) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_uncommented_property_([ValueSource(nameof(ReturnTypes))] string returnType) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public " + returnType + @" DoSomething { get; set; }
@@ -128,7 +128,6 @@ public class TestMe
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 public class TestMe
 {
@@ -143,28 +142,6 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_Enumerable_only_method_(
-                                                                                     [Values("returns", "value")] string xmlTag,
-                                                                                     [ValueSource(nameof(EnumerableOnlyReturnValues))] string returnType)
-            => No_issue_is_reported_for(@"
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-public class TestMe
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    /// <" + xmlTag + @">
-    /// A collection of whatever.
-    /// </" + xmlTag + @">
-    public " + returnType + @" DoSomething(object o) => null;
-}
-");
-
-        [Test, Combinatorial]
         public void No_issue_is_reported_for_correctly_commented_List_method_(
                                                                           [Values("returns", "value")] string xmlTag,
                                                                           [Values("A", "An")] string startingWord,
@@ -173,7 +150,6 @@ public class TestMe
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 public class TestMe
 {
@@ -188,10 +164,95 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
+        public void No_issue_is_reported_for_correctly_commented_List_of_method_(
+                                                                             [Values("returns", "value")] string xmlTag,
+                                                                             [Values("A", "An")] string startingWord,
+                                                                             [Values("that contains", "containing")] string continuation)
+            => No_issue_is_reported_for(@"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <" + xmlTag + @">
+    /// " + startingWord + @" <see cref=""List{T}"" /> of <see cref=""int""/> " + continuation + @" something.
+    /// </" + xmlTag + @">
+    public List<int> DoSomething(object o) => null;
+}
+");
+
+        [Test, Combinatorial]
+        public void No_issue_is_reported_for_correctly_commented_Enumerable_only_method_([Values("returns", "value")] string xmlTag)
+            => No_issue_is_reported_for(@"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <" + xmlTag + @">
+    /// A sequence of whatever.
+    /// </" + xmlTag + @">
+    public IEnumerable<int> DoSomething(object o) => null;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_correctly_commented_Enumerable_method_(
+                                                                                [Values("returns", "value")] string xmlTag,
+                                                                                [Values("A", "An")] string startingWord,
+                                                                                [Values("that contains", "containing")] string continuation)
+            => No_issue_is_reported_for(@"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <" + xmlTag + @">
+    /// " + startingWord + @" <see cref=""IEnumerable{T}"" /> " + continuation + @" something.
+    /// </" + xmlTag + @">
+    public IEnumerable<int> DoSomething(object o) => null;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_correctly_commented_Enumerable_of_method_(
+                                                                                   [Values("returns", "value")] string xmlTag,
+                                                                                   [Values("A", "An")] string startingWord,
+                                                                                   [Values("that contains", "containing")] string continuation)
+            => No_issue_is_reported_for(@"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <" + xmlTag + @">
+    /// " + startingWord + @" <see cref=""IEnumerable{T}"" /> of <see cref=""int""/> " + continuation + @" something.
+    /// </" + xmlTag + @">
+    public IEnumerable<int> DoSomething(object o) => null;
+}
+");
+
+        [Test, Combinatorial]
         public void No_issue_is_reported_for_correctly_commented_Enumerable_Task_method_(
                                                                                      [Values("returns", "value")] string xmlTag,
                                                                                      [Values("", " ")] string space,
-                                                                                     [ValueSource(nameof(EnumerableTaskReturnValues))] string returnType)
+                                                                                     [ValueSource(nameof(TaskReturnTypes))] string returnType)
             => No_issue_is_reported_for(@"
 using System;
 using System.Collections;
@@ -232,7 +293,7 @@ public class TestMe
         public void An_issue_is_reported_for_wrong_commented_method_(
                                                                  [Values("returns", "value")] string xmlTag,
                                                                  [Values("A whatever", "An whatever", "The whatever")] string comment,
-                                                                 [ValueSource(nameof(EnumerableReturnValues))] string returnType)
+                                                                 [ValueSource(nameof(ReturnTypes))] string returnType)
             => An_issue_is_reported_for(@"
 using System;
 using System.Collections;

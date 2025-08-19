@@ -90,7 +90,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 #pragma warning restore CA1716
 
 //// ncrunch: rdi off
-        private static IEnumerable<string> CreateAlmostCorrectTaskReturnTypeStartingPhrases()
+        private static HashSet<string> CreateAlmostCorrectTaskReturnTypeStartingPhrases()
         {
             var starts = new[] { "a task", "an task" };
             var continuations = new[] { "that represents", "which represents", "representing" };

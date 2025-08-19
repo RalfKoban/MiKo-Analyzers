@@ -110,7 +110,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 returnTypeFullyQualified = returnTypeSymbol.FullyQualifiedName(false);
             }
 
-            if (returnTypeSymbol.TryGetGenericArgumentCount(out var count) && count > 0)
+            if (returnTypeSymbol.TryGetGenericArguments(out var arguments))
             {
                 var genericArguments = returnTypeSymbol.GetGenericArgumentsAsTs();
 
@@ -119,17 +119,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var firstPart = returnType.AsSpan(0, length);
 
                 var returnTypeWithTs = firstPart.ConcatenatedWith('{', genericArguments, '}');
-                var returnTypeWithGenericCount = firstPart.ConcatenatedWith('`', count.ToString());
+                var returnTypeWithGenericCount = firstPart.ConcatenatedWith('`', arguments.Length.ToString());
+
+                var argument = arguments[0].FullyQualifiedName(false); // we are interested in the fully qualified name without any alias used, such as 'System.Int32' instead of 'int'
 
 //// ncrunch: rdi off
                 return Array.Empty<string>()
-                            .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeWithTs))) // for the phrases to show to the user
-                            .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeWithGenericCount))); // for the real check
+                            .Concat(startingPhrases.Take(1).Select(_ => _.FormatWith(returnTypeWithTs, argument))) // for the phrases to show to the user
+                            .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeWithGenericCount, argument))); // for the real check
             }
 
             return Array.Empty<string>()
-                        .Concat(startingPhrases.Select(_ => _.FormatWith(returnType)))
-                        .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeFullyQualified)));
+                        .Concat(startingPhrases.Take(1).Select(_ => _.FormatWith(returnType, Constants.TODO))) // for the phrases to show to the user
+                        .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeFullyQualified, Constants.TODO))); // for the real check
 //// ncrunch: rdi default
         }
 
