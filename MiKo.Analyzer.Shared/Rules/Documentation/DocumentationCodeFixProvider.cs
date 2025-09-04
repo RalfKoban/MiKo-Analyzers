@@ -107,7 +107,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static T Comment<T>(T syntax, in ReadOnlySpan<string> terms, in ReadOnlySpan<Pair> replacementMap, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.KeepSingleLeadingSpace) where T : SyntaxNode
         {
-            var minimumLength = MinLength(terms);
+            var minimumLength = MinimumLength(terms);
 
             var textMap = CreateReplacementTextMap(minimumLength, terms, replacementMap, firstWordAdjustment);
 
@@ -120,7 +120,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return syntax.ReplaceNodes(textMap.Keys, (_, __) => textMap[_]);
 
 //// ncrunch: no coverage start
-            int MinLength(in ReadOnlySpan<string> source)
+            int MinimumLength(in ReadOnlySpan<string> source)
             {
                 var sourceLength = source.Length;
 
