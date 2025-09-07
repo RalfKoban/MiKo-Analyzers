@@ -18,13 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
 //// ncrunch: rdi default
 
-        protected static XmlEmptyElementSyntax SeeCrefTaskResult()
-        {
-            var type = "Task<TResult>".AsTypeSyntax();
-            var member = SyntaxFactory.ParseName(nameof(Task<object>.Result));
-
-            return Cref(Constants.XmlTag.See, type, member);
-        }
+        protected static XmlEmptyElementSyntax SeeCrefTaskResult() => SeeCref("Task<TResult>", SyntaxFactory.ParseName(nameof(Task<object>.Result)));
 
         protected sealed override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes)
         {

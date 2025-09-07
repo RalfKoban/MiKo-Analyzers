@@ -2,6 +2,7 @@
 using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -13,10 +14,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class DocumentationCodeFixProvider : MiKoCodeFixProvider
     {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static string GetStartingPhraseProposal(Diagnostic issue) => issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.StartingPhrase, out var s) ? s : string.Empty;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static string GetEndingPhraseProposal(Diagnostic issue) => issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.EndingPhrase, out var s) ? s : string.Empty;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static string GetPhraseProposal(Diagnostic issue) => issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.Phrase, out var s) ? s : string.Empty;
 
 //// ncrunch: rdi off
@@ -461,6 +465,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlElementSyntax CommentWithContent(XmlElementSyntax value, in SyntaxList<XmlNodeSyntax> content) => SyntaxFactory.XmlElement(value.StartTag, content, value.EndTag).WithTagsOnSeparateLines();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static TypeCrefSyntax Cref(string typeName) => Cref(typeName.AsTypeSyntax());
 
         protected static TypeCrefSyntax Cref(TypeSyntax type)
@@ -485,6 +490,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static string GetParameterName(XmlEmptyElementSyntax syntax) => syntax.GetAttributes<XmlNameAttributeSyntax>()[0].Identifier.GetName();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlCrefAttributeSyntax GetSeeCref(SyntaxNode value) => value.GetCref(Constants.XmlTag.See);
 
         protected static DocumentationCommentTriviaSyntax GetXmlSyntax(IEnumerable<SyntaxNode> syntaxNodes, in SyntaxKind kind = SyntaxKind.SingleLineDocumentationCommentTrivia)
@@ -504,8 +510,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static IEnumerable<XmlElementSyntax> GetXmlSyntax(string startTag, IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.SelectMany(_ => _.GetXmlSyntax(startTag));
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlEmptyElementSyntax Inheritdoc() => XmlEmptyElement(Constants.XmlTag.Inheritdoc);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlEmptyElementSyntax Inheritdoc(XmlCrefAttributeSyntax cref) => Inheritdoc().WithAttributes(cref.ToSyntaxList<XmlAttributeSyntax>());
 
         protected static XmlElementSyntax MakeFirstWordInfiniteVerb(XmlElementSyntax syntax)
@@ -549,25 +557,28 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return text;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlEmptyElementSyntax Para() => XmlEmptyElement(Constants.XmlTag.Para);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlElementSyntax Para(string text) => SyntaxFactory.XmlParaElement(XmlText(text));
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlElementSyntax Para(in SyntaxList<XmlNodeSyntax> nodes) => SyntaxFactory.XmlParaElement(nodes);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlElementSyntax ParameterComment(ParameterSyntax parameter, in ReadOnlySpan<string> comments) => ParameterComment(parameter, comments[0]);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlElementSyntax ParameterComment(ParameterSyntax parameter, string comment) => Comment(SyntaxFactory.XmlParamElement(parameter.GetName()), comment);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlEmptyElementSyntax ParamRef(ParameterSyntax parameter) => ParamRef(parameter.GetName());
 
-        protected static XmlEmptyElementSyntax ParamRef(string parameterName)
-        {
-            var name = SyntaxFactory.XmlNameAttribute(parameterName);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected static XmlEmptyElementSyntax ParamRef(string parameterName) => XmlEmptyElement(Constants.XmlTag.ParamRef).WithAttribute(SyntaxFactory.XmlNameAttribute(parameterName));
 
-            return XmlEmptyElement(Constants.XmlTag.ParamRef).WithAttribute(name);
-        }
-
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlElementSyntax ParaOr() => Para(Constants.Comments.SpecialOrPhrase);
 
         protected static XmlElementSyntax RemoveBooleansTags(XmlElementSyntax comment)
@@ -578,6 +589,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return CombineTexts(combinedTexts);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static T ReplaceText<T>(T comment, XmlTextSyntax text, string phrase, string replacement) where T : SyntaxNode => ReplaceText(comment, text, new[] { phrase }, replacement);
 
         protected static T ReplaceText<T>(T comment, XmlTextSyntax text, in ReadOnlySpan<string> phrases, string replacement) where T : SyntaxNode
@@ -589,10 +601,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                    : comment.ReplaceNode(text, modifiedText);
         }
 
-        protected static XmlEmptyElementSyntax SeeCref(string typeName) => Cref(Constants.XmlTag.See, typeName.AsTypeSyntax());
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected static XmlEmptyElementSyntax SeeCref(string typeName) => SeeCref(typeName.AsTypeSyntax());
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlEmptyElementSyntax SeeCref(TypeSyntax type) => Cref(Constants.XmlTag.See, type);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected static XmlEmptyElementSyntax SeeCref(string typeName, NameSyntax member) => SeeCref(typeName.AsTypeSyntax(), member);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlEmptyElementSyntax SeeCref(TypeSyntax type, NameSyntax member) => Cref(Constants.XmlTag.See, type, member);
 
         protected static XmlEmptyElementSyntax SeeLangword(string text)
@@ -602,10 +620,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return XmlEmptyElement(Constants.XmlTag.See).WithAttribute(attribute);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlEmptyElementSyntax SeeLangword_False() => SeeLangword("false");
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlEmptyElementSyntax SeeLangword_Null() => SeeLangword("null");
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlEmptyElementSyntax SeeLangword_True() => SeeLangword("true");
 
 #pragma warning disable CA1021
@@ -692,6 +713,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return XmlEmptyElement(Constants.XmlTag.TypeParamRef).WithAttribute(attribute);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlTextAttributeSyntax XmlAttribute(string tag, string text) => SyntaxFactory.XmlTextAttribute(tag, text.AsToken());
 
         /// <summary>
@@ -729,18 +751,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return list.AddStartTagAttributes(type);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlElementSyntax XmlElement(string tag) => SyntaxFactory.XmlElement(tag, default);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlElementSyntax XmlElement(string tag, XmlNodeSyntax content) => SyntaxFactory.XmlElement(tag, content.ToSyntaxList());
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlElementSyntax XmlElement(string tag, IEnumerable<XmlNodeSyntax> contents) => SyntaxFactory.XmlElement(tag, contents.ToSyntaxList());
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlEmptyElementSyntax XmlEmptyElement(string tag) => SyntaxFactory.XmlEmptyElement(tag);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlTextSyntax NewLineXmlText() => XmlText(string.Empty).WithLeadingXmlComment();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlTextSyntax TrailingNewLineXmlText() => XmlText(string.Empty).WithTrailingXmlComment();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlTextSyntax XmlText(string text) => SyntaxFactory.XmlText(text);
 
         protected static XmlTextSyntax XmlText(in SyntaxTokenList textTokens)
@@ -753,6 +782,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return SyntaxFactory.XmlText(textTokens);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlTextSyntax XmlText(IEnumerable<SyntaxToken> textTokens) => XmlText(textTokens.ToTokenList());
 
         private static List<XmlNodeSyntax> CommentEnd(string commentEnd, params XmlNodeSyntax[] commendEndNodes)
@@ -833,43 +863,41 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 //// ncrunch: rdi off
         private static XmlElementSyntax CombineTexts(XmlElementSyntax comment)
         {
-            var modified = false;
-
             var contents = comment.Content;
-            var contentsCount = contents.Count - 2; // risky operation, fails when 'contents' gets re-assigned so perform a careful review of te code
+            var contentsCount = contents.Count - 2; // risky operation, fails when 'contents' gets re-assigned so perform a careful review of the code
 
-            for (var index = 0; index <= contentsCount; index++)
+            if (contentsCount >= 0)
             {
-                if (contents[index] is XmlTextSyntax text1)
+                var modified = false;
+
+                for (var index = 0; index <= contentsCount; index++)
                 {
-                    var nextIndex = index + 1;
-
-                    if (contents[nextIndex] is XmlTextSyntax text2)
+                    if (contents[index + 1] is XmlTextSyntax nextText && contents[index] is XmlTextSyntax currentText)
                     {
-                        var text1TextTokens = text1.TextTokens;
-                        var text2TextTokens = text2.TextTokens;
+                        var currentTextTokens = currentText.TextTokens;
+                        var nextTextTokens = nextText.TextTokens;
 
-                        var lastToken = text1TextTokens.Last();
-                        var firstToken = text2TextTokens.First();
+                        var lastToken = currentTextTokens.Last();
+                        var firstToken = nextTextTokens.First();
 
                         var token = lastToken.WithText(lastToken.Text + firstToken.Text)
                                              .WithLeadingTriviaFrom(lastToken)
                                              .WithTrailingTriviaFrom(firstToken);
 
-                        var tokens = text1TextTokens.Replace(lastToken, token).AddRange(text2TextTokens.Skip(1));
-                        var newText = text1.WithTextTokens(tokens);
+                        var tokens = currentTextTokens.Replace(lastToken, token).AddRange(nextTextTokens.Skip(1));
+                        var newText = currentText.WithTextTokens(tokens);
 
-                        contents = contents.Replace(text1, newText).RemoveAt(nextIndex);
+                        contents = contents.Replace(currentText, newText).RemoveAt(index + 1);
                         contentsCount = contents.Count - 2; // risky operation, fails when 'contents' gets re-assigned
 
                         modified = true;
                     }
                 }
-            }
 
-            if (modified)
-            {
-                return comment.WithContent(contents);
+                if (modified)
+                {
+                    return comment.WithContent(contents);
+                }
             }
 
             return comment;
