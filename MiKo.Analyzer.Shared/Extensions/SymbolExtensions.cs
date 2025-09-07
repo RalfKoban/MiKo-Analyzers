@@ -1778,16 +1778,16 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        internal static bool TryGetGenericArgumentCount(this ITypeSymbol value, out int result)
+        internal static bool TryGetGenericArguments(this ITypeSymbol value, out ImmutableArray<ITypeSymbol> result)
         {
-            result = 0;
+            result = ImmutableArray.Create<ITypeSymbol>();
 
             if (value is INamedTypeSymbol namedType)
             {
-                result = namedType.TypeArguments.Length;
+                result = namedType.TypeArguments;
             }
 
-            return result > 0;
+            return result.Length > 0;
         }
 
         internal static bool TryGetGenericArgumentType(this ITypeSymbol value, out ITypeSymbol result, in int index = 0)

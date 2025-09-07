@@ -438,6 +438,21 @@ public sealed record TestMe(object o)
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [TestCase("that can be used in", "that are suitable for")]
+        [TestCase("which can be used in", "that are suitable for")]
+        public void Code_gets_fixed_for_description_on_extensions_class_(string originalCode, string fixedCode)
+        {
+            const string Template = @"
+/// <summary>
+/// Provides extensions for <see cref=""objects""/>s ### some area.
+/// </summary>
+public static class TestMeExtensions
+{
+}";
+
+            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
+        }
+
         protected override string GetDiagnosticId() => MiKo_2218_DocumentationShouldNotContainUsedToAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2218_DocumentationShouldNotContainUsedToAnalyzer();
