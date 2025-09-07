@@ -12,18 +12,18 @@ namespace BenchmarkConsole
         // public int Times;
 
         // [Benchmark(Baseline = true)]
-        // public void MiKo_2023_Original() => GC.KeepAlive(new MiKoSolutions.Analyzers.Rules.Documentation.MiKo_2023_CodeFixProvider.MapData());
+        // public void MiKo_2023_Original() => System.GC.KeepAlive(new MiKoSolutions.Analyzers.Rules.Documentation.MiKo_2023_CodeFixProvider.MapData());
 
         // [Benchmark(Baseline = true)]
         // [Benchmark]
-        // public void MiKo_2035_Original() => GC.KeepAlive(new MiKoSolutions.Analyzers.Rules.Documentation.MiKo_2035_CodeFixProvider.MapData());
+        // public void MiKo_2035_Original() => System.GC.KeepAlive(new MiKoSolutions.Analyzers.Rules.Documentation.MiKo_2035_CodeFixProvider.MapData());
 
         // [Benchmark(Baseline = true)]
         // [Benchmark]
-        // public void MiKo_2060_Original() => GC.KeepAlive(new MiKoSolutions.Analyzers.Rules.Documentation.MiKo_2060_CodeFixProvider.MapData());
+        // public void MiKo_2060_Original() => System.GC.KeepAlive(new MiKoSolutions.Analyzers.Rules.Documentation.MiKo_2060_CodeFixProvider.MapData());
 
         // [Benchmark(Baseline = true)]
         // [Benchmark]
-        // public void MiKo_2080_Original() => GC.KeepAlive(new MiKoSolutions.Analyzers.Rules.Documentation.MiKo_2080_CodeFixProvider.MapData());
+        // public void MiKo_2080_Original() => System.GC.KeepAlive(new MiKoSolutions.Analyzers.Rules.Documentation.MiKo_2080_CodeFixProvider.MapData());
     }
 }

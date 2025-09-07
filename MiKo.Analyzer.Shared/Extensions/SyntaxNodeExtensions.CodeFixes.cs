@@ -13,21 +13,45 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers
 {
     /// <summary>
-    /// Provides extensions for <see cref="SyntaxNode"/>s that can be used in code fixes where the <see cref="Document"/> class is available.
+    /// Provides extensions for <see cref="SyntaxNode"/>s that are suitable for code fixes where the <see cref="Document"/> class is available.
     /// </summary>
     internal static partial class SyntaxNodeExtensions
     {
-        internal static SemanticModel GetSemanticModel(this Document document)
+        /// <summary>
+        /// Gets the <see cref="SemanticModel"/> for the specified <see cref="Document"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The document to retrieve the semantic model for.
+        /// </param>
+        /// <returns>
+        /// The semantic model for the document.
+        /// </returns>
+        internal static SemanticModel GetSemanticModel(this Document value)
         {
-            if (document.TryGetSemanticModel(out var result))
+            if (value.TryGetSemanticModel(out var result))
             {
                 return result;
             }
 
-            return document.GetSemanticModelAsync(CancellationToken.None).GetAwaiter().GetResult();
+            return value.GetSemanticModelAsync(CancellationToken.None).GetAwaiter().GetResult();
         }
 
-        internal static async Task<ISymbol> GetSymbolAsync(this SyntaxNode syntax, Document document, CancellationToken cancellationToken)
+        /// <summary>
+        /// Asynchronously gets the symbol represented by the specified <see cref="SyntaxNode"/> in the context of the given <see cref="Document"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to get the symbol for.
+        /// </param>
+        /// <param name="document">
+        /// The document that contains the syntax node.
+        /// </param>
+        /// <param name="cancellationToken">
+        /// The token to monitor for cancellation requests.
+        /// </param>
+        /// <returns>
+        /// A task that represents the asynchronous operation. The value of the <see cref="Task{TResult}.Result"/> parameter contains the symbol for the syntax node, or <see langword="null"/> if no symbol is found.
+        /// </returns>
+        internal static async Task<ISymbol> GetSymbolAsync(this SyntaxNode value, Document document, CancellationToken cancellationToken)
         {
             if (cancellationToken.IsCancellationRequested)
             {
@@ -39,20 +63,68 @@ namespace MiKoSolutions.Analyzers
                 semanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
             }
 
-            if (syntax is TypeSyntax typeSyntax)
+            if (value is TypeSyntax typeSyntax)
             {
                 return semanticModel?.GetTypeInfo(typeSyntax, cancellationToken).Type;
             }
 
-            return semanticModel?.GetDeclaredSymbol(syntax, cancellationToken);
+            return semanticModel?.GetDeclaredSymbol(value, cancellationToken);
         }
 
-        internal static ISymbol GetSymbol(this SyntaxNode syntax, Document document) => syntax.GetSymbolAsync(document, CancellationToken.None).GetAwaiter().GetResult();
+        /// <summary>
+        /// Gets the symbol represented by the specified <see cref="SyntaxNode"/> in the context of the given <see cref="Document"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to get the symbol for.
+        /// </param>
+        /// <param name="document">
+        /// The document that contains the syntax node.
+        /// </param>
+        /// <returns>
+        /// The symbol for the syntax node, or <see langword="null"/> if no symbol is found.
+        /// </returns>
+        internal static ISymbol GetSymbol(this SyntaxNode value, Document document) => value.GetSymbolAsync(document, CancellationToken.None).GetAwaiter().GetResult();
 
-        internal static ISymbol GetSymbol(this InvocationExpressionSyntax syntax, Document document) => syntax.GetSymbol(document.GetSemanticModel());
+        /// <summary>
+        /// Gets the symbol represented by the specified <see cref="InvocationExpressionSyntax"/> in the context of the given <see cref="Document"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The invocation expression syntax to get the symbol for.
+        /// </param>
+        /// <param name="document">
+        /// The document that contains the syntax node.
+        /// </param>
+        /// <returns>
+        /// The symbol for the invocation expression, or <see langword="null"/> if no symbol is found.
+        /// </returns>
+        internal static ISymbol GetSymbol(this InvocationExpressionSyntax value, Document document) => value.GetSymbol(document.GetSemanticModel());
 
+        /// <summary>
+        /// Gets the type symbol for the specified <see cref="ArgumentSyntax"/> in the context of the given <see cref="Document"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The argument syntax to get the type symbol for.
+        /// </param>
+        /// <param name="document">
+        /// The document that contains the argument syntax.
+        /// </param>
+        /// <returns>
+        /// The type symbol for the argument, or <see langword="null"/> if no type is found.
+        /// </returns>
         internal static ITypeSymbol GetTypeSymbol(this ArgumentSyntax value, Document document) => value?.GetTypeSymbol(GetSemanticModel(document));
 
+        /// <summary>
+        /// Gets the type symbol for the specified <see cref="ExpressionSyntax"/> in the context of the given <see cref="Document"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The expression syntax to get the type symbol for.
+        /// </param>
+        /// <param name="document">
+        /// The document that contains the expression syntax.
+        /// </param>
+        /// <returns>
+        /// The type symbol for the expression, or <see langword="null"/> if no type is found.
+        /// </returns>
         internal static ITypeSymbol GetTypeSymbol(this ExpressionSyntax value, Document document)
         {
             if (value is null)
@@ -66,27 +138,135 @@ namespace MiKoSolutions.Analyzers
             return typeInfo.Type;
         }
 
+        /// <summary>
+        /// Gets the type symbol for the specified <see cref="MemberAccessExpressionSyntax"/> in the context of the given <see cref="Document"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The member access expression syntax to get the type symbol for.
+        /// </param>
+        /// <param name="document">
+        /// The document that contains the member access expression syntax.
+        /// </param>
+        /// <returns>
+        /// The type symbol for the member access expression, or <see langword="null"/> if no type is found.
+        /// </returns>
         internal static ITypeSymbol GetTypeSymbol(this MemberAccessExpressionSyntax value, Document document) => value?.GetTypeSymbol(GetSemanticModel(document));
 
+        /// <summary>
+        /// Gets the type symbol for the specified <see cref="BaseTypeSyntax"/> in the context of the given <see cref="Document"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The base type syntax to get the type symbol for.
+        /// </param>
+        /// <param name="document">
+        /// The document that contains the base type syntax.
+        /// </param>
+        /// <returns>
+        /// The type symbol for the base type, or <see langword="null"/> if no type is found.
+        /// </returns>
         internal static ITypeSymbol GetTypeSymbol(this BaseTypeSyntax value, Document document) => value?.GetTypeSymbol(GetSemanticModel(document));
 
+        /// <summary>
+        /// Gets the type symbol for the specified <see cref="ClassDeclarationSyntax"/> in the context of the given <see cref="Document"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The class declaration syntax to get the type symbol for.
+        /// </param>
+        /// <param name="document">
+        /// The document that contains the class declaration syntax.
+        /// </param>
+        /// <returns>
+        /// The type symbol for the class declaration, or <see langword="null"/> if no type is found.
+        /// </returns>
         internal static ITypeSymbol GetTypeSymbol(this ClassDeclarationSyntax value, Document document) => value?.GetTypeSymbol(GetSemanticModel(document));
 
+        /// <summary>
+        /// Gets the type symbol for the specified <see cref="RecordDeclarationSyntax"/> in the context of the given <see cref="Document"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The record declaration syntax to get the type symbol for.
+        /// </param>
+        /// <param name="document">
+        /// The document that contains the record declaration syntax.
+        /// </param>
+        /// <returns>
+        /// The type symbol for the record declaration, or <see langword="null"/> if no type is found.
+        /// </returns>
         internal static ITypeSymbol GetTypeSymbol(this RecordDeclarationSyntax value, Document document) => value?.GetTypeSymbol(GetSemanticModel(document));
 
+        /// <summary>
+        /// Gets the type symbol for the specified <see cref="VariableDeclarationSyntax"/> in the context of the given <see cref="Document"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The variable declaration syntax to get the type symbol for.
+        /// </param>
+        /// <param name="document">
+        /// The document that contains the variable declaration syntax.
+        /// </param>
+        /// <returns>
+        /// The type symbol for the variable declaration, or <see langword="null"/> if no type is found.
+        /// </returns>
         internal static ITypeSymbol GetTypeSymbol(this VariableDeclarationSyntax value, Document document) => value?.GetTypeSymbol(GetSemanticModel(document));
 
+        /// <summary>
+        /// Gets the type symbol for the specified <see cref="VariableDesignationSyntax"/> in the context of the given <see cref="Document"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The variable designation syntax to get the type symbol for.
+        /// </param>
+        /// <param name="document">
+        /// The document that contains the variable designation syntax.
+        /// </param>
+        /// <returns>
+        /// The type symbol for the variable designation, or <see langword="null"/> if no type is found.
+        /// </returns>
         internal static ITypeSymbol GetTypeSymbol(this VariableDesignationSyntax value, Document document) => value?.GetTypeSymbol(GetSemanticModel(document));
 
+        /// <summary>
+        /// Gets the type symbol for the specified <see cref="TypeSyntax"/> in the context of the given <see cref="Document"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The type syntax to get the type symbol for.
+        /// </param>
+        /// <param name="document">
+        /// The document that contains the type syntax.
+        /// </param>
+        /// <returns>
+        /// The type symbol for the type syntax, or <see langword="null"/> if no type is found.
+        /// </returns>
         internal static ITypeSymbol GetTypeSymbol(this TypeSyntax value, Document document) => value?.GetTypeSymbol(GetSemanticModel(document));
 
-        internal static bool HasMinimumCSharpVersion(this Document document, LanguageVersion wantedVersion) => document.TryGetSyntaxTree(out var syntaxTree) && syntaxTree.HasMinimumCSharpVersion(wantedVersion);
+        /// <summary>
+        /// Determines whether the specified <see cref="Document"/> has at least the given C# language version.
+        /// </summary>
+        /// <param name="value">
+        /// The document to check.
+        /// </param>
+        /// <param name="wantedVersion">
+        /// One of the enumeration members that specifies the minimum required C# language version.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the document has at least the specified language version; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool HasMinimumCSharpVersion(this Document value, LanguageVersion wantedVersion) => value.TryGetSyntaxTree(out var syntaxTree) && syntaxTree.HasMinimumCSharpVersion(wantedVersion);
 
-        internal static bool IsConst(this ArgumentSyntax syntax, Document document)
+        /// <summary>
+        /// Determines whether the specified <see cref="ArgumentSyntax"/> represents a constant value in the context of the given <see cref="Document"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The argument syntax to check.
+        /// </param>
+        /// <param name="document">
+        /// The document that contains the argument syntax.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the argument is a constant; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsConst(this ArgumentSyntax value, Document document)
         {
-            var identifierName = syntax.Expression.GetName();
+            var identifierName = value.Expression.GetName();
 
-            var method = syntax.GetEnclosingMethod(document.GetSemanticModel());
+            var method = value.GetEnclosingMethod(document.GetSemanticModel());
             var type = method.FindContainingType();
 
             var isConst = type.GetFields(identifierName).Any(_ => _.IsConst);
@@ -104,11 +284,35 @@ namespace MiKoSolutions.Analyzers
             return isLocalConst;
         }
 
-        internal static bool IsNullable(this IsPatternExpressionSyntax pattern, Document document) => pattern.Expression.GetSymbol(document) is ITypeSymbol typeSymbol && typeSymbol.IsNullable();
+        /// <summary>
+        /// Determines whether the specified <see cref="IsPatternExpressionSyntax"/> represents a nullable type in the context of the given <see cref="Document"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The pattern expression syntax to check.
+        /// </param>
+        /// <param name="document">
+        /// The document that contains the pattern expression syntax.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the pattern is nullable; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsNullable(this IsPatternExpressionSyntax value, Document document) => value.Expression.GetSymbol(document) is ITypeSymbol typeSymbol && typeSymbol.IsNullable();
 
-        internal static bool IsEnum(this ArgumentSyntax syntax, Document document)
+        /// <summary>
+        /// Determines whether the specified <see cref="ArgumentSyntax"/> represents an enum value in the context of the given <see cref="Document"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The argument syntax to check.
+        /// </param>
+        /// <param name="document">
+        /// The document that contains the argument syntax.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the argument is an enum; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsEnum(this ArgumentSyntax value, Document document)
         {
-            var expression = (MemberAccessExpressionSyntax)syntax.Expression;
+            var expression = (MemberAccessExpressionSyntax)value.Expression;
 
             if (expression.Expression.GetSymbol(document) is ITypeSymbol type)
             {
@@ -118,6 +322,15 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        /// <summary>
+        /// Determines whether the specified <see cref="SyntaxNode"/> represents a <c>&lt;see cref="..."/&gt;</c> XML element.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the node is a <c>&lt;see cref="..."/&gt;</c> element; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsSeeCref(this SyntaxNode value)
         {
             switch (value)
@@ -141,6 +354,18 @@ namespace MiKoSolutions.Analyzers
             bool IsCref(SyntaxList<XmlAttributeSyntax> syntax) => syntax.FirstOrDefault() is XmlCrefAttributeSyntax;
         }
 
+        /// <summary>
+        /// Determines whether the specified <see cref="SyntaxNode"/> represents a <c>&lt;see cref="..."/&gt;</c> XML element with the given cref value.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to check.
+        /// </param>
+        /// <param name="type">
+        /// The cref value to match.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the node is a <c>&lt;see cref="..."/&gt;</c> element with the specified cref; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsSeeCref(this SyntaxNode value, string type)
         {
             switch (value)
@@ -164,6 +389,18 @@ namespace MiKoSolutions.Analyzers
             bool IsCref(SyntaxList<XmlAttributeSyntax> syntax, string content) => syntax.FirstOrDefault() is XmlCrefAttributeSyntax attribute && attribute.Cref.ToString() == content;
         }
 
+        /// <summary>
+        /// Determines whether the specified <see cref="SyntaxNode"/> represents a <c>&lt;see cref="..."/&gt;</c> XML element with the given <see cref="TypeSyntax"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to check.
+        /// </param>
+        /// <param name="type">
+        /// The type syntax to match.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the node is a <c>&lt;see cref="..."/&gt;</c> element with the specified type; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsSeeCref(this SyntaxNode value, TypeSyntax type)
         {
             switch (value)
@@ -200,6 +437,21 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        /// <summary>
+        /// Determines whether the specified <see cref="SyntaxNode"/> represents a <c>&lt;see cref="..."/&gt;</c> XML element with the given <see cref="TypeSyntax"/> and member name.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to check.
+        /// </param>
+        /// <param name="type">
+        /// The type syntax to match.
+        /// </param>
+        /// <param name="member">
+        /// The member name to match.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the node is a <c>&lt;see cref="..."/&gt;</c> element with the specified type and member; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsSeeCref(this SyntaxNode value, TypeSyntax type, NameSyntax member)
         {
             switch (value)
@@ -237,6 +489,15 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        /// <summary>
+        /// Determines whether the specified <see cref="SyntaxNode"/> represents a <c>&lt;see cref="Task{TResult}.Result"/&gt;</c> XML element.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the node is a <c>&lt;see cref="Task{TResult}.Result"/&gt;</c> element; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsSeeCrefTaskResult(this SyntaxNode value)
         {
             var type = "Task<TResult>".AsTypeSyntax();
@@ -245,6 +506,15 @@ namespace MiKoSolutions.Analyzers
             return value.IsSeeCref(type, member);
         }
 
+        /// <summary>
+        /// Determines whether the specified <see cref="SyntaxNode"/> represents a <c>&lt;see cref="Task"/&gt;</c> or <c>&lt;see cref="Task{TResult}"/&gt;</c> XML element.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the node is a <c>&lt;see cref="Task"/&gt;</c> or <c>&lt;see cref="Task{TResult}"/&gt;</c> element; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsSeeCrefTask(this SyntaxNode value)
         {
             if (value.IsSeeCref("Task".AsTypeSyntax()))
@@ -260,9 +530,18 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        internal static bool IsStringCreation(this SyntaxNode node)
+        /// <summary>
+        /// Determines whether the specified <see cref="SyntaxNode"/> represents a string creation expression.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the node is a string creation expression; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsStringCreation(this SyntaxNode value)
         {
-            if (node is BinaryExpressionSyntax b && b.IsKind(SyntaxKind.AddExpression))
+            if (value is BinaryExpressionSyntax b && b.IsKind(SyntaxKind.AddExpression))
             {
                 if (b.Left.IsStringLiteral() || b.Right.IsStringLiteral())
                 {
@@ -278,22 +557,103 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        /// <summary>
+        /// Gets a copy of the specified <see cref="AccessorDeclarationSyntax"/> with a semicolon token.
+        /// </summary>
+        /// <param name="value">
+        /// The accessor declaration syntax to modify.
+        /// </param>
+        /// <returns>
+        /// A copy of the accessor declaration syntax with a semicolon token.
+        /// </returns>
         internal static AccessorDeclarationSyntax WithSemicolonToken(this AccessorDeclarationSyntax value) => value.WithSemicolonToken(SyntaxKind.SemicolonToken.AsToken());
 
+        /// <summary>
+        /// Gets a copy of the specified <see cref="MethodDeclarationSyntax"/> with a semicolon token.
+        /// </summary>
+        /// <param name="value">
+        /// The method declaration syntax to modify.
+        /// </param>
+        /// <returns>
+        /// A copy of the method declaration syntax with a semicolon token.
+        /// </returns>
         internal static MethodDeclarationSyntax WithSemicolonToken(this MethodDeclarationSyntax value) => value.WithSemicolonToken(SyntaxKind.SemicolonToken.AsToken());
 
+        /// <summary>
+        /// Gets a copy of the specified <see cref="PropertyDeclarationSyntax"/> with a semicolon token.
+        /// </summary>
+        /// <param name="value">
+        /// The property declaration syntax to modify.
+        /// </param>
+        /// <returns>
+        /// A copy of the property declaration syntax with a semicolon token.
+        /// </returns>
         internal static PropertyDeclarationSyntax WithSemicolonToken(this PropertyDeclarationSyntax value) => value.WithSemicolonToken(SyntaxKind.SemicolonToken.AsToken());
 
+        /// <summary>
+        /// Gets a copy of the specified <see cref="AccessorDeclarationSyntax"/> without a semicolon token.
+        /// </summary>
+        /// <param name="value">
+        /// The accessor declaration syntax to modify.
+        /// </param>
+        /// <returns>
+        /// A copy of the accessor declaration syntax without a semicolon token.
+        /// </returns>
         internal static AccessorDeclarationSyntax WithoutSemicolonToken(this AccessorDeclarationSyntax value) => value.WithSemicolonToken(SyntaxKind.None.AsToken());
 
+        /// <summary>
+        /// Gets a copy of the specified <see cref="MethodDeclarationSyntax"/> without a semicolon token.
+        /// </summary>
+        /// <param name="value">
+        /// The method declaration syntax to modify.
+        /// </param>
+        /// <returns>
+        /// A copy of the method declaration syntax without a semicolon token.
+        /// </returns>
         internal static MethodDeclarationSyntax WithoutSemicolonToken(this MethodDeclarationSyntax value) => value.WithSemicolonToken(SyntaxKind.None.AsToken());
 
+        /// <summary>
+        /// Gets a copy of the specified <see cref="PropertyDeclarationSyntax"/> without a semicolon token.
+        /// </summary>
+        /// <param name="value">
+        /// The property declaration syntax to modify.
+        /// </param>
+        /// <returns>
+        /// A copy of the property declaration syntax without a semicolon token.
+        /// </returns>
         internal static PropertyDeclarationSyntax WithoutSemicolonToken(this PropertyDeclarationSyntax value) => value.WithSemicolonToken(SyntaxKind.None.AsToken());
 
+        /// <summary>
+        /// Gets a copy of the specified <see cref="AccessorDeclarationSyntax"/> without an expression body and without a semicolon token.
+        /// </summary>
+        /// <param name="value">
+        /// The accessor declaration syntax to modify.
+        /// </param>
+        /// <returns>
+        /// A copy of the accessor declaration syntax without an expression body and without a semicolon token.
+        /// </returns>
         internal static AccessorDeclarationSyntax WithoutExpressionBody(this AccessorDeclarationSyntax value) => value.WithExpressionBody(null).WithoutSemicolonToken();
 
+        /// <summary>
+        /// Gets a copy of the specified <see cref="MethodDeclarationSyntax"/> without an expression body and without a semicolon token.
+        /// </summary>
+        /// <param name="value">
+        /// The method declaration syntax to modify.
+        /// </param>
+        /// <returns>
+        /// A copy of the method declaration syntax without an expression body and without a semicolon token.
+        /// </returns>
         internal static MethodDeclarationSyntax WithoutExpressionBody(this MethodDeclarationSyntax value) => value.WithExpressionBody(null).WithoutSemicolonToken();
 
+        /// <summary>
+        /// Gets a copy of the specified <see cref="PropertyDeclarationSyntax"/> without an expression body and without a semicolon token.
+        /// </summary>
+        /// <param name="value">
+        /// The property declaration syntax to modify.
+        /// </param>
+        /// <returns>
+        /// A copy of the property declaration syntax without an expression body and without a semicolon token.
+        /// </returns>
         internal static PropertyDeclarationSyntax WithoutExpressionBody(this PropertyDeclarationSyntax value) => value.WithExpressionBody(null).WithoutSemicolonToken();
 
         private static bool IsSameGeneric(TypeSyntax t1, TypeSyntax t2)
