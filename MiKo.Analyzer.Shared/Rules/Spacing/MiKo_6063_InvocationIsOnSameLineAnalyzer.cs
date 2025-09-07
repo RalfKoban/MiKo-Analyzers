@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     case IdentifierNameSyntax expression:
                         return name.IsOnSameLineAs(expression) is false;
 
-                    case InvocationExpressionSyntax invocation when invocation.Expression is IdentifierNameSyntax:
+                    case InvocationExpressionSyntax invocation when invocation.Expression is IdentifierNameSyntax && invocation.ArgumentList.Arguments.None(_ => _.IsSpanningMultipleLines()):
                         return name.IsOnSameLineAs(invocation) is false;
                 }
             }

@@ -46,30 +46,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             switch (symbol)
             {
                 case INamedTypeSymbol type: return AnalyzeStartingPhrase(type, summaryXmls, summaries.Value, Constants.Comments.FactorySummaryPhrase);
-                case IMethodSymbol method: return AnalyzeStartingPhrase(method, summaryXmls, summaries.Value, GetPhrases(method).ToArray());
+                case IMethodSymbol method: return AnalyzeStartingPhrase(method, summaryXmls, summaries.Value, GetPhrases(method));
                 default: return Array.Empty<Diagnostic>();
             }
         }
 
-        private static IEnumerable<string> GetPhrases(IMethodSymbol symbol) => symbol.ReturnType.IsEnumerable() ? GetCollectionPhrases(symbol) : GetSimplePhrases(symbol);
+        private static string[] GetPhrases(IMethodSymbol symbol) => symbol.ReturnType.IsEnumerable() ? GetCollectionPhrases(symbol) : GetSimplePhrases(symbol);
 
-        private static IEnumerable<string> GetSimplePhrases(IMethodSymbol symbol) => GetStartingPhrases(symbol.ReturnType, Constants.Comments.FactoryCreateMethodSummaryStartingPhrase);
+        private static string[] GetSimplePhrases(IMethodSymbol symbol) => GetStartingPhrases(symbol.ReturnType, Constants.Comments.FactoryCreateMethodSummaryStartingPhrase);
 
-        private static IEnumerable<string> GetCollectionPhrases(IMethodSymbol symbol)
+        private static string[] GetCollectionPhrases(IMethodSymbol symbol)
         {
-            symbol.ReturnType.TryGetGenericArgumentCount(out var count);
-
-            if (count <= 0)
+            if (symbol.ReturnType.TryGetGenericArguments(out var arguments))
             {
-                return GetSimplePhrases(symbol);
+                // enhance for generic collections
+                return GetStartingPhrases(arguments.Last(), Constants.Comments.FactoryCreateCollectionMethodSummaryStartingPhrase);
             }
 
-            // enhance for generic collections
-            var startingPhrases = Constants.Comments.FactoryCreateCollectionMethodSummaryStartingPhrase;
-
-            return symbol.ReturnType.TryGetGenericArgumentType(out var argumentType, count - 1)
-                   ? GetStartingPhrases(argumentType, startingPhrases)
-                   : startingPhrases.Select(_ => _.FormatWith(argumentType));
+            return GetSimplePhrases(symbol);
         }
 
         private Diagnostic[] AnalyzeStartingPhrase(ISymbol symbol, IReadOnlyList<XmlElementSyntax> summaryXmls, in ReadOnlySpan<string> summaries, params string[] phrases)

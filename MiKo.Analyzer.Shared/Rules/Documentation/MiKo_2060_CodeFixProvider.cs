@@ -29,12 +29,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var mappedData = MappedData.Value;
 
-            return text.StartsWithAny(mappedData.InstancesReplacementMapKeys, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysA, StringComparison.OrdinalIgnoreCase)
+            return text.StartsWithAny(mappedData.TypeReplacementMapKeysA, StringComparison.OrdinalIgnoreCase)
                 || text.StartsWithAny(mappedData.TypeReplacementMapKeysCD, StringComparison.OrdinalIgnoreCase)
                 || text.StartsWithAny(mappedData.TypeReplacementMapKeysThe, StringComparison.OrdinalIgnoreCase)
                 || text.StartsWithAny(mappedData.TypeReplacementMapKeysThis, StringComparison.OrdinalIgnoreCase)
-                || text.StartsWithAny(mappedData.TypeReplacementMapKeysOthers, StringComparison.OrdinalIgnoreCase);
+                || text.StartsWithAny(mappedData.TypeReplacementMapKeysOthers, StringComparison.OrdinalIgnoreCase)
+                || text.StartsWithAny(mappedData.InstancesReplacementMapKeys, StringComparison.OrdinalIgnoreCase);
         }
 
         internal static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
@@ -48,12 +48,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         case SyntaxKind.ClassDeclaration:
                         case SyntaxKind.InterfaceDeclaration:
                         {
-                            var preparedComment = PrepareTypeComment(summary);
+                            var mappedData = MappedData.Value;
+
+                            var preparedComment = PrepareTypeComment(summary, mappedData);
 
                             if (preparedComment == summary)
                             {
-                                var mappedData = MappedData.Value;
-
                                 preparedComment = Comment(summary, mappedData.InstancesReplacementMapKeys, mappedData.InstancesReplacementMap);
                             }
 
@@ -92,43 +92,69 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => GetUpdatedSyntax(syntax);
 
-        private static XmlElementSyntax PrepareTypeComment(XmlElementSyntax comment)
+        private static XmlElementSyntax PrepareTypeComment(XmlElementSyntax comment, MapData mappedData)
         {
-            var mappedData = MappedData.Value;
+            XmlElementSyntax updated;
 
-            var updated = Comment(comment, mappedData.TypeReplacementMapKeysA, mappedData.TypeReplacementMapA);
+            //// TODO RKN: Add check about starting with 'A', 'T', 'C' or 'D'
+            var startText = comment.GetXmlTextTokens().FirstOrDefault().ValueText.AsSpan().TrimStart();
 
-            if (ReferenceEquals(updated, comment) is false)
+            switch (startText[0])
             {
-                // has been replaced, so nothing more to do
-                return updated;
-            }
+                case 'A':
+                case 'a':
+                {
+                    updated = Comment(comment, mappedData.TypeReplacementMapKeysA, mappedData.TypeReplacementMapA);
 
-            updated = Comment(comment, mappedData.TypeReplacementMapKeysThe, mappedData.TypeReplacementMapThe);
+                    if (ReferenceEquals(updated, comment) is false)
+                    {
+                        // has been replaced, so nothing more to do
+                        return updated;
+                    }
 
-            if (ReferenceEquals(updated, comment) is false)
-            {
-                // has been replaced, so nothing more to do
-                return updated;
-            }
+                    break;
+                }
 
-            updated = Comment(comment, mappedData.TypeReplacementMapKeysThis, mappedData.TypeReplacementMapThis);
+                case 'C':
+                case 'c':
+                case 'D':
+                case 'd':
+                {
+                    updated = Comment(comment, mappedData.TypeReplacementMapKeysCD, mappedData.TypeReplacementMapCD);
 
-            if (ReferenceEquals(updated, comment) is false)
-            {
-                // has been replaced, so nothing more to do
-                return updated;
+                    if (ReferenceEquals(updated, comment) is false)
+                    {
+                        // has been replaced, so nothing more to do
+                        return updated;
+                    }
+
+                    break;
+                }
+
+                case 'T':
+                case 't':
+                {
+                    updated = Comment(comment, mappedData.TypeReplacementMapKeysThe, mappedData.TypeReplacementMapThe);
+
+                    if (ReferenceEquals(updated, comment) is false)
+                    {
+                        // has been replaced, so nothing more to do
+                        return updated;
+                    }
+
+                    updated = Comment(comment, mappedData.TypeReplacementMapKeysThis, mappedData.TypeReplacementMapThis);
+
+                    if (ReferenceEquals(updated, comment) is false)
+                    {
+                        // has been replaced, so nothing more to do
+                        return updated;
+                    }
+
+                    break;
+                }
             }
 
             updated = Comment(comment, mappedData.TypeReplacementMapKeysOthers, mappedData.TypeReplacementMapOthers);
-
-            if (ReferenceEquals(updated, comment) is false)
-            {
-                // has been replaced, so nothing more to do
-                return updated;
-            }
-
-            updated = Comment(comment, mappedData.TypeReplacementMapKeysCD, mappedData.TypeReplacementMapCD);
 
             if (ReferenceEquals(updated, comment) is false)
             {

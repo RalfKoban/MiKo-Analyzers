@@ -757,7 +757,7 @@ namespace MiKoSolutions.Analyzers
                     var phraseSpan = phrase.AsSpan();
 
                     // no separate handling for StringComparison.Ordinal here as that happens around 30 times out of 90_000_000 times; so almost never
-                    if (QuickSubstringProbe(valueSpan, phraseSpan, comparison))
+                    if (QuickContainsSubstringProbe(valueSpan, phraseSpan, comparison))
                     {
                         if (ordinalComparison)
                         {
@@ -1601,12 +1601,13 @@ namespace MiKoSolutions.Analyzers
             return value.HasCharacters() && value.AsSpan().StartsWith(characters, comparison);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWith(this in ReadOnlySpan<char> value, string characters, in StringComparison comparison)
         {
             var others = characters.AsSpan();
 
             // perform quick check
-            return QuickSubstringProbe(value, others, comparison) && value.StartsWith(others, comparison);
+            return QuickStartSubstringProbe(value, others, comparison) && value.StartsWith(others, comparison);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1625,7 +1626,7 @@ namespace MiKoSolutions.Analyzers
                 {
                     var prefix = prefixes[index];
 
-                    if (QuickSubstringProbe(valueSpan, prefix.AsSpan(), comparison))
+                    if (QuickStartSubstringProbe(valueSpan, prefix.AsSpan(), comparison))
                     {
                         if (value.StartsWith(prefix, comparison))
                         {
@@ -2083,7 +2084,7 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        private static bool QuickSubstringProbe(in ReadOnlySpan<char> value, in ReadOnlySpan<char> other, in StringComparison comparison)
+        private static bool QuickContainsSubstringProbe(in ReadOnlySpan<char> value, in ReadOnlySpan<char> other, in StringComparison comparison)
         {
             if (value.Length > other.Length)
             {
@@ -2091,13 +2092,18 @@ namespace MiKoSolutions.Analyzers
                 return true;
             }
 
+            return QuickStartSubstringProbe(value, other, comparison);
+        }
+
+        private static bool QuickStartSubstringProbe(in ReadOnlySpan<char> value, in ReadOnlySpan<char> other, in StringComparison comparison)
+        {
             if (value.Length < other.Length)
             {
                 // cannot match
                 return false;
             }
 
-            // both are same length, so perform a quick compare first
+            // both are at least of similar length, so perform a quick compare first
             if (value.Length > QuickSubstringProbeLengthThreshold)
             {
                 switch (comparison)
@@ -2116,9 +2122,9 @@ namespace MiKoSolutions.Analyzers
 
         private static bool QuickSubstringProbeOrdinal(in ReadOnlySpan<char> value, in ReadOnlySpan<char> other)
         {
-            var length = value.Length;
+            var length = Math.Min(value.Length, other.Length);
 
-            if (length != other.Length && length < QuickSubstringProbeLengthThreshold)
+            if (length < QuickSubstringProbeLengthThreshold)
             {
                 return true;
             }
@@ -2128,9 +2134,9 @@ namespace MiKoSolutions.Analyzers
 
         private static unsafe bool QuickSubstringProbeOrdinalIgnoreCase(in ReadOnlySpan<char> value, in ReadOnlySpan<char> other)
         {
-            var length = value.Length;
+            var length = Math.Min(value.Length, other.Length);
 
-            if (length != other.Length && length < QuickSubstringProbeLengthThreshold)
+            if (length < QuickSubstringProbeLengthThreshold)
             {
                 return true;
             }

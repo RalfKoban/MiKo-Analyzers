@@ -18,13 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
 //// ncrunch: rdi default
 
-        protected static XmlEmptyElementSyntax SeeCrefTaskResult()
-        {
-            var type = "Task<TResult>".AsTypeSyntax();
-            var member = SyntaxFactory.ParseName(nameof(Task<object>.Result));
-
-            return Cref(Constants.XmlTag.See, type, member);
-        }
+        protected static XmlEmptyElementSyntax SeeCrefTaskResult() => SeeCref("Task<TResult>", SyntaxFactory.ParseName(nameof(Task<object>.Result)));
 
         protected sealed override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes)
         {
@@ -90,12 +84,61 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 #pragma warning restore CA1716
 
 //// ncrunch: rdi off
-        private static IEnumerable<string> CreateAlmostCorrectTaskReturnTypeStartingPhrases()
+        private static HashSet<string> CreateAlmostCorrectTaskReturnTypeStartingPhrases()
         {
             var starts = new[] { "a task", "an task" };
             var continuations = new[] { "that represents", "which represents", "representing" };
             var operations = new[] { "the operation", "the asynchronous operation" };
-            var finalVerbs = new[] { "is", "indicates if", "indicates whether", "indicates" };
+            var finalVerbs = new[] { "is", "indicates if", "indicates whether", "indicates", "contains" };
+            var sentences = new[]
+                                {
+                                    //// dot start
+                                    ". The result ",
+                                    ". The Result ",
+                                    ". The task result ",
+                                    ". The task Result ",
+                                    ". The Task result ",
+                                    ". The Task Result ",
+                                    ". The Task's result ",
+                                    ". The Task's Result ",
+                                    ". The task's result ",
+                                    ". The task's Result ",
+                                    //// comma start
+                                    ", the result ",
+                                    ", the Result ",
+                                    ", the task result ",
+                                    ", the task Result ",
+                                    ", the Task result ",
+                                    ", the Task Result ",
+                                    ", the task's result ",
+                                    ", the task's Result ",
+                                    ", the Task's result ",
+                                    ", the Task's Result ",
+                                    //// semicolon start
+                                    "; the result ",
+                                    "; the Result ",
+                                    "; the task result ",
+                                    "; the task Result ",
+                                    "; the Task result ",
+                                    "; the Task Result ",
+                                    "; the task's result ",
+                                    "; the task's Result ",
+                                    "; the Task's result ",
+                                    "; the Task's Result ",
+                                    //// where start
+                                    " where the result ",
+                                    " where the Result ",
+                                    " where the task result ",
+                                    " where the task Result ",
+                                    " where the Task result ",
+                                    " where the Task Result ",
+                                    " where the task's result ",
+                                    " where the task's Result ",
+                                    " where the Task's result ",
+                                    " where the Task's Result ",
+                                };
+
+            var results = new HashSet<string>();
 
             foreach (var start in starts)
             {
@@ -105,25 +148,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         var middle = string.Concat(" ", continuation, " ", operation);
 
-                        var middleLowerCase = middle + ". The result ";
-                        var middleUpperCase = middle + ". The Result ";
-
-                        foreach (var verb in finalVerbs)
+                        foreach (var sentence in sentences)
                         {
-                            var endingLowerCase = middleLowerCase + verb + " ";
-                            var endingUpperCase = middleUpperCase + verb + " ";
+                            var beginning = string.Concat(start, middle, sentence);
 
-                            yield return start + endingLowerCase;
-                            yield return start + endingUpperCase;
-                            yield return start.ToUpperCaseAt(0) + endingLowerCase;
-                            yield return start.ToUpperCaseAt(0) + endingUpperCase;
+                            foreach (var verb in finalVerbs)
+                            {
+                                var final = string.Concat(beginning, verb, " ");
 
-                            yield return "Returns " + start + endingLowerCase;
-                            yield return "Returns " + start + endingUpperCase;
+                                results.Add(final);
+                                results.Add(final.ToUpperCaseAt(0));
+                                results.Add("Returns " + final);
+                            }
                         }
                     }
                 }
             }
+
+            return results;
         }
 //// ncrunch: rdi default
 

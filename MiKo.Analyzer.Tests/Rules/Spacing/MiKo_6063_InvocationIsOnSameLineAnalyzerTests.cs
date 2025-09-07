@@ -47,6 +47,29 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_if_invocation_is_on_different() => No_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public async void DoSomething(TestMe someObject)
+    {
+        await MyCallback(async my =>
+                                     {
+                                        await my.DoSomething(1, 2, 3).ConfigureAwait(false);
+                                        await my.DoSomething(4, 5, 6).ConfigureAwait(false);
+                                        await my.DoSomething(7, 8, 9).ConfigureAwait(false);
+                                     }).ConfigureAwait(false);
+    }
+
+    private Task DoSomething(int i, int j, int k) => Task.CompletedTask;
+
+    private async Task MyCallback(Func<TestMe, Task> callback) => await callback(null);
+}
+");
+
+        [Test]
         public void An_issue_is_reported_if_invocation_is_on_different_line() => An_issue_is_reported_for(@"
 public class TestMe
 {

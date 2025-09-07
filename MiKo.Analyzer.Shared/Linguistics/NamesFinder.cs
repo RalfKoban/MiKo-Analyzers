@@ -6,9 +6,7 @@ using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-using MiKoSolutions.Analyzers.Linguistics;
-
-namespace MiKoSolutions.Analyzers.Rules.Naming
+namespace MiKoSolutions.Analyzers.Linguistics
 {
     public static class NamesFinder
     {
@@ -265,6 +263,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                            .ReplaceWithProbe("_no_throws_", "_throws_no_")
                            .ReplaceWithProbe("_has_has_", "_has_")
                            .ReplaceWithProbe("D_oes", "_does")
+                           .ReplaceWithProbe("F_actory", "_factory")
                            .ReplaceWithProbe("M_akes", "_makes")
                            .ReplaceWithProbe("O_bject", "_object")
                            .ReplaceWithProbe("R_eference", "_reference")
