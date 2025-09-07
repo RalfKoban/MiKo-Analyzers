@@ -6,6 +6,77 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public partial class MiKo_1063_AbbreviationsInNameAnalyzerTests
     {
         [Test]
+        public void No_issue_is_reported_for_special_name_([Values("paramName")] string specialName) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(string " + specialName + @")
+        {
+        }
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_Json_constructor_([ValueSource(nameof(BadPrefixes))] string name) => No_issue_is_reported_for(@"
+using System;
+using System.Text.Json.Serialization;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [JsonConstructor]
+        public TestMe(int " + name + @"Value)
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_Newtonsoft_Json_constructor_([ValueSource(nameof(BadPrefixes))] string name) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Newtonsoft.Json.JsonConstructorAttribute]
+        public TestMe(int " + name + @"Value)
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_extern_method_([ValueSource(nameof(BadPrefixes))] string part) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static extern int " + part + @"DoSomething();
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_parameters_of_extern_method_([ValueSource(nameof(BadPrefixes))] string part) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static extern int DoSomething(int " + part + @"Parameter);
+    }
+}");
+
+        [Test]
         public void An_issue_is_reported_for_local_variable_with_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
 using System;
 
@@ -155,75 +226,18 @@ namespace " + prefix + @"Namespace
     { }
 }");
 
-        [Test]
-        public void No_issue_is_reported_for_special_name_([Values("paramName")] string specialName) => No_issue_is_reported_for(@"
+        [TestCase("seq", "sequential")]
+        public void Code_gets_fixed_for_prefix_(string originalTerm, string fixedTerm)
+        {
+            const string Template = @"
 using System;
 
-namespace Bla
+public class TestMe(int ###Term)
 {
-    public class TestMe
-    {
-        public void DoSomething(string " + specialName + @")
-        {
-        }
-    }
-}");
-
-        [Test]
-        public void No_issue_is_reported_for_Json_constructor_([ValueSource(nameof(BadPrefixes))] string name) => No_issue_is_reported_for(@"
-using System;
-using System.Text.Json.Serialization;
-
-namespace Bla
-{
-    public class TestMe
-    {
-        [JsonConstructor]
-        public TestMe(int " + name + @"Value)
-        {
-        }
-    }
 }
-");
+";
 
-        [Test]
-        public void No_issue_is_reported_for_Newtonsoft_Json_constructor_([ValueSource(nameof(BadPrefixes))] string name) => No_issue_is_reported_for(@"
-using System;
-
-namespace Bla
-{
-    public class TestMe
-    {
-        [Newtonsoft.Json.JsonConstructorAttribute]
-        public TestMe(int " + name + @"Value)
-        {
+            VerifyCSharpFix(Template.Replace("###", originalTerm), Template.Replace("###", fixedTerm));
         }
-    }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_extern_method_([ValueSource(nameof(BadPrefixes))] string part) => No_issue_is_reported_for(@"
-using System;
-
-namespace Bla
-{
-    public class TestMe
-    {
-        public static extern int " + part + @"DoSomething();
-    }
-}");
-
-        [Test]
-        public void No_issue_is_reported_for_parameters_of_extern_method_([ValueSource(nameof(BadPrefixes))] string part) => No_issue_is_reported_for(@"
-using System;
-
-namespace Bla
-{
-    public class TestMe
-    {
-        public static extern int DoSomething(int " + part + @"Parameter);
-    }
-}");
     }
 }

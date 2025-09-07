@@ -24,6 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private const string UsedInCombinationUnclearReplacement = "made to work with";
 
         private const string UsedInPluralReplacement = "are suitable for";
+        private const string SpecialUsedInPluralReplacement = "s that are suitable for";
         private const string UsedInSingularReplacement = "is suitable for";
         private const string UsedInUnclearReplacement = "suitable for";
 
@@ -192,6 +193,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                    "are to be used in",
                                                                    "have to be used in",
                                                                };
+
+        private static readonly string[] SpecialUsedInPluralPhrases =
+                                                                      {
+                                                                          "s that can be used in",
+                                                                          "s which can be used in",
+                                                                      };
 
         private static readonly string[] UsedInSingularPhrases =
                                                                  {
@@ -391,12 +398,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 issues.AddRange(AnalyzeForSpecialPhrase(token, AreUsedToPhrase, Verbalizer.MakeInfiniteVerb));
 
                 AnalyzeForPhrases(issues, token, UsedToPhrase, UsedToReplacement); // do not use case-insensitive here
+
                 AnalyzeForPhrases(issues, token, UsedInCombinationPluralPhrases, UsedInCombinationPluralReplacement, StringComparison.OrdinalIgnoreCase);
                 AnalyzeForPhrases(issues, token, UsedInCombinationSingularPhrases, UsedInCombinationSingularReplacement, StringComparison.OrdinalIgnoreCase);
                 AnalyzeForPhrases(issues, token, UsedInCombinationUnclearPhrases, UsedInCombinationUnclearReplacement, StringComparison.OrdinalIgnoreCase);
+
                 AnalyzeForPhrases(issues, token, UsedInternallyPluralPhrases, UsedInternallyPluralReplacement, StringComparison.OrdinalIgnoreCase);
                 AnalyzeForPhrases(issues, token, UsedInternallySingularPhrases, UsedInternallySingularReplacement, StringComparison.OrdinalIgnoreCase);
                 AnalyzeForPhrases(issues, token, UsedInternallyUnclearPhrases, UsedInternallyUnclearReplacement, StringComparison.OrdinalIgnoreCase);
+
+                AnalyzeForPhrases(issues, token, SpecialUsedInPluralPhrases, SpecialUsedInPluralReplacement, StringComparison.OrdinalIgnoreCase);
+
                 AnalyzeForPhrases(issues, token, UsedInPluralPhrases, UsedInPluralReplacement, StringComparison.OrdinalIgnoreCase);
                 AnalyzeForPhrases(issues, token, UsedInSingularPhrases, UsedInSingularReplacement, StringComparison.OrdinalIgnoreCase);
                 AnalyzeForPhrases(issues, token, UsedInUnclearPhrases, UsedInUnclearReplacement, StringComparison.OrdinalIgnoreCase);

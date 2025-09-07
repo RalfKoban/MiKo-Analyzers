@@ -38,35 +38,17 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsOnSameLineAs(this SyntaxNode value, in SyntaxNodeOrToken other) => value?.GetStartingLine() == other.GetStartingLine();
 
-        internal static T WithAdditionalLeadingTrivia<T>(this T value, in SyntaxTriviaList trivia) where T : SyntaxNode
-        {
-            return value.WithLeadingTrivia(value.GetLeadingTrivia().AddRange(trivia));
-        }
+        internal static T WithAdditionalLeadingTrivia<T>(this T value, in SyntaxTriviaList trivia) where T : SyntaxNode => value.WithLeadingTrivia(value.GetLeadingTrivia().AddRange(trivia));
 
-        internal static T WithAdditionalLeadingTrivia<T>(this T value, in SyntaxTrivia trivia) where T : SyntaxNode
-        {
-            return value.WithLeadingTrivia(value.GetLeadingTrivia().Add(trivia));
-        }
+        internal static T WithAdditionalLeadingTrivia<T>(this T value, in SyntaxTrivia trivia) where T : SyntaxNode => value.WithLeadingTrivia(value.GetLeadingTrivia().Add(trivia));
 
-        internal static T WithAdditionalLeadingTrivia<T>(this T value, params SyntaxTrivia[] trivia) where T : SyntaxNode
-        {
-            return value.WithLeadingTrivia(value.GetLeadingTrivia().AddRange(trivia));
-        }
+        internal static T WithAdditionalLeadingTrivia<T>(this T value, params SyntaxTrivia[] trivia) where T : SyntaxNode => value.WithLeadingTrivia(value.GetLeadingTrivia().AddRange(trivia));
 
-        internal static T WithAdditionalTrailingTrivia<T>(this T value, in SyntaxTriviaList trivia) where T : SyntaxNode
-        {
-            return value.WithTrailingTrivia(value.GetTrailingTrivia().AddRange(trivia));
-        }
+        internal static T WithAdditionalTrailingTrivia<T>(this T value, in SyntaxTriviaList trivia) where T : SyntaxNode => value.WithTrailingTrivia(value.GetTrailingTrivia().AddRange(trivia));
 
-        internal static T WithAdditionalTrailingTrivia<T>(this T value, in SyntaxTrivia trivia) where T : SyntaxNode
-        {
-            return value.WithTrailingTrivia(value.GetTrailingTrivia().Add(trivia));
-        }
+        internal static T WithAdditionalTrailingTrivia<T>(this T value, in SyntaxTrivia trivia) where T : SyntaxNode => value.WithTrailingTrivia(value.GetTrailingTrivia().Add(trivia));
 
-        internal static T WithAdditionalTrailingTrivia<T>(this T value, params SyntaxTrivia[] trivia) where T : SyntaxNode
-        {
-            return value.WithTrailingTrivia(value.GetTrailingTrivia().AddRange(trivia));
-        }
+        internal static T WithAdditionalTrailingTrivia<T>(this T value, params SyntaxTrivia[] trivia) where T : SyntaxNode => value.WithTrailingTrivia(value.GetTrailingTrivia().AddRange(trivia));
 
         internal static T WithEndOfLine<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
