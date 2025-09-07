@@ -416,38 +416,43 @@ public class TestMe
 
         [TestCase("A cache for")]
         [TestCase("A Cache for")]
-        [TestCase("A collection for")]
-        [TestCase("A collection of")]
-        [TestCase("A collection that is holding")]
-        [TestCase("A collection that holds")]
-        [TestCase("A collection which holds")]
-        [TestCase("A collection which is holding")]
-        [TestCase("A collection holding")]
-        [TestCase("A collection that is containing")]
-        [TestCase("A collection that contains")]
-        [TestCase("A collection which contains")]
-        [TestCase("A collection which is containing")]
         [TestCase("A collection containing")]
+        [TestCase("A collection for")]
+        [TestCase("A collection holding")]
+        [TestCase("A collection of")]
+        [TestCase("A collection storing")]
+        [TestCase("A collection that contains")]
+        [TestCase("A collection that holds")]
+        [TestCase("A collection that is containing")]
+        [TestCase("A collection that is holding")]
         [TestCase("A collection that is storing")]
         [TestCase("A collection that stores")]
-        [TestCase("A collection which stores")]
+        [TestCase("A collection which contains")]
+        [TestCase("A collection which holds")]
+        [TestCase("A collection which is containing")]
+        [TestCase("A collection which is holding")]
         [TestCase("A collection which is storing")]
-        [TestCase("A collection storing")]
+        [TestCase("A collection which stores")]
         [TestCase("A dictionary for")]
         [TestCase("A dictionary of")]
         [TestCase("A list for")]
         [TestCase("A list of")]
+        [TestCase("A queue that contains")]
+        [TestCase("A Queue that contains")]
+        [TestCase("A stack that contains")]
+        [TestCase("A Stack that contains")]
         [TestCase("An array for")]
         [TestCase("An array of")]
         [TestCase("An array that holds")]
         [TestCase("An array which holds")]
+        [TestCase("An enumerable containing")]
+        [TestCase("An Enumerable containing")]
         [TestCase("Array for")]
         [TestCase("Array holding")]
         [TestCase("Array of")]
         [TestCase("Array that holds")]
         [TestCase("Array which holds")]
         [TestCase("Cache for")]
-        [TestCase("Containing")]
         [TestCase("Collection for")]
         [TestCase("Collection holding")]
         [TestCase("Collection of")]
@@ -455,12 +460,16 @@ public class TestMe
         [TestCase("Collection that is holding")]
         [TestCase("Collection which holds")]
         [TestCase("Collection which is holding")]
+        [TestCase("Containing")]
         [TestCase("Dictionary for")]
         [TestCase("Dictionary of")]
+        [TestCase("Enumerable for")]
         [TestCase("Holding")]
         [TestCase("Holds")]
         [TestCase("List for")]
         [TestCase("List of")]
+        [TestCase("Queue for")]
+        [TestCase("Stack for")]
         [TestCase("Stores")]
         [TestCase("Storing")]
         [TestCase("The collection that holds")]
@@ -589,6 +598,80 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
         }
 
+        [TestCase("dictionary mapping a", "Contains the mapping information from a")]
+        [TestCase("Dictionary mapping a", "Contains the mapping information from a")]
+        [TestCase("dictionary mapping from a", "Contains the mapping information from a")]
+        [TestCase("Dictionary mapping from a", "Contains the mapping information from a")]
+        [TestCase("dictionary mapping from", "Contains the mapping information from")]
+        [TestCase("Dictionary mapping from", "Contains the mapping information from")]
+        [TestCase("dictionary mapping info a", "Contains the mapping information from a")]
+        [TestCase("Dictionary mapping info a", "Contains the mapping information from a")]
+        [TestCase("dictionary mapping info from a", "Contains the mapping information from a")]
+        [TestCase("Dictionary mapping info from a", "Contains the mapping information from a")]
+        [TestCase("dictionary mapping info from", "Contains the mapping information from")]
+        [TestCase("Dictionary mapping info from", "Contains the mapping information from")]
+        [TestCase("dictionary mapping info", "Contains the mapping information from")]
+        [TestCase("Dictionary mapping info", "Contains the mapping information from")]
+        [TestCase("dictionary mapping information a", "Contains the mapping information from a")]
+        [TestCase("Dictionary mapping information a", "Contains the mapping information from a")]
+        [TestCase("dictionary mapping information from a", "Contains the mapping information from a")]
+        [TestCase("Dictionary mapping information from a", "Contains the mapping information from a")]
+        [TestCase("dictionary mapping information from", "Contains the mapping information from")]
+        [TestCase("Dictionary mapping information from", "Contains the mapping information from")]
+        [TestCase("dictionary mapping information", "Contains the mapping information from")]
+        [TestCase("Dictionary mapping information", "Contains the mapping information from")]
+        [TestCase("dictionary mapping infos a", "Contains the mapping information from a")]
+        [TestCase("Dictionary mapping infos a", "Contains the mapping information from a")]
+        [TestCase("dictionary mapping infos from a", "Contains the mapping information from a")]
+        [TestCase("Dictionary mapping infos from a", "Contains the mapping information from a")]
+        [TestCase("dictionary mapping infos from", "Contains the mapping information from")]
+        [TestCase("Dictionary mapping infos from", "Contains the mapping information from")]
+        [TestCase("dictionary mapping infos", "Contains the mapping information from")]
+        [TestCase("Dictionary mapping infos", "Contains the mapping information from")]
+        [TestCase("dictionary mapping", "Contains the mapping information from")]
+        [TestCase("Dictionary mapping", "Contains the mapping information from")]
+        [TestCase("dictionary mappings a", "Contains the mapping information from a")]
+        [TestCase("Dictionary mappings a", "Contains the mapping information from a")]
+        [TestCase("dictionary mappings from a", "Contains the mapping information from a")]
+        [TestCase("Dictionary mappings from a", "Contains the mapping information from a")]
+        [TestCase("dictionary mappings from", "Contains the mapping information from")]
+        [TestCase("Dictionary mappings from", "Contains the mapping information from")]
+        [TestCase("dictionary mappings info a", "Contains the mapping information from a")]
+        [TestCase("Dictionary mappings info a", "Contains the mapping information from a")]
+        [TestCase("dictionary mappings info from a", "Contains the mapping information from a")]
+        [TestCase("Dictionary mappings info from a", "Contains the mapping information from a")]
+        [TestCase("dictionary mappings info from", "Contains the mapping information from")]
+        [TestCase("Dictionary mappings info from", "Contains the mapping information from")]
+        [TestCase("dictionary mappings info", "Contains the mapping information from")]
+        [TestCase("Dictionary mappings info", "Contains the mapping information from")]
+        [TestCase("dictionary mappings information a", "Contains the mapping information from a")]
+        [TestCase("Dictionary mappings information a", "Contains the mapping information from a")]
+        [TestCase("dictionary mappings information from a", "Contains the mapping information from a")]
+        [TestCase("Dictionary mappings information from a", "Contains the mapping information from a")]
+        [TestCase("dictionary mappings information from", "Contains the mapping information from")]
+        [TestCase("Dictionary mappings information from", "Contains the mapping information from")]
+        [TestCase("dictionary mappings information", "Contains the mapping information from")]
+        [TestCase("Dictionary mappings information", "Contains the mapping information from")]
+        [TestCase("dictionary mappings", "Contains the mapping information from")]
+        [TestCase("Dictionary mappings", "Contains the mapping information from")]
+        public void Code_gets_fixed_for_dictionary_field_(string originalComment, string fixedComment)
+        {
+            const string Template = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// ### A to B.
+    /// </summary>
+    private Dictionary<string, int> m_field;
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
+        }
+
         protected override string GetDiagnosticId() => MiKo_2080_FieldSummaryDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2080_FieldSummaryDefaultPhraseAnalyzer();
@@ -631,12 +714,13 @@ public class TestMe
 
             string[] nonBooleanStarts =
                                         [
-                                            "Controls",
-                                            "Indicates",
+                                            "Control",
                                             "Controling", // typo
                                             "Controlling",
-                                            "Indicating",
+                                            "Controls",
+                                            "Indicate",
                                             "Indicates",
+                                            "Indicating",
                                             "Shall control",
                                             "Shall indicate",
                                             "Should control",
@@ -662,13 +746,22 @@ public class TestMe
                         var phrase = begin + end;
 
                         results.Add(phrase);
+                        results.Add(phrase.ToLowerCaseAt(0));
                     }
                 }
+            }
+
+            foreach (var phrase in new[] { "If", "When", "Whether" })
+            {
+                results.Add(phrase);
+                results.Add(phrase.ToLowerCaseAt(0));
             }
 
             // those are allowed boolean terms
             results.Remove("Indicates whether");
             results.Remove("Indicates whether or not");
+            results.Remove("indicates whether");
+            results.Remove("indicates whether or not");
 
             return results;
         }

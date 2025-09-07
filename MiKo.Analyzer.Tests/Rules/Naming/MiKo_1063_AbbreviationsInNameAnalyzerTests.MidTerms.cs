@@ -132,5 +132,18 @@ namespace My" + midterm + @"Namespace
     public class TestMe
     { }
 }");
+
+        [TestCase("Seq", "Sequential")]
+        public void Code_gets_fixed_for_midterm_(string originalTerm, string fixedTerm)
+        {
+            const string Template = @"
+using System;
+
+public class Test###Me
+{ }
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalTerm), Template.Replace("###", fixedTerm));
+        }
     }
 }

@@ -132,5 +132,19 @@ namespace Bla" + postfix + @"
     public class TestMe
     { }
 }");
+
+        [TestCase("Seq", "Sequence")]
+        public void Code_gets_fixed_for_postfix_(string originalTerm, string fixedTerm)
+        {
+            const string Template = @"
+using System;
+
+public class TestMe###
+{
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalTerm), Template.Replace("###", fixedTerm));
+        }
     }
 }

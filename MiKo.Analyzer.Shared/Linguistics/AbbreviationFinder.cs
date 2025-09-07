@@ -119,6 +119,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("res", "result"),
                                                       new Pair("resp", "response"),
                                                       new Pair("sem", "semantic"),
+                                                      new Pair("seq", "sequential"),
                                                       new Pair("sess", "session"),
                                                       new Pair("spec", "specification"),
                                                       new Pair("specs", "specifications"),
@@ -257,6 +258,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Res", "Result"),
                                                           new Pair("Resp", "Response"),
                                                           new Pair("Sem", "Semantic"),
+                                                          new Pair("Seq", "Sequential"),
                                                           new Pair("Sess", "Session"),
                                                           new Pair("Spec", "Specification"),
                                                           new Pair("Src", "Source"),
@@ -278,7 +280,12 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly Pair[] MidTerms = OnlyMidTerms.Concat(Prefixes).ToArray();
 
-        private static readonly Pair[] Postfixes = OnlyMidTerms;
+        private static readonly Pair[] OnlyPostFixes =
+                                                       {
+                                                           new Pair("Seq", "Sequence"),
+                                                       };
+
+        private static readonly Pair[] Postfixes = OnlyMidTerms.Except(OnlyPostFixes, IdenticalKeyComparer.Instance).Concat(OnlyPostFixes).OrderBy(_ => _.Key).ToArray();
 
         private static readonly string[] AllowedPostFixTerms =
                                                                {
@@ -560,6 +567,25 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 }
 
                 return spanY.Contains(spanX);
+            }
+
+            public int GetHashCode(Pair obj) => 42; // we have to rely on 'Equals', so we have to provide the same hash to cause 'Equals' to be invoked
+        }
+
+        private sealed class IdenticalKeyComparer : IEqualityComparer<Pair>
+        {
+            internal static readonly IdenticalKeyComparer Instance = new IdenticalKeyComparer();
+
+            private IdenticalKeyComparer()
+            {
+            }
+
+            public bool Equals(Pair x, Pair y)
+            {
+                var spanX = x.Key.AsSpan();
+                var spanY = y.Key.AsSpan();
+
+                return spanX.Length == spanY.Length && spanX.SequenceEqual(spanY);
             }
 
             public int GetHashCode(Pair obj) => 42; // we have to rely on 'Equals', so we have to provide the same hash to cause 'Equals' to be invoked

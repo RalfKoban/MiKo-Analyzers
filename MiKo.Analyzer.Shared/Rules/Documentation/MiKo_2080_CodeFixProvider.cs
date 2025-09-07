@@ -59,11 +59,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 #pragma warning disable CA1861
             public MapData()
             {
-                ReplacementMap = CreateReplacementMapKeys().OrderByDescending(_ => _.Length) // get longest items first as shorter items may be part of the longer ones and would cause problems
-                                                           .ThenBy(_ => _)
-                                                           .Select(_ => new Pair(_))
-                                                           .Concat(new[] { new Pair("Factory ", "a factory ") })
-                                                           .ToArray();
+                ReplacementMap = CreateReplacementMapPairs().OrderByDescending(_ => _.Key.Length) // get longest items first as shorter items may be part of the longer ones and would cause problems
+                                                            .ThenBy(_ => _.Key)
+                                                            .Concat(new[] { new Pair("Factory ", "a factory ") })
+                                                            .ToArray();
 
                 var keys = ReplacementMap.ToArray(_ => _.Key);
 
@@ -120,33 +119,43 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                      new Pair("The a ", "The "),
                                      new Pair("The an ", "The "),
                                      new Pair("The the ", "The "),
+                                     new Pair(" from from ", " from "),
+                                     new Pair(" whether if ", " whether "),
+                                     new Pair(" whether when ", " whether "),
+                                     new Pair(" whether whether ", " whether "),
                                  };
 
                 CleanupMapKeys = CleanupMap.ToArray(_ => _.Key);
             }
 #pragma warning restore CA1861
 
-            private static HashSet<string> CreateReplacementMapKeys()
+            private static List<Pair> CreateReplacementMapPairs()
             {
-                var keys = Enumerable.Empty<string>()
-                                     .Concat(CreateBooleanReplacementMapKeys())
-                                     .Concat(CreateGuidReplacementMapKeys())
-                                     .Concat(CreateCollectionReplacementMapKeys())
-                                     .Concat(CreateGetReplacementMapKeys())
-                                     .Concat(CreateOtherReplacementMapKeys());
+                var keys = new List<string>(6_144);
 
-                var results = new HashSet<string>(); // avoid duplicates
+                FillBooleanReplacementMapKeys(keys);
+                FillGuidReplacementMapKeys(keys);
+                FillCollectionReplacementMapKeys(keys);
+                FillGetReplacementMapKeys(keys);
+                FillOtherReplacementMapKeys(keys);
+
+                var hashSet = new HashSet<string>(); // avoid duplicates
 
                 foreach (var key in keys)
                 {
-                    results.Add(key);
-                    results.Add(key.ToLowerCaseAt(0));
+                    hashSet.Add(key);
+                    hashSet.Add(key.ToLowerCaseAt(0));
                 }
+
+                var results = new List<Pair>(8_192);
+                results.AddRange(hashSet.Select(_ => new Pair(_)));
+
+                FillSpecialCollectionReplacementPairs(results);
 
                 return results;
             }
 
-            private static HashSet<string> CreateBooleanReplacementMapKeys()
+            private static void FillBooleanReplacementMapKeys(List<string> keys)
             {
                 string[] booleans =
                                     {
@@ -218,7 +227,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                 }
 
-                foreach (var start in new[] { "Indicating", "Indicates", "Controlling", "Controling", "Controls" })
+                foreach (var start in new[] { "Indicating", "Indicates", "Indicate", "Controlling", "Controling", "Controls", "Control" })
                 {
                     foreach (var continuation in continuations)
                     {
@@ -232,16 +241,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                 }
 
-                return results;
+                keys.AddRange(results);
             }
 
-            private static List<string> CreateGuidReplacementMapKeys()
+            private static void FillGuidReplacementMapKeys(List<string> keys)
             {
                 string[] starts = { string.Empty, "A ", "The " };
                 string[] types = { "GUID", "Guid", "guid", "TypeGuid", "Guids" };
                 string[] continuations = { "of", "for" };
-
-                var results = new List<string>(3 + (starts.Length * types.Length * continuations.Length));
 
                 foreach (var start in starts)
                 {
@@ -251,86 +258,126 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         foreach (var continuation in continuations)
                         {
-                            results.Add(begin + continuation + " ");
+                            keys.Add(begin + continuation + " ");
                         }
                     }
                 }
 
-                results.Add("A unique identifier for "); // needed to avoid duplicate text in type guid comments
-                results.Add("An unique identifier for "); // needed to avoid duplicate text in type guid comments
-                results.Add("The unique identifier for "); // needed to avoid duplicate text in type guid comments
-
-                return results;
+                keys.Add("A unique identifier for "); // needed to avoid duplicate text in type guid comments
+                keys.Add("An unique identifier for "); // needed to avoid duplicate text in type guid comments
+                keys.Add("The unique identifier for "); // needed to avoid duplicate text in type guid comments
             }
 
-            private static IEnumerable<string> CreateCollectionReplacementMapKeys()
+            private static void FillCollectionReplacementMapKeys(List<string> keys)
             {
-                yield return "Containing ";
-                yield return "Storing ";
-                yield return "Stores ";
-                yield return "Holding ";
-                yield return "Holds ";
-                yield return "This is ";
+                keys.Add("Containing ");
+                keys.Add("Storing ");
+                keys.Add("Stores ");
+                keys.Add("Holding ");
+                keys.Add("Holds ");
+                keys.Add("This is ");
 
+                foreach (var begin in CollectionStartupPhrases())
+                {
+                    keys.Add(begin + " of all ");
+                    keys.Add(begin + " of ");
+                    keys.Add(begin + " for all ");
+                    keys.Add(begin + " for ");
+
+                    keys.Add(begin + " that holds ");
+                    keys.Add(begin + " which holds ");
+                    keys.Add(begin + " holds ");
+                    keys.Add(begin + " holding ");
+                    keys.Add(begin + " is holding ");
+                    keys.Add(begin + " that is holding ");
+                    keys.Add(begin + " which is holding ");
+
+                    keys.Add(begin + " that contains ");
+                    keys.Add(begin + " which contains ");
+                    keys.Add(begin + " contains ");
+                    keys.Add(begin + " containing ");
+                    keys.Add(begin + " is containing ");
+                    keys.Add(begin + " that is containing ");
+                    keys.Add(begin + " which is containing ");
+
+                    keys.Add(begin + " that stores ");
+                    keys.Add(begin + " which stores ");
+                    keys.Add(begin + " stores ");
+                    keys.Add(begin + " storing ");
+                    keys.Add(begin + " is storing ");
+                    keys.Add(begin + " that is storing ");
+                    keys.Add(begin + " which is storing ");
+                }
+            }
+
+            private static void FillSpecialCollectionReplacementPairs(List<Pair> results)
+            {
+                const string Replacement = "mapping information from ";
+
+                foreach (var begin in CollectionStartupPhrases())
+                {
+                    results.Add(new Pair(begin + " mapping ", Replacement));
+                    results.Add(new Pair(begin + " mapping info ", Replacement));
+                    results.Add(new Pair(begin + " mapping infos ", Replacement));
+                    results.Add(new Pair(begin + " mapping information ", Replacement));
+                    results.Add(new Pair(begin + " mapping informations ", Replacement));
+                    results.Add(new Pair(begin + " mappings ", Replacement));
+                    results.Add(new Pair(begin + " mappings info ", Replacement));
+                    results.Add(new Pair(begin + " mappings information ", Replacement));
+                }
+            }
+
+            private static void FillGetReplacementMapKeys(List<string> keys)
+            {
+                keys.Add("Gets ");
+                keys.Add("Get ");
+                keys.Add("Sets ");
+                keys.Add("Set ");
+                keys.Add("Gets or sets ");
+                keys.Add("Gets or Sets ");
+                keys.Add("Get or set ");
+                keys.Add("Get or Set ");
+                keys.Add("Return ");
+                keys.Add("Returns ");
+
+                // typos
+                keys.Add("/Return ");
+                keys.Add("/Returns ");
+            }
+
+            private static void FillOtherReplacementMapKeys(List<string> keys)
+            {
+                keys.Add("Defines ");
+                keys.Add("Specifies ");
+                keys.Add("Use this ");
+                keys.Add("This ");
+            }
+
+            private static IEnumerable<string> CollectionStartupPhrases()
+            {
                 var articles = new[] { string.Empty, "A ", "An ", "The ", "This ", "a ", "an ", "the ", "this " };
                 var starts = new[]
-                                 {
-                                     "Array", "array",
-                                     "Collection", "collection",
-                                     "List", "list",
-                                     "Dictionary", "dictionary",
-                                     "Cache", "cache",
-                                 };
+                             {
+                                 "Array", "array",
+                                 "Collection", "collection",
+                                 "List", "list",
+                                 "Dictionary", "dictionary",
+                                 "Cache", "cache",
+                                 "Stack", "stack",
+                                 "Queue", "queue",
+                                 "Enumerable", "enumerable",
+                             };
 
                 foreach (var article in articles)
                 {
                     foreach (var start in starts)
                     {
-                        var begin = article + start;
-
-                        yield return begin + " of all ";
-                        yield return begin + " of ";
-                        yield return begin + " for all ";
-                        yield return begin + " for ";
-
-                        yield return begin + " that holds ";
-                        yield return begin + " which holds ";
-                        yield return begin + " holds ";
-                        yield return begin + " holding ";
-                        yield return begin + " is holding ";
-                        yield return begin + " that is holding ";
-                        yield return begin + " which is holding ";
-
-                        yield return begin + " that contains ";
-                        yield return begin + " which contains ";
-                        yield return begin + " contains ";
-                        yield return begin + " containing ";
-                        yield return begin + " is containing ";
-                        yield return begin + " that is containing ";
-                        yield return begin + " which is containing ";
-
-                        yield return begin + " that stores ";
-                        yield return begin + " which stores ";
-                        yield return begin + " stores ";
-                        yield return begin + " storing ";
-                        yield return begin + " is storing ";
-                        yield return begin + " that is storing ";
-                        yield return begin + " which is storing ";
+                        yield return article + start;
                     }
                 }
             }
-
-            private static string[] CreateGetReplacementMapKeys() => new[]
-                                                                         {
-                                                                             "Gets ", "Get ",
-                                                                             "Sets ", "Set ",
-                                                                             "Gets or sets ", "Gets or Sets ", "Get or set ", "Get or Set ",
-                                                                             "Return ", "Returns ",
-                                                                             "/Return ", "/Returns ", // typos
-                                                                         };
-
-            private static string[] CreateOtherReplacementMapKeys() => new[] { "Defines ", "Specifies ", "Use this ", "This " };
         }
+
 //// ncrunch: no coverage end
 //// ncrunch: rdi default
     }

@@ -453,12 +453,9 @@ namespace MiKoSolutions.Analyzers
 
             var result = new List<SyntaxToken>(sourceCount);
 
-            if (sourceCount > 0)
+            for (var index = 0; index < sourceCount; index++)
             {
-                for (var index = 0; index < sourceCount; index++)
-                {
-                    result.Add(source[index]);
-                }
+                result.Add(source[index]);
             }
 
             return result;
