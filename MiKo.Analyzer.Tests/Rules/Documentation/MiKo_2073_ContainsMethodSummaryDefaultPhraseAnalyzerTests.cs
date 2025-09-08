@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] MethodNames = ["Contains", "ContainsKey", "ContainsValue"];
 
         [Test]
-        public void No_issue_is_reported_for_undocumented_method([ValueSource(nameof(MethodNames))] string methodName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_method_([ValueSource(nameof(MethodNames))] string methodName) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public bool " + methodName + @"()
