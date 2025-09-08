@@ -15,7 +15,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                             new Pair("Reference to an "),
                                                             new Pair("Reference to the "),
                                                             new Pair("Determines the "),
-                                                            new Pair("Determines to ", "value to "), // TODO RKN: new Pair("Determines to ", "value to "),
+                                                            new Pair("Determines to ", "value to "),
+                                                            new Pair("Either a "),
+                                                            new Pair("Either an "),
+                                                            new Pair("Either the "),
                                                         };
 
         private static readonly string[] ReplacementMapKeys = ReplacementMap.ToArray(_ => _.Key);
