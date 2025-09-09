@@ -1589,6 +1589,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rename parameter and remove implementation detail suffix.
+        /// </summary>
+        internal static string MiKo_1040_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1040_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Adding suffixes like &apos;List&apos; to parameter names adds unnecessary clutter. It&apos;s best to avoid them for cleaner, more readable code..
         /// </summary>
         internal static string MiKo_1040_Description {
@@ -1612,6 +1621,15 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_1040_Title {
             get {
                 return ResourceManager.GetString("MiKo_1040_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename field and remove implementation detail suffix.
+        /// </summary>
+        internal static string MiKo_1041_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1041_CodeFixTitle", resourceCulture);
             }
         }
         

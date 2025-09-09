@@ -216,11 +216,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return Array.Empty<Diagnostic>();
         }
 
-        protected Diagnostic AnalyzeCollectionSuffix(ISymbol symbol) => Constants.Markers.Collections.Select(_ => AnalyzeCollectionSuffix(symbol, _)).FirstOrDefault(_ => _ != null);
-
-        protected Diagnostic AnalyzeCollectionSuffix(ISymbol symbol, string suffix, in StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        protected Diagnostic AnalyzeCollectionSuffix(ISymbol symbol)
         {
-            var betterName = Pluralizer.GetPluralName(symbol.Name, comparison, suffix);
+            var betterName = FindBetterNameForCollectionSuffix(symbol.Name);
 
             if (betterName.IsNullOrWhiteSpace())
             {
@@ -373,6 +371,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     return name;
                 }
             }
+        }
+
+        private static string FindBetterNameForCollectionSuffix(string name)
+        {
+            // TODO RKN: Combine with MiKo_1070
+            var preparedName = name.AsCachedBuilder()
+                                   .ReplaceWithProbe("lementNodeList", "lementList")
+                                   .ReplaceWithProbe("lementReferenceNodeList", "lementList")
+                                   .ToString();
+
+            return Pluralizer.GetPluralName(preparedName, StringComparison.OrdinalIgnoreCase, Constants.Markers.Collections);
         }
 
         private IEnumerable<Diagnostic> Analyze(SemanticModel semanticModel, ITypeSymbol type, VariableDesignationSyntax node)

@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -73,8 +74,33 @@ public class TestMe : ITestMe
 }
 ");
 
+        // TODO RKN: Add more tests
+        [TestCase("itemList", "items")]
+        [TestCase("triviaList", "trivia")]
+        [TestCase("allElementNodeList", "allElements")]
+        [TestCase("allElementReferenceNodeList", "allElements")]
+        [TestCase("elementNodeList", "elements")]
+        [TestCase("elementReferenceNodeList", "elements")]
+        public void Code_gets_fixed_for_parameter_(string originalName, string fixedName)
+        {
+            const string Template = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int[] ###)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalName), Template.Replace("###", fixedName));
+        }
+
         protected override string GetDiagnosticId() => MiKo_1040_ParameterCollectionSuffixAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1040_ParameterCollectionSuffixAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1040_CodeFixProvider();
     }
 }

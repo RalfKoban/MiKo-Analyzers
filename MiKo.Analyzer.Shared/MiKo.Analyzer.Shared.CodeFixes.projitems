@@ -276,6 +276,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1037_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1038_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1039_CodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1040_CodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1041_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1042_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1043_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1044_CodeFixProvider.cs" />
