@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
+using System.Diagnostics;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -17,6 +18,27 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => null; // we want to remove the syntax
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue) => root.WithoutUsing("System.Diagnostics"); // remove unused "using System.Diagnostics;"
+        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
+        {
+            if (root.DescendantNodes<IdentifierNameSyntax>().None(_ => IsDebugOrTrace(_.GetName())))
+            {
+                return root.WithoutUsing("System.Diagnostics"); // remove unused "using System.Diagnostics;"
+            }
+
+            return root;
+        }
+
+        private static bool IsDebugOrTrace(string name)
+        {
+            switch (name)
+            {
+                case nameof(Debug):
+                case nameof(Trace):
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
     }
 }
