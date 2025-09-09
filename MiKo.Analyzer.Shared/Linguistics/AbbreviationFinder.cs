@@ -58,6 +58,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("docs", "documents"),
                                                       new Pair("dst", "destination"),
                                                       new Pair("dto", string.Empty),
+                                                      new Pair("el", "element"),
+                                                      new Pair("ele", "element"),
                                                       new Pair("encr", "encrypt"),
                                                       new Pair("env", "environment"),
                                                       new Pair("environ", "environment"),
@@ -199,6 +201,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Ef", "EntityFramework"),
                                                           new Pair("EF", "EntityFramework"),
                                                           new Pair("El", "Element"),
+                                                          new Pair("Ele", "Element"),
                                                           new Pair("Encr", "Encrypt"),
                                                           new Pair("Env", "Environment"),
                                                           new Pair("Environ", "Environment"),
@@ -480,7 +483,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             if (value.Length > keyLength)
             {
-                if (IndicatesNewWord(value[keyLength]) && value.StartsWith(key, StringComparison.Ordinal))
+                if (IndicatesNewWord(value[keyLength]) && value.StartsWith(key))
                 {
                     return true;
                 }
