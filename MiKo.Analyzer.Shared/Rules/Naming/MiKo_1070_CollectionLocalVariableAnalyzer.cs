@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1070";
 
-        private static readonly string[] SpecialNames = { "actual", "expected" };
+        private static readonly string[] TestRelatedNames = { "actual", "expected" };
 
         private static readonly string[] Splitters = { "Of", "With", "To", "In", "From" };
 
@@ -68,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     continue;
                 }
 
-                if (originalName.EqualsAny(SpecialNames))
+                if (originalName.EqualsAny(TestRelatedNames))
                 {
                     continue;
                 }
@@ -179,13 +179,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool IsMefAggregateCatalog(string typeName) => typeName is "AssemblyCatalog";
 
-        private static string GetPluralName(in ReadOnlySpan<char> originalName, out string name)
+        // TODO RKN: Merge with 'FindBetterNameForCollectionSuffix' in NamingAnalyzer
+        private static string GetPluralName(in ReadOnlySpan<char> originalName, out string singularName)
         {
             if (originalName.EndsWith('s'))
             {
-                name = originalName.ToString();
+                singularName = originalName.ToString();
 
-                return Pluralizer.GetPluralName(name, StringComparison.Ordinal);
+                return Pluralizer.GetPluralName(singularName, StringComparison.Ordinal);
             }
 
             var index = originalName.IndexOfAny(Splitters);
@@ -195,9 +196,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 var nameToInspect = originalName.Slice(0, index);
                 var remainingPart = originalName.Slice(index);
 
-                var pluralName = GetPluralName(nameToInspect, out name);
+                var pluralName = GetPluralName(nameToInspect, out singularName);
 
-                name = name.ConcatenatedWith(remainingPart);
+                singularName = singularName.ConcatenatedWith(remainingPart);
 
                 return pluralName.ConcatenatedWith(remainingPart);
             }
@@ -207,14 +208,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                  ? originalName.WithoutNumberSuffix()
                                  : originalName;
 
-                name = pluralName.ToString();
+                singularName = pluralName.ToString();
 
                 if (pluralName.EndsWithAny(Constants.Markers.Collections, StringComparison.OrdinalIgnoreCase))
                 {
-                    return Pluralizer.GetPluralName(name, StringComparison.OrdinalIgnoreCase, Constants.Markers.Collections);
+                    singularName = singularName.AsCachedBuilder()
+                                               .ReplaceWithProbe("lementNodeList", "lementList")
+                                               .ReplaceWithProbe("lementReferenceNodeList", "lementList")
+                                               .ToString();
+
+                    return Pluralizer.GetPluralName(singularName, StringComparison.OrdinalIgnoreCase, Constants.Markers.Collections);
                 }
 
-                return Pluralizer.GetPluralName(name);
+                return Pluralizer.GetPluralName(singularName);
             }
         }
     }

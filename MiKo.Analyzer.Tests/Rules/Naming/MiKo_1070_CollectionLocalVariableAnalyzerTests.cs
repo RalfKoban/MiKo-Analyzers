@@ -347,6 +347,10 @@ public class TestMe
         [TestCase("resultInSomething", "resultsInSomething")]
         [TestCase("resultFromSomething", "resultsFromSomething")]
         [TestCase("triviaList", "trivia")]
+        [TestCase("allElementNodeList", "allElements")]
+        [TestCase("allElementReferenceNodeList", "allElements")]
+        [TestCase("elementNodeList", "elements")]
+        [TestCase("elementReferenceNodeList", "elements")]
         public void Code_gets_fixed_for_variable_(string originalName, string fixedName)
         {
             const string Template = @"
