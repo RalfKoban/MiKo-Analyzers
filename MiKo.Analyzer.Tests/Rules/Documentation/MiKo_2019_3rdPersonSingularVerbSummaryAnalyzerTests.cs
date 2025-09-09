@@ -458,6 +458,8 @@ public class TestMe
         [TestCase("Called to inform about something", "Informs about something")]
         [TestCase("Called to save something", "Saves something")]
         [TestCase("Save something", "Saves something")]
+        [TestCase("Whether something is there", "Determines whether something is there")]
+        [TestCase("If something is there", "Determines whether something is there")]
         public void Code_gets_fixed_for_method_text_(string originalText, string fixedText)
         {
             const string Template = @"
@@ -493,22 +495,23 @@ public interface TestMe
             VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
         }
 
-        [Test]
-        public void Code_is_not_fixed_for_special_phrase_Given()
+        [TestCase("Given anything, does something")]
+        [TestCase("When anything, does something")]
+        public void Code_is_not_fixed_for_special_phrase_(string phrase)
         {
-            const string Code = @"
+            var code = @"
 using System;
 
 public interface TestMe
 {
     /// <summary>
-    /// Given anything, does something.
+    /// " + phrase + @".
     /// </summary>
     public void DoSomething() { }
 }
 ";
 
-            VerifyCSharpFix(Code, Code);
+            VerifyCSharpFix(code, code);
         }
 
         protected override string GetDiagnosticId() => MiKo_2019_3rdPersonSingularVerbSummaryAnalyzer.Id;
