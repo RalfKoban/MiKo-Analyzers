@@ -77,7 +77,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly string[] PluralEndings = { "gers", "tchers", "pters", "stors", "ptors", "tures", "ties", "dges", "rges", "sages" };
         private static readonly string[] NonPluralEndings = { "ges", "nues", "curs", "opts", "nforms", "ses" };
-        private static readonly string[] SpecialPluralWords = { "ages", "loot" };
+        private static readonly string[] SpecialPluralWords = { "ages", "loot", "classes" };
         private static readonly string[] SpecialNonPluralWords = { "does", "lets" };
         private static readonly string[] SpecialPluralEndingsWithS = { "deas", "llas" };
         private static readonly string[] SingularOrPluralEndings = { "data", "heep", "moose", "trivia", "ircraft", "nformation", "nested" };

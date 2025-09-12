@@ -539,7 +539,7 @@ namespace MiKoSolutions.Analyzers
                                                                               "Wrapper",
                                                                           };
 
-            internal static readonly string[] MeaninglessTypeStartingPhrase = MeaninglessStartingPhrase.Concat(new[] { "Contains", "Contain", "Has" }).OrderBy(_ => _.Length).ToArray();
+            internal static readonly string[] MeaninglessTypeStartingPhrase = MeaninglessStartingPhrase.ConcatenatedWith("Contains", "Contain", "Has").OrderBy(_ => _.Length).ToArray();
 
             internal static readonly string[] MeaninglessPhrase =
                                                                   {

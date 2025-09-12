@@ -9,11 +9,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
     {
         private static readonly HashSet<char> CharsForTwoCharacterEndingsWithS = new HashSet<char> { 'a', 'h', 'i', 'o', 's', 'u', 'x', 'z' };
 
-        private static readonly string[] NonThirdPersonSingularEndingsWithS = { "pters", "tors", "gers", "chers" };
+        private static readonly string[] NonThirdPersonSingularEndingsWithS = { "pters", "tors", "gers", "chers", "asses" };
 
         private static readonly string[] SpecialPastEndings = { "ated", "dled", "ced", "ged", "ied", "red", "rized", "sed", "ved" };
 
-        private static readonly string[] PastEndings = SpecialPastEndings.Concat(new[] { "led", "eed", "ted", "ded" }).ToArray();
+        private static readonly string[] PastEndings = SpecialPastEndings.ConcatenatedWith("led", "eed", "ted", "ded").ToArray();
 
         private static readonly string[] FourCharacterGerundEndings = { "pping", "rring", "tting" };
 

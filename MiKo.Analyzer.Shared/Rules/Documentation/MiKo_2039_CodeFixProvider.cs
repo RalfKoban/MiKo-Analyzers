@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
@@ -15,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] Parts = Constants.Comments.ExtensionMethodClassStartingPhraseTemplate.FormatWith("|").Split('|');
 
-        private static readonly string[] ReplacementMapKeys = CreateReplacementMapKeys().ToArray();
+        private static readonly string[] ReplacementMapKeys = CreateReplacementMapKeys().OrderByDescending(_ => _.Length).ToArray();
 
         private static readonly Pair[] ReplacementMap = ReplacementMapKeys.ToArray(_ => new Pair(_));
 
@@ -23,14 +24,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => "MiKo_2039";
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        internal static bool CanFix(in ReadOnlySpan<char> text) => text.StartsWithAny(ReplacementMapKeys, StringComparison.OrdinalIgnoreCase);
+
+        internal static SyntaxNode GetUpdatedSyntax(XmlElementSyntax syntax)
         {
-            var comment = PrepareComment((XmlElementSyntax)syntax);
+            var comment = Comment(syntax, ReplacementMapKeys, ReplacementMap);
 
             return CommentStartingWith(comment, Parts[0], SeeLangword("static"), Parts[1]);
         }
 
-        private static XmlElementSyntax PrepareComment(XmlElementSyntax comment) => Comment(comment, ReplacementMapKeys, ReplacementMap);
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => GetUpdatedSyntax((XmlElementSyntax)syntax);
 
 //// ncrunch: rdi off
 
@@ -90,6 +93,30 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                         : string.Concat(start, preMiddle, " ", middle, " ", end));
                         }
                     }
+                }
+            }
+
+            var alternativeStarts = new[] { "class", "a class", "the class" };
+
+            foreach (var start in alternativeStarts)
+            {
+                foreach (var middle in middles)
+                {
+                    var phrase = start + " for " + middle;
+
+                    var phrase1 = phrase + " that extend";
+                    var phrase2 = phrase + " which extend";
+                    var phrase3 = phrase + " extending";
+
+                    results.Add(phrase1);
+                    results.Add(phrase1.ToUpperCaseAt(0));
+                    results.Add(phrase2);
+                    results.Add(phrase2.ToUpperCaseAt(0));
+                    results.Add(phrase3);
+                    results.Add(phrase3.ToUpperCaseAt(0));
+
+                    results.Add(phrase);
+                    results.Add(phrase.ToUpperCaseAt(0));
                 }
             }
 
