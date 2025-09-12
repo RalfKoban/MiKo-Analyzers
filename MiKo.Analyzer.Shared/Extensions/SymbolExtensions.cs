@@ -10,6 +10,8 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Xml;
+using System.Xml.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -1694,6 +1696,29 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsValueConverter(this ITypeSymbol value) => value.Implements(Constants.Names.IValueConverter, Constants.Names.IValueConverterFullName)
                                                                       || value.InheritsFrom(Constants.Names.IValueConverter, Constants.Names.IValueConverterFullName);
+
+        internal static bool IsXmlNode(this ITypeSymbol value)
+        {
+            switch (value?.Name)
+            {
+                case nameof(XmlAttribute):
+                case nameof(XmlDocument):
+                case nameof(XmlElement):
+                case nameof(XmlNode):
+                case nameof(XAttribute):
+                case nameof(XDocument):
+                case nameof(XElement):
+                case nameof(XNode):
+                {
+                    return true;
+                }
+
+                default:
+                {
+                    return false;
+                }
+            }
+        }
 
         /// <summary>
         /// Determines whether a <see cref="IFieldSymbol"/> of the containing type has the same name as the given <see cref="IParameterSymbol"/>.

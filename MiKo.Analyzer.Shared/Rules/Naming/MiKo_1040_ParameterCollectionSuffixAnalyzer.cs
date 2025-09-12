@@ -16,13 +16,33 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.Parameters.Length > 0 && base.ShallAnalyze(symbol);
 
+        protected override bool ShallAnalyze(IParameterSymbol symbol)
+        {
+            var parameterType = symbol.Type;
+
+            if (parameterType.IsXmlNode())
+            {
+                return false;
+            }
+
+            if (parameterType.IsString())
+            {
+                return symbol.Name.EndsWithAny(Constants.Markers.Collections);
+            }
+
+            if (parameterType.IsEnumerable())
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
             foreach (var parameter in symbol.Parameters)
             {
-                var parameterType = parameter.Type;
-
-                if (parameterType.IsString() || parameterType.IsEnumerable())
+                if (ShallAnalyze(parameter))
                 {
                     var diagnostic = AnalyzeCollectionSuffix(parameter);
 

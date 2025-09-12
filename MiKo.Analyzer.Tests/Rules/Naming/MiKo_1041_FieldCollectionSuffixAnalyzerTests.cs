@@ -14,9 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static readonly string[] FieldPrefixes = Constants.Markers.FieldPrefixes;
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_field_(
-                                                                [ValueSource(nameof(FieldPrefixes))] string prefix,
-                                                                [Values("bla", "dictionary", "map", "array")] string field)
+        public void No_issue_is_reported_for_correctly_named_field_([ValueSource(nameof(FieldPrefixes))] string prefix, [Values("dictionary", "map", "array", "value", "myValue")] string field)
             => No_issue_is_reported_for(@"
 
 public class TestMe
@@ -38,11 +36,42 @@ public enum TestMe
 }
 ");
 
+        [TestCase("XAttribute attribute")]
+        [TestCase("XAttribute myAttribute")]
+        [TestCase("XDocument document")]
+        [TestCase("XDocument myDocument")]
+        [TestCase("XElement element")]
+        [TestCase("XElement myElement")]
+        [TestCase("XmlAttribute attribute")]
+        [TestCase("XmlAttribute myAttribute")]
+        [TestCase("XmlDocument document")]
+        [TestCase("XmlDocument myDocument")]
+        [TestCase("XmlElement element")]
+        [TestCase("XmlElement myElement")]
+        [TestCase("XmlNode myNode")]
+        [TestCase("XmlNode node")]
+        [TestCase("XNode myNode")]
+        [TestCase("XNode node")]
+        public void No_issue_is_reported_for_correctly_named_XML_field_(string field) => No_issue_is_reported_for(@"
+using System;
+using System.Xml;
+using System.Xml.Linq;
+
+public class TestMe
+{
+    private " + field + @";
+}
+");
+
         [TestCase("string blaList")]
+        [TestCase("string blaEnumList")]
         [TestCase("string blaCollection")]
         [TestCase("string blaObservableCollection")]
         [TestCase("string blaArray")]
         [TestCase("string blaHashSet")]
+        [TestCase("string blaDictionary")]
+        [TestCase("string blaDict")]
+        [TestCase("string blaDic")]
         public void An_issue_is_reported_for_incorrectly_named_field_(string field) => An_issue_is_reported_for(@"
 
 public class TestMe
@@ -51,7 +80,12 @@ public class TestMe
 }
 ");
 
-        // TODO RKN: Add more tests
+        [TestCase("number", "numbers")]
+        [TestCase("resultOfSomething", "resultsOfSomething")]
+        [TestCase("resultToShow", "resultsToShow")]
+        [TestCase("resultWithData", "resultsWithData")]
+        [TestCase("resultInSomething", "resultsInSomething")]
+        [TestCase("resultFromSomething", "resultsFromSomething")]
         [TestCase("itemList", "items")]
         [TestCase("triviaList", "trivia")]
         [TestCase("allElementNodeList", "allElements")]

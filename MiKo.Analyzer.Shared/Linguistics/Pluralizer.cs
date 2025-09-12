@@ -207,12 +207,14 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 proposedName = proposedName.WithoutSuffixes(Constants.Markers.Models);
             }
 
-            if (name.Length != proposedName.Length)
+            var pluralName = GetPluralName(name, proposedName.ToString(), comparison);
+
+            if (pluralName is null || name.Length == pluralName.Length)
             {
-                return GetPluralName(name, proposedName.ToString(), comparison);
+                return null;
             }
 
-            return null;
+            return pluralName;
         }
 
         private static bool IsAllowedListName(string symbolName, in StringComparison comparison = StringComparison.OrdinalIgnoreCase) => symbolName.EqualsAny(AllowedListNames, comparison);

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using System.Xml;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -40,7 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     return false;
                 }
 
-                if (IsXmlNode(symbolName))
+                if (symbol.IsXmlNode())
                 {
                     return false;
                 }
@@ -153,24 +152,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             return false;
-        }
-
-        private static bool IsXmlNode(string typeName)
-        {
-            switch (typeName)
-            {
-                case nameof(XmlDocument):
-                case nameof(XmlElement):
-                case nameof(XmlNode):
-                {
-                    return true;
-                }
-
-                default:
-                {
-                    return false;
-                }
-            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
