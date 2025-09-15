@@ -373,7 +373,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                             "href",
                                                         };
 
-        private static readonly ConcurrentDictionary<string, string> AlreadyInspectedNames = new ConcurrentDictionary<string, string>();
+        private static readonly ConcurrentDictionary<string, Pair[]> AlreadyFoundAbbreviations = new ConcurrentDictionary<string, Pair[]>();
 
         internal static ReadOnlySpan<Pair> Find(string value)
         {
@@ -387,9 +387,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return ReadOnlySpan<Pair>.Empty;
             }
 
-            var name = AlreadyInspectedNames.GetOrAdd(value, _ => _.Without(AllowedParts));
-
-            return FindCore(name.AsSpan());
+            // cache findings as they will not change
+            return AlreadyFoundAbbreviations.GetOrAdd(value, _ => FindCore(_.Without(AllowedParts).AsSpan()));
         }
 
         internal static string ReplaceAllAbbreviations(string value, in ReadOnlySpan<Pair> findings)
@@ -427,7 +426,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         }
 
 //// ncrunch: rdi off
-        private static ReadOnlySpan<Pair> FindCore(in ReadOnlySpan<char> valueSpan)
+        private static Pair[] FindCore(in ReadOnlySpan<char> valueSpan)
         {
             var results = new HashSet<Pair>(KeyComparer.Instance);
 
@@ -470,7 +469,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 }
             }
 
-            return results.Count is 0 ? ReadOnlySpan<Pair>.Empty : results.ToArray();
+            return results.Count is 0 ? Array.Empty<Pair>() : results.ToArray();
         }
 //// ncrunch: rdi default
 
