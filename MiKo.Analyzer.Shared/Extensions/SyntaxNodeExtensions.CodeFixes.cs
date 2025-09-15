@@ -266,22 +266,39 @@ namespace MiKoSolutions.Analyzers
         {
             var identifierName = value.Expression.GetName();
 
-            var method = value.GetEnclosingMethod(document.GetSemanticModel());
-            var type = method.FindContainingType();
+            var semanticModel = document.GetSemanticModel();
+            var method = value.GetEnclosingMethod(semanticModel);
+            var containingType = method.FindContainingType();
 
-            var isConst = type.GetFields(identifierName).Any(_ => _.IsConst);
+            var fields = containingType.GetFields(identifierName);
 
-            if (isConst)
+            if (fields.Count > 0)
             {
                 // const value inside class
-                return true;
+                return fields.Any(_ => _.IsConst);
             }
 
-            // local const variable
-            var isLocalConst = method.GetSyntax().DescendantNodes<LocalDeclarationStatementSyntax>(_ => _.IsConst)
-                                     .Any(_ => _.Declaration.Variables.Any(__ => __.GetName() == identifierName));
+            // we might have properties, so we investigate the complete expression
+            if (value.Expression is MemberAccessExpressionSyntax maes)
+            {
+                var typeSymbol = maes.GetIdentifierExpression().GetTypeSymbol(semanticModel);
 
-            return isLocalConst;
+                if (typeSymbol != null)
+                {
+                    var typeFields = typeSymbol.GetFields(identifierName);
+
+                    if (typeFields.Count > 0)
+                    {
+                        // const value inside class
+                        return typeFields.Any(_ => _.IsConst);
+                    }
+                }
+            }
+
+            // we might have a local const variable
+            return method.GetSyntax()
+                         .DescendantNodes<LocalDeclarationStatementSyntax>(_ => _.IsConst)
+                         .Any(_ => _.Declaration.Variables.Any(__ => __.GetName() == identifierName));
         }
 
         /// <summary>
