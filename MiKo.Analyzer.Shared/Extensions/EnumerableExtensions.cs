@@ -28,6 +28,23 @@ namespace MiKoSolutions.Analyzers
         internal static XmlTextSyntax AsXmlText(this IEnumerable<SyntaxToken> textTokens) => textTokens.ToTokenList().AsXmlText();
 
         /// <summary>
+        /// Concatenates the specified additional elements to the end of the source sequence.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of elements in the sequences.
+        /// </typeparam>
+        /// <param name="values">
+        /// The source sequence.
+        /// </param>
+        /// <param name="others">
+        /// The elements to append to the end of the source sequence.
+        /// </param>
+        /// <returns>
+        /// A sequence that contains the elements from the source sequence followed by the additional elements.
+        /// </returns>
+        internal static IEnumerable<T> ConcatenatedWith<T>(this IEnumerable<T> values, params T[] others) => values.Concat(others);
+
+        /// <summary>
         /// Removes the specified values from the <see cref="HashSet{T}"/> and returns the modified set.
         /// </summary>
         /// <typeparam name="T">

@@ -19,7 +19,6 @@ public class TestMe
     {
         throw new InvalidEnumArgumentException();
     }
-
 }
 ";
 
@@ -32,7 +31,6 @@ public class TestMe
     {
         throw new InvalidOperationException(""TODO"");
     }
-
 }
 ";
 
@@ -52,7 +50,6 @@ public class TestMe
     {
         throw new InvalidEnumArgumentException(""TestMe"");
     }
-
 }
 ";
 
@@ -65,7 +62,6 @@ public class TestMe
     {
         throw new InvalidOperationException(""TODO"");
     }
-
 }
 ";
 
@@ -85,7 +81,6 @@ public class TestMe
     {
         throw new InvalidEnumArgumentException(nameof(TestMe));
     }
-
 }
 ";
 
@@ -98,7 +93,6 @@ public class TestMe
     {
         throw new InvalidOperationException(""TODO"");
     }
-
 }
 ";
 
@@ -121,7 +115,6 @@ public class TestMe
         if (x != StringComparison.OrdinalIgnoreCase)
             throw new InvalidEnumArgumentException(""some message"", x, typeof(StringComparison));
     }
-
 }
 ";
 
@@ -137,7 +130,6 @@ public class TestMe
         if (x != StringComparison.OrdinalIgnoreCase)
             throw new InvalidOperationException(""some message"");
     }
-
 }
 ";
 
@@ -160,7 +152,6 @@ public class TestMe
         if (x != StringComparison.OrdinalIgnoreCase)
             throw new InvalidEnumArgumentException(""x"", x, typeof(StringComparison));
     }
-
 }
 ";
 
@@ -176,7 +167,6 @@ public class TestMe
         if (x != StringComparison.OrdinalIgnoreCase)
             throw new InvalidOperationException(""TODO"");
     }
-
 }
 ";
 
@@ -199,7 +189,6 @@ public class TestMe
         if (x != StringComparison.OrdinalIgnoreCase)
             throw new InvalidEnumArgumentException(nameof(x), x, typeof(StringComparison));
     }
-
 }
 ";
 
@@ -215,7 +204,59 @@ public class TestMe
         if (x != StringComparison.OrdinalIgnoreCase)
             throw new InvalidOperationException(""TODO"");
     }
+}
+";
 
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_multiple_InvalidEnumArgumentException_with_message_value_and_type()
+        {
+            const string OriginalCode = @"
+using System;
+using System.ComponentModel;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var x = StringComparison.Ordinal;
+
+        if (x != StringComparison.OrdinalIgnoreCase)
+            throw new InvalidEnumArgumentException(""some message"", x, typeof(StringComparison));
+    }
+
+    public void DoSomethingElse()
+    {
+        var x = StringComparison.Ordinal;
+
+        if (x != StringComparison.Ordinal)
+            throw new InvalidEnumArgumentException(""some other message"", x, typeof(StringComparison));
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var x = StringComparison.Ordinal;
+
+        if (x != StringComparison.OrdinalIgnoreCase)
+            throw new InvalidOperationException(""some message"");
+    }
+
+    public void DoSomethingElse()
+    {
+        var x = StringComparison.Ordinal;
+
+        if (x != StringComparison.Ordinal)
+            throw new InvalidOperationException(""some other message"");
+    }
 }
 ";
 

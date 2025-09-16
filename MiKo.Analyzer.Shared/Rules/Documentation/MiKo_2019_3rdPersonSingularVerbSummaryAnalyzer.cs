@@ -8,7 +8,6 @@ using MiKoSolutions.Analyzers.Linguistics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-
     public sealed class MiKo_2019_3rdPersonSingularVerbSummaryAnalyzer : SummaryStartDocumentationAnalyzer
     {
         public const string Id = "MiKo_2019";

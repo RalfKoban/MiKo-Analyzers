@@ -129,60 +129,28 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        [TestCase("Reference to the")]
-        [TestCase("Reference to a")]
-        [TestCase("Reference to an")]
-        public void Code_gets_fixed_for_parameter_with_(string start)
-        {
-            var originalCode = @"
-public class TestMe
-{
-    /// <summary />
-    /// <param name='o'>
-    /// " + start + @" stuff.
-    /// </param>
-    public void DoSomething(object o) { }
-}";
-
-            const string FixedCode = @"
-public class TestMe
-{
-    /// <summary />
-    /// <param name='o'>
-    /// The stuff.
-    /// </param>
-    public void DoSomething(object o) { }
-}";
-
-            VerifyCSharpFix(originalCode, FixedCode);
-        }
-
         [TestCase("Determines the", "The")]
         [TestCase("Determines to which extend", "The value to which extend")]
         [TestCase("Determines to what extend", "The value to what extend")]
-        public void Code_gets_fixed_for_parameter_with_Determines(string originalStart, string fixedStart)
+        [TestCase("Either a item or", "The item or")]
+        [TestCase("Either an item or", "The item or")]
+        [TestCase("Either the item or", "The item or")]
+        [TestCase("Reference to the", "The")]
+        [TestCase("Reference to a", "The")]
+        [TestCase("Reference to an", "The")]
+        public void Code_gets_fixed_for_parameter_with_(string originalStart, string fixedStart)
         {
-            var originalCode = @"
+            const string Template = @"
 public class TestMe
 {
     /// <summary />
     /// <param name='o'>
-    /// " + originalStart + @" stuff.
+    /// ### stuff.
     /// </param>
     public void DoSomething(object o) { }
 }";
 
-            var fixedCode = @"
-public class TestMe
-{
-    /// <summary />
-    /// <param name='o'>
-    /// " + fixedStart + @" stuff.
-    /// </param>
-    public void DoSomething(object o) { }
-}";
-
-            VerifyCSharpFix(originalCode, fixedCode);
+            VerifyCSharpFix(Template.Replace("###", originalStart), Template.Replace("###", fixedStart));
         }
 
         protected override string GetDiagnosticId() => MiKo_2021_ParamDefaultPhraseAnalyzer.Id;

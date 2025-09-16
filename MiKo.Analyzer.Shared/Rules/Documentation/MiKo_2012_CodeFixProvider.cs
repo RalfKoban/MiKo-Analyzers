@@ -16,6 +16,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2012_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
 //// ncrunch: rdi off
+        private const FirstWordAdjustment StartAdjustment = FirstWordAdjustment.StartUpperCase | FirstWordAdjustment.MakeThirdPersonSingular | FirstWordAdjustment.KeepSingleLeadingSpace;
+
         private static readonly string[] DefaultPhrases =
                                                           {
                                                               "A default impl",
@@ -76,7 +78,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (text.StartsWithAny(EmptyReplacementsMapKeys))
             {
-                return Comment(comment, EmptyReplacementsMapKeys, EmptyReplacementsMap, FirstWordAdjustment.StartUpperCase | FirstWordAdjustment.MakeThirdPersonSingular | FirstWordAdjustment.KeepSingleLeadingSpace);
+                return Comment(comment, EmptyReplacementsMapKeys, EmptyReplacementsMap, StartAdjustment);
             }
 
             if (comment.GetEnclosing(Declarations) is MemberDeclarationSyntax member)
@@ -98,9 +100,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return MiKo_2002_CodeFixProvider.GetUpdatedSyntax(comment);
                 }
 
-                if (text.StartsWithAny(ReplacementMapKeys))
+                if (MiKo_2039_CodeFixProvider.CanFix(text))
                 {
-                    return Comment(comment, ReplacementMapKeys, ReplacementMap);
+                    return MiKo_2039_CodeFixProvider.GetUpdatedSyntax(comment);
                 }
 
                 foreach (var phrase in UsedToPhrases)
@@ -122,6 +124,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         return Comment(comment, replacedText, comment.Content.RemoveAt(0));
                     }
+                }
+
+                if (text.StartsWithAny(ReplacementMapKeys))
+                {
+                    return Comment(comment, ReplacementMapKeys, ReplacementMap, StartAdjustment);
                 }
 
                 if (text.StartsWithAny(Constants.Comments.AAnThePhraseWithSpaces))
@@ -274,7 +281,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                 "Initialize",
                                 "Handle",
                                 "Manipulate",
-                                "Offer",
                                 "Perform",
                                 "Provide",
                                 "Process",
@@ -306,7 +312,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            return result.ToArray(_ => new Pair(_.Key, _.Value));
+            return result.Select(_ => new Pair(_.Key, _.Value))
+                         .OrderBy(_ => _.Key, AscendingStringComparer.Default) // sort by first character
+                         .ThenByDescending(_ => _.Key.Length)
+                         .ToArray();
         }
 
         private static IEnumerable<Pair> CreateReplacementMapEntries(string[] verbs, Dictionary<string, string> thirdPersonVerbs, Dictionary<string, string> gerundVerbs)
@@ -360,6 +369,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new Pair("Used to create ", Constants.Comments.FactorySummaryPhrase);
             yield return new Pair("Used for creating ", Constants.Comments.FactorySummaryPhrase);
 
+            yield return new Pair("Class part ", "Represents the part ");
+            yield return new Pair("Class Part ", "Represents the part ");
             yield return new Pair("Class that serves as ", "Represents a ");
             yield return new Pair("Class that serves ", "Provides ");
             yield return new Pair("Class which serves as ", "Represents a ");
@@ -405,48 +416,43 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
+        private static string[] GetSubjects()
+        {
+            return new[]
+                       {
+                           "A class", "An class", "The class", "This class", "Class",
+                           "A base class", "An base class", "The base class", "This base class", "Base class",
+                           "A abstract base class", "An abstract base class", "The abstract base class", "This abstract base class", "Abstract base class",
+                           "A interface", "An interface", "The interface", "This interface", "Interface",  "The interface class", "This interface class",
+                           "A component", "An component", "The component", "This component", "Component",
+                           "A attribute", "An attribute", "The attribute", "This attribute", "Attribute",
+                           "Classes implementing the interface", "Classes implementing the interface,",
+                           "Classes implementing the interfaces", "Classes implementing the interfaces,",
+                           "Classes implementing this interface", "Classes implementing this interface,",
+                           "Classes implementing this interfaces", "Classes implementing this interfaces,",
+                           "Interface definition of helper",
+                           "Interface definition of a helper",
+                           "Interface definition of an helper",
+                           "Interface definition of the helper",
+                           "Interface for classes",
+                           "Interface for elements",
+                           "Interface for items",
+                           "Interface for objects",
+                           "Interface for view models",
+                           "Interface for workflows",
+                           "Interface for work flows",
+                           "The class implementing the interface",
+                           "The class implementing the interface,",
+                           "The class implementing this interface",
+                       };
+        }
+
         private static IEnumerable<Pair> CreatePhrases(string[] verbs, Dictionary<string, string> thirdPersonVerbs, Dictionary<string, string> gerundVerbs)
         {
-            var beginnings = new[]
-                                 {
-                                     "A class",
-                                     "A interface",
-                                     "An interface",
-                                     "Class",
-                                     "Classes implementing the interfaces",
-                                     "Classes implementing the interfaces,",
-                                     "Extension method",
-                                     "Factory method",
-                                     "Function",
-                                     "Help function",
-                                     "Help method",
-                                     "Helper class",
-                                     "Helper function",
-                                     "Helper method",
-                                     "Interface definition of helper",
-                                     "Interface definition of a helper",
-                                     "Interface definition of an helper",
-                                     "Interface definition of the helper",
-                                     "Interface for classes",
-                                     "Interface for elements",
-                                     "Interface for items",
-                                     "Interface for objects",
-                                     "Interface for view models",
-                                     "Interface for workflows",
-                                     "Interface for work flows",
-                                     "Interface for",
-                                     "Interface implemented to",
-                                     "Interface",
-                                     "Method",
-                                     "The class implementing the interface",
-                                     "The class implementing the interface,",
-                                     "The class implementing this interface",
-                                     "The class",
-                                     "The interface",
-                                     "This class",
-                                     "This interface class",
-                                     "This interface",
-                                 };
+            // GetSubjects
+            var beginnings = GetSubjects().ConcatenatedWith("Extension method", "Factory method", "Function", "Help function", "Help method", "Helper class", "Helper function", "Helper method", "Interface for", "Interface implemented to", "Method")
+                                          .Distinct()
+                                          .ToArray();
 
             var middleParts = new[]
                                   {
@@ -477,44 +483,95 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 for (var beginningIndex = 0; beginningIndex < beginningsLength; beginningIndex++)
                 {
-                    var start = beginnings[beginningIndex];
+                    var beginning = beginnings[beginningIndex];
 
                     for (var middleIndex = 0; middleIndex < middlePartsLength; middleIndex++)
                     {
                         var middle = middleParts[middleIndex];
-                        var begin = string.Concat(start, " ", middle, " ");
+                        var start = string.Concat(beginning, " ", middle, " ");
 
-                        yield return new Pair(string.Concat(begin, verb, " "), fix);
-                        yield return new Pair(string.Concat(begin, thirdPersonVerb, " "), fix);
+                        yield return new Pair(string.Concat(start, verb, " "), fix);
+                        yield return new Pair(string.Concat(start, thirdPersonVerb, " "), fix);
                     }
 
-                    yield return new Pair(string.Concat(start, " to ", noun, " "), fix);
-                    yield return new Pair(string.Concat(start, " to ", verb, " "), fix);
+                    yield return new Pair(string.Concat(beginning, " to ", noun, " "), fix);
+                    yield return new Pair(string.Concat(beginning, " to ", verb, " "), fix);
 
-                    yield return new Pair(string.Concat(start, " ", verb, " "), fix);
-                    yield return new Pair(string.Concat(start, " ", thirdPersonVerb, " "), fix);
-                    yield return new Pair(string.Concat(start, " ", gerundVerb, " "), fix);
+                    yield return new Pair(string.Concat(beginning, " ", verb, " "), fix);
+                    yield return new Pair(string.Concat(beginning, " ", thirdPersonVerb, " "), fix);
+                    yield return new Pair(string.Concat(beginning, " ", gerundVerb, " "), fix);
                 }
+            }
+
+            const string Provides = "Provides ";
+
+            for (var beginningIndex = 0; beginningIndex < beginningsLength; beginningIndex++)
+            {
+                var beginning = beginnings[beginningIndex];
+
+                yield return new Pair(beginning + " that is used as helper for ", Provides);
+                yield return new Pair(beginning + " that is used as helper class for ", Provides);
+                yield return new Pair(beginning + " that is used as a helper for ", Provides);
+                yield return new Pair(beginning + " that is used as a helper class for ", Provides);
+                yield return new Pair(beginning + " which is used as helper for ", Provides);
+                yield return new Pair(beginning + " which is used as helper class for ", Provides);
+                yield return new Pair(beginning + " which is used as a helper for ", Provides);
+                yield return new Pair(beginning + " which is used as a helper class for ", Provides);
+                yield return new Pair(beginning + " used as helper for ", Provides);
+                yield return new Pair(beginning + " used as helper class for ", Provides);
+                yield return new Pair(beginning + " used as a helper for ", Provides);
+                yield return new Pair(beginning + " used as a helper class for ", Provides);
+
+                yield return new Pair(beginning + " to contain ", Provides);
+                yield return new Pair(beginning + " to offer ", Provides);
+                yield return new Pair(beginning + " to retrieve ", Provides);
+                yield return new Pair(beginning + " to provide functionality to ");
+                yield return new Pair(beginning + " to ");
+
+                yield return new Pair(beginning + " containing ", Provides);
+                yield return new Pair(beginning + " offering ", Provides);
+                yield return new Pair(beginning + " retrieving ", Provides);
+                yield return new Pair(beginning + " providing functionality to ");
+                yield return new Pair(beginning + " representing ", "Represents ");
+                yield return new Pair(beginning + " Representing ", "Represents "); // upper-case is intended as this is a real-world-scenario
+                yield return new Pair(beginning + " will be called with their ", Provides + "a "); // upper-case is intended as this is a real-world-scenario
+
+                for (var middleIndex = 0; middleIndex < middlePartsLength; middleIndex++)
+                {
+                    var middle = middleParts[middleIndex];
+                    var start = string.Concat(beginning, " ", middle, " ");
+
+                    yield return new Pair(start + "contains ", Provides);
+                    yield return new Pair(start + "contain ", Provides);
+
+                    yield return new Pair(start + "offers ", Provides);
+                    yield return new Pair(start + "offer ", Provides);
+
+                    yield return new Pair((beginning + " will be called with their ").Replace("will will", "will"), Provides + "a "); // upper-case is intended as this is a real-world-scenario
+
+                    yield return new Pair(start + "provides functionality to ");
+
+                    yield return new Pair(start);
+                }
+
+                yield return new Pair(beginning + " for checking ", "Determines ");
+                yield return new Pair(beginning + " for ");
+                yield return new Pair(beginning + " in charge of ");
+                yield return new Pair(beginning + " specialized in ");
+                yield return new Pair(beginning + " used for checking ", "Determines ");
+                yield return new Pair(beginning + " used for ");
             }
         }
 
         private static IEnumerable<string> CreateUsedToPhrases()
         {
-            string[] subjects =
-                                {
-                                    "A class", "An class", "The class", "This class", "Class",
-                                    "A base class", "An base class", "The base class", "This base class", "Base class",
-                                    "A abstract base class", "An abstract base class", "The abstract base class", "This abstract base class", "Abstract base class",
-                                    "A interface", "An interface", "The interface", "This interface", "Interface",
-                                    "A component", "An component", "The component", "This component", "Component",
-                                    "A attribute", "An attribute", "The attribute", "This attribute", "Attribute",
-                                };
+            var subjects = GetSubjects();
             string[] conjunctions = { "that", "which" };
             string[] conditionals = { "is", "can be", "could be", "may be", "might be", "shall be", "should be", "will be", "would be" };
 
             foreach (var subject in subjects)
             {
-                yield return string.Concat(subject, " to ");
+                // yield return string.Concat(subject, " to ");
                 yield return string.Concat(subject, " allows to ");
                 yield return string.Concat(subject, " used to ");
                 yield return string.Concat(subject, " able to ");
@@ -548,6 +605,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return "Capable to ";
         }
 
-//// ncrunch: rdi default
+        //// ncrunch: rdi default
     }
 }

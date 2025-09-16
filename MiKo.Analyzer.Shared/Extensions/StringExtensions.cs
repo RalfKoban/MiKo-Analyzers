@@ -184,10 +184,13 @@ namespace MiKoSolutions.Analyzers
 
         public static InterpolatedStringTextSyntax AsInterpolatedString(this in ReadOnlySpan<char> value) => value.ToString().AsInterpolatedString();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static InterpolatedStringTextSyntax AsInterpolatedString(this string value) => SyntaxFactory.InterpolatedStringText(value.AsToken(SyntaxKind.InterpolatedStringTextToken));
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TypeSyntax AsTypeSyntax(this string value) => SyntaxFactory.ParseTypeName(value);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static XmlTextSyntax AsXmlText(this string text) => SyntaxFactory.XmlText(text);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1804,6 +1807,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// An array of encapsulated terms.
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string[] WithDelimiters(this string value) => WithDelimiters(new[] { value });
 
         /// <summary>
@@ -1849,6 +1853,7 @@ namespace MiKoSolutions.Analyzers
 
         public static string Without(this string value, in ReadOnlySpan<string> phrases) => value.AsCachedBuilder().Without(phrases).Trimmed().ToStringAndRelease();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string WithoutFirstWord(this string value) => WithoutFirstWord(value.AsSpan()).ToString();
 
         public static ReadOnlySpan<char> WithoutFirstWord(this in ReadOnlySpan<char> value)
@@ -1866,6 +1871,7 @@ namespace MiKoSolutions.Analyzers
             return text.Slice(firstSpace);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ReadOnlySpan<char> WithoutFirstWords(this string value, in ReadOnlySpan<string> words) => WithoutFirstWords(value.AsSpan(), words);
 
         public static ReadOnlySpan<char> WithoutFirstWords(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> words)
@@ -2084,6 +2090,7 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool QuickContainsSubstringProbe(in ReadOnlySpan<char> value, in ReadOnlySpan<char> other, in StringComparison comparison)
         {
             if (value.Length > other.Length)
@@ -2120,6 +2127,7 @@ namespace MiKoSolutions.Analyzers
             return true;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool QuickSubstringProbeOrdinal(in ReadOnlySpan<char> value, in ReadOnlySpan<char> other)
         {
             var length = Math.Min(value.Length, other.Length);
@@ -2185,7 +2193,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static unsafe bool QuickDiff(char* a, char* b, in int index)
+        private static unsafe bool QuickDiff(in char* a, in char* b, in int index)
         {
             int charA = *(a + index);
 
