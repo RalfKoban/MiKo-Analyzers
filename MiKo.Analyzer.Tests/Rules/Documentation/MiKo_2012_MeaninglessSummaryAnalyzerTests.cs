@@ -300,28 +300,60 @@ public class TestMe : ITestMe
 }
 ");
 
-        [TestCase("Able to render something", "Renders something")]
-        [TestCase("Capable to render something", "Renders something")]
         [TestCase("A class that adopts", "Adopts")]
         [TestCase("A interface that adopts", "Adopts")]
+        [TestCase("Able to render", "Renders")]
         [TestCase("An interface that adopts", "Adopts")]
+        [TestCase("Capable to render", "Renders")]
+        [TestCase("Class for checking", "Determines")]
+        [TestCase("Class in charge of getting", "Gets")]
+        [TestCase("Class specialized in creating", "Creates")]
         [TestCase("Class that adopts", "Adopts")]
         [TestCase("Class that allows to do", "Does")]
+        [TestCase("Class that contains", "Provides")]
         [TestCase("Class that creates", "Creates")]
         [TestCase("Class that describes", "Describes")]
         [TestCase("Class that enhances", "Enhances")]
         [TestCase("Class that extends", "Extends")]
+        [TestCase("Class that holds", "Holds")]
+        [TestCase("Class that implements", "Implements")]
+        [TestCase("Class that is used as a helper for", "Provides")]
+        [TestCase("Class that is used as helper class for", "Provides")]
+        [TestCase("Class that is used as helper for", "Provides")]
+        [TestCase("Class that offers", "Provides")]
+        [TestCase("Class that provides", "Provides")]
         [TestCase("Class that represents", "Represents")]
         [TestCase("Class that serves as", "Represents a")]
         [TestCase("Class that serves", "Provides")]
         [TestCase("Class that will represent", "Represents")]
+        [TestCase("Class to contain", "Provides")]
+        [TestCase("Class to hold", "Holds")]
+        [TestCase("Class to implement", "Implements")]
+        [TestCase("Class to offer", "Provides")]
         [TestCase("Class to provide", "Provides")]
+        [TestCase("Class which contains", "Provides")]
+        [TestCase("Class which holds", "Holds")]
+        [TestCase("Class which implements", "Implements")]
+        [TestCase("Class which is used as a helper for", "Provides")]
+        [TestCase("Class which is used as helper class for", "Provides")]
+        [TestCase("Class which is used as helper for", "Provides")]
+        [TestCase("Class which offers", "Provides")]
+        [TestCase("Class which provides", "Provides")]
         [TestCase("Class which serves as", "Represents a")]
         [TestCase("Class which serves", "Provides")]
         [TestCase("Class which will represent", "Represents")]
+        [TestCase("Classes implementing the interface provide", "Provides")]
+        [TestCase("Classes implementing the interface will provide", "Provides")]
+        [TestCase("Classes implementing the interface, will provide", "Provides")] // typo, real-world-scenario
         [TestCase("Classes implementing the interfaces provide", "Provides")]
         [TestCase("Classes implementing the interfaces will provide", "Provides")]
-        [TestCase("Classes implementing the interfaces, will provide", "Provides")]
+        [TestCase("Classes implementing the interfaces, will provide", "Provides")] // typo, real-world-scenario
+        [TestCase("Classes implementing this interface provide", "Provides")]
+        [TestCase("Classes implementing this interface will provide", "Provides")]
+        [TestCase("Classes implementing this interface, will provide", "Provides")] // typo, real-world-scenario
+        [TestCase("Classes implementing this interfaces provide", "Provides")] // typo, real-world-scenario
+        [TestCase("Classes implementing this interfaces will provide", "Provides")] // typo, real-world-scenario
+        [TestCase("Classes implementing this interfaces, will provide", "Provides")] // typo, real-world-scenario
         [TestCase("Contain", "Provides")]
         [TestCase("Contains", "Provides")]
         [TestCase("Event argument for", "Provides data for the")]
@@ -418,15 +450,15 @@ public class TestMe : ITestMe
         [TestCase("The class which adopts", "Adopts")]
         [TestCase("The interface offers", "Provides")]
         [TestCase("The interface that adopts", "Adopts")]
-        [TestCase("The interface which adopts", "Adopts")]
-        [TestCase("The interface that may be used to adopt", "Adopts")]
-        [TestCase("The interface which may be used to adopt", "Adopts")]
-        [TestCase("The interface that might be used to adopt", "Adopts")]
-        [TestCase("The interface which might be used to adopt", "Adopts")]
         [TestCase("The interface that can be used to adopt", "Adopts")]
-        [TestCase("The interface which can be used to adopt", "Adopts")]
         [TestCase("The interface that could be used to adopt", "Adopts")]
+        [TestCase("The interface that may be used to adopt", "Adopts")]
+        [TestCase("The interface that might be used to adopt", "Adopts")]
+        [TestCase("The interface which adopts", "Adopts")]
+        [TestCase("The interface which can be used to adopt", "Adopts")]
         [TestCase("The interface which could be used to adopt", "Adopts")]
+        [TestCase("The interface which may be used to adopt", "Adopts")]
+        [TestCase("The interface which might be used to adopt", "Adopts")]
         [TestCase("This class adopts", "Adopts")]
         [TestCase("This class offers", "Provides")]
         [TestCase("This class provides", "Provides")]
@@ -1200,11 +1232,11 @@ public class TestMe
                                  "Action",
                                  "Func",
                                  "Converter",
-                                 "Adapter ",
+                                 "Adapter",
                                  "Builder",
                                  "Factory",
-                                 "Proxy ",
-                                 "Wrapper ",
+                                 "Proxy",
+                                 "Wrapper",
                              ];
 
             var results = new HashSet<string>

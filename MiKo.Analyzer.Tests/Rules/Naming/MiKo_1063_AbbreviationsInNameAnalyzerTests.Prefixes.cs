@@ -227,6 +227,7 @@ namespace " + prefix + @"Namespace
 }");
 
         [TestCase("seq", "sequential")]
+        [TestCase("attr", "attribute")]
         public void Code_gets_fixed_for_prefix_(string originalTerm, string fixedTerm)
         {
             const string Template = @"

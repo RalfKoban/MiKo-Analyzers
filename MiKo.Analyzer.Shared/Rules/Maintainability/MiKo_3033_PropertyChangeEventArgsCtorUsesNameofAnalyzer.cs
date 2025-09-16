@@ -57,7 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             switch (argumentExpression)
             {
-                case InvocationExpressionSyntax i when i.Expression is IdentifierNameSyntax sa && sa.GetName() is "nameof":
+                case InvocationExpressionSyntax i when i.IsNameOf():
                     return NameofHasIssue(node, i.ArgumentList.Arguments, semanticModel);
 
                 case IdentifierNameSyntax s when node.EnclosingMethodHasParameter(s.GetName(), semanticModel):

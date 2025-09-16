@@ -666,6 +666,23 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_method_with_(
+                                                                             [Values("string", "String", "Sring", "sring", "Sting", "sting")] string type,
+                                                                             [Values("Empty", "empty", "Empy", "empy", "Emtpy", "emtpy")] string property)
+            => An_issue_is_reported_for(@"
+using System;
+using System.IO;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something with " + type + "." + property + @" to see.
+    /// </summary>
+    void DoSomething();
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_2223_DocumentationDoesNotUsePlainTextReferencesAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2223_DocumentationDoesNotUsePlainTextReferencesAnalyzer();
