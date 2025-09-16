@@ -22,9 +22,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var symbolName = symbol.Name;
 
-            if (IsMefAggregateCatalog(symbolName))
+            if (IsCatalog(symbolName))
             {
-                // ignore MEF aggregate catalog
+                // ignore stuff like the MEF aggregate catalog
                 return false;
             }
 
@@ -151,9 +151,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool IsDocument(string typeName) => typeName.EndsWith("Document", StringComparison.Ordinal);
+        private static bool IsDocument(string typeName) => typeName.EndsWith("ocument", StringComparison.Ordinal);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool IsMefAggregateCatalog(string typeName) => typeName is "AssemblyCatalog";
+        private static bool IsCatalog(string typeName) => typeName.EndsWith("atalog", StringComparison.Ordinal);
     }
 }
