@@ -7,6 +7,6 @@ namespace MiKoSolutions.Analyzers.Rules
 
         public string Fixed { get; init; }
 
-        public override string ToString() => $"Wrong: {Wrong}   -   Fixed: {Fixed}";
+        public override string ToString() => StringBuilderCache.Acquire().Append('\'').Append(Wrong).Append("' -> '").Append(Fixed).Append('\'').ToStringAndRelease();
     }
 }

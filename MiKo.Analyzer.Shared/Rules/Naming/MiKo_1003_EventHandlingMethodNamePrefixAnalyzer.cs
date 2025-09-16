@@ -73,7 +73,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 }
             }
 
-            return name.AsCachedBuilder().Without(Constants.Underscore).ToUpperCaseAt(0).ToString();
+            return name.AsCachedBuilder().Without(Constants.Underscore).ToUpperCaseAt(0).ToStringAndRelease();
         }
 
         private static string FindProperNameInClass(IMethodSymbol method)
