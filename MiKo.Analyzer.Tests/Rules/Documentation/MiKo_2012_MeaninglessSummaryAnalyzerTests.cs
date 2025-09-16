@@ -1232,11 +1232,11 @@ public class TestMe
                                  "Action",
                                  "Func",
                                  "Converter",
-                                 "Adapter ",
+                                 "Adapter",
                                  "Builder",
                                  "Factory",
-                                 "Proxy ",
-                                 "Wrapper ",
+                                 "Proxy",
+                                 "Wrapper",
                              ];
 
             var results = new HashSet<string>
