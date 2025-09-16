@@ -13,7 +13,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/18917.svg)](https://scan.coverity.com/projects/ralfkoban-miko-analyzers)
 
 ## Available Rules
-The following tables lists all the 515 rules that are currently provided by the analyzer.
+The following tables lists all the 516 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -68,8 +68,8 @@ The following tables lists all the 515 rules that are currently provided by the 
 |MiKo_1037|Types should not be suffixed with 'Type', 'Interface', 'Class', 'Struct', 'Record' or 'Enum'|&#x2713;|&#x2713;|
 |MiKo_1038|Classes that contain extension methods should end with same suffix|&#x2713;|&#x2713;|
 |MiKo_1039|The 'this' parameter of extension methods should have a default name|&#x2713;|&#x2713;|
-|MiKo_1040|Parameters should not be suffixed with implementation details|&#x2713;|\-|
-|MiKo_1041|Fields should not be suffixed with implementation details|&#x2713;|\-|
+|MiKo_1040|Parameters should not be suffixed with implementation details|&#x2713;|&#x2713;|
+|MiKo_1041|Fields should not be suffixed with implementation details|&#x2713;|&#x2713;|
 |MiKo_1042|'CancellationToken' parameters should have specific name|&#x2713;|&#x2713;|
 |MiKo_1043|'CancellationToken' variables should have specific name|&#x2713;|&#x2713;|
 |MiKo_1044|Commands should be suffixed with 'Command'|&#x2713;|&#x2713;|
@@ -452,6 +452,7 @@ The following tables lists all the 515 rules that are currently provided by the 
 |MiKo_3228|Prefer pattern matching for inequality checks|&#x2713;|&#x2713;|
 |MiKo_3229|'KeyValuePair.Create' should be used instead of constructors|&#x2713;|&#x2713;|
 |MiKo_3230|Do not use 'Guid' as type for identifiers|&#x2713;|\-|
+|MiKo_3231|Prefer pattern matching for equality checks for ordinal string comparisons|&#x2713;|&#x2713;|
 |MiKo_3301|Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements|&#x2713;|&#x2713;|
 |MiKo_3302|Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters|&#x2713;|&#x2713;|
 |MiKo_3401|Namespace hierarchies should not be too deep|&#x2713;|\-|

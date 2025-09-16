@@ -75,7 +75,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             ];
 
         [Test]
-        public void No_issue_is_reported_for_non_test_class([ValueSource(nameof(WrongMethodNames))] string methodName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_test_class_([ValueSource(nameof(WrongMethodNames))] string methodName) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void " + methodName + @"() { }

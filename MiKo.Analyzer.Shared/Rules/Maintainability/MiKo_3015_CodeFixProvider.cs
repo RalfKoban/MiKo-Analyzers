@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Composition;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -10,6 +13,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3015_CodeFixProvider)), Shared]
     public sealed class MiKo_3015_CodeFixProvider : ObjectCreationExpressionMaintainabilityCodeFixProvider
     {
+        private const string Namespace = "System.ComponentModel";
+
+        private static readonly HashSet<string> ComponentModelTypes = typeof(InvalidEnumArgumentException).Assembly.GetTypes().Where(_ => _.Namespace == Namespace).ToHashSet(_ => _.Name);
+
         public override string FixableDiagnosticId => "MiKo_3015";
 
         protected override TypeSyntax GetUpdatedSyntaxType(ObjectCreationExpressionSyntax syntax) => nameof(InvalidOperationException).AsTypeSyntax();
@@ -26,6 +33,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return ArgumentList(errorMessage);
         }
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue) => root.WithoutUsing("System.ComponentModel"); // remove unused "using System.ComponentModel;"
+        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
+        {
+            if (root.DescendantNodes<IdentifierNameSyntax>().None(_ => ComponentModelTypes.Contains(_.GetName())))
+            {
+                return root.WithoutUsing(Namespace); // remove unused "using System.ComponentModel;"
+            }
+
+            return root;
+        }
     }
 }

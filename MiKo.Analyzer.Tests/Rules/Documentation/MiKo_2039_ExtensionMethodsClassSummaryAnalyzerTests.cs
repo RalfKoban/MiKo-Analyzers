@@ -65,6 +65,9 @@ public static class TestMeExtensions
 
         [TestCase("Class containing extension methods for", "")]
         [TestCase("Class containing extension methods to", "")]
+        [TestCase("Class for extension methods that extend", "")]
+        [TestCase("Class for extension methods which extend", "")]
+        [TestCase("Class for extension methods extending", "")]
         [TestCase("Contains extension methods for", "")]
         [TestCase("Contains extension methods to", "")]
         [TestCase("Contains extensions for", "")]

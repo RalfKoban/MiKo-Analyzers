@@ -1589,6 +1589,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rename parameter and remove implementation detail suffix.
+        /// </summary>
+        internal static string MiKo_1040_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1040_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Adding suffixes like &apos;List&apos; to parameter names adds unnecessary clutter. It&apos;s best to avoid them for cleaner, more readable code..
         /// </summary>
         internal static string MiKo_1040_Description {
@@ -1612,6 +1621,15 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_1040_Title {
             get {
                 return ResourceManager.GetString("MiKo_1040_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename field and remove implementation detail suffix.
+        /// </summary>
+        internal static string MiKo_1041_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1041_CodeFixTitle", resourceCulture);
             }
         }
         
@@ -6598,7 +6616,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Replace &lt;br/&gt; with &lt;para/&gt;.
+        ///   Looks up a localized string similar to Replace &lt;p&gt; with &lt;para&gt;.
         /// </summary>
         internal static string MiKo_2042_CodeFixTitle {
             get {
@@ -6607,7 +6625,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should use the &apos;&lt;para/&gt;&apos; XML tags instead of &apos;&lt;br/&gt;&apos; or &apos;&lt;p/&gt;&apos; HTML tags. This ensures a consistent format, suitable for XML-based documentation tools and frameworks..
+        ///   Looks up a localized string similar to Documentation should use the &apos;&lt;para&gt;&apos; XML tags instead of &apos;&lt;p&gt;&apos; HTML tags. This ensures a consistent format, suitable for XML-based documentation tools and frameworks..
         /// </summary>
         internal static string MiKo_2042_Description {
             get {
@@ -6625,7 +6643,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;&lt;para/&gt;&apos; instead of &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Use &apos;&lt;para&gt;&apos; instead of &apos;&lt;p&gt;&apos;.
         /// </summary>
         internal static string MiKo_2042_MessageFormat {
             get {
@@ -6634,7 +6652,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should use &apos;&lt;para/&gt;&apos; XML tags instead of &apos;&lt;br/&gt;&apos; HTML tags.
+        ///   Looks up a localized string similar to Documentation should use &apos;&lt;para&gt;&apos; XML tags instead of &apos;&lt;p&gt;&apos; HTML tags.
         /// </summary>
         internal static string MiKo_2042_Title {
             get {
@@ -14468,6 +14486,42 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_3230_Title {
             get {
                 return ResourceManager.GetString("MiKo_3230_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apply &apos;is&apos; pattern.
+        /// </summary>
+        internal static string MiKo_3231_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3231_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Equality checks using &apos;is&apos; pattern matching are more intuitive and easier to read than the &apos;Equals(StringComparison.Ordinal)&apos; comparison. This makes them the preferred choice for clarity and comprehension..
+        /// </summary>
+        internal static string MiKo_3231_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3231_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;is&apos; instead of &apos;Equals&apos;.
+        /// </summary>
+        internal static string MiKo_3231_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3231_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prefer pattern matching for equality checks for ordinal string comparisons.
+        /// </summary>
+        internal static string MiKo_3231_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3231_Title", resourceCulture);
             }
         }
         

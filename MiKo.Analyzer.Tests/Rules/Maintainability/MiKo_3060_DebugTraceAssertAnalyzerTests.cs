@@ -97,6 +97,41 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_multiple_Assert_usage_method_([Values("Debug", "Trace")] string className)
+        {
+            var originalCode = @"
+using System;
+using System.Diagnostics;
+
+public class TestMe
+{
+    public void DoSomething(int i)
+    {
+        " + className + @".Assert(i != 42);
+        " + className + @".Assert(i != 0815);
+
+        DoSomething(42);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int i)
+    {
+
+        DoSomething(42);
+    }
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_fully_qualified_Assert_usage_method_([Values("Debug", "Trace")] string className)
         {
             var originalCode = @"
