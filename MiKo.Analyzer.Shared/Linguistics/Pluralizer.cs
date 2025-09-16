@@ -137,7 +137,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         public static string MakePluralName(string name) => GetPluralName(name, StringComparison.Ordinal) ?? name;
 
         /// <summary>
-        /// Attempts to create a plural name for a given name, but (in contrast to <see cref="MakePluralName"/>) returns <see langword="null"/> in case if fails to do so.
+        /// Attempts to create a plural name for a given name, but - in contrast to <see cref="MakePluralName"/> - returns <see langword="null"/> in case if fails to do so.
         /// </summary>
         /// <param name="name">
         /// The name to create a plural for.
@@ -152,7 +152,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         public static string GetPluralName(string name, in StringComparison comparison = StringComparison.OrdinalIgnoreCase) => GetPluralName(name, name, comparison);
 
         /// <summary>
-        /// Attempts to create a plural name for a given proposed name, but (in contrast to <see cref="MakePluralName"/>) returns <see langword="null"/> in case if fails to do so.
+        /// Attempts to create a plural name for a given proposed name, but - in contrast to <see cref="MakePluralName"/> - returns <see langword="null"/> in case if fails to do so.
         /// </summary>
         /// <param name="name">
         /// The name to create a plural for.
@@ -178,7 +178,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         }
 
         /// <summary>
-        /// Attempts to create a plural name for a given name, but (in contrast to <see cref="MakePluralName"/>) returns <see langword="null"/> in case if fails to do so.
+        /// Attempts to create a plural name for a given name, but - in contrast to <see cref="MakePluralName"/> - returns <see langword="null"/> in case if fails to do so.
         /// </summary>
         /// <param name="name">
         /// The name to create a plural for.
@@ -207,12 +207,14 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 proposedName = proposedName.WithoutSuffixes(Constants.Markers.Models);
             }
 
-            if (name.Length != proposedName.Length)
+            var pluralName = GetPluralName(name, proposedName.ToString(), comparison);
+
+            if (pluralName is null || name.Length == pluralName.Length)
             {
-                return GetPluralName(name, proposedName.ToString(), comparison);
+                return null;
             }
 
-            return null;
+            return pluralName;
         }
 
         private static bool IsAllowedListName(string symbolName, in StringComparison comparison = StringComparison.OrdinalIgnoreCase) => symbolName.EqualsAny(AllowedListNames, comparison);

@@ -15,15 +15,35 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.ContainingType?.IsEnum() is false; // ignore enum definitions
+        protected override bool ShallAnalyze(IFieldSymbol symbol)
+        {
+            if (symbol.ContainingType?.IsEnum() is true)
+            {
+                return false; // ignore enum definitions
+            }
+
+            var type = symbol.Type;
+
+            if (type.IsXmlNode())
+            {
+                return false;
+            }
+
+            if (type.IsString())
+            {
+                return symbol.Name.EndsWithAny(Constants.Markers.Collections);
+            }
+
+            return true;
+        }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation)
         {
             var diagnostic = AnalyzeCollectionSuffix(symbol);
 
-            return diagnostic != null
-                   ? new[] { diagnostic }
-                   : Array.Empty<Diagnostic>();
+            return diagnostic is null
+                   ? Array.Empty<Diagnostic>()
+                   : new[] { diagnostic };
         }
     }
 }
