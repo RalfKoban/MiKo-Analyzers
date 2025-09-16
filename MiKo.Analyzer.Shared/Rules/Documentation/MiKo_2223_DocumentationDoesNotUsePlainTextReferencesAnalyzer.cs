@@ -32,6 +32,46 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] CompilerWarningIndicators = { "CS", "CA", "SA" };
 
+        private static readonly string[] StringEmptyTexts =
+                                                            {
+                                                                "sring.empty",
+                                                                "sring.Empty",
+                                                                "Sring.empty",
+                                                                "Sring.Empty",
+                                                                "sring.empy",
+                                                                "sring.Empy",
+                                                                "Sring.empy",
+                                                                "Sring.Empy",
+                                                                "sring.emtpy",
+                                                                "sring.Emtpy",
+                                                                "Sring.emtpy",
+                                                                "Sring.Emtpy",
+                                                                "sting.empty",
+                                                                "sting.Empty",
+                                                                "Sting.empty",
+                                                                "Sting.Empty",
+                                                                "sting.empy",
+                                                                "sting.Empy",
+                                                                "Sting.empy",
+                                                                "Sting.Empy",
+                                                                "sting.emtpy",
+                                                                "sting.Emtpy",
+                                                                "Sting.emtpy",
+                                                                "Sting.Emtpy",
+                                                                "string.empty",
+                                                                "string.Empty",
+                                                                "String.empty",
+                                                                "String.Empty",
+                                                                "string.empy",
+                                                                "string.Empy",
+                                                                "String.empy",
+                                                                "String.Empy",
+                                                                "string.emtpy",
+                                                                "string.Emtpy",
+                                                                "String.emtpy",
+                                                                "String.Emtpy",
+                                                            };
+
         private static readonly HashSet<string> IgnoreTags = new HashSet<string>
                                                                  {
                                                                      Constants.XmlTag.Code,
@@ -66,6 +106,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
+            List<Location> alreadyReportedLocations = null;
             List<Diagnostic> results = null;
 
             var textTokens = comment.GetXmlTextTokens(_ => IgnoreTags.Contains(_.GetName()) is false);
@@ -84,14 +125,34 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         continue;
                     }
 
-                    foreach (var diagnostic in AnalyzeComment(token, text))
+                    foreach (var issue in AnalyzeComment(token, text))
                     {
+                        if (issue is null)
+                        {
+                            continue;
+                        }
+
+                        if (alreadyReportedLocations is null)
+                        {
+                            alreadyReportedLocations = new List<Location>(1);
+                        }
+                        else
+                        {
+                            if (alreadyReportedLocations.Exists(_ => issue.Location.IntersectsWith(_)))
+                            {
+                                // already reported, so ignore it
+                                continue;
+                            }
+                        }
+
+                        alreadyReportedLocations.Add(issue.Location);
+
                         if (results is null)
                         {
                             results = new List<Diagnostic>(1);
                         }
 
-                        results.Add(diagnostic);
+                        results.Add(issue);
                     }
                 }
             }
@@ -243,8 +304,30 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return true;
         }
 
+        private static new Location CreateLocation(in SyntaxToken token, in int offsetStart, in int offsetEnd)
+        {
+            var spanStart = token.SpanStart;
+
+            return DocumentationAnalyzer.CreateLocation(token, spanStart + offsetStart, spanStart + offsetEnd);
+        }
+
         private IEnumerable<Diagnostic> AnalyzeComment(SyntaxToken token, string text)
         {
+            // run over the string.Empty texts here to get the correct text as replacement text in the message
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
+            foreach (var stringEmpty in StringEmptyTexts)
+            {
+                var index = text.IndexOf(stringEmpty, StringComparison.Ordinal);
+
+                if (index != -1)
+                {
+                    // we found a special text, so report that
+                    var location = CreateLocation(token, index, index + stringEmpty.Length);
+
+                    yield return Issue("String.Empty", location); // we use the side effect here that the name is the argument zero and gets used in the issue's message
+                }
+            }
+
             var textLength = text.Length - 1;
 
             var start = 0;
@@ -289,7 +372,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     if (compoundWord)
                     {
                         // we found a compound word, so report that
-                        var location = CreateLocation(token, token.SpanStart + start, token.SpanStart + end);
+                        var location = CreateLocation(token, start, end);
 
                         yield return Issue(location);
                     }

@@ -17,6 +17,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                     "Repository ",
                                                                 };
 
+        private static readonly string[] CurrentlyUnfixable =
+                                                              {
+                                                                  "Given ",
+                                                                  "When ",
+                                                              };
+
+        private static readonly string[] DeterminesCandidates =
+                                                                {
+                                                                    "Whether",
+                                                                    "If",
+                                                                };
+
         public override string FixableDiagnosticId => "MiKo_2019";
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
@@ -29,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     var startText = textSyntax.GetTextTrimmed();
 
-                    if (startText.StartsWith("Given ", StringComparison.Ordinal))
+                    if (startText.StartsWithAny(CurrentlyUnfixable))
                     {
                         // we cannot fix that for the moment
                         return syntax;
@@ -62,7 +74,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             var index = text.IndexOf(firstWord);
                             var remainingText = text.Slice(index + firstWord.Length);
 
-                            var replacementForFirstWord = Verbalizer.MakeThirdPersonSingularVerb(firstWord.ToUpperCaseAt(0));
+                            var firstWordUpper = firstWord.ToUpperCaseAt(0);
+
+                            string replacementForFirstWord = firstWordUpper.EqualsAny(DeterminesCandidates)
+                                                             ? "Determines whether"
+                                                             : Verbalizer.MakeThirdPersonSingularVerb(firstWordUpper);
 
                             var replacedText = replacementForFirstWord.ConcatenatedWith(remainingText);
 

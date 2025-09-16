@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using System.Xml;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
-
-using MiKoSolutions.Analyzers.Linguistics;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
@@ -15,9 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1070";
 
-        private static readonly string[] SpecialNames = { "actual", "expected" };
-
-        private static readonly string[] Splitters = { "Of", "With", "To", "In", "From" };
+        private static readonly string[] TestRelatedNames = { "actual", "expected" };
 
         public MiKo_1070_CollectionLocalVariableAnalyzer() : base(Id)
         {
@@ -27,9 +22,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var symbolName = symbol.Name;
 
-            if (IsMefAggregateCatalog(symbolName))
+            if (IsCatalog(symbolName))
             {
-                // ignore MEF aggregate catalog
+                // ignore stuff like the MEF aggregate catalog
                 return false;
             }
 
@@ -40,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     return false;
                 }
 
-                if (IsXmlNode(symbolName))
+                if (symbol.IsXmlNode())
                 {
                     return false;
                 }
@@ -68,7 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     continue;
                 }
 
-                if (originalName.EqualsAny(SpecialNames))
+                if (originalName.EqualsAny(TestRelatedNames))
                 {
                     continue;
                 }
@@ -83,18 +78,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     continue;
                 }
 
-                var name = originalName;
-                var span = originalName.AsSpan();
-                var pluralName = span.EndsWith('s')
-                                 ? originalName
-                                 : GetPluralName(span, out name);  // might return null in case there is none
+                var pluralName = FindPluralName(originalName.AsSpan(), out var singularName);  // might return null in case there is none
 
                 if (pluralName is null)
                 {
                     continue;
                 }
 
-                if (pluralName != name)
+                if (pluralName != singularName)
                 {
                     yield return Issue(originalName, identifier, pluralName, CreateBetterNameProposal(pluralName));
                 }
@@ -155,67 +146,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return false;
         }
 
-        private static bool IsXmlNode(string typeName)
-        {
-            switch (typeName)
-            {
-                case nameof(XmlDocument):
-                case nameof(XmlElement):
-                case nameof(XmlNode):
-                {
-                    return true;
-                }
-
-                default:
-                {
-                    return false;
-                }
-            }
-        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool IsDocument(string typeName) => typeName.EndsWith("ocument", StringComparison.Ordinal);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool IsDocument(string typeName) => typeName.EndsWith("Document", StringComparison.Ordinal);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool IsMefAggregateCatalog(string typeName) => typeName is "AssemblyCatalog";
-
-        private static string GetPluralName(in ReadOnlySpan<char> originalName, out string name)
-        {
-            if (originalName.EndsWith('s'))
-            {
-                name = originalName.ToString();
-
-                return Pluralizer.GetPluralName(name, StringComparison.Ordinal);
-            }
-
-            var index = originalName.IndexOfAny(Splitters);
-
-            if (index > 0)
-            {
-                var nameToInspect = originalName.Slice(0, index);
-                var remainingPart = originalName.Slice(index);
-
-                var pluralName = GetPluralName(nameToInspect, out name);
-
-                name = name.ConcatenatedWith(remainingPart);
-
-                return pluralName.ConcatenatedWith(remainingPart);
-            }
-            else
-            {
-                var pluralName = originalName.EndsWithNumber()
-                                 ? originalName.WithoutNumberSuffix()
-                                 : originalName;
-
-                name = pluralName.ToString();
-
-                if (pluralName.EndsWithAny(Constants.Markers.Collections, StringComparison.OrdinalIgnoreCase))
-                {
-                    return Pluralizer.GetPluralName(name, StringComparison.OrdinalIgnoreCase, Constants.Markers.Collections);
-                }
-
-                return Pluralizer.GetPluralName(name);
-            }
-        }
+        private static bool IsCatalog(string typeName) => typeName.EndsWith("atalog", StringComparison.Ordinal);
     }
 }

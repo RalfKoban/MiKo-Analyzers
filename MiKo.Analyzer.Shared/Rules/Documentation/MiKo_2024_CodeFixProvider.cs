@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] FlagsReplacementMapKeys = FlagsReplacementMap.ToArray(_ => _.Key);
 
-        private static readonly string[] ReplacementMapKeys = CreateReplacementMapKeys().Concat(new[] { "Specifies", "Determines" }).ToArray();
+        private static readonly string[] ReplacementMapKeys = CreateReplacementMapKeys().ConcatenatedWith("Specifies", "Determines").ToArray();
         private static readonly Pair[] ReplacementMap = ReplacementMapKeys.ToArray(_ => new Pair(_));
 
         public override string FixableDiagnosticId => "MiKo_2024";

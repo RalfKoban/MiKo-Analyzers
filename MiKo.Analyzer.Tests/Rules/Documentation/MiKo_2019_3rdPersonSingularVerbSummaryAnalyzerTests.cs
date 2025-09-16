@@ -341,6 +341,34 @@ public class TestMe
         [TestCase("The class which would be used to update something", "Updates something")]
         [TestCase("The class which allows to update something", "Updates something")]
         [TestCase("This class allows to update something", "Updates something")]
+        [TestCase("Class containing extension methods for something", @"Provides a set of <see langword=""static""/> methods for something")]
+        [TestCase("Class for byte value conversation.", "Converts byte value.", Ignore = "Currently unclear how to fix")] // TODO RKN
+        [TestCase("Class for checking something", "Determines something")]
+        [TestCase("Class for extension methods that extend something", @"Provides a set of <see langword=""static""/> methods for something")]
+        [TestCase("Class for extension methods which extend something", @"Provides a set of <see langword=""static""/> methods for something")]
+        [TestCase("Class for extensions", @"Provides a set of <see langword=""static""/> methods for ")]
+        [TestCase("Class for representing something", "Represents something")]
+        [TestCase("Class in charge of getting something", "Gets something")]
+        [TestCase("Class part of the something", "Represents the part of the something")]
+        [TestCase("Class provides something", "Provides something")]
+        [TestCase("Class providing functionality to calculate something", "Calculates something")]
+        [TestCase("Class providing functionality to populate something", "Populates something")]
+        [TestCase("Class providing something", "Provides something")]
+        [TestCase("Class representing something", "Represents something")]
+        [TestCase("Class Representing something", "Represents something")] // 'Representing' is written upper-case by intent, as there is a real-world-scenario
+        [TestCase("Class retrieving something", "Provides something")]
+        [TestCase("Class specialized in creating something", "Creates something")]
+        [TestCase("Class that contains something", "Provides something")]
+        [TestCase("Class that holds something", "Holds something")]
+        [TestCase("Class that is used as helper class for something", "Provides something")]
+        [TestCase("Class that offers something", "Provides something")]
+        [TestCase("Class to deserialize something", "Deserializes something")]
+        [TestCase("Class to help with something", "Helps with something")]
+        [TestCase("Class to retrieve something", "Provides something")]
+        [TestCase("Class to store something", "Stores something")]
+        [TestCase("Class used for loading something", "Loads something")]
+        [TestCase("Class which holds something", "Holds something")]
+        [TestCase("Classes implementing this interfaces, will be called with their something", "Provides a something")]
         public void Code_gets_fixed_for_class_text_(string originalText, string fixedText)
         {
             const string Template = @"
@@ -458,6 +486,8 @@ public class TestMe
         [TestCase("Called to inform about something", "Informs about something")]
         [TestCase("Called to save something", "Saves something")]
         [TestCase("Save something", "Saves something")]
+        [TestCase("Whether something is there", "Determines whether something is there")]
+        [TestCase("If something is there", "Determines whether something is there")]
         public void Code_gets_fixed_for_method_text_(string originalText, string fixedText)
         {
             const string Template = @"
@@ -493,22 +523,23 @@ public interface TestMe
             VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
         }
 
-        [Test]
-        public void Code_is_not_fixed_for_special_phrase_Given()
+        [TestCase("Given anything, does something")]
+        [TestCase("When anything, does something")]
+        public void Code_is_not_fixed_for_special_phrase_(string phrase)
         {
-            const string Code = @"
+            var code = @"
 using System;
 
 public interface TestMe
 {
     /// <summary>
-    /// Given anything, does something.
+    /// " + phrase + @".
     /// </summary>
     public void DoSomething() { }
 }
 ";
 
-            VerifyCSharpFix(Code, Code);
+            VerifyCSharpFix(code, code);
         }
 
         protected override string GetDiagnosticId() => MiKo_2019_3rdPersonSingularVerbSummaryAnalyzer.Id;
