@@ -40,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 
         private static string FindBetterName(string name) => name.Length > 5
-                                                             ? name.AsCachedBuilder().Without("proxy").Without("Proxy").ToLowerCaseAt(0).ToString() // simply remove both as we need to check them anyway (so we save some calls)
+                                                             ? name.AsCachedBuilder().Without("proxy").Without("Proxy").ToLowerCaseAt(0).ToStringAndRelease() // simply remove both as we need to check them anyway (so we save some calls)
                                                              : name;
     }
 }

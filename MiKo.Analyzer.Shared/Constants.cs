@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -1528,12 +1529,12 @@ namespace MiKoSolutions.Analyzers
                                                                                       "WritingProgressChangedEventHandler",
                                                                                   };
 
-            internal static class Patterns
-            {
-                internal const string Adapter = "Adapter";
-                internal const string Wrapper = "Wrapper";
-                internal const string Decorator = "Decorator";
-            }
+            internal static readonly IReadOnlyDictionary<string, string> StructuralDesignPatternNames = new ConcurrentDictionary<string, string>(new[]
+                                                                                                                                                     {
+                                                                                                                                                         new KeyValuePair<string, string>("Adapter", "adapted"),
+                                                                                                                                                         new KeyValuePair<string, string>("Wrapper", "wrapped"),
+                                                                                                                                                         new KeyValuePair<string, string>("Decorator", "decorated"),
+                                                                                                                                                     });
         }
 
         internal static class AnalyzerCodeFixSharedData
