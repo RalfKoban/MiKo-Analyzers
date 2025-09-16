@@ -49,7 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var length = Constants.Names.Counter.Length;
 
-            return "counted" + Pluralizer.MakePluralName(name.AsCachedBuilder().Remove(name.Length - length, length).ToUpperCaseAt(0).ToString());
+            return "counted" + Pluralizer.MakePluralName(name.AsCachedBuilder().Remove(name.Length - length, length).ToUpperCaseAt(0).ToStringAndRelease());
         }
     }
 }

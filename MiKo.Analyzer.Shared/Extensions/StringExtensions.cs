@@ -882,7 +882,7 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        public static bool EndsWithAny(this string value, Dictionary<string, string>.KeyCollection suffixes, in StringComparison comparison = StringComparison.Ordinal)
+        public static bool EndsWithAny(this string value, IEnumerable<string> suffixes, in StringComparison comparison = StringComparison.Ordinal)
         {
             if (value.HasCharacters())
             {
