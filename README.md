@@ -13,7 +13,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/18917.svg)](https://scan.coverity.com/projects/ralfkoban-miko-analyzers)
 
 ## Available Rules
-The following tables lists all the 515 rules that are currently provided by the analyzer.
+The following tables lists all the 516 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -452,6 +452,7 @@ The following tables lists all the 515 rules that are currently provided by the 
 |MiKo_3228|Prefer pattern matching for inequality checks|&#x2713;|&#x2713;|
 |MiKo_3229|'KeyValuePair.Create' should be used instead of constructors|&#x2713;|&#x2713;|
 |MiKo_3230|Do not use 'Guid' as type for identifiers|&#x2713;|\-|
+|MiKo_3231|Prefer pattern matching for equality checks for ordinal string comparisons|&#x2713;|&#x2713;|
 |MiKo_3301|Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements|&#x2713;|&#x2713;|
 |MiKo_3302|Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters|&#x2713;|&#x2713;|
 |MiKo_3401|Namespace hierarchies should not be too deep|&#x2713;|\-|

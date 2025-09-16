@@ -132,7 +132,7 @@ namespace MiKoSolutions.Analyzers
             return Array.Empty<IFieldSymbol>();
         }
 
-        internal static IEnumerable<IFieldSymbol> GetFields(this ITypeSymbol value, string fieldName)
+        internal static IReadOnlyList<IFieldSymbol> GetFields(this ITypeSymbol value, string fieldName)
         {
             var members = value.GetMembers(fieldName);
 
