@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (expected.HasCollectionMarker())
             {
-                var plural = Pluralizer.GetPluralName(expected, StringComparison.OrdinalIgnoreCase, Constants.Markers.Collections);
+                var plural = FindBetterNameForCollectionSuffix(expected);
 
                 // symbol may have both Entity and Collection marker, such as 'ModelCollection', so 'plural' may be null
                 expected = plural ?? (symbolName[0].IsUpperCase() ? Constants.Entities : Constants.entities);
@@ -35,23 +35,44 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return expected;
         }
 
-        protected static string GetFieldPrefix(string fieldName) => GetFieldPrefix(fieldName.AsSpan());
-
-        protected static string GetFieldPrefix(in ReadOnlySpan<char> fieldName)
+        protected static string FindBetterNameForCollectionSuffix(string name)
         {
-            var fieldPrefixes = Constants.Markers.FieldPrefixes;
+            var pluralName = FindPluralName(name.AsSpan(), out _);
 
-            for (int index = 0, prefixesLength = fieldPrefixes.Length; index < prefixesLength; index++)
+            return name.Equals(pluralName, StringComparison.Ordinal) ? null : pluralName;
+        }
+
+        protected static string FindBetterNameForStructuralDesignPattern(string name, string prefix = "")
+        {
+            var startIndex = prefix.Length;
+
+            foreach (var pair in Constants.Names.StructuralDesignPatternNames)
             {
-                var prefix = fieldPrefixes[index];
-
-                if (prefix.Length > 0 && fieldName.StartsWith(prefix))
+                if (name.EndsWith(pair.Key, StringComparison.OrdinalIgnoreCase))
                 {
-                    return prefix;
+                    var count = name.Length - pair.Key.Length;
+
+                    if (count is 0)
+                    {
+                        return pair.Value;
+                    }
+
+                    var builder = StringBuilderCache.Acquire();
+
+                    if (startIndex > 0)
+                    {
+                        builder.Append(prefix);
+                    }
+
+                    builder.Append(pair.Value);
+                    builder.Append(name, startIndex, count - startIndex);
+                    builder.ToUpperCaseAt(pair.Value.Length + startIndex);
+
+                    return builder.ToStringAndRelease();
                 }
             }
 
-            return string.Empty;
+            return name;
         }
 
 #pragma warning disable CA1021
@@ -95,8 +116,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             else
             {
                 var pluralName = originalName.EndsWithNumber()
-                                 ? originalName.WithoutNumberSuffix()
-                                 : originalName;
+                                     ? originalName.WithoutNumberSuffix()
+                                     : originalName;
 
                 singularName = pluralName.ToString();
 
@@ -105,7 +126,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     singularName = singularName.AsCachedBuilder()
                                                .ReplaceWithProbe("lementNodeList", "lementList")
                                                .ReplaceWithProbe("lementReferenceNodeList", "lementList")
-                                               .ToString();
+                                               .ToStringAndRelease();
 
                     return Pluralizer.GetPluralName(singularName, StringComparison.OrdinalIgnoreCase, Constants.Markers.Collections);
                 }
@@ -114,6 +135,27 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 #pragma warning restore CA1021
+
+        protected static string GetFieldPrefix(string fieldName) => GetFieldPrefix(fieldName.AsSpan());
+
+        protected static string GetFieldPrefix(in ReadOnlySpan<char> fieldName)
+        {
+            var fieldPrefixes = Constants.Markers.FieldPrefixes;
+
+            for (int index = 0, prefixesLength = fieldPrefixes.Length; index < prefixesLength; index++)
+            {
+                var prefix = fieldPrefixes[index];
+
+                if (prefix.Length > 0 && fieldName.StartsWith(prefix))
+                {
+                    return prefix;
+                }
+            }
+
+            return string.Empty;
+        }
+
+        protected static bool IsNameForStructuralDesignPattern(string name) => name.EndsWithAny(Constants.Names.StructuralDesignPatternNames.Keys, StringComparison.OrdinalIgnoreCase);
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeNamespace(INamespaceSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
                                                                                                                                 ? AnalyzeName(symbol, compilation)
@@ -434,13 +476,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     return name;
                 }
             }
-        }
-
-        private static string FindBetterNameForCollectionSuffix(string name)
-        {
-            var pluralName = FindPluralName(name.AsSpan(), out _);
-
-            return name.Equals(pluralName, StringComparison.Ordinal) ? null : pluralName;
         }
 
         private IEnumerable<Diagnostic> Analyze(SemanticModel semanticModel, ITypeSymbol type, VariableDesignationSyntax node)
