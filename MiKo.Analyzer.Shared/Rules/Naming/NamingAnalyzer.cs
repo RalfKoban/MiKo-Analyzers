@@ -61,7 +61,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 singularName = originalName.ToString();
 
-                return Pluralizer.GetPluralName(singularName, StringComparison.Ordinal);
+                var pluralName = Pluralizer.GetPluralName(singularName, StringComparison.Ordinal);
+
+                if (pluralName != null && originalName.SequenceEqual(pluralName.AsSpan()))
+                {
+                    singularName = originalName.Slice(0, originalName.Length - 1).ToString();
+
+                    return null; // seems the original name is already the plural name, so we do not report that
+                }
+
+                return pluralName;
             }
 
             var index = originalName.IndexOfAny(Splitters);
@@ -69,9 +78,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (index > 0)
             {
                 var nameToInspect = originalName.Slice(0, index);
-                var remainingPart = originalName.Slice(index);
 
                 var pluralName = FindPluralName(nameToInspect, out singularName);
+
+                if (pluralName is null)
+                {
+                    return null; // seems the original name is already the plural name, so we do not report that
+                }
+
+                var remainingPart = originalName.Slice(index);
 
                 singularName = singularName.ConcatenatedWith(remainingPart);
 
@@ -80,8 +95,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             else
             {
                 var pluralName = originalName.EndsWithNumber()
-                                     ? originalName.WithoutNumberSuffix()
-                                     : originalName;
+                                 ? originalName.WithoutNumberSuffix()
+                                 : originalName;
 
                 singularName = pluralName.ToString();
 
@@ -421,7 +436,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        private static string FindBetterNameForCollectionSuffix(string name) => FindPluralName(name.AsSpan(), out _);
+        private static string FindBetterNameForCollectionSuffix(string name)
+        {
+            var pluralName = FindPluralName(name.AsSpan(), out _);
+
+            return name.Equals(pluralName, StringComparison.Ordinal) ? null : pluralName;
+        }
 
         private IEnumerable<Diagnostic> Analyze(SemanticModel semanticModel, ITypeSymbol type, VariableDesignationSyntax node)
         {

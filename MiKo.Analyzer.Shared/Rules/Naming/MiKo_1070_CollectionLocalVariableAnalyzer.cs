@@ -78,18 +78,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     continue;
                 }
 
-                var name = originalName;
-                var span = originalName.AsSpan();
-                var pluralName = span.EndsWith('s')
-                                 ? originalName
-                                 : FindPluralName(span, out name);  // might return null in case there is none
+                var pluralName = FindPluralName(originalName.AsSpan(), out var singularName);  // might return null in case there is none
 
                 if (pluralName is null)
                 {
                     continue;
                 }
 
-                if (pluralName != name)
+                if (pluralName != singularName)
                 {
                     yield return Issue(originalName, identifier, pluralName, CreateBetterNameProposal(pluralName));
                 }
