@@ -568,6 +568,25 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        internal static bool IsNameOf(this ExpressionSyntax value)
+        {
+            switch (value)
+            {
+                case IdentifierNameSyntax identifier:
+                    return identifier.IsNameOf();
+
+                case InvocationExpressionSyntax invocation:
+                    return invocation.IsNameOf();
+
+                default:
+                    return false;
+            }
+        }
+
+        internal static bool IsNameOf(this IdentifierNameSyntax value) => value.GetName() is "nameof";
+
+        internal static bool IsNameOf(this InvocationExpressionSyntax value) => value.Expression.IsNameOf();
+
         internal static bool IsOnlyNodeInsideRegion(this SyntaxNode value)
         {
             if (value.TryGetRegionDirective(out var regionTrivia))

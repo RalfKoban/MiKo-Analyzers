@@ -46,6 +46,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                           "target",
                                                           "myDictionary",
                                                           "myList42",
+                                                          "myDict",
+                                                          "myDic",
+                                                          "myEnumList",
                                                       ];
 
         private static readonly string[] CorrectNamesWithSuffixes =
@@ -75,6 +78,38 @@ public class TestMe
 {
     public void DoSomething()
     {
+    }
+}
+");
+
+        [TestCase("string value")]
+        [TestCase("string myValue")]
+        [TestCase("XAttribute attribute")]
+        [TestCase("XAttribute myAttribute")]
+        [TestCase("XDocument document")]
+        [TestCase("XDocument myDocument")]
+        [TestCase("XElement element")]
+        [TestCase("XElement myElement")]
+        [TestCase("XmlAttribute attribute")]
+        [TestCase("XmlAttribute myAttribute")]
+        [TestCase("XmlDocument document")]
+        [TestCase("XmlDocument myDocument")]
+        [TestCase("XmlElement element")]
+        [TestCase("XmlElement myElement")]
+        [TestCase("XmlNode myNode")]
+        [TestCase("XmlNode node")]
+        [TestCase("XNode myNode")]
+        [TestCase("XNode node")]
+        public void No_issue_is_reported_for_method_with_variable_(string variable) => No_issue_is_reported_for(@"
+using System;
+using System.Xml;
+using System.Xml.Linq;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        string " + variable + @" = null;
     }
 }
 ");
@@ -347,6 +382,10 @@ public class TestMe
         [TestCase("resultInSomething", "resultsInSomething")]
         [TestCase("resultFromSomething", "resultsFromSomething")]
         [TestCase("triviaList", "trivia")]
+        [TestCase("allElementNodeList", "allElements")]
+        [TestCase("allElementReferenceNodeList", "allElements")]
+        [TestCase("elementNodeList", "elements")]
+        [TestCase("elementReferenceNodeList", "elements")]
         public void Code_gets_fixed_for_variable_(string originalName, string fixedName)
         {
             const string Template = @"

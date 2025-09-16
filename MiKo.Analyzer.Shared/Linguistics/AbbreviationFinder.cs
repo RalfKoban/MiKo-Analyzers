@@ -15,6 +15,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("app", "application"),
                                                       new Pair("apps", "applications"),
                                                       new Pair("assoc", "association"),
+                                                      new Pair("attr", "attribute"),
                                                       new Pair("auth", "authorization"),
                                                       new Pair("btn", "button"),
                                                       new Pair("calc", "calculate"),
@@ -45,6 +46,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("dest", "destination"),
                                                       new Pair("diag", "diagnostic"),
                                                       new Pair("diags", "diagnostics"),
+                                                      new Pair("dic", "dictionary"),
                                                       new Pair("dict", "dictionary"),
                                                       new Pair("diff", "difference"),
                                                       new Pair("diffs", "differences"),
@@ -57,6 +59,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("docs", "documents"),
                                                       new Pair("dst", "destination"),
                                                       new Pair("dto", string.Empty),
+                                                      new Pair("el", "element"),
+                                                      new Pair("ele", "element"),
+                                                      new Pair("elem", "element"),
                                                       new Pair("encr", "encrypt"),
                                                       new Pair("env", "environment"),
                                                       new Pair("environ", "environment"),
@@ -132,6 +137,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("tmp", "temp"),
                                                       new Pair("txt", "text"),
                                                       new Pair("txts", "texts"),
+                                                      new Pair("val", "value"),
                                                       new Pair("var", "variable"),
                                                       new Pair("ver", "version"),
                                                       new Pair("vol", "volume"),
@@ -143,6 +149,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("App", "Application"),
                                                           new Pair("Apps", "Applications"),
                                                           new Pair("Assoc", "Association"),
+                                                          new Pair("Attr", "Attribute"),
                                                           new Pair("Auth", "Authorization"),
                                                           new Pair("Bl", "BusinessLogic"),
                                                           new Pair("BL", "BusinessLogic"),
@@ -181,6 +188,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Dest", "Destination"),
                                                           new Pair("Diag", "Diagnostic"),
                                                           new Pair("Diags", "Diagnostics"),
+                                                          new Pair("Dic", "Dictionary"),
                                                           new Pair("Dict", "Dictionary"),
                                                           new Pair("Diff", "Difference"),
                                                           new Pair("Diffs", "Differences"),
@@ -197,6 +205,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Ef", "EntityFramework"),
                                                           new Pair("EF", "EntityFramework"),
                                                           new Pair("El", "Element"),
+                                                          new Pair("Ele", "Element"),
+                                                          new Pair("Elem", "Element"),
                                                           new Pair("Encr", "Encrypt"),
                                                           new Pair("Env", "Environment"),
                                                           new Pair("Environ", "Environment"),
@@ -269,6 +279,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Tm", "Time"),
                                                           new Pair("Tmp", "Temp"),
                                                           new Pair("Txt", "Text"),
+                                                          new Pair("Val", "Value"),
                                                           new Pair("Var", "Variable"),
                                                           new Pair("Ver", "Version"),
                                                           new Pair("Vm", "ViewModel"),
@@ -364,7 +375,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                             "href",
                                                         };
 
-        private static readonly ConcurrentDictionary<string, string> AlreadyInspectedNames = new ConcurrentDictionary<string, string>();
+        private static readonly ConcurrentDictionary<string, Pair[]> AlreadyFoundAbbreviations = new ConcurrentDictionary<string, Pair[]>();
 
         internal static ReadOnlySpan<Pair> Find(string value)
         {
@@ -378,9 +389,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return ReadOnlySpan<Pair>.Empty;
             }
 
-            var name = AlreadyInspectedNames.GetOrAdd(value, _ => _.Without(AllowedParts));
-
-            return FindCore(name.AsSpan());
+            // cache findings as they will not change
+            return AlreadyFoundAbbreviations.GetOrAdd(value, _ => FindCore(_.Without(AllowedParts).AsSpan()));
         }
 
         internal static string ReplaceAllAbbreviations(string value, in ReadOnlySpan<Pair> findings)
@@ -418,7 +428,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         }
 
 //// ncrunch: rdi off
-        private static ReadOnlySpan<Pair> FindCore(in ReadOnlySpan<char> valueSpan)
+        private static Pair[] FindCore(in ReadOnlySpan<char> valueSpan)
         {
             var results = new HashSet<Pair>(KeyComparer.Instance);
 
@@ -461,7 +471,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 }
             }
 
-            return results.Count is 0 ? ReadOnlySpan<Pair>.Empty : results.ToArray();
+            return results.Count is 0 ? Array.Empty<Pair>() : results.ToArray();
         }
 //// ncrunch: rdi default
 
@@ -478,7 +488,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             if (value.Length > keyLength)
             {
-                if (IndicatesNewWord(value[keyLength]) && value.StartsWith(key, StringComparison.Ordinal))
+                if (IndicatesNewWord(value[keyLength]) && value.StartsWith(key))
                 {
                     return true;
                 }

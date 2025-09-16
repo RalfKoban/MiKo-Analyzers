@@ -407,9 +407,7 @@ namespace MiKoSolutions.Analyzers
             {
                 case IdentifierNameSyntax identifier:
                 {
-                    var text = identifier.GetName();
-
-                    if (text is "nameof" && value.Ancestors<MemberAccessExpressionSyntax>().None())
+                    if (identifier.IsNameOf() && value.Ancestors<MemberAccessExpressionSyntax>().None())
                     {
                         // nameof
                         var arguments = value.ArgumentList.Arguments;
@@ -420,7 +418,7 @@ namespace MiKoSolutions.Analyzers
                         }
                     }
 
-                    return text;
+                    return identifier.GetName();
                 }
 
                 case MemberAccessExpressionSyntax m:
