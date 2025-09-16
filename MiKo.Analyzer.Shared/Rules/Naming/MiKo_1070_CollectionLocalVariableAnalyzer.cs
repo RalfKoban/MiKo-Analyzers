@@ -5,8 +5,6 @@ using System.Runtime.CompilerServices;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-using MiKoSolutions.Analyzers.Linguistics;
-
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
@@ -15,8 +13,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public const string Id = "MiKo_1070";
 
         private static readonly string[] TestRelatedNames = { "actual", "expected" };
-
-        private static readonly string[] Splitters = { "Of", "With", "To", "In", "From" };
 
         public MiKo_1070_CollectionLocalVariableAnalyzer() : base(Id)
         {
@@ -86,7 +82,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 var span = originalName.AsSpan();
                 var pluralName = span.EndsWith('s')
                                  ? originalName
-                                 : GetPluralName(span, out name);  // might return null in case there is none
+                                 : FindPluralName(span, out name);  // might return null in case there is none
 
                 if (pluralName is null)
                 {
@@ -159,50 +155,5 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool IsMefAggregateCatalog(string typeName) => typeName is "AssemblyCatalog";
-
-        // TODO RKN: Merge with 'FindBetterNameForCollectionSuffix' in NamingAnalyzer
-        private static string GetPluralName(in ReadOnlySpan<char> originalName, out string singularName)
-        {
-            if (originalName.EndsWith('s'))
-            {
-                singularName = originalName.ToString();
-
-                return Pluralizer.GetPluralName(singularName, StringComparison.Ordinal);
-            }
-
-            var index = originalName.IndexOfAny(Splitters);
-
-            if (index > 0)
-            {
-                var nameToInspect = originalName.Slice(0, index);
-                var remainingPart = originalName.Slice(index);
-
-                var pluralName = GetPluralName(nameToInspect, out singularName);
-
-                singularName = singularName.ConcatenatedWith(remainingPart);
-
-                return pluralName.ConcatenatedWith(remainingPart);
-            }
-            else
-            {
-                var pluralName = originalName.EndsWithNumber()
-                                 ? originalName.WithoutNumberSuffix()
-                                 : originalName;
-
-                singularName = pluralName.ToString();
-
-                if (pluralName.EndsWithAny(Constants.Markers.Collections, StringComparison.OrdinalIgnoreCase))
-                {
-                    singularName = singularName.AsCachedBuilder()
-                                               .ReplaceWithProbe("lementNodeList", "lementList")
-                                               .ReplaceWithProbe("lementReferenceNodeList", "lementList")
-                                               .ToString();
-
-                    return Pluralizer.GetPluralName(singularName, StringComparison.OrdinalIgnoreCase, Constants.Markers.Collections);
-                }
-
-                return Pluralizer.GetPluralName(singularName);
-            }
-        }
     }
 }

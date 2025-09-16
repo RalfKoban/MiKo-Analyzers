@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System.Collections.Generic;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -78,14 +80,14 @@ public class TestMe
 }
 ");
 
-        [Test]
+        [Test] // this situation is covered by CA 1725 so we do not report that as well
         public void No_issue_is_reported_for_incorrectly_named_parameter_of_method_that_implements_interface() => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 
 public interface ITestMe
 {
-    void DoSomething(List<string> items);
+    void DoSomething(List<string> myItems);
 }
 
 public class TestMe : ITestMe
