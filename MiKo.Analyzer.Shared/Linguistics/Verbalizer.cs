@@ -43,6 +43,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                                                                                                  new KeyValuePair<string, string>("were", "is"),
                                                                                                                                                  new KeyValuePair<string, string>("Was", "Is"),
                                                                                                                                                  new KeyValuePair<string, string>("was", "is"),
+                                                                                                                                                 new KeyValuePair<string, string>("Maintenance", "Maintains"),
+                                                                                                                                                 new KeyValuePair<string, string>("maintenance", "maintains"),
+                                                                                                                                                 new KeyValuePair<string, string>("Implementation", "Implements"),
+                                                                                                                                                 new KeyValuePair<string, string>("implementation", "implements"),
                                                                                                                                              });
 
         private static readonly string[] ThirdPersonalSingularVerbExceptions =

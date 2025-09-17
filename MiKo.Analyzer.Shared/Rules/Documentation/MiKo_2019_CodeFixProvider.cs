@@ -78,9 +78,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                             var firstWordUpper = firstWord.ToUpperCaseAt(0);
 
-                            string replacementForFirstWord = firstWordUpper.EqualsAny(DeterminesCandidates)
-                                                             ? "Determines whether"
-                                                             : Verbalizer.MakeThirdPersonSingularVerb(firstWordUpper);
+                            var replacementForFirstWord = firstWordUpper.EqualsAny(DeterminesCandidates)
+                                                          ? "Determines whether"
+                                                          : Verbalizer.MakeThirdPersonSingularVerb(firstWordUpper);
 
                             var replacedText = replacementForFirstWord.ConcatenatedWith(remainingText);
 
