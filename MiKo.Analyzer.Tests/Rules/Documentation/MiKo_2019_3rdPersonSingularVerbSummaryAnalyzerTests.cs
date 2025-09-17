@@ -369,6 +369,8 @@ public class TestMe
         [TestCase("Class used for loading something", "Loads something")]
         [TestCase("Class which holds something", "Holds something")]
         [TestCase("Classes implementing this interfaces, will be called with their something", "Provides a something")]
+        [TestCase("Simple structure to do stuff", "Represents a simple structure to do stuff")]
+        [TestCase("Complex structure to do stuff", "Represents a complex structure to do stuff")]
         public void Code_gets_fixed_for_class_text_(string originalText, string fixedText)
         {
             const string Template = @"

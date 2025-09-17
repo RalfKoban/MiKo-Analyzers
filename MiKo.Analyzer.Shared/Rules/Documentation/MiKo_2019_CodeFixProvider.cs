@@ -15,6 +15,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] RepresentsCandidates =
                                                                 {
                                                                     "Repository ",
+                                                                    "Simple ",
+                                                                    "Complex ",
                                                                 };
 
         private static readonly string[] CurrentlyUnfixable =
