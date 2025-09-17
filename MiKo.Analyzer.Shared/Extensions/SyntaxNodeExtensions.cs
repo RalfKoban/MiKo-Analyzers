@@ -22,6 +22,8 @@ namespace MiKoSolutions.Analyzers
     /// </summary>
     internal static partial class SyntaxNodeExtensions
     {
+        private static readonly SyntaxKind[] LogicalConditions = { SyntaxKind.LogicalAndExpression, SyntaxKind.LogicalOrExpression };
+
         private static readonly SyntaxList<TypeParameterConstraintClauseSyntax> EmptyConstraintClauses = SyntaxFactory.List<TypeParameterConstraintClauseSyntax>();
 
         internal static bool Contains(this SyntaxNode value, in char c) => value?.ToString().Contains(c) ?? false;
@@ -1356,6 +1358,20 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static SyntaxNode WithoutParenthesisParent(this SyntaxNode value)
+        {
+            while (true)
+            {
+                if (value is ParenthesizedExpressionSyntax parenthesized)
+                {
+                    value = parenthesized.Parent;
+
+                    continue;
+                }
+
+                return value;
+            }
+        }
         internal static SyntaxNode WithUsing(this SyntaxNode value, string usingNamespace)
         {
             var usings = value.DescendantNodes<UsingDirectiveSyntax>().ToList();
@@ -1432,6 +1448,121 @@ namespace MiKoSolutions.Analyzers
             }
 
             return null;
+        }
+
+        internal static bool IsBooleanCheck(this IsPatternExpressionSyntax value)
+        {
+            switch (value.Pattern)
+            {
+                case ConstantPatternSyntax constant when IsBoolean(constant): return true;
+                case UnaryPatternSyntax unary when unary.Pattern is ConstantPatternSyntax constant && IsBoolean(constant): return true;
+                default:
+                    return false;
+            }
+
+            bool IsBoolean(ConstantPatternSyntax constant)
+            {
+                switch (constant.Expression.Kind())
+                {
+                    case SyntaxKind.TrueLiteralExpression:
+                    case SyntaxKind.FalseLiteralExpression:
+                        return true;
+
+                    default:
+                        return false;
+                }
+            }
+        }
+
+        internal static bool IsElementAccess(this ExpressionSyntax value) => value is BinaryExpressionSyntax binary && IsElementAccess(binary);
+
+        internal static bool IsElementAccess(this BinaryExpressionSyntax value) => value.Left.IsKind(SyntaxKind.ElementAccessExpression) || value.Right.IsKind(SyntaxKind.ElementAccessExpression);
+
+        internal static bool IsNullCheck(this BinaryExpressionSyntax value) => value.Left.IsKind(SyntaxKind.NullLiteralExpression) || value.Right.IsKind(SyntaxKind.NullLiteralExpression);
+
+        internal static bool IsNullCheck(this IsPatternExpressionSyntax value)
+        {
+            switch (value.Pattern)
+            {
+                case ConstantPatternSyntax constant when constant.Expression.IsKind(SyntaxKind.NullLiteralExpression): return true; // is null
+                case UnaryPatternSyntax unary when unary.Pattern is ConstantPatternSyntax constant && constant.Expression.IsKind(SyntaxKind.NullLiteralExpression): return true; // is not null
+                default:
+                    return false;
+            }
+        }
+
+        internal static bool IsValueType(this ExpressionSyntax value, SemanticModel semanticModel)
+        {
+            switch (value?.Kind())
+            {
+                case SyntaxKind.NumericLiteralExpression:
+                case SyntaxKind.TrueLiteralExpression:
+                case SyntaxKind.FalseLiteralExpression:
+                case SyntaxKind.CharacterLiteralExpression:
+                    return true;
+
+                case SyntaxKind.NullLiteralExpression:
+                case SyntaxKind.StringLiteralExpression:
+#if VS2022
+                case SyntaxKind.Utf8StringLiteralExpression:
+#endif
+                    return false;
+
+                default:
+                    return value.GetTypeSymbol(semanticModel)?.IsValueType is true;
+            }
+        }
+
+        internal static Stack<ExpressionSyntax> GetLeafs(this BinaryExpressionSyntax value)
+        {
+            var leafs = new Stack<ExpressionSyntax>();
+
+            CollectLeafs(value);
+
+            return leafs;
+
+            void CollectLeafs(BinaryExpressionSyntax node)
+            {
+                Collect(node.Right.WithoutParenthesis());
+                Collect(node.Left.WithoutParenthesis());
+            }
+
+            void Collect(ExpressionSyntax expression)
+            {
+                if (expression is BinaryExpressionSyntax b && b.IsAnyKind(LogicalConditions))
+                {
+                    CollectLeafs(b);
+                }
+                else
+                {
+                    leafs.Push(expression);
+                }
+            }
+        }
+
+        internal static Stack<SyntaxKind> GetConditionKinds(this BinaryExpressionSyntax value)
+        {
+            var leafs = new Stack<SyntaxKind>();
+
+            CollectLeafs(value);
+
+            return leafs;
+
+            void CollectLeafs(BinaryExpressionSyntax node)
+            {
+                Collect(node.Right.WithoutParenthesis());
+                Collect(node.Left.WithoutParenthesis());
+            }
+
+            void Collect(ExpressionSyntax expression)
+            {
+                if (expression is BinaryExpressionSyntax b && b.IsAnyKind(LogicalConditions))
+                {
+                    leafs.Push(expression.Kind());
+
+                    CollectLeafs(b);
+                }
+            }
         }
 
         private static SeparatedSyntaxList<ParameterSyntax> CollectParameters(ObjectCreationExpressionSyntax syntax)
