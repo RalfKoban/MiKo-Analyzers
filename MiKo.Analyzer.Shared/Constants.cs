@@ -216,7 +216,7 @@ namespace MiKoSolutions.Analyzers
                                                                   ThreadStaticFieldPrefix,
                                                               };
 
-            internal static readonly string[] OSBitNumbers = { "32", "64" };
+            internal static readonly string[] BitNumbers = { "8", "16", "32", "64", "128" };
 
             internal static readonly string[] ReSharper = { "ReSharper disable", "ReSharper restore" };
         }
