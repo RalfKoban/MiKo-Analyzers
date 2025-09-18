@@ -54,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         return CommentStartingWith(summary, "Represents a ");
                     }
 
-                    var updatedSyntax = MiKo_2012_CodeFixProvider.GetUpdatedSyntax(summary, textSyntax);
+                    var updatedSyntax = MiKo_2012_CodeFixProvider.GetUpdatedSyntax(summary);
 
                     if (ReferenceEquals(summary, updatedSyntax) is false)
                     {
