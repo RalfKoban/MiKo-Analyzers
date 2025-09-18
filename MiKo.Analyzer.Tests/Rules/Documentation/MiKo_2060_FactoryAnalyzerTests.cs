@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
@@ -18,6 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly string[] ClassSummaryStartingPhrases = [.. CreateTypeSummaryStartingPhrases().Take(TestLimit).OrderBy(_ => _.Length).ThenBy(_ => _)];
         private static readonly string[] InterfaceSummaryStartingPhrases = [.. ClassSummaryStartingPhrases.Take(100)];
+        private static readonly string[] MethodStartingPhrases = [.. CreateMethodSummaryPhrases()];
 
 #if NCRUNCH
 
@@ -471,73 +471,14 @@ internal interface IFactory
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        [TestCase("Construct a instance of the")]
-        [TestCase("Construct a instance of")]
-        [TestCase("Construct a new instance of the")]
-        [TestCase("Construct a new instance of")]
-        [TestCase("Construct a new")]
-        [TestCase("Construct a")]
-        [TestCase("Construct an instance of the")]
-        [TestCase("Construct an instance of")]
-        [TestCase("Construct instances of the")]
-        [TestCase("Construct instances of")]
-        [TestCase("Construct new instances of the")]
-        [TestCase("Constructs a instance of the")]
-        [TestCase("Constructs a instance of")]
-        [TestCase("Constructs a new instance of the")]
-        [TestCase("Constructs a new instance of")]
-        [TestCase("Constructs a new")]
-        [TestCase("Constructs a")]
-        [TestCase("Constructs an instance of the")]
-        [TestCase("Constructs an instance of")]
-        [TestCase("Constructs instances of the")]
-        [TestCase("Constructs instances of")]
-        [TestCase("Constructs new instances of the")]
-        [TestCase("Create a instance of the")]
-        [TestCase("Create a instance of")]
-        [TestCase("Create a new instance of the")]
-        [TestCase("Create a new instance of")]
-        [TestCase("Create a new")]
-        [TestCase("Create a")]
-        [TestCase("Create an instance of the")]
-        [TestCase("Create an instance of")]
-        [TestCase("Create instances of the")]
-        [TestCase("Create instances of")]
-        [TestCase("Create new instances of the")]
-        [TestCase("Creates a instance of the")]
-        [TestCase("Creates a instance of")]
-        [TestCase("Creates a new")]
-        [TestCase("Creates a")]
-        [TestCase("Creates an instance of the")]
-        [TestCase("Creates an instance of")]
-        [TestCase("Creates an new instance of the")]
-        [TestCase("Creates an new instance of")]
-        [TestCase("Creates instances of the")]
-        [TestCase("Creates instances of")]
-        [TestCase("Creates new instances of the")]
-        [TestCase("Creates and initializes a new instance of the")]
-        [TestCase("Creates and initializes new instances of the")]
-        [TestCase("Create and initialize a new instance of the")]
-        [TestCase("Create and initialize new instances of the")]
-        [TestCase("Creates and provides a new instance of the")]
-        [TestCase("Creates and provides new instances of the")]
-        [TestCase("Creates and returns a new instance of the")]
-        [TestCase("Creates and returns new instances of the")]
-        [TestCase("Return a new instance of the")]
-        [TestCase("Return new instances of the")]
-        [TestCase("Returns a new instance of the")]
-        [TestCase("Returns new instances of the")]
-        [TestCase("Get a new instance of the")]
-        [TestCase("Get new instances of the")]
-        [TestCase("Gets a new instance of the")]
-        [TestCase("Gets new instances of the")]
-        public void Code_gets_fixed_for_almost_correct_method_summary_starting_phrase_(string summary)
+        [Test]
+        public void Code_gets_fixed_for_almost_correct_method_summary_starting_phrase_([ValueSource(nameof(MethodStartingPhrases))] string summary, [Values("class", "type")] string type)
         {
             var originalCode = @"
 internal interface IFactory
 {
     /// <summary>
-    /// " + summary + @" <see cref=""Xyz""/> type.
+    /// " + summary + @" <see cref=""Xyz""/> " + type + @".
     /// </summary>
     IXyz Create();
 }
@@ -556,55 +497,12 @@ internal interface IFactory
             VerifyCSharpFix(originalCode, FixedCode);
         }
 
-        [TestCase("Construct a instance")]
-        [TestCase("Construct a new instance")]
-        [TestCase("Construct an instance")]
-        [TestCase("Construct instances")]
-        [TestCase("Construct new instances")]
-        [TestCase("Constructs a instance")]
-        [TestCase("Constructs a new instance")]
-        [TestCase("Constructs an instance")]
-        [TestCase("Constructs instances")]
-        [TestCase("Constructs new instances")]
-        [TestCase("Create a instance")]
-        [TestCase("Create a new instance")]
-        [TestCase("Create an instance")]
-        [TestCase("Create and initialize a new instance")]
-        [TestCase("Create and initialize new instances")]
-        [TestCase("Create and provide a new instance")]
-        [TestCase("Create and provide new instances")]
-        [TestCase("Create and return a new instance")]
-        [TestCase("Create and return new instances")]
-        [TestCase("Create and set up a new instance")]
-        [TestCase("Create and set up new instances")]
-        [TestCase("Create instances")]
-        [TestCase("Create new instances")]
-        [TestCase("Creates a instance")]
-        [TestCase("Creates an instance")]
-        [TestCase("Creates an new instance")]
-        [TestCase("Creates and initializes a new instance")]
-        [TestCase("Creates and initializes new instances")]
-        [TestCase("Creates and provides a new instance")]
-        [TestCase("Creates and provides new instances")]
-        [TestCase("Creates and returns a new instance")]
-        [TestCase("Creates and returns new instances")]
-        [TestCase("Creates and sets up a new instance")]
-        [TestCase("Creates and sets up new instances")]
-        [TestCase("Creates instances")]
-        [TestCase("Creates new instances")]
-        [TestCase("Get a new instance")]
-        [TestCase("Get new instances")]
-        [TestCase("Gets a new instance")]
-        [TestCase("Gets new instances")]
-        [TestCase("Return a new instance")]
-        [TestCase("Return new instances")]
-        [TestCase("Returns a new instance")]
-        [TestCase("Returns new instances")]
-        public void Code_gets_fixed_for_almost_correct_interface_summary_starting_phrase_(string summary)
+        [Test]
+        public void Code_gets_fixed_for_almost_correct_interface_summary_starting_phrase_([ValueSource(nameof(MethodStartingPhrases))] string summary, [Values("class", "type")] string type)
         {
             var originalCode = @"
 /// <summary>
-/// " + summary + @" of the <see cref=""IXyz""/> type.
+/// " + summary + @" <see cref=""IXyz""/> " + type + @".
 /// </summary>
 internal interface IFactory
 {
@@ -631,7 +529,7 @@ internal interface IFactory
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2060_CodeFixProvider();
 
-//// ncrunch: no coverage start
+        //// ncrunch: no coverage start
 
         // ReSharper disable once ReturnTypeCanBeEnumerable.Local Violates CA1859
         [ExcludeFromCodeCoverage]
@@ -883,7 +781,7 @@ internal interface IFactory
                                           "for the providing",
                                       ];
 
-            results.RemoveWhere(_ => _.ContainsAny(strangePhrases, StringComparison.Ordinal));
+            results.RemoveWhere(_ => _.ContainsAny(strangePhrases));
 
             results.Add("Implementations create ");
             results.Add("Implementations construct ");
@@ -893,6 +791,31 @@ internal interface IFactory
             return results;
         }
 
+        [ExcludeFromCodeCoverage]
+        private static HashSet<string> CreateMethodSummaryPhrases()
+        {
+            string[] verbs = [
+                                "Construct", "Constructs",
+                                "Create", "Create and initialize", "Create and provide", "Create and return", "Create and set up",
+                                "Creates", "Creates and initializes", "Creates and provides", "Creates and returns", "Creates and sets up",
+                                "Return", "Returns",
+                                "Get", "Gets",
+                                "Initialize", "Initializes"
+                            ];
+            string[] followUps = ["a instance of the", "a instance of", "a new instance of the", "a new instance of", "a new", "a", "an instance of the", "an instance of", "instances of the", "instances of", "new instances of the", "new instances of"];
+
+            var results = new HashSet<string>();
+
+            foreach (var verb in verbs)
+            {
+                foreach (var followUp in followUps)
+                {
+                    results.Add(verb + " " + followUp);
+                }
+            }
+
+            return results;
+        }
 //// ncrunch: no coverage end
     }
 }
