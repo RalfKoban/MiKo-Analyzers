@@ -66,7 +66,28 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => "MiKo_2012";
 
-        internal static SyntaxNode GetUpdatedSyntax(XmlElementSyntax comment, XmlTextSyntax textSyntax)
+        internal static SyntaxNode GetUpdatedSyntax(XmlElementSyntax comment)
+        {
+            var content = comment.Content;
+
+            var inheritdoc = GetUpdatedSyntaxWithInheritdoc(content);
+
+            if (inheritdoc != null)
+            {
+                return inheritdoc;
+            }
+
+            if (content.FirstOrDefault() is XmlTextSyntax t)
+            {
+                return GetUpdatedSyntax(comment, t);
+            }
+
+            return Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordAdjustment.StartLowerCase);
+        }
+
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => GetUpdatedSyntax((XmlElementSyntax)syntax);
+
+        private static SyntaxNode GetUpdatedSyntax(XmlElementSyntax comment, XmlTextSyntax textSyntax)
         {
             var text = textSyntax.GetTextTrimmed().AsSpan();
 
@@ -145,26 +166,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return comment;
-        }
-
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
-        {
-            var comment = (XmlElementSyntax)syntax;
-            var content = comment.Content;
-
-            var inheritdoc = GetUpdatedSyntaxWithInheritdoc(content);
-
-            if (inheritdoc != null)
-            {
-                return inheritdoc;
-            }
-
-            if (content.FirstOrDefault() is XmlTextSyntax t)
-            {
-                return GetUpdatedSyntax(comment, t);
-            }
-
-            return Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordAdjustment.StartLowerCase);
         }
 
         private static XmlEmptyElementSyntax GetUpdatedSyntaxWithInheritdoc(in SyntaxList<XmlNodeSyntax> content)

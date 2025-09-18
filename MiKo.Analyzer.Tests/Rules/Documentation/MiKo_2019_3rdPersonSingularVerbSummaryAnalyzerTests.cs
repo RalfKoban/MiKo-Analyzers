@@ -387,6 +387,35 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
         }
 
+        [TestCase(@"Implementation of ")]
+        [TestCase(@"Implementation for ")]
+        [TestCase(@"Implementation class of ")]
+        [TestCase(@"Implementation class for ")]
+        public void Code_gets_fixed_for_implementation_class_text_(string originalText)
+        {
+            var originalCode = @"
+using System;
+
+/// <summary>
+/// " + originalText + @" <see cref=""IDisposable""/>
+/// </summary>
+public class TestMe
+{
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+/// <inheritdoc cref=""IDisposable""/>
+public class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
         [TestCase("Interface that allows to update something", "Updates something")]
         [TestCase("Interface that can be used to update something", "Updates something")]
         [TestCase("Interface that could be used to update something", "Updates something")]
