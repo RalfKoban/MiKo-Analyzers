@@ -39,9 +39,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             for (var i = 0; i < textTokensCount; i++)
             {
+                var syntaxToken = textTokens[i];
+                var tokenText = syntaxToken.ValueText;
+
+                if (tokenText.Contains("local function"))
+                {
+                    // ignore that specific text
+                    continue;
+                }
+
                 const int Offset = 1; // we do not want to underline the first and last char
 
-                var locations = GetAllLocations(textTokens[i], ActionTermsWithDelimiters, StringComparison.Ordinal, Offset, Offset);
+                var locations = GetAllLocations(syntaxToken, ActionTermsWithDelimiters, StringComparison.Ordinal, Offset, Offset);
                 var locationsCount = locations.Count;
 
                 if (locationsCount > 0)

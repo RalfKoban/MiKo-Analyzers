@@ -71,6 +71,20 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_method_comment_that_contains_([Values("local function")] string word) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Some " + word + @".
+    /// </summary>
+    public void DoSomething()
+    { }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_class_comment_that_contains_([ValueSource(nameof(ProblematicWords))] string word) => An_issue_is_reported_for(@"
 using System;
 
