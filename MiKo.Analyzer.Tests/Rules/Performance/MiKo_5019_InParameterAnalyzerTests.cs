@@ -5,6 +5,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Rules.Performance
 {
     [TestFixture]
@@ -264,12 +265,58 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_gets_reported_for_enum_with_no_in_modifier_as_parameter() => An_issue_is_reported_for(@"
+        public void An_issue_gets_reported_for_enum_with_no_in_modifier_at_parameter() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
     public void DoSomething(StringComparison value) { }
+}
+");
+
+        [Test]
+        public void An_issue_gets_reported_for_ctor_with_no_in_modifier_at_parameter() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private readonly byte _value;
+
+    public TestMe(byte value) => _value = value;
+}
+");
+
+        [Test]
+        public void An_issue_gets_reported_for_conversion_operator_with_no_in_modifier_at_parameter() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private readonly byte _value;
+
+    public TestMe(in byte value) => _value = value;
+
+    public static implicit operator TestMe(byte value) => new TestMe(value)
+}
+");
+
+        [Test]
+        public void An_issue_gets_reported_for_equality_operator_with_no_in_modifier_at_1st_parameter() => An_issue_is_reported_for(@"
+using System;
+
+public readonly struct TestMe
+{
+    public static bool operator ==(TestMe left, in TestMe right) => left.Equals(right);
+}
+");
+
+        [Test]
+        public void An_issue_gets_reported_for_equality_operator_with_no_in_modifier_at_2nd_parameter() => An_issue_is_reported_for(@"
+using System;
+
+public readonly struct TestMe
+{
+    public static bool operator ==(TestMe left, in TestMe right) => left.Equals(right);
 }
 ");
 
@@ -319,6 +366,90 @@ using System;
 public class TestMe
 {
     public void DoSomething(in StringComparison value) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ctor_with_no_in_modifier_at_parameter()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    private readonly byte _value;
+
+    public TestMe(byte value) => _value = value;
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    private readonly byte _value;
+
+    public TestMe(in byte value) => _value = value;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_conversion_operator_with_no_in_modifier_at_parameter()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    private readonly byte _value;
+
+    public TestMe(byte value) => _value = value;
+
+    public static implicit operator TestMe(byte value) => new TestMe(value)
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    private readonly byte _value;
+
+    public TestMe(in byte value) => _value = value;
+
+    public static implicit operator TestMe(in byte value) => new TestMe(value)
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_equality_operator_with_no_in_modifier_at_parameters()
+        {
+            const string OriginalCode = @"
+using System;
+
+public readonly struct TestMe
+{
+    public static bool operator ==(TestMe left, TestMe right) => left.Equals(right);
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public readonly struct TestMe
+{
+    public static bool operator ==(in TestMe left, in TestMe right) => left.Equals(right);
 }
 ";
 
