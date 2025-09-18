@@ -17,7 +17,22 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             {
                 var spaces = GetProposedSpaces(issue);
 
-                return expression.WithQuestionToken(expression.QuestionToken.WithLeadingSpaces(spaces))
+                SyntaxToken questionToken = expression.QuestionToken.WithLeadingSpaces(spaces);
+
+                if (expression.WhenTrue is ObjectCreationExpressionSyntax o && o.Initializer is InitializerExpressionSyntax initializer)
+                {
+                    var colonToken = expression.ColonToken;
+                    var closeBraceToken = initializer.CloseBraceToken;
+
+                    if (colonToken.IsOnSameLineAs(closeBraceToken))
+                    {
+                        return expression.WithQuestionToken(questionToken)
+                                         .WithColonToken(colonToken.WithLeadingEndOfLine().WithAdditionalLeadingSpacesAtEnd(spaces))
+                                         .WithWhenTrue(o.WithInitializer(initializer.WithCloseBraceToken(closeBraceToken.WithoutTrailingTrivia()))); // remove spaces after initializer
+                    }
+                }
+
+                return expression.WithQuestionToken(questionToken)
                                  .WithColonToken(expression.ColonToken.WithLeadingSpaces(spaces));
             }
 

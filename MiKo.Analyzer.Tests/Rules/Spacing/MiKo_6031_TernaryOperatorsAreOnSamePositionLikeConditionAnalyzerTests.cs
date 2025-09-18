@@ -235,6 +235,63 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_ternary_operator_if_colon_is_placed_on_same_line_as_closing_bracket_of_initializer()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class Item
+{
+    public int Id { get; init; }
+    public string Name { get; init; }
+}
+
+public class TestMe
+{
+    public Item Item { get; set; }
+
+    public void DoSomething(object item)
+    {
+        Item = item != null
+            ? new Item
+            {
+                Id = 42,
+                Name = ""Whatever"",
+            } : null
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class Item
+{
+    public int Id { get; init; }
+    public string Name { get; init; }
+}
+
+public class TestMe
+{
+    public Item Item { get; set; }
+
+    public void DoSomething(object item)
+    {
+        Item = item != null
+               ? new Item
+            {
+                Id = 42,
+                Name = ""Whatever"",
+            }
+               : null
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6031_TernaryOperatorsAreOnSamePositionLikeConditionAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6031_TernaryOperatorsAreOnSamePositionLikeConditionAnalyzer();
