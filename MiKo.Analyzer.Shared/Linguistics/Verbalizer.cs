@@ -235,50 +235,6 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly char[] SentenceEndingMarkers = ".?!;:,)".ToCharArray();
 
-        private static readonly string[] AdjectivesOrAdverbs =
-                                                               {
-                                                                   "about",
-                                                                   "afterwards",
-                                                                   "also",
-                                                                   "already",
-                                                                   "always",
-                                                                   "at",
-                                                                   "before",
-                                                                   "either",
-                                                                   "first",
-                                                                   "however",
-                                                                   "in",
-                                                                   "just",
-                                                                   "later",
-                                                                   "longer",
-                                                                   "on",
-                                                                   "off",
-                                                                   "out",
-                                                                   "no",
-                                                                   "not",
-                                                                   "now",
-                                                                   "than",
-                                                                   "then",
-                                                                   "therefore",
-                                                                   "to",
-                                                                   "turn",
-                                                               };
-
-        public static bool IsAdjectiveOrAdverb(in ReadOnlySpan<char> value, in StringComparison comparison = StringComparison.OrdinalIgnoreCase)
-        {
-            if (value.EndsWith("ly", comparison))
-            {
-                if (value.EndsWith("ply", comparison))
-                {
-                    return value.Equals("simply", comparison);
-                }
-
-                return true;
-            }
-
-            return value.EqualsAny(AdjectivesOrAdverbs, comparison);
-        }
-
         public static bool IsThirdPersonSingularVerb(in ReadOnlySpan<char> value)
         {
             var length = value.Length;
