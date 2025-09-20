@@ -17920,6 +17920,43 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Align ternary operator vertically.
+        /// </summary>
+        internal static string MiKo_6067_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6067_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Placing the ? and : tokens of the ternary operator at the start of their respective lines in multi-line ternary expressions improves readability, visual structure, and code scanning.
+        ///This style avoids dangling operators, aligns with common C# style guides and tooling, and makes complex logic easier to parse and maintain..
+        /// </summary>
+        internal static string MiKo_6067_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6067_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place ternary operator and colon on the same lines as their respective expressions.
+        /// </summary>
+        internal static string MiKo_6067_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6067_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ternary operators should be placed on same lines as their respective expressions.
+        /// </summary>
+        internal static string MiKo_6067_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6067_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Surround with blank lines.
         /// </summary>
         internal static string MiKo_6070_CodeFixTitle {
