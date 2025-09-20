@@ -102,33 +102,37 @@ public class TestMe
         [Test]
         public void Code_gets_fixed_for_ternary_operator_if_question_is_placed_on_position_before_condition()
         {
-            const string OriginalCode = @"
-using System;
+            const string OriginalCode = """
 
-public class TestMe
-{
-    public void DoSomething(bool condition)
-    {
-        DoSomething(condition
-                   ? true
-                    : false);
-    }
-}
-";
+                                        using System;
 
-            const string FixedCode = @"
-using System;
+                                        public class TestMe
+                                        {
+                                            public void DoSomething(bool condition)
+                                            {
+                                                DoSomething(condition
+                                                           ? true
+                                                            : false);
+                                            }
+                                        }
 
-public class TestMe
-{
-    public void DoSomething(bool condition)
-    {
-        DoSomething(condition
-                    ? true
-                    : false);
-    }
-}
-";
+                                        """;
+
+            const string FixedCode = """
+
+                                     using System;
+
+                                     public class TestMe
+                                     {
+                                         public void DoSomething(bool condition)
+                                         {
+                                             DoSomething(condition
+                                                         ? true
+                                                         : false);
+                                         }
+                                     }
+
+                                     """;
 
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
@@ -136,33 +140,37 @@ public class TestMe
         [Test]
         public void Code_gets_fixed_for_ternary_operator_if_question_is_placed_on_position_after_condition()
         {
-            const string OriginalCode = @"
-using System;
+            const string OriginalCode = """
 
-public class TestMe
-{
-    public void DoSomething(bool condition)
-    {
-        DoSomething(condition
-                     ? true
-                    : false);
-    }
-}
-";
+                                        using System;
 
-            const string FixedCode = @"
-using System;
+                                        public class TestMe
+                                        {
+                                            public void DoSomething(bool condition)
+                                            {
+                                                DoSomething(condition
+                                                             ? true
+                                                            : false);
+                                            }
+                                        }
 
-public class TestMe
-{
-    public void DoSomething(bool condition)
-    {
-        DoSomething(condition
-                    ? true
-                    : false);
-    }
-}
-";
+                                        """;
+
+            const string FixedCode = """
+
+                                     using System;
+
+                                     public class TestMe
+                                     {
+                                         public void DoSomething(bool condition)
+                                         {
+                                             DoSomething(condition
+                                                         ? true
+                                                         : false);
+                                         }
+                                     }
+
+                                     """;
 
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
@@ -170,33 +178,37 @@ public class TestMe
         [Test]
         public void Code_gets_fixed_for_ternary_operator_if_colon_is_placed_on_position_before_condition()
         {
-            const string OriginalCode = @"
-using System;
+            const string OriginalCode = """
 
-public class TestMe
-{
-    public void DoSomething(bool condition)
-    {
-        DoSomething(condition
-                    ? true
-                   : false);
-    }
-}
-";
+                                        using System;
 
-            const string FixedCode = @"
-using System;
+                                        public class TestMe
+                                        {
+                                            public void DoSomething(bool condition)
+                                            {
+                                                DoSomething(condition
+                                                            ? true
+                                                           : false);
+                                            }
+                                        }
 
-public class TestMe
-{
-    public void DoSomething(bool condition)
-    {
-        DoSomething(condition
-                    ? true
-                    : false);
-    }
-}
-";
+                                        """;
+
+            const string FixedCode = """
+
+                                     using System;
+
+                                     public class TestMe
+                                     {
+                                         public void DoSomething(bool condition)
+                                         {
+                                             DoSomething(condition
+                                                         ? true
+                                                         : false);
+                                         }
+                                     }
+
+                                     """;
 
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
@@ -204,33 +216,37 @@ public class TestMe
         [Test]
         public void Code_gets_fixed_for_ternary_operator_if_colon_is_placed_on_position_after_condition()
         {
-            const string OriginalCode = @"
-using System;
+            const string OriginalCode = """
 
-public class TestMe
-{
-    public void DoSomething(bool condition)
-    {
-        DoSomething(condition
-                    ? true
-                     : false);
-    }
-}
-";
+                                        using System;
 
-            const string FixedCode = @"
-using System;
+                                        public class TestMe
+                                        {
+                                            public void DoSomething(bool condition)
+                                            {
+                                                DoSomething(condition
+                                                            ? true
+                                                             : false);
+                                            }
+                                        }
 
-public class TestMe
-{
-    public void DoSomething(bool condition)
-    {
-        DoSomething(condition
-                    ? true
-                    : false);
-    }
-}
-";
+                                        """;
+
+            const string FixedCode = """
+
+                                     using System;
+
+                                     public class TestMe
+                                     {
+                                         public void DoSomething(bool condition)
+                                         {
+                                             DoSomething(condition
+                                                         ? true
+                                                         : false);
+                                         }
+                                     }
+
+                                     """;
 
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
@@ -238,56 +254,108 @@ public class TestMe
         [Test]
         public void Code_gets_fixed_for_ternary_operator_if_colon_is_placed_on_same_line_as_closing_bracket_of_initializer()
         {
-            const string OriginalCode = @"
-using System;
+            const string OriginalCode = """
 
-public class Item
-{
-    public int Id { get; init; }
-    public string Name { get; init; }
-}
+                                        using System;
 
-public class TestMe
-{
-    public Item Item { get; set; }
+                                        public class Item
+                                        {
+                                            public int Id { get; init; }
+                                            public string Name { get; init; }
+                                        }
 
-    public void DoSomething(object item)
-    {
-        Item = item != null
-            ? new Item
-            {
-                Id = 42,
-                Name = ""Whatever"",
-            } : null
-    }
-}
-";
+                                        public class TestMe
+                                        {
+                                            public Item Item { get; set; }
 
-            const string FixedCode = @"
-using System;
+                                            public void DoSomething(object item)
+                                            {
+                                                Item = item != null
+                                                    ? new Item
+                                                    {
+                                                        Id = 42,
+                                                        Name = "Whatever",
+                                                    } : null
+                                            }
+                                        }
 
-public class Item
-{
-    public int Id { get; init; }
-    public string Name { get; init; }
-}
+                                        """;
 
-public class TestMe
-{
-    public Item Item { get; set; }
+            const string FixedCode = """
 
-    public void DoSomething(object item)
-    {
-        Item = item != null
-               ? new Item
-            {
-                Id = 42,
-                Name = ""Whatever"",
-            }
-               : null
-    }
-}
-";
+                                     using System;
+
+                                     public class Item
+                                     {
+                                         public int Id { get; init; }
+                                         public string Name { get; init; }
+                                     }
+
+                                     public class TestMe
+                                     {
+                                         public Item Item { get; set; }
+
+                                         public void DoSomething(object item)
+                                         {
+                                             Item = item != null
+                                                    ? new Item
+                                                 {
+                                                     Id = 42,
+                                                     Name = "Whatever",
+                                                 }
+                                                    : null
+                                         }
+                                     }
+
+                                     """;
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ternary_operator_if_question_mark_and_colon_are_placed_at_end_of_lines_and_string_is_returned_for_multiline_condition()
+        {
+            const string OriginalCode = """
+
+                                        public record TestMe
+                                        {
+                                            public string Name { get; init; } = "";
+                                            public string Id { get; init; } = "";
+                                            public string Description { get; init; } = "";
+                                            
+                                            public string GetInformation(string s) => s;
+
+                                            public override string ToString()
+                                            {
+                                                return string.Compare(Name, Description,
+                                                    StringComparison.OrdinalIgnoreCase) == 0 ?        
+                                                    GetInformation(Id) :                  
+                                                    "whatever";
+                                            }
+                                        }
+
+                                        """;
+
+            const string FixedCode = """
+
+                                     public record TestMe
+                                     {
+                                         public string Name { get; init; } = "";
+                                         public string Id { get; init; } = "";
+                                         public string Description { get; init; } = "";
+                                         
+                                         public string GetInformation(string s) => s;
+                                     
+                                         public override string ToString()
+                                         {
+                                             return string.Compare(Name, Description,
+                                                 StringComparison.OrdinalIgnoreCase) == 0
+                                                    ? GetInformation(Id)
+                                                    : "whatever";
+                                         }
+                                     }
+
+                                     """;
 
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
