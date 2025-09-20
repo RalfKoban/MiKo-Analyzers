@@ -308,7 +308,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var spanStart = token.SpanStart;
 
-            return DocumentationAnalyzer.CreateLocation(token, spanStart + offsetStart, spanStart + offsetEnd);
+            return Analyzer.CreateLocation(token, spanStart + offsetStart, spanStart + offsetEnd);
         }
 
         private IEnumerable<Diagnostic> AnalyzeComment(SyntaxToken token, string text)

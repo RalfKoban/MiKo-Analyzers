@@ -130,10 +130,10 @@ public class TestMe
                 foreach (var pair in pairs)
                 {
                     yield return new TestCaseData
-                                 {
-                                     Wrong = prefix + pair.Key,
-                                     Fixed = prefix + pair.Value,
-                                 };
+                                     {
+                                         Wrong = prefix + pair.Key,
+                                         Fixed = prefix + pair.Value,
+                                     };
                 }
             }
         }

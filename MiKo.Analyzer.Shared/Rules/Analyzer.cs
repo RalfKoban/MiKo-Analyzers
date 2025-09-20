@@ -206,11 +206,11 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected void InitializeCore(CompilationStartAnalysisContext context, in SymbolKind symbolKind)
         {
-            var action = GetAnalyzeMethod(symbolKind);
+            var callback = GetAnalyzeMethod(symbolKind);
 
-            if (action != null)
+            if (callback != null)
             {
-                context.RegisterSymbolAction(action, symbolKind);
+                context.RegisterSymbolAction(callback, symbolKind);
             }
         }
 

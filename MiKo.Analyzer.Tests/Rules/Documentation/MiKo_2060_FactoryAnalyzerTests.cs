@@ -801,7 +801,7 @@ internal interface IFactory
                                 "Return", "Returns",
                                 "Get", "Gets",
                                 "Initialize", "Initializes"
-                            ];
+                             ];
             string[] followUps = ["a instance of the", "a instance of", "a new instance of the", "a new instance of", "a new", "a", "an instance of the", "an instance of", "instances of the", "instances of", "new instances of the", "new instances of"];
 
             var results = new HashSet<string>();
