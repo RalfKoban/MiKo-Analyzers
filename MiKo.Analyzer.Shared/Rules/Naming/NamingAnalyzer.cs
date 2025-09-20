@@ -116,8 +116,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             else
             {
                 var pluralName = originalName.EndsWithNumber()
-                                     ? originalName.WithoutNumberSuffix()
-                                     : originalName;
+                                 ? originalName.WithoutNumberSuffix()
+                                 : originalName;
 
                 singularName = pluralName.ToString();
 
