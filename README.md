@@ -13,7 +13,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/18917.svg)](https://scan.coverity.com/projects/ralfkoban-miko-analyzers)
 
 ## Available Rules
-The following tables lists all the 517 rules that are currently provided by the analyzer.
+The following tables lists all the 520 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -174,6 +174,9 @@ The following tables lists all the 517 rules that are currently provided by the 
 |MiKo_1512|Parameters should not be prefixed or suffixed with 'proxy'|&#x2713;|&#x2713;|
 |MiKo_1513|Types should not be suffixed with 'Advanced', 'Complex', 'Enhanced', 'Extended', 'Simple' or 'Simplified'|&#x2713;|&#x2713;|
 |MiKo_1514|Fields should not be suffixed with pattern names|&#x2713;|&#x2713;|
+|MiKo_1515|Boolean property names should clearly express a binary condition|&#x2713;|&#x2713;|
+|MiKo_1516|Boolean parameter names should clearly express a binary condition|&#x2713;|&#x2713;|
+|MiKo_1517|Boolean field names should clearly express a binary condition|&#x2713;|&#x2713;|
 
 ### Documentation
 |ID|Title|Enabled by default|CodeFix available|

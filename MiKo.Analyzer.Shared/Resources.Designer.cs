@@ -5207,6 +5207,154 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fix name.
+        /// </summary>
+        internal static string MiKo_1514_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1514_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prefer naming fields using prefixes to describe their role rather than suffixes to describe their type.
+        ///This improves code readability, avoids confusion with class names and helps developers quickly understand the purpose of the field in context..
+        /// </summary>
+        internal static string MiKo_1514_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1514_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1514_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1514_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fields should not be suffixed with pattern names.
+        /// </summary>
+        internal static string MiKo_1514_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1514_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fix name.
+        /// </summary>
+        internal static string MiKo_1515_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1515_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prefer naming boolean properties using adjectives or predicates to express a binary condition rather than abstract nouns. 
+        ///This improves code clarity, avoids ambiguity, and helps developers immediately understand the true/false nature of the value..
+        /// </summary>
+        internal static string MiKo_1515_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1515_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1515_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1515_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Boolean property names should clearly express a binary condition.
+        /// </summary>
+        internal static string MiKo_1515_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1515_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fix name.
+        /// </summary>
+        internal static string MiKo_1516_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1516_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prefer naming boolean parameters using adjectives or predicates to express a binary condition rather than abstract nouns. 
+        ///This improves code clarity, avoids ambiguity, and helps developers immediately understand the true/false nature of the value..
+        /// </summary>
+        internal static string MiKo_1516_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1516_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1516_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1516_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Boolean parameter names should clearly express a binary condition.
+        /// </summary>
+        internal static string MiKo_1516_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1516_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fix name.
+        /// </summary>
+        internal static string MiKo_1517_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1517_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prefer naming boolean fields using adjectives or predicates to express a binary condition rather than abstract nouns. 
+        ///This improves code clarity, avoids ambiguity, and helps developers immediately understand the true/false nature of the value..
+        /// </summary>
+        internal static string MiKo_1517_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1517_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1517_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1517_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Boolean field names should clearly express a binary condition.
+        /// </summary>
+        internal static string MiKo_1517_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1517_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fix malformed XML.
         /// </summary>
         internal static string MiKo_2000_CodeFixTitle {

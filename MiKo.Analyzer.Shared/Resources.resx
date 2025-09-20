@@ -1898,6 +1898,45 @@ This improves code readability, avoids confusion with class names and helps deve
   <data name="MiKo_1514_Title" xml:space="preserve">
     <value>Fields should not be suffixed with pattern names</value>
   </data>
+  <data name="MiKo_1515_CodeFixTitle" xml:space="preserve">
+    <value>Fix name</value>
+  </data>
+  <data name="MiKo_1515_Description" xml:space="preserve">
+    <value>Prefer naming boolean properties using adjectives or predicates to express a binary condition rather than abstract nouns. 
+This improves code clarity, avoids ambiguity, and helps developers immediately understand the true/false nature of the value.</value>
+  </data>
+  <data name="MiKo_1515_MessageFormat" xml:space="preserve">
+    <value>Rename '{0}' to '{1}'</value>
+  </data>
+  <data name="MiKo_1515_Title" xml:space="preserve">
+    <value>Boolean property names should clearly express a binary condition</value>
+  </data>
+  <data name="MiKo_1516_CodeFixTitle" xml:space="preserve">
+    <value>Fix name</value>
+  </data>
+  <data name="MiKo_1516_Description" xml:space="preserve">
+    <value>Prefer naming boolean parameters using adjectives or predicates to express a binary condition rather than abstract nouns. 
+This improves code clarity, avoids ambiguity, and helps developers immediately understand the true/false nature of the value.</value>
+  </data>
+  <data name="MiKo_1516_MessageFormat" xml:space="preserve">
+    <value>Rename '{0}' to '{1}'</value>
+  </data>
+  <data name="MiKo_1516_Title" xml:space="preserve">
+    <value>Boolean parameter names should clearly express a binary condition</value>
+  </data>
+  <data name="MiKo_1517_CodeFixTitle" xml:space="preserve">
+    <value>Fix name</value>
+  </data>
+  <data name="MiKo_1517_Description" xml:space="preserve">
+    <value>Prefer naming boolean fields using adjectives or predicates to express a binary condition rather than abstract nouns. 
+This improves code clarity, avoids ambiguity, and helps developers immediately understand the true/false nature of the value.</value>
+  </data>
+  <data name="MiKo_1517_MessageFormat" xml:space="preserve">
+    <value>Rename '{0}' to '{1}'</value>
+  </data>
+  <data name="MiKo_1517_Title" xml:space="preserve">
+    <value>Boolean field names should clearly express a binary condition</value>
+  </data>
   <data name="MiKo_2000_CodeFixTitle" xml:space="preserve">
     <value>Fix malformed XML</value>
   </data>
