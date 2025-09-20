@@ -17,13 +17,27 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(IParameterSymbol symbol) => symbol.Type.IsBoolean() && symbol.Name.EndsWith('y') && symbol.Name.HasUpperCaseLettersAbove(1) is false;
+        protected override bool ShallAnalyze(IParameterSymbol symbol)
+        {
+            if (symbol.Type.IsBoolean())
+            {
+                var symbolName = GetPartToInspect(symbol.Name);
+
+                return symbolName.EndsWith('y') && symbolName.HasUpperCaseLettersAbove(1) is false;
+            }
+
+            return false;
+        }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol, Compilation compilation)
         {
-            var betterName = AdjectiveFinder.GetAdjectiveForNoun(symbol.Name.AsSpan(), FirstWordAdjustment.StartLowerCase);
+            var betterName = AdjectiveFinder.GetAdjectiveForNoun(GetPartToInspect(symbol.Name), FirstWordAdjustment.StartLowerCase);
 
             return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
         }
+
+        private static ReadOnlySpan<char> GetPartToInspect(string name) => name.EndsWith("Condition", StringComparison.Ordinal)
+                                                                           ? name.AsSpan(0, name.Length - 9)
+                                                                           : name.AsSpan();
     }
 }

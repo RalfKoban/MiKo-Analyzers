@@ -40,6 +40,20 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_non_boolean_field_with_Condition_suffix_([ValueSource(nameof(FieldPrefixes))] string prefix, [ValueSource(nameof(Names))] string name) => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        private int " + prefix + "something" + name + @"Condition;
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_boolean_field_with_suffix_([ValueSource(nameof(FieldPrefixes))] string prefix, [ValueSource(nameof(Names))] string name) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -53,7 +67,22 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_boolean_field_with_Condition_suffix_([ValueSource(nameof(FieldPrefixes))] string prefix, [ValueSource(nameof(Names))] string name) => An_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        private bool " + prefix + "something" + name + @"Condition;
+    }
+}
+");
+
         [TestCase("m_visibility", "m_visible")]
+        [TestCase("m_visibilityCondition", "m_visible")]
         public void Code_gets_fixed_for_field_with_(string originalName, string fixedName)
         {
             const string Template = @"

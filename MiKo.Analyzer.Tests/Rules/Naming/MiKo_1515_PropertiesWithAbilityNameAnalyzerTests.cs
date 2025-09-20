@@ -39,6 +39,20 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_non_boolean_property_with_Condition_suffix_([ValueSource(nameof(Names))] string name) => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        public int " + name + @"Condition { get; set; }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_boolean_property_with_suffix_([ValueSource(nameof(Names))] string name) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -52,7 +66,22 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_boolean_property_with_Condition_suffix_([ValueSource(nameof(Names))] string name) => An_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        public bool " + name + @"Condition { get; set; }
+    }
+}
+");
+
         [TestCase("Visibility", "Visible")]
+        [TestCase("VisibilityCondition", "Visible")]
         public void Code_gets_fixed_for_property_with_(string originalName, string fixedName)
         {
             const string Template = @"

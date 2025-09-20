@@ -17,15 +17,29 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.Type.IsBoolean() && symbol.Name.EndsWith('y') && symbol.Name.HasUpperCaseLettersAbove(1) is false;
+        protected override bool ShallAnalyze(IFieldSymbol symbol)
+        {
+            if (symbol.Type.IsBoolean())
+            {
+                var symbolName = GetPartToInspect(symbol.Name);
+
+                return symbolName.EndsWith('y') && symbolName.HasUpperCaseLettersAbove(1) is false;
+            }
+
+            return false;
+        }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation)
         {
             var name = symbol.Name;
             var prefix = GetFieldPrefix(name);
-            var betterName = prefix + AdjectiveFinder.GetAdjectiveForNoun(name.AsSpan(prefix.Length), FirstWordAdjustment.StartLowerCase);
+            var betterName = prefix + AdjectiveFinder.GetAdjectiveForNoun(GetPartToInspect(name, prefix.Length), FirstWordAdjustment.StartLowerCase);
 
             return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
         }
+
+        private static ReadOnlySpan<char> GetPartToInspect(string name, in int start = 0) => name.EndsWith("Condition", StringComparison.Ordinal)
+                                                                                             ? name.AsSpan(start, name.Length - start - 9)
+                                                                                             : name.AsSpan(start);
     }
 }

@@ -39,6 +39,20 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_non_boolean_parameter_with_Condition_suffix_([ValueSource(nameof(Names))] string name) => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        public void DoSomething(int something" + name + @"Condition) { }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_boolean_parameter_with_suffix_([ValueSource(nameof(Names))] string name) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -52,7 +66,22 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_boolean_parameter_with_Condition_suffix_([ValueSource(nameof(Names))] string name) => An_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        public void DoSomething(bool something" + name + @"Condition) { }
+    }
+}
+");
+
         [TestCase("visibility", "visible")]
+        [TestCase("visibilityCondition", "visible")]
         public void Code_gets_fixed_for_parameter_with_(string originalName, string fixedName)
         {
             const string Template = @"
