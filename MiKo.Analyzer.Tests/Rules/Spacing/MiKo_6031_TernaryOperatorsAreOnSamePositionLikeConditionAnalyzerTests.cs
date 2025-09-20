@@ -25,7 +25,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_ternary_operator_if_condition_and_colon_is_placed_on_same_position_as_condition() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_ternary_operator_if_question_and_colon_are_placed_on_same_position_as_condition() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe

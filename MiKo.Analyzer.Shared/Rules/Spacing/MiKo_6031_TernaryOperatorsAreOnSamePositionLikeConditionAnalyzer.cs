@@ -7,6 +7,8 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
+    /// <inheritdoc />
+    /// <seealso cref="MiKo_6067_TernaryOperatorsAreOnSameLineLikeWhenClausesAnalyzer"/>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class MiKo_6031_TernaryOperatorsAreOnSamePositionLikeConditionAnalyzer : SpacingAnalyzer
     {

@@ -6,6 +6,8 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
+    /// <inheritdoc />
+    /// <seealso cref="MiKo_6067_CodeFixProvider"/>
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_6031_CodeFixProvider)), Shared]
     public sealed class MiKo_6031_CodeFixProvider : SpacingCodeFixProvider
     {
@@ -17,11 +19,12 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             {
                 var spaces = GetProposedSpaces(issue);
 
-                SyntaxToken questionToken = expression.QuestionToken.WithLeadingSpaces(spaces);
+                var questionToken = expression.QuestionToken.WithLeadingSpaces(spaces);
+                var colonToken = expression.ColonToken;
 
+                // when adjusting, also take a look at MiKo_6067 code fix
                 if (expression.WhenTrue is ObjectCreationExpressionSyntax o && o.Initializer is InitializerExpressionSyntax initializer)
                 {
-                    var colonToken = expression.ColonToken;
                     var closeBraceToken = initializer.CloseBraceToken;
 
                     if (colonToken.IsOnSameLineAs(closeBraceToken))
@@ -33,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 }
 
                 return expression.WithQuestionToken(questionToken)
-                                 .WithColonToken(expression.ColonToken.WithLeadingSpaces(spaces));
+                                 .WithColonToken(colonToken.WithLeadingSpaces(spaces));
             }
 
             return syntax;
