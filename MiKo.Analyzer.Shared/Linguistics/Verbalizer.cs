@@ -43,6 +43,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                                                                                                  new KeyValuePair<string, string>("were", "is"),
                                                                                                                                                  new KeyValuePair<string, string>("Was", "Is"),
                                                                                                                                                  new KeyValuePair<string, string>("was", "is"),
+                                                                                                                                                 new KeyValuePair<string, string>("Maintenance", "Maintains"),
+                                                                                                                                                 new KeyValuePair<string, string>("maintenance", "maintains"),
+                                                                                                                                                 new KeyValuePair<string, string>("Implementation", "Implements"),
+                                                                                                                                                 new KeyValuePair<string, string>("implementation", "implements"),
                                                                                                                                              });
 
         private static readonly string[] ThirdPersonalSingularVerbExceptions =
@@ -230,50 +234,6 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                              }.ToArray(_ => _, AscendingStringComparer.Default);
 
         private static readonly char[] SentenceEndingMarkers = ".?!;:,)".ToCharArray();
-
-        private static readonly string[] AdjectivesOrAdverbs =
-                                                               {
-                                                                   "about",
-                                                                   "afterwards",
-                                                                   "also",
-                                                                   "already",
-                                                                   "always",
-                                                                   "at",
-                                                                   "before",
-                                                                   "either",
-                                                                   "first",
-                                                                   "however",
-                                                                   "in",
-                                                                   "just",
-                                                                   "later",
-                                                                   "longer",
-                                                                   "on",
-                                                                   "off",
-                                                                   "out",
-                                                                   "no",
-                                                                   "not",
-                                                                   "now",
-                                                                   "than",
-                                                                   "then",
-                                                                   "therefore",
-                                                                   "to",
-                                                                   "turn",
-                                                               };
-
-        public static bool IsAdjectiveOrAdverb(in ReadOnlySpan<char> value, in StringComparison comparison = StringComparison.OrdinalIgnoreCase)
-        {
-            if (value.EndsWith("ly", comparison))
-            {
-                if (value.EndsWith("ply", comparison))
-                {
-                    return value.Equals("simply", comparison);
-                }
-
-                return true;
-            }
-
-            return value.EqualsAny(AdjectivesOrAdverbs, comparison);
-        }
 
         public static bool IsThirdPersonSingularVerb(in ReadOnlySpan<char> value)
         {

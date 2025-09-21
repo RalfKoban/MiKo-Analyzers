@@ -216,7 +216,7 @@ namespace MiKoSolutions.Analyzers
                                                                   ThreadStaticFieldPrefix,
                                                               };
 
-            internal static readonly string[] OSBitNumbers = { "32", "64" };
+            internal static readonly string[] BitNumbers = { "8", "16", "32", "64", "128" };
 
             internal static readonly string[] ReSharper = { "ReSharper disable", "ReSharper restore" };
         }
@@ -487,9 +487,13 @@ namespace MiKoSolutions.Analyzers
                                                                               "Default impl ",
                                                                               "Default implementation for ",
                                                                               "Default implementation of ",
+                                                                              "Default implementation class for ",
+                                                                              "Default implementation class of ",
                                                                               "Default-Impl ",
                                                                               "Default-Implementation for ",
                                                                               "Default-Implementation of ",
+                                                                              "Default-Implementation class for ",
+                                                                              "Default-Implementation class of ",
                                                                               "Delegate",
                                                                               "Does implement ",
                                                                               Entity,
@@ -510,6 +514,8 @@ namespace MiKoSolutions.Analyzers
                                                                               "Implement ",
                                                                               "Implementation for ",
                                                                               "Implementation of ",
+                                                                              "Implementation class for ",
+                                                                              "Implementation class of ",
                                                                               "Implements ",
                                                                               "Interaction logic",
                                                                               "Interface",

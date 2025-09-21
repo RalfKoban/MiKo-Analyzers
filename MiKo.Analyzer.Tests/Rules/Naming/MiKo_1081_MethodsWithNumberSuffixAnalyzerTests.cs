@@ -38,7 +38,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_OS_bit_number_suffix_([Values(32, 64)] in int number) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_OS_bit_number_suffix_([Values(8, 16, 32, 64, 128)] in int number) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething" + number + @"() { }
@@ -46,7 +46,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_local_function_with_OS_bit_number_suffix_([Values(32, 64)] in int number) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_local_function_with_OS_bit_number_suffix_([Values(8, 16, 32, 64, 128)] in int number) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -57,7 +57,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_number_suffix_([Range(0, 10)] int number) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_number_suffix_([Range(0, 7)] int number) => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething" + number + @"() { }
@@ -65,7 +65,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_local_function_with_number_suffix_([Range(0, 10)] int number) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_local_function_with_number_suffix_([Range(0, 7)] int number) => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()

@@ -191,6 +191,12 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsOnSameLineAs(this in SyntaxToken value, in SyntaxToken other) => value.GetStartingLine() == other.GetStartingLine();
 
+        internal static bool IsOnSameLineAsEndOf(this in SyntaxToken value, SyntaxNode other) => value.GetStartingLine() == other?.GetEndingLine();
+
+        internal static bool IsOnSameLineAsEndOf(this in SyntaxToken value, in SyntaxNodeOrToken other) => value.GetStartingLine() == other.GetEndingLine();
+
+        internal static bool IsOnSameLineAsEndOf(this in SyntaxToken value, in SyntaxToken other) => value.GetStartingLine() == other.GetEndingLine();
+
         internal static bool IsSpanningMultipleLines(this in SyntaxToken value)
         {
             var leadingTrivia = value.LeadingTrivia;

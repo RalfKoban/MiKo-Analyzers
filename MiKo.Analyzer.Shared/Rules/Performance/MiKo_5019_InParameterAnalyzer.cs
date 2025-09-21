@@ -46,19 +46,31 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 return false;
             }
 
-            if (symbol.CanBeReferencedByName is false)
+            if (symbol.CanBeReferencedByName)
             {
-                return false;
-            }
+                if (symbol.ReturnType.IsTask())
+                {
+                    return false;
+                }
 
-            if (symbol.ReturnType.IsTask())
-            {
-                return false;
+                if (symbol.IsInterfaceImplementation())
+                {
+                    return false;
+                }
             }
-
-            if (symbol.IsInterfaceImplementation())
+            else
             {
-                return false;
+                // seems to be a ctor or operator
+                switch (symbol.MethodKind)
+                {
+                    case MethodKind.Constructor:
+                    case MethodKind.Conversion:
+                    case MethodKind.UserDefinedOperator:
+                        break;
+
+                    default:
+                        return false;
+                }
             }
 
             return symbol.GetSyntax().DescendantNodes<YieldStatementSyntax>().None();

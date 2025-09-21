@@ -359,9 +359,9 @@ namespace MiKoSolutions.Analyzers.Rules
             var category = string.Empty;
             var tableFormat = "|{0}|{1}|{2}|{3}|" + Environment.NewLine;
 
-            var codeFixProviders = EnumerableExtensions.ToHashSet(AllCodeFixProviders.SelectMany(_ => _.FixableDiagnosticIds));
+            var codeFixProviders = AllCodeFixProviders.SelectMany(_ => _.FixableDiagnosticIds).ToHashSet();
 
-            foreach (var descriptor in AllAnalyzers.Select(_ => _.GetType().GetProperty("Rule", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(_)).OfType<DiagnosticDescriptor>().OrderBy(_ => _.Id).ThenBy(_ => _.Category))
+            foreach (var descriptor in AllAnalyzers.Select(GetFieldValue).OrderBy(_ => _.Id).ThenBy(_ => _.Category))
             {
                 if (category != descriptor.Category)
                 {
@@ -390,6 +390,25 @@ namespace MiKoSolutions.Analyzers.Rules
             File.WriteAllText(@"z:\test.md", markdown);
 
             Assert.That(markdown, Is.Empty);
+
+            static DiagnosticDescriptor GetFieldValue(Analyzer analyzer)
+            {
+                var type = analyzer.GetType();
+
+                FieldInfo fieldInfo;
+                do
+                {
+                    fieldInfo = type.GetField("m_rule", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetField);
+
+                    if (fieldInfo is null)
+                    {
+                        type = type.BaseType;
+                    }
+                }
+                while (fieldInfo is null && type != null);
+
+                return fieldInfo?.GetValue(analyzer) as DiagnosticDescriptor;
+            }
         }
 
         private static int GetDiagnosticIdStartingNumber(Analyzer analyzer) => analyzer.GetType().Namespace switch

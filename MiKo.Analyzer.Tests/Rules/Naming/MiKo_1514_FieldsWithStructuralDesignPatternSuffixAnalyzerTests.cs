@@ -78,17 +78,17 @@ namespace Bla
                                new("dataAdapter", "adaptedData"),
                                new("dataWrapper", "wrappedData"),
                                new("dataDecorator", "decoratedData")
-                            ];
+                           ];
 
             foreach (var prefix in FieldPrefixes)
             {
                 foreach (var pair in pairs)
                 {
                     yield return new TestCaseData
-                                 {
-                                     Wrong = prefix + pair.Key,
-                                     Fixed = prefix + pair.Value,
-                                 };
+                                     {
+                                         Wrong = prefix + pair.Key,
+                                         Fixed = prefix + pair.Value,
+                                     };
                 }
             }
         }
