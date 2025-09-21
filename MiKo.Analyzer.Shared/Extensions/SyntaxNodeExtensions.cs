@@ -1372,6 +1372,7 @@ namespace MiKoSolutions.Analyzers
                 return value;
             }
         }
+
         internal static SyntaxNode WithUsing(this SyntaxNode value, string usingNamespace)
         {
             var usings = value.DescendantNodes<UsingDirectiveSyntax>().ToList();

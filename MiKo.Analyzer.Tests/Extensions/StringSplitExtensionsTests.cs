@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Extensions
                 }
             }
 
-            Assert.That(words, Is.EqualTo(new[] { "This", "is", "a", "test", "to", "see", "if", "everything", "is", "working", "Another", "line.", "Some", "more", "text." }));
+            Assert.That(words, Is.EqualTo(["This", "is", "a", "test", "to", "see", "if", "everything", "is", "working", "Another", "line.", "Some", "more", "text."]));
         }
 
         [Test]

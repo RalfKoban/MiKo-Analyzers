@@ -357,16 +357,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var articles = new[] { string.Empty, "A ", "An ", "The ", "This ", "a ", "an ", "the ", "this " };
                 var starts = new[]
-                             {
-                                 "Array", "array",
-                                 "Collection", "collection",
-                                 "List", "list",
-                                 "Dictionary", "dictionary",
-                                 "Cache", "cache",
-                                 "Stack", "stack",
-                                 "Queue", "queue",
-                                 "Enumerable", "enumerable",
-                             };
+                                 {
+                                     "Array", "array",
+                                     "Collection", "collection",
+                                     "List", "list",
+                                     "Dictionary", "dictionary",
+                                     "Cache", "cache",
+                                     "Stack", "stack",
+                                     "Queue", "queue",
+                                     "Enumerable", "enumerable",
+                                 };
 
                 foreach (var article in articles)
                 {

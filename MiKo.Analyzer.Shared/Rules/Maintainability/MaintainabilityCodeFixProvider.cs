@@ -132,6 +132,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected static LocalDeclarationStatementSyntax LocalVariable(TypeSyntax type, string variableName, out VariableDeclaratorSyntax declarator)
         {
             declarator = SyntaxFactory.VariableDeclarator(variableName);
+
             var declaration = SyntaxFactory.VariableDeclaration(type, declarator.ToSeparatedSyntaxList());
 
             return SyntaxFactory.LocalDeclarationStatement(declaration);

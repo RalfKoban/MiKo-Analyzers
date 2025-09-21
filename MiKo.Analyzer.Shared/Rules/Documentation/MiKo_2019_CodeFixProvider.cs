@@ -15,6 +15,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] RepresentsCandidates =
                                                                 {
                                                                     "Repository ",
+                                                                    "Simple ",
+                                                                    "Complex ",
+                                                                    "Additional ",
+                                                                    "Addtional ", // typo
+                                                                    "Health ",
                                                                 };
 
         private static readonly string[] CurrentlyUnfixable =
@@ -43,24 +48,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (startText.StartsWithAny(CurrentlyUnfixable))
                     {
-                        // we cannot fix that for the moment
+                        // currently we cannot fix that
                         return syntax;
                     }
 
+                    var text = startText.AsSpan();
+                    var firstWord = text.FirstWord();
+
                     if (startText.StartsWithAny(RepresentsCandidates))
                     {
-                        return CommentStartingWith(summary, "Represents a ");
+                        var article = ArticleProvider.GetArticleFor(firstWord, FirstWordAdjustment.StartLowerCase);
+
+                        return CommentStartingWith(summary, "Represents " + article);
                     }
 
-                    var updatedSyntax = MiKo_2012_CodeFixProvider.GetUpdatedSyntax(summary, textSyntax);
+                    var updatedSyntax = MiKo_2012_CodeFixProvider.GetUpdatedSyntax(summary);
 
                     if (ReferenceEquals(summary, updatedSyntax) is false)
                     {
                         return updatedSyntax;
                     }
-
-                    var text = startText.AsSpan();
-                    var firstWord = text.FirstWord();
 
                     // only adjust in case there is no single letter
                     if (firstWord.Length > 1)
@@ -68,22 +75,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         if (firstWord.EndsWith("alled"))
                         {
                             // currently we cannot adjust "Called" text properly
+                            return syntax;
                         }
-                        else
-                        {
-                            var index = text.IndexOf(firstWord);
-                            var remainingText = text.Slice(index + firstWord.Length);
 
-                            var firstWordUpper = firstWord.ToUpperCaseAt(0);
+                        var index = text.IndexOf(firstWord);
+                        var remainingText = text.Slice(index + firstWord.Length);
 
-                            string replacementForFirstWord = firstWordUpper.EqualsAny(DeterminesCandidates)
-                                                             ? "Determines whether"
-                                                             : Verbalizer.MakeThirdPersonSingularVerb(firstWordUpper);
+                        var firstWordUpper = firstWord.ToUpperCaseAt(0);
 
-                            var replacedText = replacementForFirstWord.ConcatenatedWith(remainingText);
+                        var replacementForFirstWord = firstWordUpper.EqualsAny(DeterminesCandidates)
+                                                      ? "Determines whether"
+                                                      : Verbalizer.MakeThirdPersonSingularVerb(firstWordUpper);
 
-                            return Comment(summary, replacedText, content.RemoveAt(0));
-                        }
+                        var replacedText = replacementForFirstWord.ConcatenatedWith(remainingText);
+
+                        return Comment(summary, replacedText, content.RemoveAt(0));
                     }
                 }
             }

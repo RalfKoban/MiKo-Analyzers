@@ -248,6 +248,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("tests", ExpectedResult = "tests")]
         [TestCase("used", ExpectedResult = "uses")]
         [TestCase("will", ExpectedResult = "will")]
+        [TestCase("implementation", ExpectedResult = "implements")]
+        [TestCase("Implementation", ExpectedResult = "Implements")]
+        [TestCase("maintenance", ExpectedResult = "maintains")]
+        [TestCase("Maintenance", ExpectedResult = "Maintains")]
         public static string MakeThirdPersonSingularVerb_finds_proper_3rd_person_singular_verb_(string name) => Verbalizer.MakeThirdPersonSingularVerb(name);
 
         [TestCase("", ExpectedResult = "")]

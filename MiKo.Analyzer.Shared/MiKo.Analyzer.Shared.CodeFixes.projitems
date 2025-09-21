@@ -39,9 +39,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\WordsReadOnlySpanEnumerator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\WordsReadOnlySpanEnumeratorSelectDelegate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Linguistics\AbbreviationFinder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Linguistics\AdjectiveFinder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Linguistics\ArticleProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Linguistics\AscendingStringComparer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Linguistics\FirstWordAdjustment.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Linguistics\NamesFinder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Linguistics\Pluralizer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Linguistics\Verbalizer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Pair.cs" />
@@ -348,6 +350,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1512_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1513_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1514_CodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1515_CodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1516_CodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1517_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\NamingCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\ParameterNamingCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\PropertyNamingCodeFixProvider.cs" />
@@ -438,6 +443,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6064_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6065_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6066_CodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6067_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6070_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6071_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\SpacingCodeFixProvider.cs" />

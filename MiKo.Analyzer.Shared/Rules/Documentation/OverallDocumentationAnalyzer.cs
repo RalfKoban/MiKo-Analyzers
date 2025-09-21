@@ -42,14 +42,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     var adjective = ReadOnlySpan<char>.Empty;
 
-                    if (Verbalizer.IsAdjectiveOrAdverb(nextWord))
+                    if (AdjectiveFinder.IsAdjectiveOrAdverb(nextWord))
                     {
                         // jump over an adjective or adverb as next word
                         adjective = nextWord;
 
                         nextWord = textAfterStartingPhrase.SecondWord();
 
-                        if (Verbalizer.IsAdjectiveOrAdverb(nextWord))
+                        if (AdjectiveFinder.IsAdjectiveOrAdverb(nextWord))
                         {
                             // jump over an adjective or adverb as next word
                             nextWord = textAfterStartingPhrase.ThirdWord();

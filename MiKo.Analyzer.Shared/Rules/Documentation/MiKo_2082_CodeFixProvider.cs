@@ -69,7 +69,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         if (isPlural
                          || unsuffixed.EqualsAny(WordsThatPreventArticle, StringComparison.OrdinalIgnoreCase)
                          || Verbalizer.IsGerundVerb(unsuffixedSpan)
-                         || Verbalizer.IsAdjectiveOrAdverb(unsuffixedSpan)
+                         || AdjectiveFinder.IsAdjectiveOrAdverb(unsuffixedSpan)
                          || Verbalizer.IsPastTense(unsuffixedSpan))
                         {
                             // prevent articles for gerund and past tense words and make them lower case
