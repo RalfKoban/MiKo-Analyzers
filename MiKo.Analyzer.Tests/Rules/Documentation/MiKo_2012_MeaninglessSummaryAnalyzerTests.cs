@@ -504,7 +504,7 @@ public class TestMe
         [Test]
         public void Code_gets_fixed_to_inheritdoc_for_default_implementation_(
                                                                           [Values("A", "The", "")] string startPhrase,
-                                                                          [Values("Default implementation", "Default-implementation", "Default impl", "Default-impl", "Implementation")] string text,
+                                                                          [Values("Default implementation", "Default implementation class", "Default-implementation", "Default-implementation class", "Default impl", "Default-impl", "Implementation", "Implementation class")] string text,
                                                                           [Values("for", "of")] string middlePart)
         {
             var originalCode = @"
@@ -1259,10 +1259,17 @@ public class TestMe
                                   "Implements ",
                                   "Interaction logic ",
                                   "Implementation of ",
+                                  "Implementation class of ",
+                                  "Implementation for ",
+                                  "Implementation class for ",
                                   "Default-implementation of ",
+                                  "Default-implementation class of ",
                                   "Default implementation of ",
+                                  "Default implementation class of ",
                                   "Default-Implementation for ",
+                                  "Default-Implementation class for ",
                                   "Default Implementation for ",
+                                  "Default Implementation class for ",
                                   "Impl ",
                                   "Default impl ",
                                   "Default-Impl ",

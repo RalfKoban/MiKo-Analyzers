@@ -1,7 +1,7 @@
 ﻿//// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Rules
 {
-    public sealed class TestCaseData
+    public sealed record TestCaseData
     {
         public string Wrong { get; init; }
 

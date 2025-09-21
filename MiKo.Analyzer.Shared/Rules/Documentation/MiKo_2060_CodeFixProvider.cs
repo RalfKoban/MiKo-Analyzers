@@ -57,7 +57,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                 preparedComment = Comment(summary, mappedData.InstancesReplacementMapKeys, mappedData.InstancesReplacementMap);
                             }
 
-                            return CommentStartingWith(preparedComment, Constants.Comments.FactorySummaryPhrase);
+                            var fixedComment = CommentStartingWith(preparedComment, Constants.Comments.FactorySummaryPhrase);
+
+                            return CleanupComment(fixedComment);
                         }
 
                         case SyntaxKind.MethodDeclaration:
@@ -77,14 +79,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                             var fixedComment = CommentStartingWith(preparedComment, parts[0], SeeCref(returnType), parts[1]);
 
-                            var cleanedContent = CleanupMethodComment(fixedComment);
-
-                            return cleanedContent;
+                            return CleanupComment(fixedComment);
                         }
                     }
                 }
-
-                return summary;
             }
 
             return syntax;
@@ -187,7 +185,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return preparedComment;
         }
 
-        private static XmlElementSyntax CleanupMethodComment(XmlElementSyntax comment)
+        private static XmlElementSyntax CleanupComment(XmlElementSyntax comment)
         {
             var mappedData = MappedData.Value;
 
@@ -310,6 +308,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 CleanupReplacementMap = new[]
                                             {
+                                                new Pair("classes", "types"),
+                                                new Pair("class", "type"),
+                                                new Pair("typeifi", "classifi"), // fix typo when 'class' in 'classification' or 'classified' gets changed into 'type'
                                                 new Pair(" based on ", " default values for "),
                                                 new Pair(" with for ", " with "),
                                                 new Pair(" with with ", " with "),
@@ -427,6 +428,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                             "Returns",
                                             "Get",
                                             "Gets",
+                                            "Initializes",
+                                            "Initialize",
                                         };
 
                 var continuations = new[]

@@ -369,6 +369,11 @@ public class TestMe
         [TestCase("Class used for loading something", "Loads something")]
         [TestCase("Class which holds something", "Holds something")]
         [TestCase("Classes implementing this interfaces, will be called with their something", "Provides a something")]
+        [TestCase("Simple structure to do stuff", "Represents a simple structure to do stuff")]
+        [TestCase("Complex structure to do stuff", "Represents a complex structure to do stuff")]
+        [TestCase("Health check to do stuff", "Represents a health check to do stuff")]
+        [TestCase("Additional information to do stuff", "Represents an additional information to do stuff")]
+        [TestCase("Addtional information to do stuff", "Represents an addtional information to do stuff")] // typo
         public void Code_gets_fixed_for_class_text_(string originalText, string fixedText)
         {
             const string Template = @"
@@ -383,6 +388,35 @@ public class TestMe
 ";
 
             VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
+        }
+
+        [TestCase(@"Implementation of ")]
+        [TestCase(@"Implementation for ")]
+        [TestCase(@"Implementation class of ")]
+        [TestCase(@"Implementation class for ")]
+        public void Code_gets_fixed_for_implementation_class_text_(string originalText)
+        {
+            var originalCode = @"
+using System;
+
+/// <summary>
+/// " + originalText + @" <see cref=""IDisposable""/>
+/// </summary>
+public class TestMe
+{
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+/// <inheritdoc cref=""IDisposable""/>
+public class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
         }
 
         [TestCase("Interface that allows to update something", "Updates something")]

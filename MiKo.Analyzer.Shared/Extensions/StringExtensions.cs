@@ -956,9 +956,9 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        public static bool EndsWithCommonNumber(this string value) => value.EndsWithNumber() && value.EndsWithAny(Constants.Markers.OSBitNumbers, StringComparison.OrdinalIgnoreCase) is false;
+        public static bool EndsWithCommonNumber(this string value) => value.EndsWithNumber() && value.EndsWithAny(Constants.Markers.BitNumbers, StringComparison.OrdinalIgnoreCase) is false;
 
-        public static bool EndsWithCommonNumber(this in ReadOnlySpan<char> value) => value.EndsWithNumber() && value.EndsWithAny(Constants.Markers.OSBitNumbers, StringComparison.OrdinalIgnoreCase) is false;
+        public static bool EndsWithCommonNumber(this in ReadOnlySpan<char> value) => value.EndsWithNumber() && value.EndsWithAny(Constants.Markers.BitNumbers, StringComparison.OrdinalIgnoreCase) is false;
 
         public static bool EndsWithNumber(this string value) => value.HasCharacters() && value[value.Length - 1].IsNumber();
 

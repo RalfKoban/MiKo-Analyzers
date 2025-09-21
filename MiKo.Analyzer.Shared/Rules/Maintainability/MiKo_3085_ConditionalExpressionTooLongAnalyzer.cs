@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3085";
 
-        private const int MaxExpressionLength = 60;
+        private const int MaximumExpressionLength = 62;
 
         private static readonly SyntaxKind[] IsExpressions =
                                                              {
@@ -131,7 +131,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool AnalyzeLength(SyntaxNode node, SemanticModel semanticModel)
         {
-            if (node.Span.Length <= MaxExpressionLength)
+            if (node.Span.Length <= MaximumExpressionLength)
             {
                 return false;
             }
