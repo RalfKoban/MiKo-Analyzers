@@ -63,7 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 // seems to be a ctor or operator
                 switch (symbol.MethodKind)
                 {
-                    case MethodKind.Constructor:
+                    case MethodKind.Constructor when symbol.IsPrimaryConstructor() is false:
                     case MethodKind.Conversion:
                     case MethodKind.UserDefinedOperator:
                         break;
