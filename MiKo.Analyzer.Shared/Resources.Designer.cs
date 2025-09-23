@@ -5068,8 +5068,17 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &apos;Info&apos; suffix is too generic and does not clearly convey the purpose or structure of a type.
-        ///Replacing it with more descriptive and intent-revealing names (such as &apos;Data&apos;, &apos;Descriptor&apos;, &apos;Details&apos;, &apos;Metadata&apos;, &apos;Overview&apos;, &apos;Profile&apos;, &apos;Settings&apos;, &apos;Snapshot&apos;, &apos;Status&apos; or &apos;Summary&apos;) improves code readability, simplifies maintenance, and enhances discoverability through better IntelliSense support. It also reduces confusion, so developers don’t have to guess what the type represents..
+        ///   Looks up a localized string similar to Fix name.
+        /// </summary>
+        internal static string MiKo_1510_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1510_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prefer naming fields using prefixes to describe their role rather than suffixes to describe their type.
+        ///This improves code readability, avoids confusion with class names and helps developers quickly understand the purpose of the field in context..
         /// </summary>
         internal static string MiKo_1510_Description {
             get {
@@ -5078,7 +5087,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Change suffix &apos;Info&apos; to a more intent-revealing name.
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
         /// </summary>
         internal static string MiKo_1510_MessageFormat {
             get {
@@ -5087,7 +5096,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not suffix types with &apos;Info&apos;.
+        ///   Looks up a localized string similar to Do not suffix fields with pattern names.
         /// </summary>
         internal static string MiKo_1510_Title {
             get {
@@ -5207,17 +5216,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fix name.
-        /// </summary>
-        internal static string MiKo_1514_CodeFixTitle {
-            get {
-                return ResourceManager.GetString("MiKo_1514_CodeFixTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Prefer naming fields using prefixes to describe their role rather than suffixes to describe their type.
-        ///This improves code readability, avoids confusion with class names and helps developers quickly understand the purpose of the field in context..
+        ///   Looks up a localized string similar to The &apos;Info&apos; suffix is too generic and does not clearly convey the purpose or structure of a type.
+        ///Replacing it with more descriptive and intent-revealing names (such as &apos;Data&apos;, &apos;Descriptor&apos;, &apos;Details&apos;, &apos;Metadata&apos;, &apos;Overview&apos;, &apos;Profile&apos;, &apos;Settings&apos;, &apos;Snapshot&apos;, &apos;Status&apos; or &apos;Summary&apos;) improves code readability, simplifies maintenance, and enhances discoverability through better IntelliSense support. It also reduces confusion, so developers don’t have to guess what the type represents..
         /// </summary>
         internal static string MiKo_1514_Description {
             get {
@@ -5226,7 +5226,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Change suffix &apos;Info&apos; to a more intent-revealing name.
         /// </summary>
         internal static string MiKo_1514_MessageFormat {
             get {
@@ -5235,7 +5235,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not suffix fields with pattern names.
+        ///   Looks up a localized string similar to Do not suffix types with &apos;Info&apos;.
         /// </summary>
         internal static string MiKo_1514_Title {
             get {

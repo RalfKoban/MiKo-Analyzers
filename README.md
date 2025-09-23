@@ -169,11 +169,11 @@ The following tables lists all the 521 rules that are currently provided by the 
 |MiKo_1507|Do not suffix parameters with 'Counter'|&#x2713;|&#x2713;|
 |MiKo_1508|Do not suffix local variables with pattern names|&#x2713;|&#x2713;|
 |MiKo_1509|Do not suffix parameters with pattern names|&#x2713;|&#x2713;|
-|MiKo_1510|Do not suffix types with 'Info'|&#x2713;|\-|
+|MiKo_1510|Do not suffix fields with pattern names|&#x2713;|&#x2713;|
 |MiKo_1511|Do not prefix or suffix local variables with 'proxy'|&#x2713;|&#x2713;|
 |MiKo_1512|Do not prefix or suffix parameters with 'proxy'|&#x2713;|&#x2713;|
 |MiKo_1513|Do not suffix types with 'Advanced', 'Complex', 'Enhanced', 'Extended', 'Simple' or 'Simplified'|&#x2713;|&#x2713;|
-|MiKo_1514|Do not suffix fields with pattern names|&#x2713;|&#x2713;|
+|MiKo_1514|Do not suffix types with 'Info'|&#x2713;|\-|
 |MiKo_1515|Express binary conditions clearly in boolean property names|&#x2713;|&#x2713;|
 |MiKo_1516|Express binary conditions clearly in boolean parameter names|&#x2713;|&#x2713;|
 |MiKo_1517|Express binary conditions clearly in boolean field names|&#x2713;|&#x2713;|
