@@ -13,7 +13,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/18917.svg)](https://scan.coverity.com/projects/ralfkoban-miko-analyzers)
 
 ## Available Rules
-The following tables lists all the 521 rules that are currently provided by the analyzer.
+The following tables lists all the 523 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -177,6 +177,8 @@ The following tables lists all the 521 rules that are currently provided by the 
 |MiKo_1515|Express binary conditions clearly in boolean property names|&#x2713;|&#x2713;|
 |MiKo_1516|Express binary conditions clearly in boolean parameter names|&#x2713;|&#x2713;|
 |MiKo_1517|Express binary conditions clearly in boolean field names|&#x2713;|&#x2713;|
+|MiKo_1518|Do not prefix or suffix local variables with 'reference'|&#x2713;|&#x2713;|
+|MiKo_1519|Do not prefix or suffix parameters with 'reference'|&#x2713;|&#x2713;|
 
 ### Documentation
 |ID|Title|Enabled by default|CodeFix available|
