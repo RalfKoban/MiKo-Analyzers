@@ -5355,6 +5355,78 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;reference&apos; from name.
+        /// </summary>
+        internal static string MiKo_1518_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1518_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reference types in .NET are already references, so adding &apos;Reference&apos; to variable names is redundant. Use names that describe the object&apos;s role, not its implementation detail..
+        /// </summary>
+        internal static string MiKo_1518_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1518_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1518_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1518_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not prefix or suffix local variables with &apos;reference&apos;.
+        /// </summary>
+        internal static string MiKo_1518_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1518_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;reference&apos; from name.
+        /// </summary>
+        internal static string MiKo_1519_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1519_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reference types in .NET are already references, so adding &apos;Reference&apos; to parameter names is redundant. Use names that describe the object&apos;s role, not its implementation detail..
+        /// </summary>
+        internal static string MiKo_1519_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1519_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1519_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1519_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not prefix or suffix parameters with &apos;reference&apos;.
+        /// </summary>
+        internal static string MiKo_1519_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1519_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fix malformed XML.
         /// </summary>
         internal static string MiKo_2000_CodeFixTitle {
