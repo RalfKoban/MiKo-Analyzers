@@ -253,6 +253,15 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_gets_reported_for_primary_ctor_with_no_in_modifier_at_parameter() => No_issue_is_reported_for(@"
+using System;
+
+public record TestMe(byte Value)
+{
+}
+");
+
+        [Test]
         public void An_issue_gets_reported_for_readonly_struct_as_parameter() => An_issue_is_reported_for(@"
 using System;
 
