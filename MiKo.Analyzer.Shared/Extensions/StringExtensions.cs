@@ -1541,12 +1541,12 @@ namespace MiKoSolutions.Analyzers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsUpperCase(this in char value)
         {
-            if (value.IsAsciiLetterLower())
+            if ((uint)(value - 'a') <= 'z' - 'a') // see 'IsAsciiLetterLower', inlined for performance reasons
             {
                 return false;
             }
 
-            if (value.IsAsciiLetterUpper())
+            if ((uint)(value - 'A') <= 'Z' - 'A') // see 'IsAsciiLetterUpper', inlined for performance reasons
             {
                 return true;
             }
@@ -2197,14 +2197,14 @@ namespace MiKoSolutions.Analyzers
         {
             int charA = *(a + index);
 
-            if (charA.IsAsciiLetterLower())
+            if ((uint)(charA - 'a') <= 'z' - 'a')
             {
                 charA -= DifferenceBetweenUpperAndLowerCaseAscii;
             }
 
             int charB = *(b + index);
 
-            if (charB.IsAsciiLetterLower())
+            if ((uint)(charB - 'a') <= 'z' - 'a') // see 'IsAsciiLetterLower', inlined for performance reasons
             {
                 charB -= DifferenceBetweenUpperAndLowerCaseAscii;
             }
