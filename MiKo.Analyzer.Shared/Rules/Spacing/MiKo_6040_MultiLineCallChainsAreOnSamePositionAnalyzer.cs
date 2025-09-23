@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     {
         public const string Id = "MiKo_6040";
 
-        private static readonly SyntaxKind[] Expressions = { SyntaxKind.SimpleMemberAccessExpression, SyntaxKind.ConditionalAccessExpression };
+        private static readonly SyntaxKind[] Expressions = { SyntaxKind.SimpleMemberAccessExpression, SyntaxKind.ConditionalAccessExpression, SyntaxKind.ElementAccessExpression };
 
         public MiKo_6040_MultiLineCallChainsAreOnSamePositionAnalyzer() : base(Id)
         {
@@ -65,6 +65,13 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                         dots.Push(b.OperatorToken);
 
                         return;
+                    }
+
+                    case ElementAccessExpressionSyntax a:
+                    {
+                        expression = a.Expression;
+
+                        continue;
                     }
 
                     default:
