@@ -14,6 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             context.RegisterSyntaxNodeAction(AnalyzeLocalDeclarationStatement, SyntaxKind.LocalDeclarationStatement);
             context.RegisterSyntaxNodeAction(AnalyzeDeclarationPattern, SyntaxKind.DeclarationPattern);
+            context.RegisterSyntaxNodeAction(AnalyzeDeclarationExpression, SyntaxKind.DeclarationExpression);
             context.RegisterSyntaxNodeAction(AnalyzeForEachStatement, SyntaxKind.ForEachStatement);
             context.RegisterSyntaxNodeAction(AnalyzeForStatement, SyntaxKind.ForStatement);
         }
