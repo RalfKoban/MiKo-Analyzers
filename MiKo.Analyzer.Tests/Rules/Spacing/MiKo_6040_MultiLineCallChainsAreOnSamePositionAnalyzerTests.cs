@@ -830,6 +830,86 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_if_multi_line_element_access_call_chain_is_long()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public TestMe[] Children { get; }
+
+    public void DoSomething(TestMe child)
+    {
+        var descendant = child.Children[1]
+            .Children[2]
+            .Children[3]
+            .Children[4];
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public TestMe[] Children { get; }
+
+    public void DoSomething(TestMe child)
+    {
+        var descendant = child.Children[1]
+                              .Children[2]
+                              .Children[3]
+                              .Children[4];
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_multi_line_element_access_with_conditional_access_call_chain_is_long()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public TestMe[] Children { get; }
+
+    public void DoSomething(TestMe child)
+    {
+        var descendant = child.Children[1]?
+            .Children[2]?
+            .Children[3]?
+            .Children[4];
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public TestMe[] Children { get; }
+
+    public void DoSomething(TestMe child)
+    {
+        var descendant = child.Children[1]?
+                              .Children[2]?
+                              .Children[3]?
+                              .Children[4];
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6040_MultiLineCallChainsAreOnSamePositionAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6040_MultiLineCallChainsAreOnSamePositionAnalyzer();
