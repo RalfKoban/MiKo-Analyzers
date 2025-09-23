@@ -31,21 +31,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] WrongIds =
                                                     [
-                                                        " id ",
-                                                        " id,",
-                                                        " id;",
-                                                        " id.",
-                                                        " id:",
-                                                        " Id ",
-                                                        " Id,",
-                                                        " Id;",
-                                                        " Id.",
-                                                        " Id:",
-                                                        " ID ",
-                                                        " ID,",
-                                                        " ID;",
-                                                        " ID.",
-                                                        " ID:",
+                                                        " id ", " id,", " id;", " id.", " id:", " id)", " id]", " id}", " id>",
+                                                        " Id ", " Id,", " Id;", " Id.", " Id:", " Id)", " Id]", " Id}", " Id>",
+                                                        " ID ", " ID,", " ID;", " ID.", " ID:", " ID)", " ID]", " ID}", " ID>"
                                                     ];
 
         [Test, Combinatorial]

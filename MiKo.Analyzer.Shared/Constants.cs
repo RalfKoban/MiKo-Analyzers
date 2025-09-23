@@ -321,7 +321,7 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] MultiWhitespaceStrings = { "    ", "   ", "  " };
 
-            internal static readonly char[] Delimiters = { ' ', '.', ',', ';', ':', '!', '?' };
+            internal static readonly char[] Delimiters = { ' ', '.', ',', ';', ':', '!', '?', ')', ']', '>', '}' };
             internal static readonly string[] UnusedPhrase = { "Unused.", "Unused", "This parameter is not used.", "This parameter is not used" };
             internal static readonly string[] FuturePhrase = { "Reserved for future usage.", "Reserved for future usage", "Reserved.", "Reserved", "future", };
 
