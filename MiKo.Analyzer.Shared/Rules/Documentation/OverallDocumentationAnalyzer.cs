@@ -156,6 +156,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         var end = offset + tokenText.Length;
                         var start = end - trimmedTerm.Length;
 
+                        if (trimmedTerm.StartsWith(' '))
+                        {
+                            start += Offset; // we do not want to underline the first char
+                        }
+
                         var location = CreateLocation(syntaxToken, start, end);
                         var issue = IssueLocal(location);
 
