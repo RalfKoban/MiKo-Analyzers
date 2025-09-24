@@ -13,36 +13,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2202_DocumentationUsesIdentifierInsteadOfIdAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] XmlTags =
-                                                   [
-                                                       "example",
-                                                       "exception",
-                                                       "note",
-                                                       "overloads",
-                                                       "para",
-                                                       "param",
-                                                       "permission",
-                                                       "remarks",
-                                                       "returns",
-                                                       "summary",
-                                                       "typeparam",
-                                                       "value",
-                                                   ];
-
         private static readonly string[] WrongIds =
                                                     [
                                                         " id ", " id,", " id;", " id.", " id:", " id)", " id]", " id}", " id>",
                                                         " Id ", " Id,", " Id;", " Id.", " Id:", " Id)", " Id]", " Id}", " Id>",
                                                         " ID ", " ID,", " ID;", " ID.", " ID:", " ID)", " ID]", " ID}", " ID>"
                                                     ];
-
-        [Test, Combinatorial]
-        public void An_issue_is_reported_for_Id_in_Xml_tag_([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(WrongIds))] string id) => An_issue_is_reported_for(@"
-/// <" + xmlTag + @">
-/// The " + id.Trim() + @" something.
-/// </" + xmlTag + @">
-public sealed class TestMe { }
-");
 
         [Test]
         public void No_issue_is_reported_for_uncommented_class() => No_issue_is_reported_for(@"
@@ -58,7 +34,7 @@ public sealed class TestMe { }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_Id_in_code_tag_([Values("c", "code")] string xmlTag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_code_tag_([Values("c", "code")] string xmlTag) => No_issue_is_reported_for(@"
 /// <summary>
 /// <" + xmlTag + @">
 /// var id = 42;
@@ -67,12 +43,44 @@ public sealed class TestMe { }
 public sealed class TestMe { }
 ");
 
+        [Test, Combinatorial]
+        public void An_issue_is_reported_for_xml_tag_([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(WrongIds))] string id) => An_issue_is_reported_for(@"
+/// <" + xmlTag + @">
+/// The " + id.Trim() + @" something.
+/// </" + xmlTag + @">
+public sealed class TestMe { }
+");
+
+        [Test, Combinatorial]
+        public void An_issue_is_reported_for_ending_comment_in_xml_tag_([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(WrongIds))] string id) => An_issue_is_reported_for(@"
+/// <" + xmlTag + @">
+/// The " + id.Trim() + @"
+/// </" + xmlTag + @">
+public sealed class TestMe { }
+");
+
         [Test]
-        public void Code_gets_fixed_for_type_([ValueSource(nameof(WrongIds))] string wrongId)
+        public void Code_gets_fixed_for_type_comment_with_([ValueSource(nameof(WrongIds))] string wrongId)
         {
             const string Template = @"
 /// <summary>
 /// The ### something.
+/// </summary>
+public sealed class TestMe { }
+";
+
+            var wrongText = wrongId.Trim();
+            var correctText = wrongText.Replace("id", "identifier", StringComparison.OrdinalIgnoreCase);
+
+            VerifyCSharpFix(Template.Replace("###", wrongText), Template.Replace("###", correctText));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_type_comment_ending_with_([ValueSource(nameof(WrongIds))] string wrongId)
+        {
+            const string Template = @"
+/// <summary>
+/// The ###
 /// </summary>
 public sealed class TestMe { }
 ";
