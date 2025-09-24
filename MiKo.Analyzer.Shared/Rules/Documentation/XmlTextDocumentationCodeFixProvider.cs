@@ -9,26 +9,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class XmlTextDocumentationCodeFixProvider : DocumentationCodeFixProvider
     {
-        protected static XmlTextSyntax GetUpdatedXmlText(XmlTextSyntax xmlText, in ReadOnlySpan<string> terms, string endingTerm, in ReadOnlySpan<Pair> replacementMap, in string endingReplacement)
+        protected static XmlTextSyntax GetUpdatedSyntax(XmlTextSyntax syntax, Diagnostic issue, in ReadOnlySpan<Pair> replacementPairs, string endingTerm = null, string endingReplacement = null)
         {
-            var updatedXmlText = Comment(xmlText, terms, replacementMap);
+            var token = syntax.FindToken(issue);
+            var text = token.ValueText.AsCachedBuilder().ReplaceAllWithProbe(replacementPairs).ToStringAndRelease();
 
-            var ending = ' '.ConcatenatedWith(endingTerm);
-
-            foreach (var textToken in updatedXmlText.GetXmlTextTokens())
+            if (endingTerm != null && text.EndsWith(endingTerm, StringComparison.OrdinalIgnoreCase))
             {
-                var text = textToken.ValueText;
+                var ending = ' '.ConcatenatedWith(endingTerm);
 
                 if (text.EndsWith(ending, StringComparison.OrdinalIgnoreCase))
                 {
-                    var replacement = text.AsSpan(0, text.Length - ending.Length + 1) // 1 as length of the ' ' character
-                                          .ConcatenatedWith(endingReplacement);
-
-                    updatedXmlText = updatedXmlText.ReplaceText(text, replacement);
+                    text = text.AsSpan(0, text.Length - ending.Length + 1) // 1 as length of the ' ' character
+                               .ConcatenatedWith(endingReplacement);
                 }
             }
 
-            return updatedXmlText;
+            return syntax.ReplaceToken(token, token.WithText(text));
         }
 
         protected sealed override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<XmlTextSyntax>().FirstOrDefault();

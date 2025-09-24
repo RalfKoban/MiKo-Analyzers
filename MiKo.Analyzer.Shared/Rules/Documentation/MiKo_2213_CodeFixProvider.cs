@@ -1,5 +1,4 @@
-﻿using System;
-using System.Composition;
+﻿using System.Composition;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -8,16 +7,13 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2213_CodeFixProvider)), Shared]
-    public sealed class MiKo_2213_CodeFixProvider : OverallDocumentationCodeFixProvider
+    public sealed class MiKo_2213_CodeFixProvider : XmlTextDocumentationCodeFixProvider
     {
         public override string FixableDiagnosticId => "MiKo_2213";
 
-        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic issue)
+        protected override XmlTextSyntax GetUpdatedSyntax(Document document, XmlTextSyntax syntax, Diagnostic issue)
         {
-            var token = syntax.FindToken(issue);
-            var text = token.ValueText.AsCachedBuilder().ReplaceAllWithProbe(Constants.Comments.NotContractionReplacementMap.AsSpan()).ToStringAndRelease();
-
-            return syntax.ReplaceToken(token, token.WithText(text));
+            return GetUpdatedSyntax(syntax, issue, Constants.Comments.NotContractionReplacementMap);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override XmlTextSyntax GetUpdatedSyntax(Document document, XmlTextSyntax syntax, Diagnostic issue)
         {
-            return GetUpdatedXmlText(syntax, Constants.Comments.GuidTermsWithDelimiters, Constants.Comments.Guids[0], ReplacementMap, ReplacementTerm);
+            return GetUpdatedSyntax(syntax, issue, ReplacementMap, Constants.Comments.Guids[0], ReplacementTerm);
         }
 
 //// ncrunch: rdi off
