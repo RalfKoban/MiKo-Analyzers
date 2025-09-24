@@ -1018,9 +1018,9 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] TryWords = { "Try", "Tries" };
             internal static readonly string[] ReturnWords = { "Return", "Returns" };
             internal static readonly string[] ActionTerms = { "action", "Action", "function", "Function", "func", "Func" };
-            internal static readonly string[] IdTerms = IdTerm.WithDelimiters();
-            internal static readonly string[] IdentTerms = IdentTerm.WithDelimiters();
-            internal static readonly string[] InfoTerms = InfoTerm.WithDelimiters();
+            internal static readonly string[] IdTermWithDelimiters = IdTerm.WithDelimiters();
+            internal static readonly string[] IdentTermWithDelimiters = IdentTerm.WithDelimiters();
+            internal static readonly string[] InfoTermWithDelimiters = InfoTerm.WithDelimiters();
             internal static readonly string[] EventArgsTermsWithDelimiters = new[] { "event args", "event arg" }.WithDelimiters();
             internal static readonly string[] FindTerms = { "to find", "to inspect for", "to look for", "to test for" };
             internal static readonly string[] FlagTermsWithDelimiters = new[] { "flag", "flags" }.WithDelimiters();

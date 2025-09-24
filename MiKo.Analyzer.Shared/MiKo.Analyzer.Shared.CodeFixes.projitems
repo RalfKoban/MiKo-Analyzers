@@ -166,6 +166,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\ParameterDocumentationCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\ReturnTypeDocumentationCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\SummaryDocumentationCodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\XmlTextDocumentationCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\DoNotUseSuppressNullableWarningAnalyzerCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\LogicalConditionsSimplifierCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MaintainabilityCodeFixProvider.cs" />

@@ -7,8 +7,10 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2203_CodeFixProvider)), Shared]
-    public sealed class MiKo_2203_CodeFixProvider : OverallDocumentationCodeFixProvider
+    public sealed class MiKo_2203_CodeFixProvider : XmlTextDocumentationCodeFixProvider
     {
+        private const string ReplacementTerm = "unique identifier";
+
 //// ncrunch: rdi off
 
         private static readonly Pair[] ReplacementMap = CreateReplacementMap();
@@ -17,9 +19,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => "MiKo_2203";
 
-        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic issue)
+        protected override XmlTextSyntax GetUpdatedSyntax(Document document, XmlTextSyntax syntax, Diagnostic issue)
         {
-            return Comment(syntax, Constants.Comments.GuidTermsWithDelimiters, ReplacementMap);
+            return GetUpdatedXmlText(syntax, Constants.Comments.GuidTermsWithDelimiters, Constants.Comments.Guids[0], ReplacementMap, ReplacementTerm);
         }
 
 //// ncrunch: rdi off
@@ -34,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var termWithA = "A " + term.TrimStart();
 
-                var replacement = term.ToUpperInvariant().Replace("GUID", "unique identifier");
+                var replacement = term.ToUpperInvariant().Replace("GUID", ReplacementTerm);
                 var replacementWithA = "An " + replacement.TrimStart();
 
                 result[resultIndex++] = new Pair(termWithA, replacementWithA);

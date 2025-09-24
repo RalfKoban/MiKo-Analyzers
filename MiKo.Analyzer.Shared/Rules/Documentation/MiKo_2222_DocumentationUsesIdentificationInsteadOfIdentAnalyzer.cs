@@ -11,13 +11,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2222";
 
+        private static readonly string[] IdentTerm = { Constants.Comments.IdentTerm };
+
         public MiKo_2222_DocumentationUsesIdentificationInsteadOfIdentAnalyzer() : base(Id)
         {
         }
 
         protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
-            return AnalyzeComment(comment, Constants.Comments.IdentTerms, Constants.Comments.IdentTerms);
+            return AnalyzeComment(comment, IdentTerm, Constants.Comments.IdentTermWithDelimiters);
         }
     }
 }
