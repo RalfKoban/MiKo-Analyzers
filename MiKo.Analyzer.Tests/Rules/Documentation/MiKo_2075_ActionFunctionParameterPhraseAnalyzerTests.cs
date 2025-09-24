@@ -71,7 +71,21 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_comment_that_contains_([Values("local function")] string word) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_comment_ending_with_([Values("local function")] string word) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Some " + word + @"
+    /// </summary>
+    public void DoSomething()
+    { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_method_sentence_comment_with_([Values("local function")] string word) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -85,7 +99,19 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_class_comment_that_contains_([ValueSource(nameof(ProblematicWords))] string word) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_class_comment_ending_with_([ValueSource(nameof(ProblematicWords))] string word) => An_issue_is_reported_for(@"
+using System;
+
+/// <summary>
+/// Some " + word + @"
+/// </summary>
+public class TestMe
+{
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_class_sentence_comment_with_([ValueSource(nameof(ProblematicWords))] string word) => An_issue_is_reported_for(@"
 using System;
 
 /// <summary>
@@ -97,7 +123,20 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_event_comment_that_contains_([ValueSource(nameof(ProblematicWords))] string word) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_event_comment_ending_with_([ValueSource(nameof(ProblematicWords))] string word) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Some " + word + @"
+    /// </summary>
+    public event EventHandler MyEvent;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_event_sentence_comment_with_([ValueSource(nameof(ProblematicWords))] string word) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -110,7 +149,21 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_comment_that_contains_([ValueSource(nameof(ProblematicWords))] string word) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_comment_ending_with_([ValueSource(nameof(ProblematicWords))] string word) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Some " + word + @"
+    /// </summary>
+    public void DoSomething()
+    { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_method_sentence_comment_with_([ValueSource(nameof(ProblematicWords))] string word) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -124,7 +177,24 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_property_comment_that_contains_([ValueSource(nameof(ProblematicWords))] string word) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_property_comment_ending_with_([ValueSource(nameof(ProblematicWords))] string word) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Some " + word + @"
+    /// </summary>
+    public string Property
+    {
+        get => m_field;
+        set => m_field = value;
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_property_sentence_comment_with_([ValueSource(nameof(ProblematicWords))] string word) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -141,7 +211,20 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_field_comment_that_contains_([ValueSource(nameof(ProblematicWords))] string word) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_field_comment_ending_with_([ValueSource(nameof(ProblematicWords))] string word) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Some " + word + @"
+    /// </summary>
+    private string m_field;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_field_sentence_comment_with_([ValueSource(nameof(ProblematicWords))] string word) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -154,7 +237,26 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_for_method_comment_that_contains_([ValueSource(nameof(ProblematicWords))] string word)
+        public void Code_gets_fixed_for_method_comment_ending_with_([ValueSource(nameof(ProblematicWords))] string word)
+        {
+            const string Template = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Some ###
+    /// </summary>
+    public void DoSomething()
+    { }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", word), Template.Replace("###", "callback"));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_sentence_comment_with_([ValueSource(nameof(ProblematicWords))] string word)
         {
             const string Template = @"
 using System;
