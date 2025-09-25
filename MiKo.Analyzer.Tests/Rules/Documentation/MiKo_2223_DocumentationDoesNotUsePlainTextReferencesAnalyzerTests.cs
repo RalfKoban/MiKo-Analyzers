@@ -362,6 +362,47 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_correctly_documented_method_with_starting_number_as_pseudo_namespace_or_type_name() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something regarding 1A.SomeNameSpace.SomeClass and 2B.SomeInterface that is very important.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [TestCase("e.g")]
+        [TestCase("E.g")]
+        [TestCase("E.G")]
+        [TestCase("e.g.")]
+        [TestCase("E.g.")]
+        [TestCase("E.G.")]
+        [TestCase("i.e")]
+        [TestCase("I.e")]
+        [TestCase("I.E")]
+        [TestCase("i.e.")]
+        [TestCase("I.e.")]
+        [TestCase("I.E.")]
+        public void No_issue_is_reported_for_correctly_documented_method_with_(string example) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something regarding " + example + @" that is very important.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_correctly_documented_method_with_exclamation_mark() => No_issue_is_reported_for(@"
 using System;
 
@@ -555,21 +596,6 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_with_starting_number() => An_issue_is_reported_for(@"
-using System;
-
-public class TestMe
-{
-    /// <summary>
-    /// Does something regarding 1A.SomeNameSpace.SomeClass that is very important.
-    /// </summary>
-    public void DoSomething()
-    {
-    }
-}
-");
-
-        [Test]
         public void An_issue_is_reported_for_incorrectly_documented_method_with_starting_underscore_number() => An_issue_is_reported_for(@"
 using System;
 
@@ -739,9 +765,9 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_single_line_documented_method_with_(
-                                                                                    [Values("string", "String", "Sring", "sring", "Sting", "sting")] string type,
-                                                                                    [Values("Empty", "empty", "Empy", "empy", "Emtpy", "emtpy")] string property)
+        public void Code_gets_fixed_for_incorrectly_documented_method_on_single_line_with_(
+                                                                                       [Values("string", "String", "Sring", "sring", "Sting", "sting")] string type,
+                                                                                       [Values("Empty", "empty", "Empy", "empy", "Emtpy", "emtpy")] string property)
         {
             const string Template = """
 
@@ -762,9 +788,9 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_single_line_documented_method_ending_with_(
-                                                                                           [Values("string", "String", "Sring", "sring", "Sting", "sting")] string type,
-                                                                                           [Values("Empty", "empty", "Empy", "empy", "Emtpy", "emtpy")] string property)
+        public void Code_gets_fixed_for_incorrectly_documented_method_on_single_line_ending_with_(
+                                                                                              [Values("string", "String", "Sring", "sring", "Sting", "sting")] string type,
+                                                                                              [Values("Empty", "empty", "Empy", "empy", "Emtpy", "emtpy")] string property)
         {
             const string Template = """
 
@@ -782,6 +808,27 @@ public class TestMe
                                     """;
 
             VerifyCSharpFix(Template.Replace("###", type + "." + property), Template.Replace("###", """<see cref="String.Empty"/>"""));
+        }
+
+        [TestCase("TestMe", "TestMe")]
+        public void Code_gets_fixed_for_incorrectly_documented_method_with_type_(string originalName, string fixedName)
+        {
+            const string Template = """
+
+                                    using System;
+                                    using System.IO;
+
+                                    public class TestMe
+                                    {
+                                        /// <summary>Does something with ###</summary>
+                                        public void DoSomething()
+                                        {
+                                        }
+                                    }
+
+                                    """;
+
+            VerifyCSharpFix(Template.Replace("###", originalName), Template.Replace("###", "<see cref=\"" + fixedName + "\"/>"));
         }
 
         protected override string GetDiagnosticId() => MiKo_2223_DocumentationDoesNotUsePlainTextReferencesAnalyzer.Id;

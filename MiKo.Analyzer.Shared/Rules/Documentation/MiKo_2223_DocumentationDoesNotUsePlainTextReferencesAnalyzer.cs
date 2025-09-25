@@ -28,6 +28,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] LangwordCandidates = { "true", "false", "null" };
 
+        private static readonly string[] ExampleCandidates = { "e.g", "i.e", "e.g.", "i.e." };
+
         private static readonly string[] HyperlinkIndicators = { "http:", "https:", "ftp:", "ftps:" };
 
         private static readonly string[] CompilerWarningIndicators = { "CS", "CA", "SA" };
@@ -221,10 +223,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (trimmed[0].IsNumber())
             {
-                return trimmed.Any('.') && trimmed[1].IsLetter();
+                return false; // numbers as 1st character are no valid type names
             }
 
-            if (trimmed.Length is 3 && trimmed.Equals("e.g", StringComparison.OrdinalIgnoreCase))
+            if (trimmed.EqualsAny(ExampleCandidates, StringComparison.OrdinalIgnoreCase))
             {
                 return false;
             }
@@ -356,25 +358,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     var trimmed = text.AsSpan(start, end - start);
 
-                    var compoundWord = IsCompoundWord(trimmed);
-
-                    if (compoundWord && trimmed.StartsWith("default(") && trimmed.EndsWith(')') is false)
+                    if (IsCompoundWord(trimmed))
                     {
-                        // adjust the default to include the brace as it had been trimmed above
-                        var i = text.IndexOf(')');
-
-                        if (i != -1)
+                        if (trimmed.StartsWith("default(") && trimmed.EndsWith(')') is false)
                         {
-                            end = i + 1;
-                        }
-                    }
+                            // adjust the default to include the brace as it had been trimmed above
+                            var i = text.IndexOf(')');
 
-                    if (compoundWord)
-                    {
+                            if (i != -1)
+                            {
+                                end = i + 1;
+                            }
+                        }
+
                         // we found a compound word, so report that
                         var location = CreateLocation(token, start, end);
+                        var compoundWord = trimmed.ToString();
 
-                        yield return Issue(location);
+                        yield return Issue(location, CreateReplacementProposal(compoundWord, compoundWord));
                     }
                 }
 
