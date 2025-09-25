@@ -532,6 +532,36 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
         }
 
+        [TestCase("Set to true")]
+        [TestCase("Set to true,")]
+        [TestCase("Set to true if")]
+        [TestCase("Get/Set flag that indicates if")]
+        [TestCase("Get/Set flag that indicates whether")]
+        [TestCase("Get/Set flag that indicates that")]
+        [TestCase("Get/Set flag which indicates if")]
+        [TestCase("Get/Set flag which indicates whether")]
+        [TestCase("Get/Set flag which indicates that")]
+        [TestCase("Get/Set flag indicating if")]
+        [TestCase("Get/Set flag indicating whether")]
+        [TestCase("Get/Set flag indicating that")]
+        [TestCase("Get/Set")]
+        public void Code_gets_fixed_for_boolean_property_text_(string originalText)
+        {
+            const string Template = @"
+using System;
+
+public interface TestMe
+{
+    /// <summary>
+    /// ### to inform about something
+    /// </summary>
+    public bool SomeProperty { get; set; }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", "Gets or sets a value indicating whether"));
+        }
+
         [TestCase("Called to inform about something", "Informs about something")]
         [TestCase("Called to save something", "Saves something")]
         [TestCase("Save something", "Saves something")]
