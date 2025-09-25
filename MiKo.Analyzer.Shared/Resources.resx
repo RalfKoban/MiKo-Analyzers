@@ -3154,6 +3154,9 @@ This ensures clarity and usability in your documentation, making it straightforw
   <data name="MiKo_2222_Title" xml:space="preserve">
     <value>Use term 'identification' instead of 'ident' in documentation</value>
   </data>
+  <data name="MiKo_2223_CodeFixTitle" xml:space="preserve">
+    <value>Use '&lt;see cref="..."/&gt;'</value>
+  </data>
   <data name="MiKo_2223_Description" xml:space="preserve">
     <value>XML documentation should link references like methods or types using &lt;see cref="..."/&gt; instead of plain text. This approach ensures refactoring tools can update these references during renames, preventing the documentation from pointing to non-existent code.</value>
   </data>

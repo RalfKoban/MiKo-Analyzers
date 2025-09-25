@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -662,7 +663,9 @@ public class TestMe
     /// <summary>
     /// You may want to call stream.Seek() before.
     /// </summary>
-    void DoSomething(Stream stream);
+    public void DoSomething(Stream stream)
+    {
+    }
 }
 ");
 
@@ -679,12 +682,112 @@ public class TestMe
     /// <summary>
     /// Does something with " + type + "." + property + @" to see.
     /// </summary>
-    void DoSomething();
+    public void DoSomething()
+    {
+    }
 }
 ");
+
+        [Test]
+        public void Code_gets_fixed_for_incorrectly_documented_method_with_(
+                                                                        [Values("string", "String", "Sring", "sring", "Sting", "sting")] string type,
+                                                                        [Values("Empty", "empty", "Empy", "empy", "Emtpy", "emtpy")] string property)
+        {
+            const string Template = """
+
+                                    using System;
+                                    using System.IO;
+
+                                    public class TestMe
+                                    {
+                                        /// <summary>
+                                        /// Does something with ### to see.
+                                        /// </summary>
+                                        public void DoSomething()
+                                        {
+                                        }
+                                    }
+
+                                    """;
+
+            VerifyCSharpFix(Template.Replace("###", type + "." + property), Template.Replace("###", """<see cref="String.Empty"/>"""));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_incorrectly_documented_method_ending_with_(
+                                                                               [Values("string", "String", "Sring", "sring", "Sting", "sting")] string type,
+                                                                               [Values("Empty", "empty", "Empy", "empy", "Emtpy", "emtpy")] string property)
+        {
+            const string Template = """
+
+                                    using System;
+                                    using System.IO;
+
+                                    public class TestMe
+                                    {
+                                        /// <summary>
+                                        /// Does something with ###
+                                        /// </summary>
+                                        public void DoSomething()
+                                        {
+                                        }
+                                    }
+
+                                    """;
+
+            VerifyCSharpFix(Template.Replace("###", type + "." + property), Template.Replace("###", """<see cref="String.Empty"/>"""));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_incorrectly_single_line_documented_method_with_(
+                                                                                    [Values("string", "String", "Sring", "sring", "Sting", "sting")] string type,
+                                                                                    [Values("Empty", "empty", "Empy", "empy", "Emtpy", "emtpy")] string property)
+        {
+            const string Template = """
+
+                                    using System;
+                                    using System.IO;
+
+                                    public class TestMe
+                                    {
+                                        /// <summary>Does something with ### to see.</summary>
+                                        public void DoSomething()
+                                        {
+                                        }
+                                    }
+
+                                    """;
+
+            VerifyCSharpFix(Template.Replace("###", type + "." + property), Template.Replace("###", """<see cref="String.Empty"/>"""));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_incorrectly_single_line_documented_method_ending_with_(
+                                                                                           [Values("string", "String", "Sring", "sring", "Sting", "sting")] string type,
+                                                                                           [Values("Empty", "empty", "Empy", "empy", "Emtpy", "emtpy")] string property)
+        {
+            const string Template = """
+
+                                    using System;
+                                    using System.IO;
+
+                                    public class TestMe
+                                    {
+                                        /// <summary>Does something with ###</summary>
+                                        public void DoSomething()
+                                        {
+                                        }
+                                    }
+
+                                    """;
+
+            VerifyCSharpFix(Template.Replace("###", type + "." + property), Template.Replace("###", """<see cref="String.Empty"/>"""));
+        }
 
         protected override string GetDiagnosticId() => MiKo_2223_DocumentationDoesNotUsePlainTextReferencesAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2223_DocumentationDoesNotUsePlainTextReferencesAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2223_CodeFixProvider();
     }
 }

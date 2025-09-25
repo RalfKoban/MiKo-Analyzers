@@ -280,7 +280,7 @@ The following tables lists all the 523 rules that are currently provided by the 
 |MiKo_2220|Use 'to seek' instead of 'to look for', 'to inspect for' or 'to test for' in documentation|&#x2713;|&#x2713;|
 |MiKo_2221|Do not use empty XML tags in documentation|&#x2713;|\-|
 |MiKo_2222|Use term 'identification' instead of 'ident' in documentation|&#x2713;|&#x2713;|
-|MiKo_2223|Link references via &lt;see cref="..."/&gt; in documentation|&#x2713;|\-|
+|MiKo_2223|Link references via &lt;see cref="..."/&gt; in documentation|&#x2713;|&#x2713;|
 |MiKo_2224|Place XML tags and texts on separate lines in documentation|&#x2713;|&#x2713;|
 |MiKo_2225|Place code marked with &lt;c&gt; tags on single line|&#x2713;|&#x2713;|
 |MiKo_2226|Explain the 'Why' instead of the 'That' in documentation|&#x2713;|\-|

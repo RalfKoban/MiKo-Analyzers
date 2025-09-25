@@ -324,7 +324,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     // we found a special text, so report that
                     var location = CreateLocation(token, index, index + stringEmpty.Length);
 
-                    yield return Issue("String.Empty", location); // we use the side effect here that the name is the argument zero and gets used in the issue's message
+                    yield return Issue("String.Empty", location, CreateReplacementProposal(stringEmpty, "String.Empty")); // we use the side effect here that the name is the argument zero and gets used in the issue's message
                 }
             }
 

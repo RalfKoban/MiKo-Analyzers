@@ -8926,6 +8926,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use &apos;&lt;see cref=&quot;...&quot;/&gt;&apos;.
+        /// </summary>
+        internal static string MiKo_2223_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2223_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to XML documentation should link references like methods or types using &lt;see cref=&quot;...&quot;/&gt; instead of plain text. This approach ensures refactoring tools can update these references during renames, preventing the documentation from pointing to non-existent code..
         /// </summary>
         internal static string MiKo_2223_Description {
