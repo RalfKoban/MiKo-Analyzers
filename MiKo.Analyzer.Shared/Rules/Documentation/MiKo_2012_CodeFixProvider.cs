@@ -62,7 +62,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] EmptyReplacementsMapKeys = EmptyReplacementsMap.ToArray(_ => _.Key);
 
-//// ncrunch: rdi default
+        private static readonly string[] PropertyStartingPhrases =
+                                                                   {
+                                                                       "Gets/Sets ",
+                                                                       "Gets or Sets ",
+                                                                       "Gets Or Sets ",
+                                                                       "Gets OR Sets ",
+                                                                       "Gets and Sets ",
+                                                                       "Gets And Sets ",
+                                                                       "Gets AND Sets ",
+                                                                       "Get ",
+                                                                       "Set ",
+                                                                       "Get/Set ",
+                                                                       "Get or Set ",
+                                                                       "Get Or Set ",
+                                                                       "Get OR Set ",
+                                                                       "Get and Set ",
+                                                                       "Get And Set ",
+                                                                       "Get AND Set ",
+                                                                   };
+
+        //// ncrunch: rdi default
 
         public override string FixableDiagnosticId => "MiKo_2012";
 
@@ -163,6 +183,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             return CommentStartingWith(comment, "Represents ");
                     }
                 }
+
+                if (text.StartsWithAny(PropertyStartingPhrases))
+                {
+                    if (member is PropertyDeclarationSyntax property)
+                    {
+                        return GetUpdatedProperty(comment, property, text);
+                    }
+                }
             }
 
             return comment;
@@ -209,17 +237,32 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var builder = StringBuilderCache.Acquire(startingPhrase.Length + remainingText.Length)
                                             .Append(startingPhrase)
                                             .Append(remainingText.ToLowerCaseAt(0))
+                                            .ReplaceWithProbe("get/Set flag ", " ")
+                                            .ReplaceWithProbe("get/Set ", " ")
                                             .ReplaceWithProbe("Gets or sets a value indicating get or set ", "Gets or sets a value indicating ")
+                                            .ReplaceWithProbe("Gets or sets a value indicating to true ", "Gets or sets a value indicating ")
                                             .ReplaceWithProbe("Gets or sets a value indicating get ", "Gets or sets a value indicating ")
                                             .ReplaceWithProbe("Gets or sets a value indicating set ", "Gets or sets a value indicating ")
                                             .ReplaceWithProbe("Gets or sets get or set ", "Gets or sets ")
                                             .ReplaceWithProbe("Gets or sets get ", "Gets or sets ")
                                             .ReplaceWithProbe("Gets or sets set ", "Gets or sets ")
                                             .ReplaceWithProbe("Gets a value indicating get ", "Gets a value indicating ")
+                                            .ReplaceWithProbe("Gets a value indicating set to true ", "Gets a value indicating ")
                                             .ReplaceWithProbe("Gets get ", "Gets ")
+                                            .ReplaceWithProbe("Sets a value indicating set to true ", "Sets a value indicating ")
                                             .ReplaceWithProbe("Sets a value indicating set ", "Sets a value indicating ")
                                             .ReplaceWithProbe("Sets set ", "Sets ")
-                                            .ReplaceWithProbe("value indicating the value indicating", "value indicating the");
+                                            .ReplaceWithProbe("value indicating the value indicating", "value indicating the")
+                                            .ReplaceWithProbe("indicating  that indicates", "indicating")
+                                            .ReplaceWithProbe("indicating  which indicates", "indicating")
+                                            .ReplaceWithProbe("indicating to true,", "indicating")
+                                            .ReplaceWithProbe("indicating to true", "indicating")
+                                            .ReplaceWithProbe("indicating to", "indicating whether to")
+                                            .ReplaceWithProbe("indicating if to", "indicating whether to")
+                                            .ReplaceWithProbe("indicating that to", "indicating whether to")
+                                            .ReplaceWithProbe("indicating  to", "indicating whether to")
+                                            .ReplaceWithProbe("indicating  indicating", "indicating")
+                                            .ReplaceWithProbe("indicating indicating", "indicating");
 
             var replacedFixedText = builder.ToStringAndRelease();
 
