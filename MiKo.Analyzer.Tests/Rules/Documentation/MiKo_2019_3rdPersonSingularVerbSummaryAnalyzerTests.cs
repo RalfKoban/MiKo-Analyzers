@@ -369,11 +369,6 @@ public class TestMe
         [TestCase("Class used for loading something", "Loads something")]
         [TestCase("Class which holds something", "Holds something")]
         [TestCase("Classes implementing this interfaces, will be called with their something", "Provides a something")]
-        [TestCase("Simple structure to do stuff", "Represents a simple structure to do stuff")]
-        [TestCase("Complex structure to do stuff", "Represents a complex structure to do stuff")]
-        [TestCase("Health check to do stuff", "Represents a health check to do stuff")]
-        [TestCase("Additional information to do stuff", "Represents an additional information to do stuff")]
-        [TestCase("Addtional information to do stuff", "Represents an addtional information to do stuff")] // typo
         public void Code_gets_fixed_for_class_text_(string originalText, string fixedText)
         {
             const string Template = @"
@@ -500,6 +495,26 @@ public interface TestMe
             VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
         }
 
+        [TestCase("Simple structure to do stuff", "Represents a simple structure to do stuff")]
+        [TestCase("Complex structure to do stuff", "Represents a complex structure to do stuff")]
+        [TestCase("Health check to do stuff", "Represents a health check to do stuff")]
+        [TestCase("Additional information to do stuff", "Represents an additional information to do stuff")]
+        [TestCase("Addtional information to do stuff", "Represents an addtional information to do stuff")] // typo
+        [TestCase("Highest version to do stuff", "Represents the highest version to do stuff")]
+        [TestCase("Lowest version to do stuff", "Represents the lowest version to do stuff")]
+        [TestCase("High version to do stuff", "Represents the high version to do stuff")]
+        [TestCase("Medium version to do stuff", "Represents the medium version to do stuff")]
+        [TestCase("Middle version to do stuff", "Represents the middle version to do stuff")]
+        [TestCase("Low version to do stuff", "Represents the low version to do stuff")]
+        [TestCase("Minimum version to do stuff", "Represents the minimum version to do stuff")]
+        [TestCase("Maximum version to do stuff", "Represents the maximum version to do stuff")]
+        [TestCase("Min version to do stuff", "Represents the min version to do stuff")]
+        [TestCase("Max version to do stuff", "Represents the max version to do stuff")]
+        [TestCase("Major version to do stuff", "Represents the major version to do stuff")]
+        [TestCase("Minor version to do stuff", "Represents the minor version to do stuff")]
+        [TestCase("Optimum version to do stuff", "Represents the optimum version to do stuff")]
+        [TestCase("Optimal version to do stuff", "Represents the optimal version to do stuff")]
+        [TestCase("Absolute version to do stuff", "Represents the absolute version to do stuff")]
         [TestCase("Repository that does something", "Represents a repository that does something")]
         public void Code_gets_fixed_for_special_class_text_(string originalText, string fixedText)
         {
