@@ -22,6 +22,21 @@ namespace Bla
 }");
 
         [Test]
+        public void An_issue_is_reported_for_local_out_variable_in_try_parse_with_midterm_([ValueSource(nameof(BadMidTerms))] string midterm) => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int DoSomething()
+        {
+            return int.TryParse(""42"", out var my" + midterm + @"Variable) ? my" + midterm + @"Variable : 0;
+        }
+    }
+}");
+
+        [Test]
         public void An_issue_is_reported_for_local_foreach_variable_with_midterm_([ValueSource(nameof(BadMidTerms))] string midterm) => An_issue_is_reported_for(@"
 using System;
 
@@ -142,6 +157,26 @@ using System;
 public class Test###Me
 { }
 ";
+
+            VerifyCSharpFix(Template.Replace("###", originalTerm), Template.Replace("###", fixedTerm));
+        }
+
+        [TestCase("Ref", "Reference")]
+        public void Code_gets_fixed_for_local_out_variable_in_try_parse_with_midterm_(string originalTerm, string fixedTerm)
+        {
+            const string Template = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int DoSomething()
+        {
+            return int.TryParse(""42"", out var my###Variable) ? my###Variable : 0;
+        }
+    }
+}";
 
             VerifyCSharpFix(Template.Replace("###", originalTerm), Template.Replace("###", fixedTerm));
         }

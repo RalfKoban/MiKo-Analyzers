@@ -7,33 +7,17 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2234_CodeFixProvider)), Shared]
-    public sealed class MiKo_2234_CodeFixProvider : OverallDocumentationCodeFixProvider
+    public sealed class MiKo_2234_CodeFixProvider : XmlTextDocumentationCodeFixProvider
     {
         private static readonly Pair[] ReplacementMap = CreateReplacementMap();
 
         public override string FixableDiagnosticId => "MiKo_2234";
 
-        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic issue)
-        {
-            return Comment(syntax, Constants.Comments.WhichIsToTerms, ReplacementMap);
-        }
+        protected override XmlTextSyntax GetUpdatedSyntax(Document document, XmlTextSyntax syntax, Diagnostic issue) => GetUpdatedSyntax(syntax, issue, ReplacementMap);
 
 //// ncrunch: rdi off
 
-        private static Pair[] CreateReplacementMap()
-        {
-            var terms = Constants.Comments.WhichIsToTerms;
-            var termsLength = terms.Length;
-
-            var result = new Pair[termsLength];
-
-            for (var index = 0; index < termsLength; index++)
-            {
-                result[index] = new Pair(terms[index], Constants.Comments.ToTerm);
-            }
-
-            return result;
-        }
+        private static Pair[] CreateReplacementMap() => Constants.Comments.WhichIsToTerms.ToArray(_ => new Pair(_, Constants.Comments.ToTerm));
 
 //// ncrunch: rdi default
     }

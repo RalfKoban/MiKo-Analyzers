@@ -11,6 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1040_ParameterCollectionSuffixAnalyzerTests : CodeFixVerifier
     {
+        [TestCase("object item")]
         [TestCase("string value")]
         [TestCase("string MyValue")]
         [TestCase("int[] numbers")]

@@ -11,22 +11,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2200_DocumentationStartsCapitalizedAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] XmlTags =
-                                                   [
-                                                       "example",
-                                                       "exception",
-                                                       "note",
-                                                       "overloads",
-                                                       "para",
-                                                       "param",
-                                                       "permission",
-                                                       "remarks",
-                                                       "returns",
-                                                       "summary",
-                                                       "typeparam",
-                                                       "value",
-                                                   ];
-
         private static readonly char[] ValidStartingCharacter = "abcdefghijklmnopqrstuvwxyz".ToUpperInvariant().ToCharArray();
 
         private static readonly char[] InvalidStartingCharacter = "abcdefghijklmnopqrstuvwxyz1234567890-#+*.,;".ToCharArray();

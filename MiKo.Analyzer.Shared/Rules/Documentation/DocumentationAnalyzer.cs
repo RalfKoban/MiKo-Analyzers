@@ -31,6 +31,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static Pair[] CreatePhraseProposal(string phrase) => new[] { new Pair(Constants.AnalyzerCodeFixSharedData.Phrase, phrase) };
 
+        protected static Pair[] CreateReplacementProposal(string text, string replacement) => new[]
+                                                                                                  {
+                                                                                                      new Pair(Constants.AnalyzerCodeFixSharedData.TextKey, text),
+                                                                                                      new Pair(Constants.AnalyzerCodeFixSharedData.TextReplacementKey, replacement),
+                                                                                                  };
+
         protected static Location GetFirstLocation(in SyntaxToken textToken, string value, in StringComparison comparison = StringComparison.Ordinal, in int startOffset = 0, in int endOffset = 0)
         {
             return CreateLocation(value, textToken.SyntaxTree, textToken.SpanStart, textToken.ValueText.IndexOf(value, comparison), startOffset, endOffset);

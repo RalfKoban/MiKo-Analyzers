@@ -10,7 +10,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2219_DocumentationContainsNoQuestionOrExclamationMarkAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] XmlTags = ["summary", "remarks", "returns", "example", "value", "exception"];
+        private static readonly string[] Tags = [.. XmlTags.Except("note")];
+
         private static readonly string[] Markers = ["?", "!"];
 
         [Test]
@@ -27,7 +28,7 @@ public class TestMe
 }");
 
         [Test]
-        public void An_issue_is_reported_for_wrong_text_in_documentation_([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Markers))] string marker) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_wrong_text_in_documentation_([ValueSource(nameof(Tags))] string tag, [ValueSource(nameof(Markers))] string marker) => An_issue_is_reported_for(@"
 /// <" + tag + ">Some text" + marker + "</" + tag + @">
 public class TestMe
 {

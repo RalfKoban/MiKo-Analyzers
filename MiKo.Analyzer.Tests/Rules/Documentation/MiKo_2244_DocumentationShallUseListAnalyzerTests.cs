@@ -11,8 +11,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2244_DocumentationShallUseListAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] XmlTags = ["example", "exception", "note", "overloads", "para", "param", "permission", "remarks", "returns", "summary", "typeparam", "value"];
-
         [Test]
         public void An_issue_is_reported_for_Enumeration_in_Xml_tag_([ValueSource(nameof(XmlTags))] string xmlTag, [Values("ul", "ol", "UL", "OL")] string wrongTag)
             => An_issue_is_reported_for(@"

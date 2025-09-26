@@ -7,8 +7,10 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2210_CodeFixProvider)), Shared]
-    public sealed class MiKo_2210_CodeFixProvider : OverallDocumentationCodeFixProvider
+    public sealed class MiKo_2210_CodeFixProvider : XmlTextDocumentationCodeFixProvider
     {
+        private const string ReplacementTerm = "information";
+
 //// ncrunch: rdi off
 
         private static readonly Pair[] ReplacementMap = CreateReplacementMap();
@@ -17,27 +19,30 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => "MiKo_2210";
 
-        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic issue)
+        protected override XmlTextSyntax GetUpdatedSyntax(Document document, XmlTextSyntax syntax, Diagnostic issue)
         {
-            return Comment(syntax, Constants.Comments.InfoTerms, ReplacementMap);
+            return GetUpdatedSyntax(syntax, issue, ReplacementMap, Constants.Comments.InfoTerm, ReplacementTerm);
         }
 
 //// ncrunch: rdi off
 
         private static Pair[] CreateReplacementMap()
         {
-            var terms = Constants.Comments.InfoTerms;
+            var terms = Constants.Comments.InfoTermWithDelimiters;
 
-            var result = new Pair[2 * terms.Length];
+            var result = new Pair[3 * terms.Length];
             var resultIndex = 0;
 
             foreach (var term in terms)
             {
-                var replacement = term.Replace(Constants.Comments.InfoTerm, "information");
+                var replacement = term.Replace(Constants.Comments.InfoTerm, ReplacementTerm);
                 result[resultIndex++] = new Pair(term, replacement);
 
-                var alternative = term.Replace('i', 'I');
-                result[resultIndex++] = new Pair(alternative, replacement);
+                // alternative 1
+                result[resultIndex++] = new Pair(term.Replace('i', 'I'), replacement);
+
+                // alternative 2
+                result[resultIndex++] = new Pair(term.ToUpperCase(), replacement);
             }
 
             return result;
