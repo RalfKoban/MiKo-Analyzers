@@ -20,22 +20,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var parameterType = symbol.Type;
 
-            if (parameterType.IsXmlNode())
-            {
-                return false;
-            }
-
             if (parameterType.IsString())
             {
                 return symbol.Name.EndsWithAny(Constants.Markers.Collections);
             }
 
-            if (parameterType.IsEnumerable())
+            if (parameterType.IsXmlNode())
             {
-                return true;
+                return false;
             }
 
-            return false;
+            return parameterType.IsEnumerable();
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
