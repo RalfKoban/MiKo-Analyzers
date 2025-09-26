@@ -120,7 +120,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     continue;
                 }
 
-                var span = token.GetLocation().GetLineSpan();
+                var span = token.GetLineSpan();
 
                 if (lines.Contains(span.StartLinePosition.Line) || lines.Contains(span.EndLinePosition.Line))
                 {

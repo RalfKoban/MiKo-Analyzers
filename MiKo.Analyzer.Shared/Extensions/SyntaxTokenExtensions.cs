@@ -31,6 +31,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static T GetEnclosing<T>(this in SyntaxToken value) where T : SyntaxNode => value.Parent.GetEnclosing<T>();
 
+        internal static FileLinePositionSpan GetLineSpan(this in SyntaxToken value) => value.GetLocation().GetLineSpan();
+
         internal static int GetPositionWithinStartLine(this in SyntaxToken value) => value.GetLocation().GetPositionWithinStartLine();
 
         internal static int GetPositionWithinEndLine(this in SyntaxToken value) => value.GetLocation().GetPositionWithinEndLine();

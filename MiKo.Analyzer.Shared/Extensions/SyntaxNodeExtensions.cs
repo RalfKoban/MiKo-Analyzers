@@ -87,6 +87,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static AccessorDeclarationSyntax GetSetter(this PropertyDeclarationSyntax value) => value?.AccessorList?.FirstChild<AccessorDeclarationSyntax>(SyntaxKind.SetAccessorDeclaration);
 
+        internal static FileLinePositionSpan GetLineSpan(this SyntaxNode value) => value.GetLocation().GetLineSpan();
+
         internal static XmlElementSyntax GetParameterComment(this DocumentationCommentTriviaSyntax value, string parameterName) => value.FirstDescendant<XmlElementSyntax>(_ => _.GetName() is Constants.XmlTag.Param && _.GetParameterName() == parameterName);
 
         internal static ExpressionSyntax GetPropertyExpression(this PropertyDeclarationSyntax value)
@@ -961,7 +963,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsSpanningMultipleLines(this SyntaxNode value)
         {
-            var lineSpan = value.GetLocation().GetLineSpan();
+            var lineSpan = value.GetLineSpan();
 
             var startingLine = lineSpan.StartLinePosition.Line;
             var endingLine = lineSpan.EndLinePosition.Line;
