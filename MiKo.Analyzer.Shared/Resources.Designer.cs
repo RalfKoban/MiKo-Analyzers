@@ -5068,8 +5068,17 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &apos;Info&apos; suffix is too generic and does not clearly convey the purpose or structure of a type.
-        ///Replacing it with more descriptive and intent-revealing names (such as &apos;Data&apos;, &apos;Descriptor&apos;, &apos;Details&apos;, &apos;Metadata&apos;, &apos;Overview&apos;, &apos;Profile&apos;, &apos;Settings&apos;, &apos;Snapshot&apos;, &apos;Status&apos; or &apos;Summary&apos;) improves code readability, simplifies maintenance, and enhances discoverability through better IntelliSense support. It also reduces confusion, so developers don’t have to guess what the type represents..
+        ///   Looks up a localized string similar to Fix name.
+        /// </summary>
+        internal static string MiKo_1510_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1510_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prefer naming fields using prefixes to describe their role rather than suffixes to describe their type.
+        ///This improves code readability, avoids confusion with class names and helps developers quickly understand the purpose of the field in context..
         /// </summary>
         internal static string MiKo_1510_Description {
             get {
@@ -5078,7 +5087,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Change suffix &apos;Info&apos; to a more intent-revealing name.
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
         /// </summary>
         internal static string MiKo_1510_MessageFormat {
             get {
@@ -5087,7 +5096,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not suffix types with &apos;Info&apos;.
+        ///   Looks up a localized string similar to Do not suffix fields with pattern names.
         /// </summary>
         internal static string MiKo_1510_Title {
             get {
@@ -5207,17 +5216,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fix name.
-        /// </summary>
-        internal static string MiKo_1514_CodeFixTitle {
-            get {
-                return ResourceManager.GetString("MiKo_1514_CodeFixTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Prefer naming fields using prefixes to describe their role rather than suffixes to describe their type.
-        ///This improves code readability, avoids confusion with class names and helps developers quickly understand the purpose of the field in context..
+        ///   Looks up a localized string similar to The &apos;Info&apos; suffix is too generic and does not clearly convey the purpose or structure of a type.
+        ///Replacing it with more descriptive and intent-revealing names (such as &apos;Data&apos;, &apos;Descriptor&apos;, &apos;Details&apos;, &apos;Metadata&apos;, &apos;Overview&apos;, &apos;Profile&apos;, &apos;Settings&apos;, &apos;Snapshot&apos;, &apos;Status&apos; or &apos;Summary&apos;) improves code readability, simplifies maintenance, and enhances discoverability through better IntelliSense support. It also reduces confusion, so developers don’t have to guess what the type represents..
         /// </summary>
         internal static string MiKo_1514_Description {
             get {
@@ -5226,7 +5226,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Change suffix &apos;Info&apos; to a more intent-revealing name.
         /// </summary>
         internal static string MiKo_1514_MessageFormat {
             get {
@@ -5235,7 +5235,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not suffix fields with pattern names.
+        ///   Looks up a localized string similar to Do not suffix types with &apos;Info&apos;.
         /// </summary>
         internal static string MiKo_1514_Title {
             get {
@@ -5351,6 +5351,78 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_1517_Title {
             get {
                 return ResourceManager.GetString("MiKo_1517_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;reference&apos; from name.
+        /// </summary>
+        internal static string MiKo_1518_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1518_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reference types in .NET are already references, so adding &apos;Reference&apos; to variable names is redundant. Use names that describe the object&apos;s role, not its implementation detail..
+        /// </summary>
+        internal static string MiKo_1518_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1518_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1518_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1518_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not prefix or suffix local variables with &apos;reference&apos;.
+        /// </summary>
+        internal static string MiKo_1518_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1518_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;reference&apos; from name.
+        /// </summary>
+        internal static string MiKo_1519_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1519_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reference types in .NET are already references, so adding &apos;Reference&apos; to parameter names is redundant. Use names that describe the object&apos;s role, not its implementation detail..
+        /// </summary>
+        internal static string MiKo_1519_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1519_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1519_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1519_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not prefix or suffix parameters with &apos;reference&apos;.
+        /// </summary>
+        internal static string MiKo_1519_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1519_Title", resourceCulture);
             }
         }
         
@@ -8850,6 +8922,15 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_2222_Title {
             get {
                 return ResourceManager.GetString("MiKo_2222_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;&lt;see cref=&quot;...&quot;/&gt;&apos;.
+        /// </summary>
+        internal static string MiKo_2223_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2223_CodeFixTitle", resourceCulture);
             }
         }
         

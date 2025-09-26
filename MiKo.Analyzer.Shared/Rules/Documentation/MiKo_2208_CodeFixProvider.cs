@@ -8,38 +8,21 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2208_CodeFixProvider)), Shared]
-    public sealed class MiKo_2208_CodeFixProvider : OverallDocumentationCodeFixProvider
+    public sealed class MiKo_2208_CodeFixProvider : XmlTextDocumentationCodeFixProvider
     {
 //// ncrunch: rdi off
 
-        private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMap();
+        private static readonly Pair[] ReplacementMap = CreateReplacementMap();
 
 //// ncrunch: rdi default
 
         public override string FixableDiagnosticId => "MiKo_2208";
 
-        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic issue)
-        {
-            var token = syntax.FindToken(issue);
-
-            return syntax.ReplaceToken(token, token.WithText(ReplaceText(token.Text)));
-        }
-
-        private static string ReplaceText(string originalText)
-        {
-            var result = originalText.AsCachedBuilder();
-
-            foreach (var pair in ReplacementMap)
-            {
-                result.ReplaceWithProbe(pair.Key, pair.Value);
-            }
-
-            return result.ToStringAndRelease();
-        }
+        protected override XmlTextSyntax GetUpdatedSyntax(Document document, XmlTextSyntax syntax, Diagnostic issue) => GetUpdatedSyntax(syntax, issue, ReplacementMap);
 
 //// ncrunch: rdi off
 
-        private static Dictionary<string, string> CreateReplacementMap()
+        private static Pair[] CreateReplacementMap()
         {
             var dictionary = new Dictionary<string, string>();
 
@@ -52,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 dictionary.Add(phrase, phrase.FirstWord() + " ");
             }
 
-            return dictionary;
+            return dictionary.ToArray(_ => new Pair(_.Key, _.Value));
         }
 
 //// ncrunch: rdi default

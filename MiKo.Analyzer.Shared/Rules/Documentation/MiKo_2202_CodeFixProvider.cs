@@ -7,25 +7,28 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2202_CodeFixProvider)), Shared]
-    public sealed class MiKo_2202_CodeFixProvider : OverallDocumentationCodeFixProvider
+    public sealed class MiKo_2202_CodeFixProvider : XmlTextDocumentationCodeFixProvider
     {
+        private const string ReplacementTerm = "identifier";
+
 //// ncrunch: rdi off
+
         private static readonly Pair[] ReplacementMap = CreateReplacementMap();
 
 //// ncrunch: rdi default
 
         public override string FixableDiagnosticId => "MiKo_2202";
 
-        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic issue)
+        protected override XmlTextSyntax GetUpdatedSyntax(Document document, XmlTextSyntax syntax, Diagnostic issue)
         {
-            return Comment(syntax, Constants.Comments.IdTerms, ReplacementMap);
+            return GetUpdatedSyntax(syntax, issue, ReplacementMap, Constants.Comments.IdTerm, ReplacementTerm);
         }
 
 //// ncrunch: rdi off
 
         private static Pair[] CreateReplacementMap()
         {
-            var terms = Constants.Comments.IdTerms;
+            var terms = Constants.Comments.IdTermWithDelimiters;
 
             var result = new Pair[6 * terms.Length];
             var resultIndex = 0;
@@ -37,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var termWithA = "A " + term.TrimStart();
                 var alternativeWithA = "A " + alternative.TrimStart();
 
-                var replacement = term.Replace(Constants.Comments.IdTerm, "identifier");
+                var replacement = term.Replace(Constants.Comments.IdTerm, ReplacementTerm);
                 var replacementWithA = "An " + replacement.TrimStart();
 
                 result[resultIndex++] = new Pair(termWithA, replacementWithA);

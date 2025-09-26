@@ -7,11 +7,11 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2209_CodeFixProvider)), Shared]
-    public sealed class MiKo_2209_CodeFixProvider : OverallDocumentationCodeFixProvider
+    public sealed class MiKo_2209_CodeFixProvider : XmlTextDocumentationCodeFixProvider
     {
         public override string FixableDiagnosticId => "MiKo_2209";
 
-        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic issue)
+        protected override XmlTextSyntax GetUpdatedSyntax(Document document, XmlTextSyntax syntax, Diagnostic issue)
         {
             var token = syntax.FindToken(issue);
 

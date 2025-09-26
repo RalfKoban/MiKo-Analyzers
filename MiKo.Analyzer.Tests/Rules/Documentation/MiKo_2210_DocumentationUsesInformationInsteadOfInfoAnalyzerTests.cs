@@ -13,43 +13,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2210_DocumentationUsesInformationInsteadOfInfoAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] XmlTags =
-                                                   [
-                                                       "example",
-                                                       "exception",
-                                                       "note",
-                                                       "overloads",
-                                                       "para",
-                                                       "param",
-                                                       "permission",
-                                                       "remarks",
-                                                       "returns",
-                                                       "summary",
-                                                       "typeparam",
-                                                       "value",
-                                                   ];
-
         private static readonly string[] WrongTerms =
                                                       [
-                                                          " info ",
-                                                          " info,",
-                                                          " info;",
-                                                          " info.",
-                                                          " info:",
-                                                          " Info ",
-                                                          " Info,",
-                                                          " Info;",
-                                                          " Info.",
-                                                          " Info:",
+                                                          " info ", " info,", " info;", " info.", " info:", " info)", " info]", " info}", " info>",
+                                                          " Info ", " Info,", " Info;", " Info.", " Info:", " Info)", " Info]", " Info}", " Info>",
+                                                          " INFO ", " INFO,", " INFO;", " INFO.", " INFO:", " INFO)", " INFO]", " INFO}", " INFO>",
                                                       ];
-
-        [Test, Combinatorial]
-        public void An_issue_is_reported_for_Info_in_Xml_tag_([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(WrongTerms))] string term) => An_issue_is_reported_for(@"
-/// <" + xmlTag + @">
-/// The " + term + @" something.
-/// </" + xmlTag + @">
-public sealed class TestMe { }
-");
 
         [Test]
         public void No_issue_is_reported_for_uncommented_class() => No_issue_is_reported_for(@"
@@ -64,8 +33,16 @@ public sealed class TestMe { }
 public sealed class TestMe { }
 ");
 
+        [Test, Combinatorial]
+        public void An_issue_is_reported_for_Info_in_Xml_tag_([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(WrongTerms))] string term) => An_issue_is_reported_for(@"
+/// <" + xmlTag + @">
+/// The " + term.Trim() + @" something.
+/// </" + xmlTag + @">
+public sealed class TestMe { }
+");
+
         [Test]
-        public void Code_gets_fixed_for_type_([ValueSource(nameof(WrongTerms))] string wrongText)
+        public void Code_gets_fixed_for_type_comment_with_([ValueSource(nameof(WrongTerms))] string wrongTerm)
         {
             const string Template = @"
 /// <summary>
@@ -74,6 +51,23 @@ public sealed class TestMe { }
 public sealed class TestMe { }
 ";
 
+            var wrongText = wrongTerm.Trim();
+            var correctText = wrongText.Replace("info", "information", StringComparison.OrdinalIgnoreCase);
+
+            VerifyCSharpFix(Template.Replace("###", wrongText), Template.Replace("###", correctText));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_type_comment_ending_with_([ValueSource(nameof(WrongTerms))] string wrongTerm)
+        {
+            const string Template = @"
+/// <summary>
+/// The ###
+/// </summary>
+public sealed class TestMe { }
+";
+
+            var wrongText = wrongTerm.Trim();
             var correctText = wrongText.Replace("info", "information", StringComparison.OrdinalIgnoreCase);
 
             VerifyCSharpFix(Template.Replace("###", wrongText), Template.Replace("###", correctText));

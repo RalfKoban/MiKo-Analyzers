@@ -11,8 +11,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2237_MultipleDocumentationAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] XmlTags = ["summary", "remarks"];
-
         [Test]
         public void No_issue_is_reported_for_undocumented_items() => No_issue_is_reported_for(@"
 using System;

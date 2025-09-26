@@ -14,13 +14,32 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly string[] RepresentsCandidates =
                                                                 {
-                                                                    "Repository ",
-                                                                    "Simple ",
-                                                                    "Complex ",
                                                                     "Additional ",
                                                                     "Addtional ", // typo
+                                                                    "Complex ",
                                                                     "Health ",
+                                                                    "Repository ",
+                                                                    "Simple ",
                                                                 };
+
+        private static readonly string[] RepresentsTheCandidates =
+                                                                   {
+                                                                       "Absolute ",
+                                                                       "High ",
+                                                                       "Highest ",
+                                                                       "Low ",
+                                                                       "Lowest ",
+                                                                       "Major ",
+                                                                       "Max ",
+                                                                       "Maximum ",
+                                                                       "Medium ",
+                                                                       "Middle ",
+                                                                       "Min ",
+                                                                       "Minimum ",
+                                                                       "Minor ",
+                                                                       "Optimal ",
+                                                                       "Optimum ",
+                                                                   };
 
         private static readonly string[] CurrentlyUnfixable =
                                                               {
@@ -60,6 +79,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         var article = ArticleProvider.GetArticleFor(firstWord, FirstWordAdjustment.StartLowerCase);
 
                         return CommentStartingWith(summary, "Represents " + article);
+                    }
+
+                    if (startText.StartsWithAny(RepresentsTheCandidates))
+                    {
+                        return CommentStartingWith(summary, "Represents the ");
                     }
 
                     var updatedSyntax = MiKo_2012_CodeFixProvider.GetUpdatedSyntax(summary);

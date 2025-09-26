@@ -12,7 +12,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
-    public sealed class MiKo_1514_FieldsWithStructuralDesignPatternSuffixAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_1510_FieldsWithStructuralDesignPatternSuffixAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] FieldPrefixes = Constants.Markers.FieldPrefixes;
 
@@ -61,11 +61,11 @@ namespace Bla
             VerifyCSharpFix(Template.Replace("###", data.Wrong), Template.Replace("###", data.Fixed));
         }
 
-        protected override string GetDiagnosticId() => MiKo_1514_FieldsWithStructuralDesignPatternSuffixAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_1510_FieldsWithStructuralDesignPatternSuffixAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1514_FieldsWithStructuralDesignPatternSuffixAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1510_FieldsWithStructuralDesignPatternSuffixAnalyzer();
 
-        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1514_CodeFixProvider();
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1510_CodeFixProvider();
 
         [ExcludeFromCodeCoverage]
         private static IEnumerable<TestCaseData> CreateCodeFixData()
