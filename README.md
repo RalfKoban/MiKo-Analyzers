@@ -496,6 +496,7 @@ The following tables lists all the 523 rules that are currently provided by the 
 |MiKo_5015|Do not intern string literals|&#x2713;|&#x2713;|
 |MiKo_5016|Use HashSet for lookups in 'List.RemoveAll'|&#x2713;|\-|
 |MiKo_5017|Make fields or variables assigned with string literals constant|&#x2713;|&#x2713;|
+|MiKo_5018|Perform value comparisons before reference comparisons|&#x2713;|&#x2713;|
 |MiKo_5019|Add [in] modifier to read-only struct parameters|&#x2713;|&#x2713;|
 
 ### Spacing
