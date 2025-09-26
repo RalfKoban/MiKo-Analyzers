@@ -34,6 +34,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                       "Get AND Set ",
                                                                   };
 
+        private static readonly string[] ContinuationPhrases = { "flag", "Flag", "field", "Field" };
+
         public MiKo_2079_PropertiesDocumentationShouldNotStateObviousAnalyzer() : base(Id)
         {
         }
@@ -74,14 +76,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static HashSet<string> GetObviousComments(string symbolName)
         {
+            var articles = new[] { string.Empty, "the " };
+
             var result = new HashSet<string>();
 
             foreach (var startingPhrase in ObviousStartingPhrases)
             {
-                var obviousPhrase = startingPhrase + symbolName;
+                foreach (var article in articles)
+                {
+                    var obviousPhrase = startingPhrase + article + symbolName;
 
-                result.Add(obviousPhrase);
-                result.Add(obviousPhrase + ".");
+                    result.Add(obviousPhrase);
+                    result.Add(obviousPhrase + ".");
+
+                    foreach (var continuation in ContinuationPhrases)
+                    {
+                        var phrase = obviousPhrase + " " + continuation;
+
+                        result.Add(phrase);
+                        result.Add(phrase + ".");
+                    }
+                }
             }
 
             return result;

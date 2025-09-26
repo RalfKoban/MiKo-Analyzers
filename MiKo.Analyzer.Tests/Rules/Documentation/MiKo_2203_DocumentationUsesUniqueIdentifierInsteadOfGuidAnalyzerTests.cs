@@ -13,48 +13,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2203_DocumentationUsesUniqueIdentifierInsteadOfGuidAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] XmlTags =
-                                                   [
-                                                       "example",
-                                                       "exception",
-                                                       "note",
-                                                       "overloads",
-                                                       "para",
-                                                       "param",
-                                                       "permission",
-                                                       "remarks",
-                                                       "returns",
-                                                       "summary",
-                                                       "typeparam",
-                                                       "value",
-                                                   ];
-
         private static readonly string[] WrongGuids =
                                                       [
-                                                          " guid ",
-                                                          " guid,",
-                                                          " guid;",
-                                                          " guid.",
-                                                          " guid:",
-                                                          " Guid ",
-                                                          " Guid,",
-                                                          " Guid;",
-                                                          " Guid.",
-                                                          " Guid:",
-                                                          " GUID ",
-                                                          " GUID,",
-                                                          " GUID;",
-                                                          " GUID.",
-                                                          " GUID:",
+                                                          " guid ", " guid,", " guid;", " guid.", " guid:", " guid)", " guid]", " guid}", " guid>",
+                                                          " Guid ", " Guid,", " Guid;", " Guid.", " Guid:", " Guid)", " Guid]", " Guid}", " Guid>",
+                                                          " GUID ", " GUID,", " GUID;", " GUID.", " GUID:", " GUID)", " GUID]", " GUID}", " GUID>",
                                                       ];
-
-        [Test, Combinatorial]
-        public void An_issue_is_reported_for_Guid_in_Xml_tag_([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(WrongGuids))] string wrongValue) => An_issue_is_reported_for(@"
-/// <" + xmlTag + @">
-/// The " + wrongValue.Trim() + @" something.
-/// </" + xmlTag + @">
-public sealed class TestMe { }
-");
 
         [Test]
         public void No_issue_is_reported_for_uncommented_class() => No_issue_is_reported_for(@"
@@ -79,12 +43,36 @@ public sealed class TestMe { }
 public sealed class TestMe { }
 ");
 
+        [Test, Combinatorial]
+        public void An_issue_is_reported_for_Guid_in_Xml_tag_([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(WrongGuids))] string wrongValue) => An_issue_is_reported_for(@"
+/// <" + xmlTag + @">
+/// The " + wrongValue.Trim() + @" something.
+/// </" + xmlTag + @">
+public sealed class TestMe { }
+");
+
         [Test]
-        public void Code_gets_fixed_for_type_([ValueSource(nameof(WrongGuids))] string wrongGuid)
+        public void Code_gets_fixed_for_type_comment_with_([ValueSource(nameof(WrongGuids))] string wrongGuid)
         {
             const string Template = @"
 /// <summary>
 /// The ### something.
+/// </summary>
+public sealed class TestMe { }
+";
+
+            var wrongText = wrongGuid.Trim();
+            var correctText = wrongText.Replace("guid", "unique identifier", StringComparison.OrdinalIgnoreCase);
+
+            VerifyCSharpFix(Template.Replace("###", wrongText), Template.Replace("###", correctText));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_type_comment_ending_with_([ValueSource(nameof(WrongGuids))] string wrongGuid)
+        {
+            const string Template = @"
+/// <summary>
+/// The ###
 /// </summary>
 public sealed class TestMe { }
 ";

@@ -12,7 +12,7 @@ using MiKoSolutions.Analyzers.Linguistics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2049_CodeFixProvider)), Shared]
-    public sealed class MiKo_2049_CodeFixProvider : OverallDocumentationCodeFixProvider
+    public sealed class MiKo_2049_CodeFixProvider : XmlTextDocumentationCodeFixProvider
     {
         private const string IsPhrase = "is";
         private const string ArePhrase = "are";
@@ -21,16 +21,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => "MiKo_2049";
 
-        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic issue)
+        protected override XmlTextSyntax GetUpdatedSyntax(Document document, XmlTextSyntax syntax, Diagnostic issue)
         {
-            var location = issue.Location;
             var properties = issue.Properties;
             var textToReplace = properties[Constants.AnalyzerCodeFixSharedData.TextKey];
             var textToReplaceWith = properties[Constants.AnalyzerCodeFixSharedData.TextReplacementKey];
 
-            var affectedNodes = syntax.DescendantNodes<XmlTextSyntax>(_ => _.GetLocation().Contains(location));
-
-            return syntax.ReplaceNodes(affectedNodes, (_, rewritten) => GetBetterText(rewritten, textToReplace, textToReplaceWith));
+            return GetBetterText(syntax, textToReplace, textToReplaceWith);
         }
 
         private static XmlTextSyntax GetBetterText(XmlTextSyntax node, string textToReplace, string textToReplaceWith)

@@ -13,7 +13,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/18917.svg)](https://scan.coverity.com/projects/ralfkoban-miko-analyzers)
 
 ## Available Rules
-The following tables lists all the 521 rules that are currently provided by the analyzer.
+The following tables lists all the 523 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -169,14 +169,16 @@ The following tables lists all the 521 rules that are currently provided by the 
 |MiKo_1507|Do not suffix parameters with 'Counter'|&#x2713;|&#x2713;|
 |MiKo_1508|Do not suffix local variables with pattern names|&#x2713;|&#x2713;|
 |MiKo_1509|Do not suffix parameters with pattern names|&#x2713;|&#x2713;|
-|MiKo_1510|Do not suffix types with 'Info'|&#x2713;|\-|
+|MiKo_1510|Do not suffix fields with pattern names|&#x2713;|&#x2713;|
 |MiKo_1511|Do not prefix or suffix local variables with 'proxy'|&#x2713;|&#x2713;|
 |MiKo_1512|Do not prefix or suffix parameters with 'proxy'|&#x2713;|&#x2713;|
 |MiKo_1513|Do not suffix types with 'Advanced', 'Complex', 'Enhanced', 'Extended', 'Simple' or 'Simplified'|&#x2713;|&#x2713;|
-|MiKo_1514|Do not suffix fields with pattern names|&#x2713;|&#x2713;|
+|MiKo_1514|Do not suffix types with 'Info'|&#x2713;|\-|
 |MiKo_1515|Express binary conditions clearly in boolean property names|&#x2713;|&#x2713;|
 |MiKo_1516|Express binary conditions clearly in boolean parameter names|&#x2713;|&#x2713;|
 |MiKo_1517|Express binary conditions clearly in boolean field names|&#x2713;|&#x2713;|
+|MiKo_1518|Do not prefix or suffix local variables with 'reference'|&#x2713;|&#x2713;|
+|MiKo_1519|Do not prefix or suffix parameters with 'reference'|&#x2713;|&#x2713;|
 
 ### Documentation
 |ID|Title|Enabled by default|CodeFix available|
@@ -278,7 +280,7 @@ The following tables lists all the 521 rules that are currently provided by the 
 |MiKo_2220|Use 'to seek' instead of 'to look for', 'to inspect for' or 'to test for' in documentation|&#x2713;|&#x2713;|
 |MiKo_2221|Do not use empty XML tags in documentation|&#x2713;|\-|
 |MiKo_2222|Use term 'identification' instead of 'ident' in documentation|&#x2713;|&#x2713;|
-|MiKo_2223|Link references via &lt;see cref="..."/&gt; in documentation|&#x2713;|\-|
+|MiKo_2223|Link references via &lt;see cref="..."/&gt; in documentation|&#x2713;|&#x2713;|
 |MiKo_2224|Place XML tags and texts on separate lines in documentation|&#x2713;|&#x2713;|
 |MiKo_2225|Place code marked with &lt;c&gt; tags on single line|&#x2713;|&#x2713;|
 |MiKo_2226|Explain the 'Why' instead of the 'That' in documentation|&#x2713;|\-|

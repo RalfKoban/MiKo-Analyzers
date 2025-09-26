@@ -10,22 +10,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2205_DocumentationShallUseNoteAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] XmlTags =
-                                                   [
-                                                       "example",
-                                                       "exception",
-                                                       "note",
-                                                       "overloads",
-                                                       "para",
-                                                       "param",
-                                                       "permission",
-                                                       "remarks",
-                                                       "returns",
-                                                       "summary",
-                                                       "typeparam",
-                                                       "value",
-                                                   ];
-
         private static readonly string[] Markers =
                                                    [
                                                        "Attention:",

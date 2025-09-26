@@ -13,8 +13,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2049_WillBePhraseAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] XmlTags = ["summary", "remarks", "returns", "example", "value", "exception"];
-
         private static readonly string[] Phrases =
                                                    [
                                                        "It will be.",

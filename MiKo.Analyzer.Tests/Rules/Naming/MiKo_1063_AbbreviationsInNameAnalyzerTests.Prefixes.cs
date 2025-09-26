@@ -173,6 +173,21 @@ namespace Bla
 }");
 
         [Test]
+        public void An_issue_is_reported_for_local_out_variable_in_try_parse_with_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int DoSomething()
+        {
+            return int.TryParse(""42"", out var " + prefix + @"Variable) ? " + prefix + @"Variable : 0;
+        }
+    }
+}");
+
+        [Test]
         public void An_issue_is_reported_for_method_with_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
 using System;
 
