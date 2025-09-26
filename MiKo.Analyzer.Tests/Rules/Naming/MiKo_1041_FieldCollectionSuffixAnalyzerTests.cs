@@ -19,6 +19,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static readonly TestCaseData[] CodeFixData = [.. CreateCodeFixData()];
 
         [Test]
+        public void No_issue_is_reported_for_correctly_named_field() => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    private object _item;
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_correctly_named_field_([ValueSource(nameof(FieldPrefixes))] string prefix, [Values("dictionary", "map", "array", "value", "myValue")] string field)
             => No_issue_is_reported_for(@"
 

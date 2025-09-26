@@ -24,17 +24,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var type = symbol.Type;
 
-            if (type.IsXmlNode())
-            {
-                return false;
-            }
-
             if (type.IsString())
             {
                 return symbol.Name.EndsWithAny(Constants.Markers.Collections);
             }
 
-            return true;
+            if (type.IsXmlNode())
+            {
+                return false;
+            }
+
+            return type.IsEnumerable();
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation)

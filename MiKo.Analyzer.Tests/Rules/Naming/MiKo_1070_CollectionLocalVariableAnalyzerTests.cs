@@ -82,6 +82,7 @@ public class TestMe
 }
 ");
 
+        [TestCase("object item")]
         [TestCase("string value")]
         [TestCase("string myValue")]
         [TestCase("XAttribute attribute")]
