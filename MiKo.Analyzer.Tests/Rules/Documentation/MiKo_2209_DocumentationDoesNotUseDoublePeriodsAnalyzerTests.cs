@@ -11,8 +11,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2209_DocumentationDoesNotUseDoublePeriodsAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] XmlTags = ["summary", "remarks", "returns", "example", "value", "exception"];
-
         [Test]
         public void No_issue_is_reported_for_uncommented_method() => No_issue_is_reported_for(@"
 using System;

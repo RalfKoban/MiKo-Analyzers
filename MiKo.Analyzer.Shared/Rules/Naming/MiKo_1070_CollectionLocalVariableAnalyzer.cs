@@ -22,28 +22,28 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var symbolName = symbol.Name;
 
+            if (symbol.IsString())
+            {
+                return symbolName.EndsWithAny(Constants.Markers.Collections);
+            }
+
             if (IsCatalog(symbolName))
             {
                 // ignore stuff like the MEF aggregate catalog
                 return false;
             }
 
-            if (symbol.IsEnumerable())
+            if (IsDocument(symbolName))
             {
-                if (IsDocument(symbolName))
-                {
-                    return false;
-                }
-
-                if (symbol.IsXmlNode())
-                {
-                    return false;
-                }
-
-                return true;
+                return false;
             }
 
-            return false;
+            if (symbol.IsXmlNode())
+            {
+                return false;
+            }
+
+            return symbol.IsEnumerable();
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers)

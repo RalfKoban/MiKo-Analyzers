@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -351,14 +352,30 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return;
             }
 
-            if (ShallAnalyze(type) is false)
+            if (ShallAnalyze(type))
             {
-                return;
+                var issues = AnalyzeIdentifiers(semanticModel, type, node.Declaration.Variables.ToArray(_ => _.Identifier));
+
+                ReportDiagnostics(context, issues);
             }
+        }
 
-            var issues = AnalyzeIdentifiers(semanticModel, type, node.Declaration.Variables.ToArray(_ => _.Identifier));
+        protected void AnalyzeDeclarationExpression(SyntaxNodeAnalysisContext context)
+        {
+            var declaration = (DeclarationExpressionSyntax)context.Node;
 
-            ReportDiagnostics(context, issues);
+            if (declaration.Parent is ArgumentSyntax argument && argument.RefKindKeyword.IsKind(SyntaxKind.OutKeyword))
+            {
+                var semanticModel = context.SemanticModel;
+                var type = declaration.GetTypeSymbol(semanticModel);
+
+                if (ShallAnalyze(type))
+                {
+                    var issues = Analyze(semanticModel, type, declaration.Designation);
+
+                    ReportDiagnostics(context, issues);
+                }
+            }
         }
 
         protected virtual void AnalyzeDeclarationPattern(SyntaxNodeAnalysisContext context)
@@ -368,14 +385,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var semanticModel = context.SemanticModel;
             var type = node.Type.GetTypeSymbol(semanticModel);
 
-            if (ShallAnalyze(type) is false)
+            if (ShallAnalyze(type))
             {
-                return;
+                var issues = Analyze(semanticModel, type, node.Designation);
+
+                ReportDiagnostics(context, issues);
             }
-
-            var issues = Analyze(semanticModel, type, node.Designation);
-
-            ReportDiagnostics(context, issues);
         }
 
         protected virtual void AnalyzeForEachStatement(SyntaxNodeAnalysisContext context)
@@ -385,14 +400,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var semanticModel = context.SemanticModel;
             var type = node.Type.GetTypeSymbol(semanticModel);
 
-            if (ShallAnalyze(type) is false)
+            if (ShallAnalyze(type))
             {
-                return;
+                var issues = AnalyzeIdentifiers(semanticModel, type, node.Identifier);
+
+                ReportDiagnostics(context, issues);
             }
-
-            var issues = AnalyzeIdentifiers(semanticModel, type, node.Identifier);
-
-            ReportDiagnostics(context, issues);
         }
 
         protected virtual void AnalyzeForStatement(SyntaxNodeAnalysisContext context)
@@ -409,14 +422,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var semanticModel = context.SemanticModel;
             var type = variableDeclaration.GetTypeSymbol(semanticModel);
 
-            if (ShallAnalyze(type) is false)
+            if (ShallAnalyze(type))
             {
-                return;
+                var issues = AnalyzeIdentifiers(semanticModel, type, variableDeclaration.Variables.ToArray(_ => _.Identifier));
+
+                ReportDiagnostics(context, issues);
             }
-
-            var issues = AnalyzeIdentifiers(semanticModel, type, variableDeclaration.Variables.ToArray(_ => _.Identifier));
-
-            ReportDiagnostics(context, issues);
         }
 
         protected virtual IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers) => Array.Empty<Diagnostic>();

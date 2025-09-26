@@ -62,13 +62,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 replacement = replacement.ToUpperCaseAt(0);
             }
 
-            var properties = new[]
-                                 {
-                                     new Pair(Constants.AnalyzerCodeFixSharedData.TextKey, text),
-                                     new Pair(Constants.AnalyzerCodeFixSharedData.TextReplacementKey, replacement),
-                                 };
-
-            return Issue(location, replacement, properties);
+            return Issue(location, replacement, CreateReplacementProposal(text, replacement));
         }
 
         protected override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)

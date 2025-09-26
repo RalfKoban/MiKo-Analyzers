@@ -8,7 +8,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
-    public sealed class MiKo_1510_TypesWithInfoSuffixAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_1514_TypesWithInfoSuffixAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] TypeKinds = ["interface", "class", "struct", "record", "enum"];
 
@@ -32,8 +32,8 @@ namespace Bla
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_1510_TypesWithInfoSuffixAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_1514_TypesWithInfoSuffixAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1510_TypesWithInfoSuffixAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1514_TypesWithInfoSuffixAnalyzer();
     }
 }

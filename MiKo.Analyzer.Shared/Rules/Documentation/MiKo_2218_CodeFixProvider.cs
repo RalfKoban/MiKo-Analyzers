@@ -9,20 +9,17 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2218_CodeFixProvider)), Shared]
-    public sealed class MiKo_2218_CodeFixProvider : OverallDocumentationCodeFixProvider
+    public sealed class MiKo_2218_CodeFixProvider : XmlTextDocumentationCodeFixProvider
     {
         public override string FixableDiagnosticId => "MiKo_2218";
 
-        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic issue)
+        protected override XmlTextSyntax GetUpdatedSyntax(Document document, XmlTextSyntax syntax, Diagnostic issue)
         {
-            var location = issue.Location;
             var properties = issue.Properties;
             var textToReplace = properties[Constants.AnalyzerCodeFixSharedData.TextKey];
             var textToReplaceWith = properties[Constants.AnalyzerCodeFixSharedData.TextReplacementKey];
 
-            var affectedNodes = syntax.DescendantNodes<XmlTextSyntax>(_ => _.GetLocation().Contains(location));
-
-            return syntax.ReplaceNodes(affectedNodes, (_, rewritten) => GetBetterText(rewritten, textToReplace, textToReplaceWith));
+            return GetBetterText(syntax, textToReplace, textToReplaceWith);
         }
 
         private static XmlTextSyntax GetBetterText(XmlTextSyntax node, string textToReplace, string textToReplaceWith)

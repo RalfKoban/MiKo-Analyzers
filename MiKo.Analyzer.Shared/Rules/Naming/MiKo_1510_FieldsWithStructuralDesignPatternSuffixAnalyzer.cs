@@ -6,11 +6,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_1514_FieldsWithStructuralDesignPatternSuffixAnalyzer : NamingAnalyzer
+    public sealed class MiKo_1510_FieldsWithStructuralDesignPatternSuffixAnalyzer : NamingAnalyzer
     {
-        public const string Id = "MiKo_1514";
+        public const string Id = "MiKo_1510";
 
-        public MiKo_1514_FieldsWithStructuralDesignPatternSuffixAnalyzer() : base(Id, SymbolKind.Field)
+        public MiKo_1510_FieldsWithStructuralDesignPatternSuffixAnalyzer() : base(Id, SymbolKind.Field)
         {
         }
 

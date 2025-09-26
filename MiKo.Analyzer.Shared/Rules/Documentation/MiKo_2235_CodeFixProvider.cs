@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2235_CodeFixProvider)), Shared]
-    public sealed class MiKo_2235_CodeFixProvider : OverallDocumentationCodeFixProvider
+    public sealed class MiKo_2235_CodeFixProvider : XmlTextDocumentationCodeFixProvider
     {
         private static readonly Pair[] ReplacementMap =
                                                         {
@@ -23,10 +23,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                             new Pair("Going to", "Will"),
                                                         };
 
-        private static readonly string[] ReplacementMapKeys = ReplacementMap.ToArray(_ => _.Key);
-
         public override string FixableDiagnosticId => "MiKo_2235";
 
-        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic issue) => Comment(syntax, ReplacementMapKeys, ReplacementMap);
+        protected override XmlTextSyntax GetUpdatedSyntax(Document document, XmlTextSyntax syntax, Diagnostic issue) => GetUpdatedSyntax(syntax, issue, ReplacementMap);
     }
 }

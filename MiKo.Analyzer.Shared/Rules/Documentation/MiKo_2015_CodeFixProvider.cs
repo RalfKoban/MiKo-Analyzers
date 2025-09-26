@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2015_CodeFixProvider)), Shared]
-    public sealed class MiKo_2015_CodeFixProvider : OverallDocumentationCodeFixProvider
+    public sealed class MiKo_2015_CodeFixProvider : XmlTextDocumentationCodeFixProvider
     {
         private static readonly Pair[] EventReplacementMap =
                                                              {
@@ -21,8 +21,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                  new Pair("Fire", "Raise"),
                                                              };
 
-        private static readonly string[] EventReplacementMapKeys = EventReplacementMap.ToArray(_ => _.Key);
-
         private static readonly Pair[] ExceptionReplacementMap =
                                                                  {
                                                                      new Pair("fired", "thrown"),
@@ -35,18 +33,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                      new Pair("Fire", "Throw"),
                                                                  };
 
-        private static readonly string[] ExceptionReplacementMapKeys = ExceptionReplacementMap.ToArray(_ => _.Key);
-
         public override string FixableDiagnosticId => "MiKo_2015";
 
-        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic issue)
+        protected override XmlTextSyntax GetUpdatedSyntax(Document document, XmlTextSyntax syntax, Diagnostic issue)
         {
-            var text = syntax.ToString();
+            var text = syntax.GetTextTrimmed();
 
             // inspect comment for 'event' or exception
-            return text.Contains("xception")
-                   ? Comment(syntax, ExceptionReplacementMapKeys, ExceptionReplacementMap)
-                   : Comment(syntax, EventReplacementMapKeys, EventReplacementMap);
+            var map = text.Contains("xception") ? ExceptionReplacementMap : EventReplacementMap;
+
+            return GetUpdatedSyntax(syntax, issue, map);
         }
     }
 }
