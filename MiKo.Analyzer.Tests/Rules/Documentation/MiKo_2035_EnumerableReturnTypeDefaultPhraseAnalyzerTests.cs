@@ -936,7 +936,11 @@ public class TestMe
         {
             string[] startingWords = ["a", "an", "the"];
             string[] modifications = ["readonly", "read-only", "read only"];
-            string[] collections = ["array", "list", "dictionary", "enumerable", "queue", "stack", "map", "hashset", "hashSet", "hashtable", "hashTable", "hash set", "hashed set", "hash table", "hashed table", "hashing set", "hashing table"];
+            string[] collections = [
+                                       "array", "list", "dictionary", "enumerable", "queue", "stack", "map",
+                                       "hashset", "hashSet", "hashtable", "hashTable", "hash set", "hashed set", "hash table", "hashed table", "hashing set", "hashing table",
+                                       "syntax list", "enumerable collection", "separated syntax list", "immutable array",
+                                   ];
             string[] prepositions = ["of", "with", "that contains", "which contains", "that holds", "which holds", "containing", "holding"];
 
             foreach (var collection in collections)

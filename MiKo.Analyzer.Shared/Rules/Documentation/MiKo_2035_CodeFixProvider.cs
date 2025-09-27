@@ -257,7 +257,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var startingWords = new[] { "a", "an", "the" };
                 var modifications = new[] { "readonly", "read-only", "read only" };
-                var collections = new[] { "array", "list", "dictionary", "enumerable", "hash set", "hash table", "hashed set", "hashed table", "hashing set", "hashing table", "hashset", "hashSet", "hashtable", "hashTable", "map", "queue", "stack" };
+                var collections = new[]
+                                      {
+                                          "array", "list", "dictionary", "enumerable", "enumerable collection", "syntax list", "separated syntax list", "immutable array",
+                                          "hash set", "hash table", "hashed set", "hashed table", "hashing set", "hashing table", "hashset", "hashSet", "hashtable", "hashTable",
+                                          "map", "queue", "stack",
+                                      };
                 var prepositions = new[] { "of", "with", "that contains", "which contains", "that holds", "which holds", "containing", "holding" };
 
                 foreach (var collection in collections)
