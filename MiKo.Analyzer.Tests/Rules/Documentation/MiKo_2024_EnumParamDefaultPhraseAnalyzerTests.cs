@@ -388,6 +388,37 @@ public class TestMe
             VerifyCSharpFix(originalCode, FixedCode);
         }
 
+        [TestCase("The minimum expected C# language version.", "the minimum expected C# language version.")]
+        public void Code_gets_fixed_for_phrase_(string originalPhrase, string fixedPhrase)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'>
+    /// " + originalPhrase + @"
+    /// </param>
+    public void DoSomething(StringComparison o) { }
+}
+";
+
+            var fixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'>
+    /// One of the enumeration members that specifies " + fixedPhrase + @"
+    /// </param>
+    public void DoSomething(StringComparison o) { }
+}
+";
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
         [TestCase("Specifies", "specifies")]
         [TestCase("A value specifying", "specifies")]
         [TestCase("A value that specifies", "specifies")]
@@ -434,6 +465,9 @@ public class TestMe
         [TestCase("Bitwise combination of values that specifies", "specifies")]
         [TestCase("Bitwise combination of the values that specify", "specifies")]
         [TestCase("Bitwise combination of the values that specifies", "specifies")]
+        [TestCase("A", "specifies a")]
+        [TestCase("An", "specifies an")]
+        [TestCase("The", "specifies the")]
         public void Code_gets_fixed_for_flags_phrase_(string originalPhrase, string fixedContinuation)
         {
             var originalCode = @"
