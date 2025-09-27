@@ -27,6 +27,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] FlagsReplacementMapKeys = FlagsReplacementMap.ToArray(_ => _.Key);
 
+        private static readonly Pair[] FlagsCleanupMap =
+                                                         {
+                                                             new Pair("umeration values that a ", "umeration values that specifies a "),
+                                                             new Pair("umeration values that an ", "umeration values that specifies an "),
+                                                             new Pair("umeration values that the ", "umeration values that specifies the "),
+                                                         };
+
+        private static readonly string[] FlagsCleanupMapKeys = FlagsCleanupMap.ToArray(_ => _.Key);
+
         private static readonly string[] ReplacementMapKeys = CreateReplacementMapKeys().ConcatenatedWith("Specifies", "Determines").ToArray();
         private static readonly Pair[] ReplacementMap = ReplacementMapKeys.ToArray(_ => new Pair(_));
 
@@ -38,11 +47,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var isFlagged = bool.Parse(issue.Properties[Constants.AnalyzerCodeFixSharedData.IsFlagged]);
 
             // TODO RKN: Update comment base on whether we have a Flags enum or not (defined as part of the properties of the reported issue)
-            var updatedComment = isFlagged
+            var preparedComment = isFlagged
                                  ? Comment(comment, FlagsReplacementMapKeys, FlagsReplacementMap, FirstWordAdjustment.StartLowerCase | FirstWordAdjustment.MakeThirdPersonSingular)
                                  : Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordAdjustment.StartLowerCase);
 
-            return CommentStartingWith(updatedComment, phrase);
+            var updatedComment = CommentStartingWith(preparedComment, phrase);
+
+            return Comment(updatedComment, FlagsCleanupMapKeys, FlagsCleanupMap);
         }
 
         private static string[] CreateReplacementMapKeys() => new[]
