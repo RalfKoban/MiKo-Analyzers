@@ -31,8 +31,13 @@ namespace MiKoSolutions.Analyzers
 
         internal static T GetEnclosing<T>(this in SyntaxToken value) where T : SyntaxNode => value.Parent.GetEnclosing<T>();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static FileLinePositionSpan GetLineSpan(this in SyntaxToken value) => value.GetLocation().GetLineSpan();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static int GetPositionWithinStartLine(this in SyntaxToken value) => value.GetLocation().GetPositionWithinStartLine();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static int GetPositionWithinEndLine(this in SyntaxToken value) => value.GetLocation().GetPositionWithinEndLine();
 
         internal static LinePosition GetPositionAfterEnd(this in SyntaxToken value)
@@ -42,12 +47,16 @@ namespace MiKoSolutions.Analyzers
             return new LinePosition(position.Line, position.Character + 1);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static LinePosition GetStartPosition(this in SyntaxToken value) => value.GetLocation().GetStartPosition();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static LinePosition GetEndPosition(this in SyntaxToken value) => value.GetLocation().GetEndPosition();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static int GetStartingLine(this in SyntaxToken value) => value.GetLocation().GetStartingLine();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static int GetEndingLine(this in SyntaxToken value) => value.GetLocation().GetEndingLine();
 
         internal static ISymbol GetSymbol(this in SyntaxToken value, Compilation compilation)
@@ -158,14 +167,19 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool HasComment(this in SyntaxToken value) => value.HasLeadingComment() || value.HasTrailingComment();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool HasLeadingComment(this in SyntaxToken value) => value.LeadingTrivia.HasComment();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool HasTrailingComment(this in SyntaxToken value) => value.TrailingTrivia.HasComment();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool HasTrailingEndOfLine(this in SyntaxToken value) => value.TrailingTrivia.HasEndOfLine();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsDefaultValue(this in SyntaxToken value) => value.IsKind(SyntaxKind.None);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsAnyKind(this in SyntaxToken value, ISet<SyntaxKind> kinds) => kinds.Contains(value.Kind());
 
         internal static bool IsAnyKind(this in SyntaxToken value, in ReadOnlySpan<SyntaxKind> kinds)
@@ -183,6 +197,7 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsLocatedAt(this in SyntaxToken value, Location location) => value.GetLocation().Equals(location);
 
         internal static bool IsOnSameLineAs(this in SyntaxToken value, SyntaxNode other) => value.GetStartingLine() == other?.GetStartingLine();
@@ -269,8 +284,10 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxTokenList ToTokenList(this IEnumerable<SyntaxKind> source) => source.Select(_ => _.AsToken()).ToTokenList();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken WithEndOfLine(this in SyntaxToken value) => value.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken WithLeadingEmptyLine(this in SyntaxToken value) => value.WithLeadingEmptyLines(1);
 
         internal static SyntaxToken WithLeadingEmptyLines(this in SyntaxToken value, in int lines)
@@ -302,12 +319,16 @@ namespace MiKoSolutions.Analyzers
             return value.WithLeadingTrivia(trivia);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken WithLeadingEndOfLine(this in SyntaxToken value) => value.WithLeadingTrivia(SyntaxFactory.CarriageReturnLineFeed); // do not use elastic one to prevent formatting it away again
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken WithAdditionalLeadingTrivia(this in SyntaxToken value, in SyntaxTrivia trivia) => value.WithLeadingTrivia(value.LeadingTrivia.Add(trivia));
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken WithAdditionalLeadingTrivia(this in SyntaxToken value, in SyntaxTriviaList trivia) => value.WithLeadingTrivia(value.LeadingTrivia.AddRange(trivia));
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken WithAdditionalLeadingTrivia(this in SyntaxToken value, IEnumerable<SyntaxTrivia> trivia) => value.WithLeadingTrivia(value.LeadingTrivia.AddRange(trivia));
 
         internal static SyntaxToken WithAdditionalLeadingTriviaFrom(this in SyntaxToken value, SyntaxNode node)
@@ -328,6 +349,7 @@ namespace MiKoSolutions.Analyzers
                    : value;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken WithLeadingSpace(this in SyntaxToken value) => value.WithLeadingTrivia(SyntaxFactory.ElasticSpace); // use elastic one to allow formatting to be done automatically
 
         internal static SyntaxToken WithLeadingSpaces(this in SyntaxToken value, in int count)
@@ -389,8 +411,10 @@ namespace MiKoSolutions.Analyzers
             return value.WithAdditionalLeadingTrivia(WhiteSpaces(additionalSpaces));
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken WithLeadingXmlComment(this in SyntaxToken value) => value.WithLeadingTrivia(SyntaxNodeExtensions.XmlCommentStart);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken WithLeadingXmlCommentExterior(this in SyntaxToken value) => value.WithLeadingTrivia(SyntaxNodeExtensions.XmlCommentExterior);
 
         internal static SyntaxToken WithTriviaFrom(this in SyntaxToken value, SyntaxNode node) => value.WithLeadingTriviaFrom(node)
@@ -504,20 +528,27 @@ namespace MiKoSolutions.Analyzers
             return values;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken WithSurroundingSpace(this in SyntaxToken value) => value.WithLeadingSpace().WithTrailingSpace();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken WithText(this in SyntaxToken value, string text) => SyntaxFactory.Token(value.LeadingTrivia, value.Kind(), text, text, value.TrailingTrivia);
 
         internal static SyntaxToken WithText(this in SyntaxToken value, in ReadOnlySpan<char> text) => value.WithText(text.ToString());
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken WithTrailingEmptyLine(this in SyntaxToken value) => value.WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed, SyntaxFactory.CarriageReturnLineFeed);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken WithTrailingNewLine(this in SyntaxToken value) => value.WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken WithTrailingSpace(this in SyntaxToken value) => value.WithTrailingTrivia(SyntaxFactory.Space); // use non-elastic one to prevent formatting to be done automatically
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken WithTrailingXmlComment(this in SyntaxToken value) => value.WithTrailingTrivia(SyntaxNodeExtensions.XmlCommentStart);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static SyntaxTrivia WhiteSpaces(in int count) => SyntaxFactory.Whitespace(new string(' ', count));
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -18,18 +19,25 @@ namespace MiKoSolutions.Analyzers
     /// </summary>
     internal static partial class SyntaxNodeExtensions
     {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static int GetPositionWithinStartLine(this SyntaxNode value) => value.GetLocation().GetPositionWithinStartLine();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static int GetPositionWithinEndLine(this SyntaxNode value) => value.GetLocation().GetPositionWithinEndLine();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static int GetStartingLine(this SyntaxNode value) => value.GetLocation().GetStartingLine();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static int GetEndingLine(this SyntaxNode value) => value.GetLocation().GetEndingLine();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static LinePosition GetStartPosition(this SyntaxNode value) => value.GetLocation().GetStartPosition();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static LinePosition GetEndPosition(this SyntaxNode value) => value.GetLocation().GetEndPosition();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool HasTrailingEndOfLine(this SyntaxNode value) => value != null && value.GetTrailingTrivia().HasEndOfLine();
 
         internal static bool IsOnSameLineAs(this SyntaxNode value, SyntaxNode other) => value?.GetStartingLine() == other?.GetStartingLine();
@@ -90,8 +98,10 @@ namespace MiKoSolutions.Analyzers
             return value.WithLeadingTrivia(trivia);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T WithIndentation<T>(this T value) where T : SyntaxNode => value.WithFirstLeadingTrivia(SyntaxFactory.ElasticMarker); // use elastic one to allow formatting to be done automatically
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T WithAdditionalLeadingEmptyLine<T>(this T value) where T : SyntaxNode => value.WithAdditionalLeadingTrivia(SyntaxFactory.CarriageReturnLineFeed);
 
         internal static bool HasLeadingEmptyLine(this SyntaxNode value)
@@ -114,14 +124,19 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T WithLeadingEmptyLine<T>(this T value) where T : SyntaxNode => value.WithFirstLeadingTrivia(SyntaxFactory.CarriageReturnLineFeed); // do not use elastic one to prevent formatting it away again
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T WithLeadingEndOfLine<T>(this T value) where T : SyntaxNode => value.WithFirstLeadingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T WithLeadingSpace<T>(this T value) where T : SyntaxNode => value.WithLeadingTrivia(SyntaxFactory.ElasticSpace); // use elastic one to allow formatting to be done automatically
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T WithTrailingSpace<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(SyntaxFactory.ElasticSpace); // use elastic one to allow formatting to be done automatically
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T WithTrailingSpaces<T>(this T value, in int spaces) where T : SyntaxNode => value.WithTrailingTrivia(Enumerable.Repeat(SyntaxFactory.ElasticSpace, spaces)); // use elastic one to allow formatting to be done automatically
 
         internal static T WithAdditionalLeadingSpaces<T>(this T value, in int additionalSpaces) where T : SyntaxNode
@@ -354,10 +369,13 @@ namespace MiKoSolutions.Analyzers
             return value;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T WithAdditionalTrailingEmptyLine<T>(this T value) where T : SyntaxNode => value.WithAdditionalTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T WithTrailingEmptyLine<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed, SyntaxFactory.CarriageReturnLineFeed);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T WithTrailingNewLine<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed); // do not use an elastic one to enforce the line break
 
         internal static T WithoutTrailingSpaces<T>(this T value) where T : SyntaxNode
@@ -422,6 +440,7 @@ namespace MiKoSolutions.Analyzers
             return finalTrivia;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static SyntaxTrivia WhiteSpaces(in int count) => SyntaxFactory.Whitespace(new string(' ', count));
     }
 }

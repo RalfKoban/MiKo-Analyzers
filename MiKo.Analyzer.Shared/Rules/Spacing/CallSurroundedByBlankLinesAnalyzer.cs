@@ -111,7 +111,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private Diagnostic AnalyzeSimpleMemberAccessExpression(in SyntaxList<StatementSyntax> statements, MemberAccessExpressionSyntax call, SemanticModel semanticModel)
         {
-            var callLineSpan = call.GetLocation().GetLineSpan();
+            var callLineSpan = call.GetLineSpan();
 
             var noBlankLinesBefore = statements.Where(_ => HasNoBlankLinesBefore(callLineSpan, _))
                                                .Any(_ => IsAlsoCall(_, semanticModel) is false);

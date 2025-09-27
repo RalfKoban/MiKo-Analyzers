@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Runtime.CompilerServices;
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 
 // ncrunch: rdi off
@@ -15,16 +17,22 @@ namespace MiKoSolutions.Analyzers
             return node.GetEnclosingSymbol(semanticModel) as T;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static LinePosition GetStartPosition(this Location value) => value.GetLineSpan().StartLinePosition;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static LinePosition GetEndPosition(this Location value) => value.GetLineSpan().EndLinePosition;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static int GetPositionWithinStartLine(this Location value) => value.GetStartPosition().Character;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static int GetPositionWithinEndLine(this Location value) => value.GetEndPosition().Character;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static int GetStartingLine(this Location value) => value.GetStartPosition().Line;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static int GetEndingLine(this Location value) => value.GetEndPosition().Line;
 
         internal static string GetText(this Location value) => value.SourceTree?.GetText().ToString(value.SourceSpan);

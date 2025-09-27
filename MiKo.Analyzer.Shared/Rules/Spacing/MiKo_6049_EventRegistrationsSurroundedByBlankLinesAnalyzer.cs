@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 if (assignment.Parent?.Parent is BlockSyntax block)
                 {
                     // we found an event
-                    var callLineSpan = assignment.GetLocation().GetLineSpan();
+                    var callLineSpan = assignment.GetLineSpan();
 
                     var noBlankLinesBefore = block.Statements
                                                   .Where(_ => HasNoBlankLinesBefore(callLineSpan, _))

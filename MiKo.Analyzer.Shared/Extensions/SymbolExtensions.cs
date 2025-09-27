@@ -319,6 +319,8 @@ namespace MiKoSolutions.Analyzers
                                                                                                                                            .Select(_ => _.ArgumentList.Arguments)
                                                                                                                                            .FirstOrDefault(_ => _.Count > 0);
 
+        internal static FileLinePositionSpan GetLineSpan(this ISymbol value) => value.Locations.First(_ => _.IsInSource).GetLineSpan();
+
         internal static IReadOnlyList<TSymbol> GetMembers<TSymbol>(this ITypeSymbol value) where TSymbol : ISymbol
         {
             var members = value.GetMembers();

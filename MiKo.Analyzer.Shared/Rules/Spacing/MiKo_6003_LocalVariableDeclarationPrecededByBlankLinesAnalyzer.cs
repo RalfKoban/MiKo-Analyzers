@@ -72,7 +72,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private Diagnostic AnalyzeLocalDeclarationStatement(in SyntaxList<StatementSyntax> statements, LocalDeclarationStatementSyntax declaration)
         {
-            var callLineSpan = declaration.GetLocation().GetLineSpan();
+            var callLineSpan = declaration.GetLineSpan();
 
             var noBlankLinesBefore = statements.Where(_ => HasNoBlankLinesBefore(callLineSpan, _))
                                                .Any(_ => IsDeclaration(_) is false);
