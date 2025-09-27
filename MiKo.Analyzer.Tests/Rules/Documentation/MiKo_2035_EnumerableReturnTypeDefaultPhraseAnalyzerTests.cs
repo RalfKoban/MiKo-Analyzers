@@ -608,6 +608,10 @@ public class TestMe
 
         [TestCase("Some integers.", "A sequence that contains some integers.")]
         [TestCase("The mapping information.", "A sequence that contains the mapping information.")]
+        [TestCase("An enumerable collection of invocation expressions that represent LINQ extension methods.", "A sequence that contains invocation expressions that represent LINQ extension methods.")]
+        [TestCase("The syntax list of type parameter constraint clauses.", "A sequence that contains type parameter constraint clauses.")]
+        [TestCase("A read-only list of attributes of the specified type.", "A sequence that contains attributes of the specified type.")]
+        [TestCase("A separated syntax list of parameters accessible from the given context.", "A sequence that contains parameters accessible from the given context.")]
         public void Code_gets_fixed_for_non_generic_enumerable_(string originalPhrase, string fixedPhrase)
         {
             const string Template = @"
