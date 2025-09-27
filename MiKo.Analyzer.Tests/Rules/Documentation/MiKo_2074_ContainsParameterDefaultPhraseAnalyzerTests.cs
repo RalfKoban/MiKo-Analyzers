@@ -183,6 +183,8 @@ public class TestMe
         [TestCase("The item", "The item")]
         [TestCase("The value to search", "The value")]
         [TestCase("The value to search for", "The value")]
+        [TestCase("The value to look up", "The value")]
+        [TestCase("The value to look-up", "The value")]
         public void Code_gets_fixed_for_simple_text(string originalStartingPhrase, string fixedStartingPhrase)
         {
             var originalCode = @"

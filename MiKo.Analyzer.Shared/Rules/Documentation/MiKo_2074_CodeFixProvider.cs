@@ -13,6 +13,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                         {
                                                             new Pair("to search to seek", "to seek"),
                                                             new Pair("to search for to seek", "to seek"),
+                                                            new Pair("to look up to seek", "to seek"),
+                                                            new Pair("to look-up to seek", "to seek"),
                                                         };
 
         private static readonly string[] ReplacementMapKeys = ReplacementMap.ToArray(_ => _.Key);
