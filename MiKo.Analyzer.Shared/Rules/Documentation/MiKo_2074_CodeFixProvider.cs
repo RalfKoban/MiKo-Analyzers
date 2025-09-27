@@ -9,6 +9,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2074_CodeFixProvider)), Shared]
     public sealed class MiKo_2074_CodeFixProvider : ParameterDocumentationCodeFixProvider
     {
+        private static readonly Pair[] ReplacementMap =
+                                                        {
+                                                            new Pair("to search to seek", "to seek"),
+                                                            new Pair("to search for to seek", "to seek"),
+                                                        };
+
+        private static readonly string[] ReplacementMapKeys = ReplacementMap.ToArray(_ => _.Key);
+
         public override string FixableDiagnosticId => "MiKo_2074";
 
         protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, in int index, Diagnostic issue)
@@ -21,7 +29,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return comment.WithContent(XmlText("The item" + phrase));
             }
 
-            return CommentEndingWith(comment, phrase);
+            var updatedComment = CommentEndingWith(comment, phrase);
+
+            return Comment(updatedComment, ReplacementMapKeys, ReplacementMap);
         }
     }
 }
