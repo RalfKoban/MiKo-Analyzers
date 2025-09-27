@@ -15,16 +15,22 @@ namespace MiKoSolutions.Analyzers
 {
     internal static class SyntaxTriviaExtensions
     {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static FileLinePositionSpan GetLineSpan(this in SyntaxTrivia value) => value.GetLocation().GetLineSpan();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static int GetPositionWithinStartLine(this in SyntaxTrivia value) => value.GetLocation().GetPositionWithinStartLine();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static int GetStartingLine(this in SyntaxTrivia value) => value.GetLocation().GetStartingLine();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static int GetEndingLine(this in SyntaxTrivia value) => value.GetLocation().GetEndingLine();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static LinePosition GetStartPosition(this in SyntaxTrivia value) => value.GetLocation().GetStartPosition();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static LinePosition GetEndPosition(this in SyntaxTrivia value) => value.GetLocation().GetEndPosition();
 
         internal static bool HasEndOfLine(this in SyntaxTriviaList value)
