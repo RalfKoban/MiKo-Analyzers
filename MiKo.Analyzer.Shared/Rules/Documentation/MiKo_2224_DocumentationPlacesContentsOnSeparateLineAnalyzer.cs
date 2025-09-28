@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                 };
 
         private static readonly Pair[] AddSpacesBoth = { new Pair(Constants.AnalyzerCodeFixSharedData.AddSpaceBefore), new Pair(Constants.AnalyzerCodeFixSharedData.AddSpaceAfter) };
-        private static readonly Pair[] AddSpacesBefore = { new Pair(Constants.AnalyzerCodeFixSharedData.AddSpaceBefore, string.Empty) };
+        private static readonly Pair[] AddSpacesBefore = { new Pair(Constants.AnalyzerCodeFixSharedData.AddSpaceBefore) };
         private static readonly Pair[] AddSpacesAfter = { new Pair(Constants.AnalyzerCodeFixSharedData.AddSpaceAfter) };
 
         private static readonly SyntaxKind[] ProblematicSiblingKinds = { SyntaxKind.XmlElementStartTag, SyntaxKind.XmlElementEndTag, SyntaxKind.XmlEmptyElement };
@@ -69,12 +69,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
+            var cache = new Dictionary<SyntaxNode, int>();
+
             // first loop over the elements to collect all lines that are also required to check for the empty elements, then loop over the empty ones
             List<Diagnostic> results = null;
 
             foreach (var element in elements)
             {
-                foreach (var issue in AnalyzeXmlElement(element, lines))
+                foreach (var issue in AnalyzeXmlElement(element, lines, cache))
                 {
                     if (results is null)
                     {
@@ -87,7 +89,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var element in emptyElements)
             {
-                var issue = AnalyzeEmptyXmlElement(element, lines);
+                var issue = AnalyzeEmptyXmlElement(element, lines, cache);
 
                 if (issue is null)
                 {
@@ -101,6 +103,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 results.Add(issue);
             }
+
+            cache.Clear();
 
             return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
         }
@@ -132,7 +136,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return false;
         }
 
-        private static bool IsOnSameLine(in SyntaxList<XmlNodeSyntax> contents, params int[] lines)
+        private static bool IsOnSameLine(in SyntaxList<XmlNodeSyntax> contents, Dictionary<SyntaxNode, int> cache, params int[] lines)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             for (int index = 0, contentsCount = contents.Count; index < contentsCount; index++)
@@ -148,7 +152,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
                 else
                 {
-                    var line = content.GetStartingLine();
+                    var line = GetStartingLineCached(content, cache);
 
                     if (lines.Contains(line))
                     {
@@ -170,31 +174,50 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return onSameLineAsTextAfter ? AddSpacesAfter : Array.Empty<Pair>();
         }
 
-        private IEnumerable<Diagnostic> AnalyzeXmlElement(XmlElementSyntax element, HashSet<int> lines)
+        private static int GetStartingLineCached(SyntaxNode node, Dictionary<SyntaxNode, int> cache)
+        {
+            if (cache.TryGetValue(node, out var result))
+            {
+                return result;
+            }
+
+            var line = node.GetStartingLine();
+
+            cache[node] = line;
+
+            return line;
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeXmlElement(XmlElementSyntax element, HashSet<int> lines, Dictionary<SyntaxNode, int> cache)
         {
             var elementName = element.GetName();
 
             if (Tags.Contains(elementName) is false)
             {
                 // that is allowed
-                yield break;
+                return Array.Empty<Diagnostic>();
             }
 
             if (elementName is Constants.XmlTag.Para && element.GetTextTrimmed().Equals(Constants.Comments.SpecialOrPhrase.AsSpan(), StringComparison.OrdinalIgnoreCase))
             {
                 // that is allowed
-                yield break;
+                return Array.Empty<Diagnostic>();
             }
 
-            var startTagLine = element.StartTag.GetStartingLine();
-            var endTagLine = element.EndTag.GetStartingLine();
+            return AnalyzeXmlElement(element, lines, element.StartTag, element.EndTag, cache);
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeXmlElement(XmlElementSyntax element, HashSet<int> lines, XmlElementStartTagSyntax startTag, XmlElementEndTagSyntax endTag, Dictionary<SyntaxNode, int> cache)
+        {
+            var startTagLine = GetStartingLineCached(startTag, cache);
+            var endTagLine = GetStartingLineCached(endTag, cache);
 
             var startLineOnSeparateLine = lines.Add(startTagLine);
             var endLineOnSeparateLine = lines.Add(endTagLine);
 
             if (startLineOnSeparateLine)
             {
-                if (IsOnSameLine(element.Content, startTagLine))
+                if (IsOnSameLine(element.Content, cache, startTagLine))
                 {
                     yield return Issue(element.StartTag);
                 }
@@ -206,7 +229,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (endLineOnSeparateLine)
             {
-                if (IsOnSameLine(element.Content, endTagLine))
+                if (IsOnSameLine(element.Content, cache, endTagLine))
                 {
                     yield return Issue(element.EndTag);
                 }
@@ -217,11 +240,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private Diagnostic AnalyzeEmptyXmlElement(XmlEmptyElementSyntax element, HashSet<int> lines)
+        private Diagnostic AnalyzeEmptyXmlElement(XmlEmptyElementSyntax element, HashSet<int> lines, Dictionary<SyntaxNode, int> cache)
         {
             if (EmptyTags.Contains(element.GetName()))
             {
-                var startingLine = element.GetStartingLine();
+                var startingLine = GetStartingLineCached(element, cache);
 
                 var previousSibling = element.PreviousSibling();
                 var nextSibling = element.NextSibling();
