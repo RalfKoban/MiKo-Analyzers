@@ -571,7 +571,7 @@ namespace MiKoSolutions.Analyzers
         /// The <see cref="SyntaxKind"/> to match.
         /// </param>
         /// <returns>
-        /// A sequence of elements whose <see cref="SyntaxNode.IsKind(SyntaxKind)"/> matches the specified kind.
+        /// A sequence of elements whose <see cref="SyntaxNode.RawKind"/> matches the specified kind.
         /// </returns>
         internal static IEnumerable<T> OfKind<T>(this IEnumerable<T> source, in SyntaxKind kind) where T : SyntaxNode
         {
@@ -594,6 +594,45 @@ namespace MiKoSolutions.Analyzers
                 }
             }
         }
+
+        /// <summary>
+        /// Converts the specified sequence of strings to an array, ordering elements by length in descending order and then by text.
+        /// </summary>
+        /// <param name="source">
+        /// The sequence of strings to order and convert.
+        /// </param>
+        /// <returns>
+        /// An array containing the strings from the source sequence, ordered by length (descending) and then by text.
+        /// </returns>
+        internal static string[] OrderDescendingByLengthAndText(this IEnumerable<string> source) => source.ToHashSet().OrderDescendingByLengthAndText();
+
+        /// <summary>
+        /// Converts the specified sequence of strings to an array, ordering elements by length in descending order and then by text.
+        /// </summary>
+        /// <param name="source">
+        /// The sequence of strings to order and convert.
+        /// </param>
+        /// <returns>
+        /// An array containing the strings from the source sequence, ordered by length (descending) and then by text.
+        /// </returns>
+        internal static string[] OrderDescendingByLengthAndText(this HashSet<string> source) => source.OrderByDescending(_ => _.Length).ThenBy(_ => _).ToArray();
+
+        /// <summary>
+        /// Converts the specified sequence to an array, ordering elements by the length of their selected string property in descending order and then by the string property itself.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of elements in the sequence.
+        /// </typeparam>
+        /// <param name="source">
+        /// The sequence to order and convert.
+        /// </param>
+        /// <param name="selector">
+        /// A function to extract a string from each element.
+        /// </param>
+        /// <returns>
+        /// An array containing elements from the source sequence, ordered by the length of their selected string property (descending) and then by the string property itself.
+        /// </returns>
+        internal static T[] OrderDescendingByLengthAndText<T>(this IEnumerable<T> source, Func<T, string> selector) => source.OrderByDescending(_ => selector(_).Length).ThenBy(selector).ToArray();
 
         /// <summary>
         /// Converts the specified sequence to an array, using the specified comparer to order the elements.
