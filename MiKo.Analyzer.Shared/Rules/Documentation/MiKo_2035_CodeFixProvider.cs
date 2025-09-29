@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 using MiKoSolutions.Analyzers.Linguistics;
@@ -74,7 +75,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return CommentStartingWith(preparedComment, TaskParts[0], SeeCrefTaskResult(), TaskParts[1] + middlePart);
             }
 
-            var startingPhrase = GetCollectionStartingPhrase(returnType);
+            if (returnType.GetName() is "IEnumerable")
+            {
+                return CommentStartingWith(preparedComment, Constants.Comments.EnumerableReturnTypeStartingPhrase);
+            }
+
+            var startingPhrase = Constants.Comments.CollectionReturnTypeStartingPhrase;
 
             if (returnType.TypeArgumentList.Arguments.Count is 1)
             {
@@ -109,25 +115,51 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return CommentStartingWith(PrepareComment(comment), Constants.Comments.ArrayReturnTypeStartingPhrase);
             }
 
-            var startingPhrase = GetCollectionStartingPhrase(returnType);
+            var startingPhrase = returnType.GetName() is "IEnumerable"
+                                 ? Constants.Comments.EnumerableReturnTypeStartingPhrase
+                                 : Constants.Comments.CollectionReturnTypeStartingPhrase;
 
             return CommentStartingWith(PrepareComment(comment), startingPhrase);
         }
 
-        private static string GetCollectionStartingPhrase(TypeSyntax returnType)
-        {
-            return returnType.GetName() is "IEnumerable"
-                   ? Constants.Comments.EnumerableReturnTypeStartingPhrase
-                   : Constants.Comments.CollectionReturnTypeStartingPhrase;
-        }
-
         private static string GetGenericTypeArgumentTypeName(GenericNameSyntax returnType)
         {
-            var argument = returnType.TypeArgumentList.Arguments[0];
+            var type = returnType.TypeArgumentList.Arguments[0];
 
-            return argument is ArrayTypeSyntax arrayType
-                   ? arrayType.ElementType.GetName()
-                   : argument.GetName();
+            if (type is ArrayTypeSyntax arrayType)
+            {
+                type = arrayType.ElementType;
+            }
+
+            var name = type.GetName();
+
+            if (returnType.Parent is MethodDeclarationSyntax m && m.ConstraintClauses is SyntaxList<TypeParameterConstraintClauseSyntax> clauses)
+            {
+                for (int index = 0, count = clauses.Count; index < count; index++)
+                {
+                    var clause = clauses[index];
+
+                    if (name == clause.GetName())
+                    {
+                        var constraints = clause.Constraints;
+
+                        if (constraints.OfType<TypeConstraintSyntax>().FirstOrDefault() is TypeConstraintSyntax constraint)
+                        {
+                            // seems we have a 'where T : xyz' clause
+                            return constraint.Type.GetName();
+                        }
+
+                        if (constraints.OfType<ClassOrStructConstraintSyntax>().FirstOrDefault() is ClassOrStructConstraintSyntax classConstraint)
+                        {
+                            return classConstraint.IsKind(SyntaxKind.ClassConstraint)
+                                   ? "object"
+                                   : "value"; // it is a struct
+                        }
+                    }
+                }
+            }
+
+            return name;
         }
 
         private static string GetGenericCommentMiddlePart(GenericNameSyntax returnType)
