@@ -49,6 +49,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                         new Pair("that contains the new string value", "that contains the original value"),
                                                         new Pair("that contains the new string", "that contains the original value"),
                                                         new Pair("that contains the new", "that contains the original value"),
+                                                        new Pair("that contains a formatted string", "that contains the formatted result"),
+                                                        new Pair("that contains the formatted string", "that contains the formatted result"),
+                                                        new Pair("that contains a ", "that contains the "),
                                                     };
 
         private static readonly string[] CleanupMapKeys = CleanupMap.ToArray(_ => _.Key);
