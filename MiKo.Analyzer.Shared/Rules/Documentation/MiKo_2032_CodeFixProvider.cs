@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Composition;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -67,11 +66,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                            "Returns",
                                                                                                            "returns",
                                                                                                            "will return")
-                                                                                             .OrderByDescending(_ => _.Length)
-                                                                                             .ThenBy(_ => _)
-                                                                                             .ToArray();
+                                                                                             .OrderDescendingByLengthAndText();
 
-        private static readonly string[] SimpleStartingPhrases = CreateSimpleStartingPhrases().OrderByDescending(_ => _.Length).ThenBy(_ => _).ToArray();
+        private static readonly string[] SimpleStartingPhrases = CreateSimpleStartingPhrases().OrderDescendingByLengthAndText();
 
         private static readonly string[] DelimiterPhrases =
                                                             {
@@ -132,7 +129,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
 //// ncrunch: rdi off
 
-        public static ISet<string> CreateSimpleStartingPhrases()
+        public static HashSet<string> CreateSimpleStartingPhrases()
         {
             var starts = new[] { "A ", "An ", string.Empty };
             var booleans = new[]

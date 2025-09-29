@@ -258,27 +258,74 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        [TestCase("Return")]
-        [TestCase("Returns")]
-        [TestCase("return")]
-        [TestCase("returns")]
-        [TestCase("Contains")]
-        [TestCase("Contain")]
-        [TestCase("A string with")]
-        [TestCase("A string that represents")]
-        [TestCase("A string which represents")]
-        [TestCase("A string that contains")]
-        [TestCase("A string which contains")]
+        [TestCase("A concatenated string containing")]
+        [TestCase("A concatenated string of")]
+        [TestCase("A concatenated string with")]
+        [TestCase("A concatenated string that contains")]
+        [TestCase("A concatenated string value containing")]
+        [TestCase("A concatenated string value of")]
+        [TestCase("A concatenated string value with")]
+        [TestCase("A concatenated string value that contains")]
+        [TestCase("A concatenated string value which contains")]
+        [TestCase("A concatenated string which contains")]
+        [TestCase("A new string containing")]
+        [TestCase("A new string representing")]
+        [TestCase("A new string that contains")]
+        [TestCase("A new string that represents")]
+        [TestCase("A new string which contains")]
+        [TestCase("A new string which represents")]
+        [TestCase("A single string containing")]
+        [TestCase("A single string representing")]
+        [TestCase("A single string that contains")]
+        [TestCase("A single string that represents")]
+        [TestCase("A single string which contains")]
+        [TestCase("A single string which represents")]
+        [TestCase("A single string with")]
         [TestCase("A string containing")]
         [TestCase("A string representing")]
-        [TestCase("String with")]
-        [TestCase("String that represents")]
-        [TestCase("String which represents")]
-        [TestCase("String that contains")]
-        [TestCase("String which contains")]
-        [TestCase("String representing")]
-        [TestCase("String containing")]
+        [TestCase("A string that contains")]
+        [TestCase("A string that represents")]
+        [TestCase("A string which contains")]
+        [TestCase("A string which represents")]
+        [TestCase("A string with")]
+        [TestCase("Contain")]
+        [TestCase("Contains")]
+        [TestCase("return")]
+        [TestCase("Return")]
         [TestCase("Returns a string with")]
+        [TestCase("returns")]
+        [TestCase("Returns")]
+        [TestCase("String containing")]
+        [TestCase("String representing")]
+        [TestCase("String that contains")]
+        [TestCase("String that represents")]
+        [TestCase("String which contains")]
+        [TestCase("String which represents")]
+        [TestCase("String with")]
+        [TestCase("The concatenated string containing")]
+        [TestCase("The concatenated string of")]
+        [TestCase("The concatenated string with")]
+        [TestCase("The concatenated string that contains")]
+        [TestCase("The concatenated string value containing")]
+        [TestCase("The concatenated string value of")]
+        [TestCase("The concatenated string value with")]
+        [TestCase("The concatenated string value that contains")]
+        [TestCase("The concatenated string value which contains")]
+        [TestCase("The concatenated string which contains")]
+        [TestCase("The new string containing")]
+        [TestCase("The new string representing")]
+        [TestCase("The new string that contains")]
+        [TestCase("The new string that represents")]
+        [TestCase("The new string which contains")]
+        [TestCase("The new string which represents")]
+        [TestCase("The single string containing")]
+        [TestCase("The single string representing")]
+        [TestCase("The single string that contains")]
+        [TestCase("The single string that represents")]
+        [TestCase("The single string which contains")]
+        [TestCase("The single string which represents")]
+        [TestCase("The single string with")]
+        [TestCase("The string value with")]
         public void Code_gets_fixed_for_non_generic_method_starting_with_(string phrase)
         {
             var originalCode = @"
@@ -310,6 +357,51 @@ public class TestMe
 ";
 
             VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [TestCase("A new string surrounded by whatever", "the original value surrounded by whatever")]
+        [TestCase("A new string value surrounded by whatever", "the original value surrounded by whatever")]
+        [TestCase("A new string value with something", "the original value with something")]
+        [TestCase("A new string value without something", "the original value without something")]
+        [TestCase("A new string with something", "the original value with something")]
+        [TestCase("A new string without something", "the original value without something")]
+        [TestCase("The new string surrounded by whatever", "the original value surrounded by whatever")]
+        [TestCase("The new string value surrounded by whatever", "the original value surrounded by whatever")]
+        [TestCase("The new string value with something", "the original value with something")]
+        [TestCase("The new string value without something", "the original value without something")]
+        [TestCase("The new string with something", "the original value with something")]
+        [TestCase("The new string without something", "the original value without something")]
+        public void Code_gets_fixed_for_non_generic_method_starting_and_continuing_with_(string phrase, string continuation)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>" + phrase + @".</returns>
+    public string DoSomething(object o) => null;
+}
+";
+
+            var fixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// A <see cref=""string""/> that contains " + continuation + @".
+    /// </returns>
+    public string DoSomething(object o) => null;
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
         }
 
         [Test]

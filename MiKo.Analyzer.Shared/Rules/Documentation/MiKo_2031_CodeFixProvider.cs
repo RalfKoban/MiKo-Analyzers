@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Composition;
-using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
@@ -26,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                  "that represents the asynchronous operation.",
                                                              };
 
-        private static readonly string[] TextParts = CreateTextParts().OrderByDescending(_ => _.Length).ThenBy(_ => _).ToArray();
+        private static readonly string[] TextParts = CreateTextParts().OrderDescendingByLengthAndText();
 
 //// ncrunch: rdi default
 

@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2060_FactoryAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] ClassSummaryStartingPhrases = [.. CreateTypeSummaryStartingPhrases().Take(TestLimit).OrderBy(_ => _.Length).ThenBy(_ => _)];
+        private static readonly string[] ClassSummaryStartingPhrases = CreateTypeSummaryStartingPhrases().Take(TestLimit).OrderDescendingByLengthAndText();
         private static readonly string[] InterfaceSummaryStartingPhrases = [.. ClassSummaryStartingPhrases.Take(100)];
         private static readonly string[] MethodStartingPhrases = [.. CreateMethodSummaryPhrases()];
 
