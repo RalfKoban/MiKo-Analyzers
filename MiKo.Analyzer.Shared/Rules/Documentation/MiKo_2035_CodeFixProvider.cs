@@ -202,9 +202,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 ReplacementMap = AlmostCorrectTaskReturnTypeStartingPhrases.ConcatenatedWith("A task that can be used to await.", "A task that can be used to await", "A task to await.", "A task to await", "An awaitable task.", "An awaitable task")
                                                                            .Concat(phrases)
-                                                                           .OrderByDescending(_ => _.Length)
-                                                                           .ThenBy(_ => _)
-                                                                           .ToArray(_ => new Pair(_));
+                                                                           .Select(_ => new Pair(_))
+                                                                           .OrderDescendingByLengthAndText(_ => _.Key);
 
                 ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap.ToArray(_ => _.Key));
 
@@ -235,9 +234,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                   "The array of bytes which contains ",
                                                                                                   "The array of ",
                                                                                                   "The array with ")
-                                                                                    .OrderByDescending(_ => _.Length)
-                                                                                    .ThenBy(_ => _)
-                                                                                    .ToArray(_ => new Pair(_));
+                                                                                    .Select(_ => new Pair(_))
+                                                                                    .OrderDescendingByLengthAndText(_ => _.Key);
 
                 ByteArrayReplacementMapKeys = GetTermsForQuickLookup(ByteArrayReplacementMap.ToArray(_ => _.Key));
 

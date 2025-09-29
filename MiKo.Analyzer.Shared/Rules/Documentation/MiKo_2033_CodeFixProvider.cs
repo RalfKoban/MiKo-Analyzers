@@ -7,8 +7,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-using MiKoSolutions.Analyzers.Linguistics;
-
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2033_CodeFixProvider)), Shared]
@@ -33,13 +31,34 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                          "which contains",
                                                          "which represents",
                                                          "which returns",
-                                                         "with",
                                                      };
 
-        private static readonly string[] ReplacementMapKeys = CreateReplacementMapKeys().ToHashSet().ToArray();
+        private static readonly Pair[] PreparationMap =
+                                                        {
+                                                            new Pair("new string value with", "#1#"),
+                                                            new Pair("new string with", "#2#"),
+                                                        };
 
-        private static readonly Pair[] ReplacementMap = ReplacementMapKeys.Select(_ => new Pair(_))
-                                                                          .ToArray(_ => _.Key, AscendingStringComparer.Default);
+        private static readonly Pair[] CleanupMap =
+                                                    {
+                                                        new Pair("#1#", "new string value with"),
+                                                        new Pair("#2#", "new string with"),
+                                                        new Pair("that contains a new string value", "that contains the original value"),
+                                                        new Pair("that contains a new string", "that contains the original value"),
+                                                        new Pair("that contains a new", "that contains the original value"),
+                                                        new Pair("that contains the new string value", "that contains the original value"),
+                                                        new Pair("that contains the new string", "that contains the original value"),
+                                                        new Pair("that contains the new", "that contains the original value"),
+                                                        new Pair("that contains a formatted string", "that contains the formatted result"),
+                                                        new Pair("that contains the formatted string", "that contains the formatted result"),
+                                                        new Pair("that contains a ", "that contains the "),
+                                                    };
+
+        private static readonly string[] CleanupMapKeys = CleanupMap.ToArray(_ => _.Key);
+
+        private static readonly string[] ReplacementMapKeys = CreateReplacementMapKeys().OrderDescendingByLengthAndText();
+
+        private static readonly Pair[] ReplacementMap = PreparationMap.Concat(ReplacementMapKeys.ToArray(_ => new Pair(_))).ToArray();
 
 //// ncrunch: rdi default
 
@@ -102,15 +121,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, string memberName, TypeSyntax returnType)
         {
-            var commentStart = StringParts[0];
-            var commentEnd = StringParts[1];
-
-            var contents = comment.Content;
-
             if (memberName == nameof(ToString))
             {
                 return Comment(comment, "A ", SeeCref("string"), " that represents the current object.");
             }
+
+            var commentStart = StringParts[0];
+            var commentEnd = StringParts[1];
+
+            var contents = comment.Content;
 
             // we might have an almost complete string
             if (contents.Count >= 3 && contents[0] is XmlTextSyntax startText && contents[1].IsSeeCref("string") && contents[2] is XmlTextSyntax continueText)
@@ -130,25 +149,54 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             contents = PrepareComment(comment).Content;
 
             // we have to replace the XmlText if it is part of the first item of context
-            return Comment(comment, commentStart, SeeCref("string"), commentEnd, contents.ToArray());
+            var updatedComment = Comment(comment, commentStart, SeeCref("string"), commentEnd, contents.ToArray());
+
+            return CleanupComment(updatedComment);
         }
 
         private static XmlElementSyntax PrepareComment(XmlElementSyntax comment) => Comment(comment, ReplacementMapKeys, ReplacementMap);
+
+        private static XmlElementSyntax CleanupComment(XmlElementSyntax comment) => Comment(comment, CleanupMapKeys, CleanupMap);
 
 //// ncrunch: rdi off
 
         private static IEnumerable<string> CreateReplacementMapKeys()
         {
-            var starts = new[] { "a ", "A ", string.Empty };
-            var middles = new[] { "string", "String" };
+            var starts = new[]
+                             {
+                                 "A ", "A new ", "A single ", "A concatenated ",
+                                 "a ", "a new ", "a single ", "a concatenated ",
+                                 "The ", "The new ", "The single ", "The concatenated ",
+                                 string.Empty,
+                             };
+            var middles = new[] { "string", "String", "string value", "String value" };
 
             foreach (var start in starts)
             {
                 foreach (var middle in middles)
                 {
+                    var beginning = string.Concat(start, middle, " ");
+
                     foreach (var text in TextParts)
                     {
-                        yield return string.Concat(start, middle, " ", text);
+                        var beginningText = string.Concat(beginning, text, " ");
+
+                        yield return beginningText;
+
+                        if (beginningText[0].IsLowerCase())
+                        {
+                            yield return "Returns " + beginningText;
+                            yield return "Return " + beginningText;
+                            yield return "returns " + beginningText;
+                            yield return "return " + beginningText;
+                        }
+                    }
+
+                    yield return beginning + "of ";
+
+                    if (start.Contains(" new ") is false)
+                    {
+                        yield return beginning + "with ";
                     }
                 }
             }

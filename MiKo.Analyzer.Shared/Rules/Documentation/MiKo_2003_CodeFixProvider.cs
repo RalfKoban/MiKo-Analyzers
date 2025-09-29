@@ -48,9 +48,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   "When the ",
                                                               };
 
-        private static readonly Pair[] ReplacementMap = ReplacementMapKeys.OrderByDescending(_ => _.Length)
-                                                                          .ThenBy(_ => _)
-                                                                          .ToArray(_ => new Pair(_, Constants.Comments.EventHandlerSummaryStartingPhrase));
+        private static readonly Pair[] ReplacementMap = ReplacementMapKeys.Select(_ => new Pair(_, Constants.Comments.EventHandlerSummaryStartingPhrase))
+                                                                          .OrderDescendingByLengthAndText(_ => _.Key);
 
 //// ncrunch: rdi default
 
