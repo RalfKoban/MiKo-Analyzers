@@ -371,6 +371,9 @@ public class TestMe
         [TestCase("The new string value without something", "the original value without something")]
         [TestCase("The new string with something", "the original value with something")]
         [TestCase("The new string without something", "the original value without something")]
+        [TestCase("A formatted string", "the formatted result")]
+        [TestCase("The formatted string", "the formatted result")]
+        [TestCase("A humanized concatenation of the strings", "the humanized concatenation of the strings")]
         public void Code_gets_fixed_for_non_generic_method_starting_and_continuing_with_(string phrase, string continuation)
         {
             var originalCode = @"
