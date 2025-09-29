@@ -658,7 +658,7 @@ public class TestMe
 
         [TestCase("Some integers.", "A sequence that contains some integers.")]
         [TestCase("The mapping information.", "A sequence that contains the mapping information.")]
-        public void Code_gets_fixed_for_generic_enumerable_(string originalPhrase, string fixedPhrase)
+        public void Code_gets_fixed_for_generic_enumerable_with_primitive_type_(string originalPhrase, string fixedPhrase)
         {
             const string Template = @"
 using System;
@@ -682,7 +682,7 @@ public class TestMe
 
         [TestCase("Some integers.", "A sequence that contains some integers.")]
         [TestCase("The mapping information.", "A sequence that contains the mapping information.")]
-        public void Code_gets_fixed_for_generic_enumerable_on_same_line_(string originalPhrase, string fixedPhrase)
+        public void Code_gets_fixed_for_generic_enumerable_with_primitive_type_on_same_line_(string originalPhrase, string fixedPhrase)
         {
             var originalCode = @"
 using System;
@@ -719,8 +719,9 @@ public class TestMe
             VerifyCSharpFix(originalCode, fixedCode);
         }
 
-        [Test]
-        public void Code_gets_fixed_for_generic_enumerable_with_non_primitive_type()
+        [TestCase("Some data", "A sequence that contains some data")]
+        [TestCase("All ancestors of the specified type", "A sequence that contains all ancestors of the specified type")]
+        public void Code_gets_fixed_for_generic_enumerable_with_non_primitive_type_(string originalPhrase, string fixedPhrase)
         {
             const string Template = @"
 using System;
@@ -742,7 +743,84 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(Template.Replace("###", "Some data"), Template.Replace("###", "A sequence that contains grouped rows that contains some data"));
+            VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
+        }
+
+        [TestCase("Some data", "A sequence that contains some data")]
+        [TestCase("All ancestors of the specified type", "A sequence that contains all ancestors of the specified type")]
+        public void Code_gets_fixed_for_generic_enumerable_with_generic_type_(string originalPhrase, string fixedPhrase)
+        {
+            const string Template = @"
+using System;
+using System.Collections.Generic;
+
+public record MyStuff
+{
+}
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// ###.
+    /// </returns>
+    public IEnumerable<T> DoSomething<T>() where T : MyStuff => null;
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
+        }
+
+        [TestCase("Some data", "A collection of my nodes that contains some data")]
+        [TestCase("All ancestors of the specified type", "A collection of my nodes that contains all ancestors of the specified type")]
+        public void Code_gets_fixed_for_generic_collection_with_generic_closed_type_(string originalPhrase, string fixedPhrase)
+        {
+            const string Template = @"
+using System;
+using System.Collections.Generic;
+
+public record MyNode
+{
+}
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// ###.
+    /// </returns>
+    public IList<T> DoSomething<T>() where T : MyNode => null;
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
+        }
+
+        [TestCase("Some data", "A collection of some data")]
+        [TestCase("All ancestors of the specified type", "A collection of all ancestors of the specified type")]
+        public void Code_gets_fixed_for_generic_collection_with_generic_open_type_(string originalPhrase, string fixedPhrase)
+        {
+            const string Template = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// ###.
+    /// </returns>
+    public IList<T> DoSomething<T>() where T : class => null;
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
         }
 
         [TestCase("Some integers.", "some integers.")]
