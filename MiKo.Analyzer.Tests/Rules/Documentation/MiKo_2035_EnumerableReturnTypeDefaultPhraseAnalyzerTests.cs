@@ -357,6 +357,27 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [TestCase("The adjusted trivia array with proper whitespace indentation for comments", "An array of the adjusted trivia with proper whitespace indentation for comments")]
+        public void Code_gets_fixed_for_array_type_(string originalText, string fixedText)
+        {
+            const string Template = @"
+using Microsoft.CodeAnalysis;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// ###.
+    /// </returns>
+    public SyntaxTrivia[] DoSomething { get; set; }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
+        }
+
         [TestCase("")]
         [TestCase("A array of byte containing")]
         [TestCase("A array of byte that contains")]
