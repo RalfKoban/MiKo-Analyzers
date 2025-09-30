@@ -64,6 +64,71 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var preparedComment = PrepareComment(comment);
 
+            var updatedComment = GenericComment(preparedComment, returnType);
+
+            return CleanupComment(updatedComment);
+        }
+
+        protected override XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, string memberName, TypeSyntax returnType)
+        {
+            var preparedComment = returnType is ArrayTypeSyntax arrayType && arrayType.ElementType.IsByte()
+                                  ? PrepareByteArrayComment(comment)
+                                  : PrepareComment(comment);
+
+            var startingPhrase = GetNonGenericMiddlePart(returnType);
+
+            var updatedComment = CommentStartingWith(preparedComment, startingPhrase);
+
+            return CleanupComment(updatedComment);
+        }
+
+        private static XmlElementSyntax PrepareComment(XmlElementSyntax comment)
+        {
+            var adjustedComment = CommentWithContent(comment, comment.Content);
+
+            adjustedComment = Comment(adjustedComment, MappedData.Value.PreparationMapKeys, MappedData.Value.PreparationMap);
+
+            return Comment(adjustedComment, MappedData.Value.ReplacementMapKeys, MappedData.Value.ReplacementMap);
+        }
+
+        private static XmlElementSyntax PrepareByteArrayComment(XmlElementSyntax comment)
+        {
+            var preparedComment = Comment(comment, MappedData.Value.ByteArrayReplacementMapKeys, MappedData.Value.ByteArrayReplacementMap);
+
+            var contents = preparedComment.Content;
+            var count = contents.Count;
+
+            if (count > 1 && contents[1].IsSeeCref("byte") && contents[0].IsWhiteSpaceOnlyText())
+            {
+                // inspect the continue text and - if necessary - clean it up
+                if (count > 2 && contents[2] is XmlTextSyntax continueText)
+                {
+                    var token = continueText.TextTokens.First();
+                    var text = token.ValueText;
+
+                    if (text.StartsWithAny(MappedData.Value.ByteArrayContinueTexts, StringComparison.OrdinalIgnoreCase))
+                    {
+                        var fixedText = text.AsCachedBuilder().Without(MappedData.Value.ByteArrayContinueTexts).ToStringAndRelease();
+                        var newContinueText = continueText.ReplaceToken(token, token.WithText(fixedText));
+
+                        preparedComment = preparedComment.ReplaceNode(continueText, newContinueText);
+                    }
+                }
+
+                // remove the <see cref="byte"/> element
+                preparedComment = preparedComment.Without(preparedComment.Content[1]);
+            }
+
+            return preparedComment;
+        }
+
+        private static XmlElementSyntax CleanupComment(XmlElementSyntax comment)
+        {
+            return Comment(comment, MappedData.Value.CleanupMapKeys, MappedData.Value.CleanupMap);
+        }
+
+        private static XmlElementSyntax GenericComment(XmlElementSyntax preparedComment, GenericNameSyntax returnType)
+        {
             // it's either a task or a generic collection
             var returnTypeValue = returnType.Identifier.ValueText;
 
@@ -103,41 +168,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return CommentStartingWith(preparedComment, startingPhrase);
         }
 
-        protected override XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, string memberName, TypeSyntax returnType)
-        {
-            XmlElementSyntax updatedComment;
-
-            if (returnType is ArrayTypeSyntax arrayType)
-            {
-                updatedComment = NonGenericComment(comment, arrayType);
-            }
-            else
-            {
-                var startingPhrase = returnType.GetName() is "IEnumerable"
-                                     ? Constants.Comments.EnumerableReturnTypeStartingPhrase
-                                     : Constants.Comments.CollectionReturnTypeStartingPhrase;
-
-                updatedComment = CommentStartingWith(PrepareComment(comment), startingPhrase);
-            }
-
-            return CleanupComment(updatedComment);
-        }
-
-        private static XmlElementSyntax NonGenericComment(XmlElementSyntax comment, ArrayTypeSyntax arrayType)
-        {
-            bool isByteArray = arrayType.ElementType.IsByte();
-
-            var preparedComment = isByteArray
-                                  ? PrepareByteArrayComment(comment)
-                                  : PrepareComment(comment);
-
-            var startingPhrase = isByteArray
-                                 ? Constants.Comments.ByteArrayReturnTypeStartingPhrase[0]
-                                 : Constants.Comments.ArrayReturnTypeStartingPhrase[0];
-
-            return CommentStartingWith(preparedComment, startingPhrase);
-        }
-
         private static string GetGenericTypeArgumentTypeName(GenericNameSyntax returnType)
         {
             var type = returnType.TypeArgumentList.Arguments[0];
@@ -168,8 +198,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         if (constraints.OfType<ClassOrStructConstraintSyntax>().FirstOrDefault() is ClassOrStructConstraintSyntax classConstraint)
                         {
                             return classConstraint.IsKind(SyntaxKind.ClassConstraint)
-                                   ? "object"
-                                   : "value"; // it is a struct
+                                    ? "object"
+                                    : "value"; // it is a struct
                         }
                     }
                 }
@@ -192,49 +222,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Constants.Comments.CollectionReturnTypeStartingPhraseLowerCase;
         }
 
-        private static XmlElementSyntax PrepareComment(XmlElementSyntax comment)
+        private static string GetNonGenericMiddlePart(TypeSyntax returnType)
         {
-            var adjustedComment = CommentWithContent(comment, comment.Content);
-
-            adjustedComment = Comment(adjustedComment, MappedData.Value.PreparationMapKeys, MappedData.Value.PreparationMap);
-
-            return Comment(adjustedComment, MappedData.Value.ReplacementMapKeys, MappedData.Value.ReplacementMap);
-        }
-
-        private static XmlElementSyntax CleanupComment(XmlElementSyntax comment)
-        {
-            return Comment(comment, MappedData.Value.CleanupMapKeys, MappedData.Value.CleanupMap);
-        }
-
-        private static XmlElementSyntax PrepareByteArrayComment(XmlElementSyntax comment)
-        {
-            var preparedComment = Comment(comment, MappedData.Value.ByteArrayReplacementMapKeys, MappedData.Value.ByteArrayReplacementMap);
-
-            var contents = preparedComment.Content;
-            var count = contents.Count;
-
-            if (count > 1 && contents[1].IsSeeCref("byte") && contents[0].IsWhiteSpaceOnlyText())
+            if (returnType is ArrayTypeSyntax arrayType)
             {
-                // inspect the continue text and - if necessary - clean it up
-                if (count > 2 && contents[2] is XmlTextSyntax continueText)
-                {
-                    var token = continueText.TextTokens.First();
-                    var text = token.ValueText;
-
-                    if (text.StartsWithAny(MappedData.Value.ByteArrayContinueTexts, StringComparison.OrdinalIgnoreCase))
-                    {
-                        var fixedText = text.AsCachedBuilder().Without(MappedData.Value.ByteArrayContinueTexts).ToStringAndRelease();
-                        var newContinueText = continueText.ReplaceToken(token, token.WithText(fixedText));
-
-                        preparedComment = preparedComment.ReplaceNode(continueText, newContinueText);
-                    }
-                }
-
-                // remove the <see cref="byte"/> element
-                preparedComment = preparedComment.Without(preparedComment.Content[1]);
+                return arrayType.ElementType.IsByte()
+                       ? Constants.Comments.ByteArrayReturnTypeStartingPhrase[0]
+                       : Constants.Comments.ArrayReturnTypeStartingPhrase[0];
             }
 
-            return preparedComment;
+            return returnType.GetName() is "IEnumerable"
+                   ? Constants.Comments.EnumerableReturnTypeStartingPhrase
+                   : Constants.Comments.CollectionReturnTypeStartingPhrase;
         }
 
 //// ncrunch: rdi off
@@ -318,6 +317,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 CleanupMap = new[]
                                  {
                                      new Pair("#1#", "trivia"),
+                                     new Pair("the modified set", "elements from the original set"),
                                  };
 
                 CleanupMapKeys = CleanupMap.ToArray(_ => _.Key);

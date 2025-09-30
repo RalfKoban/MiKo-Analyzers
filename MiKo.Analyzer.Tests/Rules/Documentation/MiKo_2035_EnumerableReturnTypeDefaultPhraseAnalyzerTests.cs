@@ -378,6 +378,27 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
         }
 
+        [TestCase("The modified set after something", "A collection of elements from the original set after something")]
+        public void Code_gets_fixed_for_hashset_(string originalText, string fixedText)
+        {
+            const string Template = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// ###.
+    /// </returns>
+    public HashSet<int> DoSomething { get; set; }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
+        }
+
         [TestCase("")]
         [TestCase("A array of byte containing")]
         [TestCase("A array of byte that contains")]
