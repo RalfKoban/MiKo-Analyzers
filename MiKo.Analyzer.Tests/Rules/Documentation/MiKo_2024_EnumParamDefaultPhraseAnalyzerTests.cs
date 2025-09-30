@@ -465,6 +465,10 @@ public class TestMe
         [TestCase("Bitwise combination of values that specifies", "specifies")]
         [TestCase("Bitwise combination of the values that specify", "specifies")]
         [TestCase("Bitwise combination of the values that specifies", "specifies")]
+        [TestCase("Bitwise combination of enumeration members that specify", "specifies")]
+        [TestCase("Bitwise combination of enumeration members that specifies", "specifies")]
+        [TestCase("Bitwise combination of the enumeration members that specify", "specifies")]
+        [TestCase("Bitwise combination of the enumeration members that specifies", "specifies")]
         [TestCase("A", "specifies a")]
         [TestCase("An", "specifies an")]
         [TestCase("The", "specifies the")]
@@ -492,7 +496,47 @@ public class TestMe
 {
     /// <summary />
     /// <param name='o'>
-    /// A bitwise combination of enumeration values that " + fixedContinuation + @" whatever it is.
+    /// A bitwise combination of the enumeration members that " + fixedContinuation + @" whatever it is.
+    /// </param>
+    public void DoSomething(NumberStyles o) { }
+}
+";
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
+        [TestCase("The flag to check", "specifies the value to check")]
+        [TestCase("The flag to check for", "specifies the value to check for")]
+        [TestCase("The value to check", "specifies the value to check")]
+        [TestCase("The value to check for", "specifies the value to check for")]
+        [TestCase("The flag to investigate", "specifies the value to investigate")]
+        [TestCase("The flag to investigate for", "specifies the value to investigate for")]
+        [TestCase("The value to investigate", "specifies the value to investigate")]
+        [TestCase("The value to investigate for", "specifies the value to investigate for")]
+        public void Code_gets_fixed_for_complete_flags_phrase_(string originalPhrase, string fixedContinuation)
+        {
+            var originalCode = @"
+using System;
+using System.Globalization;
+
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'>
+    /// " + originalPhrase + @".
+    /// </param>
+    public void DoSomething(NumberStyles o) { }
+}
+";
+
+            var fixedCode = @"
+using System;
+using System.Globalization;
+
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'>
+    /// A bitwise combination of the enumeration members that " + fixedContinuation + @".
     /// </param>
     public void DoSomething(NumberStyles o) { }
 }
