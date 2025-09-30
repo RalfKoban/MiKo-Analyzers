@@ -367,11 +367,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, in ReadOnlySpan<string> phrases, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.StartLowerCase)
-        {
-            return CommentStartingWith(comment, phrases[0], firstWordAdjustment);
-        }
-
         protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string phrase, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.StartLowerCase)
         {
             var content = CommentStartingWith(comment.Content, phrase, firstWordAdjustment);
