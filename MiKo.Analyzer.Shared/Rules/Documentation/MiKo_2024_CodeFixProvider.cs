@@ -29,14 +29,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly Pair[] FlagsCleanupMap =
                                                          {
-                                                             new Pair("umeration values that a ", "umeration values that specifies a "),
-                                                             new Pair("umeration values that an ", "umeration values that specifies an "),
-                                                             new Pair("umeration values that the ", "umeration values that specifies the "),
+                                                             new Pair("umeration values that a ", "umeration members that specifies a "),
+                                                             new Pair("umeration values that an ", "umeration members that specifies an "),
+                                                             new Pair("umeration values that the ", "umeration members that specifies the "),
+                                                             new Pair("umeration members that a ", "umeration members that specifies a "),
+                                                             new Pair("umeration members that an ", "umeration members that specifies an "),
+                                                             new Pair("umeration members that the ", "umeration members that specifies the "),
+                                                             new Pair(" that toes ", " that specifies the value to "),
                                                          };
 
         private static readonly string[] FlagsCleanupMapKeys = FlagsCleanupMap.ToArray(_ => _.Key);
 
         private static readonly string[] ReplacementMapKeys = CreateReplacementMapKeys().ConcatenatedWith("Specifies", "Determines").ToArray();
+
         private static readonly Pair[] ReplacementMap = ReplacementMapKeys.ToArray(_ => new Pair(_));
 
         public override string FixableDiagnosticId => "MiKo_2024";
@@ -44,16 +49,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, in int index, Diagnostic issue)
         {
             var phrase = GetStartingPhraseProposal(issue);
-            var isFlagged = bool.Parse(issue.Properties[Constants.AnalyzerCodeFixSharedData.IsFlagged]);
 
-            // TODO RKN: Update comment base on whether we have a Flags enum or not (defined as part of the properties of the reported issue)
-            var preparedComment = isFlagged
-                                 ? Comment(comment, FlagsReplacementMapKeys, FlagsReplacementMap, FirstWordAdjustment.StartLowerCase | FirstWordAdjustment.MakeThirdPersonSingular)
-                                 : Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordAdjustment.StartLowerCase);
-
+            var preparedComment = PrepareComment(comment, issue);
             var updatedComment = CommentStartingWith(preparedComment, phrase);
 
             return Comment(updatedComment, FlagsCleanupMapKeys, FlagsCleanupMap);
+        }
+
+        private static XmlElementSyntax PrepareComment(XmlElementSyntax comment, Diagnostic issue)
+        {
+            var isFlagged = bool.Parse(issue.Properties[Constants.AnalyzerCodeFixSharedData.IsFlagged]);
+
+            // TODO RKN: Update comment base on whether we have a Flags enum or not (defined as part of the properties of the reported issue)
+            if (isFlagged)
+            {
+                return Comment(comment, FlagsReplacementMapKeys, FlagsReplacementMap, FirstWordAdjustment.StartLowerCase | FirstWordAdjustment.MakeThirdPersonSingular);
+            }
+
+            return Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordAdjustment.StartLowerCase);
         }
 
         private static string[] CreateReplacementMapKeys() => new[]
@@ -105,6 +118,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                            "The value that ",
                                                                            "The value which ",
                                                                            "The value ",
+                                                                           "A flag that ",
+                                                                           "A flag which ",
+                                                                           "A flag ",
+                                                                           "An flag that ",
+                                                                           "An flag which ",
+                                                                           "An flag ",
+                                                                           "The flag that ",
+                                                                           "The flag which ",
+                                                                           "The flag ",
                                                                            "A bitmask ",
                                                                            "Bitmask ",
                                                                            "One of enumeration members which ",
@@ -123,6 +145,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                            "Bitwise combination of values which ",
                                                                            "Bitwise combination of the values that ",
                                                                            "Bitwise combination of the values which ",
+                                                                           "Bitwise combination of enumeration members that ",
+                                                                           "Bitwise combination of enumeration members which ",
+                                                                           "Bitwise combination of the enumeration members that ",
+                                                                           "Bitwise combination of the enumeration members which ",
                                                                            "Enum that ",
                                                                            "Enum which ",
                                                                            "enum that ",
