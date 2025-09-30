@@ -73,6 +73,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 case BinaryExpressionSyntax binary: return PlacedOnSameLine(binary) as T;
                 case CasePatternSwitchLabelSyntax patternLabel: return PlacedOnSameLine(patternLabel) as T;
                 case CaseSwitchLabelSyntax label: return PlacedOnSameLine(label) as T;
+                case ConditionalExpressionSyntax conditional: return PlacedOnSameLine(conditional) as T;
                 case ConstantPatternSyntax constantPattern: return PlacedOnSameLine(constantPattern) as T;
                 case DeclarationPatternSyntax declaration: return PlacedOnSameLine(declaration) as T;
                 case InvocationExpressionSyntax invocation: return PlacedOnSameLine(invocation) as T;
@@ -116,6 +117,13 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                                                                                                        .WithKeyword(syntax.Keyword.WithoutTrailingTrivia())
                                                                                                        .WithValue(PlacedOnSameLine(syntax.Value).WithLeadingSpace().WithoutTrailingTrivia())
                                                                                                        .WithColonToken(syntax.ColonToken.WithoutLeadingTrivia());
+
+        protected static ConditionalExpressionSyntax PlacedOnSameLine(ConditionalExpressionSyntax syntax) => syntax.WithoutTrivia()
+                                                                                                                   .WithCondition(PlacedOnSameLine(syntax.Condition).WithLeadingSpace().WithoutTrailingTrivia())
+                                                                                                                   .WithQuestionToken(syntax.QuestionToken.WithoutTrivia())
+                                                                                                                   .WithWhenTrue(PlacedOnSameLine(syntax.WhenTrue).WithLeadingSpace().WithoutTrailingTrivia())
+                                                                                                                   .WithColonToken(syntax.ColonToken.WithoutTrivia())
+                                                                                                                   .WithWhenFalse(PlacedOnSameLine(syntax.WhenFalse).WithLeadingSpace().WithoutTrailingTrivia());
 
         protected static ConstantPatternSyntax PlacedOnSameLine(ConstantPatternSyntax syntax) => syntax.WithoutTrivia()
                                                                                                        .WithExpression(PlacedOnSameLine(syntax.Expression));

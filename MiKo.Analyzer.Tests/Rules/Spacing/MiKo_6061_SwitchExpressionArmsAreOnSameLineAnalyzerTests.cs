@@ -202,6 +202,46 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_switch_expression_arm_if_it_has_a_conditional_expression_that_spans_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(StringComparison comparison, bool inverse)
+    {
+            return comparison switch
+                                    {
+                                        StringComparison.Ordinal => inverse
+                                                                    ? false
+                                                                    : true,
+                                        _ => false,
+                                    };
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(StringComparison comparison, bool inverse)
+    {
+            return comparison switch
+                                    {
+                                        StringComparison.Ordinal => inverse ? false : true,
+                                        _ => false,
+                                    };
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_switch_expression_arm_throwing_an_exception_if_it_spans_multiple_lines()
         {
             const string OriginalCode = @"
