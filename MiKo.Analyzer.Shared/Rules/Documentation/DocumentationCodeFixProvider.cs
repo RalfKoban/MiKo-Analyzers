@@ -603,7 +603,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlEmptyElementSyntax SeeCref(TypeSyntax type) => Cref(Constants.XmlTag.See, type);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected static XmlEmptyElementSyntax SeeCref(string typeName, string member) => SeeCref(typeName.AsTypeSyntax(), member);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlEmptyElementSyntax SeeCref(string typeName, NameSyntax member) => SeeCref(typeName.AsTypeSyntax(), member);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected static XmlEmptyElementSyntax SeeCref(TypeSyntax type, string member) => SeeCref(type, SyntaxFactory.ParseName(member));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlEmptyElementSyntax SeeCref(TypeSyntax type, NameSyntax member) => Cref(Constants.XmlTag.See, type, member);

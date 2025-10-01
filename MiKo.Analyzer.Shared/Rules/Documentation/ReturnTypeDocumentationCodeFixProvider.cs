@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -15,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
 //// ncrunch: rdi default
 
-        protected static XmlEmptyElementSyntax SeeCrefTaskResult() => SeeCref("Task<TResult>", SyntaxFactory.ParseName(nameof(Task<object>.Result)));
+        protected static XmlEmptyElementSyntax SeeCrefTaskResult() => SeeCref("Task<TResult>", nameof(Task<object>.Result));
 
         protected sealed override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes)
         {
