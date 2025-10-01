@@ -330,6 +330,56 @@ public readonly struct TestMe
 ");
 
         [Test]
+        public void Code_gets_fixed_for_integer_as_parameter()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int value) { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(in int value) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_integer_as_parameter_on_2nd_line()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(
+            int value) { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(
+            in int value) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_readonly_struct_as_parameter()
         {
             const string OriginalCode = @"
