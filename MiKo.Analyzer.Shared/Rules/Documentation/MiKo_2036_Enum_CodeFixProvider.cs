@@ -5,7 +5,6 @@ using System.Composition;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -24,12 +23,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (symbol is INamedTypeSymbol typeSymbol && typeSymbol.IsEnum())
             {
                 var defaultValue = typeSymbol.GetFields()[0];
-                var nameSyntax = SyntaxFactory.ParseName(defaultValue.Name);
 
                 return new XmlNodeSyntax[]
                            {
                                XmlText(Constants.Comments.DefaultStartingPhrase),
-                               SeeCref(returnType, nameSyntax),
+                               SeeCref(returnType, defaultValue.Name),
                                XmlText("."),
                            };
             }
