@@ -743,6 +743,40 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_conditions_spanning_multiple_lines()
+        {
+            const string OriginalCode = """
+
+                public class TestMe
+                {
+                    public bool DoSomething(string s)
+                    {
+                        return !s.Equals("Sum", StringComparison.Ordinal) &&
+                               s.Equals("Something") &&
+                               !s.Equals("Product", StringComparison.Ordinal);
+                    }
+                }
+
+                """;
+
+            const string FixedCode = """
+
+                public class TestMe
+                {
+                    public bool DoSomething(string s)
+                    {
+                        return s is "Sum" is false &&
+                               s is "Something" &&
+                               s is "Product" is false;
+                    }
+                }
+                
+                """;
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3231_UseIsPatternStringEqualsInvocationAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3231_UseIsPatternStringEqualsInvocationAnalyzer();

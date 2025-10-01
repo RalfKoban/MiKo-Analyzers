@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var updatedSyntax = GetUpdatedSyntax(document, unary.Operand);
 
-                return updatedSyntax is null ? null : IsFalsePattern(updatedSyntax);
+                return updatedSyntax is null ? null : IsFalsePattern(updatedSyntax).WithTriviaFrom(unary);
             }
 
             return GetUpdatedSyntax(document, syntax);
