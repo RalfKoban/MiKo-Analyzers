@@ -58,12 +58,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
 //// ncrunch: no coverage end
 
-#if NCRUNCH
-
         [OneTimeSetUp]
         public static void PrepareTestEnvironment() => MiKo_2023_CodeFixProvider.LoadData();
-
-#endif
 
         [Test]
         public void No_issue_is_reported_for_undocumented_parameter() => No_issue_is_reported_for(@"

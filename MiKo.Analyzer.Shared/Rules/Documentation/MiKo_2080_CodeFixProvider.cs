@@ -16,10 +16,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly Lazy<MapData> MappedData = new Lazy<MapData>();
 
-#if !NCRUNCH // do not define a static ctor to speed up tests in NCrunch
-        static MiKo_2080_CodeFixProvider() => LoadData(); // ensure that we have the object available
-#endif
-
         public override string FixableDiagnosticId => "MiKo_2080";
 
         public static void LoadData() => GC.KeepAlive(MappedData.Value);
