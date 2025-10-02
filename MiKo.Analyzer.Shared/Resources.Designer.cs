@@ -7361,7 +7361,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {1} should end with: &apos;{2}&apos;.
+        ///   Looks up a localized string similar to End {1} with: &apos;{2}&apos;.
         /// </summary>
         internal static string MiKo_2056_MessageFormat {
             get {
@@ -7640,7 +7640,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;param name=&quot;{0}&quot;&gt; should end with: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to End &lt;param name=&quot;{0}&quot;&gt; with: &apos;{1}&apos;.
         /// </summary>
         internal static string MiKo_2074_MessageFormat {
             get {

@@ -2618,7 +2618,7 @@ This approach ensures clarity and consistency, helping developers understand und
 This distinction clearly indicates the reason for the exception and helps developers understand the status of the object.</value>
   </data>
   <data name="MiKo_2056_MessageFormat" xml:space="preserve">
-    <value>{1} should end with: '{2}'</value>
+    <value>End {1} with: '{2}'</value>
   </data>
   <data name="MiKo_2056_Title" xml:space="preserve">
     <value>End ObjectDisposedException documentation with default phrase</value>
@@ -2711,7 +2711,7 @@ This distinction clearly indicates the reason for the exception and helps develo
     <value>The &lt;summary&gt; documentation of 'Contain' methods should end with the phrase ' to seek.'. This is because they attempt to determine if a given parameter's value exists within something. This phrasing clearly communicates the intent and functionality of the parameter within the method.</value>
   </data>
   <data name="MiKo_2074_MessageFormat" xml:space="preserve">
-    <value>&lt;param name="{0}"&gt; should end with: '{1}'</value>
+    <value>End &lt;param name="{0}"&gt; with: '{1}'</value>
   </data>
   <data name="MiKo_2074_Title" xml:space="preserve">
     <value>End 'Contains' method parameter documentation with default phrase</value>
