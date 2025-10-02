@@ -37,7 +37,9 @@ namespace MiKoSolutions.Analyzers
 
         internal static string GetText(this Location value) => value.SourceTree?.GetText().ToString(value.SourceSpan);
 
-        internal static string GetText(this Location value, in int length)
+        internal static string GetText(this Location value, in int length) => GetText(value, 0, length);
+
+        internal static string GetText(this Location value, in int startOffset, in int length)
         {
             var tree = value.SourceTree;
 
@@ -46,7 +48,7 @@ namespace MiKoSolutions.Analyzers
                 return null;
             }
 
-            var start = value.SourceSpan.Start;
+            var start = value.SourceSpan.Start + startOffset;
 
             return tree.GetText().ToString(TextSpan.FromBounds(start, start + length));
         }

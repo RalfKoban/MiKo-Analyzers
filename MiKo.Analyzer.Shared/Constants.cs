@@ -938,6 +938,7 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] NotContractionPhrase =
                                                                      {
                                                                          "n't",
+                                                                         "n’t",
                                                                          "cant",
                                                                          "dont",
                                                                          "wont",
@@ -960,6 +961,7 @@ namespace MiKoSolutions.Analyzers
                                                                            {
                                                                                new Pair("adnt", "ad not"),
                                                                                new Pair("an't", "annot"),
+                                                                               new Pair("an’t", "annot"),
                                                                                new Pair("arent", "are not"),
                                                                                new Pair("Arent", "Are not"),
                                                                                new Pair("asnt", "as not"),
@@ -976,9 +978,12 @@ namespace MiKoSolutions.Analyzers
                                                                                new Pair("snt", "s not"),
                                                                                new Pair("wont", "will not"),
                                                                                new Pair("won't", "will not"),
+                                                                               new Pair("won’t", "will not"),
                                                                                new Pair("Wont", "Will not"),
                                                                                new Pair("Won't", "Will not"),
+                                                                               new Pair("Won’t", "Will not"),
                                                                                new Pair("n't", " not"),
+                                                                               new Pair("n’t", " not"),
                                                                            };
 
             internal static readonly string[] IntentionallyPhrase =
