@@ -138,36 +138,50 @@ namespace MiKoSolutions.Analyzers
                 return Array.Empty<SyntaxToken>();
             }
 
-            return value.SelectMany(_ => _.GetXmlTextTokens());
+            return GetXmlTextTokensLocal(value);
+
+            IEnumerable<SyntaxToken> GetXmlTextTokensLocal(IEnumerable<XmlElementSyntax> elements)
+            {
+                // ReSharper disable once LoopCanBePartlyConvertedToQuery
+                foreach (var element in elements)
+                {
+                    foreach (var token in element.GetXmlTextTokens())
+                    {
+                        yield return token;
+                    }
+                }
+            }
         }
 
         internal static IEnumerable<SyntaxToken> GetXmlTextTokens(this XmlTextSyntax value)
         {
-            if (value != null)
+            if (value is null)
             {
-                var textTokens = value.TextTokens;
+                yield break;
+            }
 
-                // keep in local variable to avoid multiple requests (see Roslyn implementation)
-                var tokensCount = textTokens.Count;
+            var textTokens = value.TextTokens;
 
-                if (tokensCount > 0)
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var tokensCount = textTokens.Count;
+
+            if (tokensCount > 0)
+            {
+                for (var index = 0; index < tokensCount; index++)
                 {
-                    for (var index = 0; index < tokensCount; index++)
+                    var token = textTokens[index];
+
+                    if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
                     {
-                        var token = textTokens[index];
+                        var text = token.ValueText;
 
-                        if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
+                        if (text.Length <= Constants.MinimumCharactersThreshold && string.IsNullOrWhiteSpace(text))
                         {
-                            var text = token.ValueText;
-
-                            if (text.Length <= Constants.MinimumCharactersThreshold && string.IsNullOrWhiteSpace(text))
-                            {
-                                // nothing to inspect as the text is too short and consists of whitespaces only
-                                continue;
-                            }
-
-                            yield return token;
+                            // nothing to inspect as the text is too short and consists of whitespaces only
+                            continue;
                         }
+
+                        yield return token;
                     }
                 }
             }
@@ -180,7 +194,19 @@ namespace MiKoSolutions.Analyzers
                 return Array.Empty<SyntaxToken>();
             }
 
-            return value.SelectMany(_ => _.GetXmlTextTokens());
+            return GetXmlTextTokensLocal(value);
+
+            IEnumerable<SyntaxToken> GetXmlTextTokensLocal(IEnumerable<XmlTextSyntax> nodes)
+            {
+                // ReSharper disable once LoopCanBePartlyConvertedToQuery
+                foreach (var node in nodes)
+                {
+                    foreach (var token in node.GetXmlTextTokens())
+                    {
+                        yield return token;
+                    }
+                }
+            }
         }
 
         internal static IReadOnlyList<SyntaxToken> GetXmlTextTokens(this DocumentationCommentTriviaSyntax value)
@@ -190,7 +216,19 @@ namespace MiKoSolutions.Analyzers
 
         internal static IReadOnlyList<SyntaxToken> GetXmlTextTokens(this DocumentationCommentTriviaSyntax value, Func<XmlElementSyntax, bool> descendantNodesFilter)
         {
-            return (IReadOnlyList<SyntaxToken>)value?.DescendantNodes(descendantNodesFilter).GetXmlTextTokens().ToList() ?? Array.Empty<SyntaxToken>();
+            if (value is null)
+            {
+                return Array.Empty<SyntaxToken>();
+            }
+
+            var tokens = value?.DescendantNodes(descendantNodesFilter).GetXmlTextTokens();
+
+            if (tokens is SyntaxToken[] array)
+            {
+                return array;
+            }
+
+            return tokens.ToList();
         }
 
         internal static IEnumerable<SyntaxTrivia> NextSiblings(this in SyntaxTrivia value, in int count = int.MaxValue)
