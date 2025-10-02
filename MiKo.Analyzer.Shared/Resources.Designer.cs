@@ -70,7 +70,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Too many LoC: {1,4} (allowed are max. {2}).
+        ///   Looks up a localized string similar to Too many LoC: {1,4} (max. {2} allowed).
         /// </summary>
         internal static string MiKo_0001_MessageFormat {
             get {
@@ -99,7 +99,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Too high CC: {1,4} (allowed are max. {2}).
+        ///   Looks up a localized string similar to Too high CC: {1,4} (max. {2} allowed).
         /// </summary>
         internal static string MiKo_0002_MessageFormat {
             get {
@@ -126,7 +126,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Too many LoC: {1,4} (allowed are max. {2}).
+        ///   Looks up a localized string similar to Too many LoC: {1,4} (max. {2} allowed).
         /// </summary>
         internal static string MiKo_0003_MessageFormat {
             get {
@@ -153,7 +153,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Too many parameters: {1,4} (allowed are max. {2}).
+        ///   Looks up a localized string similar to Too many parameters: {1,4} (max. {2} allowed).
         /// </summary>
         internal static string MiKo_0004_MessageFormat {
             get {
@@ -180,7 +180,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Too many LoC: {1,4} (allowed are max. {2}).
+        ///   Looks up a localized string similar to Too many LoC: {1,4} (max. {2} allowed).
         /// </summary>
         internal static string MiKo_0005_MessageFormat {
             get {
@@ -209,7 +209,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Too high CC: {1,4} (allowed are max. {2}).
+        ///   Looks up a localized string similar to Too high CC: {1,4} (max. {2} allowed).
         /// </summary>
         internal static string MiKo_0006_MessageFormat {
             get {
@@ -236,7 +236,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Too many parameters: {1,4} (allowed are max. {2}).
+        ///   Looks up a localized string similar to Too many parameters: {1,4} (max. {2} allowed).
         /// </summary>
         internal static string MiKo_0007_MessageFormat {
             get {
@@ -272,7 +272,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name it &apos;{1}&apos; instead.
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
         /// </summary>
         internal static string MiKo_1000_MessageFormat {
             get {
@@ -507,7 +507,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;EventHandler&lt;{1}&gt;&apos; instead.
+        ///   Looks up a localized string similar to Use &apos;EventHandler&lt;{1}&gt;&apos;.
         /// </summary>
         internal static string MiKo_1006_MessageFormat {
             get {
@@ -534,7 +534,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Used &apos;{1}&apos; should be in namespace &apos;{2}&apos;.
+        ///   Looks up a localized string similar to Move &apos;{1}&apos; into namespace &apos;{2}&apos;.
         /// </summary>
         internal static string MiKo_1007_MessageFormat {
             get {
@@ -1949,7 +1949,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use &apos;{1}&apos; in name.
+        ///   Looks up a localized string similar to Remove &apos;{1}&apos; from name.
         /// </summary>
         internal static string MiKo_1049_MessageFormat {
             get {
@@ -2022,7 +2022,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use a better matching name instead.
+        ///   Looks up a localized string similar to Use a better matching name.
         /// </summary>
         internal static string MiKo_1051_MessageFormat {
             get {
@@ -2058,7 +2058,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use a better matching name instead.
+        ///   Looks up a localized string similar to Use a better matching name.
         /// </summary>
         internal static string MiKo_1052_MessageFormat {
             get {
@@ -2094,7 +2094,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use a better matching name instead.
+        ///   Looks up a localized string similar to Use a better matching name.
         /// </summary>
         internal static string MiKo_1053_MessageFormat {
             get {
@@ -2176,7 +2176,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name it &apos;{1}&apos; instead.
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
         /// </summary>
         internal static string MiKo_1055_MessageFormat {
             get {
@@ -2212,7 +2212,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name it {1} instead.
+        ///   Looks up a localized string similar to Name it {1}.
         /// </summary>
         internal static string MiKo_1056_MessageFormat {
             get {
@@ -2257,7 +2257,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name it &apos;{1}&apos; instead.
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
         /// </summary>
         internal static string MiKo_1057_MessageFormat {
             get {
@@ -2293,7 +2293,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name it {1} instead.
+        ///   Looks up a localized string similar to Name it {1}.
         /// </summary>
         internal static string MiKo_1058_MessageFormat {
             get {
@@ -2368,7 +2368,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Consider to name it &apos;{1}&apos; instead.
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
         /// </summary>
         internal static string MiKo_1060_MessageFormat {
             get {
@@ -2879,7 +2879,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name it &apos;{1}&apos; instead.
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
         /// </summary>
         internal static string MiKo_1075_MessageFormat {
             get {
@@ -2915,7 +2915,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name it &apos;{1}&apos; instead.
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
         /// </summary>
         internal static string MiKo_1076_MessageFormat {
             get {
@@ -3529,7 +3529,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name it &apos;{1}&apos; instead.
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
         /// </summary>
         internal static string MiKo_1094_MessageFormat {
             get {
@@ -3624,7 +3624,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use field prefix &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Remove field prefix &apos;{1}&apos;.
         /// </summary>
         internal static string MiKo_1097_MessageFormat {
             get {
@@ -4453,7 +4453,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name it &apos;_&apos; instead.
+        ///   Looks up a localized string similar to Name it &apos;_&apos;.
         /// </summary>
         internal static string MiKo_1300_MessageFormat {
             get {
@@ -4733,7 +4733,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name it &apos;{1}&apos; instead.
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
         /// </summary>
         internal static string MiKo_1409_MessageFormat {
             get {
@@ -5517,7 +5517,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; should follow pattern: &apos;{1} ... {2}&apos;.
+        ///   Looks up a localized string similar to In &lt;summary&gt; follow pattern: &apos;{1} ... {2}&apos;.
         /// </summary>
         internal static string MiKo_2002_MessageFormat {
             get {
@@ -5942,7 +5942,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;{1}&gt; should be: &apos;{2}&apos;.
+        ///   Looks up a localized string similar to Change &lt;{1}&gt; to: &apos;{2}&apos;.
         /// </summary>
         internal static string MiKo_2017_MessageFormat {
             get {
@@ -6456,7 +6456,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;{1}&gt; should follow pattern: &apos;{2} ... {3}&apos;.
+        ///   Looks up a localized string similar to In &lt;{1}&gt; follow pattern: &apos;{2} ... {3}&apos;.
         /// </summary>
         internal static string MiKo_2032_MessageFormat {
             get {
@@ -7217,7 +7217,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {1} should be something like:
+        ///   Looks up a localized string similar to Change {1} to:
         ///
         ///{2}.
         /// </summary>
@@ -7283,7 +7283,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {1} should be something like:
+        ///   Looks up a localized string similar to Change {1} to:
         ///
         ///{2}.
         /// </summary>
@@ -7322,7 +7322,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {1} should be something like:
+        ///   Looks up a localized string similar to Change {1} to:
         ///
         ///{2}.
         /// </summary>
@@ -7532,7 +7532,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use &apos;{0}&apos; in &lt;summary&gt;.
+        ///   Looks up a localized string similar to Remove &apos;{0}&apos; from &lt;summary&gt;.
         /// </summary>
         internal static string MiKo_2071_MessageFormat {
             get {
@@ -7712,7 +7712,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Document the default value via &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Document default value as: &apos;{1}&apos;.
         /// </summary>
         internal static string MiKo_2076_MessageFormat {
             get {
@@ -10140,7 +10140,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Too many MEF dependencies: {1,4} (allowed are max. {2}).
+        ///   Looks up a localized string similar to Too many MEF dependencies: {1,4} (max. {2} allowed).
         /// </summary>
         internal static string MiKo_3002_MessageFormat {
             get {
