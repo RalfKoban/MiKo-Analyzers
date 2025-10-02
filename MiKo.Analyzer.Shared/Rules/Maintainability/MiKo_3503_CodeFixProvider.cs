@@ -81,12 +81,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var declarationSyntax = localDeclaration.Declaration;
             var declarationVariable = declarationSyntax.Variables[0];
 
+            var blockStatements = block.Statements.ToList();
+
             if (declarationVariable.Initializer is null)
             {
                 var name = declarationVariable.GetName();
 
                 // only add a type initializer if the block does not contain the variable's assignment
-                if (block.Statements.None(_ => _.IsAssignmentOf(name)))
+                if (blockStatements.None(_ => _.IsAssignmentOf(name)))
                 {
                     var updatedDeclarationVariable = declarationVariable.WithInitializer(SyntaxFactory.EqualsValueClause(SyntaxFactory.DefaultExpression(declarationSyntax.Type)));
 
@@ -94,11 +96,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
             }
 
-            var statements = block.Statements
-                                  .Insert(0, localDeclaration.WithAdditionalLeadingSpaces(Constants.Indentation))
-                                  .Add(returnStatement.WithAdditionalLeadingSpaces(Constants.Indentation));
+            blockStatements.Insert(0, localDeclaration.WithAdditionalLeadingSpaces(Constants.Indentation));
+            blockStatements.Add(returnStatement.WithAdditionalLeadingSpaces(Constants.Indentation));
 
-            return block.WithStatements(statements);
+            return block.WithStatements(blockStatements.ToSyntaxList());
         }
     }
 }
