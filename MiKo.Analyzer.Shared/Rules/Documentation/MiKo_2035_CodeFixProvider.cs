@@ -194,8 +194,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         if (constraints.OfType<ClassOrStructConstraintSyntax>().FirstOrDefault() is ClassOrStructConstraintSyntax classConstraint)
                         {
                             return classConstraint.IsKind(SyntaxKind.ClassConstraint)
-                                    ? "object"
-                                    : "value"; // it is a struct
+                                   ? "object"
+                                   : "value"; // it is a struct
                         }
                     }
                 }
