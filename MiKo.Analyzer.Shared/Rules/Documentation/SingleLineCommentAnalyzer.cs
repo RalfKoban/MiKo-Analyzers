@@ -10,6 +10,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class SingleLineCommentAnalyzer : DocumentationAnalyzer
     {
+        private static readonly Func<SyntaxNode, bool> DoNotDescendIntoDocumentation = node => node.IsAnyKind(DocumentationCommentTrivia) is false;
+
         private static readonly SyntaxKind[] Declarations =
                                                             {
                                                                 SyntaxKind.MethodDeclaration,
@@ -187,7 +189,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             List<SyntaxTrivia> triviaToAnalyze = null;
 
             // ReSharper disable once LoopCanBePartlyConvertedToQuery : foreach loop is used intentionally for performance gains, so there is no need for a Where clause
-            foreach (var trivia in node.DescendantTrivia())
+            foreach (var trivia in node.DescendantTrivia(DoNotDescendIntoDocumentation))
             {
                 if (ShallAnalyze(trivia))
                 {
