@@ -14,7 +14,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers
 {
     /// <summary>
-    /// Provides extensions for <see cref="SyntaxNode"/>s that focus on naming.
+    /// Provides a set of <see langword="static"/> methods for <see cref="SyntaxNode"/>s that focus on naming.
     /// </summary>
     internal static partial class SyntaxNodeExtensions
     {
