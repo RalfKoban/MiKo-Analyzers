@@ -126,6 +126,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     if (summary.Contains(phrase, StringComparison.OrdinalIgnoreCase))
                     {
+                        if (phrase.EndsWith(" used", StringComparison.Ordinal) && summary.Contains(" used in ", StringComparison.OrdinalIgnoreCase))
+                        {
+                            // ignore the specific phrase
+                            continue;
+                        }
+
                         return ReportIssueContainsPhrase(symbol, phrase.AsSpan());
                     }
                 }
