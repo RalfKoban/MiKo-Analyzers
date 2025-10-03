@@ -8,6 +8,7 @@ namespace TestHelper
     {
         protected static readonly Dictionary<string, string> ContractionMap = new()
                                                                                   {
+                                                                                      // with apostrophes
                                                                                       { "aren't", "are not" },
                                                                                       { "can't", "cannot" },
                                                                                       { "couldn't", "could not" },
@@ -26,7 +27,7 @@ namespace TestHelper
                                                                                       { "won't", "will not" },
                                                                                       { "wouldn't", "would not" },
 
-                                                                                      // capitalized
+                                                                                      // capitalized with apostrophes
                                                                                       { "Aren't", "Are not" },
                                                                                       { "Can't", "Cannot" },
                                                                                       { "Couldn't", "Could not" },
@@ -44,6 +45,44 @@ namespace TestHelper
                                                                                       { "Weren't", "Were not" },
                                                                                       { "Won't", "Will not" },
                                                                                       { "Wouldn't", "Would not" },
+
+                                                                                      // with right single quotation mark
+                                                                                      { "aren’t", "are not" },
+                                                                                      { "can’t", "cannot" },
+                                                                                      { "couldn’t", "could not" },
+                                                                                      { "daren’t", "dare not" },
+                                                                                      { "didn’t", "did not" },
+                                                                                      { "doesn’t", "does not" },
+                                                                                      { "don’t", "do not" },
+                                                                                      { "hadn’t", "had not" },
+                                                                                      { "hasn’t", "has not" },
+                                                                                      { "haven’t", "have not" },
+                                                                                      { "isn’t", "is not" },
+                                                                                      { "needn’t", "need not" },
+                                                                                      { "shouldn’t", "should not" },
+                                                                                      { "wasn’t", "was not" },
+                                                                                      { "weren’t", "were not" },
+                                                                                      { "won’t", "will not" },
+                                                                                      { "wouldn’t", "would not" },
+
+                                                                                      // capitalized with right single quotation mark
+                                                                                      { "Aren’t", "Are not" },
+                                                                                      { "Can’t", "Cannot" },
+                                                                                      { "Couldn’t", "Could not" },
+                                                                                      { "Daren’t", "Dare not" },
+                                                                                      { "Didn’t", "Did not" },
+                                                                                      { "Doesn’t", "Does not" },
+                                                                                      { "Don’t", "Do not" },
+                                                                                      { "Hadn’t", "Had not" },
+                                                                                      { "Hasn’t", "Has not" },
+                                                                                      { "Haven’t", "Have not" },
+                                                                                      { "Isn’t", "Is not" },
+                                                                                      { "Needn’t", "Need not" },
+                                                                                      { "Shouldn’t", "Should not" },
+                                                                                      { "Wasn’t", "Was not" },
+                                                                                      { "Weren’t", "Were not" },
+                                                                                      { "Won’t", "Will not" },
+                                                                                      { "Wouldn’t", "Would not" },
 
                                                                                       // without apostrophes
                                                                                       { "cant", "cannot" },
