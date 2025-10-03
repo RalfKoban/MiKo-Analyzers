@@ -44,7 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var symbolNames = GetSelfSymbolNames(symbol);
             var phrases = GetPhrases(symbol);
 
-            return AnalyzeSummaryPhrases(symbol, summaries.Value, symbolNames.Concat(phrases));
+            return AnalyzeSummaryPhrases(symbol, summaries.Value, phrases.Concat(symbolNames));
         }
 
         private static string[] GetPhrases(ISymbol symbol)
@@ -59,7 +59,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static HashSet<string> GetSelfSymbolNames(ISymbol symbol)
         {
-            var names = new List<string> { symbol.Name };
+            var names = new HashSet<string> { symbol.Name.ConcatenatedWith(' ') };
 
             switch (symbol)
             {
@@ -69,7 +69,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (interfaces.Length > 0)
                     {
-                        names.AddRange(interfaces.Select(_ => _.Name));
+                        names.AddRange(interfaces.Select(_ => _.Name.ConcatenatedWith(' ')));
                     }
 
                     break;
@@ -83,14 +83,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (interfaces.Length > 0)
                     {
-                        names.AddRange(interfaces.Select(_ => _.Name));
+                        names.AddRange(interfaces.Select(_ => _.Name.ConcatenatedWith(' ')));
                     }
 
                     break;
                 }
             }
 
-            return names.ToHashSet(_ => _ + " ");
+            return names;
         }
 
         private Diagnostic[] AnalyzeSummaryPhrases(ISymbol symbol, in ReadOnlySpan<string> summaries, IEnumerable<string> phrases)
@@ -106,20 +106,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var summary = summaries[index];
 
-                foreach (var phrase in phrases)
-                {
-                    if (summary.StartsWith(phrase, StringComparison.OrdinalIgnoreCase))
-                    {
-                        return ReportIssueStartingPhrase(symbol, phrase.AsSpan());
-                    }
-                }
-
                 if (summary.StartsWith(Constants.Comments.XmlElementStartingTagChar))
                 {
                     var i = summary.AsSpan().IndexOf(Constants.Comments.XmlElementEndingTag.AsSpan());
                     var phrase = i > 0 ? summary.AsSpan(0, i + 2) : Constants.Comments.XmlElementStartingTag.AsSpan();
 
                     return ReportIssueStartingPhrase(symbol, phrase);
+                }
+
+                foreach (var phrase in phrases)
+                {
+                    if (summary.StartsWith(phrase, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return ReportIssueStartingPhrase(symbol, phrase.AsSpan());
+                    }
                 }
 
                 foreach (var phrase in Constants.Comments.MeaninglessPhrase)
