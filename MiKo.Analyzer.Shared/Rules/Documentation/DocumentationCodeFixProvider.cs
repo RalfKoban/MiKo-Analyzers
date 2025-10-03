@@ -436,6 +436,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     var tokens = textTokens.ToList();
                     tokens.RemoveAt(0);
+
                     tokens[0] = tokens[0].WithLeadingTrivia();
 
                     text = XmlText(tokens);
@@ -889,6 +890,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                              .WithTrailingTriviaFrom(firstToken);
 
                         currentTextTokens[count - 1] = token;
+
                         currentTextTokens.AddRange(nextTextTokens.Skip(1));
 
                         var newText = currentText.WithTextTokens(currentTextTokens.ToTokenList());

@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                    && m.GetIdentifierName() is nameof(StringComparison)
                                                                                    && m.GetName() is nameof(StringComparison.Ordinal);
 
-        private static bool IsStringComparisonOrdinal(SeparatedSyntaxList<ArgumentSyntax> arguments)
+        private static bool IsStringComparisonOrdinal(in SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
             switch (arguments.Count)
             {
