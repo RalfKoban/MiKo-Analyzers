@@ -14,18 +14,21 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 #pragma warning disable IDE0130
 namespace MiKoSolutions.Analyzers
 {
+    /// <summary>
+    /// Provides a set of <see langword="static"/> methods for <see cref="IEnumerable{T}"/>s.
+    /// </summary>
     internal static class EnumerableExtensions
     {
         /// <summary>
         /// Converts a sequence of <see cref="SyntaxToken"/> instances into an <see cref="XmlTextSyntax"/> node.
         /// </summary>
-        /// <param name="textTokens">
+        /// <param name="values">
         /// The sequence of <see cref="SyntaxToken"/> objects representing XML text content.
         /// </param>
         /// <returns>
         /// An <see cref="XmlTextSyntax"/> node that contains the provided tokens as XML text.
         /// </returns>
-        internal static XmlTextSyntax AsXmlText(this IEnumerable<SyntaxToken> textTokens) => textTokens.ToTokenList().AsXmlText();
+        internal static XmlTextSyntax AsXmlText(this IEnumerable<SyntaxToken> values) => values.ToTokenList().AsXmlText();
 
         /// <summary>
         /// Concatenates the specified additional elements to the end of the source sequence.
@@ -57,7 +60,7 @@ namespace MiKoSolutions.Analyzers
         /// The values to remove from the set.
         /// </param>
         /// <returns>
-        /// The modified set after removing the specified values.
+        /// A collection of elements from the original set after removing the specified values.
         /// </returns>
         internal static HashSet<T> Except<T>(this HashSet<T> source, IEnumerable<T> values) where T : class
         {
@@ -108,7 +111,7 @@ namespace MiKoSolutions.Analyzers
         /// The values to remove from the set.
         /// </param>
         /// <returns>
-        /// The modified set after removing the specified values.
+        /// A collection of elements from the original set after removing the specified values.
         /// </returns>
         internal static HashSet<T> Except<T>(this HashSet<T> source, params T[] values) where T : class
         {
@@ -193,7 +196,7 @@ namespace MiKoSolutions.Analyzers
         /// The list of <see cref="SyntaxToken"/> instances whose text content is to be concatenated and trimmed.
         /// </param>
         /// <returns>
-        /// A trimmed string containing the concatenated text of all tokens, with new lines and multiple white spaces removed;
+        /// A <see cref="string"/> that contains the trimmed the concatenated text of all tokens, with new lines and multiple white spaces removed;
         /// or the <see cref="string.Empty"/> string ("") if the list is empty.
         /// </returns>
         internal static string GetTextTrimmedWithParaTags(this IReadOnlyList<SyntaxToken> values)
@@ -220,25 +223,25 @@ namespace MiKoSolutions.Analyzers
         /// Appends the text content of each syntax token in the specified list to the provided <see cref="StringBuilder"/>,
         /// excluding those of kind <see cref="SyntaxKind.XmlTextLiteralNewLineToken"/>.
         /// </summary>
-        /// <param name="textTokens">
+        /// <param name="values">
         /// The list of <see cref="SyntaxToken"/> instances whose text content is to be appended.
         /// </param>
         /// <param name="builder">
-        /// The <see cref="StringBuilder"/> to which the text content will be appended.
+        /// The <see cref="StringBuilder"/> to which the text content are appended.
         /// </param>
         /// <returns>
         /// The <see cref="StringBuilder"/> instance with the appended text content.
         /// </returns>
-        internal static StringBuilder GetTextWithoutTrivia(this IReadOnlyList<SyntaxToken> textTokens, StringBuilder builder)
+        internal static StringBuilder GetTextWithoutTrivia(this IReadOnlyList<SyntaxToken> values, StringBuilder builder)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var textTokensCount = textTokens.Count;
+            var textTokensCount = values.Count;
 
             if (textTokensCount > 0)
             {
                 for (var index = 0; index < textTokensCount; index++)
                 {
-                    var token = textTokens[index];
+                    var token = values[index];
 
                     if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
                     {
@@ -516,7 +519,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Returns a read-only list containing all elements of type <typeparamref name="T"/> from the source list
+        /// Gets a read-only list containing all elements of type <typeparamref name="T"/> from the source list
         /// that have the specified <see cref="SyntaxKind"/>.
         /// </summary>
         /// <typeparam name="T">
@@ -526,7 +529,7 @@ namespace MiKoSolutions.Analyzers
         /// The read-only list to filter.
         /// </param>
         /// <param name="kind">
-        /// The <see cref="SyntaxKind"/> to match.
+        /// One of the enumeration members that specifies the <see cref="SyntaxKind"/> to match.
         /// </param>
         /// <returns>
         /// A collection of elements whose <see cref="SyntaxKind"/> matches the specified kind,
@@ -558,7 +561,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Returns a sequence containing all elements of type <typeparamref name="T"/> from the source sequence
+        /// Gets a sequence containing all elements of type <typeparamref name="T"/> from the source sequence
         /// that have the specified <see cref="SyntaxKind"/>.
         /// </summary>
         /// <typeparam name="T">
@@ -568,7 +571,7 @@ namespace MiKoSolutions.Analyzers
         /// The sequence to filter.
         /// </param>
         /// <param name="kind">
-        /// The <see cref="SyntaxKind"/> to match.
+        /// One of the enumeration members that specifies the <see cref="SyntaxKind"/> to match.
         /// </param>
         /// <returns>
         /// A sequence of elements whose <see cref="SyntaxNode.RawKind"/> matches the specified kind.
@@ -602,7 +605,7 @@ namespace MiKoSolutions.Analyzers
         /// The sequence of strings to order and convert.
         /// </param>
         /// <returns>
-        /// An array containing the strings from the source sequence, ordered by length (descending) and then by text.
+        /// An array of the strings from the source sequence, ordered by length (descending) and then by text.
         /// </returns>
         internal static string[] OrderDescendingByLengthAndText(this IEnumerable<string> source) => source.ToHashSet().OrderDescendingByLengthAndText();
 
@@ -613,7 +616,7 @@ namespace MiKoSolutions.Analyzers
         /// The sequence of strings to order and convert.
         /// </param>
         /// <returns>
-        /// An array containing the strings from the source sequence, ordered by length (descending) and then by text.
+        /// An array of the strings from the source sequence, ordered by length (descending) and then by text.
         /// </returns>
         internal static string[] OrderDescendingByLengthAndText(this HashSet<string> source) => source.OrderByDescending(_ => _.Length).ThenBy(_ => _).ToArray();
 
@@ -627,10 +630,10 @@ namespace MiKoSolutions.Analyzers
         /// The sequence to order and convert.
         /// </param>
         /// <param name="selector">
-        /// A function to extract a string from each element.
+        /// A callback to extract a string from each element.
         /// </param>
         /// <returns>
-        /// An array containing elements from the source sequence, ordered by the length of their selected string property (descending) and then by the string property itself.
+        /// An array of elements from the source sequence, ordered by the length of their selected string property (descending) and then by the string property itself.
         /// </returns>
         internal static T[] OrderDescendingByLengthAndText<T>(this IEnumerable<T> source, Func<T, string> selector) => source.OrderByDescending(_ => selector(_).Length).ThenBy(selector).ToArray();
 

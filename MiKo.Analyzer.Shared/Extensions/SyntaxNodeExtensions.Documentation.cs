@@ -201,10 +201,10 @@ namespace MiKoSolutions.Analyzers
                                 .ToArray();
         }
 
-        internal static XmlTextAttributeSyntax GetListType(this XmlElementSyntax list) => list.GetAttributes<XmlTextAttributeSyntax>()
-                                                                                              .FirstOrDefault(_ => _.GetName() is Constants.XmlTag.Attribute.Type);
+        internal static XmlTextAttributeSyntax GetListType(this XmlElementSyntax value) => value.GetAttributes<XmlTextAttributeSyntax>()
+                                                                                                .FirstOrDefault(_ => _.GetName() is Constants.XmlTag.Attribute.Type);
 
-        internal static string GetListType(this XmlTextAttributeSyntax listType) => listType.GetTextWithoutTrivia();
+        internal static string GetListType(this XmlTextAttributeSyntax value) => value.GetTextWithoutTrivia();
 
         internal static ParameterSyntax[] GetParameters(this XmlElementSyntax value)
         {
@@ -738,9 +738,9 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsValueNull(this SyntaxNode value) => value.Is(Constants.XmlTag.Value, Nulls);
 
-        internal static bool IsXml(this SyntaxNode node)
+        internal static bool IsXml(this SyntaxNode value)
         {
-            switch (node.Kind())
+            switch (value.Kind())
             {
                 case SyntaxKind.XmlElement:
                 case SyntaxKind.XmlEmptyElement:

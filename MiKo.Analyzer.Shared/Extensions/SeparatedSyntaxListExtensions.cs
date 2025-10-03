@@ -780,14 +780,14 @@ namespace MiKoSolutions.Analyzers
         /// <typeparam name="T">
         /// The type of syntax node.
         /// </typeparam>
-        /// <param name="value">
+        /// <param name="source">
         /// The syntax node to include in the separated list.
         /// </param>
         /// <returns>
         /// A <see cref="SeparatedSyntaxList{T}"/> containing the specified syntax node.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static SeparatedSyntaxList<T> ToSeparatedSyntaxList<T>(this T value) where T : SyntaxNode => SyntaxFactory.SingletonSeparatedList(value);
+        internal static SeparatedSyntaxList<T> ToSeparatedSyntaxList<T>(this T source) where T : SyntaxNode => SyntaxFactory.SingletonSeparatedList(source);
 
         /// <summary>
         /// Creates a <see cref="SeparatedSyntaxList{T}"/> from the specified sequence of syntax nodes.
