@@ -37,13 +37,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             foreach (var parameter in symbol.Parameters)
             {
+                if (parameter.Ordinal is 0 && symbol.IsExtensionMethod)
+                {
+                    // this is a 'this' parameter
+                    continue;
+                }
+
                 if (ShallAnalyze(parameter))
                 {
-                    var diagnostic = AnalyzeCollectionSuffix(parameter);
+                    var issue = AnalyzeCollectionSuffix(parameter);
 
-                    if (diagnostic != null)
+                    if (issue != null)
                     {
-                        yield return diagnostic;
+                        yield return issue;
                     }
                 }
             }
