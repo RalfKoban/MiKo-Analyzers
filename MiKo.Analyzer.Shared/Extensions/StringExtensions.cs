@@ -1260,11 +1260,10 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if any of the phrases are found; otherwise, <see langword="false"/>.
         /// </returns>
-        public static bool ContainsAny(this string value, in ReadOnlySpan<string> phrases, in StringComparison comparison = StringComparison.Ordinal)
+        public static bool ContainsAny(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> phrases, in StringComparison comparison = StringComparison.Ordinal)
         {
-            if (value.HasCharacters())
+            if (value.Length > 0)
             {
-                var valueSpan = value.AsSpan();
                 var ordinalComparison = comparison is StringComparison.Ordinal;
 
                 for (int index = 0, length = phrases.Length; index < length; index++)
@@ -1273,18 +1272,18 @@ namespace MiKoSolutions.Analyzers
                     var phraseSpan = phrase.AsSpan();
 
                     // no separate handling for StringComparison.Ordinal here as that happens around 30 times out of 90_000_000 times; so almost never
-                    if (QuickContainsSubstringProbe(valueSpan, phraseSpan, comparison))
+                    if (QuickContainsSubstringProbe(value, phraseSpan, comparison))
                     {
                         if (ordinalComparison)
                         {
-                            if (valueSpan.Contains(phraseSpan))
+                            if (value.Contains(phraseSpan))
                             {
                                 return true;
                             }
                         }
                         else
                         {
-                            if (value.Contains(phrase, comparison))
+                            if (value.Contains(phrase.AsSpan(), comparison))
                             {
                                 return true;
                             }
@@ -1294,6 +1293,27 @@ namespace MiKoSolutions.Analyzers
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Determines whether the string contains any of the specified phrases.
+        /// </summary>
+        /// <param name="value">
+        /// The string to search in.
+        /// </param>
+        /// <param name="phrases">
+        /// The phrases to seek.
+        /// </param>
+        /// <param name="comparison">
+        /// One of the enumeration members that specifies the string comparison method to use.
+        /// The default is <see cref="StringComparison.Ordinal"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if any of the phrases are found; otherwise, <see langword="false"/>.
+        /// </returns>
+        public static bool ContainsAny(this string value, in ReadOnlySpan<string> phrases, in StringComparison comparison = StringComparison.Ordinal)
+        {
+            return ContainsAny(value.AsSpan(), phrases, comparison);
         }
 
         /// <summary>

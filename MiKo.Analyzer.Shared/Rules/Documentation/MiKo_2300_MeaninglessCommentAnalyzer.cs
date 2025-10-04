@@ -99,13 +99,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool CommentHasIssue(in ReadOnlySpan<char> comment, SemanticModel semanticModel)
         {
-            // perform 'ToString' here to avoid multiple calls later on
-            var commentString = comment.ToString();
-
-            return CommentHasIssue(commentString) && commentString.ContainsAny(Constants.Comments.ReasoningPhrases, StringComparison.OrdinalIgnoreCase) is false;
+            return CommentHasIssue(comment) && comment.ContainsAny(Constants.Comments.ReasoningPhrases, StringComparison.OrdinalIgnoreCase) is false;
         }
 
-        private static bool CommentHasIssue(string comment)
+        private static bool CommentHasIssue(ReadOnlySpan<char> comment)
         {
             if (comment.StartsWith(Constants.Comments.CommentExterior, StringComparison.Ordinal))
             {
@@ -122,21 +119,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return false; // already reported by the other analyzer
             }
 
-            var commentSpan = comment.AsSpan();
-
-            if (commentSpan.StartsWithAny(MeaninglessPhrases, StringComparison.OrdinalIgnoreCase) && commentSpan.StartsWithAny(AllowedMarkers, StringComparison.OrdinalIgnoreCase) is false)
+            if (comment.StartsWithAny(MeaninglessPhrases, StringComparison.OrdinalIgnoreCase) && comment.StartsWithAny(AllowedMarkers, StringComparison.OrdinalIgnoreCase) is false)
             {
                 return true;
             }
 
-            if (commentSpan.Contains("->"))
+            if (comment.Contains("->"))
             {
                 return true;
             }
 
             var spaces = 0;
 
-            foreach (var c in commentSpan)
+            foreach (var c in comment)
             {
                 if (c.IsWhiteSpace())
                 {
@@ -147,12 +142,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (spaces < 3)
             {
                 // 3 or fewer words
-                if (comment.ContainsAny(AllowedMarkers, StringComparison.OrdinalIgnoreCase))
+                if (comment.ContainsAny(AllowedMarkers))
                 {
                     return false;
                 }
 
-                if (MiKo_2301_TestArrangeActAssertCommentAnalyzer.CommentContainsArrangeActAssert(commentSpan))
+                if (MiKo_2301_TestArrangeActAssertCommentAnalyzer.CommentContainsArrangeActAssert(comment))
                 {
                     return false; // already reported by the other analyzer
                 }

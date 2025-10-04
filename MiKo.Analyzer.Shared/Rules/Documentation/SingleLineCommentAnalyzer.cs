@@ -10,8 +10,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class SingleLineCommentAnalyzer : DocumentationAnalyzer
     {
-        private static readonly Func<SyntaxNode, bool> DoNotDescendIntoDocumentation = node => node.IsAnyKind(DocumentationCommentTrivia) is false;
-
         private static readonly SyntaxKind[] Declarations =
                                                             {
                                                                 SyntaxKind.MethodDeclaration,
@@ -163,22 +161,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeCommentTrivia(string name, IReadOnlyList<SyntaxTrivia> triviaToAnalyze, SemanticModel semanticModel)
         {
-            var count = triviaToAnalyze.Count;
-
-            if (count > 0)
+            for (int index = 0, count = triviaToAnalyze.Count; index < count; index++)
             {
-                for (var index = 0; index < count; index++)
+                var trivia = triviaToAnalyze[index];
+
+                var hasIssue = AnalyzeComment(trivia, semanticModel);
+
+                if (hasIssue)
                 {
-                    var trivia = triviaToAnalyze[index];
-
-                    var hasIssue = AnalyzeComment(trivia, semanticModel);
-
-                    if (hasIssue)
+                    foreach (var issue in CollectIssues(name, trivia))
                     {
-                        foreach (var issue in CollectIssues(name, trivia))
-                        {
-                            yield return issue;
-                        }
+                        yield return issue;
                     }
                 }
             }
@@ -189,8 +182,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             List<SyntaxTrivia> triviaToAnalyze = null;
 
             // ReSharper disable once LoopCanBePartlyConvertedToQuery : foreach loop is used intentionally for performance gains, so there is no need for a Where clause
-            foreach (var trivia in node.DescendantTrivia(DoNotDescendIntoDocumentation))
+            foreach (var trivia in node.DescendantTrivia())
             {
+                switch (trivia.RawKind)
+                {
+                    case (int)SyntaxKind.WhitespaceTrivia:
+                    case (int)SyntaxKind.EndOfLineTrivia:
+                        continue;
+                }
+
                 if (ShallAnalyze(trivia))
                 {
                     if (triviaToAnalyze is null)
