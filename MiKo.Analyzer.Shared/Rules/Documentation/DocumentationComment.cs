@@ -40,6 +40,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return comment.Slice(indexAfterPhrase).StartsWithAny(Constants.Comments.Delimiters);
         }
 
-        internal static bool ContainsPhrases(in ReadOnlySpan<string> phrases, in ReadOnlySpan<char> comment) => comment.ToString().ContainsAny(phrases, StringComparison.OrdinalIgnoreCase);
+        internal static bool ContainsPhrases(in ReadOnlySpan<string> phrases, in ReadOnlySpan<char> comment) => comment.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase);
     }
 }

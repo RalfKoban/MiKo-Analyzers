@@ -88,10 +88,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static XmlElementSyntax PrepareTypeComment(XmlElementSyntax comment, MapData mappedData)
         {
+            var textTokens = comment.GetXmlTextTokens();
+
+            if (textTokens.Count is 0)
+            {
+                return comment;
+            }
+
             XmlElementSyntax updated;
 
             //// TODO RKN: Add check about starting with 'A', 'T', 'C' or 'D'
-            var startText = comment.GetXmlTextTokens().FirstOrDefault().ValueText.AsSpan().TrimStart();
+            var startText = textTokens[0].ValueText.AsSpan().TrimStart();
 
             switch (startText[0])
             {

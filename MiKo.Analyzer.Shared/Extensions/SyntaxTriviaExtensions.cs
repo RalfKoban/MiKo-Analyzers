@@ -295,45 +295,18 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A collection of syntax tokens from the XML element.
         /// </returns>
-        internal static IEnumerable<SyntaxToken> GetXmlTextTokens(this XmlElementSyntax value)
+        internal static IReadOnlyList<SyntaxToken> GetXmlTextTokens(this XmlElementSyntax value)
         {
             if (value is null)
             {
                 return Array.Empty<SyntaxToken>();
             }
 
-            return value.ChildNodes<XmlTextSyntax>().GetXmlTextTokens();
-        }
+            List<SyntaxToken> result = null;
 
-        /// <summary>
-        /// Gets XML text tokens from a collection of XML elements.
-        /// </summary>
-        /// <param name="value">
-        /// The collection of XML elements to get tokens from.
-        /// </param>
-        /// <returns>
-        /// A collection of syntax tokens from all XML elements.
-        /// </returns>
-        internal static IEnumerable<SyntaxToken> GetXmlTextTokens(this IEnumerable<XmlElementSyntax> value)
-        {
-            if (value is null)
-            {
-                return Array.Empty<SyntaxToken>();
-            }
+            CollectXmlTextTokens(value, ref result);
 
-            return GetXmlTextTokensLocal(value);
-
-            IEnumerable<SyntaxToken> GetXmlTextTokensLocal(IEnumerable<XmlElementSyntax> elements)
-            {
-                // ReSharper disable once LoopCanBePartlyConvertedToQuery
-                foreach (var element in elements)
-                {
-                    foreach (var token in element.GetXmlTextTokens())
-                    {
-                        yield return token;
-                    }
-                }
-            }
+            return (IReadOnlyList<SyntaxToken>)result ?? Array.Empty<SyntaxToken>();
         }
 
         /// <summary>
@@ -345,69 +318,18 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A collection of non-empty syntax tokens from the XML text.
         /// </returns>
-        internal static IEnumerable<SyntaxToken> GetXmlTextTokens(this XmlTextSyntax value)
-        {
-            if (value is null)
-            {
-                yield break;
-            }
-
-            var textTokens = value.TextTokens;
-
-            // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var tokensCount = textTokens.Count;
-
-            if (tokensCount > 0)
-            {
-                for (var index = 0; index < tokensCount; index++)
-                {
-                    var token = textTokens[index];
-
-                    if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
-                    {
-                        var text = token.ValueText;
-
-                        if (text.Length <= Constants.MinimumCharactersThreshold && string.IsNullOrWhiteSpace(text))
-                        {
-                            // nothing to inspect as the text is too short and consists of whitespaces only
-                            continue;
-                        }
-
-                        yield return token;
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets XML text tokens from a collection of XML text syntax nodes.
-        /// </summary>
-        /// <param name="value">
-        /// The collection of XML text syntax nodes to get tokens from.
-        /// </param>
-        /// <returns>
-        /// A collection of syntax tokens from all XML text nodes.
-        /// </returns>
-        internal static IEnumerable<SyntaxToken> GetXmlTextTokens(this IEnumerable<XmlTextSyntax> value)
+        internal static IReadOnlyList<SyntaxToken> GetXmlTextTokens(this XmlTextSyntax value)
         {
             if (value is null)
             {
                 return Array.Empty<SyntaxToken>();
             }
 
-            return GetXmlTextTokensLocal(value);
+            List<SyntaxToken> result = null;
 
-            IEnumerable<SyntaxToken> GetXmlTextTokensLocal(IEnumerable<XmlTextSyntax> nodes)
-            {
-                // ReSharper disable once LoopCanBePartlyConvertedToQuery
-                foreach (var node in nodes)
-                {
-                    foreach (var token in node.GetXmlTextTokens())
-                    {
-                        yield return token;
-                    }
-                }
-            }
+            CollectSyntaxTokens(value, ref result);
+
+            return (IReadOnlyList<SyntaxToken>)result ?? Array.Empty<SyntaxToken>();
         }
 
         /// <summary>
@@ -443,14 +365,11 @@ namespace MiKoSolutions.Analyzers
                 return Array.Empty<SyntaxToken>();
             }
 
-            var tokens = value?.DescendantNodes(descendantNodesFilter).GetXmlTextTokens();
+            List<SyntaxToken> result = null;
 
-            if (tokens is SyntaxToken[] array)
-            {
-                return array;
-            }
+            CollectXmlTextTokens(value.DescendantNodes(descendantNodesFilter), ref result);
 
-            return tokens.ToList();
+            return (IReadOnlyList<SyntaxToken>)result ?? Array.Empty<SyntaxToken>();
         }
 
         /// <summary>
@@ -569,6 +488,85 @@ namespace MiKoSolutions.Analyzers
             }
 
             return source.ToString();
+        }
+
+        /// <summary>
+        /// Collects XML text tokens from a collection of XML elements.
+        /// </summary>
+        /// <param name="elements">
+        /// The collection of XML elements to get tokens from.
+        /// </param>
+        /// <param name="results">
+        /// The collection to fill with syntax tokens from all XML elements.
+        /// </param>
+        private static void CollectXmlTextTokens(IEnumerable<XmlElementSyntax> elements, ref List<SyntaxToken> results)
+        {
+            foreach (var element in elements)
+            {
+                CollectXmlTextTokens(element, ref results);
+            }
+        }
+
+        /// <summary>
+        /// Collects XML text tokens from an XML element.
+        /// </summary>
+        /// <param name="element">
+        /// The XML element to get tokens from.
+        /// </param>
+        /// <param name="results">
+        /// The collection to fill with syntax tokens from the XML element.
+        /// </param>
+        private static void CollectXmlTextTokens(XmlElementSyntax element, ref List<SyntaxToken> results)
+        {
+            foreach (var node in element.ChildNodes<XmlTextSyntax>())
+            {
+                CollectSyntaxTokens(node, ref results);
+            }
+        }
+
+        /// <summary>
+        /// Collects XML text tokens from an XML text.
+        /// </summary>
+        /// <param name="value">
+        /// The XML text to get tokens from.
+        /// </param>
+        /// <param name="results">
+        /// The collection to fill with syntax tokens from the XML text.
+        /// </param>
+        private static void CollectSyntaxTokens(XmlTextSyntax value, ref List<SyntaxToken> results)
+        {
+            var textTokens = value.TextTokens;
+
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var tokensCount = textTokens.Count;
+
+            if (tokensCount is 0)
+            {
+                return;
+            }
+
+            for (var index = 0; index < tokensCount; index++)
+            {
+                var token = textTokens[index];
+
+                if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
+                {
+                    var text = token.ValueText;
+
+                    if (text.Length <= Constants.MinimumCharactersThreshold && string.IsNullOrWhiteSpace(text))
+                    {
+                        // nothing to inspect as the text is too short and consists of whitespaces only
+                        continue;
+                    }
+
+                    if (results is null)
+                    {
+                        results = new List<SyntaxToken>();
+                    }
+
+                    results.Add(token);
+                }
+            }
         }
     }
 }

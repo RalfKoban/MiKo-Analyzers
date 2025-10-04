@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         protected static readonly string[] CodeTags = { Constants.XmlTag.Code, Constants.XmlTag.C };
 
-        protected static readonly SyntaxKind[] DocumentationCommentTrivia = { SyntaxKind.SingleLineDocumentationCommentTrivia, SyntaxKind.MultiLineDocumentationCommentTrivia };
+        private static readonly SyntaxKind[] DocumentationCommentTrivia = { SyntaxKind.SingleLineDocumentationCommentTrivia, SyntaxKind.MultiLineDocumentationCommentTrivia };
 
         protected DocumentationAnalyzer(string diagnosticId) : base(nameof(Documentation), diagnosticId, (SymbolKind)(-1))
         {
