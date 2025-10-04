@@ -103,6 +103,18 @@ public static class TestMeExtensions
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_better_parameter_name_that_would_match_an_existing_parameter() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public void DoSomething(List<int> value, int[] values)
+    { }
+}
+");
+
         [TestCase("string blaEnumList")]
         [TestCase("string blaList")]
         [TestCase("string blaCollection")]

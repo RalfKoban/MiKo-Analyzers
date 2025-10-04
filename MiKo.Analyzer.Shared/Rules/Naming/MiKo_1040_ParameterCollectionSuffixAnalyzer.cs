@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -35,7 +36,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
-            foreach (var parameter in symbol.Parameters)
+            var parameters = symbol.Parameters;
+
+            foreach (var parameter in parameters)
             {
                 if (parameter.Ordinal is 0 && symbol.IsExtensionMethod)
                 {
@@ -47,10 +50,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 {
                     var issue = AnalyzeCollectionSuffix(parameter);
 
-                    if (issue != null)
+                    if (issue is null)
                     {
-                        yield return issue;
+                        continue;
                     }
+
+                    if (issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.BetterName, out var betterName) && parameters.Any(_ => _.Name == betterName))
+                    {
+                        // ignore duplicate names
+                        continue;
+                    }
+
+                    yield return issue;
                 }
             }
         }
