@@ -61,24 +61,6 @@ public class TestMe
 }
 ");
 
-        [TestCase("string blaEnumList")]
-        [TestCase("string blaList")]
-        [TestCase("string blaCollection")]
-        [TestCase("string blaObservableCollection")]
-        [TestCase("string blaArray")]
-        [TestCase("string blaHashSet")]
-        [TestCase("string blaDictionary")]
-        [TestCase("string blaDict")]
-        [TestCase("string blaDic")]
-        public void An_issue_is_reported_for_incorrectly_named_parameter_(string parameter) => An_issue_is_reported_for(@"
-
-public class TestMe
-{
-    public void DoSomething(" + parameter + @")
-    { }
-}
-");
-
         [Test] // this situation is covered by CA 1725 so we do not report that as well
         public void No_issue_is_reported_for_incorrectly_named_parameter_of_method_that_implements_interface() => No_issue_is_reported_for(@"
 using System;
@@ -104,6 +86,49 @@ using System.Collections.Generic;
 public class TestMe : ITestMe
 {
     public void DoSomething(bool refreshList)
+    { }
+}
+");
+
+        [TestCase("value")]
+        [TestCase("source")]
+        public void No_issue_is_reported_for_extension_method_parameter_(string parameter) => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public static class TestMeExtensions
+{
+    public static void DoSomething(this List<int> " + parameter + @")
+    { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_better_parameter_name_that_would_match_an_existing_parameter() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public void DoSomething(List<int> value, int[] values)
+    { }
+}
+");
+
+        [TestCase("string blaEnumList")]
+        [TestCase("string blaList")]
+        [TestCase("string blaCollection")]
+        [TestCase("string blaObservableCollection")]
+        [TestCase("string blaArray")]
+        [TestCase("string blaHashSet")]
+        [TestCase("string blaDictionary")]
+        [TestCase("string blaDict")]
+        [TestCase("string blaDic")]
+        public void An_issue_is_reported_for_incorrectly_named_parameter_(string parameter) => An_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public void DoSomething(" + parameter + @")
     { }
 }
 ");
