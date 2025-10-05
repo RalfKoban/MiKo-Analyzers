@@ -13,6 +13,9 @@ using Microsoft.CodeAnalysis.Text;
 #pragma warning disable IDE0130
 namespace MiKoSolutions.Analyzers
 {
+    /// <summary>
+    /// Provides a set of <see langword="static"/> methods for <see cref="SyntaxToken"/>.
+    /// </summary>
     internal static class SyntaxTokenExtensions
     {
         internal static IEnumerable<T> Ancestors<T>(this in SyntaxToken value) where T : SyntaxNode => value.Parent.Ancestors<T>();
@@ -21,13 +24,6 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsKind(this in SyntaxToken value, in SyntaxKind kind) => value.RawKind == (int)kind;
 
         internal static SyntaxToken AsToken(this SyntaxKind value) => SyntaxFactory.Token(value);
-
-        internal static SyntaxToken First(this in SyntaxTokenList value, in SyntaxKind kind)
-        {
-            var tokens = value.OfKind(kind);
-
-            return tokens.Count > 0 ? tokens[0] : default;
-        }
 
         internal static T GetEnclosing<T>(this in SyntaxToken value) where T : SyntaxNode => value.Parent.GetEnclosing<T>();
 
@@ -240,36 +236,6 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        internal static IReadOnlyList<SyntaxToken> OfKind(this in SyntaxTokenList source, in SyntaxKind kind)
-        {
-            // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var sourceCount = source.Count;
-
-            if (sourceCount is 0)
-            {
-                return Array.Empty<SyntaxToken>();
-            }
-
-            List<SyntaxToken> results = null;
-
-            for (var index = 0; index < sourceCount; index++)
-            {
-                var item = source[index];
-
-                if (item.IsKind(kind))
-                {
-                    if (results is null)
-                    {
-                        results = new List<SyntaxToken>(1);
-                    }
-
-                    results.Add(item);
-                }
-            }
-
-            return results ?? (IReadOnlyList<SyntaxToken>)Array.Empty<SyntaxToken>();
-        }
-
         internal static IEnumerable<SyntaxToken> OfKind(this IEnumerable<SyntaxToken> source, SyntaxKind kind)
         {
             // ReSharper disable once LoopCanBeConvertedToQuery
@@ -459,74 +425,9 @@ namespace MiKoSolutions.Analyzers
                    : value;
         }
 
-        internal static SyntaxTokenList WithoutFirstXmlNewLine(this in SyntaxTokenList values)
-        {
-            var tokens = values;
-
-            if (tokens.Count > 0)
-            {
-                tokens = WithoutEmptyText(tokens, tokens[0]);
-            }
-
-            if (tokens.Count > 0)
-            {
-                tokens = WithoutNewLine(tokens, tokens[0]);
-            }
-
-            if (tokens.Count > 0)
-            {
-                tokens = WithoutEmptyText(tokens, tokens[0]);
-            }
-
-            return tokens;
-        }
-
-        internal static SyntaxTokenList WithoutLastXmlNewLine(this in SyntaxTokenList values)
-        {
-            var tokens = values;
-
-            // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var tokensCount = values.Count;
-
-            if (tokensCount > 0)
-            {
-                tokens = WithoutEmptyText(tokens, tokens[tokensCount - 1]);
-
-                // keep in local variable to avoid multiple requests (see Roslyn implementation)
-                tokensCount = tokens.Count;
-            }
-
-            if (tokensCount > 0)
-            {
-                tokens = WithoutNewLine(tokens, tokens[tokensCount - 1]);
-            }
-
-            return tokens;
-        }
-
         internal static SyntaxToken WithoutLeadingTrivia(this in SyntaxToken value) => value.WithoutTrivia().WithTrailingTrivia(value.TrailingTrivia);
 
         internal static SyntaxToken WithoutTrailingTrivia(this in SyntaxToken value) => value.WithoutTrivia().WithLeadingTrivia(value.LeadingTrivia);
-
-        internal static SyntaxTokenList WithoutEmptyText(this in SyntaxTokenList values, in SyntaxToken token)
-        {
-            if (token.IsKind(SyntaxKind.XmlTextLiteralToken) && token.ValueText.IsNullOrWhiteSpace())
-            {
-                return values.Remove(token);
-            }
-
-            return values;
-        }
-
-        internal static SyntaxTokenList WithoutNewLine(this in SyntaxTokenList values, in SyntaxToken token)
-        {
-            if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
-            {
-                return values.Remove(token);
-            }
-
-            return values;
-        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken WithSurroundingSpace(this in SyntaxToken value) => value.WithLeadingSpace().WithTrailingSpace();

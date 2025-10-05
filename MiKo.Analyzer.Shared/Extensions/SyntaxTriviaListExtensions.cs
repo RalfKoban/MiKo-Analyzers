@@ -9,6 +9,9 @@ using Microsoft.CodeAnalysis;
 #pragma warning disable IDE0130
 namespace MiKoSolutions.Analyzers
 {
+    /// <summary>
+    /// Provides a set of <see langword="static"/> methods for <see cref="SyntaxTriviaList"/>.
+    /// </summary>
     internal static class SyntaxTriviaListExtensions
     {
         /// <summary>
@@ -106,6 +109,62 @@ namespace MiKoSolutions.Analyzers
             }
 
             return count;
+        }
+
+        /// <summary>
+        /// Determines whether the trivia list contains any end of line trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia list to examine.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the list contains any end of line trivia; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool HasEndOfLine(this in SyntaxTriviaList value)
+        {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var valueCount = value.Count;
+
+            if (valueCount > 0)
+            {
+                for (var index = 0; index < valueCount; index++)
+                {
+                    if (value[index].IsEndOfLine())
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Determines whether the trivia list contains any comment trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia list to examine.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the list contains any comment trivia; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool HasComment(this in SyntaxTriviaList value)
+        {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var valueCount = value.Count;
+
+            if (valueCount > 0)
+            {
+                for (var index = 0; index < valueCount; index++)
+                {
+                    if (value[index].IsComment())
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         /// <summary>

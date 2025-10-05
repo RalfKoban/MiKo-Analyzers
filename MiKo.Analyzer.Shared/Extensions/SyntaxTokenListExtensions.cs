@@ -12,6 +12,9 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 #pragma warning disable IDE0130
 namespace MiKoSolutions.Analyzers
 {
+    /// <summary>
+    /// Provides a set of <see langword="static"/> methods for <see cref="SyntaxTokenList"/>.
+    /// </summary>
     internal static class SyntaxTokenListExtensions
     {
         /// <summary>
@@ -76,6 +79,15 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        /// <summary>
+        /// Converts a list of syntax tokens to an <see cref="XmlTextSyntax"/> node.
+        /// </summary>
+        /// <param name="textTokens">
+        /// The list of syntax tokens to convert.
+        /// </param>
+        /// <returns>
+        /// An <see cref="XmlTextSyntax"/> node containing the syntax tokens.
+        /// </returns>
         internal static XmlTextSyntax AsXmlText(this in SyntaxTokenList textTokens) => SyntaxFactory.XmlText(textTokens);
 
         /// <summary>
@@ -107,6 +119,25 @@ namespace MiKoSolutions.Analyzers
                     yield return item;
                 }
             }
+        }
+
+        /// <summary>
+        /// Finds the first token in the <see cref="SyntaxTokenList"/> of the specified kind.
+        /// </summary>
+        /// <param name="value">
+        /// The list of syntax tokens to search.
+        /// </param>
+        /// <param name="kind">
+        /// One of the enumeration members that specifies the kind of syntax token to find.
+        /// </param>
+        /// <returns>
+        /// The first token of the specified kind, or the default value if no such token is found.
+        /// </returns>
+        internal static SyntaxToken First(this in SyntaxTokenList value, in SyntaxKind kind)
+        {
+            var tokens = value.OfKind(kind);
+
+            return tokens.Count > 0 ? tokens[0] : default;
         }
 
         /// <summary>
@@ -204,6 +235,18 @@ namespace MiKoSolutions.Analyzers
             return default;
         }
 
+        /// <summary>
+        /// Builds a string representation of the syntax token list without any trivia.
+        /// </summary>
+        /// <param name="textTokens">
+        /// The list of syntax tokens to process.
+        /// </param>
+        /// <param name="builder">
+        /// The <see cref="StringBuilder"/> to append the text to.
+        /// </param>
+        /// <returns>
+        /// The <see cref="StringBuilder"/> with the appended text.
+        /// </returns>
         internal static StringBuilder GetTextWithoutTrivia(this in SyntaxTokenList textTokens, StringBuilder builder)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
@@ -310,6 +353,48 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool None(this in SyntaxTokenList source, in SyntaxKind kind) => source.Any(kind) is false;
+
+        /// <summary>
+        /// Retrieves all tokens of the specified kind from the <see cref="SyntaxTokenList"/>.
+        /// </summary>
+        /// <param name="source">
+        /// The list of syntax tokens to filter.
+        /// </param>
+        /// <param name="kind">
+        /// One of the enumeration members that specifies the kind of syntax tokens to retrieve.
+        /// </param>
+        /// <returns>
+        /// A read-only list of syntax tokens of the specified kind.
+        /// </returns>
+        internal static IReadOnlyList<SyntaxToken> OfKind(this in SyntaxTokenList source, in SyntaxKind kind)
+        {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
+            if (sourceCount is 0)
+            {
+                return Array.Empty<SyntaxToken>();
+            }
+
+            List<SyntaxToken> results = null;
+
+            for (var index = 0; index < sourceCount; index++)
+            {
+                var item = source[index];
+
+                if (item.IsKind(kind))
+                {
+                    if (results is null)
+                    {
+                        results = new List<SyntaxToken>(1);
+                    }
+
+                    results.Add(item);
+                }
+            }
+
+            return results ?? (IReadOnlyList<SyntaxToken>)Array.Empty<SyntaxToken>();
+        }
 
         /// <summary>
         /// Projects each element of a <see cref="SyntaxTokenList"/> into a new form.
@@ -525,6 +610,113 @@ namespace MiKoSolutions.Analyzers
                     yield return value;
                 }
             }
+        }
+
+        /// <summary>
+        /// Removes a token with empty text value from the <see cref="SyntaxTokenList"/>.
+        /// </summary>
+        /// <param name="values">
+        /// The list of syntax tokens to process.
+        /// </param>
+        /// <param name="token">
+        /// The token to potentially remove if it has empty text.
+        /// </param>
+        /// <returns>
+        /// A <see cref="SyntaxTokenList"/> without the empty text token if applicable; otherwise, the original list.
+        /// </returns>
+        internal static SyntaxTokenList WithoutEmptyText(this in SyntaxTokenList values, in SyntaxToken token)
+        {
+            if (token.IsKind(SyntaxKind.XmlTextLiteralToken) && token.ValueText.IsNullOrWhiteSpace())
+            {
+                return values.Remove(token);
+            }
+
+            return values;
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="SyntaxTokenList"/> without the XML new line token at the beginning.
+        /// </summary>
+        /// <param name="values">
+        /// The list of syntax tokens to process.
+        /// </param>
+        /// <returns>
+        /// A <see cref="SyntaxTokenList"/> without XML new line tokens and empty text at the beginning.
+        /// </returns>
+        internal static SyntaxTokenList WithoutFirstXmlNewLine(this in SyntaxTokenList values)
+        {
+            var tokens = values;
+
+            if (tokens.Count > 0)
+            {
+                tokens = WithoutEmptyText(tokens, tokens[0]);
+            }
+
+            if (tokens.Count > 0)
+            {
+                tokens = WithoutNewLine(tokens, tokens[0]);
+            }
+
+            if (tokens.Count > 0)
+            {
+                tokens = WithoutEmptyText(tokens, tokens[0]);
+            }
+
+            return tokens;
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="SyntaxTokenList"/> without the XML new line token at the end.
+        /// </summary>
+        /// <param name="values">
+        /// The list of syntax tokens to process.
+        /// </param>
+        /// <returns>
+        /// A <see cref="SyntaxTokenList"/> without XML new line tokens and empty text at the end.
+        /// </returns>
+        internal static SyntaxTokenList WithoutLastXmlNewLine(this in SyntaxTokenList values)
+        {
+            var tokens = values;
+
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var tokensCount = values.Count;
+
+            if (tokensCount > 0)
+            {
+                tokens = WithoutEmptyText(tokens, tokens[tokensCount - 1]);
+
+                // keep in local variable to avoid multiple requests (see Roslyn implementation)
+                tokensCount = tokens.Count;
+            }
+
+            if (tokensCount > 0)
+            {
+                tokens = WithoutNewLine(tokens, tokens[tokensCount - 1]);
+            }
+
+            return tokens;
+        }
+
+        /// <summary>
+        /// Removes a new line token from the <see cref="SyntaxTokenList"/>.
+        /// </summary>
+        /// <param name="values">
+        /// The list of syntax tokens to process.
+        /// </param>
+        /// <param name="token">
+        /// The token to potentially remove if it is a new line token.
+        /// </param>
+        /// <returns>
+        /// A <see cref="SyntaxTokenList"/> without the new line token if applicable; otherwise, the original list.
+        /// </returns>
+        internal static SyntaxTokenList WithoutNewLine(this in SyntaxTokenList values, in SyntaxToken token)
+        {
+            if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+            {
+                return values.Remove(token);
+            }
+
+            return values;
         }
     }
 }
