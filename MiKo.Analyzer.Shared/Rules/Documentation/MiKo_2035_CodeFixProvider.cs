@@ -252,7 +252,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 #pragma warning disable CA1861
             public MapData()
             {
-                var phrases = CreatePhrases().ToHashSet(_ => _ + " "); // TODO RKN: Order by 'A', 'An ' and 'The '
+                var phrases = CreatePhrases().ToHashSet(); // TODO RKN: Order by 'A', 'An ' and 'The '
 
                 ReplacementMap = AlmostCorrectTaskReturnTypeStartingPhrases.ConcatenatedWith("A task that can be used to await.", "A task that can be used to await", "A task to await.", "A task to await", "An awaitable task.", "An awaitable task")
                                                                            .Concat(phrases)
@@ -323,12 +323,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             private static IEnumerable<string> CreatePhrases()
             {
                 var startingWords = new[] { "a", "an", "the" };
-                var modifications = new[] { "readonly", "read-only", "read only", "filtered" };
+                var modifications = new[] { "readonly", "read-only", "read only", "filtered", "concurrent" };
                 var collections = new[]
                                       {
-                                          "array", "list", "dictionary", "enumerable", "enumerable collection", "syntax list", "separated syntax list", "immutable array",
+                                          "array", "arraylist", "array list", "list",  "collection", "dictionary", "enumerable", "enumerable collection", "syntax list", "separated syntax list", "immutable array",
                                           "hash set", "hash table", "hashed set", "hashed table", "hashing set", "hashing table", "hashset", "hashSet", "hashtable", "hashTable",
-                                          "map", "queue", "stack",
+                                          "map", "queue", "stack", "bag",
                                       };
                 var prepositions = new[] { "of", "with", "that contains", "which contains", "that holds", "which holds", "containing", "holding" };
 
@@ -336,32 +336,41 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     foreach (var preposition in prepositions)
                     {
-                        var phrase = string.Concat(collection, " ", preposition);
+                        var phrase = string.Concat(collection, " ", preposition, " ");
 
+                        yield return phrase;
                         yield return phrase.ToUpperCaseAt(0);
-                        yield return phrase.ToLowerCaseAt(0);
 
                         foreach (var modification in modifications)
                         {
                             var modificationPhrase = string.Concat(modification, " ", phrase);
 
+                            yield return modificationPhrase;
                             yield return modificationPhrase.ToUpperCaseAt(0);
-                            yield return modificationPhrase.ToLowerCaseAt(0);
 
                             foreach (var startingWord in startingWords)
                             {
-                                var shortStartingPhrase = string.Concat(startingWord, " ", collection);
-                                var startingPhrase = string.Concat(startingWord, " ", phrase);
+                                var shortStartingPhrase = string.Concat(startingWord, " ", collection, " ");
+
+                                yield return shortStartingPhrase;
+                                yield return shortStartingPhrase.ToUpperCaseAt(0);
+
                                 var modifiedStartingPhrase = string.Concat(startingWord, " ", modificationPhrase);
 
-                                yield return shortStartingPhrase.ToUpperCaseAt(0);
-                                yield return shortStartingPhrase.ToLowerCaseAt(0);
-
-                                yield return startingPhrase.ToUpperCaseAt(0);
-                                yield return startingPhrase.ToLowerCaseAt(0);
-
+                                yield return modifiedStartingPhrase;
                                 yield return modifiedStartingPhrase.ToUpperCaseAt(0);
-                                yield return modifiedStartingPhrase.ToLowerCaseAt(0);
+
+                                var startingPhrase = string.Concat(startingWord, " ", phrase);
+
+                                if (startingPhrase is Constants.Comments.CollectionReturnTypeStartingPhraseLowerCase)
+                                {
+                                    // we do not want to have that as that is the correct phrase which we shall not replace
+                                }
+                                else
+                                {
+                                    yield return startingPhrase;
+                                    yield return startingPhrase.ToUpperCaseAt(0);
+                                }
                             }
                         }
                     }
