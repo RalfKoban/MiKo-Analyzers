@@ -1085,7 +1085,7 @@ public class TestMe
                                        "hashset", "hashSet", "hashtable", "hashTable", "hash set", "hashed set", "hash table", "hashed table", "hashing set", "hashing table",
                                        "syntax list", "enumerable collection", "separated syntax list", "immutable array",
                                    ];
-            string[] prepositions = ["of", "with", "that contains", "which contains", "that holds", "which holds", "containing", "holding"];
+            string[] prepositions = ["of", "with", "that contains", "which contains", "containing"];
 
             foreach (var collection in collections)
             {
