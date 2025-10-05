@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis;
 namespace MiKoSolutions.Analyzers
 {
     /// <summary>
-    /// Provides a set of <see langword="static"/> methods for <see cref="SyntaxTriviaList"/>.
+    /// Provides a set of <see langword="static"/> methods for <see cref="SyntaxTriviaList"/>s.
     /// </summary>
     internal static class SyntaxTriviaListExtensions
     {

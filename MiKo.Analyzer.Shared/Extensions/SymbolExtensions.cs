@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Xml;
@@ -24,6 +25,9 @@ using Microsoft.CodeAnalysis.Diagnostics;
 #pragma warning disable CA1506
 namespace MiKoSolutions.Analyzers
 {
+    /// <summary>
+    /// Provides a set of <see langword="static"/> methods for <see cref="ISymbol"/>s.
+    /// </summary>
     internal static class SymbolExtensions
     {
         private static readonly SymbolDisplayFormat FullyQualifiedDisplayFormat = new SymbolDisplayFormat(
@@ -40,10 +44,40 @@ namespace MiKoSolutions.Analyzers
 
         private static readonly Func<SyntaxNode, bool> IsLocalFunctionContainer = IsLocalFunctionContainerCore;
 
+        /// <summary>
+        /// Gets all extension methods defined for the type.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect for extension methods.
+        /// </param>
+        /// <returns>
+        /// A collection of extension methods for the specified type.
+        /// </returns>
         internal static IEnumerable<IMethodSymbol> GetExtensionMethods(this ITypeSymbol value) => value.GetMethods().Where(_ => _.IsExtensionMethod);
 
+        /// <summary>
+        /// Gets all methods defined for the type.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect for methods.
+        /// </param>
+        /// <returns>
+        /// A collection of methods defined on the specified type.
+        /// </returns>
         internal static IReadOnlyList<IMethodSymbol> GetMethods(this ITypeSymbol value) => value.GetMembers<IMethodSymbol>();
 
+        /// <summary>
+        /// Gets all methods of a specific kind defined for the type.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect for methods.
+        /// </param>
+        /// <param name="kind">
+        /// One of the enumeration members that specifies the specific kind of methods to retrieve.
+        /// </param>
+        /// <returns>
+        /// A collection of methods of the specified kind.
+        /// </returns>
         internal static IEnumerable<IMethodSymbol> GetMethods(this ITypeSymbol value, MethodKind kind)
         {
             // note that methods with MethodKind.Constructor cannot be referenced by name
@@ -67,6 +101,18 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        /// <summary>
+        /// Gets all methods with a specific name defined for the type.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect for methods.
+        /// </param>
+        /// <param name="methodName">
+        /// The name of the methods to retrieve.
+        /// </param>
+        /// <returns>
+        /// A collection of methods with the specified name.
+        /// </returns>
         internal static IReadOnlyList<IMethodSymbol> GetMethods(this ITypeSymbol value, string methodName)
         {
             var members = value.GetMembers(methodName);
@@ -122,6 +168,15 @@ namespace MiKoSolutions.Analyzers
             return Array.Empty<IPropertySymbol>();
         }
 
+        /// <summary>
+        /// Gets all fields defined for the type.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect for fields.
+        /// </param>
+        /// <returns>
+        /// A collection of fields that can be referenced by name.
+        /// </returns>
         internal static IReadOnlyList<IFieldSymbol> GetFields(this ITypeSymbol value)
         {
             var fields = value.GetMembers<IFieldSymbol>();
@@ -134,6 +189,18 @@ namespace MiKoSolutions.Analyzers
             return Array.Empty<IFieldSymbol>();
         }
 
+        /// <summary>
+        /// Gets all fields with a specific name defined for the type.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect for fields.
+        /// </param>
+        /// <param name="fieldName">
+        /// The name of the fields to retrieve.
+        /// </param>
+        /// <returns>
+        /// A collection of fields with the specified name.
+        /// </returns>
         internal static IReadOnlyList<IFieldSymbol> GetFields(this ITypeSymbol value, string fieldName)
         {
             var members = value.GetMembers(fieldName);
@@ -146,6 +213,15 @@ namespace MiKoSolutions.Analyzers
             return Array.Empty<IFieldSymbol>();
         }
 
+        /// <summary>
+        /// Gets all local functions defined within the method.
+        /// </summary>
+        /// <param name="value">
+        /// The method to inspect for local functions.
+        /// </param>
+        /// <returns>
+        /// A collection of local functions defined within the method.
+        /// </returns>
         internal static IReadOnlyList<LocalFunctionStatementSyntax> GetLocalFunctions(this IMethodSymbol value)
         {
             var node = value.GetSyntaxNodeInSource();
@@ -173,12 +249,52 @@ namespace MiKoSolutions.Analyzers
             return functions ?? (IReadOnlyList<LocalFunctionStatementSyntax>)Array.Empty<LocalFunctionStatementSyntax>();
         }
 
+        /// <summary>
+        /// Determines whether the type contains extension methods.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type contains extension methods; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool ContainsExtensionMethods(this INamedTypeSymbol value) => value.TypeKind is TypeKind.Class && value.IsStatic && value.MightContainExtensionMethods && value.GetExtensionMethods().Any();
 
+        /// <summary>
+        /// Finds the containing type from the syntax node analysis context.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node analysis context to inspect.
+        /// </param>
+        /// <returns>
+        /// The containing type of the syntax node analysis context.
+        /// </returns>
         internal static INamedTypeSymbol FindContainingType(this in SyntaxNodeAnalysisContext value) => FindContainingType(value.ContainingSymbol);
 
+        /// <summary>
+        /// Finds the containing type of a symbol.
+        /// </summary>
+        /// <param name="value">
+        /// The symbol to inspect.
+        /// </param>
+        /// <returns>
+        /// The containing type of the symbol.
+        /// </returns>
         internal static INamedTypeSymbol FindContainingType(this ISymbol value) => value as INamedTypeSymbol ?? value?.ContainingType;
 
+        /// <summary>
+        /// Gets the fully qualified name of a symbol.
+        /// </summary>
+        /// <param name="value">
+        /// The symbol to get the fully qualified name for.
+        /// </param>
+        /// <param name="useAlias">
+        /// <see langword="true"/> to indicate that use aliases in the fully qualified name; otherwise, <see langword="false"/>.
+        /// The default is <see langword="true"/>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the fully qualified name of the symbol.
+        /// </returns>
         internal static string FullyQualifiedName(this ISymbol value, in bool useAlias = true)
         {
             switch (value)
@@ -203,6 +319,18 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        /// <summary>
+        /// Gets assignments made to a field via a specific invocation.
+        /// </summary>
+        /// <param name="value">
+        /// The field to inspect.
+        /// </param>
+        /// <param name="invocation">
+        /// The invocation string to match.
+        /// </param>
+        /// <returns>
+        /// A collection of member access expressions for the specified invocation.
+        /// </returns>
         internal static IEnumerable<MemberAccessExpressionSyntax> GetAssignmentsVia(this IFieldSymbol value, string invocation)
         {
             var field = value.GetSyntax<FieldDeclarationSyntax>();
@@ -215,8 +343,26 @@ namespace MiKoSolutions.Analyzers
             return field.DescendantNodes<MemberAccessExpressionSyntax>(_ => _.ToCleanedUpString() == invocation);
         }
 
+        /// <summary>
+        /// Gets the names of all attributes applied to the symbol.
+        /// </summary>
+        /// <param name="value">
+        /// The symbol to inspect.
+        /// </param>
+        /// <returns>
+        /// An array of attribute names.
+        /// </returns>
         internal static string[] GetAttributeNames(this ISymbol value) => value.GetAttributes().ToArray(_ => _.AttributeClass?.Name);
 
+        /// <summary>
+        /// Gets all object creation expressions that are returned directly by a method.
+        /// </summary>
+        /// <param name="value">
+        /// The method to inspect.
+        /// </param>
+        /// <returns>
+        /// A collection of object creation expressions that are directly returned by the method.
+        /// </returns>
         internal static IEnumerable<ObjectCreationExpressionSyntax> GetCreatedObjectSyntaxReturnedByMethod(this IMethodSymbol value)
         {
             var method = (MethodDeclarationSyntax)value.GetSyntax();
@@ -241,6 +387,15 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        /// <summary>
+        /// Gets all object creation expressions that are returned by methods that create the type under test.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// A collection of object creation expressions that are returned by methods that create the type under test.
+        /// </returns>
         // TODO RKN: find better name
         internal static IEnumerable<ObjectCreationExpressionSyntax> GetCreatedObjectSyntaxReturnedByMethods(this ITypeSymbol value)
         {
@@ -259,6 +414,15 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        /// <summary>
+        /// Gets the enclosing method for a symbol.
+        /// </summary>
+        /// <param name="value">
+        /// The symbol to inspect.
+        /// </param>
+        /// <returns>
+        /// The method that contains the symbol.
+        /// </returns>
         internal static IMethodSymbol GetEnclosingMethod(this ISymbol value)
         {
             var symbol = value;
@@ -292,10 +456,28 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        /// <summary>
+        /// Gets a string representation of the generic arguments for a type as T parameters.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the string representation of the generic arguments as T parameters.
+        /// </returns>
         internal static string GetGenericArgumentsAsTs(this ITypeSymbol value) => value is INamedTypeSymbol n
                                                                                   ? n.GetGenericArgumentsAsTs()
                                                                                   : string.Empty;
 
+        /// <summary>
+        /// Gets a string representation of the generic arguments for a named type as T parameters.
+        /// </summary>
+        /// <param name="value">
+        /// The named type to inspect.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the string representation of the generic arguments as T parameters.
+        /// </returns>
         internal static string GetGenericArgumentsAsTs(this INamedTypeSymbol value)
         {
             var count = value.TypeArguments.Length;
@@ -314,13 +496,46 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        /// <summary>
+        /// Gets the arguments from an invocation on a field.
+        /// </summary>
+        /// <param name="value">
+        /// The field to inspect.
+        /// </param>
+        /// <param name="invocation">
+        /// The invocation string to match.
+        /// </param>
+        /// <returns>
+        /// A collection of argument syntaxes that contains arguments for the specified invocation.
+        /// </returns>
         internal static SeparatedSyntaxList<ArgumentSyntax> GetInvocationArgumentsFrom(this IFieldSymbol value, string invocation) => value.GetAssignmentsVia(invocation)
                                                                                                                                            .Select(_ => _.GetEnclosing<InvocationExpressionSyntax>())
                                                                                                                                            .Select(_ => _.ArgumentList.Arguments)
                                                                                                                                            .FirstOrDefault(_ => _.Count > 0);
 
+        /// <summary>
+        /// Gets the line span of a symbol in source code.
+        /// </summary>
+        /// <param name="value">
+        /// The symbol to inspect.
+        /// </param>
+        /// <returns>
+        /// The file line position span for the symbol.
+        /// </returns>
         internal static FileLinePositionSpan GetLineSpan(this ISymbol value) => value.Locations.First(_ => _.IsInSource).GetLineSpan();
 
+        /// <summary>
+        /// Gets members of a specific type defined for the type.
+        /// </summary>
+        /// <typeparam name="TSymbol">
+        /// The specific symbol type to retrieve.
+        /// </typeparam>
+        /// <param name="value">
+        /// The type to inspect for members.
+        /// </param>
+        /// <returns>
+        /// A collection of members of the specified type.
+        /// </returns>
         internal static IReadOnlyList<TSymbol> GetMembers<TSymbol>(this ITypeSymbol value) where TSymbol : ISymbol
         {
             var members = value.GetMembers();
@@ -344,6 +559,18 @@ namespace MiKoSolutions.Analyzers
             return results;
         }
 
+        /// <summary>
+        /// Gets members of a specific type defined for the type including those from base types.
+        /// </summary>
+        /// <typeparam name="TSymbol">
+        /// The specific symbol type to retrieve.
+        /// </typeparam>
+        /// <param name="value">
+        /// The type to inspect for members.
+        /// </param>
+        /// <returns>
+        /// A collection of members of the specified type including those from base types.
+        /// </returns>
         internal static IEnumerable<TSymbol> GetMembersIncludingInherited<TSymbol>(this ITypeSymbol value) where TSymbol : ISymbol
         {
             foreach (var type in value.IncludingAllBaseTypes())
@@ -366,6 +593,21 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        /// <summary>
+        /// Gets members of a specific type with a specific name defined for the type including those from base types.
+        /// </summary>
+        /// <typeparam name="TSymbol">
+        /// The specific symbol type to retrieve.
+        /// </typeparam>
+        /// <param name="value">
+        /// The type to inspect for members.
+        /// </param>
+        /// <param name="name">
+        /// The name of the members to retrieve.
+        /// </param>
+        /// <returns>
+        /// A collection of members of the specified type with the specified name including those from base types.
+        /// </returns>
         internal static IEnumerable<TSymbol> GetMembersIncludingInherited<TSymbol>(this ITypeSymbol value, string name) where TSymbol : ISymbol
         {
             foreach (var type in value.IncludingAllBaseTypes())
@@ -386,6 +628,18 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        /// <summary>
+        /// Gets a string representation of the method signature.
+        /// </summary>
+        /// <param name="value">
+        /// The method to get the signature for.
+        /// </param>
+        /// <param name="builder">
+        /// The string builder to append the signature to.
+        /// </param>
+        /// <returns>
+        /// The string builder with the appended method signature.
+        /// </returns>
         internal static StringBuilder GetMethodSignature(this IMethodSymbol value, StringBuilder builder)
         {
             if (value.IsStatic)
@@ -485,6 +739,18 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        /// <summary>
+        /// Gets a specific modifier for a method.
+        /// </summary>
+        /// <param name="value">
+        /// The method to inspect.
+        /// </param>
+        /// <param name="kind">
+        /// One of the enumeration members that specifies the kind of modifier to retrieve.
+        /// </param>
+        /// <returns>
+        /// The syntax token for the specified modifier.
+        /// </returns>
         internal static SyntaxToken GetModifier(this IMethodSymbol value, in SyntaxKind kind)
         {
             switch (value.GetSyntax())
@@ -497,6 +763,18 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        /// <summary>
+        /// Gets a specific modifier for a parameter.
+        /// </summary>
+        /// <param name="value">
+        /// The parameter to inspect.
+        /// </param>
+        /// <param name="kind">
+        /// One of the enumeration members that specifies the kind of modifier to retrieve.
+        /// </param>
+        /// <returns>
+        /// The syntax token for the specified modifier.
+        /// </returns>
         internal static SyntaxToken GetModifier(this IParameterSymbol value, in SyntaxKind kind)
         {
             var syntax = value.GetSyntax();
@@ -504,12 +782,51 @@ namespace MiKoSolutions.Analyzers
             return syntax.Modifiers.First(kind);
         }
 
+        /// <summary>
+        /// Gets the return type of a property.
+        /// </summary>
+        /// <param name="value">
+        /// The property to inspect.
+        /// </param>
+        /// <returns>
+        /// The return type of the property.
+        /// </returns>
         internal static ITypeSymbol GetReturnType(this IPropertySymbol value) => value.GetMethod?.ReturnType ?? value.SetMethod?.Parameters[0].Type;
 
+        /// <summary>
+        /// Gets the starting line of a method in source code.
+        /// </summary>
+        /// <param name="value">
+        /// The method to inspect.
+        /// </param>
+        /// <returns>
+        /// The starting line number of the method.
+        /// </returns>
         internal static int GetStartingLine(this IMethodSymbol value) => value.Locations.First(_ => _.IsInSource).GetStartingLine();
 
+        /// <summary>
+        /// Gets the syntax node for a symbol in source code.
+        /// </summary>
+        /// <param name="value">
+        /// The symbol to inspect.
+        /// </param>
+        /// <returns>
+        /// The syntax node for the symbol in source code.
+        /// </returns>
         internal static SyntaxNode GetSyntaxNodeInSource(this ISymbol value) => value.GetSyntaxNodeInSource<SyntaxNode>();
 
+        /// <summary>
+        /// Gets a specific type of syntax node for a symbol in source code.
+        /// </summary>
+        /// <typeparam name="TSyntaxNode">
+        /// The specific syntax node type to retrieve.
+        /// </typeparam>
+        /// <param name="value">
+        /// The symbol to inspect.
+        /// </param>
+        /// <returns>
+        /// The syntax node of the specified type for the symbol in source code.
+        /// </returns>
         internal static TSyntaxNode GetSyntaxNodeInSource<TSyntaxNode>(this ISymbol value) where TSyntaxNode : SyntaxNode
         {
             var references = value.DeclaringSyntaxReferences;
@@ -572,6 +889,15 @@ namespace MiKoSolutions.Analyzers
             return null;
         }
 
+        /// <summary>
+        /// Gets the syntax node for a symbol.
+        /// </summary>
+        /// <param name="value">
+        /// The symbol to inspect.
+        /// </param>
+        /// <returns>
+        /// The syntax node for the symbol.
+        /// </returns>
         internal static SyntaxNode GetSyntax(this ISymbol value)
         {
             switch (value)
@@ -607,8 +933,29 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        /// <summary>
+        /// Gets the parameter syntax for a parameter symbol.
+        /// </summary>
+        /// <param name="value">
+        /// The parameter symbol to inspect.
+        /// </param>
+        /// <returns>
+        /// The parameter syntax for the parameter symbol.
+        /// </returns>
         internal static ParameterSyntax GetSyntax(this IParameterSymbol value) => value.GetSyntaxNodeInSource<ParameterSyntax>();
 
+        /// <summary>
+        /// Gets a specific type of syntax node for a symbol.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The specific syntax node type to retrieve.
+        /// </typeparam>
+        /// <param name="value">
+        /// The symbol to inspect.
+        /// </param>
+        /// <returns>
+        /// The syntax node of the specified type for the symbol.
+        /// </returns>
         internal static T GetSyntax<T>(this ISymbol value) where T : SyntaxNode
         {
             var node = value.GetSyntaxNodeInSource();
@@ -616,10 +963,37 @@ namespace MiKoSolutions.Analyzers
             return node?.GetEnclosing<T>();
         }
 
+        /// <summary>
+        /// Determines whether the symbol has a documentation comment trivia syntax.
+        /// </summary>
+        /// <param name="value">
+        /// The symbol to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the symbol has a documentation comment trivia syntax; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool HasDocumentationCommentTriviaSyntax(this ISymbol value) => value.GetSyntax()?.HasDocumentationCommentTriviaSyntax() ?? false;
 
+        /// <summary>
+        /// Gets the documentation comment trivia syntaxes for a symbol.
+        /// </summary>
+        /// <param name="value">
+        /// The symbol to inspect.
+        /// </param>
+        /// <returns>
+        /// An array of documentation comment trivia syntaxes for the symbol.
+        /// </returns>
         internal static DocumentationCommentTriviaSyntax[] GetDocumentationCommentTriviaSyntax(this ISymbol value) => value.GetSyntax()?.GetDocumentationCommentTriviaSyntax() ?? Array.Empty<DocumentationCommentTriviaSyntax>();
 
+        /// <summary>
+        /// Gets the return type symbol for a symbol.
+        /// </summary>
+        /// <param name="value">
+        /// The symbol to inspect.
+        /// </param>
+        /// <returns>
+        /// The return type symbol for the specified symbol.
+        /// </returns>
         internal static ITypeSymbol GetReturnTypeSymbol(this ISymbol value)
         {
             switch (value)
@@ -631,6 +1005,15 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        /// <summary>
+        /// Gets all members that represent a type under test for a test class.
+        /// </summary>
+        /// <param name="value">
+        /// The test class type to inspect.
+        /// </param>
+        /// <returns>
+        /// A collection of symbols that represent the type under test.
+        /// </returns>
         internal static IReadOnlyCollection<ISymbol> GetTypeUnderTestMembers(this ITypeSymbol value)
         {
             // TODO: RKN what about base types?
@@ -658,12 +1041,33 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        /// <summary>
+        /// Gets all types that are tested by a test class.
+        /// </summary>
+        /// <param name="value">
+        /// The test class type to inspect.
+        /// </param>
+        /// <returns>
+        /// A collection of type symbols that are tested by the test class.
+        /// </returns>
         internal static IReadOnlyCollection<ITypeSymbol> GetTypeUnderTestTypes(this ITypeSymbol value)
         {
             // TODO: RKN what about base types?
             return value.GetTypeUnderTestMembers().Select(_ => _.GetReturnTypeSymbol()).WhereNotNull().ToHashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
         }
 
+        /// <summary>
+        /// Determines whether a symbol has an attribute applied that inherits from the specified attribute name.
+        /// </summary>
+        /// <param name="value">
+        /// The symbol to inspect.
+        /// </param>
+        /// <param name="attributeName">
+        /// The name of the attribute to check for inheritance.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the symbol has an attribute applied that inherits from the specified attribute name; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool HasAttributeApplied(this ISymbol value, string attributeName)
         {
             var attributes = value.GetAttributes();
@@ -676,6 +1080,18 @@ namespace MiKoSolutions.Analyzers
             return attributes.Any(_ => _.AttributeClass.InheritsFrom(attributeName));
         }
 
+        /// <summary>
+        /// Determines whether a symbol has an attribute with the exact specified name.
+        /// </summary>
+        /// <param name="value">
+        /// The symbol to inspect.
+        /// </param>
+        /// <param name="attributeName">
+        /// The exact name of the attribute to check for.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the symbol has an attribute with the exact specified name; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool HasAttribute(this ISymbol value, string attributeName)
         {
             var attributes = value.GetAttributes();
@@ -688,6 +1104,18 @@ namespace MiKoSolutions.Analyzers
             return attributes.Any(_ => attributeName == _.AttributeClass?.FullyQualifiedName());
         }
 
+        /// <summary>
+        /// Determines whether a symbol has an attribute from a set of attribute names.
+        /// </summary>
+        /// <param name="value">
+        /// The symbol to inspect.
+        /// </param>
+        /// <param name="attributeNames">
+        /// The set of attribute names to check for.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the symbol has an attribute from the specified set; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool HasAttribute(this ISymbol value, ISet<string> attributeNames)
         {
             var attributes = value.GetAttributes();
@@ -700,6 +1128,15 @@ namespace MiKoSolutions.Analyzers
             return attributes.Any(_ => attributeNames.Contains(_.AttributeClass?.Name) || attributeNames.Contains(_.AttributeClass?.FullyQualifiedName()));
         }
 
+        /// <summary>
+        /// Determines whether a method has a parameter of type <see href="https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencyobject">DependencyObject</see>.
+        /// </summary>
+        /// <param name="value">
+        /// The method to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method has a parameter of type <see href="https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencyobject">DependencyObject</see>; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool HasDependencyObjectParameter(this IMethodSymbol value)
         {
             var parameters = value.Parameters;
@@ -712,14 +1149,68 @@ namespace MiKoSolutions.Analyzers
             return parameters.Any(_ => _.Type.IsDependencyObject());
         }
 
+        /// <summary>
+        /// Determines whether a parameter's type has the <see cref="FlagsAttribute"/> applied.
+        /// </summary>
+        /// <param name="value">
+        /// The parameter to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the parameter's type has the <see cref="FlagsAttribute"/> applied; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool HasFlags(this IParameterSymbol value) => value.Type.HasFlags();
 
+        /// <summary>
+        /// Determines whether a type has the <see cref="FlagsAttribute"/> applied.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type has the <see cref="FlagsAttribute"/> applied; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool HasFlags(this ITypeSymbol value) => value.HasAttribute(Constants.Names.FlagsAttributeNames);
 
+        /// <summary>
+        /// Determines whether a method has a specific modifier.
+        /// </summary>
+        /// <param name="value">
+        /// The method to inspect.
+        /// </param>
+        /// <param name="kind">
+        /// One of the enumeration members that specifies the kind of modifier to check for.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method has the specified modifier; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool HasModifier(this IMethodSymbol value, in SyntaxKind kind) => ((BaseMethodDeclarationSyntax)value.GetSyntax()).Modifiers.Any(kind);
 
+        /// <summary>
+        /// Determines whether a type implements a specific interface.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The interface type to check for implementation.
+        /// </typeparam>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type implements the specified interface; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool Implements<T>(this ITypeSymbol value) => Implements(value, typeof(T).FullName);
 
+        /// <summary>
+        /// Determines whether a type implements an interface with the specified name.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <param name="interfaceTypeName">
+        /// The name of the interface to check for implementation.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type implements the interface with the specified name; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool Implements(this ITypeSymbol value, string interfaceTypeName)
         {
             switch (value.SpecialType)
@@ -802,10 +1293,49 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        /// <summary>
+        /// Determines whether a type implements an interface with either of the specified names.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <param name="interfaceTypeName">
+        /// The first name of the interface to check for implementation.
+        /// </param>
+        /// <param name="interfaceTypeFullQualifiedName">
+        /// The second, fully qualified name of the interface to check for implementation.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type implements an interface with either of the specified names; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool Implements(this ITypeSymbol value, string interfaceTypeName, string interfaceTypeFullQualifiedName) => value.Implements(interfaceTypeName) || value.Implements(interfaceTypeFullQualifiedName);
 
+        /// <summary>
+        /// Determines whether a type implements a potential generic interface.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <param name="interfaceType">
+        /// The interface type to check for implementation.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type implements the potential generic interface; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool ImplementsPotentialGeneric(this ITypeSymbol value, Type interfaceType) => ImplementsPotentialGeneric(value, interfaceType.FullName);
 
+        /// <summary>
+        /// Determines whether a type implements a potential generic interface with the specified name.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <param name="interfaceType">
+        /// The name of the potential generic interface to check for implementation.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type implements the potential generic interface with the specified name; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool ImplementsPotentialGeneric(this ITypeSymbol value, string interfaceType)
         {
             switch (value.SpecialType)
@@ -894,6 +1424,18 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        /// <summary>
+        /// Determines whether any base type of a type satisfies the specified condition.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <param name="callback">
+        /// The condition to check for each base type.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if any base type satisfies the condition; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool AnyBaseType(this ITypeSymbol value, Func<ITypeSymbol, bool> callback)
         {
             var symbol = value;
@@ -916,6 +1458,15 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        /// <summary>
+        /// Gets a collection of all base types including the type itself.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// A collection of all base types including the type itself.
+        /// </returns>
         internal static IReadOnlyCollection<ITypeSymbol> IncludingAllBaseTypes(this ITypeSymbol value)
         {
             var symbol = value;
@@ -940,6 +1491,15 @@ namespace MiKoSolutions.Analyzers
             return baseTypes;
         }
 
+        /// <summary>
+        /// Gets a collection of all nested types including the type itself.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// A collection of all nested types including the type itself.
+        /// </returns>
         internal static IReadOnlyCollection<ITypeSymbol> IncludingAllNestedTypes(this ITypeSymbol value)
         {
             var types = new Queue<ITypeSymbol>(value.IsValueType ? 1 : 2); // probably an object, so increase by 1 to skip re-allocation
@@ -959,9 +1519,33 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        /// <summary>
+        /// Determines whether a type inherits from a specific base class.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The base class type to check for inheritance.
+        /// </typeparam>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type inherits from the specified base class; otherwise, <see langword="false"/>.
+        /// </returns>
         // ReSharper disable once AssignNullToNotNullAttribute
         internal static bool InheritsFrom<T>(this ITypeSymbol value) => InheritsFrom(value, typeof(T).FullName);
 
+        /// <summary>
+        /// Determines whether a type inherits from a base class with the specified name.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <param name="baseClassName">
+        /// The name of the base class to check for inheritance.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type inherits from a base class with the specified name; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool InheritsFrom(this ITypeSymbol value, string baseClassName)
         {
             if (value is null)
@@ -1015,6 +1599,21 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        /// <summary>
+        /// Determines whether a type inherits from a base class with either of the specified names.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <param name="baseClassName">
+        /// The first name of the base class to check for inheritance.
+        /// </param>
+        /// <param name="baseClassFullQualifiedName">
+        /// The second, fully qualified name of the base class to check for inheritance.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type inherits from a base class with either of the specified names; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool InheritsFrom(this ITypeSymbol value, string baseClassName, string baseClassFullQualifiedName)
         {
             switch (value.SpecialType)
@@ -1066,6 +1665,18 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        /// <summary>
+        /// Determines whether a type is related to another type.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <param name="type">
+        /// The type to check for relationship.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is related to the specified type; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsRelated(this ITypeSymbol value, ITypeSymbol type)
         {
             switch (type.TypeKind)
@@ -1090,6 +1701,15 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        /// <summary>
+        /// Determines whether a method is an ASP.NET Core controller method.
+        /// </summary>
+        /// <param name="value">
+        /// The method to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method is an ASP.NET Core controller method; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsAspNetCoreController(this IMethodSymbol value)
         {
             if (value.DeclaredAccessibility is Accessibility.Public)
@@ -1104,6 +1724,15 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        /// <summary>
+        /// Determines whether a method is an ASP.NET Core startup method.
+        /// </summary>
+        /// <param name="value">
+        /// The method to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method is an ASP.NET Core startup method; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsAspNetCoreStartUp(this IMethodSymbol value)
         {
             switch (value.Name)
@@ -1117,9 +1746,27 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        /// <summary>
+        /// Determines whether a method is asynchronous task-based.
+        /// </summary>
+        /// <param name="value">
+        /// The method to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method is asynchronous task-based; otherwise, <see langword="false"/>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsAsyncTaskBased(this IMethodSymbol value) => value.IsAsync || value.ReturnType.IsTask();
 
+        /// <summary>
+        /// Determines whether a type is a boolean or a nullable boolean.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is a boolean or a nullable boolean; otherwise, <see langword="false"/>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsBoolean(this ITypeSymbol value)
         {
@@ -1136,11 +1783,38 @@ namespace MiKoSolutions.Analyzers
             return value.IsNullable() && value is INamedTypeSymbol type && type.TypeArguments[0].SpecialType is SpecialType.System_Boolean;
         }
 
+        /// <summary>
+        /// Determines whether a type is a byte.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is a byte; otherwise, <see langword="false"/>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsByte(this ITypeSymbol value) => value.SpecialType is SpecialType.System_Byte;
 
+        /// <summary>
+        /// Determines whether a type is a byte array.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is a byte array; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsByteArray(this ITypeSymbol value) => value is IArrayTypeSymbol array && array.ElementType.IsByte();
 
+        /// <summary>
+        /// Determines whether a type is an <see cref="IGrouping"/> interface.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is an <see cref="IGrouping"/> interface; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsIGrouping(this ITypeSymbol value)
         {
             if (value.TypeKind is TypeKind.Interface)
@@ -1156,9 +1830,27 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        /// <summary>
+        /// Determines whether a type is a <see cref="CancellationToken"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is a <see cref="CancellationToken"/>; otherwise, <see langword="false"/>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsCancellationToken(this ITypeSymbol value) => value.TypeKind is TypeKind.Struct && value.ToString() == TypeNames.CancellationToken;
 
+        /// <summary>
+        /// Determines whether a method is a coerce value callback for a dependency property.
+        /// </summary>
+        /// <param name="value">
+        /// The method to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method is a coerce value callback; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsCoerceValueCallback(this IMethodSymbol value)
         {
             if (value.ReturnType.IsObject())
@@ -1171,17 +1863,62 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        /// <summary>
+        /// Determines whether a type implements the <see cref="ICommand"/> interface.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type implements the <see cref="ICommand"/> interface; otherwise, <see langword="false"/>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsCommand(this ITypeSymbol value) => value.Implements<ICommand>();
 
+        /// <summary>
+        /// Determines whether a symbol is a constructor.
+        /// </summary>
+        /// <param name="value">
+        /// The symbol to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the symbol is a constructor; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsConstructor(this ISymbol value) => value is IMethodSymbol m && m.IsConstructor();
 
+        /// <summary>
+        /// Determines whether a method is a constructor.
+        /// </summary>
+        /// <param name="value">
+        /// The method to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method is a constructor; otherwise, <see langword="false"/>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsConstructor(this IMethodSymbol value) => value.MethodKind is MethodKind.Constructor;
 
+        /// <summary>
+        /// Determines whether a symbol is a primary constructor.
+        /// </summary>
+        /// <param name="value">
+        /// The symbol to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the symbol is a primary constructor; otherwise, <see langword="false"/>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsPrimaryConstructor(this ISymbol value) => value is IMethodSymbol m && m.IsPrimaryConstructor();
 
+        /// <summary>
+        /// Determines whether a method is a primary constructor.
+        /// </summary>
+        /// <param name="value">
+        /// The method to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method is a primary constructor; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsPrimaryConstructor(this IMethodSymbol value)
         {
             if (value.IsConstructor())
@@ -1199,11 +1936,38 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        /// <summary>
+        /// Determines whether a type inherits from <see href="https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencyobject">DependencyObject</see>.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type inherits from <see href="https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencyobject">DependencyObject</see>; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsDependencyObject(this ITypeSymbol value) => value.InheritsFrom("DependencyObject", "System.Windows.DependencyObject");
 
+        /// <summary>
+        /// Determines whether a type is a <see href="https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencyproperty">DependencyProperty</see>.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is a <see href="https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencyproperty">DependencyProperty</see>; otherwise, <see langword="false"/>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsDependencyProperty(this ITypeSymbol value) => value.Name is Constants.DependencyProperty.TypeName || value.Name is Constants.DependencyProperty.FullyQualifiedTypeName;
 
+        /// <summary>
+        /// Determines whether a type is a <see href="https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertychangedeventargs">DependencyPropertyChangedEventArgs</see>.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is a <see href="https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertychangedeventargs">DependencyPropertyChangedEventArgs</see>; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsDependencyPropertyChangedEventArgs(this ITypeSymbol value)
         {
             if (value.TypeKind is TypeKind.Struct && value.SpecialType is SpecialType.None)
@@ -1219,6 +1983,15 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        /// <summary>
+        /// Determines whether a method is a dependency object event handler.
+        /// </summary>
+        /// <param name="value">
+        /// The method to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method is a dependency object event handler; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsDependencyObjectEventHandler(this IMethodSymbol value)
         {
             var parameters = value.Parameters;
@@ -1226,6 +1999,15 @@ namespace MiKoSolutions.Analyzers
             return parameters.Length is 2 && parameters[0].Type.IsDependencyObject() && parameters[1].Type.IsDependencyPropertyChangedEventArgs();
         }
 
+        /// <summary>
+        /// Determines whether a method is a dependency property event handler.
+        /// </summary>
+        /// <param name="value">
+        /// The method to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method is a dependency property event handler; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsDependencyPropertyEventHandler(this IMethodSymbol value)
         {
             var parameters = value.Parameters;
@@ -1233,8 +2015,26 @@ namespace MiKoSolutions.Analyzers
             return parameters.Length is 2 && parameters[0].Type.IsObject() && parameters[1].Type.IsDependencyPropertyChangedEventArgs();
         }
 
+        /// <summary>
+        /// Determines whether a type is a <see href="https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertykey">DependencyPropertyKey</see>.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is a <see href="https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertykey">DependencyPropertyKey</see>; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsDependencyPropertyKey(this ITypeSymbol value) => value.Name is Constants.DependencyPropertyKey.TypeName || value.Name is Constants.DependencyPropertyKey.FullyQualifiedTypeName;
 
+        /// <summary>
+        /// Determines whether a type implements <see cref="IDisposable"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type implements <see cref="IDisposable"/>; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsDisposable(this ITypeSymbol value)
         {
             var interfaces = value.AllInterfaces;
@@ -1242,11 +2042,38 @@ namespace MiKoSolutions.Analyzers
             return interfaces.Length > 0 && interfaces.Any(_ => _.SpecialType is SpecialType.System_IDisposable);
         }
 
+        /// <summary>
+        /// Determines whether a symbol is enhanced by a PostSharp advice.
+        /// </summary>
+        /// <param name="value">
+        /// The symbol to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the symbol is enhanced by a PostSharp advice; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsEnhancedByPostSharpAdvice(this ISymbol value) => value.HasAttributeApplied("PostSharp.Aspects.Advices.Advice");
 
+        /// <summary>
+        /// Determines whether a type is an enumeration.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is an enumeration; otherwise, <see langword="false"/>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsEnum(this ITypeSymbol value) => value?.TypeKind is TypeKind.Enum;
 
+        /// <summary>
+        /// Determines whether a type implements <see cref="IEnumerable"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type implements <see cref="IEnumerable"/>; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsEnumerable(this ITypeSymbol value)
         {
             var specialType = value.SpecialType;
@@ -1301,15 +2128,42 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        /// <summary>
+        /// Determines whether a type is a Prism event.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is a Prism event; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsPrismEvent(this ITypeSymbol value) => value.TypeKind is TypeKind.Class
                                                                   && value.SpecialType is SpecialType.None
                                                                   && value.ToString() != "Microsoft.Practices.Prism.Events.EventBase"
                                                                   && value.InheritsFrom("Microsoft.Practices.Prism.Events.EventBase");
 
+        /// <summary>
+        /// Determines whether a type inherits from <see cref="EventArgs"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type inherits from <see cref="EventArgs"/>; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsEventArgs(this ITypeSymbol value) => value.TypeKind is TypeKind.Class
                                                                  && value.SpecialType is SpecialType.None
                                                                  && value.InheritsFrom<EventArgs>();
 
+        /// <summary>
+        /// Determines whether a method is an event handler.
+        /// </summary>
+        /// <param name="value">
+        /// The method to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method is an event handler; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsEventHandler(this IMethodSymbol value)
         {
             switch (value.MethodKind)
@@ -1335,6 +2189,15 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        /// <summary>
+        /// Determines whether a type is an event handler delegate.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is an event handler delegate; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsEventHandler(this ITypeSymbol value)
         {
             if (value.TypeKind != TypeKind.Delegate)
@@ -1354,11 +2217,32 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        /// <summary>
+        /// Determines whether a type inherits from <see cref="Exception"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type inherits from Exception; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsException(this ITypeSymbol value) => value != null
                                                                  && value.TypeKind is TypeKind.Class
                                                                  && value.SpecialType is SpecialType.None
                                                                  && value.OriginalDefinition.InheritsFrom<Exception>();
 
+        /// <summary>
+        /// Determines whether an argument represents an exception.
+        /// </summary>
+        /// <param name="value">
+        /// The argument to inspect.
+        /// </param>
+        /// <param name="semanticModel">
+        /// The semantic model to use for symbol resolution.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the argument represents an exception; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsException(this ArgumentSyntax value, SemanticModel semanticModel)
         {
             if (value is null)
@@ -1373,6 +2257,15 @@ namespace MiKoSolutions.Analyzers
             return argumentType.IsException();
         }
 
+        /// <summary>
+        /// Determines whether a type is a factory.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is a factory; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsFactory(this ITypeSymbol value)
         {
             switch (value?.TypeKind)
@@ -1390,18 +2283,75 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        /// <summary>
+        /// Determines whether a type is generated.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is generated; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsGenerated(this ITypeSymbol value) => value?.TypeKind is TypeKind.Class && value.HasAttribute(Constants.Names.GeneratedAttributeNames);
 
+        /// <summary>
+        /// Determines whether a type is generic.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is generic; otherwise, <see langword="false"/>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsGeneric(this ITypeSymbol value) => value is INamedTypeSymbol type && type.TypeArguments.Length > 0;
 
+        /// <summary>
+        /// Determines whether a type is a <see cref="Guid"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is a <see cref="Guid"/>; otherwise, <see langword="false"/>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsGuid(this ITypeSymbol value) => value.IsValueType && value.Name == nameof(Guid);
 
+        /// <summary>
+        /// Determines whether a symbol has an Import attribute.
+        /// </summary>
+        /// <param name="value">
+        /// The symbol to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the symbol has an Import attribute; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsImport(this ISymbol value) => value.HasAttribute(Constants.Names.ImportAttributeNames);
 
+        /// <summary>
+        /// Determines whether a symbol is an importing constructor.
+        /// </summary>
+        /// <param name="value">
+        /// The symbol to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the symbol is an importing constructor; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsImportingConstructor(this ISymbol value) => value.IsConstructor() && value.HasAttribute(Constants.Names.ImportingConstructorAttributeNames);
 
+        /// <summary>
+        /// Determines whether a symbol is an interface implementation.
+        /// </summary>
+        /// <typeparam name="TSymbol">
+        /// The symbol type to check.
+        /// </typeparam>
+        /// <param name="value">
+        /// The symbol to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the symbol is an interface implementation; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsInterfaceImplementation<TSymbol>(this TSymbol value) where TSymbol : class, ISymbol
         {
             if (value.IsStatic)
@@ -1447,6 +2397,15 @@ namespace MiKoSolutions.Analyzers
             return value.IsInterfaceImplementation(typeSymbol);
         }
 
+        /// <summary>
+        /// Determines whether a method is an interface implementation.
+        /// </summary>
+        /// <param name="value">
+        /// The method to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method is an interface implementation; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsInterfaceImplementation(this IMethodSymbol value)
         {
             if (value.IsStatic)
@@ -1499,6 +2458,18 @@ namespace MiKoSolutions.Analyzers
             return value.IsInterfaceImplementation(typeSymbol);
         }
 
+        /// <summary>
+        /// Determines whether a method is an implementation of a specific interface.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The interface type to check for implementation.
+        /// </typeparam>
+        /// <param name="value">
+        /// The method to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method is an implementation of the specified interface; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsInterfaceImplementationOf<T>(this IMethodSymbol value)
         {
             if (value.IsStatic)
@@ -1555,6 +2526,15 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        /// <summary>
+        /// Determines whether a symbol is a LINQ extension method.
+        /// </summary>
+        /// <param name="value">
+        /// The symbol to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the symbol is a LINQ extension method; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsLinqExtensionMethod(this ISymbol value)
         {
             if (value is IMethodSymbol method)
@@ -1579,22 +2559,75 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        /// <summary>
+        /// Determines whether a type is a multi-value converter.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is a multi-value converter; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsMultiValueConverter(this ITypeSymbol value) => value.Implements(Constants.Names.IMultiValueConverter, Constants.Names.IMultiValueConverterFullName)
                                                                            || value.InheritsFrom(Constants.Names.IMultiValueConverter, Constants.Names.IMultiValueConverterFullName);
 
-        // ignore special situation for task factory
+        /// <summary>
+        /// Determines whether a type is a nullable value type.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is a nullable value type; otherwise, <see langword="false"/>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsNullable(this ITypeSymbol value) => value.IsValueType && value.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
 
+        /// <summary>
+        /// Determines whether a type is <see cref="object"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is <see cref="object"/>; otherwise, <see langword="false"/>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsObject(this ITypeSymbol value) => value.SpecialType is SpecialType.System_Object;
 
+        /// <summary>
+        /// Determines whether a type is partial.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is partial; otherwise, <see langword="false"/>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsPartial(this ITypeSymbol value) => value.Locations.Length > 1;
 
+        /// <summary>
+        /// Determines whether a method is partial.
+        /// </summary>
+        /// <param name="value">
+        /// The method to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method is partial; otherwise, <see langword="false"/>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsPartial(this IMethodSymbol value) => value.HasModifier(SyntaxKind.PartialKeyword);
 
+        /// <summary>
+        /// Determines whether a symbol is publicly visible.
+        /// </summary>
+        /// <param name="value">
+        /// The symbol to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the symbol is publicly visible; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsPubliclyVisible(this ISymbol value)
         {
             switch (value.DeclaredAccessibility)
@@ -1608,6 +2641,15 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        /// <summary>
+        /// Determines whether a type is a routed event.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is a routed event; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsRoutedEvent(this ITypeSymbol value)
         {
             if (value.TypeKind is TypeKind.Class && value.IsSealed)
@@ -1623,11 +2665,38 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        /// <summary>
+        /// Determines whether a method is a serialization constructor.
+        /// </summary>
+        /// <param name="value">
+        /// The method to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method is a serialization constructor; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsSerializationConstructor(this IMethodSymbol value) => value.IsConstructor() && value.Parameters.Length is 2 && value.Parameters[0].IsSerializationInfoParameter() && value.Parameters[1].IsStreamingContextParameter();
 
+        /// <summary>
+        /// Determines whether a parameter is a <see cref="SerializationInfo"/> parameter.
+        /// </summary>
+        /// <param name="value">
+        /// The parameter to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the parameter is a <see cref="SerializationInfo"/> parameter; otherwise, <see langword="false"/>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsSerializationInfoParameter(this IParameterSymbol value) => value.Type.Name == nameof(SerializationInfo);
 
+        /// <summary>
+        /// Determines whether a method is a special accessor.
+        /// </summary>
+        /// <param name="value">
+        /// The method to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method is a special accessor; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsSpecialAccessor(this IMethodSymbol value)
         {
             switch (value.MethodKind)
@@ -1644,15 +2713,51 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        /// <summary>
+        /// Determines whether a parameter is a <see cref="StreamingContext"/> parameter.
+        /// </summary>
+        /// <param name="value">
+        /// The parameter to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the parameter is a <see cref="StreamingContext"/> parameter; otherwise, <see langword="false"/>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsStreamingContextParameter(this IParameterSymbol value) => value.Type.Name == nameof(StreamingContext);
 
+        /// <summary>
+        /// Determines whether a type is <see cref="string"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is <see cref="string"/>; otherwise, <see langword="false"/>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsString(this ITypeSymbol value) => value?.SpecialType is SpecialType.System_String;
 
+        /// <summary>
+        /// Determines whether a type is <see cref="System.Threading.Tasks.Task"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is <see cref="System.Threading.Tasks.Task"/>; otherwise, <see langword="false"/>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsTask(this ITypeSymbol value) => value?.Name == nameof(Task);
 
+        /// <summary>
+        /// Determines whether a type is a test class.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is a test class; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsTestClass(this ITypeSymbol value)
         {
             if (value?.TypeKind is TypeKind.Class && value.IsRecord is false)
@@ -1672,18 +2777,81 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        /// <summary>
+        /// Determines whether a method is a test method.
+        /// </summary>
+        /// <param name="value">
+        /// The method to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method is a test method; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsTestMethod(this IMethodSymbol value) => value.IsTestSpecificMethod(Constants.Names.TestMethodAttributeNames);
 
+        /// <summary>
+        /// Determines whether a method is a one-time test setup method.
+        /// </summary>
+        /// <param name="value">
+        /// The method to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method is a one-time test setup method; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsTestOneTimeSetUpMethod(this IMethodSymbol value) => value.IsTestSpecificMethod(Constants.Names.TestOneTimeSetupAttributeNames);
 
+        /// <summary>
+        /// Determines whether a method is a one-time test tear down method.
+        /// </summary>
+        /// <param name="value">
+        /// The method to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method is a one-time test tear down method; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsTestOneTimeTearDownMethod(this IMethodSymbol value) => value.IsTestSpecificMethod(Constants.Names.TestOneTimeTearDownAttributeNames);
 
+        /// <summary>
+        /// Determines whether a method is a test setup method.
+        /// </summary>
+        /// <param name="value">
+        /// The method to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method is a test setup method; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsTestSetUpMethod(this IMethodSymbol value) => value.IsTestSpecificMethod(Constants.Names.TestSetupAttributeNames);
 
+        /// <summary>
+        /// Determines whether a method is a test tear down method.
+        /// </summary>
+        /// <param name="value">
+        /// The method to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method is a test tear down method; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsTestTearDownMethod(this IMethodSymbol value) => value.IsTestSpecificMethod(Constants.Names.TestTearDownAttributeNames);
 
+        /// <summary>
+        /// Determines whether a method is a type under test creation method.
+        /// </summary>
+        /// <param name="value">
+        /// The method to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method is a type under test creation method; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsTypeUnderTestCreationMethod(this IMethodSymbol value) => value.ReturnsVoid is false && Constants.Names.TypeUnderTestMethodNames.Contains(value.Name);
 
+        /// <summary>
+        /// Determines whether a method is a validate value callback for a dependency property.
+        /// </summary>
+        /// <param name="value">
+        /// The method to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method is a validate value callback; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsValidateValueCallback(this IMethodSymbol value)
         {
             if (value.ReturnType.IsBoolean())
@@ -1696,9 +2864,27 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        /// <summary>
+        /// Determines whether a type is a value converter.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is a value converter; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsValueConverter(this ITypeSymbol value) => value.Implements(Constants.Names.IValueConverter, Constants.Names.IValueConverterFullName)
                                                                       || value.InheritsFrom(Constants.Names.IValueConverter, Constants.Names.IValueConverterFullName);
 
+        /// <summary>
+        /// Determines whether a type is an XML node.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is an XML node; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsXmlNode(this ITypeSymbol value)
         {
             switch (value?.Name)
@@ -1805,6 +2991,18 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        /// <summary>
+        /// Attempts to get the generic arguments of a type.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <param name="result">
+        /// On successful return, contains the generic arguments if found.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if generic arguments were found; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool TryGetGenericArguments(this ITypeSymbol value, out ImmutableArray<ITypeSymbol> result)
         {
             result = ImmutableArray.Create<ITypeSymbol>();
@@ -1817,6 +3015,22 @@ namespace MiKoSolutions.Analyzers
             return result.Length > 0;
         }
 
+        /// <summary>
+        /// Attempts to get a specific generic argument type from a type.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <param name="result">
+        /// On successful return, contains the generic argument type if found.
+        /// </param>
+        /// <param name="index">
+        /// The zero-based index of the generic argument to retrieve.
+        /// The default is <c>0</c>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the generic argument type was found; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool TryGetGenericArgumentType(this ITypeSymbol value, out ITypeSymbol result, in int index = 0)
         {
             result = null;

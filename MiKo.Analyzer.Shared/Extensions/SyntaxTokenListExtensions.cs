@@ -13,7 +13,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers
 {
     /// <summary>
-    /// Provides a set of <see langword="static"/> methods for <see cref="SyntaxTokenList"/>.
+    /// Provides a set of <see langword="static"/> methods for <see cref="SyntaxTokenList"/>s.
     /// </summary>
     internal static class SyntaxTokenListExtensions
     {
@@ -128,7 +128,7 @@ namespace MiKoSolutions.Analyzers
         /// The list of syntax tokens to search.
         /// </param>
         /// <param name="kind">
-        /// One of the enumeration members that specifies the kind of syntax token to find.
+        /// One of the enumeration members that specifies the kind of syntax token to seek.
         /// </param>
         /// <returns>
         /// The first token of the specified kind, or the default value if no such token is found.
@@ -143,7 +143,7 @@ namespace MiKoSolutions.Analyzers
         /// <summary>
         /// Finds the first element in the <see cref="SyntaxTokenList"/> that satisfies the specified condition.
         /// </summary>
-        /// <param name="source">
+        /// <param name="value">
         /// The list of syntax tokens to search.
         /// </param>
         /// <param name="predicate">
@@ -155,20 +155,20 @@ namespace MiKoSolutions.Analyzers
         /// <exception cref="InvalidOperationException">
         /// No element satisfies the condition.
         /// </exception>
-        internal static SyntaxToken First(this in SyntaxTokenList source, Func<SyntaxToken, bool> predicate)
+        internal static SyntaxToken First(this in SyntaxTokenList value, Func<SyntaxToken, bool> predicate)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var sourceCount = source.Count;
+            var valueCount = value.Count;
 
-            if (sourceCount > 0)
+            if (valueCount > 0)
             {
-                for (var index = 0; index < sourceCount; index++)
+                for (var index = 0; index < valueCount; index++)
                 {
-                    var value = source[index];
+                    var token = value[index];
 
-                    if (predicate(value))
+                    if (predicate(token))
                     {
-                        return value;
+                        return token;
                     }
                 }
             }
@@ -179,7 +179,7 @@ namespace MiKoSolutions.Analyzers
         /// <summary>
         /// Finds the first element in the <see cref="SyntaxTokenList"/> that satisfies the specified condition, or the default value if no such element is found.
         /// </summary>
-        /// <param name="source">
+        /// <param name="value">
         /// The list of syntax tokens to search.
         /// </param>
         /// <param name="predicate">
@@ -188,20 +188,20 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The first element that satisfies the condition, or the default value if no such element is found.
         /// </returns>
-        internal static SyntaxToken FirstOrDefault(this in SyntaxTokenList source, Func<SyntaxToken, bool> predicate)
+        internal static SyntaxToken FirstOrDefault(this in SyntaxTokenList value, Func<SyntaxToken, bool> predicate)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var sourceCount = source.Count;
+            var valueCount = value.Count;
 
-            if (sourceCount > 0)
+            if (valueCount > 0)
             {
-                for (var index = 0; index < sourceCount; index++)
+                for (var index = 0; index < valueCount; index++)
                 {
-                    var value = source[index];
+                    var token = value[index];
 
-                    if (predicate(value))
+                    if (predicate(token))
                     {
-                        return value;
+                        return token;
                     }
                 }
             }
@@ -364,7 +364,7 @@ namespace MiKoSolutions.Analyzers
         /// One of the enumeration members that specifies the kind of syntax tokens to retrieve.
         /// </param>
         /// <returns>
-        /// A read-only list of syntax tokens of the specified kind.
+        /// A collection of syntax tokens that contains syntax tokens of the specified kind.
         /// </returns>
         internal static IReadOnlyList<SyntaxToken> OfKind(this in SyntaxTokenList source, in SyntaxKind kind)
         {
@@ -622,7 +622,7 @@ namespace MiKoSolutions.Analyzers
         /// The token to potentially remove if it has empty text.
         /// </param>
         /// <returns>
-        /// A <see cref="SyntaxTokenList"/> without the empty text token if applicable; otherwise, the original list.
+        /// A collection of syntax tokens without the empty text token if applicable; otherwise, the original list.
         /// </returns>
         internal static SyntaxTokenList WithoutEmptyText(this in SyntaxTokenList values, in SyntaxToken token)
         {
@@ -641,7 +641,7 @@ namespace MiKoSolutions.Analyzers
         /// The list of syntax tokens to process.
         /// </param>
         /// <returns>
-        /// A <see cref="SyntaxTokenList"/> without XML new line tokens and empty text at the beginning.
+        /// A collection of syntax tokens without XML new line tokens at the beginning.
         /// </returns>
         internal static SyntaxTokenList WithoutFirstXmlNewLine(this in SyntaxTokenList values)
         {
@@ -672,7 +672,7 @@ namespace MiKoSolutions.Analyzers
         /// The list of syntax tokens to process.
         /// </param>
         /// <returns>
-        /// A <see cref="SyntaxTokenList"/> without XML new line tokens and empty text at the end.
+        /// A collection of syntax tokens without XML new line tokens at the end.
         /// </returns>
         internal static SyntaxTokenList WithoutLastXmlNewLine(this in SyntaxTokenList values)
         {
@@ -707,7 +707,7 @@ namespace MiKoSolutions.Analyzers
         /// The token to potentially remove if it is a new line token.
         /// </param>
         /// <returns>
-        /// A <see cref="SyntaxTokenList"/> without the new line token if applicable; otherwise, the original list.
+        /// A collection of syntax tokens without the new line token if applicable; otherwise, the original list.
         /// </returns>
         internal static SyntaxTokenList WithoutNewLine(this in SyntaxTokenList values, in SyntaxToken token)
         {
