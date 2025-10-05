@@ -1,5 +1,4 @@
 ﻿using System.Composition;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -12,9 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
 //// ncrunch: rdi off
 
-        private static readonly Pair[] ReplacementMap = Constants.Comments.FindTerms.Select(_ => new Pair(_, Constants.Comments.ToSeekTerm))
-                                                                 .ConcatenatedWith(new Pair(" to inspect for ", " " + Constants.Comments.ToSeekTerm + " for "))
-                                                                 .OrderDescendingByLengthAndText(_ => _.Key);
+        private static readonly Pair[] ReplacementMap = Constants.Comments.FindTerms.ToArray(_ => new Pair(_, Constants.Comments.ToSeekTerm));
 
 //// ncrunch: rdi default
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -12,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2220";
 
-        private static readonly string[] FindTermsWithDelimiters = Constants.Comments.FindTerms.WithDelimiters();
+        private static readonly string[] FindTermsWithDelimiters = Constants.Comments.FindTerms.WithDelimiters().Except(" to inspect for ").ToArray();
 
         public MiKo_2220_DocumentationShouldUseToSeekAnalyzer() : base(Id)
         {
