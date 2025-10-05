@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly Dictionary<string, string> Map = new()
                                                                      {
                                                                          { "to find", "to seek" },
-                                                                         { "to inspect for", "to seek" },
+                                                                         { "to inspect for ", "to seek for " },
                                                                          { "to look for", "to seek" },
                                                                          { "to test for", "to seek" },
 
@@ -47,7 +47,7 @@ public class TestMe
         [Test]
         public void An_issue_is_reported_for_wrong_text_in_documentation_([ValueSource(nameof(WrongPhrases))] string phrase) => An_issue_is_reported_for(@"
 /// <summary>
-/// It " + phrase + @" do something.
+/// It is used " + phrase.Trim() + @" something.
 /// </summary>
 public class TestMe
 {
@@ -58,13 +58,13 @@ public class TestMe
         {
             const string Template = @"
 /// <summary>
-/// It ### do something.
+/// It is used ### something.
 /// </summary>
 public class TestMe
 {
 }";
 
-            VerifyCSharpFix(Template.Replace("###", phrase), Template.Replace("###", Map[phrase]));
+            VerifyCSharpFix(Template.Replace("###", phrase.Trim()), Template.Replace("###", Map[phrase].Trim()));
         }
 
         protected override string GetDiagnosticId() => MiKo_2220_DocumentationShouldUseToSeekAnalyzer.Id;
