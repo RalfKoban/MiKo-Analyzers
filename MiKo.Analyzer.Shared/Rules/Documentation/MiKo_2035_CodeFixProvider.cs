@@ -323,7 +323,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             private static IEnumerable<string> CreatePhrases()
             {
                 var startingWords = new[] { "a", "an", "the" };
-                var modifications = new[] { "readonly", "read-only", "read only" };
+                var modifications = new[] { "readonly", "read-only", "read only", "filtered" };
                 var collections = new[]
                                       {
                                           "array", "list", "dictionary", "enumerable", "enumerable collection", "syntax list", "separated syntax list", "immutable array",

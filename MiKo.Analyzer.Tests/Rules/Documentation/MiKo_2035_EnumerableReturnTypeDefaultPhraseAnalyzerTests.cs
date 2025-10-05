@@ -1055,7 +1055,7 @@ public class TestMe
         private static IEnumerable<string> CreateStartingPhrases()
         {
             string[] startingWords = ["a", "an", "the"];
-            string[] modifications = ["readonly", "read-only", "read only"];
+            string[] modifications = ["readonly", "read-only", "read only", "filtered"];
             string[] collections = [
                                        "array", "list", "dictionary", "enumerable", "queue", "stack", "map",
                                        "hashset", "hashSet", "hashtable", "hashTable", "hash set", "hashed set", "hash table", "hashed table", "hashing set", "hashing table",
