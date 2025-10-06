@@ -28,6 +28,16 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_correctly_IGrouping_named_field() => No_issue_is_reported_for(@"
+using System.Linq;
+
+public class TestMe
+{
+    private IGrouping<int, string> _group;
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_correctly_named_field_([ValueSource(nameof(FieldPrefixes))] string prefix, [Values("dictionary", "map", "array", "value", "myValue")] string field)
             => No_issue_is_reported_for(@"
 
