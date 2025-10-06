@@ -34,6 +34,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return false;
             }
 
+            if (type.IsIGrouping())
+            {
+                return false;
+            }
+
             return type.IsEnumerable();
         }
 

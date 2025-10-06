@@ -376,6 +376,27 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_IGrouping_node() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class TestMe
+{
+    public string Name { get; set; }
+
+    public void DoSomething(IEnumerable<TestMe> items)
+    {
+        var itemsGroupedByName = items.GroupBy(_ => _.Name);
+
+        foreach (var itemGroup in itemsGroupedByName)
+        {
+        }
+    }
+}
+");
+
         [TestCase("number", "numbers")]
         [TestCase("resultOfSomething", "resultsOfSomething")]
         [TestCase("resultToShow", "resultsToShow")]

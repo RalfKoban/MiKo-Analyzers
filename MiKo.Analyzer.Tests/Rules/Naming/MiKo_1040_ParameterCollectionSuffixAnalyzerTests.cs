@@ -115,6 +115,17 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_IGrouping_parameter() => No_issue_is_reported_for(@"
+using System.Linq;
+
+public class TestMe
+{
+    public void DoSomething(IGrouping<int, string> group)
+    { }
+}
+");
+
         [TestCase("string blaEnumList")]
         [TestCase("string blaList")]
         [TestCase("string blaCollection")]
