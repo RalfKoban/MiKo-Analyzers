@@ -61,7 +61,7 @@ namespace MiKoSolutions.Analyzers
                 XmlNodeSyntax first = null;
 
                 // try to find the first syntax that is not only an XmlCommentExterior
-                for (int index = 0, listCount = list.Count; index < listCount; index++)
+                for (int index = 0, count = list.Count; index < count; index++)
                 {
                     first = list[index];
 
@@ -162,11 +162,11 @@ namespace MiKoSolutions.Analyzers
                 var list = value.GetLeadingTrivia();
 
                 // keep in local variable to avoid multiple requests (see Roslyn implementation)
-                var listCount = list.Count;
+                var count = list.Count;
 
-                if (listCount > 0)
+                if (count > 0)
                 {
-                    for (var index = 0; index < listCount; index++)
+                    for (var index = 0; index < count; index++)
                     {
                         var trivia = list[index];
 
@@ -1175,7 +1175,7 @@ namespace MiKoSolutions.Analyzers
 
             var textTokens = tokens.ToList();
 
-            for (int i = 0, textTokensCount = textTokens.Count; i < textTokensCount; i++)
+            for (int i = 0, count = textTokens.Count; i < count; i++)
             {
                 var token = textTokens[i];
 

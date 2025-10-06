@@ -91,62 +91,6 @@ namespace MiKoSolutions.Analyzers
         internal static LinePosition GetEndPosition(this in SyntaxTrivia value) => value.GetLocation().GetEndPosition();
 
         /// <summary>
-        /// Determines whether the trivia list contains any end of line trivia.
-        /// </summary>
-        /// <param name="value">
-        /// The trivia list to examine.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the list contains any end of line trivia; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool HasEndOfLine(this in SyntaxTriviaList value)
-        {
-            // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var valueCount = value.Count;
-
-            if (valueCount > 0)
-            {
-                for (var index = 0; index < valueCount; index++)
-                {
-                    if (value[index].IsEndOfLine())
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Determines whether the trivia list contains any comment trivia.
-        /// </summary>
-        /// <param name="value">
-        /// The trivia list to examine.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the list contains any comment trivia; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool HasComment(this in SyntaxTriviaList value)
-        {
-            // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var valueCount = value.Count;
-
-            if (valueCount > 0)
-            {
-                for (var index = 0; index < valueCount; index++)
-                {
-                    if (value[index].IsComment())
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        /// <summary>
         /// Determines whether the trivia is an end of line trivia.
         /// </summary>
         /// <param name="value">

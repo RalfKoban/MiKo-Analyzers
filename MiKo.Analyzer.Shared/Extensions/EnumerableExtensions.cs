@@ -235,11 +235,11 @@ namespace MiKoSolutions.Analyzers
         internal static StringBuilder GetTextWithoutTrivia(this IReadOnlyList<SyntaxToken> values, StringBuilder builder)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var textTokensCount = values.Count;
+            var count = values.Count;
 
-            if (textTokensCount > 0)
+            if (count > 0)
             {
-                for (var index = 0; index < textTokensCount; index++)
+                for (var index = 0; index < count; index++)
                 {
                     var token = values[index];
 
@@ -538,16 +538,16 @@ namespace MiKoSolutions.Analyzers
         internal static IReadOnlyList<T> OfKind<T>(this IReadOnlyList<T> source, in SyntaxKind kind) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var sourceCount = source.Count;
+            var count = source.Count;
 
-            if (sourceCount is 0)
+            if (count is 0)
             {
                 return Array.Empty<T>();
             }
 
             var results = new List<T>();
 
-            for (var index = 0; index < sourceCount; index++)
+            for (var index = 0; index < count; index++)
             {
                 var item = source[index];
 
@@ -674,16 +674,16 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static TKey[] ToArray<TKey, TSource>(this IReadOnlyList<TSource> source, Func<TSource, TKey> keySelector)
         {
-            var sourceCount = source.Count;
+            var count = source.Count;
 
-            if (sourceCount is 0)
+            if (count is 0)
             {
                 return Array.Empty<TKey>();
             }
 
-            var result = new TKey[sourceCount];
+            var result = new TKey[count];
 
-            for (var index = 0; index < sourceCount; index++)
+            for (var index = 0; index < count; index++)
             {
                 result[index] = keySelector(source[index]);
             }
@@ -711,15 +711,15 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static TKey[] ToArray<TKey, TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, TKey> keySelector)
         {
-            var sourceCount = source.Count;
+            var count = source.Count;
 
-            if (sourceCount is 0)
+            if (count is 0)
             {
                 return Array.Empty<TKey>();
             }
 
             var index = 0;
-            var result = new TKey[sourceCount];
+            var result = new TKey[count];
 
             foreach (var item in source)
             {
