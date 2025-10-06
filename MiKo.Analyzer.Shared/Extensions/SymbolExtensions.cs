@@ -1807,30 +1807,6 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsByteArray(this ITypeSymbol value) => value is IArrayTypeSymbol array && array.ElementType.IsByte();
 
         /// <summary>
-        /// Determines whether a type is an <see cref="IGrouping"/> interface.
-        /// </summary>
-        /// <param name="value">
-        /// The type to inspect.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the type is an <see cref="IGrouping"/> interface; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool IsIGrouping(this ITypeSymbol value)
-        {
-            if (value.TypeKind is TypeKind.Interface)
-            {
-                switch (value.Name)
-                {
-                    case "IGrouping":
-                    case "System.Linq.IGrouping":
-                        return true;
-                }
-            }
-
-            return false;
-        }
-
-        /// <summary>
         /// Determines whether a type is a <see cref="CancellationToken"/>.
         /// </summary>
         /// <param name="value">
@@ -2129,18 +2105,54 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether a type is a Prism event.
+        /// Determines whether a type is an <see cref="IGrouping{TKey,TElement}"/> interface.
         /// </summary>
         /// <param name="value">
         /// The type to inspect.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the type is a Prism event; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the type is an <see cref="IGrouping{TKey,TElement}"/> interface; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool IsPrismEvent(this ITypeSymbol value) => value.TypeKind is TypeKind.Class
-                                                                  && value.SpecialType is SpecialType.None
-                                                                  && value.ToString() != "Microsoft.Practices.Prism.Events.EventBase"
-                                                                  && value.InheritsFrom("Microsoft.Practices.Prism.Events.EventBase");
+        internal static bool IsIGrouping(this ITypeSymbol value)
+        {
+            if (value.TypeKind is TypeKind.Interface)
+            {
+                switch (value.Name)
+                {
+                    case "IGrouping":
+                    case "System.Linq.IGrouping":
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Determines whether a type is an <see cref="IQueryable"/> interface.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is an <see cref="IQueryable"/> interface; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsIQueryable(this ITypeSymbol value)
+        {
+            if (value.TypeKind is TypeKind.Interface)
+            {
+                switch (value.Name)
+                {
+                    case nameof(IQueryable):
+                    case nameof(IOrderedQueryable):
+                    case "System.Linq.IQueryable":
+                    case "System.Linq.IOrderedQueryable":
+                        return true;
+                }
+            }
+
+            return value.Implements<IQueryable>();
+        }
 
         /// <summary>
         /// Determines whether a type inherits from <see cref="EventArgs"/>.
@@ -2618,6 +2630,20 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsPartial(this IMethodSymbol value) => value.HasModifier(SyntaxKind.PartialKeyword);
+
+        /// <summary>
+        /// Determines whether a type is a Prism event.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is a Prism event; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsPrismEvent(this ITypeSymbol value) => value.TypeKind is TypeKind.Class
+                                                                     && value.SpecialType is SpecialType.None
+                                                                     && value.ToString() != "Microsoft.Practices.Prism.Events.EventBase"
+                                                                     && value.InheritsFrom("Microsoft.Practices.Prism.Events.EventBase");
 
         /// <summary>
         /// Determines whether a symbol is publicly visible.

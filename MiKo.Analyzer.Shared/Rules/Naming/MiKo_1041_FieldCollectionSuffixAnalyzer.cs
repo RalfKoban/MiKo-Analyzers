@@ -39,7 +39,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return false;
             }
 
-            return type.IsEnumerable();
+            if (type.IsEnumerable())
+            {
+                return type.IsIQueryable() is false;
+            }
+
+            return false;
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation)
