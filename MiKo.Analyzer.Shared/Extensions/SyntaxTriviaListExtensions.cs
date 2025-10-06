@@ -29,11 +29,11 @@ namespace MiKoSolutions.Analyzers
         internal static bool All(this in SyntaxTriviaList value, Func<SyntaxTrivia, bool> filter)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var valueCount = value.Count;
+            var count = value.Count;
 
-            if (valueCount > 0)
+            if (count > 0)
             {
-                for (var index = 0; index < valueCount; index++)
+                for (var index = 0; index < count; index++)
                 {
                     if (filter(value[index]) is false)
                     {
@@ -60,11 +60,11 @@ namespace MiKoSolutions.Analyzers
         internal static bool Any(this in SyntaxTriviaList value, Func<SyntaxTrivia, bool> filter)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var valueCount = value.Count;
+            var count = value.Count;
 
-            if (valueCount > 0)
+            if (count > 0)
             {
-                for (var index = 0; index < valueCount; index++)
+                for (var index = 0; index < count; index++)
                 {
                     if (filter(value[index]))
                     {
@@ -91,24 +91,24 @@ namespace MiKoSolutions.Analyzers
         internal static int Count(this in SyntaxTriviaList value, Func<SyntaxTrivia, bool> filter)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var valueCount = value.Count;
+            var count = value.Count;
 
-            if (valueCount <= 0)
+            if (count <= 0)
             {
                 return 0;
             }
 
-            var count = 0;
+            var counted = 0;
 
-            for (var index = 0; index < valueCount; index++)
+            for (var index = 0; index < count; index++)
             {
                 if (filter(value[index]))
                 {
-                    count++;
+                    counted++;
                 }
             }
 
-            return count;
+            return counted;
         }
 
         /// <summary>
@@ -123,11 +123,11 @@ namespace MiKoSolutions.Analyzers
         internal static bool HasEndOfLine(this in SyntaxTriviaList value)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var valueCount = value.Count;
+            var count = value.Count;
 
-            if (valueCount > 0)
+            if (count > 0)
             {
-                for (var index = 0; index < valueCount; index++)
+                for (var index = 0; index < count; index++)
                 {
                     if (value[index].IsEndOfLine())
                     {
@@ -151,11 +151,11 @@ namespace MiKoSolutions.Analyzers
         internal static bool HasComment(this in SyntaxTriviaList value)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var valueCount = value.Count;
+            var count = value.Count;
 
-            if (valueCount > 0)
+            if (count > 0)
             {
-                for (var index = 0; index < valueCount; index++)
+                for (var index = 0; index < count; index++)
                 {
                     if (value[index].IsComment())
                     {

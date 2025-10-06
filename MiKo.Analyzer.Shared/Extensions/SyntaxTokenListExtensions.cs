@@ -32,11 +32,11 @@ namespace MiKoSolutions.Analyzers
         internal static bool All(this in SyntaxTokenList value, Func<SyntaxToken, bool> predicate)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var valueCount = value.Count;
+            var count = value.Count;
 
-            if (valueCount > 0)
+            if (count > 0)
             {
-                for (var index = 0; index < valueCount; index++)
+                for (var index = 0; index < count; index++)
                 {
                     if (predicate(value[index]) is false)
                     {
@@ -63,11 +63,11 @@ namespace MiKoSolutions.Analyzers
         internal static bool Any(this in SyntaxTokenList value, Func<SyntaxToken, bool> predicate)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var valueCount = value.Count;
+            var count = value.Count;
 
-            if (valueCount > 0)
+            if (count > 0)
             {
-                for (var index = 0; index < valueCount; index++)
+                for (var index = 0; index < count; index++)
                 {
                     if (predicate(value[index]))
                     {
@@ -82,13 +82,13 @@ namespace MiKoSolutions.Analyzers
         /// <summary>
         /// Converts a list of syntax tokens to an <see cref="XmlTextSyntax"/> node.
         /// </summary>
-        /// <param name="textTokens">
+        /// <param name="source">
         /// The list of syntax tokens to convert.
         /// </param>
         /// <returns>
         /// An <see cref="XmlTextSyntax"/> node containing the syntax tokens.
         /// </returns>
-        internal static XmlTextSyntax AsXmlText(this in SyntaxTokenList textTokens) => SyntaxFactory.XmlText(textTokens);
+        internal static XmlTextSyntax AsXmlText(this in SyntaxTokenList source) => SyntaxFactory.XmlText(source);
 
         /// <summary>
         /// Concatenates two <see cref="SyntaxTokenList"/> sequences into a single sequence.
@@ -158,11 +158,11 @@ namespace MiKoSolutions.Analyzers
         internal static SyntaxToken First(this in SyntaxTokenList value, Func<SyntaxToken, bool> predicate)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var valueCount = value.Count;
+            var count = value.Count;
 
-            if (valueCount > 0)
+            if (count > 0)
             {
-                for (var index = 0; index < valueCount; index++)
+                for (var index = 0; index < count; index++)
                 {
                     var token = value[index];
 
@@ -191,11 +191,11 @@ namespace MiKoSolutions.Analyzers
         internal static SyntaxToken FirstOrDefault(this in SyntaxTokenList value, Func<SyntaxToken, bool> predicate)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var valueCount = value.Count;
+            var count = value.Count;
 
-            if (valueCount > 0)
+            if (count > 0)
             {
-                for (var index = 0; index < valueCount; index++)
+                for (var index = 0; index < count; index++)
                 {
                     var token = value[index];
 
@@ -238,7 +238,7 @@ namespace MiKoSolutions.Analyzers
         /// <summary>
         /// Builds a string representation of the syntax token list without any trivia.
         /// </summary>
-        /// <param name="textTokens">
+        /// <param name="source">
         /// The list of syntax tokens to process.
         /// </param>
         /// <param name="builder">
@@ -247,16 +247,16 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// The <see cref="StringBuilder"/> with the appended text.
         /// </returns>
-        internal static StringBuilder GetTextWithoutTrivia(this in SyntaxTokenList textTokens, StringBuilder builder)
+        internal static StringBuilder GetTextWithoutTrivia(this in SyntaxTokenList source, StringBuilder builder)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var textTokensCount = textTokens.Count;
+            var count = source.Count;
 
-            if (textTokensCount > 0)
+            if (count > 0)
             {
-                for (var index = 0; index < textTokensCount; index++)
+                for (var index = 0; index < count; index++)
                 {
-                    var token = textTokens[index];
+                    var token = source[index];
 
                     if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
                     {
@@ -369,16 +369,16 @@ namespace MiKoSolutions.Analyzers
         internal static IReadOnlyList<SyntaxToken> OfKind(this in SyntaxTokenList source, in SyntaxKind kind)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var sourceCount = source.Count;
+            var count = source.Count;
 
-            if (sourceCount is 0)
+            if (count is 0)
             {
                 return Array.Empty<SyntaxToken>();
             }
 
             List<SyntaxToken> results = null;
 
-            for (var index = 0; index < sourceCount; index++)
+            for (var index = 0; index < count; index++)
             {
                 var item = source[index];
 
@@ -411,11 +411,11 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<SyntaxToken> Select(this SyntaxTokenList source, Func<SyntaxToken, SyntaxToken> predicate)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var sourceCount = source.Count;
+            var count = source.Count;
 
-            if (sourceCount > 0)
+            if (count > 0)
             {
-                for (var index = 0; index < sourceCount; index++)
+                for (var index = 0; index < count; index++)
                 {
                     var value = source[index];
 
@@ -447,11 +447,11 @@ namespace MiKoSolutions.Analyzers
                 var list = selector(value);
 
                 // keep in local variable to avoid multiple requests (see Roslyn implementation)
-                var listCount = list.Count;
+                var count = list.Count;
 
-                if (listCount > 0)
+                if (count > 0)
                 {
-                    for (var index = 0; index < listCount; index++)
+                    for (var index = 0; index < count; index++)
                     {
                         yield return list[index];
                     }
@@ -505,16 +505,16 @@ namespace MiKoSolutions.Analyzers
         internal static SyntaxToken[] ToArray(this in SyntaxTokenList source)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var sourceCount = source.Count;
+            var count = source.Count;
 
-            if (sourceCount is 0)
+            if (count is 0)
             {
                 return Array.Empty<SyntaxToken>();
             }
 
-            var result = new SyntaxToken[sourceCount];
+            var result = new SyntaxToken[count];
 
-            for (var index = 0; index < sourceCount; index++)
+            for (var index = 0; index < count; index++)
             {
                 result[index] = source[index];
             }
@@ -534,11 +534,11 @@ namespace MiKoSolutions.Analyzers
         internal static List<SyntaxToken> ToList(this in SyntaxTokenList source)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var sourceCount = source.Count;
+            var count = source.Count;
 
-            var result = new List<SyntaxToken>(sourceCount);
+            var result = new List<SyntaxToken>(count);
 
-            for (var index = 0; index < sourceCount; index++)
+            for (var index = 0; index < count; index++)
             {
                 result.Add(source[index]);
             }
@@ -573,11 +573,11 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<SyntaxToken> Where(this SyntaxTokenList source, Func<SyntaxToken, bool> predicate)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var sourceCount = source.Count;
+            var count = source.Count;
 
-            if (sourceCount > 0)
+            if (count > 0)
             {
-                for (var index = 0; index < sourceCount; index++)
+                for (var index = 0; index < count; index++)
                 {
                     var value = source[index];
 
@@ -679,7 +679,7 @@ namespace MiKoSolutions.Analyzers
             var tokens = values;
 
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var tokensCount = values.Count;
+            var tokensCount = tokens.Count;
 
             if (tokensCount > 0)
             {
