@@ -419,6 +419,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                    new Pair("; otherwise; otherwise, ", OtherwiseReplacement),
                                                    new Pair(", otherwise; otherwise, ", OtherwiseReplacement),
                                                    new Pair("if you want to", ReplacementTo),
+                                                   new Pair("if you need ", ReplacementTo),
                                                    new Pair("if this is ", ReplacementTo),
                                                    new Pair(" to value indicating, whether ", Replacement),
                                                    new Pair(" to value indicating, that ", Replacement),
