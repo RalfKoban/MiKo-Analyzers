@@ -237,16 +237,16 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static TKey[] ToArray<TKey, TSource>(this in ImmutableArray<TSource> source, Func<TSource, TKey> keySelector)
         {
-            var sourceCount = source.Length;
+            var length = source.Length;
 
-            if (sourceCount is 0)
+            if (length is 0)
             {
                 return Array.Empty<TKey>();
             }
 
-            var result = new TKey[sourceCount];
+            var result = new TKey[length];
 
-            for (var index = 0; index < sourceCount; index++)
+            for (var index = 0; index < length; index++)
             {
                 result[index] = keySelector(source[index]);
             }
