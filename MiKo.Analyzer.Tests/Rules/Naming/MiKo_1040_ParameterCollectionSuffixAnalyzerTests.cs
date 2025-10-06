@@ -115,6 +115,21 @@ public class TestMe
 }
 ");
 
+        [TestCase("IGrouping<int, string> group")]
+        [TestCase("IQueryable query")]
+        [TestCase("IQueryable<int> query")]
+        [TestCase("IOrderedQueryable query")]
+        [TestCase("IOrderedQueryable<int> query")]
+        public void No_issue_is_reported_for_parameter_(string parameter) => No_issue_is_reported_for(@"
+using System.Linq;
+
+public class TestMe
+{
+    public void DoSomething("" + parameter + @"")
+    { }
+}
+");
+
         [TestCase("string blaEnumList")]
         [TestCase("string blaList")]
         [TestCase("string blaCollection")]
