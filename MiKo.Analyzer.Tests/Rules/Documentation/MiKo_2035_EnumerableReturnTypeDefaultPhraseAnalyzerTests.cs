@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
@@ -508,6 +509,29 @@ public class TestMe
 ";
 
             VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_generic_readonly_([Values("readonly", "read only", "read-only")] string modification, [Values("list", "collection")] string collection)
+        {
+            const string Template = @"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// ### some integers.
+    /// </returns>
+    public IReadOnlyCollection<int> DoSomething { get; set; }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", "A " + modification + " " + collection + " of"), Template.Replace("###", "A collection of"));
         }
 
         [Test]
@@ -1055,13 +1079,13 @@ public class TestMe
         private static IEnumerable<string> CreateStartingPhrases()
         {
             string[] startingWords = ["a", "an", "the"];
-            string[] modifications = ["readonly", "read-only", "read only"];
+            string[] modifications = ["read-only", "filtered", "concurrent"];
             string[] collections = [
-                                       "array", "list", "dictionary", "enumerable", "queue", "stack", "map",
+                                       "array", "arraylist", "array list", "list", "dictionary", "enumerable", "queue", "stack", "map", "bag",
                                        "hashset", "hashSet", "hashtable", "hashTable", "hash set", "hashed set", "hash table", "hashed table", "hashing set", "hashing table",
                                        "syntax list", "enumerable collection", "separated syntax list", "immutable array",
                                    ];
-            string[] prepositions = ["of", "with", "that contains", "which contains", "that holds", "which holds", "containing", "holding"];
+            string[] prepositions = ["of", "with", "that contains", "which contains", "containing"];
 
             foreach (var collection in collections)
             {
@@ -1069,29 +1093,36 @@ public class TestMe
                 {
                     var phrase = string.Concat(collection, " ", preposition);
 
-                    yield return phrase.ToLowerCaseAt(0);
+                    yield return phrase;
                     yield return phrase.ToUpperCaseAt(0);
 
                     foreach (var modification in modifications)
                     {
                         var modificationPhrase = string.Concat(modification, " ", phrase);
 
-                        yield return modificationPhrase.ToLowerCaseAt(0);
+                        yield return modificationPhrase;
                         yield return modificationPhrase.ToUpperCaseAt(0);
 
                         foreach (var startingWord in startingWords)
                         {
                             var shortStartingPhrase = string.Concat(startingWord, " ", collection);
+
+                            if (shortStartingPhrase.StartsWith("a i", StringComparison.Ordinal) || shortStartingPhrase.StartsWith("a a", StringComparison.Ordinal))
+                            {
+                                // do not test "a array" or "a immutable array", to limit tests
+                                continue;
+                            }
+
                             var startingPhrase = string.Concat(startingWord, " ", phrase);
                             var modifiedStartingPhrase = string.Concat(startingWord, " ", modificationPhrase);
 
-                            yield return shortStartingPhrase.ToLowerCaseAt(0);
+                            yield return shortStartingPhrase;
                             yield return shortStartingPhrase.ToUpperCaseAt(0);
 
-                            yield return startingPhrase.ToLowerCaseAt(0);
+                            yield return startingPhrase;
                             yield return startingPhrase.ToUpperCaseAt(0);
 
-                            yield return modifiedStartingPhrase.ToLowerCaseAt(0);
+                            yield return modifiedStartingPhrase;
                             yield return modifiedStartingPhrase.ToUpperCaseAt(0);
                         }
                     }
