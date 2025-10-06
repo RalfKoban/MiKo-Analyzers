@@ -184,16 +184,19 @@ public class TestMe
 }
 ");
 
-        [Test]
-        public void No_issue_is_reported_for_method_with_IGrouping() => No_issue_is_reported_for(@"
-using System;
+        [TestCase("IGrouping<int, string> group")]
+        [TestCase("IQueryable query")]
+        [TestCase("IQueryable<int> query")]
+        [TestCase("IOrderedQueryable query")]
+        [TestCase("IOrderedQueryable<int> query")]
+        public void No_issue_is_reported_for_method_with_(string variable) => No_issue_is_reported_for(@"
 using System.Linq;
 
 public class TestMe
 {
     public void DoSomething()
     {
-        IGrouping<string, string> group = null;
+        " + variable + @" = null;
     }
 }
 ");

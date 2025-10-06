@@ -36,7 +36,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return false;
             }
 
-            return parameterType.IsEnumerable();
+            if (parameterType.IsEnumerable())
+            {
+                return parameterType.IsIQueryable() is false;
+            }
+
+            return false;
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
