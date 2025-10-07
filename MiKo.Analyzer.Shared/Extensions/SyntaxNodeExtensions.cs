@@ -1620,14 +1620,24 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static bool IsException(this TypeSyntax value, Type exceptionType)
         {
-            if (value is PredefinedTypeSyntax)
+            while (true)
             {
-                return false;
+                switch (value)
+                {
+                    case PredefinedTypeSyntax _:
+                        return false;
+
+                    case NullableTypeSyntax nullable:
+                        value = nullable.ElementType;
+
+                        continue;
+
+                    default:
+                        var s = value.ToString();
+
+                        return s == exceptionType.Name || s == exceptionType.FullName;
+                }
             }
-
-            var s = value.ToString();
-
-            return s == exceptionType.Name || s == exceptionType.FullName;
         }
 
         /// <summary>
@@ -2059,19 +2069,30 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static bool IsString(this TypeSyntax value)
         {
-            if (value is PredefinedTypeSyntax predefined)
+            while (true)
             {
-                return predefined.Keyword.IsKind(SyntaxKind.StringKeyword);
-            }
+                switch (value)
+                {
+                    case PredefinedTypeSyntax predefined:
+                        return predefined.Keyword.IsKind(SyntaxKind.StringKeyword);
 
-            switch (value.ToString())
-            {
-                case nameof(String):
-                case nameof(System) + "." + nameof(String):
-                    return true;
-            }
+                    case NullableTypeSyntax nullable:
+                        value = nullable.ElementType;
 
-            return false;
+                        continue;
+
+                    default:
+                        switch (value.ToString())
+                        {
+                            case nameof(String):
+                            case nameof(System) + "." + nameof(String):
+                                return true;
+
+                            default:
+                                return false;
+                        }
+                }
+            }
         }
 
         /// <summary>
