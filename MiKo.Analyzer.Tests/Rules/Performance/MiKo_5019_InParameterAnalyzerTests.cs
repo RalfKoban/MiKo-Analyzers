@@ -219,6 +219,17 @@ public class TestMe : EqualityComparer<int>
 ");
 
         [Test]
+        public void No_issue_gets_reported_for_StreamingContext() => No_issue_is_reported_for(@"
+using System;
+using System.Runtime.Serialization;
+
+public class TestMe
+{
+    public bool DoSomething(StreamingContext context) => true;
+}
+");
+
+        [Test]
         public void No_issue_gets_reported_for_readonly_struct_as_parameter_with_in_modifier() => No_issue_is_reported_for(@"
 using System;
 
