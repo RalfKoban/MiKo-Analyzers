@@ -82,51 +82,54 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         {
             var type = symbol.Type;
 
-            if (IsReadOnlyStruct(type))
+            if (IsReadOnlyStruct(type) && symbol.RefKind is RefKind.None)
             {
-                if (symbol.RefKind is RefKind.None)
+                if (symbol.IsStreamingContextParameter())
                 {
-                    if (symbol.HasAttribute("NUnit.Framework.RangeAttribute"))
-                    {
-                        // NUnit seems to have an issue here, so we cannot change the code
-                        return Array.Empty<Diagnostic>();
-                    }
+                    // do not report for streaming contexts as that might be used by obsolete .NET serialization (and which might fail due to changed method signatures)
+                    return Array.Empty<Diagnostic>();
+                }
 
-                    var parameterName = symbol.Name;
-                    var syntaxNode = symbol.ContainingSymbol.GetSyntax();
+                if (symbol.HasAttribute("NUnit.Framework.RangeAttribute"))
+                {
+                    // NUnit seems to have an issue here, so we cannot change the code
+                    return Array.Empty<Diagnostic>();
+                }
 
-                    foreach (var node in syntaxNode.AllDescendantNodes())
+                var parameterName = symbol.Name;
+                var syntaxNode = symbol.ContainingSymbol.GetSyntax();
+
+                foreach (var node in syntaxNode.AllDescendantNodes())
+                {
+                    switch (node)
                     {
-                        switch (node)
+                        case LambdaExpressionSyntax lambda when lambda.DescendantNodes<IdentifierNameSyntax>().Any(_ => _.GetName() == parameterName):
                         {
-                            case LambdaExpressionSyntax lambda when lambda.DescendantNodes<IdentifierNameSyntax>().Any(_ => _.GetName() == parameterName):
-                            {
-                                // cannot fix lambdas
-                                return Array.Empty<Diagnostic>();
-                            }
+                            // cannot fix lambdas
+                            return Array.Empty<Diagnostic>();
+                        }
 
-                            case AssignmentExpressionSyntax assignment when assignment.IsKind(SyntaxKind.SimpleAssignmentExpression) && assignment.Left is IdentifierNameSyntax identifier && identifier.GetName() == parameterName:
-                            {
-                                // cannot fix assignments
-                                return Array.Empty<Diagnostic>();
-                            }
+                        case AssignmentExpressionSyntax assignment when assignment.IsKind(SyntaxKind.SimpleAssignmentExpression) && assignment.Left is IdentifierNameSyntax identifier && identifier.GetName() == parameterName:
+                        {
+                            // cannot fix assignments
+                            return Array.Empty<Diagnostic>();
+                        }
 
-                            case PrefixUnaryExpressionSyntax prefix when prefix.IsAnyKind(PrefixedExpressions) && prefix.Operand is IdentifierNameSyntax identifier && identifier.GetName() == parameterName:
-                            {
-                                // cannot fix increments or decrements
-                                return Array.Empty<Diagnostic>();
-                            }
+                        case PrefixUnaryExpressionSyntax prefix when prefix.IsAnyKind(PrefixedExpressions) && prefix.Operand is IdentifierNameSyntax identifier && identifier.GetName() == parameterName:
+                        {
+                            // cannot fix increments or decrements
+                            return Array.Empty<Diagnostic>();
+                        }
 
-                            case PostfixUnaryExpressionSyntax postfix when postfix.IsAnyKind(PostfixedExpressions) && postfix.Operand is IdentifierNameSyntax identifier && identifier.GetName() == parameterName:
-                            {
-                                // cannot fix increments or decrements
-                                return Array.Empty<Diagnostic>();
-                            }
+                        case PostfixUnaryExpressionSyntax postfix when postfix.IsAnyKind(PostfixedExpressions) && postfix.Operand is IdentifierNameSyntax identifier && identifier.GetName() == parameterName:
+                        {
+                            // cannot fix increments or decrements
+                            return Array.Empty<Diagnostic>();
                         }
                     }
-
-                    return new[] { Issue(symbol) };
                 }
+
+                return new[] { Issue(symbol) };
             }
 
             return Array.Empty<Diagnostic>();
