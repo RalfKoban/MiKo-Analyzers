@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,6 +18,41 @@ namespace MiKoSolutions.Analyzers
     /// </summary>
     internal static partial class SyntaxNodeExtensions
     {
+        /// <summary>
+        /// Gets the first XML element that is NOT empty (has some content) and matches the given tag.
+        /// </summary>
+        /// <param name="syntaxNodes">
+        /// The collection of syntax nodes to search.
+        /// </param>
+        /// <param name="startTag">
+        /// The tag of the XML elements to consider.
+        /// </param>
+        /// <returns>
+        /// A <see cref="XmlElementSyntax"/> that is NOT empty (has some content) and matches the given tag; or <see langword="null"/> if none is found.
+        /// </returns>
+        internal static XmlElementSyntax FirstXmlSyntax(this IEnumerable<SyntaxNode> syntaxNodes, string startTag)
+        {
+            foreach (var node in syntaxNodes)
+            {
+                if (node is XmlElementSyntax element && element.GetName() == startTag)
+                {
+                    return element;
+                }
+            }
+
+            foreach (var node in syntaxNodes)
+            {
+                var elementSyntaxes = node.GetXmlSyntax(startTag);
+
+                if (elementSyntaxes.Count > 0)
+                {
+                    return elementSyntaxes[0];
+                }
+            }
+
+            return null;
+        }
+
         /// <summary>
         /// Gets the <see cref="SemanticModel"/> for the specified <see cref="Document"/>.
         /// </summary>

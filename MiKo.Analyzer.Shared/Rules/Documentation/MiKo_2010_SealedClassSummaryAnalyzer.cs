@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (symbol.IsSealed && summaries.Value.None(_ => _.EndsWith(Constants.Comments.SealedClassPhrase, StringComparison.Ordinal)))
             {
-                return new[] { Issue(symbol, Constants.Comments.SealedClassPhrase) };
+                return new[] { Issue(symbol.Name, summaryXmls[0].EndTag, Constants.Comments.SealedClassPhrase) };
             }
 
             return Array.Empty<Diagnostic>();
