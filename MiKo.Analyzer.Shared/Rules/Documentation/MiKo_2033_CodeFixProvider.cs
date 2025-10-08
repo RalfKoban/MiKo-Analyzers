@@ -53,6 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                         new Pair("that contains the formatted string", "that contains the formatted result"),
                                                         new Pair("that contains a ", "that contains the "),
                                                         new Pair("that contains value ", "that contains the value "),
+                                                        new Pair(" string result ", " result "),
                                                     };
 
         private static readonly string[] CleanupMapKeys = CleanupMap.ToArray(_ => _.Key);
