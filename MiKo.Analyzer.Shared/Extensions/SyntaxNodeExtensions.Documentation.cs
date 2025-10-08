@@ -217,6 +217,15 @@ namespace MiKoSolutions.Analyzers
 
                     case IndexerDeclarationSyntax indexer:
                         return indexer.ParameterList.Parameters.ToArray();
+#if VS2022
+                    case ClassDeclarationSyntax c when c.ParameterList is ParameterListSyntax parameters:
+                        return parameters.Parameters.ToArray();
+
+                    case StructDeclarationSyntax s when s.ParameterList is ParameterListSyntax parameters:
+                        return parameters.Parameters.ToArray();
+#endif
+                    case RecordDeclarationSyntax r when r.ParameterList is ParameterListSyntax parameters:
+                        return parameters.Parameters.ToArray();
 
                     case BaseTypeDeclarationSyntax _:
                         return Array.Empty<ParameterSyntax>();

@@ -257,6 +257,87 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_primary_class_ctor()
+        {
+            const string OriginalCode = @"
+using System;
+
+/// <summary />
+/// <param name='o'>Whatever it is.</param>
+public class TestMe(StringComparison o)
+{
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+/// <summary />
+/// <param name='o'>
+/// One of the enumeration members that specifies whatever it is.
+/// </param>
+public class TestMe(StringComparison o)
+{
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_primary_struct_ctor()
+        {
+            const string OriginalCode = @"
+using System;
+
+/// <summary />
+/// <param name='o'>Whatever it is.</param>
+public struct TestMe(StringComparison o)
+{
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+/// <summary />
+/// <param name='o'>
+/// One of the enumeration members that specifies whatever it is.
+/// </param>
+public struct TestMe(StringComparison o)
+{
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_primary_record_ctor()
+        {
+            const string OriginalCode = @"
+using System;
+
+/// <summary />
+/// <param name='o'>Whatever it is.</param>
+public record TestMe(StringComparison o)
+{
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+/// <summary />
+/// <param name='o'>
+/// One of the enumeration members that specifies whatever it is.
+/// </param>
+public record TestMe(StringComparison o)
+{
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_when_on_different_lines()
         {
             const string OriginalCode = @"
