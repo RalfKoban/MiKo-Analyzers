@@ -104,7 +104,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed()
+        public void Code_gets_fixed_for_class()
         {
             const string OriginalCode = @"
 /// <summary>
@@ -121,6 +121,30 @@ public class TestMe
 /// Some documentation.
 /// </summary>
 public class TestMe
+{
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_record()
+        {
+            const string OriginalCode = @"
+/// <summary>
+/// Some documentation.
+/// This class cannot be inherited.
+/// </summary>
+public record TestMe
+{
+}
+";
+
+            const string FixedCode = @"
+/// <summary>
+/// Some documentation.
+/// </summary>
+public record TestMe
 {
 }
 ";
