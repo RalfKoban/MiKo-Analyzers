@@ -863,6 +863,10 @@ public sealed class BlaBlaException : Exception
         [TestCase("The exception which occurs during some operations", "The exception that is thrown when an error occurs during some operations")]
         [TestCase("Exception that occurs during some operations", "The exception that is thrown when an error occurs during some operations")]
         [TestCase("Exception which occurs during some operations", "The exception that is thrown when an error occurs during some operations")]
+        [TestCase("Represents errors that occur during some operations", "The exception that is thrown when an error occurs during some operations")]
+        [TestCase("Represents errors which occur during some operations", "The exception that is thrown when an error occurs during some operations")]
+        [TestCase("Represents an error that occurs during some operations", "The exception that is thrown when an error occurs during some operations")]
+        [TestCase("Represents an error which occurs during some operations", "The exception that is thrown when an error occurs during some operations")]
         public void Code_gets_fixed_for_exception_type_with_special_summary_on_same_line_(string originalMessage, string fixedMessage)
         {
             var originalCode = @"
