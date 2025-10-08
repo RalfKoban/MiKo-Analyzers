@@ -186,8 +186,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                  "A exception", "An exception", "The exception", "This exception", "Exception",
                                  "A general exception", "An general exception", "The general exception", "This general exception", "General exception",
                                  "A most general exception", "An most general exception", "The most general exception", "This most general exception", "Most general exception",
+                                 "A error", "An error", "The error", "This error", "Error", "Errors", "errors",
                              };
-            var verbs = new[] { "that is thrown", "which is thrown", "is thrown", "thrown", "to throw", "that is fired", "which is fired", "fired", "to fire", "that occurs", "which occurs" };
+            var verbs = new[] { "that is thrown", "which is thrown", "is thrown", "thrown", "to throw", "that is fired", "which is fired", "fired", "to fire", "that occurs", "which occurs", "that occur", "which occur" };
             var conditions = new[] { "if", "when", "in case" };
 
             var results = new HashSet<string>();
@@ -214,6 +215,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 results.Add(start + " indicating that ");
                 results.Add(start + " that occurs ");
                 results.Add(start + " which occurs ");
+                results.Add(start + " that occur ");
+                results.Add(start + " which occur ");
 
                 foreach (var verb in verbs)
                 {
