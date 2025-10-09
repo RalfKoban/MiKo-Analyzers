@@ -451,6 +451,41 @@ namespace MiKoSolutions.Analyzers
         internal static bool None<T>(this IEnumerable<T> source, Func<T, bool> predicate) => source.All(_ => predicate(_) is false);
 
         /// <summary>
+        /// Determines whether the specified list contains no elements that satisfy the specified condition.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of elements in the list.
+        /// </typeparam>
+        /// <param name="source">
+        /// The list to evaluate.
+        /// </param>
+        /// <param name="predicate">
+        /// The condition to test each element against.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if no elements satisfy the condition; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool None<T>(this IReadOnlyList<T> source, Func<T, bool> predicate)
+        {
+            var count = source.Count;
+
+            if (count is 0)
+            {
+                return true;
+            }
+
+            for (var index = 0; index < count; index++)
+            {
+                if (predicate(source[index]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Determines whether the specified array contains no elements that satisfy the specified condition.
         /// </summary>
         /// <typeparam name="T">
