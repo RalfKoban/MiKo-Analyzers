@@ -1078,7 +1078,7 @@ public class TestMe
         [ExcludeFromCodeCoverage]
         private static IEnumerable<string> CreateStartingPhrases()
         {
-            string[] startingWords = ["a", "an", "the"];
+            string[] startingWords = ["a", "an", "the", "a new", "the new"];
             string[] modifications = ["read-only", "filtered", "concurrent"];
             string[] collections = [
                                        "array", "arraylist", "array list", "list", "dictionary", "enumerable", "queue", "stack", "map", "bag",
@@ -1110,6 +1110,12 @@ public class TestMe
                             if (shortStartingPhrase.StartsWith("a i", StringComparison.Ordinal) || shortStartingPhrase.StartsWith("a a", StringComparison.Ordinal))
                             {
                                 // do not test "a array" or "a immutable array", to limit tests
+                                continue;
+                            }
+
+                            if (shortStartingPhrase.StartsWith("an ", StringComparison.Ordinal) && shortStartingPhrase[3] != 'a' && shortStartingPhrase[3] != 'i')
+                            {
+                                // do not test "an dictionary" or "an hashset", to limit tests
                                 continue;
                             }
 
