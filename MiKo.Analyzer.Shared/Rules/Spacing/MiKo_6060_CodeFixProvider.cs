@@ -10,6 +10,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     {
         public override string FixableDiagnosticId => "MiKo_6060";
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => PlacedOnSameLine(syntax);
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => syntax.PlacedOnSameLine();
     }
 }

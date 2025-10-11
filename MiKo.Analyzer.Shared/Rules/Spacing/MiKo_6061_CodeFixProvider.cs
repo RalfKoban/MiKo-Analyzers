@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                                                           {
                                                               var node = token.AsNode();
 
-                                                              return PlacedOnSameLine(node).WithLeadingTriviaFrom(node);
+                                                              return node.PlacedOnSameLine().WithLeadingTriviaFrom(node);
                                                           }
 
                                                           if (token.IsToken)
