@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                                                    new KeyValuePair<string, string>("will both be", "are both"),
                                                                                                                                });
 
-        private static readonly string[] PhrasesMapKeys = PhrasesMap.Keys.OrderByDescending(_ => _.Length).ToArray();
+        private static readonly string[] PhrasesMapKeys = PhrasesMap.Keys.OrderDescendingByLengthAndText();
 
         private static readonly string[] Phrases = PhrasesMapKeys.WithDelimiters();
 

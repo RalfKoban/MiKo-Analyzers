@@ -16,10 +16,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly Lazy<MapData> MappedData = new Lazy<MapData>();
 
-#if !NCRUNCH // do not define a static ctor to speed up tests in NCrunch
-        static MiKo_2080_CodeFixProvider() => LoadData(); // ensure that we have the object available
-#endif
-
         public override string FixableDiagnosticId => "MiKo_2080";
 
         public static void LoadData() => GC.KeepAlive(MappedData.Value);
@@ -59,8 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 #pragma warning disable CA1861
             public MapData()
             {
-                ReplacementMap = CreateReplacementMapPairs().OrderByDescending(_ => _.Key.Length) // get longest items first as shorter items may be part of the longer ones and would cause problems
-                                                            .ThenBy(_ => _.Key)
+                ReplacementMap = CreateReplacementMapPairs().OrderDescendingByLengthAndText(_ => _.Key) // get longest items first as shorter items may be part of the longer ones and would cause problems
                                                             .Concat(new[] { new Pair("Factory ", "a factory ") })
                                                             .ToArray();
 
@@ -92,9 +87,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                      "TypeGuids of ", // typo
                                                  }.ToArray(AscendingStringComparer.Default);
 
-                TypeGuidReplacementMap = TypeGuidReplacementMapKeys.OrderByDescending(_ => _.Length)
-                                                                   .ThenBy(_ => _)
-                                                                   .ToArray(_ => new Pair(_, "The unique identifier for the type of "));
+                TypeGuidReplacementMap = TypeGuidReplacementMapKeys.Select(_ => new Pair(_, "The unique identifier for the type of "))
+                                                                   .OrderDescendingByLengthAndText(_ => _.Key);
 
                 PreparationMap = new[]
                                      {

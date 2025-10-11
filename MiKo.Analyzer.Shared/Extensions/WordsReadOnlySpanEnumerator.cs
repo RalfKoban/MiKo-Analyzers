@@ -7,13 +7,27 @@ using System.Collections.Generic;
 #pragma warning disable IDE0130
 namespace MiKoSolutions.Analyzers
 {
-    // Must be a ref struct as it contains a ReadOnlySpan<char>
-    internal ref struct WordsReadOnlySpanEnumerator
+    /// <summary>
+    /// Provides a specialized enumerator for words within a <see cref="ReadOnlySpan{T}"/> of characters, where words are identified by uppercase characters.
+    /// </summary>
+    /// <remarks>
+    /// The enumerator splits text into words based on uppercase character positions and provides methods to access and transform these words.
+    /// </remarks>
+    internal ref struct WordsReadOnlySpanEnumerator // Must be a ref struct as it contains a ReadOnlySpan<char>
     {
         private readonly ReadOnlySpan<char> m_text;
         private readonly int[] m_wordStartingPositions;
         private int m_currentIndex;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WordsReadOnlySpanEnumerator"/> struct that contains words from the specified text.
+        /// </summary>
+        /// <param name="text">
+        /// The text to split into words based on uppercase characters.
+        /// </param>
+        /// <remarks>
+        /// Words are identified by uppercase characters within the text.
+        /// </remarks>
         public WordsReadOnlySpanEnumerator(in ReadOnlySpan<char> text)
         {
             m_text = text;
@@ -63,6 +77,15 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         public int Count() => m_wordStartingPositions.Length - 1; // first entry is zero and needs to be removed
 
+        /// <summary>
+        /// Projects each element of the collection into a string by applying a specified transformation.
+        /// </summary>
+        /// <param name="callback">
+        /// A transformation to apply to each element in the collection.
+        /// </param>
+        /// <returns>
+        /// A collection of strings that contains the projected elements from the current collection.
+        /// </returns>
         public IEnumerable<string> Select(WordsReadOnlySpanEnumeratorSelectDelegate callback)
         {
             var items = new List<string>();
@@ -82,6 +105,15 @@ namespace MiKoSolutions.Analyzers
             return items;
         }
 
+        /// <summary>
+        /// Gets the first element in the collection.
+        /// </summary>
+        /// <returns>
+        /// The first element in the collection.
+        /// </returns>
+        /// <exception cref="InvalidOperationException">
+        /// The collection is empty.
+        /// </exception>
         public ReadOnlySpanEnumeratorEntry First()
         {
             if (m_text.Length is 0)
@@ -97,6 +129,15 @@ namespace MiKoSolutions.Analyzers
             return new ReadOnlySpanEnumeratorEntry(m_text.Slice(m_wordStartingPositions[0]));
         }
 
+        /// <summary>
+        /// Gets the last element in the collection.
+        /// </summary>
+        /// <returns>
+        /// The last element in the collection.
+        /// </returns>
+        /// <exception cref="InvalidOperationException">
+        /// The collection is empty.
+        /// </exception>
         public ReadOnlySpanEnumeratorEntry Last()
         {
             if (m_text.Length is 0)

@@ -22,13 +22,26 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                    && m.GetIdentifierName() is nameof(StringComparison)
                                                                                    && m.GetName() is nameof(StringComparison.Ordinal);
 
+        private static bool IsStringComparisonOrdinal(in SeparatedSyntaxList<ArgumentSyntax> arguments)
+        {
+            switch (arguments.Count)
+            {
+                case 1:
+                case 2 when IsStringComparisonOrdinal(arguments[1].Expression):
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
         private static bool HasIssue(InvocationExpressionSyntax invocation, in SyntaxNodeAnalysisContext context)
         {
             if (invocation.Expression is MemberAccessExpressionSyntax maes && maes.GetName() is nameof(Equals))
             {
                 var arguments = invocation.ArgumentList.Arguments;
 
-                if (arguments.Count is 2 && IsStringComparisonOrdinal(arguments[1].Expression))
+                if (IsStringComparisonOrdinal(arguments))
                 {
                     var argumentExpression = arguments[0].Expression;
                     var expression = maes.Expression;

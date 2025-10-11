@@ -17,10 +17,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly Lazy<MapData> MappedData = new Lazy<MapData>();
 
-#if !NCRUNCH // do not define a static ctor to speed up tests in NCrunch
-        static MiKo_2060_CodeFixProvider() => LoadData(); // ensure that we have the object available
-#endif
-
         public override string FixableDiagnosticId => "MiKo_2060";
 
         public static void LoadData() => GC.KeepAlive(MappedData.Value);
@@ -92,10 +88,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static XmlElementSyntax PrepareTypeComment(XmlElementSyntax comment, MapData mappedData)
         {
+            var textTokens = comment.GetXmlTextTokens();
+
+            if (textTokens.Count is 0)
+            {
+                return comment;
+            }
+
             XmlElementSyntax updated;
 
             //// TODO RKN: Add check about starting with 'A', 'T', 'C' or 'D'
-            var startText = comment.GetXmlTextTokens().FirstOrDefault().ValueText.AsSpan().TrimStart();
+            var startText = textTokens[0].ValueText.AsSpan().TrimStart();
 
             switch (startText[0])
             {

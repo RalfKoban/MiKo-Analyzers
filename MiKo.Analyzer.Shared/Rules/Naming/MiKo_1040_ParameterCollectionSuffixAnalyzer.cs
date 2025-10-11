@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -30,21 +31,47 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return false;
             }
 
-            return parameterType.IsEnumerable();
+            if (parameterType.IsIGrouping())
+            {
+                return false;
+            }
+
+            if (parameterType.IsEnumerable())
+            {
+                return parameterType.IsIQueryable() is false;
+            }
+
+            return false;
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
-            foreach (var parameter in symbol.Parameters)
+            var parameters = symbol.Parameters;
+
+            foreach (var parameter in parameters)
             {
+                if (parameter.Ordinal is 0 && symbol.IsExtensionMethod)
+                {
+                    // this is a 'this' parameter
+                    continue;
+                }
+
                 if (ShallAnalyze(parameter))
                 {
-                    var diagnostic = AnalyzeCollectionSuffix(parameter);
+                    var issue = AnalyzeCollectionSuffix(parameter);
 
-                    if (diagnostic != null)
+                    if (issue is null)
                     {
-                        yield return diagnostic;
+                        continue;
                     }
+
+                    if (issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.BetterName, out var betterName) && parameters.Any(_ => _.Name == betterName))
+                    {
+                        // ignore duplicate names
+                        continue;
+                    }
+
+                    yield return issue;
                 }
             }
         }

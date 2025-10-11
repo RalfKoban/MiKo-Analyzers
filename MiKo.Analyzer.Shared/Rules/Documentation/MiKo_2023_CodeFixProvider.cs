@@ -57,10 +57,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly Lazy<MapData> MappedData = new Lazy<MapData>();
 
-#if !NCRUNCH // do not define a static ctor to speed up tests in NCrunch
-        static MiKo_2023_CodeFixProvider() => LoadData(); // ensure that we have the object available
-#endif
-
         public override string FixableDiagnosticId => "MiKo_2023";
 
         public static void LoadData() => GC.KeepAlive(MappedData.Value);
@@ -423,6 +419,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                    new Pair("; otherwise; otherwise, ", OtherwiseReplacement),
                                                    new Pair(", otherwise; otherwise, ", OtherwiseReplacement),
                                                    new Pair("if you want to", ReplacementTo),
+                                                   new Pair("if you need ", ReplacementTo),
                                                    new Pair("if this is ", ReplacementTo),
                                                    new Pair(" to value indicating, whether ", Replacement),
                                                    new Pair(" to value indicating, that ", Replacement),

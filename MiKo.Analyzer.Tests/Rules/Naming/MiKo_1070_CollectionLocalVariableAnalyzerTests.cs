@@ -184,16 +184,19 @@ public class TestMe
 }
 ");
 
-        [Test]
-        public void No_issue_is_reported_for_method_with_IGrouping() => No_issue_is_reported_for(@"
-using System;
+        [TestCase("IGrouping<int, string> group")]
+        [TestCase("IQueryable query")]
+        [TestCase("IQueryable<int> query")]
+        [TestCase("IOrderedQueryable query")]
+        [TestCase("IOrderedQueryable<int> query")]
+        public void No_issue_is_reported_for_method_with_(string variable) => No_issue_is_reported_for(@"
 using System.Linq;
 
 public class TestMe
 {
     public void DoSomething()
     {
-        IGrouping<string, string> group = null;
+        " + variable + @" = null;
     }
 }
 ");
@@ -370,6 +373,27 @@ public class TestMe
     public void DoSomething(IEnumerable<Document> documents)
     {
         foreach (var document in documents)
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_IGrouping_node() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class TestMe
+{
+    public string Name { get; set; }
+
+    public void DoSomething(IEnumerable<TestMe> items)
+    {
+        var itemsGroupedByName = items.GroupBy(_ => _.Name);
+
+        foreach (var itemGroup in itemsGroupedByName)
         {
         }
     }

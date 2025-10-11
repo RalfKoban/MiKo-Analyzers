@@ -91,7 +91,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed()
+        public void Code_gets_fixed_for_class()
         {
             const string OriginalCode = @"
 /// <summary>
@@ -108,6 +108,30 @@ public sealed class TestMe
 /// This class cannot be inherited.
 /// </summary>
 public sealed class TestMe
+{
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_record()
+        {
+            const string OriginalCode = @"
+/// <summary>
+/// Some documentation
+/// </summary>
+public sealed record TestMe
+{
+}
+";
+
+            const string FixedCode = @"
+/// <summary>
+/// Some documentation
+/// This class cannot be inherited.
+/// </summary>
+public sealed record TestMe
 {
 }
 ";

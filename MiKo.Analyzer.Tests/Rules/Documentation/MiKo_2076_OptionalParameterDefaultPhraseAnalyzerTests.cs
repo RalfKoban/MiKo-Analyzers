@@ -313,6 +313,49 @@ public namespace Bla
         }
 
         [Test]
+        public void Code_gets_fixed_for_documented_method_in_namespace_with_optional_value_with_missing_default_documentation_for_integer_type_constant()
+        {
+            const string OriginalCode = @"
+public namespace Bla
+{
+    public class TestMe
+    {
+        /// <summary>
+        /// Does something.
+        /// </summary>
+        /// <param name=""value"">
+        /// Some value.
+        /// </param>
+        public bool DoSomething(int value = int.MaxValue)
+        {
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+public namespace Bla
+{
+    public class TestMe
+    {
+        /// <summary>
+        /// Does something.
+        /// </summary>
+        /// <param name=""value"">
+        /// Some value.
+        /// The default is <see cref=""int.MaxValue""/>.
+        /// </param>
+        public bool DoSomething(int value = int.MaxValue)
+        {
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_documented_method_in_namespace_with_optional_value_with_missing_default_documentation_for_enum()
         {
             const string OriginalCode = @"

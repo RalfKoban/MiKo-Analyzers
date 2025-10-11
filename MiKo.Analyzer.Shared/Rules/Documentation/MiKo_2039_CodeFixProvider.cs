@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Composition;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -16,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] Parts = Constants.Comments.ExtensionMethodClassStartingPhraseTemplate.FormatWith("|").Split('|');
 
-        private static readonly string[] ReplacementMapKeys = CreateReplacementMapKeys().OrderByDescending(_ => _.Length).ToArray();
+        private static readonly string[] ReplacementMapKeys = CreateReplacementMapKeys().OrderDescendingByLengthAndText();
 
         private static readonly Pair[] ReplacementMap = ReplacementMapKeys.ToArray(_ => new Pair(_));
 
