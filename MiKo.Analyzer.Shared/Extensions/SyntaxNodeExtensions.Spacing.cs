@@ -145,6 +145,162 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static bool IsOnSameLineAs(this SyntaxNode value, in SyntaxNodeOrToken other) => value?.GetStartingLine() == other.GetStartingLine();
 
+        internal static SeparatedSyntaxList<T> PlacedOnSameLine<T>(this in SeparatedSyntaxList<T> values) where T : SyntaxNode
+        {
+            var updatedItems = values.GetWithSeparators()
+                                     .Select(_ =>
+                                     {
+                                         if (_.IsNode)
+                                         {
+                                             return PlacedOnSameLine(_.AsNode());
+                                         }
+
+                                         if (_.IsToken)
+                                         {
+                                             return _.AsToken().WithoutLeadingTrivia().WithTrailingSpace();
+                                         }
+
+                                         return _;
+                                     });
+
+            return SyntaxFactory.SeparatedList<T>(updatedItems);
+        }
+
+        internal static T PlacedOnSameLine<T>(this T value) where T : SyntaxNode
+        {
+            switch (value)
+            {
+                case null: return null;
+                case ArgumentListSyntax argumentList: return PlacedOnSameLine(argumentList) as T;
+                case ArgumentSyntax argument: return PlacedOnSameLine(argument) as T;
+                case BinaryExpressionSyntax binary: return PlacedOnSameLine(binary) as T;
+                case CasePatternSwitchLabelSyntax patternLabel: return PlacedOnSameLine(patternLabel) as T;
+                case CaseSwitchLabelSyntax label: return PlacedOnSameLine(label) as T;
+                case ConditionalExpressionSyntax conditional: return PlacedOnSameLine(conditional) as T;
+                case ConstantPatternSyntax constantPattern: return PlacedOnSameLine(constantPattern) as T;
+                case DeclarationPatternSyntax declaration: return PlacedOnSameLine(declaration) as T;
+                case InvocationExpressionSyntax invocation: return PlacedOnSameLine(invocation) as T;
+                case IsPatternExpressionSyntax pattern: return PlacedOnSameLine(pattern) as T;
+                case MemberAccessExpressionSyntax maes: return PlacedOnSameLine(maes) as T;
+                case NameSyntax name: return PlacedOnSameLine(name) as T;
+                case ObjectCreationExpressionSyntax creation: return PlacedOnSameLine(creation) as T;
+                case SingleVariableDesignationSyntax singleVariable: return PlacedOnSameLine(singleVariable) as T;
+                case SwitchExpressionArmSyntax arm: return PlacedOnSameLine(arm) as T;
+                case ThrowExpressionSyntax throwExpression: return PlacedOnSameLine(throwExpression) as T;
+                case TypeArgumentListSyntax typeArgumentList: return PlacedOnSameLine(typeArgumentList) as T;
+                case WhenClauseSyntax clause: return PlacedOnSameLine(clause) as T;
+                default:
+                    return value.WithoutTrivia();
+            }
+        }
+
+        internal static ArgumentSyntax PlacedOnSameLine(this ArgumentSyntax value) => value.WithoutTrivia()
+                                                                                           .WithRefKindKeyword(value.RefKindKeyword.WithoutLeadingTrivia().WithTrailingSpace())
+                                                                                           .WithRefOrOutKeyword(value.RefOrOutKeyword.WithoutLeadingTrivia().WithTrailingSpace())
+                                                                                           .WithNameColon(PlacedOnSameLine(value.NameColon))
+                                                                                           .WithExpression(PlacedOnSameLine(value.Expression));
+
+        internal static ArgumentListSyntax PlacedOnSameLine(this ArgumentListSyntax value) => value.WithoutTrivia()
+                                                                                                   .WithOpenParenToken(value.OpenParenToken.WithoutTrivia())
+                                                                                                   .WithArguments(PlacedOnSameLine(value.Arguments))
+                                                                                                   .WithCloseParenToken(value.CloseParenToken.WithoutTrivia());
+
+        internal static BinaryExpressionSyntax PlacedOnSameLine(this BinaryExpressionSyntax value) => value.WithoutTrivia()
+                                                                                                           .WithLeft(PlacedOnSameLine(value.Left))
+                                                                                                           .WithOperatorToken(value.OperatorToken.WithLeadingSpace().WithoutTrailingTrivia())
+                                                                                                           .WithRight(PlacedOnSameLine(value.Right));
+
+        internal static CasePatternSwitchLabelSyntax PlacedOnSameLine(this CasePatternSwitchLabelSyntax value) => value.WithoutTrivia()
+                                                                                                                       .WithKeyword(value.Keyword.WithoutTrailingTrivia())
+                                                                                                                       .WithPattern(PlacedOnSameLine(value.Pattern).WithLeadingSpace().WithoutTrailingTrivia())
+                                                                                                                       .WithWhenClause(PlacedOnSameLine(value.WhenClause))
+                                                                                                                       .WithColonToken(value.ColonToken.WithoutLeadingTrivia());
+
+        internal static CaseSwitchLabelSyntax PlacedOnSameLine(this CaseSwitchLabelSyntax value) => value.WithoutTrivia()
+                                                                                                         .WithKeyword(value.Keyword.WithoutTrailingTrivia())
+                                                                                                         .WithValue(PlacedOnSameLine(value.Value).WithLeadingSpace().WithoutTrailingTrivia())
+                                                                                                         .WithColonToken(value.ColonToken.WithoutLeadingTrivia());
+
+        internal static ConditionalExpressionSyntax PlacedOnSameLine(this ConditionalExpressionSyntax value) => value.WithoutTrivia()
+                                                                                                                     .WithCondition(PlacedOnSameLine(value.Condition).WithLeadingSpace().WithoutTrailingTrivia())
+                                                                                                                     .WithQuestionToken(value.QuestionToken.WithoutTrivia())
+                                                                                                                     .WithWhenTrue(PlacedOnSameLine(value.WhenTrue).WithLeadingSpace().WithoutTrailingTrivia())
+                                                                                                                     .WithColonToken(value.ColonToken.WithoutTrivia())
+                                                                                                                     .WithWhenFalse(PlacedOnSameLine(value.WhenFalse).WithLeadingSpace().WithoutTrailingTrivia());
+
+        internal static ConstantPatternSyntax PlacedOnSameLine(this ConstantPatternSyntax value) => value.WithoutTrivia()
+                                                                                                         .WithExpression(PlacedOnSameLine(value.Expression));
+
+        internal static DeclarationPatternSyntax PlacedOnSameLine(this DeclarationPatternSyntax value) => value.WithoutTrivia()
+                                                                                                               .WithType(value.Type.WithoutTrailingTrivia())
+                                                                                                               .WithDesignation(PlacedOnSameLine(value.Designation));
+
+        internal static InvocationExpressionSyntax PlacedOnSameLine(this InvocationExpressionSyntax value) => value.WithoutTrivia()
+                                                                                                                   .WithExpression(PlacedOnSameLine(value.Expression))
+                                                                                                                   .WithArgumentList(PlacedOnSameLine(value.ArgumentList));
+
+        internal static IsPatternExpressionSyntax PlacedOnSameLine(this IsPatternExpressionSyntax value) => value.WithoutTrivia()
+                                                                                                                 .WithPattern(PlacedOnSameLine(value.Pattern))
+                                                                                                                 .WithIsKeyword(value.IsKeyword.WithLeadingSpace().WithoutTrailingTrivia())
+                                                                                                                 .WithExpression(PlacedOnSameLine(value.Expression));
+
+        internal static MemberAccessExpressionSyntax PlacedOnSameLine(this MemberAccessExpressionSyntax value) => value.WithoutTrivia()
+                                                                                                                       .WithName(PlacedOnSameLine(value.Name))
+                                                                                                                       .WithOperatorToken(value.OperatorToken.WithoutTrivia())
+                                                                                                                       .WithExpression(PlacedOnSameLine(value.Expression));
+
+        internal static NameSyntax PlacedOnSameLine(this NameSyntax value)
+        {
+            switch (value)
+            {
+                // note that 'GenericNameSyntax' inherits from 'SimpleNameSyntax', so we have to check that first
+                case GenericNameSyntax genericName:
+                {
+                    return genericName.WithoutTrivia()
+                                      .WithIdentifier(genericName.Identifier.WithoutTrivia())
+                                      .WithTypeArgumentList(PlacedOnSameLine(genericName.TypeArgumentList));
+                }
+
+                case SimpleNameSyntax simpleName:
+                {
+                    return simpleName.WithoutTrivia();
+                }
+
+                default:
+                {
+                    return value.WithoutTrivia();
+                }
+            }
+        }
+
+        internal static ObjectCreationExpressionSyntax PlacedOnSameLine(this ObjectCreationExpressionSyntax value) => value.WithoutTrivia()
+                                                                                                                           .WithNewKeyword(value.NewKeyword.WithoutTrivia())
+                                                                                                                           .WithType(PlacedOnSameLine(value.Type).WithLeadingSpace())
+                                                                                                                           .WithArgumentList(PlacedOnSameLine(value.ArgumentList))
+                                                                                                                           .WithInitializer(PlacedOnSameLine(value.Initializer));
+
+        internal static SingleVariableDesignationSyntax PlacedOnSameLine(this SingleVariableDesignationSyntax value) => value.WithoutTrivia()
+                                                                                                                             .WithIdentifier(value.Identifier.WithoutTrivia());
+
+        internal static SwitchExpressionArmSyntax PlacedOnSameLine(this SwitchExpressionArmSyntax value) => value.WithoutTrailingTrivia()
+                                                                                                                 .WithEqualsGreaterThanToken(value.EqualsGreaterThanToken.WithLeadingSpace().WithoutTrailingTrivia())
+                                                                                                                 .WithExpression(PlacedOnSameLine(value.Expression))
+                                                                                                                 .WithWhenClause(PlacedOnSameLine(value.WhenClause))
+                                                                                                                 .WithPattern(PlacedOnSameLine(value.Pattern));
+
+        internal static ThrowExpressionSyntax PlacedOnSameLine(this ThrowExpressionSyntax value) => value.WithoutTrivia()
+                                                                                                         .WithThrowKeyword(value.ThrowKeyword.WithoutTrivia())
+                                                                                                         .WithExpression(PlacedOnSameLine(value.Expression));
+
+        internal static TypeArgumentListSyntax PlacedOnSameLine(this TypeArgumentListSyntax value) => value.WithoutTrivia()
+                                                                                                           .WithArguments(PlacedOnSameLine(value.Arguments))
+                                                                                                           .WithGreaterThanToken(value.GreaterThanToken.WithoutTrivia())
+                                                                                                           .WithLessThanToken(value.LessThanToken.WithoutTrivia());
+
+        internal static WhenClauseSyntax PlacedOnSameLine(this WhenClauseSyntax value) => value?.WithoutTrivia()
+                                                                                                .WithWhenKeyword(value.WhenKeyword.WithLeadingSpace().WithoutTrailingTrivia())
+                                                                                                .WithCondition(PlacedOnSameLine(value.Condition));
+
         /// <summary>
         /// Creates a new node from this node with additional leading trivia.
         /// </summary>
