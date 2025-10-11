@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2060_FactoryAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] ClassSummaryStartingPhrases = CreateTypeSummaryStartingPhrases().Take(TestLimit).OrderDescendingByLengthAndText();
-        private static readonly string[] InterfaceSummaryStartingPhrases = [.. ClassSummaryStartingPhrases.Take(100)];
+        private static readonly string[] InterfaceSummaryStartingPhrases = [.. ClassSummaryStartingPhrases.Take(10)];
         private static readonly string[] MethodStartingPhrases = [.. CreateMethodSummaryPhrases()];
 
         [OneTimeSetUp]
@@ -525,7 +525,7 @@ internal interface IFactory
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2060_CodeFixProvider();
 
-        //// ncrunch: no coverage start
+//// ncrunch: no coverage start
 
         // ReSharper disable once ReturnTypeCanBeEnumerable.Local Violates CA1859
         [ExcludeFromCodeCoverage]
@@ -596,14 +596,14 @@ internal interface IFactory
                                    "Represents factories",
                                    "Represents methods",
                                    "Represents",
-                                   "The class containing factory methods",
-                                   "The class containing methods",
+                                   //// "The class containing factory methods", // we do not test them to limit number of tests
+                                   //// "The class containing methods", // we do not test them to limit number of tests
                                    "The class contains factory methods",
                                    "The class contains methods",
                                    "The class provides factory methods",
                                    "The class provides methods",
-                                   "The class providing factory methods",
-                                   "The class providing methods",
+                                   //// "The class providing factory methods", // we do not test them to limit number of tests
+                                   //// "The class providing methods", // we do not test them to limit number of tests
                                    "The class that contains factory methods",
                                    "The class that contains methods",
                                    "The class that provides factory methods",
@@ -612,7 +612,7 @@ internal interface IFactory
                                    "The class which contains methods",
                                    "The class which provides factory methods",
                                    "The class which provides methods",
-                                   "The factory providing methods",
+                                   //// "The factory providing methods",  // we do not test them to limit number of tests
                                    "The factory that provides methods",
                                    "The factory to provide methods",
                                    "The factory which provides methods",
@@ -631,7 +631,7 @@ internal interface IFactory
                                    "This factory",
                                    "This interface is implemented by factories",
                                    "Used",
-                                   "Uses", // typo in 'used'
+                                   //// "Uses", // typo in 'used' // we do not test them to limit number of tests
                                ];
 
             string[] verbs = [
@@ -652,20 +652,20 @@ internal interface IFactory
 
             var startingPhrases = s.Concat(s.Select(_ => _.Replace("actory", "actory class"))).ToList();
 
-            var constructionPhrases = new List<string>(startingPhrases.Count);
-            var buildingPhrases = new List<string>(startingPhrases.Count);
-            var providingPhrases = new List<string>(startingPhrases.Count);
-
-            foreach (var phrase in startingPhrases)
-            {
-                constructionPhrases.Add(phrase.AsCachedBuilder().Replace("creation", "construction").Replace("creating", "constructing").Replace("create", "construct").ToStringAndRelease());
-                buildingPhrases.Add(phrase.AsCachedBuilder().Replace("creation", "building").Replace("creating", "building").Replace("create", "build").ToStringAndRelease());
-                providingPhrases.Add(phrase.AsCachedBuilder().Replace("creation", "providing").Replace("creating", "providing").Replace("create", "provide").ToStringAndRelease());
-            }
-
+            // TODO RKN: Do not test following phrases, to limit number of tests
+            // var constructionPhrases = new List<string>(startingPhrases.Count);
+            // var buildingPhrases = new List<string>(startingPhrases.Count);
+            // var providingPhrases = new List<string>(startingPhrases.Count);
+            //
+            // foreach (var phrase in startingPhrases)
+            // {
+            //     constructionPhrases.Add(phrase.AsCachedBuilder().Replace("creation", "construction").Replace("creating", "constructing").Replace("create", "construct").ToStringAndRelease());
+            //     buildingPhrases.Add(phrase.AsCachedBuilder().Replace("creation", "building").Replace("creating", "building").Replace("create", "build").ToStringAndRelease());
+            //     providingPhrases.Add(phrase.AsCachedBuilder().Replace("creation", "providing").Replace("creating", "providing").Replace("create", "provide").ToStringAndRelease());
+            // }
             var results = new HashSet<string>();
 
-            foreach (var startingPhrase in startingPhrases.Concat(constructionPhrases).Concat(buildingPhrases).Concat(providingPhrases))
+            foreach (var startingPhrase in startingPhrases) //// .Concat(constructionPhrases).Concat(buildingPhrases).Concat(providingPhrases))
             {
                 foreach (var article in articles)
                 {

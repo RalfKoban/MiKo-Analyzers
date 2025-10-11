@@ -1030,15 +1030,7 @@ namespace MiKoSolutions.Analyzers
         /// <see langword="true"/> if the sequence is found; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Contains(this in ReadOnlySpan<char> value, in ReadOnlySpan<char> finding)
-        {
-            if (finding.Length > value.Length)
-            {
-                return false;
-            }
-
-            return value.IndexOf(finding) >= 0;
-        }
+        public static bool Contains(this in ReadOnlySpan<char> value, in ReadOnlySpan<char> finding) => value.IndexOf(finding) >= 0;
 
         /// <summary>
         /// Determines whether the span of characters contains the specified string.
@@ -1271,7 +1263,6 @@ namespace MiKoSolutions.Analyzers
                     var phrase = phrases[index];
                     var phraseSpan = phrase.AsSpan();
 
-                    // no separate handling for StringComparison.Ordinal here as that happens around 30 times out of 90_000_000 times; so almost never
                     if (QuickContainsSubstringProbe(value, phraseSpan, comparison))
                     {
                         if (ordinalComparison)
@@ -1283,7 +1274,7 @@ namespace MiKoSolutions.Analyzers
                         }
                         else
                         {
-                            if (value.Contains(phrase.AsSpan(), comparison))
+                            if (value.Contains(phraseSpan, comparison)) // Perf: when compared other than with Ordinal comparison, a string gets created internally
                             {
                                 return true;
                             }
