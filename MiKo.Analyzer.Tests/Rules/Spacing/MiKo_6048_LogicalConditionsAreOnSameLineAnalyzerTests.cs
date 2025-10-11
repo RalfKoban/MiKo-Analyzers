@@ -56,6 +56,25 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_if_multiple_logical_condition_parts_are_all_on_their_own_lines() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool flag1, bool flag2, bool flag3, bool flag4)
+    {
+        if (flag1
+         && flag2
+         && flag3
+         && flag4)
+        {
+            return;
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_if_parenthesized_logical_condition_parts_are_all_on_their_own_line_and_combined_condition_is_first() => No_issue_is_reported_for(@"
 using System;
 
@@ -444,6 +463,41 @@ public class TestMe
     public bool Equality => (A == other.A || (A != null && A.Equals(other.A, StringComparison.Ordinal))) && (B == other.B || (B != null && B.Equals(other.B, StringComparison.Ordinal)));
 }
 ";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_invocation_on_multiple_lines()
+        {
+            const string OriginalCode = """
+                                        using System;
+
+                                        public class TestMe
+                                        {
+                                            public void DoSomething(string someText)
+                                            {
+                                                if (!string.IsNullOrWhiteSpace(someText) && Enum.TryParse<StringComparison>(
+                                                        someText.Replace(" ", "", StringComparison.Ordinal), out var format))
+                                                {
+                                                }
+                                            }
+                                        }
+                                        """;
+
+            const string FixedCode = """
+                                     using System;
+
+                                     public class TestMe
+                                     {
+                                         public void DoSomething(string someText)
+                                         {
+                                             if (!string.IsNullOrWhiteSpace(someText) && Enum.TryParse<StringComparison>(someText.Replace(" ", "", StringComparison.Ordinal), out var format))
+                                             {
+                                             }
+                                         }
+                                     }
+                                     """;
 
             VerifyCSharpFix(OriginalCode, FixedCode);
         }

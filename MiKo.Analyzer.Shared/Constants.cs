@@ -999,7 +999,7 @@ namespace MiKoSolutions.Analyzers
                                                                         "by indention", // be able to detect typos
                                                                         "with indention", // be able to detect typos
                                                                         "by indent", // be able to detect typos
-                                                                        "with indent", // be able to detect typos
+                                                                        //// to not use "with indent" because "with indentation" is a correct phrase that has no reference to "intentionally"
                                                                         "on purpose",
                                                                         "purposely",
                                                                         "purposly", // be able to detect typos
