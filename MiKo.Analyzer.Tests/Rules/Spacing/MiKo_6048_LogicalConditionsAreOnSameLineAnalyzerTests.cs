@@ -26,7 +26,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_if_logical_condition_parts_are_all_on_their_own_line_with_condition_on_same_line_as_first() => No_issue_is_reported_for(@"
+        public void An_issue_is_reported_if_logical_condition_parts_are_all_on_their_own_line_with_condition_on_same_line_as_first() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -41,7 +41,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_if_logical_condition_parts_are_all_on_their_own_line_with_condition_on_same_line_as_last() => No_issue_is_reported_for(@"
+        public void An_issue_is_reported_if_logical_condition_parts_are_all_on_their_own_line_with_condition_on_same_line_as_last() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -56,7 +56,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_if_parenthesized_logical_condition_parts_are_all_on_their_own_line_and_combined_condition_is_first() => No_issue_is_reported_for(@"
+        public void An_issue_is_reported_if_parenthesized_logical_condition_parts_are_all_on_their_own_line_and_combined_condition_is_first() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -71,7 +71,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_if_parenthesized_logical_condition_parts_are_all_on_their_own_line_and_combined_condition_is_last() => No_issue_is_reported_for(@"
+        public void An_issue_is_reported_if_parenthesized_logical_condition_parts_are_all_on_their_own_line_and_combined_condition_is_last() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -86,7 +86,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_if_multiple_parenthesized_logical_condition_parts_are_all_on_multiple_lines() => No_issue_is_reported_for(@"
+        public void An_issue_is_reported_if_multiple_parenthesized_logical_condition_parts_are_all_on_multiple_lines() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -625,6 +625,41 @@ public class TestMe
     }
 }
 ";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_invocation_on_multiple_lines()
+        {
+            const string OriginalCode = """
+                                        using System;
+
+                                        public class TestMe
+                                        {
+                                            public void DoSomething(string someText)
+                                            {
+                                                if (!string.IsNullOrWhiteSpace(someText) && Enum.TryParse<StringComparison>(
+                                                        someText.Replace(" ", "", StringComparison.Ordinal), out var format))
+                                                {
+                                                }
+                                            }
+                                        }
+                                        """;
+
+            const string FixedCode = """
+                                     using System;
+
+                                     public class TestMe
+                                     {
+                                         public void DoSomething(string someText)
+                                         {
+                                             if (!string.IsNullOrWhiteSpace(someText) && Enum.TryParse<StringComparison>(someText.Replace(" ", "", StringComparison.Ordinal), out var format))
+                                             {
+                                             }
+                                         }
+                                     }
+                                     """;
 
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
