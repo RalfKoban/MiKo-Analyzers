@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,6 +18,41 @@ namespace MiKoSolutions.Analyzers
     /// </summary>
     internal static partial class SyntaxNodeExtensions
     {
+        /// <summary>
+        /// Gets the first XML element that is NOT empty (has some content) and matches the given tag.
+        /// </summary>
+        /// <param name="syntaxNodes">
+        /// The collection of syntax nodes to search.
+        /// </param>
+        /// <param name="startTag">
+        /// The tag of the XML elements to consider.
+        /// </param>
+        /// <returns>
+        /// A <see cref="XmlElementSyntax"/> that is NOT empty (has some content) and matches the given tag; or <see langword="null"/> if none is found.
+        /// </returns>
+        internal static XmlElementSyntax FirstXmlSyntax(this IEnumerable<SyntaxNode> syntaxNodes, string startTag)
+        {
+            foreach (var node in syntaxNodes)
+            {
+                if (node is XmlElementSyntax element && element.GetName() == startTag)
+                {
+                    return element;
+                }
+            }
+
+            foreach (var node in syntaxNodes)
+            {
+                var elementSyntaxes = node.GetXmlSyntax(startTag);
+
+                if (elementSyntaxes.Count > 0)
+                {
+                    return elementSyntaxes[0];
+                }
+            }
+
+            return null;
+        }
+
         /// <summary>
         /// Gets the <see cref="SemanticModel"/> for the specified <see cref="Document"/>.
         /// </summary>
@@ -383,28 +419,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the node is a <c>&lt;see cref="..."/&gt;</c> element with the specified cref; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool IsSeeCref(this SyntaxNode value, string type)
-        {
-            switch (value)
-            {
-                case XmlEmptyElementSyntax element when element.GetName() is Constants.XmlTag.See:
-                {
-                    return IsCref(element.Attributes, type);
-                }
-
-                case XmlElementSyntax element when element.GetName() is Constants.XmlTag.See:
-                {
-                    return IsCref(element.StartTag.Attributes, type);
-                }
-
-                default:
-                {
-                    return false;
-                }
-            }
-
-            bool IsCref(SyntaxList<XmlAttributeSyntax> syntax, string content) => syntax.FirstOrDefault() is XmlCrefAttributeSyntax attribute && attribute.Cref.ToString() == content;
-        }
+        internal static bool IsSeeCref(this SyntaxNode value, string type) => value.IsSeeCref(type.AsTypeSyntax());
 
         /// <summary>
         /// Determines whether the specified <see cref="SyntaxNode"/> represents a <c>&lt;see cref="..."/&gt;</c> XML element with the given <see cref="TypeSyntax"/>.
@@ -442,17 +457,38 @@ namespace MiKoSolutions.Analyzers
             {
                 if (syntax.FirstOrDefault() is XmlCrefAttributeSyntax attribute)
                 {
-                    if (attribute.Cref is NameMemberCrefSyntax m)
+                    switch (attribute.Cref)
                     {
-                        return t is GenericNameSyntax
-                               ? IsSameGeneric(m.Name, t)
-                               : IsSameName(m.Name, t);
+                        case NameMemberCrefSyntax m:
+                            return t is GenericNameSyntax
+                                   ? IsSameGeneric(m.Name, t)
+                                   : IsSameName(m.Name, t);
+
+                        case TypeCrefSyntax ct:
+                            return t.ToString() == ct.Type.ToString();
                     }
                 }
 
                 return false;
             }
         }
+
+        /// <summary>
+        /// Determines whether the specified <see cref="SyntaxNode"/> represents a <c>&lt;see cref="..."/&gt;</c> XML element with the given <see cref="TypeSyntax"/> and member name.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to check.
+        /// </param>
+        /// <param name="type">
+        /// The type syntax to match.
+        /// </param>
+        /// <param name="member">
+        /// The member name to match.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the node is a <c>&lt;see cref="..."/&gt;</c> element with the specified type and member; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsSeeCref(this SyntaxNode value, string type, string member) => value.IsSeeCref(type.AsTypeSyntax(), SyntaxFactory.ParseName(member));
 
         /// <summary>
         /// Determines whether the specified <see cref="SyntaxNode"/> represents a <c>&lt;see cref="..."/&gt;</c> XML element with the given <see cref="TypeSyntax"/> and member name.
@@ -515,13 +551,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the node is a <c>&lt;see cref="Task{TResult}.Result"/&gt;</c> element; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool IsSeeCrefTaskResult(this SyntaxNode value)
-        {
-            var type = "Task<TResult>".AsTypeSyntax();
-            var member = SyntaxFactory.ParseName(nameof(Task<object>.Result));
-
-            return value.IsSeeCref(type, member);
-        }
+        internal static bool IsSeeCrefTaskResult(this SyntaxNode value) => value.IsSeeCref("Task<TResult>", nameof(Task<object>.Result));
 
         /// <summary>
         /// Determines whether the specified <see cref="SyntaxNode"/> represents a <c>&lt;see cref="Task"/&gt;</c> or <c>&lt;see cref="Task{TResult}"/&gt;</c> XML element.
@@ -532,20 +562,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the node is a <c>&lt;see cref="Task"/&gt;</c> or <c>&lt;see cref="Task{TResult}"/&gt;</c> element; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool IsSeeCrefTask(this SyntaxNode value)
-        {
-            if (value.IsSeeCref("Task".AsTypeSyntax()))
-            {
-                return true;
-            }
-
-            if (value.IsSeeCref("Task<TResult>".AsTypeSyntax()))
-            {
-                return true;
-            }
-
-            return false;
-        }
+        internal static bool IsSeeCrefTask(this SyntaxNode value) => value.IsSeeCref("Task") || value.IsSeeCref("Task<TResult>");
 
         /// <summary>
         /// Determines whether the specified <see cref="SyntaxNode"/> represents a string creation expression.

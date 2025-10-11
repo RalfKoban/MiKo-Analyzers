@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (syntax is InvocationExpressionSyntax invocation)
             {
-                return invocation.WithArgumentList(PlacedOnSameLine(invocation.ArgumentList))
+                return invocation.WithArgumentList(invocation.ArgumentList.PlacedOnSameLine())
                                  .WithExpression(PlacedOnSameLine(invocation.Expression))
                                  .WithTrailingTriviaFrom(invocation);
             }
@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         }
 
         private static ExpressionSyntax PlacedOnSameLine(ExpressionSyntax expression) => expression is MemberAccessExpressionSyntax maes
-                                                                                         ? maes.WithName(SpacingCodeFixProvider.PlacedOnSameLine(maes.Name))
+                                                                                         ? maes.WithName(maes.Name.PlacedOnSameLine())
                                                                                          : expression;
     }
 }

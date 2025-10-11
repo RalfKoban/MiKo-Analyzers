@@ -33,11 +33,11 @@ namespace MiKoSolutions.Analyzers
         internal static bool All<T>(this in SyntaxList<T> value, Func<T, bool> predicate) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var valueCount = value.Count;
+            var count = value.Count;
 
-            if (valueCount > 0)
+            if (count > 0)
             {
-                for (var index = 0; index < valueCount; index++)
+                for (var index = 0; index < count; index++)
                 {
                     if (predicate(value[index]) is false)
                     {
@@ -67,11 +67,11 @@ namespace MiKoSolutions.Analyzers
         internal static bool Any<T>(this in SyntaxList<T> value, Func<T, bool> predicate) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var valueCount = value.Count;
+            var count = value.Count;
 
-            if (valueCount > 0)
+            if (count > 0)
             {
-                for (var index = 0; index < valueCount; index++)
+                for (var index = 0; index < count; index++)
                 {
                     if (predicate(value[index]))
                     {
@@ -101,11 +101,11 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<T> Except<T>(this SyntaxList<T> source, T value) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var sourceCount = source.Count;
+            var count = source.Count;
 
-            if (sourceCount > 0)
+            if (count > 0)
             {
-                for (var index = 0; index < sourceCount; index++)
+                for (var index = 0; index < count; index++)
                 {
                     var item = source[index];
 
@@ -140,11 +140,11 @@ namespace MiKoSolutions.Analyzers
         internal static T First<T>(this in SyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var sourceCount = source.Count;
+            var count = source.Count;
 
-            if (sourceCount > 0)
+            if (count > 0)
             {
-                for (var index = 0; index < sourceCount; index++)
+                for (var index = 0; index < count; index++)
                 {
                     var value = source[index];
 
@@ -176,11 +176,11 @@ namespace MiKoSolutions.Analyzers
         internal static T FirstOrDefault<T>(this in SyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var sourceCount = source.Count;
+            var count = source.Count;
 
-            if (sourceCount > 0)
+            if (count > 0)
             {
-                for (var index = 0; index < sourceCount; index++)
+                for (var index = 0; index < count; index++)
                 {
                     var value = source[index];
 
@@ -317,16 +317,16 @@ namespace MiKoSolutions.Analyzers
                                                                                                 where TResult : T
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var sourceCount = source.Count;
+            var count = source.Count;
 
-            if (sourceCount is 0)
+            if (count is 0)
             {
                 return Array.Empty<TResult>();
             }
 
             List<TResult> results = null;
 
-            for (var index = 0; index < sourceCount; index++)
+            for (var index = 0; index < count; index++)
             {
                 if (source[index] is TResult result)
                 {
@@ -346,16 +346,16 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxList<XmlNodeSyntax> ReplaceText(this in SyntaxList<XmlNodeSyntax> source, in ReadOnlySpan<string> phrases, string replacement)
         {
-            var sourceCount = source.Count;
+            var count = source.Count;
 
-            if (sourceCount is 0)
+            if (count is 0)
             {
                 return source;
             }
 
             var result = source.ToArray();
 
-            for (var index = 0; index < sourceCount; index++)
+            for (var index = 0; index < count; index++)
             {
                 var value = result[index];
 
@@ -390,11 +390,11 @@ namespace MiKoSolutions.Analyzers
                                                                                                                       where TResult : class
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var sourceCount = source.Count;
+            var count = source.Count;
 
-            if (sourceCount > 0)
+            if (count > 0)
             {
-                for (var index = 0; index < sourceCount; index++)
+                for (var index = 0; index < count; index++)
                 {
                     yield return selector(source[index]);
                 }
@@ -419,11 +419,11 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<SyntaxToken> Select<T>(this SyntaxList<T> source, Func<T, SyntaxToken> selector) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var sourceCount = source.Count;
+            var count = source.Count;
 
-            if (sourceCount > 0)
+            if (count > 0)
             {
-                for (var index = 0; index < sourceCount; index++)
+                for (var index = 0; index < count; index++)
                 {
                     yield return selector(source[index]);
                 }
@@ -452,11 +452,11 @@ namespace MiKoSolutions.Analyzers
                                                                                                                                        where TResult : class
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var sourceCount = source.Count;
+            var count = source.Count;
 
-            if (sourceCount > 0)
+            if (count > 0)
             {
-                for (var index = 0; index < sourceCount; index++)
+                for (var index = 0; index < count; index++)
                 {
                     var value = source[index];
 
@@ -520,16 +520,16 @@ namespace MiKoSolutions.Analyzers
         internal static T[] ToArray<T>(this in SyntaxList<T> source) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var sourceCount = source.Count;
+            var count = source.Count;
 
-            if (sourceCount is 0)
+            if (count is 0)
             {
                 return Array.Empty<T>();
             }
 
-            var result = new T[sourceCount];
+            var result = new T[count];
 
-            for (var index = 0; index < sourceCount; index++)
+            for (var index = 0; index < count; index++)
             {
                 result[index] = source[index];
             }
@@ -586,13 +586,13 @@ namespace MiKoSolutions.Analyzers
         internal static List<T> ToList<T>(this in SyntaxList<T> source) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var sourceCount = source.Count;
+            var count = source.Count;
 
-            var result = new List<T>(sourceCount);
+            var result = new List<T>(count);
 
-            if (sourceCount > 0)
+            if (count > 0)
             {
-                for (var index = 0; index < sourceCount; index++)
+                for (var index = 0; index < count; index++)
                 {
                     result.Add(source[index]);
                 }
@@ -649,11 +649,11 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<T> Where<T>(this SyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var sourceCount = source.Count;
+            var count = source.Count;
 
-            if (sourceCount > 0)
+            if (count > 0)
             {
-                for (var index = 0; index < sourceCount; index++)
+                for (var index = 0; index < count; index++)
                 {
                     var value = source[index];
 
@@ -722,16 +722,16 @@ namespace MiKoSolutions.Analyzers
         internal static SyntaxList<XmlNodeSyntax> WithoutText(this in SyntaxList<XmlNodeSyntax> values, string text)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var valuesCount = values.Count;
+            var count = values.Count;
 
-            if (valuesCount is 0)
+            if (count is 0)
             {
                 return values;
             }
 
             var contents = values.ToList();
 
-            for (var index = 0; index < valuesCount; index++)
+            for (var index = 0; index < count; index++)
             {
                 if (values[index] is XmlTextSyntax s)
                 {

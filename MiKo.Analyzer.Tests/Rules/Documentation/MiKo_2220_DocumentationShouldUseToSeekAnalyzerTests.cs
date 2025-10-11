@@ -16,7 +16,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly Dictionary<string, string> Map = new()
                                                                      {
                                                                          { "to find", "to seek" },
-                                                                         { "to inspect for", "to seek" },
                                                                          { "to look for", "to seek" },
                                                                          { "to test for", "to seek" },
 
@@ -45,9 +44,18 @@ public class TestMe
 }");
 
         [Test]
+        public void No_issue_is_reported_for_correct_comment_with_to_inspect_for() => No_issue_is_reported_for(@"
+/// <summary>
+/// Some summary to inspect for more details.
+/// </summary>
+public class TestMe
+{
+}");
+
+        [Test]
         public void An_issue_is_reported_for_wrong_text_in_documentation_([ValueSource(nameof(WrongPhrases))] string phrase) => An_issue_is_reported_for(@"
 /// <summary>
-/// It " + phrase + @" do something.
+/// It is used " + phrase + @" something.
 /// </summary>
 public class TestMe
 {
@@ -58,7 +66,7 @@ public class TestMe
         {
             const string Template = @"
 /// <summary>
-/// It ### do something.
+/// It is used ### something.
 /// </summary>
 public class TestMe
 {

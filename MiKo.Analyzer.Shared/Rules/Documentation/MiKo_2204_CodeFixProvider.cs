@@ -34,34 +34,39 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var listItemText = new List<SyntaxToken>();
             var normalText = new List<SyntaxToken>();
 
-            foreach (var token in text.GetXmlTextTokens())
+            var tokens = text.GetXmlTextTokens();
+
+            if (tokens.Count > 0)
             {
-                var valueText = token.ValueText.AsSpan().Trim();
-
-                if (valueText.IsNullOrWhiteSpace())
+                foreach (var token in tokens)
                 {
-                    continue;
-                }
+                    var valueText = token.ValueText.AsSpan().Trim();
 
-                var adjustedToken = token.WithText(valueText).WithLeadingXmlComment();
+                    if (valueText.IsNullOrWhiteSpace())
+                    {
+                        continue;
+                    }
 
-                if (valueText.StartsWithAny(Markers, StringComparison.OrdinalIgnoreCase))
-                {
-                    // we already have some text
-                    AddXmlText(result, normalText);
+                    var adjustedToken = token.WithText(valueText).WithLeadingXmlComment();
 
-                    listItemText.Add(adjustedToken);
+                    if (valueText.StartsWithAny(Markers, StringComparison.OrdinalIgnoreCase))
+                    {
+                        // we already have some text
+                        AddXmlText(result, normalText);
 
-                    normalText.Clear();
-                }
-                else
-                {
-                    // we found some text
-                    AddList(result, listItemText);
+                        listItemText.Add(adjustedToken);
 
-                    normalText.Add(adjustedToken);
+                        normalText.Clear();
+                    }
+                    else
+                    {
+                        // we found some text
+                        AddList(result, listItemText);
 
-                    listItemText.Clear();
+                        normalText.Add(adjustedToken);
+
+                        listItemText.Clear();
+                    }
                 }
             }
 

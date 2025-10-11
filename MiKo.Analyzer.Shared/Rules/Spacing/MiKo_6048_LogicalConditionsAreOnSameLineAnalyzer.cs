@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private static bool IsOnSingleLineLocal(SyntaxNode s)
         {
-            var span = s.GetLocation().GetLineSpan();
+            var span = s.GetLineSpan();
 
             return span.StartLinePosition.Line == span.EndLinePosition.Line;
         }
@@ -54,8 +54,8 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             var leftCondition = binary.Left;
             var rightCondition = binary.Right;
 
-            var leftSpan = leftCondition.GetLocation().GetLineSpan();
-            var rightSpan = rightCondition.GetLocation().GetLineSpan();
+            var leftSpan = leftCondition.GetLineSpan();
+            var rightSpan = rightCondition.GetLineSpan();
 
             // let's see if both conditions are on same line
             if (leftSpan.EndLinePosition.Line == rightSpan.StartLinePosition.Line)
@@ -79,8 +79,8 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             if (IsOnSingleLine(parenthesized.Expression))
             {
                 // we have a parenthesized one, so let's check also the parenthesis
-                var openParenthesisSpan = parenthesized.OpenParenToken.GetLocation().GetLineSpan();
-                var closeParenthesisSpan = parenthesized.CloseParenToken.GetLocation().GetLineSpan();
+                var openParenthesisSpan = parenthesized.OpenParenToken.GetLineSpan();
+                var closeParenthesisSpan = parenthesized.CloseParenToken.GetLineSpan();
 
                 if (openParenthesisSpan.StartLinePosition.Line == closeParenthesisSpan.EndLinePosition.Line)
                 {

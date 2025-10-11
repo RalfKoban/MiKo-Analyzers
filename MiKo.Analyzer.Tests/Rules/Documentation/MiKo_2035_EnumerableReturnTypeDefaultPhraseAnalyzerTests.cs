@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
@@ -36,12 +37,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] StartingPhrases = [.. Enumerable.ToHashSet(CreateStartingPhrases().Take(TestLimit))];
 
-#if NCRUNCH
-
         [OneTimeSetUp]
         public static void PrepareTestEnvironment() => MiKo_2035_CodeFixProvider.LoadData();
-
-#endif
 
         [Test]
         public void No_issue_is_reported_for_uncommented_method_([ValueSource(nameof(ReturnTypes))] string returnType) => No_issue_is_reported_for(@"
@@ -357,6 +354,48 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [TestCase("The adjusted trivia array with proper whitespace indentation for comments", "An array of the adjusted trivia with proper whitespace indentation for comments")]
+        public void Code_gets_fixed_for_array_type_(string originalText, string fixedText)
+        {
+            const string Template = @"
+using Microsoft.CodeAnalysis;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// ###.
+    /// </returns>
+    public SyntaxTrivia[] DoSomething { get; set; }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
+        }
+
+        [TestCase("The modified set after something", "A collection of elements from the original set after something")]
+        public void Code_gets_fixed_for_hashset_(string originalText, string fixedText)
+        {
+            const string Template = @"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// ###.
+    /// </returns>
+    public HashSet<int> DoSomething { get; set; }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
+        }
+
         [TestCase("")]
         [TestCase("A array of byte containing")]
         [TestCase("A array of byte that contains")]
@@ -470,6 +509,29 @@ public class TestMe
 ";
 
             VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_generic_readonly_([Values("readonly", "read only", "read-only")] string modification, [Values("list", "collection")] string collection)
+        {
+            const string Template = @"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// ### some integers.
+    /// </returns>
+    public IReadOnlyCollection<int> DoSomething { get; set; }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", "A " + modification + " " + collection + " of"), Template.Replace("###", "A collection of"));
         }
 
         [Test]
@@ -608,6 +670,10 @@ public class TestMe
 
         [TestCase("Some integers.", "A sequence that contains some integers.")]
         [TestCase("The mapping information.", "A sequence that contains the mapping information.")]
+        [TestCase("An enumerable collection of invocation expressions that represent LINQ extension methods.", "A sequence that contains invocation expressions that represent LINQ extension methods.")]
+        [TestCase("The syntax list of type parameter constraint clauses.", "A sequence that contains type parameter constraint clauses.")]
+        [TestCase("A read-only list of attributes of the specified type.", "A sequence that contains attributes of the specified type.")]
+        [TestCase("A separated syntax list of parameters accessible from the given context.", "A sequence that contains parameters accessible from the given context.")]
         public void Code_gets_fixed_for_non_generic_enumerable_(string originalPhrase, string fixedPhrase)
         {
             const string Template = @"
@@ -654,7 +720,7 @@ public class TestMe
 
         [TestCase("Some integers.", "A sequence that contains some integers.")]
         [TestCase("The mapping information.", "A sequence that contains the mapping information.")]
-        public void Code_gets_fixed_for_generic_enumerable_(string originalPhrase, string fixedPhrase)
+        public void Code_gets_fixed_for_generic_enumerable_with_primitive_type_(string originalPhrase, string fixedPhrase)
         {
             const string Template = @"
 using System;
@@ -678,7 +744,7 @@ public class TestMe
 
         [TestCase("Some integers.", "A sequence that contains some integers.")]
         [TestCase("The mapping information.", "A sequence that contains the mapping information.")]
-        public void Code_gets_fixed_for_generic_enumerable_on_same_line_(string originalPhrase, string fixedPhrase)
+        public void Code_gets_fixed_for_generic_enumerable_with_primitive_type_on_same_line_(string originalPhrase, string fixedPhrase)
         {
             var originalCode = @"
 using System;
@@ -715,8 +781,9 @@ public class TestMe
             VerifyCSharpFix(originalCode, fixedCode);
         }
 
-        [Test]
-        public void Code_gets_fixed_for_generic_enumerable_with_non_primitive_type()
+        [TestCase("Some data", "A sequence that contains some data")]
+        [TestCase("All ancestors of the specified type", "A sequence that contains all ancestors of the specified type")]
+        public void Code_gets_fixed_for_generic_enumerable_with_non_primitive_type_(string originalPhrase, string fixedPhrase)
         {
             const string Template = @"
 using System;
@@ -738,7 +805,84 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(Template.Replace("###", "Some data"), Template.Replace("###", "A sequence that contains grouped rows that contains some data"));
+            VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
+        }
+
+        [TestCase("Some data", "A sequence that contains some data")]
+        [TestCase("All ancestors of the specified type", "A sequence that contains all ancestors of the specified type")]
+        public void Code_gets_fixed_for_generic_enumerable_with_generic_type_(string originalPhrase, string fixedPhrase)
+        {
+            const string Template = @"
+using System;
+using System.Collections.Generic;
+
+public record MyStuff
+{
+}
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// ###.
+    /// </returns>
+    public IEnumerable<T> DoSomething<T>() where T : MyStuff => null;
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
+        }
+
+        [TestCase("Some data", "A collection of my nodes that contains some data")]
+        [TestCase("All ancestors of the specified type", "A collection of my nodes that contains all ancestors of the specified type")]
+        public void Code_gets_fixed_for_generic_collection_with_generic_closed_type_(string originalPhrase, string fixedPhrase)
+        {
+            const string Template = @"
+using System;
+using System.Collections.Generic;
+
+public record MyNode
+{
+}
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// ###.
+    /// </returns>
+    public IList<T> DoSomething<T>() where T : MyNode => null;
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
+        }
+
+        [TestCase("Some data", "A collection of some data")]
+        [TestCase("All ancestors of the specified type", "A collection of all ancestors of the specified type")]
+        public void Code_gets_fixed_for_generic_collection_with_generic_open_type_(string originalPhrase, string fixedPhrase)
+        {
+            const string Template = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// ###.
+    /// </returns>
+    public IList<T> DoSomething<T>() where T : class => null;
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
         }
 
         [TestCase("Some integers.", "some integers.")]
@@ -935,9 +1079,13 @@ public class TestMe
         private static IEnumerable<string> CreateStartingPhrases()
         {
             string[] startingWords = ["a", "an", "the"];
-            string[] modifications = ["readonly", "read-only", "read only"];
-            string[] collections = ["array", "list", "dictionary", "enumerable", "queue", "stack", "map", "hashset", "hashSet", "hashtable", "hashTable", "hash set", "hashed set", "hash table", "hashed table", "hashing set", "hashing table"];
-            string[] prepositions = ["of", "with", "that contains", "which contains", "that holds", "which holds", "containing", "holding"];
+            string[] modifications = ["read-only", "filtered", "concurrent"];
+            string[] collections = [
+                                       "array", "arraylist", "array list", "list", "dictionary", "enumerable", "queue", "stack", "map", "bag",
+                                       "hashset", "hashSet", "hashtable", "hashTable", "hash set", "hashed set", "hash table", "hashed table", "hashing set", "hashing table",
+                                       "syntax list", "enumerable collection", "separated syntax list", "immutable array",
+                                   ];
+            string[] prepositions = ["of", "with", "that contains", "which contains", "containing"];
 
             foreach (var collection in collections)
             {
@@ -945,29 +1093,36 @@ public class TestMe
                 {
                     var phrase = string.Concat(collection, " ", preposition);
 
-                    yield return phrase.ToLowerCaseAt(0);
+                    yield return phrase;
                     yield return phrase.ToUpperCaseAt(0);
 
                     foreach (var modification in modifications)
                     {
                         var modificationPhrase = string.Concat(modification, " ", phrase);
 
-                        yield return modificationPhrase.ToLowerCaseAt(0);
+                        yield return modificationPhrase;
                         yield return modificationPhrase.ToUpperCaseAt(0);
 
                         foreach (var startingWord in startingWords)
                         {
                             var shortStartingPhrase = string.Concat(startingWord, " ", collection);
+
+                            if (shortStartingPhrase.StartsWith("a i", StringComparison.Ordinal) || shortStartingPhrase.StartsWith("a a", StringComparison.Ordinal))
+                            {
+                                // do not test "a array" or "a immutable array", to limit tests
+                                continue;
+                            }
+
                             var startingPhrase = string.Concat(startingWord, " ", phrase);
                             var modifiedStartingPhrase = string.Concat(startingWord, " ", modificationPhrase);
 
-                            yield return shortStartingPhrase.ToLowerCaseAt(0);
+                            yield return shortStartingPhrase;
                             yield return shortStartingPhrase.ToUpperCaseAt(0);
 
-                            yield return startingPhrase.ToLowerCaseAt(0);
+                            yield return startingPhrase;
                             yield return startingPhrase.ToUpperCaseAt(0);
 
-                            yield return modifiedStartingPhrase.ToLowerCaseAt(0);
+                            yield return modifiedStartingPhrase;
                             yield return modifiedStartingPhrase.ToUpperCaseAt(0);
                         }
                     }

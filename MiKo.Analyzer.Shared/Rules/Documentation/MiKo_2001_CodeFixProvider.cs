@@ -25,9 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly Pair[] ReplacementMap = CreatePhrases().Select(_ => new Pair(_))
                                                                        .Append(new Pair("Invoked if ", "when "))
                                                                        .Append(new Pair("Invoked when ", "when "))
-                                                                       .OrderByDescending(_ => _.Key.Length)
-                                                                       .ThenBy(_ => _.Key)
-                                                                       .ToArray();
+                                                                       .OrderDescendingByLengthAndText(_ => _.Key);
 
         private static readonly string[] ReplacementMapKeys = ReplacementMap.ToArray(_ => _.Key);
 

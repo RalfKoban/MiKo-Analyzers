@@ -219,6 +219,17 @@ public class TestMe : EqualityComparer<int>
 ");
 
         [Test]
+        public void No_issue_gets_reported_for_StreamingContext() => No_issue_is_reported_for(@"
+using System;
+using System.Runtime.Serialization;
+
+public class TestMe
+{
+    public bool DoSomething(StreamingContext context) => true;
+}
+");
+
+        [Test]
         public void No_issue_gets_reported_for_readonly_struct_as_parameter_with_in_modifier() => No_issue_is_reported_for(@"
 using System;
 
@@ -328,6 +339,56 @@ public readonly struct TestMe
     public static bool operator ==(TestMe left, in TestMe right) => left.Equals(right);
 }
 ");
+
+        [Test]
+        public void Code_gets_fixed_for_integer_as_parameter()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int value) { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(in int value) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_integer_as_parameter_on_2nd_line()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(
+            int value) { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(
+            in int value) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
 
         [Test]
         public void Code_gets_fixed_for_readonly_struct_as_parameter()

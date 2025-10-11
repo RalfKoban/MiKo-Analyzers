@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected sealed override async Task<Solution> ApplySolutionCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic issue, CancellationToken cancellationToken)
         {
-            // Produce a new solution that has all references to that symbol renamed, including the declaration.
+            // Produce a new solution that has all references to that symbol renamed, including the declaration
             var originalSolution = document.Project.Solution;
 
             var symbol = await syntax.GetSymbolAsync(document, cancellationToken).ConfigureAwait(false);
@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
 #if VS2022
-            // Return the new solution with the new symbol name.
+            // Return the new solution with the new symbol name
             return await Renamer.RenameSymbolAsync(originalSolution, symbol, default, newName, cancellationToken).ConfigureAwait(false);
 #else
 

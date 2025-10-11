@@ -27,6 +27,20 @@ public class TestMe
 }
 ");
 
+        [TestCase("IGrouping<int, string> group")]
+        [TestCase("IQueryable query")]
+        [TestCase("IQueryable<int> query")]
+        [TestCase("IOrderedQueryable query")]
+        [TestCase("IOrderedQueryable<int> query")]
+        public void No_issue_is_reported_for_field_(string field) => No_issue_is_reported_for(@"
+using System.Linq;
+
+public class TestMe
+{
+    private " + field + @";
+}
+");
+
         [Test]
         public void No_issue_is_reported_for_correctly_named_field_([ValueSource(nameof(FieldPrefixes))] string prefix, [Values("dictionary", "map", "array", "value", "myValue")] string field)
             => No_issue_is_reported_for(@"

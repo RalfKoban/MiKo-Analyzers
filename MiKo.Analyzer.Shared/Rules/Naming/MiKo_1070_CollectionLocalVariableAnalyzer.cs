@@ -43,7 +43,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return false;
             }
 
-            return symbol.IsEnumerable();
+            if (symbol.IsIGrouping())
+            {
+                return false;
+            }
+
+            if (symbol.IsEnumerable())
+            {
+                return symbol.IsIQueryable() is false;
+            }
+
+            return false;
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers)

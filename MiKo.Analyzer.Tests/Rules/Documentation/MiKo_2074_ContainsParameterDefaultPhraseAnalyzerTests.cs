@@ -180,17 +180,24 @@ public class TestMe
 }
 ");
 
-        [Test]
-        public void Code_gets_fixed_for_simple_text()
+        [TestCase("The item", "The item")]
+        [TestCase("The value to search", "The value")]
+        [TestCase("The value to search for", "The value")]
+        [TestCase("The value to look up", "The value")]
+        [TestCase("The value to look-up", "The value")]
+        [TestCase("The value to check", "The value")]
+        [TestCase("The value to check for", "The value")]
+        [TestCase("The value to check if contained", "The value")]
+        public void Code_gets_fixed_for_simple_text(string originalStartingPhrase, string fixedStartingPhrase)
         {
-            const string OriginalCode = @"
+            var originalCode = @"
 public class TestMe
 {
     /// <summary>
     /// Does something.
     /// </summary>
     /// <param name=""i"">
-    /// The item.
+    /// " + originalStartingPhrase + @".
     /// </param>
     public bool Contains(int i)
     {
@@ -198,14 +205,14 @@ public class TestMe
 }
 ";
 
-            const string FixedCode = @"
+            var fixedCode = @"
 public class TestMe
 {
     /// <summary>
     /// Does something.
     /// </summary>
     /// <param name=""i"">
-    /// The item to seek.
+    /// " + fixedStartingPhrase + @" to seek.
     /// </param>
     public bool Contains(int i)
     {
@@ -213,7 +220,7 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(originalCode, fixedCode);
         }
 
         [Test]

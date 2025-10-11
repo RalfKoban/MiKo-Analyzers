@@ -80,6 +80,104 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_method_with_Contains_documentation() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// Contains documentation.
+    /// </summary>
+    public void DoSomething() { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_method_without_documentation() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething() { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_method_with_documentation() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// Some documentation.
+    /// </summary>
+    public void DoSomething() { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_method_with_documentation_([Values("that is used in", "which is used in")] string phrase) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// Some documentation " + phrase + @" something.
+    /// </summary>
+    public void DoSomething() { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_method_with_documentation_in_para_tag() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// <para>
+    /// Some documentation.
+    /// </para>
+    /// </summary>
+    public void DoSomething() { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_field_without_documentation() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    private int DoSomething;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_field_with_documentation() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// Some documentation.
+    /// </summary>
+    private int DoSomething;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_field_with_documentation_in_para_tag() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// <para>
+    /// Some documentation.
+    /// </para>
+    /// </summary>
+    private int DoSomething;
+}
+");
+
+        [TestCase("Some")]
+        [TestCase("All")]
+        public void No_issue_is_reported_for_enum_member_with_documentation_(string firstWord) => No_issue_is_reported_for(@"
+public enum TestMe
+{
+    /// <summary>
+    /// " + firstWord + @" documentation.
+    /// </summary>
+    None = 0,
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_class_with_meaningless_phrase_([ValueSource(nameof(MeaninglessPhrases))] string phrase) => An_issue_is_reported_for(@"
 public interface ITestMe
 {
@@ -104,17 +202,6 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_Contains_documentation() => No_issue_is_reported_for(@"
-public class TestMe
-{
-    /// <summary>
-    /// Contains documentation.
-    /// </summary>
-    public void DoSomething() { }
-}
-");
-
-        [Test]
         public void An_issue_is_reported_for_class_with_meaningless_phrase_in_para_tag_([ValueSource(nameof(MeaninglessPhrases))] string phrase) => An_issue_is_reported_for(@"
 public interface ITestMe
 {
@@ -127,38 +214,6 @@ public interface ITestMe
 /// </summary>
 public class TestMe : ITestMe
 {
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_method_without_documentation() => No_issue_is_reported_for(@"
-public class TestMe
-{
-    public void DoSomething() { }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_method_with_documentation() => No_issue_is_reported_for(@"
-public class TestMe
-{
-    /// <summary>
-    /// Some documentation.
-    /// </summary>
-    public void DoSomething() { }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_method_with_documentation_in_para_tag() => No_issue_is_reported_for(@"
-public class TestMe
-{
-    /// <summary>
-    /// <para>
-    /// Some documentation.
-    /// </para>
-    /// </summary>
-    public void DoSomething() { }
 }
 ");
 
@@ -206,50 +261,6 @@ public class TestMe : ITestMe
     /// Some text " + phrase + @" whatever
     /// </summary>
     public void DoSomething() { }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_field_without_documentation() => No_issue_is_reported_for(@"
-public class TestMe
-{
-    private int DoSomething;
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_field_with_documentation() => No_issue_is_reported_for(@"
-public class TestMe
-{
-    /// <summary>
-    /// Some documentation.
-    /// </summary>
-    private int DoSomething;
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_field_with_documentation_in_para_tag() => No_issue_is_reported_for(@"
-public class TestMe
-{
-    /// <summary>
-    /// <para>
-    /// Some documentation.
-    /// </para>
-    /// </summary>
-    private int DoSomething;
-}
-");
-
-        [TestCase("Some")]
-        [TestCase("All")]
-        public void No_issue_is_reported_for_enum_member_with_documentation_(string firstWord) => No_issue_is_reported_for(@"
-public enum TestMe
-{
-    /// <summary>
-    /// " + firstWord + @" documentation.
-    /// </summary>
-    None = 0,
 }
 ");
 

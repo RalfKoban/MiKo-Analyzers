@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         {
             if (syntax is ParameterSyntax parameter)
             {
-                return parameter.WithModifiers(parameter.Modifiers.Add(SyntaxKind.InKeyword.AsToken()));
+                return parameter.WithModifiers(parameter.Modifiers.Add(SyntaxKind.InKeyword.AsToken().WithLeadingTriviaFrom(parameter)));
             }
 
             return syntax;

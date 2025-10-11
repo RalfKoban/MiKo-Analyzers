@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (syntax is MemberAccessExpressionSyntax member)
             {
-                return PlacedOnSameLine(member).WithTriviaFrom(member);
+                return member.PlacedOnSameLine().WithTriviaFrom(member);
             }
 
             return syntax;

@@ -121,7 +121,7 @@
     <value>Methods should be short to ease reading and maintenance (SRP, SLoA).</value>
   </data>
   <data name="MiKo_0001_MessageFormat" xml:space="preserve">
-    <value>Too many LoC: {1,4} (allowed are max. {2})</value>
+    <value>Too many LoC: {1,4} (max. {2} allowed)</value>
   </data>
   <data name="MiKo_0001_Title" xml:space="preserve">
     <value>Keep methods small</value>
@@ -132,7 +132,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     if | while | for | foreach | case | continue | goto | &amp;&amp; | || | catch | catch when | ternary operator ?: | ?? | ?.</value>
   </data>
   <data name="MiKo_0002_MessageFormat" xml:space="preserve">
-    <value>Too high CC: {1,4} (allowed are max. {2})</value>
+    <value>Too high CC: {1,4} (max. {2} allowed)</value>
   </data>
   <data name="MiKo_0002_Title" xml:space="preserve">
     <value>Simplify complex methods</value>
@@ -141,7 +141,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>To make code easier to read and maintain, types should be kept small. This follows the Single Responsibility Principle (SRP).</value>
   </data>
   <data name="MiKo_0003_MessageFormat" xml:space="preserve">
-    <value>Too many LoC: {1,4} (allowed are max. {2})</value>
+    <value>Too many LoC: {1,4} (max. {2} allowed)</value>
   </data>
   <data name="MiKo_0003_Title" xml:space="preserve">
     <value>Keep types small</value>
@@ -150,7 +150,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>To follow the Single Responsibility Principle (SRP), methods should use as few parameters as possible.</value>
   </data>
   <data name="MiKo_0004_MessageFormat" xml:space="preserve">
-    <value>Too many parameters: {1,4} (allowed are max. {2})</value>
+    <value>Too many parameters: {1,4} (max. {2} allowed)</value>
   </data>
   <data name="MiKo_0004_Title" xml:space="preserve">
     <value>Limit method parameters</value>
@@ -159,7 +159,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>To make code easier to read and maintain, local functions should be kept short. This follows the Single Responsibility Principle (SRP) and the Single Level of Abstraction (SLoA) principle.</value>
   </data>
   <data name="MiKo_0005_MessageFormat" xml:space="preserve">
-    <value>Too many LoC: {1,4} (allowed are max. {2})</value>
+    <value>Too many LoC: {1,4} (max. {2} allowed)</value>
   </data>
   <data name="MiKo_0005_Title" xml:space="preserve">
     <value>Keep local functions small</value>
@@ -170,7 +170,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     if | while | for | foreach | case | continue | goto | &amp;&amp; | || | catch | catch when | ternary operator ?: | ?? | ?.</value>
   </data>
   <data name="MiKo_0006_MessageFormat" xml:space="preserve">
-    <value>Too high CC: {1,4} (allowed are max. {2})</value>
+    <value>Too high CC: {1,4} (max. {2} allowed)</value>
   </data>
   <data name="MiKo_0006_Title" xml:space="preserve">
     <value>Simplify complex local functions</value>
@@ -179,7 +179,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>To follow the Single Responsibility Principle (SRP), local functions should use as few parameters as possible.</value>
   </data>
   <data name="MiKo_0007_MessageFormat" xml:space="preserve">
-    <value>Too many parameters: {1,4} (allowed are max. {2})</value>
+    <value>Too many parameters: {1,4} (max. {2} allowed)</value>
   </data>
   <data name="MiKo_0007_Title" xml:space="preserve">
     <value>Limit local function parameters</value>
@@ -191,7 +191,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>To maintain consistency and clarity in code, event argument types should inherit from 'System.EventArgs' and their names should end with 'EventArgs'.</value>
   </data>
   <data name="MiKo_1000_MessageFormat" xml:space="preserve">
-    <value>Name it '{1}' instead</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1000_Title" xml:space="preserve">
     <value>Suffix 'System.EventArgs' types with 'EventArgs'</value>
@@ -270,7 +270,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
 Example: A 'Loaded' event should use an 'EventHandler&lt;LoadedEventArgs&gt;'.</value>
   </data>
   <data name="MiKo_1006_MessageFormat" xml:space="preserve">
-    <value>Use 'EventHandler&lt;{1}&gt;' instead</value>
+    <value>Use 'EventHandler&lt;{1}&gt;'</value>
   </data>
   <data name="MiKo_1006_Title" xml:space="preserve">
     <value>Use 'EventHandler&lt;T&gt;' with 'EventArgs' named after the event</value>
@@ -279,7 +279,7 @@ Example: A 'Loaded' event should use an 'EventHandler&lt;LoadedEventArgs&gt;'.</
     <value>Events and their event arguments are logically related, so they should be placed in the same namespace for better organization.</value>
   </data>
   <data name="MiKo_1007_MessageFormat" xml:space="preserve">
-    <value>Used '{1}' should be in namespace '{2}'</value>
+    <value>Move '{1}' into namespace '{2}'</value>
   </data>
   <data name="MiKo_1007_Title" xml:space="preserve">
     <value>Place events and their 'EventArgs' types in the same namespace</value>
@@ -752,7 +752,7 @@ This naming convention helps ensure clarity and consistency in method functional
     <value>Using terms like 'Must', 'Need', 'Shall', 'Should', 'Will', or 'Would' in names is not clear enough. Instead, go for positive verbs or adjectives like 'Is', 'Has', or 'Can.' These make the names more explicit and easier to understand.</value>
   </data>
   <data name="MiKo_1049_MessageFormat" xml:space="preserve">
-    <value>Do not use '{1}' in name</value>
+    <value>Remove '{1}' from name</value>
   </data>
   <data name="MiKo_1049_Title" xml:space="preserve">
     <value>Do not use requirement terms such as 'Shall', 'Should', 'Must' or 'Need' for names</value>
@@ -777,7 +777,7 @@ So, use meaningful names instead of vague ones like 'ret', 'retVal', or 'returnV
     <value>Using the delegate type as a suffix for parameter names is redundant and unhelpful. Instead, use descriptive names like 'callback', 'filter', or 'map' to provide clearer context.</value>
   </data>
   <data name="MiKo_1051_MessageFormat" xml:space="preserve">
-    <value>Use a better matching name instead</value>
+    <value>Use a better matching name</value>
   </data>
   <data name="MiKo_1051_Title" xml:space="preserve">
     <value>Do not suffix parameters with delegate types</value>
@@ -789,7 +789,7 @@ So, use meaningful names instead of vague ones like 'ret', 'retVal', or 'returnV
     <value>Using the delegate type as a suffix for variable names is redundant and unhelpful. Instead, use descriptive names like 'callback', 'filter', or 'map' to provide clearer context.</value>
   </data>
   <data name="MiKo_1052_MessageFormat" xml:space="preserve">
-    <value>Use a better matching name instead</value>
+    <value>Use a better matching name</value>
   </data>
   <data name="MiKo_1052_Title" xml:space="preserve">
     <value>Do not suffix variables with delegate types</value>
@@ -801,7 +801,7 @@ So, use meaningful names instead of vague ones like 'ret', 'retVal', or 'returnV
     <value>Using the delegate type as a suffix for field names is redundant and unhelpful. Instead, use descriptive names like 'callback', 'filter', or 'map' to provide clearer context.</value>
   </data>
   <data name="MiKo_1053_MessageFormat" xml:space="preserve">
-    <value>Use a better matching name instead</value>
+    <value>Use a better matching name</value>
   </data>
   <data name="MiKo_1053_Title" xml:space="preserve">
     <value>Do not suffix fields with delegate types</value>
@@ -829,7 +829,7 @@ Instead, use specific names that describe their exact purpose, making the code e
     <value>https://learn.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property</value>
   </data>
   <data name="MiKo_1055_MessageFormat" xml:space="preserve">
-    <value>Name it '{1}' instead</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1055_Title" xml:space="preserve">
     <value>Suffix dependency properties with 'Property' (as in the .NET Framework)</value>
@@ -841,7 +841,7 @@ Instead, use specific names that describe their exact purpose, making the code e
     <value>https://learn.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property</value>
   </data>
   <data name="MiKo_1056_MessageFormat" xml:space="preserve">
-    <value>Name it {1} instead</value>
+    <value>Name it {1}</value>
   </data>
   <data name="MiKo_1056_Title" xml:space="preserve">
     <value>Prefix dependency properties with property names (as in the .NET Framework)</value>
@@ -856,7 +856,7 @@ Instead, use specific names that describe their exact purpose, making the code e
     <value>https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertykey</value>
   </data>
   <data name="MiKo_1057_MessageFormat" xml:space="preserve">
-    <value>Name it '{1}' instead</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1057_Title" xml:space="preserve">
     <value>Suffix dependency property keys with 'Key' (as in the .NET Framework)</value>
@@ -868,7 +868,7 @@ Instead, use specific names that describe their exact purpose, making the code e
     <value>https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertykey</value>
   </data>
   <data name="MiKo_1058_MessageFormat" xml:space="preserve">
-    <value>Name it {1} instead</value>
+    <value>Name it {1}</value>
   </data>
   <data name="MiKo_1058_Title" xml:space="preserve">
     <value>Prefix dependency property keys with property names (as in the .NET Framework)</value>
@@ -895,7 +895,7 @@ Naming the exception 'GetXyzFailedException' is unclear because it does not spec
 Similarly, using 'XyzMissingException' is also misleading. 'Missing' implies it should be there but is not, whereas 'not found' simply states it does not exist. Hence, 'XyzNotFoundException' is a clearer and more precise choice.</value>
   </data>
   <data name="MiKo_1060_MessageFormat" xml:space="preserve">
-    <value>Consider to name it '{1}' instead</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1060_Title" xml:space="preserve">
     <value>Use '&lt;Entity&gt;NotFound' instead of 'Get&lt;Entity&gt;Failed' or '&lt;Entity&gt;Missing'</value>
@@ -1088,7 +1088,7 @@ Example:
     <value>Event argument types should inherit from 'System.EventArgs' and have names ending with 'EventArgs'. If a type ends with 'EventArgs' but does not follow this pattern, it's misleading and should not use 'EventArgs' in its name.</value>
   </data>
   <data name="MiKo_1075_MessageFormat" xml:space="preserve">
-    <value>Name it '{1}' instead</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1075_Title" xml:space="preserve">
     <value>Do not suffix non-'System.EventArgs' types with 'EventArgs'</value>
@@ -1100,7 +1100,7 @@ Example:
     <value>Prism event types follow the pattern defined by Prism and end their names with 'Event'.</value>
   </data>
   <data name="MiKo_1076_MessageFormat" xml:space="preserve">
-    <value>Name it '{1}' instead</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1076_Title" xml:space="preserve">
     <value>Suffix Prism event types with 'Event'</value>
@@ -1306,7 +1306,7 @@ For example, 'GetUsersByCity' should be renamed to 'UsersWithCity', as the code 
 Keep the passive suffixes for namespaces.</value>
   </data>
   <data name="MiKo_1094_MessageFormat" xml:space="preserve">
-    <value>Name it '{1}' instead</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1094_Title" xml:space="preserve">
     <value>Do not suffix types with passive namespace names</value>
@@ -1341,7 +1341,7 @@ For instance, do not name a method 'RemoveUser' if the documentation states it '
     <value>Parameters should not use the same prefixes as fields because that would be make them difficult to distinguish from fields. Reviewers probably are not aware of such and might come to wrong conclusions when reading the code.</value>
   </data>
   <data name="MiKo_1097_MessageFormat" xml:space="preserve">
-    <value>Do not use field prefix '{1}'</value>
+    <value>Remove field prefix '{1}'</value>
   </data>
   <data name="MiKo_1097_Title" xml:space="preserve">
     <value>Do not use field naming schemes for parameter names</value>
@@ -1624,7 +1624,7 @@ To make them clearer and more descriptive, the names should include details abou
     <value>To make maintenance easier and reduce visual clutter, consistently name unimportant lambda parameters as '_'. This helps keep the code clean and easy to read.</value>
   </data>
   <data name="MiKo_1300_MessageFormat" xml:space="preserve">
-    <value>Name it '_' instead</value>
+    <value>Name it '_'</value>
   </data>
   <data name="MiKo_1300_Title" xml:space="preserve">
     <value>Name unimportant lambda statement identifiers '_'</value>
@@ -1718,7 +1718,7 @@ For example, using a 'Lib' suffix just indicates the assembly is a DLL, which is
     <value>Namespaces should be made up of full words without any leading or trailing underscores. This helps developers easily understand and navigate the code structure.</value>
   </data>
   <data name="MiKo_1409_MessageFormat" xml:space="preserve">
-    <value>Name it '{1}' instead</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1409_Title" xml:space="preserve">
     <value>Do not prefix or suffix namespaces with underscores</value>
@@ -1992,7 +1992,7 @@ This improves code clarity, avoids ambiguity, and helps developers immediately u
     <value>To make maintenance easier, classes inheriting from 'System.EventArgs' should include documentation stating 'Provides data for the &lt;see cref="XYZ" /&gt; event.' This clarifies which event they relate to, ensuring the documentation is clear and helpful.</value>
   </data>
   <data name="MiKo_2002_MessageFormat" xml:space="preserve">
-    <value>&lt;summary&gt; should follow pattern: '{1} ... {2}'</value>
+    <value>In &lt;summary&gt; follow pattern: '{1} ... {2}'</value>
   </data>
   <data name="MiKo_2002_Title" xml:space="preserve">
     <value>Document EventArgs properly</value>
@@ -2135,7 +2135,7 @@ This approach keeps the documentation clear and user-focused.</value>
     <value>Dependency properties should follow the same documentation style used by the .NET Framework. This consistency ensures clarity and makes it easier for developers to understand and work with these properties.</value>
   </data>
   <data name="MiKo_2017_MessageFormat" xml:space="preserve">
-    <value>&lt;{1}&gt; should be: '{2}'</value>
+    <value>Change &lt;{1}&gt; to: '{2}'</value>
   </data>
   <data name="MiKo_2017_Title" xml:space="preserve">
     <value>Document dependency properties as done by the .NET Framework</value>
@@ -2307,7 +2307,7 @@ This ensures clarity and precision in your code.</value>
     <value>For Boolean return values, documentation should explicitly describe the 'true' case followed by the 'false' case. Use the format '&lt;see langword="true"/&gt; if ...; otherwise, &lt;see langword="false"/&gt;.'. This aligns with best practices, ensures clarity and helps developers understand the possible outcomes of the method.</value>
   </data>
   <data name="MiKo_2032_MessageFormat" xml:space="preserve">
-    <value>&lt;{1}&gt; should follow pattern: '{2} ... {3}'</value>
+    <value>In &lt;{1}&gt; follow pattern: '{2} ... {3}'</value>
   </data>
   <data name="MiKo_2032_Title" xml:space="preserve">
     <value>Use specific phrase for Boolean return value documentation</value>
@@ -2564,7 +2564,7 @@ This practice ensures clarity and precision, making your code's behavior easier 
 This approach ensures clarity and consistency, helping developers understand the condition under which the exception is thrown.</value>
   </data>
   <data name="MiKo_2052_MessageFormat" xml:space="preserve">
-    <value>{1} should be something like:
+    <value>Change {1} to:
 
 {2}</value>
   </data>
@@ -2588,7 +2588,7 @@ This approach ensures clarity and consistency, helping developers understand the
 This approach ensures clarity and consistency, helping developers understand the condition under which the exception is thrown.</value>
   </data>
   <data name="MiKo_2054_MessageFormat" xml:space="preserve">
-    <value>{1} should be something like:
+    <value>Change {1} to:
 
 {2}</value>
   </data>
@@ -2603,7 +2603,7 @@ This approach ensures clarity and consistency, helping developers understand the
 This approach ensures clarity and consistency, helping developers understand under what condition the argument is considered out of range.</value>
   </data>
   <data name="MiKo_2055_MessageFormat" xml:space="preserve">
-    <value>{1} should be something like:
+    <value>Change {1} to:
 
 {2}</value>
   </data>
@@ -2618,7 +2618,7 @@ This approach ensures clarity and consistency, helping developers understand und
 This distinction clearly indicates the reason for the exception and helps developers understand the status of the object.</value>
   </data>
   <data name="MiKo_2056_MessageFormat" xml:space="preserve">
-    <value>{1} should end with: '{2}'</value>
+    <value>End {1} with: '{2}'</value>
   </data>
   <data name="MiKo_2056_Title" xml:space="preserve">
     <value>End ObjectDisposedException documentation with default phrase</value>
@@ -2675,7 +2675,7 @@ This distinction clearly indicates the reason for the exception and helps develo
     <value>&lt;summary&gt; documentation for methods returning Enum types should avoid phrases meant for boolean types. Enum values are not booleans, so the documentation should not use terms like 'indicates whether', which imply a boolean context. This ensures the documentation accurately reflects the nature of the Enum type.</value>
   </data>
   <data name="MiKo_2071_MessageFormat" xml:space="preserve">
-    <value>Do not use '{0}' in &lt;summary&gt;</value>
+    <value>Remove '{0}' from &lt;summary&gt;</value>
   </data>
   <data name="MiKo_2071_Title" xml:space="preserve">
     <value>Do not use boolean phrases in Enum return type &lt;summary&gt; documentation</value>
@@ -2711,7 +2711,7 @@ This distinction clearly indicates the reason for the exception and helps develo
     <value>The &lt;summary&gt; documentation of 'Contain' methods should end with the phrase ' to seek.'. This is because they attempt to determine if a given parameter's value exists within something. This phrasing clearly communicates the intent and functionality of the parameter within the method.</value>
   </data>
   <data name="MiKo_2074_MessageFormat" xml:space="preserve">
-    <value>&lt;param name="{0}"&gt; should end with: '{1}'</value>
+    <value>End &lt;param name="{0}"&gt; with: '{1}'</value>
   </data>
   <data name="MiKo_2074_Title" xml:space="preserve">
     <value>End 'Contains' method parameter documentation with default phrase</value>
@@ -2735,7 +2735,7 @@ This distinction clearly indicates the reason for the exception and helps develo
     <value>In case a parameter is an optional one it is important to document its default value. This is because the values of those optional parameters are "baked into" the calling code.</value>
   </data>
   <data name="MiKo_2076_MessageFormat" xml:space="preserve">
-    <value>Document the default value via '{1}'</value>
+    <value>Document default value as: '{1}'</value>
   </data>
   <data name="MiKo_2076_Title" xml:space="preserve">
     <value>Document default values of optional parameters</value>
@@ -2765,7 +2765,7 @@ This distinction clearly indicates the reason for the exception and helps develo
     <value>Comments that merely state the name of a property and that it gets or sets provide no meaningful information. Such redundant comments should be removed to keep the code clean and focused on more valuable insights. Clear and concise documentation improves overall readability and maintenance.</value>
   </data>
   <data name="MiKo_2079_MessageFormat" xml:space="preserve">
-    <value>Comment is obvious and provides no value</value>
+    <value>Remove obvious comment</value>
   </data>
   <data name="MiKo_2079_Title" xml:space="preserve">
     <value>Do not include obvious text in property &lt;summary&gt; documentation</value>
@@ -3571,7 +3571,7 @@ Instead, comments should enhance understanding, giving context and reasoning for
     <value>If a class has too many dependencies, it's taking on too many responsibilities and violating the Single Responsibility Principle (SRP). This indicates a need for refactoring the class into smaller, more focused units, ensuring the codebase remains clean and manageable.</value>
   </data>
   <data name="MiKo_3002_MessageFormat" xml:space="preserve">
-    <value>Too many MEF dependencies: {1,4} (allowed are max. {2})</value>
+    <value>Too many MEF dependencies: {1,4} (max. {2} allowed)</value>
   </data>
   <data name="MiKo_3002_Title" xml:space="preserve">
     <value>Limit class dependencies</value>
@@ -3898,7 +3898,7 @@ Generally, this behavior is not desirable. The object reference should remain th
     <value>Use the 'nameof' operator for property names passed into 'PropertyChangedEventArgs' constructors, instead of strings. This avoids typos and invalid names and makes refactoring easier, as 'nameof' ensures property names are automatically updated during renames, unlike strings.</value>
   </data>
   <data name="MiKo_3032_MessageFormat" xml:space="preserve">
-    <value>Use '{1}' instead</value>
+    <value>Change to '{1}'</value>
   </data>
   <data name="MiKo_3032_Title" xml:space="preserve">
     <value>Use 'nameof' instead of Cinch for PropertyChangedEventArgs property names</value>
@@ -6251,7 +6251,7 @@ This organization ensures clarity and makes the code easier to find, understand 
 This style avoids dangling operators, aligns with common C# style guides and tooling, and makes complex logic easier to parse and maintain.</value>
   </data>
   <data name="MiKo_6067_MessageFormat" xml:space="preserve">
-    <value>Place ternary operator and colon on the same lines as their respective expressions</value>
+    <value>Place ? and : on the same lines as their expressions</value>
   </data>
   <data name="MiKo_6067_Title" xml:space="preserve">
     <value>Place ternary operators on same lines as their respective expressions</value>
