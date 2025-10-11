@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Composition;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -34,9 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                       "This class ",
                                                                   };
 
-        private static readonly Pair[] CommandReplacementMap = CreateCommandReplacementMapEntries().OrderByDescending(_ => _.Key.Length)
-                                                                                                   .ThenBy(_ => _.Key)
-                                                                                                   .ToArray();
+        private static readonly Pair[] CommandReplacementMap = CreateCommandReplacementMapEntries().OrderDescendingByLengthAndText(_ => _.Key);
 
         private static readonly string[] CommandReplacementMapKeys = CommandReplacementMap.ToArray(_ => _.Key);
 

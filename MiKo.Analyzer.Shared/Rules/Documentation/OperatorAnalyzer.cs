@@ -38,11 +38,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected sealed override IReadOnlyList<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment, ISymbol symbol, SemanticModel semanticModel)
         {
             var method = (IMethodSymbol)symbol;
-            var commentXml = symbol.GetDocumentationCommentXml();
 
-            var violationsInSummaries = AnalyzeSummaries(comment, method, commentXml);
-            var violationsInReturns = AnalyzeReturns(method, commentXml, comment);
-            var violationsInParameters = AnalyzeParameters(method.Parameters, commentXml, comment);
+            var violationsInSummaries = AnalyzeSummaries(comment, method);
+            var violationsInReturns = AnalyzeReturns(comment, method);
+            var violationsInParameters = AnalyzeParameters(comment, method.Parameters);
 
             var issueCount = violationsInSummaries.Length + violationsInReturns.Length + violationsInParameters.Length;
 
@@ -59,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return results;
         }
 
-        private Diagnostic[] AnalyzeSummaries(DocumentationCommentTriviaSyntax comment, ISymbol symbol, string commentXml)
+        private Diagnostic[] AnalyzeSummaries(DocumentationCommentTriviaSyntax comment, ISymbol symbol)
         {
             var summaryXmls = comment.GetSummaryXmls();
 
@@ -68,40 +67,44 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return Array.Empty<Diagnostic>();
             }
 
-            var summaries = CommentExtensions.GetSummaries(commentXml);
-
             var phrases = GetSummaryPhrases(symbol);
 
-            if (summaries.None(_ => _.AsSpan().Trim().EqualsAny(phrases, StringComparison.OrdinalIgnoreCase)))
+            if (summaryXmls.None(_ => _.GetTextTrimmed().EqualsAny(phrases, StringComparison.OrdinalIgnoreCase)))
             {
-                return new[] { Issue(symbol, Constants.XmlTag.Summary, phrases[0]) };
+                return new[] { Issue(symbol.Name, summaryXmls[0].GetContentsLocation(), Constants.XmlTag.Summary, phrases[0]) };
             }
 
             return Array.Empty<Diagnostic>();
         }
 
-        private Diagnostic[] AnalyzeReturns(ISymbol symbol, string commentXml, DocumentationCommentTriviaSyntax comment)
+        private Diagnostic[] AnalyzeReturns(DocumentationCommentTriviaSyntax comment, ISymbol symbol)
         {
-            var phrases = GetReturnsPhrases(symbol);
-            var comments = CommentExtensions.GetReturns(commentXml);
+            var returnXmls = comment.GetReturnsXmls();
 
-            if (comments.None(_ => _.AsSpan().Trim().EqualsAny(phrases, StringComparison.OrdinalIgnoreCase)))
+            if (returnXmls.Count is 0)
             {
-                return new[] { Issue(symbol, Constants.XmlTag.Returns, phrases[0]) };
+                return Array.Empty<Diagnostic>();
+            }
+
+            var phrases = GetReturnsPhrases(symbol);
+
+            if (returnXmls.None(_ => _.GetTextTrimmed().EqualsAny(phrases, StringComparison.OrdinalIgnoreCase)))
+            {
+                return new[] { Issue(symbol.Name, returnXmls[0].GetContentsLocation(), Constants.XmlTag.Returns, phrases[0]) };
             }
 
             return Array.Empty<Diagnostic>();
         }
 
-        private Diagnostic[] AnalyzeParameters(in ImmutableArray<IParameterSymbol> parameters, string commentXml, DocumentationCommentTriviaSyntax comment)
+        private Diagnostic[] AnalyzeParameters(DocumentationCommentTriviaSyntax comment, in ImmutableArray<IParameterSymbol> parameters)
         {
             if (parameters.Length != 2)
             {
                 return Array.Empty<Diagnostic>();
             }
 
-            var issue1 = AnalyzeParameter(commentXml, parameters[0], "The first value to compare.");
-            var issue2 = AnalyzeParameter(commentXml, parameters[1], "The second value to compare.");
+            var issue1 = AnalyzeParameter(comment, parameters[0], "The first value to compare.");
+            var issue2 = AnalyzeParameter(comment, parameters[1], "The second value to compare.");
 
             if (issue1 is null)
             {
@@ -111,13 +114,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return issue2 is null ? new[] { issue1 } : new[] { issue1, issue2 };
         }
 
-        private Diagnostic AnalyzeParameter(string commentXml, IParameterSymbol parameter, string phrase)
+        private Diagnostic AnalyzeParameter(DocumentationCommentTriviaSyntax comment, IParameterSymbol parameter, string phrase)
         {
-            var comment = parameter.GetComment(commentXml);
+            var parameterName = parameter.Name;
+            string paramName = Constants.XmlTag.Param + " name=\"" + parameterName + "\"";
 
-            return comment == phrase
-                   ? null
-                   : Issue(parameter, Constants.XmlTag.Param + " name=\"" + parameter.Name + "\"", phrase);
+            var parameterComment = comment.GetParameterComment(parameterName);
+
+            if (parameterComment is null)
+            {
+                return Issue(parameter, paramName, phrase);
+            }
+
+            var text = parameterComment.GetTextTrimmed();
+
+            if (text == phrase)
+            {
+                return null;
+            }
+
+            return Issue(parameterName, parameterComment.GetContentsLocation(), paramName, phrase);
         }
     }
 }

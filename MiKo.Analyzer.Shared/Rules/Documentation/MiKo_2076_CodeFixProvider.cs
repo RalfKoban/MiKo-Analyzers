@@ -53,7 +53,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.DefaultSeeCrefValue, out var defaultCrefValue))
             {
-                return SeeCref(defaultCrefValue);
+                if (defaultCrefValue != null)
+                {
+                    var dotIndex = defaultCrefValue.LastIndexOf('.');
+
+                    if (dotIndex is -1)
+                    {
+                        return SeeCref(defaultCrefValue);
+                    }
+
+                    return SeeCref(defaultCrefValue.Substring(0, dotIndex), defaultCrefValue.Substring(dotIndex + 1));
+                }
             }
 
             if (issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.DefaultCodeValue, out var defaultCodeValue))

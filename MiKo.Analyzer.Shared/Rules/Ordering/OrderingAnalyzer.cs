@@ -11,16 +11,16 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
         {
         }
 
-        protected static IReadOnlyList<IMethodSymbol> GetMethodsOrderedByLocation(INamedTypeSymbol type, MethodKind kind = MethodKind.Ordinary) => GetMethodsOrderedByLocation(type, type.Locations.First(_ => _.IsInSource).GetLineSpan().Path, kind);
+        protected static IReadOnlyList<IMethodSymbol> GetMethodsOrderedByLocation(INamedTypeSymbol type, MethodKind kind = MethodKind.Ordinary) => GetMethodsOrderedByLocation(type, type.GetLineSpan().Path, kind);
 
         protected static IReadOnlyList<IMethodSymbol> GetMethodsOrderedByLocation(INamedTypeSymbol type, string path, MethodKind kind = MethodKind.Ordinary) => type.GetMethods(kind)
-                                                                                                                                                                    .Where(_ => _.Locations.First(__ => __.IsInSource).GetLineSpan().Path == path)
-                                                                                                                                                                    .OrderBy(_ => _.Locations.First(__ => __.IsInSource).GetLineSpan().StartLinePosition)
+                                                                                                                                                                    .Where(_ => _.GetLineSpan().Path == path)
+                                                                                                                                                                    .OrderBy(_ => _.GetLineSpan().StartLinePosition)
                                                                                                                                                                     .ToList();
 
         protected static IReadOnlyList<IFieldSymbol> GetFieldsOrderedByLocation(INamedTypeSymbol type, string path) => type.GetFields()
-                                                                                                                           .Where(_ => _.Locations.First(__ => __.IsInSource).GetLineSpan().Path == path)
-                                                                                                                           .OrderBy(_ => _.Locations.First(__ => __.IsInSource).GetLineSpan().StartLinePosition)
+                                                                                                                           .Where(_ => _.GetLineSpan().Path == path)
+                                                                                                                           .OrderBy(_ => _.GetLineSpan().StartLinePosition)
                                                                                                                            .ToList();
     }
 }

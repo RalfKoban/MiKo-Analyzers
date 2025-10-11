@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return false;
             }
 
-            if (comment.ToString().ContainsAny(TODOs, StringComparison.OrdinalIgnoreCase))
+            if (comment.ContainsAny(TODOs, StringComparison.OrdinalIgnoreCase))
             {
                 // allow TODOs
                 return false;

@@ -58,6 +58,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 case SyntaxKind.IdentifierName:
                     return new Pair(Constants.AnalyzerCodeFixSharedData.DefaultSeeCrefValue, defaultValue.ToString()); // seems like some field or property, so simply use that one
 
+                case SyntaxKind.SimpleMemberAccessExpression:
+                    return new Pair(Constants.AnalyzerCodeFixSharedData.DefaultSeeCrefValue, defaultValue.ToString()); // seems like some field or property, so simply use that one
+
                 case SyntaxKind.UnaryPlusExpression:
                 case SyntaxKind.UnaryMinusExpression:
                 case SyntaxKind.BitwiseNotExpression:

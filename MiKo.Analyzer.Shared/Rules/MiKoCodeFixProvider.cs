@@ -14,6 +14,10 @@ namespace MiKoSolutions.Analyzers.Rules
 {
     public abstract class MiKoCodeFixProvider : CodeFixProvider
     {
+        private readonly string m_equivalenceKey;
+
+        protected MiKoCodeFixProvider() => m_equivalenceKey = string.Intern(GetType().Name); // ncrunch: no coverage
+
         public abstract string FixableDiagnosticId { get; }
 
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(FixableDiagnosticId);
@@ -31,15 +35,17 @@ namespace MiKoSolutions.Analyzers.Rules
 
         public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {
-            var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
-
             var diagnostics = context.Diagnostics;
 
             if (diagnostics.Length > 0 && IsApplicable(diagnostics))
             {
                 var diagnostic = diagnostics[0];
 
-                var codeFix = CreateCodeFix(context, root, diagnostic);
+                var document = context.Document;
+
+                var root = await document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
+
+                var codeFix = CreateCodeFix(document, root, diagnostic);
 
                 if (codeFix != null)
                 {
@@ -368,10 +374,8 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
-        private CodeAction CreateCodeFix(in CodeFixContext context, SyntaxNode root, Diagnostic issue)
+        private CodeAction CreateCodeFix(Document document, SyntaxNode root, Diagnostic issue)
         {
-            var document = context.Document;
-
             var issueSpan = issue.Location.SourceSpan;
             var startPosition = issueSpan.Start;
 
@@ -379,7 +383,7 @@ namespace MiKoSolutions.Analyzers.Rules
             {
                 var trivia = root.FindTrivia(startPosition);
 
-                return CodeAction.Create(Title, cancellationToken => ApplyDocumentCodeFixAsync(document, root, trivia, issue, cancellationToken), GetType().Name); // ncrunch: no coverage
+                return CodeAction.Create(Title, cancellationToken => ApplyDocumentCodeFixAsync(document, root, trivia, issue, cancellationToken), m_equivalenceKey); // ncrunch: no coverage
             }
 
             // TODO RKN
@@ -397,10 +401,10 @@ namespace MiKoSolutions.Analyzers.Rules
 
             if (IsSolutionWide)
             {
-                return CodeAction.Create(Title, cancellationToken => ApplySolutionCodeFixAsync(document, root, syntax, issue, cancellationToken), GetType().Name); // ncrunch: no coverage
+                return CodeAction.Create(Title, cancellationToken => ApplySolutionCodeFixAsync(document, root, syntax, issue, cancellationToken), m_equivalenceKey); // ncrunch: no coverage
             }
 
-            return CodeAction.Create(Title, cancellationToken => ApplyDocumentCodeFixAsync(document, root, syntax, issue, cancellationToken), GetType().Name); // ncrunch: no coverage
+            return CodeAction.Create(Title, cancellationToken => ApplyDocumentCodeFixAsync(document, root, syntax, issue, cancellationToken), m_equivalenceKey); // ncrunch: no coverage
         }
 
 //// ncrunch: rdi default

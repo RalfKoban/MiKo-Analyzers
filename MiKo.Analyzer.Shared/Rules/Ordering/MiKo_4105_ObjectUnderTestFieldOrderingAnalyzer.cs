@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         private Diagnostic[] AnalyzeTestType(INamedTypeSymbol symbol, IFieldSymbol field)
         {
-            var path = field.Locations.First(_ => _.IsInSource).GetLineSpan().Path;
+            var path = field.GetLineSpan().Path;
 
             var fields = GetFieldsOrderedByLocation(symbol, path);
             var firstField = fields[0];

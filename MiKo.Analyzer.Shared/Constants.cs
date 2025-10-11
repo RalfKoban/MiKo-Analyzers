@@ -338,7 +338,7 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] OutBoolParameterStartingPhrase = { "On successful return, indicates " };
             internal static readonly string[] EnumParameterStartingPhrase =
                                                                             {
-                                                                                "One of the enumeration members that specifies ",
+                                                                                "One of the enumeration members that specifies ", // used as first starting phrase to be in-sync with the flags version
                                                                                 "One of the enumeration members that determines ",
                                                                                 "One of the enumeration members that defines ",
                                                                                 "One of the enumeration values that specifies ",
@@ -414,6 +414,10 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] EnumFlagsParameterStartingPhrase =
                                                                                  {
+                                                                                     "A bitwise combination of the enumeration members that ", // used as first starting phrase to be in-sync with the non-flags version
+                                                                                     "A bitwise combination of the enumeration values that ",
+                                                                                     "A bitwise combination of the enumeration members which ",
+                                                                                     "A bitwise combination of the enumeration values which ",
                                                                                      "A bitwise combination of enumeration values that ",
                                                                                      "A bitwise combination of enumeration members that ",
                                                                                      "A bitwise combination of enumeration values which ",
@@ -422,10 +426,6 @@ namespace MiKoSolutions.Analyzers
                                                                                      "A bitwise combination of members that ",
                                                                                      "A bitwise combination of values which ",
                                                                                      "A bitwise combination of members which ",
-                                                                                     "A bitwise combination of the enumeration values that ",
-                                                                                     "A bitwise combination of the enumeration members that ",
-                                                                                     "A bitwise combination of the enumeration values which ",
-                                                                                     "A bitwise combination of the enumeration members which ",
                                                                                      "A bitwise combination of the values that ",
                                                                                      "A bitwise combination of the members that ",
                                                                                      "A bitwise combination of the values which ",
@@ -938,6 +938,7 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] NotContractionPhrase =
                                                                      {
                                                                          "n't",
+                                                                         "n’t",
                                                                          "cant",
                                                                          "dont",
                                                                          "wont",
@@ -960,6 +961,7 @@ namespace MiKoSolutions.Analyzers
                                                                            {
                                                                                new Pair("adnt", "ad not"),
                                                                                new Pair("an't", "annot"),
+                                                                               new Pair("an’t", "annot"),
                                                                                new Pair("arent", "are not"),
                                                                                new Pair("Arent", "Are not"),
                                                                                new Pair("asnt", "as not"),
@@ -976,9 +978,12 @@ namespace MiKoSolutions.Analyzers
                                                                                new Pair("snt", "s not"),
                                                                                new Pair("wont", "will not"),
                                                                                new Pair("won't", "will not"),
+                                                                               new Pair("won’t", "will not"),
                                                                                new Pair("Wont", "Will not"),
                                                                                new Pair("Won't", "Will not"),
+                                                                               new Pair("Won’t", "Will not"),
                                                                                new Pair("n't", " not"),
+                                                                               new Pair("n’t", " not"),
                                                                            };
 
             internal static readonly string[] IntentionallyPhrase =

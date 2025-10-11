@@ -77,7 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 return null;
             }
 
-            var callLineSpan = returnStatement.GetLocation().GetLineSpan();
+            var callLineSpan = returnStatement.GetLineSpan();
 
             var noBlankLinesBefore = statements.Where(_ => _.IsKind(SyntaxKind.YieldReturnStatement) is false)
                                                .Any(_ => HasNoBlankLinesBefore(callLineSpan, _));

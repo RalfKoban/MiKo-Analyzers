@@ -14,18 +14,21 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 #pragma warning disable IDE0130
 namespace MiKoSolutions.Analyzers
 {
+    /// <summary>
+    /// Provides a set of <see langword="static"/> methods for <see cref="IEnumerable{T}"/>s.
+    /// </summary>
     internal static class EnumerableExtensions
     {
         /// <summary>
         /// Converts a sequence of <see cref="SyntaxToken"/> instances into an <see cref="XmlTextSyntax"/> node.
         /// </summary>
-        /// <param name="textTokens">
+        /// <param name="values">
         /// The sequence of <see cref="SyntaxToken"/> objects representing XML text content.
         /// </param>
         /// <returns>
         /// An <see cref="XmlTextSyntax"/> node that contains the provided tokens as XML text.
         /// </returns>
-        internal static XmlTextSyntax AsXmlText(this IEnumerable<SyntaxToken> textTokens) => textTokens.ToTokenList().AsXmlText();
+        internal static XmlTextSyntax AsXmlText(this IEnumerable<SyntaxToken> values) => values.ToTokenList().AsXmlText();
 
         /// <summary>
         /// Concatenates the specified additional elements to the end of the source sequence.
@@ -57,7 +60,7 @@ namespace MiKoSolutions.Analyzers
         /// The values to remove from the set.
         /// </param>
         /// <returns>
-        /// The modified set after removing the specified values.
+        /// A collection of elements from the original set after removing the specified values.
         /// </returns>
         internal static HashSet<T> Except<T>(this HashSet<T> source, IEnumerable<T> values) where T : class
         {
@@ -108,7 +111,7 @@ namespace MiKoSolutions.Analyzers
         /// The values to remove from the set.
         /// </param>
         /// <returns>
-        /// The modified set after removing the specified values.
+        /// A collection of elements from the original set after removing the specified values.
         /// </returns>
         internal static HashSet<T> Except<T>(this HashSet<T> source, params T[] values) where T : class
         {
@@ -193,7 +196,7 @@ namespace MiKoSolutions.Analyzers
         /// The list of <see cref="SyntaxToken"/> instances whose text content is to be concatenated and trimmed.
         /// </param>
         /// <returns>
-        /// A trimmed string containing the concatenated text of all tokens, with new lines and multiple white spaces removed;
+        /// A <see cref="string"/> that contains the trimmed the concatenated text of all tokens, with new lines and multiple white spaces removed;
         /// or the <see cref="string.Empty"/> string ("") if the list is empty.
         /// </returns>
         internal static string GetTextTrimmedWithParaTags(this IReadOnlyList<SyntaxToken> values)
@@ -220,25 +223,25 @@ namespace MiKoSolutions.Analyzers
         /// Appends the text content of each syntax token in the specified list to the provided <see cref="StringBuilder"/>,
         /// excluding those of kind <see cref="SyntaxKind.XmlTextLiteralNewLineToken"/>.
         /// </summary>
-        /// <param name="textTokens">
+        /// <param name="values">
         /// The list of <see cref="SyntaxToken"/> instances whose text content is to be appended.
         /// </param>
         /// <param name="builder">
-        /// The <see cref="StringBuilder"/> to which the text content will be appended.
+        /// The <see cref="StringBuilder"/> to which the text content are appended.
         /// </param>
         /// <returns>
         /// The <see cref="StringBuilder"/> instance with the appended text content.
         /// </returns>
-        internal static StringBuilder GetTextWithoutTrivia(this IReadOnlyList<SyntaxToken> textTokens, StringBuilder builder)
+        internal static StringBuilder GetTextWithoutTrivia(this IReadOnlyList<SyntaxToken> values, StringBuilder builder)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var textTokensCount = textTokens.Count;
+            var count = values.Count;
 
-            if (textTokensCount > 0)
+            if (count > 0)
             {
-                for (var index = 0; index < textTokensCount; index++)
+                for (var index = 0; index < count; index++)
                 {
-                    var token = textTokens[index];
+                    var token = values[index];
 
                     if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
                     {
@@ -448,6 +451,41 @@ namespace MiKoSolutions.Analyzers
         internal static bool None<T>(this IEnumerable<T> source, Func<T, bool> predicate) => source.All(_ => predicate(_) is false);
 
         /// <summary>
+        /// Determines whether the specified list contains no elements that satisfy the specified condition.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of elements in the list.
+        /// </typeparam>
+        /// <param name="source">
+        /// The list to evaluate.
+        /// </param>
+        /// <param name="predicate">
+        /// The condition to test each element against.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if no elements satisfy the condition; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool None<T>(this IReadOnlyList<T> source, Func<T, bool> predicate)
+        {
+            var count = source.Count;
+
+            if (count is 0)
+            {
+                return true;
+            }
+
+            for (var index = 0; index < count; index++)
+            {
+                if (predicate(source[index]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Determines whether the specified array contains no elements that satisfy the specified condition.
         /// </summary>
         /// <typeparam name="T">
@@ -516,7 +554,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Returns a read-only list containing all elements of type <typeparamref name="T"/> from the source list
+        /// Gets a read-only list containing all elements of type <typeparamref name="T"/> from the source list
         /// that have the specified <see cref="SyntaxKind"/>.
         /// </summary>
         /// <typeparam name="T">
@@ -526,7 +564,7 @@ namespace MiKoSolutions.Analyzers
         /// The read-only list to filter.
         /// </param>
         /// <param name="kind">
-        /// The <see cref="SyntaxKind"/> to match.
+        /// One of the enumeration members that specifies the <see cref="SyntaxKind"/> to match.
         /// </param>
         /// <returns>
         /// A collection of elements whose <see cref="SyntaxKind"/> matches the specified kind,
@@ -535,16 +573,16 @@ namespace MiKoSolutions.Analyzers
         internal static IReadOnlyList<T> OfKind<T>(this IReadOnlyList<T> source, in SyntaxKind kind) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var sourceCount = source.Count;
+            var count = source.Count;
 
-            if (sourceCount is 0)
+            if (count is 0)
             {
                 return Array.Empty<T>();
             }
 
             var results = new List<T>();
 
-            for (var index = 0; index < sourceCount; index++)
+            for (var index = 0; index < count; index++)
             {
                 var item = source[index];
 
@@ -558,7 +596,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Returns a sequence containing all elements of type <typeparamref name="T"/> from the source sequence
+        /// Gets a sequence containing all elements of type <typeparamref name="T"/> from the source sequence
         /// that have the specified <see cref="SyntaxKind"/>.
         /// </summary>
         /// <typeparam name="T">
@@ -568,10 +606,10 @@ namespace MiKoSolutions.Analyzers
         /// The sequence to filter.
         /// </param>
         /// <param name="kind">
-        /// The <see cref="SyntaxKind"/> to match.
+        /// One of the enumeration members that specifies the <see cref="SyntaxKind"/> to match.
         /// </param>
         /// <returns>
-        /// A sequence of elements whose <see cref="SyntaxNode.IsKind(SyntaxKind)"/> matches the specified kind.
+        /// A sequence of elements whose <see cref="SyntaxNode.RawKind"/> matches the specified kind.
         /// </returns>
         internal static IEnumerable<T> OfKind<T>(this IEnumerable<T> source, in SyntaxKind kind) where T : SyntaxNode
         {
@@ -594,6 +632,45 @@ namespace MiKoSolutions.Analyzers
                 }
             }
         }
+
+        /// <summary>
+        /// Converts the specified sequence of strings to an array, ordering elements by length in descending order and then by text.
+        /// </summary>
+        /// <param name="source">
+        /// The sequence of strings to order and convert.
+        /// </param>
+        /// <returns>
+        /// An array of the strings from the source sequence, ordered by length (descending) and then by text.
+        /// </returns>
+        internal static string[] OrderDescendingByLengthAndText(this IEnumerable<string> source) => source.ToHashSet().OrderDescendingByLengthAndText();
+
+        /// <summary>
+        /// Converts the specified sequence of strings to an array, ordering elements by length in descending order and then by text.
+        /// </summary>
+        /// <param name="source">
+        /// The sequence of strings to order and convert.
+        /// </param>
+        /// <returns>
+        /// An array of the strings from the source sequence, ordered by length (descending) and then by text.
+        /// </returns>
+        internal static string[] OrderDescendingByLengthAndText(this HashSet<string> source) => source.OrderByDescending(_ => _.Length).ThenBy(_ => _).ToArray();
+
+        /// <summary>
+        /// Converts the specified sequence to an array, ordering elements by the length of their selected string property in descending order and then by the string property itself.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of elements in the sequence.
+        /// </typeparam>
+        /// <param name="source">
+        /// The sequence to order and convert.
+        /// </param>
+        /// <param name="selector">
+        /// A callback to extract a string from each element.
+        /// </param>
+        /// <returns>
+        /// An array of elements from the source sequence, ordered by the length of their selected string property (descending) and then by the string property itself.
+        /// </returns>
+        internal static T[] OrderDescendingByLengthAndText<T>(this IEnumerable<T> source, Func<T, string> selector) => source.OrderByDescending(_ => selector(_).Length).ThenBy(selector).ToArray();
 
         /// <summary>
         /// Converts the specified sequence to an array, using the specified comparer to order the elements.
@@ -632,16 +709,16 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static TKey[] ToArray<TKey, TSource>(this IReadOnlyList<TSource> source, Func<TSource, TKey> keySelector)
         {
-            var sourceCount = source.Count;
+            var count = source.Count;
 
-            if (sourceCount is 0)
+            if (count is 0)
             {
                 return Array.Empty<TKey>();
             }
 
-            var result = new TKey[sourceCount];
+            var result = new TKey[count];
 
-            for (var index = 0; index < sourceCount; index++)
+            for (var index = 0; index < count; index++)
             {
                 result[index] = keySelector(source[index]);
             }
@@ -669,15 +746,15 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static TKey[] ToArray<TKey, TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, TKey> keySelector)
         {
-            var sourceCount = source.Count;
+            var count = source.Count;
 
-            if (sourceCount is 0)
+            if (count is 0)
             {
                 return Array.Empty<TKey>();
             }
 
             var index = 0;
-            var result = new TKey[sourceCount];
+            var result = new TKey[count];
 
             foreach (var item in source)
             {

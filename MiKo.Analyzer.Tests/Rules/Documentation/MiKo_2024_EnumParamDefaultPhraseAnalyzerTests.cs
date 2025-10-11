@@ -257,6 +257,87 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_primary_class_ctor()
+        {
+            const string OriginalCode = @"
+using System;
+
+/// <summary />
+/// <param name='o'>Whatever it is.</param>
+public class TestMe(StringComparison o)
+{
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+/// <summary />
+/// <param name='o'>
+/// One of the enumeration members that specifies whatever it is.
+/// </param>
+public class TestMe(StringComparison o)
+{
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_primary_struct_ctor()
+        {
+            const string OriginalCode = @"
+using System;
+
+/// <summary />
+/// <param name='o'>Whatever it is.</param>
+public struct TestMe(StringComparison o)
+{
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+/// <summary />
+/// <param name='o'>
+/// One of the enumeration members that specifies whatever it is.
+/// </param>
+public struct TestMe(StringComparison o)
+{
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_primary_record_ctor()
+        {
+            const string OriginalCode = @"
+using System;
+
+/// <summary />
+/// <param name='o'>Whatever it is.</param>
+public record TestMe(StringComparison o)
+{
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+/// <summary />
+/// <param name='o'>
+/// One of the enumeration members that specifies whatever it is.
+/// </param>
+public record TestMe(StringComparison o)
+{
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_when_on_different_lines()
         {
             const string OriginalCode = @"
@@ -388,6 +469,37 @@ public class TestMe
             VerifyCSharpFix(originalCode, FixedCode);
         }
 
+        [TestCase("The minimum expected C# language version.", "the minimum expected C# language version.")]
+        public void Code_gets_fixed_for_phrase_(string originalPhrase, string fixedPhrase)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'>
+    /// " + originalPhrase + @"
+    /// </param>
+    public void DoSomething(StringComparison o) { }
+}
+";
+
+            var fixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'>
+    /// One of the enumeration members that specifies " + fixedPhrase + @"
+    /// </param>
+    public void DoSomething(StringComparison o) { }
+}
+";
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
         [TestCase("Specifies", "specifies")]
         [TestCase("A value specifying", "specifies")]
         [TestCase("A value that specifies", "specifies")]
@@ -434,6 +546,13 @@ public class TestMe
         [TestCase("Bitwise combination of values that specifies", "specifies")]
         [TestCase("Bitwise combination of the values that specify", "specifies")]
         [TestCase("Bitwise combination of the values that specifies", "specifies")]
+        [TestCase("Bitwise combination of enumeration members that specify", "specifies")]
+        [TestCase("Bitwise combination of enumeration members that specifies", "specifies")]
+        [TestCase("Bitwise combination of the enumeration members that specify", "specifies")]
+        [TestCase("Bitwise combination of the enumeration members that specifies", "specifies")]
+        [TestCase("A", "specifies a")]
+        [TestCase("An", "specifies an")]
+        [TestCase("The", "specifies the")]
         public void Code_gets_fixed_for_flags_phrase_(string originalPhrase, string fixedContinuation)
         {
             var originalCode = @"
@@ -458,7 +577,47 @@ public class TestMe
 {
     /// <summary />
     /// <param name='o'>
-    /// A bitwise combination of enumeration values that " + fixedContinuation + @" whatever it is.
+    /// A bitwise combination of the enumeration members that " + fixedContinuation + @" whatever it is.
+    /// </param>
+    public void DoSomething(NumberStyles o) { }
+}
+";
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
+        [TestCase("The flag to check", "specifies the value to check")]
+        [TestCase("The flag to check for", "specifies the value to check for")]
+        [TestCase("The value to check", "specifies the value to check")]
+        [TestCase("The value to check for", "specifies the value to check for")]
+        [TestCase("The flag to investigate", "specifies the value to investigate")]
+        [TestCase("The flag to investigate for", "specifies the value to investigate for")]
+        [TestCase("The value to investigate", "specifies the value to investigate")]
+        [TestCase("The value to investigate for", "specifies the value to investigate for")]
+        public void Code_gets_fixed_for_complete_flags_phrase_(string originalPhrase, string fixedContinuation)
+        {
+            var originalCode = @"
+using System;
+using System.Globalization;
+
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'>
+    /// " + originalPhrase + @".
+    /// </param>
+    public void DoSomething(NumberStyles o) { }
+}
+";
+
+            var fixedCode = @"
+using System;
+using System.Globalization;
+
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'>
+    /// A bitwise combination of the enumeration members that " + fixedContinuation + @".
     /// </param>
     public void DoSomething(NumberStyles o) { }
 }

@@ -61,7 +61,7 @@ namespace MiKoSolutions.Analyzers
                 XmlNodeSyntax first = null;
 
                 // try to find the first syntax that is not only an XmlCommentExterior
-                for (int index = 0, listCount = list.Count; index < listCount; index++)
+                for (int index = 0, count = list.Count; index < count; index++)
                 {
                     first = list[index];
 
@@ -162,11 +162,11 @@ namespace MiKoSolutions.Analyzers
                 var list = value.GetLeadingTrivia();
 
                 // keep in local variable to avoid multiple requests (see Roslyn implementation)
-                var listCount = list.Count;
+                var count = list.Count;
 
-                if (listCount > 0)
+                if (count > 0)
                 {
-                    for (var index = 0; index < listCount; index++)
+                    for (var index = 0; index < count; index++)
                     {
                         var trivia = list[index];
 
@@ -201,10 +201,10 @@ namespace MiKoSolutions.Analyzers
                                 .ToArray();
         }
 
-        internal static XmlTextAttributeSyntax GetListType(this XmlElementSyntax list) => list.GetAttributes<XmlTextAttributeSyntax>()
-                                                                                              .FirstOrDefault(_ => _.GetName() is Constants.XmlTag.Attribute.Type);
+        internal static XmlTextAttributeSyntax GetListType(this XmlElementSyntax value) => value.GetAttributes<XmlTextAttributeSyntax>()
+                                                                                                .FirstOrDefault(_ => _.GetName() is Constants.XmlTag.Attribute.Type);
 
-        internal static string GetListType(this XmlTextAttributeSyntax listType) => listType.GetTextWithoutTrivia();
+        internal static string GetListType(this XmlTextAttributeSyntax value) => value.GetTextWithoutTrivia();
 
         internal static ParameterSyntax[] GetParameters(this XmlElementSyntax value)
         {
@@ -217,6 +217,15 @@ namespace MiKoSolutions.Analyzers
 
                     case IndexerDeclarationSyntax indexer:
                         return indexer.ParameterList.Parameters.ToArray();
+#if VS2022
+                    case ClassDeclarationSyntax c when c.ParameterList is ParameterListSyntax parameters:
+                        return parameters.Parameters.ToArray();
+
+                    case StructDeclarationSyntax s when s.ParameterList is ParameterListSyntax parameters:
+                        return parameters.Parameters.ToArray();
+#endif
+                    case RecordDeclarationSyntax r when r.ParameterList is ParameterListSyntax parameters:
+                        return parameters.Parameters.ToArray();
 
                     case BaseTypeDeclarationSyntax _:
                         return Array.Empty<ParameterSyntax>();
@@ -449,7 +458,7 @@ namespace MiKoSolutions.Analyzers
         internal static IReadOnlyList<XmlElementSyntax> GetValueXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Value);
 
         /// <summary>
-        /// Gets only those XML elements that are NOT empty (have some content) and the given tag out of the documentation syntax.
+        /// Gets only those XML elements that are NOT empty (have some content) and match the given tag out of the documentation syntax.
         /// </summary>
         /// <param name="value">
         /// The documentation syntax.
@@ -458,7 +467,7 @@ namespace MiKoSolutions.Analyzers
         /// The tag of the XML elements to consider.
         /// </param>
         /// <returns>
-        /// A collection of <see cref="XmlElementSyntax"/> that are the XML elements that are NOT empty (have some content) and the given tag out of the documentation syntax.
+        /// A collection of <see cref="XmlElementSyntax"/> that are the XML elements that are NOT empty (have some content) and match the given tag out of the documentation syntax.
         /// </returns>
         /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,string)"/>
         /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,ISet{string})"/>
@@ -484,7 +493,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets only those XML elements that are NOT empty (have some content) and the given tag out of the documentation syntax.
+        /// Gets only those XML elements that are NOT empty (have some content) and match the given tag out of the documentation syntax.
         /// </summary>
         /// <param name="value">
         /// The documentation syntax.
@@ -493,7 +502,7 @@ namespace MiKoSolutions.Analyzers
         /// The tags of the XML elements to consider.
         /// </param>
         /// <returns>
-        /// A collection of <see cref="XmlElementSyntax"/> that are the XML elements that are NOT empty (have some content) and the given tag out of the documentation syntax.
+        /// A collection of <see cref="XmlElementSyntax"/> that are the XML elements that are NOT empty (have some content) and match the given tag out of the documentation syntax.
         /// </returns>
         /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,string)"/>
         /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,ISet{string})"/>
@@ -520,7 +529,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets only those XML elements that are empty (have NO content) and the given tag out of the documentation syntax.
+        /// Gets only those XML elements that are empty (have NO content) and match the given tag out of the documentation syntax.
         /// </summary>
         /// <param name="value">
         /// The documentation syntax.
@@ -529,7 +538,7 @@ namespace MiKoSolutions.Analyzers
         /// The tag of the XML elements to consider.
         /// </param>
         /// <returns>
-        /// A collection of <see cref="XmlEmptyElementSyntax"/> that are the XML elements that are empty (have NO content) and the given tag out of the documentation syntax.
+        /// A collection of <see cref="XmlEmptyElementSyntax"/> that are the XML elements that are empty (have NO content) and match the given tag out of the documentation syntax.
         /// </returns>
         /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,ISet{string})"/>
         /// <seealso cref="GetXmlSyntax(SyntaxNode,string)"/>
@@ -548,7 +557,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets only those XML elements that are empty (have NO content) and the given tag out of the list of syntax nodes.
+        /// Gets only those XML elements that are empty (have NO content) and match the given tag out of the list of syntax nodes.
         /// </summary>
         /// <param name="value">
         /// The starting point of the XML elements to consider.
@@ -557,7 +566,7 @@ namespace MiKoSolutions.Analyzers
         /// The tags of the XML elements to consider.
         /// </param>
         /// <returns>
-        /// A collection of <see cref="XmlEmptyElementSyntax"/> that are the XML elements that are empty (have NO content) and the given tag out of the list of syntax nodes.
+        /// A collection of <see cref="XmlEmptyElementSyntax"/> that are the XML elements that are empty (have NO content) and match the given tag out of the list of syntax nodes.
         /// </returns>
         /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,string)"/>
         /// <seealso cref="GetXmlSyntax(SyntaxNode,string)"/>
@@ -738,9 +747,9 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsValueNull(this SyntaxNode value) => value.Is(Constants.XmlTag.Value, Nulls);
 
-        internal static bool IsXml(this SyntaxNode node)
+        internal static bool IsXml(this SyntaxNode value)
         {
-            switch (node.Kind())
+            switch (value.Kind())
             {
                 case SyntaxKind.XmlElement:
                 case SyntaxKind.XmlEmptyElement:
@@ -1175,7 +1184,7 @@ namespace MiKoSolutions.Analyzers
 
             var textTokens = tokens.ToList();
 
-            for (int i = 0, textTokensCount = textTokens.Count; i < textTokensCount; i++)
+            for (int i = 0, count = textTokens.Count; i < count; i++)
             {
                 var token = textTokens[i];
 

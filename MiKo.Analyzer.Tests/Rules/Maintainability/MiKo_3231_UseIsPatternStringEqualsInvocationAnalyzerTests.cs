@@ -23,6 +23,34 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                 ];
 
         [Test]
+        public void No_issue_is_reported_for_1_variable_of_type_([Values("bool", "char", "int", "object", "StringComparison")] string type) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public bool DoSomething(" + type + @" a)
+    {
+        if (a.Equals(42))
+            return true;
+        else
+            return false;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_1_variable_of_type_as_argument_([Values("bool", "char", "int", "object", "StringComparison")] string type) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public bool DoSomething(" + type + @" a)
+    {
+        if (42.Equals(a))
+            return true;
+        else
+            return false;
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_2_variables_of_type_([Values("bool", "char", "int", "object", "StringComparison")] string type) => No_issue_is_reported_for(@"
 public class TestMe
 {
@@ -198,6 +226,32 @@ public class TestMe
 }");
 
         [Test]
+        public void An_issue_is_reported_for_hardcoded_string_as_1st_argument_compared_without_comparison() => An_issue_is_reported_for(@"
+public class TestMe
+{
+    public bool DoSomething(string a)
+    {
+        if (""someValue"".Equals(a))
+            return true;
+        else
+            return false;
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_hardcoded_string_as_2nd_argument_compared_without_comparison() => An_issue_is_reported_for(@"
+public class TestMe
+{
+    public bool DoSomething(string a)
+    {
+        if (a.Equals(""someValue""))
+            return true;
+        else
+            return false;
+    }
+}");
+
+        [Test]
         public void An_issue_is_reported_for_hardcoded_string_as_1st_argument_compared_with_Ordinal() => An_issue_is_reported_for(@"
 public class TestMe
 {
@@ -332,29 +386,33 @@ public class TestMe
         [Test]
         public void Code_gets_fixed_for_external_const_string_as_1st_parameter()
         {
-            const string OriginalCode = @"
-public class Constants
-{
-    public const string SomeValue = ""Some text"";
-}
+            const string OriginalCode = """
 
-public class TestMe
-{
-    public bool DoSomething(string s) => Constants.SomeValue.Equals(s, StringComparison.Ordinal);
-}
-";
+                public class Constants
+                {
+                    public const string SomeValue = "Some text";
+                }
 
-            const string FixedCode = @"
-public class Constants
-{
-    public const string SomeValue = ""Some text"";
-}
+                public class TestMe
+                {
+                    public bool DoSomething(string s) => Constants.SomeValue.Equals(s, StringComparison.Ordinal);
+                }
 
-public class TestMe
-{
-    public bool DoSomething(string s) => s is Constants.SomeValue;
-}
-";
+                """;
+
+            const string FixedCode = """
+
+                public class Constants
+                {
+                    public const string SomeValue = "Some text";
+                }
+
+                public class TestMe
+                {
+                    public bool DoSomething(string s) => s is Constants.SomeValue;
+                }
+
+                """;
 
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
@@ -362,29 +420,33 @@ public class TestMe
         [Test]
         public void Code_gets_fixed_for_external_const_string_as_2nd_parameter()
         {
-            const string OriginalCode = @"
-public class Constants
-{
-    public const string SomeValue = ""Some text"";
-}
+            const string OriginalCode = """
 
-public class TestMe
-{
-    public bool DoSomething(string s) => s.Equals(Constants.SomeValue, StringComparison.Ordinal);
-}
-";
+                public class Constants
+                {
+                    public const string SomeValue = "Some text";
+                }
 
-            const string FixedCode = @"
-public class Constants
-{
-    public const string SomeValue = ""Some text"";
-}
+                public class TestMe
+                {
+                    public bool DoSomething(string s) => s.Equals(Constants.SomeValue, StringComparison.Ordinal);
+                }
 
-public class TestMe
-{
-    public bool DoSomething(string s) => s is Constants.SomeValue;
-}
-";
+                """;
+
+            const string FixedCode = """
+
+                public class Constants
+                {
+                    public const string SomeValue = "Some text";
+                }
+
+                public class TestMe
+                {
+                    public bool DoSomething(string s) => s is Constants.SomeValue;
+                }
+
+                """;
 
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
@@ -392,23 +454,27 @@ public class TestMe
         [Test]
         public void Code_gets_fixed_for_internal_const_string_as_1st_parameter()
         {
-            const string OriginalCode = @"
-public class TestMe
-{
-    private const string SomeValue = ""Some text"";
+            const string OriginalCode = """
 
-    public bool DoSomething(string s) => SomeValue.Equals(s, StringComparison.Ordinal);
-}
-";
+                public class TestMe
+                {
+                    private const string SomeValue = "Some text";
 
-            const string FixedCode = @"
-public class TestMe
-{
-    private const string SomeValue = ""Some text"";
+                    public bool DoSomething(string s) => SomeValue.Equals(s, StringComparison.Ordinal);
+                }
 
-    public bool DoSomething(string s) => s is SomeValue;
-}
-";
+                """;
+
+            const string FixedCode = """
+
+                public class TestMe
+                {
+                    private const string SomeValue = "Some text";
+
+                    public bool DoSomething(string s) => s is SomeValue;
+                }
+
+                """;
 
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
@@ -416,23 +482,27 @@ public class TestMe
         [Test]
         public void Code_gets_fixed_for_internal_const_string_as_2nd_parameter()
         {
-            const string OriginalCode = @"
-public class TestMe
-{
-    private const string SomeValue = ""Some text"";
+            const string OriginalCode = """
 
-    public bool DoSomething(string s) => s.Equals(SomeValue, StringComparison.Ordinal);
-}
-";
+                public class TestMe
+                {
+                    private const string SomeValue = "Some text";
 
-            const string FixedCode = @"
-public class TestMe
-{
-    private const string SomeValue = ""Some text"";
+                    public bool DoSomething(string s) => s.Equals(SomeValue, StringComparison.Ordinal);
+                }
 
-    public bool DoSomething(string s) => s is SomeValue;
-}
-";
+                """;
+
+            const string FixedCode = """
+
+                public class TestMe
+                {
+                    private const string SomeValue = "Some text";
+
+                    public bool DoSomething(string s) => s is SomeValue;
+                }
+
+                """;
 
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
@@ -440,23 +510,27 @@ public class TestMe
         [Test]
         public void Code_gets_fixed_for_nameof_string_as_1st_parameter()
         {
-            const string OriginalCode = @"
-public class TestMe
-{
-    public int SomeValue { get; set; }
+            const string OriginalCode = """
 
-    public bool DoSomething(string s) => nameof(SomeValue).Equals(s, StringComparison.Ordinal);
-}
-";
+                public class TestMe
+                {
+                    public int SomeValue { get; set; }
 
-            const string FixedCode = @"
-public class TestMe
-{
-    public int SomeValue { get; set; }
+                    public bool DoSomething(string s) => nameof(SomeValue).Equals(s, StringComparison.Ordinal);
+                }
 
-    public bool DoSomething(string s) => s is nameof(SomeValue);
-}
-";
+                """;
+
+            const string FixedCode = """
+
+                public class TestMe
+                {
+                    public int SomeValue { get; set; }
+
+                    public bool DoSomething(string s) => s is nameof(SomeValue);
+                }
+
+                """;
 
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
@@ -464,23 +538,241 @@ public class TestMe
         [Test]
         public void Code_gets_fixed_for_nameof_string_as_2nd_parameter()
         {
-            const string OriginalCode = @"
-public class TestMe
-{
-    public int SomeValue { get; set; }
+            const string OriginalCode = """
 
-    public bool DoSomething(string s) => s.Equals(nameof(SomeValue), StringComparison.Ordinal);
-}
-";
+                public class TestMe
+                {
+                    public int SomeValue { get; set; }
 
-            const string FixedCode = @"
-public class TestMe
-{
-    public int SomeValue { get; set; }
+                    public bool DoSomething(string s) => s.Equals(nameof(SomeValue), StringComparison.Ordinal);
+                }
 
-    public bool DoSomething(string s) => s is nameof(SomeValue);
-}
-";
+                """;
+
+            const string FixedCode = """
+
+                public class TestMe
+                {
+                    public int SomeValue { get; set; }
+
+                    public bool DoSomething(string s) => s is nameof(SomeValue);
+                }
+
+                """;
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_external_const_string_as_1st_parameter_without_comparison()
+        {
+            const string OriginalCode = """
+
+                public class Constants
+                {
+                    public const string SomeValue = "Some text";
+                }
+
+                public class TestMe
+                {
+                    public bool DoSomething(string s) => Constants.SomeValue.Equals(s);
+                }
+
+                """;
+
+            const string FixedCode = """
+
+                public class Constants
+                {
+                    public const string SomeValue = "Some text";
+                }
+
+                public class TestMe
+                {
+                    public bool DoSomething(string s) => s is Constants.SomeValue;
+                }
+
+                """;
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_external_const_string_as_2nd_parameter_without_comparison()
+        {
+            const string OriginalCode = """
+
+                public class Constants
+                {
+                    public const string SomeValue = "Some text";
+                }
+
+                public class TestMe
+                {
+                    public bool DoSomething(string s) => s.Equals(Constants.SomeValue);
+                }
+
+                """;
+
+            const string FixedCode = """
+
+                public class Constants
+                {
+                    public const string SomeValue = "Some text";
+                }
+
+                public class TestMe
+                {
+                    public bool DoSomething(string s) => s is Constants.SomeValue;
+                }
+
+                """;
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_internal_const_string_as_1st_parameter_without_comparison()
+        {
+            const string OriginalCode = """
+
+                public class TestMe
+                {
+                    private const string SomeValue = "Some text";
+
+                    public bool DoSomething(string s) => SomeValue.Equals(s);
+                }
+
+                """;
+
+            const string FixedCode = """
+
+                public class TestMe
+                {
+                    private const string SomeValue = "Some text";
+
+                    public bool DoSomething(string s) => s is SomeValue;
+                }
+
+                """;
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_internal_const_string_as_2nd_parameter_without_comparison()
+        {
+            const string OriginalCode = """
+
+                public class TestMe
+                {
+                    private const string SomeValue = "Some text";
+
+                    public bool DoSomething(string s) => s.Equals(SomeValue);
+                }
+
+                """;
+
+            const string FixedCode = """
+
+                public class TestMe
+                {
+                    private const string SomeValue = "Some text";
+
+                    public bool DoSomething(string s) => s is SomeValue;
+                }
+
+                """;
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_nameof_string_as_1st_parameter_without_comparison()
+        {
+            const string OriginalCode = """
+
+                public class TestMe
+                {
+                    public int SomeValue { get; set; }
+
+                    public bool DoSomething(string s) => nameof(SomeValue).Equals(s);
+                }
+
+                """;
+
+            const string FixedCode = """
+
+                public class TestMe
+                {
+                    public int SomeValue { get; set; }
+
+                    public bool DoSomething(string s) => s is nameof(SomeValue);
+                }
+
+                """;
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_nameof_string_as_2nd_parameter_without_comparison()
+        {
+            const string OriginalCode = """
+
+                public class TestMe
+                {
+                    public int SomeValue { get; set; }
+
+                    public bool DoSomething(string s) => s.Equals(nameof(SomeValue));
+                }
+
+                """;
+
+            const string FixedCode = """
+
+                public class TestMe
+                {
+                    public int SomeValue { get; set; }
+
+                    public bool DoSomething(string s) => s is nameof(SomeValue);
+                }
+
+                """;
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_conditions_spanning_multiple_lines()
+        {
+            const string OriginalCode = """
+
+                public class TestMe
+                {
+                    public bool DoSomething(string s)
+                    {
+                        return !s.Equals("Sum", StringComparison.Ordinal) &&
+                               s.Equals("Something") &&
+                               !s.Equals("Product", StringComparison.Ordinal);
+                    }
+                }
+
+                """;
+
+            const string FixedCode = """
+
+                public class TestMe
+                {
+                    public bool DoSomething(string s)
+                    {
+                        return s is "Sum" is false &&
+                               s is "Something" &&
+                               s is "Product" is false;
+                    }
+                }
+                
+                """;
 
             VerifyCSharpFix(OriginalCode, FixedCode);
         }

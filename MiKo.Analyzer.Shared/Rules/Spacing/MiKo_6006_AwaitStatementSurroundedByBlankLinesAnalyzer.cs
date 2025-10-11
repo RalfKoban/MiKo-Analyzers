@@ -115,7 +115,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             {
                 case StatementSyntax _:
                 {
-                    var callLineSpan = node.GetLocation().GetLineSpan();
+                    var callLineSpan = node.GetLineSpan();
 
                     var noBlankLinesBefore = HasNonAwaitedStatement(statements.Where(_ => HasNoBlankLinesBefore(callLineSpan, _)));
                     var noBlankLinesAfter = HasNonAwaitedStatement(statements.Where(_ => HasNoBlankLinesAfter(callLineSpan, _)));
@@ -131,7 +131,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 case EqualsValueClauseSyntax _:
                 case AssignmentExpressionSyntax _:
                 {
-                    var callLineSpan = node.GetLocation().GetLineSpan();
+                    var callLineSpan = node.GetLineSpan();
 
                     var noBlankLinesBefore = HasNonAwaitedLocalAssignment(statements.Where(_ => HasNoBlankLinesBefore(callLineSpan, _)));
                     var noBlankLinesAfter = HasNonAwaitedLocalAssignment(statements.Where(_ => HasNoBlankLinesAfter(callLineSpan, _)));
