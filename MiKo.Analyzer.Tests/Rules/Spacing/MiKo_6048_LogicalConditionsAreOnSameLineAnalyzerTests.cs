@@ -56,6 +56,25 @@ public class TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_if_multiple_logical_condition_parts_are_all_on_their_own_lines() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool flag1, bool flag2, bool flag3, bool flag4)
+    {
+        if (flag1
+         && flag2
+         && flag3
+         && flag4)
+        {
+            return;
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_if_parenthesized_logical_condition_parts_are_all_on_their_own_line_and_combined_condition_is_first() => An_issue_is_reported_for(@"
 using System;
 
