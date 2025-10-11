@@ -19,8 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             {
                 case IfStatementSyntax statement:
                 {
-                    var updated = statement.WithOpenParenToken(statement.OpenParenToken.WithoutTrailingTrivia())
-                                           .WithCloseParenToken(statement.CloseParenToken.WithoutLeadingTrivia());
+                    var updated = statement.PlacedOnSameLine();
 
                     return root.ReplaceNode(statement, updated);
                 }

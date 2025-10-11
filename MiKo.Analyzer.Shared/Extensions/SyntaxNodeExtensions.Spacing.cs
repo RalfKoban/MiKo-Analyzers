@@ -145,27 +145,51 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static bool IsOnSameLineAs(this SyntaxNode value, in SyntaxNodeOrToken other) => value?.GetStartingLine() == other.GetStartingLine();
 
+        /// <summary>
+        /// Creates a new separated syntax list with all its items and separators placed on the same line.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the syntax nodes in the list.
+        /// </typeparam>
+        /// <param name="values">
+        /// The separated syntax list to modify.
+        /// </param>
+        /// <returns>
+        /// A collection of syntax nodes that contains all items and separators placed on the same line.
+        /// </returns>
         internal static SeparatedSyntaxList<T> PlacedOnSameLine<T>(this in SeparatedSyntaxList<T> values) where T : SyntaxNode
         {
             var updatedItems = values.GetWithSeparators()
                                      .Select(_ =>
-                                     {
-                                         if (_.IsNode)
-                                         {
-                                             return PlacedOnSameLine(_.AsNode());
-                                         }
+                                                 {
+                                                     if (_.IsNode)
+                                                     {
+                                                         return PlacedOnSameLine(_.AsNode());
+                                                     }
 
-                                         if (_.IsToken)
-                                         {
-                                             return _.AsToken().WithoutLeadingTrivia().WithTrailingSpace();
-                                         }
+                                                     if (_.IsToken)
+                                                     {
+                                                         return _.AsToken().WithoutLeadingTrivia().WithTrailingSpace();
+                                                     }
 
-                                         return _;
-                                     });
+                                                     return _;
+                                                 });
 
             return SyntaxFactory.SeparatedList<T>(updatedItems);
         }
 
+        /// <summary>
+        /// Creates a new syntax node with all its components placed on the same line.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the syntax node.
+        /// </typeparam>
+        /// <param name="value">
+        /// The syntax node to modify.
+        /// </param>
+        /// <returns>
+        /// A new syntax node with all its components placed on the same line.
+        /// </returns>
         internal static T PlacedOnSameLine<T>(this T value) where T : SyntaxNode
         {
             switch (value)
@@ -177,13 +201,13 @@ namespace MiKoSolutions.Analyzers
                 case CasePatternSwitchLabelSyntax patternLabel: return PlacedOnSameLine(patternLabel) as T;
                 case CaseSwitchLabelSyntax label: return PlacedOnSameLine(label) as T;
                 case ConditionalExpressionSyntax conditional: return PlacedOnSameLine(conditional) as T;
-                case ConstantPatternSyntax constantPattern: return PlacedOnSameLine(constantPattern) as T;
-                case DeclarationPatternSyntax declaration: return PlacedOnSameLine(declaration) as T;
+                case IfStatementSyntax ifStatement: return PlacedOnSameLine(ifStatement) as T;
                 case InvocationExpressionSyntax invocation: return PlacedOnSameLine(invocation) as T;
                 case IsPatternExpressionSyntax pattern: return PlacedOnSameLine(pattern) as T;
                 case MemberAccessExpressionSyntax maes: return PlacedOnSameLine(maes) as T;
                 case NameSyntax name: return PlacedOnSameLine(name) as T;
                 case ObjectCreationExpressionSyntax creation: return PlacedOnSameLine(creation) as T;
+                case PatternSyntax pattern: return PlacedOnSameLine(pattern) as T;
                 case SingleVariableDesignationSyntax singleVariable: return PlacedOnSameLine(singleVariable) as T;
                 case SwitchExpressionArmSyntax arm: return PlacedOnSameLine(arm) as T;
                 case ThrowExpressionSyntax throwExpression: return PlacedOnSameLine(throwExpression) as T;
@@ -194,33 +218,87 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        /// <summary>
+        /// Creates a new argument syntax with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The argument syntax to modify.
+        /// </param>
+        /// <returns>
+        /// A new argument syntax with all its components placed on the same line.
+        /// </returns>
         internal static ArgumentSyntax PlacedOnSameLine(this ArgumentSyntax value) => value.WithoutTrivia()
                                                                                            .WithRefKindKeyword(value.RefKindKeyword.WithoutLeadingTrivia().WithTrailingSpace())
                                                                                            .WithRefOrOutKeyword(value.RefOrOutKeyword.WithoutLeadingTrivia().WithTrailingSpace())
                                                                                            .WithNameColon(PlacedOnSameLine(value.NameColon))
                                                                                            .WithExpression(PlacedOnSameLine(value.Expression));
 
+        /// <summary>
+        /// Creates a new argument list syntax with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The argument list syntax to modify.
+        /// </param>
+        /// <returns>
+        /// A new argument list syntax with all its components placed on the same line.
+        /// </returns>
         internal static ArgumentListSyntax PlacedOnSameLine(this ArgumentListSyntax value) => value.WithoutTrivia()
                                                                                                    .WithOpenParenToken(value.OpenParenToken.WithoutTrivia())
                                                                                                    .WithArguments(PlacedOnSameLine(value.Arguments))
                                                                                                    .WithCloseParenToken(value.CloseParenToken.WithoutTrivia());
 
+        /// <summary>
+        /// Creates a new binary expression syntax with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The binary expression syntax to modify.
+        /// </param>
+        /// <returns>
+        /// A new binary expression syntax with all its components placed on the same line.
+        /// </returns>
         internal static BinaryExpressionSyntax PlacedOnSameLine(this BinaryExpressionSyntax value) => value.WithoutTrivia()
                                                                                                            .WithLeft(PlacedOnSameLine(value.Left))
                                                                                                            .WithOperatorToken(value.OperatorToken.WithLeadingSpace().WithoutTrailingTrivia())
                                                                                                            .WithRight(PlacedOnSameLine(value.Right));
 
+        /// <summary>
+        /// Creates a new case pattern switch label syntax with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The case pattern switch label syntax to modify.
+        /// </param>
+        /// <returns>
+        /// A new case pattern switch label syntax with all its components placed on the same line.
+        /// </returns>
         internal static CasePatternSwitchLabelSyntax PlacedOnSameLine(this CasePatternSwitchLabelSyntax value) => value.WithoutTrivia()
                                                                                                                        .WithKeyword(value.Keyword.WithoutTrailingTrivia())
                                                                                                                        .WithPattern(PlacedOnSameLine(value.Pattern).WithLeadingSpace().WithoutTrailingTrivia())
                                                                                                                        .WithWhenClause(PlacedOnSameLine(value.WhenClause))
                                                                                                                        .WithColonToken(value.ColonToken.WithoutLeadingTrivia());
 
+        /// <summary>
+        /// Creates a new case switch label syntax with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The case switch label syntax to modify.
+        /// </param>
+        /// <returns>
+        /// A new case switch label syntax with all its components placed on the same line.
+        /// </returns>
         internal static CaseSwitchLabelSyntax PlacedOnSameLine(this CaseSwitchLabelSyntax value) => value.WithoutTrivia()
                                                                                                          .WithKeyword(value.Keyword.WithoutTrailingTrivia())
                                                                                                          .WithValue(PlacedOnSameLine(value.Value).WithLeadingSpace().WithoutTrailingTrivia())
                                                                                                          .WithColonToken(value.ColonToken.WithoutLeadingTrivia());
 
+        /// <summary>
+        /// Creates a new conditional expression syntax with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The conditional expression syntax to modify.
+        /// </param>
+        /// <returns>
+        /// A new conditional expression syntax with all its components placed on the same line.
+        /// </returns>
         internal static ConditionalExpressionSyntax PlacedOnSameLine(this ConditionalExpressionSyntax value) => value.WithoutTrivia()
                                                                                                                      .WithCondition(PlacedOnSameLine(value.Condition).WithLeadingSpace().WithoutTrailingTrivia())
                                                                                                                      .WithQuestionToken(value.QuestionToken.WithoutTrivia())
@@ -228,27 +306,95 @@ namespace MiKoSolutions.Analyzers
                                                                                                                      .WithColonToken(value.ColonToken.WithoutTrivia())
                                                                                                                      .WithWhenFalse(PlacedOnSameLine(value.WhenFalse).WithLeadingSpace().WithoutTrailingTrivia());
 
+        /// <summary>
+        /// Creates a new constant pattern syntax with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The constant pattern syntax to modify.
+        /// </param>
+        /// <returns>
+        /// A new constant pattern syntax with all its components placed on the same line.
+        /// </returns>
         internal static ConstantPatternSyntax PlacedOnSameLine(this ConstantPatternSyntax value) => value.WithoutTrivia()
                                                                                                          .WithExpression(PlacedOnSameLine(value.Expression));
 
+        /// <summary>
+        /// Creates a new declaration pattern syntax with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The declaration pattern syntax to modify.
+        /// </param>
+        /// <returns>
+        /// A new declaration pattern syntax with all its components placed on the same line.
+        /// </returns>
         internal static DeclarationPatternSyntax PlacedOnSameLine(this DeclarationPatternSyntax value) => value.WithoutTrivia()
                                                                                                                .WithType(value.Type.WithoutTrailingTrivia())
                                                                                                                .WithDesignation(PlacedOnSameLine(value.Designation));
 
+        /// <summary>
+        /// Creates a new if statement syntax with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The if statement syntax to modify.
+        /// </param>
+        /// <returns>
+        /// A new if statement syntax with all its components placed on the same line.
+        /// </returns>
+        internal static IfStatementSyntax PlacedOnSameLine(this IfStatementSyntax value) => value.WithIfKeyword(value.IfKeyword.WithTrailingSpace())
+                                                                                                 .WithOpenParenToken(value.OpenParenToken.WithoutTrailingTrivia())
+                                                                                                 .WithCondition(value.Condition.PlacedOnSameLine())
+                                                                                                 .WithCloseParenToken(value.CloseParenToken.WithoutLeadingTrivia());
+
+        /// <summary>
+        /// Creates a new invocation expression syntax with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The invocation expression syntax to modify.
+        /// </param>
+        /// <returns>
+        /// A new invocation expression syntax with all its components placed on the same line.
+        /// </returns>
         internal static InvocationExpressionSyntax PlacedOnSameLine(this InvocationExpressionSyntax value) => value.WithoutTrivia()
                                                                                                                    .WithExpression(PlacedOnSameLine(value.Expression))
                                                                                                                    .WithArgumentList(PlacedOnSameLine(value.ArgumentList));
 
+        /// <summary>
+        /// Creates a new is pattern expression syntax with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The is pattern expression syntax to modify.
+        /// </param>
+        /// <returns>
+        /// A new is pattern expression syntax with all its components placed on the same line.
+        /// </returns>
         internal static IsPatternExpressionSyntax PlacedOnSameLine(this IsPatternExpressionSyntax value) => value.WithoutTrivia()
                                                                                                                  .WithPattern(PlacedOnSameLine(value.Pattern))
                                                                                                                  .WithIsKeyword(value.IsKeyword.WithLeadingSpace().WithoutTrailingTrivia())
                                                                                                                  .WithExpression(PlacedOnSameLine(value.Expression));
 
+        /// <summary>
+        /// Creates a new member access expression syntax with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The member access expression syntax to modify.
+        /// </param>
+        /// <returns>
+        /// A new member access expression syntax with all its components placed on the same line.
+        /// </returns>
         internal static MemberAccessExpressionSyntax PlacedOnSameLine(this MemberAccessExpressionSyntax value) => value.WithoutTrivia()
                                                                                                                        .WithName(PlacedOnSameLine(value.Name))
                                                                                                                        .WithOperatorToken(value.OperatorToken.WithoutTrivia())
                                                                                                                        .WithExpression(PlacedOnSameLine(value.Expression));
 
+        /// <summary>
+        /// Creates a new name syntax with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The name syntax to modify.
+        /// </param>
+        /// <returns>
+        /// A new name syntax with all its components placed on the same line.
+        /// </returns>
         internal static NameSyntax PlacedOnSameLine(this NameSyntax value)
         {
             switch (value)
@@ -273,30 +419,130 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        /// <summary>
+        /// Creates a new object creation expression syntax with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The object creation expression syntax to modify.
+        /// </param>
+        /// <returns>
+        /// A new object creation expression syntax with all its components placed on the same line.
+        /// </returns>
         internal static ObjectCreationExpressionSyntax PlacedOnSameLine(this ObjectCreationExpressionSyntax value) => value.WithoutTrivia()
                                                                                                                            .WithNewKeyword(value.NewKeyword.WithoutTrivia())
                                                                                                                            .WithType(PlacedOnSameLine(value.Type).WithLeadingSpace())
                                                                                                                            .WithArgumentList(PlacedOnSameLine(value.ArgumentList))
                                                                                                                            .WithInitializer(PlacedOnSameLine(value.Initializer));
 
+        /// <summary>
+        /// Creates a new pattern syntax with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The pattern syntax to modify.
+        /// </param>
+        /// <returns>
+        /// A new pattern syntax with all its components placed on the same line.
+        /// </returns>
+        internal static PatternSyntax PlacedOnSameLine(this PatternSyntax value)
+        {
+            switch (value)
+            {
+                case ConstantPatternSyntax constantPattern: return PlacedOnSameLine(constantPattern);
+                case DeclarationPatternSyntax declaration: return PlacedOnSameLine(declaration);
+                case UnaryPatternSyntax unaryPattern: return PlacedOnSameLine(unaryPattern);
+
+                /*
+                   -> BinaryPatternSyntax
+                   -> DiscardPatternSyntax
+                   -> ListPatternSyntax
+                   -> ParenthesizedPatternSyntax
+                   -> RecursivePatternSyntax
+                   -> RelationalPatternSyntax
+                   -> SlicePatternSyntax
+                   -> TypePatternSyntax
+                   -> VarPatternSyntax
+                 */
+                default:
+                    return value.WithoutTrivia();
+            }
+        }
+
+        /// <summary>
+        /// Creates a new single variable designation syntax with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The single variable designation syntax to modify.
+        /// </param>
+        /// <returns>
+        /// A new single variable designation syntax with all its components placed on the same line.
+        /// </returns>
         internal static SingleVariableDesignationSyntax PlacedOnSameLine(this SingleVariableDesignationSyntax value) => value.WithoutTrivia()
                                                                                                                              .WithIdentifier(value.Identifier.WithoutTrivia());
 
+        /// <summary>
+        /// Creates a new switch expression arm syntax with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The switch expression arm syntax to modify.
+        /// </param>
+        /// <returns>
+        /// A new switch expression arm syntax with all its components placed on the same line.
+        /// </returns>
         internal static SwitchExpressionArmSyntax PlacedOnSameLine(this SwitchExpressionArmSyntax value) => value.WithoutTrailingTrivia()
                                                                                                                  .WithEqualsGreaterThanToken(value.EqualsGreaterThanToken.WithLeadingSpace().WithoutTrailingTrivia())
                                                                                                                  .WithExpression(PlacedOnSameLine(value.Expression))
                                                                                                                  .WithWhenClause(PlacedOnSameLine(value.WhenClause))
                                                                                                                  .WithPattern(PlacedOnSameLine(value.Pattern));
 
+        /// <summary>
+        /// Creates a new throw expression syntax with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The throw expression syntax to modify.
+        /// </param>
+        /// <returns>
+        /// A new throw expression syntax with all its components placed on the same line.
+        /// </returns>
         internal static ThrowExpressionSyntax PlacedOnSameLine(this ThrowExpressionSyntax value) => value.WithoutTrivia()
                                                                                                          .WithThrowKeyword(value.ThrowKeyword.WithoutTrivia())
                                                                                                          .WithExpression(PlacedOnSameLine(value.Expression));
 
+        /// <summary>
+        /// Creates a new type argument list syntax with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The type argument list syntax to modify.
+        /// </param>
+        /// <returns>
+        /// A new type argument list syntax with all its components placed on the same line.
+        /// </returns>
         internal static TypeArgumentListSyntax PlacedOnSameLine(this TypeArgumentListSyntax value) => value.WithoutTrivia()
                                                                                                            .WithArguments(PlacedOnSameLine(value.Arguments))
                                                                                                            .WithGreaterThanToken(value.GreaterThanToken.WithoutTrivia())
                                                                                                            .WithLessThanToken(value.LessThanToken.WithoutTrivia());
 
+        /// <summary>
+        /// Creates a new unary pattern syntax with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The unary pattern syntax to modify.
+        /// </param>
+        /// <returns>
+        /// A new unary pattern syntax with all its components placed on the same line.
+        /// </returns>
+        internal static UnaryPatternSyntax PlacedOnSameLine(this UnaryPatternSyntax value) => value.WithoutTrivia()
+                                                                                                   .WithOperatorToken(value.OperatorToken.WithLeadingSpace().WithoutTrailingTrivia())
+                                                                                                   .WithPattern(PlacedOnSameLine(value.Pattern));
+
+        /// <summary>
+        /// Creates a new when clause syntax with all its components placed on the same line.
+        /// </summary>
+        /// <param name="value">
+        /// The when clause syntax to modify.
+        /// </param>
+        /// <returns>
+        /// A new when clause syntax with all its components placed on the same line.
+        /// </returns>
         internal static WhenClauseSyntax PlacedOnSameLine(this WhenClauseSyntax value) => value?.WithoutTrivia()
                                                                                                 .WithWhenKeyword(value.WhenKeyword.WithLeadingSpace().WithoutTrailingTrivia())
                                                                                                 .WithCondition(PlacedOnSameLine(value.Condition));

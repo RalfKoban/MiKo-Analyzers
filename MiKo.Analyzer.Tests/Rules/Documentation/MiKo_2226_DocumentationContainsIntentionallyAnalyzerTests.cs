@@ -26,7 +26,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   "purposely left empty",
                                                                   "purposly left empty", // check for typo
                                                                   "by indent", // check for typo
-                                                                  "empty with indent", // check for typo
                                                                   "empty with indention", // check for typo
                                                                   "indentionally", // check for typo
                                                                   "indentionaly", // check for typo
