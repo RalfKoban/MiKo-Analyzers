@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (identifierNames.Count != 0)
             {
-                var fieldLocation = fieldSyntax.GetLocation().GetLineSpan();
+                var fieldLocation = fieldSyntax.GetLineSpan();
 
                 // get all fields
                 var problematicFields = GetStaticFieldsFromBelowOrFromOtherPart(symbol, fieldLocation);
@@ -66,7 +66,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             foreach (var otherField in otherFields)
             {
-                var lineSpan = otherField.GetLocation().GetLineSpan();
+                var lineSpan = otherField.GetLineSpan();
 
                 if (lineSpan.Path != fieldLocation.Path || lineSpan.StartLinePosition >= fieldLocation.StartLinePosition)
                 {

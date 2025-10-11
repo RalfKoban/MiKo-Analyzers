@@ -101,8 +101,8 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             if (otherStatements.Count > 0)
             {
-                var beforePosition = GetLocationOfNodeOrLeadingComment(node).GetLineSpan();
-                var afterPosition = GetLocationOfNodeOrTrailingComment(node).GetLineSpan();
+                var beforePosition = GetLineSpanOfNodeOrLeadingComment(node);
+                var afterPosition = GetLineSpanOfNodeOrTrailingComment(node);
 
                 var noBlankLinesBefore = HasNoBlankLinesBefore(otherStatements, beforePosition);
                 var noBlankLinesAfter = HasNoBlankLinesAfter(otherStatements, afterPosition);
@@ -118,8 +118,8 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private Diagnostic AnalyzeStatement(SwitchSectionSyntax section, T node)
         {
-            var beforePosition = GetLocationOfNodeOrLeadingComment(node).GetLineSpan();
-            var afterPosition = GetLocationOfNodeOrTrailingComment(node).GetLineSpan();
+            var beforePosition = GetLineSpanOfNodeOrLeadingComment(node);
+            var afterPosition = GetLineSpanOfNodeOrTrailingComment(node);
 
             var statements = section.Statements;
             var otherStatements = statements.Except(node).Where(ShallAnalyzeOtherStatement).ToList();

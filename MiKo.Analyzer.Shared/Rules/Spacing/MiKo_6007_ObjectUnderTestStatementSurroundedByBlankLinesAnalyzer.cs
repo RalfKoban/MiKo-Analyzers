@@ -91,7 +91,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private Diagnostic AnalyzeExpressionStatements(in SyntaxList<StatementSyntax> statements, CSharpSyntaxNode node)
         {
-            var callLineSpan = node.GetLocation().GetLineSpan();
+            var callLineSpan = node.GetLineSpan();
 
             var noBlankLinesBefore = HasNoOtherObjectUnderTestExpression(statements.Where(_ => HasNoBlankLinesBefore(callLineSpan, _)));
             var noBlankLinesAfter = HasNoOtherObjectUnderTestExpression(statements.Where(_ => HasNoBlankLinesAfter(callLineSpan, _)));

@@ -21,6 +21,8 @@ public class TestMe
 
         [TestCase("some comment")]
         [TestCase("some parent")]
+        [TestCase("some insignificant comment")]
+        [TestCase("some significant comment")]
         public void No_issue_is_reported_for_correct_single_line_comment_(string comment) => No_issue_is_reported_for(@"
 public class TestMe
 {

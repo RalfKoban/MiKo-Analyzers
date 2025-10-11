@@ -360,6 +360,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     return proposedName.WithoutSuffix("ex").ConcatenatedWith("ices");
                 }
 
+                if (proposedName.EndsWith("x", comparison))
+                {
+                    return proposedName.ConcatenatedWith("es");
+                }
+
                 if (proposedName.EndsWith("oose", comparison))
                 {
                     return proposedName.WithoutSuffix("oose").ConcatenatedWith("eese");

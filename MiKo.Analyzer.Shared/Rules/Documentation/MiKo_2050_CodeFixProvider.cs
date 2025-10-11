@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -15,9 +14,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2050_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
 //// ncrunch: rdi off
-        private static readonly string[] TypeReplacementMapKeys = CreateTypePhrases().Except(Constants.Comments.ExceptionTypeSummaryStartingPhrase).ToArray();
+        private static readonly Pair[] TypeReplacementMap = CreateTypePhrases().Except(Constants.Comments.ExceptionTypeSummaryStartingPhrase).OrderDescendingByLengthAndText().ToArray(_ => new Pair(_));
 
-        private static readonly Pair[] TypeReplacementMap = TypeReplacementMapKeys.ToArray(_ => new Pair(_));
+        private static readonly string[] TypeReplacementMapKeys = TypeReplacementMap.ToArray(_ => _.Key);
+
+        private static readonly Pair[] TypeCleanupMap =
+                                                        {
+                                                            new Pair("when during", "when an error occurs during"),
+                                                        };
+
+        private static readonly string[] TypeCleanupMapKeys = TypeCleanupMap.ToArray(_ => _.Key);
+
 //// ncrunch: rdi default
 
         public override string FixableDiagnosticId => "MiKo_2050";
@@ -37,23 +44,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static DocumentationCommentTriviaSyntax FixTypeSummary(DocumentationCommentTriviaSyntax comment)
         {
-            const string Phrase = Constants.Comments.ExceptionTypeSummaryStartingPhrase;
-
             var summaries = comment.GetXmlSyntax(Constants.XmlTag.Summary);
 
             if (summaries.Count is 0)
             {
-                var newSummary = Comment(SyntaxFactory.XmlSummaryElement(), Phrase).WithTrailingXmlComment();
+                var newSummary = Comment(SyntaxFactory.XmlSummaryElement(), Constants.Comments.ExceptionTypeSummaryStartingPhrase).WithTrailingXmlComment();
 
                 return comment.InsertNodeAfter(comment.Content[0], newSummary);
             }
             else
             {
                 var summary = summaries[0];
-                var preparedSummary = Comment(summary, TypeReplacementMapKeys, TypeReplacementMap, FirstWordAdjustment.StartLowerCase);
-                var newSummary = CommentStartingWith(preparedSummary, Phrase);
 
-                return comment.ReplaceNode(summary, newSummary);
+                var preparedSummary = Comment(summary, TypeReplacementMapKeys, TypeReplacementMap, FirstWordAdjustment.StartLowerCase);
+                var newSummary = CommentStartingWith(preparedSummary, Constants.Comments.ExceptionTypeSummaryStartingPhrase);
+                var updatedSummary = Comment(newSummary, TypeCleanupMapKeys, TypeCleanupMap);
+
+                return comment.ReplaceNode(summary, updatedSummary);
             }
         }
 
@@ -80,18 +87,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return FixSerializationParamCtor(type, parameters[0], parameters[1]);
             }
 
-            var summary = Comment(SyntaxFactory.XmlSummaryElement(), "Determines whether the specified ", SeeCref(type), " instances are considered not equal.").WithTrailingXmlComment();
-            var param1 = ParameterComment(parameters[0], "The first value to compare.").WithTrailingXmlComment();
-            var param2 = ParameterComment(parameters[1], "The second value to compare.").WithTrailingXmlComment();
-
-            var returns = SyntaxFactory.XmlReturnsElement(
-                                                      SeeLangword_True().WithLeadingXmlComment(),
-                                                      XmlText(" if both instances are considered not equal; otherwise, "),
-                                                      SeeLangword_False(),
-                                                      XmlText(".").WithTrailingXmlComment())
-                                       .WithEndOfLine();
-
-            return SyntaxFactory.DocumentationComment(summary, param1, param2, returns);
+            return FixParameterlessCtor(type);
         }
 
         private static DocumentationCommentTriviaSyntax FixParameterlessCtor(TypeSyntax type)
@@ -190,8 +186,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                  "A exception", "An exception", "The exception", "This exception", "Exception",
                                  "A general exception", "An general exception", "The general exception", "This general exception", "General exception",
                                  "A most general exception", "An most general exception", "The most general exception", "This most general exception", "Most general exception",
+                                 "A error", "An error", "The error", "This error", "Error", "Errors", "errors",
                              };
-            var verbs = new[] { "that is thrown", "which is thrown", "is thrown", "thrown", "to throw", "that is fired", "which is fired", "fired", "to fire" };
+            var verbs = new[] { "that is thrown", "which is thrown", "is thrown", "thrown", "to throw", "that is fired", "which is fired", "fired", "to fire", "that occurs", "which occurs", "that occur", "which occur" };
             var conditions = new[] { "if", "when", "in case" };
 
             var results = new HashSet<string>();
@@ -216,6 +213,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 results.Add(start + " that indicates that ");
                 results.Add(start + " which indicates that ");
                 results.Add(start + " indicating that ");
+                results.Add(start + " that occurs ");
+                results.Add(start + " which occurs ");
+                results.Add(start + " that occur ");
+                results.Add(start + " which occur ");
 
                 foreach (var verb in verbs)
                 {
@@ -223,6 +224,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     var begin = string.Concat(start, middle);
                     var beginLowerCase = begin.ToLowerCaseAt(0);
+
+                    results.Add(string.Concat("Represent ", beginLowerCase));
+                    results.Add(string.Concat("Represents ", beginLowerCase));
 
                     foreach (var condition in conditions)
                     {

@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (syntax is InvocationExpressionSyntax invocation)
             {
-                return PlacedOnSameLine(invocation).WithLeadingTriviaFrom(invocation);
+                return invocation.PlacedOnSameLine().WithLeadingTriviaFrom(invocation);
             }
 
             return syntax;

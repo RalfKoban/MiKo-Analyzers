@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         private Diagnostic[] AnalyzeTestType(INamedTypeSymbol symbol, IMethodSymbol method)
         {
-            var path = method.Locations.First(_ => _.IsInSource).GetLineSpan().Path;
+            var path = method.GetLineSpan().Path;
 
             var methods = GetMethodsOrderedByLocation(symbol, path).ToList();
 

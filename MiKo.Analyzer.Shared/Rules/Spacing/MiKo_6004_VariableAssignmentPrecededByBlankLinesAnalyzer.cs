@@ -121,7 +121,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private Diagnostic Analyze(AssignmentExpressionSyntax assignment, in SyntaxList<StatementSyntax> statements)
         {
-            var callLineSpan = assignment.GetLocation().GetLineSpan();
+            var callLineSpan = assignment.GetLineSpan();
 
             var noBlankLinesBefore = statements.Where(_ => HasNoBlankLinesBefore(callLineSpan, _))
                                                .Any(_ => IsAssignmentOrDeclaration(assignment, _) is false);

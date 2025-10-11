@@ -111,9 +111,7 @@ namespace MiKoSolutions.Analyzers.Rules
                 return true;
             }
 
-            var lineString = line.ToString();
-
-            if (lineString.ContainsAny(CodeConditionMarkers))
+            if (line.ContainsAny(CodeConditionMarkers))
             {
                 return true;
             }
@@ -131,7 +129,7 @@ namespace MiKoSolutions.Analyzers.Rules
                     return false; // ignore all framed comments
                 }
 
-                if (lineString.ContainsAny(Constants.Markers.ReSharper, StringComparison.OrdinalIgnoreCase))
+                if (line.ContainsAny(Constants.Markers.ReSharper, StringComparison.OrdinalIgnoreCase))
                 {
                     return false; // ignore '// ReSharper' comments
                 }
@@ -159,7 +157,7 @@ namespace MiKoSolutions.Analyzers.Rules
                 return true; // found a construction or initialization
             }
 
-            if (lineString.ContainsAny(FrameMarkers, StringComparison.OrdinalIgnoreCase))
+            if (line.ContainsAny(FrameMarkers, StringComparison.OrdinalIgnoreCase))
             {
                 return false;
             }
@@ -176,7 +174,7 @@ namespace MiKoSolutions.Analyzers.Rules
                     return true;
                 }
 
-                if (lineString.ContainsAny(Operators, StringComparison.OrdinalIgnoreCase))
+                if (line.ContainsAny(Operators, StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
                 }
@@ -204,7 +202,7 @@ var convertedType = semanticModel.GetTypeInfo(node).ConvertedType;
                 return true;
             }
 
-            if (lineString.ContainsAny(LockStatements, StringComparison.OrdinalIgnoreCase))
+            if (line.ContainsAny(LockStatements, StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }

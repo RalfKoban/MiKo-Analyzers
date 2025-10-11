@@ -14,7 +14,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers
 {
     /// <summary>
-    /// Provides extensions for <see cref="SyntaxNode"/>s that focus on naming.
+    /// Provides a set of <see langword="static"/> methods for <see cref="SyntaxNode"/>s that focus on naming.
     /// </summary>
     internal static partial class SyntaxNodeExtensions
     {
@@ -671,6 +671,17 @@ namespace MiKoSolutions.Analyzers
                     return string.Empty;
             }
         }
+
+        /// <summary>
+        /// Gets the name of the specified <see cref="TypeParameterConstraintClauseSyntax"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The type syntax.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the name of the constraint; or the <see cref="string.Empty"/> string ("") if no name is found.
+        /// </returns>
+        internal static string GetName(this TypeParameterConstraintClauseSyntax value) => value?.Name.GetName() ?? string.Empty;
 
         /// <summary>
         /// Gets the name of the specified <see cref="TypeSyntax"/>.

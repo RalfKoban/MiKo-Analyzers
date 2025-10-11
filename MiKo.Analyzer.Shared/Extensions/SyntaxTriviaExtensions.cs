@@ -13,59 +13,104 @@ using Microsoft.CodeAnalysis.Text;
 #pragma warning disable IDE0130
 namespace MiKoSolutions.Analyzers
 {
+    /// <summary>
+    /// Provides a set of <see langword="static"/> methods for <see cref="SyntaxTrivia"/>.
+    /// </summary>
     internal static class SyntaxTriviaExtensions
     {
+        /// <summary>
+        /// Gets the line span information for a syntax trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia to get the line span for.
+        /// </param>
+        /// <returns>
+        /// A file line position span representing the line span information.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static FileLinePositionSpan GetLineSpan(this in SyntaxTrivia value) => value.GetLocation().GetLineSpan();
+
+        /// <summary>
+        /// Gets the character position within the starting line of a syntax trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia to get the position for.
+        /// </param>
+        /// <returns>
+        /// An integer representing the character position within the starting line.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static int GetPositionWithinStartLine(this in SyntaxTrivia value) => value.GetLocation().GetPositionWithinStartLine();
 
+        /// <summary>
+        /// Gets the starting line number of a syntax trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia to get the starting line for.
+        /// </param>
+        /// <returns>
+        /// An integer representing the starting line number.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static int GetStartingLine(this in SyntaxTrivia value) => value.GetLocation().GetStartingLine();
 
+        /// <summary>
+        /// Gets the ending line number of a syntax trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia to get the ending line for.
+        /// </param>
+        /// <returns>
+        /// An integer representing the ending line number.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static int GetEndingLine(this in SyntaxTrivia value) => value.GetLocation().GetEndingLine();
 
+        /// <summary>
+        /// Gets the starting position of a syntax trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia to get the starting position for.
+        /// </param>
+        /// <returns>
+        /// A line position representing the starting position.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static LinePosition GetStartPosition(this in SyntaxTrivia value) => value.GetLocation().GetStartPosition();
 
+        /// <summary>
+        /// Gets the ending position of a syntax trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia to get the ending position for.
+        /// </param>
+        /// <returns>
+        /// A line position representing the ending position.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static LinePosition GetEndPosition(this in SyntaxTrivia value) => value.GetLocation().GetEndPosition();
 
-        internal static bool HasEndOfLine(this in SyntaxTriviaList value)
-        {
-            // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var valueCount = value.Count;
-
-            if (valueCount > 0)
-            {
-                for (var index = 0; index < valueCount; index++)
-                {
-                    if (value[index].IsEndOfLine())
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        internal static bool HasComment(this in SyntaxTriviaList value)
-        {
-            // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var valueCount = value.Count;
-
-            if (valueCount > 0)
-            {
-                for (var index = 0; index < valueCount; index++)
-                {
-                    if (value[index].IsComment())
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
+        /// <summary>
+        /// Determines whether the trivia is an end of line trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia to examine.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the trivia is an end of line trivia; otherwise, <see langword="false"/>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsEndOfLine(this in SyntaxTrivia value) => value.IsKind(SyntaxKind.EndOfLineTrivia);
 
+        /// <summary>
+        /// Determines whether the trivia is a comment trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia to examine.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the trivia is a single line or multi-line comment; otherwise, <see langword="false"/>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsComment(this in SyntaxTrivia value)
         {
@@ -74,24 +119,96 @@ namespace MiKoSolutions.Analyzers
             return (uint)(value.RawKind - (int)SyntaxKind.SingleLineCommentTrivia) <= 1;
         }
 
+        /// <summary>
+        /// Determines whether the trivia is a multi-line comment.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia to examine.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the trivia is a multi-line comment; otherwise, <see langword="false"/>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsMultiLineComment(this in SyntaxTrivia value) => value.IsKind(SyntaxKind.MultiLineCommentTrivia);
 
+        /// <summary>
+        /// Determines whether the trivia is a single line comment.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia to examine.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the trivia is a single line comment; otherwise, <see langword="false"/>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsSingleLineComment(this in SyntaxTrivia value) => value.IsKind(SyntaxKind.SingleLineCommentTrivia);
 
+        /// <summary>
+        /// Determines whether the trivia spans multiple lines.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia to examine.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the trivia spans multiple lines; otherwise, <see langword="false"/>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsSpanningMultipleLines(this in SyntaxTrivia value) => value.Token.IsSpanningMultipleLines();
 
+        /// <summary>
+        /// Determines whether the trivia is a whitespace.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia to examine.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the trivia is a whitespace; otherwise, <see langword="false"/>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsWhiteSpace(this in SyntaxTrivia value) => value.IsKind(SyntaxKind.WhitespaceTrivia);
 
+        /// <summary>
+        /// Determines whether the trivia is of the specified syntax kind.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia to examine.
+        /// </param>
+        /// <param name="kind">
+        /// One of the enumeration members that specifies the syntax kind to check for.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the trivia is of the specified kind; otherwise, <see langword="false"/>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsKind(this in SyntaxTrivia value, in SyntaxKind kind) => value.RawKind == (int)kind;
 
+        /// <summary>
+        /// Determines whether the trivia is of the specified syntax kinds.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia to examine.
+        /// </param>
+        /// <param name="kinds">
+        /// The set of syntax kinds to check for.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the trivia is of the specified kinds; otherwise, <see langword="false"/>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsAnyKind(this in SyntaxTrivia value, ISet<SyntaxKind> kinds) => kinds.Contains(value.Kind());
 
+        /// <summary>
+        /// Determines whether the trivia is of the specified syntax kinds.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia to examine.
+        /// </param>
+        /// <param name="kinds">
+        /// The span of syntax kinds to check for.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the trivia is of the specified kinds; otherwise, <see langword="false"/>.
+        /// </returns>
         internal static bool IsAnyKind(this in SyntaxTrivia value, in ReadOnlySpan<SyntaxKind> kinds)
         {
             var valueKind = value.Kind();
@@ -113,78 +230,105 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        internal static IEnumerable<SyntaxToken> GetXmlTextTokens(this XmlElementSyntax value)
+        /// <summary>
+        /// Gets XML text tokens from an XML element.
+        /// </summary>
+        /// <param name="value">
+        /// The XML element to get tokens from.
+        /// </param>
+        /// <returns>
+        /// A collection of syntax tokens from the XML element.
+        /// </returns>
+        internal static IReadOnlyList<SyntaxToken> GetXmlTextTokens(this XmlElementSyntax value)
         {
             if (value is null)
             {
                 return Array.Empty<SyntaxToken>();
             }
 
-            return value.ChildNodes<XmlTextSyntax>().GetXmlTextTokens();
+            List<SyntaxToken> result = null;
+
+            CollectXmlTextTokens(value, ref result);
+
+            return (IReadOnlyList<SyntaxToken>)result ?? Array.Empty<SyntaxToken>();
         }
 
-        internal static IEnumerable<SyntaxToken> GetXmlTextTokens(this IEnumerable<XmlElementSyntax> value)
+        /// <summary>
+        /// Gets XML text tokens from an XML text syntax node.
+        /// </summary>
+        /// <param name="value">
+        /// The XML text syntax node to get tokens from.
+        /// </param>
+        /// <returns>
+        /// A collection of non-empty syntax tokens from the XML text.
+        /// </returns>
+        internal static IReadOnlyList<SyntaxToken> GetXmlTextTokens(this XmlTextSyntax value)
         {
             if (value is null)
             {
                 return Array.Empty<SyntaxToken>();
             }
 
-            return value.SelectMany(_ => _.GetXmlTextTokens());
+            List<SyntaxToken> result = null;
+
+            CollectSyntaxTokens(value, ref result);
+
+            return (IReadOnlyList<SyntaxToken>)result ?? Array.Empty<SyntaxToken>();
         }
 
-        internal static IEnumerable<SyntaxToken> GetXmlTextTokens(this XmlTextSyntax value)
-        {
-            if (value != null)
-            {
-                var textTokens = value.TextTokens;
-
-                // keep in local variable to avoid multiple requests (see Roslyn implementation)
-                var tokensCount = textTokens.Count;
-
-                if (tokensCount > 0)
-                {
-                    for (var index = 0; index < tokensCount; index++)
-                    {
-                        var token = textTokens[index];
-
-                        if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
-                        {
-                            var text = token.ValueText;
-
-                            if (text.Length <= Constants.MinimumCharactersThreshold && string.IsNullOrWhiteSpace(text))
-                            {
-                                // nothing to inspect as the text is too short and consists of whitespaces only
-                                continue;
-                            }
-
-                            yield return token;
-                        }
-                    }
-                }
-            }
-        }
-
-        internal static IEnumerable<SyntaxToken> GetXmlTextTokens(this IEnumerable<XmlTextSyntax> value)
-        {
-            if (value is null)
-            {
-                return Array.Empty<SyntaxToken>();
-            }
-
-            return value.SelectMany(_ => _.GetXmlTextTokens());
-        }
-
+        /// <summary>
+        /// Gets XML text tokens from a documentation comment trivia, excluding code blocks.
+        /// </summary>
+        /// <param name="value">
+        /// The documentation comment trivia to get tokens from.
+        /// </param>
+        /// <returns>
+        /// A collection of syntax tokens that contains syntax tokens from the documentation comment.
+        /// </returns>
         internal static IReadOnlyList<SyntaxToken> GetXmlTextTokens(this DocumentationCommentTriviaSyntax value)
         {
             return GetXmlTextTokens(value, node => node.IsCode() is false); // skip code
         }
 
+        /// <summary>
+        /// Gets XML text tokens from a documentation comment trivia using a custom filter.
+        /// </summary>
+        /// <param name="value">
+        /// The documentation comment trivia to get tokens from.
+        /// </param>
+        /// <param name="descendantNodesFilter">
+        /// A callback to filter which descendant nodes to include.
+        /// </param>
+        /// <returns>
+        /// A collection of syntax tokens that contains syntax tokens from the filtered documentation comment nodes.
+        /// </returns>
         internal static IReadOnlyList<SyntaxToken> GetXmlTextTokens(this DocumentationCommentTriviaSyntax value, Func<XmlElementSyntax, bool> descendantNodesFilter)
         {
-            return (IReadOnlyList<SyntaxToken>)value?.DescendantNodes(descendantNodesFilter).GetXmlTextTokens().ToList() ?? Array.Empty<SyntaxToken>();
+            if (value is null)
+            {
+                return Array.Empty<SyntaxToken>();
+            }
+
+            List<SyntaxToken> result = null;
+
+            CollectXmlTextTokens(value.DescendantNodes(descendantNodesFilter), ref result);
+
+            return (IReadOnlyList<SyntaxToken>)result ?? Array.Empty<SyntaxToken>();
         }
 
+        /// <summary>
+        /// Gets the next sibling trivia of the specified trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia to get the next siblings for.
+        /// </param>
+        /// <param name="count">
+        /// The maximum number of siblings to return.
+        /// The default is <see cref="int.MaxValue"/>.
+        /// </param>
+        /// <returns>
+        /// A collection of the next sibling trivia.
+        /// </returns>
         internal static IEnumerable<SyntaxTrivia> NextSiblings(this in SyntaxTrivia value, in int count = int.MaxValue)
         {
             if (count > 0)
@@ -211,6 +355,19 @@ namespace MiKoSolutions.Analyzers
             return Array.Empty<SyntaxTrivia>();
         }
 
+        /// <summary>
+        /// Gets the previous sibling trivia of the specified trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia to get the previous siblings for.
+        /// </param>
+        /// <param name="count">
+        /// The maximum number of siblings to return.
+        /// The default is <see cref="int.MaxValue"/>.
+        /// </param>
+        /// <returns>
+        /// A collection of the previous sibling trivia.
+        /// </returns>
         internal static IEnumerable<SyntaxTrivia> PreviousSiblings(this in SyntaxTrivia value, in int count = int.MaxValue)
         {
             if (count > 0)
@@ -237,13 +394,22 @@ namespace MiKoSolutions.Analyzers
             return Array.Empty<SyntaxTrivia>();
         }
 
-        internal static string ToTextOnlyString(this in SyntaxTrivia trivia)
+        /// <summary>
+        /// Converts a syntax trivia to a text-only string, removing comment markers and whitespace.
+        /// </summary>
+        /// <param name="source">
+        /// The trivia to convert to a text-only string.
+        /// </param>
+        /// <returns>
+        /// A string containing only the text content of the trivia, or the original trivia string if not a comment.
+        /// </returns>
+        internal static string ToTextOnlyString(this in SyntaxTrivia source)
         {
-            if (trivia.IsComment() && trivia.SyntaxTree is SyntaxTree tree)
+            if (source.IsComment() && source.SyntaxTree is SyntaxTree tree)
             {
                 var sourceText = tree.GetText();
 
-                var span = trivia.Span;
+                var span = source.Span;
                 var start = span.Start + 2; // the text '//' has 2 characters
                 var end = span.End;
 
@@ -265,7 +431,86 @@ namespace MiKoSolutions.Analyzers
                 return sourceText.ToString(TextSpan.FromBounds(start, end + 1));
             }
 
-            return trivia.ToString();
+            return source.ToString();
+        }
+
+        /// <summary>
+        /// Collects XML text tokens from a collection of XML elements.
+        /// </summary>
+        /// <param name="elements">
+        /// The collection of XML elements to get tokens from.
+        /// </param>
+        /// <param name="results">
+        /// The collection to fill with syntax tokens from all XML elements.
+        /// </param>
+        private static void CollectXmlTextTokens(IEnumerable<XmlElementSyntax> elements, ref List<SyntaxToken> results)
+        {
+            foreach (var element in elements)
+            {
+                CollectXmlTextTokens(element, ref results);
+            }
+        }
+
+        /// <summary>
+        /// Collects XML text tokens from an XML element.
+        /// </summary>
+        /// <param name="element">
+        /// The XML element to get tokens from.
+        /// </param>
+        /// <param name="results">
+        /// The collection to fill with syntax tokens from the XML element.
+        /// </param>
+        private static void CollectXmlTextTokens(XmlElementSyntax element, ref List<SyntaxToken> results)
+        {
+            foreach (var node in element.ChildNodes<XmlTextSyntax>())
+            {
+                CollectSyntaxTokens(node, ref results);
+            }
+        }
+
+        /// <summary>
+        /// Collects XML text tokens from an XML text.
+        /// </summary>
+        /// <param name="value">
+        /// The XML text to get tokens from.
+        /// </param>
+        /// <param name="results">
+        /// The collection to fill with syntax tokens from the XML text.
+        /// </param>
+        private static void CollectSyntaxTokens(XmlTextSyntax value, ref List<SyntaxToken> results)
+        {
+            var textTokens = value.TextTokens;
+
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var tokensCount = textTokens.Count;
+
+            if (tokensCount is 0)
+            {
+                return;
+            }
+
+            for (var index = 0; index < tokensCount; index++)
+            {
+                var token = textTokens[index];
+
+                if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
+                {
+                    var text = token.ValueText;
+
+                    if (text.Length <= Constants.MinimumCharactersThreshold && string.IsNullOrWhiteSpace(text))
+                    {
+                        // nothing to inspect as the text is too short and consists of whitespaces only
+                        continue;
+                    }
+
+                    if (results is null)
+                    {
+                        results = new List<SyntaxToken>();
+                    }
+
+                    results.Add(token);
+                }
+            }
         }
     }
 }

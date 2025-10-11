@@ -192,7 +192,7 @@ namespace MiKoSolutions.Analyzers
         public static StringBuilder ReplaceAllWithProbe(this StringBuilder value, in ReadOnlySpan<Pair> replacementPairs)
         {
             char[] text = null;
-            var textSpan = GetTextAsRentedArray(value, ref text, SharedPool);
+            var textSpan = GetTextAsRentedArray(ref value, ref text);
 
             for (int index = 0, count = replacementPairs.Length; index < count; index++)
             {
@@ -215,7 +215,7 @@ namespace MiKoSolutions.Analyzers
                 value.Replace(pair.Key, pair.Value, replaceStartIndex, value.Length - replaceStartIndex);
 
                 // re-assign text as we might have replaced the string, but use a different array
-                textSpan = GetTextAsRentedArray(value, ref text, SharedPool);
+                textSpan = GetTextAsRentedArray(ref value, ref text);
             }
 
             if (text != null)
@@ -229,7 +229,7 @@ namespace MiKoSolutions.Analyzers
         public static StringBuilder ReplaceAllWithProbe(this StringBuilder value, in ReadOnlySpan<string> texts, string replacement)
         {
             char[] text = null;
-            var textSpan = GetTextAsRentedArray(value, ref text, SharedPool);
+            var textSpan = GetTextAsRentedArray(ref value, ref text);
 
             for (int index = 0, length = texts.Length; index < length; index++)
             {
@@ -246,7 +246,7 @@ namespace MiKoSolutions.Analyzers
                 value.Replace(oldValue, replacement, replaceStartIndex, value.Length - replaceStartIndex);
 
                 // re-assign text as we might have replaced the string, but use a different array
-                textSpan = GetTextAsRentedArray(value, ref text, SharedPool);
+                textSpan = GetTextAsRentedArray(ref value, ref text);
             }
 
             if (text != null)
@@ -266,7 +266,7 @@ namespace MiKoSolutions.Analyzers
             }
 
             char[] text = null;
-            var textSpan = GetTextAsRentedArray(value, ref text, SharedPool);
+            var textSpan = GetTextAsRentedArray(ref value, ref text);
 
             var replaceStartIndex = QuickSubstringProbe(textSpan, oldValue.AsSpan());
 
@@ -555,14 +555,14 @@ namespace MiKoSolutions.Analyzers
 
             if (count < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(count));
+                throw new ArgumentOutOfRangeException(nameof(count), count, "Should be greater than zero.");
             }
 
             var length = value.Length;
 
             if (count > length)
             {
-                throw new ArgumentOutOfRangeException(nameof(count));
+                throw new ArgumentOutOfRangeException(nameof(count), count, $"Should be less than {length}.");
             }
 
             return value.Remove(length - count, count);
@@ -628,16 +628,23 @@ namespace MiKoSolutions.Analyzers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static StringBuilder WithoutParaTags(this StringBuilder value) => value.Without(Constants.ParaTags);
 
-        private static ReadOnlySpan<char> GetTextAsRentedArray(StringBuilder value, ref char[] text, ArrayPool<char> pool)
+        private static ReadOnlySpan<char> GetTextAsRentedArray(ref StringBuilder value, ref char[] text)
         {
-            if (text != null)
-            {
-                pool.Return(text);
-            }
-
             var size = value.Length;
 
-            text = pool.Rent(size);
+            if (text is null)
+            {
+                text = SharedPool.Rent(size);
+            }
+            else
+            {
+                if (text.Length < size)
+                {
+                    SharedPool.Return(text);
+
+                    text = SharedPool.Rent(size);
+                }
+            }
 
             value.CopyTo(0, text, 0, size);
 
@@ -664,16 +671,36 @@ namespace MiKoSolutions.Analyzers
             var startChar = other[0];
             var endChar = other[lastIndex];
 
-            // Performance-Note:
-            // - do not use a separate if condition for the delta being zero as that may not happen often and the conditional check therefore is too costly
-            for (var position = 0; position <= delta; position++)
+            if (lastIndex < QuickSubstringProbeLengthThreshold)
             {
                 // Performance-Note:
-                // - do not split or re-calculate last index position each time as this gets invoked millions of time and re-calculation is too costly in such situation
-                if (current[lastIndex + position] == endChar && current[position] == startChar)
+                // - do not use a separate if condition for the delta being zero as that may not happen often and the conditional check therefore is too costly
+                for (var position = 0; position <= delta; position++)
                 {
-                    // could be part in the replacement as characters match both at start and end
-                    return position;
+                    // Performance-Note:
+                    // - do not split or re-calculate last index position each time as this gets invoked millions of time and re-calculation is too costly in such situation
+                    if (current[position + lastIndex] == endChar && current[position /* + 0 */] == startChar)
+                    {
+                        // could be part in the replacement as characters match both at start and end
+                        return position;
+                    }
+                }
+            }
+            else
+            {
+                var middleChar = other[QuickSubstringProbeLengthThreshold];
+
+                // Performance-Note:
+                // - do not use a separate if condition for the delta being zero as that may not happen often and the conditional check therefore is too costly
+                for (var position = 0; position <= delta; position++)
+                {
+                    // Performance-Note:
+                    // - do not split or re-calculate last index position each time as this gets invoked millions of time and re-calculation is too costly in such situation
+                    if (current[position + lastIndex] == endChar && current[position /* + 0 */] == startChar && current[position + QuickSubstringProbeLengthThreshold] == middleChar)
+                    {
+                        // could be part in the replacement as characters match both at start and end
+                        return position;
+                    }
                 }
             }
 
