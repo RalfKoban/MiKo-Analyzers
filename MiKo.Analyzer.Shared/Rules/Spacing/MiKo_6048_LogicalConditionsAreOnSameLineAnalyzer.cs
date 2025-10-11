@@ -97,7 +97,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
 
             // they span different lines
-            return IsOnSingleLine(leftCondition) && IsOnSingleLine(rightCondition);
+            return false;
         }
 
         private static bool IsOnSingleLine(ParenthesizedExpressionSyntax parenthesized)
@@ -144,7 +144,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
 
             // they span different lines
-            return IsOnSingleLine(leftCondition) && IsOnSingleLine(rightCondition);
+            return false;
         }
 
         private static bool ShallAnalyzeNode(ExpressionSyntax syntax)

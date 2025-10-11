@@ -177,13 +177,13 @@ namespace MiKoSolutions.Analyzers
                 case CasePatternSwitchLabelSyntax patternLabel: return PlacedOnSameLine(patternLabel) as T;
                 case CaseSwitchLabelSyntax label: return PlacedOnSameLine(label) as T;
                 case ConditionalExpressionSyntax conditional: return PlacedOnSameLine(conditional) as T;
-                case ConstantPatternSyntax constantPattern: return PlacedOnSameLine(constantPattern) as T;
-                case DeclarationPatternSyntax declaration: return PlacedOnSameLine(declaration) as T;
+                case IfStatementSyntax ifStatement: return PlacedOnSameLine(ifStatement) as T;
                 case InvocationExpressionSyntax invocation: return PlacedOnSameLine(invocation) as T;
                 case IsPatternExpressionSyntax pattern: return PlacedOnSameLine(pattern) as T;
                 case MemberAccessExpressionSyntax maes: return PlacedOnSameLine(maes) as T;
                 case NameSyntax name: return PlacedOnSameLine(name) as T;
                 case ObjectCreationExpressionSyntax creation: return PlacedOnSameLine(creation) as T;
+                case PatternSyntax pattern: return PlacedOnSameLine(pattern) as T;
                 case SingleVariableDesignationSyntax singleVariable: return PlacedOnSameLine(singleVariable) as T;
                 case SwitchExpressionArmSyntax arm: return PlacedOnSameLine(arm) as T;
                 case ThrowExpressionSyntax throwExpression: return PlacedOnSameLine(throwExpression) as T;
@@ -235,6 +235,11 @@ namespace MiKoSolutions.Analyzers
                                                                                                                .WithType(value.Type.WithoutTrailingTrivia())
                                                                                                                .WithDesignation(PlacedOnSameLine(value.Designation));
 
+        internal static IfStatementSyntax PlacedOnSameLine(this IfStatementSyntax value) => value.WithIfKeyword(value.IfKeyword.WithTrailingSpace())
+                                                                                                 .WithOpenParenToken(value.OpenParenToken.WithoutTrailingTrivia())
+                                                                                                 .WithCondition(value.Condition.PlacedOnSameLine())
+                                                                                                 .WithCloseParenToken(value.CloseParenToken.WithoutLeadingTrivia());
+
         internal static InvocationExpressionSyntax PlacedOnSameLine(this InvocationExpressionSyntax value) => value.WithoutTrivia()
                                                                                                                    .WithExpression(PlacedOnSameLine(value.Expression))
                                                                                                                    .WithArgumentList(PlacedOnSameLine(value.ArgumentList));
@@ -279,6 +284,30 @@ namespace MiKoSolutions.Analyzers
                                                                                                                            .WithArgumentList(PlacedOnSameLine(value.ArgumentList))
                                                                                                                            .WithInitializer(PlacedOnSameLine(value.Initializer));
 
+        internal static PatternSyntax PlacedOnSameLine(this PatternSyntax value)
+        {
+            switch (value)
+            {
+                case ConstantPatternSyntax constantPattern: return PlacedOnSameLine(constantPattern);
+                case DeclarationPatternSyntax declaration: return PlacedOnSameLine(declaration);
+                case UnaryPatternSyntax unaryPattern: return PlacedOnSameLine(unaryPattern);
+
+                /*
+                   -> BinaryPatternSyntax
+                   -> DiscardPatternSyntax
+                   -> ListPatternSyntax
+                   -> ParenthesizedPatternSyntax
+                   -> RecursivePatternSyntax
+                   -> RelationalPatternSyntax
+                   -> SlicePatternSyntax
+                   -> TypePatternSyntax
+                   -> VarPatternSyntax
+                 */
+                default:
+                    return value.WithoutTrivia();
+            }
+        }
+
         internal static SingleVariableDesignationSyntax PlacedOnSameLine(this SingleVariableDesignationSyntax value) => value.WithoutTrivia()
                                                                                                                              .WithIdentifier(value.Identifier.WithoutTrivia());
 
@@ -297,9 +326,13 @@ namespace MiKoSolutions.Analyzers
                                                                                                            .WithGreaterThanToken(value.GreaterThanToken.WithoutTrivia())
                                                                                                            .WithLessThanToken(value.LessThanToken.WithoutTrivia());
 
+        internal static UnaryPatternSyntax PlacedOnSameLine(this UnaryPatternSyntax value) => value.WithoutTrivia()
+                                                                                                   .WithOperatorToken(value.OperatorToken.WithLeadingSpace().WithoutTrailingTrivia())
+                                                                                                   .WithPattern(PlacedOnSameLine(value.Pattern));
+
         internal static WhenClauseSyntax PlacedOnSameLine(this WhenClauseSyntax value) => value?.WithoutTrivia()
-                                                                                                .WithWhenKeyword(value.WhenKeyword.WithLeadingSpace().WithoutTrailingTrivia())
-                                                                                                .WithCondition(PlacedOnSameLine(value.Condition));
+                                                                                               .WithWhenKeyword(value.WhenKeyword.WithLeadingSpace().WithoutTrailingTrivia())
+                                                                                               .WithCondition(PlacedOnSameLine(value.Condition));
 
         /// <summary>
         /// Creates a new node from this node with additional leading trivia.

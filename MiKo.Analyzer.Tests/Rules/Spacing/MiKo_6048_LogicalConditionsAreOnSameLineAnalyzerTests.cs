@@ -508,7 +508,6 @@ public class TestMe
         if (SomeProperty != null && SomeProperty.Equals(o))
         { }
     }
-
 }
 ";
 
@@ -547,7 +546,6 @@ public class TestMe
         if (SomeProperty != null && SomeProperty.Equals(o))
         { }
     }
-
 }
 ";
 
@@ -587,7 +585,6 @@ public class TestMe
         if (SomeProperty != null && SomeProperty.Equals(o))
         { }
     }
-
 }
 ";
 
@@ -626,7 +623,6 @@ public class TestMe
         if (SomeProperty != null && SomeProperty.Equals(o))
         { }
     }
-
 }
 ";
 
