@@ -6316,6 +6316,18 @@ This style avoids dangling operators, aligns with common C# style guides and too
   <data name="MiKo_6067_Title" xml:space="preserve">
     <value>Place ternary operators on same lines as their respective expressions</value>
   </data>
+  <data name="MiKo_6068_CodeFixTitle" xml:space="preserve">
+    <value>Place property pattern on single line</value>
+  </data>
+  <data name="MiKo_6068_Description" xml:space="preserve">
+    <value>In C#, write simple property patterns on one line to keep your code clean and easy to read. This avoids extra indentation and makes it clear what you're checking.</value>
+  </data>
+  <data name="MiKo_6068_MessageFormat" xml:space="preserve">
+    <value>Place property pattern on single line</value>
+  </data>
+  <data name="MiKo_6068_Title" xml:space="preserve">
+    <value>Place property patterns inside 'if' conditions on same line</value>
+  </data>
   <data name="MiKo_6070_CodeFixTitle" xml:space="preserve">
     <value>Surround with blank lines</value>
   </data>

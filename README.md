@@ -13,7 +13,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/18917.svg)](https://scan.coverity.com/projects/ralfkoban-miko-analyzers)
 
 ## Available Rules
-The following tables lists all the 528 rules that are currently provided by the analyzer.
+The following tables lists all the 529 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -568,5 +568,6 @@ The following tables lists all the 528 rules that are currently provided by the 
 |MiKo_6065|Indent rather than outdent consecutive invocations spanning multiple lines|&#x2713;|&#x2713;|
 |MiKo_6066|Indent rather than outdent collection expression elements|&#x2713;|&#x2713;|
 |MiKo_6067|Place ternary operators on same lines as their respective expressions|&#x2713;|&#x2713;|
+|MiKo_6068|Place property patterns inside 'if' conditions on same line|&#x2713;|&#x2713;|
 |MiKo_6070|Surround Console statements with blank lines|&#x2713;|&#x2713;|
 |MiKo_6071|Surround local using statements with blank lines|&#x2713;|&#x2713;|

@@ -150,7 +150,7 @@ namespace TestHelper
 
                 for (var i = 0; i < attempts; ++i)
                 {
-                    var actions = new List<CodeAction>();
+                    var actions = new List<CodeAction>(1);
                     var context = new CodeFixContext(document, analyzerDiagnostics[0], (a, _) => actions.Add(a), CancellationToken.None);
                     codeFixProvider.RegisterCodeFixesAsync(context).Wait();
 
@@ -182,7 +182,7 @@ namespace TestHelper
 {string.Join("\r\n", newCompilerDiagnostics.Select(d => d.ToString()))}
 
 New document:
-{document.GetSyntaxRootAsync().Result.ToFullString()}
+{document.GetSyntaxRootAsync().Result!.ToFullString()}
 ");
                     }
 
@@ -199,13 +199,14 @@ New document:
                 // after applying all of the code fixes, compare the resulting string to the inputted one
                 var actual = GetStringFromDocument(document);
 
-                var message = @"Fix created unexpected document.
+                Assert.That(
+                            actual,
+                            Is.EqualTo(newSource),
+                            () => @"Fix created unexpected document.
 New document:
 ################################################
 " + actual + @"
-################################################";
-
-                Assert.That(actual, Is.EqualTo(newSource), message);
+################################################");
             }
         }
     }
