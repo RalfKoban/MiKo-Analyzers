@@ -101,6 +101,60 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_recursive_pattern_in_if_condition_that_spans_multiple_line()
+        {
+            const string OriginalCode = """
+                                        using System;
+                                        using System.Xml;
+
+                                        public class TestMe
+                                        {
+                                            public static string GetPropertyName<T, TProperty>(Expression<Func<T, TProperty>> propertyLambda)
+                                            {
+                                        
+                                                if (propertyLambda.Body is not MemberExpression
+                                                    {
+                                                        Member: PropertyInfo
+                                                        {
+                                                            ReflectedType: { } reflectedType,
+                                                            Name: { } name
+                                                        }
+                                                    })
+                                                {
+                                                    throw new ArgumentException($"Expression '{propertyLambda}' does not refer to a property.");
+                                                }
+                                            }
+                                        }
+                                        """;
+
+            const string FixedCode = """
+                                        using System;
+                                        using System.Xml;
+
+                                        public class TestMe
+                                        {
+                                            public static string GetPropertyName<T, TProperty>(Expression<Func<T, TProperty>> propertyLambda)
+                                            {
+
+                                                if (propertyLambda.Body is not MemberExpression
+                                                    {
+                                                        Member: PropertyInfo
+                                                        {
+                                                            ReflectedType: { } reflectedType,
+                                                            Name: { } name
+                                                        }
+                                                    })
+                                                {
+                                                    throw new ArgumentException($"Expression '{propertyLambda}' does not refer to a property.");
+                                                }
+                                            }
+                                        }
+                                        """;
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6068_PropertyPatternInConditionIsOnSameLineAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6068_PropertyPatternInConditionIsOnSameLineAnalyzer();
