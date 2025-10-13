@@ -559,6 +559,10 @@ public class TestMe
 
         [TestCase("Some integers.", "A collection of some integers.")]
         [TestCase("The mapping information.", "A collection of the mapping information.")]
+        [TestCase("Gets the integers.", "A collection of the integers.")]
+        [TestCase("Get the integers.", "A collection of the integers.")]
+        [TestCase("The List with the integers.", "A collection of the integers.")]
+        [TestCase("A List with the integers.", "A collection of the integers.")]
         public void Code_gets_fixed_for_generic_collection_(string originalPhrase, string fixedPhrase)
         {
             const string Template = @"
@@ -620,14 +624,16 @@ public class TestMe
             VerifyCSharpFix(originalCode, fixedCode);
         }
 
-        [Test]
-        public void Code_gets_fixed_for_generic_collection_with_non_primitive_type()
+        [TestCase("Some data", "A collection of my items that contains some data")]
+        [TestCase("Gets the information.", "A collection of my items that contains the information.")]
+        [TestCase("Get the information.", "A collection of my items that contains the information.")]
+        public void Code_gets_fixed_for_generic_collection_with_non_primitive_type_(string originalPhrase, string fixedPhrase)
         {
             const string Template = @"
 using System;
 using System.Collections.Generic;
 
-public record GroupedRow
+public record MyItem
 {
 }
 
@@ -639,11 +645,11 @@ public class TestMe
     /// <returns>
     /// ###.
     /// </returns>
-    public ICollection<GroupedRow> DoSomething { get; set; }
+    public ICollection<MyItem> DoSomething { get; set; }
 }
 ";
 
-            VerifyCSharpFix(Template.Replace("###", "Some data"), Template.Replace("###", "A collection of grouped rows that contains some data"));
+            VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
         }
 
         [Test]
