@@ -314,6 +314,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                  {
                                      new Pair("#1#", "trivia"),
                                      new Pair("the modified set", "elements from the original set"),
+                                     new Pair("the the", "the"),
+                                     new Pair("a the", "the"),
+                                     new Pair("an the", "the"),
+                                     new Pair(" of gets ", " of "),
+                                     new Pair(" of get ", " of "),
                                  };
 
                 CleanupMapKeys = CleanupMap.ToArray(_ => _.Key);

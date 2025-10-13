@@ -559,6 +559,10 @@ public class TestMe
 
         [TestCase("Some integers.", "A collection of some integers.")]
         [TestCase("The mapping information.", "A collection of the mapping information.")]
+        [TestCase("Gets the integers.", "A collection of the integers.")]
+        [TestCase("Get the integers.", "A collection of the integers.")]
+        [TestCase("The List with the integers.", "A collection of the integers.")]
+        [TestCase("A List with the integers.", "A collection of the integers.")]
         public void Code_gets_fixed_for_generic_collection_(string originalPhrase, string fixedPhrase)
         {
             const string Template = @"
