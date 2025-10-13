@@ -5427,6 +5427,78 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;toCopy&apos; into &apos;original&apos;.
+        /// </summary>
+        internal static string MiKo_1520_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1520_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;original&apos; as a variable name when providing an object to be copied, because it clearly indicates that it&apos;s the source of the data. Avoid names like &apos;toCopy&apos;, which can be misleading and suggest it&apos;s the target instead. Clear and conventional naming improves readability and reduces confusion..
+        /// </summary>
+        internal static string MiKo_1520_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1520_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1520_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1520_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not prefix or suffix local variables with &apos;toCopy&apos;.
+        /// </summary>
+        internal static string MiKo_1520_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1520_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;toCopy&apos; into &apos;original&apos;.
+        /// </summary>
+        internal static string MiKo_1521_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1521_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;original&apos; as a parameter name when passing an object to be copied, because it clearly indicates that it&apos;s the source of the data. Avoid names like &apos;toCopy&apos;, which can be misleading and suggest it&apos;s the target instead. Clear and conventional naming improves readability and reduces confusion..
+        /// </summary>
+        internal static string MiKo_1521_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1521_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;{0}&apos; to &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1521_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1521_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not prefix or suffix parameters with &apos;toCopy&apos;.
+        /// </summary>
+        internal static string MiKo_1521_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1521_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fix malformed XML.
         /// </summary>
         internal static string MiKo_2000_CodeFixTitle {
@@ -7802,7 +7874,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Comment is obvious and provides no value.
+        ///   Looks up a localized string similar to Remove obvious comment.
         /// </summary>
         internal static string MiKo_2079_MessageFormat {
             get {
@@ -11097,7 +11169,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;{1}&apos; instead.
+        ///   Looks up a localized string similar to Change to &apos;{1}&apos;.
         /// </summary>
         internal static string MiKo_3032_MessageFormat {
             get {
@@ -18056,7 +18128,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place ternary operator and colon on the same lines as their respective expressions.
+        ///   Looks up a localized string similar to Place ? and : on the same lines as their expressions.
         /// </summary>
         internal static string MiKo_6067_MessageFormat {
             get {
