@@ -1961,6 +1961,30 @@ This improves code clarity, avoids ambiguity, and helps developers immediately u
   <data name="MiKo_1519_Title" xml:space="preserve">
     <value>Do not prefix or suffix parameters with 'reference'</value>
   </data>
+  <data name="MiKo_1520_CodeFixTitle" xml:space="preserve">
+    <value>Rename 'toCopy' into 'original'</value>
+  </data>
+  <data name="MiKo_1520_Description" xml:space="preserve">
+    <value>Use 'original' as a variable name when providing an object to be copied, because it clearly indicates that it's the source of the data. Avoid names like 'toCopy', which can be misleading and suggest it's the target instead. Clear and conventional naming improves readability and reduces confusion.</value>
+  </data>
+  <data name="MiKo_1520_MessageFormat" xml:space="preserve">
+    <value>Rename '{0}' to '{1}'</value>
+  </data>
+  <data name="MiKo_1520_Title" xml:space="preserve">
+    <value>Do not prefix or suffix local variables with 'toCopy'</value>
+  </data>
+  <data name="MiKo_1521_CodeFixTitle" xml:space="preserve">
+    <value>Rename 'toCopy' into 'original'</value>
+  </data>
+  <data name="MiKo_1521_Description" xml:space="preserve">
+    <value>Use 'original' as a parameter name when passing an object to be copied, because it clearly indicates that it's the source of the data. Avoid names like 'toCopy', which can be misleading and suggest it's the target instead. Clear and conventional naming improves readability and reduces confusion.</value>
+  </data>
+  <data name="MiKo_1521_MessageFormat" xml:space="preserve">
+    <value>Rename '{0}' to '{1}'</value>
+  </data>
+  <data name="MiKo_1521_Title" xml:space="preserve">
+    <value>Do not prefix or suffix parameters with 'toCopy'</value>
+  </data>
   <data name="MiKo_2000_CodeFixTitle" xml:space="preserve">
     <value>Fix malformed XML</value>
   </data>
