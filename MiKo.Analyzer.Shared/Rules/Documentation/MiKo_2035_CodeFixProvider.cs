@@ -304,9 +304,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                              };
 
                 PreparationMap = new[]
-                                 {
-                                     new Pair("trivia array", "#1#"),
-                                 };
+                                     {
+                                         new Pair("trivia array", "#1#"),
+                                     };
 
                 PreparationMapKeys = PreparationMap.ToArray(_ => _.Key);
 
@@ -319,6 +319,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                      new Pair("an the", "the"),
                                      new Pair(" of gets ", " of "),
                                      new Pair(" of get ", " of "),
+                                     new Pair(" contains gets ", " contains "),
+                                     new Pair(" contains get ", " contains "),
                                  };
 
                 CleanupMapKeys = CleanupMap.ToArray(_ => _.Key);
