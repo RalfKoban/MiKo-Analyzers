@@ -3474,9 +3474,22 @@ namespace MiKoSolutions.Analyzers
             {
                 var word = words[index];
 
-                if (text.FirstWord().Equals(word, StringComparison.OrdinalIgnoreCase))
+                if (word.Contains(' '))
                 {
-                    text = text.WithoutFirstWord().TrimStart();
+                    foreach (var partialWord in word.Split(' '))
+                    {
+                        if (text.FirstWord().Equals(partialWord, StringComparison.OrdinalIgnoreCase))
+                        {
+                            text = text.WithoutFirstWord().TrimStart();
+                        }
+                    }
+                }
+                else
+                {
+                    if (text.FirstWord().Equals(word, StringComparison.OrdinalIgnoreCase))
+                    {
+                        text = text.WithoutFirstWord().TrimStart();
+                    }
                 }
             }
 

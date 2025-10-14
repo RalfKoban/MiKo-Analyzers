@@ -3,6 +3,7 @@ using System.Buffers;
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -41,14 +42,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] Conditionals = { "if", "when", "in case", "whether or not", "whether" };
         private static readonly string[] ElseConditionals = { "else", "otherwise" };
 
+        private static readonly string[] ShouldBeTextStartIndicators = { "Determines", "Determine", "Whether or not", "Whether", "If", "In case" };
+
+        private static readonly Regex ShouldBeRegex = new Regex(@"\b(should|must|can|may|could|would|might)\s+be\s+\w+\b", RegexOptions.Compiled, 100.Milliseconds());
+
         private static readonly IComparer<string> ArticleStartComparer = new StringStartComparer(
-                                                                                             StartWithArticleA,
-                                                                                             StartWithArticleAn,
-                                                                                             StartWithArticleThe,
-                                                                                             StartWithArticleLowerCaseA,
-                                                                                             StartWithArticleLowerCaseAn,
-                                                                                             StartWithArticleLowerCaseThe,
-                                                                                             StartWithParenthesis);
+                                                                                                 StartWithArticleA,
+                                                                                                 StartWithArticleAn,
+                                                                                                 StartWithArticleThe,
+                                                                                                 StartWithArticleLowerCaseA,
+                                                                                                 StartWithArticleLowerCaseAn,
+                                                                                                 StartWithArticleLowerCaseThe,
+                                                                                                 StartWithParenthesis);
 
         private static readonly Pair OtherwisePair = new Pair(". Otherwise", "; otherwise");
 
@@ -132,11 +137,28 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 case 1 when contents[0] is XmlTextSyntax t:
                 {
-                    var text = t.GetTextTrimmed().AsSpan();
+                    var textTrimmed = t.GetTextTrimmed();
+                    var text = textTrimmed.AsSpan();
 
                     if (text.IsEmpty)
                     {
                         return FixEmptyComment(comment);
+                    }
+
+                    if (textTrimmed.StartsWithAny(ShouldBeTextStartIndicators, StringComparison.OrdinalIgnoreCase))
+                    {
+                        var match = ShouldBeRegex.Match(textTrimmed);
+
+                        if (match.Success)
+                        {
+                            var found = match.Value;
+
+                            var newTextStart = ReplacementTo + Verbalizer.MakeInfiniteVerb(found.ThirdWord()) + " ";
+
+                            var updatedText = string.Concat(newTextStart, text.WithoutFirstWords(ShouldBeTextStartIndicators).ToString()).Without(" " + found);
+
+                            return FixTextOnlyComment(comment, t, updatedText.AsSpan(), ReplacementTo, FindMatchingReplacementMapKeys(ReadOnlySpan<char>.Empty));
+                        }
                     }
 
                     // determine whether we have a comment like:

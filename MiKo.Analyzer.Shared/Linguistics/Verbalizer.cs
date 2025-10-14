@@ -23,7 +23,13 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly ConcurrentDictionary<string, string> GerundVerbs = new ConcurrentDictionary<string, string>();
 
-        private static readonly ConcurrentDictionary<string, string> InfiniteVerbs = new ConcurrentDictionary<string, string>();
+        private static readonly ConcurrentDictionary<string, string> InfiniteVerbs = new ConcurrentDictionary<string, string>(new[]
+                                                                                                                                  {
+                                                                                                                                      new KeyValuePair<string, string>("Done", "Do"),
+                                                                                                                                      new KeyValuePair<string, string>("done", "do"),
+                                                                                                                                      new KeyValuePair<string, string>("Frozen", "Freeze"),
+                                                                                                                                      new KeyValuePair<string, string>("frozen", "freeze"),
+                                                                                                                                  });
 
         private static readonly ConcurrentDictionary<string, string> ThirdPersonSingularVerbs = new ConcurrentDictionary<string, string>(new[]
                                                                                                                                              {
@@ -395,6 +401,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 if (word.EndsWith('s'))
                 {
                     if (word.Equals("is", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return word[0].IsUpperCaseLetter() ? "Be" : "be";
+                    }
+
+                    if (word.Equals("was", StringComparison.OrdinalIgnoreCase))
                     {
                         return word[0].IsUpperCaseLetter() ? "Be" : "be";
                     }

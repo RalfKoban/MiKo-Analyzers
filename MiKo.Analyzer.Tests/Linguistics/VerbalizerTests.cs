@@ -262,6 +262,12 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase(" maintain something whatever it takes", ExpectedResult = " maintain something whatever it takes")]
         [TestCase("   Maintains something whatever it takes", ExpectedResult = "Maintain something whatever it takes")]
         [TestCase("   maintains something whatever it takes", ExpectedResult = "maintain something whatever it takes")]
+        [TestCase("Was something", ExpectedResult = "Be something")]
+        [TestCase("was something", ExpectedResult = "be something")]
+        [TestCase("Are something", ExpectedResult = "Be something")]
+        [TestCase("are something", ExpectedResult = "be something")]
+        [TestCase("Done something", ExpectedResult = "Do something")]
+        [TestCase("done something", ExpectedResult = "do something")]
         public static string MakeFirstWordInfiniteVerb_finds_proper_infinite_verb_(string name) => Verbalizer.MakeFirstWordInfiniteVerb(name);
 
         [TestCase("access", ExpectedResult = false)]
