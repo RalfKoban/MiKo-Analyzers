@@ -69,6 +69,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("idx", ExpectedResult = "index")]
         [TestCase("init", ExpectedResult = "initialize")]
         [TestCase("itf", ExpectedResult = "interface")]
+        [TestCase("kvp", ExpectedResult = "pair")]
         [TestCase("lang", ExpectedResult = "language")]
         [TestCase("lbl", ExpectedResult = "label")]
         [TestCase("len", ExpectedResult = "length")]
