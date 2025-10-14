@@ -25,54 +25,66 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly ConcurrentDictionary<string, string> InfiniteVerbs = new ConcurrentDictionary<string, string>(new[]
                                                                                                                                   {
-                                                                                                                                      new KeyValuePair<string, string>("Done", "Do"),
-                                                                                                                                      new KeyValuePair<string, string>("done", "do"),
-                                                                                                                                      new KeyValuePair<string, string>("Frozen", "Freeze"),
-                                                                                                                                      new KeyValuePair<string, string>("frozen", "freeze"),
-                                                                                                                                      new KeyValuePair<string, string>("Broken", "Break"),
                                                                                                                                       new KeyValuePair<string, string>("broken", "break"),
-                                                                                                                                      new KeyValuePair<string, string>("Chosen", "Choose"),
+                                                                                                                                      new KeyValuePair<string, string>("Broken", "Break"),
                                                                                                                                       new KeyValuePair<string, string>("chosen", "choose"),
-                                                                                                                                      new KeyValuePair<string, string>("Drove", "Drive"),
-                                                                                                                                      new KeyValuePair<string, string>("drove", "drive"),
-                                                                                                                                      new KeyValuePair<string, string>("Driven", "Drive"),
+                                                                                                                                      new KeyValuePair<string, string>("Chosen", "Choose"),
+                                                                                                                                      new KeyValuePair<string, string>("done", "do"),
+                                                                                                                                      new KeyValuePair<string, string>("Done", "Do"),
                                                                                                                                       new KeyValuePair<string, string>("driven", "drive"),
-                                                                                                                                      new KeyValuePair<string, string>("Hid", "Hide"),
+                                                                                                                                      new KeyValuePair<string, string>("Driven", "Drive"),
+                                                                                                                                      new KeyValuePair<string, string>("drove", "drive"),
+                                                                                                                                      new KeyValuePair<string, string>("Drove", "Drive"),
+                                                                                                                                      new KeyValuePair<string, string>("felt", "feel"),
+                                                                                                                                      new KeyValuePair<string, string>("Felt", "Feel"),
+                                                                                                                                      new KeyValuePair<string, string>("frozen", "freeze"),
+                                                                                                                                      new KeyValuePair<string, string>("Frozen", "Freeze"),
                                                                                                                                       new KeyValuePair<string, string>("hid", "hide"),
-                                                                                                                                      new KeyValuePair<string, string>("Hidden", "Hide"),
+                                                                                                                                      new KeyValuePair<string, string>("Hid", "Hide"),
                                                                                                                                       new KeyValuePair<string, string>("hidden", "hide"),
-                                                                                                                                      new KeyValuePair<string, string>("Woken", "Wake"),
-                                                                                                                                      new KeyValuePair<string, string>("woken", "wake"),
-                                                                                                                                      new KeyValuePair<string, string>("Woke", "Wake"),
+                                                                                                                                      new KeyValuePair<string, string>("Hidden", "Hide"),
                                                                                                                                       new KeyValuePair<string, string>("woke", "wake"),
-                                                                                                                                      new KeyValuePair<string, string>("Written", "Write"),
+                                                                                                                                      new KeyValuePair<string, string>("Woke", "Wake"),
+                                                                                                                                      new KeyValuePair<string, string>("bent", "bend"),
+                                                                                                                                      new KeyValuePair<string, string>("Bent", "Bend"),
+                                                                                                                                      new KeyValuePair<string, string>("lent", "lend"),
+                                                                                                                                      new KeyValuePair<string, string>("Lent", "Lend"),
+                                                                                                                                      new KeyValuePair<string, string>("sent", "send"),
+                                                                                                                                      new KeyValuePair<string, string>("Sent", "Send"),
+                                                                                                                                      new KeyValuePair<string, string>("spent", "spend"),
+                                                                                                                                      new KeyValuePair<string, string>("Spent", "Spend"),
+                                                                                                                                      new KeyValuePair<string, string>("spoken", "speak"),
+                                                                                                                                      new KeyValuePair<string, string>("Spoken", "Speak"),
+                                                                                                                                      new KeyValuePair<string, string>("woken", "wake"),
+                                                                                                                                      new KeyValuePair<string, string>("Woken", "Wake"),
                                                                                                                                       new KeyValuePair<string, string>("written", "write"),
-                                                                                                                                      new KeyValuePair<string, string>("Wrote", "Write"),
+                                                                                                                                      new KeyValuePair<string, string>("Written", "Write"),
                                                                                                                                       new KeyValuePair<string, string>("wrote", "write"),
+                                                                                                                                      new KeyValuePair<string, string>("Wrote", "Write"),
                                                                                                                                   });
 
         private static readonly ConcurrentDictionary<string, string> ThirdPersonSingularVerbs = new ConcurrentDictionary<string, string>(new[]
                                                                                                                                              {
-                                                                                                                                                 new KeyValuePair<string, string>("Are", "Is"),
                                                                                                                                                  new KeyValuePair<string, string>("are", "is"),
-                                                                                                                                                 new KeyValuePair<string, string>("got", "gets"),
-                                                                                                                                                 new KeyValuePair<string, string>("Got", "Gets"),
-                                                                                                                                                 new KeyValuePair<string, string>("Had", "Has"),
-                                                                                                                                                 new KeyValuePair<string, string>("had", "has"),
-                                                                                                                                                 new KeyValuePair<string, string>("Has", "Has"),
-                                                                                                                                                 new KeyValuePair<string, string>("has", "has"),
-                                                                                                                                                 new KeyValuePair<string, string>("Is", "Is"),
-                                                                                                                                                 new KeyValuePair<string, string>("is", "is"),
+                                                                                                                                                 new KeyValuePair<string, string>("Are", "Is"),
                                                                                                                                                  new KeyValuePair<string, string>("frozen", "freezes"),
                                                                                                                                                  new KeyValuePair<string, string>("Frozen", "Freezes"),
-                                                                                                                                                 new KeyValuePair<string, string>("Were", "Is"),
-                                                                                                                                                 new KeyValuePair<string, string>("were", "is"),
-                                                                                                                                                 new KeyValuePair<string, string>("Was", "Is"),
-                                                                                                                                                 new KeyValuePair<string, string>("was", "is"),
-                                                                                                                                                 new KeyValuePair<string, string>("Maintenance", "Maintains"),
-                                                                                                                                                 new KeyValuePair<string, string>("maintenance", "maintains"),
-                                                                                                                                                 new KeyValuePair<string, string>("Implementation", "Implements"),
+                                                                                                                                                 new KeyValuePair<string, string>("got", "gets"),
+                                                                                                                                                 new KeyValuePair<string, string>("Got", "Gets"),
+                                                                                                                                                 new KeyValuePair<string, string>("had", "has"),
+                                                                                                                                                 new KeyValuePair<string, string>("Had", "Has"),
+                                                                                                                                                 new KeyValuePair<string, string>("has", "has"),
+                                                                                                                                                 new KeyValuePair<string, string>("Has", "Has"),
                                                                                                                                                  new KeyValuePair<string, string>("implementation", "implements"),
+                                                                                                                                                 new KeyValuePair<string, string>("Implementation", "Implements"),
+                                                                                                                                                 new KeyValuePair<string, string>("is", "is"),
+                                                                                                                                                 new KeyValuePair<string, string>("Is", "Is"),
+                                                                                                                                                 new KeyValuePair<string, string>("maintenance", "maintains"),
+                                                                                                                                                 new KeyValuePair<string, string>("Maintenance", "Maintains"),
+                                                                                                                                                 new KeyValuePair<string, string>("was", "is"),
+                                                                                                                                                 new KeyValuePair<string, string>("Was", "Is"),
+                                                                                                                                                 new KeyValuePair<string, string>("were", "is"),
+                                                                                                                                                 new KeyValuePair<string, string>("Were", "Is"),
                                                                                                                                              });
 
         private static readonly string[] ThirdPersonalSingularVerbExceptions =
@@ -442,10 +454,78 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
                     if (word.EndsWith("oes", StringComparison.Ordinal) || word.EndsWith("shes", StringComparison.Ordinal))
                     {
-                        return word.WithoutSuffix("es");
+                        return word.Substring(0, word.Length - 2);
                     }
 
-                    return word.WithoutSuffix("s");
+                    return word.Substring(0, word.Length - 1);
+                }
+
+                if (word.EndsWith('t'))
+                {
+                    if (word.EndsWith("et", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return word;
+                    }
+
+                    if (word.EndsWith("nt", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (word.EndsWith("ant", StringComparison.OrdinalIgnoreCase))
+                        {
+                            return word.Substring(0, word.Length - 1);
+                        }
+
+                        if (word.EndsWith("rnt", StringComparison.OrdinalIgnoreCase))
+                        {
+                            return word.Substring(0, word.Length - 1);
+                        }
+
+                        return word;
+                    }
+
+                    if (word.EndsWith("pt", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (word.EndsWith("ept", StringComparison.OrdinalIgnoreCase))
+                        {
+                            if (word.EndsWith("cept", StringComparison.OrdinalIgnoreCase))
+                            {
+                                return word;
+                            }
+
+                            return word.AsSpan(0, word.Length - 2).ConcatenatedWith("ep");
+                        }
+
+                        if (word.EndsWith("eapt", StringComparison.OrdinalIgnoreCase))
+                        {
+                            return word.Substring(0, word.Length - 1);
+                        }
+
+                        return word;
+                    }
+
+                    if (word.EndsWith("lt", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (word.EndsWith("elt", StringComparison.OrdinalIgnoreCase))
+                        {
+                            return word.AsSpan(0, word.Length - 1).ConcatenatedWith('l');
+                        }
+
+                        if (word.EndsWith("alt", StringComparison.OrdinalIgnoreCase))
+                        {
+                            return word.Substring(0, word.Length - 1);
+                        }
+
+                        if (word.EndsWith("ilt", StringComparison.OrdinalIgnoreCase))
+                        {
+                            return word.AsSpan(0, word.Length - 1).ConcatenatedWith('d');
+                        }
+                    }
+
+                    if (word.EndsWith("amt", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return word.Substring(0, word.Length - 1);
+                    }
+
+                    return word;
                 }
 
                 if (word.Equals("are", StringComparison.OrdinalIgnoreCase))
@@ -498,12 +578,12 @@ namespace MiKoSolutions.Analyzers.Linguistics
             {
                 if (word.EndsWith("dded", StringComparison.Ordinal))
                 {
-                    return word.AsSpan(0, word.Length - 2).ToString();
+                    return word.Substring(0, word.Length - 2);
                 }
 
                 if (word.EndsWith("tted", StringComparison.Ordinal))
                 {
-                    return word.AsSpan(0, word.Length - 3).ToString();
+                    return word.Substring(0, word.Length - 3);
                 }
 
                 if (word.EndsWith("eed", StringComparison.Ordinal))
@@ -513,10 +593,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
                 if (word.EndsWithAny(SpecialPastEndings))
                 {
-                    return word.AsSpan(0, word.Length - 1).ToString();
+                    return word.Substring(0, word.Length - 1);
                 }
 
-                return word.AsSpan(0, word.Length - 2).ToString();
+                return word.Substring(0, word.Length - 2);
             }
         }
 

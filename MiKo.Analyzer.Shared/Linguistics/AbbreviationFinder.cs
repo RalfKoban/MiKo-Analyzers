@@ -76,6 +76,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("idx", "index"),
                                                       new Pair("init", "initialize"),
                                                       new Pair("itf", "interface"),
+                                                      new Pair("kvp", "pair"),
                                                       new Pair("lang", "language"),
                                                       new Pair("lbl", "label"),
                                                       new Pair("len", "length"),
