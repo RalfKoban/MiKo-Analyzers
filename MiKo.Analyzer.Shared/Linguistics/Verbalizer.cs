@@ -23,7 +23,33 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly ConcurrentDictionary<string, string> GerundVerbs = new ConcurrentDictionary<string, string>();
 
-        private static readonly ConcurrentDictionary<string, string> InfiniteVerbs = new ConcurrentDictionary<string, string>();
+        private static readonly ConcurrentDictionary<string, string> InfiniteVerbs = new ConcurrentDictionary<string, string>(new[]
+                                                                                                                                  {
+                                                                                                                                      new KeyValuePair<string, string>("Done", "Do"),
+                                                                                                                                      new KeyValuePair<string, string>("done", "do"),
+                                                                                                                                      new KeyValuePair<string, string>("Frozen", "Freeze"),
+                                                                                                                                      new KeyValuePair<string, string>("frozen", "freeze"),
+                                                                                                                                      new KeyValuePair<string, string>("Broken", "Break"),
+                                                                                                                                      new KeyValuePair<string, string>("broken", "break"),
+                                                                                                                                      new KeyValuePair<string, string>("Chosen", "Choose"),
+                                                                                                                                      new KeyValuePair<string, string>("chosen", "choose"),
+                                                                                                                                      new KeyValuePair<string, string>("Drove", "Drive"),
+                                                                                                                                      new KeyValuePair<string, string>("drove", "drive"),
+                                                                                                                                      new KeyValuePair<string, string>("Driven", "Drive"),
+                                                                                                                                      new KeyValuePair<string, string>("driven", "drive"),
+                                                                                                                                      new KeyValuePair<string, string>("Hid", "Hide"),
+                                                                                                                                      new KeyValuePair<string, string>("hid", "hide"),
+                                                                                                                                      new KeyValuePair<string, string>("Hidden", "Hide"),
+                                                                                                                                      new KeyValuePair<string, string>("hidden", "hide"),
+                                                                                                                                      new KeyValuePair<string, string>("Woken", "Wake"),
+                                                                                                                                      new KeyValuePair<string, string>("woken", "wake"),
+                                                                                                                                      new KeyValuePair<string, string>("Woke", "Wake"),
+                                                                                                                                      new KeyValuePair<string, string>("woke", "wake"),
+                                                                                                                                      new KeyValuePair<string, string>("Written", "Write"),
+                                                                                                                                      new KeyValuePair<string, string>("written", "write"),
+                                                                                                                                      new KeyValuePair<string, string>("Wrote", "Write"),
+                                                                                                                                      new KeyValuePair<string, string>("wrote", "write"),
+                                                                                                                                  });
 
         private static readonly ConcurrentDictionary<string, string> ThirdPersonSingularVerbs = new ConcurrentDictionary<string, string>(new[]
                                                                                                                                              {
@@ -395,6 +421,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 if (word.EndsWith('s'))
                 {
                     if (word.Equals("is", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return word[0].IsUpperCaseLetter() ? "Be" : "be";
+                    }
+
+                    if (word.Equals("was", StringComparison.OrdinalIgnoreCase))
                     {
                         return word[0].IsUpperCaseLetter() ? "Be" : "be";
                     }

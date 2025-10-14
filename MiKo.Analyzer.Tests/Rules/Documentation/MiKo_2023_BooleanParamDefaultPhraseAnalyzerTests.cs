@@ -1065,6 +1065,33 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [TestCase("Determines whether something should be used during anything.", """<see langword="true"/> to use something during anything; otherwise, <see langword="false"/>.""")]
+        [TestCase("Determines if something should be used during anything.", """<see langword="true"/> to use something during anything; otherwise, <see langword="false"/>.""")]
+        [TestCase("Whether something should be updated during anything.", """<see langword="true"/> to update something during anything; otherwise, <see langword="false"/>.""")]
+        [TestCase("Whether or not something should be updated during anything.", """<see langword="true"/> to update something during anything; otherwise, <see langword="false"/>.""")]
+        [TestCase("If something should be done.", """<see langword="true"/> to do something; otherwise, <see langword="false"/>.""")]
+        [TestCase("In case something should be done.", """<see langword="true"/> to do something; otherwise, <see langword="false"/>.""")]
+        public void Code_gets_fixed_for_shoud_be_phrase(string originalPhrase, string fixedPhrase)
+        {
+            const string Template = """
+
+                                    using System;
+
+                                    public class TestMe
+                                    {
+                                        /// <summary>
+                                        /// </summary>
+                                        /// <param name="condition">
+                                        /// ###
+                                        /// </param>
+                                        public void DoSomething(bool condition) { }
+                                    }
+
+                                    """;
+
+            VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
+        }
+
         protected override string GetDiagnosticId() => MiKo_2023_BooleanParamDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2023_BooleanParamDefaultPhraseAnalyzer();
