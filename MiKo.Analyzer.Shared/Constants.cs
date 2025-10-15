@@ -283,6 +283,7 @@ namespace MiKoSolutions.Analyzers
             internal const string FromResultTaskReturnTypeStartingPhrase = "The successfully completed task.";
             internal const string GenericTaskReturnTypeStartingPhraseTemplate = NonGenericTaskReturnTypeStartingPhraseTemplate + " The value of the {1} parameter contains ";
             internal const string IdTerm = "id";
+            internal const string IdsTerm = "ids";
             internal const string IdentTerm = "ident";
             internal const string InfoTerm = "info";
             internal const string NoDefaultPhrase = "This property has no default value.";
@@ -1023,7 +1024,8 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] TryWords = { "Try", "Tries" };
             internal static readonly string[] ReturnWords = { "Return", "Returns" };
             internal static readonly string[] ActionTerms = { "action", "Action", "function", "Function", "func", "Func" };
-            internal static readonly string[] IdTermWithDelimiters = IdTerm.WithDelimiters();
+            internal static readonly string[] IdTerms = { IdTerm, IdsTerm };
+            internal static readonly string[] IdTermsWithDelimiters = IdTerms.WithDelimiters();
             internal static readonly string[] IdentTermWithDelimiters = IdentTerm.WithDelimiters();
             internal static readonly string[] InfoTermWithDelimiters = InfoTerm.WithDelimiters();
             internal static readonly string[] EventArgsTermsWithDelimiters = new[] { "event args", "event arg" }.WithDelimiters();
