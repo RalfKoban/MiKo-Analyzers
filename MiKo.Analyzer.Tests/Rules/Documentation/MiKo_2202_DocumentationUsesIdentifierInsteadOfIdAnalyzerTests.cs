@@ -15,9 +15,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly string[] WrongIds =
                                                     [
-                                                        " id ", " id,", " id;", " id.", " id:", " id)", " id]", " id}", " id>",
-                                                        " Id ", " Id,", " Id;", " Id.", " Id:", " Id)", " Id]", " Id}", " Id>",
-                                                        " ID ", " ID,", " ID;", " ID.", " ID:", " ID)", " ID]", " ID}", " ID>"
+                                                        " id ", " id,", " id;", " id.", " id:", " id)", " id]", " id}",
+                                                        " Id ", " Id,", " Id;", " Id.", " Id:", " Id)", " Id]", " Id}",
+                                                        " ID ", " ID,", " ID;", " ID.", " ID:", " ID)", " ID]", " ID}",
+                                                        " ids ", " ids,", " ids;", " ids.", " ids:", " ids)", " ids]", " ids}",
+                                                        " Ids ", " Ids,", " Ids;", " Ids.", " Ids:", " Ids)", " Ids]", " Ids}",
+                                                        " IDs ", " IDs,", " IDs;", " IDs.", " IDs:", " IDs)", " IDs]", " IDs}",
+                                                        " IDS ", " IDS,", " IDS;", " IDS.", " IDS:", " IDS)", " IDS]", " IDS}",
                                                     ];
 
         [Test]
@@ -70,7 +74,7 @@ public sealed class TestMe { }
 ";
 
             var wrongText = wrongId.Trim();
-            var correctText = wrongText.Replace("id", "identifier", StringComparison.OrdinalIgnoreCase);
+            string correctText = ToCorrectText(wrongText);
 
             VerifyCSharpFix(Template.Replace("###", wrongText), Template.Replace("###", correctText));
         }
@@ -86,7 +90,7 @@ public sealed class TestMe { }
 ";
 
             var wrongText = wrongId.Trim();
-            var correctText = wrongText.Replace("id", "identifier", StringComparison.OrdinalIgnoreCase);
+            string correctText = ToCorrectText(wrongText);
 
             VerifyCSharpFix(Template.Replace("###", wrongText), Template.Replace("###", correctText));
         }
@@ -109,7 +113,7 @@ public sealed class TestMe { }
 ";
 
             var wrongText = wrongId.Trim();
-            var correctText = wrongText.Replace("id", "identifier", StringComparison.OrdinalIgnoreCase);
+            string correctText = ToCorrectText(wrongText);
 
             VerifyCSharpFix(OriginalTemplate.Replace("###", wrongText), FixedTemplate.Replace("###", correctText));
         }
@@ -119,5 +123,8 @@ public sealed class TestMe { }
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2202_DocumentationUsesIdentifierInsteadOfIdAnalyzer();
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2202_CodeFixProvider();
+
+        private static string ToCorrectText(string wrongText) => wrongText.Replace("ids", "ids", StringComparison.OrdinalIgnoreCase) // next step will replace 'id', so 'ids' becomes 'identifiers'
+                                                                          .Replace("id", "identifier", StringComparison.OrdinalIgnoreCase);
     }
 }
