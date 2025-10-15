@@ -26,6 +26,30 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                 "Tells",
                                                             ];
 
+        private static readonly string[] Constructors =
+                                                        [
+                                                            "constructor",
+                                                            "Constructor",
+                                                            "Ctor",
+                                                            "ctor",
+                                                            "Copy constructor",
+                                                            "Copy Constructor",
+                                                            "Copy ctor",
+                                                            "Copy Ctor",
+                                                            "copy constructor",
+                                                            "copy Constructor",
+                                                            "copy ctor",
+                                                            "copy Ctor",
+                                                            "Default constructor",
+                                                            "Default Constructor",
+                                                            "Default ctor",
+                                                            "Default Ctor",
+                                                            "default constructor",
+                                                            "default Constructor",
+                                                            "default ctor",
+                                                            "default Ctor",
+                                                        ];
+
         [Test]
         public void No_issue_is_reported_for_undocumented_class() => No_issue_is_reported_for(@"
 using System;
@@ -619,6 +643,66 @@ public interface TestMe
 ";
 
             VerifyCSharpFix(code, code);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_public_constructor_([ValueSource(nameof(Constructors))] string originalText)
+        {
+            const string Template = """
+
+                                    using System;
+
+                                    public class TestMe
+                                    {
+                                        /// <summary>
+                                        /// ###.
+                                        /// </summary>
+                                        public TestMe() { }
+                                    }
+
+                                    """;
+
+            VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", """Initializes a new instance of the <see cref="TestMe"/> class"""));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_public_constructor_with_additional_information_([ValueSource(nameof(Constructors))] string originalText)
+        {
+            const string Template = """
+
+                                    using System;
+
+                                    public class TestMe
+                                    {
+                                        /// <summary>
+                                        /// ###.
+                                        /// </summary>
+                                        public TestMe() { }
+                                    }
+
+                                    """;
+
+            VerifyCSharpFix(Template.Replace("###", originalText + " for something"), Template.Replace("###", """Initializes a new instance of the <see cref="TestMe"/> class with something"""));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_private_constructor_([ValueSource(nameof(Constructors))] string originalText)
+        {
+            const string Template = """
+
+                                    using System;
+
+                                    public class TestMe
+                                    {
+                                        /// <summary>
+                                        /// ###.
+                                        /// </summary>
+                                        private TestMe() { }
+                                    }
+
+                                    """;
+
+            VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", """Prevents a default instance of the <see cref="TestMe"/> class from being created"""));
         }
 
         protected override string GetDiagnosticId() => MiKo_2019_3rdPersonSingularVerbSummaryAnalyzer.Id;
