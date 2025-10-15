@@ -1031,7 +1031,7 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] EventArgsTermsWithDelimiters = new[] { "event args", "event arg" }.WithDelimiters();
             internal static readonly string[] FindTerms = { "to find", "to inspect for", "to look for", "to test for" };
             internal static readonly string[] FlagTermsWithDelimiters = new[] { "flag", "flags" }.WithDelimiters();
-            internal static readonly string[] Guids = { "guid", "Guid", "GUID" };
+            internal static readonly string[] Guids = { "guid", "Guid", "GUID", "guids", "Guids", "GUIDs", "GUIDS" };
             internal static readonly string[] GuidTermsWithDelimiters = Guids.WithDelimiters();
 
             internal static readonly string[] InstanceOfPhrases =
