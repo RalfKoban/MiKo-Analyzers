@@ -42,9 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] Conditionals = { "if", "when", "in case", "whether or not", "whether" };
         private static readonly string[] ElseConditionals = { "else", "otherwise" };
 
-        private static readonly string[] ShouldBeTextStartIndicators = { "Determines", "Determine", "Whether or not", "Whether", "If", "In case" };
-
-        private static readonly Regex ShouldBeRegex = new Regex(@"\b(should|must|can|may|could|would|might)\s+be\s+\w+\b", RegexOptions.Compiled, 100.Milliseconds());
+        private static readonly Regex ShouldBeRegex = new Regex(@"\b(shall|should|can|could|must|may|might|would)\s+be\s+\w+\b", RegexOptions.Compiled, 100.Milliseconds());
 
         private static readonly IComparer<string> ArticleStartComparer = new StringStartComparer(
                                                                                                  StartWithArticleA,
@@ -145,28 +143,34 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         return FixEmptyComment(comment);
                     }
 
-                    if (textTrimmed.StartsWithAny(ShouldBeTextStartIndicators, StringComparison.OrdinalIgnoreCase))
+                    var data = FindMatchingReplacementMapKeys(text);
+
+                    var shouldBeMatch = ShouldBeRegex.Match(textTrimmed);
+
+                    if (shouldBeMatch.Success)
                     {
-                        var match = ShouldBeRegex.Match(textTrimmed);
+                        var shouldBeText = shouldBeMatch.Value;
+                        var newTextStart = ReplacementTo + Verbalizer.MakeInfiniteVerb(shouldBeText.ThirdWord()) + " ";
 
-                        if (match.Success)
-                        {
-                            var found = match.Value;
+                        // re-phrase the text to fix it later on
+                        var updatedText = textTrimmed.AsCachedBuilder()
+                                                     .ReplaceAllWithProbe(data.Map)
+                                                     .Without(" " + shouldBeText)
+                                                     .TrimmedStart()
+                                                     .WithoutStarting(Conditionals, StringComparison.OrdinalIgnoreCase)
+                                                     .TrimmedStart()
+                                                     .Insert(0, newTextStart)
+                                                     .ToStringAndRelease();
 
-                            var newTextStart = ReplacementTo + Verbalizer.MakeInfiniteVerb(found.ThirdWord()) + " ";
-
-                            var updatedText = string.Concat(newTextStart, text.WithoutFirstWords(ShouldBeTextStartIndicators).ToString()).Without(" " + found);
-
-                            return FixTextOnlyComment(comment, t, updatedText.AsSpan(), ReplacementTo, FindMatchingReplacementMapKeys(ReadOnlySpan<char>.Empty));
-                        }
+                        // do a second round with the updated text, to fix all the other stuff
+                        return FixText(comment.WithContent(XmlText(updatedText)));
                     }
 
                     // determine whether we have a comment like:
                     //    true: some condition
-                    //    false: some other condition'
+                    //    false: some other condition
                     var replacement = text.Contains(':') ? ReplacementTo : Replacement;
 
-                    var data = FindMatchingReplacementMapKeys(text);
                     var uniqueKeys = data.UniqueKeys;
 
 //// ncrunch: no coverage start
@@ -623,7 +627,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 foreach (var text in startTerms.OrderBy(_ => _, ArticleStartComparer).ThenByDescending(_ => _.Length).ThenBy(_ => _))
                 {
-                    replacements[index++] = new Pair(text, Replacement);
+                    replacements[index++] = new Pair(text);
                 }
 
                 return replacements;

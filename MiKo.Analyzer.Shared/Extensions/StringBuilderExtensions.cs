@@ -623,6 +623,24 @@ namespace MiKoSolutions.Analyzers
             return value;
         }
 
+        public static StringBuilder WithoutStarting(this StringBuilder value, in ReadOnlySpan<string> phrases, in StringComparison comparison = StringComparison.Ordinal)
+        {
+            foreach (var phrase in phrases)
+            {
+                var length = phrase.Length;
+
+                if (value.Length > length)
+                {
+                    if (value.ToString(0, length).Equals(phrase, comparison))
+                    {
+                        value.Remove(0, length);
+                    }
+                }
+            }
+
+            return value;
+        }
+
         public static StringBuilder WithoutAbbreviations(this StringBuilder value) => AbbreviationFinder.FindAndReplaceAllAbbreviations(value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
