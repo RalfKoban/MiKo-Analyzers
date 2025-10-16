@@ -5742,7 +5742,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Append sealed text to comment.
+        ///   Looks up a localized string similar to Append sealed text to documention.
         /// </summary>
         internal static string MiKo_2010_CodeFixTitle {
             get {
@@ -5778,7 +5778,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove sealed text to comment.
+        ///   Looks up a localized string similar to Remove sealed text from documentation.
         /// </summary>
         internal static string MiKo_2011_CodeFixTitle {
             get {
@@ -7997,6 +7997,42 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_2082_Title {
             get {
                 return ResourceManager.GetString("MiKo_2082_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove read-only text from documentation.
+        /// </summary>
+        internal static string MiKo_2083_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2083_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Writable fields should not mention being read-only since they are not. This keeps things clear and straightforward for developers..
+        /// </summary>
+        internal static string MiKo_2083_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2083_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; should not contain: &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_2083_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2083_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not falsely document writable fields as read-only.
+        /// </summary>
+        internal static string MiKo_2083_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2083_Title", resourceCulture);
             }
         }
         

@@ -15,9 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comment = (XmlElementSyntax)syntax;
 
-            const string Text = Constants.Comments.FieldIsReadOnly;
-
-            return CommentWithContent(comment, comment.WithoutText(Text).Add(XmlText(Text))); // place on new line
+            return CommentWithContent(comment, comment.WithoutText(Constants.Comments.FieldIsReadOnly).Add(XmlText(Constants.Comments.FieldIsReadOnly))); // place on new line
         }
     }
 }

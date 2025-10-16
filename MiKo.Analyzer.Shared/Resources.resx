@@ -2067,7 +2067,7 @@ This improves code clarity, avoids ambiguity, and helps developers immediately u
     <value>Document routed events as done by the .NET Framework</value>
   </data>
   <data name="MiKo_2010_CodeFixTitle" xml:space="preserve">
-    <value>Append sealed text to comment</value>
+    <value>Append sealed text to documention</value>
   </data>
   <data name="MiKo_2010_Description" xml:space="preserve">
     <value>To simplify their use in inheritance scenarios, sealed classes should clearly document that they are sealed. This helps developers understand their constraints and usage better.</value>
@@ -2079,7 +2079,7 @@ This improves code clarity, avoids ambiguity, and helps developers immediately u
     <value>Document sealed classes as being sealed</value>
   </data>
   <data name="MiKo_2011_CodeFixTitle" xml:space="preserve">
-    <value>Remove sealed text to comment</value>
+    <value>Remove sealed text from documentation</value>
   </data>
   <data name="MiKo_2011_Description" xml:space="preserve">
     <value>Unsealed classes should not mention being sealed since they are not. This keeps things clear and straightforward for developers.</value>
@@ -2830,6 +2830,18 @@ This ensures the documentation is precise and informative, helping developers un
   </data>
   <data name="MiKo_2082_Title" xml:space="preserve">
     <value>Use distinct phrases for Enum member &lt;summary&gt; documentation</value>
+  </data>
+  <data name="MiKo_2083_CodeFixTitle" xml:space="preserve">
+    <value>Remove read-only text from documentation</value>
+  </data>
+  <data name="MiKo_2083_Description" xml:space="preserve">
+    <value>Writable fields should not mention being read-only since they are not. This keeps things clear and straightforward for developers.</value>
+  </data>
+  <data name="MiKo_2083_MessageFormat" xml:space="preserve">
+    <value>&lt;summary&gt; should not contain: '{1}'</value>
+  </data>
+  <data name="MiKo_2083_Title" xml:space="preserve">
+    <value>Do not falsely document writable fields as read-only</value>
   </data>
   <data name="MiKo_2090_CodeFixTitle" xml:space="preserve">
     <value>Apply standard comment</value>

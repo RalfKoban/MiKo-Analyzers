@@ -13,7 +13,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/18917.svg)](https://scan.coverity.com/projects/ralfkoban-miko-analyzers)
 
 ## Available Rules
-The following tables lists all the 525 rules that are currently provided by the analyzer.
+The following tables lists all the 526 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -255,6 +255,7 @@ The following tables lists all the 525 rules that are currently provided by the 
 |MiKo_2080|Start field &lt;summary&gt; documentation with default phrase|&#x2713;|&#x2713;|
 |MiKo_2081|End public-visible read-only field &lt;summary&gt; documentation with default phrase|&#x2713;|&#x2713;|
 |MiKo_2082|Use distinct phrases for Enum member &lt;summary&gt; documentation|&#x2713;|&#x2713;|
+|MiKo_2083|Do not falsely document writable fields as read-only|&#x2713;|&#x2713;|
 |MiKo_2090|Use default phrase for equality operator documentation|&#x2713;|&#x2713;|
 |MiKo_2091|Use default phrase for inequality operator documentation|&#x2713;|&#x2713;|
 |MiKo_2100|Start &lt;example&gt; documentation with descriptive default phrase|&#x2713;|&#x2713;|
