@@ -12,12 +12,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2081_ReadOnlyFieldAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_uncommented_readonly_field_with_visibility_([Values("protected", "public", "private", "internal")] string visibility) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_uncommented_field_with_visibility_([Values("protected", "public", "private", "internal")] string visibility) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
     " + visibility + @" string m_field;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_uncommented_readonly_field_with_visibility_([Values("protected", "public", "private", "internal")] string visibility) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    " + visibility + @" readonly string m_field;
 }
 ");
 
