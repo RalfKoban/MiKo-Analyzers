@@ -19,6 +19,31 @@ namespace MiKoSolutions.Analyzers
     internal static partial class SyntaxNodeExtensions
     {
         /// <summary>
+        /// Converts the specified <see cref="TypeDeclarationSyntax"/> to a <see cref="TypeSyntax"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The type declaration syntax to convert.
+        /// </param>
+        /// <returns>
+        /// A <see cref="TypeSyntax"/> representing the type declaration.
+        /// </returns>
+        public static TypeSyntax AsTypeSyntax(this TypeDeclarationSyntax value)
+        {
+            var name = value.GetName();
+
+            if (value.TypeParameterList is TypeParameterListSyntax typeParameters)
+            {
+                var arguments = typeParameters.Parameters
+                                              .Select(_ => SyntaxFactory.ParseTypeName(_.GetName()))
+                                              .ToSeparatedSyntaxList();
+
+                return SyntaxFactory.GenericName(SyntaxFactory.Identifier(name), SyntaxFactory.TypeArgumentList(arguments));
+            }
+
+            return SyntaxFactory.ParseTypeName(name);
+        }
+
+        /// <summary>
         /// Gets the first XML element that is NOT empty (has some content) and matches the given tag.
         /// </summary>
         /// <param name="syntaxNodes">

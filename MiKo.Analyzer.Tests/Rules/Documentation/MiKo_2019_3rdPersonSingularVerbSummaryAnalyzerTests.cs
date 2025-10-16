@@ -705,6 +705,26 @@ public interface TestMe
             VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", """Prevents a default instance of the <see cref="TestMe"/> class from being created"""));
         }
 
+        [Test]
+        public void Code_gets_fixed_for_public_constructor_for_generic_type_([ValueSource(nameof(Constructors))] string originalText)
+        {
+            const string Template = """
+
+                                    using System;
+
+                                    public class TestMe<T1, T2>
+                                    {
+                                        /// <summary>
+                                        /// ###.
+                                        /// </summary>
+                                        public TestMe() { }
+                                    }
+
+                                    """;
+
+            VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", """Initializes a new instance of the <see cref="TestMe{T1,T2}"/> class"""));
+        }
+
         protected override string GetDiagnosticId() => MiKo_2019_3rdPersonSingularVerbSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2019_3rdPersonSingularVerbSummaryAnalyzer();

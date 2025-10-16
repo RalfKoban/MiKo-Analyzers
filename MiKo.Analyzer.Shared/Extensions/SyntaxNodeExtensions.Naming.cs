@@ -684,6 +684,17 @@ namespace MiKoSolutions.Analyzers
         internal static string GetName(this TypeParameterConstraintClauseSyntax value) => value?.Name.GetName() ?? string.Empty;
 
         /// <summary>
+        /// Gets the name of the specified <see cref="TypeParameterSyntax"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The type syntax.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the name of the type parameter; or the <see cref="string.Empty"/> string ("") if no name is found.
+        /// </returns>
+        internal static string GetName(this TypeParameterSyntax value) => value?.Identifier.ValueText ?? string.Empty;
+
+        /// <summary>
         /// Gets the name of the specified <see cref="TypeSyntax"/>.
         /// </summary>
         /// <param name="value">

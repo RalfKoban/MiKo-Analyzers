@@ -74,7 +74,7 @@ public sealed class TestMe { }
 ";
 
             var wrongText = wrongId.Trim();
-            string correctText = ToCorrectText(wrongText);
+            var correctText = ToCorrectText(wrongText);
 
             VerifyCSharpFix(Template.Replace("###", wrongText), Template.Replace("###", correctText));
         }
@@ -90,7 +90,7 @@ public sealed class TestMe { }
 ";
 
             var wrongText = wrongId.Trim();
-            string correctText = ToCorrectText(wrongText);
+            var correctText = ToCorrectText(wrongText);
 
             VerifyCSharpFix(Template.Replace("###", wrongText), Template.Replace("###", correctText));
         }
@@ -113,7 +113,7 @@ public sealed class TestMe { }
 ";
 
             var wrongText = wrongId.Trim();
-            string correctText = ToCorrectText(wrongText);
+            var correctText = ToCorrectText(wrongText);
 
             VerifyCSharpFix(OriginalTemplate.Replace("###", wrongText), FixedTemplate.Replace("###", correctText));
         }

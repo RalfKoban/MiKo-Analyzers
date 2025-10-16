@@ -114,15 +114,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         continuation = " class from being created";
                     }
 
-                    string commentEnd = continuation.AsCachedBuilder()
-                                                    .Append(startText)
-                                                    .Without(ConstructorPhrases)
-                                                    .Append(' ')
-                                                    .Replace(" for ", " with ")
-                                                    .TrimmedEnd()
-                                                    .ToStringAndRelease();
+                    var commentEnd = continuation.AsCachedBuilder()
+                                                 .Append(startText)
+                                                 .Without(ConstructorPhrases)
+                                                 .Append(' ')
+                                                 .Replace(" for ", " with ")
+                                                 .TrimmedEnd()
+                                                 .ToStringAndRelease();
 
-                    return Comment(summary, start, SeeCref(constructor.Identifier.ValueText), commentEnd);
+                    var seeCref = constructor.Parent is TypeDeclarationSyntax type
+                                  ? SeeCref(type.AsTypeSyntax())
+                                  : SeeCref(constructor.Identifier.ValueText);
+
+                    return Comment(summary, start, seeCref, commentEnd);
                 }
             }
 
