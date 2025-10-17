@@ -75,7 +75,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 if (node.Parent.IsCode())
                 {
-                    // skip <code> samples
+                    // skip code in <code> samples
+                    continue;
+                }
+
+                if (node.Parent.IsC())
+                {
+                    // skip parts in <c> samples
                     continue;
                 }
 
