@@ -642,6 +642,10 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsCodeNull(this SyntaxNode value) => value.Is(Constants.XmlTag.Code, Nulls);
 
+        internal static bool IsC(this SyntaxNode value) => value is XmlElementSyntax xes && xes.IsC();
+
+        internal static bool IsC(this XmlElementSyntax value) => value.GetName() is Constants.XmlTag.C;
+
         internal static bool IsCode(this SyntaxNode value) => value is XmlElementSyntax xes && xes.IsCode();
 
         internal static bool IsCode(this XmlElementSyntax value) => value.GetName() is Constants.XmlTag.Code;
