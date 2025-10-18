@@ -71,9 +71,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                   ? PrepareByteArrayComment(comment)
                                   : PrepareComment(comment);
 
-            var startingPhrase = GetNonGenericMiddlePart(returnType);
-
-            var updatedComment = CommentStartingWith(preparedComment, startingPhrase);
+            var updatedComment = NonGenericComment(preparedComment, returnType);
 
             return CleanupComment(updatedComment);
         }
@@ -143,6 +141,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var startingPhrase = Constants.Comments.CollectionReturnTypeStartingPhrase;
 
+            var preparedCommentContent = preparedComment.Content;
+
+            if (preparedCommentContent.FirstOrDefault() is XmlTextSyntax xmlText)
+            {
+                if (xmlText.GetTextTrimmed().IsNullOrEmpty())
+                {
+                    return CommentWithContent(preparedComment, preparedCommentContent.Replace(xmlText, XmlText(startingPhrase).WithTriviaFrom(xmlText)));
+                }
+            }
+
             if (returnType.TypeArgumentList.Arguments.Count is 1)
             {
                 var typeName = GetGenericTypeArgumentTypeName(returnType);
@@ -158,6 +166,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         startingPhrase = startingPhrase + text + " " + Constants.Comments.ThatContainsTerm + " ";
                     }
+                }
+            }
+
+            return CommentStartingWith(preparedComment, startingPhrase);
+        }
+
+        private static XmlElementSyntax NonGenericComment(XmlElementSyntax preparedComment, TypeSyntax returnType)
+        {
+            var startingPhrase = GetNonGenericMiddlePart(returnType);
+
+            var content = preparedComment.Content;
+
+            if (content.FirstOrDefault() is XmlTextSyntax xmlText)
+            {
+                const string Phrase = " that represents ";
+
+                var text = xmlText.GetTextTrimmed();
+
+                var index = text.IndexOf(Phrase, StringComparison.Ordinal);
+
+                if (index > 0)
+                {
+                    var newStartPhrase = startingPhrase.ConcatenatedWith(text.AsSpan(index + Phrase.Length));
+
+                    return CommentWithContent(preparedComment, content.Replace(xmlText, XmlText(newStartPhrase).WithTriviaFrom(xmlText)));
                 }
             }
 
@@ -223,16 +256,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (returnType is ArrayTypeSyntax arrayType)
             {
                 return arrayType.ElementType.IsByte()
-                       ? Constants.Comments.ByteArrayReturnTypeStartingPhrase[0]
-                       : Constants.Comments.ArrayReturnTypeStartingPhrase[0];
+                           ? Constants.Comments.ByteArrayReturnTypeStartingPhrase[0]
+                           : Constants.Comments.ArrayReturnTypeStartingPhrase[0];
             }
 
             return returnType.GetName() is "IEnumerable"
-                   ? Constants.Comments.EnumerableReturnTypeStartingPhrase
-                   : Constants.Comments.CollectionReturnTypeStartingPhrase;
+                       ? Constants.Comments.EnumerableReturnTypeStartingPhrase
+                       : Constants.Comments.CollectionReturnTypeStartingPhrase;
         }
 
-//// ncrunch: rdi off
+        //// ncrunch: rdi off
 //// ncrunch: no coverage start
 
         private sealed class MapData
