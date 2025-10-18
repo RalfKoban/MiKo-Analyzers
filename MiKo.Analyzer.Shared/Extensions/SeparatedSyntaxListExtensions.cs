@@ -12,6 +12,9 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 #pragma warning disable IDE0130
 namespace MiKoSolutions.Analyzers
 {
+    /// <summary>
+    /// Provides a set of <see langword="static"/> methods for <see cref="SeparatedSyntaxList{T}"/>s.
+    /// </summary>
     internal static class SeparatedSyntaxListExtensions
     {
         /// <summary>
@@ -406,6 +409,24 @@ namespace MiKoSolutions.Analyzers
             return default;
         }
 
+        /// <summary>
+        /// Filters the elements in the <see cref="SeparatedSyntaxList{T}"/> to return only those of the specified syntax kind.
+        /// </summary>
+        /// <typeparam name="TResult">
+        /// The type of syntax nodes in the resulting list.
+        /// </typeparam>
+        /// <typeparam name="TSyntaxNode">
+        /// The type of syntax nodes in the source list.
+        /// </typeparam>
+        /// <param name="source">
+        /// The separated list of syntax nodes to filter.
+        /// </param>
+        /// <param name="kind">
+        /// One of the enumeration members that specifies the kind of syntax node to filter for.
+        /// </param>
+        /// <returns>
+        /// A collection syntax nodes that contains all elements from the source list that match the specified syntax kind.
+        /// </returns>
         internal static IReadOnlyList<TResult> OfKind<TResult, TSyntaxNode>(this in SeparatedSyntaxList<TSyntaxNode> source, in SyntaxKind kind) where TSyntaxNode : SyntaxNode
                                                                                                                                                  where TResult : TSyntaxNode
         {
