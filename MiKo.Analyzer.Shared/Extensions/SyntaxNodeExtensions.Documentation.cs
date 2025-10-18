@@ -21,16 +21,28 @@ namespace MiKoSolutions.Analyzers
     /// </summary>
     internal static partial class SyntaxNodeExtensions
     {
+        /// <summary>
+        /// The XML comment exterior trivia with a trailing space, used for formatting XML documentation comments.
+        /// </summary>
         internal static readonly SyntaxTrivia XmlCommentExterior = SyntaxFactory.DocumentationCommentExterior(Constants.Comments.XmlCommentExterior + " ");
 
+        /// <summary>
+        /// Contains the standard XML comment start sequence consisting of an elastic carriage return line feed followed by the XML comment exterior trivia.
+        /// </summary>
         internal static readonly SyntaxTrivia[] XmlCommentStart =
                                                                   {
                                                                       SyntaxFactory.ElasticCarriageReturnLineFeed, // use elastic one to allow formatting to be done automatically
                                                                       XmlCommentExterior,
                                                                   };
 
+        /// <summary>
+        /// Contains the boolean string representations in various casings used for detecting boolean values in XML documentation.
+        /// </summary>
         private static readonly string[] Booleans = { "true", "false", "True", "False", "TRUE", "FALSE" };
 
+        /// <summary>
+        /// Contains the <see langword="null"/> string representations in various casings used for detecting <see langword="null"/> values in XML documentation.
+        /// </summary>
         private static readonly string[] Nulls = { "null", "Null", "NULL" };
 
         /// <summary>
