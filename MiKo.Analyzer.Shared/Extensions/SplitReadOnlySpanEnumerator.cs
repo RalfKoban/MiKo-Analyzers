@@ -6,7 +6,19 @@
 #pragma warning disable IDE0130
 namespace MiKoSolutions.Analyzers
 {
-    // Must be a ref struct as it contains a ReadOnlySpan<char>
+    /// <summary>
+    /// Provides an enumerator that splits a <see cref="ReadOnlySpan{T}"/> of characters into parts based on separator characters.
+    /// </summary>
+    /// <remarks>
+    /// This enumerator supports the <see cref="StringSplitOptions"/> to control how empty entries are handled during enumeration.
+    /// The enumerator can be reset and provides a count of elements that respects the specified split options.
+    /// <para>
+    /// <note type="important">
+    /// This is a ref struct that enables efficient enumeration without allocating strings for each part.
+    /// </note>
+    /// </para>
+    /// </remarks>
+    //// Must be a ref struct as it contains / Must be a ref struct as it contains a ReadOnlySpan<char>
     internal ref struct SplitReadOnlySpanEnumerator
     {
         private readonly ReadOnlySpan<char> m_separatorChars;
@@ -14,6 +26,18 @@ namespace MiKoSolutions.Analyzers
         private readonly ReadOnlySpan<char> m_initialText;
         private ReadOnlySpan<char> m_spanAfterMoveNext;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SplitReadOnlySpanEnumerator"/> struct that splits the specified text using the provided separator characters and options.
+        /// </summary>
+        /// <param name="text">
+        /// The text to be split.
+        /// </param>
+        /// <param name="separatorChars">
+        /// The characters to separate the text into parts.
+        /// </param>
+        /// <param name="options">
+        /// A bitwise combination of the enumeration members that specifies how the splitting operations are performed.
+        /// </param>
         public SplitReadOnlySpanEnumerator(in ReadOnlySpan<char> text, in ReadOnlySpan<char> separatorChars, in StringSplitOptions options)
         {
             m_initialText = text;
