@@ -8,6 +8,9 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Linguistics
 {
+    /// <summary>
+    /// Provides methods to find and improve names, particularly for test methods and properties.
+    /// </summary>
     public static class NamesFinder
     {
         private const string If = "If";
@@ -48,6 +51,18 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                  "Wont",
                                                              };
 
+        /// <summary>
+        /// Determines an improved test name based on the specified name and symbol.
+        /// </summary>
+        /// <param name="name">
+        /// The original name to improve.
+        /// </param>
+        /// <param name="symbol">
+        /// The symbol to analyze for context.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the improved test name that follows naming conventions.
+        /// </returns>
         internal static string FindBetterTestName(string name, ISymbol symbol)
         {
             var betterName = FindBetterTestName(name);
@@ -80,6 +95,18 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return betterName;
         }
 
+        /// <summary>
+        /// Determines an improved test name with reordered parts based on the specified symbol name and symbol.
+        /// </summary>
+        /// <param name="symbolName">
+        /// The original symbol name to improve.
+        /// </param>
+        /// <param name="symbol">
+        /// The symbol to analyze for context.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the improved test name with parts reordered according to naming conventions.
+        /// </returns>
         internal static string FindBetterTestNameWithReorder(string symbolName, ISymbol symbol)
         {
             var name = symbolName.Replace("_Expect_", "_");
@@ -91,6 +118,19 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return FindBetterTestName(nameToImprove, symbol);
         }
 
+        /// <summary>
+        /// Determines a descriptive word representation for the specified character.
+        /// </summary>
+        /// <param name="c">
+        /// The character to describe.
+        /// </param>
+        /// <param name="defaultValue">
+        /// The value to return if no descriptive word is available for the character.
+        /// The default is <see langword="null"/>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the descriptive word for the character, or the specified default value if the character has no known description.
+        /// </returns>
         internal static string FindDescribingWord(in char c, string defaultValue = null)
         {
             switch (c)
@@ -133,6 +173,21 @@ namespace MiKoSolutions.Analyzers.Linguistics
             }
         }
 
+        /// <summary>
+        /// Determines the property names that match the specified field symbol.
+        /// </summary>
+        /// <param name="symbol">
+        /// The field symbol to analyze.
+        /// </param>
+        /// <param name="unwantedSuffix">
+        /// The suffix to remove from the symbol name before comparison.
+        /// </param>
+        /// <param name="invocation">
+        /// The invocation to extract the registered name from.
+        /// </param>
+        /// <returns>
+        /// A collection of property names that match the field symbol, or an empty collection if no matching properties are found or if the field name already matches a property.
+        /// </returns>
         internal static IReadOnlyCollection<string> FindPropertyNames(IFieldSymbol symbol, string unwantedSuffix, string invocation)
         {
             // find properties
@@ -170,6 +225,15 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return propertyNames;
         }
 
+        /// <summary>
+        /// Determines an improved test name based on the specified symbol name.
+        /// </summary>
+        /// <param name="symbolName">
+        /// The original symbol name to improve.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the improved test name that follows naming conventions.
+        /// </returns>
         private static string FindBetterTestName(string symbolName)
         {
             if (symbolName.Length < 3)
@@ -295,6 +359,18 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return result.ToStringAndRelease();
         }
 
+        /// <summary>
+        /// Determines the registered name from the invocation arguments of the specified field symbol.
+        /// </summary>
+        /// <param name="symbol">
+        /// The field symbol to analyze.
+        /// </param>
+        /// <param name="invocation">
+        /// The invocation to extract the registered name from.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the name extracted from the first invocation argument, or <see langword="null"/> if no arguments are available.
+        /// </returns>
         private static string GetRegisteredName(IFieldSymbol symbol, string invocation)
         {
             var arguments = symbol.GetInvocationArgumentsFrom(invocation);
@@ -307,6 +383,18 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return null;
         }
 
+        /// <summary>
+        /// Attempts to reorder the parts of the specified name according to naming conventions.
+        /// </summary>
+        /// <param name="name">
+        /// The name to reorder.
+        /// </param>
+        /// <param name="result">
+        /// On successful return, contains the reordered name; otherwise, <see langword="null"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the name parts were reordered; otherwise, <see langword="false"/>.
+        /// </returns>
         private static bool TryGetInOrder(string name, out string result)
         {
             var parts = name.Split(Constants.Underscores, StringSplitOptions.RemoveEmptyEntries);
@@ -326,6 +414,21 @@ namespace MiKoSolutions.Analyzers.Linguistics
             }
         }
 
+        /// <summary>
+        /// Attempts to reorder two parts of a test name according to naming conventions.
+        /// </summary>
+        /// <param name="part0">
+        /// The first part of the name.
+        /// </param>
+        /// <param name="part1">
+        /// The second part of the name.
+        /// </param>
+        /// <param name="result">
+        /// On successful return, contains the reordered name; otherwise, <see langword="null"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the name parts were reordered; otherwise, <see langword="false"/>.
+        /// </returns>
         private static bool TryGetInOrder(string part0, string part1, out string result)
         {
             result = null;
@@ -369,6 +472,24 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return true;
         }
 
+        /// <summary>
+        /// Attempts to reorder three parts of a test name according to naming conventions.
+        /// </summary>
+        /// <param name="part0">
+        /// The first part of the name.
+        /// </param>
+        /// <param name="part1">
+        /// The second part of the name.
+        /// </param>
+        /// <param name="part2">
+        /// The third part of the name.
+        /// </param>
+        /// <param name="result">
+        /// On successful return, contains the reordered name; otherwise, <see langword="null"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the name parts were reordered; otherwise, <see langword="false"/>.
+        /// </returns>
         private static bool TryGetInOrder(string part0, string part1, string part2, out string result)
         {
             if (part1.StartsWithAny(SpecialThrowPhrases, StringComparison.OrdinalIgnoreCase))
@@ -414,6 +535,27 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return true;
         }
 
+        /// <summary>
+        /// Attempts to reorder four parts of a test name according to naming conventions.
+        /// </summary>
+        /// <param name="part0">
+        /// The first part of the name.
+        /// </param>
+        /// <param name="part1">
+        /// The second part of the name.
+        /// </param>
+        /// <param name="part2">
+        /// The third part of the name.
+        /// </param>
+        /// <param name="part3">
+        /// The fourth part of the name.
+        /// </param>
+        /// <param name="result">
+        /// On successful return, contains the reordered name; otherwise, <see langword="null"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the name parts were reordered; otherwise, <see langword="false"/>.
+        /// </returns>
         private static bool TryGetInOrder(string part0, string part1, string part2, string part3, out string result)
         {
             if (part2.StartsWith(And, StringComparison.Ordinal))
@@ -472,6 +614,18 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return true;
         }
 
+        /// <summary>
+        /// Determines whether an "If" connector is required between two name parts.
+        /// </summary>
+        /// <param name="part1">
+        /// The first part of the name to evaluate.
+        /// </param>
+        /// <param name="part2">
+        /// The second part of the name to evaluate.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if an "If" connector is required; otherwise, <see langword="false"/>.
+        /// </returns>
         private static bool IsIfRequired(string part1, string part2)
         {
             if (part1.StartsWith(If, StringComparison.OrdinalIgnoreCase)
@@ -484,6 +638,15 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return true;
         }
 
+        /// <summary>
+        /// Appends a modified version of a name part to the string builder according to naming conventions.
+        /// </summary>
+        /// <param name="builder">
+        /// The string builder to append to.
+        /// </param>
+        /// <param name="original">
+        /// The original name part to process and append.
+        /// </param>
         private static void FixPart(StringBuilder builder, string original)
         {
             if (original.EndsWith(Returned, StringComparison.OrdinalIgnoreCase))
