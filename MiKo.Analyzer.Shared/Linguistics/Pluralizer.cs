@@ -126,7 +126,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         }
 
         /// <summary>
-        /// Create a plural name for a given name, but returns the same name in case if fails to do so.
+        /// Creates a plural name for a given name, but returns the same name in case if fails to do so.
         /// </summary>
         /// <param name="name">
         /// The name to create a plural for.
