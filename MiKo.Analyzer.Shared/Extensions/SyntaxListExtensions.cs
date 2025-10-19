@@ -683,7 +683,7 @@ namespace MiKoSolutions.Analyzers
         /// The syntax node to include in the list.
         /// </param>
         /// <returns>
-        /// A collection of syntax nodes ith the specified syntax node.
+        /// A collection of syntax nodes with the specified syntax node.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxList<T> ToSyntaxList<T>(this T source) where T : SyntaxNode => SyntaxFactory.SingletonList(source);
