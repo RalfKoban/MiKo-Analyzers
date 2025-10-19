@@ -5,6 +5,9 @@ using System.Linq;
 
 namespace MiKoSolutions.Analyzers.Linguistics
 {
+    /// <summary>
+    /// Provides functionality to convert words and phrases between different verb forms.
+    /// </summary>
     internal static class Verbalizer
     {
         private static readonly HashSet<char> CharsForTwoCharacterEndingsWithS = new HashSet<char> { 'a', 'h', 'i', 'o', 's', 'u', 'x', 'z' };
@@ -273,6 +276,15 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly char[] SentenceEndingMarkers = ".?!;:,)".ToCharArray();
 
+        /// <summary>
+        /// Determines whether the specified word is a third-person singular verb.
+        /// </summary>
+        /// <param name="value">
+        /// The word to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the word is a third-person singular verb; otherwise, <see langword="false"/>.
+        /// </returns>
         public static bool IsThirdPersonSingularVerb(in ReadOnlySpan<char> value)
         {
             var length = value.Length;
@@ -308,8 +320,26 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return true;
         }
 
+        /// <summary>
+        /// Determines whether the specified word is a third-person singular verb.
+        /// </summary>
+        /// <param name="value">
+        /// The word to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the word is a third-person singular verb; otherwise, <see langword="false"/>.
+        /// </returns>
         public static bool IsThirdPersonSingularVerb(string value) => value != null && IsThirdPersonSingularVerb(value.AsSpan());
 
+        /// <summary>
+        /// Determines whether the specified word ends with a two-character ending followed by 's'.
+        /// </summary>
+        /// <param name="value">
+        /// The word to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the word ends with a two-character ending followed by 's'; otherwise, <see langword="false"/>.
+        /// </returns>
         public static bool IsTwoCharacterEndingsWithS(string value)
         {
             var length = value?.Length;
@@ -322,12 +352,48 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return false;
         }
 
+        /// <summary>
+        /// Determines whether the specified word is in past tense.
+        /// </summary>
+        /// <param name="value">
+        /// The word to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the word is in past tense; otherwise, <see langword="false"/>.
+        /// </returns>
         public static bool IsPastTense(string value) => value != null && IsPastTense(value.AsSpan());
 
+        /// <summary>
+        /// Determines whether the specified word is in past tense.
+        /// </summary>
+        /// <param name="value">
+        /// The word to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the word is in past tense; otherwise, <see langword="false"/>.
+        /// </returns>
         public static bool IsPastTense(in ReadOnlySpan<char> value) => value.EndsWithAny(PastEndings);
 
+        /// <summary>
+        /// Determines whether the specified word is a gerund verb.
+        /// </summary>
+        /// <param name="value">
+        /// The word to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the word is a gerund verb; otherwise, <see langword="false"/>.
+        /// </returns>
         public static bool IsGerundVerb(string value) => value != null && IsGerundVerb(value.AsSpan());
 
+        /// <summary>
+        /// Determines whether the specified word is a gerund verb.
+        /// </summary>
+        /// <param name="value">
+        /// The word to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the word is a gerund verb; otherwise, <see langword="false"/>.
+        /// </returns>
         public static bool IsGerundVerb(in ReadOnlySpan<char> value)
         {
             if (value.Length <= 4)
@@ -363,6 +429,15 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return false;
         }
 
+        /// <summary>
+        /// Converts the specified word to its gerund form.
+        /// </summary>
+        /// <param name="value">
+        /// The word to convert.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the gerund form of the word; or the original word if it is <see langword="null"/> or consists only of whitespace characters.
+        /// </returns>
         public static string MakeGerundVerb(string value)
         {
             if (value.IsNullOrWhiteSpace())
@@ -419,6 +494,15 @@ namespace MiKoSolutions.Analyzers.Linguistics
             }
         }
 
+        /// <summary>
+        /// Converts the specified word to its infinitive form.
+        /// </summary>
+        /// <param name="value">
+        /// The word to convert.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the infinitive form of the word; or the original word if it is <see langword="null"/> or consists only of whitespace characters.
+        /// </returns>
         public static string MakeInfiniteVerb(string value)
         {
             if (value.IsNullOrWhiteSpace())
@@ -600,6 +684,19 @@ namespace MiKoSolutions.Analyzers.Linguistics
             }
         }
 
+        /// <summary>
+        /// Converts the first word of the specified text to its infinitive form.
+        /// </summary>
+        /// <param name="text">
+        /// The text containing the word to convert.
+        /// </param>
+        /// <param name="adjustment">
+        /// A bitwise combination of the enumeration members that specifies the adjustment to apply to the first word's casing.
+        /// The default is <see cref="FirstWordAdjustment.None"/>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the text with the first word converted to its infinitive form; or the original text if it is <see langword="null"/> or consists only of whitespace characters.
+        /// </returns>
         public static string MakeFirstWordInfiniteVerb(string text, in FirstWordAdjustment adjustment = FirstWordAdjustment.None)
         {
             if (text.IsNullOrWhiteSpace())
@@ -610,6 +707,19 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return MakeFirstWordInfiniteVerb(text.AsSpan(), adjustment);
         }
 
+        /// <summary>
+        /// Converts the first word of the specified text to its infinitive form.
+        /// </summary>
+        /// <param name="text">
+        /// The text containing the word to convert.
+        /// </param>
+        /// <param name="firstWordAdjustment">
+        /// A bitwise combination of the enumeration members that specifies the adjustment to apply to the first word's casing.
+        /// The default is <see cref="FirstWordAdjustment.None"/>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the text with the first word converted to its infinitive form; or the <see cref="string.Empty"/> string ("") if the text is <see langword="null"/> or consists only of whitespace characters.
+        /// </returns>
         public static string MakeFirstWordInfiniteVerb(in ReadOnlySpan<char> text, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.None)
         {
             if (text.IsNullOrWhiteSpace())
@@ -652,6 +762,15 @@ namespace MiKoSolutions.Analyzers.Linguistics
             }
         }
 
+        /// <summary>
+        /// Converts the specified word to its third-person singular form.
+        /// </summary>
+        /// <param name="value">
+        /// The word to convert.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the third-person singular form of the word; or the original word if it is <see langword="null"/> or consists only of whitespace characters.
+        /// </returns>
         public static string MakeThirdPersonSingularVerb(string value)
         {
             if (value.IsNullOrWhiteSpace())
@@ -810,6 +929,18 @@ namespace MiKoSolutions.Analyzers.Linguistics
             }
         }
 
+        /// <summary>
+        /// Attempts to convert the specified word to its verb form.
+        /// </summary>
+        /// <param name="value">
+        /// The word to convert.
+        /// </param>
+        /// <param name="result">
+        /// On successful return, contains the verb form of the word; otherwise the original word.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the word was successfully converted to a verb form; otherwise, <see langword="false"/>.
+        /// </returns>
         public static bool TryMakeVerb(string value, out string result)
         {
             result = value;
@@ -852,6 +983,15 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return false;
         }
 
+        /// <summary>
+        /// Determines whether the specified word starts with an acceptable phrase.
+        /// </summary>
+        /// <param name="value">
+        /// The word to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the word starts with an acceptable phrase; otherwise, <see langword="false"/>.
+        /// </returns>
         private static bool HasAcceptableStartingPhrase(in ReadOnlySpan<char> value)
         {
             for (int index = 0, length = StartingPhrases.Length; index < length; index++)
@@ -869,8 +1009,26 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return false;
         }
 
+        /// <summary>
+        /// Determines whether the specified word contains an acceptable phrase.
+        /// </summary>
+        /// <param name="value">
+        /// The word to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the word contains an acceptable phrase; otherwise, <see langword="false"/>.
+        /// </returns>
         private static bool HasAcceptableMiddlePhrase(string value) => value.ContainsAny(MiddlePhrases);
 
+        /// <summary>
+        /// Determines whether the specified word ends with an acceptable phrase.
+        /// </summary>
+        /// <param name="value">
+        /// The word to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the word ends with an acceptable phrase; otherwise, <see langword="false"/>.
+        /// </returns>
         private static bool HasAcceptableEndingPhrase(in ReadOnlySpan<char> value) => value.EndsWithAny(EndingPhrases);
     }
 }
