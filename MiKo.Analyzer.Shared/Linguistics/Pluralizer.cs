@@ -5,6 +5,9 @@ using System.Linq;
 
 namespace MiKoSolutions.Analyzers.Linguistics
 {
+    /// <summary>
+    /// Provides functionality to determine whether words are plural and to create plural forms of words.
+    /// </summary>
     internal static class Pluralizer
     {
         private static readonly ConcurrentDictionary<string, string> PluralNames = new ConcurrentDictionary<string, string>();
@@ -83,8 +86,26 @@ namespace MiKoSolutions.Analyzers.Linguistics
         private static readonly string[] SingularOrPluralEndings = { "data", "heep", "moose", "trivia", "ircraft", "nformation", "nested" };
         private static readonly string[] SpecialPluralEndingsWithoutS = new[] { "cti", "men", "ngi", "dren", "eeth", "feet", "mena", "mice", "eople", "teria" }.Concat(SingularOrPluralEndings).ToArray();
 
+        /// <summary>
+        /// Determines whether the specified value represents a word that can be both singular and plural.
+        /// </summary>
+        /// <param name="value">
+        /// The value to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the value is both singular and plural; otherwise, <see langword="false"/>.
+        /// </returns>
         public static bool IsSingularAndPlural(in ReadOnlySpan<char> value) => value.EqualsAny(UncountableNouns, StringComparison.OrdinalIgnoreCase) || (IsPlural(value) && value.EndsWithAny(SingularOrPluralEndings, StringComparison.OrdinalIgnoreCase));
 
+        /// <summary>
+        /// Determines whether the specified value represents a plural word.
+        /// </summary>
+        /// <param name="value">
+        /// The value to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the value is plural; otherwise, <see langword="false"/>.
+        /// </returns>
         public static bool IsPlural(in ReadOnlySpan<char> value)
         {
             if (value.Length <= 2)
@@ -217,8 +238,34 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return pluralName;
         }
 
+        /// <summary>
+        /// Determines whether the specified symbol name is an allowed list name.
+        /// </summary>
+        /// <param name="symbolName">
+        /// The symbol name to check.
+        /// </param>
+        /// <param name="comparison">
+        /// One of the <see cref="StringComparison"/> values that specifies the rules for comparison.
+        /// The default is <see cref="StringComparison.OrdinalIgnoreCase"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the symbol name is an allowed list name; otherwise, <see langword="false"/>.
+        /// </returns>
         private static bool IsAllowedListName(string symbolName, in StringComparison comparison = StringComparison.OrdinalIgnoreCase) => symbolName.EqualsAny(AllowedListNames, comparison);
 
+        /// <summary>
+        /// Creates a plural name based on the proposed name.
+        /// </summary>
+        /// <param name="proposedName">
+        /// The proposed name to create the plural name for.
+        /// </param>
+        /// <param name="comparison">
+        /// One of the <see cref="StringComparison"/> values that specifies the rules for comparison.
+        /// The default is <see cref="StringComparison.OrdinalIgnoreCase"/>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the plural name.
+        /// </returns>
         private static string CreatePluralName(in ReadOnlySpan<char> proposedName, in StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             if (proposedName.EqualsAny(SpecialPluralWords, StringComparison.OrdinalIgnoreCase))
