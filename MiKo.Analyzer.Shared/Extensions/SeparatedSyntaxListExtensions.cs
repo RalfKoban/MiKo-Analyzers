@@ -425,7 +425,7 @@ namespace MiKoSolutions.Analyzers
         /// One of the enumeration members that specifies the kind of syntax node to filter for.
         /// </param>
         /// <returns>
-        /// A collection syntax nodes that contains all elements from the source list that match the specified syntax kind.
+        /// A collection of syntax nodes that contains all elements from the source list that match the specified syntax kind.
         /// </returns>
         internal static IReadOnlyList<TResult> OfKind<TResult, TSyntaxNode>(this in SeparatedSyntaxList<TSyntaxNode> source, in SyntaxKind kind) where TSyntaxNode : SyntaxNode
                                                                                                                                                  where TResult : TSyntaxNode

@@ -14,7 +14,7 @@ using MiKoSolutions.Analyzers.Linguistics;
 namespace MiKoSolutions.Analyzers
 {
     /// <summary>
-    /// Provides a set of <see langword="static"/> methods for <see cref="SyntaxList"/>s.
+    /// Provides a set of <see langword="static"/> methods for <see cref="SyntaxList{T}"/>s.
     /// </summary>
     internal static class SyntaxListExtensions
     {
@@ -683,7 +683,7 @@ namespace MiKoSolutions.Analyzers
         /// The syntax node to include in the list.
         /// </param>
         /// <returns>
-        /// A collection of syntax nodes that with the specified syntax node.
+        /// A collection of syntax nodes with the specified syntax node.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxList<T> ToSyntaxList<T>(this T source) where T : SyntaxNode => SyntaxFactory.SingletonList(source);
@@ -698,7 +698,7 @@ namespace MiKoSolutions.Analyzers
         /// The sequence of syntax nodes to include in the list.
         /// </param>
         /// <returns>
-        /// A collection of syntax nodes that with the specified syntax nodes.
+        /// A collection of syntax nodes with the specified syntax nodes.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxList<T> ToSyntaxList<T>(this IEnumerable<T> source) where T : SyntaxNode => SyntaxFactory.List(source); // ncrunch: no coverage
@@ -747,7 +747,7 @@ namespace MiKoSolutions.Analyzers
         /// The list whose first element is to be adjusted.
         /// </param>
         /// <returns>
-        /// A collection of syntax nodes that with the first element with proper indentation.
+        /// A collection of syntax nodes whose first element is adjusted to have proper indentation.
         /// </returns>
         internal static SyntaxList<T> WithIndentation<T>(this in SyntaxList<T> values) where T : SyntaxNode
         {
