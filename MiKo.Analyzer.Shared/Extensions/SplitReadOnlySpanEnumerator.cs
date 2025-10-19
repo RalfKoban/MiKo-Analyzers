@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers
     /// </note>
     /// </para>
     /// </remarks>
-    //// Must be a ref struct as it contains / Must be a ref struct as it contains a ReadOnlySpan<char>
+    //// Note: It must be a 'ref' struct as it contains a ReadOnlySpan<char> which requires the 'ref'.
     internal ref struct SplitReadOnlySpanEnumerator
     {
         private readonly ReadOnlySpan<char> m_separatorChars;

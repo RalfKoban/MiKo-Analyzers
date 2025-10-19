@@ -935,8 +935,8 @@ namespace MiKoSolutions.Analyzers
         /// <see langword="true"/> if the syntax node represents a wrong boolean tag; otherwise, <see langword="false"/>.
         /// </returns>
         /// <remarks>
-        /// Incorrect tags include &lt;c&gt;, &lt;b&gt;, &lt;value&gt;, or&lt;code&gt; containing boolean values.
-        /// The correct format is &lt;see langword="true"/&gt; or &lt;see langword="false"/&gt;.
+        /// Incorrect tags include <c>&lt;c&gt;</c>, <c>&lt;b&gt;</c>, <c>&lt;value&gt;</c> or <c>&lt;code&gt;</c> containing boolean values.
+        /// The correct format is <c>&lt;see langword="true"/&gt;</c> or <c>&lt;see langword="false"/&gt;</c>.
         /// </remarks>
         internal static bool IsWrongBooleanTag(this SyntaxNode value) => value.IsCBool() || value.IsBBool() || value.IsValueBool() || value.IsCodeBool();
 
@@ -1051,24 +1051,24 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsCodeNull(this SyntaxNode value) => value.Is(Constants.XmlTag.Code, Nulls);
 
         /// <summary>
-        /// Determines whether a syntax node represents a <c>&lt;code… /&gt;</c> tag.
+        /// Determines whether a syntax node represents a <c>&lt;code&gt;…&lt;/code&gt;</c> tag.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check for the <c>&lt;code… /&gt;</c> tag.
+        /// The syntax node to check for the <c>&lt;code&gt;…&lt;/code&gt;</c> tag.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the syntax node represents a <c>&lt;code… /&gt;</c> tag; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the syntax node represents a <c>&lt;code&gt;…&lt;/code&gt;</c> tag; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool IsCode(this SyntaxNode value) => value is XmlElementSyntax xes && xes.IsCode();
 
         /// <summary>
-        /// Determines whether an XML element syntax represents a <c>&lt;code… /&gt;</c> tag.
+        /// Determines whether an XML element syntax represents a <c>&lt;code&gt;…&lt;/code&gt;</c> tag.
         /// </summary>
         /// <param name="value">
-        /// The XML element syntax to check for <c>&lt;code… /&gt;</c> tag.
+        /// The XML element syntax to check for <c>&lt;code&gt;…&lt;/code&gt;</c> tag.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the XML element syntax represents a <c>&lt;code… /&gt;</c> tag; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the XML element syntax represents a <c>&lt;code&gt;…&lt;/code&gt;</c> tag; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool IsCode(this XmlElementSyntax value) => value.GetName() is Constants.XmlTag.Code;
 
@@ -1158,7 +1158,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether a syntax node represents a <c>&lt;para/&gt;</c> XML tag .
+        /// Determines whether a syntax node represents a <c>&lt;para/&gt;</c> XML tag.
         /// </summary>
         /// <param name="value">
         /// The syntax node to check for the paragraph tag.
@@ -1169,13 +1169,13 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsPara(this SyntaxNode value) => value.IsXmlTag(Constants.XmlTag.Para);
 
         /// <summary>
-        /// Determines whether a syntax node represents a <c>&lt;see langword… /&gt;</c> or <c>&lt;see langref… /&gt;</c> XML tag.
+        /// Determines whether a syntax node represents a <c>&lt;see langword… /&gt;</c> or an (invalid) <c>&lt;see langref… /&gt;</c> XML tag.
         /// </summary>
         /// <param name="value">
         /// The syntax node to check for the <c>&lt;see langword… /&gt;</c> tag.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the syntax node represents a <c>&lt;see langword… /&gt;</c> or <c>&lt;see langref… /&gt;</c> XML tag; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the syntax node represents a <c>&lt;see langword… /&gt;</c> or an (invalid) <c>&lt;see langref… /&gt;</c> XML tag; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool IsSeeLangword(this SyntaxNode value)
         {
