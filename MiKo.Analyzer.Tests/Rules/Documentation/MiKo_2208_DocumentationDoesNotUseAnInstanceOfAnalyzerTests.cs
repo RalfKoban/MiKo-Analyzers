@@ -171,6 +171,29 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", text.Trim()), Template.Replace("###", text.FirstWord()));
         }
 
+        [TestCase("A instance of the requested elements", "The requested elements")]
+        [TestCase("An instance of the requested elements", "The requested elements")]
+        [TestCase("The instance of the requested elements", "The requested elements")]
+        [TestCase("Gets a instance of the requested elements", "Gets the requested elements")]
+        [TestCase("Gets an instance of the requested elements", "Gets the requested elements")]
+        [TestCase("Gets the instance of the requested elements", "Gets the requested elements")]
+        public void Code_gets_fixed_for_(string originalText, string fixedText)
+        {
+            const string Template = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// ###
+    /// </summary>
+    public TestMe DoSomething() { }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
+        }
+
         protected override string GetDiagnosticId() => MiKo_2208_DocumentationDoesNotUseAnInstanceOfAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2208_DocumentationDoesNotUseAnInstanceOfAnalyzer();
