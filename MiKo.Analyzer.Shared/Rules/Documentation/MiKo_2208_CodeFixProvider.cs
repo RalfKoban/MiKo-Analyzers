@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -35,7 +36,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 dictionary.Add(phrase, phrase.FirstWord() + " ");
             }
 
-            return dictionary.ToArray(_ => new Pair(_.Key, _.Value));
+            var map = dictionary.Select(_ => new Pair(_.Key, _.Value)).ToList();
+
+            map.Add(new Pair("A the", "The"));
+            map.Add(new Pair("An the", "The"));
+            map.Add(new Pair("The the", "The"));
+            map.Add(new Pair(" a the", " the"));
+            map.Add(new Pair(" an the", " the"));
+            map.Add(new Pair(" the the", " the"));
+
+            return map.ToArray();
         }
 
 //// ncrunch: rdi default
