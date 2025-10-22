@@ -363,6 +363,20 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Determines whether the specified <see cref="ExpressionSyntax"/> represents a nullable type in the context of the given <see cref="Document"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The expression syntax to check.
+        /// </param>
+        /// <param name="document">
+        /// The document that contains the expression syntax.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the expression syntax is nullable; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsNullable(this ExpressionSyntax value, Document document) => value.GetSymbol(document) is ITypeSymbol typeSymbol && typeSymbol.IsNullable();
+
+        /// <summary>
         /// Determines whether the specified <see cref="IsPatternExpressionSyntax"/> represents a nullable type in the context of the given <see cref="Document"/>.
         /// </summary>
         /// <param name="value">
@@ -374,7 +388,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the pattern is nullable; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool IsNullable(this IsPatternExpressionSyntax value, Document document) => value.Expression.GetSymbol(document) is ITypeSymbol typeSymbol && typeSymbol.IsNullable();
+        internal static bool IsNullable(this IsPatternExpressionSyntax value, Document document) => value.Expression.IsNullable(document);
 
         /// <summary>
         /// Determines whether the specified <see cref="ArgumentSyntax"/> represents an enum value in the context of the given <see cref="Document"/>.

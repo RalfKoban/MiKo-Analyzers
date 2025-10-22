@@ -174,15 +174,19 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected static PredefinedTypeSyntax PredefinedType(in SyntaxKind kind) => SyntaxFactory.PredefinedType(kind.AsToken());
 
+        protected static ConditionalAccessExpressionSyntax ConditionalAccess(ExpressionSyntax expression, string name) => ConditionalAccess(expression, IdentifierName(name));
+
+        protected static ConditionalAccessExpressionSyntax ConditionalAccess(ExpressionSyntax expression, SimpleNameSyntax binding)
+        {
+            return SyntaxFactory.ConditionalAccessExpression(expression, SyntaxFactory.MemberBindingExpression(binding));
+        }
+
         protected static MemberAccessExpressionSyntax Member(ExpressionSyntax expression, SimpleNameSyntax name)
         {
             return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, expression, name);
         }
 
-        protected static MemberAccessExpressionSyntax Member(ExpressionSyntax syntax, string name)
-        {
-            return Member(syntax, IdentifierName(name));
-        }
+        protected static MemberAccessExpressionSyntax Member(ExpressionSyntax syntax, string name) => Member(syntax, IdentifierName(name));
 
         protected static MemberAccessExpressionSyntax Member(ExpressionSyntax syntax, params string[] names)
         {
