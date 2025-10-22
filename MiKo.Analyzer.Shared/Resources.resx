@@ -3421,6 +3421,18 @@ Using &lt;list&gt; allows IntelliSense to format content as tables, numbered lis
   <data name="MiKo_2244_Title" xml:space="preserve">
     <value>Use &lt;list&gt; instead of &lt;ul&gt; or &lt;ol&gt; in documentation</value>
   </data>
+  <data name="MiKo_2245_CodeFixTitle" xml:space="preserve">
+    <value>Wrap number with &lt;c&gt;</value>
+  </data>
+  <data name="MiKo_2245_Description" xml:space="preserve">
+    <value>Wrap numeric literals in &lt;c&gt; tags in XML documentation to clearly indicate code values. This improves readability, ensures consistent formatting in IntelliSense and documentation tools, and avoids ambiguity between prose and code.</value>
+  </data>
+  <data name="MiKo_2245_MessageFormat" xml:space="preserve">
+    <value>Change '{1}' to '&lt;c&gt;{1}&lt;/c&gt;'</value>
+  </data>
+  <data name="MiKo_2245_Title" xml:space="preserve">
+    <value>Wrap numbers with &lt;c&gt; in documentation</value>
+  </data>
   <data name="MiKo_2300_Description" xml:space="preserve">
     <value>Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works—let the code itself do that.
 This approach ensures comments are insightful and add real value by giving context and rationale, helping developers understand the reasoning behind the implementation.</value>
