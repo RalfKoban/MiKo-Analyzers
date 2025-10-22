@@ -132,7 +132,7 @@ namespace MiKoSolutions.Analyzers
                 var indicesInReverseOrder = indices.OrderByDescending(_ => _.Item2.Length)
                                                    .ThenByDescending(_ => _.Item1);
 
-                // Filter duplicates that have the same index, but are shorted, to only include the long ones
+                // Filter duplicates that have the same index, but are shorter, to only include the long ones
                 foreach (var (startPosition, foundText) in indicesInReverseOrder)
                 {
                     // Note: do not mark the start position as occupied as we need that for the check to detect whether others occupy the same space
