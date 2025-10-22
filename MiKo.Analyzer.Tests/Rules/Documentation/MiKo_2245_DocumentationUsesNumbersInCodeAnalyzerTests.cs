@@ -52,6 +52,14 @@ public sealed class TestMe { }
 ");
 
         [Test]
+        public void An_issue_is_reported_with_a_number_followed_by_a_colon_in_([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
+/// <" + tag + @">
+/// This is some text for -1, just to be sure.
+/// </" + tag + @">
+public sealed class TestMe { }
+");
+
+        [Test]
         public void Code_gets_fixed_for_number()
         {
             const string OriginalCode = """
@@ -165,6 +173,30 @@ public sealed class TestMe { }
                                      /// This is Pi with around <c>3.1415927</c>. Just to be sure.
                                      /// </summary>
                                      public sealed class TestMe { }
+
+                                     """;
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_number_but_not_in_name()
+        {
+            const string OriginalCode = """
+
+                                        /// <summary>
+                                        /// This is a -1 used by TestMe2 to see what happens.
+                                        /// </summary>
+                                        public sealed class TestMe2 { }
+
+                                        """;
+
+            const string FixedCode = """
+
+                                     /// <summary>
+                                     /// This is a <c>-1</c> used by TestMe2 to see what happens.
+                                     /// </summary>
+                                     public sealed class TestMe2 { }
 
                                      """;
 
