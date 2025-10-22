@@ -28,11 +28,28 @@ namespace MiKoSolutions.Analyzers
 
         private const int DifferenceBetweenUpperAndLowerCaseAscii = 0x20; // valid for Roman ASCII characters ('A' ... 'Z')
 
+        private const string NumberRegexPattern = @"
+                                                       (?<!\w)                    # no word character before
+                                                       [+-]?                      # optional sign
+                                                       (
+                                                           \d{1,3}                # first digit group
+                                                           (?: [,_\.] \d{3} )*    # thousands groups
+                                                           |
+                                                           \d+                    # or plain digits
+                                                       )
+                                                       (?: [.,] \d+ )?            # optional decimal part
+                                                       (?!\w)                     # no word character after
+                                                   ";
+
         private static readonly char[] GenericTypeArgumentSeparator = { ',' };
 
         private static readonly Regex HyperlinkRegex = new Regex(@"(www|ftp:|ftps:|http:|https:)+[^\s]+[\w]", RegexOptions.Compiled, 150.Milliseconds());
 
         private static readonly Regex PascalCasingRegex = new Regex("[a-z]+[A-Z]+", RegexOptions.Compiled, 100.Milliseconds());
+
+        private static readonly Regex NumberRegex = new Regex(NumberRegexPattern, RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace, 100.Milliseconds());
+
+        private static readonly Regex OnlyNumberRegex = new Regex("^" + NumberRegexPattern + "$", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace, 100.Milliseconds());
 
         /// <summary>
         /// Adjusts the first word of the value according to the specified adjustment options.
@@ -2210,6 +2227,27 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Gets all numbers contained in the string.
+        /// </summary>
+        /// <param name="value">
+        /// The string to search for numbers.
+        /// </param>
+        /// <returns>
+        /// An array of strings representing each number found in the string, or an empty array if no numbers are found.
+        /// </returns>
+        public static string[] GetNumbers(this string value)
+        {
+            var matches = NumberRegex.Matches(value);
+
+            if (matches.Count is 0)
+            {
+                return Array.Empty<string>();
+            }
+
+            return matches.Cast<Match>().ToArray(_ => _.Value);
+        }
+
+        /// <summary>
         /// Gets the part of the span after the last dot.
         /// </summary>
         /// <param name="value">
@@ -2449,7 +2487,7 @@ namespace MiKoSolutions.Analyzers
         /// The default is <see cref="StringComparison.Ordinal"/>.
         /// </param>
         /// <returns>
-        /// The index of the first occurrence of any phrase, or -1 if none are found.
+        /// The index of the first occurrence of any phrase, or <c>-1</c> if none are found.
         /// </returns>
         public static int IndexOfAny(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> phrases, in StringComparison comparison = StringComparison.Ordinal)
         {
@@ -2492,7 +2530,7 @@ namespace MiKoSolutions.Analyzers
         /// The default is <see cref="StringComparison.Ordinal"/>.
         /// </param>
         /// <returns>
-        /// The index of the first occurrence of any phrase, or -1 if none are found.
+        /// The index of the first occurrence of any phrase, or <c>-1</c> if none are found.
         /// </returns>
         public static int IndexOfAny(this string value, in ReadOnlySpan<string> phrases, in StringComparison comparison = StringComparison.Ordinal)
         {
@@ -2531,7 +2569,7 @@ namespace MiKoSolutions.Analyzers
         /// The default is <see cref="StringComparison.Ordinal"/>.
         /// </param>
         /// <returns>
-        /// The index of the last occurrence of any phrase, or -1 if none are found.
+        /// The index of the last occurrence of any phrase, or <c>-1</c> if none are found.
         /// </returns>
         public static int LastIndexOfAny(this string value, in ReadOnlySpan<string> phrases, in StringComparison comparison = StringComparison.Ordinal)
         {
@@ -2704,6 +2742,36 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsNumber(this in char value) => char.IsNumber(value);
+
+        /// <summary>
+        /// Determines whether the span is a number.
+        /// </summary>
+        /// <param name="value">
+        /// The span to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the span is a number; otherwise, <see langword="false"/>.
+        /// </returns>
+        public static bool IsNumber(this in ReadOnlySpan<char> value)
+        {
+            switch (value.Length)
+            {
+                case 0: return false;
+                case 1: return value[0].IsNumber();
+                default: return value.ToString().IsNumber();
+            }
+        }
+
+        /// <summary>
+        /// Determines whether the string is a number.
+        /// </summary>
+        /// <param name="value">
+        /// The string to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the string is a number; otherwise, <see langword="false"/>.
+        /// </returns>
+        public static bool IsNumber(this string value) => OnlyNumberRegex.IsMatch(value);
 
         /// <summary>
         /// Determines whether the string is in <c>PascalCasing</c> format.
@@ -3702,10 +3770,14 @@ namespace MiKoSolutions.Analyzers
         /// <param name="value">
         /// The span of characters to enumerate words from.
         /// </param>
+        /// <param name="boundary">
+        /// One of the enumeration members that specifies the word boundary method to use.
+        /// The default is <see cref="WordBoundary.UpperCaseCharacters"/>.
+        /// </param>
         /// <returns>
         /// A <see cref="WordsReadOnlySpanEnumerator"/> for the span of characters.
         /// </returns>
-        public static WordsReadOnlySpanEnumerator WordsAsSpan(this in ReadOnlySpan<char> value) => new WordsReadOnlySpanEnumerator(value);
+        public static WordsReadOnlySpanEnumerator WordsAsSpan(this in ReadOnlySpan<char> value, in WordBoundary boundary = WordBoundary.UpperCaseCharacters) => new WordsReadOnlySpanEnumerator(value, boundary);
 
         /// <summary>
         /// Removes consecutive suffixes from the given span of characters.

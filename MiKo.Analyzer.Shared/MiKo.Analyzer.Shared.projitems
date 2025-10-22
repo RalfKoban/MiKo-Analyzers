@@ -36,6 +36,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\SyntaxTriviaExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\SyntaxTriviaListExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\TimeSpanExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\WordBoundary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\WordsReadOnlySpanEnumerator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\WordsReadOnlySpanEnumeratorSelectDelegate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Linguistics\AbbreviationFinder.cs" />
@@ -172,6 +173,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2239_DocumentationUsesSingleLineDocumentationCommentAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2240_ResponseTypeDefaultPhraseAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2244_DocumentationShallUseListAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2245_DocumentationUsesNumbersInCodeAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2300_MeaninglessCommentAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2301_TestArrangeActAssertCommentAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2302_CommentedOutCodeAnalyzer.cs" />

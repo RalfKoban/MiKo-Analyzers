@@ -9709,6 +9709,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wrap number with &lt;c&gt;.
+        /// </summary>
+        internal static string MiKo_2245_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2245_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wrap numeric literals in &lt;c&gt; tags in XML documentation to clearly indicate code values. This improves readability, ensures consistent formatting in IntelliSense and documentation tools, and avoids ambiguity between prose and code..
+        /// </summary>
+        internal static string MiKo_2245_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2245_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change &apos;{1}&apos; to &apos;&lt;c&gt;{1}&lt;/c&gt;&apos;.
+        /// </summary>
+        internal static string MiKo_2245_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2245_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wrap numbers with &lt;c&gt; in documentation.
+        /// </summary>
+        internal static string MiKo_2245_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2245_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works—let the code itself do that.
         ///This approach ensures comments are insightful and add real value by giving context and rationale, helping developers understand the reasoning behind the implementation..
         /// </summary>

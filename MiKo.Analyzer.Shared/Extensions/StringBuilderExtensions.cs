@@ -1056,7 +1056,7 @@ namespace MiKoSolutions.Analyzers
         /// The text to search for.
         /// </param>
         /// <returns>
-        /// The zero-based starting position where the specified text might occur, or -1 if it does not occur.
+        /// The zero-based starting position where the specified text might occur, or <c>-1</c> if it does not occur.
         /// </returns>
         private static int QuickSubstringProbe(in ReadOnlySpan<char> current, in ReadOnlySpan<char> other)
         {
@@ -1319,7 +1319,7 @@ namespace MiKoSolutions.Analyzers
         /// The default is <c>0</c>.
         /// </param>
         /// <returns>
-        /// The zero-based index of the first occurrence of the specified character, or -1 if it is not found.
+        /// The zero-based index of the first occurrence of the specified character, or <c>-1</c> if it is not found.
         /// </returns>
         private static int IndexOf(this StringBuilder value, in char c, in int start = 0)
         {
@@ -1351,7 +1351,7 @@ namespace MiKoSolutions.Analyzers
         /// The default is <c>0</c>.
         /// </param>
         /// <returns>
-        /// The zero-based index of the first occurrence of either specified character, or -1 if neither is found.
+        /// The zero-based index of the first occurrence of either specified character, or <c>-1</c> if neither is found.
         /// </returns>
         private static int IndexOf(this StringBuilder value, in char c1, in char c2, in int start = 0)
         {

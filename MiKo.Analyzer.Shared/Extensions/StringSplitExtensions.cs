@@ -90,6 +90,14 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
+            if (substringIndices.Count is 0)
+            {
+                // happens in case we could not split the string
+                return new[] { value.ToString() };
+            }
+
+            RemoveOverlaps(substringIndices);
+
             var results = new List<string>((substringIndices.Count * 2) + 1);
 
             var remainingString = value;
@@ -116,6 +124,36 @@ namespace MiKoSolutions.Analyzers
             results.Reverse();
 
             return results;
+
+            void RemoveOverlaps(List<(int, string)> indices)
+            {
+                var occupiedPositions = new HashSet<int>();
+
+                var indicesInReverseOrder = indices.OrderByDescending(_ => _.Item2.Length)
+                                                   .ThenByDescending(_ => _.Item1);
+
+                // Filter duplicates that have the same index, but are shorted, to only include the long ones
+                foreach (var (startPosition, foundText) in indicesInReverseOrder)
+                {
+                    // Note: do not mark the start position as occupied as we need that for the check to detect whether others occupy the same space
+                    for (int i = 1, length = foundText.Length; i < length; i++)
+                    {
+                        occupiedPositions.Add(startPosition + i);
+                    }
+                }
+
+                // filter the parts that are overlapped by others but occupy different positions (such as '0' inside '101')
+                indices.RemoveAll(_ => occupiedPositions.Contains(_.Item1));
+
+                // filter the parts that start with the same position (such as '1' at the start of '123')
+                foreach (var group in indices.GroupBy(_ => _.Item1).Where(_ => _.Count() > 1))
+                {
+                    foreach (var overlap in group.OrderByDescending(_ => _.Item2.Length).Skip(1))
+                    {
+                        indices.Remove(overlap);
+                    }
+                }
+            }
         }
 
         /// <summary>
