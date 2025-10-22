@@ -2584,16 +2584,29 @@ namespace MiKoSolutions.Analyzers
                                                                            || value.InheritsFrom(Constants.Names.IMultiValueConverter, Constants.Names.IMultiValueConverterFullName);
 
         /// <summary>
-        /// Determines whether a type is a nullable value type.
+        /// Determines whether a type is a nullable type.
         /// </summary>
         /// <param name="value">
         /// The type to inspect.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the type is a nullable value type; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the type is a nullable type; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsNullable(this ITypeSymbol value) => value.IsValueType && value.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
+        internal static bool IsNullable(this ITypeSymbol value)
+        {
+            if (value.IsValueType)
+            {
+                return value.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
+            }
+
+            if (value.IsReferenceType)
+            {
+                return value.NullableAnnotation is NullableAnnotation.Annotated;
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// Determines whether a type is <see cref="object"/>.
