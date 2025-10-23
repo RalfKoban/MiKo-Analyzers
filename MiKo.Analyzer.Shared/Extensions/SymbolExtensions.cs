@@ -1780,7 +1780,7 @@ namespace MiKoSolutions.Analyzers
                 return true;
             }
 
-            if (value.IsNullable() && value is INamedTypeSymbol type)
+            if (value.IsValueType && value.IsNullable() && value is INamedTypeSymbol type)
             {
                 // in a nullable context we might not have a 'Nullable<T>' but instead something like 'xyz?'
                 // (so we have to check if there are any type arguments available)
