@@ -54,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 //// ncrunch: no coverage start
 
         /// <summary>
-        /// Gets an optimized array of terms for quick lookup by removing terms that are prefixes of other terms.
+        /// Creates an optimized array of terms for quick lookup by removing terms that are prefixes of other terms.
         /// </summary>
         /// <param name="terms">
         /// The collection of terms to optimize.
@@ -120,7 +120,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 //// ncrunch: rdi default
 
         /// <summary>
-        /// Gets an XML code element containing the specified text.
+        /// Creates an XML code element containing the specified text.
         /// </summary>
         /// <param name="text">
         /// The text to include in the code element.
@@ -131,7 +131,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlElementSyntax C(string text) => SyntaxFactory.XmlElement(Constants.XmlTag.C, XmlText(text).ToSyntaxList<XmlNodeSyntax>());
 
         /// <summary>
-        /// Gets an XML comment element with the specified content and proper XML comment formatting.
+        /// Creates an XML comment element with the specified content and proper XML comment formatting.
         /// </summary>
         /// <param name="comment">
         /// The XML element to update.
@@ -152,7 +152,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         /// <summary>
-        /// Gets an XML comment element with the specified nodes and proper XML comment formatting.
+        /// Creates an XML comment element with the specified nodes and proper XML comment formatting.
         /// </summary>
         /// <param name="comment">
         /// The XML element to update.
@@ -166,7 +166,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, IEnumerable<XmlNodeSyntax> nodes) => Comment(comment, nodes.ToSyntaxList());
 
         /// <summary>
-        /// Gets an XML comment element with text from the specified span.
+        /// Creates an XML comment element with text from the specified span.
         /// </summary>
         /// <param name="comment">
         /// The XML element to update.
@@ -184,7 +184,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, in ReadOnlySpan<string> text, string additionalComment = null) => Comment(comment, text[0], additionalComment);
 
         /// <summary>
-        /// Gets an XML comment element with text from the specified span and additional content nodes.
+        /// Creates an XML comment element with text from the specified span and additional content nodes.
         /// </summary>
         /// <param name="comment">
         /// The XML element to update.
@@ -203,7 +203,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         //// ncrunch: rdi off
 
         /// <summary>
-        /// Gets an XML comment element with the specified text and additional content nodes.
+        /// Creates an XML comment element with the specified text and additional content nodes.
         /// </summary>
         /// <param name="comment">
         /// The XML element to update.
@@ -225,7 +225,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         /// <summary>
-        /// Gets an XML comment element with the specified text.
+        /// Creates an XML comment element with the specified text.
         /// </summary>
         /// <param name="comment">
         /// The XML element to update.
@@ -243,7 +243,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string text, string additionalComment = null) => Comment(comment, additionalComment is null ? XmlText(text) : XmlText(text + additionalComment));
 
         /// <summary>
-        /// Gets an XML comment element with text replacements based on the specified lookup terms and replacement map.
+        /// Creates an XML comment element with text replacements based on the specified lookup terms and replacement map.
         /// </summary>
         /// <param name="syntax">
         /// The XML element to update.
@@ -269,7 +269,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         /// <summary>
-        /// Gets a syntax node with text replacements based on the specified lookup terms and replacement map.
+        /// Creates a syntax node with text replacements based on the specified lookup terms and replacement map.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node (typically <see cref="XmlElementSyntax"/>).
@@ -410,7 +410,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 //// ncrunch: rdi default
 
         /// <summary>
-        /// Gets an XML comment element with the specified text surrounding a type reference.
+        /// Creates an XML comment element with the specified text surrounding a type reference.
         /// </summary>
         /// <param name="comment">
         /// The XML element to update.
@@ -433,7 +433,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         /// <summary>
-        /// Gets an XML comment element with the specified text surrounding a link and additional content nodes.
+        /// Creates an XML comment element with the specified text surrounding a link and additional content nodes.
         /// </summary>
         /// <param name="comment">
         /// The XML element to update.
@@ -464,7 +464,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         /// <summary>
-        /// Gets an XML comment element with the specified XML nodes.
+        /// Creates an XML comment element with the specified XML nodes.
         /// </summary>
         /// <param name="comment">
         /// The XML element to update.
@@ -478,7 +478,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, params XmlNodeSyntax[] nodes) => Comment(comment, nodes.ToSyntaxList());
 
         /// <summary>
-        /// Gets an XML comment element with the specified text surrounding a link and additional content nodes.
+        /// Creates an XML comment element with the specified text surrounding a link and additional content nodes.
         /// </summary>
         /// <param name="comment">
         /// The XML element to update.
@@ -513,7 +513,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         /// <summary>
-        /// Gets an XML comment element with the specified text surrounding two links.
+        /// Creates an XML comment element with the specified text surrounding two links.
         /// </summary>
         /// <param name="comment">
         /// The XML element to update.
@@ -553,7 +553,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         /// <summary>
-        /// Gets an XML comment element with the specified text surrounding two links with middle content nodes.
+        /// Creates an XML comment element with the specified text surrounding two links with middle content nodes.
         /// </summary>
         /// <param name="comment">
         /// The XML element to update.
@@ -598,7 +598,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         /// <summary>
-        /// Gets an XML comment element with the specified ending text appended, replacing any existing trailing period with the new ending. This ensures consistent sentence termination.
+        /// Creates an XML comment element with the specified ending text appended, replacing any existing trailing period with the new ending. This ensures consistent sentence termination.
         /// </summary>
         /// <param name="comment">
         /// The XML element to update.
@@ -652,7 +652,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         /// <summary>
-        /// Gets an XML comment element with the specified ending text and reference appended or replaced.
+        /// Creates an XML comment element with the specified ending text and reference appended or replaced.
         /// </summary>
         /// <param name="comment">
         /// The XML element to update.
@@ -712,7 +712,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         /// <summary>
-        /// Gets an XML comment element with a given phrase added at the beginning.
+        /// Creates an XML comment element with a given phrase added at the beginning.
         /// The first word of the original comment is adjusted based on the specified rule.
         /// For example, the word may be lowercased to continue the sentence smoothly.
         /// </summary>
@@ -737,7 +737,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         /// <summary>
-        /// Gets a content list with the specified phrase at the start and adjusted first word.
+        /// Creates a content list with the specified phrase at the start and adjusted first word.
         /// </summary>
         /// <param name="content">
         /// The content nodes to update.
@@ -782,7 +782,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         /// <summary>
-        /// Gets an XML comment element with the specified starting text and reference.
+        /// Creates an XML comment element with the specified starting text and reference.
         /// </summary>
         /// <param name="comment">
         /// The XML element to update.
@@ -855,7 +855,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         /// <summary>
-        /// Gets an XML element with the specified content and properly formatted tags.
+        /// Creates an XML element with the specified content and properly formatted tags.
         /// </summary>
         /// <param name="value">
         /// The XML element to update.
@@ -869,7 +869,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlElementSyntax CommentWithContent(XmlElementSyntax value, in SyntaxList<XmlNodeSyntax> content) => SyntaxFactory.XmlElement(value.StartTag, content, value.EndTag).WithTagsOnSeparateLines();
 
         /// <summary>
-        /// Gets a type reference syntax for the specified type name.
+        /// Creates a type reference syntax for the specified type name.
         /// </summary>
         /// <param name="typeName">
         /// The name of the type to reference.
@@ -881,7 +881,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static TypeCrefSyntax Cref(string typeName) => Cref(typeName.AsTypeSyntax());
 
         /// <summary>
-        /// Gets a type reference syntax for the specified type.
+        /// Creates a type reference syntax for the specified type.
         /// </summary>
         /// <param name="type">
         /// The type to reference.
@@ -896,7 +896,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         /// <summary>
-        /// Gets an empty XML element with a reference to the specified type.
+        /// Creates an empty XML element with a reference to the specified type.
         /// </summary>
         /// <param name="tag">
         /// The XML tag name.
@@ -914,7 +914,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         /// <summary>
-        /// Gets an empty XML element with a reference to the specified type member.
+        /// Creates an empty XML element with a reference to the specified type member.
         /// </summary>
         /// <param name="tag">
         /// The XML tag name.
@@ -997,7 +997,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         /// <summary>
-        /// Gets an <c>&lt;inheritdoc/&gt;</c> XML element.
+        /// Creates an <c>&lt;inheritdoc/&gt;</c> XML element.
         /// </summary>
         /// <returns>
         /// The <c>&lt;inheritdoc/&gt;</c> XML element.
@@ -1006,7 +1006,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlEmptyElementSyntax Inheritdoc() => XmlEmptyElement(Constants.XmlTag.Inheritdoc);
 
         /// <summary>
-        /// Gets an <c>&lt;inheritdoc cref="…"/&gt;</c> XML element with the specified <c>cref</c> attribute.
+        /// Creates an <c>&lt;inheritdoc cref="…"/&gt;</c> XML element with the specified <c>cref</c> attribute.
         /// </summary>
         /// <param name="cref">
         /// The <c>cref</c> attribute for the inheritdoc element.
@@ -1018,7 +1018,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlEmptyElementSyntax Inheritdoc(XmlCrefAttributeSyntax cref) => Inheritdoc().WithAttributes(cref.ToSyntaxList<XmlAttributeSyntax>());
 
         /// <summary>
-        /// Gets an XML element with the first word converted to infinite verb form.
+        /// Creates an XML element with the first word converted to infinite verb form.
         /// </summary>
         /// <param name="syntax">
         /// The XML element to update.
@@ -1043,7 +1043,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         /// <summary>
-        /// Gets an XML text with the first word converted to infinite verb form.
+        /// Creates an XML text with the first word converted to infinite verb form.
         /// </summary>
         /// <param name="text">
         /// The XML text to update.
@@ -1078,7 +1078,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         /// <summary>
-        /// Gets an XML para empty element.
+        /// Creates an XML para empty element.
         /// </summary>
         /// <returns>
         /// The XML para empty element.
@@ -1087,7 +1087,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlEmptyElementSyntax Para() => XmlEmptyElement(Constants.XmlTag.Para);
 
         /// <summary>
-        /// Gets an XML para element with the specified text.
+        /// Creates an XML para element with the specified text.
         /// </summary>
         /// <param name="text">
         /// The text for the para element.
@@ -1099,7 +1099,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlElementSyntax Para(string text) => SyntaxFactory.XmlParaElement(XmlText(text));
 
         /// <summary>
-        /// Gets an XML para element with the specified content nodes.
+        /// Creates an XML para element with the specified content nodes.
         /// </summary>
         /// <param name="nodes">
         /// The content nodes for the para element.
@@ -1111,7 +1111,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlElementSyntax Para(in SyntaxList<XmlNodeSyntax> nodes) => SyntaxFactory.XmlParaElement(nodes);
 
         /// <summary>
-        /// Gets an XML parameter comment for the specified parameter using text from the span.
+        /// Creates an XML parameter comment for the specified parameter using text from the span.
         /// </summary>
         /// <param name="parameter">
         /// The parameter to document.
@@ -1126,7 +1126,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlElementSyntax ParameterComment(ParameterSyntax parameter, in ReadOnlySpan<string> comments) => ParameterComment(parameter, comments[0]);
 
         /// <summary>
-        /// Gets an XML parameter comment for the specified parameter.
+        /// Creates an XML parameter comment for the specified parameter.
         /// </summary>
         /// <param name="parameter">
         /// The parameter to document.
@@ -1141,7 +1141,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlElementSyntax ParameterComment(ParameterSyntax parameter, string comment) => Comment(SyntaxFactory.XmlParamElement(parameter.GetName()), comment);
 
         /// <summary>
-        /// Gets an XML paramref element for the specified parameter.
+        /// Creates an XML paramref element for the specified parameter.
         /// </summary>
         /// <param name="parameter">
         /// The parameter to reference.
@@ -1153,7 +1153,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlEmptyElementSyntax ParamRef(ParameterSyntax parameter) => ParamRef(parameter.GetName());
 
         /// <summary>
-        /// Gets an XML paramref element for the specified parameter name.
+        /// Creates an XML paramref element for the specified parameter name.
         /// </summary>
         /// <param name="parameterName">
         /// The name of the parameter to reference.
@@ -1165,7 +1165,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlEmptyElementSyntax ParamRef(string parameterName) => XmlEmptyElement(Constants.XmlTag.ParamRef).WithAttribute(SyntaxFactory.XmlNameAttribute(parameterName));
 
         /// <summary>
-        /// Gets an XML para element with special or phrase text.
+        /// Creates an XML para element with special or phrase text.
         /// </summary>
         /// <returns>
         /// The XML para element with special or phrase text.
@@ -1174,7 +1174,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlElementSyntax ParaOr() => Para(Constants.Comments.SpecialOrPhrase);
 
         /// <summary>
-        /// Gets an XML element with boolean tags removed and text nodes combined.
+        /// Creates an XML element with boolean tags removed and text nodes combined.
         /// </summary>
         /// <param name="comment">
         /// The XML element to update.
@@ -1191,7 +1191,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         /// <summary>
-        /// Gets a syntax node with the specified phrase replaced.
+        /// Creates a syntax node with the specified phrase replaced.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1215,7 +1215,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static T ReplaceText<T>(T comment, XmlTextSyntax text, string phrase, string replacement) where T : SyntaxNode => ReplaceText(comment, text, new[] { phrase }, replacement);
 
         /// <summary>
-        /// Gets a syntax node with the specified phrases replaced.
+        /// Creates a syntax node with the specified phrases replaced.
         /// </summary>
         /// <typeparam name="T">
         /// The type of the syntax node.
@@ -1245,7 +1245,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         /// <summary>
-        /// Gets an XML see element with a reference to the specified type name.
+        /// Creates an XML see element with a reference to the specified type name.
         /// </summary>
         /// <param name="typeName">
         /// The name of the type to reference.
@@ -1257,7 +1257,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlEmptyElementSyntax SeeCref(string typeName) => SeeCref(typeName.AsTypeSyntax());
 
         /// <summary>
-        /// Gets an XML see element with a reference to the specified type.
+        /// Creates an XML see element with a reference to the specified type.
         /// </summary>
         /// <param name="type">
         /// The type to reference.
@@ -1269,7 +1269,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlEmptyElementSyntax SeeCref(TypeSyntax type) => Cref(Constants.XmlTag.See, type);
 
         /// <summary>
-        /// Gets an XML see element with a reference to a member of the specified type.
+        /// Creates an XML see element with a reference to a member of the specified type.
         /// </summary>
         /// <param name="typeName">
         /// The name of the type containing the member.
@@ -1284,7 +1284,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlEmptyElementSyntax SeeCref(string typeName, string member) => SeeCref(typeName.AsTypeSyntax(), member);
 
         /// <summary>
-        /// Gets an XML see element with a reference to a member of the specified type.
+        /// Creates an XML see element with a reference to a member of the specified type.
         /// </summary>
         /// <param name="typeName">
         /// The name of the type containing the member.
@@ -1299,7 +1299,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlEmptyElementSyntax SeeCref(string typeName, NameSyntax member) => SeeCref(typeName.AsTypeSyntax(), member);
 
         /// <summary>
-        /// Gets an XML see element with a reference to a member of the specified type.
+        /// Creates an XML see element with a reference to a member of the specified type.
         /// </summary>
         /// <param name="type">
         /// The type containing the member.
@@ -1314,7 +1314,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlEmptyElementSyntax SeeCref(TypeSyntax type, string member) => SeeCref(type, SyntaxFactory.ParseName(member));
 
         /// <summary>
-        /// Gets an XML see element with a reference to a member of the specified type.
+        /// Creates an XML see element with a reference to a member of the specified type.
         /// </summary>
         /// <param name="type">
         /// The type containing the member.
@@ -1329,7 +1329,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlEmptyElementSyntax SeeCref(TypeSyntax type, NameSyntax member) => Cref(Constants.XmlTag.See, type, member);
 
         /// <summary>
-        /// Gets an XML see element with a langword attribute for the specified text.
+        /// Creates an XML see element with a langword attribute for the specified text.
         /// </summary>
         /// <param name="text">
         /// The langword value.
@@ -1345,7 +1345,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         /// <summary>
-        /// Gets an <c>&lt;see langword="false"/&gt;</c> XML element.
+        /// Creates an <c>&lt;see langword="false"/&gt;</c> XML element.
         /// </summary>
         /// <returns>
         /// The XML element <c>&lt;see langword="false"/&gt;</c>.
@@ -1354,7 +1354,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlEmptyElementSyntax SeeLangword_False() => SeeLangword("false");
 
         /// <summary>
-        /// Gets an <c>&lt;see langword="null"/&gt;</c> XML element.
+        /// Creates an <c>&lt;see langword="null"/&gt;</c> XML element.
         /// </summary>
         /// <returns>
         /// The XML element <c>&lt;see langword="null"/&gt;</c>.
@@ -1363,7 +1363,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlEmptyElementSyntax SeeLangword_Null() => SeeLangword("null");
 
         /// <summary>
-        /// Gets an <c>&lt;see langword="true"/&gt;</c> XML element.
+        /// Creates an <c>&lt;see langword="true"/&gt;</c> XML element.
         /// </summary>
         /// <returns>
         /// The XML element <c>&lt;see langword="true"/&gt;</c>.
@@ -1461,7 +1461,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         /// <summary>
-        /// Gets an XML typeparamref element for the specified type parameter name.
+        /// Creates an XML typeparamref element for the specified type parameter name.
         /// </summary>
         /// <param name="name">
         /// The name of the type parameter to reference.
@@ -1477,7 +1477,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         /// <summary>
-        /// Gets an XML text attribute with the specified tag and text.
+        /// Creates an XML text attribute with the specified tag and text.
         /// </summary>
         /// <param name="tag">
         /// The attribute tag name.
@@ -1527,7 +1527,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         /// <summary>
-        /// Gets an XML element with the specified tag and no content.
+        /// Creates an XML element with the specified tag and no content.
         /// </summary>
         /// <param name="tag">
         /// The XML tag name.
@@ -1539,7 +1539,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlElementSyntax XmlElement(string tag) => SyntaxFactory.XmlElement(tag, default);
 
         /// <summary>
-        /// Gets an XML element with the specified tag and content.
+        /// Creates an XML element with the specified tag and content.
         /// </summary>
         /// <param name="tag">
         /// The XML tag name.
@@ -1554,7 +1554,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlElementSyntax XmlElement(string tag, XmlNodeSyntax content) => SyntaxFactory.XmlElement(tag, content.ToSyntaxList());
 
         /// <summary>
-        /// Gets an XML element with the specified tag and content nodes.
+        /// Creates an XML element with the specified tag and content nodes.
         /// </summary>
         /// <param name="tag">
         /// The XML tag name.
@@ -1569,7 +1569,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlElementSyntax XmlElement(string tag, IEnumerable<XmlNodeSyntax> contents) => SyntaxFactory.XmlElement(tag, contents.ToSyntaxList());
 
         /// <summary>
-        /// Gets an empty XML element with the specified tag.
+        /// Creates an empty XML element with the specified tag.
         /// </summary>
         /// <param name="tag">
         /// The XML tag name.
@@ -1581,7 +1581,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlEmptyElementSyntax XmlEmptyElement(string tag) => SyntaxFactory.XmlEmptyElement(tag);
 
         /// <summary>
-        /// Gets an empty XML text with leading XML comment trivia.
+        /// Creates an empty XML text with leading XML comment trivia.
         /// </summary>
         /// <returns>
         /// The empty XML text with a new line and leading XML comment.
@@ -1590,7 +1590,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlTextSyntax NewLineXmlText() => XmlText(string.Empty).WithLeadingXmlComment();
 
         /// <summary>
-        /// Gets an empty XML text with trailing XML comment trivia.
+        /// Creates an empty XML text with trailing XML comment trivia.
         /// </summary>
         /// <returns>
         /// The empty XML text with trailing XML comment.
@@ -1599,7 +1599,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlTextSyntax TrailingNewLineXmlText() => XmlText(string.Empty).WithTrailingXmlComment();
 
         /// <summary>
-        /// Gets an XML text with the specified text.
+        /// Creates an XML text with the specified text.
         /// </summary>
         /// <param name="text">
         /// The text value.
@@ -1611,7 +1611,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlTextSyntax XmlText(string text) => SyntaxFactory.XmlText(text);
 
         /// <summary>
-        /// Gets an XML text with the specified syntax token list.
+        /// Creates an XML text with the specified syntax token list.
         /// </summary>
         /// <param name="textTokens">
         /// The syntax token list for the XML text.
@@ -1630,7 +1630,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         /// <summary>
-        /// Gets an XML text with the specified syntax tokens.
+        /// Creates an XML text with the specified syntax tokens.
         /// </summary>
         /// <param name="textTokens">
         /// The syntax tokens for the XML text.
@@ -1641,6 +1641,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlTextSyntax XmlText(IEnumerable<SyntaxToken> textTokens) => XmlText(textTokens.ToTokenList());
 
+        /// <summary>
+        /// Creates a collection of XML nodes with the specified ending text and additional content nodes.
+        /// </summary>
+        /// <param name="commentEnd">
+        /// The ending text to prepend to the content nodes.
+        /// </param>
+        /// <param name="commentEndNodes">
+        /// The additional XML nodes to append.
+        /// </param>
+        /// <returns>
+        /// A collection of XML nodes with the ending text combined with the additional content nodes, with the first word of existing text nodes adjusted to lowercase.
+        /// </returns>
         private static List<XmlNodeSyntax> CommentEnd(string commentEnd, params XmlNodeSyntax[] commentEndNodes)
         {
             var skip = 0;
@@ -1697,8 +1709,29 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return result;
         }
 
+        /// <summary>
+        /// Creates an empty XML element with a code reference attribute.
+        /// </summary>
+        /// <param name="tag">
+        /// The XML tag name.
+        /// </param>
+        /// <param name="syntax">
+        /// The code reference syntax to include in the element.
+        /// </param>
+        /// <returns>
+        /// The empty XML element with the code reference attribute.
+        /// </returns>
         private static XmlEmptyElementSyntax Cref(string tag, CrefSyntax syntax) => XmlEmptyElement(tag).WithAttribute(SyntaxFactory.XmlCrefAttribute(syntax));
 
+        /// <summary>
+        /// Gets the index of the first content node to process, accounting for whitespace-only text nodes.
+        /// </summary>
+        /// <param name="content">
+        /// The content nodes to analyze.
+        /// </param>
+        /// <returns>
+        /// The zero-based index of the first meaningful content node, or <c>-1</c> if the content is empty.
+        /// </returns>
         private static int GetIndex(in SyntaxList<XmlNodeSyntax> content)
         {
             var contentCount = content.Count;
@@ -1717,6 +1750,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
 //// ncrunch: rdi off
+
+        /// <summary>
+        /// Creates an XML element with adjacent text nodes merged into single text nodes.
+        /// </summary>
+        /// <param name="comment">
+        /// The XML element to update.
+        /// </param>
+        /// <returns>
+        /// The XML element with adjacent text nodes combined, or the original element if no adjacent text nodes were found.
+        /// </returns>
         private static XmlElementSyntax CombineTexts(XmlElementSyntax comment)
         {
             var contents = comment.Content;
