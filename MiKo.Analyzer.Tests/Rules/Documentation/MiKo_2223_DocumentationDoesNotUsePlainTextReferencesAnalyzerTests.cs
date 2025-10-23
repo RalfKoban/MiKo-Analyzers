@@ -388,6 +388,10 @@ public class TestMe
         [TestCase("i.e.")]
         [TestCase("I.e.")]
         [TestCase("I.E.")]
+        [TestCase("etc.")]
+        [TestCase("( such as nothing etc.)")]
+        [TestCase("(such as anything, nothing, etc.)")]
+        [TestCase("(such as anything, nothing, etc.). So")]
         public void No_issue_is_reported_for_correctly_documented_method_with_(string example) => No_issue_is_reported_for(@"
 using System;
 

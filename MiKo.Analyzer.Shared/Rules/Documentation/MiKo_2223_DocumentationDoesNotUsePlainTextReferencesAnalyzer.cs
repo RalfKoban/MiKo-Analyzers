@@ -100,6 +100,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                          "SonarQube",
                                                                          "StyleCop",
                                                                          "VisualBasic",
+                                                                         "etc",
                                                                      };
 
         public MiKo_2223_DocumentationDoesNotUsePlainTextReferencesAnalyzer() : base(Id)
