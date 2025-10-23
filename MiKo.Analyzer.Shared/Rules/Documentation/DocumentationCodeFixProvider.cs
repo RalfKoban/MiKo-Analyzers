@@ -1012,7 +1012,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// The <c>cref</c> attribute for the inheritdoc element.
         /// </param>
         /// <returns>
-        /// The <c>&lt;inheritdoc cref="…"/&gt;</c> XML element  with the <c>cref</c> attribute.
+        /// The <c>&lt;inheritdoc cref="…"/&gt;</c> XML element with the <c>cref</c> attribute.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlEmptyElementSyntax Inheritdoc(XmlCrefAttributeSyntax cref) => Inheritdoc().WithAttributes(cref.ToSyntaxList<XmlAttributeSyntax>());
