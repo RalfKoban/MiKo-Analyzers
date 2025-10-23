@@ -447,7 +447,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// <param name="commentEnd">
         /// The text after the link.
         /// </param>
-        /// <param name="commendEndNodes">
+        /// <param name="commentEndNodes">
         /// The additional content nodes to append.
         /// </param>
         /// <returns>
@@ -458,9 +458,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                               string commentStart,
                                               XmlNodeSyntax link,
                                               string commentEnd,
-                                              in SyntaxList<XmlNodeSyntax> commendEndNodes)
+                                              in SyntaxList<XmlNodeSyntax> commentEndNodes)
         {
-            return Comment(comment, commentStart, link, commentEnd, commendEndNodes.ToArray());
+            return Comment(comment, commentStart, link, commentEnd, commentEndNodes.ToArray());
         }
 
         /// <summary>
@@ -492,7 +492,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// <param name="commentEnd">
         /// The text after the link.
         /// </param>
-        /// <param name="commendEndNodes">
+        /// <param name="commentEndNodes">
         /// The additional content nodes to append.
         /// </param>
         /// <returns>
@@ -503,11 +503,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                               string commentStart,
                                               XmlNodeSyntax link,
                                               string commentEnd,
-                                              params XmlNodeSyntax[] commendEndNodes)
+                                              params XmlNodeSyntax[] commentEndNodes)
         {
             // TODO RKN: Check array creation to see if it can be optimized
             var start = new[] { XmlText(commentStart), link };
-            var end = CommentEnd(commentEnd, commendEndNodes);
+            var end = CommentEnd(commentEnd, commentEndNodes);
 
             return Comment(comment, start.Concat(end));
         }
@@ -533,7 +533,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// <param name="commentEnd">
         /// The text after the second link.
         /// </param>
-        /// <param name="commendEndNodes">
+        /// <param name="commentEndNodes">
         /// The additional content nodes to append.
         /// </param>
         /// <returns>
@@ -546,10 +546,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                               string commentMiddle,
                                               XmlNodeSyntax link2,
                                               string commentEnd,
-                                              params XmlNodeSyntax[] commendEndNodes)
+                                              params XmlNodeSyntax[] commentEndNodes)
         {
             // TODO RKN: Check array creation to see if it can be optimized
-            return Comment(comment, commentStart, link1, new[] { XmlText(commentMiddle) }, link2, commentEnd, commendEndNodes);
+            return Comment(comment, commentStart, link1, new[] { XmlText(commentMiddle) }, link2, commentEnd, commentEndNodes);
         }
 
         /// <summary>
@@ -573,7 +573,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// <param name="commentEnd">
         /// The text after the second link.
         /// </param>
-        /// <param name="commendEndNodes">
+        /// <param name="commentEndNodes">
         /// The additional content nodes to append.
         /// </param>
         /// <returns>
@@ -586,12 +586,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                               IEnumerable<XmlNodeSyntax> commentMiddle,
                                               XmlNodeSyntax link2,
                                               string commentEnd,
-                                              params XmlNodeSyntax[] commendEndNodes)
+                                              params XmlNodeSyntax[] commentEndNodes)
         {
             // TODO RKN: Check array creation to see if it can be optimized
             var start = new[] { XmlText(commentStart), link1 };
             var middle = new[] { link2 };
-            var end = CommentEnd(commentEnd, commendEndNodes);
+            var end = CommentEnd(commentEnd, commentEndNodes);
 
             // TODO RKN: Fix XML escaping caused by string conversion
             return Comment(comment, start.Concat(commentMiddle).Concat(middle).Concat(end));
@@ -1641,12 +1641,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlTextSyntax XmlText(IEnumerable<SyntaxToken> textTokens) => XmlText(textTokens.ToTokenList());
 
-        private static List<XmlNodeSyntax> CommentEnd(string commentEnd, params XmlNodeSyntax[] commendEndNodes)
+        private static List<XmlNodeSyntax> CommentEnd(string commentEnd, params XmlNodeSyntax[] commentEndNodes)
         {
             var skip = 0;
             XmlTextSyntax textCommentEnd;
 
-            var length = commendEndNodes.Length;
+            var length = commentEndNodes.Length;
 
             // add a white space at the end of the comment in case we have further texts
             if (length > 1 && commentEnd.Length > 0 && commentEnd[commentEnd.Length - 1] != ' ')
@@ -1654,7 +1654,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 commentEnd += " ";
             }
 
-            if (commendEndNodes.FirstOrDefault() is XmlTextSyntax text)
+            if (commentEndNodes.FirstOrDefault() is XmlTextSyntax text)
             {
                 skip = 1;
 
@@ -1684,15 +1684,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var last = length - 1;
 
-                if (commendEndNodes[last] is XmlTextSyntax additionalText)
+                if (commentEndNodes[last] is XmlTextSyntax additionalText)
                 {
-                    commendEndNodes[last] = XmlText(additionalText.TextTokens.WithoutLastXmlNewLine());
+                    commentEndNodes[last] = XmlText(additionalText.TextTokens.WithoutLastXmlNewLine());
                 }
             }
 
             var result = new List<XmlNodeSyntax>(1 + length - skip);
             result.Add(textCommentEnd);
-            result.AddRange(commendEndNodes.Skip(skip));
+            result.AddRange(commentEndNodes.Skip(skip));
 
             return result;
         }
