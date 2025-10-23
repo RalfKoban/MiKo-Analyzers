@@ -1724,7 +1724,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static XmlEmptyElementSyntax Cref(string tag, CrefSyntax syntax) => XmlEmptyElement(tag).WithAttribute(SyntaxFactory.XmlCrefAttribute(syntax));
 
         /// <summary>
-        /// Gets the index of the first content node to process, accounting for whitespace-only text nodes.
+        /// Determines the index of the first content node to process, accounting for whitespace-only text nodes.
         /// </summary>
         /// <param name="content">
         /// The content nodes to analyze.
