@@ -56,7 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     var text = token.ValueText;
 
-                    foreach (ReadOnlySpan<char> word in text.AsSpan().WordsAsSpan(WordBoundary.WhiteSpaces))
+                    foreach (ReadOnlySpan<char> word in text.WordsAsSpan(WordBoundary.WhiteSpaces))
                     {
                         if (word.Length is 0 || (word.Length is 1 && word.IsNumber() is false))
                         {

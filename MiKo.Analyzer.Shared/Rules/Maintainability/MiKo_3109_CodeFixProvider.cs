@@ -107,8 +107,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var foundSuffix = string.Empty;
 
             var text = GetText(arguments[index].Expression);
-            var finalText = text.AsSpan()
-                                .WordsAsSpan()
+            var finalText = text.WordsAsSpan()
                                 .Select(_ => _.Text.Trim(Constants.Underscores).ToLowerCaseAt(0))
                                 .Select(_ =>
                                             {
