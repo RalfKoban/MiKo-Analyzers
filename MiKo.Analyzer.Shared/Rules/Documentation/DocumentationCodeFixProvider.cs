@@ -1587,7 +1587,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// The empty XML text with a new line and leading XML comment.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected static XmlTextSyntax NewLineXmlText() => XmlText(string.Empty).WithLeadingXmlComment();
+        protected static XmlTextSyntax NewLineXmlText() => XmlText().WithLeadingXmlComment();
 
         /// <summary>
         /// Creates an empty XML text with trailing XML comment trivia.
@@ -1596,19 +1596,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// The empty XML text with trailing XML comment.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected static XmlTextSyntax TrailingNewLineXmlText() => XmlText(string.Empty).WithTrailingXmlComment();
+        protected static XmlTextSyntax TrailingNewLineXmlText() => XmlText().WithTrailingXmlComment();
 
         /// <summary>
         /// Creates an XML text with the specified text.
         /// </summary>
         /// <param name="text">
         /// The text value.
+        /// The default is the <see cref="string.Empty"/> string ("").
         /// </param>
         /// <returns>
         /// The XML text.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected static XmlTextSyntax XmlText(string text) => SyntaxFactory.XmlText(text);
+        protected static XmlTextSyntax XmlText(string text = "") => SyntaxFactory.XmlText(text);
 
         /// <summary>
         /// Creates an XML text with the specified syntax token list.

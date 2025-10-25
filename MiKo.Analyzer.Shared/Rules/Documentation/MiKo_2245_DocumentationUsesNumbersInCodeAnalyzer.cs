@@ -23,6 +23,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var xmlText in comment.DescendantNodes<XmlTextSyntax>())
             {
+                var textTokens = xmlText.TextTokens;
+
+                // keep in local variable to avoid multiple requests (see Roslyn implementation)
+                var textTokensCount = textTokens.Count;
+
+                if (textTokensCount is 0)
+                {
+                    continue;
+                }
+
                 var parent = xmlText.Parent;
 
                 if (parent.IsCode())
@@ -35,41 +45,39 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     continue;
                 }
 
-                var textTokens = xmlText.TextTokens;
-
-                // keep in local variable to avoid multiple requests (see Roslyn implementation)
-                var textTokensCount = textTokens.Count;
-
-                if (textTokensCount > 0)
+                for (var index = 0; index < textTokensCount; index++)
                 {
-                    for (var index = 0; index < textTokensCount; index++)
-                    {
-                        var token = textTokens[index];
+                    var token = textTokens[index];
 
-                        if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                    if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                    {
+                        continue;
+                    }
+
+                    var text = token.ValueText;
+
+                    foreach (ReadOnlySpan<char> word in text.AsSpan().WordsAsSpan(WordBoundary.WhiteSpaces))
+                    {
+                        if (word.Length is 0 || (word.Length is 1 && word.IsNumber() is false))
                         {
+                            // avoid unnecessary string creations
                             continue;
                         }
 
-                        var text = token.ValueText;
+                        var value = word.ToString();
 
-                        foreach (ReadOnlySpan<char> word in text.AsSpan().WordsAsSpan(WordBoundary.WhiteSpaces))
+                        if (value.IsNumber())
                         {
-                            if (word.IsNumber())
+                            var locations = GetAllLocations(token, value);
+
+                            if (issues is null)
                             {
-                                var number = word.ToString();
+                                issues = new List<Diagnostic>(locations.Count);
+                            }
 
-                                var locations = GetAllLocations(token, number);
-
-                                if (issues is null)
-                                {
-                                    issues = new List<Diagnostic>(locations.Count);
-                                }
-
-                                foreach (var location in locations)
-                                {
-                                    issues.Add(Issue(location, number));
-                                }
+                            foreach (var location in locations)
+                            {
+                                issues.Add(Issue(location, value));
                             }
                         }
                     }

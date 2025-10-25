@@ -131,7 +131,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             switch (count)
             {
                 case 0:
-                    return FixEmptyComment(comment.WithContent(XmlText(string.Empty)));
+                    return FixEmptyComment(comment.WithContent(XmlText()));
 
                 case 1 when contents[0] is XmlTextSyntax t:
                 {
@@ -266,7 +266,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var finalCommentContinuation = StringBuilderCache.GetStringAndRelease(commentContinuation);
 
-            var prepared = comment.ReplaceNode(originalText, XmlText(string.Empty));
+            var prepared = comment.ReplaceNode(originalText, XmlText());
 
             return FixComment(prepared, info.Keys, info.Map, finalCommentContinuation);
         }
