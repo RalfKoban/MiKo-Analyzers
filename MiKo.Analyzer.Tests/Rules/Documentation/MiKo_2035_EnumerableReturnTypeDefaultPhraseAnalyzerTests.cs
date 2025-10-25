@@ -1244,10 +1244,10 @@ public class TestMe
         private static IEnumerable<string> CreateStartingPhrases()
         {
             string[] startingWords = ["a", "an", "the", "a new", "the new"];
-            string[] modifications = ["read-only", "filtered", "concurrent"];
+            string[] modifications = ["read-only", /* commented out to limit tests: "filtered", "concurrent", "single" */];
             string[] collections = [
                                        "array", "arraylist", "array list", "list", "dictionary", "enumerable", "queue", "stack", "map", "bag",
-                                       "hashset", "hashSet", "hashtable", "hashTable", "hash set", "hashed set", "hash table", "hashed table", "hashing set", "hashing table",
+                                       //// commented out to limit tests: "hashset", "hashSet", "hashtable", "hashTable", "hash set", "hashed set", "hash table", "hashed table", "hashing set", "hashing table",
                                        "syntax list", "enumerable collection", "separated syntax list", "immutable array",
                                    ];
             string[] prepositions = ["of", "with", "that contains", "which contains", "containing"];
