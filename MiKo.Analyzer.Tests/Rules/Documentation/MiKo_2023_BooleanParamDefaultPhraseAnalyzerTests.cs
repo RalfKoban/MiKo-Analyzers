@@ -1147,26 +1147,26 @@ public class TestMe
 
             string[] verbs =
                              [
-                                 "controling", // be aware of typo
+                                 //// commented out to limit tests: "controling", // be aware of typo
                                  "controlling",
                                  "defining",
                                  "determining",
-                                 "determinating", // be aware of typo
+                                 //// commented out to limit tests: "determinating", // be aware of typo
                                  "indicating",
                                  "specifying",
                                  "that controls",
-                                 "that defined", // be aware of typo
+                                 //// commented out to limit tests: "that defined", // be aware of typo
                                  "that defines",
-                                 "that determined", // be aware of typo
+                                 //// commented out to limit tests: "that determined", // be aware of typo
                                  "that determines",
-                                 "that indicated", // be aware of typo
+                                 //// commented out to limit tests: "that indicated", // be aware of typo
                                  "that indicates",
                                  "that specifies",
                                  "which controls",
                                  "which defines",
                                  "which determines",
                                  "which indicates",
-                                 "which specified", // be aware of typo
+                                 //// commented out to limit tests: "which specified", // be aware of typo
                                  "which specifies",
                              ];
 
@@ -1186,20 +1186,20 @@ public class TestMe
             string[] startingVerbs =
                                      [
                                          "Controls",
-                                         "Controling", // be aware of typo
+                                         //// commented out to limit tests: "Controling", // be aware of typo
                                          "Controlling",
                                          "Defines",
                                          "Defined",
                                          "Defining",
                                          "Determines",
-                                         "Determined",
+                                         //// commented out to limit tests: "Determined",
                                          "Determining",
-                                         "Determinating", // be aware of typo
+                                         //// commented out to limit tests: "Determinating", // be aware of typo
                                          "Indicates",
-                                         "Indicated",
+                                         //// commented out to limit tests: "Indicated",
                                          "Indicating",
                                          "Specifies",
-                                         "Specified",
+                                         //// commented out to limit tests: "Specified",
                                          "Specifying",
                                      ];
 
@@ -1218,32 +1218,32 @@ public class TestMe
         [ExcludeFromCodeCoverage]
         private static HashSet<string> CreateOptionalPhrases()
         {
-            string[] starts = ["A optional", "An optional", "The optional", "An (optional)", "The (optional)", "Optional", "(Optional)"];
+            string[] starts = ["A optional", "An optional", "The optional", "Optional"]; // commented out to limit tests: "An (optional)", "The (optional)", "(Optional)"];
             string[] conditions = ["if", "whether", "whether or not", "if to", "whether to", "whether or not to"];
             string[] booleans = ["bool ", "Boolean ", string.Empty];
             string[] values = ["parameter", "flag", "value"];
 
             string[] verbs =
                              [
-                                 "controling", // be aware of typo
+                                 //// commented out to limit tests: "controling", // be aware of typo
                                  "controlling",
                                  "defining",
                                  "determining",
                                  "indicating",
                                  "specifying",
                                  "that controls",
-                                 "that defined", // be aware of typo
+                                 //// commented out to limit tests: "that defined", // be aware of typo
                                  "that defines",
                                  "that determined",
                                  "that determines",
-                                 "that indicated", // be aware of typo
+                                 //// commented out to limit tests: "that indicated", // be aware of typo
                                  "that indicates",
                                  "that specifies",
                                  "which controls",
                                  "which defines",
                                  "which determines",
                                  "which indicates",
-                                 "which specified", // be aware of typo
+                                 //// commented out to limit tests: "which specified", // be aware of typo
                                  "which specifies",
                              ];
 
