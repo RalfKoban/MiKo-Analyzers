@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -30,6 +32,32 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                               "Microsoft",
                                                               "Outlook",
                                                           ];
+
+        private static readonly string[] NonCompoundWords =
+                                                            [
+                                                                 "bool",
+                                                                 "byte",
+                                                                 "char",
+                                                                 "float",
+                                                                 "int",
+                                                                 "string",
+                                                                 "uint",
+                                                                 "ushort",
+                                                                 "ulong",
+                                                                 nameof(String),
+                                                                 nameof(Int16),
+                                                                 nameof(Int32),
+                                                                 nameof(Int64),
+                                                                 nameof(UInt16),
+                                                                 nameof(UInt32),
+                                                                 nameof(UInt64),
+                                                                 nameof(Single),
+                                                                 nameof(Double),
+                                                                 nameof(Boolean),
+                                                                 nameof(Byte),
+                                                                 nameof(Char),
+                                                                 nameof(Type),
+                                                           ];
 
         [Test]
         public void No_issue_is_reported_for_undocumented_method() => No_issue_is_reported_for(@"
@@ -700,6 +728,22 @@ public class TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_method_with_([ValueSource(nameof(NonCompoundWords))] string type) => An_issue_is_reported_for(@"
+using System;
+using System.IO;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something with " + type + @" to see.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_incorrectly_documented_method_with_(
                                                                              [Values("string", "String", "Sring", "sring", "Sting", "sting")] string type,
                                                                              [Values("Empty", "empty", "Empy", "empy", "Emtpy", "emtpy")] string property)
@@ -717,6 +761,29 @@ public class TestMe
     }
 }
 ");
+
+        [Test]
+        public void Code_gets_fixed_for_incorrectly_documented_method_with_([ValueSource(nameof(NonCompoundWords))] string type)
+        {
+            const string Template = """
+
+                                    using System;
+                                    using System.IO;
+
+                                    public class TestMe
+                                    {
+                                        /// <summary>
+                                        /// Does something with ### to see.
+                                        /// </summary>
+                                        public void DoSomething()
+                                        {
+                                        }
+                                    }
+
+                                    """;
+
+            VerifyCSharpFix(Template.Replace("###", type), Template.Replace("###", "<see cref=\"" + type + "\"/>"));
+        }
 
         [Test]
         public void Code_gets_fixed_for_incorrectly_documented_method_with_(

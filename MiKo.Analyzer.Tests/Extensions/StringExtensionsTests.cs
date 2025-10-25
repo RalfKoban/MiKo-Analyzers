@@ -132,13 +132,13 @@ namespace MiKoSolutions.Analyzers.Extensions
         }
 
         [Test]
-        public static void WordsAsSpan_returns_words_in_method_name() => Assert.That("GetHashCode".AsSpan().WordsAsSpan().Select(_ => _.ToString()), Is.EquivalentTo(["Get", "Hash", "Code"]));
+        public static void WordsAsSpan_returns_words_in_method_name() => Assert.That("GetHashCode".WordsAsSpan().Select(_ => _.ToString()), Is.EquivalentTo(["Get", "Hash", "Code"]));
 
         [Test]
-        public static void WordsAsSpan_returns_words_in_text_with_leading_whitespaces() => Assert.That(" This is some text for -1. Just to be sure.".AsSpan().WordsAsSpan(WordBoundary.WhiteSpaces).Select(_ => _.ToString()), Is.EquivalentTo(["This", "is", "some", "text", "for", "-1", "Just", "to", "be", "sure"]));
+        public static void WordsAsSpan_returns_words_in_text_with_leading_whitespaces() => Assert.That(" This is some text for -1. Just to be sure.".WordsAsSpan(WordBoundary.WhiteSpaces).Select(_ => _.ToString()), Is.EquivalentTo(["This", "is", "some", "text", "for", "-1", "Just", "to", "be", "sure"]));
 
         [Test]
-        public static void WordsAsSpan_returns_words_in_text_without_leading_whitespaces() => Assert.That("This is some text for -1. Just to be sure.".AsSpan().WordsAsSpan(WordBoundary.WhiteSpaces).Select(_ => _.ToString()), Is.EquivalentTo(["This", "is", "some", "text", "for", "-1", "Just", "to", "be", "sure"]));
+        public static void WordsAsSpan_returns_words_in_text_without_leading_whitespaces() => Assert.That("This is some text for -1. Just to be sure.".WordsAsSpan(WordBoundary.WhiteSpaces).Select(_ => _.ToString()), Is.EquivalentTo(["This", "is", "some", "text", "for", "-1", "Just", "to", "be", "sure"]));
 
         [TestCase(' ', "", ExpectedResult = " ")]
         [TestCase('-', "", ExpectedResult = "-")]

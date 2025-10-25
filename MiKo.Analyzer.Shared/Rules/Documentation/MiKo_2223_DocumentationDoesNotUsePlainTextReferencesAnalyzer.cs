@@ -103,6 +103,32 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                          "etc",
                                                                      };
 
+        private static readonly HashSet<string> NonCompoundWords = new HashSet<string>
+                                                                       {
+                                                                           "bool",
+                                                                           "byte",
+                                                                           "char",
+                                                                           "float",
+                                                                           "int",
+                                                                           "string",
+                                                                           "uint",
+                                                                           "ushort",
+                                                                           "ulong",
+                                                                           nameof(String),
+                                                                           nameof(Int16),
+                                                                           nameof(Int32),
+                                                                           nameof(Int64),
+                                                                           nameof(UInt16),
+                                                                           nameof(UInt32),
+                                                                           nameof(UInt64),
+                                                                           nameof(Single),
+                                                                           nameof(Double),
+                                                                           nameof(Boolean),
+                                                                           nameof(Byte),
+                                                                           nameof(Char),
+                                                                           nameof(Type),
+                                                                       };
+
         public MiKo_2223_DocumentationDoesNotUsePlainTextReferencesAnalyzer() : base(Id)
         {
         }
@@ -307,6 +333,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return true;
         }
 
+        private static HashSet<string> FindSingleWords(string text)
+        {
+            var words = new HashSet<string>();
+
+            foreach (ReadOnlySpan<char> wordSpan in text.WordsAsSpan(WordBoundary.WhiteSpaces))
+            {
+                var word = wordSpan.ToString();
+
+                if (NonCompoundWords.Contains(word))
+                {
+                    words.Add(word);
+                }
+            }
+
+            return words;
+        }
+
         private static new Location CreateLocation(in SyntaxToken token, in int offsetStart, in int offsetEnd)
         {
             var spanStart = token.SpanStart;
@@ -382,6 +425,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 // jump over word
                 start = end;
+            }
+
+            var words = FindSingleWords(text);
+
+            if (words.Count > 0)
+            {
+                foreach (var word in words)
+                {
+                    var locations = GetAllLocations(token, word);
+
+                    if (locations.Count > 0)
+                    {
+                        foreach (var location in locations)
+                        {
+                            yield return Issue(location, CreateReplacementProposal(word, word));
+                        }
+                    }
+                }
             }
         }
     }

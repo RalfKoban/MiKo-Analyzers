@@ -3785,6 +3785,24 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A <see cref="WordsReadOnlySpanEnumerator"/> for the span of characters.
         /// </returns>
+        public static WordsReadOnlySpanEnumerator WordsAsSpan(this string value, in WordBoundary boundary = WordBoundary.UpperCaseCharacters)
+        {
+            return value.AsSpan().WordsAsSpan(boundary);
+        }
+
+        /// <summary>
+        /// Converts the string to a <see cref="WordsReadOnlySpanEnumerator"/> for word enumeration.
+        /// </summary>
+        /// <param name="value">
+        /// The span of characters to enumerate words from.
+        /// </param>
+        /// <param name="boundary">
+        /// One of the enumeration members that specifies the word boundary method to use.
+        /// The default is <see cref="WordBoundary.UpperCaseCharacters"/>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="WordsReadOnlySpanEnumerator"/> for the span of characters.
+        /// </returns>
         public static WordsReadOnlySpanEnumerator WordsAsSpan(this in ReadOnlySpan<char> value, in WordBoundary boundary = WordBoundary.UpperCaseCharacters) => new WordsReadOnlySpanEnumerator(value, boundary);
 
         /// <summary>
