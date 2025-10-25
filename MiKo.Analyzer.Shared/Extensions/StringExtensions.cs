@@ -2771,7 +2771,15 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the string is a number; otherwise, <see langword="false"/>.
         /// </returns>
-        public static bool IsNumber(this string value) => OnlyNumberRegex.IsMatch(value);
+        public static bool IsNumber(this string value)
+        {
+            switch (value.Length)
+            {
+                case 0: return false;
+                case 1: return value[0].IsNumber();
+                default: return OnlyNumberRegex.IsMatch(value);
+            }
+        }
 
         /// <summary>
         /// Determines whether the string is in <c>PascalCasing</c> format.
