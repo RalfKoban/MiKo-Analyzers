@@ -44,7 +44,7 @@ public sealed class TestMe { }
 ");
 
         [Test]
-        public void An_issue_is_reported_with_a_number_in_([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_a_number_in_([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
 /// <" + tag + @">
 /// This is some text for -1. Just to be sure.
 /// </" + tag + @">
@@ -52,7 +52,7 @@ public sealed class TestMe { }
 ");
 
         [Test]
-        public void An_issue_is_reported_with_a_number_followed_by_a_colon_in_([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_a_number_followed_by_a_colon_in_([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
 /// <" + tag + @">
 /// This is some text for -1, just to be sure.
 /// </" + tag + @">

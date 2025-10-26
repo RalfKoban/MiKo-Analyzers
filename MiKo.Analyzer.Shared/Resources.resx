@@ -3405,6 +3405,18 @@ Such documentation also undermines tool integration and usability, as IDEs rely 
   <data name="MiKo_2240_Title" xml:space="preserve">
     <value>Do not start &lt;response&gt; documentation with 'Returns'</value>
   </data>
+  <data name="MiKo_2241_CodeFixTitle" xml:space="preserve">
+    <value>Replace 'empty string' with '&lt;see cref="string.Empty"/&gt; string ("")'</value>
+  </data>
+  <data name="MiKo_2241_Description" xml:space="preserve">
+    <value>XML documentation shall not use the phrase 'empty string'. Instead, use the phrase '&lt;see cref="string.Empty"/&gt; string ("")' to clearly express the concept and provide hyperlink support. This improves readability and developer understanding.</value>
+  </data>
+  <data name="MiKo_2241_MessageFormat" xml:space="preserve">
+    <value>Replace phrase 'empty string' with '&lt;see cref="string.Empty"/&gt; string ("")'</value>
+  </data>
+  <data name="MiKo_2241_Title" xml:space="preserve">
+    <value>Do not use 'empty string' in documentation</value>
+  </data>
   <data name="MiKo_2244_CodeFixTitle" xml:space="preserve">
     <value>Use &lt;list&gt; to list items</value>
   </data>

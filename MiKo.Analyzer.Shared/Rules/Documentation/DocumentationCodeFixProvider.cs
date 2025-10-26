@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// The diagnostic issue containing the starting phrase proposal.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the starting phrase proposal, or an empty string if not found.
+        /// A <see cref="string"/> that contains the starting phrase proposal, or the <see cref="string.Empty"/> string ("") if not found.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static string GetStartingPhraseProposal(Diagnostic issue) => issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.StartingPhrase, out var s) ? s : string.Empty;
@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// The diagnostic issue containing the ending phrase proposal.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the ending phrase proposal, or an empty string if not found.
+        /// A <see cref="string"/> that contains the ending phrase proposal, or the <see cref="string.Empty"/> string ("") if not found.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static string GetEndingPhraseProposal(Diagnostic issue) => issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.EndingPhrase, out var s) ? s : string.Empty;
@@ -45,7 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// The diagnostic issue containing the phrase proposal.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the phrase proposal, or an empty string if not found.
+        /// A <see cref="string"/> that contains the phrase proposal, or the <see cref="string.Empty"/> string ("") if not found.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static string GetPhraseProposal(Diagnostic issue) => issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.Phrase, out var s) ? s : string.Empty;
