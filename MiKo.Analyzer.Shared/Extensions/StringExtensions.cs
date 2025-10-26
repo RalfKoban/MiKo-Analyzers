@@ -1073,7 +1073,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether the <see cref="string"/> contains the specified sub<see cref="string"/> using the given <see cref="string"/> comparison.
+        /// Determines whether the <see cref="string"/> contains the specified string using the given <see cref="string"/> comparison.
         /// </summary>
         /// <param name="value">
         /// The <see cref="string"/> to search in.
@@ -3451,7 +3451,7 @@ namespace MiKoSolutions.Analyzers
         public static string Without(this string value, in char character) => value.Without(character.ToString());
 
         /// <summary>
-        /// Creates a new <see cref="string"/> with the specified sub<see cref="string"/> removed.
+        /// Creates a new <see cref="string"/> with the specified string removed.
         /// </summary>
         /// <param name="value">
         /// The <see cref="string"/> to process.
@@ -4194,7 +4194,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Finds all indices of a sub<see cref="string"/> in a <see cref="string"/> using case-insensitive comparison.
+        /// Finds all indices of a string in a <see cref="string"/> using case-insensitive comparison.
         /// </summary>
         /// <param name="value">
         /// The <see cref="string"/> to search in.
