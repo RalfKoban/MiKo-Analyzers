@@ -657,7 +657,7 @@ namespace MiKoSolutions.Analyzers
         /// The type declaration syntax.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the name of the type, including any generic type information; or the <see langword="string.Empty"/> <see cref="string"/> ("") if no name is found.
+        /// A <see cref="string"/> that contains the name of the type, including any generic type information; or the <see langword="string.Empty"/> string ("") if no name is found.
         /// </returns>
         internal static string GetName(this TypeDeclarationSyntax value)
         {
