@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers
         private static readonly string[] Booleans = { "true", "false", "True", "False", "TRUE", "FALSE" };
 
         /// <summary>
-        /// Contains the <see langword="null"/> <see cref="string"/> representations in various casings used for detecting <see langword="null"/> values in XML documentation.
+        /// Contains the <see cref="string"/> representations for <see langword="null"/> in various casings used for detecting <see langword="null"/> values in XML documentation.
         /// </summary>
         private static readonly string[] Nulls = { "null", "Null", "NULL" };
 

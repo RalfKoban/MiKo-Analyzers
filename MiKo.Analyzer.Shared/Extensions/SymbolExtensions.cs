@@ -463,7 +463,7 @@ namespace MiKoSolutions.Analyzers
         /// The type to inspect.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the <see cref="string"/> representation of the generic arguments as T parameters.
+        /// A <see cref="string"/> that contains the string representation of the generic arguments as T parameters.
         /// </returns>
         internal static string GetGenericArgumentsAsTs(this ITypeSymbol value) => value is INamedTypeSymbol n
                                                                                   ? n.GetGenericArgumentsAsTs()
@@ -476,7 +476,7 @@ namespace MiKoSolutions.Analyzers
         /// The named type to inspect.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the <see cref="string"/> representation of the generic arguments as T parameters.
+        /// A <see cref="string"/> that contains the string representation of the generic arguments as T parameters.
         /// </returns>
         internal static string GetGenericArgumentsAsTs(this INamedTypeSymbol value)
         {
