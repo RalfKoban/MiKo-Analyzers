@@ -1073,7 +1073,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether the <see cref="string"/> contains the specified string using the given <see cref="string"/> comparison.
+        /// Determines whether the <see cref="string"/> contains the specified substring using the given <see cref="string"/> comparison.
         /// </summary>
         /// <param name="value">
         /// The <see cref="string"/> to search in.
