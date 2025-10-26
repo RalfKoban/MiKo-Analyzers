@@ -44,7 +44,7 @@ namespace MiKoSolutions.Analyzers
         public static SplitReadOnlySpanEnumerator SplitBy(this in ReadOnlySpan<char> value, in ReadOnlySpan<char> separatorChars, in StringSplitOptions options) => new SplitReadOnlySpanEnumerator(value, separatorChars, options);
 
         /// <summary>
-        /// Splits the text into substrings based on the specified string separators using the provided comparison and split options.
+        /// Splits the text into sub<see cref="string"/>s based on the specified <see cref="string"/> separators using the provided comparison and split options.
         /// </summary>
         /// <param name="value">
         /// The text to split.
@@ -157,7 +157,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Splits the text into substrings based on the specified string separators using the provided comparison and split options.
+        /// Splits the text into sub<see cref="string"/>s based on the specified <see cref="string"/> separators using the provided comparison and split options.
         /// </summary>
         /// <param name="value">
         /// The text to split.
@@ -175,7 +175,7 @@ namespace MiKoSolutions.Analyzers
         /// </param>
         /// <returns>
         /// A collection of the substrings from the text that are delimited by one or more strings from the separator collection.
-        /// If the input string is <see langword="null"/>, the method returns an empty array.
+        /// If the input <see cref="string"/> is <see langword="null"/>, the method returns an empty array.
         /// </returns>
         public static IReadOnlyList<string> SplitBy(this string value, in ReadOnlySpan<string> findings, in StringComparison comparison = StringComparison.OrdinalIgnoreCase, in StringSplitOptions options = StringSplitOptions.None)
         {

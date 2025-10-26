@@ -487,7 +487,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Projects each element of a <see cref="SeparatedSyntaxList{T}"/> into a string.
+        /// Projects each element of a <see cref="SeparatedSyntaxList{T}"/> into a <see cref="string"/>.
         /// </summary>
         /// <typeparam name="T">
         /// The type of syntax nodes in the list.

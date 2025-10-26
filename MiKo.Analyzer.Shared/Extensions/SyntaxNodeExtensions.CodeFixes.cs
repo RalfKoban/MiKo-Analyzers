@@ -604,13 +604,13 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsSeeCrefTask(this SyntaxNode value) => value.IsSeeCref("Task") || value.IsSeeCref("Task<TResult>");
 
         /// <summary>
-        /// Determines whether the specified <see cref="SyntaxNode"/> represents a string creation expression.
+        /// Determines whether the specified <see cref="SyntaxNode"/> represents a <see cref="string"/> creation expression.
         /// </summary>
         /// <param name="value">
         /// The syntax node to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the node is a string creation expression; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the node is a <see cref="string"/> creation expression; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool IsStringCreation(this SyntaxNode value)
         {

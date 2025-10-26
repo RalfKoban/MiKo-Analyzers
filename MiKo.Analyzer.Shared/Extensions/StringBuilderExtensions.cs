@@ -574,13 +574,13 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Converts the text to a string and releases the <see cref="StringBuilder"/> back to the cache.
+        /// Converts the text to a <see cref="string"/> and releases the <see cref="StringBuilder"/> back to the cache.
         /// </summary>
         /// <param name="value">
         /// The text to convert.
         /// </param>
         /// <returns>
-        /// A string representation of the text.
+        /// A <see cref="string"/> representation of the text.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ToStringAndRelease(this StringBuilder value) => StringBuilderCache.GetStringAndRelease(value);
@@ -642,7 +642,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets a string where all leading and trailing whitespace characters are removed.
+        /// Gets a <see cref="string"/> where all leading and trailing whitespace characters are removed.
         /// </summary>
         /// <param name="value">
         /// The original text.
@@ -689,7 +689,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets a string where all leading whitespace characters are removed.
+        /// Gets a <see cref="string"/> where all leading whitespace characters are removed.
         /// </summary>
         /// <param name="value">
         /// The original text.
@@ -737,7 +737,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets a string where all trailing whitespace characters are removed.
+        /// Gets a <see cref="string"/> where all trailing whitespace characters are removed.
         /// </summary>
         /// <param name="value">
         /// The original text.

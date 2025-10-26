@@ -256,13 +256,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (returnType is ArrayTypeSyntax arrayType)
             {
                 return arrayType.ElementType.IsByte()
-                           ? Constants.Comments.ByteArrayReturnTypeStartingPhrase[0]
-                           : Constants.Comments.ArrayReturnTypeStartingPhrase[0];
+                       ? Constants.Comments.ByteArrayReturnTypeStartingPhrase[0]
+                       : Constants.Comments.ArrayReturnTypeStartingPhrase[0];
             }
 
             return returnType.GetName() is "IEnumerable"
-                       ? Constants.Comments.EnumerableReturnTypeStartingPhrase
-                       : Constants.Comments.CollectionReturnTypeStartingPhrase;
+                   ? Constants.Comments.EnumerableReturnTypeStartingPhrase
+                   : Constants.Comments.CollectionReturnTypeStartingPhrase;
         }
 
         //// ncrunch: rdi off

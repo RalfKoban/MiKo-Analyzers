@@ -3,7 +3,7 @@
 namespace MiKoSolutions.Analyzers
 {
     /// <summary>
-    /// Encapsulates a method that transforms an enumerator entry into a string.
+    /// Encapsulates a method that transforms an enumerator entry into a <see cref="string"/>.
     /// </summary>
     /// <param name="entry">
     /// The entry to transform.

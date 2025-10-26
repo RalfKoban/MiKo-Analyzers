@@ -216,10 +216,10 @@ namespace MiKoSolutions.Analyzers
         internal static XElement GetCommentElement(this ISymbol value) => GetCommentElement(value.GetDocumentationCommentXml());
 
         /// <summary>
-        /// Gets the comment element from the provided XML documentation string.
+        /// Gets the comment element from the provided XML documentation <see cref="string"/>.
         /// </summary>
         /// <param name="value">
-        /// The XML documentation string to parse.
+        /// The XML documentation <see cref="string"/> to parse.
         /// </param>
         /// <returns>
         /// The parsed comment element, or <see langword="null"/> if the XML is invalid or <see langword="null"/>.
@@ -255,10 +255,10 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets all comment elements for the specified XML tag from the provided XML documentation string.
+        /// Gets all comment elements for the specified XML tag from the provided XML documentation <see cref="string"/>.
         /// </summary>
         /// <param name="value">
-        /// The XML documentation string to extract the comment elements from.
+        /// The XML documentation <see cref="string"/> to extract the comment elements from.
         /// </param>
         /// <param name="xmlTag">
         /// The XML tag to search for.

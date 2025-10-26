@@ -36,12 +36,12 @@ namespace MiKoSolutions.Analyzers
                                                                   };
 
         /// <summary>
-        /// Contains the boolean string representations in various casings used for detecting boolean values in XML documentation.
+        /// Contains the boolean <see cref="string"/> representations in various casings used for detecting boolean values in XML documentation.
         /// </summary>
         private static readonly string[] Booleans = { "true", "false", "True", "False", "TRUE", "FALSE" };
 
         /// <summary>
-        /// Contains the <see langword="null"/> string representations in various casings used for detecting <see langword="null"/> values in XML documentation.
+        /// Contains the <see langword="null"/> <see cref="string"/> representations in various casings used for detecting <see langword="null"/> values in XML documentation.
         /// </summary>
         private static readonly string[] Nulls = { "null", "Null", "NULL" };
 
@@ -488,16 +488,16 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets the text content of an XML text syntax without syntax trivia (whitespace, comments, and formatting tokens) and appends it to a string builder.
+        /// Gets the text content of an XML text syntax without syntax trivia (whitespace, comments, and formatting tokens) and appends it to a <see cref="StringBuilder"/> .
         /// </summary>
         /// <param name="value">
         /// The XML text syntax to get the text from.
         /// </param>
         /// <param name="builder">
-        /// The string builder to append the text to.
+        /// The <see cref="StringBuilder"/>  to append the text to.
         /// </param>
         /// <returns>
-        /// The same string builder with the appended text content.
+        /// The same <see cref="StringBuilder"/>  with the appended text content.
         /// </returns>
         internal static StringBuilder GetTextWithoutTrivia(this XmlTextSyntax value, StringBuilder builder)
         {
@@ -510,16 +510,16 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets the text content of an XML element without syntax trivia (whitespace, comments, and formatting tokens) and appends it to a string builder.
+        /// Gets the text content of an XML element without syntax trivia (whitespace, comments, and formatting tokens) and appends it to a <see cref="StringBuilder"/> .
         /// </summary>
         /// <param name="value">
         /// The XML element to get the text from.
         /// </param>
         /// <param name="builder">
-        /// The string builder to append the text to.
+        /// The <see cref="StringBuilder"/>  to append the text to.
         /// </param>
         /// <returns>
-        /// The same string builder with the appended text content.
+        /// The same <see cref="StringBuilder"/>  with the appended text content.
         /// </returns>
         internal static StringBuilder GetTextWithoutTrivia(this XmlElementSyntax value, StringBuilder builder)
         {
@@ -1365,7 +1365,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new XML text syntax from the specified XML text syntax with all occurrences of a specified phrase replaced with a replacement string.
+        /// Creates a new XML text syntax from the specified XML text syntax with all occurrences of a specified phrase replaced with a replacement <see cref="string"/>.
         /// </summary>
         /// <param name="value">
         /// The XML text syntax to replace text in.
@@ -1374,10 +1374,10 @@ namespace MiKoSolutions.Analyzers
         /// The phrase to search for and replace.
         /// </param>
         /// <param name="replacement">
-        /// The string to replace all occurrences of the phrase with.
+        /// The <see cref="string"/> to replace all occurrences of the phrase with.
         /// </param>
         /// <returns>
-        /// A new <see cref="XmlTextSyntax"/> with all occurrences of the phrase replaced with the replacement string, or the original syntax if no replacements were made.
+        /// A new <see cref="XmlTextSyntax"/> with all occurrences of the phrase replaced with the replacement <see cref="string"/>, or the original syntax if no replacements were made.
         /// </returns>
         internal static XmlTextSyntax ReplaceText(this XmlTextSyntax value, string phrase, string replacement)
         {
@@ -1430,7 +1430,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new XML text syntax from the specified XML text syntax with all occurrences of multiple specified phrases replaced with a replacement string.
+        /// Creates a new XML text syntax from the specified XML text syntax with all occurrences of multiple specified phrases replaced with a replacement <see cref="string"/>.
         /// </summary>
         /// <param name="value">
         /// The XML text syntax to replace text in.
@@ -1439,10 +1439,10 @@ namespace MiKoSolutions.Analyzers
         /// The collection of phrases to search for and replace.
         /// </param>
         /// <param name="replacement">
-        /// The string to replace all occurrences of any phrase with.
+        /// The <see cref="string"/> to replace all occurrences of any phrase with.
         /// </param>
         /// <returns>
-        /// A new <see cref="XmlTextSyntax"/> with all occurrences of any phrase replaced with the replacement string, or the original syntax if no replacements were made.
+        /// A new <see cref="XmlTextSyntax"/> with all occurrences of any phrase replaced with the replacement <see cref="string"/>, or the original syntax if no replacements were made.
         /// </returns>
         internal static XmlTextSyntax ReplaceText(this XmlTextSyntax value, in ReadOnlySpan<string> phrases, string replacement)
         {
@@ -1506,7 +1506,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new XML text syntax from the specified XML text syntax with the first occurrence of a specified phrase replaced with a replacement string.
+        /// Creates a new XML text syntax from the specified XML text syntax with the first occurrence of a specified phrase replaced with a replacement <see cref="string"/>.
         /// </summary>
         /// <param name="value">
         /// The XML text syntax to replace text in.
@@ -1515,10 +1515,10 @@ namespace MiKoSolutions.Analyzers
         /// The phrase to search for and replace.
         /// </param>
         /// <param name="replacement">
-        /// The string to replace the first occurrence of the phrase with.
+        /// The <see cref="string"/> to replace the first occurrence of the phrase with.
         /// </param>
         /// <returns>
-        /// A new <see cref="XmlTextSyntax"/> with the first occurrence of the phrase replaced with the replacement string, or the original syntax if no replacement was made.
+        /// A new <see cref="XmlTextSyntax"/> with the first occurrence of the phrase replaced with the replacement <see cref="string"/>, or the original syntax if no replacement was made.
         /// </returns>
         internal static XmlTextSyntax ReplaceFirstText(this XmlTextSyntax value, string phrase, string replacement)
         {
@@ -2017,18 +2017,18 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Removes all XML comment exterior markers from a string builder's content.
+        /// Removes all XML comment exterior markers from a <see cref="StringBuilder"/> 's content.
         /// </summary>
         /// <param name="value">
-        /// The string builder to remove XML comment exterior markers from.
+        /// The <see cref="StringBuilder"/>  to remove XML comment exterior markers from.
         /// </param>
         /// <returns>
-        /// The string builder with all XML comment exterior markers removed.
+        /// The <see cref="StringBuilder"/>  with all XML comment exterior markers removed.
         /// </returns>
         internal static StringBuilder WithoutXmlCommentExterior(this StringBuilder value) => value.Without(Constants.Comments.XmlCommentExterior);
 
         /// <summary>
-        /// Removes all XML comment exterior markers from a syntax node's string representation.
+        /// Removes all XML comment exterior markers from a syntax node's <see cref="string"/> representation.
         /// </summary>
         /// <param name="value">
         /// The syntax node to remove XML comment exterior markers from.

@@ -510,10 +510,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected static LiteralExpressionSyntax Literal(in int value, string valueRepresentation) => Literal(SyntaxFactory.Literal(valueRepresentation, value));
 
         /// <summary>
-        /// Creates a string literal expression.
+        /// Creates a <see cref="string"/> literal expression.
         /// </summary>
         /// <param name="text">
-        /// The string value.
+        /// The <see cref="string"/> value.
         /// </param>
         /// <returns>
         /// The literal expression syntax node.

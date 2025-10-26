@@ -326,7 +326,7 @@ namespace MiKoSolutions.Analyzers
         /// The field to inspect.
         /// </param>
         /// <param name="invocation">
-        /// The invocation string to match.
+        /// The invocation <see cref="string"/> to match.
         /// </param>
         /// <returns>
         /// A collection of member access expressions for the specified invocation.
@@ -457,26 +457,26 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets a string representation of the generic arguments for a type as T parameters.
+        /// Gets a <see cref="string"/> representation of the generic arguments for a type as T parameters.
         /// </summary>
         /// <param name="value">
         /// The type to inspect.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the string representation of the generic arguments as T parameters.
+        /// A <see cref="string"/> that contains the <see cref="string"/> representation of the generic arguments as T parameters.
         /// </returns>
         internal static string GetGenericArgumentsAsTs(this ITypeSymbol value) => value is INamedTypeSymbol n
                                                                                   ? n.GetGenericArgumentsAsTs()
                                                                                   : string.Empty;
 
         /// <summary>
-        /// Gets a string representation of the generic arguments for a named type as T parameters.
+        /// Gets a <see cref="string"/> representation of the generic arguments for a named type as T parameters.
         /// </summary>
         /// <param name="value">
         /// The named type to inspect.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the string representation of the generic arguments as T parameters.
+        /// A <see cref="string"/> that contains the <see cref="string"/> representation of the generic arguments as T parameters.
         /// </returns>
         internal static string GetGenericArgumentsAsTs(this INamedTypeSymbol value)
         {
@@ -503,7 +503,7 @@ namespace MiKoSolutions.Analyzers
         /// The field to inspect.
         /// </param>
         /// <param name="invocation">
-        /// The invocation string to match.
+        /// The invocation <see cref="string"/> to match.
         /// </param>
         /// <returns>
         /// A collection of argument syntaxes that contains arguments for the specified invocation.
@@ -629,16 +629,16 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets a string representation of the method signature.
+        /// Gets a <see cref="string"/> representation of the method signature.
         /// </summary>
         /// <param name="value">
         /// The method to get the signature for.
         /// </param>
         /// <param name="builder">
-        /// The string builder to append the signature to.
+        /// The <see cref="StringBuilder"/>  to append the signature to.
         /// </param>
         /// <returns>
-        /// The string builder with the appended method signature.
+        /// The <see cref="StringBuilder"/>  with the appended method signature.
         /// </returns>
         internal static StringBuilder GetMethodSignature(this IMethodSymbol value, StringBuilder builder)
         {
@@ -1793,25 +1793,25 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether a type is a byte.
+        /// Determines whether a type is a <see cref="byte"/>.
         /// </summary>
         /// <param name="value">
         /// The type to inspect.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the type is a byte; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the type is a <see cref="byte"/>; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsByte(this ITypeSymbol value) => value.SpecialType is SpecialType.System_Byte;
 
         /// <summary>
-        /// Determines whether a type is a byte array.
+        /// Determines whether a type is a <see cref="byte"/> array.
         /// </summary>
         /// <param name="value">
         /// The type to inspect.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the type is a byte array; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the type is a <see cref="byte"/> array; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool IsByteArray(this ITypeSymbol value) => value is IArrayTypeSymbol array && array.ElementType.IsByte();
 
