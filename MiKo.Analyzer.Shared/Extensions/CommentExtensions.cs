@@ -13,7 +13,7 @@ using Microsoft.CodeAnalysis;
 namespace MiKoSolutions.Analyzers
 {
     /// <summary>
-    /// Provides extension methods for extracting and cleaning XML documentation comments from symbols.
+    /// Provides a set of <see langword="static"/> methods for extracting and cleaning XML documentation comments from symbols.
     /// </summary>
     internal static class CommentExtensions
     {
