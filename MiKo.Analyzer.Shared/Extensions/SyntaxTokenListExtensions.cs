@@ -236,7 +236,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Builds a string representation of the syntax token list without any trivia.
+        /// Builds a <see cref="string"/> representation of the syntax token list without any trivia.
         /// </summary>
         /// <param name="source">
         /// The list of syntax tokens to process.

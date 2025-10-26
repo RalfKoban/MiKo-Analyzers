@@ -1,7 +1,7 @@
 ﻿namespace MiKoSolutions.Analyzers
 {
     /// <summary>
-    /// Specifies the type of boundary used to identify word breaks when enumerating words.
+    /// Defines values that specify the type of boundary used to identify word breaks when enumerating words.
     /// </summary>
     /// <seealso cref="WordsReadOnlySpanEnumerator"/>
     public enum WordBoundary

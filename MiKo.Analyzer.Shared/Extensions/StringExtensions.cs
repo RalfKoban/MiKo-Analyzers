@@ -55,7 +55,7 @@ namespace MiKoSolutions.Analyzers
         /// Adjusts the first word of the value according to the specified adjustment options.
         /// </summary>
         /// <param name="value">
-        /// The original string value.
+        /// The original <see cref="string"/> value.
         /// </param>
         /// <param name="adjustment">
         /// A bitwise combination of enumeration values that specifies the adjustment options for the first word.
@@ -121,20 +121,20 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Finds all indices of the specified string within the current string, using the specified comparison option.
+        /// Finds all indices of the specified <see cref="string"/> within the current <see cref="string"/>, using the specified comparison option.
         /// </summary>
         /// <param name="value">
-        /// The original string where the finds are performed.
+        /// The original <see cref="string"/> where the finds are performed.
         /// </param>
         /// <param name="finding">
-        /// The string to seek within the current string.
+        /// The <see cref="string"/> to seek within the current <see cref="string"/>.
         /// </param>
         /// <param name="comparison">
-        /// One of the enumeration members that specifies the comparison option to use when finding the string (for example, ordinal, ignore case).
+        /// One of the enumeration members that specifies the comparison option to use when finding the <see cref="string"/> (for example, ordinal, ignore case).
         /// The default is <see cref="StringComparison.OrdinalIgnoreCase"/>.
         /// </param>
         /// <returns>
-        /// An array of integers representing the zero-based indices of each occurrence of the specified string.
+        /// An array of integers representing the zero-based indices of each occurrence of the specified <see cref="string"/>.
         /// </returns>
         public static int[] AllIndicesOf(this string value, string finding, in StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
@@ -160,20 +160,20 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Finds all indices of the specified string within the current string, using the specified comparison option.
+        /// Finds all indices of the specified <see cref="string"/> within the current <see cref="string"/>, using the specified comparison option.
         /// </summary>
         /// <param name="value">
         /// The span of characters where the finds are performed.
         /// </param>
         /// <param name="finding">
-        /// The string to seek within the current span.
+        /// The <see cref="string"/> to seek within the current span.
         /// </param>
         /// <param name="comparison">
-        /// One of the enumeration members that specifies the comparison option to use when finding the string (for example, ordinal, ignore case).
+        /// One of the enumeration members that specifies the comparison option to use when finding the <see cref="string"/> (for example, ordinal, ignore case).
         /// The default is <see cref="StringComparison.OrdinalIgnoreCase"/>.
         /// </param>
         /// <returns>
-        /// An array of integers representing the zero-based indices of each occurrence of the specified string.
+        /// An array of integers representing the zero-based indices of each occurrence of the specified <see cref="string"/>.
         /// </returns>
         public static int[] AllIndicesOf(this in ReadOnlySpan<char> value, string finding, in StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
@@ -254,29 +254,29 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a cached <see cref="StringBuilder"/> initialized with the specified string.
+        /// Creates a cached <see cref="StringBuilder"/> initialized with the specified <see cref="string"/>.
         /// </summary>
         /// <param name="value">
-        /// The string value to initialize the builder with.
+        /// The <see cref="string"/> value to initialize the builder with.
         /// </param>
         /// <returns>
-        /// A <see cref="StringBuilder"/> from the cache initialized with the specified string.
+        /// A <see cref="StringBuilder"/> from the cache initialized with the specified <see cref="string"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static StringBuilder AsCachedBuilder(this string value) => StringBuilderCache.Acquire(value.Length).Append(value);
 
         /// <summary>
-        /// Converts the string to a <see cref="SyntaxToken"/> with the specified kind.
+        /// Converts the <see cref="string"/> to a <see cref="SyntaxToken"/> with the specified kind.
         /// </summary>
         /// <param name="source">
-        /// The string to convert.
+        /// The <see cref="string"/> to convert.
         /// </param>
         /// <param name="kind">
         /// One of the enumeration members that specifies the syntax kind for the token.
         /// The default is <see cref="SyntaxKind.StringLiteralToken"/>.
         /// </param>
         /// <returns>
-        /// A syntax token created from the string.
+        /// A syntax token created from the <see cref="string"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SyntaxToken AsToken(this string source, in SyntaxKind kind = SyntaxKind.StringLiteralToken)
@@ -290,42 +290,42 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Converts a character span to an interpolated string text syntax node.
+        /// Converts a character span to an interpolated <see cref="string"/> text syntax node.
         /// </summary>
         /// <param name="value">
         /// The span of characters to convert.
         /// </param>
         /// <returns>
-        /// An interpolated string text syntax node.
+        /// An interpolated <see cref="string"/> text syntax node.
         /// </returns>
         public static InterpolatedStringTextSyntax AsInterpolatedString(this in ReadOnlySpan<char> value) => value.ToString().AsInterpolatedString();
 
         /// <summary>
-        /// Converts a string to an interpolated string text syntax node.
+        /// Converts a <see cref="string"/> to an interpolated <see cref="string"/> text syntax node.
         /// </summary>
         /// <param name="value">
-        /// The string to convert.
+        /// The <see cref="string"/> to convert.
         /// </param>
         /// <returns>
-        /// An interpolated string text syntax node.
+        /// An interpolated <see cref="string"/> text syntax node.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static InterpolatedStringTextSyntax AsInterpolatedString(this string value) => SyntaxFactory.InterpolatedStringText(value.AsToken(SyntaxKind.InterpolatedStringTextToken));
 
         /// <summary>
-        /// Converts a string to a type syntax node.
+        /// Converts a <see cref="string"/> to a type syntax node.
         /// </summary>
         /// <param name="value">
-        /// The string to convert.
+        /// The <see cref="string"/> to convert.
         /// </param>
         /// <returns>
-        /// A type syntax node representing the string.
+        /// A type syntax node representing the <see cref="string"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TypeSyntax AsTypeSyntax(this string value) => SyntaxFactory.ParseTypeName(value);
 
         /// <summary>
-        /// Converts a string to an XML text syntax node.
+        /// Converts a <see cref="string"/> to an XML text syntax node.
         /// </summary>
         /// <param name="value">
         /// The text to convert.
@@ -337,7 +337,7 @@ namespace MiKoSolutions.Analyzers
         public static XmlTextSyntax AsXmlText(this string value) => SyntaxFactory.XmlText(value);
 
         /// <summary>
-        /// Concatenates a collection of strings into a single string.
+        /// Concatenates a collection of <see cref="string"/>s into a single <see cref="string"/>.
         /// </summary>
         /// <param name="values">
         /// The collection of strings to concatenate.
@@ -364,16 +364,16 @@ namespace MiKoSolutions.Analyzers
         public static string ConcatenatedWith(this IEnumerable<string> values, string separator) => string.Join(separator, values);
 
         /// <summary>
-        /// Creates a new string by concatenating a character with a string.
+        /// Creates a new <see cref="string"/> by concatenating a character with a <see cref="string"/>.
         /// </summary>
         /// <param name="value">
         /// The character to place at the beginning.
         /// </param>
         /// <param name="arg0">
-        /// The string to append.
+        /// The <see cref="string"/> to append.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the character followed by the string.
+        /// A <see cref="string"/> that contains the character followed by the <see cref="string"/>.
         /// </returns>
         public static string ConcatenatedWith(this in char value, string arg0)
         {
@@ -397,7 +397,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new string by concatenating a character with a span of characters.
+        /// Creates a new <see cref="string"/> by concatenating a character with a span of characters.
         /// </summary>
         /// <param name="value">
         /// The character to place at the beginning.
@@ -430,16 +430,16 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new string by concatenating a string with a span of characters.
+        /// Creates a new <see cref="string"/> by concatenating a <see cref="string"/> with a span of characters.
         /// </summary>
         /// <param name="value">
-        /// The string to place at the beginning.
+        /// The <see cref="string"/> to place at the beginning.
         /// </param>
         /// <param name="span">
         /// The span of characters to append.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the string followed by the characters in the span.
+        /// A <see cref="string"/> that contains the <see cref="string"/> followed by the characters in the span.
         /// </returns>
         public static string ConcatenatedWith(this string value, in ReadOnlySpan<char> span)
         {
@@ -472,16 +472,16 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new string by concatenating a string with a character.
+        /// Creates a new <see cref="string"/> by concatenating a <see cref="string"/> with a character.
         /// </summary>
         /// <param name="value">
-        /// The string to place at the beginning.
+        /// The <see cref="string"/> to place at the beginning.
         /// </param>
         /// <param name="arg0">
         /// The character to append.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the string followed by the character.
+        /// A <see cref="string"/> that contains the <see cref="string"/> followed by the character.
         /// </returns>
         public static string ConcatenatedWith(this string value, in char arg0)
         {
@@ -505,7 +505,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new string by concatenating a span of characters with a character.
+        /// Creates a new <see cref="string"/> by concatenating a span of characters with a character.
         /// </summary>
         /// <param name="value">
         /// The span of characters to place at the beginning.
@@ -538,16 +538,16 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new string by concatenating a span of characters with a string.
+        /// Creates a new <see cref="string"/> by concatenating a span of characters with a <see cref="string"/>.
         /// </summary>
         /// <param name="value">
         /// The span of characters to place at the beginning.
         /// </param>
         /// <param name="arg0">
-        /// The string to append.
+        /// The <see cref="string"/> to append.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the characters in the span followed by the string.
+        /// A <see cref="string"/> that contains the characters in the span followed by the <see cref="string"/>.
         /// </returns>
         public static string ConcatenatedWith(this in ReadOnlySpan<char> value, string arg0)
         {
@@ -580,19 +580,19 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new string by concatenating a character, a string, and another character.
+        /// Creates a new <see cref="string"/> by concatenating a character, a <see cref="string"/>, and another character.
         /// </summary>
         /// <param name="value">
         /// The character to place at the beginning.
         /// </param>
         /// <param name="arg0">
-        /// The string to append after the first character.
+        /// The <see cref="string"/> to append after the first character.
         /// </param>
         /// <param name="arg1">
         /// The character to append at the end.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the first character, followed by the string, followed by the second character.
+        /// A <see cref="string"/> that contains the first character, followed by the <see cref="string"/>, followed by the second character.
         /// </returns>
         public static string ConcatenatedWith(this in char value, string arg0, in char arg1)
         {
@@ -619,7 +619,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new string by concatenating a character, a span of characters, and another character.
+        /// Creates a new <see cref="string"/> by concatenating a character, a span of characters, and another character.
         /// </summary>
         /// <param name="value">
         /// The character to place at the beginning.
@@ -658,19 +658,19 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new string by concatenating a character, a string, and a span of characters.
+        /// Creates a new <see cref="string"/> by concatenating a character, a <see cref="string"/>, and a span of characters.
         /// </summary>
         /// <param name="value">
         /// The character to place at the beginning.
         /// </param>
         /// <param name="arg0">
-        /// The string to append after the character.
+        /// The <see cref="string"/> to append after the character.
         /// </param>
         /// <param name="arg1">
         /// The span of characters to append at the end.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the character, followed by the string, followed by the span of characters.
+        /// A <see cref="string"/> that contains the character, followed by the <see cref="string"/>, followed by the span of characters.
         /// </returns>
         public static string ConcatenatedWith(this in char value, string arg0, in ReadOnlySpan<char> arg1)
         {
@@ -694,7 +694,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new string by concatenating a span of characters, a character, and a string.
+        /// Creates a new <see cref="string"/> by concatenating a span of characters, a character, and a <see cref="string"/>.
         /// </summary>
         /// <param name="value">
         /// The span of characters to place at the beginning.
@@ -703,10 +703,10 @@ namespace MiKoSolutions.Analyzers
         /// The character to append after the span.
         /// </param>
         /// <param name="arg1">
-        /// The string to append at the end.
+        /// The <see cref="string"/> to append at the end.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the span of characters, followed by the character, followed by the string.
+        /// A <see cref="string"/> that contains the span of characters, followed by the character, followed by the <see cref="string"/>.
         /// </returns>
         public static string ConcatenatedWith(this in ReadOnlySpan<char> value, in char arg0, string arg1)
         {
@@ -736,19 +736,19 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new string by concatenating a span of characters with two strings.
+        /// Creates a new <see cref="string"/> by concatenating a span of characters with two <see cref="string"/>s.
         /// </summary>
         /// <param name="value">
         /// The span of characters to place at the beginning.
         /// </param>
         /// <param name="arg0">
-        /// The first string to append.
+        /// The first <see cref="string"/> to append.
         /// </param>
         /// <param name="arg1">
-        /// The second string to append.
+        /// The second <see cref="string"/> to append.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the span of characters, followed by the first string, followed by the second string.
+        /// A <see cref="string"/> that contains the span of characters, followed by the first <see cref="string"/>, followed by the second <see cref="string"/>.
         /// </returns>
         public static string ConcatenatedWith(this in ReadOnlySpan<char> value, string arg0, string arg1)
         {
@@ -778,19 +778,19 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new string by concatenating a span of characters, a string, and another span of characters.
+        /// Creates a new <see cref="string"/> by concatenating a span of characters, a <see cref="string"/>, and another span of characters.
         /// </summary>
         /// <param name="value">
         /// The span of characters to place at the beginning.
         /// </param>
         /// <param name="arg0">
-        /// The string to append after the span.
+        /// The <see cref="string"/> to append after the span.
         /// </param>
         /// <param name="arg1">
         /// The span of characters to append at the end.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the first span, followed by the string, followed by the second span.
+        /// A <see cref="string"/> that contains the first span, followed by the <see cref="string"/>, followed by the second span.
         /// </returns>
         public static string ConcatenatedWith(this in ReadOnlySpan<char> value, string arg0, in ReadOnlySpan<char> arg1)
         {
@@ -820,19 +820,19 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new string by concatenating a string, another string, and a span of characters.
+        /// Creates a new <see cref="string"/> by concatenating a <see cref="string"/>, another <see cref="string"/>, and a span of characters.
         /// </summary>
         /// <param name="value">
-        /// The string to place at the beginning.
+        /// The <see cref="string"/> to place at the beginning.
         /// </param>
         /// <param name="arg0">
-        /// The second string to append.
+        /// The second <see cref="string"/> to append.
         /// </param>
         /// <param name="arg1">
         /// The span of characters to append at the end.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the first string, followed by the second string, followed by the span of characters.
+        /// A <see cref="string"/> that contains the first <see cref="string"/>, followed by the second <see cref="string"/>, followed by the span of characters.
         /// </returns>
         public static string ConcatenatedWith(this string value, string arg0, in ReadOnlySpan<char> arg1)
         {
@@ -867,10 +867,10 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new string by concatenating a string, a span of characters, and a character.
+        /// Creates a new <see cref="string"/> by concatenating a <see cref="string"/>, a span of characters, and a character.
         /// </summary>
         /// <param name="value">
-        /// The string to place at the beginning.
+        /// The <see cref="string"/> to place at the beginning.
         /// </param>
         /// <param name="arg0">
         /// The span of characters to append.
@@ -879,7 +879,7 @@ namespace MiKoSolutions.Analyzers
         /// The character to append at the end.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the string, followed by the span of characters, followed by the character.
+        /// A <see cref="string"/> that contains the <see cref="string"/>, followed by the span of characters, followed by the character.
         /// </returns>
         public static string ConcatenatedWith(this string value, in ReadOnlySpan<char> arg0, in char arg1)
         {
@@ -914,19 +914,19 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new string by concatenating a string, a span of characters, and another string.
+        /// Creates a new <see cref="string"/> by concatenating a <see cref="string"/>, a span of characters, and another <see cref="string"/>.
         /// </summary>
         /// <param name="value">
-        /// The string to place at the beginning.
+        /// The <see cref="string"/> to place at the beginning.
         /// </param>
         /// <param name="arg0">
         /// The span of characters to append.
         /// </param>
         /// <param name="arg1">
-        /// The second string to append at the end.
+        /// The second <see cref="string"/> to append at the end.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the first string, followed by the span of characters, followed by the second string.
+        /// A <see cref="string"/> that contains the first <see cref="string"/>, followed by the span of characters, followed by the second <see cref="string"/>.
         /// </returns>
         public static string ConcatenatedWith(this string value, in ReadOnlySpan<char> arg0, string arg1)
         {
@@ -961,7 +961,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new string by concatenating a span of characters, a character, a string, and another character.
+        /// Creates a new <see cref="string"/> by concatenating a span of characters, a character, a <see cref="string"/>, and another character.
         /// </summary>
         /// <param name="value">
         /// The span of characters to place at the beginning.
@@ -970,13 +970,13 @@ namespace MiKoSolutions.Analyzers
         /// The first character to append.
         /// </param>
         /// <param name="arg1">
-        /// The string to append.
+        /// The <see cref="string"/> to append.
         /// </param>
         /// <param name="arg2">
         /// The second character to append at the end.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the span, the first character, the string, and the second character.
+        /// A <see cref="string"/> that contains the span, the first character, the <see cref="string"/>, and the second character.
         /// </returns>
         public static string ConcatenatedWith(this in ReadOnlySpan<char> value, in char arg0, string arg1, in char arg2)
         {
@@ -1005,10 +1005,10 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether the string contains the specified character.
+        /// Determines whether the <see cref="string"/> contains the specified character.
         /// </summary>
         /// <param name="value">
-        /// The string to search in.
+        /// The <see cref="string"/> to search in.
         /// </param>
         /// <param name="c">
         /// The character to seek.
@@ -1050,16 +1050,16 @@ namespace MiKoSolutions.Analyzers
         public static bool Contains(this in ReadOnlySpan<char> value, in ReadOnlySpan<char> finding) => value.IndexOf(finding) >= 0;
 
         /// <summary>
-        /// Determines whether the span of characters contains the specified string.
+        /// Determines whether the span of characters contains the specified <see cref="string"/>.
         /// </summary>
         /// <param name="value">
         /// The span of characters to search in.
         /// </param>
         /// <param name="finding">
-        /// The string to seek.
+        /// The <see cref="string"/> to seek.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the string is found; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the <see cref="string"/> is found; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Contains(this in ReadOnlySpan<char> value, string finding)
@@ -1073,16 +1073,16 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether the string contains the specified substring using the given string comparison.
+        /// Determines whether the <see cref="string"/> contains the specified substring using the given <see cref="string"/> comparison.
         /// </summary>
         /// <param name="value">
-        /// The string to search in.
+        /// The <see cref="string"/> to search in.
         /// </param>
         /// <param name="finding">
         /// The substring to seek.
         /// </param>
         /// <param name="comparison">
-        /// One of the enumeration members that specifies the string comparison method to use.
+        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if the substring is found; otherwise, <see langword="false"/>.
@@ -1136,23 +1136,23 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether the span of characters contains the specified string with validation of the following character.
+        /// Determines whether the span of characters contains the specified <see cref="string"/> with validation of the following character.
         /// </summary>
         /// <param name="value">
         /// The span of characters to search in.
         /// </param>
         /// <param name="finding">
-        /// The string to seek.
+        /// The <see cref="string"/> to seek.
         /// </param>
         /// <param name="nextCharValidationCallback">
-        /// The validation callback for the character that follows the found string.
+        /// The validation callback for the character that follows the found <see cref="string"/>.
         /// </param>
         /// <param name="comparison">
-        /// One of the enumeration members that specifies the string comparison method to use.
+        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
         /// The default is <see cref="StringComparison.Ordinal"/>.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the string is found and the following character passes validation; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the <see cref="string"/> is found and the following character passes validation; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Contains(this in ReadOnlySpan<char> value, string finding, Func<char, bool> nextCharValidationCallback, in StringComparison comparison = StringComparison.Ordinal) => value.Contains(finding.AsSpan(), nextCharValidationCallback, comparison);
@@ -1170,7 +1170,7 @@ namespace MiKoSolutions.Analyzers
         /// The validation callback for the character that follows the found span.
         /// </param>
         /// <param name="comparison">
-        /// One of the enumeration members that specifies the string comparison method to use.
+        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
         /// The default is <see cref="StringComparison.Ordinal"/>.
         /// </param>
         /// <returns>
@@ -1224,10 +1224,10 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether the string contains any of the specified characters.
+        /// Determines whether the <see cref="string"/> contains any of the specified characters.
         /// </summary>
         /// <param name="value">
-        /// The string to search in.
+        /// The <see cref="string"/> to search in.
         /// </param>
         /// <param name="characters">
         /// The characters to seek.
@@ -1254,16 +1254,16 @@ namespace MiKoSolutions.Analyzers
         public static bool ContainsAny(this in ReadOnlySpan<char> value, in ReadOnlySpan<char> characters) => value.Length > 0 && value.IndexOfAny(characters) >= 0;
 
         /// <summary>
-        /// Determines whether the string contains any of the specified phrases.
+        /// Determines whether the <see cref="string"/> contains any of the specified phrases.
         /// </summary>
         /// <param name="value">
-        /// The string to search in.
+        /// The <see cref="string"/> to search in.
         /// </param>
         /// <param name="phrases">
         /// The phrases to seek.
         /// </param>
         /// <param name="comparison">
-        /// One of the enumeration members that specifies the string comparison method to use.
+        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
         /// The default is <see cref="StringComparison.Ordinal"/>.
         /// </param>
         /// <returns>
@@ -1304,16 +1304,16 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether the string contains any of the specified phrases.
+        /// Determines whether the <see cref="string"/> contains any of the specified phrases.
         /// </summary>
         /// <param name="value">
-        /// The string to search in.
+        /// The <see cref="string"/> to search in.
         /// </param>
         /// <param name="phrases">
         /// The phrases to seek.
         /// </param>
         /// <param name="comparison">
-        /// One of the enumeration members that specifies the string comparison method to use.
+        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
         /// The default is <see cref="StringComparison.Ordinal"/>.
         /// </param>
         /// <returns>
@@ -1325,28 +1325,28 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether the string contains XML markup.
+        /// Determines whether the <see cref="string"/> contains XML markup.
         /// </summary>
         /// <param name="value">
-        /// The string to check.
+        /// The <see cref="string"/> to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the string contains XML markup; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the <see cref="string"/> contains XML markup; otherwise, <see langword="false"/>.
         /// </returns>
         public static bool ContainsXml(this string value) => value.Contains('<') && value.Contains("/>");
 
         /// <summary>
-        /// Counts the number of leading whitespace characters in the string.
+        /// Counts the number of leading whitespace characters in the <see cref="string"/>.
         /// </summary>
         /// <param name="value">
-        /// The string to check.
+        /// The <see cref="string"/> to check.
         /// </param>
         /// <param name="start">
         /// The starting index to begin counting from.
         /// The default is <c>0</c>.
         /// </param>
         /// <returns>
-        /// The number of consecutive whitespace characters at the beginning of the string.
+        /// The number of consecutive whitespace characters at the beginning of the <see cref="string"/>.
         /// </returns>
         public static int CountLeadingWhitespaces(this string value, int start = 0)
         {
@@ -1368,17 +1368,17 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Counts the number of trailing whitespace characters in the string.
+        /// Counts the number of trailing whitespace characters in the <see cref="string"/>.
         /// </summary>
         /// <param name="value">
-        /// The string to check.
+        /// The <see cref="string"/> to check.
         /// </param>
         /// <param name="start">
         /// The starting index to begin counting from.
         /// The default is <c>0</c>.
         /// </param>
         /// <returns>
-        /// The number of consecutive whitespace characters at the end of the string.
+        /// The number of consecutive whitespace characters at the end of the <see cref="string"/>.
         /// </returns>
         public static int CountTrailingWhitespaces(this string value, in int start = 0)
         {
@@ -1400,16 +1400,16 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether the string ends with the specified character.
+        /// Determines whether the <see cref="string"/> ends with the specified character.
         /// </summary>
         /// <param name="value">
-        /// The string to check.
+        /// The <see cref="string"/> to check.
         /// </param>
         /// <param name="character">
         /// The character to seek.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the string ends with the character; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the <see cref="string"/> ends with the character; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool EndsWith(this string value, in char character) => value.HasCharacters() && value[value.Length - 1] == character;
@@ -1430,20 +1430,20 @@ namespace MiKoSolutions.Analyzers
         public static bool EndsWith(this in ReadOnlySpan<char> value, in char character) => value.Length > 0 && value[value.Length - 1] == character;
 
         /// <summary>
-        /// Determines whether the span of characters ends with the specified string.
+        /// Determines whether the span of characters ends with the specified <see cref="string"/>.
         /// </summary>
         /// <param name="value">
         /// The span of characters to check.
         /// </param>
         /// <param name="characters">
-        /// The string to seek.
+        /// The <see cref="string"/> to seek.
         /// </param>
         /// <param name="comparison">
-        /// One of the enumeration members that specifies the string comparison method to use.
+        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
         /// The default is <see cref="StringComparison.Ordinal"/>.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the span ends with the string; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the span ends with the <see cref="string"/>; otherwise, <see langword="false"/>.
         /// </returns>
         public static bool EndsWith(this in ReadOnlySpan<char> value, string characters, in StringComparison comparison = StringComparison.Ordinal)
         {
@@ -1453,16 +1453,16 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether the string ends with any of the specified characters.
+        /// Determines whether the <see cref="string"/> ends with any of the specified characters.
         /// </summary>
         /// <param name="value">
-        /// The string to check.
+        /// The <see cref="string"/> to check.
         /// </param>
         /// <param name="suffixCharacters">
         /// The characters to check for.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the string ends with any of the characters; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the <see cref="string"/> ends with any of the characters; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool EndsWithAny(this string value, in ReadOnlySpan<char> suffixCharacters) => value.HasCharacters() && suffixCharacters.Contains(value[value.Length - 1]);
@@ -1498,20 +1498,20 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether the string ends with any of the specified suffixes.
+        /// Determines whether the <see cref="string"/> ends with any of the specified suffixes.
         /// </summary>
         /// <param name="value">
-        /// The string to check.
+        /// The <see cref="string"/> to check.
         /// </param>
         /// <param name="suffixes">
         /// The suffixes to check for.
         /// </param>
         /// <param name="comparison">
-        /// One of the enumeration members that specifies the string comparison method to use.
+        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
         /// The default is <see cref="StringComparison.Ordinal"/>.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the string ends with any of the suffixes; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the <see cref="string"/> ends with any of the suffixes; otherwise, <see langword="false"/>.
         /// </returns>
         public static bool EndsWithAny(this string value, in ReadOnlySpan<string> suffixes, in StringComparison comparison = StringComparison.Ordinal)
         {
@@ -1539,20 +1539,20 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether the string ends with any of the specified suffixes.
+        /// Determines whether the <see cref="string"/> ends with any of the specified suffixes.
         /// </summary>
         /// <param name="value">
-        /// The string to check.
+        /// The <see cref="string"/> to check.
         /// </param>
         /// <param name="suffixes">
         /// The enumerable of suffixes to check for.
         /// </param>
         /// <param name="comparison">
-        /// One of the enumeration members that specifies the string comparison method to use.
+        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
         /// The default is <see cref="StringComparison.Ordinal"/>.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the string ends with any of the suffixes; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the <see cref="string"/> ends with any of the suffixes; otherwise, <see langword="false"/>.
         /// </returns>
         public static bool EndsWithAny(this string value, IEnumerable<string> suffixes, in StringComparison comparison = StringComparison.Ordinal)
         {
@@ -1578,20 +1578,20 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether the string ends with any of the specified suffixes.
+        /// Determines whether the <see cref="string"/> ends with any of the specified suffixes.
         /// </summary>
         /// <param name="value">
-        /// The string to check.
+        /// The <see cref="string"/> to check.
         /// </param>
         /// <param name="suffixes">
         /// The list of suffixes to check for.
         /// </param>
         /// <param name="comparison">
-        /// One of the enumeration members that specifies the string comparison method to use.
+        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
         /// The default is <see cref="StringComparison.Ordinal"/>.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the string ends with any of the suffixes; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the <see cref="string"/> ends with any of the suffixes; otherwise, <see langword="false"/>.
         /// </returns>
         public static bool EndsWithAny(this string value, List<string> suffixes, in StringComparison comparison = StringComparison.Ordinal)
         {
@@ -1628,7 +1628,7 @@ namespace MiKoSolutions.Analyzers
         /// The suffixes to check for.
         /// </param>
         /// <param name="comparison">
-        /// One of the enumeration members that specifies the string comparison method to use.
+        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
         /// The default is <see cref="StringComparison.Ordinal"/>.
         /// </param>
         /// <returns>
@@ -1661,13 +1661,13 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether the string ends with a common number (excluding bit numbers).
+        /// Determines whether the <see cref="string"/> ends with a common number (excluding bit numbers).
         /// </summary>
         /// <param name="value">
-        /// The string to check.
+        /// The <see cref="string"/> to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the string ends with a common number; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the <see cref="string"/> ends with a common number; otherwise, <see langword="false"/>.
         /// </returns>
         public static bool EndsWithCommonNumber(this string value) => value.EndsWithNumber() && value.EndsWithAny(Constants.Markers.BitNumbers, StringComparison.OrdinalIgnoreCase) is false;
 
@@ -1683,13 +1683,13 @@ namespace MiKoSolutions.Analyzers
         public static bool EndsWithCommonNumber(this in ReadOnlySpan<char> value) => value.EndsWithNumber() && value.EndsWithAny(Constants.Markers.BitNumbers, StringComparison.OrdinalIgnoreCase) is false;
 
         /// <summary>
-        /// Determines whether the string ends with a number.
+        /// Determines whether the <see cref="string"/> ends with a number.
         /// </summary>
         /// <param name="value">
-        /// The string to check.
+        /// The <see cref="string"/> to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the string ends with a number; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the <see cref="string"/> ends with a number; otherwise, <see langword="false"/>.
         /// </returns>
         public static bool EndsWithNumber(this string value) => value.HasCharacters() && value[value.Length - 1].IsNumber();
 
@@ -1705,58 +1705,58 @@ namespace MiKoSolutions.Analyzers
         public static bool EndsWithNumber(this in ReadOnlySpan<char> value) => value.Length > 0 && value[value.Length - 1].IsNumber();
 
         /// <summary>
-        /// Determines whether the string equals the specified span of characters using the specified comparison.
+        /// Determines whether the <see cref="string"/> equals the specified span of characters using the specified comparison.
         /// </summary>
         /// <param name="value">
-        /// The string to compare.
+        /// The <see cref="string"/> to compare.
         /// </param>
         /// <param name="other">
         /// The span of characters to compare with.
         /// </param>
         /// <param name="comparison">
-        /// One of the enumeration members that specifies the string comparison method to use.
+        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
         /// The default is <see cref="StringComparison.Ordinal"/>.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the string equals the span; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the <see cref="string"/> equals the span; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Equals(this string value, in ReadOnlySpan<char> other, in StringComparison comparison = StringComparison.Ordinal) => value != null && value.AsSpan().Equals(other, comparison);
 
         /// <summary>
-        /// Determines whether the span of characters equals the specified string using the specified comparison.
+        /// Determines whether the span of characters equals the specified <see cref="string"/> using the specified comparison.
         /// </summary>
         /// <param name="value">
         /// The span of characters to compare.
         /// </param>
         /// <param name="other">
-        /// The string to compare with.
+        /// The <see cref="string"/> to compare with.
         /// </param>
         /// <param name="comparison">
-        /// One of the enumeration members that specifies the string comparison method to use.
+        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
         /// The default is <see cref="StringComparison.Ordinal"/>.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the span equals the string; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the span equals the <see cref="string"/>; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Equals(this in ReadOnlySpan<char> value, string other, in StringComparison comparison = StringComparison.Ordinal) => other != null && value.Equals(other.AsSpan(), comparison);
 
         /// <summary>
-        /// Determines whether the string equals any of the specified phrases.
+        /// Determines whether the <see cref="string"/> equals any of the specified phrases.
         /// </summary>
         /// <param name="value">
-        /// The string to compare.
+        /// The <see cref="string"/> to compare.
         /// </param>
         /// <param name="phrases">
         /// The phrases to compare with.
         /// </param>
         /// <param name="comparison">
-        /// One of the enumeration members that specifies the string comparison method to use.
+        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
         /// The default is <see cref="StringComparison.Ordinal"/>.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the string equals any of the phrases; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the <see cref="string"/> equals any of the phrases; otherwise, <see langword="false"/>.
         /// </returns>
         public static bool EqualsAny(this string value, in ReadOnlySpan<string> phrases, in StringComparison comparison = StringComparison.Ordinal)
         {
@@ -1777,20 +1777,20 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether the string equals any of the specified phrases.
+        /// Determines whether the <see cref="string"/> equals any of the specified phrases.
         /// </summary>
         /// <param name="value">
-        /// The string to compare.
+        /// The <see cref="string"/> to compare.
         /// </param>
         /// <param name="phrases">
         /// The enumerable of phrases to compare with.
         /// </param>
         /// <param name="comparison">
-        /// One of the enumeration members that specifies the string comparison method to use.
+        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
         /// The default is <see cref="StringComparison.Ordinal"/>.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the string equals any of the phrases; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the <see cref="string"/> equals any of the phrases; otherwise, <see langword="false"/>.
         /// </returns>
         public static bool EqualsAny(this string value, IEnumerable<string> phrases, in StringComparison comparison = StringComparison.Ordinal)
         {
@@ -1823,7 +1823,7 @@ namespace MiKoSolutions.Analyzers
         /// The phrases to compare with.
         /// </param>
         /// <param name="comparison">
-        /// One of the enumeration members that specifies the string comparison method to use.
+        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
         /// The default is <see cref="StringComparison.Ordinal"/>.
         /// </param>
         /// <returns>
@@ -1848,13 +1848,13 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets the first sentence from the string.
+        /// Gets the first sentence from the <see cref="string"/>.
         /// </summary>
         /// <param name="value">
-        /// The string to process.
+        /// The <see cref="string"/> to process.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the first sentence from the string.
+        /// A <see cref="string"/> that contains the first sentence from the <see cref="string"/>.
         /// </returns>
         public static string FirstSentence(this string value)
         {
@@ -1903,13 +1903,13 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets the first word from the string.
+        /// Gets the first word from the <see cref="string"/>.
         /// </summary>
         /// <param name="value">
-        /// The string to process.
+        /// The <see cref="string"/> to process.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the first word from the string.
+        /// A <see cref="string"/> that contains the first word from the <see cref="string"/>.
         /// </returns>
         public static string FirstWord(this string value)
         {
@@ -1968,13 +1968,13 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets the second word from the string.
+        /// Gets the second word from the <see cref="string"/>.
         /// </summary>
         /// <param name="value">
-        /// The string to process.
+        /// The <see cref="string"/> to process.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the second word from the string.
+        /// A <see cref="string"/> that contains the second word from the <see cref="string"/>.
         /// </returns>
         public static string SecondWord(this string value) => SecondWord(value.AsSpan()).ToString();
 
@@ -1990,13 +1990,13 @@ namespace MiKoSolutions.Analyzers
         public static ReadOnlySpan<char> SecondWord(this in ReadOnlySpan<char> value) => value.WithoutFirstWord().FirstWord();
 
         /// <summary>
-        /// Gets the third word from the string.
+        /// Gets the third word from the <see cref="string"/>.
         /// </summary>
         /// <param name="value">
-        /// The string to process.
+        /// The <see cref="string"/> to process.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the third word from the string.
+        /// A <see cref="string"/> that contains the third word from the <see cref="string"/>.
         /// </returns>
         public static string ThirdWord(this string value) => ThirdWord(value.AsSpan()).ToString();
 
@@ -2012,13 +2012,13 @@ namespace MiKoSolutions.Analyzers
         public static ReadOnlySpan<char> ThirdWord(this in ReadOnlySpan<char> value) => value.WithoutFirstWord().WithoutFirstWord().FirstWord();
 
         /// <summary>
-        /// Gets the last word from the string.
+        /// Gets the last word from the <see cref="string"/>.
         /// </summary>
         /// <param name="value">
-        /// The string to process.
+        /// The <see cref="string"/> to process.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the last word from the string.
+        /// A <see cref="string"/> that contains the last word from the <see cref="string"/>.
         /// </returns>
         public static string LastWord(this string value)
         {
@@ -2059,10 +2059,10 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Formats a string by replacing the format item with the symbol.
+        /// Formats a <see cref="string"/> by replacing the format item with the symbol.
         /// </summary>
         /// <param name="format">
-        /// The format string.
+        /// The format <see cref="string"/>.
         /// </param>
         /// <param name="arg0">
         /// The symbol to format.
@@ -2074,13 +2074,13 @@ namespace MiKoSolutions.Analyzers
         public static string FormatWith(this string format, ISymbol arg0) => string.Format(format, arg0);
 
         /// <summary>
-        /// Formats a string by replacing the format item with the string.
+        /// Formats a <see cref="string"/> by replacing the format item with the <see cref="string"/>.
         /// </summary>
         /// <param name="format">
-        /// The format string.
+        /// The format <see cref="string"/>.
         /// </param>
         /// <param name="arg0">
-        /// The string to format.
+        /// The <see cref="string"/> to format.
         /// </param>
         /// <returns>
         /// A <see cref="string"/> that contains the formatted result.
@@ -2089,16 +2089,16 @@ namespace MiKoSolutions.Analyzers
         public static string FormatWith(this string format, string arg0) => string.Format(format, arg0);
 
         /// <summary>
-        /// Formats a string by replacing the format items with the strings.
+        /// Formats a <see cref="string"/> by replacing the format items with the <see cref="string"/>s.
         /// </summary>
         /// <param name="format">
-        /// The format string.
+        /// The format <see cref="string"/>.
         /// </param>
         /// <param name="arg0">
-        /// The first string to format.
+        /// The first <see cref="string"/> to format.
         /// </param>
         /// <param name="arg1">
-        /// The second string to format.
+        /// The second <see cref="string"/> to format.
         /// </param>
         /// <returns>
         /// A <see cref="string"/> that contains the formatted result.
@@ -2107,19 +2107,19 @@ namespace MiKoSolutions.Analyzers
         public static string FormatWith(this string format, string arg0, string arg1) => string.Format(format, arg0, arg1);
 
         /// <summary>
-        /// Formats a string by replacing the format items with the strings.
+        /// Formats a <see cref="string"/> by replacing the format items with the <see cref="string"/>s.
         /// </summary>
         /// <param name="format">
-        /// The format string.
+        /// The format <see cref="string"/>.
         /// </param>
         /// <param name="arg0">
-        /// The first string to format.
+        /// The first <see cref="string"/> to format.
         /// </param>
         /// <param name="arg1">
-        /// The second string to format.
+        /// The second <see cref="string"/> to format.
         /// </param>
         /// <param name="arg2">
-        /// The third string to format.
+        /// The third <see cref="string"/> to format.
         /// </param>
         /// <returns>
         /// A <see cref="string"/> that contains the formatted result.
@@ -2128,22 +2128,22 @@ namespace MiKoSolutions.Analyzers
         public static string FormatWith(this string format, string arg0, string arg1, string arg2) => string.Format(format, arg0, arg1, arg2);
 
         /// <summary>
-        /// Formats a string by replacing the format items with the strings.
+        /// Formats a <see cref="string"/> by replacing the format items with the <see cref="string"/>s.
         /// </summary>
         /// <param name="format">
-        /// The format string.
+        /// The format <see cref="string"/>.
         /// </param>
         /// <param name="arg0">
-        /// The first string to format.
+        /// The first <see cref="string"/> to format.
         /// </param>
         /// <param name="arg1">
-        /// The second string to format.
+        /// The second <see cref="string"/> to format.
         /// </param>
         /// <param name="arg2">
-        /// The third string to format.
+        /// The third <see cref="string"/> to format.
         /// </param>
         /// <param name="arg3">
-        /// The fourth string to format.
+        /// The fourth <see cref="string"/> to format.
         /// </param>
         /// <returns>
         /// A <see cref="string"/> that contains the formatted result.
@@ -2152,13 +2152,13 @@ namespace MiKoSolutions.Analyzers
         public static string FormatWith(this string format, string arg0, string arg1, string arg2, string arg3) => string.Format(format, arg0, arg1, arg2, arg3);
 
         /// <summary>
-        /// Gets the name-only part of the string, handling generic type names.
+        /// Gets the name-only part of the <see cref="string"/>, handling generic type names.
         /// </summary>
         /// <param name="value">
-        /// The string to process.
+        /// The <see cref="string"/> to process.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the name-only part of the string.
+        /// A <see cref="string"/> that contains the name-only part of the <see cref="string"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string GetNameOnlyPart(this string value) => GetNameOnlyPart(value.AsSpan());
@@ -2227,13 +2227,13 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets all numbers contained in the string.
+        /// Gets all numbers contained in the <see cref="string"/>.
         /// </summary>
         /// <param name="value">
-        /// The string to search for numbers.
+        /// The <see cref="string"/> to search for numbers.
         /// </param>
         /// <returns>
-        /// An array of strings representing each number found in the string, or an empty array if no numbers are found.
+        /// An array of <see cref="string"/>s representing each number found in the <see cref="string"/>, or an empty array if no numbers are found.
         /// </returns>
         public static string[] GetNumbers(this string value)
         {
@@ -2259,25 +2259,25 @@ namespace MiKoSolutions.Analyzers
         public static ReadOnlySpan<char> GetPartAfterLastDot(this in ReadOnlySpan<char> value) => value.Slice(value.LastIndexOf('.') + 1);
 
         /// <summary>
-        /// Determines whether the string has a collection marker suffix.
+        /// Determines whether the <see cref="string"/> has a collection marker suffix.
         /// </summary>
         /// <param name="value">
-        /// The string to check.
+        /// The <see cref="string"/> to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the string has a collection marker suffix; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the <see cref="string"/> has a collection marker suffix; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool HasCollectionMarker(this string value) => value.EndsWithAny(Constants.Markers.Collections, StringComparison.OrdinalIgnoreCase);
 
         /// <summary>
-        /// Determines whether the string has an entity marker.
+        /// Determines whether the <see cref="string"/> has an entity marker.
         /// </summary>
         /// <param name="value">
-        /// The string to check.
+        /// The <see cref="string"/> to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the string has an entity marker; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the <see cref="string"/> has an entity marker; otherwise, <see langword="false"/>.
         /// </returns>
         public static bool HasEntityMarker(this string value)
         {
@@ -2300,13 +2300,13 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether the string has characters (is not <see langword="null"/> or empty).
+        /// Determines whether the <see cref="string"/> has characters (is not <see langword="null"/> or empty).
         /// </summary>
         /// <param name="value">
-        /// The string to check.
+        /// The <see cref="string"/> to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the string has characters; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the <see cref="string"/> has characters; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool HasCharacters(this string value)
@@ -2316,16 +2316,16 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether the string has more uppercase letters than the specified limit.
+        /// Determines whether the <see cref="string"/> has more uppercase letters than the specified limit.
         /// </summary>
         /// <param name="value">
-        /// The string to check.
+        /// The <see cref="string"/> to check.
         /// </param>
         /// <param name="limit">
         /// The limit to compare against.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the string has more uppercase letters than the limit; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the <see cref="string"/> has more uppercase letters than the limit; otherwise, <see langword="false"/>.
         /// </returns>
         public static bool HasUpperCaseLettersAbove(this string value, in ushort limit) => value != null && HasUpperCaseLettersAbove(value.AsSpan(), limit);
 
@@ -2483,7 +2483,7 @@ namespace MiKoSolutions.Analyzers
         /// The phrases to search for.
         /// </param>
         /// <param name="comparison">
-        /// One of the enumeration members that specifies the string comparison method to use.
+        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
         /// The default is <see cref="StringComparison.Ordinal"/>.
         /// </param>
         /// <returns>
@@ -2517,16 +2517,16 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets the index of the first occurrence of the specified phrases in the string.
+        /// Gets the index of the first occurrence of the specified phrases in the <see cref="string"/>.
         /// </summary>
         /// <param name="value">
-        /// The string to search in.
+        /// The <see cref="string"/> to search in.
         /// </param>
         /// <param name="phrases">
         /// The phrases to search for.
         /// </param>
         /// <param name="comparison">
-        /// One of the enumeration members that specifies the string comparison method to use.
+        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
         /// The default is <see cref="StringComparison.Ordinal"/>.
         /// </param>
         /// <returns>
@@ -2556,16 +2556,16 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets the index of the last occurrence of the specified phrases in the string.
+        /// Gets the index of the last occurrence of the specified phrases in the <see cref="string"/>.
         /// </summary>
         /// <param name="value">
-        /// The string to search in.
+        /// The <see cref="string"/> to search in.
         /// </param>
         /// <param name="phrases">
         /// The phrases to search for.
         /// </param>
         /// <param name="comparison">
-        /// One of the enumeration members that specifies the string comparison method to use.
+        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
         /// The default is <see cref="StringComparison.Ordinal"/>.
         /// </param>
         /// <returns>
@@ -2595,25 +2595,25 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether the string is an acronym (contains only uppercase letters).
+        /// Determines whether the <see cref="string"/> is an acronym (contains only uppercase letters).
         /// </summary>
         /// <param name="value">
-        /// The string to check.
+        /// The <see cref="string"/> to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the string is an acronym; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the <see cref="string"/> is an acronym; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsAcronym(this string value) => value.HasCharacters() && value.None(_ => _.IsLowerCaseLetter());
 
         /// <summary>
-        /// Determines whether the string is a hyperlink.
+        /// Determines whether the <see cref="string"/> is a hyperlink.
         /// </summary>
         /// <param name="value">
-        /// The string to check.
+        /// The <see cref="string"/> to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the string is a hyperlink; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the <see cref="string"/> is a hyperlink; otherwise, <see langword="false"/>.
         /// </returns>
         public static bool IsHyperlink(this string value)
         {
@@ -2669,13 +2669,13 @@ namespace MiKoSolutions.Analyzers
         public static bool IsLowerCaseLetter(this in char value) => value.IsLetter() && value.IsLowerCase();
 
         /// <summary>
-        /// Determines whether the string is <see langword="null"/> or empty.
+        /// Determines whether the <see cref="string"/> is <see langword="null"/> or empty.
         /// </summary>
         /// <param name="value">
-        /// The string to check.
+        /// The <see cref="string"/> to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the string is <see langword="null"/> or empty; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the <see cref="string"/> is <see langword="null"/> or empty; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsNullOrEmpty(this string value) => string.IsNullOrEmpty(value);
@@ -2693,13 +2693,13 @@ namespace MiKoSolutions.Analyzers
         public static bool IsNullOrEmpty(this in ReadOnlySpan<char> value) => value.IsEmpty;
 
         /// <summary>
-        /// Determines whether the string is <see langword="null"/>, empty, or consists only of white-space characters.
+        /// Determines whether the <see cref="string"/> is <see langword="null"/>, empty, or consists only of white-space characters.
         /// </summary>
         /// <param name="value">
-        /// The string to check.
+        /// The <see cref="string"/> to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the string is <see langword="null"/>, empty, or consists only of white-space characters; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the <see cref="string"/> is <see langword="null"/>, empty, or consists only of white-space characters; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsNullOrWhiteSpace(this string value) => string.IsNullOrWhiteSpace(value);
@@ -2763,13 +2763,13 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether the string is a number.
+        /// Determines whether the <see cref="string"/> is a number.
         /// </summary>
         /// <param name="value">
-        /// The string to check.
+        /// The <see cref="string"/> to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the string is a number; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the <see cref="string"/> is a number; otherwise, <see langword="false"/>.
         /// </returns>
         public static bool IsNumber(this string value)
         {
@@ -2782,13 +2782,13 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether the string is in <c>PascalCasing</c> format.
+        /// Determines whether the <see cref="string"/> is in <c>PascalCasing</c> format.
         /// </summary>
         /// <param name="value">
-        /// The string to check.
+        /// The <see cref="string"/> to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the string is in <c>PascalCasing</c> format; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the <see cref="string"/> is in <c>PascalCasing</c> format; otherwise, <see langword="false"/>.
         /// </returns>
         public static bool IsPascalCasing(this string value)
         {
@@ -2827,13 +2827,13 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether the string consists of a single word (no whitespace).
+        /// Determines whether the <see cref="string"/> consists of a single word (no whitespace).
         /// </summary>
         /// <param name="value">
-        /// The string to check.
+        /// The <see cref="string"/> to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the string consists of a single word; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the <see cref="string"/> consists of a single word; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsSingleWord(this string value) => value != null && IsSingleWord(value.AsSpan());
@@ -2851,13 +2851,13 @@ namespace MiKoSolutions.Analyzers
         public static bool IsSingleWord(this in ReadOnlySpan<char> value) => value.HasWhitespaces() is false;
 
         /// <summary>
-        /// Determines whether all characters in the string are uppercase.
+        /// Determines whether all characters in the <see cref="string"/> are uppercase.
         /// </summary>
         /// <param name="value">
-        /// The string to check.
+        /// The <see cref="string"/> to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if all characters in the string are uppercase; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if all characters in the <see cref="string"/> are uppercase; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsAllUpperCase(this string value) => value.AsSpan().IsAllUpperCase();
@@ -2967,31 +2967,31 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether the string starts with the specified character.
+        /// Determines whether the <see cref="string"/> starts with the specified character.
         /// </summary>
         /// <param name="value">
-        /// The string to check.
+        /// The <see cref="string"/> to check.
         /// </param>
         /// <param name="character">
         /// The character to seek.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the string starts with the character; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the <see cref="string"/> starts with the character; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWith(this string value, in char character) => value.HasCharacters() && value[0] == character;
 
         /// <summary>
-        /// Determines whether the string starts with the specified characters.
+        /// Determines whether the <see cref="string"/> starts with the specified characters.
         /// </summary>
         /// <param name="value">
-        /// The string to check.
+        /// The <see cref="string"/> to check.
         /// </param>
         /// <param name="characters">
         /// The characters to seek.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the string starts with the characters; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the <see cref="string"/> starts with the characters; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWith(this string value, in ReadOnlySpan<char> characters) => value.HasCharacters() && value.AsSpan().StartsWith(characters);
@@ -3012,34 +3012,34 @@ namespace MiKoSolutions.Analyzers
         public static bool StartsWith(this in ReadOnlySpan<char> value, in char character) => value.Length > 0 && value[0] == character;
 
         /// <summary>
-        /// Determines whether the span of characters starts with the specified string.
+        /// Determines whether the span of characters starts with the specified <see cref="string"/>.
         /// </summary>
         /// <param name="value">
         /// The span of characters to check.
         /// </param>
         /// <param name="characters">
-        /// The string to seek.
+        /// The <see cref="string"/> to seek.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the span starts with the string; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the span starts with the <see cref="string"/>; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWith(this in ReadOnlySpan<char> value, string characters) => characters.HasCharacters() && value.StartsWith(characters.AsSpan());
 
         /// <summary>
-        /// Determines whether the string starts with the specified characters using the specified comparison.
+        /// Determines whether the <see cref="string"/> starts with the specified characters using the specified comparison.
         /// </summary>
         /// <param name="value">
-        /// The string to check.
+        /// The <see cref="string"/> to check.
         /// </param>
         /// <param name="characters">
         /// The characters to seek.
         /// </param>
         /// <param name="comparison">
-        /// One of the enumeration members that specifies the string comparison method to use.
+        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the string starts with the characters; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the <see cref="string"/> starts with the characters; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWith(this string value, in ReadOnlySpan<char> characters, in StringComparison comparison)
@@ -3049,19 +3049,19 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether the span of characters starts with the specified string using the specified comparison.
+        /// Determines whether the span of characters starts with the specified <see cref="string"/> using the specified comparison.
         /// </summary>
         /// <param name="value">
         /// The span of characters to check.
         /// </param>
         /// <param name="characters">
-        /// The string to seek.
+        /// The <see cref="string"/> to seek.
         /// </param>
         /// <param name="comparison">
-        /// One of the enumeration members that specifies the string comparison method to use.
+        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the span starts with the string; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the span starts with the <see cref="string"/>; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWith(this in ReadOnlySpan<char> value, string characters, in StringComparison comparison)
@@ -3073,16 +3073,16 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether the string starts with any of the specified characters.
+        /// Determines whether the <see cref="string"/> starts with any of the specified characters.
         /// </summary>
         /// <param name="value">
-        /// The string to check.
+        /// The <see cref="string"/> to check.
         /// </param>
         /// <param name="characters">
         /// The characters to seek.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the string starts with any of the characters; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the <see cref="string"/> starts with any of the characters; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWithAny(this string value, IEnumerable<char> characters) => value.HasCharacters() && characters.Contains(value[0]);
@@ -3103,20 +3103,20 @@ namespace MiKoSolutions.Analyzers
         public static bool StartsWithAny(this in ReadOnlySpan<char> value, IEnumerable<char> characters) => value.Length > 0 && characters.Contains(value[0]);
 
         /// <summary>
-        /// Determines whether the string starts with any of the specified prefixes.
+        /// Determines whether the <see cref="string"/> starts with any of the specified prefixes.
         /// </summary>
         /// <param name="value">
-        /// The string to check.
+        /// The <see cref="string"/> to check.
         /// </param>
         /// <param name="prefixes">
         /// The prefixes to seek.
         /// </param>
         /// <param name="comparison">
-        /// One of the enumeration members that specifies the string comparison method to use.
+        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
         /// The default is <see cref="StringComparison.Ordinal"/>.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the string starts with any of the prefixes; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the <see cref="string"/> starts with any of the prefixes; otherwise, <see langword="false"/>.
         /// </returns>
         public static bool StartsWithAny(this string value, in ReadOnlySpan<string> prefixes, in StringComparison comparison = StringComparison.Ordinal)
         {
@@ -3151,7 +3151,7 @@ namespace MiKoSolutions.Analyzers
         /// The prefixes to seek.
         /// </param>
         /// <param name="comparison">
-        /// One of the enumeration members that specifies the string comparison method to use.
+        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
         /// The default is <see cref="StringComparison.Ordinal"/>.
         /// </param>
         /// <returns>
@@ -3174,22 +3174,22 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether the string starts with a number.
+        /// Determines whether the <see cref="string"/> starts with a number.
         /// </summary>
         /// <param name="value">
-        /// The string to check.
+        /// The <see cref="string"/> to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the string starts with a number; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the <see cref="string"/> starts with a number; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWithNumber(this string value) => value.HasCharacters() && value[0].IsNumber();
 
         /// <summary>
-        /// Creates a new string surrounded by the specified character.
+        /// Creates a new <see cref="string"/> surrounded by the specified character.
         /// </summary>
         /// <param name="value">
-        /// The string to surround.
+        /// The <see cref="string"/> to surround.
         /// </param>
         /// <param name="surrounding">
         /// The character to place at the beginning and end.
@@ -3201,10 +3201,10 @@ namespace MiKoSolutions.Analyzers
         public static string SurroundedWith(this string value, in char surrounding) => surrounding.ConcatenatedWith(value, surrounding);
 
         /// <summary>
-        /// Creates a new string surrounded by apostrophes.
+        /// Creates a new <see cref="string"/> surrounded by apostrophes.
         /// </summary>
         /// <param name="value">
-        /// The string to surround.
+        /// The <see cref="string"/> to surround.
         /// </param>
         /// <returns>
         /// A <see cref="string"/> that contains the original value surrounded by apostrophes.
@@ -3213,10 +3213,10 @@ namespace MiKoSolutions.Analyzers
         public static string SurroundedWithApostrophe(this string value) => value?.SurroundedWith('\'');
 
         /// <summary>
-        /// Creates a new string surrounded by double quotes.
+        /// Creates a new <see cref="string"/> surrounded by double quotes.
         /// </summary>
         /// <param name="value">
-        /// The string to surround.
+        /// The <see cref="string"/> to surround.
         /// </param>
         /// <returns>
         /// A <see cref="string"/> that contains the original value surrounded by double quotes.
@@ -3226,13 +3226,13 @@ namespace MiKoSolutions.Analyzers
 
 #pragma warning disable CA1308
         /// <summary>
-        /// Converts the string to lowercase using the invariant culture.
+        /// Converts the <see cref="string"/> to lowercase using the invariant culture.
         /// </summary>
         /// <param name="source">
-        /// The string to convert.
+        /// The <see cref="string"/> to convert.
         /// </param>
         /// <returns>
-        /// A new string converted to lowercase.
+        /// A new <see cref="string"/> converted to lowercase.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ToLowerCase(this string source) => source?.ToLowerInvariant();
@@ -3333,13 +3333,13 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Converts the string to uppercase using the invariant culture.
+        /// Converts the <see cref="string"/> to uppercase using the invariant culture.
         /// </summary>
         /// <param name="source">
-        /// The string to convert.
+        /// The <see cref="string"/> to convert.
         /// </param>
         /// <returns>
-        /// A new string converted to uppercase.
+        /// A new <see cref="string"/> converted to uppercase.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ToUpperCase(this string source) => source?.ToUpper(CultureInfo.InvariantCulture);
@@ -3436,10 +3436,10 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new string with the specified character removed.
+        /// Creates a new <see cref="string"/> with the specified character removed.
         /// </summary>
         /// <param name="value">
-        /// The string to process.
+        /// The <see cref="string"/> to process.
         /// </param>
         /// <param name="character">
         /// The character to remove.
@@ -3451,10 +3451,10 @@ namespace MiKoSolutions.Analyzers
         public static string Without(this string value, in char character) => value.Without(character.ToString());
 
         /// <summary>
-        /// Creates a new string with the specified substring removed.
+        /// Creates a new <see cref="string"/> with the specified string removed.
         /// </summary>
         /// <param name="value">
-        /// The string to process.
+        /// The <see cref="string"/> to process.
         /// </param>
         /// <param name="phrase">
         /// The substring to remove.
@@ -3466,13 +3466,13 @@ namespace MiKoSolutions.Analyzers
         public static string Without(this string value, string phrase) => value.Replace(phrase, string.Empty);
 
         /// <summary>
-        /// Creates a new string with all specified phrases removed.
+        /// Creates a new <see cref="string"/> with all specified phrases removed.
         /// </summary>
         /// <param name="value">
-        /// The string to process.
+        /// The <see cref="string"/> to process.
         /// </param>
         /// <param name="phrases">
-        /// The collection of phrases to remove from the string.
+        /// The collection of phrases to remove from the <see cref="string"/>.
         /// </param>
         /// <returns>
         /// A <see cref="string"/> that contains the original value with all specified phrases removed.
@@ -3480,10 +3480,10 @@ namespace MiKoSolutions.Analyzers
         public static string Without(this string value, in ReadOnlySpan<string> phrases) => value.AsCachedBuilder().Without(phrases).Trimmed().ToStringAndRelease();
 
         /// <summary>
-        /// Creates a new string by removing the first word.
+        /// Creates a new <see cref="string"/> by removing the first word.
         /// </summary>
         /// <param name="value">
-        /// The string to process.
+        /// The <see cref="string"/> to process.
         /// </param>
         /// <returns>
         /// A <see cref="string"/> that contains the original value with the first word removed.
@@ -3516,13 +3516,13 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Removes the specified first words from the string based on the provided list of words.
+        /// Removes the specified first words from the <see cref="string"/> based on the provided list of words.
         /// </summary>
         /// <param name="value">
-        /// The string to process.
+        /// The <see cref="string"/> to process.
         /// </param>
         /// <param name="words">
-        /// The words to remove from the beginning of the string.
+        /// The words to remove from the beginning of the <see cref="string"/>.
         /// </param>
         /// <returns>
         /// A span of characters with the specified first words removed.
@@ -3573,10 +3573,10 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Removes the suffix consisting of numbers from the string.
+        /// Removes the suffix consisting of numbers from the <see cref="string"/>.
         /// </summary>
         /// <param name="value">
-        /// The string to process.
+        /// The <see cref="string"/> to process.
         /// </param>
         /// <returns>
         /// A <see cref="string"/> that contains the original value without the number suffix.
@@ -3649,10 +3649,10 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Removes the surrounding quotes from the string.
+        /// Removes the surrounding quotes from the <see cref="string"/>.
         /// </summary>
         /// <param name="value">
-        /// The string to process.
+        /// The <see cref="string"/> to process.
         /// </param>
         /// <returns>
         /// A <see cref="string"/> that contains the original value without the surrounding quotes.
@@ -3661,10 +3661,10 @@ namespace MiKoSolutions.Analyzers
         public static string WithoutQuotes(this string value) => value.Without(@"""");
 
         /// <summary>
-        /// Removes the specified suffix from the string.
+        /// Removes the specified suffix from the <see cref="string"/>.
         /// </summary>
         /// <param name="value">
-        /// The string to process.
+        /// The <see cref="string"/> to process.
         /// </param>
         /// <param name="suffix">
         /// The suffix to remove.
@@ -3727,10 +3727,10 @@ namespace MiKoSolutions.Analyzers
         /// The span of characters to process.
         /// </param>
         /// <param name="suffix">
-        /// The string suffix to remove.
+        /// The <see cref="string"/> suffix to remove.
         /// </param>
         /// <param name="comparison">
-        /// One of the enumeration members that specifies the string comparison method to use.
+        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
         /// The default is <see cref="StringComparison.Ordinal"/>.
         /// </param>
         /// <returns>
@@ -3773,7 +3773,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Converts the string to a <see cref="WordsReadOnlySpanEnumerator"/> for word enumeration.
+        /// Converts the <see cref="string"/> to a <see cref="WordsReadOnlySpanEnumerator"/> for word enumeration.
         /// </summary>
         /// <param name="value">
         /// The span of characters to enumerate words from.
@@ -3791,7 +3791,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Converts the string to a <see cref="WordsReadOnlySpanEnumerator"/> for word enumeration.
+        /// Converts the <see cref="string"/> to a <see cref="WordsReadOnlySpanEnumerator"/> for word enumeration.
         /// </summary>
         /// <param name="value">
         /// The span of characters to enumerate words from.
@@ -3873,7 +3873,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new string with the character at the specified index converted to uppercase.
+        /// Creates a new <see cref="string"/> with the character at the specified index converted to uppercase.
         /// </summary>
         /// <param name="source">
         /// The span of characters to process.
@@ -3902,7 +3902,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new string with the character at the specified index converted to lowercase.
+        /// Creates a new <see cref="string"/> with the character at the specified index converted to lowercase.
         /// </summary>
         /// <param name="source">
         /// The span of characters to process.
@@ -3940,7 +3940,7 @@ namespace MiKoSolutions.Analyzers
         /// The span of characters to search for.
         /// </param>
         /// <param name="comparison">
-        /// One of the enumeration members that specifies the string comparison method to use.
+        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if a more detailed search should be performed; otherwise, <see langword="false"/>.
@@ -3967,7 +3967,7 @@ namespace MiKoSolutions.Analyzers
         /// The span of characters to check for at the start.
         /// </param>
         /// <param name="comparison">
-        /// One of the enumeration members that specifies the string comparison method to use.
+        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
         /// </param>
         /// <returns>
         /// <see langword="true"/> if a more detailed check should be performed; otherwise, <see langword="false"/>.
@@ -4194,13 +4194,13 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Finds all indices of a substring in a string using case-insensitive comparison.
+        /// Finds all indices of a string in a <see cref="string"/> using case-insensitive comparison.
         /// </summary>
         /// <param name="value">
-        /// The string to search in.
+        /// The <see cref="string"/> to search in.
         /// </param>
         /// <param name="finding">
-        /// The string to search for.
+        /// The <see cref="string"/> to search for.
         /// </param>
         /// <returns>
         /// An array of integer indices where the substring was found, or an empty array if not found.

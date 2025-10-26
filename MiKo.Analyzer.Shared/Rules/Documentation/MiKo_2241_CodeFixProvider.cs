@@ -59,7 +59,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                          .ReplaceWithProbe("An empty string", "The empty string")
                                          .ReplaceWithProbe("empty string", @"empty string ("""")")
                                          .ReplaceWithProbe("empty string", Splitter + " string")
-                                         .ToString();
+                                         .ToStringAndRelease();
 
                 var text = valueText.AsSpan();
 

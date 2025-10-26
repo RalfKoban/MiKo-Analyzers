@@ -639,10 +639,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
         }
 
         /// <summary>
-        /// Appends a modified version of a name part to the string builder according to naming conventions.
+        /// Appends a modified version of a name part to the <see cref="StringBuilder"/>  according to naming conventions.
         /// </summary>
         /// <param name="builder">
-        /// The string builder to append to.
+        /// The <see cref="StringBuilder"/>  to append to.
         /// </param>
         /// <param name="original">
         /// The original name part to process and append.

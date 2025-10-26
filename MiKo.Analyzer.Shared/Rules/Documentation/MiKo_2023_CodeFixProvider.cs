@@ -45,13 +45,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly Regex ShouldBeRegex = new Regex(@"\b(shall|should|can|could|must|may|might|would)\s+be\s+\w+\b", RegexOptions.Compiled, 100.Milliseconds());
 
         private static readonly IComparer<string> ArticleStartComparer = new StringStartComparer(
-                                                                                                 StartWithArticleA,
-                                                                                                 StartWithArticleAn,
-                                                                                                 StartWithArticleThe,
-                                                                                                 StartWithArticleLowerCaseA,
-                                                                                                 StartWithArticleLowerCaseAn,
-                                                                                                 StartWithArticleLowerCaseThe,
-                                                                                                 StartWithParenthesis);
+                                                                                             StartWithArticleA,
+                                                                                             StartWithArticleAn,
+                                                                                             StartWithArticleThe,
+                                                                                             StartWithArticleLowerCaseA,
+                                                                                             StartWithArticleLowerCaseAn,
+                                                                                             StartWithArticleLowerCaseThe,
+                                                                                             StartWithParenthesis);
 
         private static readonly Pair OtherwisePair = new Pair(". Otherwise", "; otherwise");
 

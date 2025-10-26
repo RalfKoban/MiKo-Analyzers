@@ -88,7 +88,7 @@ namespace MiKoSolutions.Analyzers
         public int Count() => m_wordStartingPositions.Length - 1; // first entry is zero and needs to be removed
 
         /// <summary>
-        /// Projects each element of the collection into a string by applying a specified transformation.
+        /// Projects each element of the collection into a <see cref="string"/> by applying a specified transformation.
         /// </summary>
         /// <param name="callback">
         /// A transformation to apply to each element in the collection.

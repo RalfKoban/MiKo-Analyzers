@@ -57,7 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                  nameof(Byte),
                                                                  nameof(Char),
                                                                  nameof(Type),
-                                                           ];
+                                                            ];
 
         [Test]
         public void No_issue_is_reported_for_undocumented_method() => No_issue_is_reported_for(@"

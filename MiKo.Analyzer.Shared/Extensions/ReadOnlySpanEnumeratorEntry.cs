@@ -32,6 +32,7 @@ namespace MiKoSolutions.Analyzers
         /// </summary>
         /// <value>
         /// <see langword="true"/> if the text is empty; otherwise, <see langword="false"/>.
+        /// This property has no default value.
         /// </value>
         public bool IsEmpty => Text.IsEmpty;
 
