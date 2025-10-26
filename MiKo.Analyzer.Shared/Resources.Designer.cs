@@ -9663,6 +9663,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Replace &apos;empty string&apos; with &apos;&lt;see cref=&quot;string.Empty&quot;/&gt; string (&quot;&quot;)&apos;.
+        /// </summary>
+        internal static string MiKo_2241_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2241_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML documentation shall not use the phrase &apos;empty string&apos;. Instead, use the phrase &apos;&lt;see cref=&quot;string.Empty&quot;/&gt; string (&quot;&quot;)&apos; to clearly express the concept and provide hyperlink support. This improves readability and developer understanding..
+        /// </summary>
+        internal static string MiKo_2241_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2241_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace phrase &apos;empty string&apos; with &apos;&lt;see cref=&quot;string.Empty&quot;/&gt; string (&quot;&quot;)&apos;.
+        /// </summary>
+        internal static string MiKo_2241_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2241_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use &apos;empty string&apos; in documentation.
+        /// </summary>
+        internal static string MiKo_2241_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2241_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use &lt;list&gt; to list items.
         /// </summary>
         internal static string MiKo_2244_CodeFixTitle {
