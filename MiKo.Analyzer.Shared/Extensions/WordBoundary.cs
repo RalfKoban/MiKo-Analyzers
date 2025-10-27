@@ -1,4 +1,6 @@
-﻿namespace MiKoSolutions.Analyzers
+﻿// ReSharper disable once CheckNamespace
+#pragma warning disable IDE0130
+namespace MiKoSolutions.Analyzers
 {
     /// <summary>
     /// Defines values that specify the type of boundary used to identify word breaks when enumerating words.

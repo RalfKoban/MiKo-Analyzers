@@ -103,31 +103,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                          "etc",
                                                                      };
 
-        private static readonly HashSet<string> NonCompoundWords = new HashSet<string>
-                                                                       {
-                                                                           "bool",
-                                                                           "byte",
-                                                                           "char",
-                                                                           "float",
-                                                                           "int",
-                                                                           "string",
-                                                                           "uint",
-                                                                           "ushort",
-                                                                           "ulong",
-                                                                           nameof(String),
-                                                                           nameof(Int16),
-                                                                           nameof(Int32),
-                                                                           nameof(Int64),
-                                                                           nameof(UInt16),
-                                                                           nameof(UInt32),
-                                                                           nameof(UInt64),
-                                                                           nameof(Single),
-                                                                           nameof(Double),
-                                                                           nameof(Boolean),
-                                                                           nameof(Byte),
-                                                                           nameof(Char),
-                                                                           nameof(Type),
-                                                                       };
+        private static readonly string[] SingleWords =
+                                                       {
+                                                           "bool",
+                                                           "byte",
+                                                           "char",
+                                                           "float",
+                                                           "int",
+                                                           "string",
+                                                           "uint",
+                                                           "ushort",
+                                                           "ulong",
+                                                           nameof(String),
+                                                           nameof(Int16),
+                                                           nameof(Int32),
+                                                           nameof(Int64),
+                                                           nameof(UInt16),
+                                                           nameof(UInt32),
+                                                           nameof(UInt64),
+                                                           nameof(Single),
+                                                           nameof(Double),
+                                                           nameof(Boolean),
+                                                           nameof(Byte),
+                                                           nameof(Char),
+                                                           nameof(Type),
+                                                       };
 
         public MiKo_2223_DocumentationDoesNotUsePlainTextReferencesAnalyzer() : base(Id)
         {
@@ -333,21 +333,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return true;
         }
 
-        private static HashSet<string> FindSingleWords(string text)
+        private static string[] FindSingleWords(string text)
         {
-            var words = new HashSet<string>();
+            HashSet<string> words = null;
 
-            foreach (ReadOnlySpan<char> wordSpan in text.WordsAsSpan(WordBoundary.WhiteSpaces))
+            foreach (ReadOnlySpan<char> word in text.WordsAsSpan(WordBoundary.WhiteSpaces))
             {
-                var word = wordSpan.ToString();
-
-                if (NonCompoundWords.Contains(word))
+                if (word.EqualsAny(SingleWords))
                 {
-                    words.Add(word);
+                    if (words is null)
+                    {
+                        words = new HashSet<string>();
+                    }
+
+                    words.Add(word.ToString());
                 }
             }
 
-            return words;
+            return words?.ToArray(_ => _) ?? Array.Empty<string>();
         }
 
         private static new Location CreateLocation(in SyntaxToken token, in int offsetStart, in int offsetEnd)
@@ -429,13 +432,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var words = FindSingleWords(text);
 
-            if (words.Count > 0)
+            if (words.Length > 0)
             {
                 foreach (var word in words)
                 {
-                    var locations = GetAllLocations(token, word);
+                    // we have to be aware that the word can be part within other words, so we have to surround them with delimiters or something similar to avoid incorrect replacements
+                    var locations = GetAllLocations(token, word.WithDelimiters(), startOffset: 1, endOffset: 1);
 
-                    if (locations.Count > 0)
+                    if (locations.Count is 0)
+                    {
+                        // TODO RKN: check for ending texts
+                        // we have to be aware that the word can be part within other words, so we have to surround them with delimiters or something similar to avoid incorrect replacements
+                        var lastLocation = GetLastLocation(token, word);
+
+                        if (lastLocation != null)
+                        {
+                            yield return Issue(lastLocation, CreateReplacementProposal(word, word));
+                        }
+                    }
+                    else
                     {
                         foreach (var location in locations)
                         {

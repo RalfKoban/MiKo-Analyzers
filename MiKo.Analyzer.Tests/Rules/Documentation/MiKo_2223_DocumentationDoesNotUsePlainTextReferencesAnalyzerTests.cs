@@ -811,6 +811,29 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_incorrectly_documented_method_ending_with_([ValueSource(nameof(NonCompoundWords))] string type)
+        {
+            const string Template = """
+
+                                    using System;
+                                    using System.IO;
+
+                                    public class TestMe
+                                    {
+                                        /// <summary>
+                                        /// Does something with ###
+                                        /// </summary>
+                                        public void DoSomething()
+                                        {
+                                        }
+                                    }
+
+                                    """;
+
+            VerifyCSharpFix(Template.Replace("###", type), Template.Replace("###", "<see cref=\"" + type + "\"/>"));
+        }
+
+        [Test]
         public void Code_gets_fixed_for_incorrectly_documented_method_ending_with_(
                                                                                [Values("string", "String", "Sring", "sring", "Sting", "sting")] string type,
                                                                                [Values("Empty", "empty", "Empy", "empy", "Emtpy", "emtpy")] string property)
@@ -833,6 +856,29 @@ public class TestMe
                                     """;
 
             VerifyCSharpFix(Template.Replace("###", type + "." + property), Template.Replace("###", """<see cref="String.Empty"/>"""));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_incorrectly_documented_method_ending_with_dot_on_method_with_([ValueSource(nameof(NonCompoundWords))] string type)
+        {
+            const string Template = """
+
+                                    using System;
+                                    using System.IO;
+
+                                    public class TestMe
+                                    {
+                                        /// <summary>
+                                        /// Does something with ###.
+                                        /// </summary>
+                                        public void DoSomething()
+                                        {
+                                        }
+                                    }
+
+                                    """;
+
+            VerifyCSharpFix(Template.Replace("###", type), Template.Replace("###", "<see cref=\"" + type + "\"/>"));
         }
 
         [Test]
@@ -900,6 +946,32 @@ public class TestMe
                                     """;
 
             VerifyCSharpFix(Template.Replace("###", originalName), Template.Replace("###", "<see cref=\"" + fixedName + "\"/>"));
+        }
+
+        [TestCase("Does something with charts but not with a char or any other character.", """Does something with charts but not with a <see cref="char"/> or any other character.""")]
+        [TestCase("Does something with charts but not with a char", """Does something with charts but not with a <see cref="char"/>""")]
+        [TestCase("Does something with hints but not with an int or anything else.", """Does something with hints but not with an <see cref="int"/> or anything else.""")]
+        [TestCase("Does something with hints but not with an int", """Does something with hints but not with an <see cref="int"/>""")]
+        [TestCase("Does something with substrings but not with a string or any other substring.", """Does something with substrings but not with a <see cref="string"/> or any other substring.""")]
+        [TestCase("Does something with substrings but not with a string", """Does something with substrings but not with a <see cref="string"/>""")]
+        public void Code_gets_fixed_but_does_not_adjust_parts_in_words_(string originalText, string fixedText)
+        {
+            const string Template = """
+
+                                     using System;
+                                     using System.IO;
+
+                                     public class TestMe
+                                     {
+                                         /// <summary>###</summary>
+                                         public void DoSomething()
+                                         {
+                                         }
+                                     }
+
+                                     """;
+
+            VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
         }
 
         protected override string GetDiagnosticId() => MiKo_2223_DocumentationDoesNotUsePlainTextReferencesAnalyzer.Id;
