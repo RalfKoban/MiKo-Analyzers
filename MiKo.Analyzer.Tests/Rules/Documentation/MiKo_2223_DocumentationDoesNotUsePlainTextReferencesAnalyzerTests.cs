@@ -902,6 +902,29 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", originalName), Template.Replace("###", "<see cref=\"" + fixedName + "\"/>"));
         }
 
+        [TestCase("Does something with substrings but not with a string or any other substring.", """Does something with substrings but not with a <see cref="string"/> or any other substring.""")]
+        [TestCase("Does something with hints but not with an int or anything else.", """Does something with hints but not with an <see cref="int"/> or anything else.""")]
+        [TestCase("Does something with charts but not with a char or any other character.", """Does something with charts but not with a <see cref="char"/> or any other character""")]
+        public void Code_gets_fixed_but_does_not_adjust_parts_in_words_(string originalText, string fixedText)
+        {
+            const string Template = """
+
+                                     using System;
+                                     using System.IO;
+
+                                     public class TestMe
+                                     {
+                                         /// <summary>###</summary>
+                                         public void DoSomething()
+                                         {
+                                         }
+                                     }
+
+                                     """;
+
+            VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
+        }
+
         protected override string GetDiagnosticId() => MiKo_2223_DocumentationDoesNotUsePlainTextReferencesAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2223_DocumentationDoesNotUsePlainTextReferencesAnalyzer();
