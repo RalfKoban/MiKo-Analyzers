@@ -333,7 +333,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return true;
         }
 
-        private static IReadOnlyCollection<string> FindSingleWords(string text)
+        private static string[] FindSingleWords(string text)
         {
             HashSet<string> words = null;
 
@@ -350,7 +350,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            return (IReadOnlyCollection<string>)words ?? Array.Empty<string>();
+            return words?.ToArray(_ => _) ?? Array.Empty<string>();
         }
 
         private static new Location CreateLocation(in SyntaxToken token, in int offsetStart, in int offsetEnd)
@@ -432,11 +432,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var words = FindSingleWords(text);
 
-            if (words.Count > 0)
+            if (words.Length > 0)
             {
                 foreach (var word in words)
                 {
-                    var locations = GetAllLocations(token, word);
+                    // we have to be aware that the word can be part within other words, so we have to surround them with delimiters or something similar to avoid incorrect replacements
+                    var locations = GetAllLocations(token, word.WithDelimiters(), startOffset: 1, endOffset: 1);
 
                     if (locations.Count > 0)
                     {
