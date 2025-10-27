@@ -103,31 +103,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                          "etc",
                                                                      };
 
-        private static readonly HashSet<string> NonCompoundWords = new HashSet<string>
-                                                                       {
-                                                                           "bool",
-                                                                           "byte",
-                                                                           "char",
-                                                                           "float",
-                                                                           "int",
-                                                                           "string",
-                                                                           "uint",
-                                                                           "ushort",
-                                                                           "ulong",
-                                                                           nameof(String),
-                                                                           nameof(Int16),
-                                                                           nameof(Int32),
-                                                                           nameof(Int64),
-                                                                           nameof(UInt16),
-                                                                           nameof(UInt32),
-                                                                           nameof(UInt64),
-                                                                           nameof(Single),
-                                                                           nameof(Double),
-                                                                           nameof(Boolean),
-                                                                           nameof(Byte),
-                                                                           nameof(Char),
-                                                                           nameof(Type),
-                                                                       };
+        private static readonly string[] SingleWords =
+                                                       {
+                                                           "bool",
+                                                           "byte",
+                                                           "char",
+                                                           "float",
+                                                           "int",
+                                                           "string",
+                                                           "uint",
+                                                           "ushort",
+                                                           "ulong",
+                                                           nameof(String),
+                                                           nameof(Int16),
+                                                           nameof(Int32),
+                                                           nameof(Int64),
+                                                           nameof(UInt16),
+                                                           nameof(UInt32),
+                                                           nameof(UInt64),
+                                                           nameof(Single),
+                                                           nameof(Double),
+                                                           nameof(Boolean),
+                                                           nameof(Byte),
+                                                           nameof(Char),
+                                                           nameof(Type),
+                                                       };
 
         public MiKo_2223_DocumentationDoesNotUsePlainTextReferencesAnalyzer() : base(Id)
         {
@@ -333,21 +333,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return true;
         }
 
-        private static HashSet<string> FindSingleWords(string text)
+        private static IReadOnlyCollection<string> FindSingleWords(string text)
         {
-            var words = new HashSet<string>();
+            HashSet<string> words = null;
 
-            foreach (ReadOnlySpan<char> wordSpan in text.WordsAsSpan(WordBoundary.WhiteSpaces))
+            foreach (ReadOnlySpan<char> word in text.WordsAsSpan(WordBoundary.WhiteSpaces))
             {
-                var word = wordSpan.ToString();
-
-                if (NonCompoundWords.Contains(word))
+                if (word.EqualsAny(SingleWords))
                 {
-                    words.Add(word);
+                    if (words is null)
+                    {
+                        words = new HashSet<string>();
+                    }
+
+                    words.Add(word.ToString());
                 }
             }
 
-            return words;
+            return (IReadOnlyCollection<string>)words ?? Array.Empty<string>();
         }
 
         private static new Location CreateLocation(in SyntaxToken token, in int offsetStart, in int offsetEnd)
