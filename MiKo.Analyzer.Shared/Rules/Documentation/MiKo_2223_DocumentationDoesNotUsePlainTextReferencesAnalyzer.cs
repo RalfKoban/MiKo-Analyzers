@@ -439,7 +439,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     // we have to be aware that the word can be part within other words, so we have to surround them with delimiters or something similar to avoid incorrect replacements
                     var locations = GetAllLocations(token, word.WithDelimiters(), startOffset: 1, endOffset: 1);
 
-                    if (locations.Count > 0)
+                    if (locations.Count is 0)
+                    {
+                        // TODO RKN: check for ending texts
+                        // we have to be aware that the word can be part within other words, so we have to surround them with delimiters or something similar to avoid incorrect replacements
+                        var lastLocation = GetLastLocation(token, word);
+
+                        if (lastLocation != null)
+                        {
+                            yield return Issue(lastLocation, CreateReplacementProposal(word, word));
+                        }
+                    }
+                    else
                     {
                         foreach (var location in locations)
                         {
