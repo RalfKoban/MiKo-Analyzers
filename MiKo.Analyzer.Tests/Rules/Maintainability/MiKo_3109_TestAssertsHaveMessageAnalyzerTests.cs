@@ -316,6 +316,9 @@ namespace Bla
         [TestCase("Assert.Ignore()", @"Assert.Ignore()")]
         [TestCase("Assert.Inconclusive()", @"Assert.Inconclusive()")]
         [TestCase("Assert.Fail()", @"Assert.Fail()")]
+        [TestCase("Assert.Multiple()", @"Assert.Multiple()")]
+        [TestCase("Assert.MultipleAsync()", @"Assert.MultipleAsync()")]
+        [TestCase("Assert.EnterMultipleScope()", @"Assert.EnterMultipleScope()")]
         public void Code_is_not_fixed_for_assertion_(string originalCode, string fixedCode)
         {
             const string Template = @"
