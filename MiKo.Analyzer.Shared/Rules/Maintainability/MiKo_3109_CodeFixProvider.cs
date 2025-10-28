@@ -60,6 +60,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "Inconclusive":
                 case "Ignore":
                 case "Multiple":
+                case "MultipleAsync":
+                case "EnterMultipleScope":
                     return args; // do not adjust
 
                 case "Less":
