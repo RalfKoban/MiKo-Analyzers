@@ -145,6 +145,63 @@ namespace Bla
 }");
 
         [Test]
+        public void No_issue_is_reported_for_a_Assert_EnterMultipleScope() => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething()
+        {
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(42, Is.EqualTo(42), message);
+            }
+        }
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_a_Assert_Multiple() => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething()
+        {
+            Assert.Multiple(() =>
+                                 {
+                                     Assert.That(42, Is.EqualTo(42), message);
+                                 });
+        }
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_a_Assert_MultipleAsync() => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Test]
+        public Task DoSomethingAsync()
+        {
+            await Assert.MultipleAsync(() =>
+                                             {
+                                                 Assert.That(42, Is.EqualTo(42), message);
+                                             });
+        }
+    }
+}");
+
+        [Test]
         public void No_issue_is_reported_for_a_test_method_that_uses_a_parameter_as_assertion_message() => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -157,24 +214,6 @@ namespace Bla
         {
             Assert.That(42, Is.EqualTo(42), message);
             Assert.That(-1, Is.Negative, message);
-        }
-    }
-}");
-
-        [Test]
-        public void An_issue_is_reported_for_a_test_method_that_uses_more_than_1_assertion_with_no_message_([ValueSource(nameof(AssertionsWithoutMessages))] string assertion) => An_issue_is_reported_for(@"
-using NUnit.Framework;
-
-namespace Bla
-{
-    public class TestMe
-    {
-        [Test]
-        public void DoSomething()
-        {
-            Assert.Fail(""fix me"");
-
-            " + assertion + @";
         }
     }
 }");
@@ -194,6 +233,24 @@ namespace Bla
                             {
                                 " + assertion + @";
                             });
+        }
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_a_test_method_that_uses_more_than_1_assertion_with_no_message_([ValueSource(nameof(AssertionsWithoutMessages))] string assertion) => An_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething()
+        {
+            Assert.Fail(""fix me"");
+
+            " + assertion + @";
         }
     }
 }");
