@@ -172,6 +172,28 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_command_with_ExecuteCore_method() => No_issue_is_reported_for(@"
+using System;
+using System.Windows.Input;
+
+namespace Bla
+{
+    public class TestMeCommand : System.Windows.Input.ICommand
+    {
+        public bool CanExecute(object parameter) => true;
+
+        public void Execute(object parameter) => ExecuteCore(parameter);
+
+        public event EventHandler CanExecuteChanged;
+
+        private protected void ExecuteCore(object parameter)
+        {
+        }
+    }
+}
+");
+
         [TestCase("DoExecute", "Do")]
         [TestCase("CanDoExecute", "CanDo")]
         [TestCase("ExecuteUpdate", "Update")]
