@@ -11,12 +11,12 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
         {
         }
 
-        protected static List<IMethodSymbol> GetMethodsOrderedByLocation(INamedTypeSymbol type, MethodKind kind = MethodKind.Ordinary) => GetMethodsOrderedByLocation(type, type.GetLineSpan().Path, kind);
+        protected static IList<IMethodSymbol> GetMethodsOrderedByLocation(INamedTypeSymbol type, MethodKind kind = MethodKind.Ordinary) => GetMethodsOrderedByLocation(type, type.GetLineSpan().Path, kind);
 
-        protected static List<IMethodSymbol> GetMethodsOrderedByLocation(INamedTypeSymbol type, string path, MethodKind kind = MethodKind.Ordinary) => type.GetMethods(kind)
-                                                                                                                                                           .Where(_ => _.GetLineSpan().Path == path)
-                                                                                                                                                           .OrderBy(_ => _.GetLineSpan().StartLinePosition)
-                                                                                                                                                           .ToList();
+        protected static IList<IMethodSymbol> GetMethodsOrderedByLocation(INamedTypeSymbol type, string path, MethodKind kind = MethodKind.Ordinary) => type.GetMethods(kind)
+                                                                                                                                                            .Where(_ => _.GetLineSpan().Path == path)
+                                                                                                                                                            .OrderBy(_ => _.GetLineSpan().StartLinePosition)
+                                                                                                                                                            .ToList();
 
         protected static IReadOnlyList<IFieldSymbol> GetFieldsOrderedByLocation(INamedTypeSymbol type, string path) => type.GetFields()
                                                                                                                            .Where(_ => _.GetLineSpan().Path == path)
