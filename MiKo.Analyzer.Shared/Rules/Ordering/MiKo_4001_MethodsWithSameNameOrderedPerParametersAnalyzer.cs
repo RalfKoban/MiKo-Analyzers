@@ -22,6 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
             // filter out primary constructors as we cannot adjust its position
             ctors.RemoveAll(_ => _.IsPrimaryConstructor());
+
             var methods = GetMethodsOrderedByLocation(symbol);
 
             var count = ctors.Count + methods.Count;
