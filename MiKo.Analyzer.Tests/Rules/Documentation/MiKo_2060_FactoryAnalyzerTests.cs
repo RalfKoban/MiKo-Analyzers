@@ -779,10 +779,12 @@ internal interface IFactory
 
             results.RemoveWhere(_ => _.ContainsAny(strangePhrases));
 
-            results.Add("Implementations create ");
-            results.Add("Implementations construct ");
-            results.Add("Implementations build ");
-            results.Add("Implementations provide ");
+            results.Add("Implementations create");
+            results.Add("Implementations construct");
+            results.Add("Implementations build");
+            results.Add("Implementations provide");
+            results.Add("Create");
+            results.Add("Creates");
 
             return results;
         }
