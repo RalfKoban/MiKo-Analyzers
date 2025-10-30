@@ -78,6 +78,34 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   "ctor",
                                                               };
 
+        private static readonly string[] CallbackPhrases =
+                                                           {
+                                                               "A callback that is called",
+                                                               "A callback which is called",
+                                                               "A method that gets called",
+                                                               "A method that is called",
+                                                               "A method which gets called",
+                                                               "A method which is called",
+                                                               "Callback that is called",
+                                                               "Callback which is called",
+                                                               "Method that gets called",
+                                                               "Method that is called",
+                                                               "Method which gets called",
+                                                               "Method which is called",
+                                                               "The callback that is called",
+                                                               "The callback which is called",
+                                                               "The method gets called",
+                                                               "The method is called",
+                                                               "The method that gets called",
+                                                               "The method that is called",
+                                                               "The method which gets called",
+                                                               "The method which is called",
+                                                               "This method gets called",
+                                                               "This method is called",
+                                                           };
+
+        private static readonly Pair[] CallbackReplacements = CallbackPhrases.ToArray(_ => new Pair(_, "Gets called"));
+
         public override string FixableDiagnosticId => "MiKo_2019";
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
@@ -160,6 +188,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 if (startText.StartsWithAny(RepresentsTheCandidates))
                 {
                     return CommentStartingWith(summary, "Represents the ");
+                }
+
+                if (startText.StartsWithAny(CallbackPhrases))
+                {
+                    return Comment(summary, CallbackPhrases, CallbackReplacements);
                 }
 
                 var updatedSyntax = MiKo_2012_CodeFixProvider.GetUpdatedSyntax(summary);

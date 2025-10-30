@@ -725,6 +725,44 @@ public interface TestMe
             VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", """Initializes a new instance of the <see cref="TestMe{T1,T2}"/> class"""));
         }
 
+        [TestCase("A callback that is called", "Gets called")]
+        [TestCase("A callback which is called", "Gets called")]
+        [TestCase("A method that gets called", "Gets called")]
+        [TestCase("A method that is called", "Gets called")]
+        [TestCase("A method which gets called", "Gets called")]
+        [TestCase("A method which is called", "Gets called")]
+        [TestCase("Callback that is called", "Gets called")]
+        [TestCase("Callback which is called", "Gets called")]
+        [TestCase("Method that gets called", "Gets called")]
+        [TestCase("Method that is called", "Gets called")]
+        [TestCase("Method which gets called", "Gets called")]
+        [TestCase("Method which is called", "Gets called")]
+        [TestCase("The callback that is called", "Gets called")]
+        [TestCase("The callback which is called", "Gets called")]
+        [TestCase("The method gets called", "Gets called")]
+        [TestCase("The method is called", "Gets called")]
+        [TestCase("The method that gets called", "Gets called")]
+        [TestCase("The method that is called", "Gets called")]
+        [TestCase("The method which gets called", "Gets called")]
+        [TestCase("The method which is called", "Gets called")]
+        [TestCase("This method gets called", "Gets called")]
+        [TestCase("This method is called", "Gets called")]
+        public void Code_gets_fixed_for_(string originalText, string fixedText)
+        {
+            const string Template = """
+
+                                    public class TestMe
+                                    {
+                                        /// <summary>
+                                        /// ### to do something.
+                                        /// </summary>
+                                        public void DoSomething() { }
+                                    }
+                                    """;
+
+            VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
+        }
+
         protected override string GetDiagnosticId() => MiKo_2019_3rdPersonSingularVerbSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2019_3rdPersonSingularVerbSummaryAnalyzer();
