@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1010_CommandMethodsAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] AcceptableCommands = [
+        private static readonly string[] EventHandlingMethods = [
                                                                   "CommandBindingOnCanExecute",
                                                                   "CommandBindingOnExecuted",
                                                                   "OnCanExecuteCommandBinding",
@@ -21,7 +21,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                   "OnCommandExecuting",
                                                                   "OnExecutedCommandBinding",
                                                                   "OnMyOwnCommandExecuted",
-                                                              ];
+                                                                ];
+
+        private static readonly string[] AllowedExecuteMethodNames = [
+                                                                         "ExecuteCoreAsync",
+                                                                         "ExecuteCore",
+                                                                         "ExecuteAsyncCore",
+                                                                         "ExecuteAsync",
+                                                                         "CanExecuteCoreAsync",
+                                                                         "CanExecuteCore",
+                                                                         "CanExecuteAsyncCore",
+                                                                         "CanExecuteAsync",
+                                                                     ];
 
         [Test]
         public void No_issue_is_reported_for_method_with_completely_different_name() => No_issue_is_reported_for(@"
@@ -134,7 +145,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_event_handling_method_([ValueSource(nameof(AcceptableCommands))] string methodName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_event_handling_method_([ValueSource(nameof(EventHandlingMethods))] string methodName) => No_issue_is_reported_for(@"
 public class TestMe
 {
     private int " + methodName + @"() => 42;
@@ -142,7 +153,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_event_handling_local_function_([ValueSource(nameof(AcceptableCommands))] string methodName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_event_handling_local_function_([ValueSource(nameof(EventHandlingMethods))] string methodName) => No_issue_is_reported_for(@"
 public class TestMe
 {
     private void Something()
@@ -153,7 +164,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_event_handling_local_function_in_ctor_([ValueSource(nameof(AcceptableCommands))] string methodName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_event_handling_local_function_in_ctor_([ValueSource(nameof(EventHandlingMethods))] string methodName) => No_issue_is_reported_for(@"
 public class TestMe
 {
     private TestMe()
@@ -164,33 +175,21 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_method_([ValueSource(nameof(AllowedExecuteMethodNames))] string methodName) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void " + methodName + @"()
+    {
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_test_method_([ValueSource(nameof(Tests))] string test) => No_issue_is_reported_for(@"
 public class TestMe
 {
     [" + test + @"]
     public int Do_execute_something() => 42;
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_command_with_ExecuteCore_method() => No_issue_is_reported_for(@"
-using System;
-using System.Windows.Input;
-
-namespace Bla
-{
-    public class TestMeCommand : System.Windows.Input.ICommand
-    {
-        public bool CanExecute(object parameter) => true;
-
-        public void Execute(object parameter) => ExecuteCore(parameter);
-
-        public event EventHandler CanExecuteChanged;
-
-        private protected void ExecuteCore(object parameter)
-        {
-        }
-    }
 }
 ");
 

@@ -19,10 +19,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                     {
                                                                         nameof(ICommand.CanExecute),
                                                                         nameof(ICommand.CanExecute) + Constants.Core,
+                                                                        nameof(ICommand.CanExecute) + Constants.Core + Constants.AsyncSuffix,
                                                                         nameof(ICommand.CanExecute) + Constants.AsyncSuffix,
                                                                         nameof(ICommand.CanExecute) + Constants.AsyncCoreSuffix,
                                                                         nameof(ICommand.Execute),
                                                                         nameof(ICommand.Execute) + Constants.Core,
+                                                                        nameof(ICommand.Execute) + Constants.Core + Constants.AsyncSuffix,
                                                                         nameof(ICommand.Execute) + Constants.AsyncSuffix,
                                                                         nameof(ICommand.Execute) + Constants.AsyncCoreSuffix,
                                                                         nameof(ICommand.CanExecuteChanged),
