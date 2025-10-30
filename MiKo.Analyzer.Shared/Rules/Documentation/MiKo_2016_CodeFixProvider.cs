@@ -1,4 +1,5 @@
 ﻿using System.Composition;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -11,12 +12,45 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2016_CodeFixProvider)), Shared]
     public sealed class MiKo_2016_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
-        private const string Phrase = Constants.Comments.AsynchronouslyStartingPhrase;
+        private static readonly string[] ReplacementMapKeys =
+                                                              {
+                                                                  "This method is called ",
+                                                                  "The method is called ",
+                                                                  "The method that is called ",
+                                                                  "The method which is called ",
+                                                                  "Method that is called ",
+                                                                  "Method which is called ",
+                                                                  "This method gets called ",
+                                                                  "The method gets called ",
+                                                                  "The method that gets called ",
+                                                                  "The method which gets called ",
+                                                                  "Method that gets called ",
+                                                                  "Method which gets called ",
+                                                                  "Callback that is called ",
+                                                                  "Callback which is called ",
+                                                                  "A callback that is called ",
+                                                                  "A callback which is called ",
+                                                                  "The callback that is called ",
+                                                                  "The callback which is called ",
+                                                              };
+
+        private static readonly Pair[] ReplacementMap = ReplacementMapKeys.Select(_ => new Pair(_, Constants.Comments.AsynchronouslyStartingPhrase + "invoked "))
+                                                                          .OrderDescendingByLengthAndText(_ => _.Key);
 
         public override string FixableDiagnosticId => "MiKo_2016";
 
-        protected override string Title => Resources.MiKo_2016_CodeFixTitle.FormatWith(Phrase);
+        protected override string Title => Resources.MiKo_2016_CodeFixTitle.FormatWith(Constants.Comments.AsynchronouslyStartingPhrase);
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => CommentStartingWith((XmlElementSyntax)syntax, Phrase, FirstWordAdjustment.StartLowerCase | FirstWordAdjustment.MakeThirdPersonSingular);
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        {
+            var preparedComment = Comment((XmlElementSyntax)syntax, ReplacementMapKeys, ReplacementMap);
+
+            if (ReferenceEquals(syntax, preparedComment))
+            {
+                return CommentStartingWith(preparedComment, Constants.Comments.AsynchronouslyStartingPhrase, FirstWordAdjustment.StartLowerCase | FirstWordAdjustment.MakeThirdPersonSingular);
+            }
+
+            return preparedComment;
+        }
     }
 }
