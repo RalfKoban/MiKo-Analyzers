@@ -81,8 +81,14 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 case PostfixUnaryExpressionSyntax unary:
                 {
                     var operatorToken = unary.OperatorToken;
+                    var expression = unary.Operand;
 
-                    return operatorToken.IsOnSameLineAs(unary.Operand) ? null : Issue(operatorToken);
+                    if (expression is InvocationExpressionSyntax i && i.Expression is MemberAccessExpressionSyntax maes)
+                    {
+                        expression = maes.Name;
+                    }
+
+                    return operatorToken.IsOnSameLineAs(expression) ? null : Issue(operatorToken);
                 }
 
                 default:
