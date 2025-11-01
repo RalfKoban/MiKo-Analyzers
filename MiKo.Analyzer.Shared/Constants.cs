@@ -9,6 +9,7 @@ namespace MiKoSolutions.Analyzers
     internal static class Constants
     {
         internal const int Indentation = 4;
+        internal const int IndentationForComplexElementInitializerExpression = 2;
         internal const int MinimumCharactersThreshold = 4;
 
         internal const string Core = "Core";

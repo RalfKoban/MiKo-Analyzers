@@ -16,30 +16,58 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "CanBeConnected",
                                                             "Connected",
                                                             "HasConnectionEstablished",
+                                                            "IsAllLowerCase",
+                                                            "IsAllUpperCase",
+                                                            "IsAnyKind",
+                                                            "IsAssignableFrom",
+                                                            "IsAssignableTo",
+                                                            "IsByteArray",
+                                                            "IsCancellationToken",
                                                             "IsCompleted",
                                                             "IsConnected",
+                                                            "IsContainedInData",
+                                                            "IsDefault",
                                                             "IsDefaultValue",
                                                             "IsDigitsOnly",
                                                             "IsDragSource",
+                                                            "IsDroppedOverSomething",
                                                             "IsDropTarget",
+                                                            "IsEmptyArray",
+                                                            "IsExcludedFromData",
+                                                            "IsFirstChild",
+                                                            "IsIncludedInData",
                                                             "IsInCode",
                                                             "IsInDesign",
                                                             "IsInDesignerMode",
                                                             "IsInDesignMode",
+                                                            "IsInheritedFromSomething",
+                                                            "IsInsideOfSomething",
+                                                            "IsLastChild",
                                                             "IsLowerCase",
                                                             "IsLowerCaseLetter",
+                                                            "IsNameOf",
                                                             "IsNavigationTarget",
+                                                            "IsNextChild",
                                                             "IsNotCompleted",
+                                                            "IsOfName",
+                                                            "IsOfType",
                                                             "IsOfTypeWhatever",
                                                             "IsOnSameLineLine",
+                                                            "IsPreviousChild",
+                                                            "IsPrimaryConstructor",
                                                             "IsReadOnly",
                                                             "IsReadWrite",
                                                             "IsSame",
                                                             "IsSameKey",
+                                                            "IsShownAs",
                                                             "IsShownAsText",
+                                                            "IsShownIn",
                                                             "IsShownInMenu",
+                                                            "IsSingleWord",
                                                             "IsSolutionWide",
+                                                            "IsTest",
                                                             "IsTestMethod",
+                                                            "IsTypeOf",
                                                             "IsUpperCase",
                                                             "IsUpperCaseLetter",
                                                             "IsValueConverter",
@@ -86,6 +114,22 @@ using System;
 public class TestMe
 {
     public int IsDoingSomething { get; set; }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_test_method_with_Boolean_return_type_([ValueSource(nameof(WrongNames))] string name) => No_issue_is_reported_for(@"
+using System;
+using System.Threading;
+
+[TestFixture]
+public class TestMe
+{
+    [Test]
+    public bool " + name + @"()
+    {
+        return false;
+    }
 }
 ");
 
