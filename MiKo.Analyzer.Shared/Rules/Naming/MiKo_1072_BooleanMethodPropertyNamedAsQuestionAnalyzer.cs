@@ -24,17 +24,30 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                      {
                                                                          nameof(string.IsNullOrEmpty),
                                                                          nameof(string.IsNullOrWhiteSpace),
+                                                                         "IsAllLowerCase",
+                                                                         "IsAllUpperCase",
+                                                                         "IsAnyKind",
+                                                                         "IsAssignableFrom",
+                                                                         "IsAssignableTo",
+                                                                         "IsByteArray",
+                                                                         "IsCancellationToken",
                                                                          "IsCompleted",
                                                                          "IsDigitsOnly",
                                                                          "IsDragSource",
                                                                          "IsDropTarget",
+                                                                         "IsEmptyArray",
                                                                          "IsLowerCase",
                                                                          "IsLowerCaseLetter",
+                                                                         "IsNameOf",
                                                                          "IsNavigationTarget",
                                                                          "IsNotCompleted",
+                                                                         "IsOfName",
+                                                                         "IsPrimaryConstructor",
                                                                          "IsReadOnly",
                                                                          "IsReadWrite",
+                                                                         "IsSingleWord",
                                                                          "IsSolutionWide",
+                                                                         "IsTypeOf",
                                                                          "IsUpperCase",
                                                                          "IsUpperCaseLetter",
                                                                          "IsValueConverter",
@@ -46,9 +59,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly string[] WellKnownPrefixes =
                                                              {
+                                                                 "IsContainedIn",
                                                                  "IsDefault",
-                                                                 "IsInDesign",
+                                                                 "IsDroppedOver",
+                                                                 "IsExcludedFrom",
+                                                                 "IsFirst",
+                                                                 "IsIn",
+                                                                 "IsLast",
+                                                                 "IsNext",
                                                                  "IsOfType",
+                                                                 "IsPrevious",
                                                                  "IsSame",
                                                                  "IsShownAs",
                                                                  "IsShownIn",
@@ -57,8 +77,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly string[] WellKnownPostfixes =
                                                               {
+                                                                  "Child",
                                                                   "Code",
                                                                   "Line",
+                                                                  "Mode",
                                                               };
 
         public MiKo_1072_BooleanMethodPropertyNamedAsQuestionAnalyzer() : base(Id)
@@ -72,7 +94,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             InitializeCore(context, SymbolKind.Property);
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.ReturnType.IsBoolean();
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.ReturnType.IsBoolean() && base.ShallAnalyze(symbol) && symbol.IsTestMethod() is false;
 
         protected override bool ShallAnalyze(IPropertySymbol symbol) => base.ShallAnalyze(symbol) && symbol.GetReturnType()?.IsBoolean() is true;
 
@@ -80,28 +102,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IPropertySymbol symbol, Compilation compilation) => AnalyzeName(symbol);
 
-        private Diagnostic[] AnalyzeName(ISymbol symbol)
-        {
-            var name = symbol.Name;
+        private static bool HasIssue(string name) => name.Length > 5
+                                                  && name.StartsWithAny(Prefixes)
+                                                  && name.HasUpperCaseLettersAbove(2)
+                                                  && name.StartsWithAny(WellKnownPrefixes) is false
+                                                  && name.EndsWithAny(WellKnownPostfixes) is false
+                                                  && WellKnownNames.Contains(name) is false;
 
-            if (name.Length <= 5)
-            {
-                // skip all short names (such as isIP)
-                return Array.Empty<Diagnostic>();
-            }
-
-            if (name.StartsWithAny(Prefixes) && name.HasUpperCaseLettersAbove(2))
-            {
-                if (WellKnownNames.Contains(name) || name.StartsWithAny(WellKnownPrefixes) || name.EndsWithAny(WellKnownPostfixes))
-                {
-                    // skip all well known names
-                    return Array.Empty<Diagnostic>();
-                }
-
-                return new[] { Issue(symbol) };
-            }
-
-            return Array.Empty<Diagnostic>();
-        }
+        private Diagnostic[] AnalyzeName(ISymbol symbol) => HasIssue(symbol.Name)
+                                                            ? new[] { Issue(symbol) }
+                                                            : Array.Empty<Diagnostic>();
     }
 }
