@@ -15,9 +15,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly string[] WrongGuids =
                                                       [
-                                                          " guid ", " guid,", " guid;", " guid.", " guid:", " guid)", " guid]", " guid}", " guid>",
-                                                          " Guid ", " Guid,", " Guid;", " Guid.", " Guid:", " Guid)", " Guid]", " Guid}", " Guid>",
-                                                          " GUID ", " GUID,", " GUID;", " GUID.", " GUID:", " GUID)", " GUID]", " GUID}", " GUID>",
+                                                          " guid ", " guid,", " guid;", " guid.", " guid:", " guid)", " guid]", " guid}",
+                                                          " Guid ", " Guid,", " Guid;", " Guid.", " Guid:", " Guid)", " Guid]", " Guid}",
+                                                          " GUID ", " GUID,", " GUID;", " GUID.", " GUID:", " GUID)", " GUID]", " GUID}",
+                                                          " guids ", " guids,", " guids;", " guids.", " guids:", " guids)", " guids]", " guids}",
+                                                          " Guids ", " Guids,", " Guids;", " Guids.", " Guids:", " Guids)", " Guids]", " Guids}",
+                                                          " GUIDs ", " GUIDs,", " GUIDs;", " GUIDs.", " GUIDs:", " GUIDs)", " GUIDs]", " GUIDs}",
+                                                          " GUIDS ", " GUIDS,", " GUIDS;", " GUIDS.", " GUIDS:", " GUIDS)", " GUIDS]", " GUIDS}",
                                                       ];
 
         [Test]
@@ -62,7 +66,7 @@ public sealed class TestMe { }
 ";
 
             var wrongText = wrongGuid.Trim();
-            var correctText = wrongText.Replace("guid", "unique identifier", StringComparison.OrdinalIgnoreCase);
+            var correctText = ToCorrectText(wrongText);
 
             VerifyCSharpFix(Template.Replace("###", wrongText), Template.Replace("###", correctText));
         }
@@ -78,7 +82,7 @@ public sealed class TestMe { }
 ";
 
             var wrongText = wrongGuid.Trim();
-            var correctText = wrongText.Replace("guid", "unique identifier", StringComparison.OrdinalIgnoreCase);
+            var correctText = ToCorrectText(wrongText);
 
             VerifyCSharpFix(Template.Replace("###", wrongText), Template.Replace("###", correctText));
         }
@@ -101,7 +105,7 @@ public sealed class TestMe { }
 ";
 
             var wrongText = wrongGuid.Trim();
-            var correctText = wrongText.Replace("guid", "unique identifier", StringComparison.OrdinalIgnoreCase);
+            var correctText = ToCorrectText(wrongText);
 
             VerifyCSharpFix(OriginalTemplate.Replace("###", wrongText), FixedTemplate.Replace("###", correctText));
         }
@@ -111,5 +115,8 @@ public sealed class TestMe { }
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2203_DocumentationUsesUniqueIdentifierInsteadOfGuidAnalyzer();
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2203_CodeFixProvider();
+
+        private static string ToCorrectText(string wrongText) => wrongText.Replace("guids", "guids", StringComparison.OrdinalIgnoreCase) // next step will replace 'guid', so 'guids' becomes 'unique identifiers'
+                                                                          .Replace("guid", "unique identifier", StringComparison.OrdinalIgnoreCase);
     }
 }

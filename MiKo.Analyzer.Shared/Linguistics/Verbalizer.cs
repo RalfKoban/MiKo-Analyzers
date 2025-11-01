@@ -5,13 +5,16 @@ using System.Linq;
 
 namespace MiKoSolutions.Analyzers.Linguistics
 {
+    /// <summary>
+    /// Provides functionality to convert words and phrases between different verb forms.
+    /// </summary>
     internal static class Verbalizer
     {
         private static readonly HashSet<char> CharsForTwoCharacterEndingsWithS = new HashSet<char> { 'a', 'h', 'i', 'o', 's', 'u', 'x', 'z' };
 
         private static readonly string[] NonThirdPersonSingularEndingsWithS = { "pters", "tors", "gers", "chers", "asses" };
 
-        private static readonly string[] SpecialPastEndings = { "ated", "dled", "ced", "ged", "ied", "red", "rized", "sed", "ved" };
+        private static readonly string[] SpecialPastEndings = { "ated", "dled", "ced", "ged", "ied", "red", "rized", "sed", "ved", "oked" };
 
         private static readonly string[] PastEndings = SpecialPastEndings.ConcatenatedWith("led", "eed", "ted", "ded").ToArray();
 
@@ -23,30 +26,68 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly ConcurrentDictionary<string, string> GerundVerbs = new ConcurrentDictionary<string, string>();
 
-        private static readonly ConcurrentDictionary<string, string> InfiniteVerbs = new ConcurrentDictionary<string, string>();
+        private static readonly ConcurrentDictionary<string, string> InfiniteVerbs = new ConcurrentDictionary<string, string>(new[]
+                                                                                                                                  {
+                                                                                                                                      new KeyValuePair<string, string>("broken", "break"),
+                                                                                                                                      new KeyValuePair<string, string>("Broken", "Break"),
+                                                                                                                                      new KeyValuePair<string, string>("chosen", "choose"),
+                                                                                                                                      new KeyValuePair<string, string>("Chosen", "Choose"),
+                                                                                                                                      new KeyValuePair<string, string>("done", "do"),
+                                                                                                                                      new KeyValuePair<string, string>("Done", "Do"),
+                                                                                                                                      new KeyValuePair<string, string>("driven", "drive"),
+                                                                                                                                      new KeyValuePair<string, string>("Driven", "Drive"),
+                                                                                                                                      new KeyValuePair<string, string>("drove", "drive"),
+                                                                                                                                      new KeyValuePair<string, string>("Drove", "Drive"),
+                                                                                                                                      new KeyValuePair<string, string>("felt", "feel"),
+                                                                                                                                      new KeyValuePair<string, string>("Felt", "Feel"),
+                                                                                                                                      new KeyValuePair<string, string>("frozen", "freeze"),
+                                                                                                                                      new KeyValuePair<string, string>("Frozen", "Freeze"),
+                                                                                                                                      new KeyValuePair<string, string>("hid", "hide"),
+                                                                                                                                      new KeyValuePair<string, string>("Hid", "Hide"),
+                                                                                                                                      new KeyValuePair<string, string>("hidden", "hide"),
+                                                                                                                                      new KeyValuePair<string, string>("Hidden", "Hide"),
+                                                                                                                                      new KeyValuePair<string, string>("woke", "wake"),
+                                                                                                                                      new KeyValuePair<string, string>("Woke", "Wake"),
+                                                                                                                                      new KeyValuePair<string, string>("bent", "bend"),
+                                                                                                                                      new KeyValuePair<string, string>("Bent", "Bend"),
+                                                                                                                                      new KeyValuePair<string, string>("lent", "lend"),
+                                                                                                                                      new KeyValuePair<string, string>("Lent", "Lend"),
+                                                                                                                                      new KeyValuePair<string, string>("sent", "send"),
+                                                                                                                                      new KeyValuePair<string, string>("Sent", "Send"),
+                                                                                                                                      new KeyValuePair<string, string>("spent", "spend"),
+                                                                                                                                      new KeyValuePair<string, string>("Spent", "Spend"),
+                                                                                                                                      new KeyValuePair<string, string>("spoken", "speak"),
+                                                                                                                                      new KeyValuePair<string, string>("Spoken", "Speak"),
+                                                                                                                                      new KeyValuePair<string, string>("woken", "wake"),
+                                                                                                                                      new KeyValuePair<string, string>("Woken", "Wake"),
+                                                                                                                                      new KeyValuePair<string, string>("written", "write"),
+                                                                                                                                      new KeyValuePair<string, string>("Written", "Write"),
+                                                                                                                                      new KeyValuePair<string, string>("wrote", "write"),
+                                                                                                                                      new KeyValuePair<string, string>("Wrote", "Write"),
+                                                                                                                                  });
 
         private static readonly ConcurrentDictionary<string, string> ThirdPersonSingularVerbs = new ConcurrentDictionary<string, string>(new[]
                                                                                                                                              {
-                                                                                                                                                 new KeyValuePair<string, string>("Are", "Is"),
                                                                                                                                                  new KeyValuePair<string, string>("are", "is"),
-                                                                                                                                                 new KeyValuePair<string, string>("got", "gets"),
-                                                                                                                                                 new KeyValuePair<string, string>("Got", "Gets"),
-                                                                                                                                                 new KeyValuePair<string, string>("Had", "Has"),
-                                                                                                                                                 new KeyValuePair<string, string>("had", "has"),
-                                                                                                                                                 new KeyValuePair<string, string>("Has", "Has"),
-                                                                                                                                                 new KeyValuePair<string, string>("has", "has"),
-                                                                                                                                                 new KeyValuePair<string, string>("Is", "Is"),
-                                                                                                                                                 new KeyValuePair<string, string>("is", "is"),
+                                                                                                                                                 new KeyValuePair<string, string>("Are", "Is"),
                                                                                                                                                  new KeyValuePair<string, string>("frozen", "freezes"),
                                                                                                                                                  new KeyValuePair<string, string>("Frozen", "Freezes"),
-                                                                                                                                                 new KeyValuePair<string, string>("Were", "Is"),
-                                                                                                                                                 new KeyValuePair<string, string>("were", "is"),
-                                                                                                                                                 new KeyValuePair<string, string>("Was", "Is"),
-                                                                                                                                                 new KeyValuePair<string, string>("was", "is"),
-                                                                                                                                                 new KeyValuePair<string, string>("Maintenance", "Maintains"),
-                                                                                                                                                 new KeyValuePair<string, string>("maintenance", "maintains"),
-                                                                                                                                                 new KeyValuePair<string, string>("Implementation", "Implements"),
+                                                                                                                                                 new KeyValuePair<string, string>("got", "gets"),
+                                                                                                                                                 new KeyValuePair<string, string>("Got", "Gets"),
+                                                                                                                                                 new KeyValuePair<string, string>("had", "has"),
+                                                                                                                                                 new KeyValuePair<string, string>("Had", "Has"),
+                                                                                                                                                 new KeyValuePair<string, string>("has", "has"),
+                                                                                                                                                 new KeyValuePair<string, string>("Has", "Has"),
                                                                                                                                                  new KeyValuePair<string, string>("implementation", "implements"),
+                                                                                                                                                 new KeyValuePair<string, string>("Implementation", "Implements"),
+                                                                                                                                                 new KeyValuePair<string, string>("is", "is"),
+                                                                                                                                                 new KeyValuePair<string, string>("Is", "Is"),
+                                                                                                                                                 new KeyValuePair<string, string>("maintenance", "maintains"),
+                                                                                                                                                 new KeyValuePair<string, string>("Maintenance", "Maintains"),
+                                                                                                                                                 new KeyValuePair<string, string>("was", "is"),
+                                                                                                                                                 new KeyValuePair<string, string>("Was", "Is"),
+                                                                                                                                                 new KeyValuePair<string, string>("were", "is"),
+                                                                                                                                                 new KeyValuePair<string, string>("Were", "Is"),
                                                                                                                                              });
 
         private static readonly string[] ThirdPersonalSingularVerbExceptions =
@@ -235,6 +276,15 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly char[] SentenceEndingMarkers = ".?!;:,)".ToCharArray();
 
+        /// <summary>
+        /// Determines whether the specified word is a third-person singular verb.
+        /// </summary>
+        /// <param name="value">
+        /// The word to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the word is a third-person singular verb; otherwise, <see langword="false"/>.
+        /// </returns>
         public static bool IsThirdPersonSingularVerb(in ReadOnlySpan<char> value)
         {
             var length = value.Length;
@@ -270,8 +320,26 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return true;
         }
 
+        /// <summary>
+        /// Determines whether the specified word is a third-person singular verb.
+        /// </summary>
+        /// <param name="value">
+        /// The word to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the word is a third-person singular verb; otherwise, <see langword="false"/>.
+        /// </returns>
         public static bool IsThirdPersonSingularVerb(string value) => value != null && IsThirdPersonSingularVerb(value.AsSpan());
 
+        /// <summary>
+        /// Determines whether the specified word ends with a two-character ending followed by 's'.
+        /// </summary>
+        /// <param name="value">
+        /// The word to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the word ends with a two-character ending followed by 's'; otherwise, <see langword="false"/>.
+        /// </returns>
         public static bool IsTwoCharacterEndingsWithS(string value)
         {
             var length = value?.Length;
@@ -284,12 +352,48 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return false;
         }
 
+        /// <summary>
+        /// Determines whether the specified word is in past tense.
+        /// </summary>
+        /// <param name="value">
+        /// The word to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the word is in past tense; otherwise, <see langword="false"/>.
+        /// </returns>
         public static bool IsPastTense(string value) => value != null && IsPastTense(value.AsSpan());
 
+        /// <summary>
+        /// Determines whether the specified word is in past tense.
+        /// </summary>
+        /// <param name="value">
+        /// The word to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the word is in past tense; otherwise, <see langword="false"/>.
+        /// </returns>
         public static bool IsPastTense(in ReadOnlySpan<char> value) => value.EndsWithAny(PastEndings);
 
+        /// <summary>
+        /// Determines whether the specified word is a gerund verb.
+        /// </summary>
+        /// <param name="value">
+        /// The word to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the word is a gerund verb; otherwise, <see langword="false"/>.
+        /// </returns>
         public static bool IsGerundVerb(string value) => value != null && IsGerundVerb(value.AsSpan());
 
+        /// <summary>
+        /// Determines whether the specified word is a gerund verb.
+        /// </summary>
+        /// <param name="value">
+        /// The word to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the word is a gerund verb; otherwise, <see langword="false"/>.
+        /// </returns>
         public static bool IsGerundVerb(in ReadOnlySpan<char> value)
         {
             if (value.Length <= 4)
@@ -325,6 +429,15 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return false;
         }
 
+        /// <summary>
+        /// Converts the specified word to its gerund form.
+        /// </summary>
+        /// <param name="value">
+        /// The word to convert.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the gerund form of the word; or the original word if it is <see langword="null"/> or consists only of whitespace characters.
+        /// </returns>
         public static string MakeGerundVerb(string value)
         {
             if (value.IsNullOrWhiteSpace())
@@ -381,6 +494,15 @@ namespace MiKoSolutions.Analyzers.Linguistics
             }
         }
 
+        /// <summary>
+        /// Converts the specified word to its infinitive form.
+        /// </summary>
+        /// <param name="value">
+        /// The word to convert.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the infinitive form of the word; or the original word if it is <see langword="null"/> or consists only of whitespace characters.
+        /// </returns>
         public static string MakeInfiniteVerb(string value)
         {
             if (value.IsNullOrWhiteSpace())
@@ -399,6 +521,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
                         return word[0].IsUpperCaseLetter() ? "Be" : "be";
                     }
 
+                    if (word.Equals("was", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return word[0].IsUpperCaseLetter() ? "Be" : "be";
+                    }
+
                     if (word.Equals("has", StringComparison.OrdinalIgnoreCase))
                     {
                         return word[0].IsUpperCaseLetter() ? "Have" : "have";
@@ -411,10 +538,78 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
                     if (word.EndsWith("oes", StringComparison.Ordinal) || word.EndsWith("shes", StringComparison.Ordinal))
                     {
-                        return word.WithoutSuffix("es");
+                        return word.Substring(0, word.Length - 2);
                     }
 
-                    return word.WithoutSuffix("s");
+                    return word.Substring(0, word.Length - 1);
+                }
+
+                if (word.EndsWith('t'))
+                {
+                    if (word.EndsWith("et", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return word;
+                    }
+
+                    if (word.EndsWith("nt", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (word.EndsWith("ant", StringComparison.OrdinalIgnoreCase))
+                        {
+                            return word.Substring(0, word.Length - 1);
+                        }
+
+                        if (word.EndsWith("rnt", StringComparison.OrdinalIgnoreCase))
+                        {
+                            return word.Substring(0, word.Length - 1);
+                        }
+
+                        return word;
+                    }
+
+                    if (word.EndsWith("pt", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (word.EndsWith("ept", StringComparison.OrdinalIgnoreCase))
+                        {
+                            if (word.EndsWith("cept", StringComparison.OrdinalIgnoreCase))
+                            {
+                                return word;
+                            }
+
+                            return word.AsSpan(0, word.Length - 2).ConcatenatedWith("ep");
+                        }
+
+                        if (word.EndsWith("eapt", StringComparison.OrdinalIgnoreCase))
+                        {
+                            return word.Substring(0, word.Length - 1);
+                        }
+
+                        return word;
+                    }
+
+                    if (word.EndsWith("lt", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (word.EndsWith("elt", StringComparison.OrdinalIgnoreCase))
+                        {
+                            return word.AsSpan(0, word.Length - 1).ConcatenatedWith('l');
+                        }
+
+                        if (word.EndsWith("alt", StringComparison.OrdinalIgnoreCase))
+                        {
+                            return word.Substring(0, word.Length - 1);
+                        }
+
+                        if (word.EndsWith("ilt", StringComparison.OrdinalIgnoreCase))
+                        {
+                            return word.AsSpan(0, word.Length - 1).ConcatenatedWith('d');
+                        }
+                    }
+
+                    if (word.EndsWith("amt", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return word.Substring(0, word.Length - 1);
+                    }
+
+                    return word;
                 }
 
                 if (word.Equals("are", StringComparison.OrdinalIgnoreCase))
@@ -467,12 +662,12 @@ namespace MiKoSolutions.Analyzers.Linguistics
             {
                 if (word.EndsWith("dded", StringComparison.Ordinal))
                 {
-                    return word.AsSpan(0, word.Length - 2).ToString();
+                    return word.Substring(0, word.Length - 2);
                 }
 
                 if (word.EndsWith("tted", StringComparison.Ordinal))
                 {
-                    return word.AsSpan(0, word.Length - 3).ToString();
+                    return word.Substring(0, word.Length - 3);
                 }
 
                 if (word.EndsWith("eed", StringComparison.Ordinal))
@@ -482,13 +677,26 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
                 if (word.EndsWithAny(SpecialPastEndings))
                 {
-                    return word.AsSpan(0, word.Length - 1).ToString();
+                    return word.Substring(0, word.Length - 1);
                 }
 
-                return word.AsSpan(0, word.Length - 2).ToString();
+                return word.Substring(0, word.Length - 2);
             }
         }
 
+        /// <summary>
+        /// Converts the first word of the specified text to its infinitive form.
+        /// </summary>
+        /// <param name="text">
+        /// The text containing the word to convert.
+        /// </param>
+        /// <param name="adjustment">
+        /// A bitwise combination of the enumeration members that specifies the adjustment to apply to the first word's casing.
+        /// The default is <see cref="FirstWordAdjustment.None"/>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the text with the first word converted to its infinitive form; or the original text if it is <see langword="null"/> or consists only of whitespace characters.
+        /// </returns>
         public static string MakeFirstWordInfiniteVerb(string text, in FirstWordAdjustment adjustment = FirstWordAdjustment.None)
         {
             if (text.IsNullOrWhiteSpace())
@@ -499,6 +707,19 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return MakeFirstWordInfiniteVerb(text.AsSpan(), adjustment);
         }
 
+        /// <summary>
+        /// Converts the first word of the specified text to its infinitive form.
+        /// </summary>
+        /// <param name="text">
+        /// The text containing the word to convert.
+        /// </param>
+        /// <param name="firstWordAdjustment">
+        /// A bitwise combination of the enumeration members that specifies the adjustment to apply to the first word's casing.
+        /// The default is <see cref="FirstWordAdjustment.None"/>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the text with the first word converted to its infinitive form; or the <see cref="string.Empty"/> string ("") if the text is <see langword="null"/> or consists only of whitespace characters.
+        /// </returns>
         public static string MakeFirstWordInfiniteVerb(in ReadOnlySpan<char> text, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.None)
         {
             if (text.IsNullOrWhiteSpace())
@@ -541,6 +762,15 @@ namespace MiKoSolutions.Analyzers.Linguistics
             }
         }
 
+        /// <summary>
+        /// Converts the specified word to its third-person singular form.
+        /// </summary>
+        /// <param name="value">
+        /// The word to convert.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the third-person singular form of the word; or the original word if it is <see langword="null"/> or consists only of whitespace characters.
+        /// </returns>
         public static string MakeThirdPersonSingularVerb(string value)
         {
             if (value.IsNullOrWhiteSpace())
@@ -699,6 +929,18 @@ namespace MiKoSolutions.Analyzers.Linguistics
             }
         }
 
+        /// <summary>
+        /// Attempts to convert the specified word to its verb form.
+        /// </summary>
+        /// <param name="value">
+        /// The word to convert.
+        /// </param>
+        /// <param name="result">
+        /// On successful return, contains the verb form of the word; otherwise the original word.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the word was successfully converted to a verb form; otherwise, <see langword="false"/>.
+        /// </returns>
         public static bool TryMakeVerb(string value, out string result)
         {
             result = value;
@@ -741,6 +983,15 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return false;
         }
 
+        /// <summary>
+        /// Determines whether the specified word starts with an acceptable phrase.
+        /// </summary>
+        /// <param name="value">
+        /// The word to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the word starts with an acceptable phrase; otherwise, <see langword="false"/>.
+        /// </returns>
         private static bool HasAcceptableStartingPhrase(in ReadOnlySpan<char> value)
         {
             for (int index = 0, length = StartingPhrases.Length; index < length; index++)
@@ -758,8 +1009,26 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return false;
         }
 
+        /// <summary>
+        /// Determines whether the specified word contains an acceptable phrase.
+        /// </summary>
+        /// <param name="value">
+        /// The word to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the word contains an acceptable phrase; otherwise, <see langword="false"/>.
+        /// </returns>
         private static bool HasAcceptableMiddlePhrase(string value) => value.ContainsAny(MiddlePhrases);
 
+        /// <summary>
+        /// Determines whether the specified word ends with an acceptable phrase.
+        /// </summary>
+        /// <param name="value">
+        /// The word to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the word ends with an acceptable phrase; otherwise, <see langword="false"/>.
+        /// </returns>
         private static bool HasAcceptableEndingPhrase(in ReadOnlySpan<char> value) => value.EndsWithAny(EndingPhrases);
     }
 }

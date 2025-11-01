@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         {
                             var expressionKind = useIsNotPattern ? SyntaxKind.NotEqualsExpression : SyntaxKind.EqualsExpression;
 
-                            var updatedCondition = GetUpdatedCondition(p.Expression, subPattern.NameColon.GetName(), expressionKind, literal);
+                            var updatedCondition = GetUpdatedCondition(p.Expression, subPattern.NameColon.GetName(), expressionKind, literal, document);
 
                             if (useIsNotPattern && updatedCondition is IsPatternExpressionSyntax up)
                             {
@@ -62,9 +62,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return base.GetUpdatedSyntax(document, syntax, issue);
         }
 
-        private static ExpressionSyntax GetUpdatedCondition(ExpressionSyntax expression, string name, in SyntaxKind expressionKind, LiteralExpressionSyntax literal)
+        private static ExpressionSyntax GetUpdatedCondition(ExpressionSyntax expression, string name, in SyntaxKind expressionKind, LiteralExpressionSyntax literal, Document document)
         {
-            var operand = Member(expression, name);
+            var operand = GetUpdatedExpression(expression, name, document);
 
             switch (literal.Kind())
             {
@@ -74,6 +74,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 default:
                     return SyntaxFactory.BinaryExpression(expressionKind, operand, literal.WithoutTrivia());
             }
+        }
+
+        private static ExpressionSyntax GetUpdatedExpression(ExpressionSyntax expression, string name, Document document)
+        {
+            if (expression.IsNullable(document))
+            {
+                return ConditionalAccess(expression, name);
+            }
+
+            return Member(expression, name);
         }
     }
 }

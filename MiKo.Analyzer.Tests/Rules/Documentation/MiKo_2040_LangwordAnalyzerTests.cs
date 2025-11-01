@@ -53,9 +53,9 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_documentation_on_class_([ValueSource(nameof(CorrectItems))] string finding) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correct_documentation_on_class_([ValueSource(nameof(CorrectItems))] string term) => No_issue_is_reported_for(@"
 /// <summary>
-/// Does something. " + finding + @"
+/// Does something. " + term + @"
 /// </summary>
 public sealed class TestMe
 {
@@ -63,53 +63,91 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_documentation_on_method_([ValueSource(nameof(CorrectItems))] string finding) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correct_documentation_on_method_([ValueSource(nameof(CorrectItems))] string term) => No_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
-    /// Does something. " + finding + @"
+    /// Does something. " + term + @"
     /// </summary>
     public void Correct() { }
 }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_documentation_on_property_([ValueSource(nameof(CorrectItems))] string finding) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correct_documentation_on_property_([ValueSource(nameof(CorrectItems))] string term) => No_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
-    /// Does something. " + finding + @"
+    /// Does something. " + term + @"
     /// </summary>
     public int Correct { get; set; }
 }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_documentation_on_event_([ValueSource(nameof(CorrectItems))] string finding) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correct_documentation_on_event_([ValueSource(nameof(CorrectItems))] string term) => No_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
-    /// Does something. " + finding + @"
+    /// Does something. " + term + @"
     /// </summary>
     public event EventHandler Correct;
 }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_documentation_on_field_([ValueSource(nameof(CorrectItems))] string finding) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correct_documentation_on_field_([ValueSource(nameof(CorrectItems))] string term) => No_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
-    /// Does something. " + finding + @"
+    /// Does something. " + term + @"
     /// </summary>
     private string Correct;
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrect_documentation_on_class_([ValueSource(nameof(WrongItemsWithCode))] string finding) => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_valid_code_example_on_class_([ValueSource(nameof(Terms))] string term) => No_issue_is_reported_for(@"
 /// <summary>
-/// Does something. " + finding + @"
+/// Does something.
+/// </summary>
+/// <example>
+/// <code>
+///     if (xyz is " + term + @")
+///     {
+///         return " + term + @";
+///     }
+/// </code>
+/// </example>
+public sealed class TestMe
+{
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_valid_code_inside_remarks_section_on_class_([ValueSource(nameof(Terms))] string term) => No_issue_is_reported_for(@"
+/// <summary>
+/// Does something.
+/// </summary>
+/// <remarks>
+/// <para>
+/// <code>
+///     if (xyz is " + term + @")
+///     {
+///         return " + term + @";
+///     }
+/// <code>
+/// </para>
+/// </remarks>
+public sealed class TestMe
+{
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_valid_text_inside_c_in_summary_on_class_([ValueSource(nameof(Terms))] string term) => No_issue_is_reported_for(@"
+/// <summary>
+/// Does something with <c>some special text with " + term + @" here</c>.
 /// </summary>
 public sealed class TestMe
 {
@@ -117,72 +155,92 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrect_documentation_on_method_([ValueSource(nameof(WrongItemsWithCode))] string finding) => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_valid_but_special_text_inside_c_in_summary_on_class_([ValueSource(nameof(Terms))] string term) => No_issue_is_reported_for(@"
+/// <summary>
+/// Does something with <c><c>&lt;value&gt;" + term + @"&lt;/value&gt;</c></c>.
+/// </summary>
+public sealed class TestMe
+{
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrect_documentation_on_class_([ValueSource(nameof(WrongItemsWithCode))] string term) => An_issue_is_reported_for(@"
+/// <summary>
+/// Does something. " + term + @"
+/// </summary>
+public sealed class TestMe
+{
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrect_documentation_on_method_([ValueSource(nameof(WrongItemsWithCode))] string term) => An_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
-    /// Does something. " + finding + @"
+    /// Does something. " + term + @"
     /// </summary>
     public void Malform() { }
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrect_documentation_on_method_returnValue_([ValueSource(nameof(WrongItemsWithCode))] string finding) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrect_documentation_on_method_returnValue_([ValueSource(nameof(WrongItemsWithCode))] string term) => An_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
     /// Does something.
     /// </summary>
     /// <returns>
-    /// A " + finding + @" .
+    /// A " + term + @" .
     /// </returns>
     public int Malform() => 42;
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrect_documentation_on_property_([ValueSource(nameof(WrongItemsWithCode))] string finding) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrect_documentation_on_property_([ValueSource(nameof(WrongItemsWithCode))] string term) => An_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
-    /// Does something. " + finding + @"
+    /// Does something. " + term + @"
     /// </summary>
     public int Malform { get; set; }
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrect_documentation_on_property_value_([ValueSource(nameof(WrongItemsWithCode))] string finding) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrect_documentation_on_property_value_([ValueSource(nameof(WrongItemsWithCode))] string term) => An_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
     /// Does something.
     /// </summary>
     /// <value>
-    /// A " + finding + @" .
+    /// A " + term + @" .
     /// </value>
     public int Malform { get; set; }
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrect_documentation_on_event_([ValueSource(nameof(WrongItemsWithCode))] string finding) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrect_documentation_on_event_([ValueSource(nameof(WrongItemsWithCode))] string term) => An_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
-    /// Does something. " + finding + @"
+    /// Does something. " + term + @"
     /// </summary>
     public event EventHandler Malform;
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrect_documentation_on_field_([ValueSource(nameof(WrongItemsWithCode))] string finding) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrect_documentation_on_field_([ValueSource(nameof(WrongItemsWithCode))] string term) => An_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
-    /// Does something. " + finding + @"
+    /// Does something. " + term + @"
     /// </summary>
     private string Malform;
 }
@@ -202,51 +260,13 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Wrong_example_for_documentation_is_reported_on_class_([ValueSource(nameof(WrongItemsWithoutCode))] string finding) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_wrong_example_on_class_([ValueSource(nameof(WrongItemsWithoutCode))] string term) => An_issue_is_reported_for(@"
 /// <summary>
 /// Does something.
 /// </summary>
 /// <example>
-/// " + finding + @"
+/// " + term + @"
 /// </example>
-public sealed class TestMe
-{
-}
-");
-
-        [Test]
-        public void Valid_example_for_documentation_is_not_reported_on_class_([ValueSource(nameof(Terms))] string finding) => No_issue_is_reported_for(@"
-/// <summary>
-/// Does something.
-/// </summary>
-/// <example>
-/// <code>
-///     if (xyz is " + finding + @")
-///     {
-///         return " + finding + @";
-///     }
-/// </code>
-/// </example>
-public sealed class TestMe
-{
-}
-");
-
-        [Test]
-        public void Valid_code_inside_remarks_section_for_documentation_is_not_reported_on_class_([ValueSource(nameof(Terms))] string finding) => No_issue_is_reported_for(@"
-/// <summary>
-/// Does something.
-/// </summary>
-/// <remarks>
-/// <para>
-/// <code>
-///     if (xyz is " + finding + @")
-///     {
-///         return " + finding + @";
-///     }
-/// <code>
-/// </para>
-/// </remarks>
 public sealed class TestMe
 {
 }
@@ -289,6 +309,34 @@ public class TestMe
 ";
 
             VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_wrong_documentation_on_parameter_([Values(":", ",", "")] string delimiter)
+        {
+            var originalCode = @"
+public sealed class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <param name=""flag"">True" + delimiter + @" if something. Otherwise False</param>
+    private void Malform(bool flag) { }
+}
+";
+
+            var fixedCode = @"
+public sealed class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <param name=""flag""><see langword=""true""/>" + delimiter + @" if something. Otherwise <see langword=""false""/></param>
+    private void Malform(bool flag) { }
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
         }
 
         [Test]
@@ -346,15 +394,14 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_wrong_documentation_on_parameter_([Values(":", ",", "")] string delimiter)
+        public void CodeFix_keeps_other_text_inside_c_([ValueSource(nameof(Terms))] string term)
         {
             var originalCode = @"
 public sealed class TestMe
 {
     /// <summary>
-    /// Does something.
+    /// Does something with " + term + @" but keeps <c>some special text with " + term + @" here</c>.
     /// </summary>
-    /// <param name=""flag"">True" + delimiter + @" if something. Otherwise False</param>
     private void Malform(bool flag) { }
 }
 ";
@@ -363,9 +410,8 @@ public sealed class TestMe
 public sealed class TestMe
 {
     /// <summary>
-    /// Does something.
+    /// Does something with <see langword=""" + term + @"""/> but keeps <c>some special text with " + term + @" here</c>.
     /// </summary>
-    /// <param name=""flag""><see langword=""true""/>" + delimiter + @" if something. Otherwise <see langword=""false""/></param>
     private void Malform(bool flag) { }
 }
 ";

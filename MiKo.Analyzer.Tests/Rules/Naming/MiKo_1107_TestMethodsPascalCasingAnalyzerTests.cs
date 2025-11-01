@@ -122,6 +122,11 @@ public class TestMe
         [TestCase("DoSomething_ThrowException_DoesNotKeepSomething", "Do_something_throws_exception_does_not_keep_something")]
         [TestCase("DoSomething_ThrowException_WillKeepSomething", "Do_something_throws_exception_keeps_something")]
         [TestCase("DoSomething_ThrowException_ToKeepSomething", "Do_something_throws_exception_to_keep_something")]
+        [TestCase("ClientThrow_ActiveMQException", "Client_throws_ActiveMQ_exception")]
+        [TestCase("Client_SendsHTTPRequest_WithData", "Client_sends_HTTP_request_with_data")]
+        [TestCase("Client_ReceivesHTTPRequest_WithData", "Client_receives_HTTP_request_with_data")]
+        [TestCase("HTTPClient_SendsHTTPRequest_WithData", "HTTP_client_sends_HTTP_request_with_data")]
+        [TestCase("HTTPClient_ReceivesHTTPRequest_WithData", "HTTP_client_receives_HTTP_request_with_data")]
         public void Code_gets_fixed_for_test_method_(string original, string fix)
         {
             const string Template = @"

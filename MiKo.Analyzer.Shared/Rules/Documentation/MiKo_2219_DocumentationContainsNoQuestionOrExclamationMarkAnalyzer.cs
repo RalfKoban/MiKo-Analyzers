@@ -18,6 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly HashSet<string> AllowedTags = new HashSet<string>
                                                                   {
+                                                                      Constants.XmlTag.C,
                                                                       Constants.XmlTag.Code,
                                                                       Constants.XmlTag.Note,
                                                                   };

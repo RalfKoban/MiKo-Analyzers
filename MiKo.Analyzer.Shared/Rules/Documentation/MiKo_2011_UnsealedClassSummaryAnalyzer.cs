@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   Lazy<string> commentXml,
                                                                   Lazy<string[]> summaries)
         {
-            if (symbol.IsSealed is false && summaries.Value.Any(_ => _.Contains(Constants.Comments.SealedClassPhrase)))
+            if (symbol.IsSealed is false && summaryXmls.Any(_ => _.GetTextTrimmed().Contains(Constants.Comments.SealedClassPhrase)))
             {
                 return new[] { Issue(symbol.Name, summaryXmls[0].EndTag, Constants.Comments.SealedClassPhrase) };
             }

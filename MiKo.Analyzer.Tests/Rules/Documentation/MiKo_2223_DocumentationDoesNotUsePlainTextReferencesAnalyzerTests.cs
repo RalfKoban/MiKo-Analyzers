@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -30,6 +32,32 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                               "Microsoft",
                                                               "Outlook",
                                                           ];
+
+        private static readonly string[] NonCompoundWords =
+                                                            [
+                                                                 "bool",
+                                                                 "byte",
+                                                                 "char",
+                                                                 "float",
+                                                                 "int",
+                                                                 "string",
+                                                                 "uint",
+                                                                 "ushort",
+                                                                 "ulong",
+                                                                 nameof(String),
+                                                                 nameof(Int16),
+                                                                 nameof(Int32),
+                                                                 nameof(Int64),
+                                                                 nameof(UInt16),
+                                                                 nameof(UInt32),
+                                                                 nameof(UInt64),
+                                                                 nameof(Single),
+                                                                 nameof(Double),
+                                                                 nameof(Boolean),
+                                                                 nameof(Byte),
+                                                                 nameof(Char),
+                                                                 nameof(Type),
+                                                            ];
 
         [Test]
         public void No_issue_is_reported_for_undocumented_method() => No_issue_is_reported_for(@"
@@ -388,6 +416,10 @@ public class TestMe
         [TestCase("i.e.")]
         [TestCase("I.e.")]
         [TestCase("I.E.")]
+        [TestCase("etc.")]
+        [TestCase("( such as nothing etc.)")]
+        [TestCase("(such as anything, nothing, etc.)")]
+        [TestCase("(such as anything, nothing, etc.). So")]
         public void No_issue_is_reported_for_correctly_documented_method_with_(string example) => No_issue_is_reported_for(@"
 using System;
 
@@ -696,6 +728,22 @@ public class TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_method_with_([ValueSource(nameof(NonCompoundWords))] string type) => An_issue_is_reported_for(@"
+using System;
+using System.IO;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something with " + type + @" to see.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_incorrectly_documented_method_with_(
                                                                              [Values("string", "String", "Sring", "sring", "Sting", "sting")] string type,
                                                                              [Values("Empty", "empty", "Empy", "empy", "Emtpy", "emtpy")] string property)
@@ -713,6 +761,29 @@ public class TestMe
     }
 }
 ");
+
+        [Test]
+        public void Code_gets_fixed_for_incorrectly_documented_method_with_([ValueSource(nameof(NonCompoundWords))] string type)
+        {
+            const string Template = """
+
+                                    using System;
+                                    using System.IO;
+
+                                    public class TestMe
+                                    {
+                                        /// <summary>
+                                        /// Does something with ### to see.
+                                        /// </summary>
+                                        public void DoSomething()
+                                        {
+                                        }
+                                    }
+
+                                    """;
+
+            VerifyCSharpFix(Template.Replace("###", type), Template.Replace("###", "<see cref=\"" + type + "\"/>"));
+        }
 
         [Test]
         public void Code_gets_fixed_for_incorrectly_documented_method_with_(
@@ -740,6 +811,29 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_incorrectly_documented_method_ending_with_([ValueSource(nameof(NonCompoundWords))] string type)
+        {
+            const string Template = """
+
+                                    using System;
+                                    using System.IO;
+
+                                    public class TestMe
+                                    {
+                                        /// <summary>
+                                        /// Does something with ###
+                                        /// </summary>
+                                        public void DoSomething()
+                                        {
+                                        }
+                                    }
+
+                                    """;
+
+            VerifyCSharpFix(Template.Replace("###", type), Template.Replace("###", "<see cref=\"" + type + "\"/>"));
+        }
+
+        [Test]
         public void Code_gets_fixed_for_incorrectly_documented_method_ending_with_(
                                                                                [Values("string", "String", "Sring", "sring", "Sting", "sting")] string type,
                                                                                [Values("Empty", "empty", "Empy", "empy", "Emtpy", "emtpy")] string property)
@@ -762,6 +856,29 @@ public class TestMe
                                     """;
 
             VerifyCSharpFix(Template.Replace("###", type + "." + property), Template.Replace("###", """<see cref="String.Empty"/>"""));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_incorrectly_documented_method_ending_with_dot_on_method_with_([ValueSource(nameof(NonCompoundWords))] string type)
+        {
+            const string Template = """
+
+                                    using System;
+                                    using System.IO;
+
+                                    public class TestMe
+                                    {
+                                        /// <summary>
+                                        /// Does something with ###.
+                                        /// </summary>
+                                        public void DoSomething()
+                                        {
+                                        }
+                                    }
+
+                                    """;
+
+            VerifyCSharpFix(Template.Replace("###", type), Template.Replace("###", "<see cref=\"" + type + "\"/>"));
         }
 
         [Test]
@@ -829,6 +946,32 @@ public class TestMe
                                     """;
 
             VerifyCSharpFix(Template.Replace("###", originalName), Template.Replace("###", "<see cref=\"" + fixedName + "\"/>"));
+        }
+
+        [TestCase("Does something with charts but not with a char or any other character.", """Does something with charts but not with a <see cref="char"/> or any other character.""")]
+        [TestCase("Does something with charts but not with a char", """Does something with charts but not with a <see cref="char"/>""")]
+        [TestCase("Does something with hints but not with an int or anything else.", """Does something with hints but not with an <see cref="int"/> or anything else.""")]
+        [TestCase("Does something with hints but not with an int", """Does something with hints but not with an <see cref="int"/>""")]
+        [TestCase("Does something with substrings but not with a string or any other substring.", """Does something with substrings but not with a <see cref="string"/> or any other substring.""")]
+        [TestCase("Does something with substrings but not with a string", """Does something with substrings but not with a <see cref="string"/>""")]
+        public void Code_gets_fixed_but_does_not_adjust_parts_in_words_(string originalText, string fixedText)
+        {
+            const string Template = """
+
+                                     using System;
+                                     using System.IO;
+
+                                     public class TestMe
+                                     {
+                                         /// <summary>###</summary>
+                                         public void DoSomething()
+                                         {
+                                         }
+                                     }
+
+                                     """;
+
+            VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
         }
 
         protected override string GetDiagnosticId() => MiKo_2223_DocumentationDoesNotUsePlainTextReferencesAnalyzer.Id;

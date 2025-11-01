@@ -16,6 +16,7 @@ namespace MiKoSolutions.Analyzers
     internal ref struct WordsReadOnlySpanEnumerator // Must be a ref struct as it contains a ReadOnlySpan<char>
     {
         private readonly ReadOnlySpan<char> m_text;
+        private readonly WordBoundary m_boundary;
         private readonly int[] m_wordStartingPositions;
         private int m_currentIndex;
 
@@ -25,20 +26,29 @@ namespace MiKoSolutions.Analyzers
         /// <param name="text">
         /// The text to split into words based on uppercase characters.
         /// </param>
+        /// <param name="boundary">
+        /// One of the enumeration members that specifies the word boundary.
+        /// </param>
         /// <remarks>
         /// Words are identified by uppercase characters within the text.
         /// </remarks>
-        public WordsReadOnlySpanEnumerator(in ReadOnlySpan<char> text)
+        public WordsReadOnlySpanEnumerator(in ReadOnlySpan<char> text, in WordBoundary boundary)
         {
             m_text = text;
+            m_boundary = boundary;
 
-            var textLength = text.Length;
+            if (boundary is WordBoundary.WhiteSpaces)
+            {
+                m_text = m_text.Trim(Constants.TrailingSentenceMarkers);
+            }
+
+            var textLength = m_text.Length;
             var words = 1;
 
             // start at index 1 to skip first upper case character (and avoid return of empty word)
             for (var index = 1; index < textLength; index++)
             {
-                if (text[index].IsUpperCase())
+                if (IsBoundary(m_text[index], boundary))
                 {
                     words++;
                 }
@@ -50,7 +60,7 @@ namespace MiKoSolutions.Analyzers
             // start at index 1 to skip first upper case character (and avoid return of empty word)
             for (int index = 1, i = 1; index < textLength; index++)
             {
-                if (text[index].IsUpperCase())
+                if (IsBoundary(m_text[index], boundary))
                 {
                     m_wordStartingPositions[i++] = index;
                 }
@@ -78,7 +88,7 @@ namespace MiKoSolutions.Analyzers
         public int Count() => m_wordStartingPositions.Length - 1; // first entry is zero and needs to be removed
 
         /// <summary>
-        /// Projects each element of the collection into a string by applying a specified transformation.
+        /// Projects each element of the collection into a <see cref="string"/> by applying a specified transformation.
         /// </summary>
         /// <param name="callback">
         /// A transformation to apply to each element in the collection.
@@ -123,10 +133,10 @@ namespace MiKoSolutions.Analyzers
 
             if (m_wordStartingPositions.Length > 1)
             {
-                return new ReadOnlySpanEnumeratorEntry(m_text.Slice(m_wordStartingPositions[0], m_wordStartingPositions[1]));
+                return CreateEntry(m_text.Slice(m_wordStartingPositions[0], m_wordStartingPositions[1]));
             }
 
-            return new ReadOnlySpanEnumeratorEntry(m_text.Slice(m_wordStartingPositions[0]));
+            return CreateEntry(m_text.Slice(m_wordStartingPositions[0]));
         }
 
         /// <summary>
@@ -145,7 +155,7 @@ namespace MiKoSolutions.Analyzers
                 throw new InvalidOperationException("No item available");
             }
 
-            return new ReadOnlySpanEnumeratorEntry(m_text.Slice(m_wordStartingPositions.Length - 1));
+            return CreateEntry(m_text.Slice(m_wordStartingPositions.Length - 1));
         }
 
         /// <summary>
@@ -186,16 +196,37 @@ namespace MiKoSolutions.Analyzers
             {
                 var nextIndex = m_wordStartingPositions[m_currentIndex + 1];
 
-                Current = new ReadOnlySpanEnumeratorEntry(m_text.Slice(index, nextIndex - index));
+                Current = CreateEntry(m_text.Slice(index, nextIndex - index));
             }
             else
             {
-                Current = new ReadOnlySpanEnumeratorEntry(m_text.Slice(index));
+                Current = CreateEntry(m_text.Slice(index));
             }
 
             m_currentIndex++;
 
             return true;
+        }
+
+        private static bool IsBoundary(in char c, in WordBoundary boundary)
+        {
+            switch (boundary)
+            {
+                case WordBoundary.UpperCaseCharacters: return c.IsUpperCase();
+                case WordBoundary.WhiteSpaces: return c.IsWhiteSpace();
+                default:
+                    return false;
+            }
+        }
+
+        private ReadOnlySpanEnumeratorEntry CreateEntry(in ReadOnlySpan<char> text)
+        {
+            if (m_boundary is WordBoundary.WhiteSpaces)
+            {
+                return new ReadOnlySpanEnumeratorEntry(text.Trim(Constants.TrailingSentenceMarkers));
+            }
+
+            return new ReadOnlySpanEnumeratorEntry(text);
         }
     }
 }
