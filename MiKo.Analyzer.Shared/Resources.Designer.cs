@@ -2746,7 +2746,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Formulate question as statement.
+        ///   Looks up a localized string similar to Formulate question &apos;{0}&apos; as statement.
         /// </summary>
         internal static string MiKo_1071_MessageFormat {
             get {
@@ -2781,7 +2781,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Formulate question as statement.
+        ///   Looks up a localized string similar to Formulate question &apos;{0}&apos; as statement.
         /// </summary>
         internal static string MiKo_1072_MessageFormat {
             get {
@@ -2816,7 +2816,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Formulate question as statement.
+        ///   Looks up a localized string similar to Formulate question &apos;{0}&apos; as statement.
         /// </summary>
         internal static string MiKo_1073_MessageFormat {
             get {
