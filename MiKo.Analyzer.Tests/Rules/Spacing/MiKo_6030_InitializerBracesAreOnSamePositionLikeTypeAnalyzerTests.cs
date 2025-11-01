@@ -1401,7 +1401,7 @@ public class TestMe
                              Headers = new Dictionary(string, string[])
                                            {
                                                {
-                                                   ""key"", [""value""]
+                                                 ""key"", [""value""]
                                                },
                                            },
                          };
@@ -1639,6 +1639,57 @@ public class TestMe
                                      { ""some"", ""value"" },
                                      { ""another"", ""item"" },
                                      { ""third"", ""entry"" }
+                                 }
+                         };
+    }
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_list_of_dictionary_with_explicit_dictionary_creation_and_element_expressions_are_on_separate_lines()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var result = new List<Dictionary<string, object>>
+        {
+            new Dictionary<string, object>() {
+                {
+                    ""some"", ""value"" },
+                {
+                    ""another"", ""item"" },
+                {
+                    ""third"", ""entry"" }
+            }
+        };
+    }
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var result = new List<Dictionary<string, object>>
+                         {
+                             new Dictionary<string, object>()
+                                 {
+                                     {
+                                       ""some"", ""value"" },
+                                     {
+                                       ""another"", ""item"" },
+                                     {
+                                       ""third"", ""entry"" }
                                  }
                          };
     }
