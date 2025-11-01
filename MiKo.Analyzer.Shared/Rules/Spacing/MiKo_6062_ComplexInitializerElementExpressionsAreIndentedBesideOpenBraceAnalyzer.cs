@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 var expressionPosition = expression.GetStartPosition();
                 var openBracePosition = initializer.OpenBraceToken.GetStartPosition();
 
-                var expectedPosition = openBracePosition.Character + 2;
+                var expectedPosition = openBracePosition.Character + Constants.IndentationForComplexElementInitializerExpression;
 
                 if (expressionPosition.Line > openBracePosition.Line && expressionPosition.Character != expectedPosition)
                 {
