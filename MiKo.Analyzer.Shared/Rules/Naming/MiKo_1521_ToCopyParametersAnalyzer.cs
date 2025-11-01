@@ -34,9 +34,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static string FindBetterName(string name)
         {
             var builder = name.AsCachedBuilder()
-                                              .Insert(0, "original")
-                                              .Without("toCopy")
-                                              .Without("ToCopy");
+                              .Insert(0, "original")
+                              .Without("toCopy")
+                              .Without("ToCopy");
 
             if (builder.Length > 8)
             {

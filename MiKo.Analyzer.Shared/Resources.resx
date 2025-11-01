@@ -2067,7 +2067,7 @@ This improves code clarity, avoids ambiguity, and helps developers immediately u
     <value>Document routed events as done by the .NET Framework</value>
   </data>
   <data name="MiKo_2010_CodeFixTitle" xml:space="preserve">
-    <value>Append sealed text to comment</value>
+    <value>Append sealed text to documention</value>
   </data>
   <data name="MiKo_2010_Description" xml:space="preserve">
     <value>To simplify their use in inheritance scenarios, sealed classes should clearly document that they are sealed. This helps developers understand their constraints and usage better.</value>
@@ -2079,7 +2079,7 @@ This improves code clarity, avoids ambiguity, and helps developers immediately u
     <value>Document sealed classes as being sealed</value>
   </data>
   <data name="MiKo_2011_CodeFixTitle" xml:space="preserve">
-    <value>Remove sealed text to comment</value>
+    <value>Remove sealed text from documentation</value>
   </data>
   <data name="MiKo_2011_Description" xml:space="preserve">
     <value>Unsealed classes should not mention being sealed since they are not. This keeps things clear and straightforward for developers.</value>
@@ -2831,6 +2831,18 @@ This ensures the documentation is precise and informative, helping developers un
   <data name="MiKo_2082_Title" xml:space="preserve">
     <value>Use distinct phrases for Enum member &lt;summary&gt; documentation</value>
   </data>
+  <data name="MiKo_2083_CodeFixTitle" xml:space="preserve">
+    <value>Remove read-only text from documentation</value>
+  </data>
+  <data name="MiKo_2083_Description" xml:space="preserve">
+    <value>Writable fields should not mention being read-only since they are not. This keeps things clear and straightforward for developers.</value>
+  </data>
+  <data name="MiKo_2083_MessageFormat" xml:space="preserve">
+    <value>&lt;summary&gt; should not contain: '{1}'</value>
+  </data>
+  <data name="MiKo_2083_Title" xml:space="preserve">
+    <value>Do not falsely document writable fields as read-only</value>
+  </data>
   <data name="MiKo_2090_CodeFixTitle" xml:space="preserve">
     <value>Apply standard comment</value>
   </data>
@@ -3393,6 +3405,18 @@ Such documentation also undermines tool integration and usability, as IDEs rely 
   <data name="MiKo_2240_Title" xml:space="preserve">
     <value>Do not start &lt;response&gt; documentation with 'Returns'</value>
   </data>
+  <data name="MiKo_2241_CodeFixTitle" xml:space="preserve">
+    <value>Replace 'empty string' with '&lt;see cref="string.Empty"/&gt; string ("")'</value>
+  </data>
+  <data name="MiKo_2241_Description" xml:space="preserve">
+    <value>XML documentation shall not use the phrase 'empty string'. Instead, use the phrase '&lt;see cref="string.Empty"/&gt; string ("")' to clearly express the concept and provide hyperlink support. This improves readability and developer understanding.</value>
+  </data>
+  <data name="MiKo_2241_MessageFormat" xml:space="preserve">
+    <value>Replace phrase 'empty string' with '&lt;see cref="string.Empty"/&gt; string ("")'</value>
+  </data>
+  <data name="MiKo_2241_Title" xml:space="preserve">
+    <value>Do not use 'empty string' in documentation</value>
+  </data>
   <data name="MiKo_2244_CodeFixTitle" xml:space="preserve">
     <value>Use &lt;list&gt; to list items</value>
   </data>
@@ -3408,6 +3432,18 @@ Using &lt;list&gt; allows IntelliSense to format content as tables, numbered lis
   </data>
   <data name="MiKo_2244_Title" xml:space="preserve">
     <value>Use &lt;list&gt; instead of &lt;ul&gt; or &lt;ol&gt; in documentation</value>
+  </data>
+  <data name="MiKo_2245_CodeFixTitle" xml:space="preserve">
+    <value>Wrap number with &lt;c&gt;</value>
+  </data>
+  <data name="MiKo_2245_Description" xml:space="preserve">
+    <value>Wrap numeric literals in &lt;c&gt; tags in XML documentation to clearly indicate code values. This improves readability, ensures consistent formatting in IntelliSense and documentation tools, and avoids ambiguity between prose and code.</value>
+  </data>
+  <data name="MiKo_2245_MessageFormat" xml:space="preserve">
+    <value>Change '{1}' to '&lt;c&gt;{1}&lt;/c&gt;'</value>
+  </data>
+  <data name="MiKo_2245_Title" xml:space="preserve">
+    <value>Wrap numbers with &lt;c&gt; in documentation</value>
   </data>
   <data name="MiKo_2300_Description" xml:space="preserve">
     <value>Comments should provide the deeper reasons behind the code, explaining why it is written that way. Avoid detailing how the code works—let the code itself do that.

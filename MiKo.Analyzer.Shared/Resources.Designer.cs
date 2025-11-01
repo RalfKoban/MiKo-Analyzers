@@ -5742,7 +5742,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Append sealed text to comment.
+        ///   Looks up a localized string similar to Append sealed text to documention.
         /// </summary>
         internal static string MiKo_2010_CodeFixTitle {
             get {
@@ -5778,7 +5778,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove sealed text to comment.
+        ///   Looks up a localized string similar to Remove sealed text from documentation.
         /// </summary>
         internal static string MiKo_2011_CodeFixTitle {
             get {
@@ -8001,6 +8001,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove read-only text from documentation.
+        /// </summary>
+        internal static string MiKo_2083_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2083_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Writable fields should not mention being read-only since they are not. This keeps things clear and straightforward for developers..
+        /// </summary>
+        internal static string MiKo_2083_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2083_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; should not contain: &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_2083_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2083_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not falsely document writable fields as read-only.
+        /// </summary>
+        internal static string MiKo_2083_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2083_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Apply standard comment.
         /// </summary>
         internal static string MiKo_2090_CodeFixTitle {
@@ -9627,6 +9663,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Replace &apos;empty string&apos; with &apos;&lt;see cref=&quot;string.Empty&quot;/&gt; string (&quot;&quot;)&apos;.
+        /// </summary>
+        internal static string MiKo_2241_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2241_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML documentation shall not use the phrase &apos;empty string&apos;. Instead, use the phrase &apos;&lt;see cref=&quot;string.Empty&quot;/&gt; string (&quot;&quot;)&apos; to clearly express the concept and provide hyperlink support. This improves readability and developer understanding..
+        /// </summary>
+        internal static string MiKo_2241_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2241_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace phrase &apos;empty string&apos; with &apos;&lt;see cref=&quot;string.Empty&quot;/&gt; string (&quot;&quot;)&apos;.
+        /// </summary>
+        internal static string MiKo_2241_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2241_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use &apos;empty string&apos; in documentation.
+        /// </summary>
+        internal static string MiKo_2241_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2241_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use &lt;list&gt; to list items.
         /// </summary>
         internal static string MiKo_2244_CodeFixTitle {
@@ -9669,6 +9741,42 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_2244_Title {
             get {
                 return ResourceManager.GetString("MiKo_2244_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wrap number with &lt;c&gt;.
+        /// </summary>
+        internal static string MiKo_2245_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2245_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wrap numeric literals in &lt;c&gt; tags in XML documentation to clearly indicate code values. This improves readability, ensures consistent formatting in IntelliSense and documentation tools, and avoids ambiguity between prose and code..
+        /// </summary>
+        internal static string MiKo_2245_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2245_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change &apos;{1}&apos; to &apos;&lt;c&gt;{1}&lt;/c&gt;&apos;.
+        /// </summary>
+        internal static string MiKo_2245_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2245_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wrap numbers with &lt;c&gt; in documentation.
+        /// </summary>
+        internal static string MiKo_2245_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2245_Title", resourceCulture);
             }
         }
         

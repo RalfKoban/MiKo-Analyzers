@@ -1,4 +1,5 @@
-﻿using System.Composition;
+﻿using System;
+using System.Composition;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -9,7 +10,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2203_CodeFixProvider)), Shared]
     public sealed class MiKo_2203_CodeFixProvider : XmlTextDocumentationCodeFixProvider
     {
-        private const string ReplacementTerm = "unique identifier";
+        private const string SingleReplacementTerm = "unique identifier";
+        private const string PluralReplacementTerm = "unique identifiers";
 
 //// ncrunch: rdi off
 
@@ -21,7 +23,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override XmlTextSyntax GetUpdatedSyntax(Document document, XmlTextSyntax syntax, Diagnostic issue)
         {
-            return GetUpdatedSyntax(syntax, issue, ReplacementMap, Constants.Comments.Guids[0], ReplacementTerm);
+            var endingTerm = Constants.Comments.Guids[0];
+            var endingReplacement = SingleReplacementTerm;
+
+            var text = issue.Location.GetText();
+
+            if (text.EndsWith("S", StringComparison.OrdinalIgnoreCase))
+            {
+                endingTerm = Constants.Comments.Guids[0] + "s";
+                endingReplacement = PluralReplacementTerm;
+            }
+
+            return GetUpdatedSyntax(syntax, issue, ReplacementMap, endingTerm, endingReplacement);
         }
 
 //// ncrunch: rdi off
@@ -36,7 +49,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var termWithA = "A " + term.TrimStart();
 
-                var replacement = term.ToUpperInvariant().Replace("GUID", ReplacementTerm);
+                var upperTerm = term.ToUpperInvariant();
+
+                var replacement = upperTerm.Contains("S", StringComparison.OrdinalIgnoreCase)
+                                  ? upperTerm.Replace("GUIDS", PluralReplacementTerm)
+                                  : upperTerm.Replace("GUID", SingleReplacementTerm);
+
                 var replacementWithA = "An " + replacement.TrimStart();
 
                 result[resultIndex++] = new Pair(termWithA, replacementWithA);

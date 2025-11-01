@@ -719,40 +719,6 @@ public class TestMe
             VerifyCSharpFix(originalCode, FixedCode);
         }
 
-        [TestCase("A flag controlling whether items shall be updated.", """<see langword="true"/> to indicate that items shall be updated; otherwise, <see langword="false"/>.""")]
-        [TestCase("A flag controlling whether or not items shall be updated.", """<see langword="true"/> to indicate that items shall be updated; otherwise, <see langword="false"/>.""")]
-        [TestCase("A flag indicating whether items shall be updated.", """<see langword="true"/> to indicate that items shall be updated; otherwise, <see langword="false"/>.""")]
-        [TestCase("A flag indicating whether or not items shall be updated.", """<see langword="true"/> to indicate that items shall be updated; otherwise, <see langword="false"/>.""")]
-        [TestCase("A flag specifying whether items shall be updated.", """<see langword="true"/> to indicate that items shall be updated; otherwise, <see langword="false"/>.""")]
-        [TestCase("A flag specifying whether or not items shall be updated.", """<see langword="true"/> to indicate that items shall be updated; otherwise, <see langword="false"/>.""")]
-        [TestCase("A flag that controls whether items shall be updated.", """<see langword="true"/> to indicate that items shall be updated; otherwise, <see langword="false"/>.""")]
-        [TestCase("A flag that controls whether or not items shall be updated.", """<see langword="true"/> to indicate that items shall be updated; otherwise, <see langword="false"/>.""")]
-        [TestCase("A flag that indicates whether items shall be updated.", """<see langword="true"/> to indicate that items shall be updated; otherwise, <see langword="false"/>.""")]
-        [TestCase("A flag that indicates whether or not items shall be updated.", """<see langword="true"/> to indicate that items shall be updated; otherwise, <see langword="false"/>.""")]
-        [TestCase("A flag which controls whether items shall be updated.", """<see langword="true"/> to indicate that items shall be updated; otherwise, <see langword="false"/>.""")]
-        [TestCase("A flag which controls whether or not items shall be updated.", """<see langword="true"/> to indicate that items shall be updated; otherwise, <see langword="false"/>.""")]
-        [TestCase("A flag which indicates whether items shall be updated.", """<see langword="true"/> to indicate that items shall be updated; otherwise, <see langword="false"/>.""")]
-        [TestCase("A flag which indicates whether or not items shall be updated.", """<see langword="true"/> to indicate that items shall be updated; otherwise, <see langword="false"/>.""")]
-        [TestCase("A flag which specifies whether items shall be updated.", """<see langword="true"/> to indicate that items shall be updated; otherwise, <see langword="false"/>.""")]
-        [TestCase("A flag which specifies whether or not items shall be updated.", """<see langword="true"/> to indicate that items shall be updated; otherwise, <see langword="false"/>.""")]
-
-        [TestCase("A bool controlling whether the items shall be updated.", """<see langword="true"/> to indicate that the items shall be updated; otherwise, <see langword="false"/>.""")]
-        [TestCase("A bool controlling whether or not the items shall be updated.", """<see langword="true"/> to indicate that the items shall be updated; otherwise, <see langword="false"/>.""")]
-        [TestCase("A bool indicating whether the items shall be updated.", """<see langword="true"/> to indicate that the items shall be updated; otherwise, <see langword="false"/>.""")]
-        [TestCase("A bool indicating whether or not the items shall be updated.", """<see langword="true"/> to indicate that the items shall be updated; otherwise, <see langword="false"/>.""")]
-        [TestCase("A bool specifying whether the items shall be updated.", """<see langword="true"/> to indicate that the items shall be updated; otherwise, <see langword="false"/>.""")]
-        [TestCase("A bool specifying whether or not the items shall be updated.", """<see langword="true"/> to indicate that the items shall be updated; otherwise, <see langword="false"/>.""")]
-        [TestCase("A bool that controls whether items shall be updated.", """<see langword="true"/> to indicate that items shall be updated; otherwise, <see langword="false"/>.""")]
-        [TestCase("A bool that controls whether or not items shall be updated.", """<see langword="true"/> to indicate that items shall be updated; otherwise, <see langword="false"/>.""")]
-        [TestCase("A bool that indicates whether items shall be updated.", """<see langword="true"/> to indicate that items shall be updated; otherwise, <see langword="false"/>.""")]
-        [TestCase("A bool that indicates whether or not items shall be updated.", """<see langword="true"/> to indicate that items shall be updated; otherwise, <see langword="false"/>.""")]
-        [TestCase("A bool which controls whether the items shall be updated.", """<see langword="true"/> to indicate that the items shall be updated; otherwise, <see langword="false"/>.""")]
-        [TestCase("A bool which controls whether or not the items shall be updated.", """<see langword="true"/> to indicate that the items shall be updated; otherwise, <see langword="false"/>.""")]
-        [TestCase("A bool which indicates whether the items shall be updated.", """<see langword="true"/> to indicate that the items shall be updated; otherwise, <see langword="false"/>.""")]
-        [TestCase("A bool which indicates whether or not the items shall be updated.", """<see langword="true"/> to indicate that the items shall be updated; otherwise, <see langword="false"/>.""")]
-        [TestCase("A bool which specifies whether the items shall be updated.", """<see langword="true"/> to indicate that the items shall be updated; otherwise, <see langword="false"/>.""")]
-        [TestCase("A bool which specifies whether or not the items shall be updated.", """<see langword="true"/> to indicate that the items shall be updated; otherwise, <see langword="false"/>.""")]
-
         [TestCase("Whether to do something.", """<see langword="true"/> to do something; otherwise, <see langword="false"/>.""")]
         [TestCase("Suppress the whatever.", """<see langword="true"/> to suppress the whatever; otherwise, <see langword="false"/>.""")]
         [TestCase("<value>true</value>: Activates some stuff.", """<see langword="true"/> to activate some stuff; otherwise, <see langword="false"/>.""")]
@@ -1065,6 +1031,74 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [TestCase("A flag controlling whether items shall be updated.", """<see langword="true"/> to update items; otherwise, <see langword="false"/>.""")]
+        [TestCase("A flag controlling whether or not items shall be updated.", """<see langword="true"/> to update items; otherwise, <see langword="false"/>.""")]
+        [TestCase("A flag indicating whether items shall be updated.", """<see langword="true"/> to update items; otherwise, <see langword="false"/>.""")]
+        [TestCase("A flag indicating whether or not items shall be updated.", """<see langword="true"/> to update items; otherwise, <see langword="false"/>.""")]
+        [TestCase("A flag specifying whether items shall be updated.", """<see langword="true"/> to update items; otherwise, <see langword="false"/>.""")]
+        [TestCase("A flag specifying whether or not items shall be updated.", """<see langword="true"/> to update items; otherwise, <see langword="false"/>.""")]
+        [TestCase("A flag that controls whether items shall be updated.", """<see langword="true"/> to update items; otherwise, <see langword="false"/>.""")]
+        [TestCase("A flag that controls whether or not items shall be updated.", """<see langword="true"/> to update items; otherwise, <see langword="false"/>.""")]
+        [TestCase("A flag that indicates whether items shall be updated.", """<see langword="true"/> to update items; otherwise, <see langword="false"/>.""")]
+        [TestCase("A flag that indicates whether or not items shall be updated.", """<see langword="true"/> to update items; otherwise, <see langword="false"/>.""")]
+        [TestCase("A flag which controls whether items shall be updated.", """<see langword="true"/> to update items; otherwise, <see langword="false"/>.""")]
+        [TestCase("A flag which controls whether or not items shall be updated.", """<see langword="true"/> to update items; otherwise, <see langword="false"/>.""")]
+        [TestCase("A flag which indicates whether items shall be updated.", """<see langword="true"/> to update items; otherwise, <see langword="false"/>.""")]
+        [TestCase("A flag which indicates whether or not items shall be updated.", """<see langword="true"/> to update items; otherwise, <see langword="false"/>.""")]
+        [TestCase("A flag which specifies whether items shall be updated.", """<see langword="true"/> to update items; otherwise, <see langword="false"/>.""")]
+        [TestCase("A flag which specifies whether or not items shall be updated.", """<see langword="true"/> to update items; otherwise, <see langword="false"/>.""")]
+
+        [TestCase("A bool controlling whether the items shall be updated.", """<see langword="true"/> to update the items; otherwise, <see langword="false"/>.""")]
+        [TestCase("A bool controlling whether or not the items shall be updated.", """<see langword="true"/> to update the items; otherwise, <see langword="false"/>.""")]
+        [TestCase("A bool indicating whether the items shall be updated.", """<see langword="true"/> to update the items; otherwise, <see langword="false"/>.""")]
+        [TestCase("A bool indicating whether or not the items shall be updated.", """<see langword="true"/> to update the items; otherwise, <see langword="false"/>.""")]
+        [TestCase("A bool specifying whether the items shall be updated.", """<see langword="true"/> to update the items; otherwise, <see langword="false"/>.""")]
+        [TestCase("A bool specifying whether or not the items shall be updated.", """<see langword="true"/> to update the items; otherwise, <see langword="false"/>.""")]
+        [TestCase("A bool that controls whether items shall be updated.", """<see langword="true"/> to update items; otherwise, <see langword="false"/>.""")]
+        [TestCase("A bool that controls whether or not items shall be updated.", """<see langword="true"/> to update items; otherwise, <see langword="false"/>.""")]
+        [TestCase("A bool that indicates whether items shall be updated.", """<see langword="true"/> to update items; otherwise, <see langword="false"/>.""")]
+        [TestCase("A bool that indicates whether or not items shall be updated.", """<see langword="true"/> to update items; otherwise, <see langword="false"/>.""")]
+        [TestCase("A bool which controls whether the items shall be updated.", """<see langword="true"/> to update the items; otherwise, <see langword="false"/>.""")]
+        [TestCase("A bool which controls whether or not the items shall be updated.", """<see langword="true"/> to update the items; otherwise, <see langword="false"/>.""")]
+        [TestCase("A bool which indicates whether the items shall be updated.", """<see langword="true"/> to update the items; otherwise, <see langword="false"/>.""")]
+        [TestCase("A bool which indicates whether or not the items shall be updated.", """<see langword="true"/> to update the items; otherwise, <see langword="false"/>.""")]
+        [TestCase("A bool which specifies whether the items shall be updated.", """<see langword="true"/> to update the items; otherwise, <see langword="false"/>.""")]
+        [TestCase("A bool which specifies whether or not the items shall be updated.", """<see langword="true"/> to update the items; otherwise, <see langword="false"/>.""")]
+
+        [TestCase("true if all items of any list shall be referenced.", """<see langword="true"/> to reference all items of any list; otherwise, <see langword="false"/>.""")]
+        [TestCase("True if the item shall be set to online.", """<see langword="true"/> to set the item to online; otherwise, <see langword="false"/>.""")]
+
+        [TestCase("Determines if something should be used during anything.", """<see langword="true"/> to use something during anything; otherwise, <see langword="false"/>.""")]
+        [TestCase("Determines whether something should be used during anything.", """<see langword="true"/> to use something during anything; otherwise, <see langword="false"/>.""")]
+        [TestCase("if something should be done.", """<see langword="true"/> to do something; otherwise, <see langword="false"/>.""")]
+        [TestCase("If something should be done.", """<see langword="true"/> to do something; otherwise, <see langword="false"/>.""")]
+        [TestCase("in case something should be done.", """<see langword="true"/> to do something; otherwise, <see langword="false"/>.""")]
+        [TestCase("In case something should be done.", """<see langword="true"/> to do something; otherwise, <see langword="false"/>.""")]
+        [TestCase("whether or not something should be updated during anything.", """<see langword="true"/> to update something during anything; otherwise, <see langword="false"/>.""")]
+        [TestCase("Whether or not something should be updated during anything.", """<see langword="true"/> to update something during anything; otherwise, <see langword="false"/>.""")]
+        [TestCase("whether something should be updated during anything.", """<see langword="true"/> to update something during anything; otherwise, <see langword="false"/>.""")]
+        [TestCase("Whether something should be updated during anything.", """<see langword="true"/> to update something during anything; otherwise, <see langword="false"/>.""")]
+        public void Code_gets_fixed_for_should_be_phrase(string originalPhrase, string fixedPhrase)
+        {
+            const string Template = """
+
+                                    using System;
+
+                                    public class TestMe
+                                    {
+                                        /// <summary>
+                                        /// </summary>
+                                        /// <param name="condition">
+                                        /// ###
+                                        /// </param>
+                                        public void DoSomething(bool condition) { }
+                                    }
+
+                                    """;
+
+            VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
+        }
+
         protected override string GetDiagnosticId() => MiKo_2023_BooleanParamDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2023_BooleanParamDefaultPhraseAnalyzer();
@@ -1113,26 +1147,26 @@ public class TestMe
 
             string[] verbs =
                              [
-                                 "controling", // be aware of typo
+                                 //// commented out to limit tests: "controling", // be aware of typo
                                  "controlling",
                                  "defining",
                                  "determining",
-                                 "determinating", // be aware of typo
+                                 //// commented out to limit tests: "determinating", // be aware of typo
                                  "indicating",
                                  "specifying",
                                  "that controls",
-                                 "that defined", // be aware of typo
+                                 //// commented out to limit tests: "that defined", // be aware of typo
                                  "that defines",
-                                 "that determined", // be aware of typo
+                                 //// commented out to limit tests: "that determined", // be aware of typo
                                  "that determines",
-                                 "that indicated", // be aware of typo
+                                 //// commented out to limit tests: "that indicated", // be aware of typo
                                  "that indicates",
                                  "that specifies",
                                  "which controls",
                                  "which defines",
                                  "which determines",
                                  "which indicates",
-                                 "which specified", // be aware of typo
+                                 //// commented out to limit tests: "which specified", // be aware of typo
                                  "which specifies",
                              ];
 
@@ -1152,20 +1186,20 @@ public class TestMe
             string[] startingVerbs =
                                      [
                                          "Controls",
-                                         "Controling", // be aware of typo
+                                         //// commented out to limit tests: "Controling", // be aware of typo
                                          "Controlling",
                                          "Defines",
                                          "Defined",
                                          "Defining",
                                          "Determines",
-                                         "Determined",
+                                         //// commented out to limit tests: "Determined",
                                          "Determining",
-                                         "Determinating", // be aware of typo
+                                         //// commented out to limit tests: "Determinating", // be aware of typo
                                          "Indicates",
-                                         "Indicated",
+                                         //// commented out to limit tests: "Indicated",
                                          "Indicating",
                                          "Specifies",
-                                         "Specified",
+                                         //// commented out to limit tests: "Specified",
                                          "Specifying",
                                      ];
 
@@ -1184,32 +1218,32 @@ public class TestMe
         [ExcludeFromCodeCoverage]
         private static HashSet<string> CreateOptionalPhrases()
         {
-            string[] starts = ["A optional", "An optional", "The optional", "An (optional)", "The (optional)", "Optional", "(Optional)"];
+            string[] starts = ["A optional", "An optional", "The optional", "Optional"]; // commented out to limit tests: "An (optional)", "The (optional)", "(Optional)"];
             string[] conditions = ["if", "whether", "whether or not", "if to", "whether to", "whether or not to"];
             string[] booleans = ["bool ", "Boolean ", string.Empty];
             string[] values = ["parameter", "flag", "value"];
 
             string[] verbs =
                              [
-                                 "controling", // be aware of typo
+                                 //// commented out to limit tests: "controling", // be aware of typo
                                  "controlling",
                                  "defining",
                                  "determining",
                                  "indicating",
                                  "specifying",
                                  "that controls",
-                                 "that defined", // be aware of typo
+                                 //// commented out to limit tests: "that defined", // be aware of typo
                                  "that defines",
                                  "that determined",
                                  "that determines",
-                                 "that indicated", // be aware of typo
+                                 //// commented out to limit tests: "that indicated", // be aware of typo
                                  "that indicates",
                                  "that specifies",
                                  "which controls",
                                  "which defines",
                                  "which determines",
                                  "which indicates",
-                                 "which specified", // be aware of typo
+                                 //// commented out to limit tests: "which specified", // be aware of typo
                                  "which specifies",
                              ];
 

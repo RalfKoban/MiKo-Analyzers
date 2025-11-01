@@ -684,6 +684,17 @@ namespace MiKoSolutions.Analyzers
         internal static string GetName(this TypeParameterConstraintClauseSyntax value) => value?.Name.GetName() ?? string.Empty;
 
         /// <summary>
+        /// Gets the name of the specified <see cref="TypeParameterSyntax"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The type syntax.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the name of the type parameter; or the <see cref="string.Empty"/> string ("") if no name is found.
+        /// </returns>
+        internal static string GetName(this TypeParameterSyntax value) => value?.Identifier.ValueText ?? string.Empty;
+
+        /// <summary>
         /// Gets the name of the specified <see cref="TypeSyntax"/>.
         /// </summary>
         /// <param name="value">
@@ -852,7 +863,7 @@ namespace MiKoSolutions.Analyzers
         /// The type syntax.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the name-only part of the type as a string; or the <see cref="string.Empty"/> string ("") if no name is found.
+        /// A <see cref="string"/> that contains the name-only part of the type as a <see cref="string"/>; or the <see cref="string.Empty"/> string ("") if no name is found.
         /// </returns>
         internal static string GetNameOnlyPart(this TypeSyntax value) => value?.ToString().GetNameOnlyPart();
 

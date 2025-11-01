@@ -396,6 +396,7 @@ namespace MiKoSolutions.Analyzers.Rules
                 var type = analyzer.GetType();
 
                 FieldInfo fieldInfo;
+
                 do
                 {
                     fieldInfo = type.GetField("m_rule", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetField);

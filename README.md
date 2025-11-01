@@ -13,7 +13,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/18917.svg)](https://scan.coverity.com/projects/ralfkoban-miko-analyzers)
 
 ## Available Rules
-The following tables lists all the 525 rules that are currently provided by the analyzer.
+The following tables lists all the 528 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -255,6 +255,7 @@ The following tables lists all the 525 rules that are currently provided by the 
 |MiKo_2080|Start field &lt;summary&gt; documentation with default phrase|&#x2713;|&#x2713;|
 |MiKo_2081|End public-visible read-only field &lt;summary&gt; documentation with default phrase|&#x2713;|&#x2713;|
 |MiKo_2082|Use distinct phrases for Enum member &lt;summary&gt; documentation|&#x2713;|&#x2713;|
+|MiKo_2083|Do not falsely document writable fields as read-only|&#x2713;|&#x2713;|
 |MiKo_2090|Use default phrase for equality operator documentation|&#x2713;|&#x2713;|
 |MiKo_2091|Use default phrase for inequality operator documentation|&#x2713;|&#x2713;|
 |MiKo_2100|Start &lt;example&gt; documentation with descriptive default phrase|&#x2713;|&#x2713;|
@@ -300,7 +301,9 @@ The following tables lists all the 525 rules that are currently provided by the 
 |MiKo_2238|Do not start &lt;summary&gt; documentation with 'Make sure to call this'|&#x2713;|\-|
 |MiKo_2239|Use '///' instead of '/** */' for documentation|&#x2713;|&#x2713;|
 |MiKo_2240|Do not start &lt;response&gt; documentation with 'Returns'|&#x2713;|&#x2713;|
+|MiKo_2241|Do not use 'empty string' in documentation|&#x2713;|&#x2713;|
 |MiKo_2244|Use &lt;list&gt; instead of &lt;ul&gt; or &lt;ol&gt; in documentation|&#x2713;|&#x2713;|
+|MiKo_2245|Wrap numbers with &lt;c&gt; in documentation|&#x2713;|&#x2713;|
 |MiKo_2300|Explain the 'Why' instead of the 'How' in comments|&#x2713;|\-|
 |MiKo_2301|Do not use obvious comments in AAA-Tests|&#x2713;|&#x2713;|
 |MiKo_2302|Remove commented-out code|&#x2713;|\-|

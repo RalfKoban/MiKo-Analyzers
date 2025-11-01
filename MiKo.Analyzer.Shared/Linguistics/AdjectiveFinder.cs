@@ -2,6 +2,9 @@
 
 namespace MiKoSolutions.Analyzers.Linguistics
 {
+    /// <summary>
+    /// Provides functionality to identify adjectives and adverbs, and to derive adjectives from nouns.
+    /// </summary>
     internal static class AdjectiveFinder
     {
         private static readonly string[] AdjectivesOrAdverbs =
@@ -36,6 +39,19 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                    "vain",
                                                                };
 
+        /// <summary>
+        /// Determines whether the specified value is an adjective or adverb.
+        /// </summary>
+        /// <param name="value">
+        /// The value to check.
+        /// </param>
+        /// <param name="comparison">
+        /// One of the enumeration members that specifies the comparison type to use when comparing the value.
+        /// The default is <see cref="StringComparison.OrdinalIgnoreCase"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the value is an adjective or adverb; otherwise, <see langword="false"/>.
+        /// </returns>
         public static bool IsAdjectiveOrAdverb(in ReadOnlySpan<char> value, in StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             if (value.EndsWith("y", comparison))
@@ -131,6 +147,19 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return value.EqualsAny(AdjectivesOrAdverbs, comparison);
         }
 
+        /// <summary>
+        /// Gets the adjective form for the specified noun.
+        /// </summary>
+        /// <param name="value">
+        /// The noun value to convert.
+        /// </param>
+        /// <param name="handling">
+        /// A bitwise combination of the enumeration members that specifies the adjustment to apply to the first character of the result.
+        /// The default is <see cref="FirstWordAdjustment.StartUpperCase"/>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the adjective form of the noun, or the <see cref="string.Empty"/> string ("") if no conversion is available.
+        /// </returns>
         public static string GetAdjectiveForNoun(in ReadOnlySpan<char> value, in FirstWordAdjustment handling = FirstWordAdjustment.StartUpperCase)
         {
             var result = GetAdjectiveForNounCore(value);
@@ -140,6 +169,15 @@ namespace MiKoSolutions.Analyzers.Linguistics
                    : result.ToLowerCaseAt(0);
         }
 
+        /// <summary>
+        /// Gets the adjective form for the specified noun.
+        /// </summary>
+        /// <param name="value">
+        /// The noun value to convert.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the adjective form of the noun, or the <see cref="string.Empty"/> string ("") if no conversion is available.
+        /// </returns>
         private static string GetAdjectiveForNounCore(in ReadOnlySpan<char> value)
         {
             if (value.EndsWith("ty"))
