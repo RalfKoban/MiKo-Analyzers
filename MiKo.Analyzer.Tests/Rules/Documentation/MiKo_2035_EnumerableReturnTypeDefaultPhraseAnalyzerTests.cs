@@ -37,6 +37,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] StartingPhrases = [.. Enumerable.ToHashSet(CreateStartingPhrases().Take(TestLimit))];
 
+        private static readonly string[] OfStartingPhrases = [.. StartingPhrases.Where(_ => _.EndsWith(" of", StringComparison.OrdinalIgnoreCase))];
+
         [OneTimeSetUp]
         public static void PrepareTestEnvironment() => MiKo_2035_CodeFixProvider.LoadData();
 
@@ -680,6 +682,7 @@ public class TestMe
         [TestCase("The syntax list of type parameter constraint clauses.", "A sequence that contains type parameter constraint clauses.")]
         [TestCase("A read-only list of attributes of the specified type.", "A sequence that contains attributes of the specified type.")]
         [TestCase("A separated syntax list of parameters accessible from the given context.", "A sequence that contains parameters accessible from the given context.")]
+        [TestCase("An enumerable of strings that represents the text content without trivia.", "A sequence that contains the text content without trivia.")]
         public void Code_gets_fixed_for_non_generic_enumerable_(string originalPhrase, string fixedPhrase)
         {
             const string Template = @"
@@ -699,6 +702,84 @@ public class TestMe
 ";
 
             VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_non_generic_enumerable_on_same_line_([ValueSource(nameof(StartingPhrases))] string originalPhrase)
+        {
+            var originalCode = @"
+using System;
+using System.Collections;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>" + originalPhrase + @" some integers.</returns>
+    public IEnumerable DoSomething { get; set; }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// A sequence that contains some integers.
+    /// </returns>
+    public IEnumerable DoSomething { get; set; }
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [TestCase("Some integers.", "A sequence that contains some integers.")]
+        [TestCase("The mapping information.", "A sequence that contains the mapping information.")]
+        [TestCase("An enumerable collection of invocation expressions that represent LINQ extension methods.", "A sequence that contains invocation expressions that represent LINQ extension methods.")]
+        [TestCase("The syntax list of type parameter constraint clauses.", "A sequence that contains type parameter constraint clauses.")]
+        [TestCase("A read-only list of attributes of the specified type.", "A sequence that contains attributes of the specified type.")]
+        [TestCase("A separated syntax list of parameters accessible from the given context.", "A sequence that contains parameters accessible from the given context.")]
+        [TestCase("An enumerable of strings that represents the text content without trivia.", "A sequence that contains the text content without trivia.")]
+        public void Code_gets_fixed_for_non_generic_enumerable_on_same_line_(string originalPhrase, string fixedPhrase)
+        {
+            var originalCode = @"
+using System;
+using System.Collections;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>" + originalPhrase + @"</returns>
+    public IEnumerable DoSomething { get; set; }
+}
+";
+
+            var fixedCode = @"
+using System;
+using System.Collections;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// " + fixedPhrase + @"
+    /// </returns>
+    public IEnumerable DoSomething { get; set; }
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
         }
 
         [Test]
@@ -1073,6 +1154,84 @@ public class TestMe
             VerifyCSharpFix(originalCode, fixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_generic_return_value_with_almost_correct_start_and_see_cref_XML_tag_([ValueSource(nameof(OfStartingPhrases))] string start)
+        {
+            var originalCode = @"
+using System;
+using System.Collections.Generic;
+using System.Xml;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// " + start + @" <see cref=""XmlNode""/> that represents the value XML nodes.
+    /// </returns>
+    public List<XmlNode> DoSomething { get; set; }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+using System.Xml;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// A collection of <see cref=""XmlNode""/> that represents the value XML nodes.
+    /// </returns>
+    public List<XmlNode> DoSomething { get; set; }
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_generic_return_value_with_almost_correct_start_and_see_cref_XML_tag_on_same_line_([ValueSource(nameof(OfStartingPhrases))] string start)
+        {
+            var originalCode = @"
+using System;
+using System.Collections.Generic;
+using System.Xml;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>" + start + @" <see cref=""XmlNode""/> that represents the value XML nodes.</returns>
+    public List<XmlNode> DoSomething { get; set; }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+using System.Xml;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// A collection of <see cref=""XmlNode""/> that represents the value XML nodes.
+    /// </returns>
+    public List<XmlNode> DoSomething { get; set; }
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2035_EnumerableReturnTypeDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2035_EnumerableReturnTypeDefaultPhraseAnalyzer();
@@ -1085,10 +1244,10 @@ public class TestMe
         private static IEnumerable<string> CreateStartingPhrases()
         {
             string[] startingWords = ["a", "an", "the", "a new", "the new"];
-            string[] modifications = ["read-only", "filtered", "concurrent"];
+            string[] modifications = ["read-only", /* commented out to limit tests: "filtered", "concurrent", "single" */];
             string[] collections = [
                                        "array", "arraylist", "array list", "list", "dictionary", "enumerable", "queue", "stack", "map", "bag",
-                                       "hashset", "hashSet", "hashtable", "hashTable", "hash set", "hashed set", "hash table", "hashed table", "hashing set", "hashing table",
+                                       //// commented out to limit tests: "hashset", "hashSet", "hashtable", "hashTable", "hash set", "hashed set", "hash table", "hashed table", "hashing set", "hashing table",
                                        "syntax list", "enumerable collection", "separated syntax list", "immutable array",
                                    ];
             string[] prepositions = ["of", "with", "that contains", "which contains", "containing"];

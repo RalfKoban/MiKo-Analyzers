@@ -13,6 +13,9 @@ using MiKoSolutions.Analyzers.Linguistics;
 #pragma warning disable IDE0130
 namespace MiKoSolutions.Analyzers
 {
+    /// <summary>
+    /// Provides a set of <see langword="static"/> methods for <see cref="SyntaxList{T}"/>s.
+    /// </summary>
     internal static class SyntaxListExtensions
     {
         /// <summary>
@@ -307,12 +310,51 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static bool None<T>(this in SyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode => source.All(_ => predicate(_) is false);
 
+        /// <summary>
+        /// Filters the elements of the specified <see cref="SyntaxList{T}"/> based on a specified type.
+        /// </summary>
+        /// <typeparam name="TResult">
+        /// The type to filter the elements of the sequence on.
+        /// </typeparam>
+        /// <param name="source">
+        /// The list whose elements are to be filtered.
+        /// </param>
+        /// <returns>
+        /// A collection of XML node syntaxes with the elements from the source list that are of the specified type.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static IReadOnlyList<TResult> OfType<TResult>(this in SyntaxList<XmlNodeSyntax> source) where TResult : XmlNodeSyntax => source.OfType<XmlNodeSyntax, TResult>();
 
+        /// <summary>
+        /// Filters the elements of the specified <see cref="SyntaxList{T}"/> based on a specified type.
+        /// </summary>
+        /// <typeparam name="TResult">
+        /// The type to filter the elements of the sequence on.
+        /// </typeparam>
+        /// <param name="source">
+        /// The list whose elements are to be filtered.
+        /// </param>
+        /// <returns>
+        /// A collection of xml attribute syntaxes with the elements from the source list that are of the specified type.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static IReadOnlyList<TResult> OfType<TResult>(this in SyntaxList<XmlAttributeSyntax> source) where TResult : XmlAttributeSyntax => source.OfType<XmlAttributeSyntax, TResult>();
 
+        /// <summary>
+        /// Filters the elements of the specified <see cref="SyntaxList{T}"/> based on a specified type.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of syntax nodes in the source list.
+        /// </typeparam>
+        /// <typeparam name="TResult">
+        /// The type to filter the elements of the sequence on.
+        /// </typeparam>
+        /// <param name="source">
+        /// The list whose elements are to be filtered.
+        /// </param>
+        /// <returns>
+        /// A collection of the elements from the source list that are of the specified type.
+        /// </returns>
         internal static IReadOnlyList<TResult> OfType<T, TResult>(this in SyntaxList<T> source) where T : SyntaxNode
                                                                                                 where TResult : T
         {
@@ -342,8 +384,38 @@ namespace MiKoSolutions.Analyzers
             return results ?? (IReadOnlyList<TResult>)Array.Empty<TResult>();
         }
 
+        /// <summary>
+        /// Gets a <see cref="SyntaxList{T}"/> with all occurrences of the specified phrase replaced with the specified replacement.
+        /// </summary>
+        /// <param name="source">
+        /// The list in which to replace text.
+        /// </param>
+        /// <param name="phrase">
+        /// The phrase to be replaced.
+        /// </param>
+        /// <param name="replacement">
+        /// The text that replaces all occurrences of the phrase.
+        /// </param>
+        /// <returns>
+        /// A collection of XML node syntaxes with all occurrences of the phrase replaced with the replacement.
+        /// </returns>
         internal static SyntaxList<XmlNodeSyntax> ReplaceText(this in SyntaxList<XmlNodeSyntax> source, string phrase, string replacement) => source.ReplaceText(new[] { phrase }, replacement);
 
+        /// <summary>
+        /// Gets a <see cref="SyntaxList{T}"/> with all occurrences of the specified phrases replaced with the specified replacement.
+        /// </summary>
+        /// <param name="source">
+        /// The list in which to replace text.
+        /// </param>
+        /// <param name="phrases">
+        /// The phrases to be replaced.
+        /// </param>
+        /// <param name="replacement">
+        /// The text that replaces all occurrences of the phrases.
+        /// </param>
+        /// <returns>
+        /// A collection of XML node syntaxes with all occurrences of the phrases replaced with the replacement.
+        /// </returns>
         internal static SyntaxList<XmlNodeSyntax> ReplaceText(this in SyntaxList<XmlNodeSyntax> source, in ReadOnlySpan<string> phrases, string replacement)
         {
             var count = source.Count;
@@ -611,7 +683,7 @@ namespace MiKoSolutions.Analyzers
         /// The syntax node to include in the list.
         /// </param>
         /// <returns>
-        /// A <see cref="SyntaxList{T}"/> containing the specified syntax node.
+        /// A collection of syntax nodes with the specified syntax node.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxList<T> ToSyntaxList<T>(this T source) where T : SyntaxNode => SyntaxFactory.SingletonList(source);
@@ -626,7 +698,7 @@ namespace MiKoSolutions.Analyzers
         /// The sequence of syntax nodes to include in the list.
         /// </param>
         /// <returns>
-        /// A <see cref="SyntaxList{T}"/> containing the specified syntax nodes.
+        /// A collection of syntax nodes with the specified syntax nodes.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxList<T> ToSyntaxList<T>(this IEnumerable<T> source) where T : SyntaxNode => SyntaxFactory.List(source); // ncrunch: no coverage
@@ -665,6 +737,18 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        /// <summary>
+        /// Gets a <see cref="SyntaxList{T}"/> with the first element adjusted to have proper indentation.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of syntax nodes in the list.
+        /// </typeparam>
+        /// <param name="values">
+        /// The list whose first element is to be adjusted.
+        /// </param>
+        /// <returns>
+        /// A collection of syntax nodes whose first element is adjusted to have proper indentation.
+        /// </returns>
         internal static SyntaxList<T> WithIndentation<T>(this in SyntaxList<T> values) where T : SyntaxNode
         {
             var value = values[0];
@@ -672,6 +756,15 @@ namespace MiKoSolutions.Analyzers
             return values.Replace(value, value.WithIndentation());
         }
 
+        /// <summary>
+        /// Gets a <see cref="SyntaxList{T}"/> with the first element having a leading XML comment.
+        /// </summary>
+        /// <param name="values">
+        /// The list whose first element is to be adjusted.
+        /// </param>
+        /// <returns>
+        /// A collection of XML node syntaxes with the first element having a leading XML comment.
+        /// </returns>
         internal static SyntaxList<XmlNodeSyntax> WithLeadingXmlComment(this in SyntaxList<XmlNodeSyntax> values)
         {
             var value = values[0];
@@ -679,6 +772,15 @@ namespace MiKoSolutions.Analyzers
             return values.Replace(value, value.WithoutLeadingTrivia().WithLeadingXmlComment());
         }
 
+        /// <summary>
+        /// Gets a <see cref="SyntaxList{T}"/> with the first XML newline removed from the first element.
+        /// </summary>
+        /// <param name="values">
+        /// The list whose first element is to be adjusted.
+        /// </param>
+        /// <returns>
+        /// A collection of XML node syntaxes with the first XML newline removed, or the original list if no XML newline is present.
+        /// </returns>
         internal static SyntaxList<XmlNodeSyntax> WithoutFirstXmlNewLine(this in SyntaxList<XmlNodeSyntax> values)
         {
             if (values.FirstOrDefault() is XmlTextSyntax text)
@@ -693,6 +795,15 @@ namespace MiKoSolutions.Analyzers
             return values;
         }
 
+        /// <summary>
+        /// Gets a <see cref="SyntaxList{T}"/> with the leading trivia removed from the first element.
+        /// </summary>
+        /// <param name="values">
+        /// The list whose first element is to be adjusted.
+        /// </param>
+        /// <returns>
+        /// A collection of XML node syntaxes with the leading trivia removed from the first element.
+        /// </returns>
         internal static SyntaxList<XmlNodeSyntax> WithoutLeadingTrivia(this in SyntaxList<XmlNodeSyntax> values)
         {
             var value = values[0];
@@ -700,6 +811,15 @@ namespace MiKoSolutions.Analyzers
             return values.Replace(value, value.WithoutLeadingTrivia());
         }
 
+        /// <summary>
+        /// Gets a <see cref="SyntaxList{T}"/> with the leading XML comment removed from the first element.
+        /// </summary>
+        /// <param name="value">
+        /// The list whose first element is to be adjusted.
+        /// </param>
+        /// <returns>
+        /// A collection of XML node syntaxes with the leading XML comment removed, or the original list if no XML comment is present.
+        /// </returns>
         internal static SyntaxList<XmlNodeSyntax> WithoutLeadingXmlComment(this in SyntaxList<XmlNodeSyntax> value)
         {
             if (value.FirstOrDefault() is XmlTextSyntax text)
@@ -719,6 +839,18 @@ namespace MiKoSolutions.Analyzers
             return value;
         }
 
+        /// <summary>
+        /// Gets a <see cref="SyntaxList{T}"/> with all occurrences of the specified text removed from XML text elements.
+        /// </summary>
+        /// <param name="values">
+        /// The list from which to remove the text.
+        /// </param>
+        /// <param name="text">
+        /// The text to be removed.
+        /// </param>
+        /// <returns>
+        /// A collection of XML node syntaxes with all occurrences of the text removed from XML text elements.
+        /// </returns>
         internal static SyntaxList<XmlNodeSyntax> WithoutText(this in SyntaxList<XmlNodeSyntax> values, string text)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
@@ -790,6 +922,18 @@ namespace MiKoSolutions.Analyzers
             return contents.ToSyntaxList();
         }
 
+        /// <summary>
+        /// Gets a <see cref="SyntaxList{T}"/> with all occurrences of the specified texts removed from XML text elements.
+        /// </summary>
+        /// <param name="values">
+        /// The list from which to remove the texts.
+        /// </param>
+        /// <param name="texts">
+        /// The texts to be removed.
+        /// </param>
+        /// <returns>
+        /// A collection of XML node syntaxes with all occurrences of the texts removed from XML text elements.
+        /// </returns>
         internal static SyntaxList<XmlNodeSyntax> WithoutText(this in SyntaxList<XmlNodeSyntax> values, in ReadOnlySpan<string> texts)
         {
             var length = texts.Length;
@@ -809,6 +953,15 @@ namespace MiKoSolutions.Analyzers
             return result;
         }
 
+        /// <summary>
+        /// Gets a <see cref="SyntaxList{T}"/> with the trailing XML comment removed from the last element.
+        /// </summary>
+        /// <param name="value">
+        /// The list whose last element is to be adjusted.
+        /// </param>
+        /// <returns>
+        /// A collection of XML node syntaxes with the trailing XML comment removed, or the original list if no XML comment is present.
+        /// </returns>
         internal static SyntaxList<XmlNodeSyntax> WithoutTrailingXmlComment(this in SyntaxList<XmlNodeSyntax> value)
         {
             if (value.LastOrDefault() is XmlTextSyntax text)
@@ -828,6 +981,18 @@ namespace MiKoSolutions.Analyzers
             return value;
         }
 
+        /// <summary>
+        /// Gets a <see cref="SyntaxList{T}"/> with the specified start texts removed from the first element.
+        /// </summary>
+        /// <param name="values">
+        /// The list whose first element is to be adjusted.
+        /// </param>
+        /// <param name="startTexts">
+        /// The start texts to be removed.
+        /// </param>
+        /// <returns>
+        /// A collection of XML node syntaxes with the start texts removed from the first element, or the original list if no such text is present.
+        /// </returns>
         internal static SyntaxList<XmlNodeSyntax> WithoutStartText(this in SyntaxList<XmlNodeSyntax> values, in ReadOnlySpan<string> startTexts)
         {
             if (values.Count > 0 && values[0] is XmlTextSyntax textSyntax)
@@ -838,6 +1003,22 @@ namespace MiKoSolutions.Analyzers
             return values;
         }
 
+        /// <summary>
+        /// Gets a <see cref="SyntaxList{T}"/> with the specified text prepended to the first element.
+        /// </summary>
+        /// <param name="values">
+        /// The list whose first element is to be adjusted.
+        /// </param>
+        /// <param name="startText">
+        /// The text to prepend.
+        /// </param>
+        /// <param name="firstWordAdjustment">
+        /// A bitwise combination of the enumeration members that specifies how to adjust the first word.
+        /// The default is <see cref="FirstWordAdjustment.StartLowerCase"/>.
+        /// </param>
+        /// <returns>
+        /// A collection of XML node syntaxes with the text prepended to the first element.
+        /// </returns>
         internal static SyntaxList<XmlNodeSyntax> WithStartText(this in SyntaxList<XmlNodeSyntax> values, string startText, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.StartLowerCase)
         {
             if (values.Count > 0)
@@ -850,8 +1031,26 @@ namespace MiKoSolutions.Analyzers
             return startText.AsXmlText().ToSyntaxList<XmlNodeSyntax>();
         }
 
+        /// <summary>
+        /// Gets a <see cref="SyntaxList{T}"/> with the last element having a trailing XML comment.
+        /// </summary>
+        /// <param name="values">
+        /// The list whose last element is to be adjusted.
+        /// </param>
+        /// <returns>
+        /// A collection of XML node syntaxes with the last element having a trailing XML comment.
+        /// </returns>
         internal static SyntaxList<XmlNodeSyntax> WithTrailingXmlComment(this in SyntaxList<XmlNodeSyntax> values) => values.Replace(values.Last(), values.Last().WithoutTrailingTrivia().WithTrailingXmlComment());
 
+        /// <summary>
+        /// Retrieves the <see cref="XmlCrefAttributeSyntax"/> from the specified <see cref="SyntaxList{T}"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The list of attributes to search.
+        /// </param>
+        /// <returns>
+        /// The <see cref="XmlCrefAttributeSyntax"/> if found; otherwise, <see langword="null"/>.
+        /// </returns>
         internal static XmlCrefAttributeSyntax GetCref(this in SyntaxList<XmlAttributeSyntax> value)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)

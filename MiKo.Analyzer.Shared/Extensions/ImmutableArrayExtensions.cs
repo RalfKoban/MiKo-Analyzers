@@ -10,6 +10,9 @@ using Microsoft.CodeAnalysis;
 #pragma warning disable IDE0130
 namespace MiKoSolutions.Analyzers
 {
+    /// <summary>
+    /// Provides a set of <see langword="static"/> methods for <see cref="ImmutableArray{T}"/>s.
+    /// </summary>
     internal static class ImmutableArrayExtensions
     {
         /// <summary>

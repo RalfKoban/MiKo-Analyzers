@@ -109,6 +109,18 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_class_with_primary_ctor_that_has_more_parameters_than_the_normal_ctor() => No_issue_is_reported_for(@"
+public class TestMe(int i, int j)
+{
+    public TestMe()
+    { }
+
+    public TestMe(int i)
+    { }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_class_with_identically_named_methods_in_correct_order_and_params_method_at_the_end() => No_issue_is_reported_for(@"
 public class TestMe
 {
@@ -908,6 +920,46 @@ public class TestMe
     { }
 
     #endregion
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_mixed_ctors_if_there_is_a_primary_ctor_as_well()
+        {
+            const string OriginalCode = @"
+public class TestMe(int a, int b, int c)
+{
+    public TestMe(int a)
+    { }
+
+    public TestMe(int a, int b, int c, int d)
+    { }
+
+    public TestMe(int a, int b)
+    { }
+
+    public TestMe()
+    { }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe(int a, int b, int c)
+{
+    public TestMe()
+    { }
+
+    public TestMe(int a)
+    { }
+
+    public TestMe(int a, int b)
+    { }
+
+    public TestMe(int a, int b, int c, int d)
+    { }
 }
 ";
 
