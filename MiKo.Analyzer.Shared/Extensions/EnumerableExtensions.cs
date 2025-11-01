@@ -190,7 +190,7 @@ namespace MiKoSolutions.Analyzers
 
         /// <summary>
         /// Concatenates the text content of the specified <see cref="SyntaxToken"/> list, removes new lines and multiple white spaces,
-        /// trims the result, and returns it as a single string.
+        /// trims the result, and returns it as a single <see cref="string"/>.
         /// </summary>
         /// <param name="values">
         /// The list of <see cref="SyntaxToken"/> instances whose text content is to be concatenated and trimmed.
@@ -656,7 +656,7 @@ namespace MiKoSolutions.Analyzers
         internal static string[] OrderDescendingByLengthAndText(this HashSet<string> source) => source.OrderByDescending(_ => _.Length).ThenBy(_ => _).ToArray();
 
         /// <summary>
-        /// Converts the specified sequence to an array, ordering elements by the length of their selected string property in descending order and then by the string property itself.
+        /// Converts the specified sequence to an array, ordering elements by the length of their selected <see cref="string"/> property in descending order and then by the <see cref="string"/> property itself.
         /// </summary>
         /// <typeparam name="T">
         /// The type of elements in the sequence.
@@ -665,10 +665,10 @@ namespace MiKoSolutions.Analyzers
         /// The sequence to order and convert.
         /// </param>
         /// <param name="selector">
-        /// A callback to extract a string from each element.
+        /// A callback to extract a <see cref="string"/> from each element.
         /// </param>
         /// <returns>
-        /// An array of elements from the source sequence, ordered by the length of their selected string property (descending) and then by the string property itself.
+        /// An array of elements from the source sequence, ordered by the length of their selected <see cref="string"/> property (descending) and then by the <see cref="string"/> property itself.
         /// </returns>
         internal static T[] OrderDescendingByLengthAndText<T>(this IEnumerable<T> source, Func<T, string> selector) => source.OrderByDescending(_ => selector(_).Length).ThenBy(selector).ToArray();
 

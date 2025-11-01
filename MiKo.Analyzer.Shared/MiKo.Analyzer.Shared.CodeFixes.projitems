@@ -36,6 +36,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\SyntaxTriviaExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\SyntaxTriviaListExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\TimeSpanExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\WordBoundary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\WordsReadOnlySpanEnumerator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\WordsReadOnlySpanEnumeratorSelectDelegate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Linguistics\AbbreviationFinder.cs" />
@@ -119,6 +120,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2080_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2081_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2082_CodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2083_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2090_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2091_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2100_CodeFixProvider.cs" />
@@ -153,7 +155,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2237_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2239_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2240_CodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2241_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2244_CodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2245_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2301_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2303_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2305_CodeFixProvider.cs" />

@@ -19,6 +19,31 @@ namespace MiKoSolutions.Analyzers
     internal static partial class SyntaxNodeExtensions
     {
         /// <summary>
+        /// Converts the specified <see cref="TypeDeclarationSyntax"/> to a <see cref="TypeSyntax"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The type declaration syntax to convert.
+        /// </param>
+        /// <returns>
+        /// A <see cref="TypeSyntax"/> representing the type declaration.
+        /// </returns>
+        public static TypeSyntax AsTypeSyntax(this TypeDeclarationSyntax value)
+        {
+            var name = value.GetName();
+
+            if (value.TypeParameterList is TypeParameterListSyntax typeParameters)
+            {
+                var arguments = typeParameters.Parameters
+                                              .Select(_ => SyntaxFactory.ParseTypeName(_.GetName()))
+                                              .ToSeparatedSyntaxList();
+
+                return SyntaxFactory.GenericName(SyntaxFactory.Identifier(name), SyntaxFactory.TypeArgumentList(arguments));
+            }
+
+            return SyntaxFactory.ParseTypeName(name);
+        }
+
+        /// <summary>
         /// Gets the first XML element that is NOT empty (has some content) and matches the given tag.
         /// </summary>
         /// <param name="syntaxNodes">
@@ -338,6 +363,20 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Determines whether the specified <see cref="ExpressionSyntax"/> represents a nullable type in the context of the given <see cref="Document"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The expression syntax to check.
+        /// </param>
+        /// <param name="document">
+        /// The document that contains the expression syntax.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the expression syntax is nullable; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsNullable(this ExpressionSyntax value, Document document) => value.GetSymbol(document) is ITypeSymbol typeSymbol && typeSymbol.IsNullable();
+
+        /// <summary>
         /// Determines whether the specified <see cref="IsPatternExpressionSyntax"/> represents a nullable type in the context of the given <see cref="Document"/>.
         /// </summary>
         /// <param name="value">
@@ -349,7 +388,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the pattern is nullable; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool IsNullable(this IsPatternExpressionSyntax value, Document document) => value.Expression.GetSymbol(document) is ITypeSymbol typeSymbol && typeSymbol.IsNullable();
+        internal static bool IsNullable(this IsPatternExpressionSyntax value, Document document) => value.Expression.IsNullable(document);
 
         /// <summary>
         /// Determines whether the specified <see cref="ArgumentSyntax"/> represents an enum value in the context of the given <see cref="Document"/>.
@@ -565,13 +604,13 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsSeeCrefTask(this SyntaxNode value) => value.IsSeeCref("Task") || value.IsSeeCref("Task<TResult>");
 
         /// <summary>
-        /// Determines whether the specified <see cref="SyntaxNode"/> represents a string creation expression.
+        /// Determines whether the specified <see cref="SyntaxNode"/> represents a <see cref="string"/> creation expression.
         /// </summary>
         /// <param name="value">
         /// The syntax node to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the node is a string creation expression; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the node is a <see cref="string"/> creation expression; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool IsStringCreation(this SyntaxNode value)
         {

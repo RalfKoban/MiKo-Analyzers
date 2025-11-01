@@ -102,7 +102,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return CommentHasIssue(comment) && comment.ContainsAny(Constants.Comments.ReasoningPhrases, StringComparison.OrdinalIgnoreCase) is false;
         }
 
-        private static bool CommentHasIssue(ReadOnlySpan<char> comment)
+        private static bool CommentHasIssue(in ReadOnlySpan<char> comment)
         {
             if (comment.StartsWith(Constants.Comments.CommentExterior, StringComparison.Ordinal))
             {

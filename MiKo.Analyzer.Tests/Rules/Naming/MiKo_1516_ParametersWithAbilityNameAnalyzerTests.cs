@@ -53,6 +53,22 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_nullable_non_boolean_parameter_with_Condition_suffix_([ValueSource(nameof(Names))] string name) => No_issue_is_reported_for(@"
+#nullable enable
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        public void DoSomething(string? something" + name + @"Condition) { }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_boolean_parameter_with_suffix_([ValueSource(nameof(Names))] string name) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 

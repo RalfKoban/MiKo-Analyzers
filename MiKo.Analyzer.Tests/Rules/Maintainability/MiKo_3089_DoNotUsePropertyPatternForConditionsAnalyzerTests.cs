@@ -402,6 +402,52 @@ public class TestMe
             VerifyCSharpFix(originalCode, fixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_boolean_single_property_matching_on_nullable_as_if_condition_([Values("true", "false")] string value)
+        {
+            var originalCode = @"
+#nullable enable
+
+using System;
+
+public record Dto
+{
+    public bool Data { get; set; }
+}
+
+public class TestMe
+{
+    public void DoSomething(Dto? dto)
+    {
+        if (dto is { Data: " + value + @" })
+        {
+        }
+    }
+}";
+
+            var fixedCode = @"
+#nullable enable
+
+using System;
+
+public record Dto
+{
+    public bool Data { get; set; }
+}
+
+public class TestMe
+{
+    public void DoSomething(Dto? dto)
+    {
+        if (dto?.Data is " + value + @")
+        {
+        }
+    }
+}";
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3089_DoNotUsePropertyPatternForConditionsAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3089_DoNotUsePropertyPatternForConditionsAnalyzer();

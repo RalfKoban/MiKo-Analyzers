@@ -320,6 +320,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                 new Pair(" type with type.", " type with default values."),
                                                 new Pair(" type with that ", " type with default values that "),
                                                 new Pair(" type with which ", " type with default values which "),
+                                                new Pair(" creating creates ", " creating "),
+                                                new Pair(" creating create ", " creating "),
                                             };
                 CleanupReplacementMapKeys = CleanupReplacementMap.ToArray(_ => _.Key);
 

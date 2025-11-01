@@ -395,13 +395,13 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Converts a syntax trivia to a text-only string, removing comment markers and whitespace.
+        /// Converts a syntax trivia to a text-only <see cref="string"/>, removing comment markers and whitespace.
         /// </summary>
         /// <param name="source">
-        /// The trivia to convert to a text-only string.
+        /// The trivia to convert to a text-only <see cref="string"/>.
         /// </param>
         /// <returns>
-        /// A string containing only the text content of the trivia, or the original trivia string if not a comment.
+        /// A <see cref="string"/> containing only the text content of the trivia, or the original trivia <see cref="string"/> if not a comment.
         /// </returns>
         internal static string ToTextOnlyString(this in SyntaxTrivia source)
         {

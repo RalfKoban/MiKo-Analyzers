@@ -7,6 +7,9 @@ using System.Text;
 
 namespace MiKoSolutions.Analyzers.Linguistics
 {
+    /// <summary>
+    /// Provides functionality to find and replace abbreviations in text with their full terms.
+    /// </summary>
     internal static class AbbreviationFinder
     {
         private static readonly Pair[] Prefixes =
@@ -69,6 +72,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("err", "error"),
                                                       new Pair("exec", "execute"),
                                                       new Pair("ext", "extension"),
+                                                      new Pair("fnc", "function"),
                                                       new Pair("frm", "form"),
                                                       new Pair("hdls", "headless"),
                                                       new Pair("ident", "identification"),
@@ -76,6 +80,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("idx", "index"),
                                                       new Pair("init", "initialize"),
                                                       new Pair("itf", "interface"),
+                                                      new Pair("kvp", "pair"),
                                                       new Pair("lang", "language"),
                                                       new Pair("lbl", "label"),
                                                       new Pair("len", "length"),
@@ -218,6 +223,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Err", "Error"),
                                                           new Pair("Exec", "Execute"),
                                                           new Pair("Ext", "Extension"),
+                                                          new Pair("Fnc", "Function"),
                                                           new Pair("Frm", "Form"),
                                                           new Pair("Hdls", "Headless"),
                                                           new Pair("Ident", "Identification"),
@@ -385,6 +391,15 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly ConcurrentDictionary<string, Pair[]> AlreadyFoundAbbreviations = new ConcurrentDictionary<string, Pair[]>();
 
+        /// <summary>
+        /// Finds all abbreviations contained in the specified text.
+        /// </summary>
+        /// <param name="value">
+        /// The text to inspect for abbreviations.
+        /// </param>
+        /// <returns>
+        /// A span containing all found abbreviations as pairs of abbreviated and full terms, or an empty span if no abbreviations are found or the text is <see langword="null"/>.
+        /// </returns>
         internal static ReadOnlySpan<Pair> Find(string value)
         {
             if (value is null)
@@ -401,6 +416,18 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return AlreadyFoundAbbreviations.GetOrAdd(value, _ => FindCore(_.Without(AllowedParts).AsSpan()));
         }
 
+        /// <summary>
+        /// Replaces all abbreviations in the specified text with their full terms.
+        /// </summary>
+        /// <param name="value">
+        /// The text in which abbreviations shall be replaced.
+        /// </param>
+        /// <param name="findings">
+        /// The abbreviations to replace.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the text with all abbreviations replaced by their full terms.
+        /// </returns>
         internal static string ReplaceAllAbbreviations(string value, in ReadOnlySpan<Pair> findings)
         {
             if (findings.Length > 0)
@@ -411,6 +438,18 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return value;
         }
 
+        /// <summary>
+        /// Replaces all abbreviations in the specified text with their full terms.
+        /// </summary>
+        /// <param name="value">
+        /// The text in which abbreviations shall be replaced.
+        /// </param>
+        /// <param name="findings">
+        /// The abbreviations to replace.
+        /// </param>
+        /// <returns>
+        /// The text builder with all abbreviations replaced by their full terms.
+        /// </returns>
         internal static StringBuilder ReplaceAllAbbreviations(StringBuilder value, in ReadOnlySpan<Pair> findings)
         {
             if (findings.Length > 0)
@@ -421,6 +460,15 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return value;
         }
 
+        /// <summary>
+        /// Finds and replaces all abbreviations in the specified text with their full terms.
+        /// </summary>
+        /// <param name="value">
+        /// The text to inspect for abbreviations and in which abbreviations shall be replaced.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the text with all abbreviations replaced by their full terms.
+        /// </returns>
         internal static string FindAndReplaceAllAbbreviations(string value)
         {
             var findings = Find(value);
@@ -428,6 +476,15 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return ReplaceAllAbbreviations(value, findings);
         }
 
+        /// <summary>
+        /// Finds and replaces all abbreviations in the specified text with their full terms.
+        /// </summary>
+        /// <param name="value">
+        /// The text to inspect for abbreviations and in which abbreviations shall be replaced.
+        /// </param>
+        /// <returns>
+        /// The text builder with all abbreviations replaced by their full terms.
+        /// </returns>
         internal static StringBuilder FindAndReplaceAllAbbreviations(StringBuilder value)
         {
             var findings = Find(value.ToString());
@@ -436,6 +493,16 @@ namespace MiKoSolutions.Analyzers.Linguistics
         }
 
 //// ncrunch: rdi off
+
+        /// <summary>
+        /// Finds all abbreviations contained in the specified text span.
+        /// </summary>
+        /// <param name="valueSpan">
+        /// The text span to inspect for abbreviations.
+        /// </param>
+        /// <returns>
+        /// An array of all found abbreviations as pairs of abbreviated and full terms, or an empty array if no abbreviations are found.
+        /// </returns>
         private static Pair[] FindCore(in ReadOnlySpan<char> valueSpan)
         {
             var results = new HashSet<Pair>(KeyComparer.Instance);
@@ -483,12 +550,45 @@ namespace MiKoSolutions.Analyzers.Linguistics
         }
 //// ncrunch: rdi default
 
+        /// <summary>
+        /// Determines whether the specified character indicates the start of a new word.
+        /// </summary>
+        /// <param name="c">
+        /// The character to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the character is uppercase or an underscore; otherwise, <see langword="false"/>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool IndicatesNewWord(in char c) => c.IsUpperCase() || c is Constants.Underscore;
 
+        /// <summary>
+        /// Determines whether the specified key represents the complete text.
+        /// </summary>
+        /// <param name="key">
+        /// The abbreviation key to check.
+        /// </param>
+        /// <param name="value">
+        /// The text to compare against.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the key exactly matches the text; otherwise, <see langword="false"/>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool CompleteTermHasIssue(in ReadOnlySpan<char> key, in ReadOnlySpan<char> value) => key.SequenceEqual(value);
 
+        /// <summary>
+        /// Determines whether the specified key represents an abbreviation at the beginning of the text.
+        /// </summary>
+        /// <param name="key">
+        /// The abbreviation key to check.
+        /// </param>
+        /// <param name="value">
+        /// The text to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the text starts with the key followed by a character indicating a new word; otherwise, <see langword="false"/>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool PrefixHasIssue(in ReadOnlySpan<char> key, in ReadOnlySpan<char> value)
         {
@@ -505,9 +605,33 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return false;
         }
 
+        /// <summary>
+        /// Determines whether the specified key represents an abbreviation at the end of the text.
+        /// </summary>
+        /// <param name="key">
+        /// The abbreviation key to check.
+        /// </param>
+        /// <param name="value">
+        /// The text to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the text ends with the key and is not part of an allowed postfix term; otherwise, <see langword="false"/>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool PostFixHasIssue(in ReadOnlySpan<char> key, in ReadOnlySpan<char> value) => value.EndsWith(key, StringComparison.Ordinal) && value.EndsWithAny(AllowedPostFixTerms) is false;
 
+        /// <summary>
+        /// Determines whether the specified key represents an abbreviation in the middle of the text.
+        /// </summary>
+        /// <param name="key">
+        /// The abbreviation key to check.
+        /// </param>
+        /// <param name="value">
+        /// The text to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the text contains the key as a standalone term surrounded by word boundaries; otherwise, <see langword="false"/>.
+        /// </returns>
         private static bool MidTermHasIssue(in ReadOnlySpan<char> key, in ReadOnlySpan<char> value)
         {
             // do a quick check on the hot path, as most times (~99.8%) there is no issue
@@ -561,14 +685,32 @@ namespace MiKoSolutions.Analyzers.Linguistics
             while (true);
         }
 
+        /// <summary>
+        /// Provides equality comparison for <see cref="Pair"/> instances where keys are considered equal if they match exactly (when same length) or if one key contains the other as a substring (when different lengths).
+        /// </summary>
+        /// <remarks>
+        /// This comparer allows grouping abbreviations that overlap, such as "app" and "application".
+        /// <para>
+        /// <note type="information">
+        /// <see cref="GetHashCode"/> returns a constant value to force hash collisions, ensuring <see cref="Equals"/> is invoked for all comparisons. This trades hash table performance for the ability to use substring-based equality logic.
+        /// </note>
+        /// </para>
+        /// </remarks>
         private sealed class KeyComparer : IEqualityComparer<Pair>
         {
+            /// <summary>
+            /// The only instance.
+            /// </summary>
             internal static readonly KeyComparer Instance = new KeyComparer();
 
+            /// <summary>
+            /// Prevents a default instance of the <see cref="KeyComparer"/> class from being created.
+            /// </summary>
             private KeyComparer()
             {
             }
 
+            /// <inheritdoc />
             public bool Equals(Pair x, Pair y)
             {
                 var spanX = x.Key.AsSpan();
@@ -587,17 +729,36 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return spanY.Contains(spanX);
             }
 
+            /// <inheritdoc />
             public int GetHashCode(Pair obj) => 42; // we have to rely on 'Equals', so we have to provide the same hash to cause 'Equals' to be invoked
         }
 
+        /// <summary>
+        /// Provides strict equality comparison for <see cref="Pair"/> instances where keys must be character-by-character identical. Unlike <see cref="KeyComparer"/>, this comparer does not consider substring matches as equal.
+        /// </summary>
+        /// <remarks>
+        /// This comparer allows to filter exact duplicates from abbreviation collections.
+        /// <para>
+        /// <note type="information">
+        /// <see cref="GetHashCode"/> returns a constant value to force hash collisions, ensuring <see cref="Equals"/> is invoked for all comparisons.
+        /// </note>
+        /// </para>
+        /// </remarks>
         private sealed class IdenticalKeyComparer : IEqualityComparer<Pair>
         {
+            /// <summary>
+            /// The only instance.
+            /// </summary>
             internal static readonly IdenticalKeyComparer Instance = new IdenticalKeyComparer();
 
+            /// <summary>
+            /// Prevents a default instance of the <see cref="IdenticalKeyComparer"/> class from being created.
+            /// </summary>
             private IdenticalKeyComparer()
             {
             }
 
+            /// <inheritdoc />
             public bool Equals(Pair x, Pair y)
             {
                 var spanX = x.Key.AsSpan();
@@ -606,6 +767,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return spanX.Length == spanY.Length && spanX.SequenceEqual(spanY);
             }
 
+            /// <inheritdoc />
             public int GetHashCode(Pair obj) => 42; // we have to rely on 'Equals', so we have to provide the same hash to cause 'Equals' to be invoked
         }
     }

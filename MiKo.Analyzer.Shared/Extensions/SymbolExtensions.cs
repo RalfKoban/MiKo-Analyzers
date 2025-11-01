@@ -326,7 +326,7 @@ namespace MiKoSolutions.Analyzers
         /// The field to inspect.
         /// </param>
         /// <param name="invocation">
-        /// The invocation string to match.
+        /// The invocation <see cref="string"/> to match.
         /// </param>
         /// <returns>
         /// A collection of member access expressions for the specified invocation.
@@ -457,7 +457,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets a string representation of the generic arguments for a type as T parameters.
+        /// Gets a <see cref="string"/> representation of the generic arguments for a type as T parameters.
         /// </summary>
         /// <param name="value">
         /// The type to inspect.
@@ -470,7 +470,7 @@ namespace MiKoSolutions.Analyzers
                                                                                   : string.Empty;
 
         /// <summary>
-        /// Gets a string representation of the generic arguments for a named type as T parameters.
+        /// Gets a <see cref="string"/> representation of the generic arguments for a named type as T parameters.
         /// </summary>
         /// <param name="value">
         /// The named type to inspect.
@@ -503,7 +503,7 @@ namespace MiKoSolutions.Analyzers
         /// The field to inspect.
         /// </param>
         /// <param name="invocation">
-        /// The invocation string to match.
+        /// The invocation <see cref="string"/> to match.
         /// </param>
         /// <returns>
         /// A collection of argument syntaxes that contains arguments for the specified invocation.
@@ -629,16 +629,16 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets a string representation of the method signature.
+        /// Gets a <see cref="string"/> representation of the method signature.
         /// </summary>
         /// <param name="value">
         /// The method to get the signature for.
         /// </param>
         /// <param name="builder">
-        /// The string builder to append the signature to.
+        /// The <see cref="StringBuilder"/>  to append the signature to.
         /// </param>
         /// <returns>
-        /// The string builder with the appended method signature.
+        /// The <see cref="StringBuilder"/>  with the appended method signature.
         /// </returns>
         internal static StringBuilder GetMethodSignature(this IMethodSymbol value, StringBuilder builder)
         {
@@ -1780,29 +1780,38 @@ namespace MiKoSolutions.Analyzers
                 return true;
             }
 
-            return value.IsNullable() && value is INamedTypeSymbol type && type.TypeArguments[0].SpecialType is SpecialType.System_Boolean;
+            if (value.IsValueType && value.IsNullable() && value is INamedTypeSymbol type)
+            {
+                // in a nullable context we might not have a 'Nullable<T>' but instead something like 'xyz?'
+                // (so we have to check if there are any type arguments available)
+                var typeArguments = type.TypeArguments;
+
+                return typeArguments.Length > 0 && typeArguments[0].SpecialType is SpecialType.System_Boolean;
+            }
+
+            return false;
         }
 
         /// <summary>
-        /// Determines whether a type is a byte.
+        /// Determines whether a type is a <see cref="byte"/>.
         /// </summary>
         /// <param name="value">
         /// The type to inspect.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the type is a byte; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the type is a <see cref="byte"/>; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsByte(this ITypeSymbol value) => value.SpecialType is SpecialType.System_Byte;
 
         /// <summary>
-        /// Determines whether a type is a byte array.
+        /// Determines whether a type is a <see cref="byte"/> array.
         /// </summary>
         /// <param name="value">
         /// The type to inspect.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the type is a byte array; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the type is a <see cref="byte"/> array; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool IsByteArray(this ITypeSymbol value) => value is IArrayTypeSymbol array && array.ElementType.IsByte();
 
@@ -2584,16 +2593,29 @@ namespace MiKoSolutions.Analyzers
                                                                            || value.InheritsFrom(Constants.Names.IMultiValueConverter, Constants.Names.IMultiValueConverterFullName);
 
         /// <summary>
-        /// Determines whether a type is a nullable value type.
+        /// Determines whether a type is a nullable type.
         /// </summary>
         /// <param name="value">
         /// The type to inspect.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the type is a nullable value type; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the type is a nullable type; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsNullable(this ITypeSymbol value) => value.IsValueType && value.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
+        internal static bool IsNullable(this ITypeSymbol value)
+        {
+            if (value.IsValueType)
+            {
+                return value.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
+            }
+
+            if (value.IsReferenceType)
+            {
+                return value.NullableAnnotation is NullableAnnotation.Annotated;
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// Determines whether a type is <see cref="object"/>.
