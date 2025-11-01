@@ -280,6 +280,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
                            .ReplaceWithProbe("Keep", "Keeps")
                            .ReplaceWithProbe("Keepss", "Keeps") // fix typo
                            .ReplaceWithProbe("Wont", "Does_Not_")
+                           .ReplaceWithProbe("HTTPClient", "HTTP_client")
+                           .ReplaceWithProbe("HTTPResponse", "HTTP_response")
+                           .ReplaceWithProbe("HTTPRequest", "HTTP_request")
                            .ReplaceWithProbe("ArgumentExceptionThrown", "ThrowsArgumentException")
                            .ReplaceWithProbe("ArgumentsExceptionThrown", "ThrowsArgumentException")
                            .ReplaceWithProbe("ArgumentNullExceptionThrown", "ThrowsArgumentNullException")
@@ -298,7 +301,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
                            .ReplaceWithProbe("ValidationExceptionThrown", "ThrowsValidationException")
                            .ReplaceWithProbe("UnauthorizedAccessExceptionThrown", "ThrowsUnauthorizedAccessException")
                            .ReplaceWithProbe("ExceptionThrown", "ThrowsException")
+                           .ReplaceWithProbe("ActiveMQ", "<0>")
                            .SeparateWords(Constants.Underscore)
+                           .ReplaceWithProbe("<_0>", "ActiveMQ")
                            .ReplaceWithProbe("argument_exception", "ArgumentException")
                            .ReplaceWithProbe("argument_null_exception", "ArgumentNullException") // fix some corrections, such as for known exceptions
                            .ReplaceWithProbe("argument_out_of_range_exception", "ArgumentOutOfRangeException")
