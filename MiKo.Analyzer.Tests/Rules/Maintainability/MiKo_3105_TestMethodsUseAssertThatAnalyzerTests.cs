@@ -145,6 +145,42 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_a_AssertMultipleAsync() => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Test]
+        public async Task DoSomethingAsync()
+        {
+            await Assert.MultipleAsync(() => { });
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_a_AssertEnterMultipleScope() => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething()
+        {
+            using (Assert.EnterMultipleScope())
+            {
+            }
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_a_AssertThatAsync() => No_issue_is_reported_for(@"
 using System.Threading.Tasks;
 

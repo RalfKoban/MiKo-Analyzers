@@ -19,6 +19,15 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
         protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation)
         {
             var ctors = GetMethodsOrderedByLocation(symbol, MethodKind.Constructor);
+
+            // filter out primary constructors as we cannot adjust its position
+            var primaryCtor = ctors.FirstOrDefault(_ => _.IsPrimaryConstructor());
+
+            if (primaryCtor != null)
+            {
+                ctors.Remove(primaryCtor);
+            }
+
             var methods = GetMethodsOrderedByLocation(symbol);
 
             var count = ctors.Count + methods.Count;

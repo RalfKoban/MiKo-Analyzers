@@ -118,7 +118,24 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                                                    .Where(IsAssertionMethod)
                                                                                                                    .ToList();
 
-        private static bool IsAssertionMethod(MemberAccessExpressionSyntax node) => node.Expression is IdentifierNameSyntax invokedType && Constants.Names.AssertionTypes.Contains(invokedType.GetName()) && node.GetName() != "Multiple";
+        private static bool IsAssertionMethod(MemberAccessExpressionSyntax node)
+        {
+            if (node.Expression is IdentifierNameSyntax invokedType && Constants.Names.AssertionTypes.Contains(invokedType.GetName()))
+            {
+                switch (node.GetName())
+                {
+                    case "Multiple":
+                    case "MultipleAsync":
+                    case "EnterMultipleScope":
+                        return false;
+
+                    default:
+                        return true;
+                }
+            }
+
+            return false;
+        }
 
         private static bool HasMessageParameter(MemberAccessExpressionSyntax assertion, Compilation compilation)
         {

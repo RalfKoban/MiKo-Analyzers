@@ -75,7 +75,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 if (node.Parent.IsCode())
                 {
-                    // skip <code> samples
+                    // skip code in <code> samples
+                    continue;
+                }
+
+                if (node.Parent.IsC())
+                {
+                    // skip parts in <c> samples
                     continue;
                 }
 
@@ -107,7 +113,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 if (textToken.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
                 {
                     // keep new line
-                    result.Add(XmlText(string.Empty).WithLeadingXmlComment());
+                    result.Add(XmlText().WithLeadingXmlComment());
 
                     // we do not need to inspect further
                     newLineTokenJustSkipped = true;

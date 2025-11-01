@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers
         /// The character to seek.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the string representation of the node contains the character; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the <see cref="string"/> representation of the node contains the character; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool Contains(this SyntaxNode value, in char c) => value?.ToString().Contains(c) ?? false;
 
@@ -1049,13 +1049,13 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether a type syntax represents a byte type.
+        /// Determines whether a type syntax represents a <see cref="byte"/> type.
         /// </summary>
         /// <param name="value">
         /// The type syntax to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the type syntax represents a byte type; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the type syntax represents a <see cref="byte"/> type; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool IsByte(this TypeSyntax value)
         {
@@ -2059,13 +2059,13 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether a type syntax represents a string type.
+        /// Determines whether a type syntax represents a <see cref="string"/> type.
         /// </summary>
         /// <param name="value">
         /// The type syntax to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the type syntax represents a string type; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the type syntax represents a <see cref="string"/> type; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool IsString(this TypeSyntax value)
         {
@@ -2096,7 +2096,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether an argument syntax represents a string value.
+        /// Determines whether an argument syntax represents a <see cref="string"/> value.
         /// </summary>
         /// <param name="value">
         /// The argument syntax to check.
@@ -2105,7 +2105,7 @@ namespace MiKoSolutions.Analyzers
         /// The semantic model to use for analysis.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the argument represents a string value; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the argument represents a <see cref="string"/> value; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool IsString(this ArgumentSyntax value, SemanticModel semanticModel)
         {
@@ -2118,7 +2118,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether an expression syntax represents a string value.
+        /// Determines whether an expression syntax represents a <see cref="string"/> value.
         /// </summary>
         /// <param name="value">
         /// The expression syntax to check.
@@ -2127,7 +2127,7 @@ namespace MiKoSolutions.Analyzers
         /// The semantic model to use for analysis.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the expression represents a string value; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the expression represents a <see cref="string"/> value; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool IsString(this ExpressionSyntax value, SemanticModel semanticModel)
         {
@@ -2140,24 +2140,24 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether an argument syntax represents a string literal.
+        /// Determines whether an argument syntax represents a <see cref="string"/> literal.
         /// </summary>
         /// <param name="value">
         /// The argument syntax to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the argument represents a string literal; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the argument represents a <see cref="string"/> literal; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool IsStringLiteral(this ArgumentSyntax value) => value?.Expression.IsStringLiteral() is true;
 
         /// <summary>
-        /// Determines whether an expression syntax represents a string literal.
+        /// Determines whether an expression syntax represents a <see cref="string"/> literal.
         /// </summary>
         /// <param name="value">
         /// The expression syntax to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the expression represents a string literal; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the expression represents a <see cref="string"/> literal; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool IsStringLiteral(this ExpressionSyntax value)
         {
@@ -2173,7 +2173,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether an expression syntax represents a string concatenation.
+        /// Determines whether an expression syntax represents a <see cref="string"/> concatenation.
         /// </summary>
         /// <param name="value">
         /// The expression syntax to check.
@@ -2183,7 +2183,7 @@ namespace MiKoSolutions.Analyzers
         /// The default is <see langword="null"/>.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the expression represents a string concatenation; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the expression represents a <see cref="string"/> concatenation; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool IsStringConcatenation(this ExpressionSyntax value, SemanticModel semanticModel = null)
         {
@@ -2214,13 +2214,13 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether an invocation expression represents a string format call.
+        /// Determines whether an invocation expression represents a <see cref="string"/> format call.
         /// </summary>
         /// <param name="value">
         /// The invocation expression to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the invocation represents a string format call; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the invocation represents a <see cref="string"/> format call; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool IsStringFormat(this InvocationExpressionSyntax value) => value.Expression is MemberAccessExpressionSyntax maes
                                                                                    && maes.IsKind(SyntaxKind.SimpleMemberAccessExpression)
@@ -2642,13 +2642,13 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets a cleaned-up string representation of an expression syntax.
+        /// Gets a cleaned-up <see cref="string"/> representation of an expression syntax.
         /// </summary>
         /// <param name="source">
-        /// The expression syntax to get a string representation for.
+        /// The expression syntax to get a <see cref="string"/> representation for.
         /// </param>
         /// <returns>
-        /// A cleaned-up string representation of the expression.
+        /// A cleaned-up <see cref="string"/> representation of the expression.
         /// </returns>
         internal static string ToCleanedUpString(this ExpressionSyntax source) => source?.ToString().Without(Constants.WhiteSpaces);
 

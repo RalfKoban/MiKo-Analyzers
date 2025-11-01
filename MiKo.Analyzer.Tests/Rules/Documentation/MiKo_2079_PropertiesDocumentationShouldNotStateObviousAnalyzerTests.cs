@@ -92,9 +92,9 @@ public class TestMe
 
         [Test]
         public void An_issue_is_reported_for_property_with_obvious_documentation_(
-                                                                             [ValueSource(nameof(ObviousStartingPhrases))] string obvious,
-                                                                             [ValueSource(nameof(ContinuationPhrases))] string continuation,
-                                                                             [ValueSource(nameof(Endings))] string ending)
+                                                                              [ValueSource(nameof(ObviousStartingPhrases))] string obvious,
+                                                                              [ValueSource(nameof(ContinuationPhrases))] string continuation,
+                                                                              [ValueSource(nameof(Endings))] string ending)
             => An_issue_is_reported_for(@"
 using System;
 
@@ -109,9 +109,9 @@ public class TestMe
 
         [Test]
         public void An_issue_is_reported_for_property_with_obvious_documentation_and_empty_line_(
-                                                                                            [ValueSource(nameof(ObviousStartingPhrases))] string obvious,
-                                                                                            [ValueSource(nameof(ContinuationPhrases))] string continuation,
-                                                                                            [ValueSource(nameof(Endings))] string ending)
+                                                                                             [ValueSource(nameof(ObviousStartingPhrases))] string obvious,
+                                                                                             [ValueSource(nameof(ContinuationPhrases))] string continuation,
+                                                                                             [ValueSource(nameof(Endings))] string ending)
             => An_issue_is_reported_for(@"
 using System;
 
@@ -127,9 +127,9 @@ public class TestMe
 
         [Test]
         public void Code_gets_fixed_for_property_with_obvious_documentation_(
-                                                                        [ValueSource(nameof(ObviousStartingPhrases))] string obvious,
-                                                                        [ValueSource(nameof(ContinuationPhrases))] string continuation,
-                                                                        [ValueSource(nameof(Endings))] string ending)
+                                                                         [ValueSource(nameof(ObviousStartingPhrases))] string obvious,
+                                                                         [ValueSource(nameof(ContinuationPhrases))] string continuation,
+                                                                         [ValueSource(nameof(Endings))] string ending)
         {
             var originalCode = @"
 using System;
@@ -157,9 +157,9 @@ public class TestMe
 
         [Test]
         public void Code_gets_fixed_for_property_with_obvious_documentation_and_empty_line_(
-                                                                                       [ValueSource(nameof(ObviousStartingPhrases))] string obvious,
-                                                                                       [ValueSource(nameof(ContinuationPhrases))] string continuation,
-                                                                                       [ValueSource(nameof(Endings))] string ending)
+                                                                                        [ValueSource(nameof(ObviousStartingPhrases))] string obvious,
+                                                                                        [ValueSource(nameof(ContinuationPhrases))] string continuation,
+                                                                                        [ValueSource(nameof(Endings))] string ending)
         {
             var originalCode = @"
 using System;

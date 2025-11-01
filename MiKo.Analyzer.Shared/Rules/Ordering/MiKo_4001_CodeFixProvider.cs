@@ -38,7 +38,9 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
                 // recreate nodes of type as we might change the type multiple times and would otherwise have the references to the outdated, previously changed, type
                 var childNodes = modifiedType.ChildNodes().ToList();
-                methodNodes = methodNodes.Select(_ => childNodes.First(_.IsEquivalentTo)).ToList();
+
+                // filter those that do not have an equivalent (such as primary ctors) and ignore them
+                methodNodes = methodNodes.Select(_ => childNodes.FirstOrDefault(_.IsEquivalentTo)).WhereNotNull().ToList();
 
                 var orientationNode = methodNodes[0];
 

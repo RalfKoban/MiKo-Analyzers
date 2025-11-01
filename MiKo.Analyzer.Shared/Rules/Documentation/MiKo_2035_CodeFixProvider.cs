@@ -71,9 +71,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                   ? PrepareByteArrayComment(comment)
                                   : PrepareComment(comment);
 
-            var startingPhrase = GetNonGenericMiddlePart(returnType);
-
-            var updatedComment = CommentStartingWith(preparedComment, startingPhrase);
+            var updatedComment = NonGenericComment(preparedComment, returnType);
 
             return CleanupComment(updatedComment);
         }
@@ -143,6 +141,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var startingPhrase = Constants.Comments.CollectionReturnTypeStartingPhrase;
 
+            var preparedCommentContent = preparedComment.Content;
+
+            if (preparedCommentContent.FirstOrDefault() is XmlTextSyntax xmlText)
+            {
+                if (xmlText.GetTextTrimmed().IsNullOrEmpty())
+                {
+                    return CommentWithContent(preparedComment, preparedCommentContent.Replace(xmlText, XmlText(startingPhrase).WithTriviaFrom(xmlText)));
+                }
+            }
+
             if (returnType.TypeArgumentList.Arguments.Count is 1)
             {
                 var typeName = GetGenericTypeArgumentTypeName(returnType);
@@ -158,6 +166,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         startingPhrase = startingPhrase + text + " " + Constants.Comments.ThatContainsTerm + " ";
                     }
+                }
+            }
+
+            return CommentStartingWith(preparedComment, startingPhrase);
+        }
+
+        private static XmlElementSyntax NonGenericComment(XmlElementSyntax preparedComment, TypeSyntax returnType)
+        {
+            var startingPhrase = GetNonGenericMiddlePart(returnType);
+
+            var content = preparedComment.Content;
+
+            if (content.FirstOrDefault() is XmlTextSyntax xmlText)
+            {
+                const string Phrase = " that represents ";
+
+                var text = xmlText.GetTextTrimmed();
+
+                var index = text.IndexOf(Phrase, StringComparison.Ordinal);
+
+                if (index > 0)
+                {
+                    var newStartPhrase = startingPhrase.ConcatenatedWith(text.AsSpan(index + Phrase.Length));
+
+                    return CommentWithContent(preparedComment, content.Replace(xmlText, XmlText(newStartPhrase).WithTriviaFrom(xmlText)));
                 }
             }
 
@@ -232,7 +265,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                    : Constants.Comments.CollectionReturnTypeStartingPhrase;
         }
 
-//// ncrunch: rdi off
+        //// ncrunch: rdi off
 //// ncrunch: no coverage start
 
         private sealed class MapData
@@ -330,7 +363,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             private static IEnumerable<string> CreatePhrases()
             {
                 var startingWords = new[] { "a", "an", "the", "a new", "the new" };
-                var modifications = new[] { "readonly", "read-only", "read only", "filtered", "concurrent" };
+                var modifications = new[] { "readonly", "read-only", "read only", "filtered", "concurrent", "single" };
                 var collections = new[]
                                       {
                                           "array", "arraylist", "array list", "list",  "collection", "dictionary", "enumerable", "enumerable collection", "syntax list", "separated syntax list", "immutable array",

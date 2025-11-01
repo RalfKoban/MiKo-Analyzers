@@ -49,6 +49,18 @@ public class TestMe
 }");
 
         [Test]
+        public void No_issue_is_reported_for_text_inside_c_tag() => No_issue_is_reported_for(@"
+/// <summary>
+/// Some text.
+/// </summary>
+/// <remarks>
+/// <c>a != b</c> or <c>some?.ToString()</c>
+/// </remarks>
+public class TestMe
+{
+}");
+
+        [Test]
         public void No_issue_is_reported_for_text_inside_code_tag() => No_issue_is_reported_for(@"
 /// <summary>
 /// Some text.

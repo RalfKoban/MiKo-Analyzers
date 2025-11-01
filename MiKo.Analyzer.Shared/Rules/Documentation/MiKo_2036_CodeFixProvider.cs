@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var newContent = comment.Content
                                     .AddRange(texts)
-                                    .Add(XmlText(string.Empty).WithLeadingXmlComment());
+                                    .Add(XmlText().WithLeadingXmlComment());
 
             return comment.WithContent(newContent);
         }

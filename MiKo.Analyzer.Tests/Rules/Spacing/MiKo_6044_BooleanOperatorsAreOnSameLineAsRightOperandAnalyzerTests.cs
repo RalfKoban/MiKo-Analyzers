@@ -337,6 +337,25 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void No_issue_is_reported_for_SuppressNullableWarningExpression_at_end_of_line() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    TestMe _testee;
+
+    public TestMe DoSomething()
+    {
+        _testee
+            .DoSomething()!
+            .DoSomething();
+
+        return _testee;
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_6044_BooleanOperatorsAreOnSameLineAsRightOperandAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6044_BooleanOperatorsAreOnSameLineAsRightOperandAnalyzer();
