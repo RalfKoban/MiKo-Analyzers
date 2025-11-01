@@ -43,13 +43,15 @@ namespace MiKoSolutions.Analyzers
 
         private static readonly char[] GenericTypeArgumentSeparator = { ',' };
 
-        private static readonly Regex HyperlinkRegex = new Regex(@"(www|ftp:|ftps:|http:|https:)+[^\s]+[\w]", RegexOptions.Compiled, 150.Milliseconds());
+        private static readonly TimeSpan RegexTimeout = 150.Milliseconds();
 
-        private static readonly Regex PascalCasingRegex = new Regex("[a-z]+[A-Z]+", RegexOptions.Compiled, 100.Milliseconds());
+        private static readonly Regex HyperlinkRegex = new Regex(@"(www|ftp:|ftps:|http:|https:)+[^\s]+[\w]", RegexOptions.Compiled, RegexTimeout);
 
-        private static readonly Regex NumberRegex = new Regex(NumberRegexPattern, RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace, 100.Milliseconds());
+        private static readonly Regex PascalCasingRegex = new Regex("[a-z]+[A-Z]+", RegexOptions.Compiled, RegexTimeout);
 
-        private static readonly Regex OnlyNumberRegex = new Regex("^" + NumberRegexPattern + "$", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace, 100.Milliseconds());
+        private static readonly Regex NumberRegex = new Regex(NumberRegexPattern, RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace, RegexTimeout);
+
+        private static readonly Regex OnlyNumberRegex = new Regex("^" + NumberRegexPattern + "$", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace, RegexTimeout);
 
         /// <summary>
         /// Adjusts the first word of the value according to the specified adjustment options.
