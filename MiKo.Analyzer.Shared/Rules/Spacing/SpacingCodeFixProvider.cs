@@ -63,8 +63,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             var openBraceToken = syntax.OpenBraceToken;
             var closeBraceToken = syntax.CloseBraceToken;
 
-            var closeBraceTokenSpaces = openBraceToken.IsOnSameLineAs(closeBraceToken) ? 0 : spaces;
-
             var updatedOpenBraceToken = openBraceToken.WithLeadingSpaces(spaces);
 
             if (syntax.Parent is BaseObjectCreationExpressionSyntax parent)
@@ -84,8 +82,21 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 }
             }
 
+            int closeBraceTokenSpaces, indentation;
+
+            if (syntax.IsKind(SyntaxKind.ComplexElementInitializerExpression))
+            {
+                indentation = Constants.IndentationForComplexElementInitializerExpression;
+                closeBraceTokenSpaces = syntax.Expressions.LastOrDefault()?.IsOnSameLineAs(closeBraceToken) is true ? 0 : spaces;
+            }
+            else
+            {
+                indentation = Constants.Indentation;
+                closeBraceTokenSpaces = openBraceToken.IsOnSameLineAs(closeBraceToken) ? 0 : spaces;
+            }
+
             return syntax.WithOpenBraceToken(updatedOpenBraceToken)
-                         .WithExpressions(GetUpdatedSyntax(syntax.Expressions, openBraceToken, spaces + Constants.Indentation))
+                         .WithExpressions(GetUpdatedSyntax(syntax.Expressions, openBraceToken, spaces + indentation))
                          .WithCloseBraceToken(closeBraceToken.WithLeadingSpaces(closeBraceTokenSpaces));
         }
 
@@ -116,7 +127,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     }
 
                     updatedSyntax = syntax.WithArgumentList(argumentList.WithOpenParenToken(openParenToken.WithoutTrivia()).WithCloseParenToken(updatedCloseParenToken))
-                                          .WithInitializer(GetUpdatedSyntax(initializer, spaces + Constants.Indentation));
+                                              .WithInitializer(GetUpdatedSyntax(initializer, spaces + Constants.Indentation));
                 }
             }
 
