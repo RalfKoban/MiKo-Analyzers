@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var firstPart = textTokens.Take(tokenIndex).ToTokenList().Add(token.WithText(partBefore));
 
                 var updatedXmlText = xmlText.WithTextTokens(firstPart);
-                var seeCref = SeeCref(SyntaxFactory.ParseName(replacement));
+                var seeCref = SeeCref(SyntaxFactory.ParseTypeName(replacement));
 
                 var newNodes = new List<SyntaxNode> { updatedXmlText, seeCref };
 

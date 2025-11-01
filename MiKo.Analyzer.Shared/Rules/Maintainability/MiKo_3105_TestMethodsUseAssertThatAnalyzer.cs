@@ -23,6 +23,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                   "Catch",
                                                                                   "ThrowsAsync",
                                                                                   "Multiple",
+                                                                                  "MultipleAsync",
+                                                                                  "EnterMultipleScope",
                                                                               };
 
         public MiKo_3105_TestMethodsUseAssertThatAnalyzer() : base(Id)

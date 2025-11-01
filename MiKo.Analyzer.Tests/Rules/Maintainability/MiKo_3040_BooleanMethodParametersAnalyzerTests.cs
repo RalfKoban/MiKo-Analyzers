@@ -32,6 +32,22 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_nullable_non_boolean_parameter_method() => No_issue_is_reported_for(@"
+#nullable enable
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        public void DoSomething(string? something) { }
+    }
+}
+");
+
         [TestCase("DependencyObject o, bool b")]
         [TestCase("bool b, DependencyObject o")]
         public void No_issue_is_reported_for_boolean_parameter_on_method_that_has_an_additional_DependencyObject_parameter_as_well_(string parameters) => No_issue_is_reported_for(@"

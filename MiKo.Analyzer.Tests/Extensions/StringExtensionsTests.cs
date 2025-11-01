@@ -132,7 +132,13 @@ namespace MiKoSolutions.Analyzers.Extensions
         }
 
         [Test]
-        public static void WordsAsSpan_returns_words() => Assert.That("GetHashCode".AsSpan().WordsAsSpan().Select(_ => _.ToString()), Is.EquivalentTo(["Get", "Hash", "Code"]));
+        public static void WordsAsSpan_returns_words_in_method_name() => Assert.That("GetHashCode".WordsAsSpan().Select(_ => _.ToString()), Is.EquivalentTo(["Get", "Hash", "Code"]));
+
+        [Test]
+        public static void WordsAsSpan_returns_words_in_text_with_leading_whitespaces() => Assert.That(" This is some text for -1. Just to be sure.".WordsAsSpan(WordBoundary.WhiteSpaces).Select(_ => _.ToString()), Is.EquivalentTo(["This", "is", "some", "text", "for", "-1", "Just", "to", "be", "sure"]));
+
+        [Test]
+        public static void WordsAsSpan_returns_words_in_text_without_leading_whitespaces() => Assert.That("This is some text for -1. Just to be sure.".WordsAsSpan(WordBoundary.WhiteSpaces).Select(_ => _.ToString()), Is.EquivalentTo(["This", "is", "some", "text", "for", "-1", "Just", "to", "be", "sure"]));
 
         [TestCase(' ', "", ExpectedResult = " ")]
         [TestCase('-', "", ExpectedResult = "-")]
@@ -261,5 +267,97 @@ namespace MiKoSolutions.Analyzers.Extensions
 
         [Test]
         public static void IsWhiteSpace_for_whitespace_([Values(' ', '\t', '\r', '\n', '\v', '\f')] in char c) => Assert.That(c.IsWhiteSpace(), Is.True);
+
+        [TestCase("1")]
+        [TestCase("123")]
+        [TestCase("-1")]
+        [TestCase("-0")]
+        [TestCase("-123")]
+        [TestCase("123.45")]
+        [TestCase("3.1415927")]
+        [TestCase("1.000")]
+        [TestCase("1,000")]
+        [TestCase("1_000")]
+        [TestCase("1_000_000")]
+        [TestCase("1_000_000_000")]
+        [TestCase("1_234_567_890")]
+        [TestCase("+1_234_567_890")]
+        [TestCase("-1_234_567_890")]
+        public static void IsNumber_returns_true_for_(string value) => Assert.That(value.IsNumber());
+
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase(".")]
+        [TestCase("-")]
+        [TestCase("some")]
+        [TestCase("1234.-215.12.12412.1sgsgd")]
+        [TestCase("3.1415927.")]
+        [TestCase("X-123")]
+        [TestCase("TestMe42")]
+        public static void IsNumber_returns_false_for_(string value) => Assert.That(value.IsNumber(), Is.False);
+
+        [Test]
+        public static void GetNumber_returns_small_numbers()
+        {
+            var numbers = "some text with 1, 2 and -3".GetNumbers();
+
+            Assert.That(numbers, Is.EquivalentTo(["1", "2", "-3"]));
+        }
+
+        [Test]
+        public static void GetNumber_returns_big_numbers_without_separators()
+        {
+            var numbers = "some text with 12345 and 67890".GetNumbers();
+
+            Assert.That(numbers, Is.EquivalentTo(["12345", "67890"]));
+        }
+
+        [Test]
+        public static void GetNumber_returns_big_numbers_with_dots_as_thousand_separators()
+        {
+            var numbers = "some text with 12.345 and 67.890".GetNumbers();
+
+            Assert.That(numbers, Is.EquivalentTo(["12.345", "67.890"]));
+        }
+
+        [Test]
+        public static void GetNumber_returns_big_numbers_with_commas_as_thousand_separators()
+        {
+            var numbers = "some text with 12,345 and 67,890".GetNumbers();
+
+            Assert.That(numbers, Is.EquivalentTo(["12,345", "67,890"]));
+        }
+
+        [Test]
+        public static void GetNumber_returns_single_big_number_with_underlines_as_separators()
+        {
+            var numbers = "some text with 1_000_000".GetNumbers();
+
+            Assert.That(numbers, Is.EquivalentTo(["1_000_000"]));
+        }
+
+        [Test]
+        public static void GetNumber_returns_big_numbers_with_underlines_as_separators()
+        {
+            var numbers = "some text with 12_345 and 67_890".GetNumbers();
+
+            Assert.That(numbers, Is.EquivalentTo(["12_345", "67_890"]));
+        }
+
+        [Test]
+        public static void GetNumber_returns_big_numbers_with_commas_and_dots()
+        {
+            var numbers = "some text with 12,345.321 and 67,890.5".GetNumbers();
+
+            Assert.That(numbers, Is.EquivalentTo(["12,345.321", "67,890.5"]));
+        }
+
+        [Test]
+        public static void GetNumber_returns_big_numbers_with_dots_and_commas()
+        {
+            var numbers = "some text with 12.345,321 and 67.890,5".GetNumbers();
+
+            Assert.That(numbers, Is.EquivalentTo(["12.345,321", "67.890,5"]));
+        }
     }
 }

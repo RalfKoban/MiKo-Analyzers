@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -8,28 +9,15 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2081_ReadOnlyFieldAnalyzer : SummaryDocumentationAnalyzer
+    public sealed class MiKo_2083_NonReadOnlyFieldAnalyzer : SummaryDocumentationAnalyzer
     {
-        public const string Id = "MiKo_2081";
+        public const string Id = "MiKo_2083";
 
-        public MiKo_2081_ReadOnlyFieldAnalyzer() : base(Id)
+        public MiKo_2083_NonReadOnlyFieldAnalyzer() : base(Id)
         {
         }
 
-        protected override bool ShallAnalyze(ISymbol symbol)
-        {
-            if (symbol is IFieldSymbol field && field.IsReadOnly)
-            {
-                switch (field.DeclaredAccessibility)
-                {
-                    case Accessibility.Public:
-                    case Accessibility.Protected:
-                        return field.ContainingType.IsTestClass() is false;
-                }
-            }
-
-            return false;
-        }
+        protected override bool ShallAnalyze(ISymbol symbol) => symbol is IFieldSymbol field && field.IsReadOnly is false;
 
         protected override IReadOnlyList<Diagnostic> AnalyzeSummaries(
                                                                   DocumentationCommentTriviaSyntax comment,
@@ -38,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   Lazy<string> commentXml,
                                                                   Lazy<string[]> summaries)
         {
-            if (summaryXmls.None(_ => _.GetTextTrimmed().EndsWith(Constants.Comments.FieldIsReadOnly, StringComparison.Ordinal)))
+            if (summaryXmls.Any(_ => _.GetTextTrimmed().EndsWith(Constants.Comments.FieldIsReadOnly, StringComparison.Ordinal)))
             {
                 return new[] { Issue(symbol.Name, summaryXmls[0].EndTag, Constants.Comments.FieldIsReadOnly) };
             }

@@ -3,6 +3,7 @@ using System.Buffers;
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -40,6 +41,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] Conditionals = { "if", "when", "in case", "whether or not", "whether" };
         private static readonly string[] ElseConditionals = { "else", "otherwise" };
+
+        private static readonly Regex ShouldBeRegex = new Regex(@"\b(shall|should|can|could|must|may|might|would)\s+be\s+\w+\b", RegexOptions.Compiled, 100.Milliseconds());
 
         private static readonly IComparer<string> ArticleStartComparer = new StringStartComparer(
                                                                                              StartWithArticleA,
@@ -128,23 +131,46 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             switch (count)
             {
                 case 0:
-                    return FixEmptyComment(comment.WithContent(XmlText(string.Empty)));
+                    return FixEmptyComment(comment.WithContent(XmlText()));
 
                 case 1 when contents[0] is XmlTextSyntax t:
                 {
-                    var text = t.GetTextTrimmed().AsSpan();
+                    var textTrimmed = t.GetTextTrimmed();
+                    var text = textTrimmed.AsSpan();
 
                     if (text.IsEmpty)
                     {
                         return FixEmptyComment(comment);
                     }
 
+                    var data = FindMatchingReplacementMapKeys(text);
+
+                    var shouldBeMatch = ShouldBeRegex.Match(textTrimmed);
+
+                    if (shouldBeMatch.Success)
+                    {
+                        var shouldBeText = shouldBeMatch.Value;
+                        var newTextStart = ReplacementTo + Verbalizer.MakeInfiniteVerb(shouldBeText.ThirdWord()) + " ";
+
+                        // re-phrase the text to fix it later on
+                        var updatedText = textTrimmed.AsCachedBuilder()
+                                                     .ReplaceAllWithProbe(data.Map)
+                                                     .Without(" " + shouldBeText)
+                                                     .TrimmedStart()
+                                                     .WithoutStarting(Conditionals, StringComparison.OrdinalIgnoreCase)
+                                                     .TrimmedStart()
+                                                     .Insert(0, newTextStart)
+                                                     .ToStringAndRelease();
+
+                        // do a second round with the updated text, to fix all the other stuff
+                        return FixText(comment.WithContent(XmlText(updatedText)));
+                    }
+
                     // determine whether we have a comment like:
                     //    true: some condition
-                    //    false: some other condition'
+                    //    false: some other condition
                     var replacement = text.Contains(':') ? ReplacementTo : Replacement;
 
-                    var data = FindMatchingReplacementMapKeys(text);
                     var uniqueKeys = data.UniqueKeys;
 
 //// ncrunch: no coverage start
@@ -240,7 +266,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var finalCommentContinuation = StringBuilderCache.GetStringAndRelease(commentContinuation);
 
-            var prepared = comment.ReplaceNode(originalText, XmlText(string.Empty));
+            var prepared = comment.ReplaceNode(originalText, XmlText());
 
             return FixComment(prepared, info.Keys, info.Map, finalCommentContinuation);
         }
@@ -601,7 +627,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 foreach (var text in startTerms.OrderBy(_ => _, ArticleStartComparer).ThenByDescending(_ => _.Length).ThenBy(_ => _))
                 {
-                    replacements[index++] = new Pair(text, Replacement);
+                    replacements[index++] = new Pair(text);
                 }
 
                 return replacements;

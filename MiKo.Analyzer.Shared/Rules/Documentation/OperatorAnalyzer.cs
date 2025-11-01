@@ -117,7 +117,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private Diagnostic AnalyzeParameter(DocumentationCommentTriviaSyntax comment, IParameterSymbol parameter, string phrase)
         {
             var parameterName = parameter.Name;
-            string paramName = Constants.XmlTag.Param + " name=\"" + parameterName + "\"";
+            var paramName = Constants.XmlTag.Param + " name=\"" + parameterName + "\"";
 
             var parameterComment = comment.GetParameterComment(parameterName);
 

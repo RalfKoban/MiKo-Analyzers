@@ -26,6 +26,30 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                 "Tells",
                                                             ];
 
+        private static readonly string[] Constructors =
+                                                        [
+                                                            "constructor",
+                                                            "Constructor",
+                                                            "Ctor",
+                                                            "ctor",
+                                                            "Copy constructor",
+                                                            "Copy Constructor",
+                                                            "Copy ctor",
+                                                            "Copy Ctor",
+                                                            "copy constructor",
+                                                            "copy Constructor",
+                                                            "copy ctor",
+                                                            "copy Ctor",
+                                                            "Default constructor",
+                                                            "Default Constructor",
+                                                            "Default ctor",
+                                                            "Default Ctor",
+                                                            "default constructor",
+                                                            "default Constructor",
+                                                            "default ctor",
+                                                            "default Ctor",
+                                                        ];
+
         [Test]
         public void No_issue_is_reported_for_undocumented_class() => No_issue_is_reported_for(@"
 using System;
@@ -619,6 +643,124 @@ public interface TestMe
 ";
 
             VerifyCSharpFix(code, code);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_public_constructor_([ValueSource(nameof(Constructors))] string originalText)
+        {
+            const string Template = """
+
+                                    using System;
+
+                                    public class TestMe
+                                    {
+                                        /// <summary>
+                                        /// ###.
+                                        /// </summary>
+                                        public TestMe() { }
+                                    }
+
+                                    """;
+
+            VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", """Initializes a new instance of the <see cref="TestMe"/> class"""));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_public_constructor_with_additional_information_([ValueSource(nameof(Constructors))] string originalText)
+        {
+            const string Template = """
+
+                                    using System;
+
+                                    public class TestMe
+                                    {
+                                        /// <summary>
+                                        /// ###.
+                                        /// </summary>
+                                        public TestMe() { }
+                                    }
+
+                                    """;
+
+            VerifyCSharpFix(Template.Replace("###", originalText + " for something"), Template.Replace("###", """Initializes a new instance of the <see cref="TestMe"/> class with something"""));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_private_constructor_([ValueSource(nameof(Constructors))] string originalText)
+        {
+            const string Template = """
+
+                                    using System;
+
+                                    public class TestMe
+                                    {
+                                        /// <summary>
+                                        /// ###.
+                                        /// </summary>
+                                        private TestMe() { }
+                                    }
+
+                                    """;
+
+            VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", """Prevents a default instance of the <see cref="TestMe"/> class from being created"""));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_public_constructor_for_generic_type_([ValueSource(nameof(Constructors))] string originalText)
+        {
+            const string Template = """
+
+                                    using System;
+
+                                    public class TestMe<T1, T2>
+                                    {
+                                        /// <summary>
+                                        /// ###.
+                                        /// </summary>
+                                        public TestMe() { }
+                                    }
+
+                                    """;
+
+            VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", """Initializes a new instance of the <see cref="TestMe{T1,T2}"/> class"""));
+        }
+
+        [TestCase("A callback that is called", "Gets called")]
+        [TestCase("A callback which is called", "Gets called")]
+        [TestCase("A method that gets called", "Gets called")]
+        [TestCase("A method that is called", "Gets called")]
+        [TestCase("A method which gets called", "Gets called")]
+        [TestCase("A method which is called", "Gets called")]
+        [TestCase("Callback that is called", "Gets called")]
+        [TestCase("Callback which is called", "Gets called")]
+        [TestCase("Method that gets called", "Gets called")]
+        [TestCase("Method that is called", "Gets called")]
+        [TestCase("Method which gets called", "Gets called")]
+        [TestCase("Method which is called", "Gets called")]
+        [TestCase("The callback that is called", "Gets called")]
+        [TestCase("The callback which is called", "Gets called")]
+        [TestCase("The method gets called", "Gets called")]
+        [TestCase("The method is called", "Gets called")]
+        [TestCase("The method that gets called", "Gets called")]
+        [TestCase("The method that is called", "Gets called")]
+        [TestCase("The method which gets called", "Gets called")]
+        [TestCase("The method which is called", "Gets called")]
+        [TestCase("This method gets called", "Gets called")]
+        [TestCase("This method is called", "Gets called")]
+        public void Code_gets_fixed_for_(string originalText, string fixedText)
+        {
+            const string Template = """
+
+                                    public class TestMe
+                                    {
+                                        /// <summary>
+                                        /// ### to do something.
+                                        /// </summary>
+                                        public void DoSomething() { }
+                                    }
+                                    """;
+
+            VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
         }
 
         protected override string GetDiagnosticId() => MiKo_2019_3rdPersonSingularVerbSummaryAnalyzer.Id;

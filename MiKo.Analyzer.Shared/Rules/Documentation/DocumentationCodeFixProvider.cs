@@ -14,18 +14,63 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class DocumentationCodeFixProvider : MiKoCodeFixProvider
     {
+        /// <summary>
+        /// Gets the starting phrase proposal from the specified diagnostic issue.
+        /// </summary>
+        /// <param name="issue">
+        /// The diagnostic issue containing the starting phrase proposal.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the starting phrase proposal, or the <see cref="string.Empty"/> string ("") if not found.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static string GetStartingPhraseProposal(Diagnostic issue) => issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.StartingPhrase, out var s) ? s : string.Empty;
 
+        /// <summary>
+        /// Gets the ending phrase proposal from the specified diagnostic issue.
+        /// </summary>
+        /// <param name="issue">
+        /// The diagnostic issue containing the ending phrase proposal.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the ending phrase proposal, or the <see cref="string.Empty"/> string ("") if not found.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static string GetEndingPhraseProposal(Diagnostic issue) => issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.EndingPhrase, out var s) ? s : string.Empty;
 
+        /// <summary>
+        /// Gets the phrase proposal from the specified diagnostic issue.
+        /// </summary>
+        /// <param name="issue">
+        /// The diagnostic issue containing the phrase proposal.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the phrase proposal, or the <see cref="string.Empty"/> string ("") if not found.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static string GetPhraseProposal(Diagnostic issue) => issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.Phrase, out var s) ? s : string.Empty;
 
 //// ncrunch: rdi off
 //// ncrunch: no coverage start
 
+        /// <summary>
+        /// Creates an optimized array of terms for quick lookup by removing terms that are prefixes of other terms.
+        /// </summary>
+        /// <param name="terms">
+        /// The collection of terms to optimize.
+        /// </param>
+        /// <returns>
+        /// An array of terms where no term is a prefix of another term, ordered by specificity.
+        /// </returns>
+        /// <remarks>
+        /// <para>
+        /// This optimization reduces the number of comparisons needed during text replacement operations by ensuring that longer, more specific terms are checked without being shadowed by their prefixes.
+        /// For example, if input contains ["get", "getter"], only "getter" is returned since "get" is a prefix.
+        /// </para>
+        /// <para>
+        /// Uses <see cref="ArrayPool{T}"/> for efficient memory allocation.
+        /// </para>
+        /// </remarks>
         protected static string[] GetTermsForQuickLookup(IReadOnlyCollection<string> terms)
         {
             var pool = ArrayPool<string>.Shared;
@@ -74,8 +119,29 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 //// ncrunch: no coverage end
 //// ncrunch: rdi default
 
+        /// <summary>
+        /// Creates an XML code element containing the specified text.
+        /// </summary>
+        /// <param name="text">
+        /// The text to include in the code element.
+        /// </param>
+        /// <returns>
+        /// The XML code element containing the specified text.
+        /// </returns>
         protected static XmlElementSyntax C(string text) => SyntaxFactory.XmlElement(Constants.XmlTag.C, XmlText(text).ToSyntaxList<XmlNodeSyntax>());
 
+        /// <summary>
+        /// Creates an XML comment element with the specified content and proper XML comment formatting.
+        /// </summary>
+        /// <param name="comment">
+        /// The XML element to update.
+        /// </param>
+        /// <param name="content">
+        /// The content nodes for the comment.
+        /// </param>
+        /// <returns>
+        /// The XML comment element with properly formatted tags and combined text nodes.
+        /// </returns>
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, in SyntaxList<XmlNodeSyntax> content)
         {
             var result = comment.WithStartTag(comment.StartTag.WithoutLeadingTrivia().WithTrailingXmlComment())
@@ -85,14 +151,72 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return CombineTexts(result);
         }
 
+        /// <summary>
+        /// Creates an XML comment element with the specified nodes and proper XML comment formatting.
+        /// </summary>
+        /// <param name="comment">
+        /// The XML element to update.
+        /// </param>
+        /// <param name="nodes">
+        /// The XML nodes for the comment.
+        /// </param>
+        /// <returns>
+        /// The XML comment element with properly formatted tags and combined text nodes.
+        /// </returns>
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, IEnumerable<XmlNodeSyntax> nodes) => Comment(comment, nodes.ToSyntaxList());
 
+        /// <summary>
+        /// Creates an XML comment element with text from the specified span.
+        /// </summary>
+        /// <param name="comment">
+        /// The XML element to update.
+        /// </param>
+        /// <param name="text">
+        /// The text span containing the comment text.
+        /// </param>
+        /// <param name="additionalComment">
+        /// The optional additional comment text to append.
+        /// The default is <see langword="null"/>.
+        /// </param>
+        /// <returns>
+        /// The XML comment element with the specified text.
+        /// </returns>
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, in ReadOnlySpan<string> text, string additionalComment = null) => Comment(comment, text[0], additionalComment);
 
+        /// <summary>
+        /// Creates an XML comment element with text from the specified span and additional content nodes.
+        /// </summary>
+        /// <param name="comment">
+        /// The XML element to update.
+        /// </param>
+        /// <param name="text">
+        /// The text span containing the comment text.
+        /// </param>
+        /// <param name="additionalComment">
+        /// The additional content nodes to append.
+        /// </param>
+        /// <returns>
+        /// The XML comment element with the specified text and additional content.
+        /// </returns>
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, in ReadOnlySpan<string> text, in SyntaxList<XmlNodeSyntax> additionalComment) => Comment(comment, text[0], additionalComment);
 
-//// ncrunch: rdi off
+        //// ncrunch: rdi off
 
+        /// <summary>
+        /// Creates an XML comment element with the specified text and additional content nodes.
+        /// </summary>
+        /// <param name="comment">
+        /// The XML element to update.
+        /// </param>
+        /// <param name="text">
+        /// The comment text.
+        /// </param>
+        /// <param name="additionalComment">
+        /// The additional content nodes to append.
+        /// </param>
+        /// <returns>
+        /// The XML comment element with the specified text and additional content.
+        /// </returns>
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string text, in SyntaxList<XmlNodeSyntax> additionalComment)
         {
             var end = CommentEnd(text, additionalComment.ToArray());
@@ -100,8 +224,43 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, end);
         }
 
+        /// <summary>
+        /// Creates an XML comment element with the specified text.
+        /// </summary>
+        /// <param name="comment">
+        /// The XML element to update.
+        /// </param>
+        /// <param name="text">
+        /// The comment text.
+        /// </param>
+        /// <param name="additionalComment">
+        /// The optional additional comment text to append.
+        /// The default is <see langword="null"/>.
+        /// </param>
+        /// <returns>
+        /// The XML comment element with the specified text.
+        /// </returns>
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string text, string additionalComment = null) => Comment(comment, additionalComment is null ? XmlText(text) : XmlText(text + additionalComment));
 
+        /// <summary>
+        /// Creates an XML comment element with text replacements based on the specified lookup terms and replacement map.
+        /// </summary>
+        /// <param name="syntax">
+        /// The XML element to update.
+        /// </param>
+        /// <param name="lookupTerms">
+        /// The terms to search for in the comment text.
+        /// </param>
+        /// <param name="replacementMap">
+        /// The map of terms to their replacements.
+        /// </param>
+        /// <param name="firstWordAdjustment">
+        /// A bitwise combination of the enumeration members that specifies the adjustment to apply to the first word.
+        /// The default is <see cref="FirstWordAdjustment.KeepSingleLeadingSpace"/>.
+        /// </param>
+        /// <returns>
+        /// The XML comment element with replaced text and combined text nodes.
+        /// </returns>
         protected static XmlElementSyntax Comment(XmlElementSyntax syntax, in ReadOnlySpan<string> lookupTerms, in ReadOnlySpan<Pair> replacementMap, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.KeepSingleLeadingSpace)
         {
             var result = Comment<XmlElementSyntax>(syntax, lookupTerms, replacementMap, firstWordAdjustment);
@@ -109,6 +268,32 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return CombineTexts(result);
         }
 
+        /// <summary>
+        /// Creates a syntax node with text replacements based on the specified lookup terms and replacement map.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the syntax node (typically <see cref="XmlElementSyntax"/>).
+        /// </typeparam>
+        /// <param name="syntax">
+        /// The syntax node to update.
+        /// </param>
+        /// <param name="lookupTerms">
+        /// The terms to search for in the text. Use <see cref="GetTermsForQuickLookup"/> to optimize this array.
+        /// </param>
+        /// <param name="replacementMap">
+        /// The map of terms to their replacements (key = original, value = replacement).
+        /// </param>
+        /// <param name="firstWordAdjustment">
+        /// A bitwise combination of the enumeration members that specifies the adjustment to apply to the first word (casing, verb form, etc.).
+        /// The default is <see cref="FirstWordAdjustment.KeepSingleLeadingSpace"/>.
+        /// </param>
+        /// <returns>
+        /// The syntax node with replaced text, or the original node if no replacements were made.
+        /// </returns>
+        /// <remarks>
+        /// This is the core text replacement method that performs pattern matching and substitution across all XML text nodes within the syntax tree.
+        /// It performs a deep search through all <see cref="XmlTextSyntax"/> descendants and replaces matching phrases while respecting the minimum length optimization for performance.
+        /// </remarks>
         protected static T Comment<T>(T syntax, in ReadOnlySpan<string> lookupTerms, in ReadOnlySpan<Pair> replacementMap, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.KeepSingleLeadingSpace) where T : SyntaxNode
         {
             var minimumLength = MinimumLength(lookupTerms);
@@ -224,37 +409,136 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 //// ncrunch: no coverage end
 //// ncrunch: rdi default
 
+        /// <summary>
+        /// Creates an XML comment element with the specified text surrounding a type reference.
+        /// </summary>
+        /// <param name="comment">
+        /// The XML element to update.
+        /// </param>
+        /// <param name="commentStart">
+        /// The text before the type reference.
+        /// </param>
+        /// <param name="type">
+        /// The type to reference.
+        /// </param>
+        /// <param name="commentEnd">
+        /// The text after the type reference.
+        /// </param>
+        /// <returns>
+        /// The XML comment element with the specified text and type reference.
+        /// </returns>
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string commentStart, TypeSyntax type, string commentEnd)
         {
             return Comment(comment, commentStart, SeeCref(type), commentEnd);
         }
 
+        /// <summary>
+        /// Creates an XML comment element with the specified text surrounding a link and additional content nodes.
+        /// </summary>
+        /// <param name="comment">
+        /// The XML element to update.
+        /// </param>
+        /// <param name="commentStart">
+        /// The text before the link.
+        /// </param>
+        /// <param name="link">
+        /// The link node.
+        /// </param>
+        /// <param name="commentEnd">
+        /// The text after the link.
+        /// </param>
+        /// <param name="commentEndNodes">
+        /// The additional content nodes to append.
+        /// </param>
+        /// <returns>
+        /// The XML comment element with the specified text, link, and additional content.
+        /// </returns>
         protected static XmlElementSyntax Comment(
                                               XmlElementSyntax comment,
                                               string commentStart,
                                               XmlNodeSyntax link,
                                               string commentEnd,
-                                              in SyntaxList<XmlNodeSyntax> commendEndNodes)
+                                              in SyntaxList<XmlNodeSyntax> commentEndNodes)
         {
-            return Comment(comment, commentStart, link, commentEnd, commendEndNodes.ToArray());
+            return Comment(comment, commentStart, link, commentEnd, commentEndNodes.ToArray());
         }
 
+        /// <summary>
+        /// Creates an XML comment element with the specified XML nodes.
+        /// </summary>
+        /// <param name="comment">
+        /// The XML element to update.
+        /// </param>
+        /// <param name="nodes">
+        /// The XML nodes for the comment.
+        /// </param>
+        /// <returns>
+        /// The XML comment element with the specified nodes.
+        /// </returns>
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, params XmlNodeSyntax[] nodes) => Comment(comment, nodes.ToSyntaxList());
 
+        /// <summary>
+        /// Creates an XML comment element with the specified text surrounding a link and additional content nodes.
+        /// </summary>
+        /// <param name="comment">
+        /// The XML element to update.
+        /// </param>
+        /// <param name="commentStart">
+        /// The text before the link.
+        /// </param>
+        /// <param name="link">
+        /// The link node.
+        /// </param>
+        /// <param name="commentEnd">
+        /// The text after the link.
+        /// </param>
+        /// <param name="commentEndNodes">
+        /// The additional content nodes to append.
+        /// </param>
+        /// <returns>
+        /// The XML comment element with the specified text, link, and additional content.
+        /// </returns>
         protected static XmlElementSyntax Comment(
                                               XmlElementSyntax comment,
                                               string commentStart,
                                               XmlNodeSyntax link,
                                               string commentEnd,
-                                              params XmlNodeSyntax[] commendEndNodes)
+                                              params XmlNodeSyntax[] commentEndNodes)
         {
             // TODO RKN: Check array creation to see if it can be optimized
             var start = new[] { XmlText(commentStart), link };
-            var end = CommentEnd(commentEnd, commendEndNodes);
+            var end = CommentEnd(commentEnd, commentEndNodes);
 
             return Comment(comment, start.Concat(end));
         }
 
+        /// <summary>
+        /// Creates an XML comment element with the specified text surrounding two links.
+        /// </summary>
+        /// <param name="comment">
+        /// The XML element to update.
+        /// </param>
+        /// <param name="commentStart">
+        /// The text before the first link.
+        /// </param>
+        /// <param name="link1">
+        /// The first link node.
+        /// </param>
+        /// <param name="commentMiddle">
+        /// The text between the two links.
+        /// </param>
+        /// <param name="link2">
+        /// The second link node.
+        /// </param>
+        /// <param name="commentEnd">
+        /// The text after the second link.
+        /// </param>
+        /// <param name="commentEndNodes">
+        /// The additional content nodes to append.
+        /// </param>
+        /// <returns>
+        /// The XML comment element with the specified text, links, and additional content.
+        /// </returns>
         protected static XmlElementSyntax Comment(
                                               XmlElementSyntax comment,
                                               string commentStart,
@@ -262,12 +546,39 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                               string commentMiddle,
                                               XmlNodeSyntax link2,
                                               string commentEnd,
-                                              params XmlNodeSyntax[] commendEndNodes)
+                                              params XmlNodeSyntax[] commentEndNodes)
         {
             // TODO RKN: Check array creation to see if it can be optimized
-            return Comment(comment, commentStart, link1, new[] { XmlText(commentMiddle) }, link2, commentEnd, commendEndNodes);
+            return Comment(comment, commentStart, link1, new[] { XmlText(commentMiddle) }, link2, commentEnd, commentEndNodes);
         }
 
+        /// <summary>
+        /// Creates an XML comment element with the specified text surrounding two links with middle content nodes.
+        /// </summary>
+        /// <param name="comment">
+        /// The XML element to update.
+        /// </param>
+        /// <param name="commentStart">
+        /// The text before the first link.
+        /// </param>
+        /// <param name="link1">
+        /// The first link node.
+        /// </param>
+        /// <param name="commentMiddle">
+        /// The content nodes between the two links.
+        /// </param>
+        /// <param name="link2">
+        /// The second link node.
+        /// </param>
+        /// <param name="commentEnd">
+        /// The text after the second link.
+        /// </param>
+        /// <param name="commentEndNodes">
+        /// The additional content nodes to append.
+        /// </param>
+        /// <returns>
+        /// The XML comment element with the specified text, links, and content.
+        /// </returns>
         protected static XmlElementSyntax Comment(
                                               XmlElementSyntax comment,
                                               string commentStart,
@@ -275,17 +586,29 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                               IEnumerable<XmlNodeSyntax> commentMiddle,
                                               XmlNodeSyntax link2,
                                               string commentEnd,
-                                              params XmlNodeSyntax[] commendEndNodes)
+                                              params XmlNodeSyntax[] commentEndNodes)
         {
             // TODO RKN: Check array creation to see if it can be optimized
             var start = new[] { XmlText(commentStart), link1 };
             var middle = new[] { link2 };
-            var end = CommentEnd(commentEnd, commendEndNodes);
+            var end = CommentEnd(commentEnd, commentEndNodes);
 
             // TODO RKN: Fix XML escaping caused by string conversion
             return Comment(comment, start.Concat(commentMiddle).Concat(middle).Concat(end));
         }
 
+        /// <summary>
+        /// Creates an XML comment element with the specified ending text appended, replacing any existing trailing period with the new ending. This ensures consistent sentence termination.
+        /// </summary>
+        /// <param name="comment">
+        /// The XML element to update.
+        /// </param>
+        /// <param name="ending">
+        /// The ending text to apply.
+        /// </param>
+        /// <returns>
+        /// The XML comment element with the specified ending, with any previous trailing period removed.
+        /// </returns>
         protected static XmlElementSyntax CommentEndingWith(XmlElementSyntax comment, string ending)
         {
             var lastNode = comment.Content.LastOrDefault();
@@ -328,6 +651,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
+        /// <summary>
+        /// Creates an XML comment element with the specified ending text and reference appended or replaced.
+        /// </summary>
+        /// <param name="comment">
+        /// The XML element to update.
+        /// </param>
+        /// <param name="commentStart">
+        /// The text before the reference.
+        /// </param>
+        /// <param name="seeCref">
+        /// The reference to append.
+        /// </param>
+        /// <param name="commentContinue">
+        /// The text after the reference.
+        /// </param>
+        /// <returns>
+        /// The XML comment element with the specified ending content.
+        /// </returns>
         protected static XmlElementSyntax CommentEndingWith(XmlElementSyntax comment, string commentStart, XmlEmptyElementSyntax seeCref, string commentContinue)
         {
             var lastNode = comment.Content.LastOrDefault();
@@ -370,6 +711,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
+        /// <summary>
+        /// Creates an XML comment element with a given phrase added at the beginning.
+        /// The first word of the original comment is adjusted based on the specified rule.
+        /// For example, the word may be lowercased to continue the sentence smoothly.
+        /// </summary>
+        /// <param name="comment">
+        /// The XML element to update.
+        /// </param>
+        /// <param name="phrase">
+        /// The phrase to add at the start.
+        /// </param>
+        /// <param name="firstWordAdjustment">
+        /// A bitwise combination of the enumeration members that specifies the adjustment to apply to the original first word.
+        /// The default is <see cref="FirstWordAdjustment.StartLowerCase"/>.
+        /// </param>
+        /// <returns>
+        /// The XML comment element with the specified starting phrase and adjusted continuation.
+        /// </returns>
         protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string phrase, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.StartLowerCase)
         {
             var content = CommentStartingWith(comment.Content, phrase, firstWordAdjustment);
@@ -377,6 +736,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return CommentWithContent(comment, content);
         }
 
+        /// <summary>
+        /// Creates a content list with the specified phrase at the start and adjusted first word.
+        /// </summary>
+        /// <param name="content">
+        /// The content nodes to update.
+        /// </param>
+        /// <param name="phrase">
+        /// The phrase to add at the start.
+        /// </param>
+        /// <param name="firstWordAdjustment">
+        /// A bitwise combination of the enumeration members that specifies the adjustment to apply to the first word.
+        /// The default is <see cref="FirstWordAdjustment.StartLowerCase"/>.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="XmlNodeSyntax"/> that contains the specified starting phrase.
+        /// </returns>
         protected static SyntaxList<XmlNodeSyntax> CommentStartingWith(in SyntaxList<XmlNodeSyntax> content, string phrase, in FirstWordAdjustment firstWordAdjustment = FirstWordAdjustment.StartLowerCase)
         {
             // when necessary adjust beginning text
@@ -406,6 +781,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return content.Insert(index, XmlText(phrase));
         }
 
+        /// <summary>
+        /// Creates an XML comment element with the specified starting text and reference.
+        /// </summary>
+        /// <param name="comment">
+        /// The XML element to update.
+        /// </param>
+        /// <param name="commentStart">
+        /// The text before the reference.
+        /// </param>
+        /// <param name="seeCref">
+        /// The reference to add.
+        /// </param>
+        /// <param name="commentContinue">
+        /// The text after the reference.
+        /// </param>
+        /// <returns>
+        /// The XML comment element with the specified starting content.
+        /// </returns>
         protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string commentStart, XmlEmptyElementSyntax seeCref, string commentContinue)
         {
             var content = comment.Content;
@@ -461,36 +854,133 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return CommentWithContent(comment, newContent);
         }
 
+        /// <summary>
+        /// Creates an XML element with the specified content and properly formatted tags.
+        /// </summary>
+        /// <param name="value">
+        /// The XML element to update.
+        /// </param>
+        /// <param name="content">
+        /// The content nodes for the element.
+        /// </param>
+        /// <returns>
+        /// The XML element with the specified content and tags on separate lines.
+        /// </returns>
         protected static XmlElementSyntax CommentWithContent(XmlElementSyntax value, in SyntaxList<XmlNodeSyntax> content) => SyntaxFactory.XmlElement(value.StartTag, content, value.EndTag).WithTagsOnSeparateLines();
 
+        /// <summary>
+        /// Creates a type reference syntax for the specified type name.
+        /// </summary>
+        /// <param name="typeName">
+        /// The name of the type to reference.
+        /// </param>
+        /// <returns>
+        /// The type reference syntax for the specified type name.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static TypeCrefSyntax Cref(string typeName) => Cref(typeName.AsTypeSyntax());
 
+        /// <summary>
+        /// Creates a type reference syntax for the specified type.
+        /// </summary>
+        /// <param name="type">
+        /// The type to reference.
+        /// </param>
+        /// <returns>
+        /// The type reference syntax without trivia.
+        /// </returns>
         protected static TypeCrefSyntax Cref(TypeSyntax type)
         {
             // fix trivia, to avoid situation as reported in https://github.com/dotnet/roslyn/issues/47550
             return SyntaxFactory.TypeCref(type.WithoutTrivia());
         }
 
+        /// <summary>
+        /// Creates an empty XML element with a reference to the specified type.
+        /// </summary>
+        /// <param name="tag">
+        /// The XML tag name.
+        /// </param>
+        /// <param name="type">
+        /// The type to reference.
+        /// </param>
+        /// <returns>
+        /// The empty XML element with the type reference.
+        /// </returns>
         protected static XmlEmptyElementSyntax Cref(string tag, TypeSyntax type)
         {
             // fix trivia, to avoid situation as reported in https://github.com/dotnet/roslyn/issues/47550
             return Cref(tag, SyntaxFactory.TypeCref(type.WithoutTrivia()));
         }
 
+        /// <summary>
+        /// Creates an empty XML element with a reference to the specified type member.
+        /// </summary>
+        /// <param name="tag">
+        /// The XML tag name.
+        /// </param>
+        /// <param name="type">
+        /// The type containing the member.
+        /// </param>
+        /// <param name="member">
+        /// The member to reference.
+        /// </param>
+        /// <returns>
+        /// The empty XML element with the type member reference.
+        /// </returns>
         protected static XmlEmptyElementSyntax Cref(string tag, TypeSyntax type, NameSyntax member)
         {
             // fix trivia, to avoid situation as reported in https://github.com/dotnet/roslyn/issues/47550
             return Cref(tag, SyntaxFactory.QualifiedCref(type.WithoutTrivia(), SyntaxFactory.NameMemberCref(member.WithoutTrivia())));
         }
 
+        /// <summary>
+        /// Gets the parameter name from the specified XML element.
+        /// </summary>
+        /// <param name="syntax">
+        /// The XML element containing the parameter name.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the parameter name.
+        /// </returns>
         protected static string GetParameterName(XmlElementSyntax syntax) => syntax.GetAttributes<XmlNameAttributeSyntax>()[0].Identifier.GetName();
 
+        /// <summary>
+        /// Gets the parameter name from the specified empty XML element.
+        /// </summary>
+        /// <param name="syntax">
+        /// The empty XML element containing the parameter name.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the parameter name.
+        /// </returns>
         protected static string GetParameterName(XmlEmptyElementSyntax syntax) => syntax.GetAttributes<XmlNameAttributeSyntax>()[0].Identifier.GetName();
 
+        /// <summary>
+        /// Gets the <c>cref</c> attribute from the specified syntax node.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node containing the <c>cref</c> attribute.
+        /// </param>
+        /// <returns>
+        /// The <c>cref</c> attribute.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlCrefAttributeSyntax GetSeeCref(SyntaxNode value) => value.GetCref(Constants.XmlTag.See);
 
+        /// <summary>
+        /// Gets the first documentation comment trivia from the specified syntax nodes.
+        /// </summary>
+        /// <param name="syntaxNodes">
+        /// The syntax nodes to search.
+        /// </param>
+        /// <param name="kind">
+        /// One of the enumeration members that specifies the kind of documentation comment to seek.
+        /// The default is <see cref="SyntaxKind.SingleLineDocumentationCommentTrivia"/>.
+        /// </param>
+        /// <returns>
+        /// The documentation comment trivia, or <see langword="null"/> if not found.
+        /// </returns>
         protected static DocumentationCommentTriviaSyntax GetXmlSyntax(IEnumerable<SyntaxNode> syntaxNodes, in SyntaxKind kind = SyntaxKind.SingleLineDocumentationCommentTrivia)
         {
             foreach (var node in syntaxNodes)
@@ -506,12 +996,37 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return null;
         }
 
+        /// <summary>
+        /// Creates an <c>&lt;inheritdoc/&gt;</c> XML element.
+        /// </summary>
+        /// <returns>
+        /// The <c>&lt;inheritdoc/&gt;</c> XML element.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlEmptyElementSyntax Inheritdoc() => XmlEmptyElement(Constants.XmlTag.Inheritdoc);
 
+        /// <summary>
+        /// Creates an <c>&lt;inheritdoc cref="…"/&gt;</c> XML element with the specified <c>cref</c> attribute.
+        /// </summary>
+        /// <param name="cref">
+        /// The <c>cref</c> attribute for the inheritdoc element.
+        /// </param>
+        /// <returns>
+        /// The <c>&lt;inheritdoc cref="…"/&gt;</c> XML element with the <c>cref</c> attribute.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlEmptyElementSyntax Inheritdoc(XmlCrefAttributeSyntax cref) => Inheritdoc().WithAttributes(cref.ToSyntaxList<XmlAttributeSyntax>());
 
+        /// <summary>
+        /// Creates an XML element with the first word converted to infinite verb form.
+        /// </summary>
+        /// <param name="syntax">
+        /// The XML element to update.
+        /// </param>
+        /// <returns>
+        /// The XML element with the first word converted to infinite verb form.
+        /// The original element if the first word is not a verb or is already in infinite form.
+        /// </returns>
         protected static XmlElementSyntax MakeFirstWordInfiniteVerb(XmlElementSyntax syntax)
         {
             if (syntax.Content.FirstOrDefault() is XmlTextSyntax text)
@@ -527,6 +1042,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return syntax;
         }
 
+        /// <summary>
+        /// Creates an XML text with the first word converted to infinite verb form.
+        /// </summary>
+        /// <param name="text">
+        /// The XML text to update.
+        /// </param>
+        /// <returns>
+        /// The XML text with the first word converted to infinite verb form.
+        /// </returns>
         protected static XmlTextSyntax MakeFirstWordInfiniteVerb(XmlTextSyntax text)
         {
             var textTokens = text.TextTokens;
@@ -553,30 +1077,111 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return text;
         }
 
+        /// <summary>
+        /// Creates an XML para empty element.
+        /// </summary>
+        /// <returns>
+        /// The XML para empty element.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlEmptyElementSyntax Para() => XmlEmptyElement(Constants.XmlTag.Para);
 
+        /// <summary>
+        /// Creates an XML para element with the specified text.
+        /// </summary>
+        /// <param name="text">
+        /// The text for the para element.
+        /// </param>
+        /// <returns>
+        /// The XML para element with the specified text.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlElementSyntax Para(string text) => SyntaxFactory.XmlParaElement(XmlText(text));
 
+        /// <summary>
+        /// Creates an XML para element with the specified content nodes.
+        /// </summary>
+        /// <param name="nodes">
+        /// The content nodes for the para element.
+        /// </param>
+        /// <returns>
+        /// The XML para element with the specified content.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlElementSyntax Para(in SyntaxList<XmlNodeSyntax> nodes) => SyntaxFactory.XmlParaElement(nodes);
 
+        /// <summary>
+        /// Creates an XML parameter comment for the specified parameter using text from the span.
+        /// </summary>
+        /// <param name="parameter">
+        /// The parameter to document.
+        /// </param>
+        /// <param name="comments">
+        /// The text span containing the comment text.
+        /// </param>
+        /// <returns>
+        /// The XML parameter comment.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlElementSyntax ParameterComment(ParameterSyntax parameter, in ReadOnlySpan<string> comments) => ParameterComment(parameter, comments[0]);
 
+        /// <summary>
+        /// Creates an XML parameter comment for the specified parameter.
+        /// </summary>
+        /// <param name="parameter">
+        /// The parameter to document.
+        /// </param>
+        /// <param name="comment">
+        /// The comment text.
+        /// </param>
+        /// <returns>
+        /// The XML parameter comment.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlElementSyntax ParameterComment(ParameterSyntax parameter, string comment) => Comment(SyntaxFactory.XmlParamElement(parameter.GetName()), comment);
 
+        /// <summary>
+        /// Creates an XML paramref element for the specified parameter.
+        /// </summary>
+        /// <param name="parameter">
+        /// The parameter to reference.
+        /// </param>
+        /// <returns>
+        /// The XML paramref element.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlEmptyElementSyntax ParamRef(ParameterSyntax parameter) => ParamRef(parameter.GetName());
 
+        /// <summary>
+        /// Creates an XML paramref element for the specified parameter name.
+        /// </summary>
+        /// <param name="parameterName">
+        /// The name of the parameter to reference.
+        /// </param>
+        /// <returns>
+        /// The XML paramref element.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlEmptyElementSyntax ParamRef(string parameterName) => XmlEmptyElement(Constants.XmlTag.ParamRef).WithAttribute(SyntaxFactory.XmlNameAttribute(parameterName));
 
+        /// <summary>
+        /// Creates an XML para element with special or phrase text.
+        /// </summary>
+        /// <returns>
+        /// The XML para element with special or phrase text.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlElementSyntax ParaOr() => Para(Constants.Comments.SpecialOrPhrase);
 
+        /// <summary>
+        /// Creates an XML element with boolean tags removed and text nodes combined.
+        /// </summary>
+        /// <param name="comment">
+        /// The XML element to update.
+        /// </param>
+        /// <returns>
+        /// The XML element without boolean tags and with combined text nodes.
+        /// </returns>
         protected static XmlElementSyntax RemoveBooleansTags(XmlElementSyntax comment)
         {
             var withoutBooleans = comment.Without(comment.Content.Where(_ => _.IsBooleanTag()));
@@ -585,9 +1190,51 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return CombineTexts(combinedTexts);
         }
 
+        /// <summary>
+        /// Creates a syntax node with the specified phrase replaced.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the syntax node.
+        /// </typeparam>
+        /// <param name="comment">
+        /// The syntax node to update.
+        /// </param>
+        /// <param name="text">
+        /// The XML text containing the phrase to replace.
+        /// </param>
+        /// <param name="phrase">
+        /// The phrase to search for.
+        /// </param>
+        /// <param name="replacement">
+        /// The replacement text.
+        /// </param>
+        /// <returns>
+        /// The syntax node with the replaced text, or the original node if the phrase was not found.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static T ReplaceText<T>(T comment, XmlTextSyntax text, string phrase, string replacement) where T : SyntaxNode => ReplaceText(comment, text, new[] { phrase }, replacement);
 
+        /// <summary>
+        /// Creates a syntax node with the specified phrases replaced.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the syntax node.
+        /// </typeparam>
+        /// <param name="comment">
+        /// The syntax node to update.
+        /// </param>
+        /// <param name="text">
+        /// The XML text containing the phrases to replace.
+        /// </param>
+        /// <param name="phrases">
+        /// The phrases to search for.
+        /// </param>
+        /// <param name="replacement">
+        /// The replacement text.
+        /// </param>
+        /// <returns>
+        /// The syntax node with the replaced text, or the original node if none of the phrases were found.
+        /// </returns>
         protected static T ReplaceText<T>(T comment, XmlTextSyntax text, in ReadOnlySpan<string> phrases, string replacement) where T : SyntaxNode
         {
             var modifiedText = text.ReplaceText(phrases, replacement);
@@ -597,24 +1244,99 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                    : comment.ReplaceNode(text, modifiedText);
         }
 
+        /// <summary>
+        /// Creates an XML see element with a reference to the specified type name.
+        /// </summary>
+        /// <param name="typeName">
+        /// The name of the type to reference.
+        /// </param>
+        /// <returns>
+        /// The XML see element with the type reference.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlEmptyElementSyntax SeeCref(string typeName) => SeeCref(typeName.AsTypeSyntax());
 
+        /// <summary>
+        /// Creates an XML see element with a reference to the specified type.
+        /// </summary>
+        /// <param name="type">
+        /// The type to reference.
+        /// </param>
+        /// <returns>
+        /// The XML see element with the type reference.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlEmptyElementSyntax SeeCref(TypeSyntax type) => Cref(Constants.XmlTag.See, type);
 
+        /// <summary>
+        /// Creates an XML see element with a reference to a member of the specified type.
+        /// </summary>
+        /// <param name="typeName">
+        /// The name of the type containing the member.
+        /// </param>
+        /// <param name="member">
+        /// The member name.
+        /// </param>
+        /// <returns>
+        /// The XML see element with the member reference.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlEmptyElementSyntax SeeCref(string typeName, string member) => SeeCref(typeName.AsTypeSyntax(), member);
 
+        /// <summary>
+        /// Creates an XML see element with a reference to a member of the specified type.
+        /// </summary>
+        /// <param name="typeName">
+        /// The name of the type containing the member.
+        /// </param>
+        /// <param name="member">
+        /// The member syntax.
+        /// </param>
+        /// <returns>
+        /// The XML see element with the member reference.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlEmptyElementSyntax SeeCref(string typeName, NameSyntax member) => SeeCref(typeName.AsTypeSyntax(), member);
 
+        /// <summary>
+        /// Creates an XML see element with a reference to a member of the specified type.
+        /// </summary>
+        /// <param name="type">
+        /// The type containing the member.
+        /// </param>
+        /// <param name="member">
+        /// The member name.
+        /// </param>
+        /// <returns>
+        /// The XML see element with the member reference.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlEmptyElementSyntax SeeCref(TypeSyntax type, string member) => SeeCref(type, SyntaxFactory.ParseName(member));
 
+        /// <summary>
+        /// Creates an XML see element with a reference to a member of the specified type.
+        /// </summary>
+        /// <param name="type">
+        /// The type containing the member.
+        /// </param>
+        /// <param name="member">
+        /// The member syntax.
+        /// </param>
+        /// <returns>
+        /// The XML see element with the member reference.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlEmptyElementSyntax SeeCref(TypeSyntax type, NameSyntax member) => Cref(Constants.XmlTag.See, type, member);
 
+        /// <summary>
+        /// Creates an XML see element with a langword attribute for the specified text.
+        /// </summary>
+        /// <param name="text">
+        /// The langword value.
+        /// </param>
+        /// <returns>
+        /// The XML see element with the langword attribute.
+        /// </returns>
         protected static XmlEmptyElementSyntax SeeLangword(string text)
         {
             var attribute = XmlAttribute(Constants.XmlTag.Attribute.Langword, text);
@@ -622,15 +1344,45 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return XmlEmptyElement(Constants.XmlTag.See).WithAttribute(attribute);
         }
 
+        /// <summary>
+        /// Creates an <c>&lt;see langword="false"/&gt;</c> XML element.
+        /// </summary>
+        /// <returns>
+        /// The XML element <c>&lt;see langword="false"/&gt;</c>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlEmptyElementSyntax SeeLangword_False() => SeeLangword("false");
 
+        /// <summary>
+        /// Creates an <c>&lt;see langword="null"/&gt;</c> XML element.
+        /// </summary>
+        /// <returns>
+        /// The XML element <c>&lt;see langword="null"/&gt;</c>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlEmptyElementSyntax SeeLangword_Null() => SeeLangword("null");
 
+        /// <summary>
+        /// Creates an <c>&lt;see langword="true"/&gt;</c> XML element.
+        /// </summary>
+        /// <returns>
+        /// The XML element <c>&lt;see langword="true"/&gt;</c>.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlEmptyElementSyntax SeeLangword_True() => SeeLangword("true");
 
+        /// <summary>
+        /// Splits an XML comment at the first sentence boundary (first period), returning the first sentence in the element and outputting the remaining content for separate processing.
+        /// </summary>
+        /// <param name="comment">
+        /// The XML element to split.
+        /// </param>
+        /// <param name="partsAfterSentence">
+        /// On successful return, contains the content nodes after the first sentence, which can be moved to additional <c>&lt;para/&gt;</c> elements or remarks sections.
+        /// </param>
+        /// <returns>
+        /// The XML element containing only the first sentence (up to and including the first period).
+        /// </returns>
 #pragma warning disable CA1021
         protected static XmlElementSyntax SplitCommentAfterFirstSentence(XmlElementSyntax comment, out SyntaxList<XmlNodeSyntax> partsAfterSentence)
 #pragma warning restore CA1021
@@ -708,6 +1460,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return comment;
         }
 
+        /// <summary>
+        /// Creates an XML typeparamref element for the specified type parameter name.
+        /// </summary>
+        /// <param name="name">
+        /// The name of the type parameter to reference.
+        /// </param>
+        /// <returns>
+        /// The XML typeparamref element.
+        /// </returns>
         protected static XmlEmptyElementSyntax TypeParamRef(string name)
         {
             var attribute = XmlAttribute(Constants.XmlTag.Attribute.Name, name);
@@ -715,6 +1476,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return XmlEmptyElement(Constants.XmlTag.TypeParamRef).WithAttribute(attribute);
         }
 
+        /// <summary>
+        /// Creates an XML text attribute with the specified tag and text.
+        /// </summary>
+        /// <param name="tag">
+        /// The attribute tag name.
+        /// </param>
+        /// <param name="text">
+        /// The attribute text value.
+        /// </param>
+        /// <returns>
+        /// The XML text attribute.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlTextAttributeSyntax XmlAttribute(string tag, string text) => SyntaxFactory.XmlTextAttribute(tag, text.AsToken());
 
@@ -753,27 +1526,100 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return list.AddStartTagAttributes(type);
         }
 
+        /// <summary>
+        /// Creates an XML element with the specified tag and no content.
+        /// </summary>
+        /// <param name="tag">
+        /// The XML tag name.
+        /// </param>
+        /// <returns>
+        /// The XML element with the specified tag.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlElementSyntax XmlElement(string tag) => SyntaxFactory.XmlElement(tag, default);
 
+        /// <summary>
+        /// Creates an XML element with the specified tag and content.
+        /// </summary>
+        /// <param name="tag">
+        /// The XML tag name.
+        /// </param>
+        /// <param name="content">
+        /// The content node.
+        /// </param>
+        /// <returns>
+        /// The XML element with the specified tag and content.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlElementSyntax XmlElement(string tag, XmlNodeSyntax content) => SyntaxFactory.XmlElement(tag, content.ToSyntaxList());
 
+        /// <summary>
+        /// Creates an XML element with the specified tag and content nodes.
+        /// </summary>
+        /// <param name="tag">
+        /// The XML tag name.
+        /// </param>
+        /// <param name="contents">
+        /// The content nodes.
+        /// </param>
+        /// <returns>
+        /// The XML element with the specified tag and content.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlElementSyntax XmlElement(string tag, IEnumerable<XmlNodeSyntax> contents) => SyntaxFactory.XmlElement(tag, contents.ToSyntaxList());
 
+        /// <summary>
+        /// Creates an empty XML element with the specified tag.
+        /// </summary>
+        /// <param name="tag">
+        /// The XML tag name.
+        /// </param>
+        /// <returns>
+        /// The empty XML element.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlEmptyElementSyntax XmlEmptyElement(string tag) => SyntaxFactory.XmlEmptyElement(tag);
 
+        /// <summary>
+        /// Creates an empty XML text with leading XML comment trivia.
+        /// </summary>
+        /// <returns>
+        /// The empty XML text with a new line and leading XML comment.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected static XmlTextSyntax NewLineXmlText() => XmlText(string.Empty).WithLeadingXmlComment();
+        protected static XmlTextSyntax NewLineXmlText() => XmlText().WithLeadingXmlComment();
 
+        /// <summary>
+        /// Creates an empty XML text with trailing XML comment trivia.
+        /// </summary>
+        /// <returns>
+        /// The empty XML text with trailing XML comment.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected static XmlTextSyntax TrailingNewLineXmlText() => XmlText(string.Empty).WithTrailingXmlComment();
+        protected static XmlTextSyntax TrailingNewLineXmlText() => XmlText().WithTrailingXmlComment();
 
+        /// <summary>
+        /// Creates an XML text with the specified text.
+        /// </summary>
+        /// <param name="text">
+        /// The text value.
+        /// The default is the <see cref="string.Empty"/> string ("").
+        /// </param>
+        /// <returns>
+        /// The XML text.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected static XmlTextSyntax XmlText(string text) => SyntaxFactory.XmlText(text);
+        protected static XmlTextSyntax XmlText(string text = "") => SyntaxFactory.XmlText(text);
 
+        /// <summary>
+        /// Creates an XML text with the specified syntax token list.
+        /// </summary>
+        /// <param name="textTokens">
+        /// The syntax token list for the XML text.
+        /// </param>
+        /// <returns>
+        /// The XML text with the specified tokens, or an empty XML text if the token list is empty.
+        /// </returns>
         protected static XmlTextSyntax XmlText(in SyntaxTokenList textTokens)
         {
             if (textTokens.Count is 0)
@@ -784,15 +1630,36 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return SyntaxFactory.XmlText(textTokens);
         }
 
+        /// <summary>
+        /// Creates an XML text with the specified syntax tokens.
+        /// </summary>
+        /// <param name="textTokens">
+        /// The syntax tokens for the XML text.
+        /// </param>
+        /// <returns>
+        /// The XML text with the specified tokens.
+        /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static XmlTextSyntax XmlText(IEnumerable<SyntaxToken> textTokens) => XmlText(textTokens.ToTokenList());
 
-        private static List<XmlNodeSyntax> CommentEnd(string commentEnd, params XmlNodeSyntax[] commendEndNodes)
+        /// <summary>
+        /// Creates a collection of XML nodes with the specified ending text and additional content nodes.
+        /// </summary>
+        /// <param name="commentEnd">
+        /// The ending text to prepend to the content nodes.
+        /// </param>
+        /// <param name="commentEndNodes">
+        /// The additional XML nodes to append.
+        /// </param>
+        /// <returns>
+        /// A collection of XML nodes with the ending text combined with the additional content nodes, with the first word of existing text nodes adjusted to lowercase.
+        /// </returns>
+        private static List<XmlNodeSyntax> CommentEnd(string commentEnd, params XmlNodeSyntax[] commentEndNodes)
         {
             var skip = 0;
             XmlTextSyntax textCommentEnd;
 
-            var length = commendEndNodes.Length;
+            var length = commentEndNodes.Length;
 
             // add a white space at the end of the comment in case we have further texts
             if (length > 1 && commentEnd.Length > 0 && commentEnd[commentEnd.Length - 1] != ' ')
@@ -800,7 +1667,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 commentEnd += " ";
             }
 
-            if (commendEndNodes.FirstOrDefault() is XmlTextSyntax text)
+            if (commentEndNodes.FirstOrDefault() is XmlTextSyntax text)
             {
                 skip = 1;
 
@@ -830,21 +1697,42 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var last = length - 1;
 
-                if (commendEndNodes[last] is XmlTextSyntax additionalText)
+                if (commentEndNodes[last] is XmlTextSyntax additionalText)
                 {
-                    commendEndNodes[last] = XmlText(additionalText.TextTokens.WithoutLastXmlNewLine());
+                    commentEndNodes[last] = XmlText(additionalText.TextTokens.WithoutLastXmlNewLine());
                 }
             }
 
             var result = new List<XmlNodeSyntax>(1 + length - skip);
             result.Add(textCommentEnd);
-            result.AddRange(commendEndNodes.Skip(skip));
+            result.AddRange(commentEndNodes.Skip(skip));
 
             return result;
         }
 
+        /// <summary>
+        /// Creates an empty XML element with a code reference attribute.
+        /// </summary>
+        /// <param name="tag">
+        /// The XML tag name.
+        /// </param>
+        /// <param name="syntax">
+        /// The code reference syntax to include in the element.
+        /// </param>
+        /// <returns>
+        /// The empty XML element with the code reference attribute.
+        /// </returns>
         private static XmlEmptyElementSyntax Cref(string tag, CrefSyntax syntax) => XmlEmptyElement(tag).WithAttribute(SyntaxFactory.XmlCrefAttribute(syntax));
 
+        /// <summary>
+        /// Determines the index of the first content node to process, accounting for whitespace-only text nodes.
+        /// </summary>
+        /// <param name="content">
+        /// The content nodes to analyze.
+        /// </param>
+        /// <returns>
+        /// The zero-based index of the first meaningful content node, or <c>-1</c> if the content is empty.
+        /// </returns>
         private static int GetIndex(in SyntaxList<XmlNodeSyntax> content)
         {
             var contentCount = content.Count;
@@ -863,6 +1751,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
 //// ncrunch: rdi off
+
+        /// <summary>
+        /// Creates an XML element with adjacent text nodes merged into single text nodes.
+        /// </summary>
+        /// <param name="comment">
+        /// The XML element to update.
+        /// </param>
+        /// <returns>
+        /// The XML element with adjacent text nodes combined, or the original element if no adjacent text nodes were found.
+        /// </returns>
         private static XmlElementSyntax CombineTexts(XmlElementSyntax comment)
         {
             var contents = comment.Content;
