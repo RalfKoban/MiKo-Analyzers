@@ -26,6 +26,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool HasIssue(IPropertySymbol property)
         {
+            if (property.ContainingType is INamedTypeSymbol type && type.TypeKind is TypeKind.Interface)
+            {
+                // ignore interfaces
+                return false;
+            }
+
             var syntax = property.GetSyntax<PropertyDeclarationSyntax>();
 
             if (syntax is null)
