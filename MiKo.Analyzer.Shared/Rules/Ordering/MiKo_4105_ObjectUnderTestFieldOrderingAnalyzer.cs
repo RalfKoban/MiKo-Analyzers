@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             var path = field.GetLineSpan().Path;
 
             var fields = GetFieldsOrderedByLocation(symbol, path);
-            var firstField = fields[0];
+            var firstField = fields.SkipWhile(_ => _.IsConst).First();
 
             return ReferenceEquals(field, firstField)
                    ? Array.Empty<Diagnostic>()
