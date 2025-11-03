@@ -98,15 +98,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     continue;
                 }
 
-                first = false;
-
                 for (int index = 0, length = ExpectedOutcomeMarkers.Length; index < length; index++)
                 {
                     var marker = ExpectedOutcomeMarkers[index];
 
                     if (part.Contains(marker, StringComparison.OrdinalIgnoreCase))
                     {
-                        if (SpecialMarkerHandling.Equals(marker, StringComparison.OrdinalIgnoreCase))
+                        if (first && SpecialMarkerHandling.Equals(marker, StringComparison.OrdinalIgnoreCase))
                         {
                             continue;
                         }
@@ -114,7 +112,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                         return true;
                     }
                 }
-           }
+
+                first = false;
+            }
 
             return false;
         }
