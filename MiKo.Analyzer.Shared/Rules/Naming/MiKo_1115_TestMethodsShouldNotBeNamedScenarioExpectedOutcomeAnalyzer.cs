@@ -13,6 +13,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1115";
 
+        private const string SpecialMarkerHandling = "Create";
+
         private static readonly string[] ExpectedOutcomeMarkers =
                                                                   {
                                                                       "Actual",
@@ -36,7 +38,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                       "Consumed",
                                                                       "Once",
                                                                       "Does", // incl. 'DoesNot'
-                                                                      "Create",
+                                                                      SpecialMarkerHandling,
+                                                                      "Creates",
                                                                       "Append",
                                                                       "Keep",
                                                                       "Accepted",
@@ -97,11 +100,21 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 first = false;
 
-                if (part.ContainsAny(ExpectedOutcomeMarkers, StringComparison.OrdinalIgnoreCase))
+                for (int index = 0, length = ExpectedOutcomeMarkers.Length; index < length; index++)
                 {
-                    return true;
+                    var marker = ExpectedOutcomeMarkers[index];
+
+                    if (part.Contains(marker, StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (SpecialMarkerHandling.Equals(marker, StringComparison.OrdinalIgnoreCase))
+                        {
+                            continue;
+                        }
+
+                        return true;
+                    }
                 }
-            }
+           }
 
             return false;
         }
