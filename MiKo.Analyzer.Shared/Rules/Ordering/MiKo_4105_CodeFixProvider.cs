@@ -25,18 +25,14 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
                 if (field is null)
                 {
-                    // cannot happen
-                    return modifiedType.InsertNodeAfter(typeSyntax.ChildNodes<FieldDeclarationSyntax>().Last(), syntax);
+                    // cannot happen as this would mean that the field is the only non-constant field and should not have been reported at all
+                    return modifiedType.InsertNodeAfter(modifiedType.ChildNodes<FieldDeclarationSyntax>().Last(), syntax);
                 }
-                else
-                {
-                    return modifiedType.InsertNodeBefore(field, syntax);
-                }
+
+                return modifiedType.InsertNodeBefore(field, syntax);
             }
-            else
-            {
-                return PlaceFirst<FieldDeclarationSyntax>(syntax, typeSyntax);
-            }
+
+            return PlaceFirst<FieldDeclarationSyntax>(syntax, typeSyntax);
         }
     }
 }
