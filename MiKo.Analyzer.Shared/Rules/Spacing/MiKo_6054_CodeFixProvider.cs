@@ -43,8 +43,8 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         private static ParenthesizedLambdaExpressionSyntax GetUpdatedSyntax(ParenthesizedLambdaExpressionSyntax syntax)
         {
             var updatedSyntax = syntax.WithParameterList(syntax.ParameterList.WithoutTrailingTrivia())
-                                      .WithArrowToken(syntax.ArrowToken.WithoutTrivia().WithLeadingSpace())
-                                      .WithExpressionBody(syntax.ExpressionBody?.WithoutLeadingTrivia().WithLeadingSpace());
+                                      .WithArrowToken(syntax.ArrowToken.WithLeadingAndTrailingSpace())
+                                      .WithBody(syntax.Body.WithoutLeadingTrivia());
 
             return UpdateExpressionBody(syntax, updatedSyntax);
         }
@@ -52,8 +52,8 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         private static SimpleLambdaExpressionSyntax GetUpdatedSyntax(SimpleLambdaExpressionSyntax syntax)
         {
             var updatedSyntax = syntax.WithParameter(syntax.Parameter.WithoutTrailingTrivia())
-                                      .WithArrowToken(syntax.ArrowToken.WithoutTrivia().WithLeadingSpace())
-                                      .WithExpressionBody(syntax.ExpressionBody?.WithoutLeadingTrivia().WithLeadingSpace());
+                                      .WithArrowToken(syntax.ArrowToken.WithLeadingAndTrailingSpace())
+                                      .WithBody(syntax.Body.WithoutLeadingTrivia());
 
             return UpdateExpressionBody(syntax, updatedSyntax);
         }
@@ -70,10 +70,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             var initialSpaces = syntax.GetPositionWithinStartLine();
             var additionalSpaces = updatedSyntax.ExpressionBody.GetPositionWithinStartLine();
             var spaces = initialSpaces + additionalSpaces;
-
             var updatedExpression = GetSyntaxWithLeadingSpaces(expressionBody, spaces);
 
-            return (T)updatedSyntax.WithExpressionBody(updatedExpression);
+            return (T)updatedSyntax.WithExpressionBody(updatedExpression.WithoutLeadingTrivia());
         }
     }
 }

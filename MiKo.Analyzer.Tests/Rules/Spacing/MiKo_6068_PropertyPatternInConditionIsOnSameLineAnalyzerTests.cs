@@ -112,7 +112,6 @@ public class TestMe
                                         {
                                             public static string GetPropertyName<T, TProperty>(Expression<Func<T, TProperty>> propertyLambda)
                                             {
-                                        
                                                 if (propertyLambda.Body is not MemberExpression
                                                     {
                                                         Member: PropertyInfo
@@ -136,15 +135,7 @@ public class TestMe
                                         {
                                             public static string GetPropertyName<T, TProperty>(Expression<Func<T, TProperty>> propertyLambda)
                                             {
-
-                                                if (propertyLambda.Body is not MemberExpression
-                                                    {
-                                                        Member: PropertyInfo
-                                                        {
-                                                            ReflectedType: { } reflectedType,
-                                                            Name: { } name
-                                                        }
-                                                    })
+                                                if (propertyLambda.Body is not MemberExpression { Member: PropertyInfo { ReflectedType: { } reflectedType, Name: { } name } })
                                                 {
                                                     throw new ArgumentException($"Expression '{propertyLambda}' does not refer to a property.");
                                                 }

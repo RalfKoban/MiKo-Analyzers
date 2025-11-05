@@ -14,15 +14,13 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     {
         public override string FixableDiagnosticId => "MiKo_6068";
 
-        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<PropertyPatternClauseSyntax>().FirstOrDefault();
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<RecursivePatternSyntax>().FirstOrDefault();
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            if (syntax is PropertyPatternClauseSyntax clause)
+            if (syntax is RecursivePatternSyntax pattern && pattern.PropertyPatternClause is PropertyPatternClauseSyntax clause)
             {
-                var updatedSyntax = clause.PlacedOnSameLine();
-
-                return updatedSyntax;
+                return pattern.PlacedOnSameLine();
             }
 
             return syntax;

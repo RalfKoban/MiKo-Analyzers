@@ -16,27 +16,28 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzePropertyPatternClause, SyntaxKind.PropertyPatternClause);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzePropertyPatternClause, SyntaxKind.RecursivePattern);
 
-        private static bool ShallAnalyze(SyntaxNode clause)
+        private static bool ShallAnalyze(RecursivePatternSyntax pattern)
         {
-            if (clause.FirstAncestor<IfStatementSyntax>() is IfStatementSyntax statement)
+            if (pattern.PropertyPatternClause != null)
             {
-                return statement.Condition.DescendantNodes().Contains(clause);
+                if (pattern.FirstAncestor<IfStatementSyntax>() is IfStatementSyntax statement)
+                {
+                    return statement.Condition.DescendantNodes().Contains(pattern);
+                }
             }
 
             return false;
         }
 
-        private static bool HasIssue(SyntaxNode clause) => clause.IsSpanningMultipleLines();
-
         private void AnalyzePropertyPatternClause(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is PropertyPatternClauseSyntax clause && ShallAnalyze(clause))
+            if (context.Node is RecursivePatternSyntax pattern && ShallAnalyze(pattern))
             {
-                if (HasIssue(clause))
+                if (pattern.IsSpanningMultipleLines())
                 {
-                    ReportDiagnostics(context, Issue(clause));
+                    ReportDiagnostics(context, Issue(pattern));
                 }
             }
         }
