@@ -18218,6 +18218,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Place property pattern on single line.
+        /// </summary>
+        internal static string MiKo_6068_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6068_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In C#, write simple property patterns on one line to keep your code clean and easy to read. This avoids extra indentation and makes it clear what you&apos;re checking..
+        /// </summary>
+        internal static string MiKo_6068_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6068_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place property pattern on single line.
+        /// </summary>
+        internal static string MiKo_6068_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6068_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place property patterns inside &apos;if&apos; conditions on same line.
+        /// </summary>
+        internal static string MiKo_6068_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6068_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Surround with blank lines.
         /// </summary>
         internal static string MiKo_6070_CodeFixTitle {

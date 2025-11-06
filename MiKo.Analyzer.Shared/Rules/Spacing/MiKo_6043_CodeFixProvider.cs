@@ -96,7 +96,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         private AnonymousObjectCreationExpressionSyntax GetUpdatedSyntax(AnonymousObjectCreationExpressionSyntax syntax)
         {
             return syntax.WithoutTrivia()
-                         .WithNewKeyword(syntax.NewKeyword.WithoutTrivia().WithTrailingSpace())
+                         .WithNewKeyword(syntax.NewKeyword.WithoutTrivia())
                          .WithOpenBraceToken(syntax.OpenBraceToken.WithoutTrivia().WithLeadingSpace()) // remove the spaces or line breaks around the opening bracket
                          .WithCloseBraceToken(syntax.CloseBraceToken.WithoutTrivia().WithLeadingSpace()) // remove the spaces or line breaks around the closing bracket
                          .WithInitializers(GetUpdatedSyntax(syntax.Initializers, syntax.OpenBraceToken, Constants.Indentation));

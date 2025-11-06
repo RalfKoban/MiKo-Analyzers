@@ -779,7 +779,7 @@ namespace MiKoSolutions.Analyzers
         /// A new syntax token with a space as leading trivia.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static SyntaxToken WithLeadingSpace(this in SyntaxToken value) => value.WithLeadingTrivia(SyntaxFactory.ElasticSpace); // use elastic one to allow formatting to be done automatically
+        internal static SyntaxToken WithLeadingSpace(this in SyntaxToken value) => value.WithLeadingTrivia(SyntaxFactory.Space); // use non-elastic one to prevent formatting to be done automatically
 
         /// <summary>
         /// Creates a new syntax token with the specified number of spaces as leading trivia.
@@ -851,7 +851,10 @@ namespace MiKoSolutions.Analyzers
         {
             var currentSpaces = value.GetPositionWithinStartLine();
 
-            return value.WithLeadingSpaces(currentSpaces + additionalSpaces);
+            // the spaces might get negative, so ensure that they are at least zero
+            var spaces = Math.Max(0, currentSpaces + additionalSpaces);
+
+            return value.WithLeadingSpaces(spaces);
         }
 
         /// <summary>
@@ -875,6 +878,18 @@ namespace MiKoSolutions.Analyzers
 
             return value.WithAdditionalLeadingTrivia(WhiteSpaces(additionalSpaces));
         }
+
+        /// <summary>
+        /// Creates a new syntax token with a space as both leading and trailing trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to modify.
+        /// </param>
+        /// <returns>
+        /// A new syntax token with a space as leading and trailing trivia.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static SyntaxToken WithLeadingAndTrailingSpace(this in SyntaxToken value) => value.WithLeadingSpace().WithTrailingSpace();
 
         /// <summary>
         /// Creates a new syntax token with an XML comment start as leading trivia.
