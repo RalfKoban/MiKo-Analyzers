@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            if (syntax is RecursivePatternSyntax pattern && pattern.PropertyPatternClause is PropertyPatternClauseSyntax clause)
+            if (syntax is RecursivePatternSyntax pattern && pattern.PropertyPatternClause != null)
             {
                 return pattern.PlacedOnSameLine();
             }
