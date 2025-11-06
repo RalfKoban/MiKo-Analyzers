@@ -779,7 +779,7 @@ namespace MiKoSolutions.Analyzers
         /// A new syntax token with a space as leading trivia.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static SyntaxToken WithLeadingSpace(this in SyntaxToken value) => value.WithLeadingTrivia(SyntaxFactory.Space); // use elastic one to allow formatting to be done automatically
+        internal static SyntaxToken WithLeadingSpace(this in SyntaxToken value) => value.WithLeadingTrivia(SyntaxFactory.Space); // use non-elastic one to prevent formatting to be done automatically
 
         /// <summary>
         /// Creates a new syntax token with the specified number of spaces as leading trivia.
