@@ -77,6 +77,48 @@ namespace Bla
 }");
 
         [Test]
+        public void No_issue_is_reported_for_parameters_of_implemented_interfaces_([ValueSource(nameof(BadPrefixes))] string part) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+#pragma warning disable MiKo_1063
+
+    public interface ITestMe
+    {
+        int DoSomething(int " + part + @"Parameter);
+    }
+
+#pragma warning restore MiKo_1063
+
+    public class TestMe : ITestMe
+    {
+        public int DoSomething(int " + part + @"Parameter) => 42;
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_parameters_of_implemented_interfaces_on_abstract_class_([ValueSource(nameof(BadPrefixes))] string part) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+#pragma warning disable MiKo_1063
+
+    public interface ITestMe
+    {
+        int DoSomething(int " + part + @"Parameter);
+    }
+
+#pragma warning restore MiKo_1063
+
+    public abstract class TestMe : ITestMe
+    {
+        public abstract int DoSomething(int " + part + @"Parameter);
+    }
+}");
+
+        [Test]
         public void An_issue_is_reported_for_local_variable_with_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
 using System;
 

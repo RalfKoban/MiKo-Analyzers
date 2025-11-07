@@ -31,12 +31,25 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IParameterSymbol symbol)
         {
-            if (symbol.ContainingSymbol is IMethodSymbol method && method.IsExtern)
+            if (base.ShallAnalyze(symbol))
             {
-                return false;
+                if (symbol.ContainingSymbol is IMethodSymbol method)
+                {
+                    if (method.IsExtern)
+                    {
+                        return false;
+                    }
+
+                    if (method.IsInterfaceImplementation())
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
             }
 
-            return base.ShallAnalyze(symbol);
+            return false;
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamespaceSymbol symbol, Compilation compilation) => AnalyzeName(symbol);
