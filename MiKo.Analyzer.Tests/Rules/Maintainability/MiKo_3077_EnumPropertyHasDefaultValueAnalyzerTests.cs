@@ -412,7 +412,7 @@ public interface ITestMe
         public void No_issue_is_reported_for_Enum_auto_property_on_abstract_property() => No_issue_is_reported_for(@"
 using System;
 
-public class TestMe
+public abstract class TestMe
 {
     public abstract StringComparison Comparison { get; set; }
 }
