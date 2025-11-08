@@ -205,12 +205,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 // only adjust in case there is no single letter
                 if (firstWord.Length > 1)
                 {
-                    if (firstWord.EndsWith("alled"))
-                    {
-                        // currently we cannot adjust "Called" text properly
-                        return summary;
-                    }
-
                     var index = text.IndexOf(firstWord);
                     var remainingText = text.Slice(index + firstWord.Length);
 

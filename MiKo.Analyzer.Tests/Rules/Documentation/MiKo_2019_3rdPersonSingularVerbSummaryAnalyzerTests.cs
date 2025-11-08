@@ -747,6 +747,8 @@ public interface TestMe
         [TestCase("The method which is called", "Gets called")]
         [TestCase("This method gets called", "Gets called")]
         [TestCase("This method is called", "Gets called")]
+        [TestCase("Called by someone", "Gets called by someone")]
+        [TestCase("Called if someone tries", "Gets called if someone tries")]
         public void Code_gets_fixed_for_(string originalText, string fixedText)
         {
             const string Template = """

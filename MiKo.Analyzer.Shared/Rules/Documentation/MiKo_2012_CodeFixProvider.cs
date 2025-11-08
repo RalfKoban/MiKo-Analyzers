@@ -109,7 +109,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static SyntaxNode GetUpdatedSyntax(XmlElementSyntax comment, XmlTextSyntax textSyntax)
         {
-            var text = textSyntax.GetTextTrimmed().AsSpan();
+            var trimmedText = textSyntax.GetTextTrimmed();
+            var text = trimmedText.AsSpan();
 
             if (text.StartsWith("Interaction logic for"))
             {
@@ -120,6 +121,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (text.StartsWithAny(EmptyReplacementsMapKeys))
             {
                 return Comment(comment, EmptyReplacementsMapKeys, EmptyReplacementsMap, StartAdjustment);
+            }
+
+            if (text.StartsWith("Called"))
+            {
+                return Comment(comment, trimmedText.Replace("Called", "Gets called"));
             }
 
             if (comment.GetEnclosing(Declarations) is MemberDeclarationSyntax member)
