@@ -1194,6 +1194,8 @@ public class TestMe
         }
 
         [TestCase("Called to do", "Does")]
+        [TestCase("Called by someone to do", "Gets called by someone to do")]
+        [TestCase("Called if someone attempts to do", "Gets called if someone attempts to do")]
         public void Code_gets_fixed_for_method_text_(string originalComment, string fixedComment)
         {
             const string Template = @"
