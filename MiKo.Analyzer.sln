@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.32112.339
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11205.157 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiKo.Analyzer.2019", "MiKo.Analyzer.2019\MiKo.Analyzer.2019.csproj", "{0E08768E-EB1C-4673-BE1D-B396B28BBA69}"
 EndProject
@@ -66,6 +66,18 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiKo.Analyzer.Shared.ForTests", "MiKo.Analyzer.Shared\MiKo.Analyzer.Shared.ForTests.csproj", "{16956AEC-701E-4188-A1BC-048ED3960B9A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{18E3EE33-1904-468A-92D4-326E5ED48264}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2026", "2026", "{DE43CA75-C71E-420F-8663-82CCCDE4BC7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiKo.Analyzer.2026", "MiKo.Analyzer.2026\MiKo.Analyzer.2026.csproj", "{82085CC8-3CC2-61D7-06BA-CE45E32911E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiKo.Analyzer.CodeFixes.2026", "MiKo.Analyzer.Codefixes.2026\MiKo.Analyzer.CodeFixes.2026.csproj", "{83DBF0F5-6E73-54B2-B8CA-DEC0C81A7E8D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2026", "2026", "{543DB4D0-AC4E-4752-B50B-02FA2579DCEB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiKo.Analyzer.Package.2026", "MiKo.Analyzer.Package.2026\MiKo.Analyzer.Package.2026.csproj", "{DEB6B6E4-263F-9D79-EBF5-591C04434750}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiKo.Analyzer.Vsix2026", "MiKo.Analyzer.Vsix2026\MiKo.Analyzer.Vsix2026.csproj", "{28884243-8A16-2E40-5B79-E567BF8FBF00}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -209,6 +221,54 @@ Global
 		{16956AEC-701E-4188-A1BC-048ED3960B9A}.Release|arm64.Build.0 = Release|Any CPU
 		{16956AEC-701E-4188-A1BC-048ED3960B9A}.Release|x86.ActiveCfg = Release|Any CPU
 		{16956AEC-701E-4188-A1BC-048ED3960B9A}.Release|x86.Build.0 = Release|Any CPU
+		{82085CC8-3CC2-61D7-06BA-CE45E32911E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82085CC8-3CC2-61D7-06BA-CE45E32911E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82085CC8-3CC2-61D7-06BA-CE45E32911E8}.Debug|arm64.ActiveCfg = Debug|Any CPU
+		{82085CC8-3CC2-61D7-06BA-CE45E32911E8}.Debug|arm64.Build.0 = Debug|Any CPU
+		{82085CC8-3CC2-61D7-06BA-CE45E32911E8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{82085CC8-3CC2-61D7-06BA-CE45E32911E8}.Debug|x86.Build.0 = Debug|Any CPU
+		{82085CC8-3CC2-61D7-06BA-CE45E32911E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82085CC8-3CC2-61D7-06BA-CE45E32911E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82085CC8-3CC2-61D7-06BA-CE45E32911E8}.Release|arm64.ActiveCfg = Release|Any CPU
+		{82085CC8-3CC2-61D7-06BA-CE45E32911E8}.Release|arm64.Build.0 = Release|Any CPU
+		{82085CC8-3CC2-61D7-06BA-CE45E32911E8}.Release|x86.ActiveCfg = Release|Any CPU
+		{82085CC8-3CC2-61D7-06BA-CE45E32911E8}.Release|x86.Build.0 = Release|Any CPU
+		{83DBF0F5-6E73-54B2-B8CA-DEC0C81A7E8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83DBF0F5-6E73-54B2-B8CA-DEC0C81A7E8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83DBF0F5-6E73-54B2-B8CA-DEC0C81A7E8D}.Debug|arm64.ActiveCfg = Debug|Any CPU
+		{83DBF0F5-6E73-54B2-B8CA-DEC0C81A7E8D}.Debug|arm64.Build.0 = Debug|Any CPU
+		{83DBF0F5-6E73-54B2-B8CA-DEC0C81A7E8D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{83DBF0F5-6E73-54B2-B8CA-DEC0C81A7E8D}.Debug|x86.Build.0 = Debug|Any CPU
+		{83DBF0F5-6E73-54B2-B8CA-DEC0C81A7E8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83DBF0F5-6E73-54B2-B8CA-DEC0C81A7E8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83DBF0F5-6E73-54B2-B8CA-DEC0C81A7E8D}.Release|arm64.ActiveCfg = Release|Any CPU
+		{83DBF0F5-6E73-54B2-B8CA-DEC0C81A7E8D}.Release|arm64.Build.0 = Release|Any CPU
+		{83DBF0F5-6E73-54B2-B8CA-DEC0C81A7E8D}.Release|x86.ActiveCfg = Release|Any CPU
+		{83DBF0F5-6E73-54B2-B8CA-DEC0C81A7E8D}.Release|x86.Build.0 = Release|Any CPU
+		{DEB6B6E4-263F-9D79-EBF5-591C04434750}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEB6B6E4-263F-9D79-EBF5-591C04434750}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEB6B6E4-263F-9D79-EBF5-591C04434750}.Debug|arm64.ActiveCfg = Debug|Any CPU
+		{DEB6B6E4-263F-9D79-EBF5-591C04434750}.Debug|arm64.Build.0 = Debug|Any CPU
+		{DEB6B6E4-263F-9D79-EBF5-591C04434750}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DEB6B6E4-263F-9D79-EBF5-591C04434750}.Debug|x86.Build.0 = Debug|Any CPU
+		{DEB6B6E4-263F-9D79-EBF5-591C04434750}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEB6B6E4-263F-9D79-EBF5-591C04434750}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEB6B6E4-263F-9D79-EBF5-591C04434750}.Release|arm64.ActiveCfg = Release|Any CPU
+		{DEB6B6E4-263F-9D79-EBF5-591C04434750}.Release|arm64.Build.0 = Release|Any CPU
+		{DEB6B6E4-263F-9D79-EBF5-591C04434750}.Release|x86.ActiveCfg = Release|Any CPU
+		{DEB6B6E4-263F-9D79-EBF5-591C04434750}.Release|x86.Build.0 = Release|Any CPU
+		{28884243-8A16-2E40-5B79-E567BF8FBF00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28884243-8A16-2E40-5B79-E567BF8FBF00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28884243-8A16-2E40-5B79-E567BF8FBF00}.Debug|arm64.ActiveCfg = Debug|Any CPU
+		{28884243-8A16-2E40-5B79-E567BF8FBF00}.Debug|arm64.Build.0 = Debug|Any CPU
+		{28884243-8A16-2E40-5B79-E567BF8FBF00}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{28884243-8A16-2E40-5B79-E567BF8FBF00}.Debug|x86.Build.0 = Debug|Any CPU
+		{28884243-8A16-2E40-5B79-E567BF8FBF00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28884243-8A16-2E40-5B79-E567BF8FBF00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28884243-8A16-2E40-5B79-E567BF8FBF00}.Release|arm64.ActiveCfg = Release|Any CPU
+		{28884243-8A16-2E40-5B79-E567BF8FBF00}.Release|arm64.Build.0 = Release|Any CPU
+		{28884243-8A16-2E40-5B79-E567BF8FBF00}.Release|x86.ActiveCfg = Release|Any CPU
+		{28884243-8A16-2E40-5B79-E567BF8FBF00}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -237,6 +297,12 @@ Global
 		{B0A269DD-3C07-4FCA-814C-F4F3F4E06912} = {E8DA3417-4698-4F8E-9D6A-715988F81B7A}
 		{16956AEC-701E-4188-A1BC-048ED3960B9A} = {18E3EE33-1904-468A-92D4-326E5ED48264}
 		{18E3EE33-1904-468A-92D4-326E5ED48264} = {E8DA3417-4698-4F8E-9D6A-715988F81B7A}
+		{DE43CA75-C71E-420F-8663-82CCCDE4BC7A} = {7B001D8C-F260-4E63-9ECA-A3574CBD3AFF}
+		{82085CC8-3CC2-61D7-06BA-CE45E32911E8} = {DE43CA75-C71E-420F-8663-82CCCDE4BC7A}
+		{83DBF0F5-6E73-54B2-B8CA-DEC0C81A7E8D} = {DE43CA75-C71E-420F-8663-82CCCDE4BC7A}
+		{543DB4D0-AC4E-4752-B50B-02FA2579DCEB} = {6884DFBE-B811-4B89-B435-1D2125AE9E7A}
+		{DEB6B6E4-263F-9D79-EBF5-591C04434750} = {543DB4D0-AC4E-4752-B50B-02FA2579DCEB}
+		{28884243-8A16-2E40-5B79-E567BF8FBF00} = {543DB4D0-AC4E-4752-B50B-02FA2579DCEB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7625E68D-A5A2-4509-A414-C33EB474E87C}
@@ -244,6 +310,8 @@ Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		MiKo.Analyzer.Shared\MiKo.Analyzer.Shared.projitems*{0e08768e-eb1c-4673-be1d-b396b28bba69}*SharedItemsImports = 5
 		MiKo.Analyzer.Shared\MiKo.Analyzer.Shared.CodeFixes.projitems*{282fba4b-8d06-4fc4-8cea-f33c2b9a15e8}*SharedItemsImports = 5
+		MiKo.Analyzer.Shared\MiKo.Analyzer.Shared.projitems*{82085cc8-3cc2-61d7-06ba-ce45e32911e8}*SharedItemsImports = 5
+		MiKo.Analyzer.Shared\MiKo.Analyzer.Shared.CodeFixes.projitems*{83dbf0f5-6e73-54b2-b8ca-dec0c81a7e8d}*SharedItemsImports = 5
 		MiKo.Analyzer.Shared\MiKo.Analyzer.Shared.projitems*{8a34d670-6bbf-4d20-b18b-dd95bf3a9f71}*SharedItemsImports = 13
 		MiKo.Analyzer.Shared\MiKo.Analyzer.Shared.CodeFixes.projitems*{9888ba99-c2b4-4084-b916-698e842b8f45}*SharedItemsImports = 5
 		MiKo.Analyzer.Shared\MiKo.Analyzer.Shared.CodeFixes.projitems*{be0cd873-a12b-42df-b85c-07f681953597}*SharedItemsImports = 13

@@ -13,7 +13,7 @@
   
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <DefineConstants>$(DefineConstants);VS2022</DefineConstants>
+    <DefineConstants>$(DefineConstants);VS2022;VS2026</DefineConstants>
 	<EnableNETAnalyzers>true</EnableNETAnalyzers>
   </PropertyGroup>
 
@@ -35,8 +35,8 @@
 
   <!-- Required by NCrunch on remote machines as those machines do not have the package installed -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.14.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0-2.final" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="5.0.0-2.final" />
     <PackageReference Update="NETStandard.Library" PrivateAssets="all" />
   </ItemGroup>
 

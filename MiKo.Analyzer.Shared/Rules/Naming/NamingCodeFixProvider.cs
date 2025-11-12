@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return originalSolution;
             }
 
-#if VS2022
+#if VS2022 || VS2026
             // Return the new solution with the new symbol name
             return await Renamer.RenameSymbolAsync(originalSolution, symbol, default, newName, cancellationToken).ConfigureAwait(false);
 #else

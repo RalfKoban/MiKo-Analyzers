@@ -1,4 +1,4 @@
-﻿#if VS2022
+﻿#if VS2022 || VS2026
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;

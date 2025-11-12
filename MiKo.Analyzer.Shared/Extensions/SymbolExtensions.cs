@@ -1910,7 +1910,7 @@ namespace MiKoSolutions.Analyzers
             {
                 switch (value.GetSyntax())
                 {
-#if VS2022
+#if VS2022 || VS2026
                     case ClassDeclarationSyntax c: return c.HasPrimaryConstructor();
                     case StructDeclarationSyntax s: return s.HasPrimaryConstructor();
 #endif
