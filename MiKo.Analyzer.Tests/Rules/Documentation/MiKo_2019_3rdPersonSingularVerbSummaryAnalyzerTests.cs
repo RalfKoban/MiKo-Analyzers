@@ -568,7 +568,39 @@ public class TestMe
         [TestCase("Get/Set flag indicating if")]
         [TestCase("Get/Set flag indicating whether")]
         [TestCase("Get/Set flag indicating that")]
+        [TestCase("Get/Set a flag that indicates if")]
+        [TestCase("Get/Set a flag that indicates whether")]
+        [TestCase("Get/Set a flag that indicates that")]
+        [TestCase("Get/Set a flag which indicates if")]
+        [TestCase("Get/Set a flag which indicates whether")]
+        [TestCase("Get/Set a flag which indicates that")]
+        [TestCase("Get/Set a flag indicating if")]
+        [TestCase("Get/Set a flag indicating whether")]
+        [TestCase("Get/Set a flag indicating that")]
+        [TestCase("Get/Set value that indicates if")]
+        [TestCase("Get/Set value that indicates whether")]
+        [TestCase("Get/Set value that indicates that")]
+        [TestCase("Get/Set value which indicates if")]
+        [TestCase("Get/Set value which indicates whether")]
+        [TestCase("Get/Set value which indicates that")]
+        [TestCase("Get/Set value indicating if")]
+        [TestCase("Get/Set value indicating whether")]
+        [TestCase("Get/Set value indicating that")]
+        [TestCase("Get/Set a value that indicates if")]
+        [TestCase("Get/Set a value that indicates whether")]
+        [TestCase("Get/Set a value that indicates that")]
+        [TestCase("Get/Set a value which indicates if")]
+        [TestCase("Get/Set a value which indicates whether")]
+        [TestCase("Get/Set a value which indicates that")]
+        [TestCase("Get/Set a value indicating if")]
+        [TestCase("Get/Set a value indicating whether")]
+        [TestCase("Get/Set a value indicating that")]
         [TestCase("Get/Set")]
+        [TestCase("Get/set")]
+        [TestCase("get/Set")]
+        [TestCase("Set/Get")]
+        [TestCase("Set/get")]
+        [TestCase("set/Get")]
         public void Code_gets_fixed_for_boolean_property_text_(string originalText)
         {
             const string Template = @"
@@ -584,6 +616,29 @@ public interface TestMe
 ";
 
             VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", "Gets or sets a value indicating whether"));
+        }
+
+        [TestCase("Get/Set")]
+        [TestCase("Get/set")]
+        [TestCase("get/Set")]
+        [TestCase("Set/Get")]
+        [TestCase("Set/get")]
+        [TestCase("set/Get")]
+        public void Code_gets_fixed_for_non_boolean_property_text_(string originalText)
+        {
+            const string Template = @"
+using System;
+
+public interface TestMe
+{
+    /// <summary>
+    /// ### some text to inform about something
+    /// </summary>
+    public string SomeProperty { get; set; }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", "Gets or sets"));
         }
 
         [TestCase("Called to inform about something", "Informs about something")]
