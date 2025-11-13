@@ -130,9 +130,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                         "set/Get a value ",
                                                                         "Set/get a value ",
                                                                         "Set/Get a value ",
+                                                                        "get/set ",
                                                                         "get/Set ",
                                                                         "Get/set ",
                                                                         "Get/Set ",
+                                                                        "set/get ",
                                                                         "set/Get ",
                                                                         "Set/get ",
                                                                         "Set/Get ",
@@ -315,18 +317,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                             .ReplaceWithProbe("Sets a value indicating set to true ", "Sets a value indicating ")
                                             .ReplaceWithProbe("Sets a value indicating set ", "Sets a value indicating ")
                                             .ReplaceWithProbe("Sets set ", "Sets ")
+                                            .ReplaceWithProbe("  ", " ")
                                             .ReplaceWithProbe("value indicating the value indicating", "value indicating the")
-                                            .ReplaceWithProbe("indicating  that indicates", "indicating")
-                                            .ReplaceWithProbe("indicating  which indicates", "indicating")
+                                            .ReplaceWithProbe("indicating that indicates", "indicating")
+                                            .ReplaceWithProbe("indicating which indicates", "indicating")
                                             .ReplaceWithProbe("indicating to true,", "indicating")
                                             .ReplaceWithProbe("indicating to true", "indicating")
                                             .ReplaceWithProbe("indicating to", "indicating whether to")
                                             .ReplaceWithProbe("indicating if to", "indicating whether to")
                                             .ReplaceWithProbe("indicating that to", "indicating whether to")
-                                            .ReplaceWithProbe("indicating  to", "indicating whether to")
-                                            .ReplaceWithProbe("indicating  indicating", "indicating")
                                             .ReplaceWithProbe("indicating indicating", "indicating")
-                                            .ReplaceWithProbe("a value indicating  a value indicating", "a value indicating");
+                                            .ReplaceWithProbe("a value indicating a value indicating", "a value indicating");
 
             var replacedFixedText = builder.ToStringAndRelease();
 

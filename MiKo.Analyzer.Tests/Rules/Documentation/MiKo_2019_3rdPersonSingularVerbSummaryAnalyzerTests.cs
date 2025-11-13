@@ -618,6 +618,29 @@ public interface TestMe
             VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", "Gets or sets a value indicating whether"));
         }
 
+        [TestCase("Get/Set")]
+        [TestCase("Get/set")]
+        [TestCase("get/Set")]
+        [TestCase("Set/Get")]
+        [TestCase("Set/get")]
+        [TestCase("set/Get")]
+        public void Code_gets_fixed_for_non_boolean_property_text_(string originalText)
+        {
+            const string Template = @"
+using System;
+
+public interface TestMe
+{
+    /// <summary>
+    /// ### some text to inform about something
+    /// </summary>
+    public string SomeProperty { get; set; }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", "Gets or sets"));
+        }
+
         [TestCase("Called to inform about something", "Informs about something")]
         [TestCase("Called to save something", "Saves something")]
         [TestCase("Save something", "Saves something")]
