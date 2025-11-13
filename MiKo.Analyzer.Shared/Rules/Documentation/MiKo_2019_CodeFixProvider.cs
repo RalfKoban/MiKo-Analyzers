@@ -106,6 +106,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly Pair[] CallbackReplacements = CallbackPhrases.ToArray(_ => new Pair(_, "Gets called"));
 
+        private static readonly Pair[] CallbackReplacementsWithLy =
+                                                                    {
+                                                                        new Pair(Constants.Comments.AsynchronouslyStartingPhrase + "called", Constants.Comments.AsynchronouslyStartingPhrase + "runs"),
+                                                                        new Pair(Constants.Comments.AsynchronouslyStartingPhrase + "invoked", Constants.Comments.AsynchronouslyStartingPhrase + "runs"),
+
+                                                                        new Pair(Constants.Comments.RecursivelyStartingPhrase + "called", Constants.Comments.RecursivelyStartingPhrase + "runs"),
+                                                                        new Pair(Constants.Comments.RecursivelyStartingPhrase + "invoked", Constants.Comments.RecursivelyStartingPhrase + "runs"),
+                                                                    };
+
+        private static readonly string[] CallbackPhrasesWithLy = CallbackReplacementsWithLy.ToArray(_ => _.Key);
+
         public override string FixableDiagnosticId => "MiKo_2019";
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
@@ -200,6 +211,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 if (ReferenceEquals(summary, updatedSyntax) is false)
                 {
                     return updatedSyntax;
+                }
+
+                if (text.StartsWith(Constants.Comments.AsynchronouslyStartingPhrase) || text.StartsWith(Constants.Comments.RecursivelyStartingPhrase))
+                {
+                    var updatedSummary = Comment(summary, CallbackPhrasesWithLy, CallbackReplacementsWithLy);
+
+                    if (ReferenceEquals(summary, updatedSummary) is false)
+                    {
+                        return updatedSummary;
+                    }
+
+                    firstWord = text.SecondWord();
                 }
 
                 // only adjust in case there is no single letter
