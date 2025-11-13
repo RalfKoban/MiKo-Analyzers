@@ -96,6 +96,48 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                        "Get AND Set ",
                                                                    };
 
+        private static readonly string[] GetSetReplacementPhrases =
+                                                                    {
+                                                                        "get/set flag ",
+                                                                        "get/Set flag ",
+                                                                        "Get/set flag ",
+                                                                        "Get/Set flag ",
+                                                                        "set/get flag ",
+                                                                        "set/Get flag ",
+                                                                        "Set/get flag ",
+                                                                        "Set/Get flag ",
+                                                                        "get/set a flag ",
+                                                                        "get/Set a flag ",
+                                                                        "Get/set a flag ",
+                                                                        "Get/Set a flag ",
+                                                                        "set/get a flag ",
+                                                                        "set/Get a flag ",
+                                                                        "Set/get a flag ",
+                                                                        "Set/Get a flag ",
+                                                                        "get/set value ",
+                                                                        "get/Set value ",
+                                                                        "Get/set value ",
+                                                                        "Get/Set value ",
+                                                                        "set/get value ",
+                                                                        "set/Get value ",
+                                                                        "Set/get value ",
+                                                                        "Set/Get value ",
+                                                                        "get/set a value ",
+                                                                        "get/Set a value ",
+                                                                        "Get/set a value ",
+                                                                        "Get/Set a value ",
+                                                                        "set/get a value ",
+                                                                        "set/Get a value ",
+                                                                        "Set/get a value ",
+                                                                        "Set/Get a value ",
+                                                                        "get/Set ",
+                                                                        "Get/set ",
+                                                                        "Get/Set ",
+                                                                        "set/Get ",
+                                                                        "Set/get ",
+                                                                        "Set/Get ",
+                                                                    };
+
         //// ncrunch: rdi default
 
         public override string FixableDiagnosticId => "MiKo_2012";
@@ -257,44 +299,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var builder = StringBuilderCache.Acquire(startingPhrase.Length + remainingText.Length)
                                             .Append(startingPhrase)
                                             .Append(remainingText.ToLowerCaseAt(0))
-                                            .ReplaceWithProbe("get/set flag ", " ")
-                                            .ReplaceWithProbe("get/Set flag ", " ")
-                                            .ReplaceWithProbe("Get/set flag ", " ")
-                                            .ReplaceWithProbe("Get/Set flag ", " ")
-                                            .ReplaceWithProbe("set/get flag ", " ")
-                                            .ReplaceWithProbe("set/Get flag ", " ")
-                                            .ReplaceWithProbe("Set/get flag ", " ")
-                                            .ReplaceWithProbe("Set/Get flag ", " ")
-                                            .ReplaceWithProbe("get/set a flag ", " ")
-                                            .ReplaceWithProbe("get/Set a flag ", " ")
-                                            .ReplaceWithProbe("Get/set a flag ", " ")
-                                            .ReplaceWithProbe("Get/Set a flag ", " ")
-                                            .ReplaceWithProbe("set/get a flag ", " ")
-                                            .ReplaceWithProbe("set/Get a flag ", " ")
-                                            .ReplaceWithProbe("Set/get a flag ", " ")
-                                            .ReplaceWithProbe("Set/Get a flag ", " ")
-                                            .ReplaceWithProbe("get/set value ", " ")
-                                            .ReplaceWithProbe("get/Set value ", " ")
-                                            .ReplaceWithProbe("Get/set value ", " ")
-                                            .ReplaceWithProbe("Get/Set value ", " ")
-                                            .ReplaceWithProbe("set/get value ", " ")
-                                            .ReplaceWithProbe("set/Get value ", " ")
-                                            .ReplaceWithProbe("Set/get value ", " ")
-                                            .ReplaceWithProbe("Set/Get value ", " ")
-                                            .ReplaceWithProbe("get/set a value ", " ")
-                                            .ReplaceWithProbe("get/Set a value ", " ")
-                                            .ReplaceWithProbe("Get/set a value ", " ")
-                                            .ReplaceWithProbe("Get/Set a value ", " ")
-                                            .ReplaceWithProbe("set/get a value ", " ")
-                                            .ReplaceWithProbe("set/Get a value ", " ")
-                                            .ReplaceWithProbe("Set/get a value ", " ")
-                                            .ReplaceWithProbe("Set/Get a value ", " ")
-                                            .ReplaceWithProbe("get/Set ", " ")
-                                            .ReplaceWithProbe("Get/set ", " ")
-                                            .ReplaceWithProbe("Get/Set ", " ")
-                                            .ReplaceWithProbe("set/Get ", " ")
-                                            .ReplaceWithProbe("Set/get ", " ")
-                                            .ReplaceWithProbe("Set/Get ", " ")
+                                            .ReplaceAllWithProbe(GetSetReplacementPhrases, " ")
                                             .ReplaceWithProbe("Gets or sets a value indicating get or set ", "Gets or sets a value indicating ")
                                             .ReplaceWithProbe("Gets or sets a value indicating to true ", "Gets or sets a value indicating ")
                                             .ReplaceWithProbe("Gets or sets a value indicating get/set ", "Gets or sets a value indicating ")
