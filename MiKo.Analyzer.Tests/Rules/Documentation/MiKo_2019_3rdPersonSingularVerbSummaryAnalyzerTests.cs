@@ -646,6 +646,10 @@ public interface TestMe
         [TestCase("Save something", "Saves something")]
         [TestCase("Whether something is there", "Determines whether something is there")]
         [TestCase("If something is there", "Determines whether something is there")]
+        [TestCase("Asynchronously invoked at some time", "Asynchronously runs at some time")]
+        [TestCase("Asynchronously called at some time", "Asynchronously runs at some time")]
+        [TestCase("Recursively invoked at some time", "Recursively runs at some time")]
+        [TestCase("Recursively called at some time", "Recursively runs at some time")]
         public void Code_gets_fixed_for_method_text_(string originalText, string fixedText)
         {
             const string Template = @"
