@@ -194,7 +194,7 @@ The following tables lists all the 529 rules that are currently provided by the 
 |MiKo_2006|Document routed events as done by the .NET Framework|&#x2713;|&#x2713;|
 |MiKo_2010|Document sealed classes as being sealed|&#x2713;|&#x2713;|
 |MiKo_2011|Do not falsely document unsealed classes as sealed|&#x2713;|&#x2713;|
-|MiKo_2012|Describe the type's responsibility in &lt;summary&gt; documentation|&#x2713;|&#x2713;|
+|MiKo_2012|Describe the responsibility in &lt;summary&gt; documentation|&#x2713;|&#x2713;|
 |MiKo_2013|Start Enum &lt;summary&gt; documentation with default phrase|&#x2713;|&#x2713;|
 |MiKo_2014|Document Dispose methods as done by the .NET Framework|&#x2713;|&#x2713;|
 |MiKo_2015|Use 'raise' or 'throw' instead of 'fire' in documentation|&#x2713;|&#x2713;|
