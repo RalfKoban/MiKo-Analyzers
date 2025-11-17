@@ -2094,15 +2094,15 @@ This improves code clarity, avoids ambiguity, and helps developers immediately u
     <value>Fix meaningless phrase</value>
   </data>
   <data name="MiKo_2012_Description" xml:space="preserve">
-    <value>To simplify development and maintenance, the &lt;summary&gt; documentation should briefly explain a type's responsibility from the user's perspective.
-Except for callback interfaces, it should avoid meaningless phrases like 'Used to'. Instead, start with phrases like 'Allows to', 'Represents', or 'Provides'.
-This approach keeps the documentation clear and user-focused.</value>
+    <value>Write &lt;summary&gt; documentation that clearly states a member’s purpose from the user’s perspective. Avoid vague phrases like ‘Used to’.
+For types, begin with verbs such as ‘Represents’, ‘Provides’, or ‘Allows’. For properties, use ‘Gets’, ‘Sets’, or ‘Gets or sets’ depending on their behavior.
+This approach ensures concise, meaningful, and user-focused documentation.</value>
   </data>
   <data name="MiKo_2012_MessageFormat" xml:space="preserve">
     <value>&lt;summary&gt; should not {1} meaningless phrase: '{2}'</value>
   </data>
   <data name="MiKo_2012_Title" xml:space="preserve">
-    <value>Describe the type's responsibility in &lt;summary&gt; documentation</value>
+    <value>Describe the responsibility in &lt;summary&gt; documentation</value>
   </data>
   <data name="MiKo_2013_CodeFixTitle" xml:space="preserve">
     <value>Start comment with '{0}'</value>
