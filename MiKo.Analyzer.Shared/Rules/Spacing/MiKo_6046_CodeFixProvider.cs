@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             if (syntax is BinaryExpressionSyntax binary)
             {
                 return binary.WithLeft(binary.Left.WithoutTrivia())
-                             .WithOperatorToken(binary.OperatorToken.WithLeadingSpace().WithTrailingSpace())
+                             .WithOperatorToken(binary.OperatorToken.WithLeadingAndTrailingSpace())
                              .WithRight(binary.Right.WithoutTrivia());
             }
 

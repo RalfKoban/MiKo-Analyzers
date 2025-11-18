@@ -107,22 +107,18 @@ public record TestMe(string s1, string s2, string s3);
 ");
 
         [Test]
-        public void An_issue_is_reported_for_public_virtual_method() => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_public_virtual_property() => No_issue_is_reported_for(@"
 public class TestMe
 {
-    public virtual int DoSomething(int value) => value;
+    public virtual int SomeProperty { get; set; }
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_public_virtual_property() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_public_virtual_method() => An_issue_is_reported_for(@"
 public class TestMe
 {
-    public virtual int SomeProperty
-    {
-        get => 42;
-        set => throw new System.NotImplementedException();
-    }
+    public virtual int DoSomething(int value) => value;
 }
 ");
 

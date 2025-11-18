@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation)
         {
-            var field = symbol.GetFields().FirstOrDefault(_ => Constants.Names.TypeUnderTestFieldNames.Contains(_.Name));
+            var field = symbol.GetFields().FirstOrDefault(_ => _.IsConst is false && Constants.Names.TypeUnderTestFieldNames.Contains(_.Name));
 
             return field is null
                    ? Array.Empty<Diagnostic>()
@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             var path = field.GetLineSpan().Path;
 
             var fields = GetFieldsOrderedByLocation(symbol, path);
-            var firstField = fields[0];
+            var firstField = fields.SkipWhile(_ => _.IsConst).First();
 
             return ReferenceEquals(field, firstField)
                    ? Array.Empty<Diagnostic>()

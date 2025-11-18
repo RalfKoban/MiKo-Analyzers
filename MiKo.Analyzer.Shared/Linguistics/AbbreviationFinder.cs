@@ -357,6 +357,14 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                             "Salt",
                                                             "text",
                                                             "Text",
+                                                            "topLevel",
+                                                            "toplevel",
+                                                            "topMost",
+                                                            "topmost",
+                                                            "TopLevel",
+                                                            "Toplevel",
+                                                            "TopMost",
+                                                            "Topmost",
                                                             "MEF",
 
                                                             // languages

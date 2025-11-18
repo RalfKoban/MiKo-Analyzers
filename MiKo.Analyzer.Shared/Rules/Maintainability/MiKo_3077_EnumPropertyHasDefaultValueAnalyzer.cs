@@ -18,7 +18,22 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool ShallAnalyze(IPropertySymbol symbol) => symbol.GetReturnType().IsEnum();
+        protected override bool ShallAnalyze(IPropertySymbol symbol)
+        {
+            if (symbol.IsAbstract)
+            {
+                // ignore abstract properties
+                return false;
+            }
+
+            if (symbol.ContainingType is INamedTypeSymbol type && type.TypeKind is TypeKind.Interface)
+            {
+                // ignore interfaces
+                return false;
+            }
+
+            return symbol.GetReturnType().IsEnum();
+        }
 
         protected override IEnumerable<Diagnostic> Analyze(IPropertySymbol symbol, Compilation compilation) => HasIssue(symbol)
                                                                                                                ? new[] { Issue(symbol) }

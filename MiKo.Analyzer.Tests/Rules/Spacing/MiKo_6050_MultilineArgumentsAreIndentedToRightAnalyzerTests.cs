@@ -514,6 +514,64 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_test_method_with_assertion_arguments()
+        {
+            const string OriginalCode = """
+
+                                        using System;
+
+                                        using NUnit.Framework;
+
+                                        [TestFixture]
+                                        public class TestMe
+                                        {
+                                            [TestCase(42, true)]
+                                            public void DoSomething(int actual, bool assertResult)
+                                            {
+                                                if (assertResult)
+                                                {
+                                                    Assert.That(
+                                                                actual,
+                                                                Is.EqualTo(42),
+                                                                () => @"some message
+                                        " + actual.ToString() + @"
+                                        that spans multiple lines");
+                                                }
+                                            }
+                                        }
+
+                                        """;
+
+            const string FixedCode = """
+
+                                     using System;
+
+                                     using NUnit.Framework;
+
+                                     [TestFixture]
+                                     public class TestMe
+                                     {
+                                         [TestCase(42, true)]
+                                         public void DoSomething(int actual, bool assertResult)
+                                         {
+                                             if (assertResult)
+                                             {
+                                                 Assert.That(
+                                                         actual,
+                                                         Is.EqualTo(42),
+                                                         () => @"some message
+                                     " + actual.ToString() + @"
+                                     that spans multiple lines");
+                                             }
+                                         }
+                                     }
+
+                                     """;
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6050_MultilineArgumentsAreIndentedToRightAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6050_MultilineArgumentsAreIndentedToRightAnalyzer();
