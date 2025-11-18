@@ -13,7 +13,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/18917.svg)](https://scan.coverity.com/projects/ralfkoban-miko-analyzers)
 
 ## Available Rules
-The following tables lists all the 528 rules that are currently provided by the analyzer.
+The following tables lists all the 529 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -194,7 +194,7 @@ The following tables lists all the 528 rules that are currently provided by the 
 |MiKo_2006|Document routed events as done by the .NET Framework|&#x2713;|&#x2713;|
 |MiKo_2010|Document sealed classes as being sealed|&#x2713;|&#x2713;|
 |MiKo_2011|Do not falsely document unsealed classes as sealed|&#x2713;|&#x2713;|
-|MiKo_2012|Describe the type's responsibility in &lt;summary&gt; documentation|&#x2713;|&#x2713;|
+|MiKo_2012|Describe the responsibility in &lt;summary&gt; documentation|&#x2713;|&#x2713;|
 |MiKo_2013|Start Enum &lt;summary&gt; documentation with default phrase|&#x2713;|&#x2713;|
 |MiKo_2014|Document Dispose methods as done by the .NET Framework|&#x2713;|&#x2713;|
 |MiKo_2015|Use 'raise' or 'throw' instead of 'fire' in documentation|&#x2713;|&#x2713;|
@@ -569,5 +569,6 @@ The following tables lists all the 528 rules that are currently provided by the 
 |MiKo_6065|Indent rather than outdent consecutive invocations spanning multiple lines|&#x2713;|&#x2713;|
 |MiKo_6066|Indent rather than outdent collection expression elements|&#x2713;|&#x2713;|
 |MiKo_6067|Place ternary operators on same lines as their respective expressions|&#x2713;|&#x2713;|
+|MiKo_6068|Place property patterns inside 'if' conditions on same line|&#x2713;|&#x2713;|
 |MiKo_6070|Surround Console statements with blank lines|&#x2713;|&#x2713;|
 |MiKo_6071|Surround local using statements with blank lines|&#x2713;|&#x2713;|

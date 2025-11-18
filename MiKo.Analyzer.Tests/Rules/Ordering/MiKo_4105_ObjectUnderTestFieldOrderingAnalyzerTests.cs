@@ -93,6 +93,55 @@ public class TestMeTests
 ");
 
         [Test]
+        public void No_issue_is_reported_for_a_test_class_with_the_field_coming_after_constant_fields_(
+                                                                                                   [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                   [ValueSource(nameof(Tests))] string test)
+            => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+public class TestMe
+{
+}
+
+[" + fixture + @"]
+public class TestMeTests
+{
+    private const int SomeId = 42;
+    private TestMe _objectUnderTest;
+    private int _someField;
+
+    [" + test + @"]
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_a_test_class_with_the_field_coming_after_only_constant_fields_(
+                                                                                                   [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                   [ValueSource(nameof(Tests))] string test)
+            => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+public class TestMe
+{
+}
+
+[" + fixture + @"]
+public class TestMeTests
+{
+    private const int SomeId = 42;
+    private TestMe _objectUnderTest;
+
+    [" + test + @"]
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_a_test_class_with_the_field_as_non_first_field_(
                                                                                          [ValueSource(nameof(TestFixtures))] string fixture,
                                                                                          [ValueSource(nameof(Tests))] string test)
@@ -295,6 +344,54 @@ public class TestMeTests
     private TestMe _objectUnderTest;
     private int _someField1;
     private int _someField2;
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_field_as_middle_field_with_additional_constant_fields()
+        {
+            const string OriginalCode = @"
+using NUnit.Framework;
+
+public class TestMe
+{
+}
+
+[TestFixture]
+public class TestMeTests
+{
+    private const int SomeId = 42;
+    private int _someField1;
+    private TestMe _objectUnderTest;
+    private int _someField2;
+
+    [Test]
+    public void DoSomething()
+    {
+    }
+}";
+
+            const string FixedCode = @"
+using NUnit.Framework;
+
+public class TestMe
+{
+}
+
+[TestFixture]
+public class TestMeTests
+{
+    private const int SomeId = 42;
+    private TestMe _objectUnderTest;
+    private int _someField1;
+    private int _someField2;
+
+    [Test]
+    public void DoSomething()
+    {
+    }
 }";
 
             VerifyCSharpFix(OriginalCode, FixedCode);

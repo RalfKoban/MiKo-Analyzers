@@ -5823,9 +5823,9 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To simplify development and maintenance, the &lt;summary&gt; documentation should briefly explain a type&apos;s responsibility from the user&apos;s perspective.
-        ///Except for callback interfaces, it should avoid meaningless phrases like &apos;Used to&apos;. Instead, start with phrases like &apos;Allows to&apos;, &apos;Represents&apos;, or &apos;Provides&apos;.
-        ///This approach keeps the documentation clear and user-focused..
+        ///   Looks up a localized string similar to Write &lt;summary&gt; documentation that clearly states a member’s purpose from the user’s perspective. Avoid vague phrases like ‘Used to’.
+        ///For types, begin with verbs such as ‘Represents’, ‘Provides’, or ‘Allows’. For properties, use ‘Gets’, ‘Sets’, or ‘Gets or sets’ depending on their behavior.
+        ///This approach ensures concise, meaningful, and user-focused documentation..
         /// </summary>
         internal static string MiKo_2012_Description {
             get {
@@ -5843,7 +5843,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Describe the type&apos;s responsibility in &lt;summary&gt; documentation.
+        ///   Looks up a localized string similar to Describe the responsibility in &lt;summary&gt; documentation.
         /// </summary>
         internal static string MiKo_2012_Title {
             get {
@@ -18250,6 +18250,42 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_6067_Title {
             get {
                 return ResourceManager.GetString("MiKo_6067_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place property pattern on single line.
+        /// </summary>
+        internal static string MiKo_6068_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6068_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In C#, write simple property patterns on one line to keep your code clean and easy to read. This avoids extra indentation and makes it clear what you&apos;re checking..
+        /// </summary>
+        internal static string MiKo_6068_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6068_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place property pattern on single line.
+        /// </summary>
+        internal static string MiKo_6068_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6068_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place property patterns inside &apos;if&apos; conditions on same line.
+        /// </summary>
+        internal static string MiKo_6068_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6068_Title", resourceCulture);
             }
         }
         
