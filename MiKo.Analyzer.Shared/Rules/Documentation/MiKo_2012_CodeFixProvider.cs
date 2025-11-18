@@ -23,17 +23,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                               "A default impl",
                                                               "A default-impl",
                                                               "A impl ",
-                                                              "An impl ",
                                                               "A implementation ",
+                                                              "An default impl", // typo
+                                                              "An default-impl", // typo
                                                               "An implementation ",
+                                                              "An impl ",
                                                               "Default impl",
                                                               "Default-impl",
-                                                              "Impl ",
                                                               "Implementation ",
+                                                              "Impl ",
                                                               "The default impl",
                                                               "The default-impl",
-                                                              "The imp ",
                                                               "The implementation ",
+                                                              "The impl ",
                                                           };
 
         private static readonly ISet<SyntaxKind> Declarations = new HashSet<SyntaxKind>
@@ -62,83 +64,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] EmptyReplacementsMapKeys = EmptyReplacementsMap.ToArray(_ => _.Key);
 
-        private static readonly string[] PropertyStartingPhrases =
-                                                                   {
-                                                                       "gets/sets ",
-                                                                       "gets/Sets ",
-                                                                       "Gets/sets ",
-                                                                       "Gets/Sets ",
-                                                                       "sets/gets ",
-                                                                       "sets/Gets ",
-                                                                       "Sets/gets ",
-                                                                       "Sets/Gets ",
-                                                                       "Gets or Sets ",
-                                                                       "Gets Or Sets ",
-                                                                       "Gets OR Sets ",
-                                                                       "Gets and Sets ",
-                                                                       "Gets And Sets ",
-                                                                       "Gets AND Sets ",
-                                                                       "Get ",
-                                                                       "Set ",
-                                                                       "get/set ",
-                                                                       "get/Set ",
-                                                                       "Get/set ",
-                                                                       "Get/Set ",
-                                                                       "set/get ",
-                                                                       "set/Get ",
-                                                                       "Set/get ",
-                                                                       "Set/Get ",
-                                                                       "Get or Set ",
-                                                                       "Get Or Set ",
-                                                                       "Get OR Set ",
-                                                                       "Get and Set ",
-                                                                       "Get And Set ",
-                                                                       "Get AND Set ",
-                                                                   };
-
-        private static readonly string[] GetSetReplacementPhrases =
-                                                                    {
-                                                                        "get/set flag ",
-                                                                        "get/Set flag ",
-                                                                        "Get/set flag ",
-                                                                        "Get/Set flag ",
-                                                                        "set/get flag ",
-                                                                        "set/Get flag ",
-                                                                        "Set/get flag ",
-                                                                        "Set/Get flag ",
-                                                                        "get/set a flag ",
-                                                                        "get/Set a flag ",
-                                                                        "Get/set a flag ",
-                                                                        "Get/Set a flag ",
-                                                                        "set/get a flag ",
-                                                                        "set/Get a flag ",
-                                                                        "Set/get a flag ",
-                                                                        "Set/Get a flag ",
-                                                                        "get/set value ",
-                                                                        "get/Set value ",
-                                                                        "Get/set value ",
-                                                                        "Get/Set value ",
-                                                                        "set/get value ",
-                                                                        "set/Get value ",
-                                                                        "Set/get value ",
-                                                                        "Set/Get value ",
-                                                                        "get/set a value ",
-                                                                        "get/Set a value ",
-                                                                        "Get/set a value ",
-                                                                        "Get/Set a value ",
-                                                                        "set/get a value ",
-                                                                        "set/Get a value ",
-                                                                        "Set/get a value ",
-                                                                        "Set/Get a value ",
-                                                                        "get/set ",
-                                                                        "get/Set ",
-                                                                        "Get/set ",
-                                                                        "Get/Set ",
-                                                                        "set/get ",
-                                                                        "set/Get ",
-                                                                        "Set/get ",
-                                                                        "Set/Get ",
-                                                                    };
+        private static readonly string[] GetSetReplacementPhrases = CreateGetSetReplacementPhrases().Except(new[] { "Gets or sets a value ", "Gets or sets " })
+                                                                                                    .OrderDescendingByLengthAndText();
 
         //// ncrunch: rdi default
 
@@ -216,9 +143,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         var remainingText = text.Slice(phrase.Length);
 
-                        if (member is PropertyDeclarationSyntax property)
+                        if (member is PropertyDeclarationSyntax p)
                         {
-                            return GetUpdatedProperty(comment, property, remainingText);
+                            return GetUpdatedProperty(comment, p, remainingText);
                         }
 
                         var firstWord = remainingText.FirstWord();
@@ -236,24 +163,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return Comment(comment, ReplacementMapKeys, ReplacementMap, StartAdjustment);
                 }
 
-                if (text.StartsWithAny(Constants.Comments.AAnThePhraseWithSpaces))
+                switch (member)
                 {
-                    switch (member)
-                    {
-                        case PropertyDeclarationSyntax property:
-                            return GetUpdatedProperty(comment, property, text);
-
-                        case BaseTypeDeclarationSyntax _:
-                            return CommentStartingWith(comment, "Represents ");
-                    }
-                }
-
-                if (text.StartsWithAny(PropertyStartingPhrases))
-                {
-                    if (member is PropertyDeclarationSyntax property)
-                    {
+                    case PropertyDeclarationSyntax property:
                         return GetUpdatedProperty(comment, property, text);
-                    }
+
+                    case BaseTypeDeclarationSyntax _ when text.StartsWithAny(Constants.Comments.AAnThePhraseWithSpaces):
+                        return CommentStartingWith(comment, "Represents ");
                 }
             }
 
@@ -301,33 +217,69 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var builder = StringBuilderCache.Acquire(startingPhrase.Length + remainingText.Length)
                                             .Append(startingPhrase)
                                             .Append(remainingText.ToLowerCaseAt(0))
-                                            .ReplaceAllWithProbe(GetSetReplacementPhrases, " ")
-                                            .ReplaceWithProbe("Gets or sets a value indicating get or set ", "Gets or sets a value indicating ")
-                                            .ReplaceWithProbe("Gets or sets a value indicating to true ", "Gets or sets a value indicating ")
-                                            .ReplaceWithProbe("Gets or sets a value indicating get/set ", "Gets or sets a value indicating ")
-                                            .ReplaceWithProbe("Gets or sets a value indicating get ", "Gets or sets a value indicating ")
-                                            .ReplaceWithProbe("Gets or sets a value indicating set/get ", "Gets or sets a value indicating ")
-                                            .ReplaceWithProbe("Gets or sets a value indicating set ", "Gets or sets a value indicating ")
-                                            .ReplaceWithProbe("Gets or sets get or set ", "Gets or sets ")
-                                            .ReplaceWithProbe("Gets or sets get ", "Gets or sets ")
-                                            .ReplaceWithProbe("Gets or sets set ", "Gets or sets ")
-                                            .ReplaceWithProbe("Gets a value indicating get ", "Gets a value indicating ")
-                                            .ReplaceWithProbe("Gets a value indicating set to true ", "Gets a value indicating ")
-                                            .ReplaceWithProbe("Gets get ", "Gets ")
-                                            .ReplaceWithProbe("Sets a value indicating set to true ", "Sets a value indicating ")
-                                            .ReplaceWithProbe("Sets a value indicating set ", "Sets a value indicating ")
-                                            .ReplaceWithProbe("Sets set ", "Sets ")
-                                            .ReplaceWithProbe("  ", " ")
-                                            .ReplaceWithProbe("value indicating the value indicating", "value indicating the")
-                                            .ReplaceWithProbe("indicating that indicates", "indicating")
-                                            .ReplaceWithProbe("indicating which indicates", "indicating")
-                                            .ReplaceWithProbe("indicating to true,", "indicating")
-                                            .ReplaceWithProbe("indicating to true", "indicating")
-                                            .ReplaceWithProbe("indicating to", "indicating whether to")
-                                            .ReplaceWithProbe("indicating if to", "indicating whether to")
-                                            .ReplaceWithProbe("indicating that to", "indicating whether to")
-                                            .ReplaceWithProbe("indicating indicating", "indicating")
-                                            .ReplaceWithProbe("a value indicating a value indicating", "a value indicating");
+                                            .ReplaceAllWithProbe(GetSetReplacementPhrases, " ");
+
+            builder.ReplaceWithProbe("  ", " ");
+            builder.ReplaceWithProbe("indicating get or set ", "indicating ");
+            builder.ReplaceWithProbe("indicating describes ", "indicating ");
+            builder.ReplaceWithProbe("indicating describe ", "indicating ");
+            builder.ReplaceWithProbe("indicating specifies ", "indicating ");
+            builder.ReplaceWithProbe("indicating specify ", "indicating ");
+            builder.ReplaceWithProbe("indicating indicates ", "indicating ");
+            builder.ReplaceWithProbe("indicating indicate ", "indicating ");
+            builder.ReplaceWithProbe("bool indicating", "value indicating");
+            builder.ReplaceWithProbe("bool that indicates", "value indicating");
+            builder.ReplaceWithProbe("bool which indicates", "value indicating");
+            builder.ReplaceWithProbe("boolean indicating", "value indicating");
+            builder.ReplaceWithProbe("boolean that indicates", "value indicating");
+            builder.ReplaceWithProbe("boolean which indicates", "value indicating");
+            builder.ReplaceWithProbe("value that indicates", "value indicating");
+            builder.ReplaceWithProbe("value which indicates", "value indicating");
+            builder.ReplaceWithProbe("value indicating whether value indicating", "value indicating");
+            builder.ReplaceWithProbe("value indicating value indicating", "value indicating");
+            builder.ReplaceWithProbe("the value indicat", "a value indicat");
+            builder.ReplaceWithProbe(" value indicating whether a value indicating", " value indicating");
+            builder.ReplaceWithProbe(" value indicating gets a value indicating", " value indicating");
+            builder.ReplaceWithProbe(" value indicating sets a value indicating", " value indicating");
+            builder.ReplaceWithProbe(" value indicating gets or sets a value indicating", " value indicating");
+            builder.ReplaceWithProbe(" value indicating a value indicating", " value indicating");
+            builder.ReplaceWithProbe("whether value indicating whether", "whether");
+            builder.ReplaceWithProbe("a value indicating get ", "a value indicating ");
+            builder.ReplaceWithProbe("a value indicating set ", "a value indicating ");
+            builder.ReplaceWithProbe("indicating that indicates if", "indicating whether");
+            builder.ReplaceWithProbe("indicating which indicates if", "indicating whether");
+            builder.ReplaceWithProbe("indicating that indicates that", "indicating whether");
+            builder.ReplaceWithProbe("indicating which indicates that", "indicating whether");
+            builder.ReplaceWithProbe("indicating that indicates whether", "indicating whether");
+            builder.ReplaceWithProbe("indicating which indicates whether", "indicating whether");
+            builder.ReplaceWithProbe("indicating that", "indicating whether");
+            builder.ReplaceWithProbe("indicating if ", "indicating whether ");
+            builder.ReplaceWithProbe("indicating to", "indicating whether to");
+            builder.ReplaceWithProbe("indicating indicating", "indicating");
+            builder.ReplaceWithProbe("whether to true if to", "whether to");
+            builder.ReplaceWithProbe("whether to true to", "whether to");
+            builder.ReplaceWithProbe("whether to true, to", "whether to");
+            builder.ReplaceWithProbe("whether describe if", "whether");
+            builder.ReplaceWithProbe("whether describe that", "whether");
+            builder.ReplaceWithProbe("whether describe whether", "whether");
+            builder.ReplaceWithProbe("whether describes if", "whether");
+            builder.ReplaceWithProbe("whether describes that", "whether");
+            builder.ReplaceWithProbe("whether describes whether", "whether");
+            builder.ReplaceWithProbe("whether indicate if", "whether");
+            builder.ReplaceWithProbe("whether indicate that", "whether ");
+            builder.ReplaceWithProbe("whether indicate whether", "whether");
+            builder.ReplaceWithProbe("whether indicates if", "whether");
+            builder.ReplaceWithProbe("whether indicates that", "whether ");
+            builder.ReplaceWithProbe("whether indicates whether", "whether");
+            builder.ReplaceWithProbe("whether specifies if", "whether");
+            builder.ReplaceWithProbe("whether specifies that", "whether");
+            builder.ReplaceWithProbe("whether specifies whether", "whether");
+            builder.ReplaceWithProbe("whether specify if", "whether");
+            builder.ReplaceWithProbe("whether specify that", "whether");
+            builder.ReplaceWithProbe("whether specify whether", "whether");
+            builder.ReplaceWithProbe("ets get ", "ets ");
+            builder.ReplaceWithProbe("ets set ", "ets ");
+            builder.ReplaceWithProbe("  ", " ");
 
             var replacedFixedText = builder.ToStringAndRelease();
 
@@ -336,14 +288,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static string GetPropertyStartingPhrase(PropertyDeclarationSyntax property)
         {
+            var boolean = property.Type.IsBoolean();
+
             var accessorList = property.AccessorList;
 
             if (accessorList is null)
             {
-                return string.Empty;
+                // seem to be an expression body, so it's a getter only
+                return boolean ? "Gets a value indicating " : "Gets ";
             }
-
-            var boolean = property.Type.IsBoolean();
 
             var accessors = accessorList.Accessors;
 
@@ -422,8 +375,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return result.Select(_ => new Pair(_.Key, _.Value))
-                         .OrderBy(_ => _.Key, AscendingStringComparer.Default) // sort by first character
-                         .ThenByDescending(_ => _.Key.Length)
+                         .OrderByDescending(_ => _.Key.Length)
+                         .ThenBy(_ => _.Key, AscendingStringComparer.Default) // sort by first character
                          .ToArray();
         }
 
@@ -485,8 +438,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new Pair("Class which serves as ", "Represents a ");
             yield return new Pair("Class which serves ", "Provides ");
 
+            yield return new Pair("This is an adapter for ", "Adapts ");
+            yield return new Pair("This is an adapter between ", "Adapts between ");
+
             // initialize method
             yield return new Pair("Initialize ", "Initializes ");
+            yield return new Pair("This method returns ", "Returns ");
+            yield return new Pair("This method initializes ", "Initializes ");
+            yield return new Pair("This method will initialize ", "Initializes ");
+            yield return new Pair("This will initialize ", "Initializes ");
 
             yield return new Pair("Contain ", "Provides ");
             yield return new Pair("Contains ", "Provides ");
@@ -504,20 +464,117 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new Pair("The interface offers ", "Provides ");
             yield return new Pair("This class offers ", "Provides ");
             yield return new Pair("This interface offers ", "Provides ");
+            yield return new Pair("This interface shall be implemented by classes that want to ");
+            yield return new Pair("The interface shall be implemented by classes that want to ");
+            yield return new Pair("This interface shall be implemented by components that want to ");
+            yield return new Pair("The interface shall be implemented by components that want to ");
+
+            yield return new Pair("This class is responsible for ");
+            yield return new Pair("This interface is responsible for ");
+            yield return new Pair("This method is responsible for ");
+            yield return new Pair("Is responsible for ");
+            yield return new Pair("Responsible for ");
 
             // view models
-            yield return new Pair("ViewModel of ", "Represents the view model of ");
-            yield return new Pair("View Model of ", "Represents the view model of ");
-            yield return new Pair("View model of ", "Represents the view model of ");
-            yield return new Pair("ViewModel for ", "Represents the view model of ");
-            yield return new Pair("View Model for ", "Represents the view model of ");
+            yield return new Pair("A View model for ", "Represents the view model of ");
+            yield return new Pair("A View Model for ", "Represents the view model of ");
+            yield return new Pair("A View model of ", "Represents the view model of ");
+            yield return new Pair("A View Model of ", "Represents the view model of ");
+            yield return new Pair("A View model representing ", "Represents the view model of ");
+            yield return new Pair("A View Model representing ", "Represents the view model of ");
+            yield return new Pair("A view model that is needed to ");
+            yield return new Pair("A View model that represents ", "Represents the view model of ");
+            yield return new Pair("A View Model that represents ", "Represents the view model of ");
+            yield return new Pair("A view model which is needed to ");
+            yield return new Pair("A ViewModel for ", "Represents the view model of ");
+            yield return new Pair("A ViewModel of ", "Represents the view model of ");
+            yield return new Pair("A ViewModel representing ", "Represents the view model of ");
+            yield return new Pair("A ViewModel that is needed to ");
+            yield return new Pair("A ViewModel that represents ", "Represents the view model of ");
+            yield return new Pair("A ViewModel which is needed to ");
+            yield return new Pair("The View model for ", "Represents the view model of ");
+            yield return new Pair("The View Model for ", "Represents the view model of ");
+            yield return new Pair("The View model of ", "Represents the view model of ");
+            yield return new Pair("The View Model of ", "Represents the view model of ");
+            yield return new Pair("The View model representing ", "Represents the view model of ");
+            yield return new Pair("The View Model representing ", "Represents the view model of ");
+            yield return new Pair("The view model that is needed to ");
+            yield return new Pair("The View model that represents ", "Represents the view model of ");
+            yield return new Pair("The View Model that represents ", "Represents the view model of ");
+            yield return new Pair("The view model which is needed to ");
+            yield return new Pair("The ViewModel for ", "Represents the view model of ");
+            yield return new Pair("The ViewModel of ", "Represents the view model of ");
+            yield return new Pair("The ViewModel representing ", "Represents the view model of ");
+            yield return new Pair("The ViewModel that is needed to ");
+            yield return new Pair("The ViewModel that represents ", "Represents the view model of ");
+            yield return new Pair("The ViewModel which is needed to ");
+            yield return new Pair("This view model ");
+            yield return new Pair("This view model is needed to ");
+            yield return new Pair("This ViewModel is needed to ");
             yield return new Pair("View model for ", "Represents the view model of ");
-            yield return new Pair("ViewModel representing ", "Represents the view model of ");
-            yield return new Pair("View Model representing ", "Represents the view model of ");
+            yield return new Pair("View Model for ", "Represents the view model of ");
+            yield return new Pair("View model needed to ");
+            yield return new Pair("View model of ", "Represents the view model of ");
+            yield return new Pair("View Model of ", "Represents the view model of ");
             yield return new Pair("View model representing ", "Represents the view model of ");
-            yield return new Pair("ViewModel that represents ", "Represents the view model of ");
-            yield return new Pair("View Model that represents ", "Represents the view model of ");
+            yield return new Pair("View Model representing ", "Represents the view model of ");
+            yield return new Pair("View model that is needed to ");
             yield return new Pair("View model that represents ", "Represents the view model of ");
+            yield return new Pair("View Model that represents ", "Represents the view model of ");
+            yield return new Pair("View model which is needed to ");
+            yield return new Pair("ViewModel for ", "Represents the view model of ");
+            yield return new Pair("ViewModel needed to ");
+            yield return new Pair("ViewModel of ", "Represents the view model of ");
+            yield return new Pair("ViewModel representing ", "Represents the view model of ");
+            yield return new Pair("ViewModel that is needed to ");
+            yield return new Pair("ViewModel that represents ", "Represents the view model of ");
+            yield return new Pair("ViewModel which is needed to ");
+
+            yield return new Pair("Base for all ", "Represents ");
+
+            yield return new Pair("Use this method to ");
+            yield return new Pair("Use this method, to ");
+            yield return new Pair("Use this Method to "); // typo in real-life scenario
+            yield return new Pair("Use this Method, to "); // typo in real-life scenario
+            yield return new Pair("Use this class to ");
+            yield return new Pair("Use this class, to ");
+            yield return new Pair("Use this Class to "); // typo in real-life scenario
+            yield return new Pair("Use this Class, to "); // typo in real-life scenario
+
+            yield return new Pair("The Method will be called", "Gets called"); // typo in real-life scenario
+            yield return new Pair("The method will be called", "Gets called");
+            yield return new Pair("The Method is called", "Gets called"); // typo in real-life scenario
+            yield return new Pair("The method is called", "Gets called");
+            yield return new Pair("This Method will be called", "Gets called"); // typo in real-life scenario
+            yield return new Pair("This method will be called", "Gets called");
+            yield return new Pair("This Method is called", "Gets called"); // typo in real-life scenario
+            yield return new Pair("This method is called", "Gets called");
+            yield return new Pair("This Method "); // typo in real-life scenario
+            yield return new Pair("This method ");
+            yield return new Pair("This Method will "); // typo in real-life scenario
+            yield return new Pair("This method will ");
+            yield return new Pair("This Class "); // typo in real-life scenario
+            yield return new Pair("This class ");
+            yield return new Pair("This Callback "); // typo in real-life scenario
+            yield return new Pair("This Call-back "); // typo in real-life scenario
+            yield return new Pair("This callback ");
+            yield return new Pair("This call-back ");
+            yield return new Pair("This Callback will "); // typo in real-life scenario
+            yield return new Pair("This Call-back will "); // typo in real-life scenario
+            yield return new Pair("This callback will ");
+            yield return new Pair("This call-back will ");
+
+            yield return new Pair("This control ");
+            yield return new Pair("This control will ");
+            yield return new Pair("This Control ");
+            yield return new Pair("This Control will ");
+
+            yield return new Pair("This handler ");
+            yield return new Pair("This Handler ");
+            yield return new Pair("This handler will ");
+            yield return new Pair("This Handler will ");
+
+            yield return new Pair("This will ");
 
             foreach (var phrase in CreatePhrases(verbs, thirdPersonVerbs, gerundVerbs))
             {
@@ -553,6 +610,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                            "The class implementing the interface",
                            "The class implementing the interface,",
                            "The class implementing this interface",
+                           "A callback", "A Callback", "A call-back", "A Call-back",
+                           "The callback", "The Callback", "The call-back", "The Call-back",
+                           "This callback", "This Callback", "This call-back", "This Call-back",
                        };
         }
 
@@ -712,6 +772,54 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return "Used to ";
             yield return "Able to ";
             yield return "Capable to ";
+        }
+
+        private static IEnumerable<string> CreateGetSetReplacementPhrases()
+        {
+            var continuations = new[] { "flag ", "a flag ", "the flag ", "value ", "a value ", "the value " };
+
+            var starts = new[]
+                             {
+                                 "Get and Set ",
+                                 "Get And Set ",
+                                 "Get AND Set ",
+                                 "Get or Set ",
+                                 "Get Or Set ",
+                                 "Get OR Set ",
+                                 "get/set ",
+                                 "get/Set ",
+                                 "Get/set ",
+                                 "Get/Set ",
+                                 "Gets and Sets ",
+                                 "Gets And Sets ",
+                                 "Gets AND Sets ",
+                                 "Gets or sets ",
+                                 "Gets or Sets ",
+                                 "Gets Or Sets ",
+                                 "Gets OR Sets ",
+                                 "gets/sets ",
+                                 "gets/Sets ",
+                                 "Gets/sets ",
+                                 "Gets/Sets ",
+                                 "set/get ",
+                                 "set/Get ",
+                                 "Set/get ",
+                                 "Set/Get ",
+                                 "sets/gets ",
+                                 "sets/Gets ",
+                                 "Sets/gets ",
+                                 "Sets/Gets ",
+                             };
+
+            foreach (var start in starts)
+            {
+                yield return start;
+
+                foreach (var continuation in continuations)
+                {
+                    yield return start + continuation;
+                }
+            }
         }
 
         //// ncrunch: rdi default

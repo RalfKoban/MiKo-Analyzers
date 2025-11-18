@@ -311,185 +311,6 @@ public class TestMe : ITestMe
 }
 ");
 
-        [TestCase("A class that adopts", "Adopts")]
-        [TestCase("A interface that adopts", "Adopts")]
-        [TestCase("Able to render", "Renders")]
-        [TestCase("An interface that adopts", "Adopts")]
-        [TestCase("Capable to render", "Renders")]
-        [TestCase("Class for checking", "Determines")]
-        [TestCase("Class in charge of getting", "Gets")]
-        [TestCase("Class specialized in creating", "Creates")]
-        [TestCase("Class that adopts", "Adopts")]
-        [TestCase("Class that allows to do", "Does")]
-        [TestCase("Class that contains", "Provides")]
-        [TestCase("Class that creates", "Creates")]
-        [TestCase("Class that describes", "Describes")]
-        [TestCase("Class that enhances", "Enhances")]
-        [TestCase("Class that extends", "Extends")]
-        [TestCase("Class that holds", "Holds")]
-        [TestCase("Class that implements", "Implements")]
-        [TestCase("Class that is used as a helper for", "Provides")]
-        [TestCase("Class that is used as helper class for", "Provides")]
-        [TestCase("Class that is used as helper for", "Provides")]
-        [TestCase("Class that offers", "Provides")]
-        [TestCase("Class that provides", "Provides")]
-        [TestCase("Class that represents", "Represents")]
-        [TestCase("Class that serves as", "Represents a")]
-        [TestCase("Class that serves", "Provides")]
-        [TestCase("Class that will represent", "Represents")]
-        [TestCase("Class to contain", "Provides")]
-        [TestCase("Class to hold", "Holds")]
-        [TestCase("Class to implement", "Implements")]
-        [TestCase("Class to offer", "Provides")]
-        [TestCase("Class to provide", "Provides")]
-        [TestCase("Class which contains", "Provides")]
-        [TestCase("Class which holds", "Holds")]
-        [TestCase("Class which implements", "Implements")]
-        [TestCase("Class which is used as a helper for", "Provides")]
-        [TestCase("Class which is used as helper class for", "Provides")]
-        [TestCase("Class which is used as helper for", "Provides")]
-        [TestCase("Class which offers", "Provides")]
-        [TestCase("Class which provides", "Provides")]
-        [TestCase("Class which serves as", "Represents a")]
-        [TestCase("Class which serves", "Provides")]
-        [TestCase("Class which will represent", "Represents")]
-        [TestCase("Classes implementing the interface provide", "Provides")]
-        [TestCase("Classes implementing the interface will provide", "Provides")]
-        [TestCase("Classes implementing the interface, will provide", "Provides")] // typo, real-world-scenario
-        [TestCase("Classes implementing the interfaces provide", "Provides")]
-        [TestCase("Classes implementing the interfaces will provide", "Provides")]
-        [TestCase("Classes implementing the interfaces, will provide", "Provides")] // typo, real-world-scenario
-        [TestCase("Classes implementing this interface provide", "Provides")]
-        [TestCase("Classes implementing this interface will provide", "Provides")]
-        [TestCase("Classes implementing this interface, will provide", "Provides")] // typo, real-world-scenario
-        [TestCase("Classes implementing this interfaces provide", "Provides")] // typo, real-world-scenario
-        [TestCase("Classes implementing this interfaces will provide", "Provides")] // typo, real-world-scenario
-        [TestCase("Classes implementing this interfaces, will provide", "Provides")] // typo, real-world-scenario
-        [TestCase("Contain", "Provides")]
-        [TestCase("Contains", "Provides")]
-        [TestCase("Event argument for", "Provides data for the")]
-        [TestCase("Event argument that is used in the", "Provides data for the")]
-        [TestCase("Event argument that provides information", "Provides data for the")]
-        [TestCase("Event argument which is used in the", "Provides data for the")]
-        [TestCase("Event argument which provides information", "Provides data for the")]
-        [TestCase("Event arguments for", "Provides data for the")]
-        [TestCase("Event arguments that provide information", "Provides data for the")]
-        [TestCase("Event arguments which provide information", "Provides data for the")]
-        [TestCase("Event is fired", "Occurs")]
-        [TestCase("Event that is published", "Occurs")]
-        [TestCase("Event that is published,", "Occurs")]
-        [TestCase("Event which is published", "Occurs")]
-        [TestCase("Event which is published,", "Occurs")]
-        [TestCase("Every class that implements the interface can", "Allows to")]
-        [TestCase("Every class that implements this interface can do", "Allows to do")]
-        [TestCase("Every class that implements this interface can", "Allows to")]
-        [TestCase("Extension of", "Extends the")]
-        [TestCase("Factory method creating", "Creates")]
-        [TestCase("Factory method that creates", "Creates")]
-        [TestCase("Factory method to create", "Creates")]
-        [TestCase("Factory method which creates", "Creates")]
-        [TestCase("Function that generates", "Generates")]
-        [TestCase("Function to generate", "Generates")]
-        [TestCase("Function which generates", "Generates")]
-        [TestCase("Help function that generates", "Generates")]
-        [TestCase("Help function to generate", "Generates")]
-        [TestCase("Help function which generates", "Generates")]
-        [TestCase("Help method that generates", "Generates")]
-        [TestCase("Help method to generate", "Generates")]
-        [TestCase("Help method which generates", "Generates")]
-        [TestCase("Helper class that manipulates", "Manipulates")]
-        [TestCase("Helper class to manipulate", "Manipulates")]
-        [TestCase("Helper class which manipulates", "Manipulates")]
-        [TestCase("Helper function that generates", "Generates")]
-        [TestCase("Helper function to generate", "Generates")]
-        [TestCase("Helper function which generates", "Generates")]
-        [TestCase("Helper method that generates", "Generates")]
-        [TestCase("Helper method to generate", "Generates")]
-        [TestCase("Helper method which generates", "Generates")]
-        [TestCase("Interface definition for a something", "Represents a something")]
-        [TestCase("Interface definition for an something", "Represents an something")]
-        [TestCase("Interface definition for something", "Represents something")]
-        [TestCase("Interface definition for the something", "Represents the something")]
-        [TestCase("Interface definition of a helper which provides", "Provides")]
-        [TestCase("Interface definition of an helper which provides", "Provides")]
-        [TestCase("Interface definition of helper which provides", "Provides")]
-        [TestCase("Interface definition of the helper which provides", "Provides")]
-        [TestCase("Interface describing", "Describes")]
-        [TestCase("Interface for a", "Represents a")]
-        [TestCase("Interface for an", "Represents an")]
-        [TestCase("Interface for classes that can provide", "Provides")]
-        [TestCase("Interface for classes that provide", "Provides")]
-        [TestCase("Interface for classes that represent", "Represents")]
-        [TestCase("Interface for classes which can provide", "Provides")]
-        [TestCase("Interface for elements that provide", "Provides")]
-        [TestCase("Interface for items that perform", "Performs")]
-        [TestCase("Interface for items that provide", "Provides")]
-        [TestCase("Interface for items that represent", "Represents")]
-        [TestCase("Interface for items which perform", "Performs")]
-        [TestCase("Interface for items which provide", "Provides")]
-        [TestCase("Interface for items which represent", "Represents")]
-        [TestCase("Interface for objects that can provide", "Provides")]
-        [TestCase("Interface for objects that provide", "Provides")]
-        [TestCase("Interface for objects that represent", "Represents")]
-        [TestCase("Interface for objects which can provide", "Provides")]
-        [TestCase("Interface for objects which represent", "Represents")]
-        [TestCase("Interface for processing", "Processes")]
-        [TestCase("Interface for storing", "Stores")]
-        [TestCase("Interface for the", "Represents a")]
-        [TestCase("Interface for view models describing", "Describes")]
-        [TestCase("Interface for view models representing", "Represents")]
-        [TestCase("Interface for work flows that perform", "Performs")]
-        [TestCase("Interface for work flows which perform", "Performs")]
-        [TestCase("Interface for workflows that perform", "Performs")]
-        [TestCase("Interface for workflows which perform", "Performs")]
-        [TestCase("Interface for wrapping", "Wraps")]
-        [TestCase("Interface implemented to detect", "Detects")]
-        [TestCase("Interface of a view model", "Represents a view model")]
-        [TestCase("Interface providing", "Provides")]
-        [TestCase("Interface representing", "Represents")]
-        [TestCase("Interface that serves", "Provides")]
-        [TestCase("Interface to describe", "Describes")]
-        [TestCase("Interface to represent", "Represents")]
-        [TestCase("Interface which serves", "Provides")]
-        [TestCase("Method that generates", "Generates")]
-        [TestCase("Method to generate", "Generates")]
-        [TestCase("Method which generates", "Generates")]
-        [TestCase("The class adopts", "Adopts")]
-        [TestCase("The class implementing this interface provides", "Provides")]
-        [TestCase("The class offers", "Provides")]
-        [TestCase("The class that adopts", "Adopts")]
-        [TestCase("The class which adopts", "Adopts")]
-        [TestCase("The interface offers", "Provides")]
-        [TestCase("The interface that adopts", "Adopts")]
-        [TestCase("The interface that can be used to adopt", "Adopts")]
-        [TestCase("The interface that could be used to adopt", "Adopts")]
-        [TestCase("The interface that may be used to adopt", "Adopts")]
-        [TestCase("The interface that might be used to adopt", "Adopts")]
-        [TestCase("The interface which adopts", "Adopts")]
-        [TestCase("The interface which can be used to adopt", "Adopts")]
-        [TestCase("The interface which could be used to adopt", "Adopts")]
-        [TestCase("The interface which may be used to adopt", "Adopts")]
-        [TestCase("The interface which might be used to adopt", "Adopts")]
-        [TestCase("This class adopts", "Adopts")]
-        [TestCase("This class offers", "Provides")]
-        [TestCase("This class provides", "Provides")]
-        [TestCase("This class represents", "Represents")]
-        [TestCase("This interface offers", "Provides")]
-        [TestCase("This interface represents", "Represents")]
-        public void Code_gets_fixed_for_term_(string originalCode, string fixedCode)
-        {
-            const string Template = @"
-/// <summary>
-/// ### something.
-/// </summary>
-public class TestMe
-{
-}
-";
-
-            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
-        }
-
         [Test]
         public void Code_gets_fixed_for_inheritdoc()
         {
@@ -585,52 +406,6 @@ public class TestMe
 /// </summary>
 public class TestMe
 {
-}
-";
-
-            VerifyCSharpFix(OriginalCode, FixedCode);
-        }
-
-        [Test]
-        public void Code_gets_fixed_for_property_declarations()
-        {
-            const string OriginalCode = @"
-public class TestMe
-{
-    /// <summary>
-    /// The value.
-    /// </summary>
-    public int Something1 { get; set; }
-
-    /// <summary>
-    /// A value.
-    /// </summary>
-    public int Something2 { get; }
-
-    /// <summary>
-    /// An value.
-    /// </summary>
-    public int Something3 { set; }
-}
-";
-
-            const string FixedCode = @"
-public class TestMe
-{
-    /// <summary>
-    /// Gets or sets the value.
-    /// </summary>
-    public int Something1 { get; set; }
-
-    /// <summary>
-    /// Gets a value.
-    /// </summary>
-    public int Something2 { get; }
-
-    /// <summary>
-    /// Sets an value.
-    /// </summary>
-    public int Something3 { set; }
 }
 ";
 
@@ -888,6 +663,205 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", startingPhrase + " render"), Template.Replace("###", "Renders"));
         }
 
+        [TestCase("A class that adopts", "Adopts")]
+        [TestCase("A interface that adopts", "Adopts")]
+        [TestCase("Able to render", "Renders")]
+        [TestCase("An interface that adopts", "Adopts")]
+        [TestCase("Capable to render", "Renders")]
+        [TestCase("Class for checking", "Determines")]
+        [TestCase("Class in charge of getting", "Gets")]
+        [TestCase("Class specialized in creating", "Creates")]
+        [TestCase("Class that adopts", "Adopts")]
+        [TestCase("Class that allows to do", "Does")]
+        [TestCase("Class that contains", "Provides")]
+        [TestCase("Class that creates", "Creates")]
+        [TestCase("Class that describes", "Describes")]
+        [TestCase("Class that enhances", "Enhances")]
+        [TestCase("Class that extends", "Extends")]
+        [TestCase("Class that holds", "Holds")]
+        [TestCase("Class that implements", "Implements")]
+        [TestCase("Class that is used as a helper for", "Provides")]
+        [TestCase("Class that is used as helper class for", "Provides")]
+        [TestCase("Class that is used as helper for", "Provides")]
+        [TestCase("Class that offers", "Provides")]
+        [TestCase("Class that provides", "Provides")]
+        [TestCase("Class that represents", "Represents")]
+        [TestCase("Class that serves as", "Represents a")]
+        [TestCase("Class that serves", "Provides")]
+        [TestCase("Class that will represent", "Represents")]
+        [TestCase("Class to contain", "Provides")]
+        [TestCase("Class to hold", "Holds")]
+        [TestCase("Class to implement", "Implements")]
+        [TestCase("Class to offer", "Provides")]
+        [TestCase("Class to provide", "Provides")]
+        [TestCase("Class which contains", "Provides")]
+        [TestCase("Class which holds", "Holds")]
+        [TestCase("Class which implements", "Implements")]
+        [TestCase("Class which is used as a helper for", "Provides")]
+        [TestCase("Class which is used as helper class for", "Provides")]
+        [TestCase("Class which is used as helper for", "Provides")]
+        [TestCase("Class which offers", "Provides")]
+        [TestCase("Class which provides", "Provides")]
+        [TestCase("Class which serves as", "Represents a")]
+        [TestCase("Class which serves", "Provides")]
+        [TestCase("Class which will represent", "Represents")]
+        [TestCase("Classes implementing the interface provide", "Provides")]
+        [TestCase("Classes implementing the interface will provide", "Provides")]
+        [TestCase("Classes implementing the interface, will provide", "Provides")] // typo, real-world-scenario
+        [TestCase("Classes implementing the interfaces provide", "Provides")]
+        [TestCase("Classes implementing the interfaces will provide", "Provides")]
+        [TestCase("Classes implementing the interfaces, will provide", "Provides")] // typo, real-world-scenario
+        [TestCase("Classes implementing this interface provide", "Provides")]
+        [TestCase("Classes implementing this interface will provide", "Provides")]
+        [TestCase("Classes implementing this interface, will provide", "Provides")] // typo, real-world-scenario
+        [TestCase("Classes implementing this interfaces provide", "Provides")] // typo, real-world-scenario
+        [TestCase("Classes implementing this interfaces will provide", "Provides")] // typo, real-world-scenario
+        [TestCase("Classes implementing this interfaces, will provide", "Provides")] // typo, real-world-scenario
+        [TestCase("Contain", "Provides")]
+        [TestCase("Contains", "Provides")]
+        [TestCase("Event argument for", "Provides data for the")]
+        [TestCase("Event argument that is used in the", "Provides data for the")]
+        [TestCase("Event argument that provides information", "Provides data for the")]
+        [TestCase("Event argument which is used in the", "Provides data for the")]
+        [TestCase("Event argument which provides information", "Provides data for the")]
+        [TestCase("Event arguments for", "Provides data for the")]
+        [TestCase("Event arguments that provide information", "Provides data for the")]
+        [TestCase("Event arguments which provide information", "Provides data for the")]
+        [TestCase("Event is fired", "Occurs")]
+        [TestCase("Event that is published", "Occurs")]
+        [TestCase("Event that is published,", "Occurs")]
+        [TestCase("Event which is published", "Occurs")]
+        [TestCase("Event which is published,", "Occurs")]
+        [TestCase("Every class that implements the interface can", "Allows to")]
+        [TestCase("Every class that implements this interface can do", "Allows to do")]
+        [TestCase("Every class that implements this interface can", "Allows to")]
+        [TestCase("Extension of", "Extends the")]
+        [TestCase("Factory method creating", "Creates")]
+        [TestCase("Factory method that creates", "Creates")]
+        [TestCase("Factory method to create", "Creates")]
+        [TestCase("Factory method which creates", "Creates")]
+        [TestCase("Function that generates", "Generates")]
+        [TestCase("Function to generate", "Generates")]
+        [TestCase("Function which generates", "Generates")]
+        [TestCase("Help function that generates", "Generates")]
+        [TestCase("Help function to generate", "Generates")]
+        [TestCase("Help function which generates", "Generates")]
+        [TestCase("Help method that generates", "Generates")]
+        [TestCase("Help method to generate", "Generates")]
+        [TestCase("Help method which generates", "Generates")]
+        [TestCase("Helper class that manipulates", "Manipulates")]
+        [TestCase("Helper class to manipulate", "Manipulates")]
+        [TestCase("Helper class which manipulates", "Manipulates")]
+        [TestCase("Helper function that generates", "Generates")]
+        [TestCase("Helper function to generate", "Generates")]
+        [TestCase("Helper function which generates", "Generates")]
+        [TestCase("Helper method that generates", "Generates")]
+        [TestCase("Helper method to generate", "Generates")]
+        [TestCase("Helper method which generates", "Generates")]
+        [TestCase("Interface definition for a something", "Represents a something")]
+        [TestCase("Interface definition for an something", "Represents an something")]
+        [TestCase("Interface definition for something", "Represents something")]
+        [TestCase("Interface definition for the something", "Represents the something")]
+        [TestCase("Interface definition of a helper which provides", "Provides")]
+        [TestCase("Interface definition of an helper which provides", "Provides")]
+        [TestCase("Interface definition of helper which provides", "Provides")]
+        [TestCase("Interface definition of the helper which provides", "Provides")]
+        [TestCase("Interface describing", "Describes")]
+        [TestCase("Interface for a", "Represents a")]
+        [TestCase("Interface for an", "Represents an")]
+        [TestCase("Interface for classes that can provide", "Provides")]
+        [TestCase("Interface for classes that provide", "Provides")]
+        [TestCase("Interface for classes that represent", "Represents")]
+        [TestCase("Interface for classes which can provide", "Provides")]
+        [TestCase("Interface for elements that provide", "Provides")]
+        [TestCase("Interface for items that perform", "Performs")]
+        [TestCase("Interface for items that provide", "Provides")]
+        [TestCase("Interface for items that represent", "Represents")]
+        [TestCase("Interface for items which perform", "Performs")]
+        [TestCase("Interface for items which provide", "Provides")]
+        [TestCase("Interface for items which represent", "Represents")]
+        [TestCase("Interface for objects that can provide", "Provides")]
+        [TestCase("Interface for objects that provide", "Provides")]
+        [TestCase("Interface for objects that represent", "Represents")]
+        [TestCase("Interface for objects which can provide", "Provides")]
+        [TestCase("Interface for objects which represent", "Represents")]
+        [TestCase("Interface for processing", "Processes")]
+        [TestCase("Interface for storing", "Stores")]
+        [TestCase("Interface for the", "Represents a")]
+        [TestCase("Interface for view models describing", "Describes")]
+        [TestCase("Interface for view models representing", "Represents")]
+        [TestCase("Interface for work flows that perform", "Performs")]
+        [TestCase("Interface for work flows which perform", "Performs")]
+        [TestCase("Interface for workflows that perform", "Performs")]
+        [TestCase("Interface for workflows which perform", "Performs")]
+        [TestCase("Interface for wrapping", "Wraps")]
+        [TestCase("Interface implemented to detect", "Detects")]
+        [TestCase("Interface of a view model", "Represents a view model")]
+        [TestCase("Interface providing", "Provides")]
+        [TestCase("Interface representing", "Represents")]
+        [TestCase("Interface that serves", "Provides")]
+        [TestCase("Interface to describe", "Describes")]
+        [TestCase("Interface to represent", "Represents")]
+        [TestCase("Interface which serves", "Provides")]
+        [TestCase("Method that generates", "Generates")]
+        [TestCase("Method to generate", "Generates")]
+        [TestCase("Method which generates", "Generates")]
+        [TestCase("The class adopts", "Adopts")]
+        [TestCase("The class implementing this interface provides", "Provides")]
+        [TestCase("The class offers", "Provides")]
+        [TestCase("The class that adopts", "Adopts")]
+        [TestCase("The class which adopts", "Adopts")]
+        [TestCase("The interface offers", "Provides")]
+        [TestCase("The interface that adopts", "Adopts")]
+        [TestCase("The interface that can be used to adopt", "Adopts")]
+        [TestCase("The interface that could be used to adopt", "Adopts")]
+        [TestCase("The interface that may be used to adopt", "Adopts")]
+        [TestCase("The interface that might be used to adopt", "Adopts")]
+        [TestCase("The interface which adopts", "Adopts")]
+        [TestCase("The interface which can be used to adopt", "Adopts")]
+        [TestCase("The interface which could be used to adopt", "Adopts")]
+        [TestCase("The interface which may be used to adopt", "Adopts")]
+        [TestCase("The interface which might be used to adopt", "Adopts")]
+        [TestCase("This class adopts", "Adopts")]
+        [TestCase("This class offers", "Provides")]
+        [TestCase("This class provides", "Provides")]
+        [TestCase("This class extends", "Extends")]
+        [TestCase("This interface offers", "Provides")]
+        [TestCase("This interface represents", "Represents")]
+        [TestCase("A callback that is used as a helper for", "Provides")]
+        [TestCase("A call-back that is used as a helper for", "Provides")]
+        [TestCase("A Callback that is used as a helper for", "Provides")]
+        [TestCase("A Call-back that is used as a helper for", "Provides")]
+        [TestCase("The callback that is used as a helper for", "Provides")]
+        [TestCase("The call-back that is used as a helper for", "Provides")]
+        [TestCase("The Callback that is used as a helper for", "Provides")]
+        [TestCase("The Call-back that is used as a helper for", "Provides")]
+        [TestCase("This callback that is used as a helper for", "Provides")]
+        [TestCase("This call-back that is used as a helper for", "Provides")]
+        [TestCase("This Callback that is used as a helper for", "Provides")]
+        [TestCase("This Call-back that is used as a helper for", "Provides")]
+        [TestCase("This control displays", "Displays")]
+        [TestCase("This control will display", "Displays")]
+        [TestCase("This Control displays", "Displays")]
+        [TestCase("This Control will display", "Displays")]
+        [TestCase("This Handler will handle", "Handles")]
+        [TestCase("This handler will handle", "Handles")]
+        [TestCase("This Handler handles", "Handles")]
+        [TestCase("This handler handles", "Handles")]
+        public void Code_gets_fixed_for_class_(string originalCode, string fixedCode)
+        {
+            const string Template = @"
+/// <summary>
+/// ### something.
+/// </summary>
+public class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
+        }
+
         [TestCase("Event args for something", @"Provides data for the <see cref=""TODO""/> event")]
         [TestCase(@"Event args for <see cref=""IWhatever""/> event", @"Provides data for the <see cref=""IWhatever""/> event")]
         public void Code_gets_fixed_for_EventArgs_class_(string startingPhrase, string fixedPhrase)
@@ -939,6 +913,10 @@ public class TestMe
         [TestCase("The interface that is used to")]
         [TestCase("This interface is used to")]
         [TestCase("Used to")]
+        [TestCase("This interface shall be implemented by components that want to")]
+        [TestCase("The interface shall be implemented by components that want to")]
+        [TestCase("This interface shall be implemented by classes that want to")]
+        [TestCase("The interface shall be implemented by classes that want to")]
         public void Code_gets_fixed_for_interface_(string startingPhrase)
         {
             const string Template = @"
@@ -1011,6 +989,20 @@ public class TestMeAttribute : System.Attribute
 
         [TestCase(@"ViewModel for <see cref=""string""/>", "Represents the view model of <see cref=\"string\"/>")]
         [TestCase(@"ViewModel of <see cref=""string""/>", "Represents the view model of <see cref=\"string\"/>")]
+
+        [TestCase("The view model that is needed to provide", "Provides")]
+        [TestCase("The view model which is needed to provide", "Provides")]
+        [TestCase("The ViewModel that is needed to provide", "Provides")]
+        [TestCase("The ViewModel which is needed to provide", "Provides")]
+        [TestCase("This view model is needed to provide", "Provides")]
+        [TestCase("This ViewModel is needed to provide", "Provides")]
+        [TestCase("View model needed to provide", "Provides")]
+        [TestCase("View model that is needed to provide", "Provides")]
+        [TestCase("View model which is needed to provide", "Provides")]
+        [TestCase("ViewModel needed to provide", "Provides")]
+        [TestCase("ViewModel that is needed to provide", "Provides")]
+        [TestCase("ViewModel which is needed to provide", "Provides")]
+        [TestCase("This view model presents", "Presents")]
         public void Code_gets_fixed_for_view_model_(string originalComment, string fixedComment)
         {
             const string Template = @"
@@ -1085,8 +1077,73 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", startingPhrase + " render"), Template.Replace("###", "Renders"));
         }
 
+        [Test]
+        public void Code_gets_fixed_for_property_declarations()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// The value.
+    /// </summary>
+    public int Something1 { get; set; }
+
+    /// <summary>
+    /// A value.
+    /// </summary>
+    public int Something2 { get; }
+
+    /// <summary>
+    /// An value.
+    /// </summary>
+    public int Something3 { set; }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Gets or sets the value.
+    /// </summary>
+    public int Something1 { get; set; }
+
+    /// <summary>
+    /// Gets a value.
+    /// </summary>
+    public int Something2 { get; }
+
+    /// <summary>
+    /// Sets an value.
+    /// </summary>
+    public int Something3 { set; }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         [TestCase("Used to get", "Gets")]
         [TestCase("The", "Gets the")]
+        [TestCase("All", "Gets all")]
+        public void Code_gets_fixed_for_expression_body_property_text_(string originalComment, string fixedComment)
+        {
+            const string Template = @"
+public class TestMe
+{
+    /// <summary>
+    /// ### something.
+    /// </summary>
+    public int Property => 42;
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
+        }
+
+        [TestCase("Used to get", "Gets")]
+        [TestCase("The", "Gets the")]
+        [TestCase("All", "Gets all")]
         public void Code_gets_fixed_for_getter_only_property_text_(string originalComment, string fixedComment)
         {
             const string Template = @"
@@ -1104,6 +1161,7 @@ public class TestMe
 
         [TestCase("Used to set", "Sets")]
         [TestCase("The", "Sets the")]
+        [TestCase("All", "Sets all")]
         public void Code_gets_fixed_for_setter_only_property_text_(string originalComment, string fixedComment)
         {
             const string Template = @"
@@ -1122,6 +1180,7 @@ public class TestMe
         [TestCase("Used to set", "Gets or sets")]
         [TestCase("Used to get", "Gets or sets")]
         [TestCase("The", "Gets or sets the")]
+        [TestCase("All", "Gets or sets all")]
         public void Code_gets_fixed_for_property_text_(string originalComment, string fixedComment)
         {
             const string Template = @"
@@ -1137,9 +1196,98 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
         }
 
-        [TestCase("Used to get", "Gets a value indicating")]
+        [TestCase("A value indicating if")]
+        [TestCase("A value indicating whether")]
+        [TestCase("A value that indicates if")]
+        [TestCase("A value that indicates whether")]
+        [TestCase("A value which indicates if")]
+        [TestCase("A value which indicates whether")]
+        [TestCase("Describe if")]
+        [TestCase("Describe that")]
+        [TestCase("Describe whether")]
+        [TestCase("Describes if")]
+        [TestCase("Describes that")]
+        [TestCase("Describes whether")]
+        [TestCase("Gets a value indicating whether a bool indicating if")]
+        [TestCase("Gets a value indicating whether a bool indicating whether")]
+        [TestCase("Gets a value indicating whether a boolean indicating if")]
+        [TestCase("Gets a value indicating whether a boolean indicating whether")]
+        [TestCase("Gets a value indicating whether a value indicating if")]
+        [TestCase("Gets a value indicating whether a value indicating whether")]
+        [TestCase("Gets a value indicating whether bool indicating if")]
+        [TestCase("Gets a value indicating whether bool indicating whether")]
+        [TestCase("Gets a value indicating whether boolean indicating if")]
+        [TestCase("Gets a value indicating whether boolean indicating whether")]
+        [TestCase("Gets a value indicating whether describe if")]
+        [TestCase("Gets a value indicating whether describe that")]
+        [TestCase("Gets a value indicating whether describe whether")]
+        [TestCase("Gets a value indicating whether describes if")]
+        [TestCase("Gets a value indicating whether describes that")]
+        [TestCase("Gets a value indicating whether describes whether")]
+        [TestCase("Gets a value indicating whether indicate if")]
+        [TestCase("Gets a value indicating whether indicate that")]
+        [TestCase("Gets a value indicating whether indicate whether")]
+        [TestCase("Gets a value indicating whether indicates if")]
+        [TestCase("Gets a value indicating whether indicates that")]
+        [TestCase("Gets a value indicating whether indicates whether")]
+        [TestCase("Gets a value indicating whether specifies if")]
+        [TestCase("Gets a value indicating whether specifies that")]
+        [TestCase("Gets a value indicating whether specifies whether")]
+        [TestCase("Gets a value indicating whether specify if")]
+        [TestCase("Gets a value indicating whether specify that")]
+        [TestCase("Gets a value indicating whether specify whether")]
+        [TestCase("Gets a value indicating whether the bool indicating if")]
+        [TestCase("Gets a value indicating whether the bool indicating whether")]
+        [TestCase("Gets a value indicating whether the boolean indicating if")]
+        [TestCase("Gets a value indicating whether the boolean indicating whether")]
+        [TestCase("Gets a value indicating whether the value indicating if")]
+        [TestCase("Gets a value indicating whether the value indicating whether")]
+        [TestCase("Gets a value indicating whether value indicating if")]
+        [TestCase("Gets a value indicating whether value indicating whether")]
+        [TestCase("Indicate if")]
+        [TestCase("Indicate that")]
+        [TestCase("Indicate whether")]
+        [TestCase("Indicates if")]
+        [TestCase("Indicates that")]
+        [TestCase("Indicates whether")]
+        [TestCase("Indicating if")]
+        [TestCase("Indicating that")]
+        [TestCase("Indicating whether")]
+        [TestCase("Specifies if")]
+        [TestCase("Specifies that")]
+        [TestCase("Specifies whether")]
+        [TestCase("Specify if")]
+        [TestCase("Specify that")]
+        [TestCase("Specify whether")]
+        [TestCase("The value indicating if")]
+        [TestCase("The value indicating whether")]
+        [TestCase("The value that indicates if")]
+        [TestCase("The value that indicates whether")]
+        [TestCase("The value which indicates if")]
+        [TestCase("The value which indicates whether")]
+        [TestCase("Value indicating if")]
+        [TestCase("Value that indicates if")]
+        [TestCase("Value which indicates if")]
+        [TestCase("Value indicating whether")]
+        [TestCase("Value that indicates whether")]
+        [TestCase("Value which indicates whether")]
+        public void Code_gets_fixed_for_boolean_getter_only_property_text_(string originalComment)
+        {
+            const string Template = @"
+public class TestMe
+{
+    /// <summary>
+    /// ### something.
+    /// </summary>
+    public bool Property { get; }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", "Gets a value indicating whether"));
+        }
+
         [TestCase("The", "Gets a value indicating the")]
-        [TestCase("The value indicating", "Gets a value indicating the")]
+        [TestCase("Used to get", "Gets a value indicating")]
         public void Code_gets_fixed_for_boolean_getter_only_property_text_(string originalComment, string fixedComment)
         {
             const string Template = @"
@@ -1155,9 +1303,97 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
         }
 
-        [TestCase("Used to set", "Sets a value indicating")]
+        [TestCase("A value indicating if")]
+        [TestCase("A value indicating whether")]
+        [TestCase("A value that indicates if")]
+        [TestCase("A value that indicates whether")]
+        [TestCase("A value which indicates if")]
+        [TestCase("A value which indicates whether")]
+        [TestCase("Describe that")]
+        [TestCase("Describe whether")]
+        [TestCase("Describes if")]
+        [TestCase("Describes that")]
+        [TestCase("Describes whether")]
+        [TestCase("Indicate if")]
+        [TestCase("Indicate that")]
+        [TestCase("Indicate whether")]
+        [TestCase("Indicates if")]
+        [TestCase("Indicates that")]
+        [TestCase("Indicates whether")]
+        [TestCase("Indicating if")]
+        [TestCase("Indicating that")]
+        [TestCase("Indicating whether")]
+        [TestCase("Sets a value indicating whether a bool indicating if")]
+        [TestCase("Sets a value indicating whether a bool indicating whether")]
+        [TestCase("Sets a value indicating whether a boolean indicating if")]
+        [TestCase("Sets a value indicating whether a boolean indicating whether")]
+        [TestCase("Sets a value indicating whether a value indicating if")]
+        [TestCase("Sets a value indicating whether a value indicating whether")]
+        [TestCase("Sets a value indicating whether bool indicating if")]
+        [TestCase("Sets a value indicating whether bool indicating whether")]
+        [TestCase("Sets a value indicating whether boolean indicating if")]
+        [TestCase("Sets a value indicating whether boolean indicating whether")]
+        [TestCase("Sets a value indicating whether describe if")]
+        [TestCase("Sets a value indicating whether describe that")]
+        [TestCase("Sets a value indicating whether describe whether")]
+        [TestCase("Sets a value indicating whether describes if")]
+        [TestCase("Sets a value indicating whether describes that")]
+        [TestCase("Sets a value indicating whether describes whether")]
+        [TestCase("Sets a value indicating whether indicate if")]
+        [TestCase("Sets a value indicating whether indicate that")]
+        [TestCase("Sets a value indicating whether indicate whether")]
+        [TestCase("Sets a value indicating whether indicates if")]
+        [TestCase("Sets a value indicating whether indicates that")]
+        [TestCase("Sets a value indicating whether indicates whether")]
+        [TestCase("Sets a value indicating whether specifies if")]
+        [TestCase("Sets a value indicating whether specifies that")]
+        [TestCase("Sets a value indicating whether specifies whether")]
+        [TestCase("Sets a value indicating whether specify if")]
+        [TestCase("Sets a value indicating whether specify that")]
+        [TestCase("Sets a value indicating whether specify whether")]
+        [TestCase("Sets a value indicating whether the bool indicating if")]
+        [TestCase("Sets a value indicating whether the bool indicating whether")]
+        [TestCase("Sets a value indicating whether the boolean indicating if")]
+        [TestCase("Sets a value indicating whether the boolean indicating whether")]
+        [TestCase("Sets a value indicating whether the value indicating if")]
+        [TestCase("Sets a value indicating whether the value indicating whether")]
+        [TestCase("Sets a value indicating whether value indicating if")]
+        [TestCase("Sets a value indicating whether value indicating whether")]
+        [TestCase("Specifies if")]
+        [TestCase("Specifies that")]
+        [TestCase("Specifies whether")]
+        [TestCase("Specify if")]
+        [TestCase("Specify that")]
+        [TestCase("Specify whether")]
+        [TestCase("The value indicating if")]
+        [TestCase("The value indicating whether")]
+        [TestCase("The value that indicates if")]
+        [TestCase("The value that indicates whether")]
+        [TestCase("The value which indicates if")]
+        [TestCase("The value which indicates whether")]
+        [TestCase("Value indicating if")]
+        [TestCase("Value indicating whether")]
+        [TestCase("Value that indicates if")]
+        [TestCase("Value that indicates whether")]
+        [TestCase("Value which indicates if")]
+        [TestCase("Value which indicates whether")]
+        public void Code_gets_fixed_for_boolean_setter_only_property_text_(string originalComment)
+        {
+            const string Template = @"
+public class TestMe
+{
+    /// <summary>
+    /// ### something.
+    /// </summary>
+    public bool Property { set; }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", "Sets a value indicating whether"));
+        }
+
         [TestCase("The", "Sets a value indicating the")]
-        [TestCase("The value indicating", "Sets a value indicating the")]
+        [TestCase("Used to set", "Sets a value indicating")]
         public void Code_gets_fixed_for_boolean_setter_only_property_text_(string originalComment, string fixedComment)
         {
             const string Template = @"
@@ -1173,11 +1409,99 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
         }
 
-        [TestCase("Used to set", "Gets or sets a value indicating")]
-        [TestCase("Used to get", "Gets or sets a value indicating")]
-        [TestCase("Used to get or set", "Gets or sets a value indicating")]
+        [TestCase("A value indicating if")]
+        [TestCase("A value indicating whether")]
+        [TestCase("A value that indicates if")]
+        [TestCase("A value that indicates whether")]
+        [TestCase("A value which indicates if")]
+        [TestCase("A value which indicates whether")]
+        [TestCase("Describe that")]
+        [TestCase("Describe whether")]
+        [TestCase("Describes if")]
+        [TestCase("Describes that")]
+        [TestCase("Describes whether")]
+        [TestCase("Gets or sets a value indicating whether a bool indicating if")]
+        [TestCase("Gets or sets a value indicating whether a bool indicating whether")]
+        [TestCase("Gets or sets a value indicating whether a boolean indicating if")]
+        [TestCase("Gets or sets a value indicating whether a boolean indicating whether")]
+        [TestCase("Gets or sets a value indicating whether a value indicating if")]
+        [TestCase("Gets or sets a value indicating whether a value indicating whether")]
+        [TestCase("Gets or sets a value indicating whether bool indicating if")]
+        [TestCase("Gets or sets a value indicating whether bool indicating whether")]
+        [TestCase("Gets or sets a value indicating whether boolean indicating if")]
+        [TestCase("Gets or sets a value indicating whether boolean indicating whether")]
+        [TestCase("Gets or sets a value indicating whether describe if")]
+        [TestCase("Gets or sets a value indicating whether describe that")]
+        [TestCase("Gets or sets a value indicating whether describe whether")]
+        [TestCase("Gets or sets a value indicating whether describes if")]
+        [TestCase("Gets or sets a value indicating whether describes that")]
+        [TestCase("Gets or sets a value indicating whether describes whether")]
+        [TestCase("Gets or sets a value indicating whether indicate if")]
+        [TestCase("Gets or sets a value indicating whether indicate that")]
+        [TestCase("Gets or sets a value indicating whether indicate whether")]
+        [TestCase("Gets or sets a value indicating whether indicates if")]
+        [TestCase("Gets or sets a value indicating whether indicates that")]
+        [TestCase("Gets or sets a value indicating whether indicates whether")]
+        [TestCase("Gets or sets a value indicating whether specifies if")]
+        [TestCase("Gets or sets a value indicating whether specifies that")]
+        [TestCase("Gets or sets a value indicating whether specifies whether")]
+        [TestCase("Gets or sets a value indicating whether specify if")]
+        [TestCase("Gets or sets a value indicating whether specify that")]
+        [TestCase("Gets or sets a value indicating whether specify whether")]
+        [TestCase("Gets or sets a value indicating whether the bool indicating if")]
+        [TestCase("Gets or sets a value indicating whether the bool indicating whether")]
+        [TestCase("Gets or sets a value indicating whether the boolean indicating if")]
+        [TestCase("Gets or sets a value indicating whether the boolean indicating whether")]
+        [TestCase("Gets or sets a value indicating whether the value indicating if")]
+        [TestCase("Gets or sets a value indicating whether the value indicating whether")]
+        [TestCase("Gets or sets a value indicating whether value indicating if")]
+        [TestCase("Gets or sets a value indicating whether value indicating whether")]
+        [TestCase("Indicate if")]
+        [TestCase("Indicate that")]
+        [TestCase("Indicate whether")]
+        [TestCase("Indicates if")]
+        [TestCase("Indicates that")]
+        [TestCase("Indicates whether")]
+        [TestCase("Indicating if")]
+        [TestCase("Indicating that")]
+        [TestCase("Indicating whether")]
+        [TestCase("Specifies if")]
+        [TestCase("Specifies that")]
+        [TestCase("Specifies whether")]
+        [TestCase("Specify if")]
+        [TestCase("Specify that")]
+        [TestCase("Specify whether")]
+        [TestCase("The value indicating if")]
+        [TestCase("The value indicating whether")]
+        [TestCase("The value that indicates if")]
+        [TestCase("The value that indicates whether")]
+        [TestCase("The value which indicates if")]
+        [TestCase("The value which indicates whether")]
+        [TestCase("Value indicating if")]
+        [TestCase("Value indicating whether")]
+        [TestCase("Value that indicates if")]
+        [TestCase("Value that indicates whether")]
+        [TestCase("Value which indicates if")]
+        [TestCase("Value which indicates whether")]
+        public void Code_gets_fixed_for_boolean_property_text_(string originalComment)
+        {
+            const string Template = @"
+public class TestMe
+{
+    /// <summary>
+    /// ### something.
+    /// </summary>
+    public bool Property { get; set; }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", "Gets or sets a value indicating whether"));
+        }
+
         [TestCase("The", "Gets or sets a value indicating the")]
-        [TestCase("The value indicating", "Gets or sets a value indicating the")]
+        [TestCase("Used to get or set", "Gets or sets a value indicating")]
+        [TestCase("Used to get", "Gets or sets a value indicating")]
+        [TestCase("Used to set", "Gets or sets a value indicating")]
         public void Code_gets_fixed_for_boolean_property_text_(string originalComment, string fixedComment)
         {
             const string Template = @"
@@ -1196,6 +1520,15 @@ public class TestMe
         [TestCase("Called to do", "Does")]
         [TestCase("Called by someone to do", "Gets called by someone to do")]
         [TestCase("Called if someone attempts to do", "Gets called if someone attempts to do")]
+        [TestCase("This method will be called to do", "Gets called to do")]
+        [TestCase("This method is called by the operator to do", "Gets called by the operator to do")]
+        [TestCase("This Method will be called to do", "Gets called to do")]
+        [TestCase("This Method is called by the operator to do", "Gets called by the operator to do")]
+        [TestCase("The method will be called to do", "Gets called to do")]
+        [TestCase("The method is called by the operator to do", "Gets called by the operator to do")]
+        [TestCase("The Method will be called to do", "Gets called to do")]
+        [TestCase("The Method is called by the operator to do", "Gets called by the operator to do")]
+        [TestCase("This will build", "Builds")]
         public void Code_gets_fixed_for_method_text_(string originalComment, string fixedComment)
         {
             const string Template = @"

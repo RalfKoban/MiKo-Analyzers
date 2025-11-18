@@ -44,6 +44,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             StringBuilderCache.Release(builder);
 
+            if (problematicText is "Is")
+            {
+                return true;
+            }
+
             return Verbalizer.IsThirdPersonSingularVerb(problematicText) is false;
         }
     }

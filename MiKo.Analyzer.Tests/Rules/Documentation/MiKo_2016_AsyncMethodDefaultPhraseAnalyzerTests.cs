@@ -281,28 +281,33 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        [TestCase("A callback that is called", "Asynchronously invoked")]
-        [TestCase("A callback which is called", "Asynchronously invoked")]
-        [TestCase("A method that gets called", "Asynchronously invoked")]
-        [TestCase("A method that is called", "Asynchronously invoked")]
-        [TestCase("A method which gets called", "Asynchronously invoked")]
-        [TestCase("A method which is called", "Asynchronously invoked")]
-        [TestCase("Callback that is called", "Asynchronously invoked")]
-        [TestCase("Callback which is called", "Asynchronously invoked")]
-        [TestCase("Method that gets called", "Asynchronously invoked")]
-        [TestCase("Method that is called", "Asynchronously invoked")]
-        [TestCase("Method which gets called", "Asynchronously invoked")]
-        [TestCase("Method which is called", "Asynchronously invoked")]
-        [TestCase("The callback that is called", "Asynchronously invoked")]
-        [TestCase("The callback which is called", "Asynchronously invoked")]
-        [TestCase("The method gets called", "Asynchronously invoked")]
-        [TestCase("The method is called", "Asynchronously invoked")]
-        [TestCase("The method that gets called", "Asynchronously invoked")]
-        [TestCase("The method that is called", "Asynchronously invoked")]
-        [TestCase("The method which gets called", "Asynchronously invoked")]
-        [TestCase("The method which is called", "Asynchronously invoked")]
-        [TestCase("This method gets called", "Asynchronously invoked")]
-        [TestCase("This method is called", "Asynchronously invoked")]
+        [TestCase("A callback that is called to do", "Asynchronously does")]
+        [TestCase("A callback which is called to do", "Asynchronously does")]
+        [TestCase("A method that gets called to do", "Asynchronously does")]
+        [TestCase("A method that is called to do", "Asynchronously does")]
+        [TestCase("A method which gets called to do", "Asynchronously does")]
+        [TestCase("A method which is called to do", "Asynchronously does")]
+        [TestCase("Callback that is called to do", "Asynchronously does")]
+        [TestCase("Callback which is called to do", "Asynchronously does")]
+        [TestCase("Method that gets called to do", "Asynchronously does")]
+        [TestCase("Method that is called to do", "Asynchronously does")]
+        [TestCase("Method which gets called to do", "Asynchronously does")]
+        [TestCase("Method which is called to do", "Asynchronously does")]
+        [TestCase("The callback that is called to do", "Asynchronously does")]
+        [TestCase("The callback which is called to do", "Asynchronously does")]
+        [TestCase("The method gets called to do", "Asynchronously does")]
+        [TestCase("The method is called to do", "Asynchronously does")]
+        [TestCase("The method that gets called to do", "Asynchronously does")]
+        [TestCase("The method that is called to do", "Asynchronously does")]
+        [TestCase("The method which gets called to do", "Asynchronously does")]
+        [TestCase("The method which is called to do", "Asynchronously does")]
+        [TestCase("This method gets called to do", "Asynchronously does")]
+        [TestCase("This method is called to do", "Asynchronously does")]
+
+        [TestCase("This will execute", "Asynchronously executes")]
+        [TestCase("This method will execute", "Asynchronously executes")]
+        [TestCase("This Method will execute", "Asynchronously executes")]
+        [TestCase("Is responsible for collecting", "Asynchronously collects")]
         public void Code_gets_fixed_for_(string originalText, string fixedText)
         {
             const string Template = """
@@ -310,7 +315,7 @@ public class TestMe
                                     public class TestMe
                                     {
                                         /// <summary>
-                                        /// ### to do something.
+                                        /// ### something.
                                         /// </summary>
                                         public async Task DoSomethingAsync() { }
                                     }

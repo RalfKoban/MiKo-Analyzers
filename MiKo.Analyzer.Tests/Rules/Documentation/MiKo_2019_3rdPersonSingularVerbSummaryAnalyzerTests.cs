@@ -365,6 +365,10 @@ public class TestMe
         [TestCase("The class which would be used to update something", "Updates something")]
         [TestCase("The class which allows to update something", "Updates something")]
         [TestCase("This class allows to update something", "Updates something")]
+        [TestCase("This class is responsible for collecting something", "Collects something")]
+        [TestCase("This interface is responsible for collecting something", "Collects something")]
+        [TestCase("Is responsible for collecting something", "Collects something")]
+        [TestCase("Responsible for collecting something", "Collects something")]
         [TestCase("Class containing extension methods for something", @"Provides a set of <see langword=""static""/> methods for something")]
         [TestCase("Class for byte value conversation.", "Converts byte value.", Ignore = "Currently unclear how to fix")] // TODO RKN
         [TestCase("Class for checking something", "Determines something")]
@@ -393,6 +397,10 @@ public class TestMe
         [TestCase("Class used for loading something", "Loads something")]
         [TestCase("Class which holds something", "Holds something")]
         [TestCase("Classes implementing this interfaces, will be called with their something", "Provides a something")]
+        [TestCase("This class reads something", "Reads something")]
+        [TestCase("This is an adapter for something", "Adapts something")]
+        [TestCase("This is an adapter between something", "Adapts between something")]
+        [TestCase("Base for all view models", "Represents view models")]
         public void Code_gets_fixed_for_class_text_(string originalText, string fixedText)
         {
             const string Template = @"
@@ -601,6 +609,8 @@ public class TestMe
         [TestCase("Set/Get")]
         [TestCase("Set/get")]
         [TestCase("set/Get")]
+        [TestCase("Describe whether")]
+        [TestCase("Specify whether")]
         public void Code_gets_fixed_for_boolean_property_text_(string originalText)
         {
             const string Template = @"
@@ -650,6 +660,25 @@ public interface TestMe
         [TestCase("Asynchronously called at some time", "Asynchronously runs at some time")]
         [TestCase("Recursively invoked at some time", "Recursively runs at some time")]
         [TestCase("Recursively called at some time", "Recursively runs at some time")]
+        [TestCase("This method returns something important", "Returns something important")]
+        [TestCase("This method is responsible for collecting something important", "Collects something important")]
+        [TestCase("Is responsible for collecting something", "Collects something")]
+        [TestCase("Responsible for collecting something important", "Collects something important")]
+        [TestCase("This will initialize something", "Initializes something")]
+        [TestCase("This callback cleans stuff", "Cleans stuff")]
+        [TestCase("This call-back cleans stuff", "Cleans stuff")]
+        [TestCase("This Callback cleans stuff", "Cleans stuff")]
+        [TestCase("This Call-back cleans stuff", "Cleans stuff")]
+        [TestCase("This callback will clean stuff", "Cleans stuff")]
+        [TestCase("This call-back will clean stuff", "Cleans stuff")]
+        [TestCase("This Callback will clean stuff", "Cleans stuff")]
+        [TestCase("This Call-back will clean stuff", "Cleans stuff")]
+        [TestCase("Use this Method, to change something", "Changes something")]
+        [TestCase("Use this Method to change something", "Changes something")]
+        [TestCase("Use this method to change something", "Changes something")]
+        [TestCase("Use this method, to change something", "Changes something")]
+        [TestCase("This will start to do something", "Starts to do something")]
+        [TestCase("This method will start to do something", "Starts to do something")]
         public void Code_gets_fixed_for_method_text_(string originalText, string fixedText)
         {
             const string Template = @"
