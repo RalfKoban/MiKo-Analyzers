@@ -44,15 +44,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol, Compilation compilation)
         {
-            var members = symbol.GetMembers();
+            var members = symbol.GetMethods();
 
-            for (int index = 0, count = members.Length; index < count; index++)
+            for (int index = 0, count = members.Count; index < count; index++)
             {
                 var member = members[index];
 
                 if (member.IsVirtual && member.DeclaredAccessibility is Accessibility.Public)
                 {
-                    if (member is IMethodSymbol method && method.MethodKind != MethodKind.Ordinary)
+                    if (member.MethodKind != MethodKind.Ordinary)
                     {
                         // ignore non-ordinary methods
                         continue;

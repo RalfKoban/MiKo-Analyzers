@@ -754,6 +754,15 @@ public class TestMe
         [TestCase("""<see langword="true"/> if creating a <see cref="TestMe"/> should succeed, otherwise <see langword="false"/>.""", """<see langword="true"/> to indicate that creating a <see cref="TestMe"/> should succeed; otherwise, <see langword="false"/>.""", Ignore = "Just for now")]
         [TestCase("If all the items are considered.", """<see langword="true"/> to consider all the items; otherwise, <see langword="false"/>.""", Ignore = "Just for now")]
         [TestCase("Whether all the items are considered.", """<see langword="true"/> to consider all the items; otherwise, <see langword="false"/>.""", Ignore = "Just for now")]
+
+        [TestCase("true to indicate that the operation succeeded, false otherwise.", """<see langword="true"/> to indicate that the operation succeeded; otherwise, <see langword="false"/>.""")]
+        [TestCase("true to indicate whether the operation succeeded, false otherwise.", """<see langword="true"/> to indicate that the operation succeeded; otherwise, <see langword="false"/>.""")]
+        [TestCase("true to indicate that the operation succeeded, otherwise false.", """<see langword="true"/> to indicate that the operation succeeded; otherwise, <see langword="false"/>.""")]
+        [TestCase("true to indicate whether the operation succeeded, otherwise false.", """<see langword="true"/> to indicate that the operation succeeded; otherwise, <see langword="false"/>.""")]
+        [TestCase("true to indicate that the operation succeeded; otherwise false.", """<see langword="true"/> to indicate that the operation succeeded; otherwise, <see langword="false"/>.""")]
+        [TestCase("true to indicate whether the operation succeeded; otherwise false.", """<see langword="true"/> to indicate that the operation succeeded; otherwise, <see langword="false"/>.""")]
+        [TestCase("true to indicate that the operation succeeded; otherwise, false.", """<see langword="true"/> to indicate that the operation succeeded; otherwise, <see langword="false"/>.""")]
+        [TestCase("true to indicate whether the operation succeeded; otherwise, false.", """<see langword="true"/> to indicate that the operation succeeded; otherwise, <see langword="false"/>.""")]
         public void Code_gets_fixed_on_same_line_for_phrase_(string originalPhrase, string fixedPhrase)
         {
             var originalCode = @"

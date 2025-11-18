@@ -399,6 +399,26 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_Enum_auto_property_on_interface() => No_issue_is_reported_for(@"
+using System;
+
+public interface ITestMe
+{
+    public StringComparison Comparison { get; set; }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_Enum_auto_property_on_abstract_property() => No_issue_is_reported_for(@"
+using System;
+
+public abstract class TestMe
+{
+    public abstract StringComparison Comparison { get; set; }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_Enum_auto_property_with_no_ctor() => An_issue_is_reported_for(@"
 using System;
 

@@ -313,7 +313,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "lvLV", // Latvia
                                                         ];
 
-        private static readonly string[] AllowedWords = [.. AllowedTerms, "obj", "href", "cref"];
+        private static readonly string[] AllowedWords = [.. AllowedTerms, "obj", "href", "cref", "topLevelItem", "toplevelItem", "topMost", "topmost", "atTop"];
 
         private static readonly string[] WrongWords = [.. BadPrefixes.Except(AllowedWords)];
 

@@ -15,6 +15,24 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<FieldDeclarationSyntax>().FirstOrDefault();
 
-        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic issue) => PlaceFirst<FieldDeclarationSyntax>(syntax, typeSyntax);
+        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic issue)
+        {
+            if (typeSyntax.ChildNodes<FieldDeclarationSyntax>().Any(_ => _.IsConst()))
+            {
+                var modifiedType = typeSyntax.RemoveNodeAndAdjustOpenCloseBraces(syntax);
+
+                var field = modifiedType.ChildNodes<FieldDeclarationSyntax>().SkipWhile(_ => _.IsConst()).FirstOrDefault();
+
+                if (field is null)
+                {
+                    // cannot happen as this would mean that the field is the only non-constant field and should not have been reported at all
+                    return modifiedType.InsertNodeAfter(modifiedType.ChildNodes<FieldDeclarationSyntax>().Last(), syntax);
+                }
+
+                return modifiedType.InsertNodeBefore(field, syntax);
+            }
+
+            return PlaceFirst<FieldDeclarationSyntax>(syntax, typeSyntax);
+        }
     }
 }
