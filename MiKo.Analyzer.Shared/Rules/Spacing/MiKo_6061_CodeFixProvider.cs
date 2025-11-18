@@ -23,24 +23,28 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 var arms = switchExpression.Arms;
 
                 var updatedArms = arms.GetWithSeparators()
-                                      .Select(token =>
-                                                      {
-                                                          if (token.IsNode)
-                                                          {
-                                                              var node = token.AsNode();
+                                      .Select(item =>
+                                                     {
+                                                         if (item.IsNode)
+                                                         {
+                                                             var node = item.AsNode();
 
-                                                              return node.PlacedOnSameLine().WithLeadingTriviaFrom(node);
-                                                          }
+                                                             return node.PlacedOnSameLine().WithLeadingTriviaFrom(node).WithEndOfLine();
+                                                         }
 
-                                                          if (token.IsToken)
-                                                          {
-                                                              return token.AsToken().WithoutLeadingTrivia();
-                                                          }
+                                                         if (item.IsToken)
+                                                         {
+                                                             return item.AsToken().WithoutLeadingTrivia();
+                                                         }
 
-                                                          return token;
-                                                      });
+                                                         return item;
+                                                     });
 
-                return switchExpression.WithArms(SyntaxFactory.SeparatedList<SwitchExpressionArmSyntax>(updatedArms));
+                var spaces = switchExpression.SwitchKeyword.GetPositionWithinEndLine();
+
+                return switchExpression.WithArms(SyntaxFactory.SeparatedList<SwitchExpressionArmSyntax>(updatedArms))
+                                       .WithOpenBraceToken(switchExpression.OpenBraceToken.WithoutTrivia().WithLeadingSpaces(spaces).WithTrailingNewLine())
+                                       .WithCloseBraceToken(switchExpression.CloseBraceToken.WithLeadingSpaces(spaces));
             }
 
             return syntax;

@@ -17,6 +17,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                   "Returns_null_if_load_fails",
                                                                   "Throws_ArgumentNullException_under_some_conditions",
                                                                   "Method_name_returns_false_if_load_fails_and_some_condition",
+                                                                  "Create_refuses_null_as_name",
+                                                                  "Create_refuses_null_as_input_for_name",
                                                               ];
 
         private static readonly string[] WrongMethodNames =
