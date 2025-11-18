@@ -119,7 +119,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => "MiKo_2019";
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        internal static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
         {
             if (syntax is XmlElementSyntax summary)
             {
@@ -132,6 +132,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return syntax;
+        }
+
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        {
+            return GetUpdatedSyntax(syntax);
         }
 
         private static SyntaxNode GetUpdatedSyntaxForConstructor(XmlElementSyntax summary, ConstructorDeclarationSyntax constructor)

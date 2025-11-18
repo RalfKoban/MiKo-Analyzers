@@ -551,12 +551,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new Pair("This method is called", "Gets called");
             yield return new Pair("This Method "); // typo in real-life scenario
             yield return new Pair("This method ");
+            yield return new Pair("This Method will "); // typo in real-life scenario
+            yield return new Pair("This method will ");
             yield return new Pair("This Class "); // typo in real-life scenario
             yield return new Pair("This class ");
-            yield return new Pair("This Callback ");
-            yield return new Pair("This Call-back ");
+            yield return new Pair("This Callback "); // typo in real-life scenario
+            yield return new Pair("This Call-back "); // typo in real-life scenario
             yield return new Pair("This callback ");
             yield return new Pair("This call-back ");
+            yield return new Pair("This Callback will "); // typo in real-life scenario
+            yield return new Pair("This Call-back will "); // typo in real-life scenario
+            yield return new Pair("This callback will ");
+            yield return new Pair("This call-back will ");
 
             yield return new Pair("This control ");
             yield return new Pair("This control will ");
