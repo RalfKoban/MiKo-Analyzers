@@ -127,6 +127,13 @@ public class TestMe
         [TestCase("Client_ReceivesHTTPRequest_WithData", "Client_receives_HTTP_request_with_data")]
         [TestCase("HTTPClient_SendsHTTPRequest_WithData", "HTTP_client_sends_HTTP_request_with_data")]
         [TestCase("HTTPClient_ReceivesHTTPRequest_WithData", "HTTP_client_receives_HTTP_request_with_data")]
+        [TestCase("Client_AccessesURL_WithData", "Client_accesses_URL_with_data")]
+        [TestCase("Client_AccessesURI_WithData", "Client_accesses_URI_with_data")]
+        [TestCase("Client_AccessesIRI_WithData", "Client_accesses_IRI_with_data")]
+        [TestCase("URLAccessedWithData", "URL_accessed_with_data")]
+        [TestCase("URIAccessedWithData", "URI_accessed_with_data")]
+        [TestCase("IRIAccessedWithData", "IRI_accessed_with_data")]
+        [TestCase("ThrowsActiveMQExceptionForSomething", "Throws_ActiveMQ_exception_for_something")]
         public void Code_gets_fixed_for_test_method_(string original, string fix)
         {
             const string Template = @"

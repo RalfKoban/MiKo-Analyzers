@@ -127,7 +127,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     }
 
                     updatedSyntax = syntax.WithArgumentList(argumentList.WithOpenParenToken(openParenToken.WithoutTrivia()).WithCloseParenToken(updatedCloseParenToken))
-                                              .WithInitializer(GetUpdatedSyntax(initializer, spaces + Constants.Indentation));
+                                          .WithInitializer(GetUpdatedSyntax(initializer, spaces + Constants.Indentation));
                 }
             }
 

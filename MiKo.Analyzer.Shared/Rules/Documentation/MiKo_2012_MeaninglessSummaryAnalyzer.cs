@@ -135,6 +135,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         return ReportIssueContainsPhrase(symbol, phrase.AsSpan());
                     }
                 }
+
+                if (symbol is IPropertySymbol property)
+                {
+                    var expectedStart = "Gets or sets ";
+
+                    if (property.GetMethod is null)
+                    {
+                        expectedStart = "Sets ";
+                    }
+
+                    if (property.SetMethod is null)
+                    {
+                        expectedStart = "Gets ";
+                    }
+
+                    if (summary.StartsWith(expectedStart, StringComparison.Ordinal) is false)
+                    {
+                        return ReportIssueStartingPhrase(property, summary.AsSpan().FirstWord());
+                    }
+                }
             }
 
             return Array.Empty<Diagnostic>();
