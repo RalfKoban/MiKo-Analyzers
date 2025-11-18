@@ -2094,15 +2094,15 @@ This improves code clarity, avoids ambiguity, and helps developers immediately u
     <value>Fix meaningless phrase</value>
   </data>
   <data name="MiKo_2012_Description" xml:space="preserve">
-    <value>To simplify development and maintenance, the &lt;summary&gt; documentation should briefly explain a type's responsibility from the user's perspective.
-Except for callback interfaces, it should avoid meaningless phrases like 'Used to'. Instead, start with phrases like 'Allows to', 'Represents', or 'Provides'.
-This approach keeps the documentation clear and user-focused.</value>
+    <value>Write &lt;summary&gt; documentation that clearly states a member’s purpose from the user’s perspective. Avoid vague phrases like ‘Used to’.
+For types, begin with verbs such as ‘Represents’, ‘Provides’, or ‘Allows’. For properties, use ‘Gets’, ‘Sets’, or ‘Gets or sets’ depending on their behavior.
+This approach ensures concise, meaningful, and user-focused documentation.</value>
   </data>
   <data name="MiKo_2012_MessageFormat" xml:space="preserve">
     <value>&lt;summary&gt; should not {1} meaningless phrase: '{2}'</value>
   </data>
   <data name="MiKo_2012_Title" xml:space="preserve">
-    <value>Describe the type's responsibility in &lt;summary&gt; documentation</value>
+    <value>Describe the responsibility in &lt;summary&gt; documentation</value>
   </data>
   <data name="MiKo_2013_CodeFixTitle" xml:space="preserve">
     <value>Start comment with '{0}'</value>
@@ -6315,6 +6315,18 @@ This style avoids dangling operators, aligns with common C# style guides and too
   </data>
   <data name="MiKo_6067_Title" xml:space="preserve">
     <value>Place ternary operators on same lines as their respective expressions</value>
+  </data>
+  <data name="MiKo_6068_CodeFixTitle" xml:space="preserve">
+    <value>Place property pattern on single line</value>
+  </data>
+  <data name="MiKo_6068_Description" xml:space="preserve">
+    <value>In C#, write simple property patterns on one line to keep your code clean and easy to read. This avoids extra indentation and makes it clear what you're checking.</value>
+  </data>
+  <data name="MiKo_6068_MessageFormat" xml:space="preserve">
+    <value>Place property pattern on single line</value>
+  </data>
+  <data name="MiKo_6068_Title" xml:space="preserve">
+    <value>Place property patterns inside 'if' conditions on same line</value>
   </data>
   <data name="MiKo_6070_CodeFixTitle" xml:space="preserve">
     <value>Surround with blank lines</value>

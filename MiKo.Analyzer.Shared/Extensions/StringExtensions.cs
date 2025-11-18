@@ -1323,7 +1323,27 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         public static bool ContainsAny(this string value, in ReadOnlySpan<string> phrases, in StringComparison comparison = StringComparison.Ordinal)
         {
-            return ContainsAny(value.AsSpan(), phrases, comparison);
+            if (comparison is StringComparison.Ordinal)
+            {
+                return ContainsAny(value.AsSpan(), phrases);
+            }
+
+            var span = value.AsSpan();
+
+            for (int index = 0, length = phrases.Length; index < length; index++)
+            {
+                var phrase = phrases[index];
+
+                if (QuickContainsSubstringProbe(span, phrase.AsSpan(), comparison))
+                {
+                    if (value.Contains(phrase, comparison))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         /// <summary>
