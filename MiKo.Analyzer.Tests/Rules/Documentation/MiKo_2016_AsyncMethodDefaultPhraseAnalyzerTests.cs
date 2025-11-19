@@ -306,8 +306,11 @@ public class TestMe
 
         [TestCase("This executes", "Asynchronously executes")]
         [TestCase("This will execute", "Asynchronously executes")]
+        [TestCase("This will return", "Asynchronously returns")]
         [TestCase("This method will execute", "Asynchronously executes")]
         [TestCase("This Method will execute", "Asynchronously executes")]
+        [TestCase("This method will return", "Asynchronously returns")]
+        [TestCase("This Method will return", "Asynchronously returns")]
         [TestCase("Is responsible for collecting", "Asynchronously collects")]
         public void Code_gets_fixed_for_(string originalText, string fixedText)
         {

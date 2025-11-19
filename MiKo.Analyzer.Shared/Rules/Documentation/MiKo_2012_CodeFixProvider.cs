@@ -115,65 +115,100 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (comment.GetEnclosing(Declarations) is MemberDeclarationSyntax member)
             {
-                var name = member.GetName();
-
-                if (name.Contains(Constants.Names.Command, StringComparison.OrdinalIgnoreCase) && MiKo_2038_CodeFixProvider.CanFix(text))
-                {
-                    return MiKo_2038_CodeFixProvider.GetUpdatedSyntax(comment);
-                }
-
-                if (name.Contains(Constants.Names.Factory, StringComparison.OrdinalIgnoreCase) && MiKo_2060_CodeFixProvider.CanFix(text))
-                {
-                    return MiKo_2060_CodeFixProvider.GetUpdatedSyntax(comment);
-                }
-
-                if (name.Contains(nameof(EventArgs)))
-                {
-                    return MiKo_2002_CodeFixProvider.GetUpdatedSyntax(comment);
-                }
-
-                if (MiKo_2039_CodeFixProvider.CanFix(text))
-                {
-                    return MiKo_2039_CodeFixProvider.GetUpdatedSyntax(comment);
-                }
-
-                foreach (var phrase in UsedToPhrases)
-                {
-                    if (text.StartsWith(phrase))
-                    {
-                        var remainingText = text.Slice(phrase.Length);
-
-                        if (member is PropertyDeclarationSyntax p)
-                        {
-                            return GetUpdatedProperty(comment, p, remainingText);
-                        }
-
-                        var firstWord = remainingText.FirstWord();
-                        var index = remainingText.IndexOf(firstWord);
-                        var replacementForFirstWord = Verbalizer.MakeThirdPersonSingularVerb(firstWord.ToUpperCaseAt(0));
-
-                        var replacedText = replacementForFirstWord.ConcatenatedWith(remainingText.Slice(index + firstWord.Length));
-
-                        return Comment(comment, replacedText, comment.Content.RemoveAt(0));
-                    }
-                }
-
-                if (text.StartsWithAny(ReplacementMapKeys))
-                {
-                    return Comment(comment, ReplacementMapKeys, ReplacementMap, StartAdjustment);
-                }
-
-                switch (member)
-                {
-                    case PropertyDeclarationSyntax property:
-                        return GetUpdatedProperty(comment, property, text);
-
-                    case BaseTypeDeclarationSyntax _ when text.StartsWithAny(Constants.Comments.AAnThePhraseWithSpaces):
-                        return CommentStartingWith(comment, "Represents ");
-                }
+                return GetUpdatedSyntax(comment, textSyntax, member, text);
             }
 
             return comment;
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(XmlElementSyntax comment, XmlTextSyntax textSyntax, MemberDeclarationSyntax member, ReadOnlySpan<char> text)
+        {
+            var name = member.GetName();
+
+            if (name.Contains(Constants.Names.Command, StringComparison.OrdinalIgnoreCase) && MiKo_2038_CodeFixProvider.CanFix(text))
+            {
+                return MiKo_2038_CodeFixProvider.GetUpdatedSyntax(comment);
+            }
+
+            if (name.Contains(Constants.Names.Factory, StringComparison.OrdinalIgnoreCase) && MiKo_2060_CodeFixProvider.CanFix(text))
+            {
+                return MiKo_2060_CodeFixProvider.GetUpdatedSyntax(comment);
+            }
+
+            if (name.Contains(nameof(EventArgs)))
+            {
+                return MiKo_2002_CodeFixProvider.GetUpdatedSyntax(comment);
+            }
+
+            if (MiKo_2039_CodeFixProvider.CanFix(text))
+            {
+                return MiKo_2039_CodeFixProvider.GetUpdatedSyntax(comment);
+            }
+
+            foreach (var phrase in UsedToPhrases)
+            {
+                if (text.StartsWith(phrase))
+                {
+                    var remainingText = text.Slice(phrase.Length);
+
+                    if (member is PropertyDeclarationSyntax p)
+                    {
+                        return GetUpdatedProperty(comment, p, remainingText);
+                    }
+
+                    var firstWord = remainingText.FirstWord();
+                    var index = remainingText.IndexOf(firstWord);
+                    var replacementForFirstWord = Verbalizer.MakeThirdPersonSingularVerb(firstWord.ToUpperCaseAt(0));
+
+                    var replacedText = replacementForFirstWord.ConcatenatedWith(remainingText.Slice(index + firstWord.Length));
+
+                    return Comment(comment, replacedText, comment.Content.RemoveAt(0));
+                }
+            }
+
+            switch (member)
+            {
+                case PropertyDeclarationSyntax property:
+                {
+                    text = GetUpdatedSyntax(ref comment, textSyntax, text);
+
+                    return GetUpdatedProperty(comment, property, text);
+                }
+
+                case BaseTypeDeclarationSyntax _:
+                {
+                    text = GetUpdatedSyntax(ref comment, textSyntax, text);
+
+                    if (text.StartsWithAny(Constants.Comments.AAnThePhraseWithSpaces))
+                    {
+                        comment = CommentStartingWith(comment, "Represents ");
+                    }
+
+                    return comment;
+                }
+
+                default:
+                {
+                    GetUpdatedSyntax(ref comment, textSyntax, text);
+
+                    return comment;
+                }
+            }
+        }
+
+        private static ReadOnlySpan<char> GetUpdatedSyntax(ref XmlElementSyntax comment, XmlTextSyntax textSyntax, in ReadOnlySpan<char> text)
+        {
+            if (text.StartsWithAny(ReplacementMapKeys))
+            {
+                comment = Comment(comment, ReplacementMapKeys, ReplacementMap, StartAdjustment);
+
+                if (comment.Content.First() is XmlTextSyntax t && ReferenceEquals(t, textSyntax) is false)
+                {
+                    return t.GetTextTrimmed().AsSpan();
+                }
+            }
+
+            return text;
         }
 
         private static XmlEmptyElementSyntax GetUpdatedSyntaxWithInheritdoc(in SyntaxList<XmlNodeSyntax> content)
@@ -227,6 +262,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             builder.ReplaceWithProbe("indicating specify ", "indicating ");
             builder.ReplaceWithProbe("indicating indicates ", "indicating ");
             builder.ReplaceWithProbe("indicating indicate ", "indicating ");
+            builder.ReplaceWithProbe("indicating returns ", "indicating ");
+            builder.ReplaceWithProbe("indicating return ", "indicating ");
             builder.ReplaceWithProbe("bool indicating", "value indicating");
             builder.ReplaceWithProbe("bool that indicates", "value indicating");
             builder.ReplaceWithProbe("bool which indicates", "value indicating");
@@ -279,6 +316,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             builder.ReplaceWithProbe("whether specify whether", "whether");
             builder.ReplaceWithProbe("ets get ", "ets ");
             builder.ReplaceWithProbe("ets set ", "ets ");
+            builder.ReplaceWithProbe("gets returns", "gets");
+            builder.ReplaceWithProbe("Gets returns", "Gets");
+            builder.ReplaceWithProbe("sets returns", "sets");
+            builder.ReplaceWithProbe("Sets returns", "Sets");
             builder.ReplaceWithProbe("  ", " ");
 
             var replacedFixedText = builder.ToStringAndRelease();
@@ -553,6 +594,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new Pair("This method ");
             yield return new Pair("This Method will "); // typo in real-life scenario
             yield return new Pair("This method will ");
+            yield return new Pair("This Property "); // typo in real-life scenario
+            yield return new Pair("This property ");
+            yield return new Pair("This Property will "); // typo in real-life scenario
+            yield return new Pair("This property will ");
+            yield return new Pair("This Event "); // typo in real-life scenario
+            yield return new Pair("This event ");
+            yield return new Pair("This Event will "); // typo in real-life scenario
+            yield return new Pair("This event will ");
             yield return new Pair("This Class "); // typo in real-life scenario
             yield return new Pair("This class ");
             yield return new Pair("This Callback "); // typo in real-life scenario
