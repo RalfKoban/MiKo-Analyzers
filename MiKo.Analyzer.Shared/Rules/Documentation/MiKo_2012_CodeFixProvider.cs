@@ -575,6 +575,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new Pair("This Handler will ");
 
             yield return new Pair("This will ");
+            yield return new Pair("This ");
 
             foreach (var phrase in CreatePhrases(verbs, thirdPersonVerbs, gerundVerbs))
             {

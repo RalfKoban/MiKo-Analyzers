@@ -679,6 +679,7 @@ public interface TestMe
         [TestCase("Use this method, to change something", "Changes something")]
         [TestCase("This will start to do something", "Starts to do something")]
         [TestCase("This method will start to do something", "Starts to do something")]
+        [TestCase("This starts to do something", "Starts to do something")]
         public void Code_gets_fixed_for_method_text_(string originalText, string fixedText)
         {
             const string Template = @"

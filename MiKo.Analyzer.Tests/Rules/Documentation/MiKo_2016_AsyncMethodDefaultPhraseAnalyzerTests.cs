@@ -304,6 +304,7 @@ public class TestMe
         [TestCase("This method gets called to do", "Asynchronously does")]
         [TestCase("This method is called to do", "Asynchronously does")]
 
+        [TestCase("This executes", "Asynchronously executes")]
         [TestCase("This will execute", "Asynchronously executes")]
         [TestCase("This method will execute", "Asynchronously executes")]
         [TestCase("This Method will execute", "Asynchronously executes")]
