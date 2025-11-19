@@ -207,6 +207,19 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
+        public void No_issue_is_reported_for_ReSharper_disabling_rule_comment_([Values("", " ")] string gap, [Values("ReSharper disable Something", "ReSharper restore Something")] string comment) => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        //" + gap + comment + @"
+        int i = 0;
+    }
+}
+");
+
+        [Test, Combinatorial]
         public void No_issue_is_reported_for_commented_method_with_reason_in_comment_([ValueSource(nameof(Comments))] string comment, [Values("because", "reason")] string reason) => No_issue_is_reported_for(@"
 
 public class TestMe
