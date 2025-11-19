@@ -611,6 +611,12 @@ public class TestMe
         [TestCase("set/Get")]
         [TestCase("Describe whether")]
         [TestCase("Specify whether")]
+        [TestCase("This will return")]
+        [TestCase("This returns")]
+        [TestCase("This property will return")]
+        [TestCase("This property returns")]
+        [TestCase("This Property will return")]
+        [TestCase("This Property returns")]
         public void Code_gets_fixed_for_boolean_property_text_(string originalText)
         {
             const string Template = @"
@@ -634,6 +640,12 @@ public interface TestMe
         [TestCase("Set/Get")]
         [TestCase("Set/get")]
         [TestCase("set/Get")]
+        [TestCase("This will return")]
+        [TestCase("This returns")]
+        [TestCase("This property will return")]
+        [TestCase("This property returns")]
+        [TestCase("This Property will return")]
+        [TestCase("This Property returns")]
         public void Code_gets_fixed_for_non_boolean_property_text_(string originalText)
         {
             const string Template = @"
@@ -679,6 +691,7 @@ public interface TestMe
         [TestCase("Use this method, to change something", "Changes something")]
         [TestCase("This will start to do something", "Starts to do something")]
         [TestCase("This method will start to do something", "Starts to do something")]
+        [TestCase("This starts to do something", "Starts to do something")]
         public void Code_gets_fixed_for_method_text_(string originalText, string fixedText)
         {
             const string Template = @"
