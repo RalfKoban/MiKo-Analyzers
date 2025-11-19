@@ -67,7 +67,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] GetSetReplacementPhrases = CreateGetSetReplacementPhrases().Except(new[] { "Gets or sets a value ", "Gets or sets " })
                                                                                                     .OrderDescendingByLengthAndText();
 
-        //// ncrunch: rdi default
+        private static readonly Pair[] CleanupMap = CreateCleanupMap();
+
+        private static readonly string[] CleanupMapKeys = CleanupMap.ToArray(_ => _.Key.Trim());
+
+//// ncrunch: rdi default
 
         public override string FixableDiagnosticId => "MiKo_2012";
 
@@ -201,6 +205,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (text.StartsWithAny(ReplacementMapKeys))
             {
                 comment = Comment(comment, ReplacementMapKeys, ReplacementMap, StartAdjustment);
+                comment = Comment(comment, CleanupMapKeys, CleanupMap);
 
                 if (comment.Content.First() is XmlTextSyntax t && ReferenceEquals(t, textSyntax) is false)
                 {
@@ -368,6 +373,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
 //// ncrunch: rdi off
 
+        private static Pair[] CreateCleanupMap() => new[]
+                                                        {
+                                                            new Pair("Cannots be inherited.", Constants.Comments.SealedClassPhrase),
+                                                            new Pair("Is read-only.", Constants.Comments.FieldIsReadOnly),
+                                                        };
+
         private static Pair[] CreateReplacementMap()
         {
             var verbs = new[]
@@ -471,6 +482,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new Pair("Interface of a factory which creates ", Constants.Comments.FactorySummaryPhrase);
             yield return new Pair("Used to create ", Constants.Comments.FactorySummaryPhrase);
             yield return new Pair("Used for creating ", Constants.Comments.FactorySummaryPhrase);
+            yield return new Pair("Is used to create ", Constants.Comments.FactorySummaryPhrase);
+            yield return new Pair("Is used for creating ", Constants.Comments.FactorySummaryPhrase);
 
             yield return new Pair("Class part ", "Represents the part ");
             yield return new Pair("Class Part ", "Represents the part ");
@@ -602,6 +615,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new Pair("This event ");
             yield return new Pair("This Event will "); // typo in real-life scenario
             yield return new Pair("This event will ");
+            yield return new Pair("This Field "); // typo in real-life scenario
+            yield return new Pair("This field ");
+            yield return new Pair("This Field will "); // typo in real-life scenario
+            yield return new Pair("This field will ");
             yield return new Pair("This Class "); // typo in real-life scenario
             yield return new Pair("This class ");
             yield return new Pair("This Callback "); // typo in real-life scenario
