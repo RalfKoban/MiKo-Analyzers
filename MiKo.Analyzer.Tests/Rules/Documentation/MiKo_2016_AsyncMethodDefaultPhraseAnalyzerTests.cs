@@ -315,6 +315,8 @@ public class TestMe
         [TestCase("Is responsible for collecting", "Asynchronously collects")]
         [TestCase("Triggers", "Asynchronously triggers")]
         [TestCase("Trigger", "Asynchronously triggers")]
+        [TestCase("Monitors", "Asynchronously monitors")]
+        [TestCase("Monitor", "Asynchronously monitors")]
         public void Code_gets_fixed_for_(string originalText, string fixedText)
         {
             const string Template = """
