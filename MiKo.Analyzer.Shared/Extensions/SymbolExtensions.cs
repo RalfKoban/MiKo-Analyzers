@@ -1849,6 +1849,64 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Determines whether a type represents a collection based on the type symbol and its name.
+        /// </summary>
+        /// <param name="value">
+        /// The type symbol to inspect.
+        /// </param>
+        /// <param name="symbolName">
+        /// The name of the symbol to analyze for collection naming patterns.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type represents a collection; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsCollection(this ITypeSymbol value, string symbolName)
+        {
+            if (value.IsString())
+            {
+                return symbolName.EndsWithAny(Constants.Markers.Collections);
+            }
+
+            if (symbolName.EndsWith("atalog", StringComparison.Ordinal))
+            {
+                // ignore stuff like the MEF aggregate catalog
+                return false;
+            }
+
+            if (symbolName.EndsWith("ocument", StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            if (value.IsXmlNode())
+            {
+                return false;
+            }
+
+            if (value.IsIGrouping())
+            {
+                return false;
+            }
+
+            if (value.IsEnumerable() is false)
+            {
+                return false;
+            }
+
+            if (value.IsIQueryable())
+            {
+                return false;
+            }
+
+            if (value.Name.AsSpan().WithoutNumberSuffix().EndsWith("Object"))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Determines whether a type implements the <see cref="ICommand"/> interface.
         /// </summary>
         /// <param name="value">
