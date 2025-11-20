@@ -371,6 +371,45 @@ namespace Bla
 }");
 
         [Test]
+        public void No_issue_is_reported_for_method_that_returns_null_for_specific_type_with_number_at_the_end() => No_issue_is_reported_for(@"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public interface IXyzObject42 : IEnumerable<string>, IEnumerable
+    {
+    }
+
+    public class TestMe
+    {
+        public IXyzObject42 Create()
+        {
+            return null;
+        }
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_expression_body_method_that_returns_null_for_specific_type_with_number_at_the_end() => No_issue_is_reported_for(@"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public interface IXyzObject42 : IEnumerable<string>, IEnumerable
+    {
+    }
+
+    public class TestMe
+    {
+        public IXyzObject42 Create() => null;
+    }
+}");
+
+        [Test]
         public void No_issue_is_reported_for_incomplete_method() => No_issue_is_reported_for(@"
 using System.Collections.Generic;
 
