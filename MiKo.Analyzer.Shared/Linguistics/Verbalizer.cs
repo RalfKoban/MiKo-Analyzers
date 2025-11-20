@@ -897,12 +897,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 {
                     difference = 3;
                 }
-                else
+                else if (word.EndsWithAny(SpecialPastEndings) && word.EndsWith("tored", StringComparison.Ordinal) is false)
                 {
-                    if (word.EndsWithAny(SpecialPastEndings))
-                    {
-                        difference = word.EndsWith("tored", StringComparison.Ordinal) ? 2 : 1;
-                    }
+                    difference = 1;
                 }
 
                 return word.AsSpan(0, word.Length - difference).ConcatenatedWith('s');
