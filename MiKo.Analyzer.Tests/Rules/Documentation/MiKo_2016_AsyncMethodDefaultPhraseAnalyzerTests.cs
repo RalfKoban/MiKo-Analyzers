@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -312,6 +313,8 @@ public class TestMe
         [TestCase("This method will return", "Asynchronously returns")]
         [TestCase("This Method will return", "Asynchronously returns")]
         [TestCase("Is responsible for collecting", "Asynchronously collects")]
+        [TestCase("Triggers", "Asynchronously triggers")]
+        [TestCase("Trigger", "Asynchronously triggers")]
         public void Code_gets_fixed_for_(string originalText, string fixedText)
         {
             const string Template = """

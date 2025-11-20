@@ -24,6 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                 "Performs",
                                                                 "Stops",
                                                                 "Tells",
+                                                                "Triggers",
                                                             ];
 
         private static readonly string[] Constructors =
@@ -692,6 +693,7 @@ public interface TestMe
         [TestCase("This will start to do something", "Starts to do something")]
         [TestCase("This method will start to do something", "Starts to do something")]
         [TestCase("This starts to do something", "Starts to do something")]
+        [TestCase("Trigger something", "Triggers something")]
         public void Code_gets_fixed_for_method_text_(string originalText, string fixedText)
         {
             const string Template = @"

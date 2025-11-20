@@ -88,6 +88,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                                                                                                  new KeyValuePair<string, string>("Was", "Is"),
                                                                                                                                                  new KeyValuePair<string, string>("were", "is"),
                                                                                                                                                  new KeyValuePair<string, string>("Were", "Is"),
+                                                                                                                                                 new KeyValuePair<string, string>("trigger", "triggers"),
+                                                                                                                                                 new KeyValuePair<string, string>("triggered", "triggers"),
+                                                                                                                                                 new KeyValuePair<string, string>("Trigger", "Triggers"),
+                                                                                                                                                 new KeyValuePair<string, string>("Triggered", "Triggers"),
                                                                                                                                              });
 
         private static readonly string[] ThirdPersonalSingularVerbExceptions =
@@ -313,7 +317,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
             {
                 if (value.EndsWithAny(NonThirdPersonSingularEndingsWithS, StringComparison.OrdinalIgnoreCase))
                 {
-                    return false;
+                    return value.EndsWith("Triggers", StringComparison.OrdinalIgnoreCase);
                 }
             }
 
