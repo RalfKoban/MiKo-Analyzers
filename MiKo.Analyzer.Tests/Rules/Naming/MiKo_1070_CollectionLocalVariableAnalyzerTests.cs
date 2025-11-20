@@ -202,6 +202,25 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_method_with_variable_of_specific_type_with_number_at_the_end() => No_issue_is_reported_for(@"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+public interface IXyzObject42 : IEnumerable<string>, IEnumerable
+{
+}
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        IXyzObject42 xyzObject = null;
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_method_with_Collection_variable_with_incorrect_name_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 using System;
 using System.Threading;

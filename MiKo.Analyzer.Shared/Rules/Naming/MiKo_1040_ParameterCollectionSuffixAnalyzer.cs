@@ -17,32 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.Parameters.Length > 0 && base.ShallAnalyze(symbol);
 
-        protected override bool ShallAnalyze(IParameterSymbol symbol)
-        {
-            var parameterType = symbol.Type;
-
-            if (parameterType.IsString())
-            {
-                return symbol.Name.EndsWithAny(Constants.Markers.Collections);
-            }
-
-            if (parameterType.IsXmlNode())
-            {
-                return false;
-            }
-
-            if (parameterType.IsIGrouping())
-            {
-                return false;
-            }
-
-            if (parameterType.IsEnumerable())
-            {
-                return parameterType.IsIQueryable() is false;
-            }
-
-            return false;
-        }
+        protected override bool ShallAnalyze(IParameterSymbol symbol) => symbol.Type.IsCollection(symbol.Name);
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
