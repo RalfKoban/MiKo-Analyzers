@@ -1898,7 +1898,7 @@ namespace MiKoSolutions.Analyzers
                 return false;
             }
 
-            if (value.Name.AsSpan().WithoutNumberSuffix().EndsWith("Object"))
+            if (symbolName.AsSpan().WithoutNumberSuffix().EndsWith("Object"))
             {
                 return false;
             }
