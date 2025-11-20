@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2012_CodeFixProvider)), Shared]
     public sealed class MiKo_2012_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
-//// ncrunch: rdi off
+        //// ncrunch: rdi off
         private const FirstWordAdjustment StartAdjustment = FirstWordAdjustment.StartUpperCase | FirstWordAdjustment.MakeThirdPersonSingular | FirstWordAdjustment.KeepSingleLeadingSpace;
 
         private static readonly string[] DefaultPhrases =
@@ -67,7 +67,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] GetSetReplacementPhrases = CreateGetSetReplacementPhrases().Except(new[] { "Gets or sets a value ", "Gets or sets " })
                                                                                                     .OrderDescendingByLengthAndText();
 
-        private static readonly Pair[] CleanupMap = CreateCleanupMap();
+        private static readonly Pair[] PreparationMap =
+                                                        {
+                                                            new Pair(Constants.Comments.SealedClassPhrase, "##SEALED##"),
+                                                            new Pair(Constants.Comments.FieldIsReadOnly, "##READONLY##"),
+                                                        };
+
+        private static readonly string[] PreparationMapKeys = PreparationMap.ToArray(_ => _.Key.Trim());
+
+        private static readonly Pair[] CleanupMap =
+                                                    {
+                                                        new Pair("##SEALED##", Constants.Comments.SealedClassPhrase),
+                                                        new Pair("##READONLY##", Constants.Comments.FieldIsReadOnly),
+                                                    };
 
         private static readonly string[] CleanupMapKeys = CleanupMap.ToArray(_ => _.Key.Trim());
 
@@ -91,10 +103,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return GetUpdatedSyntax(comment, t);
             }
 
-            return Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordAdjustment.StartLowerCase);
+            return GetUpdatedSyntax(comment, FirstWordAdjustment.StartLowerCase);
         }
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => GetUpdatedSyntax((XmlElementSyntax)syntax);
+
+        private static XmlElementSyntax GetUpdatedSyntax(XmlElementSyntax comment, in FirstWordAdjustment startAdjustment)
+        {
+            var preparedComment = Comment(comment, PreparationMapKeys, PreparationMap);
+            var updatedComment = Comment(preparedComment, ReplacementMapKeys, ReplacementMap, startAdjustment);
+            var cleanedComment = Comment(updatedComment, CleanupMapKeys, CleanupMap);
+
+            return cleanedComment;
+        }
 
         private static SyntaxNode GetUpdatedSyntax(XmlElementSyntax comment, XmlTextSyntax textSyntax)
         {
@@ -123,6 +144,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return comment;
+        }
+
+        private static ReadOnlySpan<char> GetUpdatedSyntax(ref XmlElementSyntax comment, XmlTextSyntax textSyntax, in ReadOnlySpan<char> text)
+        {
+            if (text.StartsWithAny(ReplacementMapKeys))
+            {
+                comment = GetUpdatedSyntax(comment, StartAdjustment);
+
+                if (comment.Content.First() is XmlTextSyntax t && ReferenceEquals(t, textSyntax) is false)
+                {
+                    return t.GetTextTrimmed().AsSpan();
+                }
+            }
+
+            return text;
         }
 
         private static SyntaxNode GetUpdatedSyntax(XmlElementSyntax comment, XmlTextSyntax textSyntax, MemberDeclarationSyntax member, ReadOnlySpan<char> text)
@@ -198,22 +234,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return comment;
                 }
             }
-        }
-
-        private static ReadOnlySpan<char> GetUpdatedSyntax(ref XmlElementSyntax comment, XmlTextSyntax textSyntax, in ReadOnlySpan<char> text)
-        {
-            if (text.StartsWithAny(ReplacementMapKeys))
-            {
-                comment = Comment(comment, ReplacementMapKeys, ReplacementMap, StartAdjustment);
-                comment = Comment(comment, CleanupMapKeys, CleanupMap);
-
-                if (comment.Content.First() is XmlTextSyntax t && ReferenceEquals(t, textSyntax) is false)
-                {
-                    return t.GetTextTrimmed().AsSpan();
-                }
-            }
-
-            return text;
         }
 
         private static XmlEmptyElementSyntax GetUpdatedSyntaxWithInheritdoc(in SyntaxList<XmlNodeSyntax> content)
@@ -372,12 +392,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
 //// ncrunch: rdi off
-
-        private static Pair[] CreateCleanupMap() => new[]
-                                                        {
-                                                            new Pair("Cannots be inherited.", Constants.Comments.SealedClassPhrase),
-                                                            new Pair("Is read-only.", Constants.Comments.FieldIsReadOnly),
-                                                        };
 
         private static Pair[] CreateReplacementMap()
         {
