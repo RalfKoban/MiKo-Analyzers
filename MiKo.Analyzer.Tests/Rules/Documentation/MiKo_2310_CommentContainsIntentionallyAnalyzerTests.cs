@@ -78,6 +78,16 @@ public class TestMe
 }");
 
         [Test]
+        public void No_issue_is_reported_for_intentionally_comment_with_so_that_([ValueSource(nameof(IntentionalPhrases))] string comment) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        // " + comment + @" so that we like it this way
+    }
+}");
+
+        [Test]
         public void No_issue_is_reported_for_intentionally_comment_with_reason_in_catch_block_([ValueSource(nameof(IntentionalPhrases))] string comment) => No_issue_is_reported_for(@"
 public class TestMe
 {
