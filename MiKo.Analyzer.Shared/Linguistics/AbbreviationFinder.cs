@@ -8,7 +8,7 @@ using System.Text;
 namespace MiKoSolutions.Analyzers.Linguistics
 {
     /// <summary>
-    /// Provides functionality to find and replace abbreviations in text with their full terms.
+    /// Provides functionality to seek abbreviations in text and replace them with their full terms.
     /// </summary>
     internal static class AbbreviationFinder
     {
@@ -77,6 +77,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("ext", "extension"),
                                                       new Pair("fnc", "function"),
                                                       new Pair("frm", "form"),
+                                                      new Pair("fwd", "forwarded"),
                                                       new Pair("hdls", "headless"),
                                                       new Pair("ident", "identification"),
                                                       new Pair("idents", "identifications"),
@@ -146,6 +147,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("std", "standard"),
                                                       new Pair("str", "string"),
                                                       new Pair("svc", "service"),
+                                                      new Pair("syn", "syntax"),
                                                       new Pair("sync", "synchronization"),
                                                       new Pair("tm", "time"),
                                                       new Pair("tmp", "temp"),
@@ -233,6 +235,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Ext", "Extension"),
                                                           new Pair("Fnc", "Function"),
                                                           new Pair("Frm", "Form"),
+                                                          new Pair("Fwd", "Forwarded"),
                                                           new Pair("Hdls", "Headless"),
                                                           new Pair("Ident", "Identification"),
                                                           new Pair("Idents", "Identifications"),
@@ -299,6 +302,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Std", "Standard"),
                                                           new Pair("Str", "String"),
                                                           new Pair("Svc", "Service"),
+                                                          new Pair("Syn", "Syntax"),
                                                           new Pair("Sync", "Synchronization"),
                                                           new Pair("Tm", "Time"),
                                                           new Pair("Tmp", "Temp"),
