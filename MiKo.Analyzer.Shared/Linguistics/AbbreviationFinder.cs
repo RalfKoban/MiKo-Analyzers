@@ -8,7 +8,7 @@ using System.Text;
 namespace MiKoSolutions.Analyzers.Linguistics
 {
     /// <summary>
-    /// Provides functionality to seek abbreviations in text and replace them with their full terms.
+    /// Provides functionality to find abbreviations in text and replace them with their full terms.
     /// </summary>
     internal static class AbbreviationFinder
     {
