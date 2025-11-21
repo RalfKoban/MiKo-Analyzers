@@ -1040,7 +1040,7 @@ namespace MiKoSolutions.Analyzers
                                                                         "doesnt matter", // be able to detect typos
                                                                     };
 
-            internal static readonly string[] ReasoningPhrases = { "because", "reason" };
+            internal static readonly string[] ReasoningPhrases = { "because", "reason", "so that" };
 
             internal static readonly string[] LangwordReferences = { "true", "false", "null" };
 
