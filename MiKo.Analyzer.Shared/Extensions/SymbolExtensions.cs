@@ -1150,6 +1150,18 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Determines whether a type has any type arguments and therefore is a generic type.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type has generic type arguments; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool HasGenericTypeArguments(this ITypeSymbol value) => value is INamedTypeSymbol type && type.TypeArguments.Length > 0;
+
+        /// <summary>
         /// Determines whether a parameter's type has the <see cref="FlagsAttribute"/> applied.
         /// </summary>
         /// <param name="value">
@@ -2372,18 +2384,6 @@ namespace MiKoSolutions.Analyzers
         /// <see langword="true"/> if the type is generated; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool IsGenerated(this ITypeSymbol value) => value?.TypeKind is TypeKind.Class && value.HasAttribute(Constants.Names.GeneratedAttributeNames);
-
-        /// <summary>
-        /// Determines whether a type is generic.
-        /// </summary>
-        /// <param name="value">
-        /// The type to inspect.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the type is generic; otherwise, <see langword="false"/>.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsGeneric(this ITypeSymbol value) => value is INamedTypeSymbol type && type.TypeArguments.Length > 0;
 
         /// <summary>
         /// Determines whether a type is a <see cref="Guid"/>.
