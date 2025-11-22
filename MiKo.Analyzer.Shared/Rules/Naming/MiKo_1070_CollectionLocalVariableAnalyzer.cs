@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -18,43 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(ITypeSymbol symbol)
-        {
-            var symbolName = symbol.Name;
-
-            if (symbol.IsString())
-            {
-                return symbolName.EndsWithAny(Constants.Markers.Collections);
-            }
-
-            if (IsCatalog(symbolName))
-            {
-                // ignore stuff like the MEF aggregate catalog
-                return false;
-            }
-
-            if (IsDocument(symbolName))
-            {
-                return false;
-            }
-
-            if (symbol.IsXmlNode())
-            {
-                return false;
-            }
-
-            if (symbol.IsIGrouping())
-            {
-                return false;
-            }
-
-            if (symbol.IsEnumerable())
-            {
-                return symbol.IsIQueryable() is false;
-            }
-
-            return false;
-        }
+        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.IsCollection(symbol.Name);
 
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers)
         {
@@ -155,11 +118,5 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             return false;
         }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool IsDocument(string typeName) => typeName.EndsWith("ocument", StringComparison.Ordinal);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool IsCatalog(string typeName) => typeName.EndsWith("atalog", StringComparison.Ordinal);
     }
 }

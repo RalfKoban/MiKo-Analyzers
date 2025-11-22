@@ -19,24 +19,26 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                                                     ? new[] { Issue(symbol, CreateBetterNameProposal(symbol.Name.WithoutNumberSuffix())) }
                                                                                                                     : Array.Empty<Diagnostic>();
 
-        private static bool HasIssue(IParameterSymbol symbol)
+        private static bool HasIssue(IParameterSymbol symbol) => symbol.Name.EndsWithCommonNumber() && HasIssueWithCommonNumber(symbol);
+
+        private static bool HasIssueWithCommonNumber(IParameterSymbol symbol)
         {
-            if (symbol.Name.EndsWithCommonNumber())
+            if (symbol.Type.IsOpenGeneric())
             {
-                if (MiKo_1001_EventArgsParameterAnalyzer.IsAccepted(symbol))
-                {
-                    return false;
-                }
-
-                if (MiKo_1039_ExtensionMethodsParameterAnalyzer.IsStringFormatExtension(symbol))
-                {
-                    return false;
-                }
-
-                return true;
+                return false;
             }
 
-            return false;
+            if (MiKo_1001_EventArgsParameterAnalyzer.IsAccepted(symbol))
+            {
+                return false;
+            }
+
+            if (MiKo_1039_ExtensionMethodsParameterAnalyzer.IsStringFormatExtension(symbol))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

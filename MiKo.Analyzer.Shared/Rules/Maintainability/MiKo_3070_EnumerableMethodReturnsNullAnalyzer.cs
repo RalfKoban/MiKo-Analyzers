@@ -1,6 +1,4 @@
-﻿using System.Xml;
-
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
@@ -33,12 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return false;
             }
 
-            if (returnType.IsEnumerable())
-            {
-                return returnType.InheritsFrom<XmlNode>() is false;
-            }
-
-            return false;
+            return returnType.IsCollection(returnType.Name);
         }
     }
 }

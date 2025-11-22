@@ -1150,6 +1150,18 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Determines whether a type has any type arguments and therefore is a generic type.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type has generic type arguments; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool HasGenericTypeArguments(this ITypeSymbol value) => value is INamedTypeSymbol type && type.TypeArguments.Length > 0;
+
+        /// <summary>
         /// Determines whether a parameter's type has the <see cref="FlagsAttribute"/> applied.
         /// </summary>
         /// <param name="value">
@@ -1849,6 +1861,64 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Determines whether a type represents a collection based on the type symbol and its name.
+        /// </summary>
+        /// <param name="value">
+        /// The type symbol to inspect.
+        /// </param>
+        /// <param name="symbolName">
+        /// The name of the symbol to analyze for collection naming patterns.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type represents a collection; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsCollection(this ITypeSymbol value, string symbolName)
+        {
+            if (value.IsString())
+            {
+                return symbolName.EndsWithAny(Constants.Markers.Collections);
+            }
+
+            if (symbolName.EndsWith("atalog", StringComparison.Ordinal))
+            {
+                // ignore stuff like the MEF aggregate catalog
+                return false;
+            }
+
+            if (symbolName.EndsWith("ocument", StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            if (value.IsXmlNode())
+            {
+                return false;
+            }
+
+            if (value.IsIGrouping())
+            {
+                return false;
+            }
+
+            if (value.IsEnumerable() is false)
+            {
+                return false;
+            }
+
+            if (value.IsIQueryable())
+            {
+                return false;
+            }
+
+            if (symbolName.AsSpan().WithoutNumberSuffix().EndsWith("Object"))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Determines whether a type implements the <see cref="ICommand"/> interface.
         /// </summary>
         /// <param name="value">
@@ -2316,18 +2386,6 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsGenerated(this ITypeSymbol value) => value?.TypeKind is TypeKind.Class && value.HasAttribute(Constants.Names.GeneratedAttributeNames);
 
         /// <summary>
-        /// Determines whether a type is generic.
-        /// </summary>
-        /// <param name="value">
-        /// The type to inspect.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the type is generic; otherwise, <see langword="false"/>.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsGeneric(this ITypeSymbol value) => value is INamedTypeSymbol type && type.TypeArguments.Length > 0;
-
-        /// <summary>
         /// Determines whether a type is a <see cref="Guid"/>.
         /// </summary>
         /// <param name="value">
@@ -2628,6 +2686,18 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsObject(this ITypeSymbol value) => value.SpecialType is SpecialType.System_Object;
+
+        /// <summary>
+        /// Determines whether a type is an open generic, such as <c>T</c>.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is an open generic (such as <c>T</c>); otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool IsOpenGeneric(this ITypeSymbol value) => value?.TypeKind is TypeKind.TypeParameter;
 
         /// <summary>
         /// Determines whether a type is partial.
