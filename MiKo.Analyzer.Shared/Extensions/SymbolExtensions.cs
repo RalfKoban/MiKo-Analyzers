@@ -1150,6 +1150,18 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Determines whether a type has any type arguments and therefore is a generic type.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type has generic type arguments; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool HasGenericTypeArguments(this ITypeSymbol value) => value is INamedTypeSymbol type && type.TypeArguments.Length > 0;
+
+        /// <summary>
         /// Determines whether a parameter's type has the <see cref="FlagsAttribute"/> applied.
         /// </summary>
         /// <param name="value">
@@ -2374,18 +2386,6 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsGenerated(this ITypeSymbol value) => value?.TypeKind is TypeKind.Class && value.HasAttribute(Constants.Names.GeneratedAttributeNames);
 
         /// <summary>
-        /// Determines whether a type is generic.
-        /// </summary>
-        /// <param name="value">
-        /// The type to inspect.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the type is generic; otherwise, <see langword="false"/>.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsGeneric(this ITypeSymbol value) => value is INamedTypeSymbol type && type.TypeArguments.Length > 0;
-
-        /// <summary>
         /// Determines whether a type is a <see cref="Guid"/>.
         /// </summary>
         /// <param name="value">
@@ -2686,6 +2686,18 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsObject(this ITypeSymbol value) => value.SpecialType is SpecialType.System_Object;
+
+        /// <summary>
+        /// Determines whether a type is an open generic, such as <c>T</c>.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is an open generic (such as <c>T</c>); otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool IsOpenGeneric(this ITypeSymbol value) => value?.TypeKind is TypeKind.TypeParameter;
 
         /// <summary>
         /// Determines whether a type is partial.
