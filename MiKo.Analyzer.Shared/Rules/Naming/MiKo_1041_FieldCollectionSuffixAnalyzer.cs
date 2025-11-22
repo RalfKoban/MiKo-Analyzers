@@ -22,29 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return false; // ignore enum definitions
             }
 
-            var type = symbol.Type;
-
-            if (type.IsString())
-            {
-                return symbol.Name.EndsWithAny(Constants.Markers.Collections);
-            }
-
-            if (type.IsXmlNode())
-            {
-                return false;
-            }
-
-            if (type.IsIGrouping())
-            {
-                return false;
-            }
-
-            if (type.IsEnumerable())
-            {
-                return type.IsIQueryable() is false;
-            }
-
-            return false;
+            return symbol.Type.IsCollection(symbol.Name);
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation)

@@ -18,6 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static readonly string[] WrongSuffixes =
                                                          [
                                                              "Helper",
+                                                             "Helper42",
                                                              "Helpers",
                                                              "Misc",
                                                              "Miscellaneous",

@@ -55,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return Constants.Names.Create;
             }
 
-            if (symbol.ReturnType.IsGeneric())
+            if (symbol.ReturnType.HasGenericTypeArguments())
             {
                 // we have a generic type, so we do not know an exact name
                 return Constants.Names.Create;

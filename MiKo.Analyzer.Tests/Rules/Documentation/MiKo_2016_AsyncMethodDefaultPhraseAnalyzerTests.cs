@@ -304,10 +304,18 @@ public class TestMe
         [TestCase("This method gets called to do", "Asynchronously does")]
         [TestCase("This method is called to do", "Asynchronously does")]
 
+        [TestCase("This executes", "Asynchronously executes")]
         [TestCase("This will execute", "Asynchronously executes")]
+        [TestCase("This will return", "Asynchronously returns")]
         [TestCase("This method will execute", "Asynchronously executes")]
         [TestCase("This Method will execute", "Asynchronously executes")]
+        [TestCase("This method will return", "Asynchronously returns")]
+        [TestCase("This Method will return", "Asynchronously returns")]
         [TestCase("Is responsible for collecting", "Asynchronously collects")]
+        [TestCase("Triggers", "Asynchronously triggers")]
+        [TestCase("Trigger", "Asynchronously triggers")]
+        [TestCase("Monitors", "Asynchronously monitors")]
+        [TestCase("Monitor", "Asynchronously monitors")]
         public void Code_gets_fixed_for_(string originalText, string fixedText)
         {
             const string Template = """
