@@ -14,6 +14,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly string[] NonThirdPersonSingularEndingsWithS = { "pters", "tors", "gers", "chers", "asses" };
 
+        private static readonly string[] ExceptionsToNonThirdPersonSingularEndingsWithS = { "factors", "monitors", "triggers", "passes" };
+
         private static readonly string[] SpecialPastEndings = { "ated", "dled", "ced", "ged", "ied", "red", "rized", "sed", "ved", "oked" };
 
         private static readonly string[] PastEndings = SpecialPastEndings.ConcatenatedWith("led", "eed", "ted", "ded").ToArray();
@@ -88,6 +90,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                                                                                                  new KeyValuePair<string, string>("Was", "Is"),
                                                                                                                                                  new KeyValuePair<string, string>("were", "is"),
                                                                                                                                                  new KeyValuePair<string, string>("Were", "Is"),
+                                                                                                                                                 new KeyValuePair<string, string>("trigger", "triggers"),
+                                                                                                                                                 new KeyValuePair<string, string>("triggered", "triggers"),
+                                                                                                                                                 new KeyValuePair<string, string>("Trigger", "Triggers"),
+                                                                                                                                                 new KeyValuePair<string, string>("Triggered", "Triggers"),
                                                                                                                                              });
 
         private static readonly string[] ThirdPersonalSingularVerbExceptions =
@@ -313,7 +319,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
             {
                 if (value.EndsWithAny(NonThirdPersonSingularEndingsWithS, StringComparison.OrdinalIgnoreCase))
                 {
-                    return false;
+                    return value.EndsWithAny(ExceptionsToNonThirdPersonSingularEndingsWithS, StringComparison.OrdinalIgnoreCase);
                 }
             }
 
@@ -880,27 +886,23 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             string CreateFromPast(string word)
             {
-                if (word.EndsWith("dded", StringComparison.Ordinal))
-                {
-                    return word.AsSpan(0, word.Length - 2).ConcatenatedWith('s');
-                }
-
-                if (word.EndsWith("tted", StringComparison.Ordinal))
-                {
-                    return word.AsSpan(0, word.Length - 3).ConcatenatedWith('s');
-                }
-
                 if (word.EndsWith("eed", StringComparison.Ordinal))
                 {
                     return word.AsSpan().ConcatenatedWith('s');
                 }
 
-                if (word.EndsWithAny(SpecialPastEndings))
+                var difference = 2;
+
+                if (word.EndsWith("tted", StringComparison.Ordinal))
                 {
-                    return word.AsSpan(0, word.Length - 1).ConcatenatedWith('s');
+                    difference = 3;
+                }
+                else if (word.EndsWithAny(SpecialPastEndings) && word.EndsWith("tored", StringComparison.Ordinal) is false)
+                {
+                    difference = 1;
                 }
 
-                return word.AsSpan(0, word.Length - 2).ConcatenatedWith('s');
+                return word.AsSpan(0, word.Length - difference).ConcatenatedWith('s');
             }
 
             string CreateFromGerund(string word)

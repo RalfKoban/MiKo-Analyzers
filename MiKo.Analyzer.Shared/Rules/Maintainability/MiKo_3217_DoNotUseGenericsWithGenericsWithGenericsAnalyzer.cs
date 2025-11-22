@@ -80,21 +80,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         var arguments = type.TypeArguments;
 
-                        return arguments.Length > 0 && arguments.Any(HasGenericTypeArgument);
+                        return arguments.Length > 0 && arguments.Any(HasNestedGenericTypeArguments);
                     }
                 }
             }
 
-            return HasGenericTypeArgument(symbol);
+            return HasNestedGenericTypeArguments(symbol);
         }
 
-        private static bool HasGenericTypeArgument(ITypeSymbol symbol)
+        private static bool HasNestedGenericTypeArguments(ITypeSymbol symbol)
         {
             if (symbol is INamedTypeSymbol type)
             {
                 var arguments = type.TypeArguments;
 
-                return arguments.Length > 0 && arguments.OfType<INamedTypeSymbol>().Any(_ => _.IsGeneric());
+                return arguments.Length > 0 && arguments.Any(_ => _.HasGenericTypeArguments());
             }
 
             return false;
