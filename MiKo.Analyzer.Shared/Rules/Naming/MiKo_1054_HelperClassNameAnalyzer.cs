@@ -49,12 +49,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             if (typeName.Length > SpecialNameHandle.Length && typeName.StartsWith(SpecialNameHandle))
             {
-                return typeName.WithoutSuffix(wrongName)
+                return typeName.WithoutNumberSuffix()
+                               .WithoutSuffix(wrongName)
                                .Slice(SpecialNameHandle.Length)
                                .ConcatenatedWith(SpecialNameHandler);
             }
 
-            return typeName.WithoutSuffix(wrongName).ToString();
+            return typeName.WithoutNumberSuffix()
+                           .WithoutSuffix(wrongName)
+                           .ToString();
         }
     }
 }

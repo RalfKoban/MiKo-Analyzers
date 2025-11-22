@@ -91,6 +91,22 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_method_with_field_of_specific_type_with_number_at_the_end() => No_issue_is_reported_for(@"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+public interface IXyzObject42 : IEnumerable<string>, IEnumerable
+{
+}
+
+public class TestMe
+{
+    private IXyzObject42 xyzObject;
+}
+");
+
         [TestCase("string blaList")]
         [TestCase("string blaEnumList")]
         [TestCase("string blaCollection")]
