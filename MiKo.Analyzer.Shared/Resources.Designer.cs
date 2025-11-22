@@ -14935,6 +14935,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The empty property pattern only checks for non-nullness but implies structural matching, which can be misleading. Null checks or declaration patterns are more idiomatic, improve readability, and reduce cognitive overhead..
+        /// </summary>
+        internal static string MiKo_3232_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3232_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace empty property pattern { } with null check.
+        /// </summary>
+        internal static string MiKo_3232_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3232_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use null checks instead of empty property pattern.
+        /// </summary>
+        internal static string MiKo_3232_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3232_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         internal static string MiKo_3301_CodeFixTitle {
