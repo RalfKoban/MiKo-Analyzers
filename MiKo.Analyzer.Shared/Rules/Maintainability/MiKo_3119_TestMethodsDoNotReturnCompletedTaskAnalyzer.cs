@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var returnType = symbol.ReturnType;
 
-            if (returnType.IsGeneric())
+            if (returnType.HasGenericTypeArguments())
             {
                 return false;
             }
