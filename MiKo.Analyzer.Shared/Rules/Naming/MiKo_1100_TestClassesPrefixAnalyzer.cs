@@ -63,17 +63,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static string GetTypeUnderTestName(INamedTypeSymbol testClass, ITypeSymbol typeUnderTest)
         {
-            if (typeUnderTest.TypeKind != TypeKind.TypeParameter)
+            if (typeUnderTest.IsOpenGeneric() && testClass.HasGenericTypeArguments())
             {
-                return typeUnderTest.Name;
+                var typeParameter = (ITypeParameterSymbol)testClass.TypeArguments[0];
+
+                // for generic class or struct constraints there is no constraint type available
+                var constraint = typeParameter.ConstraintTypes.FirstOrDefault();
+
+                return constraint?.Name;
             }
 
-            var typeParameter = (ITypeParameterSymbol)testClass.TypeArguments[0];
-
-            // for generic class or struct constraints there is no constraint type available
-            var constraint = typeParameter.ConstraintTypes.FirstOrDefault();
-
-            return constraint?.Name;
+            return typeUnderTest.Name;
         }
 
         private static bool TestClassStartsWithName(ITypeSymbol testClass, string typeUnderTestName) => testClass.Name.StartsWith(typeUnderTestName, StringComparison.Ordinal);
