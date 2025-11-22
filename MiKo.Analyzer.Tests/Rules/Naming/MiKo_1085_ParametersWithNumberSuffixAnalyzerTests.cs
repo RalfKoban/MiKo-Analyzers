@@ -29,15 +29,6 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_parameter_with_number_suffix_([Range(0, 7)] int number) => An_issue_is_reported_for(@"
-
-public class TestMe
-{
-    public void DoSomething(int i" + number + @") { }
-}
-");
-
-        [Test]
         public void No_issue_is_reported_for_unfinished_parameter_in_code() => No_issue_is_reported_for(@"
 
 public class TestMe
@@ -65,10 +56,30 @@ public static class TestMeExtensions
 ");
 
         [Test]
-        public void No_issue_is_reported_for_generic_parameter_on_generic_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_open_generic_parameter_on_generic_method() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public object DoSomething<T1, T2>(T1 t1, T2 t2) => null;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_closed_generic_parameter_on_method() => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public object DoSomething(List<int> ls1) => null;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_parameter_with_number_suffix_([Range(0, 7)] int number) => An_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public void DoSomething(int i" + number + @") { }
 }
 ");
 

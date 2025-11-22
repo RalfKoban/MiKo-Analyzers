@@ -2688,6 +2688,18 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsObject(this ITypeSymbol value) => value.SpecialType is SpecialType.System_Object;
 
         /// <summary>
+        /// Determines whether a type is an open generic, such as <c>T</c>.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is an open generic (such as <c>T</c>); otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool IsOpenGeneric(this ITypeSymbol value) => value?.TypeKind is TypeKind.TypeParameter;
+
+        /// <summary>
         /// Determines whether a type is partial.
         /// </summary>
         /// <param name="value">

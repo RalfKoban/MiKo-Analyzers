@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static bool HasIssueWithCommonNumber(IParameterSymbol symbol)
         {
-            if (symbol.Type.TypeKind is TypeKind.TypeParameter)
+            if (symbol.Type.IsOpenGeneric())
             {
                 return false;
             }
