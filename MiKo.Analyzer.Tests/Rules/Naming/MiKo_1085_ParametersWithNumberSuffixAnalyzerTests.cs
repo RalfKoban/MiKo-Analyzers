@@ -65,6 +65,14 @@ public static class TestMeExtensions
 ");
 
         [Test]
+        public void No_issue_is_reported_for_generic_parameter_on_generic_method() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public object DoSomething<T1, T2>(T1 t1, T2 t2) => null;
+}
+");
+
+        [Test]
         public void Code_gets_fixed() => VerifyCSharpFix(
                                                      "class TestMe { void Method(object o1) { } }",
                                                      "class TestMe { void Method(object o) { } }");
