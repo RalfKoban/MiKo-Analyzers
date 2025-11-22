@@ -15,9 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2012_CodeFixProvider)), Shared]
     public sealed class MiKo_2012_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
-        //// ncrunch: rdi off
-        private const FirstWordAdjustment StartAdjustment = FirstWordAdjustment.StartUpperCase | FirstWordAdjustment.MakeThirdPersonSingular | FirstWordAdjustment.KeepSingleLeadingSpace;
-
+//// ncrunch: rdi off
         private static readonly string[] DefaultPhrases =
                                                           {
                                                               "A default impl",
@@ -130,7 +128,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (text.StartsWithAny(EmptyReplacementsMapKeys))
             {
-                return Comment(comment, EmptyReplacementsMapKeys, EmptyReplacementsMap, StartAdjustment);
+                return Comment(comment, EmptyReplacementsMapKeys, EmptyReplacementsMap, FirstWordAdjustment.StartUpperCase | FirstWordAdjustment.MakeThirdPersonSingular | FirstWordAdjustment.KeepSingleLeadingSpace);
             }
 
             if (text.StartsWith("Called"))
@@ -148,9 +146,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static ReadOnlySpan<char> GetUpdatedSyntax(ref XmlElementSyntax comment, XmlTextSyntax textSyntax, in ReadOnlySpan<char> text)
         {
-            if (text.StartsWithAny(ReplacementMapKeys))
+            if (text.ContainsAny(ReplacementMapKeys))
             {
-                comment = GetUpdatedSyntax(comment, StartAdjustment);
+                var adjustment = FirstWordAdjustment.StartUpperCase | FirstWordAdjustment.KeepSingleLeadingSpace;
+
+                if (text.StartsWithAny(ReplacementMapKeys))
+                {
+                    adjustment |= FirstWordAdjustment.MakeThirdPersonSingular;
+                }
+
+                comment = GetUpdatedSyntax(comment, adjustment);
 
                 if (comment.Content.First() is XmlTextSyntax t && ReferenceEquals(t, textSyntax) is false)
                 {
@@ -810,6 +815,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 yield return new Pair(beginning + " specialized in ");
                 yield return new Pair(beginning + " used for checking ", "Determines ");
                 yield return new Pair(beginning + " used for ");
+
+                yield return new Pair(" used to ", " to ");
+                yield return new Pair(" able to ", " to ");
+                yield return new Pair(" capable to ", " to ");
             }
         }
 
