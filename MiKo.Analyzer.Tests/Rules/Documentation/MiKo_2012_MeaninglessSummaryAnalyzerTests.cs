@@ -110,7 +110,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_documentation_([Values("that is used in", "which is used in")] string phrase) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_documentation_([Values("that is used in", "which is used in", "available to", "unavailable to")] string phrase) => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -852,6 +852,10 @@ public class TestMe
         [TestCase("This handler will handle", "Handles")]
         [TestCase("This Handler handles", "Handles")]
         [TestCase("This handler handles", "Handles")]
+        [TestCase("Something able to do stuff that is available to anybody", "Something to do stuff that is available to anybody")]
+        [TestCase("Something able to do stuff that is available tonight", "Something to do stuff that is available tonight")]
+        [TestCase("Something able to do stuff that is unavailable to anybody", "Something to do stuff that is unavailable to anybody")]
+        [TestCase("Something able to do stuff that is unavailable tonight", "Something to do stuff that is unavailable tonight")]
         public void Code_gets_fixed_for_class_(string originalCode, string fixedCode)
         {
             const string Template = @"
