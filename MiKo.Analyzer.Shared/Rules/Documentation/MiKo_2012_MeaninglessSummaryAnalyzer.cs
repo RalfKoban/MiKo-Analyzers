@@ -132,6 +132,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             continue;
                         }
 
+                        if (phrase is "able to" && summary.Contains("vailable", StringComparison.Ordinal) && summary.Replace("vailable", "vail").Contains(phrase, StringComparison.OrdinalIgnoreCase) is false)
+                        {
+                            // ignore phrase 'available'
+                            continue;
+                        }
+
                         return ReportIssueContainsPhrase(symbol, phrase.AsSpan());
                     }
                 }

@@ -8,7 +8,7 @@ using System.Text;
 namespace MiKoSolutions.Analyzers.Linguistics
 {
     /// <summary>
-    /// Provides functionality to find and replace abbreviations in text with their full terms.
+    /// Provides functionality to find abbreviations in text and replace them with their full terms.
     /// </summary>
     internal static class AbbreviationFinder
     {
@@ -29,6 +29,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("cls", "class"),
                                                       new Pair("cmb", "comboBox"),
                                                       new Pair("cmd", "command"),
+                                                      new Pair("comp", "compile"),
+                                                      new Pair("compat", "compatible"),
                                                       new Pair("conf", "configuration"),
                                                       new Pair("config", "configuration"),
                                                       new Pair("configs", "configurations"),
@@ -63,6 +65,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("docs", "documents"),
                                                       new Pair("dst", "destination"),
                                                       new Pair("dto", string.Empty),
+                                                      new Pair("ed", "edit"),
                                                       new Pair("el", "element"),
                                                       new Pair("ele", "element"),
                                                       new Pair("elem", "element"),
@@ -74,6 +77,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("ext", "extension"),
                                                       new Pair("fnc", "function"),
                                                       new Pair("frm", "form"),
+                                                      new Pair("fwd", "forwarded"),
                                                       new Pair("hdls", "headless"),
                                                       new Pair("ident", "identification"),
                                                       new Pair("idents", "identifications"),
@@ -87,6 +91,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("lib", "library"),
                                                       new Pair("libs", "libraries"),
                                                       new Pair("lv", "listView"),
+                                                      new Pair("man", "manager"),
                                                       new Pair("max", "maximum"),
                                                       new Pair("meth", "method"),
                                                       new Pair("mgmt", "management"),
@@ -126,6 +131,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("rec", "record"),
                                                       new Pair("ref", "reference"),
                                                       new Pair("refs", "references"),
+                                                      new Pair("reloc", "relocation"),
                                                       new Pair("repo", "repository"),
                                                       new Pair("repos", "repositories"),
                                                       new Pair("req", "request"),
@@ -141,6 +147,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("std", "standard"),
                                                       new Pair("str", "string"),
                                                       new Pair("svc", "service"),
+                                                      new Pair("syn", "syntax"),
                                                       new Pair("sync", "synchronization"),
                                                       new Pair("tm", "time"),
                                                       new Pair("tmp", "temp"),
@@ -178,6 +185,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Conf", "Configuration"),
                                                           new Pair("Config", "Configuration"),
                                                           new Pair("Configs", "Configurations"),
+                                                          new Pair("Comp", "Compile"),
+                                                          new Pair("Compat", "Compatibility"),
                                                           new Pair("Conn", "Connection"),
                                                           new Pair("Conns", "Connections"),
                                                           new Pair("Ctg", "Category"),
@@ -212,6 +221,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Dst", "Destination"),
                                                           new Pair("Dto", string.Empty),
                                                           new Pair("DTO", string.Empty),
+                                                          new Pair("Ed", "Edit"),
                                                           new Pair("Ef", "EntityFramework"),
                                                           new Pair("EF", "EntityFramework"),
                                                           new Pair("El", "Element"),
@@ -225,6 +235,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Ext", "Extension"),
                                                           new Pair("Fnc", "Function"),
                                                           new Pair("Frm", "Form"),
+                                                          new Pair("Fwd", "Forwarded"),
                                                           new Pair("Hdls", "Headless"),
                                                           new Pair("Ident", "Identification"),
                                                           new Pair("Idents", "Identifications"),
@@ -237,6 +248,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Lib", "Library"),
                                                           new Pair("Libs", "Libraries"),
                                                           new Pair("Lv", "ListView"),
+                                                          new Pair("Man", "Manager"),
                                                           new Pair("Max", "Maximum"),
                                                           new Pair("Meth", "Method"),
                                                           new Pair("Mgmt", "Management"),
@@ -275,6 +287,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Rec", "Record"),
                                                           new Pair("Ref", "Reference"),
                                                           new Pair("Refs", "References"),
+                                                          new Pair("Reloc", "Relocation"),
                                                           new Pair("Repo", "Repository"),
                                                           new Pair("Repos", "Repositories"),
                                                           new Pair("Req", "Request"),
@@ -289,6 +302,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Std", "Standard"),
                                                           new Pair("Str", "String"),
                                                           new Pair("Svc", "Service"),
+                                                          new Pair("Syn", "Syntax"),
                                                           new Pair("Sync", "Synchronization"),
                                                           new Pair("Tm", "Time"),
                                                           new Pair("Tmp", "Temp"),

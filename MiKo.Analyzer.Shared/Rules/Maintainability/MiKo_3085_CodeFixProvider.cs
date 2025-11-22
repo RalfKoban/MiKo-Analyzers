@@ -427,7 +427,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return PredefinedType(kind);
             }
 
-            var name = type.IsGeneric()
+            var name = type.HasGenericTypeArguments()
                        ? type.FullyQualifiedName().GetNameOnlyPart()
                        : type.Name;
 
