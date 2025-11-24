@@ -83,25 +83,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                      "a",
                                                                  };
 
-        private static readonly HashSet<string> WellKnownWords = new HashSet<string>
-                                                                     {
-                                                                         "ASP.NET",
-                                                                         "CSharp",
-                                                                         "FxCop",
-                                                                         "IntelliSense",
-                                                                         "Microsoft",
-                                                                         "NCover",
-                                                                         "NCrunch",
-                                                                         "Outlook",
-                                                                         "PostSharp",
-                                                                         "ReSharper",
-                                                                         "SonarCube",
-                                                                         "SonarLint",
-                                                                         "SonarQube",
-                                                                         "StyleCop",
-                                                                         "VisualBasic",
-                                                                         "etc",
-                                                                     };
+        private static readonly string[] WellKnownWords =
+                                                          {
+                                                              "ASP.NET",
+                                                              "CSharp",
+                                                              "FxCop",
+                                                              "IntelliSense",
+                                                              "Microsoft",
+                                                              "NCover",
+                                                              "NCrunch",
+                                                              "Outlook",
+                                                              "PostSharp",
+                                                              "ReSharper",
+                                                              "SonarCube",
+                                                              "SonarLint",
+                                                              "SonarQube",
+                                                              "StyleCop",
+                                                              "VisualBasic",
+                                                              "etc",
+                                                          };
 
         private static readonly string[] SingleWords =
                                                        {
@@ -189,7 +189,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return (IReadOnlyList<Diagnostic>)results ?? Array.Empty<Diagnostic>();
         }
 
-        private static bool TryFindCompoundWord(string text, ref int startIndex, ref int endIndex)
+        private static bool TryFindCompoundWord(in ReadOnlySpan<char> text, ref int startIndex, ref int endIndex)
         {
             var textLength = text.Length;
 
@@ -307,7 +307,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 var part = trimmed.Slice(0, trimmed.Length - characters);
 
-                if (part.AllUpper() || WellKnownWords.Contains(part.ToString()))
+                if (part.AllUpper() || IsWellKnownWord(part))
                 {
                     // seems like an abbreviation (such as UIs) or a genitive tense of an abbreviation (such as UI's), so do not report
                     return false;
@@ -325,7 +325,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return false;
                 }
             }
-            else if (WellKnownWords.Contains(trimmed.ToString()))
+            else if (IsWellKnownWord(trimmed))
             {
                 return false;
             }
@@ -333,7 +333,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return true;
         }
 
-        private static string[] FindSingleWords(string text)
+        private static bool IsWellKnownWord(in ReadOnlySpan<char> text) => text.EqualsAny(WellKnownWords);
+
+        private static string[] FindSingleWords(in ReadOnlySpan<char> text)
         {
             HashSet<string> words = null;
 
@@ -350,7 +352,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            return words?.ToArray(_ => _) ?? Array.Empty<string>();
+            return words?.ToArray() ?? Array.Empty<string>();
         }
 
         private static new Location CreateLocation(in SyntaxToken token, in int offsetStart, in int offsetEnd)
@@ -385,7 +387,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // loop over complete text
             while (end < textLength)
             {
-                if (TryFindCompoundWord(text, ref start, ref end))
+                if (TryFindCompoundWord(text.AsSpan(), ref start, ref end))
                 {
                     // get rid of leading or trailing additional characters such as braces or sentence markers
                     var span = text.AsSpan(start, end - start);
@@ -430,20 +432,29 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 start = end;
             }
 
-            var words = FindSingleWords(text);
+            var words = FindSingleWords(text.AsSpan());
 
             if (words.Length > 0)
             {
                 foreach (var word in words)
                 {
+                    var startOffset = 0;
+
+                    var valueText = token.ValueText;
+
+                    if (valueText.StartsWith(@" string ("""")", StringComparison.Ordinal))
+                    {
+                        // jump over the special string
+                        startOffset = 7;
+                    }
+
                     // we have to be aware that the word can be part within other words, so we have to surround them with delimiters or something similar to avoid incorrect replacements
-                    var locations = GetAllLocations(token, word.WithDelimiters(), startOffset: 1, endOffset: 1);
+                    var locations = GetAllLocations(token, word.WithDelimiters(), startOffset: startOffset + 1, endOffset: 1);
 
                     if (locations.Count is 0)
                     {
-                        // TODO RKN: check for ending texts
                         // we have to be aware that the word can be part within other words, so we have to surround them with delimiters or something similar to avoid incorrect replacements
-                        var lastLocation = GetLastLocation(token, word);
+                        var lastLocation = GetLastLocation(token, word, startOffset: startOffset);
 
                         if (lastLocation != null)
                         {
@@ -454,6 +465,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         foreach (var location in locations)
                         {
+                            if (word is "string")
+                            {
+                                const string EmptyString = "empty string";
+
+                                if (location.GetText(-6, EmptyString.Length) is EmptyString)
+                                {
+                                    // do not report because it gets reported by MiKo_2241
+                                    continue;
+                                }
+                            }
+
                             yield return Issue(location, CreateReplacementProposal(word, word));
                         }
                     }

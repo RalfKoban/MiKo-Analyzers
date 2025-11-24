@@ -673,6 +673,38 @@ namespace MiKoSolutions.Analyzers
         internal static T[] OrderDescendingByLengthAndText<T>(this IEnumerable<T> source, Func<T, string> selector) => source.OrderByDescending(_ => selector(_).Length).ThenBy(selector).ToArray();
 
         /// <summary>
+        /// Converts the specified read-only collection to an array.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of elements in the collection.
+        /// </typeparam>
+        /// <param name="source">
+        /// The read-only collection to convert.
+        /// </param>
+        /// <returns>
+        /// An array of values extracted from each element in the collection, or an empty array if the collection contains no elements.
+        /// </returns>
+        internal static T[] ToArray<T>(this IReadOnlyCollection<T> source)
+        {
+            var count = source.Count;
+
+            if (count is 0)
+            {
+                return Array.Empty<T>();
+            }
+
+            var index = 0;
+            var result = new T[count];
+
+            foreach (var item in source)
+            {
+                result[index++] = item;
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Converts the specified sequence to an array, using the specified comparer to order the elements.
         /// </summary>
         /// <typeparam name="T">

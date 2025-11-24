@@ -133,6 +133,12 @@ namespace MiKoSolutions.Analyzers.Rules
             var start = spanStart + position + startOffset; // find start position for underlining
             var end = start + sizeof(char) - startOffset - endOffset; // find end position
 
+            if (end < start)
+            {
+                // seems we did not find a proper location here
+                return null;
+            }
+
             return CreateLocation(syntaxTree, start, end);
         }
 
@@ -145,6 +151,12 @@ namespace MiKoSolutions.Analyzers.Rules
 
             var start = spanStart + position + startOffset; // find start position for underlining
             var end = start + value.Length - startOffset - endOffset; // find end position
+
+            if (end < start)
+            {
+                // seems we did not find a proper location here
+                return null;
+            }
 
             return CreateLocation(syntaxTree, start, end);
         }
