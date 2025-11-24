@@ -682,7 +682,7 @@ namespace MiKoSolutions.Analyzers
         /// The read-only collection to convert.
         /// </param>
         /// <returns>
-        /// An array of values extracted from each element in the collection, or an empty array if the collection contains no elements.
+        /// An array of the elements in the collection, or an empty array if the collection contains no elements.
         /// </returns>
         internal static T[] ToArray<T>(this IReadOnlyCollection<T> source)
         {
