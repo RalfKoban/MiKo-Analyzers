@@ -455,10 +455,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var startOffset = 0;
 
-                if (tokenText.StartsWith(@" string ("""")", StringComparison.Ordinal))
+                const string EmptyStringSample = @" string ("""")";
+
+                if (tokenText.StartsWith(EmptyStringSample, StringComparison.Ordinal))
                 {
-                    // jump over the special string
-                    startOffset = 7;
+                    // jump over the special ' string'
+                    startOffset = EmptyStringSample.Length;
                 }
 
                 // we have to be aware that the word can be part within other words, so we have to surround them with delimiters or something similar to avoid incorrect replacements
@@ -480,9 +482,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         if (word is "string")
                         {
-                            const string EmptyString = "empty string";
+                            const string Empty = "empty ";
+                            const string EmptyString = Empty + "string";
 
-                            if (location.GetText(-6, EmptyString.Length) is EmptyString)
+                            if (location.GetText(-Empty.Length, EmptyString.Length) is EmptyString)
                             {
                                 // do not report because it gets reported by MiKo_2241
                                 continue;
