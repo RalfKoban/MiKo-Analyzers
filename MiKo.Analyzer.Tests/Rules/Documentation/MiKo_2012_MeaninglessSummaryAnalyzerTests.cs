@@ -1544,6 +1544,17 @@ public class TestMe
         [TestCase("Used to get or set", "Gets or sets a value indicating")]
         [TestCase("Used to get", "Gets or sets a value indicating")]
         [TestCase("Used to set", "Gets or sets a value indicating")]
+        [TestCase("get information if it is", "Gets or sets a value indicating whether it is")]
+        [TestCase("get information if parameter is", "Gets or sets a value indicating whether parameter is")]
+        [TestCase("Get set whether to create", "Gets or sets a value indicating whether to create")]
+        [TestCase("Get set whether to a parameter should be always mapped to", "Gets or sets a value indicating whether a parameter should be always mapped to")]
+        [TestCase("Get set whether to an parameter should be always mapped to", "Gets or sets a value indicating whether an parameter should be always mapped to")]
+        [TestCase("Get set whether to the parameter should be always mapped to", "Gets or sets a value indicating whether the parameter should be always mapped to")]
+        [TestCase("get the flag for system record of the trace manager", "Gets or sets a value indicating whether the system record of the trace manager")]
+        [TestCase("get the flag for a system record of the trace manager", "Gets or sets a value indicating whether a system record of the trace manager")]
+        [TestCase("get the flag for an system record of the trace manager", "Gets or sets a value indicating whether an system record of the trace manager")]
+        [TestCase("get the flag for the system record of the trace manager", "Gets or sets a value indicating whether the system record of the trace manager")]
+        [TestCase("Get information whether this element is a compound type", "Gets or sets a value indicating whether this element is a compound type")]
         public void Code_gets_fixed_for_boolean_property_text_(string originalComment, string fixedComment)
         {
             const string Template = @"
