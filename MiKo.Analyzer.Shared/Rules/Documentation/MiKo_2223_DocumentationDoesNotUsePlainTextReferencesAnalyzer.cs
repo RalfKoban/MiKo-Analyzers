@@ -453,11 +453,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var word in words)
             {
+                var wordIsString = word is "string";
+
                 var startOffset = 0;
 
                 const string EmptyStringSample = @" string ("""")";
 
-                if (tokenText.StartsWith(EmptyStringSample, StringComparison.Ordinal))
+                if (wordIsString && tokenText.StartsWith(EmptyStringSample, StringComparison.Ordinal))
                 {
                     // jump over the special ' string'
                     startOffset = EmptyStringSample.Length;
@@ -480,12 +482,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     foreach (var location in locations)
                     {
-                        if (word is "string")
+                        if (wordIsString)
                         {
                             const string Empty = "empty ";
                             const string EmptyString = Empty + "string";
 
-                            if (location.GetText(-Empty.Length, EmptyString.Length) is EmptyString)
+                            if (location.SourceSpan.Start > Empty.Length && location.GetText(-Empty.Length, EmptyString.Length) is EmptyString)
                             {
                                 // do not report because it gets reported by MiKo_2241
                                 continue;
