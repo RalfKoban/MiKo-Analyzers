@@ -62,7 +62,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] EmptyReplacementsMapKeys = EmptyReplacementsMap.ToArray(_ => _.Key);
 
-        private static readonly string[] GetSetReplacementPhrases = CreateGetSetReplacementPhrases().Except(new[] { "Gets or sets a value ", "Gets or sets " })
+        private static readonly string[] GetSetReplacementPhrases = CreateGetSetReplacementPhrases().Distinct()
+                                                                                                    .Except(new[] { "Gets or sets a value ", "Gets or sets ", "Gets a value ", "Sets a value ", "gets a value ", "sets a value " })
                                                                                                     .OrderDescendingByLengthAndText();
 
         private static readonly Pair[] PreparationMap =
@@ -285,7 +286,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                             .ReplaceAllWithProbe(GetSetReplacementPhrases, " ");
 
             builder.ReplaceWithProbe("  ", " ");
-            builder.ReplaceWithProbe("indicating get or set ", "indicating ");
             builder.ReplaceWithProbe("indicating describes ", "indicating ");
             builder.ReplaceWithProbe("indicating describe ", "indicating ");
             builder.ReplaceWithProbe("indicating specifies ", "indicating ");
@@ -294,6 +294,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             builder.ReplaceWithProbe("indicating indicate ", "indicating ");
             builder.ReplaceWithProbe("indicating returns ", "indicating ");
             builder.ReplaceWithProbe("indicating return ", "indicating ");
+            builder.ReplaceWithProbe("indicating indicating", "indicating");
+            builder.ReplaceWithProbe("indicating for ", "indicating whether the ");
             builder.ReplaceWithProbe("bool indicating", "value indicating");
             builder.ReplaceWithProbe("bool that indicates", "value indicating");
             builder.ReplaceWithProbe("bool which indicates", "value indicating");
@@ -322,7 +324,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             builder.ReplaceWithProbe("indicating that", "indicating whether");
             builder.ReplaceWithProbe("indicating if ", "indicating whether ");
             builder.ReplaceWithProbe("indicating to", "indicating whether to");
-            builder.ReplaceWithProbe("indicating indicating", "indicating");
             builder.ReplaceWithProbe("whether to true if to", "whether to");
             builder.ReplaceWithProbe("whether to true to", "whether to");
             builder.ReplaceWithProbe("whether to true, to", "whether to");
@@ -344,12 +345,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             builder.ReplaceWithProbe("whether specify if", "whether");
             builder.ReplaceWithProbe("whether specify that", "whether");
             builder.ReplaceWithProbe("whether specify whether", "whether");
+            builder.ReplaceWithProbe("whether whether", "whether");
             builder.ReplaceWithProbe("ets get ", "ets ");
             builder.ReplaceWithProbe("ets set ", "ets ");
             builder.ReplaceWithProbe("gets returns", "gets");
             builder.ReplaceWithProbe("Gets returns", "Gets");
             builder.ReplaceWithProbe("sets returns", "sets");
             builder.ReplaceWithProbe("Sets returns", "Sets");
+            builder.ReplaceWithProbe(" the the ", " the ");
+            builder.ReplaceWithProbe(" the an ", " an ");
+            builder.ReplaceWithProbe(" the a ", " a ");
+            builder.ReplaceWithProbe(" to the ", " the ");
+            builder.ReplaceWithProbe(" to an ", " an ");
+            builder.ReplaceWithProbe(" to a ", " a ");
             builder.ReplaceWithProbe("  ", " ");
 
             var replacedFixedText = builder.ToStringAndRelease();
@@ -866,40 +874,32 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static IEnumerable<string> CreateGetSetReplacementPhrases()
         {
-            var continuations = new[] { "flag ", "a flag ", "the flag ", "value ", "a value ", "the value " };
+            var continuations = new[]
+                                    {
+                                        "flag ", "a flag ", "the flag ",
+                                        "Flag ", "a Flag ", "the Flag ",
+                                        "value ", "a value ", "the value ",
+                                        "information ", "a information ", "an information ", "the information ",
+                                    };
 
-            var starts = new[]
-                             {
-                                 "Get and Set ",
-                                 "Get And Set ",
-                                 "Get AND Set ",
-                                 "Get or Set ",
-                                 "Get Or Set ",
-                                 "Get OR Set ",
-                                 "get/set ",
-                                 "get/Set ",
-                                 "Get/set ",
-                                 "Get/Set ",
-                                 "Gets and Sets ",
-                                 "Gets And Sets ",
-                                 "Gets AND Sets ",
-                                 "Gets or sets ",
-                                 "Gets or Sets ",
-                                 "Gets Or Sets ",
-                                 "Gets OR Sets ",
-                                 "gets/sets ",
-                                 "gets/Sets ",
-                                 "Gets/sets ",
-                                 "Gets/Sets ",
-                                 "set/get ",
-                                 "set/Get ",
-                                 "Set/get ",
-                                 "Set/Get ",
-                                 "sets/gets ",
-                                 "sets/Gets ",
-                                 "Sets/gets ",
-                                 "Sets/Gets ",
-                             };
+            var gets = new[] { "Get", "get", "Gets", "gets", "GET", "GETS" };
+            var sets = new[] { "Set", "set", "Sets", "sets", "SET", "SETS" };
+
+            var conjunctions = new[] { "/", " and ", " And ", " AND ", " or ", " Or ", " OR " };
+
+            var starts = new HashSet<string>();
+
+            foreach (var conjunction in conjunctions)
+            {
+                foreach (var getter in gets)
+                {
+                    foreach (var setter in sets)
+                    {
+                        starts.Add(getter + conjunction + setter + " ");
+                        starts.Add(setter + conjunction + getter + " ");
+                    }
+                }
+            }
 
             foreach (var start in starts)
             {
@@ -910,8 +910,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     yield return start + continuation;
                 }
             }
+
+            foreach (var getter in gets)
+            {
+                foreach (var continuation in continuations)
+                {
+                    yield return getter + " " + continuation;
+                }
+            }
+
+            foreach (var setter in sets)
+            {
+                foreach (var continuation in continuations)
+                {
+                    yield return setter + " " + continuation;
+                }
+            }
         }
 
-        //// ncrunch: rdi default
+//// ncrunch: rdi default
     }
 }
