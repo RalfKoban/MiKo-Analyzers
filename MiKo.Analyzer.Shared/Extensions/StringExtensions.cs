@@ -256,7 +256,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="ReadOnlySpan{T}"/> contains any element that satisfy the specified condition.
+        /// Determines whether the specified <see cref="ReadOnlySpan{T}"/> contains any element that satisfies the specified condition.
         /// </summary>
         /// <typeparam name="T">
         /// The type of elements in the span.
