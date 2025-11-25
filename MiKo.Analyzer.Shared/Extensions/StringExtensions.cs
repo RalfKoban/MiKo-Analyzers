@@ -268,7 +268,7 @@ namespace MiKoSolutions.Analyzers
         /// The condition to test each element against.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if elements satisfies the condition; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if any element satisfies the condition; otherwise, <see langword="false"/>.
         /// </returns>
         /// <seealso cref="None{T}"/>
         public static bool Any<T>(this in ReadOnlySpan<T> source, Func<T, bool> predicate)
