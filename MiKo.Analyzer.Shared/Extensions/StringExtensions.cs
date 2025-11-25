@@ -256,6 +256,74 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Determines whether the specified <see cref="ReadOnlySpan{T}"/> contains any element that satisfy the specified condition.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of elements in the span.
+        /// </typeparam>
+        /// <param name="source">
+        /// The span to evaluate.
+        /// </param>
+        /// <param name="predicate">
+        /// The condition to test each element against.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if elements satisfies the condition; otherwise, <see langword="false"/>.
+        /// </returns>
+        /// <seealso cref="None{T}"/>
+        public static bool Any<T>(this in ReadOnlySpan<T> source, Func<T, bool> predicate)
+        {
+            var sourceLength = source.Length;
+
+            if (sourceLength > 0)
+            {
+                for (var index = 0; index < sourceLength; index++)
+                {
+                    if (predicate(source[index]))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Determines whether the specified <see cref="ReadOnlySpan{T}"/> contains no elements that satisfy the specified condition.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of elements in the span.
+        /// </typeparam>
+        /// <param name="source">
+        /// The span to evaluate.
+        /// </param>
+        /// <param name="predicate">
+        /// The condition to test each element against.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if no elements satisfy the condition; otherwise, <see langword="false"/>.
+        /// </returns>
+        /// <seealso cref="Any{T}"/>
+        public static bool None<T>(this in ReadOnlySpan<T> source, Func<T, bool> predicate)
+        {
+            var sourceLength = source.Length;
+
+            if (sourceLength > 0)
+            {
+                for (var index = 0; index < sourceLength; index++)
+                {
+                    if (predicate(source[index]))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Creates a cached <see cref="StringBuilder"/> initialized with the specified <see cref="string"/>.
         /// </summary>
         /// <param name="value">

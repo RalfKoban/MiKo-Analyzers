@@ -521,39 +521,6 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="ReadOnlySpan{T}"/> contains no elements that satisfy the specified condition.
-        /// </summary>
-        /// <typeparam name="T">
-        /// The type of elements in the span.
-        /// </typeparam>
-        /// <param name="source">
-        /// The span to evaluate.
-        /// </param>
-        /// <param name="predicate">
-        /// The condition to test each element against.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if no elements satisfy the condition; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool None<T>(this in ReadOnlySpan<T> source, Func<T, bool> predicate)
-        {
-            var sourceLength = source.Length;
-
-            if (sourceLength > 0)
-            {
-                for (var index = 0; index < sourceLength; index++)
-                {
-                    if (predicate(source[index]))
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
-
-        /// <summary>
         /// Gets a read-only list containing all elements of type <typeparamref name="T"/> from the source list
         /// that have the specified <see cref="SyntaxKind"/>.
         /// </summary>
