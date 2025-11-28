@@ -85,10 +85,21 @@ public class TestMe : ICommand
 }
 ");
 
-        [TestCase("A command that can do something.")]
-        [TestCase("Command that can do something.")]
-        [TestCase("Command which can do something.")]
-        [TestCase("Can do something.")]
+        [TestCase("A command that can do")]
+        [TestCase("Command that can do")]
+        [TestCase("Command which can do")]
+        [TestCase("Can do")]
+        [TestCase("Interface for commands in")]
+        [TestCase("Interface for toggle commands in")]
+        [TestCase("A interface for commands in")]
+        [TestCase("An interface for commands in")]
+        [TestCase("The interface for commands in")]
+        [TestCase("A interface for toggle commands in")]
+        [TestCase("An interface for toggle commands in")]
+        [TestCase("The interface for toggle commands in")]
+        [TestCase("Interface for a command in")]
+        [TestCase("Interface for a command that can do")]
+        [TestCase("Interface for a command which can do")]
         public void An_issue_is_reported_for_incorrectly_documented_interface_(string text) => An_issue_is_reported_for(@"
 using System;
 using System.Windows.Input;
@@ -114,25 +125,70 @@ public class TestMe : ICommand
 }
 ");
 
-        [TestCase("A command that can do something.", "Represents a command that can do something.")]
-        [TestCase("The command that can do something.", "Represents a command that can do something.")]
-        [TestCase("Command that can do something.", "Represents a command that can do something.")]
-        [TestCase("Do something.", "Represents a command that can do something.")]
-        [TestCase("A command executes something.", "Represents a command that can execute something.")]
-        [TestCase("A toggle command to execute something.", "Represents a command that can execute something.")]
-        [TestCase("The toggle command to execute something.", "Represents a command that can execute something.")]
-        [TestCase("A standard command to execute something.", "Represents a command that can execute something.")]
-        [TestCase("The standard command to execute something.", "Represents a command that can execute something.")]
-        [TestCase("This command can be used to execute something.", "Represents a command that can execute something.")]
-        [TestCase("This command is used to execute something.", "Represents a command that can execute something.")]
-        [TestCase("A class that offers to execute something.", "Represents a command that can execute something.")]
-        [TestCase("The class which offers to execute something.", "Represents a command that can execute something.")]
-        [TestCase("This class offers to execute something.", "Represents a command that can execute something.")]
-        [TestCase("Offers to execute something.", "Represents a command that can execute something.")]
-        [TestCase("A class that tries to execute something.", "Represents a command that can execute something.")]
-        [TestCase("The class which tries to execute something.", "Represents a command that can execute something.")]
-        [TestCase("This class tries to execute something.", "Represents a command that can execute something.")]
-        [TestCase("Tries to execute something.", "Represents a command that can execute something.")]
+        [TestCase("A class that offers to execute", "execute")]
+        [TestCase("A class that tries to execute", "execute")]
+        [TestCase("A command executes", "execute")]
+        [TestCase("A command that can do", "do")]
+        [TestCase("A interface for commands in", "be used in")]
+        [TestCase("A interface for toggle commands in", "be used in")]
+        [TestCase("A standard command to execute", "execute")]
+        [TestCase("A sync command to execute", "execute")]
+        [TestCase("A toggle command to execute", "execute")]
+        [TestCase("An async command to execute", "execute")]
+        [TestCase("An interface for commands in", "be used in")]
+        [TestCase("An interface for toggle commands in", "be used in")]
+        [TestCase("Base class for backstage commands that can open", "open")]
+        [TestCase("Base class for backstage commands that open", "open")]
+        [TestCase("Base class for commands used to show and change", "show and change")]
+        [TestCase("Base class for commands with", "be used with")]
+        [TestCase("Base class for the backstage commands that can open", "open")]
+        [TestCase("Base class for the backstage commands that open", "open")]
+        [TestCase("Base class for the commands used to show and change", "show and change")]
+        [TestCase("Base class for the commands with", "be used with")]
+        [TestCase("Base class for the upload and download commands for device parameters", "upload and download device parameters")]
+        [TestCase("Base class for the upload and download command for device parameters", "upload and download device parameters")]
+        [TestCase("Command that can do", "do")]
+        [TestCase("Do", "do")]
+        [TestCase("Interface for a command in", "be used in")]
+        [TestCase("Interface for a command that can do", "do")]
+        [TestCase("Interface for a command which can do", "do")]
+        [TestCase("Interface for a sync command that can do", "do")]
+        [TestCase("Interface for a toggle command in", "be used in")]
+        [TestCase("Interface for a toggle command that can do", "do")]
+        [TestCase("Interface for a toggle command which can do", "do")]
+        [TestCase("Interface for an async command that can do", "do")]
+        [TestCase("Interface for an command in", "be used in")]
+        [TestCase("Interface for an command that can do", "do")]
+        [TestCase("Interface for an command which can do", "do")]
+        [TestCase("Interface for an toggle command in", "be used in")]
+        [TestCase("Interface for an toggle command that can do", "do")]
+        [TestCase("Interface for an toggle command which can do", "do")]
+        [TestCase("Interface for command which is used for opening", "open")]
+        [TestCase("Interface for commands in", "be used in")]
+        [TestCase("Interface for the command in", "be used in")]
+        [TestCase("Interface for the command that can do", "do")]
+        [TestCase("Interface for the command which can do", "do")]
+        [TestCase("Interface for the toggle command in", "be used in")]
+        [TestCase("Interface for the toggle command that can do", "do")]
+        [TestCase("Interface for the toggle command which can do", "do")]
+        [TestCase("Interface for toggle commands in", "be used in")]
+        [TestCase("Offers to execute", "execute")]
+        [TestCase("Provides a functionality to step", "step")]
+        [TestCase("Provides functionality to step", "step")]
+        [TestCase("Provides the functionality to step", "step")]
+        [TestCase("Represents a command that is capable to open", "open")]
+        [TestCase("The class which offers to execute", "execute")]
+        [TestCase("The class which tries to execute", "execute")]
+        [TestCase("The command that can do", "do")]
+        [TestCase("The interface for commands in", "be used in")]
+        [TestCase("The interface for toggle commands in", "be used in")]
+        [TestCase("The standard command to execute", "execute")]
+        [TestCase("The toggle command to execute", "execute")]
+        [TestCase("This class offers to execute", "execute")]
+        [TestCase("This class tries to execute", "execute")]
+        [TestCase("This command can be used to execute", "execute")]
+        [TestCase("This command is used to execute", "execute")]
+        [TestCase("Tries to execute", "execute")]
         public void Code_gets_fixed_(string originalComment, string fixedComment)
         {
             const string Template = @"
@@ -140,7 +196,7 @@ using System;
 using System.Windows.Input;
 
 /// <summary>
-/// ###
+/// ### something.
 /// </summary>
 public class TestMe : ICommand
 {
@@ -152,7 +208,7 @@ public class TestMe : ICommand
 }
 ";
 
-            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
+            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", "Represents a command that can " + fixedComment));
         }
 
         protected override string GetDiagnosticId() => MiKo_2038_CommandTypeSummaryAnalyzer.Id;
