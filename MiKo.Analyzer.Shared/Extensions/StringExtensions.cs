@@ -1120,16 +1120,34 @@ namespace MiKoSolutions.Analyzers
         public static bool Contains(this in ReadOnlySpan<char> value, in ReadOnlySpan<char> finding) => value.IndexOf(finding) >= 0;
 
         /// <summary>
-        /// Determines whether the span of characters contains the specified <see cref="string"/>.
+        /// Determines whether the span of characters contains the specified sequence of characters.
         /// </summary>
         /// <param name="value">
         /// The span of characters to search in.
         /// </param>
         /// <param name="finding">
-        /// The <see cref="string"/> to seek.
+        /// The sequence of characters to seek.
+        /// </param>
+        /// <param name="comparison">
+        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the <see cref="string"/> is found; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the sequence is found; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool Contains(this in ReadOnlySpan<char> value, in ReadOnlySpan<char> finding, in StringComparison comparison) => value.IndexOf(finding, comparison) >= 0;
+
+        /// <summary>
+        /// Determines whether the span of characters contains the specified substring.
+        /// </summary>
+        /// <param name="value">
+        /// The span of characters to search in.
+        /// </param>
+        /// <param name="finding">
+        /// The substring to seek.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the substring is found; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Contains(this in ReadOnlySpan<char> value, string finding)
@@ -1140,6 +1158,32 @@ namespace MiKoSolutions.Analyzers
             }
 
             return value.Contains(finding.AsSpan());
+        }
+
+        /// <summary>
+        /// Determines whether the span of characters contains the specified substring using the given <see cref="string"/> comparison.
+        /// </summary>
+        /// <param name="value">
+        /// The span of characters to search in.
+        /// </param>
+        /// <param name="finding">
+        /// The substring to seek.
+        /// </param>
+        /// <param name="comparison">
+        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the substring is found; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool Contains(this in ReadOnlySpan<char> value, string finding, in StringComparison comparison)
+        {
+            if (finding is null)
+            {
+                return false;
+            }
+
+            return value.Contains(finding.AsSpan(), comparison);
         }
 
         /// <summary>
@@ -1206,13 +1250,13 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether the span of characters contains the specified <see cref="string"/> with validation of the following character.
+        /// Determines whether the span of characters contains the specified substring with validation of the following character.
         /// </summary>
         /// <param name="value">
         /// The span of characters to search in.
         /// </param>
         /// <param name="finding">
-        /// The <see cref="string"/> to seek.
+        /// The substring to seek.
         /// </param>
         /// <param name="nextCharValidationCallback">
         /// The validation callback for the character that follows the found <see cref="string"/>.
@@ -1222,7 +1266,7 @@ namespace MiKoSolutions.Analyzers
         /// The default is <see cref="StringComparison.Ordinal"/>.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the <see cref="string"/> is found and the following character passes validation; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the substring is found and the following character passes validation; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Contains(this in ReadOnlySpan<char> value, string finding, Func<char, bool> nextCharValidationCallback, in StringComparison comparison = StringComparison.Ordinal) => value.Contains(finding.AsSpan(), nextCharValidationCallback, comparison);

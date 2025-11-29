@@ -374,7 +374,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (accessorList is null)
             {
                 // seem to be an expression body, so it's a getter only
-                return boolean ? "Gets a value indicating " : "Gets ";
+                return boolean ? Constants.Comments.BooleanPropertyGetterStartingPhrase : Constants.Comments.PropertyGetterStartingPhrase;
             }
 
             var accessors = accessorList.Accessors;
@@ -386,10 +386,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     switch (accessors[0].Kind())
                     {
                         case SyntaxKind.GetAccessorDeclaration:
-                            return boolean ? "Gets a value indicating " : "Gets ";
+                            return boolean ? Constants.Comments.BooleanPropertyGetterStartingPhrase : Constants.Comments.PropertyGetterStartingPhrase;
 
                         case SyntaxKind.SetAccessorDeclaration:
-                            return boolean ? "Sets a value indicating " : "Sets ";
+                            return boolean ? Constants.Comments.BooleanPropertySetterStartingPhrase : Constants.Comments.PropertySetterStartingPhrase;
 
                         default:
                             return string.Empty;
@@ -397,7 +397,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
 
                 case 2:
-                    return boolean ? "Gets or sets a value indicating " : "Gets or sets ";
+                    return boolean ? Constants.Comments.BooleanPropertyGetterSetterStartingPhrase : Constants.Comments.PropertyGetterSetterStartingPhrase;
 
                 default:
                     return string.Empty;
