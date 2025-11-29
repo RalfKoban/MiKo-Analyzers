@@ -91,7 +91,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                               "FxCop",
                                                               "IntelliSense",
                                                               "Microsoft",
+                                                              "MSTest",
                                                               "NCover",
+                                                              "NUnit",
                                                               "NCrunch",
                                                               "Outlook",
                                                               "PostSharp",
@@ -102,6 +104,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                               "StyleCop",
                                                               "VisualBasic",
                                                               "etc",
+                                                              "xUnit",
                                                           };
 
         private static readonly string[] SingleWords =

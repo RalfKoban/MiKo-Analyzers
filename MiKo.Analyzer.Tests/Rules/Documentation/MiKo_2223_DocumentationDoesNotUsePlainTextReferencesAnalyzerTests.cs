@@ -15,22 +15,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly string[] WellknownWords =
                                                           [
-                                                              "IntelliSense",
-                                                              "FxCop",
-                                                              "StyleCop",
-                                                              "SonarCube",
-                                                              "SonarQube",
+                                                              "ASP.NET",
                                                               "CSharp",
-                                                              "VisualBasic",
+                                                              "FxCop",
+                                                              "IntelliSense",
+                                                              "Microsoft",
+                                                              "MSTest",
+                                                              "NCover",
                                                               "NCrunch",
                                                               "NCrunch's",
-                                                              "NCover",
-                                                              "PostSharp",
-                                                              "SonarLint",
-                                                              "ReSharper",
-                                                              "ASP.NET",
-                                                              "Microsoft",
+                                                              "NUnit",
                                                               "Outlook",
+                                                              "PostSharp",
+                                                              "ReSharper",
+                                                              "SonarCube",
+                                                              "SonarLint",
+                                                              "SonarQube",
+                                                              "StyleCop",
+                                                              "VisualBasic",
+                                                              "xUnit",
                                                           ];
 
         private static readonly string[] NonCompoundWords =
