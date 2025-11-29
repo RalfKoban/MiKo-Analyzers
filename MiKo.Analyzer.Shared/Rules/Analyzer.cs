@@ -557,9 +557,9 @@ namespace MiKoSolutions.Analyzers.Rules
                 return SupportsNUnit;
             }
 
-            if (compilation.GetTypeByMetadataName("Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute") != null)
+            if (compilation.GetTypeByMetadataName("NUnit.Framework.TestCaseAttribute") != null)
             {
-                return SupportsMSTest;
+                return SupportsNUnit;
             }
 
             if (compilation.GetTypeByMetadataName("Xunit.FactAttribute") != null)
@@ -570,6 +570,11 @@ namespace MiKoSolutions.Analyzers.Rules
             if (compilation.GetTypeByMetadataName("Xunit.TheoryAttribute") != null)
             {
                 return SupportsXUnit;
+            }
+
+            if (compilation.GetTypeByMetadataName("Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute") != null)
+            {
+                return SupportsMSTest;
             }
 
             return false;
