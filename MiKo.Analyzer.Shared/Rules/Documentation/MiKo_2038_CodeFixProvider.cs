@@ -221,8 +221,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 results.Add(new Pair(string.Concat(start, " ")));
             }
 
-            results.Add(new Pair(string.Concat("Offers to ")));
-            results.Add(new Pair(string.Concat("Tries to ")));
+            results.Add(new Pair("Offers to "));
+            results.Add(new Pair("Tries to "));
 
             return results;
         }
