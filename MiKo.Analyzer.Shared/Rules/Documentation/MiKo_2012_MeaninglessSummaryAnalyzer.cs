@@ -123,12 +123,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             for (var index = 0; index < summariesLength; index++)
             {
-                var summary = summaries[index].AsSpan();
+                var summary = summaries[index];
 
                 if (summary.StartsWith(Constants.Comments.XmlElementStartingTagChar))
                 {
-                    var i = summary.IndexOf(Constants.Comments.XmlElementEndingTag.AsSpan());
-                    var phrase = i > 0 ? summary.Slice(0, i + 2) : Constants.Comments.XmlElementStartingTag.AsSpan();
+                    var i = summary.AsSpan().IndexOf(Constants.Comments.XmlElementEndingTag.AsSpan());
+                    var phrase = i > 0 ? summary.AsSpan(0, i + 2) : Constants.Comments.XmlElementStartingTag.AsSpan();
 
                     return ReportIssueStartingPhrase(symbol, phrase);
                 }
@@ -148,7 +148,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     expectedPropertyStart = GetExpectedStartPhrase(property);
 
-                    isExpectedPropertyStart = summary.StartsWith(expectedPropertyStart);
+                    isExpectedPropertyStart = summary.StartsWith(expectedPropertyStart, StringComparison.Ordinal);
                 }
 
                 foreach (var phrase in Constants.Comments.MeaninglessPhrase)
@@ -163,7 +163,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         if (phrase is "able to" && summary.Contains("vailable to", StringComparison.Ordinal))
                         {
-                            if (summary.ToString().Replace("vailable", "vail").Contains(phrase, StringComparison.OrdinalIgnoreCase) is false)
+                            if (summary.Replace("vailable", "vail").Contains(phrase, StringComparison.OrdinalIgnoreCase) is false)
                             {
                                 // ignore phrase 'available'
                                 continue;
@@ -172,7 +172,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         if (isExpectedPropertyStart)
                         {
-                            if (phrase.Equals("value indicating whether", StringComparison.OrdinalIgnoreCase) && summary.Slice(expectedPropertyStart.Length).Contains(phrase, StringComparison.OrdinalIgnoreCase) is false)
+                            if (phrase.Equals("value indicating whether", StringComparison.OrdinalIgnoreCase) && summary.AsSpan(expectedPropertyStart.Length).Contains(phrase, StringComparison.OrdinalIgnoreCase) is false)
                             {
                                 // ignore phrase as it is the expected property start
                                 continue;
@@ -185,7 +185,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (property != null && isExpectedPropertyStart is false)
                 {
-                    return ReportIssueStartingPhrase(property, summary.FirstWord());
+                    return ReportIssueStartingPhrase(property, summary.AsSpan().FirstWord());
                 }
             }
 
