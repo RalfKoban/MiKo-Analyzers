@@ -508,9 +508,21 @@ namespace MiKoSolutions.Analyzers.Rules
 
         private Diagnostic CreateIssue(Location location, Pair[] properties, params object[] args)
         {
-            var immutableProperties = properties.Length is 0
-                                      ? ImmutableDictionary<string, string>.Empty
-                                      : ImmutableDictionary.CreateRange(properties.Select(_ => new KeyValuePair<string, string>(_.Key, _.Value)));
+            if (properties.Length is 0)
+            {
+                return Diagnostic.Create(m_rule, location, args);
+            }
+
+            var immutableProperties = ImmutableDictionary<string, string>.Empty;
+
+            if (properties.Length is 1)
+            {
+                immutableProperties = immutableProperties.Add(properties[0].Key, properties[0].Value);
+            }
+            else
+            {
+                immutableProperties = immutableProperties.AddRange(properties.Select(_ => new KeyValuePair<string, string>(_.Key, _.Value)));
+            }
 
             return Diagnostic.Create(m_rule, location, immutableProperties, args);
         }
