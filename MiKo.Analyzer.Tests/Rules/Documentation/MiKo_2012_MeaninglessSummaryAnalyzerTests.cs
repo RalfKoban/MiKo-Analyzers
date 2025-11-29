@@ -134,6 +134,39 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_property_with_default_summary_start_for_boolean_getter() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// Gets a value indicating whether something is there.
+    /// </summary>
+    public bool SomeProperty { get; }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_property_with_default_summary_start_for_boolean_setter() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// Sets a value indicating whether something is there.
+    /// </summary>
+    public bool SomeProperty { set; }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_property_with_default_summary_start_for_boolean_getter_and_setter() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// Gets or sets a value indicating whether something is there.
+    /// </summary>
+    public bool SomeProperty { get; set; }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_field_without_documentation() => No_issue_is_reported_for(@"
 public class TestMe
 {
