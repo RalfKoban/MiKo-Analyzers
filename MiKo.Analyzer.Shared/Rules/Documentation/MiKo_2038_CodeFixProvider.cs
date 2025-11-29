@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Composition;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -16,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
 //// ncrunch: rdi off
 
-        private static readonly string[] CommandStartingPhrases = CreateCommandStartingPhrases().Except(Constants.Comments.CommandSummaryStartingPhrase).OrderDescendingByLengthAndText(_ => _);
+        private static readonly string[] CommandStartingPhrases = CreateCommandStartingPhrases().Except(Constants.Comments.CommandSummaryStartingPhrase).ToArray();
 
         private static readonly Pair[] CommandReplacementMap = CreateCommandReplacementMapEntries(CommandStartingPhrases).OrderDescendingByLengthAndText(_ => _.Key);
 
@@ -28,9 +27,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                         new Pair(" command for ", " "),
                                                         new Pair(" can in ", " can be used in "),
                                                         new Pair(" can with ", " can be used with "),
+                                                        new Pair(" can wrapper for ", " can wrap "),
+                                                        new Pair(" can be needed for ", " can support "),
+                                                        new Pair(" can need for ", " can support "),
+                                                        new Pair(" can a ", " can "),
+                                                        new Pair(" can an ", " can "),
+                                                        new Pair(" can the ", " can "),
+                                                        new Pair(" can extension of ", " can extend "),
+                                                        new Pair(" export and in ", " in "),
+                                                        new Pair(" in context menu usable extension of ", " be used within a context menu of "),
+                                                        new Pair(" in context menu useable extension of ", " be used within a context menu of "),
+                                                        new Pair(" in context-menu usable extension of ", " be used within a context menu of "),
+                                                        new Pair(" in context-menu useable extension of ", " be used within a context menu of "),
+                                                        new Pair(" can be used be used ", " can be used "),
                                                     };
 
-        private static readonly string[] CleanupMapKeys = CommandReplacementMap.ToArray(_ => _.Key);
+        private static readonly string[] CleanupMapKeys = CleanupMap.ToArray(_ => _.Key);
 
 //// ncrunch: rdi default
 
@@ -60,14 +72,33 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var result = new HashSet<string>();
 
-            result.AddRange(CreateCommandStartingPhrasesLocal());
-            result.AddRange(CreateCommandStartingPhrasesLocal().Select(_ => _.ToLowerCaseAt(0)));
+            var phrases = CreateCommandStartingPhrasesLocal();
+
+            foreach (var phrase in phrases)
+            {
+                result.Add(phrase.ToUpperCaseAt(0));
+                result.Add(phrase.ToLowerCaseAt(0));
+            }
 
             return result;
 
             IEnumerable<string> CreateCommandStartingPhrasesLocal()
             {
-                var adverbs = new[] { string.Empty, "standard ", "toggle ", "backstage ", "back-stage ", "sync ", "async " };
+                var adverbs = new[]
+                                  {
+                                      string.Empty,
+                                      "standard ", "standard-",
+                                      "toggle ", "toggle-",
+                                      "backstage ", "backstage-",
+                                      "back-stage ", "back-stage-",
+                                      "sync ", "sync-",
+                                      "synchronous ",
+                                      "async ", "async-",
+                                      "asynchronous ",
+                                      "helper ", "helper-",
+                                      "base ", "base-",
+                                      "sub ", "sub-",
+                                  };
 
                 foreach (var adverb in adverbs)
                 {
@@ -75,6 +106,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     yield return "An " + adverb + "command ";
                     yield return "The " + adverb + "command ";
                     yield return "This " + adverb + "command ";
+
+                    yield return (adverb + "command ").ToUpperCaseAt(0);
 
                     yield return "Base class for " + adverb + "commands ";
                     yield return "Base class for " + adverb;
@@ -85,10 +118,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     yield return "Base class for the ";
                 }
 
-                yield return "Command ";
                 yield return "A class ";
                 yield return "The class ";
                 yield return "This class ";
+
+                yield return "Command base class ";
+                yield return "A command base class ";
+                yield return "An command base class ";
+                yield return "The command base class ";
 
                 var articles = new[] { "a ", "an ", "the " };
 
@@ -115,18 +152,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 yield return "Provides functionality ";
                 yield return "Provides a functionality ";
+                yield return "Provides an functionality ";
                 yield return "Provides the functionality ";
+
+                yield return "A interface ";
+                yield return "An interface ";
+                yield return "The interface ";
+                yield return "Interface ";
             }
         }
 
         // ReSharper disable once ParameterTypeCanBeEnumerable.Local
-        private static List<Pair> CreateCommandReplacementMapEntries(string[] commandStartingPhrases)
+        private static HashSet<Pair> CreateCommandReplacementMapEntries(string[] commandStartingPhrases)
         {
             var middleParts = new[]
                                   {
                                       "that can",
                                       "that is used to",
                                       "that is used for",
+                                      "that is able to",
                                       "that is capable to",
                                       "that is capable for",
                                       "that offers to",
@@ -134,6 +178,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                       "that will",
                                       "that",
                                       "which can",
+                                      "which is able to",
                                       "which is capable to",
                                       "which is capable for",
                                       "which is used to",
@@ -143,6 +188,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                       "which will",
                                       "which",
                                       "will",
+                                      "to be able to",
                                       "to",
                                       "for",
                                       "can be used to",
@@ -151,15 +197,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                       "is used for",
                                       "used to",
                                       "used for",
+                                      "is able to",
                                       "is capable to",
                                       "is capable for",
                                       "capable to",
                                       "capable for",
+                                      "able to",
                                       "offers to",
                                       "tries to",
                                   };
 
-            var results = new List<Pair>();
+            var results = new HashSet<Pair>();
 
             foreach (var phrase in commandStartingPhrases)
             {
