@@ -57,6 +57,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
+        private static string GetExpectedStartPhrase(IPropertySymbol property)
+        {
+            var isBoolean = property.Type.IsBoolean();
+
+            if (property.GetMethod is null)
+            {
+                return isBoolean ? Constants.Comments.BooleanPropertySetterStartingPhrase : Constants.Comments.PropertySetterStartingPhrase;
+            }
+
+            if (property.SetMethod is null)
+            {
+                return isBoolean ? Constants.Comments.BooleanPropertyGetterStartingPhrase : Constants.Comments.PropertyGetterStartingPhrase;
+            }
+
+            return isBoolean ? Constants.Comments.BooleanPropertyGetterSetterStartingPhrase : Constants.Comments.PropertyGetterSetterStartingPhrase;
+        }
+
         private static HashSet<string> GetSelfSymbolNames(ISymbol symbol)
         {
             var names = new HashSet<string> { symbol.Name.ConcatenatedWith(' ') };
@@ -102,6 +119,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return Array.Empty<Diagnostic>();
             }
 
+            var property = symbol as IPropertySymbol;
+
             for (var index = 0; index < summariesLength; index++)
             {
                 var summary = summaries[index];
@@ -122,6 +141,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                 }
 
+                bool isExpectedPropertyStart = false;
+                var expectedPropertyStart = string.Empty;
+
+                if (property != null)
+                {
+                    expectedPropertyStart = GetExpectedStartPhrase(property);
+
+                    isExpectedPropertyStart = summary.StartsWith(expectedPropertyStart, StringComparison.Ordinal);
+                }
+
                 foreach (var phrase in Constants.Comments.MeaninglessPhrase)
                 {
                     if (summary.Contains(phrase, StringComparison.OrdinalIgnoreCase))
@@ -132,34 +161,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             continue;
                         }
 
-                        if (phrase is "able to" && summary.Contains("vailable", StringComparison.Ordinal) && summary.Replace("vailable", "vail").Contains(phrase, StringComparison.OrdinalIgnoreCase) is false)
+                        if (phrase is "able to" && summary.Contains("vailable to", StringComparison.Ordinal))
                         {
-                            // ignore phrase 'available'
-                            continue;
+                            if (summary.Replace("vailable", "vail").Contains(phrase, StringComparison.OrdinalIgnoreCase) is false)
+                            {
+                                // ignore phrase 'available'
+                                continue;
+                            }
+                        }
+
+                        if (isExpectedPropertyStart)
+                        {
+                            if (phrase.Equals("value indicating whether", StringComparison.OrdinalIgnoreCase) && summary.AsSpan(expectedPropertyStart.Length).Contains(phrase, StringComparison.OrdinalIgnoreCase) is false)
+                            {
+                                // ignore phrase as it is the expected property start
+                                continue;
+                            }
                         }
 
                         return ReportIssueContainsPhrase(symbol, phrase.AsSpan());
                     }
                 }
 
-                if (symbol is IPropertySymbol property)
+                if (property != null && isExpectedPropertyStart is false)
                 {
-                    var expectedStart = "Gets or sets ";
-
-                    if (property.GetMethod is null)
-                    {
-                        expectedStart = "Sets ";
-                    }
-
-                    if (property.SetMethod is null)
-                    {
-                        expectedStart = "Gets ";
-                    }
-
-                    if (summary.StartsWith(expectedStart, StringComparison.Ordinal) is false)
-                    {
-                        return ReportIssueStartingPhrase(property, summary.AsSpan().FirstWord());
-                    }
+                    return ReportIssueStartingPhrase(property, summary.AsSpan().FirstWord());
                 }
             }
 
