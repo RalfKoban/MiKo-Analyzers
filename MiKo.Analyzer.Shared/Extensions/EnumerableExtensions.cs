@@ -521,39 +521,6 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="ReadOnlySpan{T}"/> contains no elements that satisfy the specified condition.
-        /// </summary>
-        /// <typeparam name="T">
-        /// The type of elements in the span.
-        /// </typeparam>
-        /// <param name="source">
-        /// The span to evaluate.
-        /// </param>
-        /// <param name="predicate">
-        /// The condition to test each element against.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if no elements satisfy the condition; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool None<T>(this in ReadOnlySpan<T> source, Func<T, bool> predicate)
-        {
-            var sourceLength = source.Length;
-
-            if (sourceLength > 0)
-            {
-                for (var index = 0; index < sourceLength; index++)
-                {
-                    if (predicate(source[index]))
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
-
-        /// <summary>
         /// Gets a read-only list containing all elements of type <typeparamref name="T"/> from the source list
         /// that have the specified <see cref="SyntaxKind"/>.
         /// </summary>
@@ -671,6 +638,38 @@ namespace MiKoSolutions.Analyzers
         /// An array of elements from the source sequence, ordered by the length of their selected <see cref="string"/> property (descending) and then by the <see cref="string"/> property itself.
         /// </returns>
         internal static T[] OrderDescendingByLengthAndText<T>(this IEnumerable<T> source, Func<T, string> selector) => source.OrderByDescending(_ => selector(_).Length).ThenBy(selector).ToArray();
+
+        /// <summary>
+        /// Converts the specified read-only collection to an array.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of elements in the collection.
+        /// </typeparam>
+        /// <param name="source">
+        /// The read-only collection to convert.
+        /// </param>
+        /// <returns>
+        /// An array of the elements in the collection, or an empty array if the collection contains no elements.
+        /// </returns>
+        internal static T[] ToArray<T>(this IReadOnlyCollection<T> source)
+        {
+            var count = source.Count;
+
+            if (count is 0)
+            {
+                return Array.Empty<T>();
+            }
+
+            var index = 0;
+            var result = new T[count];
+
+            foreach (var item in source)
+            {
+                result[index++] = item;
+            }
+
+            return result;
+        }
 
         /// <summary>
         /// Converts the specified sequence to an array, using the specified comparer to order the elements.

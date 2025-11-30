@@ -239,17 +239,24 @@ namespace MiKoSolutions.Analyzers
             internal const string BooleanReturnTypeStartingPhraseTemplate = "{0} if ";
             internal const string BooleanTaskReturnTypeEndingPhraseTemplate = ", otherwise with a result of {0}.";
             internal const string BooleanTaskReturnTypeStartingPhraseTemplate = "A task that completes with a result of {0} if ";
+            internal const string PropertyGetterStartingPhrase = "Gets ";
+            internal const string PropertySetterStartingPhrase = "Sets ";
+            internal const string PropertyGetterSetterStartingPhrase = "Gets or sets ";
+            internal const string BooleanPropertyGetterStartingPhrase = PropertyGetterStartingPhrase + "a value indicating ";
+            internal const string BooleanPropertySetterStartingPhrase = PropertySetterStartingPhrase + "a value indicating ";
+            internal const string BooleanPropertyGetterSetterStartingPhrase = PropertyGetterSetterStartingPhrase + "a value indicating ";
             internal const string CallbackTerm = "callback";
             internal const string CollectionReturnTypeStartingPhrase = "A collection of ";
             internal const string CollectionReturnTypeStartingPhraseLowerCase = "a collection of ";
-            internal const string CommandPropertyGetterOnlySummaryStartingPhraseTemplate = "Gets the {0} that can ";
-            internal const string CommandPropertyGetterSetterSummaryStartingPhraseTemplate = "Gets or sets the {0} that can ";
-            internal const string CommandPropertySetterOnlySummaryStartingPhraseTemplate = "Sets the {0} that can ";
+            internal const string CommandPropertyGetterOnlySummaryStartingPhraseTemplate = PropertyGetterStartingPhrase + "the {0} that can ";
+            internal const string CommandPropertyGetterSetterSummaryStartingPhraseTemplate = PropertyGetterSetterStartingPhrase + "the {0} that can ";
+            internal const string CommandPropertySetterOnlySummaryStartingPhraseTemplate = PropertySetterStartingPhrase + "the {0} that can ";
             internal const string CommandSummaryStartingPhrase = "Represents a command that can ";
             internal const string ContinueWithTaskReturnTypeStartingPhrase = "A new continuation task.";
             internal const string DefaultCrefPhrase = DefaultStartingPhrase + "<see cref=\"{0}\"/>.";
             internal const string DefaultLangwordPhrase = DefaultStartingPhrase + "<see langword=\"{0}\"/>.";
             internal const string DefaultStartingPhrase = "The default is ";
+            internal const string DefaultStartingPhraseAlternative = "The default value is ";
             internal const string DelegateSummaryStartingPhrase = "Encapsulates a method that ";
             internal const string DependencyPropertyFieldSummaryPhraseTemplate = "Identifies the {0} dependency property.";
             internal const string DependencyPropertyFieldValuePhraseTemplate = "The identifier for the {0} dependency property.";
@@ -667,7 +674,7 @@ namespace MiKoSolutions.Analyzers
                                                                                  BooleanParameterEndingPhraseTemplate.FormatWith("<see langword=\"false\" />"),
                                                                              };
 
-            internal static readonly string[] BooleanPropertySetterStartingPhrase = BooleanReturnTypeStartingPhrase.Union(BooleanParameterStartingPhrase).ToArray();
+            internal static readonly string[] BooleanPropertySetterReturnTypeStartingPhrase = BooleanReturnTypeStartingPhrase.Union(BooleanParameterStartingPhrase).ToArray();
 
             internal static readonly string[] BooleanTaskReturnTypeStartingPhrase =
                                                                                     {
@@ -821,6 +828,7 @@ namespace MiKoSolutions.Analyzers
                                                                    {
                                                                        DefaultCrefPhrase,
                                                                        DefaultStartingPhrase + "<see cref=\"{0}\" />.",
+                                                                       DefaultStartingPhraseAlternative + "<see cref=\"{0}\" />.",
                                                                    };
 
             internal static readonly string[] DefaultBooleanLangwordPhrases =
@@ -829,6 +837,10 @@ namespace MiKoSolutions.Analyzers
                                                                                   DefaultStartingPhrase + "<see langword=\"false\"/>.",
                                                                                   DefaultStartingPhrase + "<see langword=\"true\" />.",
                                                                                   DefaultStartingPhrase + "<see langword=\"false\" />.",
+                                                                                  DefaultStartingPhraseAlternative + "<see langword=\"true\"/>.",
+                                                                                  DefaultStartingPhraseAlternative + "<see langword=\"false\"/>.",
+                                                                                  DefaultStartingPhraseAlternative + "<see langword=\"true\" />.",
+                                                                                  DefaultStartingPhraseAlternative + "<see langword=\"false\" />.",
                                                                               };
 
             internal static readonly ISet<string> InvalidSummaryCrefXmlTags = new HashSet<string>
