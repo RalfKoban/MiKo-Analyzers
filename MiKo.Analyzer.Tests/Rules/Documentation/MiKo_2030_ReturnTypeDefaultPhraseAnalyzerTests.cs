@@ -39,6 +39,24 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_method_with_list_in_returns() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// <list type=""bullet"">
+    /// <item><description>Returns <c>0</c> (zero) if the strings are identical.</description></item>
+    /// <item><description>Returns <c>1</c> if <paramref name=""x""/> has a greater value than <paramref name=""y""/>.</description></item>
+    /// <item><description>Returns <c>-1</c> if <paramref name=""x""/> has a lesser value than <paramref name=""y""/>.</description></item>
+    /// </list>
+    /// </returns>
+    public int DoSomething(object o) => 42;
+}
+");
+
         [Test, Combinatorial]
         public void No_issue_is_reported_for_method_that_returns_a_(
                                                                 [Values("returns", "value")] string xmlTag,
