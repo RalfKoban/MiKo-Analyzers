@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Text;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
@@ -179,15 +180,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IReadOnlyList<SyntaxTrivia> FindTriviaToAnalyze(SyntaxNode node)
         {
+            TextSpan span = node.FullSpan;
+
+            if (node.HasStructuredTrivia)
+            {
+                // seems we have an XML comment (or a region), so we have to jump over the first descendant token (not child as the node may consist of other nodes!) as the trivia is located there
+                var token = node.FirstDescendantToken();
+
+                span = TextSpan.FromBounds(token.FullSpan.End, span.End);
+            }
+
             List<SyntaxTrivia> triviaToAnalyze = null;
 
-            // ReSharper disable once LoopCanBePartlyConvertedToQuery : foreach loop is used intentionally for performance gains, so there is no need for a Where clause
-            foreach (var trivia in node.DescendantTrivia())
+            foreach (var trivia in node.DescendantTrivia(span))
             {
                 switch (trivia.RawKind)
                 {
                     case (int)SyntaxKind.WhitespaceTrivia:
                     case (int)SyntaxKind.EndOfLineTrivia:
+                        continue;
+
+                    case (int)SyntaxKind.SingleLineDocumentationCommentTrivia:
                         continue;
                 }
 

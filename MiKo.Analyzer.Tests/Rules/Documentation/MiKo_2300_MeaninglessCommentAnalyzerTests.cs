@@ -108,6 +108,18 @@ public class TestMe
 }
 ");
 
+        [Test, Combinatorial]
+        public void No_issue_is_reported_for_separator_comment_([Values("", " ")] string gap, [Values("----", "****", "====", "####")] string comment) => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        //" + gap + comment + @"
+    }
+}
+");
+
         [Test]
         public void No_issue_is_reported_for_correctly_commented_method() => No_issue_is_reported_for(@"
 
@@ -268,14 +280,60 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_separator_comment_([Values("", " ")] string gap, [Values("----", "****", "====", "####")] string comment) => No_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_commented_and_documented_method_with_small_comment_([Values("", " ")] string gap, [ValueSource(nameof(Comments))] string comment) => An_issue_is_reported_for(@"
 
 public class TestMe
 {
+    /// <summary>
+    /// Some summary.
+    /// </summary>
     public void DoSomething()
     {
         //" + gap + comment + @"
     }
+}
+");
+
+        [Test, Combinatorial]
+        public void An_issue_is_reported_for_incorrectly_commented_and_documented_method_with_long_comment_([Values("", " ")] string gap, [ValueSource(nameof(Comments))] string comment) => An_issue_is_reported_for(@"
+
+public class TestMe
+{
+    /// <summary>
+    /// Some summary.
+    /// </summary>
+    public void DoSomething()
+    {
+        //" + gap + comment + @" in addition to something much longer
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_commented_and_documented_method_with_arrow_inside_comment_([Values("", " ")] string gap) => An_issue_is_reported_for(@"
+
+public class TestMe
+{
+    /// <summary>
+    /// Some summary.
+    /// </summary>
+    public void DoSomething()
+    {
+        //" + gap + @" in addition to something much longer -> there is the arrow
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_uncommented_field_within_region() => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    #region Some region
+
+    private int _someField;
+
+    #endregion
 }
 ");
 
