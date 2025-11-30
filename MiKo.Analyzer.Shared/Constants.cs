@@ -256,6 +256,7 @@ namespace MiKoSolutions.Analyzers
             internal const string DefaultCrefPhrase = DefaultStartingPhrase + "<see cref=\"{0}\"/>.";
             internal const string DefaultLangwordPhrase = DefaultStartingPhrase + "<see langword=\"{0}\"/>.";
             internal const string DefaultStartingPhrase = "The default is ";
+            internal const string DefaultStartingPhraseAlternative = "The default value is ";
             internal const string DelegateSummaryStartingPhrase = "Encapsulates a method that ";
             internal const string DependencyPropertyFieldSummaryPhraseTemplate = "Identifies the {0} dependency property.";
             internal const string DependencyPropertyFieldValuePhraseTemplate = "The identifier for the {0} dependency property.";
@@ -827,6 +828,7 @@ namespace MiKoSolutions.Analyzers
                                                                    {
                                                                        DefaultCrefPhrase,
                                                                        DefaultStartingPhrase + "<see cref=\"{0}\" />.",
+                                                                       DefaultStartingPhraseAlternative + "<see cref=\"{0}\" />.",
                                                                    };
 
             internal static readonly string[] DefaultBooleanLangwordPhrases =
@@ -835,6 +837,10 @@ namespace MiKoSolutions.Analyzers
                                                                                   DefaultStartingPhrase + "<see langword=\"false\"/>.",
                                                                                   DefaultStartingPhrase + "<see langword=\"true\" />.",
                                                                                   DefaultStartingPhrase + "<see langword=\"false\" />.",
+                                                                                  DefaultStartingPhraseAlternative + "<see langword=\"true\"/>.",
+                                                                                  DefaultStartingPhraseAlternative + "<see langword=\"false\"/>.",
+                                                                                  DefaultStartingPhraseAlternative + "<see langword=\"true\" />.",
+                                                                                  DefaultStartingPhraseAlternative + "<see langword=\"false\" />.",
                                                                               };
 
             internal static readonly ISet<string> InvalidSummaryCrefXmlTags = new HashSet<string>
