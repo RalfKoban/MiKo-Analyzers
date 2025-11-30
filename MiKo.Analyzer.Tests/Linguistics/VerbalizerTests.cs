@@ -178,6 +178,12 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("sings", ExpectedResult = "sing")]
         [TestCase("access", ExpectedResult = "access")]
         [TestCase("suppress", ExpectedResult = "suppress")]
+        [TestCase("import", ExpectedResult = "import")]
+        [TestCase("imports", ExpectedResult = "import")]
+        [TestCase("importing", ExpectedResult = "import")]
+        [TestCase("export", ExpectedResult = "export")]
+        [TestCase("exports", ExpectedResult = "export")]
+        [TestCase("exporting", ExpectedResult = "export")]
         public static string MakeInfiniteVerb_finds_proper_infinite_verb_(string name) => Verbalizer.MakeInfiniteVerb(name);
 
         [TestCase("about", ExpectedResult = "about")]

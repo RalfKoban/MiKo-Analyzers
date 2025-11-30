@@ -47,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var hasPropertySetter = owningSymbol is IPropertySymbol property && property.IsReadOnly is false;
 
                 return hasPropertySetter
-                       ? Constants.Comments.BooleanPropertySetterStartingPhrase
+                       ? Constants.Comments.BooleanPropertySetterReturnTypeStartingPhrase
                        : Constants.Comments.BooleanReturnTypeStartingPhrase;
             }
 

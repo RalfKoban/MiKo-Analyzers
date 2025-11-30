@@ -133,6 +133,12 @@ namespace MiKoSolutions.Analyzers.Rules
             var start = spanStart + position + startOffset; // find start position for underlining
             var end = start + sizeof(char) - startOffset - endOffset; // find end position
 
+            if (end < start)
+            {
+                // seems we did not find a proper location here
+                return null;
+            }
+
             return CreateLocation(syntaxTree, start, end);
         }
 
@@ -145,6 +151,12 @@ namespace MiKoSolutions.Analyzers.Rules
 
             var start = spanStart + position + startOffset; // find start position for underlining
             var end = start + value.Length - startOffset - endOffset; // find end position
+
+            if (end < start)
+            {
+                // seems we did not find a proper location here
+                return null;
+            }
 
             return CreateLocation(syntaxTree, start, end);
         }
@@ -496,9 +508,21 @@ namespace MiKoSolutions.Analyzers.Rules
 
         private Diagnostic CreateIssue(Location location, Pair[] properties, params object[] args)
         {
-            var immutableProperties = properties.Length is 0
-                                      ? ImmutableDictionary<string, string>.Empty
-                                      : ImmutableDictionary.CreateRange(properties.Select(_ => new KeyValuePair<string, string>(_.Key, _.Value)));
+            if (properties.Length is 0)
+            {
+                return Diagnostic.Create(m_rule, location, args);
+            }
+
+            var immutableProperties = ImmutableDictionary<string, string>.Empty;
+
+            if (properties.Length is 1)
+            {
+                immutableProperties = immutableProperties.Add(properties[0].Key, properties[0].Value);
+            }
+            else
+            {
+                immutableProperties = immutableProperties.AddRange(properties.Select(_ => new KeyValuePair<string, string>(_.Key, _.Value)));
+            }
 
             return Diagnostic.Create(m_rule, location, immutableProperties, args);
         }
@@ -545,9 +569,9 @@ namespace MiKoSolutions.Analyzers.Rules
                 return SupportsNUnit;
             }
 
-            if (compilation.GetTypeByMetadataName("Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute") != null)
+            if (compilation.GetTypeByMetadataName("NUnit.Framework.TestCaseAttribute") != null)
             {
-                return SupportsMSTest;
+                return SupportsNUnit;
             }
 
             if (compilation.GetTypeByMetadataName("Xunit.FactAttribute") != null)
@@ -558,6 +582,11 @@ namespace MiKoSolutions.Analyzers.Rules
             if (compilation.GetTypeByMetadataName("Xunit.TheoryAttribute") != null)
             {
                 return SupportsXUnit;
+            }
+
+            if (compilation.GetTypeByMetadataName("Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute") != null)
+            {
+                return SupportsMSTest;
             }
 
             return false;

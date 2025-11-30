@@ -15,22 +15,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly string[] WellknownWords =
                                                           [
-                                                              "IntelliSense",
-                                                              "FxCop",
-                                                              "StyleCop",
-                                                              "SonarCube",
-                                                              "SonarQube",
+                                                              "ASP.NET",
                                                               "CSharp",
-                                                              "VisualBasic",
+                                                              "FxCop",
+                                                              "IntelliSense",
+                                                              "Microsoft",
+                                                              "MSTest",
+                                                              "NCover",
                                                               "NCrunch",
                                                               "NCrunch's",
-                                                              "NCover",
-                                                              "PostSharp",
-                                                              "SonarLint",
-                                                              "ReSharper",
-                                                              "ASP.NET",
-                                                              "Microsoft",
+                                                              "NUnit",
                                                               "Outlook",
+                                                              "PostSharp",
+                                                              "ReSharper",
+                                                              "SonarCube",
+                                                              "SonarLint",
+                                                              "SonarQube",
+                                                              "StyleCop",
+                                                              "VisualBasic",
+                                                              "xUnit",
                                                           ];
 
         private static readonly string[] NonCompoundWords =
@@ -488,6 +491,36 @@ public class TestMe
     /// Does something, e.g. that is very important, on stuff.
     /// </summary>
     public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_comment_with_empty_string() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <returns>
+    /// A <see cref=""string""/> that contains something, or the empty string if nothing is found.
+    /// </returns>
+    public string DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_comment_with_empty_string_replacement() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <returns>
+    /// A <see cref=""string""/> that contains something, or the <see cref=""string.Empty""/> string ("""") if nothing is found.
+    /// </returns>
+    public string DoSomething()
     {
     }
 }
@@ -972,6 +1005,40 @@ public class TestMe
                                      """;
 
             VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_comment_with_empty_string()
+        {
+            const string OriginalCode = """
+                                        using System;
+
+                                        public class TestMe
+                                        {
+                                            /// <returns>
+                                            /// A string that contains something, or the <see cref="string.Empty"/> string ("") if nothing is found.
+                                            /// </returns>
+                                            public string DoSomething()
+                                            {
+                                            }
+                                        }
+                                        """;
+
+            const string FixedCode = """
+                                     using System;
+
+                                     public class TestMe
+                                     {
+                                         /// <returns>
+                                         /// A <see cref="string"/> that contains something, or the <see cref="string.Empty"/> string ("") if nothing is found.
+                                         /// </returns>
+                                         public string DoSomething()
+                                         {
+                                         }
+                                     }
+                                     """;
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2223_DocumentationDoesNotUsePlainTextReferencesAnalyzer.Id;
