@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -26,9 +27,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeComment(SyntaxNode node)
         {
-            foreach (var trivia in node.DescendantTrivia())
+            // TODO RKN: Consider to not include all descendants, especially 'SyntaxKind.SingleLineDocumentationCommentTrivia' as inspecting documentation might take a lot of time
+            foreach (var trivia in node.DescendantTrivia().Where(_ => _.IsSingleLineComment()))
             {
-                if (trivia.IsSingleLineComment() && CommentContainsSeparator(trivia.ToString().AsSpan()))
+                if (CommentContainsSeparator(trivia.ToString().AsSpan()))
                 {
                     yield return Issue(trivia);
                 }
