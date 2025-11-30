@@ -11,16 +11,47 @@ using MiKoSolutions.Analyzers.Linguistics;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
+    /// <summary>
+    /// Provides an abstract base analyzer for naming rules.
+    /// </summary>
     public abstract class NamingAnalyzer : Analyzer
     {
         private static readonly string[] Splitters = { "Of", "With", "To", "In", "From" };
 
-        protected NamingAnalyzer(string diagnosticId, in SymbolKind kind = SymbolKind.Method) : base(nameof(Naming), diagnosticId, kind)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NamingAnalyzer"/> class with the unique identifier of the diagnostic and the kind of symbol to analyze.
+        /// </summary>
+        /// <param name="diagnosticId">
+        /// The diagnostic identifier.
+        /// </param>
+        /// <param name="symbolKind">
+        /// One of the enumeration members that specifies the kind of symbol to analyze.
+        /// The default is <see cref="SymbolKind.Method"/>.
+        /// </param>
+        protected NamingAnalyzer(string diagnosticId, in SymbolKind symbolKind = SymbolKind.Method) : base(nameof(Naming), diagnosticId, symbolKind)
         {
         }
 
+        /// <summary>
+        /// Creates a proposal for a better name.
+        /// </summary>
+        /// <param name="betterName">
+        /// The better name to propose.
+        /// </param>
+        /// <returns>
+        /// An array of key-value pairs containing the better name proposal.
+        /// </returns>
         protected static Pair[] CreateBetterNameProposal(string betterName) => new[] { new Pair(Constants.AnalyzerCodeFixSharedData.BetterName, betterName) };
 
+        /// <summary>
+        /// Finds a better name for a symbol that contains entity marker suffixes.
+        /// </summary>
+        /// <param name="symbolName">
+        /// The name of the symbol to analyze.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the better name without entity marker suffixes.
+        /// </returns>
         protected static string FindBetterNameForEntityMarker(string symbolName)
         {
             var expected = HandleSpecialEntityMarkerSituations(symbolName);
@@ -36,6 +67,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return expected;
         }
 
+        /// <summary>
+        /// Finds a better name for a symbol that uses collection suffixes instead of plural forms.
+        /// </summary>
+        /// <param name="name">
+        /// The name to analyze.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the better name using plural forms, or <see langword="null"/> if the name is already in plural form.
+        /// </returns>
         protected static string FindBetterNameForCollectionSuffix(string name)
         {
             var pluralName = FindPluralName(name.AsSpan(), out _);
@@ -43,6 +83,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return name.Equals(pluralName, StringComparison.Ordinal) ? null : pluralName;
         }
 
+        /// <summary>
+        /// Finds a better name for a symbol that uses structural design pattern suffixes.
+        /// </summary>
+        /// <param name="name">
+        /// The name to analyze.
+        /// </param>
+        /// <param name="prefix">
+        /// The prefix to preserve in the name.
+        /// The default is <c>""</c>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the better name with corrected structural design pattern suffix.
+        /// </returns>
         protected static string FindBetterNameForStructuralDesignPattern(string name, string prefix = "")
         {
             var startIndex = prefix.Length;
@@ -77,6 +130,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 
 #pragma warning disable CA1021
+
+        /// <summary>
+        /// Finds the plural form of a name.
+        /// </summary>
+        /// <param name="originalName">
+        /// The original name to analyze.
+        /// </param>
+        /// <param name="singularName">
+        /// On successful return, contains the singular form of the name.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the plural form of the name, or <see langword="null"/> if the name is already in plural form.
+        /// </returns>
         protected static string FindPluralName(in ReadOnlySpan<char> originalName, out string singularName)
         {
             if (originalName.EndsWith('s'))
@@ -137,8 +203,26 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 #pragma warning restore CA1021
 
+        /// <summary>
+        /// Gets the field prefix from a field name.
+        /// </summary>
+        /// <param name="fieldName">
+        /// The field name to analyze.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the field prefix, or the <see cref="string.Empty"/> string ("") if no prefix is found.
+        /// </returns>
         protected static string GetFieldPrefix(string fieldName) => GetFieldPrefix(fieldName.AsSpan());
 
+        /// <summary>
+        /// Gets the field prefix from a field name.
+        /// </summary>
+        /// <param name="fieldName">
+        /// The field name to analyze.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the field prefix, or the <see cref="string.Empty"/> string ("") if no prefix is found.
+        /// </returns>
         protected static string GetFieldPrefix(in ReadOnlySpan<char> fieldName)
         {
             var fieldPrefixes = Constants.Markers.FieldPrefixes;
@@ -156,16 +240,28 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return string.Empty;
         }
 
+        /// <summary>
+        /// Determines whether a name ends with a structural design pattern suffix.
+        /// </summary>
+        /// <param name="name">
+        /// The name to analyze.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the name ends with a structural design pattern suffix; otherwise, <see langword="false"/>.
+        /// </returns>
         protected static bool IsNameForStructuralDesignPattern(string name) => name.EndsWithAny(Constants.Names.StructuralDesignPatternNames.Keys, StringComparison.OrdinalIgnoreCase);
 
+        /// <inheritdoc/>
         protected sealed override IEnumerable<Diagnostic> AnalyzeNamespace(INamespaceSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
                                                                                                                                 ? AnalyzeName(symbol, compilation)
                                                                                                                                 : Array.Empty<Diagnostic>();
 
+        /// <inheritdoc/>
         protected sealed override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
                                                                                                                            ? AnalyzeName(symbol, compilation)
                                                                                                                            : Array.Empty<Diagnostic>();
 
+        /// <inheritdoc/>
         protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation)
         {
             IEnumerable<Diagnostic> namingIssues = Array.Empty<Diagnostic>();
@@ -198,22 +294,38 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return namingIssues.Concat(localFunctionIssues);
         }
 
+        /// <inheritdoc/>
         protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
                                                                                                                               ? AnalyzeName(symbol, compilation)
                                                                                                                               : Array.Empty<Diagnostic>();
 
+        /// <inheritdoc/>
         protected sealed override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
                                                                                                                         ? AnalyzeName(symbol, compilation)
                                                                                                                         : Array.Empty<Diagnostic>();
 
+        /// <inheritdoc/>
         protected sealed override IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
                                                                                                                         ? AnalyzeName(symbol, compilation)
                                                                                                                         : Array.Empty<Diagnostic>();
 
+        /// <inheritdoc/>
         protected sealed override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
                                                                                                                                 ? AnalyzeName(symbol, compilation)
                                                                                                                                 : Array.Empty<Diagnostic>();
 
+        /// <summary>
+        /// Analyzes the local functions within a method.
+        /// </summary>
+        /// <param name="symbol">
+        /// The method symbol to analyze.
+        /// </param>
+        /// <param name="compilation">
+        /// The compilation that provides access to the semantic model.
+        /// </param>
+        /// <returns>
+        /// A collection of diagnostics for naming issues found in local functions.
+        /// </returns>
         protected IEnumerable<Diagnostic> AnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation)
         {
             var localFunctions = symbol.GetLocalFunctions();
@@ -230,10 +342,37 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                  .SelectMany(_ => AnalyzeName(_, compilation));
         }
 
+        /// <summary>
+        /// Determines whether the specified namespace shall be analyzed.
+        /// </summary>
+        /// <param name="symbol">
+        /// The namespace symbol to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the namespace shall be analyzed; otherwise, <see langword="false"/>.
+        /// </returns>
         protected virtual bool ShallAnalyze(INamespaceSymbol symbol) => symbol.CanBeReferencedByName && symbol.IsGlobalNamespace is false;
 
+        /// <summary>
+        /// Determines whether the specified type shall be analyzed.
+        /// </summary>
+        /// <param name="symbol">
+        /// The type symbol to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type shall be analyzed; otherwise, <see langword="false"/>.
+        /// </returns>
         protected virtual bool ShallAnalyze(ITypeSymbol symbol) => symbol.CanBeReferencedByName;
 
+        /// <summary>
+        /// Determines whether the specified method shall be analyzed.
+        /// </summary>
+        /// <param name="symbol">
+        /// The method symbol to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method shall be analyzed; otherwise, <see langword="false"/>.
+        /// </returns>
         protected virtual bool ShallAnalyze(IMethodSymbol symbol)
         {
             if (symbol.CanBeReferencedByName is false)
@@ -259,12 +398,48 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
+        /// <summary>
+        /// Determines whether the specified property shall be analyzed.
+        /// </summary>
+        /// <param name="symbol">
+        /// The property symbol to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the property shall be analyzed; otherwise, <see langword="false"/>.
+        /// </returns>
         protected virtual bool ShallAnalyze(IPropertySymbol symbol) => symbol.CanBeReferencedByName && symbol.IsOverride is false && symbol.IsInterfaceImplementation() is false;
 
+        /// <summary>
+        /// Determines whether the specified event shall be analyzed.
+        /// </summary>
+        /// <param name="symbol">
+        /// The event symbol to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the event shall be analyzed; otherwise, <see langword="false"/>.
+        /// </returns>
         protected virtual bool ShallAnalyze(IEventSymbol symbol) => symbol.CanBeReferencedByName && symbol.IsOverride is false && symbol.IsInterfaceImplementation() is false;
 
+        /// <summary>
+        /// Determines whether the specified field shall be analyzed.
+        /// </summary>
+        /// <param name="symbol">
+        /// The field symbol to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the field shall be analyzed; otherwise, <see langword="false"/>.
+        /// </returns>
         protected virtual bool ShallAnalyze(IFieldSymbol symbol) => symbol.CanBeReferencedByName && symbol.IsOverride is false;
 
+        /// <summary>
+        /// Determines whether the specified parameter shall be analyzed.
+        /// </summary>
+        /// <param name="symbol">
+        /// The parameter symbol to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the parameter shall be analyzed; otherwise, <see langword="false"/>.
+        /// </returns>
         protected virtual bool ShallAnalyze(IParameterSymbol symbol)
         {
             if (symbol.CanBeReferencedByName is false)
@@ -290,24 +465,135 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return true;
         }
 
+        /// <summary>
+        /// Determines whether the local functions of the specified method shall be analyzed.
+        /// </summary>
+        /// <param name="symbol">
+        /// The method symbol to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the local functions shall be analyzed; otherwise, <see langword="false"/>.
+        /// </returns>
         protected virtual bool ShallAnalyzeLocalFunctions(IMethodSymbol symbol) => false;
 
+        /// <summary>
+        /// Determines whether the specified local function shall be analyzed.
+        /// </summary>
+        /// <param name="symbol">
+        /// The local function symbol to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the local function shall be analyzed; otherwise, <see langword="false"/>.
+        /// </returns>
         protected virtual bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => false;
 
+        /// <summary>
+        /// Analyzes the name of a namespace.
+        /// </summary>
+        /// <param name="symbol">
+        /// The namespace symbol to analyze.
+        /// </param>
+        /// <param name="compilation">
+        /// The compilation that provides access to the semantic model.
+        /// </param>
+        /// <returns>
+        /// A collection of diagnostics for naming issues.
+        /// </returns>
         protected virtual IEnumerable<Diagnostic> AnalyzeName(INamespaceSymbol symbol, Compilation compilation) => Array.Empty<Diagnostic>();
 
+        /// <summary>
+        /// Analyzes the name of a type.
+        /// </summary>
+        /// <param name="symbol">
+        /// The type symbol to analyze.
+        /// </param>
+        /// <param name="compilation">
+        /// The compilation that provides access to the semantic model.
+        /// </param>
+        /// <returns>
+        /// A collection of diagnostics for naming issues.
+        /// </returns>
         protected virtual IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation) => Array.Empty<Diagnostic>();
 
+        /// <summary>
+        /// Analyzes the name of a method.
+        /// </summary>
+        /// <param name="symbol">
+        /// The method symbol to analyze.
+        /// </param>
+        /// <param name="compilation">
+        /// The compilation that provides access to the semantic model.
+        /// </param>
+        /// <returns>
+        /// A collection of diagnostics for naming issues.
+        /// </returns>
         protected virtual IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation) => Array.Empty<Diagnostic>();
 
+        /// <summary>
+        /// Analyzes the name of a property.
+        /// </summary>
+        /// <param name="symbol">
+        /// The property symbol to analyze.
+        /// </param>
+        /// <param name="compilation">
+        /// The compilation that provides access to the semantic model.
+        /// </param>
+        /// <returns>
+        /// A collection of diagnostics for naming issues.
+        /// </returns>
         protected virtual IEnumerable<Diagnostic> AnalyzeName(IPropertySymbol symbol, Compilation compilation) => Array.Empty<Diagnostic>();
 
+        /// <summary>
+        /// Analyzes the name of an event.
+        /// </summary>
+        /// <param name="symbol">
+        /// The event symbol to analyze.
+        /// </param>
+        /// <param name="compilation">
+        /// The compilation that provides access to the semantic model.
+        /// </param>
+        /// <returns>
+        /// A collection of diagnostics for naming issues.
+        /// </returns>
         protected virtual IEnumerable<Diagnostic> AnalyzeName(IEventSymbol symbol, Compilation compilation) => Array.Empty<Diagnostic>();
 
+        /// <summary>
+        /// Analyzes the name of a field.
+        /// </summary>
+        /// <param name="symbol">
+        /// The field symbol to analyze.
+        /// </param>
+        /// <param name="compilation">
+        /// The compilation that provides access to the semantic model.
+        /// </param>
+        /// <returns>
+        /// A collection of diagnostics for naming issues.
+        /// </returns>
         protected virtual IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation) => Array.Empty<Diagnostic>();
 
+        /// <summary>
+        /// Analyzes the name of a parameter.
+        /// </summary>
+        /// <param name="symbol">
+        /// The parameter symbol to analyze.
+        /// </param>
+        /// <param name="compilation">
+        /// The compilation that provides access to the semantic model.
+        /// </param>
+        /// <returns>
+        /// A collection of diagnostics for naming issues.
+        /// </returns>
         protected virtual IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol, Compilation compilation) => Array.Empty<Diagnostic>();
 
+        /// <summary>
+        /// Analyzes entity marker suffixes in a symbol name.
+        /// </summary>
+        /// <param name="symbol">
+        /// The symbol to analyze.
+        /// </param>
+        /// <returns>
+        /// A collection of diagnostics for entity marker issues.
+        /// </returns>
         protected IEnumerable<Diagnostic> AnalyzeEntityMarkers(ISymbol symbol)
         {
             var symbolName = symbol.Name;
@@ -322,6 +608,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return Array.Empty<Diagnostic>();
         }
 
+        /// <summary>
+        /// Analyzes collection suffixes in a symbol name.
+        /// </summary>
+        /// <param name="symbol">
+        /// The symbol to analyze.
+        /// </param>
+        /// <returns>
+        /// A diagnostic for collection suffix issues, or <see langword="null"/> if no issues are found.
+        /// </returns>
         protected Diagnostic AnalyzeCollectionSuffix(ISymbol symbol)
         {
             var betterName = FindBetterNameForCollectionSuffix(symbol.Name);
@@ -334,6 +629,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return Issue(symbol, betterName, CreateBetterNameProposal(betterName));
         }
 
+        /// <summary>
+        /// Analyzes a local declaration statement.
+        /// </summary>
+        /// <param name="context">
+        /// The syntax node analysis context.
+        /// </param>
         protected void AnalyzeLocalDeclarationStatement(SyntaxNodeAnalysisContext context)
         {
             var node = (LocalDeclarationStatementSyntax)context.Node;
@@ -360,6 +661,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
+        /// <summary>
+        /// Analyzes a declaration expression.
+        /// </summary>
+        /// <param name="context">
+        /// The syntax node analysis context.
+        /// </param>
         protected void AnalyzeDeclarationExpression(SyntaxNodeAnalysisContext context)
         {
             var declaration = (DeclarationExpressionSyntax)context.Node;
@@ -378,6 +685,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
+        /// <summary>
+        /// Analyzes a declaration pattern.
+        /// </summary>
+        /// <param name="context">
+        /// The syntax node analysis context.
+        /// </param>
         protected virtual void AnalyzeDeclarationPattern(SyntaxNodeAnalysisContext context)
         {
             var node = (DeclarationPatternSyntax)context.Node;
@@ -393,6 +706,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
+        /// <summary>
+        /// Analyzes a foreach statement.
+        /// </summary>
+        /// <param name="context">
+        /// The syntax node analysis context.
+        /// </param>
         protected virtual void AnalyzeForEachStatement(SyntaxNodeAnalysisContext context)
         {
             var node = (ForEachStatementSyntax)context.Node;
@@ -408,6 +727,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
+        /// <summary>
+        /// Analyzes a for statement.
+        /// </summary>
+        /// <param name="context">
+        /// The syntax node analysis context.
+        /// </param>
         protected virtual void AnalyzeForStatement(SyntaxNodeAnalysisContext context)
         {
             var node = (ForStatementSyntax)context.Node;
@@ -430,6 +755,21 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
+        /// <summary>
+        /// Analyzes identifiers for naming issues.
+        /// </summary>
+        /// <param name="semanticModel">
+        /// The semantic model.
+        /// </param>
+        /// <param name="type">
+        /// The type of the identifiers.
+        /// </param>
+        /// <param name="identifiers">
+        /// The identifiers to analyze.
+        /// </param>
+        /// <returns>
+        /// A collection of diagnostics for naming issues.
+        /// </returns>
         protected virtual IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers) => Array.Empty<Diagnostic>();
 
         private static string HandleSpecialEntityMarkerSituations(string symbolName)
