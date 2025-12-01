@@ -161,6 +161,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return pluralName;
             }
 
+            if (originalName.EndsWith("Map"))
+            {
+                singularName = originalName.ToString();
+
+                return null; // seems the original name is already the plural name, so we do not report that
+            }
+
             var index = originalName.IndexOfAny(Splitters);
 
             if (index > 0)
