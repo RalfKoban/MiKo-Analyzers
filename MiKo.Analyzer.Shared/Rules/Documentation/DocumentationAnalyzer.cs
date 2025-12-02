@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// </summary>
         protected static readonly string[] CodeTags = { Constants.XmlTag.Code, Constants.XmlTag.C };
 
-        private static readonly SyntaxKind[] DocumentationCommentTrivia = { SyntaxKind.SingleLineDocumentationCommentTrivia, SyntaxKind.MultiLineDocumentationCommentTrivia };
+        private static readonly SyntaxKind[] DocumentationCommentTrivia = { SyntaxKind.SingleLineDocumentationCommentTrivia }; // we do not want to analyze 'SyntaxKind.MultiLineDocumentationCommentTrivia'
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DocumentationAnalyzer"/> class with the unique identifier of the diagnostic.
