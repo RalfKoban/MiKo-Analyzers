@@ -145,7 +145,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_Multiline_XML_documentation_with_asterix() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Multiline_XML_documentation_with_asterisk() => No_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /** This is some comment & some test */
