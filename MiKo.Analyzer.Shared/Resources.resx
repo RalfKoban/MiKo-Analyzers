@@ -1627,7 +1627,7 @@ To make them clearer and more descriptive, the names should include details abou
     <value>Name it '_'</value>
   </data>
   <data name="MiKo_1300_Title" xml:space="preserve">
-    <value>Name unimportant lambda statement identifiers '_'</value>
+    <value>Name unimportant lambda parameters '_'</value>
   </data>
   <data name="MiKo_1400_Description" xml:space="preserve">
     <value>Namespaces group functionalities, so their names should be plural. This makes it clear that they encompass multiple related functions or classes, enhancing readability and organization.</value>
@@ -1890,7 +1890,7 @@ Prefixes improve IntelliSense grouping and readability, while also making relate
   </data>
   <data name="MiKo_1514_Description" xml:space="preserve">
     <value>The 'Info' suffix is too generic and does not clearly convey the purpose or structure of a type.
-Replacing it with more descriptive and intent-revealing names (such as 'Data', 'Descriptor', 'Details', 'Metadata', 'Overview', 'Profile', 'Settings', 'Snapshot', 'Status' or 'Summary') improves code readability, simplifies maintenance, and enhances discoverability through better IntelliSense support. It also reduces confusion, so developers don’t have to guess what the type represents.</value>
+Replacing it with more descriptive and intent-revealing names (such as 'Data', 'Descriptor', 'Details', 'Metadata', 'Overview', 'Profile', 'Settings', 'Snapshot', 'Status' or 'Summary') improves code readability, simplifies maintenance, and enhances discoverability through better IntelliSense support. It also reduces confusion, so developers don't have to guess what the type represents.</value>
   </data>
   <data name="MiKo_1514_MessageFormat" xml:space="preserve">
     <value>Change suffix 'Info' to a more intent-revealing name</value>
@@ -2094,8 +2094,8 @@ This improves code clarity, avoids ambiguity, and helps developers immediately u
     <value>Fix meaningless phrase</value>
   </data>
   <data name="MiKo_2012_Description" xml:space="preserve">
-    <value>Write &lt;summary&gt; documentation that clearly states a member’s purpose from the user’s perspective. Avoid vague phrases like ‘Used to’.
-For types, begin with verbs such as ‘Represents’, ‘Provides’, or ‘Allows’. For properties, use ‘Gets’, ‘Sets’, or ‘Gets or sets’ depending on their behavior.
+    <value>Write &lt;summary&gt; documentation that clearly states a member's purpose from the user's perspective. Avoid vague phrases like 'Used to'.
+For types, begin with verbs such as 'Represents', 'Provides', or 'Allows'. For properties, use 'Gets', 'Sets', or 'Gets or sets' depending on their behavior.
 This approach ensures concise, meaningful, and user-focused documentation.</value>
   </data>
   <data name="MiKo_2012_MessageFormat" xml:space="preserve">
@@ -3371,7 +3371,7 @@ Keeping your comments compact and continuous makes them easier to read and ensur
     <value>Do not separate documentation with empty lines</value>
   </data>
   <data name="MiKo_2238_Description" xml:space="preserve">
-    <value>XML documentation should be clear and purposeful. Vague phrases like "Make sure to call this" fail to describe the functionality or behavior of the code, leading to ambiguity about the method’s purpose.
+    <value>XML documentation should be clear and purposeful. Vague phrases like "Make sure to call this" fail to describe the functionality or behavior of the code, leading to ambiguity about the method's purpose.
 Such documentation also undermines tool integration and usability, as IDEs rely on precise descriptions to generate meaningful IntelliSense tooltips and enhance developer productivity.</value>
   </data>
   <data name="MiKo_2238_MessageFormat" xml:space="preserve">
@@ -5136,16 +5136,16 @@ Instead, use non-generic types as type arguments. This approach makes the code's
     <value>Simplify value comparisons</value>
   </data>
   <data name="MiKo_3225_CodeFixTitle" xml:space="preserve">
-    <value>Simplify redundant comparison</value>
+    <value>Remove duplicate logical condition</value>
   </data>
   <data name="MiKo_3225_Description" xml:space="preserve">
-    <value>Boolean comparisons that check the same values on both sides are redundant. Simplify them by using just one side. This makes the code easier to read and understand.</value>
+    <value>Logical expressions that repeat the same condition on both sides of a logical operator are redundant. Simplify them by removing the duplicate condition. This makes the code easier to read and understand.</value>
   </data>
   <data name="MiKo_3225_MessageFormat" xml:space="preserve">
-    <value>Redundant comparison can be simplified</value>
+    <value>Duplicate logical condition can be removed</value>
   </data>
   <data name="MiKo_3225_Title" xml:space="preserve">
-    <value>Simplify redundant comparisons</value>
+    <value>Remove duplicate logical conditions</value>
   </data>
   <data name="MiKo_3226_CodeFixTitle" xml:space="preserve">
     <value>Convert field to const</value>
