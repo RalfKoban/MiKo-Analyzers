@@ -598,7 +598,7 @@ namespace MiKoSolutions.Analyzers
         {
             var symbol = semanticModel.GetDeclaredSymbol(value);
 
-#if VS2022
+#if VS2022 || VS2026
             return symbol;
 #else
             return symbol as IMethodSymbol;
@@ -836,7 +836,7 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static bool HasLinqExtensionMethod(this SyntaxNode value, SemanticModel semanticModel) => value.LinqExtensionMethods(semanticModel).Any();
 
-#if VS2022
+#if VS2022 || VS2026
 
         /// <summary>
         /// Determines whether a class declaration has a primary constructor.

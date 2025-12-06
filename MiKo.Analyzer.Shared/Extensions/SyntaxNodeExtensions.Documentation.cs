@@ -301,7 +301,7 @@ namespace MiKoSolutions.Analyzers
 
                     case IndexerDeclarationSyntax indexer:
                         return indexer.ParameterList.Parameters.ToArray();
-#if VS2022
+#if VS2022 || VS2026
                     case ClassDeclarationSyntax c when c.ParameterList is ParameterListSyntax parameters:
                         return parameters.Parameters.ToArray();
 
