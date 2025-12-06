@@ -32,6 +32,7 @@ public class TestMe
         [TestCase("IQueryable<int> query")]
         [TestCase("IOrderedQueryable query")]
         [TestCase("IOrderedQueryable<int> query")]
+        [TestCase("int[] replacementMap")]
         public void No_issue_is_reported_for_field_(string field) => No_issue_is_reported_for(@"
 using System.Linq;
 
@@ -42,7 +43,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_field_([ValueSource(nameof(FieldPrefixes))] string prefix, [Values("dictionary", "map", "array", "value", "myValue")] string field)
+        public void No_issue_is_reported_for_correctly_named_field_([ValueSource(nameof(FieldPrefixes))] string prefix, [Values("dictionary", "map", "array", "value", "myValue", "replacementMap")] string field)
             => No_issue_is_reported_for(@"
 
 public class TestMe

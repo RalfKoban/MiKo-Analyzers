@@ -67,9 +67,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, string memberName, TypeSyntax returnType)
         {
-            var preparedComment = returnType is ArrayTypeSyntax arrayType && arrayType.ElementType.IsByte()
-                                  ? PrepareByteArrayComment(comment)
-                                  : PrepareComment(comment);
+            XmlElementSyntax preparedComment = returnType is ArrayTypeSyntax arrayType
+                                               ? PrepareArrayComment(comment, arrayType)
+                                               : PrepareComment(comment);
 
             var updatedComment = NonGenericComment(preparedComment, returnType);
 
@@ -83,6 +83,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             adjustedComment = Comment(adjustedComment, MappedData.Value.PreparationMapKeys, MappedData.Value.PreparationMap);
 
             return Comment(adjustedComment, MappedData.Value.ReplacementMapKeys, MappedData.Value.ReplacementMap);
+        }
+
+        private static XmlElementSyntax PrepareArrayComment(XmlElementSyntax comment, ArrayTypeSyntax arrayType)
+        {
+            if (arrayType.ElementType.IsByte())
+            {
+                return PrepareByteArrayComment(comment);
+            }
+
+            var preparedComment = Comment(comment, MappedData.Value.SpecialArrayReplacementMapKeys, MappedData.Value.SpecialArrayReplacementMap);
+
+            return PrepareComment(preparedComment);
         }
 
         private static XmlElementSyntax PrepareByteArrayComment(XmlElementSyntax comment)
@@ -274,6 +286,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             public readonly Pair[] ReplacementMap;
             public readonly string[] ReplacementMapKeys;
             public readonly Pair[] ByteArrayReplacementMap;
+            public readonly string[] SpecialArrayReplacementMapKeys;
+            public readonly Pair[] SpecialArrayReplacementMap;
             public readonly string[] ByteArrayReplacementMapKeys;
             public readonly string[] ByteArrayContinueTexts;
             public readonly Pair[] PreparationMap;
@@ -335,6 +349,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                  " that contains ",
                                                  " which contains ",
                                              };
+
+                SpecialArrayReplacementMapKeys = new[]
+                                                     {
+                                                         Constants.Comments.CollectionReturnTypeStartingPhrase,
+                                                     };
+
+                SpecialArrayReplacementMap = SpecialArrayReplacementMapKeys.ToArray(_ => new Pair(_, Constants.Comments.ArrayReturnTypeStartingPhraseA));
 
                 PreparationMap = new[]
                                      {
