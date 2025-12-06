@@ -327,31 +327,35 @@ public class TestMe
         [Test]
         public void Code_gets_fixed_for_array_type()
         {
-            const string OriginalCode = @"
-public class TestMe
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    /// <returns>
-    /// Some integers.
-    /// </returns>
-    public int[] DoSomething { get; set; }
-}
-";
+            const string OriginalCode = """
 
-            const string FixedCode = @"
-public class TestMe
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    /// <returns>
-    /// An array of some integers.
-    /// </returns>
-    public int[] DoSomething { get; set; }
-}
-";
+                public class TestMe
+                {
+                    /// <summary>
+                    /// Does something.
+                    /// </summary>
+                    /// <returns>
+                    /// Some integers.
+                    /// </returns>
+                    public int[] DoSomething { get; set; }
+                }
+
+                """;
+
+            const string FixedCode = """
+
+                public class TestMe
+                {
+                    /// <summary>
+                    /// Does something.
+                    /// </summary>
+                    /// <returns>
+                    /// An array of some integers.
+                    /// </returns>
+                    public int[] DoSomething { get; set; }
+                }
+
+                """;
 
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
@@ -359,20 +363,22 @@ public class TestMe
         [TestCase("The adjusted trivia array with proper whitespace indentation for comments", "An array of the adjusted trivia with proper whitespace indentation for comments")]
         public void Code_gets_fixed_for_array_type_(string originalText, string fixedText)
         {
-            const string Template = @"
-using Microsoft.CodeAnalysis;
+            const string Template = """
 
-public class TestMe
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    /// <returns>
-    /// ###.
-    /// </returns>
-    public SyntaxTrivia[] DoSomething { get; set; }
-}
-";
+                using Microsoft.CodeAnalysis;
+
+                public class TestMe
+                {
+                    /// <summary>
+                    /// Does something.
+                    /// </summary>
+                    /// <returns>
+                    /// ###.
+                    /// </returns>
+                    public SyntaxTrivia[] DoSomething { get; set; }
+                }
+
+                """;
 
             VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
         }
@@ -380,20 +386,22 @@ public class TestMe
         [TestCase("The modified set after something", "A collection of elements from the original set after something")]
         public void Code_gets_fixed_for_hashset_(string originalText, string fixedText)
         {
-            const string Template = @"
-using System.Collections.Generic;
+            const string Template = """
 
-public class TestMe
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    /// <returns>
-    /// ###.
-    /// </returns>
-    public HashSet<int> DoSomething { get; set; }
-}
-";
+                using System.Collections.Generic;
+
+                public class TestMe
+                {
+                    /// <summary>
+                    /// Does something.
+                    /// </summary>
+                    /// <returns>
+                    /// ###.
+                    /// </returns>
+                    public HashSet<int> DoSomething { get; set; }
+                }
+
+                """;
 
             VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
         }
@@ -471,21 +479,23 @@ public class TestMe
         [Test]
         public void Code_gets_fixed_for_non_generic_collection_([ValueSource(nameof(StartingPhrases))] string originalPhrase)
         {
-            const string Template = @"
-using System;
-using System.Collections;
+            const string Template = """
 
-public class TestMe
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    /// <returns>
-    /// ### some integers.
-    /// </returns>
-    public ICollection DoSomething { get; set; }
-}
-";
+                using System;
+                using System.Collections;
+
+                public class TestMe
+                {
+                    /// <summary>
+                    /// Does something.
+                    /// </summary>
+                    /// <returns>
+                    /// ### some integers.
+                    /// </returns>
+                    public ICollection DoSomething { get; set; }
+                }
+
+                """;
 
             VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", "A collection of"));
         }
@@ -494,21 +504,23 @@ public class TestMe
         [TestCase("The mapping information.", "A collection of the mapping information.")]
         public void Code_gets_fixed_for_non_generic_collection_(string originalPhrase, string fixedPhrase)
         {
-            const string Template = @"
-using System;
-using System.Collections;
+            const string Template = """
 
-public class TestMe
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    /// <returns>
-    /// ###
-    /// </returns>
-    public ICollection DoSomething { get; set; }
-}
-";
+                using System;
+                using System.Collections;
+
+                public class TestMe
+                {
+                    /// <summary>
+                    /// Does something.
+                    /// </summary>
+                    /// <returns>
+                    /// ###
+                    /// </returns>
+                    public ICollection DoSomething { get; set; }
+                }
+
+                """;
 
             VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
         }
@@ -516,22 +528,24 @@ public class TestMe
         [Test]
         public void Code_gets_fixed_for_generic_readonly_([Values("readonly", "read only", "read-only")] string modification, [Values("list", "collection")] string collection)
         {
-            const string Template = @"
-using System;
-using System.Collections;
-using System.Collections.Generic;
+            const string Template = """
 
-public class TestMe
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    /// <returns>
-    /// ### some integers.
-    /// </returns>
-    public IReadOnlyCollection<int> DoSomething { get; set; }
-}
-";
+                using System;
+                using System.Collections;
+                using System.Collections.Generic;
+
+                public class TestMe
+                {
+                    /// <summary>
+                    /// Does something.
+                    /// </summary>
+                    /// <returns>
+                    /// ### some integers.
+                    /// </returns>
+                    public IReadOnlyCollection<int> DoSomething { get; set; }
+                }
+
+                """;
 
             VerifyCSharpFix(Template.Replace("###", "A " + modification + " " + collection + " of"), Template.Replace("###", "A collection of"));
         }
@@ -539,22 +553,24 @@ public class TestMe
         [Test]
         public void Code_gets_fixed_for_generic_collection_([ValueSource(nameof(StartingPhrases))] string originalPhrase)
         {
-            const string Template = @"
-using System;
-using System.Collections;
-using System.Collections.Generic;
+            const string Template = """
 
-public class TestMe
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    /// <returns>
-    /// ### some integers.
-    /// </returns>
-    public ICollection<int> DoSomething { get; set; }
-}
-";
+                using System;
+                using System.Collections;
+                using System.Collections.Generic;
+
+                public class TestMe
+                {
+                    /// <summary>
+                    /// Does something.
+                    /// </summary>
+                    /// <returns>
+                    /// ### some integers.
+                    /// </returns>
+                    public ICollection<int> DoSomething { get; set; }
+                }
+
+                """;
 
             VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", "A collection of"));
         }
@@ -567,22 +583,24 @@ public class TestMe
         [TestCase("A List with the integers.", "A collection of the integers.")]
         public void Code_gets_fixed_for_generic_collection_(string originalPhrase, string fixedPhrase)
         {
-            const string Template = @"
-using System;
-using System.Collections;
-using System.Collections.Generic;
+            const string Template = """
 
-public class TestMe
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    /// <returns>
-    /// ###
-    /// </returns>
-    public ICollection<int> DoSomething { get; set; }
-}
-";
+                using System;
+                using System.Collections;
+                using System.Collections.Generic;
+
+                public class TestMe
+                {
+                    /// <summary>
+                    /// Does something.
+                    /// </summary>
+                    /// <returns>
+                    /// ###
+                    /// </returns>
+                    public ICollection<int> DoSomething { get; set; }
+                }
+
+                """;
 
             VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
         }
@@ -631,25 +649,27 @@ public class TestMe
         [TestCase("Get the information.", "A collection of my items that contains the information.")]
         public void Code_gets_fixed_for_generic_collection_with_non_primitive_type_(string originalPhrase, string fixedPhrase)
         {
-            const string Template = @"
-using System;
-using System.Collections.Generic;
+            const string Template = """
 
-public record MyItem
-{
-}
+                using System;
+                using System.Collections.Generic;
 
-public class TestMe
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    /// <returns>
-    /// ###.
-    /// </returns>
-    public ICollection<MyItem> DoSomething { get; set; }
-}
-";
+                public record MyItem
+                {
+                }
+
+                public class TestMe
+                {
+                    /// <summary>
+                    /// Does something.
+                    /// </summary>
+                    /// <returns>
+                    /// ###.
+                    /// </returns>
+                    public ICollection<MyItem> DoSomething { get; set; }
+                }
+
+                """;
 
             VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
         }
@@ -657,21 +677,23 @@ public class TestMe
         [Test]
         public void Code_gets_fixed_for_non_generic_enumerable_([ValueSource(nameof(StartingPhrases))] string originalPhrase)
         {
-            const string Template = @"
-using System;
-using System.Collections;
+            const string Template = """
 
-public class TestMe
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    /// <returns>
-    /// ### some integers.
-    /// </returns>
-    public IEnumerable DoSomething { get; set; }
-}
-";
+                using System;
+                using System.Collections;
+
+                public class TestMe
+                {
+                    /// <summary>
+                    /// Does something.
+                    /// </summary>
+                    /// <returns>
+                    /// ### some integers.
+                    /// </returns>
+                    public IEnumerable DoSomething { get; set; }
+                }
+
+                """;
 
             VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", "A sequence that contains"));
         }
@@ -685,21 +707,23 @@ public class TestMe
         [TestCase("An enumerable of strings that represents the text content without trivia.", "A sequence that contains the text content without trivia.")]
         public void Code_gets_fixed_for_non_generic_enumerable_(string originalPhrase, string fixedPhrase)
         {
-            const string Template = @"
-using System;
-using System.Collections;
+            const string Template = """
 
-public class TestMe
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    /// <returns>
-    /// ###
-    /// </returns>
-    public IEnumerable DoSomething { get; set; }
-}
-";
+                using System;
+                using System.Collections;
+
+                public class TestMe
+                {
+                    /// <summary>
+                    /// Does something.
+                    /// </summary>
+                    /// <returns>
+                    /// ###
+                    /// </returns>
+                    public IEnumerable DoSomething { get; set; }
+                }
+
+                """;
 
             VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
         }
@@ -785,22 +809,24 @@ public class TestMe
         [Test]
         public void Code_gets_fixed_for_generic_enumerable_([ValueSource(nameof(StartingPhrases))] string originalPhrase)
         {
-            const string Template = @"
-using System;
-using System.Collections;
-using System.Collections.Generic;
+            const string Template = """
 
-public class TestMe
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    /// <returns>
-    /// ### some integers.
-    /// </returns>
-    public IEnumerable<int> DoSomething { get; set; }
-}
-";
+                using System;
+                using System.Collections;
+                using System.Collections.Generic;
+
+                public class TestMe
+                {
+                    /// <summary>
+                    /// Does something.
+                    /// </summary>
+                    /// <returns>
+                    /// ### some integers.
+                    /// </returns>
+                    public IEnumerable<int> DoSomething { get; set; }
+                }
+
+                """;
 
             VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", "A sequence that contains"));
         }
@@ -809,22 +835,24 @@ public class TestMe
         [TestCase("The mapping information.", "A sequence that contains the mapping information.")]
         public void Code_gets_fixed_for_generic_enumerable_with_primitive_type_(string originalPhrase, string fixedPhrase)
         {
-            const string Template = @"
-using System;
-using System.Collections;
-using System.Collections.Generic;
+            const string Template = """
 
-public class TestMe
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    /// <returns>
-    /// ###
-    /// </returns>
-    public IEnumerable<int> DoSomething { get; set; }
-}
-";
+                using System;
+                using System.Collections;
+                using System.Collections.Generic;
+
+                public class TestMe
+                {
+                    /// <summary>
+                    /// Does something.
+                    /// </summary>
+                    /// <returns>
+                    /// ###
+                    /// </returns>
+                    public IEnumerable<int> DoSomething { get; set; }
+                }
+
+                """;
 
             VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
         }
@@ -872,25 +900,27 @@ public class TestMe
         [TestCase("All ancestors of the specified type", "A sequence that contains all ancestors of the specified type")]
         public void Code_gets_fixed_for_generic_enumerable_with_non_primitive_type_(string originalPhrase, string fixedPhrase)
         {
-            const string Template = @"
-using System;
-using System.Collections.Generic;
+            const string Template = """
 
-public record GroupedRow
-{
-}
+                using System;
+                using System.Collections.Generic;
 
-public class TestMe
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    /// <returns>
-    /// ###.
-    /// </returns>
-    public IEnumerable<GroupedRow> DoSomething { get; set; }
-}
-";
+                public record GroupedRow
+                {
+                }
+
+                public class TestMe
+                {
+                    /// <summary>
+                    /// Does something.
+                    /// </summary>
+                    /// <returns>
+                    /// ###.
+                    /// </returns>
+                    public IEnumerable<GroupedRow> DoSomething { get; set; }
+                }
+
+                """;
 
             VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
         }
@@ -899,25 +929,27 @@ public class TestMe
         [TestCase("All ancestors of the specified type", "A sequence that contains all ancestors of the specified type")]
         public void Code_gets_fixed_for_generic_enumerable_with_generic_type_(string originalPhrase, string fixedPhrase)
         {
-            const string Template = @"
-using System;
-using System.Collections.Generic;
+            const string Template = """
 
-public record MyStuff
-{
-}
+                using System;
+                using System.Collections.Generic;
 
-public class TestMe
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    /// <returns>
-    /// ###.
-    /// </returns>
-    public IEnumerable<T> DoSomething<T>() where T : MyStuff => null;
-}
-";
+                public record MyStuff
+                {
+                }
+
+                public class TestMe
+                {
+                    /// <summary>
+                    /// Does something.
+                    /// </summary>
+                    /// <returns>
+                    /// ###.
+                    /// </returns>
+                    public IEnumerable<T> DoSomething<T>() where T : MyStuff => null;
+                }
+
+                """;
 
             VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
         }
@@ -926,25 +958,27 @@ public class TestMe
         [TestCase("All ancestors of the specified type", "A collection of my nodes that contains all ancestors of the specified type")]
         public void Code_gets_fixed_for_generic_collection_with_generic_closed_type_(string originalPhrase, string fixedPhrase)
         {
-            const string Template = @"
-using System;
-using System.Collections.Generic;
+            const string Template = """
 
-public record MyNode
-{
-}
+                using System;
+                using System.Collections.Generic;
 
-public class TestMe
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    /// <returns>
-    /// ###.
-    /// </returns>
-    public IList<T> DoSomething<T>() where T : MyNode => null;
-}
-";
+                public record MyNode
+                {
+                }
+
+                public class TestMe
+                {
+                    /// <summary>
+                    /// Does something.
+                    /// </summary>
+                    /// <returns>
+                    /// ###.
+                    /// </returns>
+                    public IList<T> DoSomething<T>() where T : MyNode => null;
+                }
+
+                """;
 
             VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
         }
@@ -953,21 +987,23 @@ public class TestMe
         [TestCase("All ancestors of the specified type", "A collection of all ancestors of the specified type")]
         public void Code_gets_fixed_for_generic_collection_with_generic_open_type_(string originalPhrase, string fixedPhrase)
         {
-            const string Template = @"
-using System;
-using System.Collections.Generic;
+            const string Template = """
 
-public class TestMe
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    /// <returns>
-    /// ###.
-    /// </returns>
-    public IList<T> DoSomething<T>() where T : class => null;
-}
-";
+                using System;
+                using System.Collections.Generic;
+
+                public class TestMe
+                {
+                    /// <summary>
+                    /// Does something.
+                    /// </summary>
+                    /// <returns>
+                    /// ###.
+                    /// </returns>
+                    public IList<T> DoSomething<T>() where T : class => null;
+                }
+
+                """;
 
             VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
         }
@@ -1230,6 +1266,50 @@ public class TestMe
 ";
 
             VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_collection_phrase_on_array()
+        {
+            const string OriginalCode = """
+
+                using System;
+                using System.Collections.Generic;
+                using System.Xml;
+
+                public class TestMe
+                {
+                    /// <summary>
+                    /// Does something.
+                    /// </summary>
+                    /// <returns>
+                    /// A collection of XML nodes.
+                    /// </returns>
+                    public XmlNode[] DoSomething() => null;
+                }
+
+                """;
+
+            const string FixedCode = """
+
+                using System;
+                using System.Collections.Generic;
+                using System.Xml;
+
+                public class TestMe
+                {
+                    /// <summary>
+                    /// Does something.
+                    /// </summary>
+                    /// <returns>
+                    /// An array of XML nodes.
+                    /// </returns>
+                    public XmlNode[] DoSomething() => null;
+                }
+
+                """;
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2035_EnumerableReturnTypeDefaultPhraseAnalyzer.Id;
