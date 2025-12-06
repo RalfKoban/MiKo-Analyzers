@@ -128,6 +128,43 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
+        private static bool IsNullCheck(ExpressionSyntax condition, IdentifierNameSyntax identifier)
+        {
+            switch (condition)
+            {
+                case BinaryExpressionSyntax b:
+                {
+                    if (b.IsKind(SyntaxKind.NotEqualsExpression))
+                    {
+                        if (b.Right.IsKind(SyntaxKind.NullLiteralExpression) && b.Left is IdentifierNameSyntax left)
+                        {
+                            return left.GetName() == identifier.GetName();
+                        }
+
+                        if (b.Left.IsKind(SyntaxKind.NullLiteralExpression) && b.Right is IdentifierNameSyntax right)
+                        {
+                            return right.GetName() == identifier.GetName();
+                        }
+                    }
+
+                    return false;
+                }
+
+                case IsPatternExpressionSyntax p:
+                {
+                    if (p.Pattern is UnaryPatternSyntax u && u.Pattern is ConstantPatternSyntax c && c.Expression.IsKind(SyntaxKind.NullLiteralExpression) && p.Expression is IdentifierNameSyntax name)
+                    {
+                        return name.GetName() == identifier.GetName();
+                    }
+
+                    return false;
+                }
+
+                default:
+                    return false;
+            }
+        }
+
         private bool CanBeIgnored(in SyntaxNodeAnalysisContext context)
         {
             if (context.CancellationToken.IsCancellationRequested)
@@ -210,38 +247,54 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private void AnalyzeExpression(in SyntaxNodeAnalysisContext context, MethodDeclarationSyntax method, ExpressionSyntax expression)
+        private void AnalyzeExpression(in SyntaxNodeAnalysisContext context, MethodDeclarationSyntax method, ExpressionSyntax returnedExpression)
         {
-            if (expression is null)
+            if (returnedExpression is null)
             {
                 // code seems to be incomplete, so ignore that
                 return;
             }
 
-            if (HasIssue(expression))
+            if (HasIssue(returnedExpression))
             {
-                ReportIssue(context, expression);
+                ReportIssue(context, returnedExpression);
+
+                return;
+            }
+
+            if (returnedExpression is IdentifierNameSyntax identifier)
+            {
+                var grandParent = returnedExpression.Parent?.Parent;
+
+                switch (grandParent)
+                {
+                    case BlockSyntax block when block.Parent is IfStatementSyntax i1 && IsNullCheck(i1.Condition, identifier):
+                    case IfStatementSyntax i2 when IsNullCheck(i2.Condition, identifier):
+                    {
+                        // we seem to have a check for null that avoids returning null
+                        return;
+                    }
+                }
+            }
+
+            var exp = returnedExpression is BinaryExpressionSyntax b && b.IsKind(SyntaxKind.CoalesceExpression) ? b.Right : returnedExpression;
+            var dataFlow = context.SemanticModel.AnalyzeDataFlow(exp);
+
+            var localVariableNames = dataFlow.ReadInside.ToHashSet(_ => _.Name);
+
+            var candidates = GetCandidates(method, localVariableNames).ToHashSet();
+
+            if (candidates.Count != 0)
+            {
+                // we found 'null' candidates
+                AnalyzeAssignments(context, candidates); // TODO RKN: Inspect expression
             }
             else
             {
-                var exp = expression is BinaryExpressionSyntax b && b.IsKind(SyntaxKind.CoalesceExpression) ? b.Right : expression;
-                var dataFlow = context.SemanticModel.AnalyzeDataFlow(exp);
-
-                var localVariableNames = dataFlow.ReadInside.ToHashSet(_ => _.Name);
-
-                var candidates = GetCandidates(method, localVariableNames).ToHashSet();
-
-                if (candidates.Count != 0)
+                // might be no candidates with variables, so check for ternary operators
+                if (exp is ConditionalExpressionSyntax conditional)
                 {
-                    AnalyzeAssignments(context, candidates);
-                }
-                else
-                {
-                    // might be no candidates with variables, so check for ternary operators
-                    if (exp is ConditionalExpressionSyntax conditional)
-                    {
-                        AnalyzeConditional(context, conditional);
-                    }
+                    AnalyzeConditional(context, conditional);
                 }
             }
         }
