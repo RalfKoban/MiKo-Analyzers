@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private void AnalyzePattern(SyntaxNodeAnalysisContext context, IsPatternExpressionSyntax expression)
+        private void AnalyzePattern(in SyntaxNodeAnalysisContext context, IsPatternExpressionSyntax expression)
         {
             var pattern = expression.Pattern;
 

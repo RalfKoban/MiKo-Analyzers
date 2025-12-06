@@ -4462,7 +4462,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name unimportant lambda statement identifiers &apos;_&apos;.
+        ///   Looks up a localized string similar to Name unimportant lambda parameters &apos;_&apos;.
         /// </summary>
         internal static string MiKo_1300_Title {
             get {
@@ -5217,7 +5217,7 @@ namespace MiKoSolutions.Analyzers {
         
         /// <summary>
         ///   Looks up a localized string similar to The &apos;Info&apos; suffix is too generic and does not clearly convey the purpose or structure of a type.
-        ///Replacing it with more descriptive and intent-revealing names (such as &apos;Data&apos;, &apos;Descriptor&apos;, &apos;Details&apos;, &apos;Metadata&apos;, &apos;Overview&apos;, &apos;Profile&apos;, &apos;Settings&apos;, &apos;Snapshot&apos;, &apos;Status&apos; or &apos;Summary&apos;) improves code readability, simplifies maintenance, and enhances discoverability through better IntelliSense support. It also reduces confusion, so developers don’t have to guess what the type represents..
+        ///Replacing it with more descriptive and intent-revealing names (such as &apos;Data&apos;, &apos;Descriptor&apos;, &apos;Details&apos;, &apos;Metadata&apos;, &apos;Overview&apos;, &apos;Profile&apos;, &apos;Settings&apos;, &apos;Snapshot&apos;, &apos;Status&apos; or &apos;Summary&apos;) improves code readability, simplifies maintenance, and enhances discoverability through better IntelliSense support. It also reduces confusion, so developers don&apos;t have to guess what the type represents..
         /// </summary>
         internal static string MiKo_1514_Description {
             get {
@@ -5823,8 +5823,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Write &lt;summary&gt; documentation that clearly states a member’s purpose from the user’s perspective. Avoid vague phrases like ‘Used to’.
-        ///For types, begin with verbs such as ‘Represents’, ‘Provides’, or ‘Allows’. For properties, use ‘Gets’, ‘Sets’, or ‘Gets or sets’ depending on their behavior.
+        ///   Looks up a localized string similar to Write &lt;summary&gt; documentation that clearly states a member&apos;s purpose from the user&apos;s perspective. Avoid vague phrases like &apos;Used to&apos;.
+        ///For types, begin with verbs such as &apos;Represents&apos;, &apos;Provides&apos;, or &apos;Allows&apos;. For properties, use &apos;Gets&apos;, &apos;Sets&apos;, or &apos;Gets or sets&apos; depending on their behavior.
         ///This approach ensures concise, meaningful, and user-focused documentation..
         /// </summary>
         internal static string MiKo_2012_Description {
@@ -9562,7 +9562,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation should be clear and purposeful. Vague phrases like &quot;Make sure to call this&quot; fail to describe the functionality or behavior of the code, leading to ambiguity about the method’s purpose.
+        ///   Looks up a localized string similar to XML documentation should be clear and purposeful. Vague phrases like &quot;Make sure to call this&quot; fail to describe the functionality or behavior of the code, leading to ambiguity about the method&apos;s purpose.
         ///Such documentation also undermines tool integration and usability, as IDEs rely on precise descriptions to generate meaningful IntelliSense tooltips and enhance developer productivity..
         /// </summary>
         internal static string MiKo_2238_Description {
@@ -14691,7 +14691,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Simplify redundant comparison.
+        ///   Looks up a localized string similar to Remove duplicate logical condition.
         /// </summary>
         internal static string MiKo_3225_CodeFixTitle {
             get {
@@ -14700,7 +14700,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Boolean comparisons that check the same values on both sides are redundant. Simplify them by using just one side. This makes the code easier to read and understand..
+        ///   Looks up a localized string similar to Logical expressions that repeat the same condition on both sides of a logical operator are redundant. Simplify them by removing the duplicate condition. This makes the code easier to read and understand..
         /// </summary>
         internal static string MiKo_3225_Description {
             get {
@@ -14709,7 +14709,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Redundant comparison can be simplified.
+        ///   Looks up a localized string similar to Duplicate logical condition can be removed.
         /// </summary>
         internal static string MiKo_3225_MessageFormat {
             get {
@@ -14718,7 +14718,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Simplify redundant comparisons.
+        ///   Looks up a localized string similar to Remove duplicate logical conditions.
         /// </summary>
         internal static string MiKo_3225_Title {
             get {

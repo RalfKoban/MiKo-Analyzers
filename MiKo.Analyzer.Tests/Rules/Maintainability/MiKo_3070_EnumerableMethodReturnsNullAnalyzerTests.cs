@@ -431,6 +431,192 @@ public class TestMe
 }");
 
         [Test]
+        public void No_issue_is_reported_for_if_condition_that_ensures_that_null_will_not_be_returned() => No_issue_is_reported_for(@"
+using System.Collections;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<int> DoSomething(bool flag)
+        {
+            if (flag)
+            {
+                List<int> variables = null;
+
+                DoStuff(ref variables);
+
+                if (variables != null)
+                {
+                    return variables;
+                }
+            }
+
+            return Array.Empty<int>();
+        }
+
+        private void DoStuff(ref List<int> list)
+        {
+        }
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_if_condition_that_ensures_that_null_will_not_be_returned_with_flipped_null_check() => No_issue_is_reported_for(@"
+using System.Collections;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<int> DoSomething(bool flag)
+        {
+            if (flag)
+            {
+                List<int> variables = null;
+
+                DoStuff(ref variables);
+
+                if (null != variables)
+                {
+                    return variables;
+                }
+            }
+
+            return Array.Empty<int>();
+        }
+
+        private void DoStuff(ref List<int> list)
+        {
+        }
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_if_condition_that_ensures_that_null_will_not_be_returned_via_is_not_pattern() => No_issue_is_reported_for(@"
+using System.Collections;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<int> DoSomething(bool flag)
+        {
+            if (flag)
+            {
+                List<int> variables = null;
+
+                DoStuff(ref variables);
+
+                if (variables is not null)
+                {
+                    return variables;
+                }
+            }
+
+            return Array.Empty<int>();
+        }
+
+        private void DoStuff(ref List<int> list)
+        {
+        }
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_nonbracketed_if_condition_that_ensures_that_null_will_not_be_returned() => No_issue_is_reported_for(@"
+using System.Collections;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<int> DoSomething(bool flag)
+        {
+            if (flag)
+            {
+                List<int> variables = null;
+
+                DoStuff(ref variables);
+
+                if (variables != null)
+                    return variables;
+            }
+
+            return Array.Empty<int>();
+        }
+
+        private void DoStuff(ref List<int> list)
+        {
+        }
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_nonbracketed_if_condition_that_ensures_that_null_will_not_be_returned_with_flipped_null_check() => No_issue_is_reported_for(@"
+using System.Collections;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<int> DoSomething(bool flag)
+        {
+            if (flag)
+            {
+                List<int> variables = null;
+
+                DoStuff(ref variables);
+
+                if (null != variables)
+                    return variables;
+            }
+
+            return Array.Empty<int>();
+        }
+
+        private void DoStuff(ref List<int> list)
+        {
+        }
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_nonbracketed_if_condition_that_ensures_that_null_will_not_be_returned_via_is_not_pattern() => No_issue_is_reported_for(@"
+using System.Collections;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<int> DoSomething(bool flag)
+        {
+            if (flag)
+            {
+                List<int> variables = null;
+
+                DoStuff(ref variables);
+
+                if (variables is not null)
+                    return variables;
+            }
+
+            return Array.Empty<int>();
+        }
+
+        private void DoStuff(ref List<int> list)
+        {
+        }
+    }
+}");
+
+        [Test]
         public void An_issue_is_reported_for_Enumerable_method_returning_null() => An_issue_is_reported_for(@"
 using System.Collections;
 using System.Collections.Generic;
