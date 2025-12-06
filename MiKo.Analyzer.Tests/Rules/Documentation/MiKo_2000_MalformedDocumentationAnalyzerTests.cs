@@ -145,6 +145,14 @@ public sealed class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_Multiline_XML_documentation_with_asterisk() => No_issue_is_reported_for(@"
+public sealed class TestMe
+{
+    /** This is some comment & some test */
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_malformed_XML_on_class() => An_issue_is_reported_for(@"
 /// <summary>
 /// Saves & Loads the relevant layout information of the ribbon within <see cref=""XmlRibbonLayout""/>

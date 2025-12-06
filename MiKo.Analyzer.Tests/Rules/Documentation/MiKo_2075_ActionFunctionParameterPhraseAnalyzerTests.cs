@@ -274,6 +274,25 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", word), Template.Replace("###", "callback"));
         }
 
+        [Test]
+        public void Code_gets_fixed_for_method_sentence_comment_with_callback_([ValueSource(nameof(ProblematicWords))] string word)
+        {
+            const string Template = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Some ###.
+    /// </summary>
+    public void DoSomething()
+    { }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", "callback " + word), Template.Replace("###", "callback"));
+        }
+
         protected override string GetDiagnosticId() => MiKo_2075_ActionFunctionParameterPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2075_ActionFunctionParameterPhraseAnalyzer();
