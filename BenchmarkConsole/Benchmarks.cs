@@ -11,6 +11,9 @@ namespace BenchmarkConsole
         // [Params(100, 125, 150, 175)]
         // public int Times;
 
+        [Benchmark]
+        public void Dummy() { }
+
         // [Benchmark(Baseline = true)]
         // public void MiKo_2023_Original() => System.GC.KeepAlive(new MiKoSolutions.Analyzers.Rules.Documentation.MiKo_2023_CodeFixProvider.MapData());
 

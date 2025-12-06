@@ -5,8 +5,15 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Metrics
 {
+    /// <summary>
+    /// Provides the base class for analyzers that enforce metrics rules.
+    /// </summary>
     public abstract class MetricsAnalyzer : Analyzer
     {
+        /// <summary>
+        /// Contains the default syntax kinds that are analyzed for metrics violations.
+        /// This field is read-only.
+        /// </summary>
         protected static readonly SyntaxKind[] DefaultSyntaxKinds =
                                                                     {
                                                                         SyntaxKind.GetAccessorDeclaration,
@@ -24,10 +31,26 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         private readonly SyntaxKind[] m_syntaxKinds;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MetricsAnalyzer"/> class with the unique identifier of the diagnostic and the syntax kinds to analyze.
+        /// </summary>
+        /// <param name="diagnosticId">
+        /// The unique identifier of the diagnostic.
+        /// </param>
+        /// <param name="syntaxKinds">
+        /// The syntax kinds that shall be analyzed.
+        /// </param>
         protected MetricsAnalyzer(string diagnosticId, params SyntaxKind[] syntaxKinds) : base(nameof(Metrics), diagnosticId) => m_syntaxKinds = syntaxKinds;
 
+        /// <inheritdoc/>
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, m_syntaxKinds);
 
+        /// <summary>
+        /// Analyzes a syntax node for metrics violations and reports any diagnostics found.
+        /// </summary>
+        /// <param name="context">
+        /// The syntax node analysis context.
+        /// </param>
         protected virtual void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
         {
             var issue = AnalyzeSyntaxNode(context, context.ContainingSymbol);
@@ -38,8 +61,32 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
             }
         }
 
+        /// <summary>
+        /// Analyzes a block body for metrics violations and returns any diagnostic found.
+        /// </summary>
+        /// <param name="body">
+        /// The block syntax representing the body to analyze.
+        /// </param>
+        /// <param name="containingSymbol">
+        /// The symbol that contains the body.
+        /// </param>
+        /// <returns>
+        /// A diagnostic if a metrics violation is found; otherwise, <see langword="null"/>.
+        /// </returns>
         protected virtual Diagnostic AnalyzeBody(BlockSyntax body, ISymbol containingSymbol) => null;
 
+        /// <summary>
+        /// Analyzes an expression body for metrics violations and returns any diagnostic found.
+        /// </summary>
+        /// <param name="body">
+        /// The arrow expression clause syntax representing the body to analyze.
+        /// </param>
+        /// <param name="containingSymbol">
+        /// The symbol that contains the body.
+        /// </param>
+        /// <returns>
+        /// A diagnostic if a metrics violation is found; otherwise, <see langword="null"/>.
+        /// </returns>
         protected virtual Diagnostic AnalyzeExpressionBody(ArrowExpressionClauseSyntax body, ISymbol containingSymbol) => null;
 
         private static BlockSyntax GetBody(in SyntaxNodeAnalysisContext context)
