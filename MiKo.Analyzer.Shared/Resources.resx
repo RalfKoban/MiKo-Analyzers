@@ -202,9 +202,6 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
   <data name="MiKo_1001_Description" xml:space="preserve">
     <value>To maintain consistency and clarity in code, parameters that inherit from 'System.EventArgs' should be named 'e'.</value>
   </data>
-  <data name="MiKo_1001_HelpLinkUri" xml:space="preserve">
-    <value>https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/event</value>
-  </data>
   <data name="MiKo_1001_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
   </data>
@@ -217,9 +214,6 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
   <data name="MiKo_1002_Description" xml:space="preserve">
     <value>To follow the .NET Framework Design Guidelines, parameters of event handlers should be named 'sender' and 'e'.</value>
   </data>
-  <data name="MiKo_1002_HelpLinkUri" xml:space="preserve">
-    <value>https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/event</value>
-  </data>
   <data name="MiKo_1002_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
   </data>
@@ -231,9 +225,6 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
   </data>
   <data name="MiKo_1003_Description" xml:space="preserve">
     <value>Event handlers should be named starting with 'On' followed by the event name to show they handle events.</value>
-  </data>
-  <data name="MiKo_1003_HelpLinkUri" xml:space="preserve">
-    <value>https://learn.microsoft.com/en-us/dotnet/csharp/event-pattern</value>
   </data>
   <data name="MiKo_1003_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -709,9 +700,6 @@ This naming convention helps ensure clarity and consistency in method functional
   <data name="MiKo_1046_Description" xml:space="preserve">
     <value>To make maintenance easier, methods using the Task-based Asynchronous Pattern (TAP) should end with the suffix 'Async.' This helps clearly identify them as asynchronous methods.</value>
   </data>
-  <data name="MiKo_1046_HelpLinkUri" xml:space="preserve">
-    <value>https://learn.microsoft.com/en-us/dotnet/standard/asynchronous-programming-patterns/task-based-asynchronous-pattern-tap</value>
-  </data>
   <data name="MiKo_1046_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
   </data>
@@ -723,9 +711,6 @@ This naming convention helps ensure clarity and consistency in method functional
   </data>
   <data name="MiKo_1047_Description" xml:space="preserve">
     <value>To simplify maintenance, do not add the 'Async' suffix to methods that do not follow the Task-based Asynchronous Pattern (TAP). Using 'Async' implies they do follow the pattern, which would be misleading.</value>
-  </data>
-  <data name="MiKo_1047_HelpLinkUri" xml:space="preserve">
-    <value>https://learn.microsoft.com/en-us/dotnet/standard/asynchronous-programming-patterns/task-based-asynchronous-pattern-tap</value>
   </data>
   <data name="MiKo_1047_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -825,9 +810,6 @@ Instead, use specific names that describe their exact purpose, making the code e
   <data name="MiKo_1055_Description" xml:space="preserve">
     <value>To show that fields are containers for specific dependency properties, add the suffix 'Property' to their names. This aligns with the naming conventions in the .NET Framework.</value>
   </data>
-  <data name="MiKo_1055_HelpLinkUri" xml:space="preserve">
-    <value>https://learn.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property</value>
-  </data>
   <data name="MiKo_1055_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
   </data>
@@ -836,9 +818,6 @@ Instead, use specific names that describe their exact purpose, making the code e
   </data>
   <data name="MiKo_1056_Description" xml:space="preserve">
     <value>To show that fields are containers for specific dependency properties, they should be prefixed with the property name. This aligns with the naming conventions in the .NET Framework.</value>
-  </data>
-  <data name="MiKo_1056_HelpLinkUri" xml:space="preserve">
-    <value>https://learn.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property</value>
   </data>
   <data name="MiKo_1056_MessageFormat" xml:space="preserve">
     <value>Name it {1}</value>
@@ -852,9 +831,6 @@ Instead, use specific names that describe their exact purpose, making the code e
   <data name="MiKo_1057_Description" xml:space="preserve">
     <value>To show that fields are keys for specific dependency properties, add the suffix 'Key' to their names. This aligns with the naming conventions in the .NET Framework.</value>
   </data>
-  <data name="MiKo_1057_HelpLinkUri" xml:space="preserve">
-    <value>https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertykey</value>
-  </data>
   <data name="MiKo_1057_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
   </data>
@@ -863,9 +839,6 @@ Instead, use specific names that describe their exact purpose, making the code e
   </data>
   <data name="MiKo_1058_Description" xml:space="preserve">
     <value>To show that fields are keys for specific dependency properties, they should be prefixed with the property name. This aligns with the naming conventions in the .NET Framework.</value>
-  </data>
-  <data name="MiKo_1058_HelpLinkUri" xml:space="preserve">
-    <value>https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertykey</value>
   </data>
   <data name="MiKo_1058_MessageFormat" xml:space="preserve">
     <value>Name it {1}</value>
@@ -956,9 +929,6 @@ If their names are longer, it likely means they are misplaced and violate the Si
 - For unary operator overloads, use 'value'.
 
 This ensures clarity and consistency in your code.</value>
-  </data>
-  <data name="MiKo_1065_HelpLinkUri" xml:space="preserve">
-    <value>https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/naming-parameters</value>
   </data>
   <data name="MiKo_1065_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -1631,9 +1601,6 @@ To make them clearer and more descriptive, the names should include details abou
   </data>
   <data name="MiKo_1400_Description" xml:space="preserve">
     <value>Namespaces group functionalities, so their names should be plural. This makes it clear that they encompass multiple related functions or classes, enhancing readability and organization.</value>
-  </data>
-  <data name="MiKo_1400_HelpLinkUri" xml:space="preserve">
-    <value>https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/names-of-namespaces</value>
   </data>
   <data name="MiKo_1400_MessageFormat" xml:space="preserve">
     <value>Use plural for namespace, such as '{1}'</value>
@@ -2449,9 +2416,6 @@ This format clearly describes the purpose of the class and its functionality, ma
   <data name="MiKo_2041_Description" xml:space="preserve">
     <value>The &lt;summary&gt; documentation should be concise and only contain a brief summary description. Other information should be included in the appropriate XML tags alongside the &lt;summary&gt;. This ensures clarity and organization in the documentation.</value>
   </data>
-  <data name="MiKo_2041_HelpLinkUri" xml:space="preserve">
-    <value>https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/recommended-tags-for-documentation-comments</value>
-  </data>
   <data name="MiKo_2041_MessageFormat" xml:space="preserve">
     <value>&lt;summary&gt; should not contain: '&lt;{0}/&gt;'</value>
   </data>
@@ -2463,9 +2427,6 @@ This format clearly describes the purpose of the class and its functionality, ma
   </data>
   <data name="MiKo_2042_Description" xml:space="preserve">
     <value>Documentation should use the '&lt;para&gt;' XML tags instead of '&lt;p&gt;' HTML tags. This ensures a consistent format, suitable for XML-based documentation tools and frameworks.</value>
-  </data>
-  <data name="MiKo_2042_HelpLinkUri" xml:space="preserve">
-    <value>https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/para</value>
   </data>
   <data name="MiKo_2042_MessageFormat" xml:space="preserve">
     <value>Use '&lt;para&gt;' instead of '&lt;p&gt;'</value>
@@ -2943,9 +2904,6 @@ This ensures the documentation is precise and informative, helping developers un
     <value>XML documentation should use the &lt;list&gt; tag for enumerating items. Avoid using terms like 1.), 2.), etc., directly because IntelliSense and XML documentation tools cannot recognize these and may format comments awkwardly.
 Using &lt;list&gt; allows IntelliSense to format content as tables, numbered lists, ordered lists, etc., making documentation clear and easy to read.</value>
   </data>
-  <data name="MiKo_2204_HelpLinkUri" xml:space="preserve">
-    <value>https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/list</value>
-  </data>
   <data name="MiKo_2204_MessageFormat" xml:space="preserve">
     <value>Use &lt;list&gt; to list items in documentation</value>
   </data>
@@ -3103,9 +3061,6 @@ Instead, use &lt;para&gt; tags, which are designed to mark paragraphs properly, 
 
 This ensures your list documentation is clear and accurately structured.</value>
   </data>
-  <data name="MiKo_2217_HelpLinkUri" xml:space="preserve">
-    <value>http://www.blackwasp.co.uk/DocumentationLists.aspx</value>
-  </data>
   <data name="MiKo_2217_MessageArgument_MissingDescription" xml:space="preserve">
     <value>&lt;description&gt; is missing</value>
   </data>
@@ -3219,9 +3174,6 @@ This ensures clarity and usability in your documentation, making it straightforw
   </data>
   <data name="MiKo_2225_Description" xml:space="preserve">
     <value>Use the &lt;c&gt; tag to mark text within a description as code, but only for single lines. For multiple lines of code, you should use the &lt;code&gt; tag. This ensures the formatting is clear and the documentation remains organized and readable.</value>
-  </data>
-  <data name="MiKo_2225_HelpLinkUri" xml:space="preserve">
-    <value>https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/recommended-tags#c</value>
   </data>
   <data name="MiKo_2225_MessageFormat" xml:space="preserve">
     <value>Place '&lt;c&gt;' tag with its content on same line</value>
@@ -3424,9 +3376,6 @@ Such documentation also undermines tool integration and usability, as IDEs rely 
     <value>XML documentation should use the &lt;list&gt; tag for enumerating items. Avoid using &lt;ul&gt; or &lt;ol&gt; because IntelliSense and XML documentation tools cannot recognize these and may format comments awkwardly.
 Using &lt;list&gt; allows IntelliSense to format content as tables, numbered lists, ordered lists, etc., making documentation clear and easy to read.</value>
   </data>
-  <data name="MiKo_2244_HelpLinkUri" xml:space="preserve">
-    <value>https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/list</value>
-  </data>
   <data name="MiKo_2244_MessageFormat" xml:space="preserve">
     <value>Use &lt;list&gt; to list items in documentation</value>
   </data>
@@ -3618,9 +3567,6 @@ Instead, comments should enhance understanding, giving context and reasoning for
   <data name="MiKo_3001_Description" xml:space="preserve">
     <value>To ease maintenance, use the pre-defined .NET Framework delegate types such as 'Action', 'Func' or 'Expression' instead of custom delegates.</value>
   </data>
-  <data name="MiKo_3001_HelpLinkUri" xml:space="preserve">
-    <value>https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/events-and-callbacks</value>
-  </data>
   <data name="MiKo_3001_MessageFormat" xml:space="preserve">
     <value>Use 'Action', 'Func' or 'Expression' instead</value>
   </data>
@@ -3638,9 +3584,6 @@ Instead, comments should enhance understanding, giving context and reasoning for
   </data>
   <data name="MiKo_3003_Description" xml:space="preserve">
     <value>To ease usage, events should follow the .NET Framework Design Guidelines for Event Design.</value>
-  </data>
-  <data name="MiKo_3003_HelpLinkUri" xml:space="preserve">
-    <value>https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/event</value>
   </data>
   <data name="MiKo_3003_MessageFormat" xml:space="preserve">
     <value>Use 'EventHandler' or 'EventHandler&lt;T&gt;' instead</value>
@@ -3708,9 +3651,6 @@ This pattern keeps methods consistent and predictable, enhancing readability and
   <data name="MiKo_3010_Description" xml:space="preserve">
     <value>Certain exceptions are reserved for and thrown by the Common Language Runtime (CLR) and often signal bugs. Developers should not throw these exceptions themselves to maintain code cleanliness and avoid confusion. Following this principle ensures clear and robust code management.</value>
   </data>
-  <data name="MiKo_3010_HelpLinkUri" xml:space="preserve">
-    <value>https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/using-standard-exception-types</value>
-  </data>
   <data name="MiKo_3010_MessageFormat" xml:space="preserve">
     <value>Do not create a '{0}'</value>
   </data>
@@ -3722,9 +3662,6 @@ This pattern keeps methods consistent and predictable, enhancing readability and
   </data>
   <data name="MiKo_3011_Description" xml:space="preserve">
     <value>Thrown ArgumentExceptions (or its subtypes) should always include the name of the parameter that caused the exception. This practice helps other developers quickly identify the problematic argument, facilitating easier debugging and improving overall code maintainability.</value>
-  </data>
-  <data name="MiKo_3011_HelpLinkUri" xml:space="preserve">
-    <value>https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/using-standard-exception-types#argumentexception-argumentnullexception-and-argumentoutofrangeexception</value>
   </data>
   <data name="MiKo_3011_MessageFormat" xml:space="preserve">
     <value>Change 'paramName' parameter to {1}</value>
@@ -3775,9 +3712,6 @@ This practice ensures that developers understand why the exception was thrown an
   <data name="MiKo_3015_Description" xml:space="preserve">
     <value>Avoid throwing ArgumentException (or its subtypes) in parameterless methods. If a method does not take any arguments, or if the failure is not related to the arguments themselves, use InvalidOperationException instead. This keeps exception handling logical and context-appropriate, making the code cleaner and easier to maintain.</value>
   </data>
-  <data name="MiKo_3015_HelpLinkUri" xml:space="preserve">
-    <value>https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/using-standard-exception-types</value>
-  </data>
   <data name="MiKo_3015_MessageFormat" xml:space="preserve">
     <value>Throw an 'InvalidOperationException' instead</value>
   </data>
@@ -3794,9 +3728,6 @@ This practice ensures that developers understand why the exception was thrown an
 - If the problem isn't with the parameter itself, throw an InvalidOperationException instead.
 
 This approach ensures that the exception thrown accurately reflects the nature of the issue, making your code more robust and understandable.</value>
-  </data>
-  <data name="MiKo_3016_HelpLinkUri" xml:space="preserve">
-    <value>https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/using-standard-exception-types</value>
   </data>
   <data name="MiKo_3016_MessageFormat" xml:space="preserve">
     <value>Throw an 'ArgumentException' or 'InvalidOperationException' instead</value>
@@ -3819,9 +3750,6 @@ This approach ensures that the exception thrown accurately reflects the nature o
   <data name="MiKo_3018_Description" xml:space="preserve">
     <value>Already disposed instances of disposable types should throw ObjectDisposedExceptions when methods are invoked on them. This practice makes it easier to identify bugs, as user code should never access already disposed types. Ensuring this indication helps maintain code integrity and prevents unintended errors.</value>
   </data>
-  <data name="MiKo_3018_HelpLinkUri" xml:space="preserve">
-    <value>https://learn.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-dispose</value>
-  </data>
   <data name="MiKo_3018_MessageFormat" xml:space="preserve">
     <value>Throw ObjectDisposedException if disposed</value>
   </data>
@@ -3842,9 +3770,6 @@ This approach ensures that the exception thrown accurately reflects the nature o
   </data>
   <data name="MiKo_3021_Description" xml:space="preserve">
     <value>If you're using 'Task.Run' to return a Task for a long-running operation, you're likely making a mistake. Instead, use 'Task.Run' to actually call the long-running operation. This approach aligns better with proper asynchronous programming practices and keeps your code efficient and manageable.</value>
-  </data>
-  <data name="MiKo_3021_HelpLinkUri" xml:space="preserve">
-    <value>https://blog.stephencleary.com/2013/11/taskrun-etiquette-examples-dont-use.html</value>
   </data>
   <data name="MiKo_3021_MessageFormat" xml:space="preserve">
     <value>Use '{0}' to invoke method '{1}', but not inside</value>
@@ -3903,9 +3828,6 @@ Generally, this behavior is not desirable. The object reference should remain th
   <data name="MiKo_3027_Description" xml:space="preserve">
     <value>Marking parameters for future use results in poor design. It's uncertain if the parameter will ever be used or if its type will fit future needs. Instead, override methods and add new parameters as needed. This approach maintains clarity and adaptability in your code, avoiding unnecessary clutter and potential issues. Keeps your codebase clean and efficient.</value>
   </data>
-  <data name="MiKo_3027_HelpLinkUri" xml:space="preserve">
-    <value>https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/parameter-design</value>
-  </data>
   <data name="MiKo_3027_MessageFormat" xml:space="preserve">
     <value>Do not reserve '{0}' for future usage</value>
   </data>
@@ -3932,9 +3854,6 @@ Generally, this behavior is not desirable. The object reference should remain th
   </data>
   <data name="MiKo_3030_Description" xml:space="preserve">
     <value>To ease maintenance, methods should make minimal assumptions about the structure or properties of the objects they use. They should work only with objects they receive directly and avoid reaching through these objects to access other objects or their services. This practice keeps methods focused, modular, and easier to maintain.</value>
-  </data>
-  <data name="MiKo_3030_HelpLinkUri" xml:space="preserve">
-    <value>https://en.wikipedia.org/wiki/Law_of_Demeter</value>
   </data>
   <data name="MiKo_3030_MessageFormat" xml:space="preserve">
     <value>Avoid to violate the Law of Demeter</value>
@@ -4046,9 +3965,6 @@ Instead, use methods to make it clear that the behavior might differ between cal
   <data name="MiKo_3040_Description" xml:space="preserve">
     <value>To ease maintenance and improve readability, avoid using Booleans as parameters unless absolutely sure the value will never exceed two options. Instead, use an Enum. This practice ensures the code remains clear, flexible, and easier to maintain.</value>
   </data>
-  <data name="MiKo_3040_HelpLinkUri" xml:space="preserve">
-    <value>https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/parameter-design</value>
-  </data>
   <data name="MiKo_3040_MessageFormat" xml:space="preserve">
     <value>Use an Enum instead</value>
   </data>
@@ -4157,9 +4073,6 @@ Instead, use methods to make it clear that the behavior might differ between cal
   <data name="MiKo_3050_Description" xml:space="preserve">
     <value>Fields that are the back of a DependencyProperty should be made 'public static readonly' to allow the .NET framework and other clients to find and access those fields.</value>
   </data>
-  <data name="MiKo_3050_HelpLinkUri" xml:space="preserve">
-    <value>https://learn.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property</value>
-  </data>
   <data name="MiKo_3050_MessageFormat" xml:space="preserve">
     <value>Make it 'public static readonly'</value>
   </data>
@@ -4171,9 +4084,6 @@ Instead, use methods to make it clear that the behavior might differ between cal
   </data>
   <data name="MiKo_3051_Description" xml:space="preserve">
     <value>To avoid typos, register fields backing a DependencyProperty using 'DependencyProperty.Register()' and the 'nameof' operator. Ensure you provide the correct property names, property types, and owning types.</value>
-  </data>
-  <data name="MiKo_3051_HelpLinkUri" xml:space="preserve">
-    <value>https://learn.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property</value>
   </data>
   <data name="MiKo_3051_MessageFormat" xml:space="preserve">
     <value>Use '{1}' instead</value>
@@ -4187,9 +4097,6 @@ Instead, use methods to make it clear that the behavior might differ between cal
   <data name="MiKo_3052_Description" xml:space="preserve">
     <value>Make fields backing a DependencyPropertyKey non-public, static, and readonly. This prevents clients from finding and accessing these fields, ensuring your code stays secure and well-encapsulated.</value>
   </data>
-  <data name="MiKo_3052_HelpLinkUri" xml:space="preserve">
-    <value>https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertykey</value>
-  </data>
   <data name="MiKo_3052_MessageFormat" xml:space="preserve">
     <value>Make it non-public 'static readonly'</value>
   </data>
@@ -4198,9 +4105,6 @@ Instead, use methods to make it clear that the behavior might differ between cal
   </data>
   <data name="MiKo_3053_Description" xml:space="preserve">
     <value>To prevent typos, register fields that are the key of a DependencyProperty using 'DependencyProperty.RegisterReadOnly()' and the 'nameof' operator. Also, ensure you provide the correct property names, property types, and owning types.</value>
-  </data>
-  <data name="MiKo_3053_HelpLinkUri" xml:space="preserve">
-    <value>https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencyproperty.registerreadonly</value>
   </data>
   <data name="MiKo_3053_MessageFormat" xml:space="preserve">
     <value>Use '{1}' instead</value>
@@ -4214,9 +4118,6 @@ Instead, use methods to make it clear that the behavior might differ between cal
   <data name="MiKo_3054_Description" xml:space="preserve">
     <value>Read-only dependency properties are defined by DependencyPropertyKey fields and should remain non-public. To make them accessible, expose a dependency property identifier for the read-only property. Do this by exposing the value of 'DependencyPropertyKey.DependencyProperty' as a 'public static readonly' field in the specific class.
 This maintains encapsulation while allowing access to the property.</value>
-  </data>
-  <data name="MiKo_3054_HelpLinkUri" xml:space="preserve">
-    <value>https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencyproperty.registerreadonly</value>
   </data>
   <data name="MiKo_3054_MessageFormat" xml:space="preserve">
     <value>Expose a DependencyProperty identifier for the read-only dependency property '{0}'</value>
@@ -4694,9 +4595,6 @@ This practice ensures clarity and transparency in your codebase.</value>
   <data name="MiKo_3105_Description" xml:space="preserve">
     <value>NUnit's constraint-based Assert model uses a single 'Assert.That' method for all assertions, making it easier to understand. This helps developers avoid mixing up 'actual' and 'expected' values and makes the code more readable and intuitive.</value>
   </data>
-  <data name="MiKo_3105_HelpLinkUri" xml:space="preserve">
-    <value>https://docs.nunit.org/articles/nunit/writing-tests/assertions/assertion-models/constraint.html</value>
-  </data>
   <data name="MiKo_3105_MessageFormat" xml:space="preserve">
     <value>Use 'Assert.That' instead</value>
   </data>
@@ -5024,9 +4922,6 @@ Instead, provide a method that returns an 'IDisposable'. This way, developers ca
   </data>
   <data name="MiKo_3215_Description" xml:space="preserve">
     <value>To standardize delegates and adhere to .NET Framework Design Guidelines, use 'Func&lt;T, bool&gt;' for callbacks instead of 'Predicate&lt;T&gt;'. This approach ensures consistency and aligns with best practices.</value>
-  </data>
-  <data name="MiKo_3215_HelpLinkUri" xml:space="preserve">
-    <value>https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/events-and-callbacks</value>
   </data>
   <data name="MiKo_3215_MessageFormat" xml:space="preserve">
     <value>Use 'Func&lt;{0}, bool&gt;' instead of 'Predicate&lt;{0}&gt;'</value>
@@ -5501,9 +5396,6 @@ This organization ensures clarity and makes the code easier to find, understand 
   </data>
   <data name="MiKo_5012_Description" xml:space="preserve">
     <value>To improve performance, avoid letting methods with yield call themselves recursively. This causes the underlying iterators to be called more times than expected, resulting in poor runtime performance.</value>
-  </data>
-  <data name="MiKo_5012_HelpLinkUri" xml:space="preserve">
-    <value>https://stackoverflow.com/questions/3969963/when-not-to-use-yield-return</value>
   </data>
   <data name="MiKo_5012_MessageFormat" xml:space="preserve">
     <value>Do not use yield recursively</value>
