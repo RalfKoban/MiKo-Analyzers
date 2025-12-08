@@ -61,7 +61,7 @@ namespace MiKoSolutions.Analyzers.Rules
                                                                 Severity,
                                                                 IsEnabledByDefault,
                                                                 LocalizableResource(id, "Description"),
-                                                                LocalizableResource(id, "HelpLinkUri")?.ToString()));
+                                                                "https://github.com/RalfKoban/MiKo-Analyzers/blob/master/Documentation/" + id + ".md"));
         }
 
         /// <summary>
