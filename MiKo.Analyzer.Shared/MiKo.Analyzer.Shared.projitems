@@ -517,6 +517,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1518_ReferenceVariablesAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1519_ReferenceParametersAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1520_ToCopyVariablesAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1521_ToCopyParametersAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1522_VoidGetMethodAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\NamespaceNamingAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\NamingAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\NamingLengthAnalyzer.cs" />
