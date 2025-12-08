@@ -308,15 +308,6 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/event.
-        /// </summary>
-        internal static string MiKo_1001_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_1001_HelpLinkUri", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
         /// </summary>
         internal static string MiKo_1001_MessageFormat {
@@ -353,15 +344,6 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/event.
-        /// </summary>
-        internal static string MiKo_1002_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_1002_HelpLinkUri", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
         /// </summary>
         internal static string MiKo_1002_MessageFormat {
@@ -394,15 +376,6 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_1003_Description {
             get {
                 return ResourceManager.GetString("MiKo_1003_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/csharp/event-pattern.
-        /// </summary>
-        internal static string MiKo_1003_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_1003_HelpLinkUri", resourceCulture);
             }
         }
         
@@ -1823,15 +1796,6 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/standard/asynchronous-programming-patterns/task-based-asynchronous-pattern-tap.
-        /// </summary>
-        internal static string MiKo_1046_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_1046_HelpLinkUri", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
         /// </summary>
         internal static string MiKo_1046_MessageFormat {
@@ -1864,15 +1828,6 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_1047_Description {
             get {
                 return ResourceManager.GetString("MiKo_1047_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/standard/asynchronous-programming-patterns/task-based-asynchronous-pattern-tap.
-        /// </summary>
-        internal static string MiKo_1047_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_1047_HelpLinkUri", resourceCulture);
             }
         }
         
@@ -2167,15 +2122,6 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property.
-        /// </summary>
-        internal static string MiKo_1055_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_1055_HelpLinkUri", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
         /// </summary>
         internal static string MiKo_1055_MessageFormat {
@@ -2199,15 +2145,6 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_1056_Description {
             get {
                 return ResourceManager.GetString("MiKo_1056_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property.
-        /// </summary>
-        internal static string MiKo_1056_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_1056_HelpLinkUri", resourceCulture);
             }
         }
         
@@ -2248,15 +2185,6 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertykey.
-        /// </summary>
-        internal static string MiKo_1057_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_1057_HelpLinkUri", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
         /// </summary>
         internal static string MiKo_1057_MessageFormat {
@@ -2280,15 +2208,6 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_1058_Description {
             get {
                 return ResourceManager.GetString("MiKo_1058_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertykey.
-        /// </summary>
-        internal static string MiKo_1058_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_1058_HelpLinkUri", resourceCulture);
             }
         }
         
@@ -2535,15 +2454,6 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_1065_Description {
             get {
                 return ResourceManager.GetString("MiKo_1065_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/naming-parameters.
-        /// </summary>
-        internal static string MiKo_1065_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_1065_HelpLinkUri", resourceCulture);
             }
         }
         
@@ -4476,15 +4386,6 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_1400_Description {
             get {
                 return ResourceManager.GetString("MiKo_1400_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/names-of-namespaces.
-        /// </summary>
-        internal static string MiKo_1400_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_1400_HelpLinkUri", resourceCulture);
             }
         }
         
@@ -6881,15 +6782,6 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/recommended-tags-for-documentation-comments.
-        /// </summary>
-        internal static string MiKo_2041_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_2041_HelpLinkUri", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to &lt;summary&gt; should not contain: &apos;&lt;{0}/&gt;&apos;.
         /// </summary>
         internal static string MiKo_2041_MessageFormat {
@@ -6922,15 +6814,6 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_2042_Description {
             get {
                 return ResourceManager.GetString("MiKo_2042_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/para.
-        /// </summary>
-        internal static string MiKo_2042_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_2042_HelpLinkUri", resourceCulture);
             }
         }
         
@@ -8335,15 +8218,6 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/list.
-        /// </summary>
-        internal static string MiKo_2204_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_2204_HelpLinkUri", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Use &lt;list&gt; to list items in documentation.
         /// </summary>
         internal static string MiKo_2204_MessageFormat {
@@ -8785,15 +8659,6 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to http://www.blackwasp.co.uk/DocumentationLists.aspx.
-        /// </summary>
-        internal static string MiKo_2217_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_2217_HelpLinkUri", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to &lt;description&gt; is missing.
         /// </summary>
         internal static string MiKo_2217_MessageArgument_MissingDescription {
@@ -9120,15 +8985,6 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_2225_Description {
             get {
                 return ResourceManager.GetString("MiKo_2225_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/recommended-tags#c.
-        /// </summary>
-        internal static string MiKo_2225_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_2225_HelpLinkUri", resourceCulture);
             }
         }
         
@@ -9718,15 +9574,6 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/list.
-        /// </summary>
-        internal static string MiKo_2244_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_2244_HelpLinkUri", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Use &lt;list&gt; to list items in documentation.
         /// </summary>
         internal static string MiKo_2244_MessageFormat {
@@ -10284,15 +10131,6 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/events-and-callbacks.
-        /// </summary>
-        internal static string MiKo_3001_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_3001_HelpLinkUri", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Use &apos;Action&apos;, &apos;Func&apos; or &apos;Expression&apos; instead.
         /// </summary>
         internal static string MiKo_3001_MessageFormat {
@@ -10343,15 +10181,6 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_3003_Description {
             get {
                 return ResourceManager.GetString("MiKo_3003_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/event.
-        /// </summary>
-        internal static string MiKo_3003_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_3003_HelpLinkUri", resourceCulture);
             }
         }
         
@@ -10548,15 +10377,6 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/using-standard-exception-types.
-        /// </summary>
-        internal static string MiKo_3010_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_3010_HelpLinkUri", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Do not create a &apos;{0}&apos;.
         /// </summary>
         internal static string MiKo_3010_MessageFormat {
@@ -10589,15 +10409,6 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_3011_Description {
             get {
                 return ResourceManager.GetString("MiKo_3011_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/using-standard-exception-types#argumentexception-argumentnullexception-and-argumentoutofrangeexception.
-        /// </summary>
-        internal static string MiKo_3011_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_3011_HelpLinkUri", resourceCulture);
             }
         }
         
@@ -10747,15 +10558,6 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/using-standard-exception-types.
-        /// </summary>
-        internal static string MiKo_3015_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_3015_HelpLinkUri", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Throw an &apos;InvalidOperationException&apos; instead.
         /// </summary>
         internal static string MiKo_3015_MessageFormat {
@@ -10793,15 +10595,6 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_3016_Description {
             get {
                 return ResourceManager.GetString("MiKo_3016_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/using-standard-exception-types.
-        /// </summary>
-        internal static string MiKo_3016_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_3016_HelpLinkUri", resourceCulture);
             }
         }
         
@@ -10869,15 +10662,6 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-dispose.
-        /// </summary>
-        internal static string MiKo_3018_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_3018_HelpLinkUri", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Throw ObjectDisposedException if disposed.
         /// </summary>
         internal static string MiKo_3018_MessageFormat {
@@ -10937,15 +10721,6 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_3021_Description {
             get {
                 return ResourceManager.GetString("MiKo_3021_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://blog.stephencleary.com/2013/11/taskrun-etiquette-examples-dont-use.html.
-        /// </summary>
-        internal static string MiKo_3021_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_3021_HelpLinkUri", resourceCulture);
             }
         }
         
@@ -11115,15 +10890,6 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/parameter-design.
-        /// </summary>
-        internal static string MiKo_3027_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_3027_HelpLinkUri", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Do not reserve &apos;{0}&apos; for future usage.
         /// </summary>
         internal static string MiKo_3027_MessageFormat {
@@ -11201,15 +10967,6 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_3030_Description {
             get {
                 return ResourceManager.GetString("MiKo_3030_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://en.wikipedia.org/wiki/Law_of_Demeter.
-        /// </summary>
-        internal static string MiKo_3030_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_3030_HelpLinkUri", resourceCulture);
             }
         }
         
@@ -11524,15 +11281,6 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_3040_Description {
             get {
                 return ResourceManager.GetString("MiKo_3040_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/parameter-design.
-        /// </summary>
-        internal static string MiKo_3040_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_3040_HelpLinkUri", resourceCulture);
             }
         }
         
@@ -11861,15 +11609,6 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property.
-        /// </summary>
-        internal static string MiKo_3050_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_3050_HelpLinkUri", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Make it &apos;public static readonly&apos;.
         /// </summary>
         internal static string MiKo_3050_MessageFormat {
@@ -11902,15 +11641,6 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_3051_Description {
             get {
                 return ResourceManager.GetString("MiKo_3051_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property.
-        /// </summary>
-        internal static string MiKo_3051_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_3051_HelpLinkUri", resourceCulture);
             }
         }
         
@@ -11951,15 +11681,6 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertykey.
-        /// </summary>
-        internal static string MiKo_3052_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_3052_HelpLinkUri", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Make it non-public &apos;static readonly&apos;.
         /// </summary>
         internal static string MiKo_3052_MessageFormat {
@@ -11983,15 +11704,6 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_3053_Description {
             get {
                 return ResourceManager.GetString("MiKo_3053_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencyproperty.registerreadonly.
-        /// </summary>
-        internal static string MiKo_3053_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_3053_HelpLinkUri", resourceCulture);
             }
         }
         
@@ -12029,15 +11741,6 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_3054_Description {
             get {
                 return ResourceManager.GetString("MiKo_3054_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencyproperty.registerreadonly.
-        /// </summary>
-        internal static string MiKo_3054_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_3054_HelpLinkUri", resourceCulture);
             }
         }
         
@@ -13410,15 +13113,6 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://docs.nunit.org/articles/nunit/writing-tests/assertions/assertion-models/constraint.html.
-        /// </summary>
-        internal static string MiKo_3105_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_3105_HelpLinkUri", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Use &apos;Assert.That&apos; instead.
         /// </summary>
         internal static string MiKo_3105_MessageFormat {
@@ -14361,15 +14055,6 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_3215_Description {
             get {
                 return ResourceManager.GetString("MiKo_3215_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/events-and-callbacks.
-        /// </summary>
-        internal static string MiKo_3215_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_3215_HelpLinkUri", resourceCulture);
             }
         }
         
@@ -15774,15 +15459,6 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_5012_Description {
             get {
                 return ResourceManager.GetString("MiKo_5012_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://stackoverflow.com/questions/3969963/when-not-to-use-yield-return.
-        /// </summary>
-        internal static string MiKo_5012_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_5012_HelpLinkUri", resourceCulture);
             }
         }
         
