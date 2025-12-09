@@ -47,19 +47,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var type = listType.GetListType();
 
-            switch (type.ToLowerCase())
+            if (type is null // no list type specified
+             || string.Equals(type, Constants.XmlTag.ListType.Bullet, StringComparison.OrdinalIgnoreCase)
+             || string.Equals(type, Constants.XmlTag.ListType.Number, StringComparison.OrdinalIgnoreCase))
             {
-                case null: // no list type specified
-                case Constants.XmlTag.ListType.Bullet:
-                case Constants.XmlTag.ListType.Number:
-                    return AnalyzeBulletOrNumberList(list);
-
-                case Constants.XmlTag.ListType.Table:
-                    return AnalyzeTable(list);
-
-                default: // unknown type
-                    return new[] { Issue(listType, Resources.MiKo_2217_MessageArgument_UnknownTypeSpecified.FormatWith(type)) };
+                return AnalyzeBulletOrNumberList(list);
             }
+
+            if (string.Equals(type, Constants.XmlTag.ListType.Table, StringComparison.OrdinalIgnoreCase))
+            {
+                return AnalyzeTable(list);
+            }
+
+            // unknown type
+            return new[] { Issue(listType, Resources.MiKo_2217_MessageArgument_UnknownTypeSpecified.FormatWith(type)) };
         }
 
         private IEnumerable<Diagnostic> AnalyzeBulletOrNumberList(XmlElementSyntax list)
