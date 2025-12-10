@@ -6,7 +6,7 @@
 
     <!-- Avoid ID conflicts with the package project. -->
     <PackageId>*$(MSBuildProjectFile)*</PackageId>
-	
+
     <RootNamespace>MiKoSolutions.Analyzers</RootNamespace>
     <AssemblyName>MiKoSolutions.Analyzers.2019</AssemblyName>
     <AssemblyVersion>0.0.50.0</AssemblyVersion>

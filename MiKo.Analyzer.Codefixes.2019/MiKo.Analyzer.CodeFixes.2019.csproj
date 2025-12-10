@@ -16,7 +16,7 @@
     <Copyright>Copyright © 2018-2025 by MiKo Solutions. All rights reserved.</Copyright>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 
-	<RunAnalyzersDuringLiveAnalysis>false</RunAnalyzersDuringLiveAnalysis>
+    <RunAnalyzersDuringLiveAnalysis>false</RunAnalyzersDuringLiveAnalysis>
   </PropertyGroup>
   
   <ItemGroup>
