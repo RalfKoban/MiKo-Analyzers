@@ -35,6 +35,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\SyntaxTokenListExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\SyntaxTriviaExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\SyntaxTriviaListExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Throw.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\TimeSpanExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\WordBoundary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\WordsReadOnlySpanEnumerator.cs" />

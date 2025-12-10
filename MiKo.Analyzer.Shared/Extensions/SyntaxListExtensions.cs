@@ -158,7 +158,9 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            throw new InvalidOperationException("nothing found");
+            Throw.InvalidOperation("nothing found");
+
+            return default;
         }
 
         /// <summary>
@@ -194,7 +196,7 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            return default;
+            return null;
         }
 
         /// <summary>
@@ -227,7 +229,9 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            throw new InvalidOperationException("nothing found");
+            Throw.InvalidOperation("nothing found");
+
+            return default;
         }
 
         /// <summary>
@@ -257,7 +261,7 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            return default;
+            return null;
         }
 
         /// <summary>
@@ -1062,7 +1066,7 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            return default;
+            return null;
         }
     }
 }
