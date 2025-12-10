@@ -18,6 +18,7 @@
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
 
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <RunAnalyzersDuringLiveAnalysis>false</RunAnalyzersDuringLiveAnalysis>
   </PropertyGroup>
   
   <ItemGroup>
