@@ -284,17 +284,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 localFunctionIssues = AnalyzeLocalFunctions(symbol, compilation);
             }
 
-            var noNamingIssues = namingIssues.IsEmptyArray();
-            var noLocalFunctionIssues = localFunctionIssues.IsEmptyArray();
-
-            if (noLocalFunctionIssues)
+            if (localFunctionIssues.IsEmptyArray())
             {
-                if (noNamingIssues)
-                {
-                    // nothing to report here
-                    return Array.Empty<Diagnostic>();
-                }
-
+                // do not perform a check for empty arrays because in case 'namingIssues' is an empty array, we would return the empty array anyway and in case it is not, we would return it as well
                 return namingIssues;
             }
 
