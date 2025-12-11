@@ -33,9 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return "count";
             }
 
-            var length = Constants.Names.Counter.Length;
-
-            return "counted" + Pluralizer.MakePluralName(symbolName.AsCachedBuilder().Remove(symbolName.Length - length, length).ToUpperCaseAt(0).ToStringAndRelease());
+            return "counted" + Pluralizer.MakePluralName(symbolName.AsCachedBuilder().ToUpperCaseAt(0).TrimEndBy(Constants.Names.Counter.Length).ToStringAndRelease());
         }
     }
 }

@@ -83,7 +83,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     if (betterName.StartsWith(betterNamePrefix, StringComparison.Ordinal))
                     {
                         var fixedBetterName = betterName.AsCachedBuilder()
-                                                        .Remove(0, betterNamePrefix.Length)
+                                                        .TrimStartBy(betterNamePrefix.Length)
                                                         .Insert(0, methodName)
                                                         .ToStringAndRelease();
 

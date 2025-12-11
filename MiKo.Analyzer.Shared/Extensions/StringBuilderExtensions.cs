@@ -630,12 +630,12 @@ namespace MiKoSolutions.Analyzers
 
             if (end > 0)
             {
-                value.Remove(length - end, end);
+                value.TrimEndBy(end);
             }
 
             if (start > 0)
             {
-                value.Remove(0, start);
+                value.TrimStartBy(start);
             }
 
             return value;
@@ -685,7 +685,7 @@ namespace MiKoSolutions.Analyzers
 
             var start = value.CountLeadingWhitespaces();
 
-            return value.Remove(0, start);
+            return value.TrimStartBy(start);
         }
 
         /// <summary>
@@ -734,6 +734,40 @@ namespace MiKoSolutions.Analyzers
             }
 
             return value;
+        }
+
+        /// <summary>
+        /// Gets a <see cref="StringBuilder"/> where the specified number of characters are removed from the start.
+        /// </summary>
+        /// <param name="value">
+        /// The original text.
+        /// </param>
+        /// <param name="count">
+        /// The number of characters to remove from the start.
+        /// </param>
+        /// <returns>
+        /// A <see cref="StringBuilder"/> where the specified number of characters are removed from the start.
+        /// </returns>
+        public static StringBuilder TrimStartBy(this StringBuilder value, in int count)
+        {
+            if (count is 0)
+            {
+                return value;
+            }
+
+            if (count < 0)
+            {
+                Throw.ArgumentOutOfRange(nameof(count), count, "Should be greater than zero.");
+            }
+
+            var length = value.Length;
+
+            if (count > length)
+            {
+                Throw.ArgumentOutOfRange(nameof(count), count, $"Should be less than {length}.");
+            }
+
+            return value.Remove(0, count);
         }
 
         /// <summary>
@@ -807,17 +841,19 @@ namespace MiKoSolutions.Analyzers
 
             if (count < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(count), count, "Should be greater than zero.");
+                Throw.ArgumentOutOfRange(nameof(count), count, "Should be greater than zero.");
             }
 
             var length = value.Length;
 
             if (count > length)
             {
-                throw new ArgumentOutOfRangeException(nameof(count), count, $"Should be less than {length}.");
+                Throw.ArgumentOutOfRange(nameof(count), count, $"Should be less than {length}.");
             }
 
-            return value.Remove(length - count, count);
+            value.Length = length - count;
+
+            return value;
         }
 
         /// <summary>
@@ -845,7 +881,7 @@ namespace MiKoSolutions.Analyzers
                 return value;
             }
 
-            return value.Remove(length - end, end);
+            return value.TrimEndBy(end);
         }
 
         /// <summary>
@@ -979,7 +1015,7 @@ namespace MiKoSolutions.Analyzers
                 {
                     if (value.ToString(0, length).Equals(phrase, comparison))
                     {
-                        value.Remove(0, length);
+                        value.TrimStartBy(length);
                     }
                 }
             }

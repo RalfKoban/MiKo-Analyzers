@@ -25,17 +25,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 if (node is XmlElementStartTagSyntax || node is XmlEmptyElementSyntax)
                 {
-                    var tag = node.GetXmlTagName().ToLowerCase();
+                    var tag = node.GetXmlTagName();
 
-                    // <br/> is not an issue, see https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/recommended-tags#br
-                    if (tag is "p")
+                    switch (tag)
                     {
-                        if (results is null)
+                        // <br/> is not an issue, see https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/recommended-tags#br
+                        case "p":
+                        case "P":
                         {
-                            results = new List<Diagnostic>(1);
-                        }
+                            if (results is null)
+                            {
+                                results = new List<Diagnostic>(1);
+                            }
 
-                        results.Add(Issue(node));
+                            results.Add(Issue(node));
+                            break;
+                        }
                     }
                 }
             }

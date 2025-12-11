@@ -14,7 +14,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/18917.svg)](https://scan.coverity.com/projects/ralfkoban-miko-analyzers)
 
 ## Available Rules
-The following tables lists all the 530 rules that are currently provided by the analyzer.
+The following tables lists all the 531 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -182,6 +182,7 @@ The following tables lists all the 530 rules that are currently provided by the 
 |[MiKo_1519](/Documentation/MiKo_1519.md)|Do not prefix or suffix parameters with 'reference'|&#x2713;|&#x2713;|
 |[MiKo_1520](/Documentation/MiKo_1520.md)|Do not prefix or suffix local variables with 'toCopy'|&#x2713;|&#x2713;|
 |[MiKo_1521](/Documentation/MiKo_1521.md)|Do not prefix or suffix parameters with 'toCopy'|&#x2713;|&#x2713;|
+|[MiKo_1522](/Documentation/MiKo_1522.md)|Do not start void methods with 'Get'|&#x2713;|\-|
 
 ### Documentation
 |ID|Title|Enabled by default|CodeFix available|
