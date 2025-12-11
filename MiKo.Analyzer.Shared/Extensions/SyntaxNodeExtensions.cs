@@ -3255,7 +3255,7 @@ namespace MiKoSolutions.Analyzers
                    ? result
                    : result.Add(Parameter(property.Type)); // 'value' is a special parameter that is not part of the parameter list
 
-            ParameterSyntax Parameter(TypeSyntax type) => SyntaxFactory.Parameter(default, default, type, SyntaxFactory.Identifier(Constants.Names.DefaultPropertyParameterName), default);
+            ParameterSyntax Parameter(TypeSyntax type) => SyntaxFactory.Parameter(default, default, type, SyntaxFactory.Identifier(Constants.Names.DefaultPropertyParameterName), null);
         }
 
         /// <summary>

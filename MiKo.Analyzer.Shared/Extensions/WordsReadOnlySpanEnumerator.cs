@@ -128,7 +128,7 @@ namespace MiKoSolutions.Analyzers
         {
             if (m_text.Length is 0)
             {
-                throw new InvalidOperationException("No item available");
+                Throw.InvalidOperation("No item available");
             }
 
             if (m_wordStartingPositions.Length > 1)
@@ -152,7 +152,7 @@ namespace MiKoSolutions.Analyzers
         {
             if (m_text.Length is 0)
             {
-                throw new InvalidOperationException("No item available");
+                Throw.InvalidOperation("No item available");
             }
 
             return CreateEntry(m_text.Slice(m_wordStartingPositions.Length - 1));

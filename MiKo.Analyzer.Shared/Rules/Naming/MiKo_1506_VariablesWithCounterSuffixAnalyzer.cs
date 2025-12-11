@@ -47,9 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return "count";
             }
 
-            var length = Constants.Names.Counter.Length;
-
-            return "counted" + Pluralizer.MakePluralName(name.AsCachedBuilder().Remove(name.Length - length, length).ToUpperCaseAt(0).ToStringAndRelease());
+            return "counted" + Pluralizer.MakePluralName(name.AsCachedBuilder().ToUpperCaseAt(0).TrimEndBy(Constants.Names.Counter.Length).ToStringAndRelease());
         }
     }
 }

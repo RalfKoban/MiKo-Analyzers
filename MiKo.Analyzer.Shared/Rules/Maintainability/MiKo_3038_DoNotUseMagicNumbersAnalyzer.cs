@@ -18,22 +18,34 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                            // ignore zero
                                                                            "0",
                                                                            "0l",
+                                                                           "0L",
                                                                            "0u",
+                                                                           "0U",
                                                                            "0d",
+                                                                           "0D",
                                                                            "0f",
+                                                                           "0F",
                                                                            "0.0",
                                                                            "0.0f",
+                                                                           "0.0F",
                                                                            "0.0d",
+                                                                           "0.0D",
 
                                                                            // ignore one as it is often used as offset
                                                                            "1",
                                                                            "1l",
+                                                                           "1L",
                                                                            "1u",
+                                                                           "1U",
                                                                            "1d",
+                                                                           "1D",
                                                                            "1f",
+                                                                           "1F",
                                                                            "1.0",
                                                                            "1.0f",
+                                                                           "1.0F",
                                                                            "1.0d",
+                                                                           "1.0D",
 
                                                                            // ignore screen resolutions
                                                                            "320",
@@ -56,10 +68,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                            {
                                                                "2",
                                                                "2l",
+                                                               "2L",
                                                                "2u",
+                                                               "2U",
                                                                "2.0",
                                                                "2.0d",
+                                                               "2.0D",
                                                                "2.0f",
+                                                               "2.0F",
                                                            };
 
         public MiKo_3038_DoNotUseMagicNumbersAnalyzer() : base(Id, (SymbolKind)(-1))
@@ -251,9 +267,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return false;
         }
 
-        private static bool IsWellKnownNumber(string number) => WellKnownNumbers.Contains(number.ToLowerCase());
+        private static bool IsWellKnownNumber(string number) => WellKnownNumbers.Contains(number);
 
-        private static bool IsTwo(LiteralExpressionSyntax syntax) => Twos.Contains(syntax.Token.Text.ToLowerCase());
+        private static bool IsTwo(LiteralExpressionSyntax syntax) => Twos.Contains(syntax.Token.Text);
 
         private void AnalyzeNumericLiteralExpression(SyntaxNodeAnalysisContext context)
         {

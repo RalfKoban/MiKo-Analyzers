@@ -43,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var xmlTag in XmlTags)
             {
-                if (element.GetCommentElements(xmlTag).SelectMany(__ => __.Nodes()).Any(CommentHasIssue))
+                if (element.GetCommentElements(xmlTag).SelectMany(_ => _.Nodes()).Any(CommentHasIssue))
                 {
                     if (results is null)
                     {
@@ -62,32 +62,28 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (node is XElement e)
             {
                 // skip <c> and <code>
-                var name = e.Name.ToString().ToLowerCase();
+                var name = e.Name.LocalName;
 
-                switch (name)
+                if (name.Equals(Constants.XmlTag.C, StringComparison.OrdinalIgnoreCase)
+                 || name.Equals(Constants.XmlTag.Code, StringComparison.OrdinalIgnoreCase))
                 {
-                    case Constants.XmlTag.C:
-                    case Constants.XmlTag.Code:
-                        return false;
-
-                    default:
-                    {
-                        if (e.HasElements)
-                        {
-                            return e.Descendants().Any(CommentHasIssue);
-                        }
-
-                        var comment = e.Value.AsSpan().TrimStart();
-
-                        // sentence starts lower case
-                        if (name is Constants.XmlTag.Para && comment.Length > 0 && comment[0].IsLowerCaseLetter())
-                        {
-                            return true;
-                        }
-
-                        return CommentHasIssue(comment);
-                    }
+                    return false;
                 }
+
+                if (e.HasElements)
+                {
+                    return e.Descendants().Any(CommentHasIssue);
+                }
+
+                var comment = e.Value.AsSpan().TrimStart();
+
+                // sentence starts lower case
+                if (comment.Length > 0 && comment[0].IsLowerCaseLetter() && name.Equals(Constants.XmlTag.Para, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+
+                return CommentHasIssue(comment);
             }
 
             return CommentHasIssue(node.ToString().AsSpan());
