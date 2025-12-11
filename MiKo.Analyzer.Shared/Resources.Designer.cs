@@ -5400,6 +5400,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Methods that return &apos;void&apos; should not start with &apos;Get&apos; because they do not return anything. The word &apos;Get&apos; suggests a value will be retrieved, which can confuse readers. Use verbs like &apos;Load&apos;, &apos;Collect&apos;, or &apos;Populate&apos; for methods that perform actions instead.
+        ///This makes your code clearer and follows common .NET naming conventions..
+        /// </summary>
+        internal static string MiKo_1522_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1522_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename method to not start with &apos;Get&apos;.
+        /// </summary>
+        internal static string MiKo_1522_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1522_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not start void methods with &apos;Get&apos;.
+        /// </summary>
+        internal static string MiKo_1522_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1522_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fix malformed XML.
         /// </summary>
         internal static string MiKo_2000_CodeFixTitle {
