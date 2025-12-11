@@ -25,16 +25,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private void AnalyzeComment(SyntaxNodeAnalysisContext context) => ReportDiagnostics(context, AnalyzeComment(context.Node));
 
-        private IEnumerable<Diagnostic> AnalyzeComment(SyntaxNode node)
+        private IReadOnlyList<Diagnostic> AnalyzeComment(SyntaxNode node)
         {
+            List<Diagnostic> issues = null;
+
             // TODO RKN: Consider to not include all descendants, especially 'SyntaxKind.SingleLineDocumentationCommentTrivia' as inspecting documentation might take a lot of time
             foreach (var trivia in node.DescendantTrivia().Where(_ => _.IsSingleLineComment()))
             {
                 if (CommentContainsSeparator(trivia.ToString().AsSpan()))
                 {
-                    yield return Issue(trivia);
+                    if (issues is null)
+                    {
+                        issues = new List<Diagnostic>(); // use default capacity here as it may not be the only separator in the compilation unit
+                    }
+
+                    issues.Add(Issue(trivia));
                 }
             }
+
+            return (IReadOnlyList<Diagnostic>)issues ?? Array.Empty<Diagnostic>();
         }
     }
 }
