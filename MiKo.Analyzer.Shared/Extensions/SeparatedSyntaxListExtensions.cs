@@ -255,7 +255,9 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            throw new InvalidOperationException("nothing found");
+            Throw.InvalidOperation("nothing found");
+
+            return default;
         }
 
         /// <summary>
@@ -291,7 +293,7 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            return default;
+            return null;
         }
 
         internal static IEnumerable<string> GetNames(this in SeparatedSyntaxList<VariableDeclaratorSyntax> value) => value.Select(_ => _.GetName());
@@ -376,7 +378,9 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            throw new InvalidOperationException("nothing found");
+            Throw.InvalidOperation("nothing found");
+
+            return default;
         }
 
         /// <summary>
@@ -406,7 +410,7 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            return default;
+            return null;
         }
 
         /// <summary>

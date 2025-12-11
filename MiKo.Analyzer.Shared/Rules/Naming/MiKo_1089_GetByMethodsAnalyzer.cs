@@ -52,6 +52,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return Array.Empty<Diagnostic>();
         }
 
-        private static string FindBetterName(string name) => name.AsCachedBuilder().Remove(0, Get.Length).ReplaceWithProbe("By", "With").ToStringAndRelease();
+        private static string FindBetterName(string name) => name.AsCachedBuilder().TrimStartBy(Get.Length).ReplaceWithProbe("By", "With").ToStringAndRelease();
     }
 }

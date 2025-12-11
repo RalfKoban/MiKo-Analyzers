@@ -1,4 +1,5 @@
-﻿using System.Composition;
+﻿using System;
+using System.Composition;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -20,19 +21,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var attribute = GetListElement(node).GetListType();
                 var listType = attribute.GetListType();
 
-                switch (listType.ToLowerCase())
+                if (listType is null // no list type specified
+                || string.Equals(listType, Constants.XmlTag.ListType.Bullet, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(listType, Constants.XmlTag.ListType.Number, StringComparison.OrdinalIgnoreCase))
                 {
-                    case null:
-                    case Constants.XmlTag.ListType.Bullet:
-                    case Constants.XmlTag.ListType.Number:
-                    {
-                        return GetUpdatedSyntaxForBulletOrNumber(syntax, node);
-                    }
+                    return GetUpdatedSyntaxForBulletOrNumber(syntax, node);
+                }
 
-                    case Constants.XmlTag.ListType.Table:
-                    {
-                        return GetUpdatedSyntaxForTable(syntax, node);
-                    }
+                if (string.Equals(listType, Constants.XmlTag.ListType.Table, StringComparison.OrdinalIgnoreCase))
+                {
+                    return GetUpdatedSyntaxForTable(syntax, node);
                 }
             }
 

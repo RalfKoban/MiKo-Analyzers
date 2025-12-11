@@ -173,7 +173,9 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            throw new InvalidOperationException("nothing found");
+            Throw.InvalidOperation("nothing found");
+
+            return default;
         }
 
         /// <summary>
@@ -297,7 +299,9 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            throw new InvalidOperationException("nothing found");
+            Throw.InvalidOperation("nothing found");
+
+            return default;
         }
 
         /// <summary>
