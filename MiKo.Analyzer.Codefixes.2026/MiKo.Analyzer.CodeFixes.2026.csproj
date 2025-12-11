@@ -16,6 +16,7 @@
     <Copyright>Copyright © 2018-2025 by MiKo Solutions. All rights reserved.</Copyright>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <DefineConstants>$(DefineConstants);VS2026</DefineConstants>
+    <RunAnalyzersDuringLiveAnalysis>false</RunAnalyzersDuringLiveAnalysis>
   </PropertyGroup>
   
   <ItemGroup>
