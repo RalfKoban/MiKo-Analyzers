@@ -1300,6 +1300,8 @@ namespace MiKoSolutions.Analyzers
                                                                                            "OneTimeSetUpAttribute",
                                                                                            "TestFixtureSetUp", // deprecated NUnit 2.6
                                                                                            "TestFixtureSetUpAttribute", // deprecated NUnit 2.6
+                                                                                           "ClassInitialize", // MSTest
+                                                                                           "ClassInitializeAttribute", // MSTest
                                                                                        };
 
             internal static readonly ISet<string> TestOneTimeTearDownAttributeNames = new HashSet<string>
@@ -1308,7 +1310,21 @@ namespace MiKoSolutions.Analyzers
                                                                                               "OneTimeTearDownAttribute",
                                                                                               "TestFixtureTearDown", // deprecated NUnit 2.6
                                                                                               "TestFixtureTearDownAttribute", // deprecated NUnit 2.6
+                                                                                              "ClassCleanup", // MSTest
+                                                                                              "ClassCleanupAttribute", // MSTest
                                                                                           };
+
+            internal static readonly ISet<string> TestAssemblyWideSetupAttributeNames = new HashSet<string>
+                                                                                            {
+                                                                                                "AssemblyInitialize", // MSTest
+                                                                                                "AssemblyInitializeAttribute", // MSTest
+                                                                                            };
+
+            internal static readonly ISet<string> TestAssemblyWideTearDownAttributeNames = new HashSet<string>
+                                                                                               {
+                                                                                                   "AssemblyCleanup", // MSTest
+                                                                                                   "AssemblyCleanupAttribute", // MSTest
+                                                                                               };
 
             internal static readonly ISet<string> ImportAttributeNames = new HashSet<string>
                                                                              {
