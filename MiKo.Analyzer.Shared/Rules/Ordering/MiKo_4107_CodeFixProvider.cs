@@ -7,10 +7,10 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Ordering
 {
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_4103_CodeFixProvider)), Shared]
-    public sealed class MiKo_4103_CodeFixProvider : OrderingCodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_4107_CodeFixProvider)), Shared]
+    public sealed class MiKo_4107_CodeFixProvider : OrderingCodeFixProvider
     {
-        public override string FixableDiagnosticId => "MiKo_4103";
+        public override string FixableDiagnosticId => "MiKo_4107";
 
         protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic issue)
         {
@@ -20,8 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
             var otherMethods = modifiedType.ChildNodes<MethodDeclarationSyntax>().ToList();
 
-            var precedingNode = otherMethods.Find(_ => _.IsTestAssemblyWideTearDownMethod())
-                             ?? otherMethods.Find(_ => _.IsTestAssemblyWideSetUpMethod());
+            var precedingNode = otherMethods.Find(_ => _.IsTestAssemblyWideSetUpMethod());
 
             if (precedingNode is null)
             {
