@@ -1,4 +1,5 @@
 ﻿using System.Composition;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -17,15 +18,20 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
             var modifiedType = typeSyntax.RemoveNodeAndAdjustOpenCloseBraces(method);
 
-            var firstMethod = modifiedType.FirstChild<MethodDeclarationSyntax>();
+            var otherMethods = modifiedType.ChildNodes<MethodDeclarationSyntax>().ToList();
 
-            if (firstMethod.IsTestOneTimeSetUpMethod())
+            var precedingNode = otherMethods.Find(_ => _.IsTestOneTimeSetUpMethod())
+                             ?? otherMethods.Find(_ => _.IsTestAssemblyWideTearDownMethod())
+                             ?? otherMethods.Find(_ => _.IsTestAssemblyWideSetUpMethod());
+
+            if (precedingNode is null)
             {
-                // we have to add the trivia to the method (as the original one belonged to the open brace token which we removed above)
-                return modifiedType.InsertNodeAfter(firstMethod, method.WithLeadingEndOfLine());
+                // place before all other nodes as there is no one-time or assembly-wide method
+                return modifiedType.InsertNodeBefore(otherMethods[0], method);
             }
 
-            return modifiedType.InsertNodeBefore(firstMethod, method);
+            // we have to add the trivia to the method (as the original one belonged to the open brace token which we removed above)
+            return modifiedType.InsertNodeAfter(precedingNode, method.WithLeadingEndOfLine());
         }
     }
 }
