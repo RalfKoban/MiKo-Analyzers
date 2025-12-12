@@ -49,6 +49,16 @@ namespace TestHelper
                                                                    "ClassCleanup", // MSTest
                                                                ];
 
+        public static readonly string[] TestAssemblySetUps =
+                                                             [
+                                                                 "AssemblyInitialize", // MSTest
+                                                             ];
+
+        public static readonly string[] TestAssemblyTearDowns =
+                                                                [
+                                                                    "AssemblyCleanup", // MSTest
+                                                                ];
+
         public static readonly string[] Tests =
                                                 [
                                                     "Test",

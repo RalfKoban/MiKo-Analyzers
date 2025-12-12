@@ -23,6 +23,16 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
         {
             var index = 0;
 
+            if (methods.Any(_ => _.IsTestAssemblyWideSetUpMethod()))
+            {
+                index++;
+            }
+
+            if (methods.Any(_ => _.IsTestAssemblyWideTearDownMethod()))
+            {
+                index++;
+            }
+
             if (methods.Any(_ => _.IsTestOneTimeSetUpMethod()))
             {
                 index++;

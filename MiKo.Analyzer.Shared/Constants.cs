@@ -1314,6 +1314,18 @@ namespace MiKoSolutions.Analyzers
                                                                                               "ClassCleanupAttribute", // MSTest
                                                                                           };
 
+            internal static readonly ISet<string> TestAssemblyWideSetupAttributeNames = new HashSet<string>
+                                                                                            {
+                                                                                                "AssemblyInitialize", // MSTest
+                                                                                                "AssemblyInitializeAttribute", // MSTest
+                                                                                            };
+
+            internal static readonly ISet<string> TestAssemblyWideTearDownAttributeNames = new HashSet<string>
+                                                                                               {
+                                                                                                   "AssemblyCleanup", // MSTest
+                                                                                                   "AssemblyCleanupAttribute", // MSTest
+                                                                                               };
+
             internal static readonly ISet<string> ImportAttributeNames = new HashSet<string>
                                                                              {
                                                                                  "Import",

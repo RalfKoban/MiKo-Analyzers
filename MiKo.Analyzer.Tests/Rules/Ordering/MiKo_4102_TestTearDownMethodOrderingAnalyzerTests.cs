@@ -29,7 +29,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_a_test_class_with_only_a_Test_method_(
+        public void No_issue_is_reported_for_a_test_class_with_only_a_test_method_(
                                                                                [ValueSource(nameof(TestFixtures))] string fixture,
                                                                                [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
@@ -46,9 +46,9 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_a_test_class_with_a_SetUp_method_as_only_method_(
-                                                                                          [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                                          [ValueSource(nameof(TestSetUps))] string setup)
+        public void No_issue_is_reported_for_a_test_class_with_a_test_initialization_method_as_only_method_(
+                                                                                                        [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                        [ValueSource(nameof(TestSetUps))] string setup)
             => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -63,9 +63,9 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_a_test_class_with_a_TearDown_method_as_only_method_(
-                                                                                             [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                                             [ValueSource(nameof(TestTearDowns))] string tearDown)
+        public void No_issue_is_reported_for_a_test_class_with_a_test_cleanup_method_as_only_method_(
+                                                                                                 [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                 [ValueSource(nameof(TestTearDowns))] string tearDown)
             => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -80,10 +80,44 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_a_test_class_with_a_TearDown_method_before_a_Test_method_(
-                                                                                                   [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                                                   [ValueSource(nameof(TestTearDowns))] string tearDown,
-                                                                                                   [ValueSource(nameof(Tests))] string test)
+        public void No_issue_is_reported_for_a_test_class_with_only_a_AssemblyWide_test_initialization_method_(
+                                                                                                           [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                           [ValueSource(nameof(TestAssemblySetUps))] string assemblySetUp)
+            => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+[" + fixture + @"]
+public class TestMe
+{
+    [" + assemblySetUp + @"]
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_a_test_class_with_only_a_AssemblyWide_test_cleanup_method_(
+                                                                                                    [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                    [ValueSource(nameof(TestAssemblyTearDowns))] string assemblyTearDown)
+            => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+[" + fixture + @"]
+public class TestMe
+{
+    [" + assemblyTearDown + @"]
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_a_test_class_with_a_test_cleanup_method_before_a_test_method_(
+                                                                                                       [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                       [ValueSource(nameof(TestTearDowns))] string tearDown,
+                                                                                                       [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -103,10 +137,10 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_a_test_class_with_a_TearDown_method_after_a_SetUp_method_(
-                                                                                                   [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                                                   [ValueSource(nameof(TestSetUps))] string setup,
-                                                                                                   [ValueSource(nameof(TestTearDowns))] string tearDown)
+        public void No_issue_is_reported_for_a_test_class_with_a_test_cleanup_method_after_a_test_initialization_method_(
+                                                                                                                     [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                                     [ValueSource(nameof(TestSetUps))] string setup,
+                                                                                                                     [ValueSource(nameof(TestTearDowns))] string tearDown)
             => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -126,27 +160,34 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_a_TearDown_method_after_a_OneTimeSetUp_and_OneTimeTearDown_and_SetUp_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_a_test_class_with_a_test_cleanup_method_after_a_OneTime_test_initialization_and_OneTime_test_cleanup_method_(
+                                                                                                                                                      [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                                                                      [ValueSource(nameof(TestSetUps))] string setup,
+                                                                                                                                                      [ValueSource(nameof(TestTearDowns))] string tearDown,
+                                                                                                                                                      [ValueSource(nameof(TestOneTimeSetUps))] string oneTimeSetUp,
+                                                                                                                                                      [ValueSource(nameof(TestOneTimeTearDowns))] string oneTimeTearDown)
+            => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
+[" + fixture + @"]
 public class TestMe
 {
-    [OneTimeSetUp]
+    [" + oneTimeSetUp + @"]
     public void PrepareTestEnvironment()
     {
     }
 
-    [OneTimeTearDown]
+    [" + oneTimeTearDown + @"]
     public void CleanupTestEnvironment()
     {
     }
 
-    [SetUp]
+    [" + setup + @"]
     public void PrepareTest()
     {
     }
 
-    [TearDown]
+    [" + tearDown + @"]
     public void CleanupTest()
     {
     }
@@ -154,10 +195,45 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_a_test_class_with_a_TearDown_method_before_a_SetUp_method_(
-                                                                                                    [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                                                    [ValueSource(nameof(TestSetUps))] string setup,
-                                                                                                    [ValueSource(nameof(TestTearDowns))] string tearDown)
+        public void No_issue_is_reported_for_a_test_class_with_a_test_cleanup_method_after_a_AssemblyWide_test_initialization_and_AssemblyWide_test_cleanup_method_(
+                                                                                                                                                                [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                                                                                [ValueSource(nameof(TestSetUps))] string setup,
+                                                                                                                                                                [ValueSource(nameof(TestTearDowns))] string tearDown,
+                                                                                                                                                                [ValueSource(nameof(TestAssemblySetUps))] string assemblySetUp,
+                                                                                                                                                                [ValueSource(nameof(TestAssemblyTearDowns))] string assemblyTearDown)
+            => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+[" + fixture + @"]
+public class TestMe
+{
+    [" + assemblySetUp + @"]
+    public void PrepareTestAssembly()
+    {
+    }
+
+    [" + assemblyTearDown + @"]
+    public void CleanupTestAssembly()
+    {
+    }
+
+    [" + setup + @"]
+    public void PrepareTest()
+    {
+    }
+
+    [" + tearDown + @"]
+    public void CleanupTest()
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_a_test_class_with_a_test_cleanup_method_before_a_test_initialization_method_(
+                                                                                                                      [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                                      [ValueSource(nameof(TestSetUps))] string setup,
+                                                                                                                      [ValueSource(nameof(TestTearDowns))] string tearDown)
             => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -177,10 +253,10 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_a_test_class_with_a_TearDown_method_before_a_OneTimeSetUp_method_(
-                                                                                                           [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                                                           [ValueSource(nameof(TestTearDowns))] string tearDown,
-                                                                                                           [ValueSource(nameof(TestOneTimeSetUps))] string oneTimeSetUp)
+        public void An_issue_is_reported_for_a_test_class_with_a_test_cleanup_method_before_a_OneTime_test_initialization_method_(
+                                                                                                                              [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                                              [ValueSource(nameof(TestTearDowns))] string tearDown,
+                                                                                                                              [ValueSource(nameof(TestOneTimeSetUps))] string oneTimeSetUp)
             => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -200,10 +276,10 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_a_test_class_with_a_TearDown_method_before_a_OneTimeTearDown_method_(
-                                                                                                              [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                                                              [ValueSource(nameof(TestTearDowns))] string tearDown,
-                                                                                                              [ValueSource(nameof(TestOneTimeTearDowns))] string oneTimeTearDown)
+        public void An_issue_is_reported_for_a_test_class_with_a_test_cleanup_method_before_a_OneTime_test_cleanup_method_(
+                                                                                                                       [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                                       [ValueSource(nameof(TestTearDowns))] string tearDown,
+                                                                                                                       [ValueSource(nameof(TestOneTimeTearDowns))] string oneTimeTearDown)
             => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -223,10 +299,10 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_a_test_class_with_a_TearDown_method_after_a_Test_method_(
-                                                                                                  [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                                                  [ValueSource(nameof(TestTearDowns))] string tearDown,
-                                                                                                  [ValueSource(nameof(Tests))] string test)
+        public void An_issue_is_reported_for_a_test_class_with_a_test_cleanup_method_after_a_test_method_(
+                                                                                                      [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                      [ValueSource(nameof(TestTearDowns))] string tearDown,
+                                                                                                      [ValueSource(nameof(Tests))] string test)
             => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -246,9 +322,9 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_a_test_class_with_a_TearDown_method_after_a_non_Test_method_(
-                                                                                                      [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                                                      [ValueSource(nameof(TestTearDowns))] string tearDown)
+        public void An_issue_is_reported_for_a_test_class_with_a_test_cleanup_method_after_a_non_test_method_(
+                                                                                                          [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                          [ValueSource(nameof(TestTearDowns))] string tearDown)
             => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -266,9 +342,9 @@ public class TestMe
 }");
 
         [Test]
-        public void An_issue_is_reported_for_a_non_test_class_with_a_TearDown_method_after_a_Test_method_(
-                                                                                                      [ValueSource(nameof(TestTearDowns))] string tearDown,
-                                                                                                      [ValueSource(nameof(Tests))] string test)
+        public void An_issue_is_reported_for_a_non_test_class_with_a_test_cleanup_method_after_a_test_method_(
+                                                                                                          [ValueSource(nameof(TestTearDowns))] string tearDown,
+                                                                                                          [ValueSource(nameof(Tests))] string test)
             => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -287,7 +363,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_for_test_method()
+        public void Code_gets_fixed_for_NUnit_test_method()
         {
             const string OriginalCode = @"
 using NUnit.Framework;
@@ -327,7 +403,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_test_initialization_method()
+        public void Code_gets_fixed_for_NUnit_test_initialization_method()
         {
             const string OriginalCode = @"
 using NUnit.Framework;
@@ -367,7 +443,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_OneTime_test_initialization_method()
+        public void Code_gets_fixed_for_NUnit_OneTime_test_initialization_method()
         {
             const string OriginalCode = @"
 using NUnit.Framework;
@@ -407,7 +483,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_OneTime_test_cleanup_method()
+        public void Code_gets_fixed_for_NUnit_OneTime_test_cleanup_method()
         {
             const string OriginalCode = @"
 using NUnit.Framework;
@@ -447,7 +523,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_full_fledged_test()
+        public void Code_gets_fixed_for_NUnit_full_fledged_test()
         {
             const string OriginalCode = @"
 using NUnit.Framework;
@@ -507,6 +583,336 @@ public class TestMe
     }
 
     [Test]
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_MSTest_test_method()
+        {
+            const string OriginalCode = @"
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+public class TestMe
+{
+    [TestMethod]
+    public void DoSomething()
+    {
+    }
+
+    [TestCleanup]
+    public void CleanupTest()
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+public class TestMe
+{
+    [TestCleanup]
+    public void CleanupTest()
+    {
+    }
+
+    [TestMethod]
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_MSTest_test_initialization_method()
+        {
+            const string OriginalCode = @"
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+public class TestMe
+{
+    [TestCleanup]
+    public void CleanupTest()
+    {
+    }
+
+    [TestInitialize]
+    public void PrepareTest()
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+public class TestMe
+{
+    [TestInitialize]
+    public void PrepareTest()
+    {
+    }
+
+    [TestCleanup]
+    public void CleanupTest()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_MSTest_Class_test_initialization_method()
+        {
+            const string OriginalCode = @"
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+public class TestMe
+{
+    [TestCleanup]
+    public void CleanupTest()
+    {
+    }
+
+    [ClassInitialize]
+    public void PrepareTestEnvironment()
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+public class TestMe
+{
+    [ClassInitialize]
+    public void PrepareTestEnvironment()
+    {
+    }
+
+    [TestCleanup]
+    public void CleanupTest()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_MSTest_Class_test_cleanup_method()
+        {
+            const string OriginalCode = @"
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+public class TestMe
+{
+    [TestCleanup]
+    public void CleanupTest()
+    {
+    }
+
+    [ClassCleanup]
+    public void CleanupTestEnvironment()
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+public class TestMe
+{
+    [ClassCleanup]
+    public void CleanupTestEnvironment()
+    {
+    }
+
+    [TestCleanup]
+    public void CleanupTest()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_MSTest_AssemblyWide_test_initialization_method()
+        {
+            const string OriginalCode = @"
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+public class TestMe
+{
+    [TestCleanup]
+    public void CleanupTest()
+    {
+    }
+
+    [AssemblyInitialize]
+    public void PrepareTestAssembly()
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+public class TestMe
+{
+    [AssemblyInitialize]
+    public void PrepareTestAssembly()
+    {
+    }
+
+    [TestCleanup]
+    public void CleanupTest()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_MSTest_AssemblyWide_test_cleanup_method()
+        {
+            const string OriginalCode = @"
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+public class TestMe
+{
+    [TestCleanup]
+    public void CleanupTest()
+    {
+    }
+
+    [AssemblyCleanup]
+    public void CleanupTestAssembly()
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+public class TestMe
+{
+    [AssemblyCleanup]
+    public void CleanupTestAssembly()
+    {
+    }
+
+    [TestCleanup]
+    public void CleanupTest()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_MSTest_full_fledged_test()
+        {
+            const string OriginalCode = @"
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+public class TestMe
+{
+    [AssemblyInitialize]
+    public void PrepareTestAssembly()
+    {
+    }
+
+    [AssemblyCleanup]
+    public void CleanupTestAssembly()
+    {
+    }
+
+    [ClassInitialize]
+    public void PrepareTestEnvironment()
+    {
+    }
+
+    [ClassCleanup]
+    public void CleanupTestEnvironment()
+    {
+    }
+
+    [TestInitialize]
+    public void PrepareTest()
+    {
+    }
+
+    [TestMethod]
+    public void DoSomething()
+    {
+    }
+
+    [TestCleanup]
+    public void CleanupTest()
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+public class TestMe
+{
+    [AssemblyInitialize]
+    public void PrepareTestAssembly()
+    {
+    }
+
+    [AssemblyCleanup]
+    public void CleanupTestAssembly()
+    {
+    }
+
+    [ClassInitialize]
+    public void PrepareTestEnvironment()
+    {
+    }
+
+    [ClassCleanup]
+    public void CleanupTestEnvironment()
+    {
+    }
+
+    [TestInitialize]
+    public void PrepareTest()
+    {
+    }
+
+    [TestCleanup]
+    public void CleanupTest()
+    {
+    }
+
+    [TestMethod]
     public void DoSomething()
     {
     }
