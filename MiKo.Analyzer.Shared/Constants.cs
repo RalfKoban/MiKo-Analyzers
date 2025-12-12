@@ -1199,16 +1199,16 @@ namespace MiKoSolutions.Analyzers
 
         internal static class LambdaIdentifiers
         {
-            internal const string Default = "_";
-            internal const string FallbackUnderscores2 = "__";
-            internal const string FallbackUnderscores3 = "___";
-            internal const string FallbackUnderscores4 = "____";
-            internal const string Fallback0 = "_0";
-            internal const string Fallback1 = "_1";
-            internal const string Fallback2 = "_2";
-            internal const string Fallback3 = "_3";
-            internal const string Fallback4 = "_4";
-            internal const string Fallback5 = "_5";
+            internal const string Default = "ˍ";
+            internal const string FallbackUnderscores2 = "ˍˍ";
+            internal const string FallbackUnderscores3 = "ˍˍˍ";
+            internal const string FallbackUnderscores4 = "ˍˍˍˍ";
+            internal const string Fallback0 = "ˍ0";
+            internal const string Fallback1 = "ˍ1";
+            internal const string Fallback2 = "ˍ2";
+            internal const string Fallback3 = "ˍ3";
+            internal const string Fallback4 = "ˍ4";
+            internal const string Fallback5 = "ˍ5";
         }
 
         internal static class Names
