@@ -193,7 +193,7 @@ public class TestMe
     }
 
     [" + assemblySetUp + @"]
-    public void PrepareTestAssebmly()
+    public void PrepareTestAssembly()
     {
     }
 }
