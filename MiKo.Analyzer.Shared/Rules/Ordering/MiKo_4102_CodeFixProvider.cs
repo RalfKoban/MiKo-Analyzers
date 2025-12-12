@@ -22,7 +22,9 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
             var precedingNode = otherMethods.Find(_ => _.IsTestSetUpMethod())
                              ?? otherMethods.Find(_ => _.IsTestOneTimeTearDownMethod())
-                             ?? otherMethods.Find(_ => _.IsTestOneTimeSetUpMethod());
+                             ?? otherMethods.Find(_ => _.IsTestOneTimeSetUpMethod())
+                             ?? otherMethods.Find(_ => _.IsTestAssemblyWideTearDownMethod())
+                             ?? otherMethods.Find(_ => _.IsTestAssemblyWideSetUpMethod());
 
             if (precedingNode is null)
             {
