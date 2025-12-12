@@ -15158,7 +15158,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place test initialization method after [OneTimeSetUp] / [OneTimeTearDown] methods and before test cleanup and all other test methods.
+        ///   Looks up a localized string similar to Place test initialization method after one-time methods and before test cleanup and all other test methods.
         /// </summary>
         internal static string MiKo_4101_MessageFormat {
             get {
@@ -15167,7 +15167,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place test initialization methods directly after One-Time methods.
+        ///   Looks up a localized string similar to Place test initialization methods directly after one-time methods.
         /// </summary>
         internal static string MiKo_4101_Title {
             get {
@@ -15212,7 +15212,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place method before all other methods.
+        ///   Looks up a localized string similar to Place one-time test initialization method directly after assembly-wide test lifecycle methods and before all other methods.
         /// </summary>
         internal static string MiKo_4103_CodeFixTitle {
             get {
@@ -15221,7 +15221,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to One-time test initialization methods set up the key parts of the test environment. To make them easy to find, place these methods first..
+        ///   Looks up a localized string similar to One-time test initialization methods set up the key parts of the test environment. To make them easy to find, place these methods first, after the assembly-wide test lifecycle methods..
         /// </summary>
         internal static string MiKo_4103_Description {
             get {
@@ -15230,7 +15230,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place [OneTimeSetUp] method before all other methods.
+        ///   Looks up a localized string similar to Place one-time test initialization method directly after assembly-wide test lifecycle methods and before all other methods.
         /// </summary>
         internal static string MiKo_4103_MessageFormat {
             get {
@@ -15239,7 +15239,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place One-Time test initialization methods before all other methods.
+        ///   Looks up a localized string similar to Place one-time test initialization methods after assembly-wide test lifecycle methods and before all other methods.
         /// </summary>
         internal static string MiKo_4103_Title {
             get {
@@ -15248,7 +15248,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place method directly after [OneTimeSetUp] method and before all other methods.
+        ///   Looks up a localized string similar to Place method directly after one-time test initialization method and before all other methods.
         /// </summary>
         internal static string MiKo_4104_CodeFixTitle {
             get {
@@ -15266,7 +15266,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place [OneTimeTearDown] method directly after [OneTimeSetUp] method and before all other methods.
+        ///   Looks up a localized string similar to Place one-time test cleanup method directly after one-time test initialization method and before all other methods.
         /// </summary>
         internal static string MiKo_4104_MessageFormat {
             get {
@@ -15275,7 +15275,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place One-Time test cleanup methods directly after One-Time test initialization methods.
+        ///   Looks up a localized string similar to Place one-time test cleanup methods directly after one-time test initialization methods.
         /// </summary>
         internal static string MiKo_4104_Title {
             get {
@@ -15316,6 +15316,78 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_4105_Title {
             get {
                 return ResourceManager.GetString("MiKo_4105_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place assembly-wide test initialization method before all other methods.
+        /// </summary>
+        internal static string MiKo_4106_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_4106_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assembly-wide test initialization methods set up the key parts of the test assembly. To make them easy to find, place these methods first, before all other methods..
+        /// </summary>
+        internal static string MiKo_4106_Description {
+            get {
+                return ResourceManager.GetString("MiKo_4106_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place assembly-wide test initialization method before all other methods.
+        /// </summary>
+        internal static string MiKo_4106_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_4106_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place assembly-wide test initialization methods before all other methods.
+        /// </summary>
+        internal static string MiKo_4106_Title {
+            get {
+                return ResourceManager.GetString("MiKo_4106_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place assembly-wide test cleanup method directly after assembly-wide test initialization method and before all other methods.
+        /// </summary>
+        internal static string MiKo_4107_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_4107_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assembly-wide test cleanup methods handle the common tasks that must be executed after all tests are done to clean up the test assembly. To make them easy to find, place them directly after the assembly-wide test initialization methods..
+        /// </summary>
+        internal static string MiKo_4107_Description {
+            get {
+                return ResourceManager.GetString("MiKo_4107_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place assembly-wide test cleanup method directly after assembly-wide test initialization method and before all other methods.
+        /// </summary>
+        internal static string MiKo_4107_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_4107_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place assembly-wide test cleanup methods directly after assembly-wide test initialization methods.
+        /// </summary>
+        internal static string MiKo_4107_Title {
+            get {
+                return ResourceManager.GetString("MiKo_4107_Title", resourceCulture);
             }
         }
         

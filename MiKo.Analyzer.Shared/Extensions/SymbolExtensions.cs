@@ -2896,15 +2896,26 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether a method is a test method.
+        /// Determines whether a method is an assembly-wide test setup method.
         /// </summary>
         /// <param name="value">
         /// The method to inspect.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the method is a test method; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the method is an assembly-wide test setup method; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool IsTestMethod(this IMethodSymbol value) => value.IsTestSpecificMethod(Constants.Names.TestMethodAttributeNames);
+        internal static bool IsTestAssemblyWideSetUpMethod(this IMethodSymbol value) => value.IsTestSpecificMethod(Constants.Names.TestAssemblyWideSetupAttributeNames);
+
+        /// <summary>
+        /// Determines whether a method is an assembly-wide test tear down method.
+        /// </summary>
+        /// <param name="value">
+        /// The method to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method is an assembly-wide test tear down method; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsTestAssemblyWideTearDownMethod(this IMethodSymbol value) => value.IsTestSpecificMethod(Constants.Names.TestAssemblyWideTearDownAttributeNames);
 
         /// <summary>
         /// Determines whether a method is a one-time test setup method.
@@ -2949,6 +2960,17 @@ namespace MiKoSolutions.Analyzers
         /// <see langword="true"/> if the method is a test tear down method; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool IsTestTearDownMethod(this IMethodSymbol value) => value.IsTestSpecificMethod(Constants.Names.TestTearDownAttributeNames);
+
+        /// <summary>
+        /// Determines whether a method is a test method.
+        /// </summary>
+        /// <param name="value">
+        /// The method to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method is a test method; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsTestMethod(this IMethodSymbol value) => value.IsTestSpecificMethod(Constants.Names.TestMethodAttributeNames);
 
         /// <summary>
         /// Determines whether a method is a type under test creation method.
