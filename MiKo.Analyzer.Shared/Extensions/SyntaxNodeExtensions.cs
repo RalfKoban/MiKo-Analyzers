@@ -2316,15 +2316,26 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsTestClass(this ClassDeclarationSyntax value) => value.HasAttributeName(Constants.Names.TestClassAttributeNames);
 
         /// <summary>
-        /// Determines whether a method declaration represents a test method.
+        /// Determines whether a method is an assembly-wide test setup method.
         /// </summary>
         /// <param name="value">
-        /// The method declaration to check.
+        /// The method to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the method declaration represents a test method; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the method is an assembly-wide test setup method; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool IsTestMethod(this MethodDeclarationSyntax value) => value.HasAttributeName(Constants.Names.TestMethodAttributeNames);
+        internal static bool IsTestAssemblyWideSetUpMethod(this MethodDeclarationSyntax value) => value.HasAttributeName(Constants.Names.TestAssemblyWideSetupAttributeNames);
+
+        /// <summary>
+        /// Determines whether a method is an assembly-wide test tear down method.
+        /// </summary>
+        /// <param name="value">
+        /// The method to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method is an assembly-wide test tear down method; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsTestAssemblyWideTearDownMethod(this MethodDeclarationSyntax value) => value.HasAttributeName(Constants.Names.TestAssemblyWideTearDownAttributeNames);
 
         /// <summary>
         /// Determines whether a method declaration represents a test one-time setup method.
@@ -2369,6 +2380,17 @@ namespace MiKoSolutions.Analyzers
         /// <see langword="true"/> if the method declaration represents a test tear down method; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool IsTestTearDownMethod(this MethodDeclarationSyntax value) => value.HasAttributeName(Constants.Names.TestTearDownAttributeNames);
+
+        /// <summary>
+        /// Determines whether a method declaration represents a test method.
+        /// </summary>
+        /// <param name="value">
+        /// The method declaration to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method declaration represents a test method; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsTestMethod(this MethodDeclarationSyntax value) => value.HasAttributeName(Constants.Names.TestMethodAttributeNames);
 
         /// <summary>
         /// Determines whether a method declaration represents a type under test creation method.
