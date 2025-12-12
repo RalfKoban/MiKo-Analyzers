@@ -5297,10 +5297,10 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>Test initialization methods define the common parts of tests. To make them easy to find, place them directly after all one-time test initialization/cleanup methods and before all test methods.</value>
   </data>
   <data name="MiKo_4101_MessageFormat" xml:space="preserve">
-    <value>Place test initialization method after [OneTimeSetUp] / [OneTimeTearDown] methods and before test cleanup and all other test methods</value>
+    <value>Place test initialization method after one-time methods and before test cleanup and all other test methods</value>
   </data>
   <data name="MiKo_4101_Title" xml:space="preserve">
-    <value>Place test initialization methods directly after One-Time methods</value>
+    <value>Place test initialization methods directly after one-time methods</value>
   </data>
   <data name="MiKo_4102_CodeFixTitle" xml:space="preserve">
     <value>Place method after test initialization methods and before all test methods</value>
@@ -5321,22 +5321,22 @@ This organization ensures clarity and makes the code easier to find, understand 
     <value>One-time test initialization methods set up the key parts of the test environment. To make them easy to find, place these methods first.</value>
   </data>
   <data name="MiKo_4103_MessageFormat" xml:space="preserve">
-    <value>Place [OneTimeSetUp] method before all other methods</value>
+    <value>Place one-time test initialization method before all other methods</value>
   </data>
   <data name="MiKo_4103_Title" xml:space="preserve">
-    <value>Place One-Time test initialization methods before all other methods</value>
+    <value>Place one-time test initialization methods before all other methods</value>
   </data>
   <data name="MiKo_4104_CodeFixTitle" xml:space="preserve">
-    <value>Place method directly after [OneTimeSetUp] method and before all other methods</value>
+    <value>Place method directly after one-time test initialization method and before all other methods</value>
   </data>
   <data name="MiKo_4104_Description" xml:space="preserve">
     <value>One-time test cleanup methods handle the common tasks that must be executed after all tests are done to clean up the test environment. To make them easy to find, place them directly after the one-time test initialization methods.</value>
   </data>
   <data name="MiKo_4104_MessageFormat" xml:space="preserve">
-    <value>Place [OneTimeTearDown] method directly after [OneTimeSetUp] method and before all other methods</value>
+    <value>Place one-time test cleanup method directly after one-time test initialization method and before all other methods</value>
   </data>
   <data name="MiKo_4104_Title" xml:space="preserve">
-    <value>Place One-Time test cleanup methods directly after One-Time test initialization methods</value>
+    <value>Place one-time test cleanup methods directly after One-Time test initialization methods</value>
   </data>
   <data name="MiKo_4105_CodeFixTitle" xml:space="preserve">
     <value>Place field before all other fields</value>

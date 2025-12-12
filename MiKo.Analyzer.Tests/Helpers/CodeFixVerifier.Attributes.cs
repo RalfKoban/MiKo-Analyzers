@@ -37,6 +37,7 @@ namespace TestHelper
                                                                 //// "OneTimeSetUp()", // disabled to limit amount of tests
                                                                 //// nameof(OneTimeSetUpAttribute), // disabled to limit amount of tests
                                                                 "TestFixtureSetUp", // deprecated NUnit 2.6
+                                                                "ClassInitialize", // MSTest
                                                             ];
 
         public static readonly string[] TestOneTimeTearDowns =
@@ -45,6 +46,7 @@ namespace TestHelper
                                                                    //// "OneTimeTearDown()", // disabled to limit amount of tests
                                                                    //// nameof(OneTimeTearDownAttribute), // disabled to limit amount of tests
                                                                    "TestFixtureTearDown", // deprecated NUnit 2.6
+                                                                   "ClassCleanup", // MSTest
                                                                ];
 
         public static readonly string[] Tests =

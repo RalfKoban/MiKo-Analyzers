@@ -483,10 +483,10 @@ The following tables lists all the 531 rules that are currently provided by the 
 |[MiKo_4005](/Documentation/MiKo_4005.md)|Place the interface that gives a type its name directly after the type's declaration|&#x2713;|&#x2713;|
 |[MiKo_4007](/Documentation/MiKo_4007.md)|Place operators before methods|&#x2713;|&#x2713;|
 |[MiKo_4008](/Documentation/MiKo_4008.md)|Place GetHashCode methods directly after Equals methods|&#x2713;|&#x2713;|
-|[MiKo_4101](/Documentation/MiKo_4101.md)|Place test initialization methods directly after One-Time methods|&#x2713;|&#x2713;|
+|[MiKo_4101](/Documentation/MiKo_4101.md)|Place test initialization methods directly after one-time methods|&#x2713;|&#x2713;|
 |[MiKo_4102](/Documentation/MiKo_4102.md)|Place test cleanup methods after test initialization methods and before test methods|&#x2713;|&#x2713;|
-|[MiKo_4103](/Documentation/MiKo_4103.md)|Place One-Time test initialization methods before all other methods|&#x2713;|&#x2713;|
-|[MiKo_4104](/Documentation/MiKo_4104.md)|Place One-Time test cleanup methods directly after One-Time test initialization methods|&#x2713;|&#x2713;|
+|[MiKo_4103](/Documentation/MiKo_4103.md)|Place one-time test initialization methods before all other methods|&#x2713;|&#x2713;|
+|[MiKo_4104](/Documentation/MiKo_4104.md)|Place one-time test cleanup methods directly after one-time test initialization methods|&#x2713;|&#x2713;|
 |[MiKo_4105](/Documentation/MiKo_4105.md)|Place object under test fields before all other fields|&#x2713;|&#x2713;|
 
 ### Performance
