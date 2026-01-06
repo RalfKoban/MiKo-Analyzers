@@ -10,6 +10,8 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Formatting;
 
+using MiKoSolutions.Analyzers;
+
 using NUnit.Framework;
 
 //// ncrunch: rdi off
@@ -98,7 +100,7 @@ namespace TestHelper
         /// </param>
         protected void VerifyCSharpFix(string oldSource, string newSource, in LanguageVersion languageVersion = LanguageVersion.Default, int? codeFixIndex = null, in bool allowNewCompilerDiagnostics = false, in bool assertResult = true)
         {
-            VerifyFix(GetObjectUnderTest(), GetCSharpCodeFixProvider(), oldSource, newSource, languageVersion, codeFixIndex, allowNewCompilerDiagnostics, assertResult);
+            VerifyFix(GetObjectUnderTest(), GetCSharpCodeFixProvider(), StringCache.Intern(oldSource), StringCache.Intern(newSource), languageVersion, codeFixIndex, allowNewCompilerDiagnostics, assertResult);
         }
 
         /// <summary>
