@@ -3379,6 +3379,18 @@ Such documentation also undermines tool integration and usability, as IDEs rely 
   <data name="MiKo_2241_Title" xml:space="preserve">
     <value>Do not use 'empty string' in documentation</value>
   </data>
+  <data name="MiKo_2242_CodeFixTitle" xml:space="preserve">
+    <value>Replace 'string representation' with 'textual representation'</value>
+  </data>
+  <data name="MiKo_2242_Description" xml:space="preserve">
+    <value>Documentation should use "textual representation" instead of "string representation". Developers care about the content being represented (the text), not the technical type (string). This makes documentation clearer and more focused on what matters.</value>
+  </data>
+  <data name="MiKo_2242_MessageFormat" xml:space="preserve">
+    <value>Replace 'string representation' with 'textual representation'</value>
+  </data>
+  <data name="MiKo_2242_Title" xml:space="preserve">
+    <value>Use 'textual representation' instead of 'string representation' in documentation</value>
+  </data>
   <data name="MiKo_2244_CodeFixTitle" xml:space="preserve">
     <value>Use &lt;list&gt; to list items</value>
   </data>
