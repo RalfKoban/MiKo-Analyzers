@@ -482,13 +482,13 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_comment_with_e_g() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_comment_with_([Values("e.g.", "e.g", "i.e.", "i.e", "p.ex.", "p.ex")] string example) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
     /// <summary>
-    /// Does something, e.g. that is very important, on stuff.
+    /// Does something, " + example + @" that is very important, on stuff.
     /// </summary>
     public void DoSomething()
     {
