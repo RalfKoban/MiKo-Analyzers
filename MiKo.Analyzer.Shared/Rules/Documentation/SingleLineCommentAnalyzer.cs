@@ -136,28 +136,28 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var triviaToAnalyze = FindTriviaToAnalyze(node);
 
-            if (triviaToAnalyze.Count > 0)
+            if (triviaToAnalyze.Count is 0)
             {
-                var name = node.GetName();
-
-                return AnalyzeCommentTrivia(name, triviaToAnalyze, semanticModel);
+                return Array.Empty<Diagnostic>();
             }
 
-            return Array.Empty<Diagnostic>();
+            var name = node.GetName();
+
+            return AnalyzeCommentTrivia(name, triviaToAnalyze, semanticModel);
         }
 
         private IEnumerable<Diagnostic> AnalyzeCommentTrivia(AccessorDeclarationSyntax node, SemanticModel semanticModel)
         {
             var triviaToAnalyze = FindTriviaToAnalyze(node);
 
-            if (triviaToAnalyze.Count > 0)
+            if (triviaToAnalyze.Count is 0)
             {
-                var name = node.GetName();
-
-                return AnalyzeCommentTrivia(name, triviaToAnalyze, semanticModel);
+                return Array.Empty<Diagnostic>();
             }
 
-            return Array.Empty<Diagnostic>();
+            var name = node.GetName();
+
+            return AnalyzeCommentTrivia(name, triviaToAnalyze, semanticModel);
         }
 
         private IEnumerable<Diagnostic> AnalyzeCommentTrivia(string name, IReadOnlyList<SyntaxTrivia> triviaToAnalyze, SemanticModel semanticModel)
@@ -180,11 +180,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IReadOnlyList<SyntaxTrivia> FindTriviaToAnalyze(SyntaxNode node)
         {
-            TextSpan span = node.FullSpan;
+            var span = node.FullSpan;
 
             if (node.HasStructuredTrivia)
             {
-                // seems we have an XML comment (or a region), so we have to jump over the first descendant token (not child as the node may consist of other nodes!) as the trivia is located there
+                // seems we have an XML comment (or a region)
+                // so we have to jump over the first descendant token (not the child itself as the node may consist of other nodes!)
+                // as the trivia is located there
                 var token = node.FirstDescendantToken();
 
                 span = TextSpan.FromBounds(token.FullSpan.End, span.End);
@@ -198,8 +200,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     case (int)SyntaxKind.WhitespaceTrivia:
                     case (int)SyntaxKind.EndOfLineTrivia:
-                        continue;
-
                     case (int)SyntaxKind.SingleLineDocumentationCommentTrivia:
                         continue;
                 }
