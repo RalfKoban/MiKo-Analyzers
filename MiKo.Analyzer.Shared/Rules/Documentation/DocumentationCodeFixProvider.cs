@@ -61,7 +61,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// </param>
         /// <param name="comparison">
         /// One of the enumeration members that specifies the comparison rules to use.
-        /// The default is <see cref="StringComparison.Ordinal"/>.
+        /// The default is <see cref="StringComparison.OrdinalIgnoreCase"/>.
         /// </param>
         /// <returns>
         /// An array of terms where no term is a prefix of another term, ordered by specificity.
@@ -75,7 +75,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// Uses <see cref="ArrayPool{T}"/> for efficient memory allocation.
         /// </para>
         /// </remarks>
-        protected static string[] GetTermsForQuickLookup(Pair[] pairs, in StringComparison comparison = StringComparison.Ordinal)
+        protected static string[] GetTermsForQuickLookup(Pair[] pairs, in StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             var terms = pairs.ToArray(_ => _.Key.Trim());
 
@@ -90,7 +90,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// </param>
         /// <param name="comparison">
         /// One of the enumeration members that specifies the comparison rules to use.
-        /// The default is <see cref="StringComparison.Ordinal"/>.
+        /// The default is <see cref="StringComparison.OrdinalIgnoreCase"/>.
         /// </param>
         /// <returns>
         /// An array of terms where no term is a prefix of another term, ordered by specificity.
@@ -104,7 +104,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// Uses <see cref="ArrayPool{T}"/> for efficient memory allocation.
         /// </para>
         /// </remarks>
-        protected static string[] GetTermsForQuickLookup(IReadOnlyCollection<string> terms, in StringComparison comparison = StringComparison.Ordinal)
+        protected static string[] GetTermsForQuickLookup(IReadOnlyCollection<string> terms, in StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             var pool = ArrayPool<string>.Shared;
 
@@ -311,10 +311,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// The syntax node to update.
         /// </param>
         /// <param name="lookupTerms">
-        /// The terms to search for in the text. Use <see cref="GetTermsForQuickLookup(MiKoSolutions.Analyzers.Pair[])"/> to optimize this array.
+        /// The terms to search for in the text. Use <see cref="GetTermsForQuickLookup(Pair[],in StringComparison)"/> to optimize this array.
         /// </param>
         /// <param name="replacementMap">
-        /// The map of terms to their replacements (key = original, value = replacement).
+        /// The map of terms to their replacements (<see cref="Pair.Key"/> = original, <see cref="Pair.Value"/> = replacement).
         /// </param>
         /// <param name="firstWordAdjustment">
         /// A bitwise combination of the enumeration members that specifies the adjustment to apply to the first word (casing, verb form, etc.).

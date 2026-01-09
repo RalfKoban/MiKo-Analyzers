@@ -16,6 +16,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2012_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
 //// ncrunch: rdi off
+
+        private const StringComparison Comparison = StringComparison.OrdinalIgnoreCase;
+
         private static readonly string[] DefaultPhrases =
                                                           {
                                                               "A default impl",
@@ -53,7 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly Pair[] ReplacementMap = CreateReplacementMap();
 
-        private static readonly string[] ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap);
+        private static readonly string[] ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap, Comparison);
 
         private static readonly Pair[] EmptyReplacementsMap =
                                                               {
@@ -147,11 +150,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static ReadOnlySpan<char> GetUpdatedSyntax(ref XmlElementSyntax comment, XmlTextSyntax textSyntax, in ReadOnlySpan<char> text)
         {
-            if (text.ContainsAny(ReplacementMapKeys))
+            if (text.ContainsAny(ReplacementMapKeys, Comparison))
             {
                 var adjustment = FirstWordAdjustment.StartUpperCase | FirstWordAdjustment.KeepSingleLeadingSpace;
 
-                if (text.StartsWithAny(ReplacementMapKeys))
+                if (text.StartsWithAny(ReplacementMapKeys, Comparison))
                 {
                     adjustment |= FirstWordAdjustment.MakeThirdPersonSingular;
                 }
@@ -171,12 +174,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var name = member.GetName();
 
-            if (name.Contains(Constants.Names.Command, StringComparison.OrdinalIgnoreCase) && MiKo_2038_CodeFixProvider.CanFix(text))
+            if (name.Contains(Constants.Names.Command, Comparison) && MiKo_2038_CodeFixProvider.CanFix(text))
             {
                 return MiKo_2038_CodeFixProvider.GetUpdatedSyntax(comment);
             }
 
-            if (name.Contains(Constants.Names.Factory, StringComparison.OrdinalIgnoreCase) && MiKo_2060_CodeFixProvider.CanFix(text))
+            if (name.Contains(Constants.Names.Factory, Comparison) && MiKo_2060_CodeFixProvider.CanFix(text))
             {
                 return MiKo_2060_CodeFixProvider.GetUpdatedSyntax(comment);
             }
@@ -262,7 +265,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return Inheritdoc();
                 }
 
-                if (text.StartsWithAny(DefaultPhrases, StringComparison.OrdinalIgnoreCase))
+                if (text.StartsWithAny(DefaultPhrases, Comparison))
                 {
                     if (content.Count > 1 && content[1].IsSeeCref())
                     {
