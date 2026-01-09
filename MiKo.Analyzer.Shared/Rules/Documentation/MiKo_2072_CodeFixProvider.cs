@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 //// ncrunch: rdi off
 
         private static readonly Pair[] ReplacementMap = CreateReplacementMap();
-        private static readonly string[] ReplacementMapKeys = ReplacementMap.ToArray(_ => _.Key);
+        private static readonly string[] ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap);
 
 //// ncrunch: rdi default
 

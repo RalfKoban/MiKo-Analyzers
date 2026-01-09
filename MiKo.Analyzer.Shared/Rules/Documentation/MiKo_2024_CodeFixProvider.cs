@@ -38,11 +38,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                              new Pair(" that toes ", " that specifies the value to "),
                                                          };
 
-        private static readonly string[] FlagsCleanupMapKeys = FlagsCleanupMap.ToArray(_ => _.Key);
+        private static readonly string[] FlagsCleanupMapKeys = GetTermsForQuickLookup(FlagsCleanupMap);
 
-        private static readonly string[] ReplacementMapKeys = CreateReplacementMapKeys().ConcatenatedWith("Specifies", "Determines").ToArray();
+        private static readonly Pair[] ReplacementMap = CreateReplacementMapKeys().ConcatenatedWith("Specifies", "Determines").ToArray(_ => new Pair(_));
 
-        private static readonly Pair[] ReplacementMap = ReplacementMapKeys.ToArray(_ => new Pair(_));
+        private static readonly string[] ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap);
 
         public override string FixableDiagnosticId => "MiKo_2024";
 

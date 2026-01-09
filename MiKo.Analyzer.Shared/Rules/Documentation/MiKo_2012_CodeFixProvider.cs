@@ -53,14 +53,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly Pair[] ReplacementMap = CreateReplacementMap();
 
-        private static readonly string[] ReplacementMapKeys = ReplacementMap.ToArray(_ => _.Key.Trim());
+        private static readonly string[] ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap);
 
         private static readonly Pair[] EmptyReplacementsMap =
                                                               {
                                                                   new Pair("Called to "),
                                                               };
 
-        private static readonly string[] EmptyReplacementsMapKeys = EmptyReplacementsMap.ToArray(_ => _.Key);
+        private static readonly string[] EmptyReplacementsMapKeys = GetTermsForQuickLookup(EmptyReplacementsMap);
 
         private static readonly string[] GetSetReplacementPhrases = CreateGetSetReplacementPhrases().Distinct()
                                                                                                     .Except(new[] { "Gets or sets a value ", "Gets or sets ", "Gets a value ", "Sets a value ", "gets a value ", "sets a value " })
@@ -72,7 +72,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                             new Pair(Constants.Comments.FieldIsReadOnly, "##READONLY##"),
                                                         };
 
-        private static readonly string[] PreparationMapKeys = PreparationMap.ToArray(_ => _.Key.Trim());
+        private static readonly string[] PreparationMapKeys = GetTermsForQuickLookup(PreparationMap);
 
         private static readonly Pair[] CleanupMap =
                                                     {
@@ -80,7 +80,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                         new Pair("##READONLY##", Constants.Comments.FieldIsReadOnly),
                                                     };
 
-        private static readonly string[] CleanupMapKeys = CleanupMap.ToArray(_ => _.Key.Trim());
+        private static readonly string[] CleanupMapKeys = GetTermsForQuickLookup(CleanupMap);
 
 //// ncrunch: rdi default
 
