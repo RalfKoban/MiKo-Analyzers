@@ -36,7 +36,7 @@ public sealed class TestMe { }
 ");
 
         [Test]
-        public void Code_gets_fixed_for_lowe_case_string_representation()
+        public void Code_gets_fixed_for_lower_case_string_representation()
         {
             const string OriginalCode = """
 
