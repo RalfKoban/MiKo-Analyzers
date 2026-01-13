@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                             new Pair("Either the "),
                                                         };
 
-        private static readonly string[] ReplacementMapKeys = ReplacementMap.ToArray(_ => _.Key);
+        private static readonly string[] ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap);
 
         public override string FixableDiagnosticId => "MiKo_2021";
 
