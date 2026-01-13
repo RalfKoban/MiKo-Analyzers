@@ -45,6 +45,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             map.Add(new Pair(" an the", " the"));
             map.Add(new Pair(" the the", " the"));
 
+            map.Add(new Pair("A this", "This"));
+            map.Add(new Pair("An this", "This"));
+            map.Add(new Pair("The this", "The this"));
+            map.Add(new Pair(" a this", " this"));
+            map.Add(new Pair(" an this", " this"));
+            map.Add(new Pair(" the this", " this"));
+
             return map.ToArray();
         }
 
