@@ -625,6 +625,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new Pair("Use this Class to "); // typo in real-life scenario
             yield return new Pair("Use this Class, to "); // typo in real-life scenario
 
+            yield return new Pair("Use a instance of the class to ");
+            yield return new Pair("Use an instance of the class to ");
+            yield return new Pair("Use the instance of the class to ");
+            yield return new Pair("Use a instance of this class to ");
+            yield return new Pair("Use an instance of this class to ");
+            yield return new Pair("Use the instance of this class to ");
+            yield return new Pair("Use instances of the class to ");
+            yield return new Pair("Use instances of this class to ");
+            yield return new Pair("Use the instances of the class to ");
+            yield return new Pair("Use the instances of this class to ");
+            yield return new Pair("Use the class to ");
+            yield return new Pair("Use this class to ");
+            yield return new Pair("Use a this class to "); // typo
+            yield return new Pair("Use an this class to "); // typo
+            yield return new Pair("Use the this class to "); // typo
+            yield return new Pair("Use a the class to "); // typo
+            yield return new Pair("Use an the class to "); // typo
+            yield return new Pair("Use the the class to "); // typo
+
             yield return new Pair("The Method will be called", "Gets called"); // typo in real-life scenario
             yield return new Pair("The method will be called", "Gets called");
             yield return new Pair("The Method is called", "Gets called"); // typo in real-life scenario
