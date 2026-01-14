@@ -153,7 +153,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("syn", "syntax"),
                                                       new Pair("sync", "synchronization"),
                                                       new Pair("tgt", "target"),
-                                                      new Pair("tgt", "targets"),
+                                                      new Pair("tgts", "targets"),
                                                       new Pair("tm", "time"),
                                                       new Pair("tmp", "temp"),
                                                       new Pair("txt", "text"),
