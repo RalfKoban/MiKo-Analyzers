@@ -177,6 +177,12 @@ public class TestMe
         [TestCase("Gets a instance of the requested elements", "Gets the requested elements")]
         [TestCase("Gets an instance of the requested elements", "Gets the requested elements")]
         [TestCase("Gets the instance of the requested elements", "Gets the requested elements")]
+        [TestCase("Use a instance of the class to", "Use the class to")]
+        [TestCase("Use an instance of the class to", "Use the class to")]
+        [TestCase("Use the instance of the class to", "Use the class to")]
+        [TestCase("Use a instance of this class to", "Use this class to")]
+        [TestCase("Use an instance of this class to", "Use this class to")]
+        [TestCase("Use the instance of this class to", "Use this class to")]
         public void Code_gets_fixed_for_(string originalText, string fixedText)
         {
             const string Template = @"

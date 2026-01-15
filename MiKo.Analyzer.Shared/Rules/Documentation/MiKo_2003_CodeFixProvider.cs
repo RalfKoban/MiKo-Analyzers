@@ -12,44 +12,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
 //// ncrunch: rdi off
 
-        private static readonly string[] ReplacementMapKeys =
-                                                              {
-                                                                  "Callback that is called by the ",
-                                                                  "Called by ",
-                                                                  "Called by the ",
-                                                                  "Called if ",
-                                                                  "Called if the ",
-                                                                  "Called when ",
-                                                                  "Called when the ",
-                                                                  "Event handler for ",
-                                                                  "Event Handler for ",
-                                                                  "Event handler for the ",
-                                                                  "Event Handler for the ",
-                                                                  "Eventhandler for ",
-                                                                  "EventHandler for ",
-                                                                  "Eventhandler for the ",
-                                                                  "EventHandler for the ",
-                                                                  "Handle the ",
-                                                                  "Handler for ",
-                                                                  "Handler for the ",
-                                                                  "Invoke the ",
-                                                                  "Invoke the event ",
-                                                                  "Invoked by ",
-                                                                  "Invoked by the ",
-                                                                  "Invoked by the event ",
-                                                                  "Invoked when ",
-                                                                  "Invoked when the ",
-                                                                  "Invoked when the event ",
-                                                                  "Raised by ",
-                                                                  "Raised by the ",
-                                                                  "Raised when ",
-                                                                  "Raised when the ",
-                                                                  "when the ",
-                                                                  "When the ",
-                                                              };
+        private static readonly Pair[] ReplacementMap = CreateReplacementMap();
 
-        private static readonly Pair[] ReplacementMap = ReplacementMapKeys.Select(_ => new Pair(_, Constants.Comments.EventHandlerSummaryStartingPhrase))
-                                                                          .OrderDescendingByLengthAndText(_ => _.Key);
+        private static readonly string[] ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap);
 
 //// ncrunch: rdi default
 
@@ -61,5 +26,51 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return Comment(comment, ReplacementMapKeys, ReplacementMap);
         }
+
+//// ncrunch: rdi off
+
+        private static Pair[] CreateReplacementMap()
+        {
+            string[] keys =
+                            {
+                                "Callback that is called by the ",
+                                "Called by ",
+                                "Called by the ",
+                                "Called if ",
+                                "Called if the ",
+                                "Called when ",
+                                "Called when the ",
+                                "Event handler for ",
+                                "Event Handler for ",
+                                "Event handler for the ",
+                                "Event Handler for the ",
+                                "Eventhandler for ",
+                                "EventHandler for ",
+                                "Eventhandler for the ",
+                                "EventHandler for the ",
+                                "Handle the ",
+                                "Handler for ",
+                                "Handler for the ",
+                                "Invoke the ",
+                                "Invoke the event ",
+                                "Invoked by ",
+                                "Invoked by the ",
+                                "Invoked by the event ",
+                                "Invoked when ",
+                                "Invoked when the ",
+                                "Invoked when the event ",
+                                "Raised by ",
+                                "Raised by the ",
+                                "Raised when ",
+                                "Raised when the ",
+                                "when the ",
+                                "When the ",
+                            };
+
+            return keys.Select(_ => new Pair(_, Constants.Comments.EventHandlerSummaryStartingPhrase))
+                       .OrderDescendingByLengthAndText(_ => _.Key);
+        }
+
+//// ncrunch: rdi default
     }
 }
