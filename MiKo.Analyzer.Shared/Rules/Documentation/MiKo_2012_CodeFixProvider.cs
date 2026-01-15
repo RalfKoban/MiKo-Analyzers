@@ -16,6 +16,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2012_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
 //// ncrunch: rdi off
+
+        private const StringComparison Comparison = StringComparison.OrdinalIgnoreCase;
+
         private static readonly string[] DefaultPhrases =
                                                           {
                                                               "A default impl",
@@ -53,14 +56,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly Pair[] ReplacementMap = CreateReplacementMap();
 
-        private static readonly string[] ReplacementMapKeys = ReplacementMap.ToArray(_ => _.Key.Trim());
+        private static readonly string[] ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap, Comparison);
 
         private static readonly Pair[] EmptyReplacementsMap =
                                                               {
                                                                   new Pair("Called to "),
                                                               };
 
-        private static readonly string[] EmptyReplacementsMapKeys = EmptyReplacementsMap.ToArray(_ => _.Key);
+        private static readonly string[] EmptyReplacementsMapKeys = GetTermsForQuickLookup(EmptyReplacementsMap);
 
         private static readonly string[] GetSetReplacementPhrases = CreateGetSetReplacementPhrases().Distinct()
                                                                                                     .Except(new[] { "Gets or sets a value ", "Gets or sets ", "Gets a value ", "Sets a value ", "gets a value ", "sets a value " })
@@ -72,7 +75,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                             new Pair(Constants.Comments.FieldIsReadOnly, "##READONLY##"),
                                                         };
 
-        private static readonly string[] PreparationMapKeys = PreparationMap.ToArray(_ => _.Key.Trim());
+        private static readonly string[] PreparationMapKeys = GetTermsForQuickLookup(PreparationMap);
 
         private static readonly Pair[] CleanupMap =
                                                     {
@@ -80,7 +83,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                         new Pair("##READONLY##", Constants.Comments.FieldIsReadOnly),
                                                     };
 
-        private static readonly string[] CleanupMapKeys = CleanupMap.ToArray(_ => _.Key.Trim());
+        private static readonly string[] CleanupMapKeys = GetTermsForQuickLookup(CleanupMap);
 
 //// ncrunch: rdi default
 
@@ -147,11 +150,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static ReadOnlySpan<char> GetUpdatedSyntax(ref XmlElementSyntax comment, XmlTextSyntax textSyntax, in ReadOnlySpan<char> text)
         {
-            if (text.ContainsAny(ReplacementMapKeys))
+            if (text.ContainsAny(ReplacementMapKeys, Comparison))
             {
                 var adjustment = FirstWordAdjustment.StartUpperCase | FirstWordAdjustment.KeepSingleLeadingSpace;
 
-                if (text.StartsWithAny(ReplacementMapKeys))
+                if (text.StartsWithAny(ReplacementMapKeys, Comparison))
                 {
                     adjustment |= FirstWordAdjustment.MakeThirdPersonSingular;
                 }
@@ -171,12 +174,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var name = member.GetName();
 
-            if (name.Contains(Constants.Names.Command, StringComparison.OrdinalIgnoreCase) && MiKo_2038_CodeFixProvider.CanFix(text))
+            if (name.Contains(Constants.Names.Command, Comparison) && MiKo_2038_CodeFixProvider.CanFix(text))
             {
                 return MiKo_2038_CodeFixProvider.GetUpdatedSyntax(comment);
             }
 
-            if (name.Contains(Constants.Names.Factory, StringComparison.OrdinalIgnoreCase) && MiKo_2060_CodeFixProvider.CanFix(text))
+            if (name.Contains(Constants.Names.Factory, Comparison) && MiKo_2060_CodeFixProvider.CanFix(text))
             {
                 return MiKo_2060_CodeFixProvider.GetUpdatedSyntax(comment);
             }
@@ -262,7 +265,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return Inheritdoc();
                 }
 
-                if (text.StartsWithAny(DefaultPhrases, StringComparison.OrdinalIgnoreCase))
+                if (text.StartsWithAny(DefaultPhrases, Comparison))
                 {
                     if (content.Count > 1 && content[1].IsSeeCref())
                     {
@@ -621,6 +624,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new Pair("Use this class, to ");
             yield return new Pair("Use this Class to "); // typo in real-life scenario
             yield return new Pair("Use this Class, to "); // typo in real-life scenario
+
+            yield return new Pair("Use a instance of the class to ");
+            yield return new Pair("Use an instance of the class to ");
+            yield return new Pair("Use the instance of the class to ");
+            yield return new Pair("Use a instance of this class to ");
+            yield return new Pair("Use an instance of this class to ");
+            yield return new Pair("Use the instance of this class to ");
+            yield return new Pair("Use instances of the class to ");
+            yield return new Pair("Use instances of this class to ");
+            yield return new Pair("Use the instances of the class to ");
+            yield return new Pair("Use the instances of this class to ");
+            yield return new Pair("Use the class to ");
+            yield return new Pair("Use this class to ");
+            yield return new Pair("Use a this class to "); // typo
+            yield return new Pair("Use an this class to "); // typo
+            yield return new Pair("Use the this class to "); // typo
+            yield return new Pair("Use a the class to "); // typo
+            yield return new Pair("Use an the class to "); // typo
+            yield return new Pair("Use the the class to "); // typo
 
             yield return new Pair("The Method will be called", "Gets called"); // typo in real-life scenario
             yield return new Pair("The method will be called", "Gets called");

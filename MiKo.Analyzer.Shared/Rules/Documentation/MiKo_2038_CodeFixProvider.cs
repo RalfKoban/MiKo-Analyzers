@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly Pair[] CommandReplacementMap = CreateCommandReplacementMapEntries(CommandStartingPhrases).OrderDescendingByLengthAndText(_ => _.Key);
 
-        private static readonly string[] CommandReplacementMapKeys = CommandReplacementMap.ToArray(_ => _.Key);
+        private static readonly string[] CommandReplacementMapKeys = GetTermsForQuickLookup(CommandReplacementMap);
 
         private static readonly Pair[] CleanupMap =
                                                     {
@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                         new Pair(" can be used be used ", " can be used "),
                                                     };
 
-        private static readonly string[] CleanupMapKeys = CleanupMap.ToArray(_ => _.Key);
+        private static readonly string[] CleanupMapKeys = GetTermsForQuickLookup(CleanupMap);
 
 //// ncrunch: rdi default
 
