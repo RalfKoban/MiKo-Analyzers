@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] LangwordCandidates = { "true", "false", "null" };
 
-        private static readonly string[] ExampleCandidates = { "e.g", "i.e", "e.g.", "i.e." };
+        private static readonly string[] ExampleCandidates = { "e.g", "i.e", "p.ex", "e.g.", "i.e.", "p.ex." };
 
         private static readonly string[] HyperlinkIndicators = { "http:", "https:", "ftp:", "ftps:" };
 

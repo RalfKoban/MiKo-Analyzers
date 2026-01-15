@@ -547,7 +547,7 @@ namespace MiKoSolutions.Analyzers
                                                                               "The ",
                                                                               "This ",
                                                                               "To ",
-                                                                              "Use this ",
+                                                                              "Use ",
                                                                               "Used ",
                                                                               "Uses ",
                                                                               "View", // includes 'ViewModel'

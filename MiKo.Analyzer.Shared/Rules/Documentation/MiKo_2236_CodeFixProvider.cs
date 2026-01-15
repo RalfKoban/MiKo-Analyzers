@@ -13,15 +13,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                         {
                                                             new Pair("e.g.", "for example"),
                                                             new Pair("i.e.", "for example"),
+                                                            new Pair("p.ex.", "for example"),
                                                             new Pair("e. g.", "for example"),
                                                             new Pair("i. e.", "for example"),
+                                                            new Pair("p. ex.", "for example"),
                                                             new Pair("eg.", "for example"),
 
                                                             // upper-case terms
                                                             new Pair("E.g.", "For example"),
                                                             new Pair("I.e.", "For example"),
+                                                            new Pair("P.ex.", "For example"),
                                                             new Pair("E. g.", "For example"),
                                                             new Pair("I. e.", "For example"),
+                                                            new Pair("P. ex.", "For example"),
                                                             new Pair("Eg.", "For example"),
                                                         };
 

@@ -50,14 +50,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected static string GetPhraseProposal(Diagnostic issue) => issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.Phrase, out var s) ? s : string.Empty;
 
-//// ncrunch: rdi off
-//// ncrunch: no coverage start
+        //// ncrunch: rdi off
+        //// ncrunch: no coverage start
 
         /// <summary>
         /// Creates an optimized array of terms for quick lookup by removing terms that are prefixes of other terms.
         /// </summary>
-        /// <param name="terms">
+        /// <param name="pairs">
         /// The collection of terms to optimize.
+        /// </param>
+        /// <param name="comparison">
+        /// One of the enumeration members that specifies the comparison rules to use.
+        /// The default is <see cref="StringComparison.OrdinalIgnoreCase"/>.
         /// </param>
         /// <returns>
         /// An array of terms where no term is a prefix of another term, ordered by specificity.
@@ -71,7 +75,36 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// Uses <see cref="ArrayPool{T}"/> for efficient memory allocation.
         /// </para>
         /// </remarks>
-        protected static string[] GetTermsForQuickLookup(IReadOnlyCollection<string> terms)
+        protected static string[] GetTermsForQuickLookup(Pair[] pairs, in StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        {
+            var terms = pairs.ToArray(_ => _.Key.Trim());
+
+            return GetTermsForQuickLookup(terms, comparison);
+        }
+
+        /// <summary>
+        /// Creates an optimized array of terms for quick lookup by removing terms that are prefixes of other terms.
+        /// </summary>
+        /// <param name="terms">
+        /// The collection of terms to optimize.
+        /// </param>
+        /// <param name="comparison">
+        /// One of the enumeration members that specifies the comparison rules to use.
+        /// The default is <see cref="StringComparison.OrdinalIgnoreCase"/>.
+        /// </param>
+        /// <returns>
+        /// An array of terms where no term is a prefix of another term, ordered by specificity.
+        /// </returns>
+        /// <remarks>
+        /// <para>
+        /// This optimization reduces the number of comparisons needed during text replacement operations by ensuring that longer, more specific terms are checked without being shadowed by their prefixes.
+        /// For example, if input contains ["get", "getter"], only "getter" is returned since "get" is a prefix.
+        /// </para>
+        /// <para>
+        /// Uses <see cref="ArrayPool{T}"/> for efficient memory allocation.
+        /// </para>
+        /// </remarks>
+        protected static string[] GetTermsForQuickLookup(IReadOnlyCollection<string> terms, in StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             var pool = ArrayPool<string>.Shared;
 
@@ -90,7 +123,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 for (var index = 0; index < resultIndex; index++)
                 {
-                    if (span.StartsWith(rentedArray[index].AsSpan()))
+                    if (span.StartsWith(rentedArray[index].AsSpan(), comparison))
                     {
                         found = true;
 
@@ -278,10 +311,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// The syntax node to update.
         /// </param>
         /// <param name="lookupTerms">
-        /// The terms to search for in the text. Use <see cref="GetTermsForQuickLookup"/> to optimize this array.
+        /// The terms to search for in the text. Use <see cref="GetTermsForQuickLookup(Pair[],in StringComparison)"/> to optimize this array.
         /// </param>
         /// <param name="replacementMap">
-        /// The map of terms to their replacements (key = original, value = replacement).
+        /// The map of terms to their replacements (<see cref="Pair.Key"/> = original, <see cref="Pair.Value"/> = replacement).
         /// </param>
         /// <param name="firstWordAdjustment">
         /// A bitwise combination of the enumeration members that specifies the adjustment to apply to the first word (casing, verb form, etc.).
