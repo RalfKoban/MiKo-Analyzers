@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                             new Pair("to check if contained to seek", "to seek"),
                                                         };
 
-        private static readonly string[] ReplacementMapKeys = ReplacementMap.ToArray(_ => _.Key);
+        private static readonly string[] ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap);
 
         public override string FixableDiagnosticId => "MiKo_2074";
 

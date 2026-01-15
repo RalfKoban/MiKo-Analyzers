@@ -1,5 +1,4 @@
 ﻿using System.Composition;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -14,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly Pair[] ReplacementMap = { new Pair("Gets called to ") };
 
-        private static readonly string[] ReplacementMapKeys = ReplacementMap.ToArray(_ => _.Key);
+        private static readonly string[] ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap);
 
         public override string FixableDiagnosticId => "MiKo_2016";
 

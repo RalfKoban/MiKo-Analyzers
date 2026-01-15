@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Composition;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -16,9 +15,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
 //// ncrunch: rdi off
 
-        private static readonly string[] ReplacementMapKeys = CreateReplacementMapKeys().ToArray();
+        private static readonly Pair[] ReplacementMap = CreateReplacementMapKeys().ToArray(_ => new Pair(_));
 
-        private static readonly Pair[] ReplacementMap = ReplacementMapKeys.ToArray(_ => new Pair(_));
+        private static readonly string[] ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap);
 
         private static readonly string[] TypesSuffixes = { "Types", "Type", "Enum" };
 
