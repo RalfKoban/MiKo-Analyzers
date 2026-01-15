@@ -78,33 +78,33 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   "ctor",
                                                               };
 
-        private static readonly string[] CallbackPhrases =
-                                                           {
-                                                               "A callback that is called",
-                                                               "A callback which is called",
-                                                               "A method that gets called",
-                                                               "A method that is called",
-                                                               "A method which gets called",
-                                                               "A method which is called",
-                                                               "Callback that is called",
-                                                               "Callback which is called",
-                                                               "Method that gets called",
-                                                               "Method that is called",
-                                                               "Method which gets called",
-                                                               "Method which is called",
-                                                               "The callback that is called",
-                                                               "The callback which is called",
-                                                               "The method gets called",
-                                                               "The method is called",
-                                                               "The method that gets called",
-                                                               "The method that is called",
-                                                               "The method which gets called",
-                                                               "The method which is called",
-                                                               "This method gets called",
-                                                               "This method is called",
-                                                           };
+        private static readonly Pair[] CallbackReplacements = new[]
+                                                                  {
+                                                                      "A callback that is called",
+                                                                      "A callback which is called",
+                                                                      "A method that gets called",
+                                                                      "A method that is called",
+                                                                      "A method which gets called",
+                                                                      "A method which is called",
+                                                                      "Callback that is called",
+                                                                      "Callback which is called",
+                                                                      "Method that gets called",
+                                                                      "Method that is called",
+                                                                      "Method which gets called",
+                                                                      "Method which is called",
+                                                                      "The callback that is called",
+                                                                      "The callback which is called",
+                                                                      "The method gets called",
+                                                                      "The method is called",
+                                                                      "The method that gets called",
+                                                                      "The method that is called",
+                                                                      "The method which gets called",
+                                                                      "The method which is called",
+                                                                      "This method gets called",
+                                                                      "This method is called",
+                                                                  }.ToArray(_ => new Pair(_, "Gets called"));
 
-        private static readonly Pair[] CallbackReplacements = CallbackPhrases.ToArray(_ => new Pair(_, "Gets called"));
+        private static readonly string[] CallbackPhrases = GetTermsForQuickLookup(CallbackReplacements);
 
         private static readonly Pair[] CallbackReplacementsWithLy =
                                                                     {
@@ -115,7 +115,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                         new Pair(Constants.Comments.RecursivelyStartingPhrase + "invoked", Constants.Comments.RecursivelyStartingPhrase + "runs"),
                                                                     };
 
-        private static readonly string[] CallbackPhrasesWithLy = CallbackReplacementsWithLy.ToArray(_ => _.Key);
+        private static readonly string[] CallbackPhrasesWithLy = GetTermsForQuickLookup(CallbackReplacementsWithLy);
 
         public override string FixableDiagnosticId => "MiKo_2019";
 

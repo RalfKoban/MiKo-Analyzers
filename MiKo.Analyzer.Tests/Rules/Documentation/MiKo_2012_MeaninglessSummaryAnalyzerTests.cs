@@ -686,6 +686,24 @@ public class TestMe
         [TestCase("The class would be used to")]
         [TestCase("This class is used to")]
         [TestCase("Used to")]
+        [TestCase("Use a instance of the class to")]
+        [TestCase("Use an instance of the class to")]
+        [TestCase("Use the instance of the class to")]
+        [TestCase("Use a instance of this class to")]
+        [TestCase("Use an instance of this class to")]
+        [TestCase("Use the instance of this class to")]
+        [TestCase("Use instances of the class to")]
+        [TestCase("Use instances of this class to")]
+        [TestCase("Use the instances of the class to")]
+        [TestCase("Use the instances of this class to")]
+        [TestCase("Use the class to")]
+        [TestCase("Use this class to")]
+        [TestCase("Use a this class to")] // typo
+        [TestCase("Use an this class to")] // typo
+        [TestCase("Use the this class to")] // typo
+        [TestCase("Use a the class to")] // typo
+        [TestCase("Use an the class to")] // typo
+        [TestCase("Use the the class to")] // typo
         public void Code_gets_fixed_for_class_(string startingPhrase)
         {
             const string Template = @"

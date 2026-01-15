@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2236";
 
-        private static readonly string[] Phrases = { "e.g.", "i.e.", "e. g.", "i. e.", "eg." };
+        private static readonly string[] Phrases = { "e.g.", "i.e.", "e. g.", "i. e.", "eg.", "p.ex.", "p. ex." };
 
         public MiKo_2236_ExampleAbbreviationAnalyzer() : base(Id)
         {

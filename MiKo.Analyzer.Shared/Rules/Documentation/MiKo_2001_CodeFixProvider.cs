@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                        .Append(new Pair("Invoked when ", "when "))
                                                                        .OrderDescendingByLengthAndText(_ => _.Key);
 
-        private static readonly string[] ReplacementMapKeys = ReplacementMap.ToArray(_ => _.Key);
+        private static readonly string[] ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap);
 
 //// ncrunch: rdi default
 

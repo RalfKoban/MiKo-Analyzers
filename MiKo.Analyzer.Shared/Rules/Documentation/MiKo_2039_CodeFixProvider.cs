@@ -15,9 +15,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] Parts = Constants.Comments.ExtensionMethodClassStartingPhraseTemplate.FormatWith("|").Split('|');
 
-        private static readonly string[] ReplacementMapKeys = CreateReplacementMapKeys().OrderDescendingByLengthAndText();
+        private static readonly Pair[] ReplacementMap = CreateReplacementMapKeys().OrderDescendingByLengthAndText().ToArray(_ => new Pair(_));
 
-        private static readonly Pair[] ReplacementMap = ReplacementMapKeys.ToArray(_ => new Pair(_));
+        private static readonly string[] ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap);
 
 //// ncrunch: rdi default
 
