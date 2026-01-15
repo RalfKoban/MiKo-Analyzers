@@ -20,6 +20,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                        "(E.g. something)",
                                                        "(e.g. something)",
                                                        "It is eg. something.",
+                                                       "It's p.ex. something.",
+                                                       "It is p.ex. something.",
                                                    ];
 
         [Test]
@@ -78,11 +80,15 @@ public class TestMe
         [TestCase("It's i.e. something", "It's for example something")]
         [TestCase("It's e. g. something", "It's for example something")]
         [TestCase("It's i. e. something", "It's for example something")]
+        [TestCase("It's p.ex. something", "It's for example something")]
+        [TestCase("It's p. ex. something", "It's for example something")]
         [TestCase("It's something (i.e. whatever)", "It's something (for example whatever)")]
         [TestCase("E.g. something", "For example something")]
         [TestCase("I.e. something", "For example something")]
+        [TestCase("P.ex. something", "For example something")]
         [TestCase("E. g. something", "For example something")]
         [TestCase("I. e. something", "For example something")]
+        [TestCase("P. ex. something", "For example something")]
         public void Code_gets_fixed_(string originalPhrase, string fixedPhrase)
         {
             const string Template = @"

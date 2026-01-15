@@ -56,11 +56,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                         new Pair(" string result ", " result "),
                                                     };
 
-        private static readonly string[] CleanupMapKeys = CleanupMap.ToArray(_ => _.Key);
+        private static readonly string[] CleanupMapKeys = GetTermsForQuickLookup(CleanupMap);
 
-        private static readonly string[] ReplacementMapKeys = CreateReplacementMapKeys().OrderDescendingByLengthAndText();
+        private static readonly Pair[] ReplacementMap = PreparationMap.Concat(CreateReplacementMapKeys().OrderDescendingByLengthAndText().Select(_ => new Pair(_))).ToArray();
 
-        private static readonly Pair[] ReplacementMap = PreparationMap.Concat(ReplacementMapKeys.ToArray(_ => new Pair(_))).ToArray();
+        private static readonly string[] ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap);
 
 //// ncrunch: rdi default
 

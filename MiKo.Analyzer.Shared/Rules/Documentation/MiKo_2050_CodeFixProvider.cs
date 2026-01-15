@@ -16,14 +16,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 //// ncrunch: rdi off
         private static readonly Pair[] TypeReplacementMap = CreateTypePhrases().Except(Constants.Comments.ExceptionTypeSummaryStartingPhrase).OrderDescendingByLengthAndText().ToArray(_ => new Pair(_));
 
-        private static readonly string[] TypeReplacementMapKeys = TypeReplacementMap.ToArray(_ => _.Key);
+        private static readonly string[] TypeReplacementMapKeys = GetTermsForQuickLookup(TypeReplacementMap);
 
         private static readonly Pair[] TypeCleanupMap =
                                                         {
                                                             new Pair("when during", "when an error occurs during"),
                                                         };
 
-        private static readonly string[] TypeCleanupMapKeys = TypeCleanupMap.ToArray(_ => _.Key);
+        private static readonly string[] TypeCleanupMapKeys = GetTermsForQuickLookup(TypeCleanupMap);
 
 //// ncrunch: rdi default
 

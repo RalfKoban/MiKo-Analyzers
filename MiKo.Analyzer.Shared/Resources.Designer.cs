@@ -9583,6 +9583,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Replace &apos;string representation&apos; with &apos;textual representation&apos;.
+        /// </summary>
+        internal static string MiKo_2242_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2242_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should use &quot;textual representation&quot; instead of &quot;string representation&quot;. Developers care about the content being represented (the text), not the technical type (string). This makes documentation clearer and more focused on what matters..
+        /// </summary>
+        internal static string MiKo_2242_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2242_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace &apos;string representation&apos; with &apos;textual representation&apos;.
+        /// </summary>
+        internal static string MiKo_2242_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2242_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;textual representation&apos; instead of &apos;string representation&apos; in documentation.
+        /// </summary>
+        internal static string MiKo_2242_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2242_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use &lt;list&gt; to list items.
         /// </summary>
         internal static string MiKo_2244_CodeFixTitle {

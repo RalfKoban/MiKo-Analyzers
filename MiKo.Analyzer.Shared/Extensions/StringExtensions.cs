@@ -2875,7 +2875,7 @@ namespace MiKoSolutions.Analyzers
         /// <see langword="true"/> if the character is a number; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsNumber(this in char value) => char.IsNumber(value);
+        public static bool IsNumber(this in char value) => char.IsDigit(value);
 
         /// <summary>
         /// Determines whether the span is a number.
@@ -2888,12 +2888,47 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         public static bool IsNumber(this in ReadOnlySpan<char> value)
         {
-            switch (value.Length)
+            var lastPosition = value.Length - 1;
+
+            if (lastPosition is -1)
             {
-                case 0: return false;
-                case 1: return value[0].IsNumber();
-                default: return value.ToString().IsNumber();
+                return false;
             }
+
+            var last = value[lastPosition];
+
+            if (last.IsNumber())
+            {
+                switch (lastPosition)
+                {
+                    case 0: return true;
+                    case 1:
+                        // check first character to be a number or a +/- sign
+                        switch (value[0])
+                        {
+                            case '-':
+                            case '+':
+                            case '1':
+                            case '2':
+                            case '3':
+                            case '4':
+                            case '5':
+                            case '6':
+                            case '7':
+                            case '8':
+                            case '9':
+                            case '0':
+                                return true;
+                        }
+
+                        return false;
+
+                    default:
+                        return value.ToString().IsNumber();
+                }
+            }
+
+            return false;
         }
 
         /// <summary>
