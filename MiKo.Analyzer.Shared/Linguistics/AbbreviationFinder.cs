@@ -65,6 +65,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("dm", string.Empty), // 'dm' means 'Domain Model'
                                                       new Pair("doc", "document"),
                                                       new Pair("docs", "documents"),
+                                                      new Pair("docu", "documentation"),
+                                                      new Pair("docus", "documentations"),
                                                       new Pair("dst", "destination"),
                                                       new Pair("dto", string.Empty),
                                                       new Pair("ed", "edit"),
@@ -225,6 +227,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("DM", string.Empty), // 'DM' means 'Domain Model'
                                                           new Pair("Doc", "Document"),
                                                           new Pair("Docs", "Documents"),
+                                                          new Pair("Docu", "Documentation"),
+                                                          new Pair("Docus", "Documentations"),
                                                           new Pair("Dst", "Destination"),
                                                           new Pair("Dto", string.Empty),
                                                           new Pair("DTO", string.Empty),
