@@ -16,6 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                         {
                                                             "_exception_thrown",
                                                             "_throws_exception",
+                                                            "correct",
                                                             "Event_Is_Raised",
                                                             "EventFired",
                                                             "EventIsFired",
@@ -25,21 +26,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "EventRaised",
                                                             "ExceptionThrown",
                                                             "FiresEvent",
+                                                            "handle",
+                                                            "not_handle",
+                                                            "NotHandle",
                                                             "OccuredEvent",
                                                             "OccurredEvent",
+                                                            "proper",
                                                             "Raised_Event",
                                                             "RaisedEvent",
                                                             "Raises_Event",
                                                             "RaisesEvent",
                                                             "ThrowsException",
-                                                            "handle",
-                                                            "not_handle",
-                                                            "NotHandle",
-                                                            "properly",
-                                                            "correct",
                                                             "works",
-                                                            "proper_way",
-                                                            "properWay",
                                                         };
 
         private static readonly string[] KnownExceptions =
