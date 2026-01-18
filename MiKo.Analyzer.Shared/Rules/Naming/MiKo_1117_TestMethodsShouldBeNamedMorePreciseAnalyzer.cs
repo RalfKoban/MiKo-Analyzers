@@ -16,16 +16,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                         {
                                                             "_exception_thrown",
                                                             "_throws_exception",
-                                                            "Event_Is_Raised", // TODO RKN: needed?
-                                                            "EventFired", // TODO RKN: needed?
-                                                            "EventIsFired", // TODO RKN: needed?
-                                                            "EventIsRaised", // TODO RKN: needed?
-                                                            "EventOccured", // TODO RKN: needed?
-                                                            "EventOccurred", // TODO RKN: needed?
-                                                            "EventRaised", // TODO RKN: needed?
-                                                            "ExceptionThrown", // TODO RKN: needed?
+                                                            "Event_Is_Raised",
+                                                            "EventFired",
+                                                            "EventIsFired",
+                                                            "EventIsRaised",
+                                                            "EventOccured",
+                                                            "EventOccurred",
+                                                            "EventRaised",
+                                                            "ExceptionThrown",
                                                             "FiresEvent",
-                                                            "IfEventIsRaised",
                                                             "OccuredEvent",
                                                             "OccurredEvent",
                                                             "Raised_Event",
@@ -33,8 +32,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "Raises_Event",
                                                             "RaisesEvent",
                                                             "ThrowsException",
-                                                            "When_Event_Is_Raised",
-                                                            "WhenEventIsRaised",
+                                                            "handles",
+                                                            "does_not_handle",
+                                                            "do_not_handle",
+                                                            "DoesNotHandle",
+                                                            "DoNotHandle",
+                                                            "properly",
+                                                            "improperly",
+                                                            "correct",
+                                                            "works",
+                                                            "proper_way",
+                                                            "properWay",
                                                         };
 
         private static readonly string[] KnownExceptions =

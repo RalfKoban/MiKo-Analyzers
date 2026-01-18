@@ -72,6 +72,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                 "Something_ThrowsException",
                                                                 "Something_exception_thrown",
                                                                 "Something_throws_exception",
+                                                                "Something_handles",
+                                                                "Something_does_not_handle",
+                                                                "Something_do_not_handle",
+                                                                "Something_DoesNotHandle",
+                                                                "Something_DoNotHandle",
+                                                                "Something_properly",
+                                                                "Something_improperly",
+                                                                "Something_correct",
+                                                                "Something_works",
+                                                                "Something_proper_way",
+                                                                "Something_properWay",
                                                             ];
 
         [Test]
