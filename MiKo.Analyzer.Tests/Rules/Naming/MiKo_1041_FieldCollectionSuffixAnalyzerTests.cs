@@ -33,6 +33,8 @@ public class TestMe
         [TestCase("IOrderedQueryable query")]
         [TestCase("IOrderedQueryable<int> query")]
         [TestCase("int[] replacementMap")]
+        [TestCase("string[] WrongNamesForConcreteLookup")]
+        [TestCase("string[] WrongNamesForLookup")]
         public void No_issue_is_reported_for_field_(string field) => No_issue_is_reported_for(@"
 using System.Linq;
 
