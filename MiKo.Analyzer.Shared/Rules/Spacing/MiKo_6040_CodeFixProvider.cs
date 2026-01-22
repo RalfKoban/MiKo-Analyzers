@@ -23,6 +23,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                     case MemberBindingExpressionSyntax _:
                         return node;
+
+                    case ConditionalAccessExpressionSyntax _:
+                        return node;
                 }
             }
 
@@ -45,6 +48,13 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     var spaces = GetProposedSpaces(issue);
 
                     return b.WithOperatorToken(b.OperatorToken.WithLeadingSpaces(spaces));
+                }
+
+                case ConditionalAccessExpressionSyntax c:
+                {
+                    var spaces = GetProposedSpaces(issue);
+
+                    return c.WithOperatorToken(c.OperatorToken.WithLeadingSpaces(spaces));
                 }
 
                 default:
