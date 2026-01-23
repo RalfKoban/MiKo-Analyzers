@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                         return Issue(localVariable);
                     }
 
-                    case FieldDeclarationSyntax field when field.IsConst() is false:
+                    case FieldDeclarationSyntax field when field.IsConst() is false && field.Declaration.Type.IsString():
                     {
                         return Issue(field);
                     }
