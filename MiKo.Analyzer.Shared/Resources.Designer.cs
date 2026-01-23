@@ -4209,8 +4209,9 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tests with names like &apos;EventIsRaised&apos; or &apos;ExceptionThrown&apos; are too vague because they don&apos;t specify the particular event or exception involved.
-        ///To make them clearer and more descriptive, the names should include details about the exact event being raised or the exception being thrown..
+        ///   Looks up a localized string similar to Test names that use vague terms like &apos;EventIsRaised&apos;, &apos;ExceptionThrown&apos;, &apos;Handles&apos;, &apos;Proper&apos;, or &apos;Correct&apos; are unclear because they don&apos;t describe the exact behavior being tested.
+        ///
+        ///Clear, descriptive names state the action and the specific expected result, making the intent obvious without reading the test code. They act as executable documentation and make tests easier to understand, review, and maintain..
         /// </summary>
         internal static string MiKo_1117_Description {
             get {
@@ -4219,7 +4220,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test name should contain the exact event being raised or the exception being thrown.
+        ///   Looks up a localized string similar to Test name should clearly state the action and the specific expected outcome, such as the exact event, exception, or returned value.
         /// </summary>
         internal static string MiKo_1117_MessageFormat {
             get {
