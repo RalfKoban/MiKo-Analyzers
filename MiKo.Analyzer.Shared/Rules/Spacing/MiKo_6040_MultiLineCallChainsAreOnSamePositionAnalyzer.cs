@@ -53,6 +53,8 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                     case ConditionalAccessExpressionSyntax ca:
                     {
+                        dots.Push(ca.OperatorToken);
+
                         CollectDots(ca.WhenNotNull, dots);
 
                         expression = ca.Expression;
@@ -91,6 +93,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     case InitializerExpressionSyntax _:
                     case MemberDeclarationSyntax _:
                     case ArrowExpressionClauseSyntax _:
+                    case AnonymousObjectMemberDeclaratorSyntax _:
                         return false;
                 }
 
