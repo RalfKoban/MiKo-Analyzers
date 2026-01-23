@@ -16,16 +16,32 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeField, SyntaxKind.FieldDeclaration);
 
+        private static bool HasIssue(VariableDeclarationSyntax declaration)
+        {
+            foreach (var variable in declaration.Variables)
+            {
+                if (variable.Initializer?.Value is LiteralExpressionSyntax literal)
+                {
+                    if (literal.IsKind(SyntaxKind.StringLiteralExpression) && declaration.Type.IsString() is false)
+                    {
+                        // cannot make constant as the type does not match
+                        continue;
+                    }
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private void AnalyzeField(SyntaxNodeAnalysisContext context)
         {
             if (context.Node is FieldDeclarationSyntax field && field.IsReadOnly())
             {
-                foreach (var variable in field.Declaration.Variables)
+                if (HasIssue(field.Declaration))
                 {
-                    if (variable.Initializer?.Value is LiteralExpressionSyntax)
-                    {
-                        ReportDiagnostics(context, Issue(field));
-                    }
+                    ReportDiagnostics(context, Issue(field));
                 }
             }
         }
