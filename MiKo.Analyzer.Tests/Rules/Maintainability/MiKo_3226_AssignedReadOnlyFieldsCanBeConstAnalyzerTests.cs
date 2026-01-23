@@ -67,6 +67,17 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_static_readonly_field_of_string_type_when_assigned_to_different_type() => No_issue_is_reported_for(@"
+using System;
+using System.Xml.Linq;
+
+public class TestMe
+{
+    private static readonly XNamespace Value = ""test me"";
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_assigned_static_readonly_field_with_number_literal() => An_issue_is_reported_for(@"
 public class TestMe
 {

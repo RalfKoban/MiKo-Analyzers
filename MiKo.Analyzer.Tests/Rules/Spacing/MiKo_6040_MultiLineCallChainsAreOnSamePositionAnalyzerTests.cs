@@ -238,6 +238,69 @@ public class TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_nested_multi_line_call_chain_below_anonymous_object_member_declarator_indented_more_to_the_right() => An_issue_is_reported_for(@"
+using System;
+using System.IO;
+using System.Xml;
+using System.Xml.Linq;
+
+public class TestMe
+{
+    public int DoSomething(Stream stream)
+    {
+        var pous = XDocument.Load(stream).Descendants(""nameA"")
+                            .Select(_ => new
+                                             {
+                                                 Name = (string)_.Attribute(""name""),
+                                                 Type = (string)_.Attribute(""type""),
+                                                 Text = _.Descendants(""body"")
+                                                           .Elements(""ISSUE"")
+                                                         .Elements(""stuff"")
+                                                         .FirstOrDefault()
+                                                         ?.Value
+                                             })
+                            .ToList();
+        return pous.Count;
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_nested_multi_line_call_chain_below_typed_declarator_indented_more_to_the_right() => An_issue_is_reported_for(@"
+using System;
+using System.IO;
+using System.Xml;
+using System.Xml.Linq;
+
+public class TestMe
+{
+    public int DoSomething(Stream stream)
+    {
+        var pous = XDocument.Load(stream).Descendants(""nameA"")
+                            .Select(_ => new Stuff
+                                             {
+                                                 Name = (string)_.Attribute(""name""),
+                                                 Type = (string)_.Attribute(""type""),
+                                                 Text = _.Descendants(""body"")
+                                                           .Elements(""ISSUE"")
+                                                         .Elements(""stuff"")
+                                                         .FirstOrDefault()
+                                                         ?.Value
+                                             })
+                            .ToList();
+        return pous.Count;
+    }
+
+    private record Stuff
+    {
+        public string Name;
+        public string Type;
+        public string Text;
+    }
+}
+");
+
+        [Test]
         public void Code_gets_fixed_if_multi_line_call_chain_contains_calls_indented_more_to_the_right()
         {
             const string OriginalCode = @"
@@ -906,6 +969,297 @@ public class TestMe
     }
 }
 ";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_nested_multi_line_call_chain_below_anonymous_object_member_declarator_indented_more_to_the_right()
+        {
+            const string OriginalCode = """
+                                        using System;
+                                        using System.IO;
+                                        using System.Xml;
+                                        using System.Xml.Linq;
+
+                                        public class TestMe
+                                        {
+                                            public int DoSomething(Stream stream)
+                                            {
+                                                var pous = XDocument.Load(stream).Descendants("nameA")
+                                                                    .Select(_ => new
+                                                                                     {
+                                                                                         Name = (string)_.Attribute("name"),
+                                                                                         Type = (string)_.Attribute("type"),
+                                                                                         Text = _.Descendants("body")
+                                                                                                   .Elements("ISSUE")
+                                                                                                 .Elements("stuff")
+                                                                                                 .FirstOrDefault()
+                                                                                                 ?.Value
+                                                                                     })
+                                                                    .ToList();
+                                                return pous.Count;
+                                            }
+                                        }
+                                        """;
+
+            const string FixedCode = """
+                                     using System;
+                                     using System.IO;
+                                     using System.Xml;
+                                     using System.Xml.Linq;
+
+                                     public class TestMe
+                                     {
+                                         public int DoSomething(Stream stream)
+                                         {
+                                             var pous = XDocument.Load(stream).Descendants("nameA")
+                                                                 .Select(_ => new
+                                                                                  {
+                                                                                      Name = (string)_.Attribute("name"),
+                                                                                      Type = (string)_.Attribute("type"),
+                                                                                      Text = _.Descendants("body")
+                                                                                              .Elements("ISSUE")
+                                                                                              .Elements("stuff")
+                                                                                              .FirstOrDefault()
+                                                                                              ?.Value
+                                                                                  })
+                                                                 .ToList();
+                                             return pous.Count;
+                                         }
+                                     }
+                                     """;
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_nested_multi_line_call_chain_below_anonymous_object_member_declarator_completely_indented_more_to_the_right()
+        {
+            const string OriginalCode = """
+                                        using System;
+                                        using System.Xml;
+                                        using System.Xml.Linq;
+
+                                        public class TestMe
+                                        {
+                                            public int DoSomething(XDocument document)
+                                            {
+                                                return document.Descendants("nameA")
+                                                               .Count(_ => new
+                                                                               {
+                                                                                   Text = _.Descendants("body")
+                                                                                             .FirstOrDefault()
+                                                                                             ?.Value
+                                                                               });
+                                            }
+                                        }
+                                        """;
+
+            const string FixedCode = """
+                                     using System;
+                                     using System.Xml;
+                                     using System.Xml.Linq;
+
+                                     public class TestMe
+                                     {
+                                         public int DoSomething(XDocument document)
+                                         {
+                                             return document.Descendants("nameA")
+                                                            .Count(_ => new
+                                                                            {
+                                                                                Text = _.Descendants("body")
+                                                                                        .FirstOrDefault()
+                                                                                        ?.Value
+                                                                            });
+                                         }
+                                     }
+                                     """;
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_nested_multi_line_call_chain_below_typed_declarator_indented_more_to_the_right()
+        {
+            const string OriginalCode = """
+                                        using System;
+                                        using System.IO;
+                                        using System.Xml;
+                                        using System.Xml.Linq;
+
+                                        public class TestMe
+                                        {
+                                            public int DoSomething(Stream stream)
+                                            {
+                                                var pous = XDocument.Load(stream).Descendants("nameA")
+                                                                    .Select(_ => new Stuff
+                                                                                     {
+                                                                                         Name = (string)_.Attribute("name"),
+                                                                                         Type = (string)_.Attribute("type"),
+                                                                                         Text = _.Descendants("body")
+                                                                                                   .Elements("ISSUE")
+                                                                                                 .Elements("stuff")
+                                                                                                 .FirstOrDefault()
+                                                                                                 ?.Value
+                                                                                     })
+                                                                    .ToList();
+                                                return pous.Count;
+                                            }
+
+                                            private record Stuff
+                                            {
+                                                public string Name;
+                                                public string Type;
+                                                public string Text;
+                                            }
+                                        }
+                                        """;
+
+            const string FixedCode = """
+                                     using System;
+                                     using System.IO;
+                                     using System.Xml;
+                                     using System.Xml.Linq;
+
+                                     public class TestMe
+                                     {
+                                         public int DoSomething(Stream stream)
+                                         {
+                                             var pous = XDocument.Load(stream).Descendants("nameA")
+                                                                 .Select(_ => new Stuff
+                                                                                  {
+                                                                                      Name = (string)_.Attribute("name"),
+                                                                                      Type = (string)_.Attribute("type"),
+                                                                                      Text = _.Descendants("body")
+                                                                                              .Elements("ISSUE")
+                                                                                              .Elements("stuff")
+                                                                                              .FirstOrDefault()
+                                                                                              ?.Value
+                                                                                  })
+                                                                 .ToList();
+                                             return pous.Count;
+                                         }
+
+                                         private record Stuff
+                                         {
+                                             public string Name;
+                                             public string Type;
+                                             public string Text;
+                                         }
+                                     }
+                                     """;
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_multi_line_call_chain_is_mixed_with_single_line_member_binding_and_access_indented_more_to_the_left()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        var x = o.ToString()
+                 .ToString()
+                ?.ToString();
+    }
+}
+";
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        var x = o.ToString()
+                 .ToString()
+                 ?.ToString();
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_multi_line_call_chain_is_mixed_with_single_line_member_binding_and_access_indented_more_to_the_right()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        var x = o.ToString()
+                 .ToString()
+                  ?.ToString();
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        var x = o.ToString()
+                 .ToString()
+                 ?.ToString();
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_nested_multi_line_call_chain_indented_more_to_the_right()
+        {
+            const string OriginalCode = """
+                                        using System;
+                                        using System.Xml;
+                                        using System.Xml.Linq;
+
+                                        public class TestMe
+                                        {
+                                            public string DoSomething(XDocument document)
+                                            {
+                                                return XDocument.Load(stream)
+                                                                ?.Descendants("nameA")
+                                                                  ?.Elements("ISSUE")
+                                                                ?.Elements("stuff")
+                                                                ?.FirstOrDefault()
+                                                                ?.Value;
+                                            }
+                                        }
+                                        """;
+
+            const string FixedCode = """
+                                     using System;
+                                     using System.Xml;
+                                     using System.Xml.Linq;
+
+                                     public class TestMe
+                                     {
+                                         public string DoSomething(XDocument document)
+                                         {
+                                             return XDocument.Load(stream)
+                                                             ?.Descendants("nameA")
+                                                             ?.Elements("ISSUE")
+                                                             ?.Elements("stuff")
+                                                             ?.FirstOrDefault()
+                                                             ?.Value;
+                                         }
+                                     }
+                                     """;
 
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
