@@ -22,6 +22,17 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_string_literal_as_static_readonly_field_if_assigned_to_different_type() => No_issue_is_reported_for(@"
+using System;
+using System.Xml.Linq;
+
+public class TestMe
+{
+    private static readonly XNamespace Value = ""test me"";
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_string_literal_as_local_constant() => No_issue_is_reported_for(@"
 using System;
 
