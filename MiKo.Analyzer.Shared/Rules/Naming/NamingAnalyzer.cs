@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     /// </summary>
     public abstract class NamingAnalyzer : Analyzer
     {
-        private static readonly string[] Splitters = { "Of", "With", "To", "In", "From" };
+        private static readonly string[] Splitters = { "Of", "With", "To", "In", "From", "For" };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NamingAnalyzer"/> class with the unique identifier of the diagnostic and the kind of symbol to analyze.
