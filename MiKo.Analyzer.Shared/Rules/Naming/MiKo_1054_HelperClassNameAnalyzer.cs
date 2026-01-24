@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var wrongName = WrongNamesForConcreteLookup.First(_ => typeName.Contains(_, StringComparison.OrdinalIgnoreCase));
 
-                var proposal = FindBetterName(typeName.AsSpan(), wrongName);
+                var proposal = FindBetterName(typeName, wrongName);
 
                 return new[] { Issue(typeNameIdentifier, proposal, wrongName) };
             }
@@ -45,19 +45,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return Array.Empty<Diagnostic>();
         }
 
-        private static string FindBetterName(in ReadOnlySpan<char> typeName, string wrongName)
+        private static string FindBetterName(string typeName, string wrongName)
         {
-            if (typeName.Length > SpecialNameHandle.Length && typeName.StartsWith(SpecialNameHandle))
+            var betterName = typeName.Without(wrongName);
+
+            if (typeName.Length > SpecialNameHandle.Length && typeName.AsSpan().StartsWith(SpecialNameHandle))
             {
-                return typeName.WithoutNumberSuffix()
-                               .WithoutSuffix(wrongName)
-                               .Slice(SpecialNameHandle.Length)
-                               .ConcatenatedWith(SpecialNameHandler);
+                return betterName.AsSpan()
+                                 .Slice(SpecialNameHandle.Length)
+                                 .ConcatenatedWith(SpecialNameHandler);
             }
 
-            return typeName.WithoutNumberSuffix()
-                           .WithoutSuffix(wrongName)
-                           .ToString();
+            return betterName;
         }
     }
 }
