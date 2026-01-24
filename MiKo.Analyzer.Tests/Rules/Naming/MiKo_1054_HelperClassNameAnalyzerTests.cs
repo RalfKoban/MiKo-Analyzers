@@ -18,7 +18,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static readonly string[] WrongSuffixes =
                                                          [
                                                              "Helper",
-                                                             "Helper42",
                                                              "Helpers",
                                                              "Misc",
                                                              "Miscellaneous",
@@ -44,6 +43,42 @@ public class " + name + @"
 {
 }
 ");
+
+        [Test]
+        public void Code_gets_fixed_for_name_with_prefix_([ValueSource(nameof(WrongSuffixes))] string wrongPrefix)
+        {
+            var originalCode = @"
+public class " + wrongPrefix + @"TestMe
+{
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_name_with_midterm_([ValueSource(nameof(WrongSuffixes))] string wrongMidterm)
+        {
+            var originalCode = @"
+public class Test" + wrongMidterm + @"Me
+{
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
 
         [Test]
         public void Code_gets_fixed_for_name_with_suffix_([ValueSource(nameof(WrongSuffixes))] string wrongSuffix)
