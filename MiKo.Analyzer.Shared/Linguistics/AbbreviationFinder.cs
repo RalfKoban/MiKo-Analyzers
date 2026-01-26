@@ -471,26 +471,27 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return ReadOnlySpan<Pair>.Empty;
             }
 
+            const string Async = "Async";
+
             // cache findings as they will not change
-            return AlreadyFoundAbbreviations.GetOrAdd(value, _ => FindCore(Prepare(_).AsSpan().WithoutSuffix("Async")));
+            return AlreadyFoundAbbreviations.GetOrAdd(value, _ => FindCore(Prepare(_).AsSpan().WithoutSuffix(Async)));
 
             string Prepare(string s)
             {
-                const int AsyncLength = 5;
-
-                if (s.Length > AsyncLength)
+                if (s.Length > Async.Length)
                 {
-                    var index = s.IndexOf("async", StringComparison.OrdinalIgnoreCase);
+                    var index = s.IndexOf(Async, StringComparison.OrdinalIgnoreCase);
 
                     if (index >= 0)
                     {
-                        var afterIndex = index + 5;
+                        var afterIndex = index + Async.Length;
 
                         if (afterIndex < s.Length && s[afterIndex].IsUpperCase())
                         {
                             return s.AsCachedBuilder()
-                                    .Remove(index, AsyncLength)
+                                    .Remove(index, Async.Length)
                                     .Without(AllowedParts)
+                                    .Trimmed()
                                     .ToStringAndRelease();
                         }
                     }
