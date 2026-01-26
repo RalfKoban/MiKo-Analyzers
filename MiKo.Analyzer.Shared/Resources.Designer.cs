@@ -4274,6 +4274,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Test method names should be clear and meaningful. The terms &apos;when_present&apos; or &apos;if_present&apos; do not add useful information and make tests harder to understand. Use descriptive names that explain the behavior being tested instead..
+        /// </summary>
+        internal static string MiKo_1119_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1119_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;{1}&apos; from test method name.
+        /// </summary>
+        internal static string MiKo_1119_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1119_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not include &apos;when_present&apos; in test method names.
+        /// </summary>
+        internal static string MiKo_1119_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1119_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rename exception.
         /// </summary>
         internal static string MiKo_1200_CodeFixTitle {
