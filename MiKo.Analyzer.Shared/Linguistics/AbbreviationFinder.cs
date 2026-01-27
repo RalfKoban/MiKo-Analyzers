@@ -62,6 +62,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("diffs", "differences"),
                                                       new Pair("dir", "directory"),
                                                       new Pair("dirs", "directories"),
+                                                      new Pair("div", "division"),
                                                       new Pair("dlg", "dialog"),
                                                       new Pair("dlgt", "delegate"),
                                                       new Pair("dm", string.Empty), // 'dm' means 'Domain Model'
@@ -163,6 +164,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("syn", "syntax"),
                                                       new Pair("sync", "synchronization"),
                                                       new Pair("synchron", "synchronous"),
+                                                      new Pair("sys", "system"),
                                                       new Pair("tgt", "target"),
                                                       new Pair("tgts", "targets"),
                                                       new Pair("tm", "time"),
@@ -234,6 +236,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Diffs", "Differences"),
                                                           new Pair("Dir", "Directory"),
                                                           new Pair("Dirs", "Directories"),
+                                                          new Pair("Div", "Division"),
                                                           new Pair("Dlg", "Dialog"),
                                                           new Pair("Dlgt", "Delegate"),
                                                           new Pair("Dm", string.Empty), // 'Dm' means 'Domain Model'
@@ -337,6 +340,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Syn", "Syntax"),
                                                           new Pair("Sync", "Synchronization"),
                                                           new Pair("Synchron", "Synchronous"),
+                                                          new Pair("Sys", "System"),
                                                           new Pair("Tgt", "Target"),
                                                           new Pair("Tgts", "Targets"),
                                                           new Pair("Tm", "Time"),
