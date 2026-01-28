@@ -1564,6 +1564,15 @@ Clear, descriptive names state the action and the specific expected result, maki
   <data name="MiKo_1118_Title" xml:space="preserve">
     <value>Do not end test method names with 'Async'</value>
   </data>
+  <data name="MiKo_1119_Description" xml:space="preserve">
+    <value>Test method names should be clear and meaningful. The terms 'when_present' or 'if_present' do not add useful information and make tests harder to understand. Use descriptive names that explain the behavior being tested instead.</value>
+  </data>
+  <data name="MiKo_1119_MessageFormat" xml:space="preserve">
+    <value>Remove '{1}' from test method name</value>
+  </data>
+  <data name="MiKo_1119_Title" xml:space="preserve">
+    <value>Do not include 'when_present' in test method names</value>
+  </data>
   <data name="MiKo_1200_CodeFixTitle" xml:space="preserve">
     <value>Rename exception</value>
   </data>
@@ -1962,6 +1971,17 @@ This makes your code clearer and follows common .NET naming conventions.</value>
   </data>
   <data name="MiKo_1522_Title" xml:space="preserve">
     <value>Do not start void methods with 'Get'</value>
+  </data>
+  <data name="MiKo_1523_Description" xml:space="preserve">
+    <value>Method names should describe the specific behavior they provide, not label the method as a generic helper.
+Names like 'Helper', 'HelpingMethod', or 'XxxHelper' are vague and add no meaningful semantic information. Whether a method "helps" is already implied by how and where it's used.
+Using action‑oriented, descriptive names that communicate intent and effect makes the code clearer and easier to understand.</value>
+  </data>
+  <data name="MiKo_1523_MessageFormat" xml:space="preserve">
+    <value>Remove '{1}' from method name</value>
+  </data>
+  <data name="MiKo_1523_Title" xml:space="preserve">
+    <value>Do not name methods 'Helper'</value>
   </data>
   <data name="MiKo_2000_CodeFixTitle" xml:space="preserve">
     <value>Fix malformed XML</value>
