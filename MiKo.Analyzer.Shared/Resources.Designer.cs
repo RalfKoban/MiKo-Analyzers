@@ -4274,6 +4274,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Test method names should be clear and meaningful. The terms &apos;when_present&apos; or &apos;if_present&apos; do not add useful information and make tests harder to understand. Use descriptive names that explain the behavior being tested instead..
+        /// </summary>
+        internal static string MiKo_1119_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1119_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;{1}&apos; from test method name.
+        /// </summary>
+        internal static string MiKo_1119_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1119_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not include &apos;when_present&apos; in test method names.
+        /// </summary>
+        internal static string MiKo_1119_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1119_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rename exception.
         /// </summary>
         internal static string MiKo_1200_CodeFixTitle {
@@ -5425,6 +5452,35 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_1522_Title {
             get {
                 return ResourceManager.GetString("MiKo_1522_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Method names should describe the specific behavior they provide, not label the method as a generic helper.
+        ///Names like &apos;Helper&apos;, &apos;HelpingMethod&apos;, or &apos;XxxHelper&apos; are vague and add no meaningful semantic information. Whether a method &quot;helps&quot; is already implied by how and where it&apos;s used.
+        ///Using action‑oriented, descriptive names that communicate intent and effect makes the code clearer and easier to understand..
+        /// </summary>
+        internal static string MiKo_1523_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1523_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;{1}&apos; from method name.
+        /// </summary>
+        internal static string MiKo_1523_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1523_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not name methods &apos;Helper&apos;.
+        /// </summary>
+        internal static string MiKo_1523_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1523_Title", resourceCulture);
             }
         }
         
