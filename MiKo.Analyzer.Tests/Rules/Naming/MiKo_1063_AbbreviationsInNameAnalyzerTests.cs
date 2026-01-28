@@ -581,7 +581,80 @@ namespace Bla
     {
         private int _###;
     }
-}
+}";
+
+            VerifyCSharpFix(Template.Replace("###", originalName), Template.Replace("###", fixedName));
+        }
+
+        [Ignore("Currently, renaming tuples does not work. See https://github.com/dotnet/roslyn/issues/14115")]
+        [TestCase("lang", "language")]
+        [TestCase("decl", "declaration")]
+        [TestCase("impl", "implementation")]
+        public void Code_gets_fixed_for_incorrectly_named_tuple_element_(string originalName, string fixedName)
+        {
+            const string Template = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            static (string? ###) Extract(object o) => null;
+        }
+    }
+}";
+
+            VerifyCSharpFix(Template.Replace("###", originalName), Template.Replace("###", fixedName));
+        }
+
+        [TestCase("lang", "language")]
+        [TestCase("decl", "declaration")]
+        [TestCase("impl", "implementation")]
+        public void Code_gets_fixed_for_incorrectly_named_deconstructed_simplified_variable_(string originalName, string fixedName)
+        {
+            const string Template = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            var (###) = Extract(null);
+
+            static (string? result) Extract(object o) => null;
+        }
+    }
+}";
+
+            VerifyCSharpFix(Template.Replace("###", originalName), Template.Replace("###", fixedName));
+        }
+
+        [TestCase("lang", "language")]
+        [TestCase("decl", "declaration")]
+        [TestCase("impl", "implementation")]
+        public void Code_gets_fixed_for_incorrectly_named_deconstructed_variable_(string originalName, string fixedName)
+        {
+            const string Template = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            (var ###, var result) = Extract(null);
+
+            static (string? a, string? b) Extract(object o)
+            {
+                return (o?.ToString(), o?.ToString());
+            }
+        }
+    }
 }";
 
             VerifyCSharpFix(Template.Replace("###", originalName), Template.Replace("###", fixedName));
