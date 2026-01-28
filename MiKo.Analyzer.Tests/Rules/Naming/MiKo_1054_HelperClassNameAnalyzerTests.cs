@@ -15,20 +15,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1054_HelperClassNameAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] WrongSuffixes =
-                                                         [
-                                                             "Helper",
-                                                             "Helper42",
-                                                             "Helpers",
-                                                             "Misc",
-                                                             "Miscellaneous",
-                                                             "Util",
-                                                             "Utils",
-                                                             "Utility",
-                                                             "Utilities",
-                                                         ];
+        private static readonly string[] WrongTerms =
+                                                      [
+                                                          "Helper",
+                                                          "Helpers",
+                                                          "Misc",
+                                                          "Miscellaneous",
+                                                          "Util",
+                                                          "Utils",
+                                                          "Utility",
+                                                          "Utilities",
+                                                      ];
 
-        private static readonly string[] WrongNames = CreateWrongNames(WrongSuffixes);
+        private static readonly string[] WrongNames = CreateWrongNames(WrongTerms);
         private static readonly string[] CorrectNames = ["TestMe", "OnlineHelp", "SoftwareUtilization"];
 
         [Test]
@@ -46,10 +45,10 @@ public class " + name + @"
 ");
 
         [Test]
-        public void Code_gets_fixed_for_name_with_suffix_([ValueSource(nameof(WrongSuffixes))] string wrongSuffix)
+        public void Code_gets_fixed_for_name_with_prefix_([ValueSource(nameof(WrongTerms))] string term)
         {
             var originalCode = @"
-public class TestMe" + wrongSuffix + @"
+public class " + term + @"TestMe
 {
 }
 ";
@@ -64,10 +63,46 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_Handle_type_name_with_suffix_([ValueSource(nameof(WrongSuffixes))] string wrongSuffix)
+        public void Code_gets_fixed_for_name_with_midterm_([ValueSource(nameof(WrongTerms))] string term)
         {
             var originalCode = @"
-public class HandleTestMe" + wrongSuffix + @"
+public class Test" + term + @"Me
+{
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_name_with_suffix_([ValueSource(nameof(WrongTerms))] string term)
+        {
+            var originalCode = @"
+public class TestMe" + term + @"
+{
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_Handle_type_name_with_suffix_([ValueSource(nameof(WrongTerms))] string term)
+        {
+            var originalCode = @"
+public class HandleTestMe" + term + @"
 {
 }
 ";
