@@ -5456,6 +5456,35 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Method names should describe the specific behavior they provide, not label the method as a generic helper.
+        ///Names like &apos;Helper&apos;, &apos;HelpingMethod&apos;, or &apos;XxxHelper&apos; are vague and add no meaningful semantic information. Whether a method &quot;helps&quot; is already implied by how and where it&apos;s used.
+        ///Using action‑oriented, descriptive names that communicate intent and effect makes the code clearer and easier to understand..
+        /// </summary>
+        internal static string MiKo_1523_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1523_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;{1}&apos; from method name.
+        /// </summary>
+        internal static string MiKo_1523_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1523_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not name methods &apos;Helper&apos;.
+        /// </summary>
+        internal static string MiKo_1523_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1523_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fix malformed XML.
         /// </summary>
         internal static string MiKo_2000_CodeFixTitle {
