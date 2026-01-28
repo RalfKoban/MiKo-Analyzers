@@ -20,6 +20,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("arr", "array"),
                                                       new Pair("assoc", "association"),
                                                       new Pair("assocs", "associations"),
+                                                      new Pair("asynchron", "asynchronous"),
                                                       new Pair("attr", "attribute"),
                                                       new Pair("auth", "authorization"),
                                                       new Pair("btn", "button"),
@@ -61,6 +62,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("diffs", "differences"),
                                                       new Pair("dir", "directory"),
                                                       new Pair("dirs", "directories"),
+                                                      new Pair("div", "division"),
                                                       new Pair("dlg", "dialog"),
                                                       new Pair("dlgt", "delegate"),
                                                       new Pair("dm", string.Empty), // 'dm' means 'Domain Model'
@@ -161,6 +163,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("svc", "service"),
                                                       new Pair("syn", "syntax"),
                                                       new Pair("sync", "synchronization"),
+                                                      new Pair("synchron", "synchronous"),
+                                                      new Pair("sys", "system"),
                                                       new Pair("tgt", "target"),
                                                       new Pair("tgts", "targets"),
                                                       new Pair("tm", "time"),
@@ -183,6 +187,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Arr", "Array"),
                                                           new Pair("Assoc", "Association"),
                                                           new Pair("Assocs", "Associations"),
+                                                          new Pair("Asynchron", "Asynchronous"),
                                                           new Pair("Attr", "Attribute"),
                                                           new Pair("Auth", "Authorization"),
                                                           new Pair("Bl", "BusinessLogic"),
@@ -231,6 +236,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Diffs", "Differences"),
                                                           new Pair("Dir", "Directory"),
                                                           new Pair("Dirs", "Directories"),
+                                                          new Pair("Div", "Division"),
                                                           new Pair("Dlg", "Dialog"),
                                                           new Pair("Dlgt", "Delegate"),
                                                           new Pair("Dm", string.Empty), // 'Dm' means 'Domain Model'
@@ -333,6 +339,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Svc", "Service"),
                                                           new Pair("Syn", "Syntax"),
                                                           new Pair("Sync", "Synchronization"),
+                                                          new Pair("Synchron", "Synchronous"),
+                                                          new Pair("Sys", "System"),
                                                           new Pair("Tgt", "Target"),
                                                           new Pair("Tgts", "Targets"),
                                                           new Pair("Tm", "Time"),
@@ -384,7 +392,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly string[] AllowedParts =
                                                         {
-                                                            "Async",
+                                                            // TODO RKN: Remove me "Async",
                                                             "Enumerable",
                                                             "Enumeration",
                                                             "Enum", // must be after the others so that those get properly replaced
@@ -467,8 +475,34 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return ReadOnlySpan<Pair>.Empty;
             }
 
+            const string Async = "Async";
+
             // cache findings as they will not change
-            return AlreadyFoundAbbreviations.GetOrAdd(value, _ => FindCore(_.Without(AllowedParts).AsSpan()));
+            return AlreadyFoundAbbreviations.GetOrAdd(value, _ => FindCore(Prepare(_).AsSpan().WithoutSuffix(Async)));
+
+            string Prepare(string s)
+            {
+                if (s.Length > Async.Length)
+                {
+                    var index = s.IndexOf(Async, StringComparison.OrdinalIgnoreCase);
+
+                    if (index >= 0)
+                    {
+                        var afterIndex = index + Async.Length;
+
+                        if (afterIndex < s.Length && s[afterIndex].IsUpperCase())
+                        {
+                            return s.AsCachedBuilder()
+                                    .Remove(index, Async.Length)
+                                    .Without(AllowedParts)
+                                    .Trimmed()
+                                    .ToStringAndRelease();
+                        }
+                    }
+                }
+
+                return s.Without(AllowedParts);
+            }
         }
 
         /// <summary>

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -670,18 +669,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var declaration = (DeclarationExpressionSyntax)context.Node;
 
-            if (declaration.Parent is ArgumentSyntax argument && argument.RefKindKeyword.IsKind(SyntaxKind.OutKeyword))
-            {
-                var semanticModel = context.SemanticModel;
-                var type = declaration.GetTypeSymbol(semanticModel);
+            var issues = Analyze(context.SemanticModel, declaration);
 
-                if (ShallAnalyze(type))
-                {
-                    var issues = Analyze(semanticModel, type, declaration.Designation);
-
-                    ReportDiagnostics(context, issues);
-                }
-            }
+            ReportDiagnostics(context, issues);
         }
 
         /// <summary>
@@ -702,6 +692,60 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 var issues = Analyze(semanticModel, type, node.Designation);
 
                 ReportDiagnostics(context, issues);
+            }
+        }
+
+        /// <summary>
+        /// Analyzes a tuple element.
+        /// </summary>
+        /// <param name="context">
+        /// The syntax node analysis context.
+        /// </param>
+        protected virtual void AnalyzeTupleElement(SyntaxNodeAnalysisContext context)
+        {
+            var node = (TupleElementSyntax)context.Node;
+
+            if (node.IsMissing)
+            {
+                // we cannot do something here
+                return;
+            }
+
+            var semanticModel = context.SemanticModel;
+            var type = node.Type.GetTypeSymbol(semanticModel);
+
+            if (ShallAnalyze(type))
+            {
+                var issues = AnalyzeIdentifiers(semanticModel, type, node.Identifier);
+
+                ReportDiagnostics(context, issues);
+            }
+        }
+
+        /// <summary>
+        /// Analyzes a tuple expression.
+        /// </summary>
+        /// <param name="context">
+        /// The syntax node analysis context.
+        /// </param>
+        protected virtual void AnalyzeTupleExpression(SyntaxNodeAnalysisContext context)
+        {
+            var node = (TupleExpressionSyntax)context.Node;
+            var semanticModel = context.SemanticModel;
+
+            foreach (var argument in node.Arguments)
+            {
+                if (argument.Expression is DeclarationExpressionSyntax declaration)
+                {
+                    var type = argument.GetTypeSymbol(semanticModel);
+
+                    if (ShallAnalyze(type))
+                    {
+                        var issues = Analyze(semanticModel, declaration);
+
+                        ReportDiagnostics(context, issues);
+                    }
+                }
             }
         }
 
@@ -824,6 +868,34 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     }
 
                     return name;
+                }
+            }
+        }
+
+        private IEnumerable<Diagnostic> Analyze(SemanticModel semanticModel, DeclarationExpressionSyntax declaration)
+        {
+            if (ShallAnalyzeLocal(declaration))
+            {
+                var type = declaration.GetTypeSymbol(semanticModel);
+
+                if (ShallAnalyze(type))
+                {
+                    return Analyze(semanticModel, type, declaration.Designation);
+                }
+            }
+
+            return Array.Empty<Diagnostic>();
+
+            bool ShallAnalyzeLocal(DeclarationExpressionSyntax d)
+            {
+                switch (d.Parent)
+                {
+                    case ArgumentSyntax _:
+                    case AssignmentExpressionSyntax _: // deconstructions
+                        return true;
+
+                    default:
+                        return false;
                 }
             }
         }
