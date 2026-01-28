@@ -1972,6 +1972,17 @@ This makes your code clearer and follows common .NET naming conventions.</value>
   <data name="MiKo_1522_Title" xml:space="preserve">
     <value>Do not start void methods with 'Get'</value>
   </data>
+  <data name="MiKo_1523_Description" xml:space="preserve">
+    <value>Method names should describe the specific behavior they provide, not label the method as a generic helper.
+Names like 'Helper', 'HelpingMethod', or 'XxxHelper' are vague and add no meaningful semantic information. Whether a method "helps" is already implied by how and where it's used.
+Using action‑oriented, descriptive names that communicate intent and effect makes the code clearer and easier to understand.</value>
+  </data>
+  <data name="MiKo_1523_MessageFormat" xml:space="preserve">
+    <value>Remove '{1}' from method name</value>
+  </data>
+  <data name="MiKo_1523_Title" xml:space="preserve">
+    <value>Do not name methods 'Helper'</value>
+  </data>
   <data name="MiKo_2000_CodeFixTitle" xml:space="preserve">
     <value>Fix malformed XML</value>
   </data>

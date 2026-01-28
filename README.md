@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 
 ## Available Rules
 
-The following tables lists all the 535 rules that are currently provided by the analyzer.
+The following tables lists all the 536 rules that are currently provided by the analyzer.
 
 ### Metrics
 
@@ -187,6 +187,7 @@ The following tables lists all the 535 rules that are currently provided by the 
 |[MiKo_1520](/Documentation/MiKo_1520.md)|Do not prefix or suffix local variables with 'toCopy'|&#x2713;|&#x2713;|
 |[MiKo_1521](/Documentation/MiKo_1521.md)|Do not prefix or suffix parameters with 'toCopy'|&#x2713;|&#x2713;|
 |[MiKo_1522](/Documentation/MiKo_1522.md)|Do not start void methods with 'Get'|&#x2713;|\-|
+|[MiKo_1523](/Documentation/MiKo_1523.md)|Do not name methods 'Helper'|&#x2713;|\-|
 
 ### Documentation
 
