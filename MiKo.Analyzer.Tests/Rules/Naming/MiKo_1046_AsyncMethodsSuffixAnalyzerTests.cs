@@ -57,6 +57,16 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_CreateTask_method() => No_issue_is_reported_for(@"
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task CreateTask() => Task.CompletedTask;
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_correctly_named_Task_method() => No_issue_is_reported_for(@"
 using System.Threading.Tasks;
 

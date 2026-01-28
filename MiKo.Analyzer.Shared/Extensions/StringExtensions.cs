@@ -43,7 +43,7 @@ namespace MiKoSolutions.Analyzers
 
         private static readonly char[] GenericTypeArgumentSeparator = { ',' };
 
-        private static readonly TimeSpan RegexTimeout = 150.Milliseconds();
+        private static readonly TimeSpan RegexTimeout = 250.Milliseconds();
 
         private static readonly Regex HyperlinkRegex = new Regex(@"(www|ftp:|ftps:|http:|https:)+[^\s]+[\w]", RegexOptions.Compiled, RegexTimeout);
 

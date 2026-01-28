@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] Conditionals = { "if", "when", "in case", "whether or not", "whether" };
         private static readonly string[] ElseConditionals = { "else", "otherwise" };
 
-        private static readonly Regex ShouldBeRegex = new Regex(@"\b(shall|should|can|could|must|may|might|would)\s+be\s+\w+\b", RegexOptions.Compiled, 100.Milliseconds());
+        private static readonly Regex ShouldBeRegex = new Regex(@"\b(shall|should|can|could|must|may|might|would)\s+be\s+\w+\b", RegexOptions.Compiled, 250.Milliseconds());
 
         private static readonly IComparer<string> ArticleStartComparer = new StringStartComparer(
                                                                                              StartWithArticleA,
