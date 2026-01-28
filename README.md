@@ -1,21 +1,24 @@
 # MiKo-Analyzers
+
 Provides analyzers that are based on the .NET Compiler Platform (Roslyn) and can be used inside Visual Studio 2019 (v16.11) or 2022 (v17.14).
 
 How to install an Roslyn analyzer is described [here](https://learn.microsoft.com/en-us/visualstudio/code-quality/install-roslyn-analyzers?view=vs-2022).
 
 Screenshots on how to use such analyzers can be found [here](https://learn.microsoft.com/en-us/visualstudio/code-quality/use-roslyn-analyzers?view=vs-2022).
 
-
 ## Build / Project status
+
 [![Maintenance](https://img.shields.io/maintenance/yes/2026.svg)](https://github.com/RalfKoban/MiKo-Analyzers)
 [![Build status](https://ci.appveyor.com/api/projects/status/qanrqn7r4q9frr9m/branch/master?svg=true)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/branch/master)
 [![codecov](https://codecov.io/gh/RalfKoban/MiKo-Analyzers/branch/master/graph/badge.svg)](https://codecov.io/gh/RalfKoban/MiKo-Analyzers)
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/18917.svg)](https://scan.coverity.com/projects/ralfkoban-miko-analyzers)
 
 ## Available Rules
-The following tables lists all the 534 rules that are currently provided by the analyzer.
+
+The following tables lists all the 537 rules that are currently provided by the analyzer.
 
 ### Metrics
+
 |ID|Title|Enabled by default|CodeFix available|
 |:-|:----|:----------------:|:---------------:|
 |[MiKo_0001](/Documentation/MiKo_0001.md)|Keep methods small|&#x2713;|\-|
@@ -27,6 +30,7 @@ The following tables lists all the 534 rules that are currently provided by the 
 |[MiKo_0007](/Documentation/MiKo_0007.md)|Limit local function parameters|&#x2713;|\-|
 
 ### Naming
+
 |ID|Title|Enabled by default|CodeFix available|
 |:-|:----|:----------------:|:---------------:|
 |[MiKo_1000](/Documentation/MiKo_1000.md)|Suffix 'System.EventArgs' types with 'EventArgs'|&#x2713;|&#x2713;|
@@ -147,6 +151,7 @@ The following tables lists all the 534 rules that are currently provided by the 
 |[MiKo_1116](/Documentation/MiKo_1116.md)|Use present tense for test method names|&#x2713;|&#x2713;|
 |[MiKo_1117](/Documentation/MiKo_1117.md)|Make test method names more precise|&#x2713;|\-|
 |[MiKo_1118](/Documentation/MiKo_1118.md)|Do not end test method names with 'Async'|&#x2713;|&#x2713;|
+|[MiKo_1119](/Documentation/MiKo_1119.md)|Do not include 'when_present' in test method names|&#x2713;|\-|
 |[MiKo_1200](/Documentation/MiKo_1200.md)|Name catch block exceptions consistently|&#x2713;|&#x2713;|
 |[MiKo_1201](/Documentation/MiKo_1201.md)|Name exception parameters consistently|&#x2713;|&#x2713;|
 |[MiKo_1300](/Documentation/MiKo_1300.md)|Name unimportant lambda parameters '_'|&#x2713;|&#x2713;|
@@ -182,8 +187,10 @@ The following tables lists all the 534 rules that are currently provided by the 
 |[MiKo_1520](/Documentation/MiKo_1520.md)|Do not prefix or suffix local variables with 'toCopy'|&#x2713;|&#x2713;|
 |[MiKo_1521](/Documentation/MiKo_1521.md)|Do not prefix or suffix parameters with 'toCopy'|&#x2713;|&#x2713;|
 |[MiKo_1522](/Documentation/MiKo_1522.md)|Do not start void methods with 'Get'|&#x2713;|\-|
+|[MiKo_1523](/Documentation/MiKo_1523.md)|Do not name methods 'Helper'|&#x2713;|\-|
 
 ### Documentation
+
 |ID|Title|Enabled by default|CodeFix available|
 |:-|:----|:----------------:|:---------------:|
 |[MiKo_2000](/Documentation/MiKo_2000.md)|Write valid XML documentation|&#x2713;|&#x2713;|
@@ -322,6 +329,7 @@ The following tables lists all the 534 rules that are currently provided by the 
 |[MiKo_2313](/Documentation/MiKo_2313.md)|Format plain documentation comments as XML documentation|&#x2713;|&#x2713;|
 
 ### Maintainability
+
 |ID|Title|Enabled by default|CodeFix available|
 |:-|:----|:----------------:|:---------------:|
 |[MiKo_3000](/Documentation/MiKo_3000.md)|Do not use empty regions|&#x2713;|\-|
@@ -475,6 +483,7 @@ The following tables lists all the 534 rules that are currently provided by the 
 |[MiKo_3503](/Documentation/MiKo_3503.md)|Do not assign variables in try-catch blocks that are returned directly outside|&#x2713;|&#x2713;|
 
 ### Ordering
+
 |ID|Title|Enabled by default|CodeFix available|
 |:-|:----|:----------------:|:---------------:|
 |[MiKo_4001](/Documentation/MiKo_4001.md)|Order methods with same name based on their parameter count|&#x2713;|&#x2713;|
@@ -493,6 +502,7 @@ The following tables lists all the 534 rules that are currently provided by the 
 |[MiKo_4107](/Documentation/MiKo_4107.md)|Place assembly-wide test cleanup methods directly after assembly-wide test initialization methods|&#x2713;|&#x2713;|
 
 ### Performance
+
 |ID|Title|Enabled by default|CodeFix available|
 |:-|:----|:----------------:|:---------------:|
 |[MiKo_5001](/Documentation/MiKo_5001.md)|Invoke 'Debug' and 'DebugFormat' methods only after checking 'IsDebugEnabled'|&#x2713;|&#x2713;|
@@ -510,6 +520,7 @@ The following tables lists all the 534 rules that are currently provided by the 
 |[MiKo_5019](/Documentation/MiKo_5019.md)|Add [in] modifier to read-only struct parameters|&#x2713;|&#x2713;|
 
 ### Spacing
+
 |ID|Title|Enabled by default|CodeFix available|
 |:-|:----|:----------------:|:---------------:|
 |[MiKo_6001](/Documentation/MiKo_6001.md)|Surround log statements with blank lines|&#x2713;|&#x2713;|
