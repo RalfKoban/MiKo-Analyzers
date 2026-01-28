@@ -55,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 switch (node)
                 {
                     case InitializerExpressionSyntax _:
-#if VS2022
+#if VS2022 || VS2026
                     case CollectionExpressionSyntax _:
 #endif
                         return true;

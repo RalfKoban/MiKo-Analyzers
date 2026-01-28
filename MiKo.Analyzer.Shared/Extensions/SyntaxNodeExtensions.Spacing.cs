@@ -550,7 +550,7 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static SubpatternSyntax PlacedOnSameLine(this SubpatternSyntax value) => value.WithoutTrivia()
                                                                                                .WithNameColon(value.NameColon?.WithoutTrivia().WithTrailingSpace())
-#if VS2022
+#if VS2022 || VS2026
                                                                                                .WithExpressionColon(value.ExpressionColon?.WithoutTrivia().WithTrailingSpace())
 #endif
                                                                                                .WithPattern(value.Pattern.PlacedOnSameLine());
