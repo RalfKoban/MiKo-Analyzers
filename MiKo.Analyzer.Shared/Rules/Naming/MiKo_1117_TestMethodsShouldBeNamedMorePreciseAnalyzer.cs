@@ -57,6 +57,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                nameof(TaskCanceledException),
                                                                nameof(UnauthorizedAccessException),
                                                                "ValidationException",
+                                                               "Property",
+                                                               "property",
                                                            };
 
         public MiKo_1117_TestMethodsShouldBeNamedMorePreciseAnalyzer() : base(Id)

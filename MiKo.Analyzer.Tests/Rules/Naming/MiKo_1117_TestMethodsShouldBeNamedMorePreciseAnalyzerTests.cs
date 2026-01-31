@@ -46,6 +46,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                   "Something_throws_" + nameof(UnauthorizedAccessException),
                                                                   "Something_throws_JsonException",
                                                                   "Something_throws_ValidationException",
+                                                                  "Something_with_a_property",
+                                                                  "Something_with_an_uppercase_Property",
                                                               ];
 
         private static readonly string[] WrongMethodNames =

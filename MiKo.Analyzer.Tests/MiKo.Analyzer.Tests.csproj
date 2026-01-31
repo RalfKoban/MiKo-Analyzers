@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.Profiler.Api" Version="1.4.10" />
+    <PackageReference Include="JetBrains.Profiler.Api" Version="1.4.11" />
     <PackageReference Include="log4net" Version="3.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.3.9" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="5.0.0" />
