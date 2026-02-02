@@ -50,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                   "Something_with_an_uppercase_Property",
                                                               ];
 
-        private static readonly string[] WrongMethodNames =
+        private static readonly string[] VagueMethodNames =
                                                             [
                                                                 "Something_EventRaised",
                                                                 "Something_EventIsRaised",
@@ -87,6 +87,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                 "Something_improperly",
                                                                 "Something_incorrect",
                                                                 "Something_incorrectly",
+                                                                "Something_is_acceptable",
+                                                                "Something_is_inacceptable",
+                                                                "Something_is_unacceptable",
                                                                 "Something_normally",
                                                                 "Something_proper_way",
                                                                 "Something_properly",
@@ -96,6 +99,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                 "SomethingDoesNotHandle",
                                                                 "SomethingDoNotHandle",
                                                                 "SomethingHandles",
+                                                                "SomethingIsAcceptable",
                                                                 "SomethingIsCorrect",
                                                                 "SomethingIsCorrectly",
                                                                 "SomethingIsDone",
@@ -104,19 +108,21 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                 "SomethingIsGracefully",
                                                                 "SomethingIsImproper",
                                                                 "SomethingIsImproperly",
+                                                                "SomethingIsInacceptable",
                                                                 "SomethingIsIncorrect",
                                                                 "SomethingIsIncorrectly",
                                                                 "SomethingIsNormal",
                                                                 "SomethingIsNormally",
                                                                 "SomethingIsProperly",
                                                                 "SomethingIsProperWay",
-                                                                "SomethingIsSuccessfully",
                                                                 "SomethingIsSuccessful",
+                                                                "SomethingIsSuccessfully",
+                                                                "SomethingIsUnacceptable",
                                                                 "SomethingWorks",
                                                             ];
 
         [Test]
-        public void No_issue_is_reported_for_non_test_class_([ValueSource(nameof(WrongMethodNames))] string methodName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_test_class_([ValueSource(nameof(VagueMethodNames))] string methodName) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void " + methodName + @"() { }
@@ -139,7 +145,7 @@ public class TestMe
 
         [Test]
         public void An_issue_is_reported_for_test_method_with_wrong_name_(
-                                                                      [ValueSource(nameof(WrongMethodNames))] string methodName,
+                                                                      [ValueSource(nameof(VagueMethodNames))] string methodName,
                                                                       [ValueSource(nameof(TestFixtures))] string fixture,
                                                                       [ValueSource(nameof(Tests))] string test)
             => An_issue_is_reported_for(@"
