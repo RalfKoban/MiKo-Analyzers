@@ -1542,12 +1542,15 @@ A clearer name would be "Send_sends_email_to_valid_address", which is easier to 
     <value>Use present tense for test method names</value>
   </data>
   <data name="MiKo_1117_Description" xml:space="preserve">
-    <value>Test names that use vague terms like 'EventIsRaised', 'ExceptionThrown', 'Handles', 'Proper', or 'Correct' are unclear because they don't describe the exact behavior being tested.
+    <value>Test method names must clearly describe the specific scenario being tested and the exact expected outcome. They should avoid vague terms like "correct", "successful", "done", or "finished", and generic phrases like "EventIsRaised" or "ExceptionThrown".
 
-Clear, descriptive names state the action and the specific expected result, making the intent obvious without reading the test code. They act as executable documentation and make tests easier to understand, review, and maintain.</value>
+Such names fail to indicate which event or exception is involved, or what terms like "successful" or "finished" actually mean.
+This forces readers to inspect the test body to understand the behavior.
+
+Precise and descriptive names make tests self‑explanatory, improve debugging, and enhance the quality of test documentation.</value>
   </data>
   <data name="MiKo_1117_MessageFormat" xml:space="preserve">
-    <value>Test name should clearly state the action and the specific expected outcome, such as the exact event, exception, or returned value</value>
+    <value>Test names must show the scenario and the exact outcome, including the event, exception type, or returned value</value>
   </data>
   <data name="MiKo_1117_Title" xml:space="preserve">
     <value>Make test method names more precise</value>
