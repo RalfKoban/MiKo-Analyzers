@@ -1550,7 +1550,7 @@ This forces readers to inspect the test body to understand the behavior.
 Precise and descriptive names make tests self‑explanatory, improve debugging, and enhance the quality of test documentation.</value>
   </data>
   <data name="MiKo_1117_MessageFormat" xml:space="preserve">
-    <value>Test names must show the scenario and the exact outcome, including the event, exception type, or returned value</value>
+    <value>Do not use vague term '{1}' in test name</value>
   </data>
   <data name="MiKo_1117_Title" xml:space="preserve">
     <value>Make test method names more precise</value>

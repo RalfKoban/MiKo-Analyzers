@@ -4223,7 +4223,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test names must show the scenario and the exact outcome, including the event, exception type, or returned value.
+        ///   Looks up a localized string similar to Do not use vague term &apos;{1}&apos; in test name.
         /// </summary>
         internal static string MiKo_1117_MessageFormat {
             get {
