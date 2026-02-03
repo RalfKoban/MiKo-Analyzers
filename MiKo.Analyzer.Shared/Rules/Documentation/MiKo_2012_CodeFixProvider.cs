@@ -349,6 +349,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             builder.ReplaceWithProbe("whether specify that", "whether");
             builder.ReplaceWithProbe("whether specify whether", "whether");
             builder.ReplaceWithProbe("whether whether", "whether");
+            builder.ReplaceWithProbe("whether set to true then", "whether");
+            builder.ReplaceWithProbe("whether set to true, then", "whether");
+            builder.ReplaceWithProbe("whether set to True then", "whether");
+            builder.ReplaceWithProbe("whether set to True, then", "whether");
+            builder.ReplaceWithProbe("whether set to TRUE then", "whether");
+            builder.ReplaceWithProbe("whether set to TRUE, then", "whether");
             builder.ReplaceWithProbe("ets get ", "ets ");
             builder.ReplaceWithProbe("ets set ", "ets ");
             builder.ReplaceWithProbe("gets returns", "gets");
@@ -361,6 +367,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             builder.ReplaceWithProbe(" to the ", " the ");
             builder.ReplaceWithProbe(" to an ", " an ");
             builder.ReplaceWithProbe(" to a ", " a ");
+            builder.ReplaceWithProbe(" true if ", " whether ");
+            builder.ReplaceWithProbe(" tRUE if ", " whether ");
+            builder.ReplaceWithProbe(" true when ", " whether ");
+            builder.ReplaceWithProbe(" tRUE when ", " whether ");
+            builder.ReplaceWithProbe(" when set to true then ", " whether ");
+            builder.ReplaceWithProbe(" when set to true, then ", " whether ");
+            builder.ReplaceWithProbe(" when set to True then ", " whether ");
+            builder.ReplaceWithProbe(" when set to True, then ", " whether ");
+            builder.ReplaceWithProbe(" when set to TRUE then ", " whether ");
+            builder.ReplaceWithProbe(" when set to TRUE, then ", " whether ");
             builder.ReplaceWithProbe("  ", " ");
 
             var replacedFixedText = builder.ToStringAndRelease();
