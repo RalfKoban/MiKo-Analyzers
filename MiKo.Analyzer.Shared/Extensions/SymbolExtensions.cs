@@ -1612,6 +1612,78 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Determines whether a type inherits from a given base class.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <param name="baseClass">
+        /// The type of the base class to check for inheritance.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type inherits from a base class with the specified type; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool InheritsFrom(this ITypeSymbol value, INamedTypeSymbol baseClass)
+        {
+            if (value is null)
+            {
+                return false;
+            }
+
+            switch (value.SpecialType)
+            {
+                case SpecialType.System_Void:
+                case SpecialType.System_Boolean:
+                case SpecialType.System_Char:
+                case SpecialType.System_SByte:
+                case SpecialType.System_Byte:
+                case SpecialType.System_Int16:
+                case SpecialType.System_UInt16:
+                case SpecialType.System_Int32:
+                case SpecialType.System_UInt32:
+                case SpecialType.System_Int64:
+                case SpecialType.System_UInt64:
+                case SpecialType.System_Decimal:
+                case SpecialType.System_Single:
+                case SpecialType.System_Double:
+                case SpecialType.System_String:
+                case SpecialType.System_IntPtr:
+                case SpecialType.System_UIntPtr:
+                case SpecialType.System_DateTime:
+                {
+                    return false;
+                }
+            }
+
+            switch (value.TypeKind)
+            {
+                case TypeKind.Class:
+                case TypeKind.Error: // needed for attribute types
+                {
+                    switch (value.IsRecord)
+                    {
+                        case true when baseClass.IsRecord is false:
+                        case false when baseClass.IsRecord:
+                        {
+                            // ignore records here as they can only inherit from other records due to their special nature (such as copy constructors)
+                            return false;
+                        }
+
+                        default:
+                        {
+                            return value.AnyBaseType(_ => _.Equals(baseClass, SymbolEqualityComparer.Default));
+                        }
+                    }
+                }
+
+                default:
+                {
+                    return false;
+                }
+            }
+        }
+
+        /// <summary>
         /// Determines whether a type inherits from a base class with either of the specified names.
         /// </summary>
         /// <param name="value">
