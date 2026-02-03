@@ -1660,20 +1660,13 @@ namespace MiKoSolutions.Analyzers
                 case TypeKind.Class:
                 case TypeKind.Error: // needed for attribute types
                 {
-                    switch (value.IsRecord)
+                    if (value.IsRecord != baseClass.IsRecord)
                     {
-                        case true when baseClass.IsRecord is false:
-                        case false when baseClass.IsRecord:
-                        {
-                            // ignore records here as they can only inherit from other records due to their special nature (such as copy constructors)
-                            return false;
-                        }
-
-                        default:
-                        {
-                            return value.AnyBaseType(_ => _.Equals(baseClass, SymbolEqualityComparer.Default));
-                        }
+                        // ignore records here as they can only inherit from other records due to their special nature (such as copy constructors)
+                        return false;
                     }
+
+                    return value.AnyBaseType(_ => _.Equals(baseClass, SymbolEqualityComparer.Default));
                 }
 
                 default:
