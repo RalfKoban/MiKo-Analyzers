@@ -945,23 +945,29 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 foreach (var continuation in continuations)
                 {
-                    yield return start + continuation;
+                    var phrase = start + continuation;
+
+                    yield return phrase;
+                    yield return phrase + "about ";
                 }
             }
 
-            foreach (var getter in gets)
+            foreach (var continuation in continuations)
             {
-                foreach (var continuation in continuations)
+                foreach (var getter in gets)
                 {
-                    yield return getter + " " + continuation;
-                }
-            }
+                    var phrase = getter + " " + continuation;
 
-            foreach (var setter in sets)
-            {
-                foreach (var continuation in continuations)
+                    yield return phrase;
+                    yield return phrase + "about ";
+                }
+
+                foreach (var setter in sets)
                 {
-                    yield return setter + " " + continuation;
+                    var phrase = setter + " " + continuation;
+
+                    yield return phrase;
+                    yield return phrase + "about ";
                 }
             }
         }

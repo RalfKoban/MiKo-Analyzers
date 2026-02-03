@@ -665,6 +665,7 @@ public interface TestMe
         [TestCase("This property returns")]
         [TestCase("This Property will return")]
         [TestCase("This Property returns")]
+        [TestCase("get information about")]
         public void Code_gets_fixed_for_non_boolean_property_text_(string originalText)
         {
             const string Template = @"
