@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -65,7 +66,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                "ValidationException",
                                                                "Property",
                                                                "property",
+                                                               "Handler",
+                                                               "handler",
                                                            };
+
+        private static readonly ConcurrentDictionary<string, string> NamesCache = new ConcurrentDictionary<string, string>();
 
         public MiKo_1117_TestMethodsShouldBeNamedMorePreciseAnalyzer() : base(Id)
         {
@@ -77,9 +82,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
-            var preparedTestName = symbol.Name.AsCachedBuilder()
-                                         .ReplaceAllWithProbe(KnownExceptions, "#")
-                                         .ToStringAndRelease();
+            var preparedTestName = NamesCache.GetOrAdd(symbol.Name, _ => _.AsCachedBuilder().ReplaceAllWithProbe(KnownExceptions, "#").ToStringAndRelease());
 
             foreach (var vagueTerm in VagueTerms)
             {

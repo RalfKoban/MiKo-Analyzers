@@ -48,6 +48,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                   "Something_throws_ValidationException",
                                                                   "Something_with_a_property",
                                                                   "Something_with_an_uppercase_Property",
+                                                                  "Something_with_an_event_handler",
+                                                                  "Something_with_an_EventHandler",
+                                                                  "Something_with_a_handler",
+                                                                  "Something_with_a_Handler",
                                                               ];
 
         private static readonly string[] VagueMethodNames =
