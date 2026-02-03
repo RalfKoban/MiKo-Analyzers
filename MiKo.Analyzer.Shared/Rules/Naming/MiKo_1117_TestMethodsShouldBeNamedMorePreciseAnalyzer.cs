@@ -64,10 +64,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                nameof(TaskCanceledException),
                                                                nameof(UnauthorizedAccessException),
                                                                "ValidationException",
-                                                               "Property",
-                                                               "property",
-                                                               "Handler",
                                                                "handler",
+                                                               "Handler",
+                                                               "normaliz",
+                                                               "Normaliz",
+                                                               "property",
+                                                               "Property",
                                                            };
 
         private static readonly ConcurrentDictionary<string, string> NamesCache = new ConcurrentDictionary<string, string>();
