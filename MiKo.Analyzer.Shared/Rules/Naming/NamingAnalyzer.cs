@@ -160,7 +160,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return pluralName;
             }
 
-            if (originalName.EndsWith("Map"))
+            if (originalName.EndsWith("Map") || originalName.EndsWith("Cache"))
             {
                 singularName = originalName.ToString();
 
