@@ -70,7 +70,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                "handler",
                                                            };
 
-        private static readonly ConcurrentDictionary<string, string> NameMappings = new ConcurrentDictionary<string, string>();
+        private static readonly ConcurrentDictionary<string, string> NamesCache = new ConcurrentDictionary<string, string>();
 
         public MiKo_1117_TestMethodsShouldBeNamedMorePreciseAnalyzer() : base(Id)
         {
@@ -82,7 +82,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
-            var preparedTestName = NameMappings.GetOrAdd(symbol.Name, _ => _.AsCachedBuilder().ReplaceAllWithProbe(KnownExceptions, "#").ToStringAndRelease());
+            var preparedTestName = NamesCache.GetOrAdd(symbol.Name, _ => _.AsCachedBuilder().ReplaceAllWithProbe(KnownExceptions, "#").ToStringAndRelease());
 
             foreach (var vagueTerm in VagueTerms)
             {
