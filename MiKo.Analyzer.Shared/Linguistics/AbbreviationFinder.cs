@@ -17,6 +17,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("alt", "alternative"),
                                                       new Pair("app", "application"),
                                                       new Pair("apps", "applications"),
+                                                      new Pair("arg", "argument"),
+                                                      new Pair("args", "arguments"),
                                                       new Pair("arr", "array"),
                                                       new Pair("assoc", "association"),
                                                       new Pair("assocs", "associations"),
@@ -138,6 +140,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("props", "properties"),
                                                       new Pair("pt", "point"),
                                                       new Pair("pts", "points"),
+                                                      new Pair("pw", "password"),
+                                                      new Pair("pwd", "password"),
+                                                      new Pair("pswd", "password"),
+                                                      new Pair("passwd", "password"),
                                                       new Pair("qty", "quantity"),
                                                       new Pair("rec", "record"),
                                                       new Pair("ref", "reference"),
@@ -186,6 +192,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Alt", "Alternative"),
                                                           new Pair("App", "Application"),
                                                           new Pair("Apps", "Applications"),
+                                                          new Pair("Arg", "Argument"),
+                                                          new Pair("Args", "Arguments"),
                                                           new Pair("Arr", "Array"),
                                                           new Pair("Assoc", "Association"),
                                                           new Pair("Assocs", "Associations"),
@@ -317,6 +325,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Props", "Properties"),
                                                           new Pair("Pt", "Point"),
                                                           new Pair("Pts", "Points"),
+                                                          new Pair("Pw", "Password"),
+                                                          new Pair("Pwd", "Password"),
+                                                          new Pair("Pswd", "Password"),
+                                                          new Pair("Passwd", "Password"),
                                                           new Pair("Qty", "Quantity"),
                                                           new Pair("Rec", "Record"),
                                                           new Pair("Ref", "Reference"),
@@ -400,6 +412,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                             "Enumerable",
                                                             "Enumeration",
                                                             "Enum", // must be after the others so that those get properly replaced
+                                                            nameof(EventArgs),
                                                             "ever",
                                                             "Ever",
                                                             "Identifiable",
@@ -450,10 +463,12 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly string[] AllowedNames =
                                                         {
+                                                            "args",
                                                             "obj",
                                                             "next",
                                                             "cref",
                                                             "href",
+                                                            nameof(EventArgs),
                                                         };
 
         private static readonly ConcurrentDictionary<string, Pair[]> AlreadyFoundAbbreviations = new ConcurrentDictionary<string, Pair[]>();
