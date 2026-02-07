@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,6 +17,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public abstract class NamingAnalyzer : Analyzer
     {
         private static readonly string[] Splitters = { "Of", "With", "To", "In", "From", "For" };
+
+        private static readonly ConcurrentDictionary<string, Pair> PluralNamesCache = new ConcurrentDictionary<string, Pair>(StringComparer.Ordinal);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NamingAnalyzer"/> class with the unique identifier of the diagnostic and the kind of symbol to analyze.
@@ -77,7 +80,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// </returns>
         protected static string FindBetterNameForCollectionSuffix(string name)
         {
-            var pluralName = FindPluralName(name.AsSpan(), out _);
+            var pluralName = FindPluralName(name, out _);
 
             return name.Equals(pluralName, StringComparison.Ordinal) ? null : pluralName;
         }
@@ -129,6 +132,34 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 
 #pragma warning disable CA1021
+
+        /// <summary>
+        /// Finds the plural form of a name.
+        /// </summary>
+        /// <param name="originalName">
+        /// The original name to analyze.
+        /// </param>
+        /// <param name="singularName">
+        /// On successful return, contains the singular form of the name.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the plural form of the name, or <see langword="null"/> if the name is already in plural form.
+        /// </returns>
+        protected static string FindPluralName(string originalName, out string singularName)
+        {
+            var found = PluralNamesCache.GetOrAdd(
+                                              originalName,
+                                              _ =>
+                                                   {
+                                                       var plural = FindPluralName(_.AsSpan(), out var singular);
+
+                                                       return new Pair(plural, singular);
+                                                   });
+
+            singularName = found.Value;
+
+            return found.Key;
+        }
 
         /// <summary>
         /// Finds the plural form of a name.
