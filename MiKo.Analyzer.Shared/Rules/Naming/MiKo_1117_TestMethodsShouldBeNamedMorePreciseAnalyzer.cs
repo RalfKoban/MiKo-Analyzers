@@ -72,7 +72,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                "Property",
                                                            };
 
-        private static readonly ConcurrentDictionary<string, string> NamesCache = new ConcurrentDictionary<string, string>();
+        private static readonly ConcurrentDictionary<string, string> NamesCache = new ConcurrentDictionary<string, string>(StringComparer.Ordinal);
 
         public MiKo_1117_TestMethodsShouldBeNamedMorePreciseAnalyzer() : base(Id)
         {
