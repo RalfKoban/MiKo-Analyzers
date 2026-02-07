@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                  "Wont",
                                                              };
 
-        private static readonly ConcurrentDictionary<string, string> TestNamesCache = new ConcurrentDictionary<string, string>();
+        private static readonly ConcurrentDictionary<string, string> TestNamesCache = new ConcurrentDictionary<string, string>(StringComparer.Ordinal);
 
         /// <summary>
         /// Determines an improved test name based on the specified name and symbol.
