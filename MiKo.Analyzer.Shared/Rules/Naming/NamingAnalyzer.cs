@@ -380,7 +380,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// <returns>
         /// <see langword="true"/> if the namespace shall be analyzed; otherwise, <see langword="false"/>.
         /// </returns>
-        protected virtual bool ShallAnalyze(INamespaceSymbol symbol) => symbol.CanBeReferencedByName && symbol.IsGlobalNamespace is false;
+        protected virtual bool ShallAnalyze(INamespaceSymbol symbol)
+        {
+            if (symbol is null)
+            {
+                // code seems to be obfuscated or contains no valid symbol, so ignore it silently
+                return false;
+            }
+
+            return symbol.CanBeReferencedByName && symbol.IsGlobalNamespace is false;
+        }
 
         /// <summary>
         /// Determines whether the specified type shall be analyzed.
@@ -391,7 +400,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// <returns>
         /// <see langword="true"/> if the type shall be analyzed; otherwise, <see langword="false"/>.
         /// </returns>
-        protected virtual bool ShallAnalyze(ITypeSymbol symbol) => symbol.CanBeReferencedByName;
+        protected virtual bool ShallAnalyze(ITypeSymbol symbol)
+        {
+            if (symbol is null)
+            {
+                // code seems to be obfuscated or contains no valid symbol, so ignore it silently
+                return false;
+            }
+
+            return symbol.CanBeReferencedByName;
+        }
 
         /// <summary>
         /// Determines whether the specified method shall be analyzed.
@@ -404,6 +422,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// </returns>
         protected virtual bool ShallAnalyze(IMethodSymbol symbol)
         {
+            if (symbol is null)
+            {
+                // code seems to be obfuscated or contains no valid symbol, so ignore it silently
+                return false;
+            }
+
             if (symbol.CanBeReferencedByName is false)
             {
                 return false;
@@ -436,7 +460,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// <returns>
         /// <see langword="true"/> if the property shall be analyzed; otherwise, <see langword="false"/>.
         /// </returns>
-        protected virtual bool ShallAnalyze(IPropertySymbol symbol) => symbol.CanBeReferencedByName && symbol.IsOverride is false && symbol.IsInterfaceImplementation() is false;
+        protected virtual bool ShallAnalyze(IPropertySymbol symbol)
+        {
+            if (symbol is null)
+            {
+                // code seems to be obfuscated or contains no valid symbol, so ignore it silently
+                return false;
+            }
+
+            return symbol.CanBeReferencedByName && symbol.IsOverride is false && symbol.IsInterfaceImplementation() is false;
+        }
 
         /// <summary>
         /// Determines whether the specified event shall be analyzed.
@@ -447,7 +480,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// <returns>
         /// <see langword="true"/> if the event shall be analyzed; otherwise, <see langword="false"/>.
         /// </returns>
-        protected virtual bool ShallAnalyze(IEventSymbol symbol) => symbol.CanBeReferencedByName && symbol.IsOverride is false && symbol.IsInterfaceImplementation() is false;
+        protected virtual bool ShallAnalyze(IEventSymbol symbol)
+        {
+            if (symbol is null)
+            {
+                // code seems to be obfuscated or contains no valid symbol, so ignore it silently
+                return false;
+            }
+
+            return symbol.CanBeReferencedByName && symbol.IsOverride is false && symbol.IsInterfaceImplementation() is false;
+        }
 
         /// <summary>
         /// Determines whether the specified field shall be analyzed.
@@ -458,7 +500,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// <returns>
         /// <see langword="true"/> if the field shall be analyzed; otherwise, <see langword="false"/>.
         /// </returns>
-        protected virtual bool ShallAnalyze(IFieldSymbol symbol) => symbol.CanBeReferencedByName && symbol.IsOverride is false;
+        protected virtual bool ShallAnalyze(IFieldSymbol symbol)
+        {
+            if (symbol is null)
+            {
+                // code seems to be obfuscated or contains no valid symbol, so ignore it silently
+                return false;
+            }
+
+            return symbol.CanBeReferencedByName && symbol.IsOverride is false;
+        }
 
         /// <summary>
         /// Determines whether the specified parameter shall be analyzed.
@@ -471,6 +522,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// </returns>
         protected virtual bool ShallAnalyze(IParameterSymbol symbol)
         {
+            if (symbol is null)
+            {
+                // code seems to be obfuscated or contains no valid symbol, so ignore it silently
+                return false;
+            }
+
             if (symbol.CanBeReferencedByName is false)
             {
                 return false;
