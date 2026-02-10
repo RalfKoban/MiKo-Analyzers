@@ -523,52 +523,56 @@ public class TestMeCommand
         [TestCase("This class contains methods for building", "Provides support for creating")]
         [TestCase("This class contains methods for constructing", "Provides support for creating")]
         [TestCase("Used to create something", "Provides support for creating something")]
-        [TestCase(@"Used to create <see cref=""string""/> instances", @"Provides support for creating <see cref=""string""/> instances")]
+        [TestCase("""Used to create <see cref="string"/> instances""", """Provides support for creating <see cref="string"/> instances""")]
         [TestCase("Used for creating something", "Provides support for creating something")]
-        [TestCase(@"Used for creating <see cref=""string""/> instances", @"Provides support for creating <see cref=""string""/> instances")]
+        [TestCase("""Used for creating <see cref="string"/> instances""", """Provides support for creating <see cref="string"/> instances""")]
         [TestCase("Is used to create something", "Provides support for creating something")]
-        [TestCase(@"Is used to create <see cref=""string""/> instances", @"Provides support for creating <see cref=""string""/> instances")]
+        [TestCase("""Is used to create <see cref="string"/> instances""", """Provides support for creating <see cref="string"/> instances""")]
         [TestCase("Is used for creating something", "Provides support for creating something")]
-        [TestCase(@"Is used for creating <see cref=""string""/> instances", @"Provides support for creating <see cref=""string""/> instances")]
+        [TestCase("""Is used for creating <see cref="string"/> instances""", """Provides support for creating <see cref="string"/> instances""")]
         public void Code_gets_fixed_for_factory_types_(string originalComment, string fixedComment)
         {
-            const string Template = @"
-/// <summary>
-/// ### something.
-/// </summary>
-public class TestMeFactory
-{
-}
-";
+            const string Template = """
+
+                                    /// <summary>
+                                    /// ### something.
+                                    /// </summary>
+                                    public class TestMeFactory
+                                    {
+                                    }
+
+                                    """;
 
             VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
         }
 
         [TestCase("Handler for event", "Handles the event")]
         [TestCase("Handler for the event", "Handles the event")]
-        [TestCase(@"Handler for <see cref=""string""/> event", @"Handles the <see cref=""string""/> event")]
-        [TestCase(@"Handler for the <see cref=""string""/> event", @"Handles the <see cref=""string""/> event")]
+        [TestCase("""Handler for <see cref="string"/> event""", """Handles the <see cref="string"/> event""")]
+        [TestCase("""Handler for the <see cref="string"/> event""", """Handles the <see cref="string"/> event""")]
         [TestCase("EventHandler for event", "Handles the event")]
         [TestCase("EventHandler for the event", "Handles the event")]
-        [TestCase(@"EventHandler for <see cref=""string""/> event", @"Handles the <see cref=""string""/> event")]
-        [TestCase(@"EventHandler for the <see cref=""string""/> event", @"Handles the <see cref=""string""/> event")]
+        [TestCase("""EventHandler for <see cref="string"/> event""", """Handles the <see cref="string"/> event""")]
+        [TestCase("""EventHandler for the <see cref="string"/> event""", """Handles the <see cref="string"/> event""")]
         [TestCase("Event handler for event", "Handles the event")]
         [TestCase("Event handler for the event", "Handles the event")]
-        [TestCase(@"Event handler for <see cref=""string""/> event", @"Handles the <see cref=""string""/> event")]
-        [TestCase(@"Event handler for the <see cref=""string""/> event", @"Handles the <see cref=""string""/> event")]
+        [TestCase("""Event handler for <see cref="string"/> event""", """Handles the <see cref="string"/> event""")]
+        [TestCase("""Event handler for the <see cref="string"/> event""", """Handles the <see cref="string"/> event""")]
         public void Code_gets_fixed_for_event_handler_(string originalComment, string fixedComment)
         {
-            const string Template = @"
-using System;
+            const string Template = """
 
-public class TestMe
-{
-    /// <summary>
-    /// ###
-    /// </summary>
-    void OnSomething(object sender, EventArgs e);
-}
-";
+                                    using System;
+
+                                    public class TestMe
+                                    {
+                                        /// <summary>
+                                        /// ###
+                                        /// </summary>
+                                        void OnSomething(object sender, EventArgs e);
+                                    }
+
+                                    """;
 
             VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
         }
@@ -955,18 +959,20 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
         }
 
-        [TestCase("Event args for something", @"Provides data for the <see cref=""TODO""/> event")]
-        [TestCase(@"Event args for <see cref=""IWhatever""/> event", @"Provides data for the <see cref=""IWhatever""/> event")]
+        [TestCase("Event args for something", """Provides data for the <see cref="TODO"/> event""")]
+        [TestCase("""Event args for <see cref="IWhatever"/> event""", """Provides data for the <see cref="IWhatever"/> event""")]
         public void Code_gets_fixed_for_EventArgs_class_(string startingPhrase, string fixedPhrase)
         {
-            const string Template = @"
-/// <summary>
-/// ###.
-/// </summary>
-public class TestMeEventArgs
-{
-}
-";
+            const string Template = """
+
+                                    /// <summary>
+                                    /// ###.
+                                    /// </summary>
+                                    public class TestMeEventArgs
+                                    {
+                                    }
+
+                                    """;
 
             VerifyCSharpFix(Template.Replace("###", startingPhrase), Template.Replace("###", fixedPhrase));
         }
@@ -1010,6 +1016,12 @@ public class TestMe
         [TestCase("The interface shall be implemented by components that want to")]
         [TestCase("This interface shall be implemented by classes that want to")]
         [TestCase("The interface shall be implemented by classes that want to")]
+        [TestCase("Implementations of this class can be used to")]
+        [TestCase("Implementations of this interface can be used to")]
+        [TestCase("Implementers of this class can be used to")]
+        [TestCase("Implementers of this interface can be used to")]
+        [TestCase("Implementer of this class can be used to")]
+        [TestCase("Implementer of this interface can be used to")]
         public void Code_gets_fixed_for_interface_(string startingPhrase)
         {
             const string Template = @"
@@ -1022,6 +1034,38 @@ public interface ITestMe
 ";
 
             VerifyCSharpFix(Template.Replace("###", startingPhrase + " render"), Template.Replace("###", "Renders"));
+        }
+
+        [TestCase("Interface that can be implemented optionally by implementations of")]
+        [TestCase("Interface that can optionally be implemented by")]
+        [TestCase("Interface that can optionally added to classes implementing")]
+        [TestCase("Interface which can be implemented optionally by implementations of")]
+        [TestCase("Interface which can optionally be implemented by")]
+        [TestCase("Interface which can optionally added to classes implementing")]
+        [TestCase("A interface can be implemented optionally by implementations of")]
+        [TestCase("A interface can optionally be implemented by")]
+        [TestCase("A interface can optionally added to classes implementing")]
+        [TestCase("An interface can be implemented optionally by implementations of")]
+        [TestCase("An interface can optionally be implemented by")]
+        [TestCase("An interface can optionally added to classes implementing")]
+        [TestCase("The interface can be implemented optionally by implementations of")]
+        [TestCase("The interface can optionally be implemented by")]
+        [TestCase("The interface can optionally added to classes implementing")]
+        [TestCase("This interface can be implemented optionally by implementations of")]
+        [TestCase("This interface can optionally be implemented by")]
+        [TestCase("This interface can optionally added to classes implementing")]
+        public void Code_gets_fixed_for_extension_interface_(string startingPhrase)
+        {
+            const string Template = @"
+/// <summary>
+/// ### something.
+/// </summary>
+public interface ITestMe
+{
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", startingPhrase), Template.Replace("###", "Enhances"));
         }
 
         [TestCase("Attribute that allows to do something", "Does something")]
@@ -1080,8 +1124,8 @@ public class TestMeAttribute : System.Attribute
         [TestCase("View Model of something", "Represents the view model of something")]
         [TestCase("ViewModel of something", "Represents the view model of something")]
 
-        [TestCase(@"ViewModel for <see cref=""string""/>", "Represents the view model of <see cref=\"string\"/>")]
-        [TestCase(@"ViewModel of <see cref=""string""/>", "Represents the view model of <see cref=\"string\"/>")]
+        [TestCase("""ViewModel for <see cref="string"/>""", """Represents the view model of <see cref="string"/>""")]
+        [TestCase("""ViewModel of <see cref="string"/>""", """Represents the view model of <see cref="string"/>""")]
 
         [TestCase("The view model that is needed to provide", "Provides")]
         [TestCase("The view model which is needed to provide", "Provides")]

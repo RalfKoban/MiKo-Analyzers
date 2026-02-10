@@ -31,6 +31,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static bool HasIssue(string name, in char character)
         {
+            if (name.Length is 0)
+            {
+                // code seems to be obfuscated or contains no valid characters, so ignore it silently
+                return false;
+            }
+
             if (name.First() == character)
             {
                 var trimmed = name.AsSpan().TrimStart(character);

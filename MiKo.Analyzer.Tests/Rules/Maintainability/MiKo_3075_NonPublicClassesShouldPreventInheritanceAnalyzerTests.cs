@@ -110,6 +110,25 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_sealed_private_record_that_inherits_from_private_record() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private sealed record Sealed : Unsealed
+        {
+        }
+
+        private record Unsealed
+        {
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_unsealed_non_static_internal_class() => An_issue_is_reported_for(@"
 using System;
 

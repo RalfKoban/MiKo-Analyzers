@@ -35,6 +35,7 @@ public class TestMe
         [TestCase("int[] replacementMap")]
         [TestCase("string[] WrongNamesForConcreteLookup")]
         [TestCase("string[] WrongNamesForLookup")]
+        [TestCase("string[] myCache")]
         public void No_issue_is_reported_for_field_(string field) => No_issue_is_reported_for(@"
 using System.Linq;
 
