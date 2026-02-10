@@ -553,6 +553,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new Pair("Every class that implements the interface can ", "Allows to ");
             yield return new Pair("Every class that implements this interface can ", "Allows to ");
             yield return new Pair("Extension of ", "Extends the ");
+            yield return new Pair("Extension interface for ", "Enhances ");
             yield return new Pair("Interface definition for ", "Represents ");
             yield return new Pair("Interface for a ", "Represents a ");
             yield return new Pair("Interface for an ", "Represents an ");
@@ -568,6 +569,52 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new Pair("The interface shall be implemented by classes that want to ");
             yield return new Pair("This interface shall be implemented by components that want to ");
             yield return new Pair("The interface shall be implemented by components that want to ");
+            yield return new Pair("Interface that can be implemented optionally by implementations of ", "Enhances ");
+            yield return new Pair("Interface that can optionally be implemented by ", "Enhances ");
+            yield return new Pair("Interface that can optionally added to classes implementing ", "Enhances ");
+            yield return new Pair("Interface which can be implemented optionally by implementations of ", "Enhances ");
+            yield return new Pair("Interface which can optionally be implemented by ", "Enhances ");
+            yield return new Pair("Interface which can optionally added to classes implementing ", "Enhances ");
+            yield return new Pair("A interface can be implemented optionally by implementations of ", "Enhances ");
+            yield return new Pair("A interface can optionally be implemented by ", "Enhances ");
+            yield return new Pair("A interface can optionally added to classes implementing ", "Enhances ");
+            yield return new Pair("An interface can be implemented optionally by implementations of ", "Enhances ");
+            yield return new Pair("An interface can optionally be implemented by ", "Enhances ");
+            yield return new Pair("An interface can optionally added to classes implementing ", "Enhances ");
+            yield return new Pair("The interface can be implemented optionally by implementations of ", "Enhances ");
+            yield return new Pair("The interface can optionally be implemented by ", "Enhances ");
+            yield return new Pair("The interface can optionally added to classes implementing ", "Enhances ");
+            yield return new Pair("This interface can be implemented optionally by implementations of ", "Enhances ");
+            yield return new Pair("This interface can optionally be implemented by ", "Enhances ");
+            yield return new Pair("This interface can optionally added to classes implementing ", "Enhances ");
+            yield return new Pair("Extension interface for ", "Enhances ");
+
+            yield return new Pair("Implementations of this class allow to ");
+            yield return new Pair("Implementations of this class allows to ");
+            yield return new Pair("Implementations of this class can be used to ");
+            yield return new Pair("Implementations of this interface allow to ");
+            yield return new Pair("Implementations of this interface allows to ");
+            yield return new Pair("Implementations of this interface can be used to ");
+            yield return new Pair("Implementations of this class can ");
+            yield return new Pair("Implementations of this interface can ");
+
+            yield return new Pair("Implementers of this class allow to ");
+            yield return new Pair("Implementers of this class allows to ");
+            yield return new Pair("Implementers of this class can be used to ");
+            yield return new Pair("Implementers of this interface allow to ");
+            yield return new Pair("Implementers of this interface allows to ");
+            yield return new Pair("Implementers of this interface can be used to ");
+            yield return new Pair("Implementers of this class can ");
+            yield return new Pair("Implementers of this interface can ");
+
+            yield return new Pair("Implementer of this class allow to ");
+            yield return new Pair("Implementer of this class allows to ");
+            yield return new Pair("Implementer of this class can be used to ");
+            yield return new Pair("Implementer of this interface allow to ");
+            yield return new Pair("Implementer of this interface allows to ");
+            yield return new Pair("Implementer of this interface can be used to ");
+            yield return new Pair("Implementer of this class can ");
+            yield return new Pair("Implementer of this interface can ");
 
             yield return new Pair("This class is responsible for ");
             yield return new Pair("This interface is responsible for ");
@@ -660,6 +707,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new Pair("Use an the class to "); // typo
             yield return new Pair("Use the the class to "); // typo
 
+            yield return new Pair("This Method should return", "Returns"); // typo in real-life scenario
+            yield return new Pair("This method should return", "Returns");
             yield return new Pair("The Method will be called", "Gets called"); // typo in real-life scenario
             yield return new Pair("The method will be called", "Gets called");
             yield return new Pair("The Method is called", "Gets called"); // typo in real-life scenario
@@ -708,6 +757,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new Pair("This will ");
             yield return new Pair("This ");
 
+            yield return new Pair("Helper inferface for", "Supports");
+            yield return new Pair("Helper interface for", "Supports");
+            yield return new Pair("Helper Inferface for", "Supports");
+            yield return new Pair("Helper Interface for", "Supports");
+            yield return new Pair("A helper inferface for", "Supports");
+            yield return new Pair("A helper interface for", "Supports");
+            yield return new Pair("A helper Inferface for", "Supports");
+            yield return new Pair("A helper inferface for", "Supports");
+            yield return new Pair("A helper Interface for", "Supports");
+            yield return new Pair("A helper interface for", "Supports");
+            yield return new Pair("An helper Inferface for", "Supports");
+            yield return new Pair("An helper inferface for", "Supports");
+            yield return new Pair("An helper Interface for", "Supports");
+            yield return new Pair("An helper interface for", "Supports");
+            yield return new Pair("The helper Inferface for", "Supports");
+            yield return new Pair("The helper inferface for", "Supports");
+            yield return new Pair("The helper Interface for", "Supports");
+            yield return new Pair("The helper interface for", "Supports");
+
             foreach (var phrase in CreatePhrases(verbs, thirdPersonVerbs, gerundVerbs))
             {
                 yield return phrase;
@@ -745,6 +813,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                            "A callback", "A Callback", "A call-back", "A Call-back",
                            "The callback", "The Callback", "The call-back", "The Call-back",
                            "This callback", "This Callback", "This call-back", "This Call-back",
+                           "Implementations of this class",
+                           "Implementations of this interface",
+                           "Implementers of this class",
+                           "Implementers of this interface",
+                           "Implementer of this class",
+                           "Implementer of this interface",
                        };
         }
 
