@@ -25,7 +25,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             base.InitializeCore(context);
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers) => identifiers.Select(_ => _.GetSymbol(semanticModel)).SelectMany(AnalyzeName);
+        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers) => identifiers.Select(_ => _.GetSymbol(semanticModel))
+                                                                                                                                                                     .WhereNotNull() // code seems to be obfuscated or contains no valid symbol, so ignore it silently
+                                                                                                                                                                     .SelectMany(AnalyzeName);
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsExtern is false && base.ShallAnalyze(symbol);
 
