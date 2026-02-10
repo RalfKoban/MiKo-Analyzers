@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(IParameterSymbol symbol) => symbol.Type.IsException();
+        protected override bool ShallAnalyze(IParameterSymbol symbol) => symbol?.Type.IsException() is true;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol, Compilation compilation)
         {
