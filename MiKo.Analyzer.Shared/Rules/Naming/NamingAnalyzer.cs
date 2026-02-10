@@ -721,7 +721,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// <param name="context">
         /// The syntax node analysis context.
         /// </param>
-        protected void AnalyzeLocalDeclarationStatement(SyntaxNodeAnalysisContext context)
+        protected virtual void AnalyzeLocalDeclarationStatement(SyntaxNodeAnalysisContext context)
         {
             var node = (LocalDeclarationStatementSyntax)context.Node;
 
@@ -742,42 +742,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (ShallAnalyze(type))
             {
                 var issues = AnalyzeIdentifiers(semanticModel, type, node.Declaration.Variables.ToArray(_ => _.Identifier));
-
-                ReportDiagnostics(context, issues);
-            }
-        }
-
-        /// <summary>
-        /// Analyzes a declaration expression.
-        /// </summary>
-        /// <param name="context">
-        /// The syntax node analysis context.
-        /// </param>
-        protected void AnalyzeDeclarationExpression(SyntaxNodeAnalysisContext context)
-        {
-            var declaration = (DeclarationExpressionSyntax)context.Node;
-
-            var issues = Analyze(context.SemanticModel, declaration);
-
-            ReportDiagnostics(context, issues);
-        }
-
-        /// <summary>
-        /// Analyzes a declaration pattern.
-        /// </summary>
-        /// <param name="context">
-        /// The syntax node analysis context.
-        /// </param>
-        protected virtual void AnalyzeDeclarationPattern(SyntaxNodeAnalysisContext context)
-        {
-            var node = (DeclarationPatternSyntax)context.Node;
-
-            var semanticModel = context.SemanticModel;
-            var type = node.Type.GetTypeSymbol(semanticModel);
-
-            if (ShallAnalyze(type))
-            {
-                var issues = Analyze(semanticModel, type, node.Designation);
 
                 ReportDiagnostics(context, issues);
             }
@@ -834,6 +798,27 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                         ReportDiagnostics(context, issues);
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Analyzes a single variable designation.
+        /// </summary>
+        /// <param name="context">
+        /// The syntax node analysis context.
+        /// </param>
+        protected virtual void AnalyzeVariableDesignation(SyntaxNodeAnalysisContext context)
+        {
+            var node = (VariableDesignationSyntax)context.Node;
+            var semanticModel = context.SemanticModel;
+
+            var type = node.Parent.GetTypeSymbol(semanticModel);
+
+            if (ShallAnalyze(type))
+            {
+                var issues = Analyze(semanticModel, type, node);
+
+                ReportDiagnostics(context, issues);
             }
         }
 
