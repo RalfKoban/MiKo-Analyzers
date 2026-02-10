@@ -23,6 +23,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(ITypeSymbol symbol)
         {
+            if (symbol is null)
+            {
+                // code seems to be obfuscated or contains no valid symbol, so ignore it silently
+                return false;
+            }
+
             var symbolName = symbol.Name.AsSpan();
 
             if (Pluralizer.IsPlural(symbolName))

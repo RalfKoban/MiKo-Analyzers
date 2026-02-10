@@ -21,9 +21,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static bool IsStringFormatExtension(IParameterSymbol symbol) => symbol.ContainingSymbol is IMethodSymbol method && IsStringFormatExtension(method);
+        internal static bool IsStringFormatExtension(IParameterSymbol symbol) => symbol?.ContainingSymbol is IMethodSymbol method && IsStringFormatExtension(method);
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsExtensionMethod;
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol?.IsExtensionMethod is true;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
