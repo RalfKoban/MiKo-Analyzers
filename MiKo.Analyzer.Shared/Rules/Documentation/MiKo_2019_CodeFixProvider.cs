@@ -187,8 +187,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (startText.StartsWithAny(CurrentlyUnfixable))
                 {
-                    // currently we cannot fix that
-                    return summary;
+                    // currently we cannot fix that, except for properties
+                    if (summary.GetEnclosing<PropertyDeclarationSyntax>() is null)
+                    {
+                        return summary;
+                    }
                 }
 
                 var text = startText.AsSpan();
