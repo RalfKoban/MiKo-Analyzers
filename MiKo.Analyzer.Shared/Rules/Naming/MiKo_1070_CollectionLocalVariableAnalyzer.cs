@@ -51,7 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     continue;
                 }
 
-                var pluralName = FindPluralName(originalName.AsSpan(), out var singularName);  // might return null in case there is none
+                var pluralName = FindPluralName(originalName, out var singularName);  // might return null in case there is none
 
                 if (pluralName is null)
                 {

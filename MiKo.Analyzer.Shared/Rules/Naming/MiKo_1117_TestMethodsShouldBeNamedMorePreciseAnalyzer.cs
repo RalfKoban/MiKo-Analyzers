@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -12,33 +13,39 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1117";
 
-        private static readonly string[] UnclearTerms =
-                                                        {
-                                                            "_exception_thrown",
-                                                            "_throws_exception",
-                                                            "correct",
-                                                            "Event_Is_Raised",
-                                                            "EventFired",
-                                                            "EventIsFired",
-                                                            "EventIsRaised",
-                                                            "EventOccured",
-                                                            "EventOccurred",
-                                                            "EventRaised",
-                                                            "ExceptionThrown",
-                                                            "FiresEvent",
-                                                            "handle",
-                                                            "not_handle",
-                                                            "NotHandle",
-                                                            "OccuredEvent",
-                                                            "OccurredEvent",
-                                                            "proper",
-                                                            "Raised_Event",
-                                                            "RaisedEvent",
-                                                            "Raises_Event",
-                                                            "RaisesEvent",
-                                                            "ThrowsException",
-                                                            "works",
-                                                        };
+        private static readonly string[] VagueTerms =
+                                                      {
+                                                          "_exception_thrown",
+                                                          "_throws_exception",
+                                                          "acceptable",
+                                                          "correct",
+                                                          "done",
+                                                          "Event_Is_Raised",
+                                                          "EventFired",
+                                                          "EventIsFired",
+                                                          "EventIsRaised",
+                                                          "EventOccured",
+                                                          "EventOccurred",
+                                                          "EventRaised",
+                                                          "ExceptionThrown",
+                                                          "finished",
+                                                          "FiresEvent",
+                                                          "graceful",
+                                                          "handle",
+                                                          "normal",
+                                                          "not_handle",
+                                                          "NotHandle",
+                                                          "OccuredEvent",
+                                                          "OccurredEvent",
+                                                          "proper",
+                                                          "Raised_Event",
+                                                          "RaisedEvent",
+                                                          "Raises_Event",
+                                                          "RaisesEvent",
+                                                          "successful",
+                                                          "ThrowsException",
+                                                          "works",
+                                                      };
 
         private static readonly string[] KnownExceptions =
                                                            {
@@ -57,7 +64,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                nameof(TaskCanceledException),
                                                                nameof(UnauthorizedAccessException),
                                                                "ValidationException",
+                                                               "handler",
+                                                               "Handler",
+                                                               "normaliz",
+                                                               "Normaliz",
+                                                               "property",
+                                                               "Property",
                                                            };
+
+        private static readonly ConcurrentDictionary<string, string> NamesCache = new ConcurrentDictionary<string, string>(StringComparer.Ordinal);
 
         public MiKo_1117_TestMethodsShouldBeNamedMorePreciseAnalyzer() : base(Id)
         {
@@ -67,10 +82,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod();
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation) => HasIssue(symbol.Name.AsCachedBuilder().ReplaceAllWithProbe(KnownExceptions, "#").ToStringAndRelease())
-                                                                                                                 ? new[] { Issue(symbol) }
-                                                                                                                 : Array.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
+        {
+            var preparedTestName = NamesCache.GetOrAdd(symbol.Name, _ => _.AsCachedBuilder().ReplaceAllWithProbe(KnownExceptions, "#").ToStringAndRelease());
 
-        private static bool HasIssue(string symbolName) => symbolName.ContainsAny(UnclearTerms, StringComparison.OrdinalIgnoreCase);
+            foreach (var vagueTerm in VagueTerms)
+            {
+                if (preparedTestName.Contains(vagueTerm, StringComparison.OrdinalIgnoreCase))
+                {
+                    return new[] { Issue(symbol, vagueTerm) };
+                }
+            }
+
+            return Array.Empty<Diagnostic>();
+        }
     }
 }

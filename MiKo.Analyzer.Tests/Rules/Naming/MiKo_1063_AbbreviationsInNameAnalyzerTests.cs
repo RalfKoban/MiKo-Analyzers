@@ -660,6 +660,90 @@ namespace Bla
             VerifyCSharpFix(Template.Replace("###", originalName), Template.Replace("###", fixedName));
         }
 
+        [TestCase("cert", "certificate")]
+        [TestCase("decl", "declaration")]
+        [TestCase("impl", "implementation")]
+        [TestCase("lang", "language")]
+        public void Code_gets_fixed_for_variable_in_is_declaration_pattern_(string originalName, string fixedName)
+        {
+            const string Template = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private object Data;
+
+        public void DoSomething()
+        {
+            if (Data is { } ###)
+            {
+            }
+        }
+    }
+}";
+
+            VerifyCSharpFix(Template.Replace("###", originalName), Template.Replace("###", fixedName));
+        }
+
+        [TestCase("cert", "certificate")]
+        [TestCase("decl", "declaration")]
+        [TestCase("impl", "implementation")]
+        [TestCase("lang", "language")]
+        public void Code_gets_fixed_for_variable_in_list_pattern_(string originalName, string fixedName)
+        {
+            const string Template = @"
+using System;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private List<int> Data;
+
+        public void DoSomething()
+        {
+            if (Data is not [ _, var ###, _ ])
+            {
+            }
+        }
+    }
+}";
+
+            VerifyCSharpFix(Template.Replace("###", originalName), Template.Replace("###", fixedName));
+        }
+
+        [TestCase("cert", "certificate")]
+        [TestCase("decl", "declaration")]
+        [TestCase("impl", "implementation")]
+        [TestCase("lang", "language")]
+        public void Code_gets_fixed_for_variable_in_property_pattern_with_variable_declaration_(string originalName, string fixedName)
+        {
+            const string Template = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private TestMe Data;
+
+        public int State { get; set; }
+
+        public void DoSomething()
+        {
+            if (Data is { State: var ### } state)
+            {
+            }
+        }
+    }
+}";
+
+            VerifyCSharpFix(Template.Replace("###", originalName), Template.Replace("###", fixedName));
+        }
+
         protected override string GetDiagnosticId() => MiKo_1063_AbbreviationsInNameAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1063_AbbreviationsInNameAnalyzer();

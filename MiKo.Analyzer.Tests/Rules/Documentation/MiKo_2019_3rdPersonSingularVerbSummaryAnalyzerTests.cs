@@ -447,78 +447,118 @@ public class TestMe
             VerifyCSharpFix(originalCode, FixedCode);
         }
 
-        [TestCase("Interface that allows to update something", "Updates something")]
-        [TestCase("Interface that can be used to update something", "Updates something")]
-        [TestCase("Interface that could be used to update something", "Updates something")]
-        [TestCase("Interface that may be used to update something", "Updates something")]
-        [TestCase("Interface that shall be used to update something", "Updates something")]
-        [TestCase("Interface that should be used to update something", "Updates something")]
-        [TestCase("Interface that will be used to update something", "Updates something")]
-        [TestCase("Interface that would be used to update something", "Updates something")]
-        [TestCase("Interface which can be used to update something", "Updates something")]
-        [TestCase("Interface which could be used to update something", "Updates something")]
-        [TestCase("Interface which may be used to update something", "Updates something")]
-        [TestCase("Interface which shall be used to update something", "Updates something")]
-        [TestCase("Interface which should be used to update something", "Updates something")]
-        [TestCase("Interface which will be used to update something", "Updates something")]
-        [TestCase("Interface which would be used to update something", "Updates something")]
-        [TestCase("Interface which allows to update something", "Updates something")]
-        [TestCase("A interface that allows to update something", "Updates something")]
-        [TestCase("A interface that can be used to update something", "Updates something")]
-        [TestCase("A interface that could be used to update something", "Updates something")]
-        [TestCase("A interface that may be used to update something", "Updates something")]
-        [TestCase("A interface that shall be used to update something", "Updates something")]
-        [TestCase("A interface that should be used to update something", "Updates something")]
-        [TestCase("A interface that will be used to update something", "Updates something")]
-        [TestCase("A interface that would be used to update something", "Updates something")]
-        [TestCase("A interface which can be used to update something", "Updates something")]
-        [TestCase("A interface which could be used to update something", "Updates something")]
-        [TestCase("A interface which may be used to update something", "Updates something")]
-        [TestCase("A interface which shall be used to update something", "Updates something")]
-        [TestCase("A interface which should be used to update something", "Updates something")]
-        [TestCase("A interface which will be used to update something", "Updates something")]
-        [TestCase("A interface which would be used to update something", "Updates something")]
-        [TestCase("A interface which allows to update something", "Updates something")]
-        [TestCase("An interface that allows to update something", "Updates something")]
-        [TestCase("An interface that can be used to update something", "Updates something")]
-        [TestCase("An interface that could be used to update something", "Updates something")]
-        [TestCase("An interface that may be used to update something", "Updates something")]
-        [TestCase("An interface that shall be used to update something", "Updates something")]
-        [TestCase("An interface that should be used to update something", "Updates something")]
-        [TestCase("An interface that will be used to update something", "Updates something")]
-        [TestCase("An interface that would be used to update something", "Updates something")]
-        [TestCase("An interface which can be used to update something", "Updates something")]
-        [TestCase("An interface which could be used to update something", "Updates something")]
-        [TestCase("An interface which may be used to update something", "Updates something")]
-        [TestCase("An interface which shall be used to update something", "Updates something")]
-        [TestCase("An interface which should be used to update something", "Updates something")]
-        [TestCase("An interface which will be used to update something", "Updates something")]
-        [TestCase("An interface which would be used to update something", "Updates something")]
-        [TestCase("An interface which allows to update something", "Updates something")]
-        [TestCase("The interface that allows to update something", "Updates something")]
-        [TestCase("The interface that can be used to update something", "Updates something")]
-        [TestCase("The interface that could be used to update something", "Updates something")]
-        [TestCase("The interface that may be used to update something", "Updates something")]
-        [TestCase("The interface that shall be used to update something", "Updates something")]
-        [TestCase("The interface that should be used to update something", "Updates something")]
-        [TestCase("The interface that will be used to update something", "Updates something")]
-        [TestCase("The interface that would be used to update something", "Updates something")]
-        [TestCase("The interface which can be used to update something", "Updates something")]
-        [TestCase("The interface which could be used to update something", "Updates something")]
-        [TestCase("The interface which may be used to update something", "Updates something")]
-        [TestCase("The interface which shall be used to update something", "Updates something")]
-        [TestCase("The interface which should be used to update something", "Updates something")]
-        [TestCase("The interface which will be used to update something", "Updates something")]
-        [TestCase("The interface which would be used to update something", "Updates something")]
-        [TestCase("The interface which allows to update something", "Updates something")]
-        [TestCase("This interface allows to update something", "Updates something")]
+        [TestCase("Interface that allows to update", "Updates")]
+        [TestCase("Interface that can be used to update", "Updates")]
+        [TestCase("Interface that could be used to update", "Updates")]
+        [TestCase("Interface that may be used to update", "Updates")]
+        [TestCase("Interface that shall be used to update", "Updates")]
+        [TestCase("Interface that should be used to update", "Updates")]
+        [TestCase("Interface that will be used to update", "Updates")]
+        [TestCase("Interface that would be used to update", "Updates")]
+        [TestCase("Interface which can be used to update", "Updates")]
+        [TestCase("Interface which could be used to update", "Updates")]
+        [TestCase("Interface which may be used to update", "Updates")]
+        [TestCase("Interface which shall be used to update", "Updates")]
+        [TestCase("Interface which should be used to update", "Updates")]
+        [TestCase("Interface which will be used to update", "Updates")]
+        [TestCase("Interface which would be used to update", "Updates")]
+        [TestCase("Interface which allows to update", "Updates")]
+        [TestCase("A interface that allows to update", "Updates")]
+        [TestCase("A interface that can be used to update", "Updates")]
+        [TestCase("A interface that could be used to update", "Updates")]
+        [TestCase("A interface that may be used to update", "Updates")]
+        [TestCase("A interface that shall be used to update", "Updates")]
+        [TestCase("A interface that should be used to update", "Updates")]
+        [TestCase("A interface that will be used to update", "Updates")]
+        [TestCase("A interface that would be used to update", "Updates")]
+        [TestCase("A interface which can be used to update", "Updates")]
+        [TestCase("A interface which could be used to update", "Updates")]
+        [TestCase("A interface which may be used to update", "Updates")]
+        [TestCase("A interface which shall be used to update", "Updates")]
+        [TestCase("A interface which should be used to update", "Updates")]
+        [TestCase("A interface which will be used to update", "Updates")]
+        [TestCase("A interface which would be used to update", "Updates")]
+        [TestCase("A interface which allows to update", "Updates")]
+        [TestCase("An interface that allows to update", "Updates")]
+        [TestCase("An interface that can be used to update", "Updates")]
+        [TestCase("An interface that could be used to update", "Updates")]
+        [TestCase("An interface that may be used to update", "Updates")]
+        [TestCase("An interface that shall be used to update", "Updates")]
+        [TestCase("An interface that should be used to update", "Updates")]
+        [TestCase("An interface that will be used to update", "Updates")]
+        [TestCase("An interface that would be used to update", "Updates")]
+        [TestCase("An interface which can be used to update", "Updates")]
+        [TestCase("An interface which could be used to update", "Updates")]
+        [TestCase("An interface which may be used to update", "Updates")]
+        [TestCase("An interface which shall be used to update", "Updates")]
+        [TestCase("An interface which should be used to update", "Updates")]
+        [TestCase("An interface which will be used to update", "Updates")]
+        [TestCase("An interface which would be used to update", "Updates")]
+        [TestCase("An interface which allows to update", "Updates")]
+        [TestCase("The interface that allows to update", "Updates")]
+        [TestCase("The interface that can be used to update", "Updates")]
+        [TestCase("The interface that could be used to update", "Updates")]
+        [TestCase("The interface that may be used to update", "Updates")]
+        [TestCase("The interface that shall be used to update", "Updates")]
+        [TestCase("The interface that should be used to update", "Updates")]
+        [TestCase("The interface that will be used to update", "Updates")]
+        [TestCase("The interface that would be used to update", "Updates")]
+        [TestCase("The interface which can be used to update", "Updates")]
+        [TestCase("The interface which could be used to update", "Updates")]
+        [TestCase("The interface which may be used to update", "Updates")]
+        [TestCase("The interface which shall be used to update", "Updates")]
+        [TestCase("The interface which should be used to update", "Updates")]
+        [TestCase("The interface which will be used to update", "Updates")]
+        [TestCase("The interface which would be used to update", "Updates")]
+        [TestCase("The interface which allows to update", "Updates")]
+        [TestCase("This interface allows to update", "Updates")]
+        [TestCase("Interface that can be implemented optionally by implementations of", "Enhances")]
+        [TestCase("Interface that can optionally be implemented by", "Enhances")]
+        [TestCase("Interface that can optionally added to classes implementing", "Enhances")]
+        [TestCase("Interface which can be implemented optionally by implementations of", "Enhances")]
+        [TestCase("Interface which can optionally be implemented by", "Enhances")]
+        [TestCase("Interface which can optionally added to classes implementing", "Enhances")]
+        [TestCase("A interface can be implemented optionally by implementations of", "Enhances")]
+        [TestCase("A interface can optionally be implemented by", "Enhances")]
+        [TestCase("A interface can optionally added to classes implementing", "Enhances")]
+        [TestCase("An interface can be implemented optionally by implementations of", "Enhances")]
+        [TestCase("An interface can optionally be implemented by", "Enhances")]
+        [TestCase("An interface can optionally added to classes implementing", "Enhances")]
+        [TestCase("The interface can be implemented optionally by implementations of", "Enhances")]
+        [TestCase("The interface can optionally be implemented by", "Enhances")]
+        [TestCase("The interface can optionally added to classes implementing", "Enhances")]
+        [TestCase("This interface can be implemented optionally by implementations of", "Enhances")]
+        [TestCase("This interface can optionally be implemented by", "Enhances")]
+        [TestCase("This interface can optionally added to classes implementing", "Enhances")]
+        [TestCase("Extension interface for", "Enhances")]
+        [TestCase("Implementations of this class allow to simplify", "Simplifies")]
+        [TestCase("Implementations of this class allows to simplify", "Simplifies")]
+        [TestCase("Implementations of this class can be used to simplify", "Simplifies")]
+        [TestCase("Implementations of this class can influence", "Influences")]
+        [TestCase("Implementations of this interface allows to simplify", "Simplifies")]
+        [TestCase("Implementations of this interface can be used to simplify", "Simplifies")]
+        [TestCase("Implementations of this interface can influence", "Influences")]
+        [TestCase("Implementers of this class allow to simplify", "Simplifies")]
+        [TestCase("Implementers of this class allows to simplify", "Simplifies")]
+        [TestCase("Implementers of this class can be used to simplify", "Simplifies")]
+        [TestCase("Implementers of this class can influence", "Influences")]
+        [TestCase("Implementers of this interface allows to simplify", "Simplifies")]
+        [TestCase("Implementers of this interface can be used to simplify", "Simplifies")]
+        [TestCase("Implementers of this interface can influence", "Influences")]
+        [TestCase("Implementer of this class allow to simplify", "Simplifies")]
+        [TestCase("Implementer of this class allows to simplify", "Simplifies")]
+        [TestCase("Implementer of this class can be used to simplify", "Simplifies")]
+        [TestCase("Implementer of this class can influence", "Influences")]
+        [TestCase("Implementer of this interface allows to simplify", "Simplifies")]
+        [TestCase("Implementer of this interface can be used to simplify", "Simplifies")]
+        [TestCase("Implementer of this interface can influence", "Influences")]
         public void Code_gets_fixed_for_interface_text_(string originalText, string fixedText)
         {
             const string Template = @"
 using System;
 
 /// <summary>
-/// ###
+/// ### something
 /// </summary>
 public interface TestMe
 {
@@ -526,6 +566,57 @@ public interface TestMe
 ";
 
             VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
+        }
+
+        [TestCase("Helper inferface for")]
+        [TestCase("Helper interface for")]
+        [TestCase("Helper Inferface for")]
+        [TestCase("Helper Interface for")]
+        [TestCase("A helper inferface for")]
+        [TestCase("A helper Inferface for")]
+        [TestCase("A helper Interface for")]
+        [TestCase("A helper interface for")]
+        [TestCase("An helper Inferface for")]
+        [TestCase("An helper inferface for")]
+        [TestCase("An helper Interface for")]
+        [TestCase("An helper interface for")]
+        [TestCase("The helper Inferface for")]
+        [TestCase("The helper inferface for")]
+        [TestCase("The helper Interface for")]
+        [TestCase("The helper interface for")]
+        public void Code_gets_fixed_for_helper_interface_text_(string originalText)
+        {
+            const string Template = @"
+using System;
+
+/// <summary>
+/// ### stuff
+/// </summary>
+public interface TestMe
+{
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", "Supports"));
+        }
+
+        [TestCase("Several basic helper functions for")]
+        [TestCase("Basic helper functions for")]
+        [TestCase("Helper functions for")]
+        public void Code_gets_fixed_for_helper_class_text_(string originalText)
+        {
+            const string Template = @"
+using System;
+
+/// <summary>
+/// ### stuff
+/// </summary>
+public static class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", """Provides a set of <see langword="static"/> methods for"""));
         }
 
         [TestCase("Simple structure to do stuff", "Represents a simple structure to do stuff")]
@@ -618,6 +709,24 @@ public class TestMe
         [TestCase("This property returns")]
         [TestCase("This Property will return")]
         [TestCase("This Property returns")]
+        [TestCase("If set to true then")]
+        [TestCase("If set to True then")]
+        [TestCase("If set to TRUE then")]
+        [TestCase("If set to true, then")]
+        [TestCase("If set to True, then")]
+        [TestCase("If set to TRUE, then")]
+        [TestCase("true if")]
+        [TestCase("True if")]
+        [TestCase("TRUE if")]
+        [TestCase("true when")]
+        [TestCase("True when")]
+        [TestCase("TRUE when")]
+        [TestCase("When set to true then")]
+        [TestCase("When set to True then")]
+        [TestCase("When set to TRUE then")]
+        [TestCase("When set to true, then")]
+        [TestCase("When set to True, then")]
+        [TestCase("When set to TRUE, then")]
         public void Code_gets_fixed_for_boolean_property_text_(string originalText)
         {
             const string Template = @"
@@ -647,6 +756,7 @@ public interface TestMe
         [TestCase("This property returns")]
         [TestCase("This Property will return")]
         [TestCase("This Property returns")]
+        [TestCase("get information about")]
         public void Code_gets_fixed_for_non_boolean_property_text_(string originalText)
         {
             const string Template = @"
@@ -694,6 +804,7 @@ public interface TestMe
         [TestCase("This method will start to do something", "Starts to do something")]
         [TestCase("This starts to do something", "Starts to do something")]
         [TestCase("Trigger something", "Triggers something")]
+        [TestCase("This method should return something", "Returns something")]
         public void Code_gets_fixed_for_method_text_(string originalText, string fixedText)
         {
             const string Template = @"
