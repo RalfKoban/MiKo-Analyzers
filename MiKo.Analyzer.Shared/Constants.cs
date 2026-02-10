@@ -1605,12 +1605,14 @@ namespace MiKoSolutions.Analyzers
                                                                                       "WritingProgressChangedEventHandler",
                                                                                   };
 
-            internal static readonly IReadOnlyDictionary<string, string> StructuralDesignPatternNames = new ConcurrentDictionary<string, string>(new[]
-                                                                                                                                                     {
-                                                                                                                                                         new KeyValuePair<string, string>("Adapter", "adapted"),
-                                                                                                                                                         new KeyValuePair<string, string>("Wrapper", "wrapped"),
-                                                                                                                                                         new KeyValuePair<string, string>("Decorator", "decorated"),
-                                                                                                                                                     });
+            internal static readonly IReadOnlyDictionary<string, string> StructuralDesignPatternNames = new ConcurrentDictionary<string, string>(
+                                                                                                                                             new[]
+                                                                                                                                                 {
+                                                                                                                                                     new KeyValuePair<string, string>("Adapter", "adapted"),
+                                                                                                                                                     new KeyValuePair<string, string>("Wrapper", "wrapped"),
+                                                                                                                                                     new KeyValuePair<string, string>("Decorator", "decorated"),
+                                                                                                                                                 },
+                                                                                                                                             StringComparer.Ordinal);
         }
 
         internal static class AnalyzerCodeFixSharedData

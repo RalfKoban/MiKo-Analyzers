@@ -65,6 +65,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "Tone",
                                                             "twoLetter",
                                                             "TwoLetter",
+                                                            "thirdPerson",
+                                                            "ThirdPerson",
                                                             "validOnes",
                                                             "versioned",
                                                             "WaitOne",
