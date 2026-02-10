@@ -22,8 +22,18 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (arm.IsSpanningMultipleLines())
             {
-                // maybe we have an initializer, so check for that
-                return arm.DescendantNodes<InitializerExpressionSyntax>().None();
+                foreach (var descendant in arm.DescendantNodes())
+                {
+                    switch (descendant)
+                    {
+                        case InitializerExpressionSyntax _: // we have an initializer, so we cannot do anything
+                        case InterpolatedStringExpressionSyntax i when i.IsSpanningMultipleLines(): // we have an interpolated string, so we cannot do anything
+                        case LiteralExpressionSyntax l when l.IsKind(SyntaxKind.StringLiteralExpression) && l.IsSpanningMultipleLines(): // we seem to have verbatim string, so we cannot do anything
+                            return false;
+                    }
+                }
+
+                return true;
             }
 
             // maybe the comma is not placed at same line, so let's find out

@@ -110,8 +110,14 @@ public static class TestMeExtensions
         [TestCase("The extension methods to", "")]
         [TestCase("The extensions for", "")]
         [TestCase("The extensions to", "")]
-        [TestCase(@"Extension methods for <see cref=""String""/>.", @" <see cref=""String""/>.")]
-        [TestCase(@"Extensions for <see cref=""String""/>.", @" <see cref=""String""/>.")]
+        [TestCase("""Extension methods for <see cref="String"/>.""", """ <see cref="String"/>.""")]
+        [TestCase("""Extensions for <see cref="String"/>.""", """ <see cref="String"/>.""")]
+        [TestCase("Contains several basic helper functions for", "")]
+        [TestCase("Provides several basic helper functions for", "")]
+        [TestCase("Has several basic helper functions for", "")]
+        [TestCase("Several basic helper functions for", "")]
+        [TestCase("Basic helper functions for", "")]
+        [TestCase("Helper functions for", "")]
         public void Code_gets_fixed_(string originalCode, string fixedCode)
         {
             const string Template = @"
