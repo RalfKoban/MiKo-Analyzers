@@ -224,6 +224,16 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static IReadOnlyList<LocalFunctionStatementSyntax> GetLocalFunctions(this IMethodSymbol value)
         {
+            if (value.IsAbstract)
+            {
+                return Array.Empty<LocalFunctionStatementSyntax>();
+            }
+
+            if (value.IsPartialDefinition)
+            {
+                return Array.Empty<LocalFunctionStatementSyntax>();
+            }
+
             var node = value.GetSyntaxNodeInSource();
 
             if (node is null)
