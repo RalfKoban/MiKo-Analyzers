@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
     /// </summary>
     internal static class Pluralizer
     {
-        private static readonly ConcurrentDictionary<string, string> PluralNames = new ConcurrentDictionary<string, string>();
+        private static readonly ConcurrentDictionary<string, string> PluralNames = new ConcurrentDictionary<string, string>(StringComparer.Ordinal);
 
         private static readonly HashSet<char> CharsForTwoCharacterEndingsWithS = new HashSet<char> { 'a', 'h', 'i', 'o', 's', 'u', 'x', 'z' };
 

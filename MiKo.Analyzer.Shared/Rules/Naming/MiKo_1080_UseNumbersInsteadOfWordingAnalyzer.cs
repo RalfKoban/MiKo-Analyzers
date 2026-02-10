@@ -97,6 +97,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                           "Sone",
                                                           "seconds",
                                                           "Seconds",
+                                                          "thirdPerson",
+                                                          "ThirdPerson",
                                                           "tone",
                                                           "Tone",
                                                           "twoLetter", // 'twoLetterLanguageCode'

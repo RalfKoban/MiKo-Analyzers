@@ -48,9 +48,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                   "Something_throws_ValidationException",
                                                                   "Something_with_a_property",
                                                                   "Something_with_an_uppercase_Property",
+                                                                  "Something_with_an_event_handler",
+                                                                  "Something_with_an_EventHandler",
+                                                                  "Something_with_a_handler",
+                                                                  "Something_is_normalizing_stuff",
+                                                                  "Something_gets_normalized",
+                                                                  "Normalize_something",
                                                               ];
 
-        private static readonly string[] WrongMethodNames =
+        private static readonly string[] VagueMethodNames =
                                                             [
                                                                 "Something_EventRaised",
                                                                 "Something_EventIsRaised",
@@ -74,21 +80,55 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                 "Something_ThrowsException",
                                                                 "Something_exception_thrown",
                                                                 "Something_throws_exception",
-                                                                "Something_handles",
-                                                                "Something_does_not_handle",
-                                                                "Something_do_not_handle",
-                                                                "Something_DoesNotHandle",
-                                                                "Something_DoNotHandle",
-                                                                "Something_properly",
-                                                                "Something_improperly",
                                                                 "Something_correct",
-                                                                "Something_works",
+                                                                "Something_correctly",
+                                                                "Something_do_not_handle",
+                                                                "Something_does_not_handle",
+                                                                "Something_DoesNotHandle",
+                                                                "Something_done",
+                                                                "Something_DoNotHandle",
+                                                                "Something_finished",
+                                                                "Something_gracefully",
+                                                                "Something_handles",
+                                                                "Something_improperly",
+                                                                "Something_incorrect",
+                                                                "Something_incorrectly",
+                                                                "Something_is_acceptable",
+                                                                "Something_is_inacceptable",
+                                                                "Something_is_unacceptable",
+                                                                "Something_normally",
                                                                 "Something_proper_way",
+                                                                "Something_properly",
                                                                 "Something_properWay",
+                                                                "Something_successfully",
+                                                                "Something_works",
+                                                                "SomethingDoesNotHandle",
+                                                                "SomethingDoNotHandle",
+                                                                "SomethingHandles",
+                                                                "SomethingIsAcceptable",
+                                                                "SomethingIsCorrect",
+                                                                "SomethingIsCorrectly",
+                                                                "SomethingIsDone",
+                                                                "SomethingIsFinished",
+                                                                "SomethingIsGraceful",
+                                                                "SomethingIsGracefully",
+                                                                "SomethingIsImproper",
+                                                                "SomethingIsImproperly",
+                                                                "SomethingIsInacceptable",
+                                                                "SomethingIsIncorrect",
+                                                                "SomethingIsIncorrectly",
+                                                                "SomethingIsNormal",
+                                                                "SomethingIsNormally",
+                                                                "SomethingIsProperly",
+                                                                "SomethingIsProperWay",
+                                                                "SomethingIsSuccessful",
+                                                                "SomethingIsSuccessfully",
+                                                                "SomethingIsUnacceptable",
+                                                                "SomethingWorks",
                                                             ];
 
         [Test]
-        public void No_issue_is_reported_for_non_test_class_([ValueSource(nameof(WrongMethodNames))] string methodName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_test_class_([ValueSource(nameof(VagueMethodNames))] string methodName) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void " + methodName + @"() { }
@@ -111,7 +151,7 @@ public class TestMe
 
         [Test]
         public void An_issue_is_reported_for_test_method_with_wrong_name_(
-                                                                      [ValueSource(nameof(WrongMethodNames))] string methodName,
+                                                                      [ValueSource(nameof(VagueMethodNames))] string methodName,
                                                                       [ValueSource(nameof(TestFixtures))] string fixture,
                                                                       [ValueSource(nameof(Tests))] string test)
             => An_issue_is_reported_for(@"

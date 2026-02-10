@@ -792,14 +792,29 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static ITypeSymbol GetTypeSymbol(this SyntaxNode value, SemanticModel semanticModel)
         {
-            if (value is null)
+            switch (value)
             {
-                return null;
+                case null: return null;
+                case ArgumentSyntax a: return a.GetTypeSymbol(semanticModel);
+                case MemberAccessExpressionSyntax m: return m.GetTypeSymbol(semanticModel);
+                case ClassDeclarationSyntax c: return c.GetTypeSymbol(semanticModel);
+                case RecordDeclarationSyntax r: return r.GetTypeSymbol(semanticModel);
+                case BaseTypeSyntax b: return b.GetTypeSymbol(semanticModel);
+                case TypeSyntax t: return t.GetTypeSymbol(semanticModel);
+                case VariableDeclarationSyntax declaration: return declaration.GetTypeSymbol(semanticModel);
+                case ParenthesizedVariableDesignationSyntax p: return p.Parent.GetTypeSymbol(semanticModel); // TODO RKN: seems we have an parenthesize around
+                case VariableDesignationSyntax designation: return designation.GetTypeSymbol(semanticModel);
+                case DeclarationPatternSyntax dp: return dp.Type.GetTypeSymbol(semanticModel);
+                case DeclarationExpressionSyntax de: return de.Type.GetTypeSymbol(semanticModel);
+                case ExpressionSyntax e: return e.GetTypeSymbol(semanticModel);
+
+                default:
+                {
+                    var typeInfo = semanticModel.GetTypeInfo(value);
+
+                    return typeInfo.Type;
+                }
             }
-
-            var typeInfo = semanticModel.GetTypeInfo(value);
-
-            return typeInfo.Type;
         }
 
         /// <summary>

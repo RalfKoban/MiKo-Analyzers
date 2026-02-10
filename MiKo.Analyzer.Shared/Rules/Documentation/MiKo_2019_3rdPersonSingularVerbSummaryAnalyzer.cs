@@ -44,12 +44,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             StringBuilderCache.Release(builder);
 
-            if (problematicText is "Is")
+            switch (problematicText)
             {
-                return true;
-            }
+                case "Classes":
+                case "Implementations":
+                case "Implementers":
+                case "Interfaces":
+                case "Is":
+                case "Types":
+                    return true;
 
-            return Verbalizer.IsThirdPersonSingularVerb(problematicText) is false;
+                default:
+                    return Verbalizer.IsThirdPersonSingularVerb(problematicText) is false;
+            }
         }
     }
 }
