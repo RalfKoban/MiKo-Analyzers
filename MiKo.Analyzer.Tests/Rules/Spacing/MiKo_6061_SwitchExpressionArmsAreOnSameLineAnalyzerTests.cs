@@ -51,6 +51,72 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_switch_expression_arm_with_interpolated_raw_string_spanning_multiple_lines()
+            => No_issue_is_reported_for(""""
+
+                                        using System;
+
+                                        public class TestMe
+                                        {
+                                            public string DoSomething(StringComparison comparison, string text)
+                                            {
+                                                    return comparison switch
+                                                                            {
+                                                                                StringComparison.Ordinal => $"""
+                                                                                                            {text},
+                                                                                                            """,
+                                                                                _ => null,
+                                                                            };
+                                            }
+                                        }
+
+                                        """");
+
+        [Test]
+        public void No_issue_is_reported_for_switch_expression_arm_with_raw_string_spanning_multiple_lines()
+            => No_issue_is_reported_for(""""
+
+                                        using System;
+
+                                        public class TestMe
+                                        {
+                                            public string DoSomething(StringComparison comparison)
+                                            {
+                                                    return comparison switch
+                                                                            {
+                                                                                StringComparison.Ordinal => """
+                                                                                                            some text,
+                                                                                                            """,
+                                                                                _ => null,
+                                                                            };
+                                            }
+                                        }
+
+                                        """");
+
+        [Test]
+        public void No_issue_is_reported_for_switch_expression_arm_with_verbatim_string_spanning_multiple_lines()
+            => No_issue_is_reported_for("""
+
+                                        using System;
+
+                                        public class TestMe
+                                        {
+                                            public string DoSomething(StringComparison comparison)
+                                            {
+                                                    return comparison switch
+                                                                            {
+                                                                                StringComparison.Ordinal => @"
+                                                                                                            some text,
+                                                                                                            ",
+                                                                                _ => null,
+                                                                            };
+                                            }
+                                        }
+
+                                        """);
+
+        [Test]
         public void An_issue_is_reported_for_switch_expression_arm_if_comma_is_on_different_line() => An_issue_is_reported_for(@"
 using System;
 
@@ -161,42 +227,46 @@ public class TestMe
         [Test]
         public void Code_gets_fixed_for_switch_expression_arm_if_it_spans_multiple_lines()
         {
-            const string OriginalCode = @"
-using System;
+            const string OriginalCode = """
 
-public class TestMe
-{
-    public bool DoSomething(StringComparison comparison)
-    {
-            return comparison switch
-                                    {
-                                        StringComparison
-                                                    .
-                                                      Ordinal
-                                                            =>
-                                                                true
-                                                                    ,
-                                        _ => false,
-                                    };
-    }
-}
-";
+                                        using System;
 
-            const string FixedCode = @"
-using System;
+                                        public class TestMe
+                                        {
+                                            public bool DoSomething(StringComparison comparison)
+                                            {
+                                                    return comparison switch
+                                                                            {
+                                                                                StringComparison
+                                                                                            .
+                                                                                              Ordinal
+                                                                                                    =>
+                                                                                                        true
+                                                                                                            ,
+                                                                                _ => false,
+                                                                            };
+                                            }
+                                        }
 
-public class TestMe
-{
-    public bool DoSomething(StringComparison comparison)
-    {
-            return comparison switch
-                                    {
-                                        StringComparison.Ordinal => true,
-                                        _ => false,
-                                    };
-    }
-}
-";
+                                        """;
+
+            const string FixedCode = """
+
+                                     using System;
+
+                                     public class TestMe
+                                     {
+                                         public bool DoSomething(StringComparison comparison)
+                                         {
+                                                 return comparison switch
+                                                                         {
+                                                                             StringComparison.Ordinal => true,
+                                                                             _ => false,
+                                                                         };
+                                         }
+                                     }
+
+                                     """;
 
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
@@ -204,39 +274,43 @@ public class TestMe
         [Test]
         public void Code_gets_fixed_for_switch_expression_arm_if_it_has_a_conditional_expression_that_spans_multiple_lines()
         {
-            const string OriginalCode = @"
-using System;
+            const string OriginalCode = """
 
-public class TestMe
-{
-    public bool DoSomething(StringComparison comparison, bool inverse)
-    {
-            return comparison switch
-                                    {
-                                        StringComparison.Ordinal => inverse
-                                                                    ? false
-                                                                    : true,
-                                        _ => false,
-                                    };
-    }
-}
-";
+                                        using System;
 
-            const string FixedCode = @"
-using System;
+                                        public class TestMe
+                                        {
+                                            public bool DoSomething(StringComparison comparison, bool inverse)
+                                            {
+                                                    return comparison switch
+                                                                            {
+                                                                                StringComparison.Ordinal => inverse
+                                                                                                            ? false
+                                                                                                            : true,
+                                                                                _ => false,
+                                                                            };
+                                            }
+                                        }
 
-public class TestMe
-{
-    public bool DoSomething(StringComparison comparison, bool inverse)
-    {
-            return comparison switch
-                                    {
-                                        StringComparison.Ordinal => inverse ? false : true,
-                                        _ => false,
-                                    };
-    }
-}
-";
+                                        """;
+
+            const string FixedCode = """
+
+                                     using System;
+
+                                     public class TestMe
+                                     {
+                                         public bool DoSomething(StringComparison comparison, bool inverse)
+                                         {
+                                                 return comparison switch
+                                                                         {
+                                                                             StringComparison.Ordinal => inverse ? false : true,
+                                                                             _ => false,
+                                                                         };
+                                         }
+                                     }
+
+                                     """;
 
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
@@ -244,48 +318,105 @@ public class TestMe
         [Test]
         public void Code_gets_fixed_for_switch_expression_arm_throwing_an_exception_if_it_spans_multiple_lines()
         {
-            const string OriginalCode = @"
-using System;
+            const string OriginalCode = """
 
-public class TestMe
-{
-    public bool DoSomething(StringComparison comparison)
-    {
-            return comparison switch
-                                    {
-                                        StringComparison.Ordinal => true,
-                                        _
-                                            =>
-                                                throw
-                                                    new
-                                                      ArgumentOutOfRangeException(
-                                                            nameof(
-                                                                direction
-                                                                        )
-                                                                         ,
-                                                                            ""some value""
-                                                                                )
-                                                                                    ,
-                                    };
-    }
-}
-";
+                                        using System;
 
-            const string FixedCode = @"
-using System;
+                                        public class TestMe
+                                        {
+                                            public bool DoSomething(StringComparison comparison)
+                                            {
+                                                    return comparison switch
+                                                                            {
+                                                                                StringComparison.Ordinal => true,
+                                                                                _
+                                                                                    =>
+                                                                                        throw
+                                                                                            new
+                                                                                              ArgumentOutOfRangeException(
+                                                                                                    nameof(
+                                                                                                        direction
+                                                                                                                )
+                                                                                                                 ,
+                                                                                                                    "some value"
+                                                                                                                        )
+                                                                                                                            ,
+                                                                            };
+                                            }
+                                        }
 
-public class TestMe
-{
-    public bool DoSomething(StringComparison comparison)
-    {
-            return comparison switch
-                                    {
-                                        StringComparison.Ordinal => true,
-                                        _ => throw new ArgumentOutOfRangeException(nameof(direction), ""some value""),
-                                    };
-    }
-}
-";
+                                        """;
+
+            const string FixedCode = """
+
+                                     using System;
+
+                                     public class TestMe
+                                     {
+                                         public bool DoSomething(StringComparison comparison)
+                                         {
+                                                 return comparison switch
+                                                                         {
+                                                                             StringComparison.Ordinal => true,
+                                                                             _ => throw new ArgumentOutOfRangeException(nameof(direction), "some value"),
+                                                                         };
+                                         }
+                                     }
+
+                                     """;
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_switch_expression_arm_throwing_an_exception_using_interpolated_string_if_it_spans_multiple_lines()
+        {
+            const string OriginalCode = """
+
+                                        using System;
+
+                                        public class TestMe
+                                        {
+                                            public bool DoSomething(StringComparison comparison)
+                                            {
+                                                    return comparison switch
+                                                                            {
+                                                                                StringComparison.Ordinal => true,
+                                                                                _
+                                                                                    =>
+                                                                                        throw
+                                                                                            new
+                                                                                              ArgumentOutOfRangeException(
+                                                                                                    nameof(
+                                                                                                        direction
+                                                                                                                )
+                                                                                                                 ,
+                                                                                                                    $"some {comparison} value"
+                                                                                                                        )
+                                                                                                                            ,
+                                                                            };
+                                            }
+                                        }
+
+                                        """;
+
+            const string FixedCode = """
+
+                                     using System;
+
+                                     public class TestMe
+                                     {
+                                         public bool DoSomething(StringComparison comparison)
+                                         {
+                                                 return comparison switch
+                                                                         {
+                                                                             StringComparison.Ordinal => true,
+                                                                             _ => throw new ArgumentOutOfRangeException(nameof(direction), $"some {comparison} value"),
+                                                                         };
+                                         }
+                                     }
+
+                                     """;
 
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
@@ -293,38 +424,42 @@ public class TestMe
         [Test]
         public void Code_gets_fixed_for_last_switch_expression_arm_if_value_is_on_different_line_but_arm_does_not_end_with_separator()
         {
-            const string OriginalCode = @"
-using System;
+            const string OriginalCode = """
 
-public class TestMe
-{
-    public bool DoSomething(StringComparison comparison)
-    {
-            return comparison switch
-                                    {
-                                        StringComparison.Ordinal => true,
-                                        _ =>
-                                             false
-                                    };
-    }
-}
-";
+                                        using System;
 
-            const string FixedCode = @"
-using System;
+                                        public class TestMe
+                                        {
+                                            public bool DoSomething(StringComparison comparison)
+                                            {
+                                                    return comparison switch
+                                                                            {
+                                                                                StringComparison.Ordinal => true,
+                                                                                _ =>
+                                                                                     false
+                                                                            };
+                                            }
+                                        }
 
-public class TestMe
-{
-    public bool DoSomething(StringComparison comparison)
-    {
-            return comparison switch
-                                    {
-                                        StringComparison.Ordinal => true,
-                                        _ => false
-                                    };
-    }
-}
-";
+                                        """;
+
+            const string FixedCode = """
+
+                                     using System;
+
+                                     public class TestMe
+                                     {
+                                         public bool DoSomething(StringComparison comparison)
+                                         {
+                                                 return comparison switch
+                                                                         {
+                                                                             StringComparison.Ordinal => true,
+                                                                             _ => false
+                                                                         };
+                                         }
+                                     }
+
+                                     """;
 
             VerifyCSharpFix(OriginalCode, FixedCode);
         }

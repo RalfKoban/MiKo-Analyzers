@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,6 +17,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public abstract class NamingAnalyzer : Analyzer
     {
         private static readonly string[] Splitters = { "Of", "With", "To", "In", "From", "For" };
+
+        private static readonly ConcurrentDictionary<string, Pair> PluralNamesCache = new ConcurrentDictionary<string, Pair>(StringComparer.Ordinal);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NamingAnalyzer"/> class with the unique identifier of the diagnostic and the kind of symbol to analyze.
@@ -77,7 +80,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// </returns>
         protected static string FindBetterNameForCollectionSuffix(string name)
         {
-            var pluralName = FindPluralName(name.AsSpan(), out _);
+            var pluralName = FindPluralName(name, out _);
 
             return name.Equals(pluralName, StringComparison.Ordinal) ? null : pluralName;
         }
@@ -142,6 +145,34 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// <returns>
         /// A <see cref="string"/> that contains the plural form of the name, or <see langword="null"/> if the name is already in plural form.
         /// </returns>
+        protected static string FindPluralName(string originalName, out string singularName)
+        {
+            var found = PluralNamesCache.GetOrAdd(
+                                              originalName,
+                                              _ =>
+                                                   {
+                                                       var plural = FindPluralName(_.AsSpan(), out var singular);
+
+                                                       return new Pair(plural, singular);
+                                                   });
+
+            singularName = found.Value;
+
+            return found.Key;
+        }
+
+        /// <summary>
+        /// Finds the plural form of a name.
+        /// </summary>
+        /// <param name="originalName">
+        /// The original name to analyze.
+        /// </param>
+        /// <param name="singularName">
+        /// On successful return, contains the singular form of the name.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the plural form of the name, or <see langword="null"/> if the name is already in plural form.
+        /// </returns>
         protected static string FindPluralName(in ReadOnlySpan<char> originalName, out string singularName)
         {
             if (originalName.EndsWith('s'))
@@ -160,7 +191,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return pluralName;
             }
 
-            if (originalName.EndsWith("Map"))
+            if (originalName.EndsWith("Map") || originalName.EndsWith("Cache"))
             {
                 singularName = originalName.ToString();
 
@@ -349,7 +380,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// <returns>
         /// <see langword="true"/> if the namespace shall be analyzed; otherwise, <see langword="false"/>.
         /// </returns>
-        protected virtual bool ShallAnalyze(INamespaceSymbol symbol) => symbol.CanBeReferencedByName && symbol.IsGlobalNamespace is false;
+        protected virtual bool ShallAnalyze(INamespaceSymbol symbol)
+        {
+            if (symbol is null)
+            {
+                // code seems to be obfuscated or contains no valid symbol, so ignore it silently
+                return false;
+            }
+
+            return symbol.CanBeReferencedByName && symbol.IsGlobalNamespace is false;
+        }
 
         /// <summary>
         /// Determines whether the specified type shall be analyzed.
@@ -360,7 +400,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// <returns>
         /// <see langword="true"/> if the type shall be analyzed; otherwise, <see langword="false"/>.
         /// </returns>
-        protected virtual bool ShallAnalyze(ITypeSymbol symbol) => symbol.CanBeReferencedByName;
+        protected virtual bool ShallAnalyze(ITypeSymbol symbol)
+        {
+            if (symbol is null)
+            {
+                // code seems to be obfuscated or contains no valid symbol, so ignore it silently
+                return false;
+            }
+
+            return symbol.CanBeReferencedByName;
+        }
 
         /// <summary>
         /// Determines whether the specified method shall be analyzed.
@@ -373,6 +422,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// </returns>
         protected virtual bool ShallAnalyze(IMethodSymbol symbol)
         {
+            if (symbol is null)
+            {
+                // code seems to be obfuscated or contains no valid symbol, so ignore it silently
+                return false;
+            }
+
             if (symbol.CanBeReferencedByName is false)
             {
                 return false;
@@ -405,7 +460,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// <returns>
         /// <see langword="true"/> if the property shall be analyzed; otherwise, <see langword="false"/>.
         /// </returns>
-        protected virtual bool ShallAnalyze(IPropertySymbol symbol) => symbol.CanBeReferencedByName && symbol.IsOverride is false && symbol.IsInterfaceImplementation() is false;
+        protected virtual bool ShallAnalyze(IPropertySymbol symbol)
+        {
+            if (symbol is null)
+            {
+                // code seems to be obfuscated or contains no valid symbol, so ignore it silently
+                return false;
+            }
+
+            return symbol.CanBeReferencedByName && symbol.IsOverride is false && symbol.IsInterfaceImplementation() is false;
+        }
 
         /// <summary>
         /// Determines whether the specified event shall be analyzed.
@@ -416,7 +480,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// <returns>
         /// <see langword="true"/> if the event shall be analyzed; otherwise, <see langword="false"/>.
         /// </returns>
-        protected virtual bool ShallAnalyze(IEventSymbol symbol) => symbol.CanBeReferencedByName && symbol.IsOverride is false && symbol.IsInterfaceImplementation() is false;
+        protected virtual bool ShallAnalyze(IEventSymbol symbol)
+        {
+            if (symbol is null)
+            {
+                // code seems to be obfuscated or contains no valid symbol, so ignore it silently
+                return false;
+            }
+
+            return symbol.CanBeReferencedByName && symbol.IsOverride is false && symbol.IsInterfaceImplementation() is false;
+        }
 
         /// <summary>
         /// Determines whether the specified field shall be analyzed.
@@ -427,7 +500,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// <returns>
         /// <see langword="true"/> if the field shall be analyzed; otherwise, <see langword="false"/>.
         /// </returns>
-        protected virtual bool ShallAnalyze(IFieldSymbol symbol) => symbol.CanBeReferencedByName && symbol.IsOverride is false;
+        protected virtual bool ShallAnalyze(IFieldSymbol symbol)
+        {
+            if (symbol is null)
+            {
+                // code seems to be obfuscated or contains no valid symbol, so ignore it silently
+                return false;
+            }
+
+            return symbol.CanBeReferencedByName && symbol.IsOverride is false;
+        }
 
         /// <summary>
         /// Determines whether the specified parameter shall be analyzed.
@@ -440,6 +522,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// </returns>
         protected virtual bool ShallAnalyze(IParameterSymbol symbol)
         {
+            if (symbol is null)
+            {
+                // code seems to be obfuscated or contains no valid symbol, so ignore it silently
+                return false;
+            }
+
             if (symbol.CanBeReferencedByName is false)
             {
                 return false;
@@ -633,7 +721,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         /// <param name="context">
         /// The syntax node analysis context.
         /// </param>
-        protected void AnalyzeLocalDeclarationStatement(SyntaxNodeAnalysisContext context)
+        protected virtual void AnalyzeLocalDeclarationStatement(SyntaxNodeAnalysisContext context)
         {
             var node = (LocalDeclarationStatementSyntax)context.Node;
 
@@ -654,42 +742,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (ShallAnalyze(type))
             {
                 var issues = AnalyzeIdentifiers(semanticModel, type, node.Declaration.Variables.ToArray(_ => _.Identifier));
-
-                ReportDiagnostics(context, issues);
-            }
-        }
-
-        /// <summary>
-        /// Analyzes a declaration expression.
-        /// </summary>
-        /// <param name="context">
-        /// The syntax node analysis context.
-        /// </param>
-        protected void AnalyzeDeclarationExpression(SyntaxNodeAnalysisContext context)
-        {
-            var declaration = (DeclarationExpressionSyntax)context.Node;
-
-            var issues = Analyze(context.SemanticModel, declaration);
-
-            ReportDiagnostics(context, issues);
-        }
-
-        /// <summary>
-        /// Analyzes a declaration pattern.
-        /// </summary>
-        /// <param name="context">
-        /// The syntax node analysis context.
-        /// </param>
-        protected virtual void AnalyzeDeclarationPattern(SyntaxNodeAnalysisContext context)
-        {
-            var node = (DeclarationPatternSyntax)context.Node;
-
-            var semanticModel = context.SemanticModel;
-            var type = node.Type.GetTypeSymbol(semanticModel);
-
-            if (ShallAnalyze(type))
-            {
-                var issues = Analyze(semanticModel, type, node.Designation);
 
                 ReportDiagnostics(context, issues);
             }
@@ -746,6 +798,27 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                         ReportDiagnostics(context, issues);
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Analyzes a single variable designation.
+        /// </summary>
+        /// <param name="context">
+        /// The syntax node analysis context.
+        /// </param>
+        protected virtual void AnalyzeVariableDesignation(SyntaxNodeAnalysisContext context)
+        {
+            var node = (VariableDesignationSyntax)context.Node;
+            var semanticModel = context.SemanticModel;
+
+            var type = node.Parent.GetTypeSymbol(semanticModel);
+
+            if (ShallAnalyze(type))
+            {
+                var issues = Analyze(semanticModel, type, node);
+
+                ReportDiagnostics(context, issues);
             }
         }
 

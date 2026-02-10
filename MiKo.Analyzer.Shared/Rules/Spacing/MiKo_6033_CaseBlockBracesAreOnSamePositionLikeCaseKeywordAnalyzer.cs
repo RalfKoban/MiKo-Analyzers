@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is SwitchSectionSyntax section && section.Statements.First() is BlockSyntax block)
+            if (context.Node is SwitchSectionSyntax section && section.Statements.FirstOrDefault() is BlockSyntax block) // be aware of incomplete sections
             {
                 var caseToken = section.Labels.First().Keyword;
                 var openBraceToken = block.OpenBraceToken;

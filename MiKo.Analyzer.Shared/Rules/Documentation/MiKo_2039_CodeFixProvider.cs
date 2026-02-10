@@ -119,6 +119,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
+            results.Add("Contains several basic helper functions for ");
+            results.Add("Provides several basic helper functions for ");
+            results.Add("Has several basic helper functions for ");
+            results.Add("Several basic helper functions for ");
+            results.Add("Basic helper functions for ");
+            results.Add("Helper functions for ");
+
             return results;
         }
 

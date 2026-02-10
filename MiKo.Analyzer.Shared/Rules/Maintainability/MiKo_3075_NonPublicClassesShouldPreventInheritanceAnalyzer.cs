@@ -60,7 +60,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                     foreach (var otherClass in privateClasses)
                     {
-                        if (otherClass.InheritsFrom(symbol.FullyQualifiedName()))
+                        if (otherClass.InheritsFrom(symbol))
                         {
                             // we found a private base class, so nothing to report
                             return Array.Empty<Diagnostic>();
