@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules
     /// </summary>
     public abstract class Analyzer : DiagnosticAnalyzer
     {
-        private static readonly ConcurrentDictionary<string, DiagnosticDescriptor> KnownRules = new ConcurrentDictionary<string, DiagnosticDescriptor>();
+        private static readonly ConcurrentDictionary<string, DiagnosticDescriptor> KnownRules = new ConcurrentDictionary<string, DiagnosticDescriptor>(StringComparer.Ordinal);
 
         private readonly DiagnosticDescriptor m_rule;
 

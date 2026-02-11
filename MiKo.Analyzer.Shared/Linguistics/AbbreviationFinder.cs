@@ -477,7 +477,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                             nameof(EventArgs),
                                                         };
 
-        private static readonly ConcurrentDictionary<string, Pair[]> AlreadyFoundAbbreviations = new ConcurrentDictionary<string, Pair[]>();
+        private static readonly ConcurrentDictionary<string, Pair[]> AlreadyFoundAbbreviations = new ConcurrentDictionary<string, Pair[]>(StringComparer.Ordinal);
 
         /// <summary>
         /// Finds all abbreviations contained in the specified text.
