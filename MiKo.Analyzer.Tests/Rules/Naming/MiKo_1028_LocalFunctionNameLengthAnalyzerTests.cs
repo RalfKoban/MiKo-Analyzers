@@ -34,6 +34,34 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_local_function_with_fitting_length_inside_if_block_([ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool value)
+    {
+        if (value)
+        {
+            void " + name + @"() { }
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_local_function_with_exceeding_length_inside_if_block_([ValueSource(nameof(NonFitting))] string name) => An_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool value)
+    {
+        if (value)
+        {
+            void " + name + @"() { }
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_local_function_with_fitting_length_inside_test_method_([ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for(@"
 using NUnit;
 

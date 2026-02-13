@@ -42,8 +42,6 @@ namespace MiKoSolutions.Analyzers
                                                                                                                   SymbolDisplayGenericsOptions.IncludeTypeParameters,
                                                                                                                   miscellaneousOptions: SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers);
 
-        private static readonly Func<SyntaxNode, bool> IsLocalFunctionContainer = IsLocalFunctionContainerCore;
-
         /// <summary>
         /// Gets all extension methods defined for the type.
         /// </summary>
@@ -222,7 +220,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A collection of local functions defined within the method.
         /// </returns>
-        internal static IReadOnlyList<LocalFunctionStatementSyntax> GetLocalFunctions(this IMethodSymbol value)
+        internal static LocalFunctionStatementSyntax[] GetLocalFunctions(this IMethodSymbol value)
         {
             if (value.IsAbstract)
             {
@@ -241,22 +239,31 @@ namespace MiKoSolutions.Analyzers
                 return Array.Empty<LocalFunctionStatementSyntax>();
             }
 
-            List<LocalFunctionStatementSyntax> functions = null;
+            return GetLocalFunctionsLocal(node) ?? Array.Empty<LocalFunctionStatementSyntax>();
 
-            foreach (var descendantNode in node.DescendantNodes(IsLocalFunctionContainer))
+            LocalFunctionStatementSyntax[] GetLocalFunctionsLocal(SyntaxNode n)
             {
-                if (descendantNode is LocalFunctionStatementSyntax function)
+                List<LocalFunctionStatementSyntax> result = null;
+
+                // ReSharper disable once LoopCanBePartlyConvertedToQuery
+                foreach (var descendant in n.DescendantNodes())
                 {
-                    if (functions is null)
+                    if (descendant.RawKind != (int)SyntaxKind.LocalFunctionStatement)
                     {
-                        functions = new List<LocalFunctionStatementSyntax>(1);
+                        // skip as we do not have a local function statement
+                        continue;
                     }
 
-                    functions.Add(function);
-                }
-            }
+                    if (result is null)
+                    {
+                        result = new List<LocalFunctionStatementSyntax>(1);
+                    }
 
-            return functions ?? (IReadOnlyList<LocalFunctionStatementSyntax>)Array.Empty<LocalFunctionStatementSyntax>();
+                    result.Add((LocalFunctionStatementSyntax)descendant);
+                }
+
+                return result?.ToArray();
+            }
         }
 
         /// <summary>
@@ -3379,21 +3386,6 @@ namespace MiKoSolutions.Analyzers
             }
 
             return results;
-        }
-
-        private static bool IsLocalFunctionContainerCore(SyntaxNode node)
-        {
-            switch (node.RawKind)
-            {
-                case (int)SyntaxKind.Block: // 8792
-                case (int)SyntaxKind.LocalFunctionStatement: // 8830
-                case (int)SyntaxKind.MethodDeclaration: // 8875,
-                case (int)SyntaxKind.ConstructorDeclaration: // 8878
-                    return true;
-
-                default:
-                    return false;
-            }
         }
 
         private static bool IsEnumerable(in SpecialType type)
