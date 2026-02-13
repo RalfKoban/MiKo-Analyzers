@@ -500,34 +500,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return ReadOnlySpan<Pair>.Empty;
             }
 
-            const string Async = "Async";
-
             // cache findings as they will not change
-            return AlreadyFoundAbbreviations.GetOrAdd(value, _ => FindCore(Prepare(_).AsSpan().WithoutSuffix(Async)));
-
-            string Prepare(string s)
-            {
-                if (s.Length > Async.Length)
-                {
-                    var index = s.IndexOf(Async, StringComparison.OrdinalIgnoreCase);
-
-                    if (index >= 0)
-                    {
-                        var afterIndex = index + Async.Length;
-
-                        if (afterIndex < s.Length && s[afterIndex].IsUpperCase())
-                        {
-                            return s.AsCachedBuilder()
-                                    .Remove(index, Async.Length)
-                                    .Without(AllowedParts)
-                                    .Trimmed()
-                                    .ToStringAndRelease();
-                        }
-                    }
-                }
-
-                return s.Without(AllowedParts);
-            }
+            return AlreadyFoundAbbreviations.GetOrAdd(value, FindCore);
         }
 
         /// <summary>
@@ -609,15 +583,58 @@ namespace MiKoSolutions.Analyzers.Linguistics
 //// ncrunch: rdi off
 
         /// <summary>
+        /// Finds all abbreviations contained in the specified text.
+        /// </summary>
+        /// <param name="text">
+        /// The text to inspect for abbreviations.
+        /// </param>
+        /// <returns>
+        /// An array of all found abbreviations as pairs of abbreviated and full terms, or an empty array if no abbreviations are found.
+        /// </returns>
+        private static Pair[] FindCore(string text)
+        {
+            var prepared = Prepare(text);
+
+            return FindCore(prepared.AsSpan());
+
+            string Prepare(string s)
+            {
+                const string Async = "Async";
+
+                var sb = s.AsCachedBuilder();
+
+                if (s.Length > Async.Length)
+                {
+                    var index = s.IndexOf(Async, StringComparison.OrdinalIgnoreCase);
+
+                    if (index >= 0)
+                    {
+                        var afterIndex = index + Async.Length;
+
+                        if (afterIndex < s.Length && s[afterIndex].IsUpperCase())
+                        {
+                            sb.Remove(index, Async.Length);
+                        }
+                    }
+                }
+
+                sb.Without(AllowedParts)
+                  .Trimmed();
+
+                return sb.ToStringAndRelease();
+            }
+        }
+
+        /// <summary>
         /// Finds all abbreviations contained in the specified text span.
         /// </summary>
-        /// <param name="valueSpan">
+        /// <param name="textSpan">
         /// The text span to inspect for abbreviations.
         /// </param>
         /// <returns>
         /// An array of all found abbreviations as pairs of abbreviated and full terms, or an empty array if no abbreviations are found.
         /// </returns>
-        private static Pair[] FindCore(in ReadOnlySpan<char> valueSpan)
+        private static Pair[] FindCore(in ReadOnlySpan<char> textSpan)
         {
             var results = new HashSet<Pair>(KeyComparer.Instance);
 
@@ -627,12 +644,12 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
                 var keySpan = pair.Key.AsSpan();
 
-                if (PrefixHasIssue(keySpan, valueSpan))
+                if (PrefixHasIssue(keySpan, textSpan))
                 {
                     results.Add(pair);
                 }
 
-                if (CompleteTermHasIssue(keySpan, valueSpan))
+                if (CompleteTermHasIssue(keySpan, textSpan))
                 {
                     results.Add(pair);
                 }
@@ -644,7 +661,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
             {
                 var pair = Postfixes[index];
 
-                if (PostFixHasIssue(pair.Key.AsSpan(), valueSpan))
+                if (PostFixHasIssue(pair.Key.AsSpan(), textSpan))
                 {
                     results.Add(pair);
                 }
@@ -654,7 +671,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
             {
                 var pair = MidTerms[index];
 
-                if (MidTermHasIssue(pair.Key.AsSpan(), valueSpan))
+                if (MidTermHasIssue(pair.Key.AsSpan(), textSpan))
                 {
                     results.Add(pair);
                 }
