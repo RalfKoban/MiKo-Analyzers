@@ -40,11 +40,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     continue;
                 }
 
-                if (originalName.EndsWith("Map", StringComparison.Ordinal))
-                {
-                    continue;
-                }
-
                 if (originalName.EqualsAny(TestRelatedNames))
                 {
                     continue;
