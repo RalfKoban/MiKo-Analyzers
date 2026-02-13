@@ -54,6 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     case ObjectCreationExpressionSyntax o: return CanAnalyzeObjectCreationExpressionSyntax(o);
                     case InvocationExpressionSyntax i: return CanAnalyzeInvocationExpressionSyntax(i);
                     case BinaryExpressionSyntax b: return CanAnalyzeBinaryExpressionSyntax(b);
+                    case LiteralExpressionSyntax l: return CanAnalyzeLiteralExpressionSyntax(l);
                     default:
                         return true;
                 }
@@ -135,7 +136,31 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     return false;
                 }
 
+                if (syntax.IsKind(SyntaxKind.AddExpression))
+                {
+                    // let's see if we add multi-line strings here
+                    return syntax.DescendantNodes<LiteralExpressionSyntax>().All(CanAnalyzeLiteralExpressionSyntax);
+                }
+
                 return true;
+            }
+
+            bool CanAnalyzeLiteralExpressionSyntax(LiteralExpressionSyntax syntax)
+            {
+                switch (syntax.Kind())
+                {
+                    case SyntaxKind.StringLiteralExpression:
+#if VS2022
+                    case SyntaxKind.Utf8StringLiteralExpression:
+#endif
+                    {
+                        // we cannot place multi-line strings on a single line, so nothing to analyze here
+                        return syntax.IsSpanningMultipleLines() is false;
+                    }
+
+                    default:
+                        return true;
+                }
             }
         }
 
