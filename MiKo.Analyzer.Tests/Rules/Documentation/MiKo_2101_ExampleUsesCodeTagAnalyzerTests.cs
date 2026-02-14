@@ -26,7 +26,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_documented_items_without_example_docu() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_documented_items_without_example() => No_issue_is_reported_for(@"
 using System;
 
 /// <summary>
@@ -52,7 +52,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_documented_items_with_correct_example_docu() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_example_with_code_tag() => No_issue_is_reported_for(@"
 using System;
 
 /// <summary>
@@ -102,7 +102,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_wrong_documented_example_docu_on_type() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_example_without_code_tag_on_type() => An_issue_is_reported_for(@"
 using System;
 
 /// <summary>
@@ -117,7 +117,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_wrong_documented_example_docu_on_method() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_example_without_code_tag_on_method() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -133,7 +133,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_wrong_documented_example_docu_on_property() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_example_without_code_tag_on_property() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -149,7 +149,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_wrong_documented_example_docu_on_event() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_example_without_code_tag_on_event() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -165,7 +165,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_for_single_line_example_code_on_method()
+        public void Code_gets_fixed_for_single_line_example_on_method()
         {
             const string OriginalCode = @"
 using System;
@@ -203,7 +203,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_double_line_example_code_on_method()
+        public void Code_gets_fixed_for_multi_line_example_on_method()
         {
             const string OriginalCode = @"
 using System;
@@ -243,7 +243,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_starting_text_and_double_line_example_code_on_method()
+        public void Code_gets_fixed_for_example_with_preceding_text_on_method()
         {
             const string OriginalCode = @"
 using System;
@@ -285,7 +285,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_surrounding_text_and_double_line_example_code_on_method()
+        public void Code_gets_fixed_for_example_with_surrounding_text_on_method()
         {
             const string OriginalCode = @"
 using System;
