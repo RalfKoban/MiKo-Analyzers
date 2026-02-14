@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol symbol)
         {
-            switch (symbol.MethodKind)
+            switch (symbol?.MethodKind)
             {
                 case MethodKind.UserDefinedOperator:
                 case MethodKind.Conversion: // that's an unary operator, such as an implicit conversion call

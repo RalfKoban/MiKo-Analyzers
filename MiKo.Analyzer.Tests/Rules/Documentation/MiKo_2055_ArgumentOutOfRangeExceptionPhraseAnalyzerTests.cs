@@ -35,7 +35,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_throwing_an_ArgumentOutOfRangeException() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_ArgumentOutOfRangeException_starting_with_paramref() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -51,7 +51,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_throwing_an_ArgumentOutOfRangeException_for_multiple_parameters() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_ArgumentOutOfRangeException_starting_with_paramref_for_multiple_parameters() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -69,7 +69,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_throwing_an_ArgumentOutOfRangeException() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_ArgumentOutOfRangeException_not_starting_with_paramref() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -85,7 +85,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_throwing_an_ArgumentOutOfRangeException_without_paramref_tags() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_ArgumentOutOfRangeException_without_paramref_tags() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -101,7 +101,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_1st_parameter_throwing_an_ArgumentOutOfRangeException_for_multiple_parameters() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_ArgumentOutOfRangeException_not_starting_with_paramref_for_first_of_multiple_parameters() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -119,7 +119,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_2nd_parameter_throwing_an_ArgumentOutOfRangeException_for_multiple_parameters() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_ArgumentOutOfRangeException_not_starting_with_paramref_for_second_of_multiple_parameters() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -176,7 +176,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_property_throwing_an_ArgumentOutOfRangeException() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_property_with_ArgumentOutOfRangeException_starting_with_paramref() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -192,7 +192,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_property_throwing_an_ArgumentOutOfRangeException() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_property_with_ArgumentOutOfRangeException_not_starting_with_paramref() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -208,7 +208,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_property_throwing_an_ArgumentOutOfRangeException_without_paramref_tags() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_property_with_ArgumentOutOfRangeException_without_paramref_tags() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -224,7 +224,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_for_method_with_1_parameter()
+        public void Code_gets_fixed_by_replacing_with_paramref_starting_phrase()
         {
             const string OriginalCode = @"
 using System;

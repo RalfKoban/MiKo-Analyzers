@@ -24,7 +24,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_non_EventHandler_variable() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_EventHandler_variable() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -37,7 +37,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_EventHandler_variable_with_correct_name() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_EventHandler_variable_named_handler() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -50,7 +50,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_generic_EventHandler_variable_with_correct_name() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_generic_EventHandler_variable_named_handler() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -63,7 +63,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_var_EventHandler_variable_with_correct_name() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_var_EventHandler_variable_named_handler() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -80,7 +80,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_EventHandler_variable_with_incorrect_name() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_EventHandler_variable() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -93,7 +93,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_var_EventHandler_variable_with_incorrect_name() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_var_EventHandler_variable() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -110,7 +110,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_var_PropertyChangingEventHandler_variable_with_incorrect_name() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_var_PropertyChangingEventHandler_variable() => An_issue_is_reported_for(@"
 using System;
 using System.ComponentModel;
 
@@ -128,7 +128,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_var_PropertyChangedEventHandler_variable_with_incorrect_name() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_var_PropertyChangedEventHandler_variable() => An_issue_is_reported_for(@"
 using System;
 using System.ComponentModel;
 

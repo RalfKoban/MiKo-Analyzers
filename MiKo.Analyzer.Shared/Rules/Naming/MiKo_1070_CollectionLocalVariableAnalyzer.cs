@@ -17,7 +17,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.IsCollection(symbol.Name);
+        protected override bool ShallAnalyze(ITypeSymbol symbol)
+        {
+            if (symbol is null)
+            {
+                // code seems to be obfuscated or contains no valid symbol, so ignore it silently
+                return false;
+            }
+
+            return symbol.IsCollection(symbol.Name);
+        }
 
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers)
         {
@@ -28,11 +37,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 if (IsShort(originalName))
                 {
                     // skip all short names
-                    continue;
-                }
-
-                if (originalName.EndsWith("Map", StringComparison.Ordinal))
-                {
                     continue;
                 }
 

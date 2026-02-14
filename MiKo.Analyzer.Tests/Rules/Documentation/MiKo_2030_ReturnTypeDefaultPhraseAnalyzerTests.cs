@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2030_ReturnTypeDefaultPhraseAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_uncommented_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_method() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public object DoSomething(object o) => null;
@@ -21,7 +21,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_uncommented_property() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_property() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public object DoSomething { get; set; }
@@ -58,10 +58,10 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_method_that_returns_a_(
-                                                                [Values("returns", "value")] string xmlTag,
-                                                                [Values("A whatever", "An whatever", "The whatever")] string comment,
-                                                                [Values("string", "bool", "Task", "Task<string>", "Task<bool>", nameof(String), nameof(Boolean))] string returnType)
+        public void No_issue_is_reported_for_method_returning_specific_types_with_standard_phrase_(
+                                                                                               [Values("returns", "value")] string xmlTag,
+                                                                                               [Values("A whatever", "An whatever", "The whatever")] string comment,
+                                                                                               [Values("string", "bool", "Task", "Task<string>", "Task<bool>", nameof(String), nameof(Boolean))] string returnType)
             => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
@@ -79,9 +79,9 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_method_(
-                                                                     [Values("returns", "value")] string xmlTag,
-                                                                     [Values("A whatever", "An whatever", "The whatever")] string comment)
+        public void No_issue_is_reported_for_return_value_starting_with_article_(
+                                                                             [Values("returns", "value")] string xmlTag,
+                                                                             [Values("A whatever", "An whatever", "The whatever")] string comment)
             => No_issue_is_reported_for(@"
 using System;
 
@@ -98,9 +98,9 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_wrong_commented_method_(
-                                                                 [Values("returns", "value")] string xmlTag,
-                                                                 [Values("Whatever")] string comment)
+        public void An_issue_is_reported_for_return_value_not_starting_with_article_(
+                                                                                 [Values("returns", "value")] string xmlTag,
+                                                                                 [Values("Whatever")] string comment)
             => An_issue_is_reported_for(@"
 using System;
 

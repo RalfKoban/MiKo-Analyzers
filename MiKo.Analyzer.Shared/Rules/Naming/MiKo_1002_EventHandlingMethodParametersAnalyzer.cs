@@ -17,11 +17,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsEventHandler();
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol?.IsEventHandler() is true;
 
-        protected override bool ShallAnalyzeLocalFunctions(IMethodSymbol symbol) => symbol.IsEventHandler() is false;
+        protected override bool ShallAnalyzeLocalFunctions(IMethodSymbol symbol) => symbol?.IsEventHandler() is false;
 
-        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => symbol.IsEventHandler();
+        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => symbol?.IsEventHandler() is true;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {

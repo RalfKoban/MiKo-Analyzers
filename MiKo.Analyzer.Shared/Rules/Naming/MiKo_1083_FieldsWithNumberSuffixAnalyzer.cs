@@ -17,9 +17,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IFieldSymbol symbol)
         {
-            if (symbol.Type.Name.EndsWithNumber())
+            if (symbol is null)
             {
-                if (symbol.Type.TypeKind is TypeKind.Struct && symbol.ContainingType.IsTestClass())
+                // code seems to be obfuscated or contains no valid symbol, so ignore it silently
+                return false;
+            }
+
+            var type = symbol.Type;
+
+            if (type.Name.EndsWithNumber())
+            {
+                if (type.TypeKind is TypeKind.Struct && symbol.ContainingType.IsTestClass())
                 {
                     // ignore only structs in tests
                     return false;

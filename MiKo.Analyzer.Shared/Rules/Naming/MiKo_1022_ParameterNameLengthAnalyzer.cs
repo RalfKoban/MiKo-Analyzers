@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsOverride is false;
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol?.IsOverride is false;
 
         protected override bool ShallAnalyzeLocalFunctions(IMethodSymbol symbol) => true;
 

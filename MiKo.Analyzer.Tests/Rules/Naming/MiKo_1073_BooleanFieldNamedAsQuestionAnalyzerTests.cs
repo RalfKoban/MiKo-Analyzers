@@ -48,7 +48,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_non_Boolean_field_([ValueSource(nameof(Prefixes))] string prefix) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_boolean_field_([ValueSource(nameof(Prefixes))] string prefix) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -58,7 +58,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_Boolean_field_with_correct_name_([ValueSource(nameof(CorrectNames))] string name, [ValueSource(nameof(Prefixes))] string prefix) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_boolean_field_([ValueSource(nameof(CorrectNames))] string name, [ValueSource(nameof(Prefixes))] string prefix) => No_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -69,7 +69,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_Boolean_field_with_incorrect_name_([ValueSource(nameof(WrongNames))] string name, [ValueSource(nameof(Prefixes))] string prefix) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_boolean_field_([ValueSource(nameof(WrongNames))] string name, [ValueSource(nameof(Prefixes))] string prefix) => An_issue_is_reported_for(@"
 using System;
 using System.Threading;
 

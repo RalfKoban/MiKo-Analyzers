@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2006_RoutedEventFieldDefaultPhraseAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_uncommented_field() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_RoutedEvent_field() => No_issue_is_reported_for(@"
 using System.Windows;
 
 public class TestMe
@@ -22,7 +22,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_field() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_RoutedEvent_field_with_standard_summary_and_value_documentation() => No_issue_is_reported_for(@"
 using System.Windows;
 
 public class TestMe
@@ -40,7 +40,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_field_summary() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_RoutedEvent_field_with_standard_summary_documentation() => No_issue_is_reported_for(@"
 using System.Windows;
 
 public class TestMe
@@ -55,7 +55,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_field_summary_with_readonly_comment() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_RoutedEvent_field_with_standard_summary_including_readonly_note() => No_issue_is_reported_for(@"
 using System.Windows;
 
 public class TestMe
@@ -70,7 +70,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_field_value() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_RoutedEvent_field_with_standard_value_documentation() => No_issue_is_reported_for(@"
 using System.Windows;
 
 public class TestMe
@@ -85,7 +85,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_field_summary() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_RoutedEvent_field_with_non_standard_summary() => An_issue_is_reported_for(@"
 using System.Windows;
 
 public class TestMe
@@ -100,7 +100,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_field_value() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_RoutedEvent_field_with_non_standard_value() => An_issue_is_reported_for(@"
 using System.Windows;
 
 public class TestMe
@@ -115,7 +115,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed()
+        public void Code_gets_fixed_to_replace_custom_documentation_with_standard_phrases()
         {
             const string OriginalCode = @"
 using System.Windows;

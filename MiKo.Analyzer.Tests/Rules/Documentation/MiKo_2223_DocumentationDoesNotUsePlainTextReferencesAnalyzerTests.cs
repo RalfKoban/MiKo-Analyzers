@@ -89,7 +89,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_without_plain_text_references() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -104,7 +104,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_para() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_without_plain_text_references_inside_para_tag() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -121,7 +121,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_see_cref() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_see_cref_tag() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -136,7 +136,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_upper_case_only_abbreviation() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_uppercase_abbreviation() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -151,7 +151,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_upper_case_only_abbreviation_in_plural_form() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_uppercase_abbreviation_in_plural_form() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -166,7 +166,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_upper_case_only_abbreviation_in_genitive_case() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_uppercase_abbreviation_in_genitive_case() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -181,7 +181,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_upper_case_only_abbreviation_in_past_tense_case() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_uppercase_abbreviation_in_past_tense() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -196,7 +196,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_upper_case_only_abbreviation_and_additional_information() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_uppercase_abbreviation_and_hyphenated_suffix() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -213,7 +213,7 @@ public class TestMe
         [TestCase("{B19F1C23-57F6-4a4E-aa69-5EE303F5184B}")]
         [TestCase("B19F1C23-57F6-4a4E-aa69-5EE303F5184B")]
         [TestCase("B19F1C2357F64a4Eaa695EE303F5184B")]
-        public void No_issue_is_reported_for_correctly_documented_method_with_Guid_(string value) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_Guid_(string value) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -228,7 +228,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_hyperlink_([Values("http", "https", "ftp", "ftps")] string preamble) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_URL_([Values("http", "https", "ftp", "ftps")] string preamble) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -243,7 +243,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_hyperlink_anchor_and_descriptive_text_([Values(@"<a href=""http://www.nunit.org/"">NUnit</a>")] string text) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_HTML_anchor_tag_([Values(@"<a href=""http://www.nunit.org/"">NUnit</a>")] string text) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -258,7 +258,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_fully_qualified_path() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_file_path() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -273,7 +273,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_keyboard_shortcut() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_keyboard_shortcut() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -288,7 +288,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_known_text_([ValueSource(nameof(WellknownWords))] string text) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_wellknown_product_name_([ValueSource(nameof(WellknownWords))] string text) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -303,7 +303,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_combined_text_([Values("Undo/Redo", "XYZ1234:Method", "PublicKeyToken=1234")] string text) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_special_combined_syntax_([Values("Undo/Redo", "XYZ1234:Method", "PublicKeyToken=1234")] string text) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -318,7 +318,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_compiler_warning_([Values("CS0012", "CS0067")] string warning) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_compiler_diagnostic_code_([Values("CS0012", "CS0067")] string warning) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -333,7 +333,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_file_extension_in_quotes() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_wildcard_file_pattern_in_quotes() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -348,7 +348,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_file_extension_not_in_quotes() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_wildcard_file_pattern() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -363,7 +363,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_hash() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_hash_delimited_text() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -378,7 +378,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_starting_number() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_identifier_starting_with_number() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -393,7 +393,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_starting_number_as_pseudo_namespace_or_type_name() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_qualified_name_starting_with_number() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -423,7 +423,7 @@ public class TestMe
         [TestCase("( such as nothing etc.)")]
         [TestCase("(such as anything, nothing, etc.)")]
         [TestCase("(such as anything, nothing, etc.). So")]
-        public void No_issue_is_reported_for_correctly_documented_method_with_(string example) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_abbreviation_(string example) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -438,7 +438,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_exclamation_mark() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_exclamation_mark_in_text() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -527,7 +527,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_plain_text_method_name() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -542,7 +542,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_with_para() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_plain_text_method_name_inside_para_tag() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -559,7 +559,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_at_end_of_sentence() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_plain_text_method_name_at_end_of_sentence() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -576,7 +576,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_with_embraced_method_name() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_parenthesized_method_name() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -593,7 +593,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_with_single_quoted_method_name() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_single_quoted_method_name() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -610,7 +610,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_with_quoted_method_name() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_double_quoted_method_name() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -627,7 +627,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_with_embraced_and_quoted_method_name() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_quoted_and_parenthesized_method_name() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -644,7 +644,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_with_reference_to_default_typeparam() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_plain_text_default_expression() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -661,7 +661,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_with_starting_underscore_number() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_plain_text_identifier_starting_with_underscore() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -676,7 +676,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_with_braces() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_plain_text_method_invocation() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -691,7 +691,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_on_interface() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_interface_method_with_plain_text_method_invocation() => An_issue_is_reported_for(@"
 using System;
 
 public interface TestMe
@@ -704,7 +704,7 @@ public interface TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_on_interface_with_array_return_type() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_interface_method_with_array_return_type_and_plain_text_reference() => An_issue_is_reported_for(@"
 using System;
 
 public interface TestMe
@@ -717,7 +717,7 @@ public interface TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_on_interface_with_generic_return_value_that_contains_an_array() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_interface_method_with_generic_array_return_type_and_plain_text_reference() => An_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 
@@ -731,7 +731,7 @@ public interface TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_on_interface_with_generic_array_return_type() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_interface_method_with_array_of_generic_return_type_and_plain_text_reference() => An_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 
@@ -745,7 +745,7 @@ public interface TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_with_parameter() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_plain_text_parameter_member_access() => An_issue_is_reported_for(@"
 using System;
 using System.IO;
 
@@ -761,7 +761,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_with_([ValueSource(nameof(NonCompoundWords))] string type) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_plain_text_type_name_([ValueSource(nameof(NonCompoundWords))] string type) => An_issue_is_reported_for(@"
 using System;
 using System.IO;
 
@@ -777,7 +777,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_with_(
+        public void An_issue_is_reported_for_method_with_plain_text_member_name_(
                                                                              [Values("string", "String", "Sring", "sring", "Sting", "sting")] string type,
                                                                              [Values("Empty", "empty", "Empy", "empy", "Emtpy", "emtpy")] string property)
             => An_issue_is_reported_for(@"
@@ -796,7 +796,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_documented_method_with_([ValueSource(nameof(NonCompoundWords))] string type)
+        public void Code_gets_fixed_for_plain_text_type_name_([ValueSource(nameof(NonCompoundWords))] string type)
         {
             const string Template = """
 
@@ -819,9 +819,9 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_documented_method_with_(
-                                                                        [Values("string", "String", "Sring", "sring", "Sting", "sting")] string type,
-                                                                        [Values("Empty", "empty", "Empy", "empy", "Emtpy", "emtpy")] string property)
+        public void Code_gets_fixed_for_plain_text_member_name_(
+                                                            [Values("string", "String", "Sring", "sring", "Sting", "sting")] string type,
+                                                            [Values("Empty", "empty", "Empy", "empy", "Emtpy", "emtpy")] string property)
         {
             const string Template = """
 
@@ -844,7 +844,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_documented_method_ending_with_([ValueSource(nameof(NonCompoundWords))] string type)
+        public void Code_gets_fixed_for_plain_text_type_name_at_end_of_sentence_([ValueSource(nameof(NonCompoundWords))] string type)
         {
             const string Template = """
 
@@ -867,9 +867,9 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_documented_method_ending_with_(
-                                                                               [Values("string", "String", "Sring", "sring", "Sting", "sting")] string type,
-                                                                               [Values("Empty", "empty", "Empy", "empy", "Emtpy", "emtpy")] string property)
+        public void Code_gets_fixed_for_plain_text_member_at_end_of_sentence_(
+                                                                          [Values("string", "String", "Sring", "sring", "Sting", "sting")] string type,
+                                                                          [Values("Empty", "empty", "Empy", "empy", "Emtpy", "emtpy")] string property)
         {
             const string Template = """
 
@@ -892,7 +892,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_documented_method_ending_with_dot_on_method_with_([ValueSource(nameof(NonCompoundWords))] string type)
+        public void Code_gets_fixed_for_plain_text_type_name_before_period_([ValueSource(nameof(NonCompoundWords))] string type)
         {
             const string Template = """
 
@@ -915,9 +915,9 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_documented_method_on_single_line_with_(
-                                                                                       [Values("string", "String", "Sring", "sring", "Sting", "sting")] string type,
-                                                                                       [Values("Empty", "empty", "Empy", "empy", "Emtpy", "emtpy")] string property)
+        public void Code_gets_fixed_for_plain_text_member_on_single_line_comment_(
+                                                                              [Values("string", "String", "Sring", "sring", "Sting", "sting")] string type,
+                                                                              [Values("Empty", "empty", "Empy", "empy", "Emtpy", "emtpy")] string property)
         {
             const string Template = """
 
@@ -938,9 +938,9 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_documented_method_on_single_line_ending_with_(
-                                                                                              [Values("string", "String", "Sring", "sring", "Sting", "sting")] string type,
-                                                                                              [Values("Empty", "empty", "Empy", "empy", "Emtpy", "emtpy")] string property)
+        public void Code_gets_fixed_for_plain_text_member_at_end_of_single_line_comment_(
+                                                                                     [Values("string", "String", "Sring", "sring", "Sting", "sting")] string type,
+                                                                                     [Values("Empty", "empty", "Empy", "empy", "Emtpy", "emtpy")] string property)
         {
             const string Template = """
 
@@ -961,7 +961,7 @@ public class TestMe
         }
 
         [TestCase("TestMe", "TestMe")]
-        public void Code_gets_fixed_for_incorrectly_documented_method_with_type_(string originalName, string fixedName)
+        public void Code_gets_fixed_for_plain_text_class_name_(string originalName, string fixedName)
         {
             const string Template = """
 
@@ -1008,7 +1008,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_comment_with_empty_string()
+        public void Code_gets_fixed_for_plain_text_string_in_empty_string_comment()
         {
             const string OriginalCode = """
                                         using System;

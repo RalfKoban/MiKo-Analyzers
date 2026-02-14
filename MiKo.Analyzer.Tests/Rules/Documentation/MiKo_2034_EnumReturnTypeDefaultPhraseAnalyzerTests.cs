@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] EnumReturnValues = [.. EnumOnlyReturnValues, .. EnumTaskReturnValues];
 
         [Test]
-        public void No_issue_is_reported_for_uncommented_method_([ValueSource(nameof(EnumReturnValues))] string returnType) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_method_([ValueSource(nameof(EnumReturnValues))] string returnType) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public " + returnType + @" DoSomething(object o) => null;
@@ -36,7 +36,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_uncommented_property_([ValueSource(nameof(EnumReturnValues))] string returnType) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_property_([ValueSource(nameof(EnumReturnValues))] string returnType) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public " + returnType + @" DoSomething { get; set; }
@@ -44,9 +44,9 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_method_that_returns_a_(
-                                                                [Values("returns", "value")] string xmlTag,
-                                                                [Values("void", "int", "Task", "Task<int>", "Task<bool>")] string returnType)
+        public void No_issue_is_reported_for_method_returning_non_enum_type_(
+                                                                         [Values("returns", "value")] string xmlTag,
+                                                                         [Values("void", "int", "Task", "Task<int>", "Task<bool>")] string returnType)
             => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
@@ -64,9 +64,9 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_Enum_only_method_(
-                                                                               [Values("returns", "value")] string xmlTag,
-                                                                               [ValueSource(nameof(EnumOnlyReturnValues))] string returnType)
+        public void No_issue_is_reported_for_non_generic_enum_return_with_standard_phrase_(
+                                                                                       [Values("returns", "value")] string xmlTag,
+                                                                                       [ValueSource(nameof(EnumOnlyReturnValues))] string returnType)
             => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
@@ -84,10 +84,10 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_Enum_Task_method_(
-                                                                               [Values("returns", "value")] string xmlTag,
-                                                                               [Values("", " ")] string space,
-                                                                               [ValueSource(nameof(EnumTaskReturnValues))] string returnType)
+        public void No_issue_is_reported_for_Task_enum_return_with_standard_phrase_(
+                                                                                [Values("returns", "value")] string xmlTag,
+                                                                                [Values("", " ")] string space,
+                                                                                [ValueSource(nameof(EnumTaskReturnValues))] string returnType)
             => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
@@ -105,10 +105,10 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_wrong_commented_method_(
-                                                                 [Values("returns", "value")] string xmlTag,
-                                                                 [Values("A whatever", "An whatever", "The whatever")] string comment,
-                                                                 [ValueSource(nameof(EnumReturnValues))] string returnType)
+        public void An_issue_is_reported_for_enum_return_with_non_standard_phrase_(
+                                                                               [Values("returns", "value")] string xmlTag,
+                                                                               [Values("A whatever", "An whatever", "The whatever")] string comment,
+                                                                               [ValueSource(nameof(EnumReturnValues))] string returnType)
             => An_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
@@ -135,7 +135,7 @@ public class TestMe
         [TestCase("""Something, such as <see cref="string.Empty"/>.""", """the something, such as <see cref="string.Empty"/>.""")]
         [TestCase("""If something, the result is <see cref="StringComparison.Ordinal"/>.""", """<see cref="StringComparison.Ordinal"/> if something.""")]
         [TestCase("""If something, the result will be <see cref="StringComparison.Ordinal"/>.""", """<see cref="StringComparison.Ordinal"/> if something.""")]
-        public void Code_gets_fixed_for_non_generic_method_(string originalText, string fixedText)
+        public void Code_gets_fixed_by_replacing_with_standard_phrase_for_enum_(string originalText, string fixedText)
         {
             var originalCode = @"
 using System;
@@ -180,7 +180,7 @@ public class TestMe
         [TestCase("""If something, the result will be <see cref="StringComparison.Ordinal"/>.""", """<see cref="StringComparison.Ordinal"/> if something.""")]
         [TestCase("""If something, the result is <see cref="StringComparison.Ordinal"/>""", """<see cref="StringComparison.Ordinal"/> if something""")]
         [TestCase("""If something, the result will be <see cref="StringComparison.Ordinal"/>""", """<see cref="StringComparison.Ordinal"/> if something""")]
-        public void Code_gets_fixed_for_generic_method_(string originalText, string fixedText)
+        public void Code_gets_fixed_by_replacing_with_standard_phrase_for_Task_enum_(string originalText, string fixedText)
         {
             var originalCode = @"
 using System;

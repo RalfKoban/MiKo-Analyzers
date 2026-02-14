@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] MethodNames = ["Contains", "ContainsKey", "ContainsValue"];
 
         [Test]
-        public void No_issue_is_reported_for_undocumented_method_([ValueSource(nameof(MethodNames))] string methodName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_Contains_method_([ValueSource(nameof(MethodNames))] string methodName) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public bool " + methodName + @"()
@@ -24,7 +24,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_([ValueSource(nameof(MethodNames))] string methodName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Contains_method_with_summary_not_starting_with_Determines_whether_([ValueSource(nameof(MethodNames))] string methodName) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -37,7 +37,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_with_see_cref_([ValueSource(nameof(MethodNames))] string methodName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Contains_method_with_see_cref_not_followed_by_Determines_whether_([ValueSource(nameof(MethodNames))] string methodName) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -50,7 +50,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_async_method_([ValueSource(nameof(MethodNames))] string methodName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_async_Contains_method_with_summary_not_containing_Determines_whether_([ValueSource(nameof(MethodNames))] string methodName) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -63,7 +63,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_incorrectly_documented_non_Contains_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_Contains_method() => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -76,7 +76,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_([ValueSource(nameof(MethodNames))] string methodName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Contains_method_with_summary_starting_with_Determines_whether_([ValueSource(nameof(MethodNames))] string methodName) => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -89,7 +89,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_incorrectly_documented_async_method_([ValueSource(nameof(MethodNames))] string methodName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_async_Contains_method_with_summary_containing_Determines_whether_([ValueSource(nameof(MethodNames))] string methodName) => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -102,7 +102,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed()
+        public void Code_gets_fixed_to_start_summary_with_Determines_whether()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -128,7 +128,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_async_phrase()
+        public void Code_gets_fixed_to_replace_Asynchronously_does_with_Asynchronously_determines_whether()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -154,7 +154,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_Determines_if_phrase()
+        public void Code_gets_fixed_to_replace_Determines_if_with_Determines_whether()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -180,7 +180,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_Checks_if_phrase_with_dot_directly_after_XML_tag()
+        public void Code_gets_fixed_to_replace_Checks_if_with_Determines_whether_when_dot_directly_after_XML_tag()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -206,7 +206,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_empty_phrase_with_spaces_on_same_line()
+        public void Code_gets_fixed_for_empty_summary_with_spaces_on_same_line()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -230,7 +230,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_empty_phrase_without_contents_on_same_line()
+        public void Code_gets_fixed_for_empty_summary_without_contents_on_same_line()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -254,7 +254,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_empty_phrase_without_contents_on_different_lines()
+        public void Code_gets_fixed_for_empty_summary_without_contents_on_different_lines()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -279,7 +279,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_empty_phrase_without_leading_space()
+        public void Code_gets_fixed_for_empty_summary_without_leading_space()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -305,7 +305,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_empty_phrase_with_leading_space()
+        public void Code_gets_fixed_for_empty_summary_with_leading_space()
         {
             const string OriginalCode = @"
 public class TestMe
