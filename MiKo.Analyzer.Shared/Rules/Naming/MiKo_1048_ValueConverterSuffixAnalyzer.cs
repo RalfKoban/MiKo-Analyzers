@@ -17,7 +17,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.IsValueConverter() || symbol.IsMultiValueConverter();
+        protected override bool ShallAnalyze(ITypeSymbol symbol)
+        {
+            if (symbol is null)
+            {
+                // code seems to be obfuscated or contains no valid symbol, so ignore it silently
+                return false;
+            }
+
+            return symbol.IsValueConverter() || symbol.IsMultiValueConverter();
+        }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
         {

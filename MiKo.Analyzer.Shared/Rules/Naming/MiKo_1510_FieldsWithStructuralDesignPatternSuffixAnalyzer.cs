@@ -14,7 +14,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(IFieldSymbol symbol) => IsNameForStructuralDesignPattern(symbol.Name);
+        protected override bool ShallAnalyze(IFieldSymbol symbol)
+        {
+            if (symbol is null)
+            {
+                // code seems to be obfuscated or contains no valid symbol, so ignore it silently
+                return false;
+            }
+
+            return IsNameForStructuralDesignPattern(symbol.Name);
+        }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation)
         {

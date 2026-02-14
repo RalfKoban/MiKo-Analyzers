@@ -45,7 +45,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_field() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_field_without_test_double_terminology() => No_issue_is_reported_for(@"
 [TestFixture]
 public class TestMe
 {
@@ -54,7 +54,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_incorrectly_named_field_in_non_test_class_([ValueSource(nameof(WrongNames))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_field_in_non_test_class_([ValueSource(nameof(WrongNames))] string name) => No_issue_is_reported_for(@"
 public class TestMe
 {
     private int _" + name + @";
@@ -62,7 +62,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_field_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_field_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 [TestFixture]
 public class TestMe
 {
@@ -71,7 +71,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_variable() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_variable_without_test_double_terminology() => No_issue_is_reported_for(@"
 [TestFixture]
 public class TestMe
 {
@@ -83,7 +83,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_incorrectly_named_variable_in_non_test_class_([ValueSource(nameof(WrongNames))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_variable_in_non_test_class_([ValueSource(nameof(WrongNames))] string name) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -94,7 +94,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_variable_in_foreach_loop() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_foreach_variable_without_test_double_terminology() => No_issue_is_reported_for(@"
 [TestFixture]
 public class TestMe
 {
@@ -108,7 +108,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_variable_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_variable_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 [TestFixture]
 public class TestMe
 {
@@ -120,7 +120,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_variable_in_foreach_loop_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_foreach_variable_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 [TestFixture]
 public class TestMe
 {
@@ -134,7 +134,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_variable_declaration() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_variable_declaration_without_test_double_terminology() => No_issue_is_reported_for(@"
 [TestFixture]
 public class TestMe
 {
@@ -150,7 +150,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_variable_declaration_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_variable_declaration_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 [TestFixture]
 public class TestMe
 {
@@ -166,7 +166,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_incorrectly_named_variable_on_multi_variable_declaration_in_non_test_class_([ValueSource(nameof(WrongNames))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_multi_variable_declaration_in_non_test_class_([ValueSource(nameof(WrongNames))] string name) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -177,7 +177,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_variable_on_multi_variable_declaration_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_multi_variable_declaration_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 [TestFixture]
 public class TestMe
 {
@@ -189,7 +189,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_parameter() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_parameter_without_test_double_terminology() => No_issue_is_reported_for(@"
 [TestFixture]
 public class TestMe
 {
@@ -200,7 +200,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_parameter_in_ctor() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_constructor_parameter_without_test_double_terminology() => No_issue_is_reported_for(@"
 [TestFixture]
 public class TestMe
 {
@@ -211,7 +211,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_parameter_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_parameter_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 [TestFixture]
 public class TestMe
 {
@@ -222,7 +222,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_parameter_in_ctor_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_constructor_parameter_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 [TestFixture]
 public class TestMe
 {
@@ -233,7 +233,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_incorrectly_named_parameter_in_lambda_([ValueSource(nameof(WrongNames))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_lambda_parameter_([ValueSource(nameof(WrongNames))] string name) => No_issue_is_reported_for(@"
 [TestFixture]
 public class TestMe
 {
@@ -245,7 +245,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_field_declaration() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_field_declaration_without_test_double_terminology() => No_issue_is_reported_for(@"
 [TestFixture]
 public class TestMe
 {
@@ -254,7 +254,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_field_declaration_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_field_declaration_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 [TestFixture]
 public class TestMe
 {
@@ -263,7 +263,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_multi_field_declaration_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_multi_field_declaration_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 [TestFixture]
 public class TestMe
 {
@@ -272,7 +272,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_property_declaration() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_property_declaration_without_test_double_terminology() => No_issue_is_reported_for(@"
 [TestFixture]
 public class TestMe
 {
@@ -281,7 +281,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_property_declaration_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_property_declaration_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 [TestFixture]
 public class TestMe
 {
@@ -297,13 +297,13 @@ public class TestMe
         [TestCase("[TestFixture] class TestMe { void Do(int mock1) { } }", "[TestFixture] class TestMe { void Do(int mock1) { } }")]
         [TestCase("[TestFixture] class TestMe { void Do(int mockValue1) { } }", "[TestFixture] class TestMe { void Do(int value1) { } }")]
         [TestCase("[TestFixture] class TestMe { public TestMe(int childFake) { } }", "[TestFixture] class TestMe { public TestMe(int child) { } }")]
-        public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
+        public void Code_gets_fixed_by_removing_test_double_terminology_from_name_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
 
         [TestCase("mockValue", "value")]
         [TestCase("mockedValue", "value")]
         [TestCase("fakeValue", "value")]
         [TestCase("fakedValue", "value")]
-        public void Code_gets_fixed_for_local_variable_(string originalName, string fixedName)
+        public void Code_gets_fixed_for_local_variable_by_removing_test_double_prefix_(string originalName, string fixedName)
         {
             var originalCode = @"
 [TestFixture]

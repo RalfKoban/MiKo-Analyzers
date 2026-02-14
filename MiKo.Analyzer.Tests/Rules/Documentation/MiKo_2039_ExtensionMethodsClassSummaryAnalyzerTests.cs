@@ -42,7 +42,7 @@ public static class TestMeExtensions
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_extension_class_([ValueSource(nameof(ValidPhrases))] string phrase) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_extension_class_with_standard_summary_phrase_([ValueSource(nameof(ValidPhrases))] string phrase) => No_issue_is_reported_for(@"
 /// <summary>
 /// " + phrase + @" something.
 /// </summary>
@@ -53,7 +53,7 @@ public static class TestMeExtensions
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_extension_class() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_extension_class_with_non_standard_summary_phrase() => An_issue_is_reported_for(@"
 /// <summary>
 /// Does something.
 /// </summary>
@@ -118,7 +118,7 @@ public static class TestMeExtensions
         [TestCase("Several basic helper functions for", "")]
         [TestCase("Basic helper functions for", "")]
         [TestCase("Helper functions for", "")]
-        public void Code_gets_fixed_(string originalCode, string fixedCode)
+        public void Code_gets_fixed_by_replacing_with_standard_phrase_(string originalCode, string fixedCode)
         {
             const string Template = @"
 /// <summary>

@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private CodeFixProvider CurrentCodeFixProvider { get; set; }
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_commented_method_([ValueSource(nameof(BooleanReturnValues))] string returnType, [Values("returns", "value")] string xmlTag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_boolean_return_type_([ValueSource(nameof(BooleanReturnValues))] string returnType, [Values("returns", "value")] string xmlTag) => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -35,7 +35,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_uncommented_property_([ValueSource(nameof(BooleanReturnValues))] string returnType) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_property_([ValueSource(nameof(BooleanReturnValues))] string returnType) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public " + returnType + @" DoSomething { get; set; }
@@ -43,9 +43,9 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_method_that_returns_a_(
-                                                                [Values("returns", "value")] string xmlTag,
-                                                                [Values("void", "int", "Task", "Task<int>", "Task<string>")] string returnType) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_returning_non_boolean_or_enum_type_(
+                                                                                    [Values("returns", "value")] string xmlTag,
+                                                                                    [Values("void", "int", "Task", "Task<int>", "Task<string>")] string returnType) => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
 
@@ -62,11 +62,11 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_commented_Boolean_property_with_missing_default_value_(
-                                                                                                [Values("returns", "value")] string xmlTag,
-                                                                                                [Values("<see langword=\"true\" />", "<see langword=\"true\"/>")] string trueValue,
-                                                                                                [Values("<see langword=\"false\" />", "<see langword=\"false\"/>")] string falseValue,
-                                                                                                [ValueSource(nameof(BooleanReturnValues))] string returnType)
+        public void An_issue_is_reported_for_boolean_property_missing_default_value_phrase_(
+                                                                                        [Values("returns", "value")] string xmlTag,
+                                                                                        [Values("<see langword=\"true\" />", "<see langword=\"true\"/>")] string trueValue,
+                                                                                        [Values("<see langword=\"false\" />", "<see langword=\"false\"/>")] string falseValue,
+                                                                                        [ValueSource(nameof(BooleanReturnValues))] string returnType)
             => An_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
@@ -84,12 +84,12 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_Boolean_property_with_default_phrase_(
-                                                                                                   [Values("returns", "value")] string xmlTag,
-                                                                                                   [Values("<see langword=\"true\" />", "<see langword=\"true\"/>")] string trueValue,
-                                                                                                   [Values("<see langword=\"false\" />", "<see langword=\"false\"/>")] string falseValue,
-                                                                                                   [Values("<see langword=\"true\"/>", "<see langword=\"false\"/>")] string defaultValue,
-                                                                                                   [ValueSource(nameof(BooleanReturnValues))] string returnType)
+        public void No_issue_is_reported_for_boolean_property_with_default_value_phrase_(
+                                                                                     [Values("returns", "value")] string xmlTag,
+                                                                                     [Values("<see langword=\"true\" />", "<see langword=\"true\"/>")] string trueValue,
+                                                                                     [Values("<see langword=\"false\" />", "<see langword=\"false\"/>")] string falseValue,
+                                                                                     [Values("<see langword=\"true\"/>", "<see langword=\"false\"/>")] string defaultValue,
+                                                                                     [ValueSource(nameof(BooleanReturnValues))] string returnType)
             => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
@@ -107,12 +107,12 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_Boolean_property_with_default_phrase_and_line_break_(
-                                                                                                                  [Values("returns", "value")] string xmlTag,
-                                                                                                                  [Values("<see langword=\"true\" />", "<see langword=\"true\"/>")] string trueValue,
-                                                                                                                  [Values("<see langword=\"false\" />", "<see langword=\"false\"/>")] string falseValue,
-                                                                                                                  [Values("<see langword=\"true\"/>", "<see langword=\"false\"/>")] string defaultValue,
-                                                                                                                  [ValueSource(nameof(BooleanReturnValues))] string returnType)
+        public void No_issue_is_reported_for_boolean_property_with_default_value_phrase_on_separate_line_(
+                                                                                                      [Values("returns", "value")] string xmlTag,
+                                                                                                      [Values("<see langword=\"true\" />", "<see langword=\"true\"/>")] string trueValue,
+                                                                                                      [Values("<see langword=\"false\" />", "<see langword=\"false\"/>")] string falseValue,
+                                                                                                      [Values("<see langword=\"true\"/>", "<see langword=\"false\"/>")] string defaultValue,
+                                                                                                      [ValueSource(nameof(BooleanReturnValues))] string returnType)
             => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
@@ -131,7 +131,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_commented_Enum_property_with_missing_default_value_([Values("returns", "value")] string xmlTag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_enum_property_missing_default_value_phrase_([Values("returns", "value")] string xmlTag) => An_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
 
@@ -154,7 +154,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_commented_Enum_property_with_default_value_([Values("returns", "value")] string xmlTag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_enum_property_with_default_value_phrase_([Values("returns", "value")] string xmlTag) => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
 
@@ -177,7 +177,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_commented_Enum_property_with_default_value_and_line_break_([Values("returns", "value")] string xmlTag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_enum_property_with_default_value_phrase_on_separate_line_([Values("returns", "value")] string xmlTag) => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
 
@@ -201,7 +201,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_commented_Enum_property_with_explicitly_commented_no_default_value_([Values("returns", "value")] string xmlTag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_enum_property_with_explicit_no_default_value_phrase_([Values("returns", "value")] string xmlTag) => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
 
@@ -225,7 +225,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_for_boolean_having_no_default_value()
+        public void Code_gets_fixed_by_adding_no_default_value_phrase_for_boolean()
         {
             CurrentCodeFixProvider = new MiKo_2036_NoDefault_CodeFixProvider();
 
@@ -264,7 +264,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_boolean_having_false_as_default_value()
+        public void Code_gets_fixed_by_adding_false_default_value_phrase_for_boolean()
         {
             CurrentCodeFixProvider = new MiKo_2036_DefaultFalse_CodeFixProvider();
 
@@ -303,7 +303,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_boolean_having_true_as_default_value()
+        public void Code_gets_fixed_by_adding_true_default_value_phrase_for_boolean()
         {
             CurrentCodeFixProvider = new MiKo_2036_DefaultTrue_CodeFixProvider();
 
@@ -342,7 +342,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_Enum_as_default_value()
+        public void Code_gets_fixed_by_adding_enum_default_value_phrase()
         {
             CurrentCodeFixProvider = new MiKo_2036_Enum_CodeFixProvider();
 

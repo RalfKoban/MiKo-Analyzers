@@ -34,7 +34,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_throwing_an_ArgumentNullException_for_class() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_ArgumentNullException_documenting_class_parameter() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -50,7 +50,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_para_tags_throwing_an_ArgumentNullException_for_class() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_ArgumentNullException_documenting_class_parameter_inside_para_tags() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -68,7 +68,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_throwing_an_ArgumentNullException_for_Nullable_struct() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_ArgumentNullException_documenting_Nullable_struct_parameter() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -84,7 +84,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_throwing_an_ArgumentNullException_for_multiple_parameters() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_ArgumentNullException_documenting_multiple_nullable_parameters() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -102,7 +102,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_throwing_an_ArgumentNullException() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_ArgumentNullException_documenting_non_nullable_struct_parameter() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -118,7 +118,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_with_para_tags_throwing_an_ArgumentNullException() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_ArgumentNullException_documenting_non_nullable_struct_parameter_inside_para_tags() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -136,7 +136,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_1st_parameter_throwing_an_ArgumentNullException_for_multiple_parameters() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_ArgumentNullException_documenting_non_nullable_struct_as_first_of_multiple_parameters() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -154,7 +154,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_2nd_parameter_throwing_an_ArgumentNullException_for_multiple_parameters() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_ArgumentNullException_documenting_non_nullable_struct_as_second_of_multiple_parameters() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -211,7 +211,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_property_throwing_an_ArgumentNullException() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_property_with_ArgumentNullException_for_class_type() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -227,7 +227,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_property_throwing_an_ArgumentNullException() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_property_with_ArgumentNullException_for_non_nullable_struct_type() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -243,7 +243,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_generic_type_that_is_a_class() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_generic_class_constrained_parameter() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -274,7 +274,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_generic_type_that_is_a_struct() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_generic_struct_constrained_parameter() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe

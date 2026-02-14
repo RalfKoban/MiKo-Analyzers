@@ -168,6 +168,6 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase("CallsDownloadWorkflowForMultipleParameterDownloadDevices", "DoEvents", "##Events", ExpectedResult = "CallsDownloadWorkflowForMultipleParameterDownloadDevices")]
         [TestCase("CallsDownloadWorkflowForMultipleParameterDownloadDevices", "Download", "My", ExpectedResult = "CallsMyWorkflowForMultipleParameterMyDevices")]
         [TestCase("CallsDownloadWorkflowForMultipleParameterDownloadDevices", "Workflow", "#", ExpectedResult = "CallsDownload#ForMultipleParameterDownloadDevices")]
-        public static string ReplaceWithProbe_above_threshold_uses_arrays_properly_to_adjust_(string start, string name, string other) => new StringBuilder(start).ReplaceWithProbe(name, other).ToString();
+        public static string ReplaceWithProbe_above_threshold_uses_arrays_to_adjust_(string start, string name, string other) => new StringBuilder(start).ReplaceWithProbe(name, other).ToString();
     }
 }
