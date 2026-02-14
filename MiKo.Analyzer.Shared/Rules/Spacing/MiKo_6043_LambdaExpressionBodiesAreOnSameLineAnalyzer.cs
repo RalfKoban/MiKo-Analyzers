@@ -15,13 +15,15 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private const int MaxLineLength = 180;
 
+        private static readonly SyntaxKind[] Lambdas = { SyntaxKind.ParenthesizedLambdaExpression, SyntaxKind.SimpleLambdaExpression };
+
         private static readonly Func<SyntaxNode, bool> IsLogicalExpression = IsLogicalExpressionCore;
 
         public MiKo_6043_LambdaExpressionBodiesAreOnSameLineAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeLambdaExpression, SyntaxKind.ParenthesizedLambdaExpression, SyntaxKind.SimpleLambdaExpression);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeLambdaExpression, Lambdas);
 
         private static bool IsLogicalExpressionCore(SyntaxNode node)
         {
@@ -51,10 +53,11 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 switch (body)
                 {
                     case AnonymousObjectCreationExpressionSyntax a: return CanAnalyzeAnonymousObjectCreationExpressionSyntax(a);
-                    case ObjectCreationExpressionSyntax o: return CanAnalyzeObjectCreationExpressionSyntax(o);
-                    case InvocationExpressionSyntax i: return CanAnalyzeInvocationExpressionSyntax(i);
                     case BinaryExpressionSyntax b: return CanAnalyzeBinaryExpressionSyntax(b);
+                    case InterpolatedStringExpressionSyntax i: return CanAnalyzeInterpolatedStringExpressionSyntax(i);
+                    case InvocationExpressionSyntax i: return CanAnalyzeInvocationExpressionSyntax(i);
                     case LiteralExpressionSyntax l: return CanAnalyzeLiteralExpressionSyntax(l);
+                    case ObjectCreationExpressionSyntax o: return CanAnalyzeObjectCreationExpressionSyntax(o);
                     default:
                         return true;
                 }
@@ -161,6 +164,11 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     default:
                         return true;
                 }
+            }
+
+            bool CanAnalyzeInterpolatedStringExpressionSyntax(InterpolatedStringExpressionSyntax syntax)
+            {
+                return syntax.IsSpanningMultipleLines() is false;
             }
         }
 

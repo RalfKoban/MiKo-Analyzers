@@ -417,55 +417,143 @@ namespace Bla
         [Test]
         public void No_issue_is_reported_for_parenthesized_lambda_expression_body_with_multiline_interpolated_string_concatenation() => No_issue_is_reported_for("""
 
-                                                                                                                                                   using System;
+                                                                                                                                                                 using System;
 
-                                                                                                                                                   using NUnit.Framework;
+                                                                                                                                                                 using NUnit.Framework;
 
-                                                                                                                                                   namespace Bla
-                                                                                                                                                   {
-                                                                                                                                                       public class TestMe
-                                                                                                                                                       {
-                                                                                                                                                           [Test]
-                                                                                                                                                           public void DoSomething(string actual, string newSource)
-                                                                                                                                                           {
-                                                                                                                                                               Assert.That(
-                                                                                                                                                                       actual,
-                                                                                                                                                                       Is.EqualTo(newSource),
-                                                                                                                                                                       () => @"Fix created unexpected document.
-                                                                                                                                                   New document:
-                                                                                                                                                   ################################################
-                                                                                                                                                   " + actual + @"
-                                                                                                                                                   ################################################");
-                                                                                                                                                       }
-                                                                                                                                                   }
+                                                                                                                                                                 namespace Bla
+                                                                                                                                                                 {
+                                                                                                                                                                     public class TestMe
+                                                                                                                                                                     {
+                                                                                                                                                                         [Test]
+                                                                                                                                                                         public void DoSomething(string actual, string newSource)
+                                                                                                                                                                         {
+                                                                                                                                                                             Assert.That(
+                                                                                                                                                                                     actual,
+                                                                                                                                                                                     Is.EqualTo(newSource),
+                                                                                                                                                                                     () => $@"Fix created unexpected document.
+                                                                                                                                                                 New document:
+                                                                                                                                                                 ################################################
+                                                                                                                                                                 {actual}
+                                                                                                                                                                 ################################################");
+                                                                                                                                                                         }
+                                                                                                                                                                     }
+                                                                                                                                                                 }
 
-                                                                                                                                                   """);
+                                                                                                                                                                 """);
 
         [Test]
-        public void No_issue_is_reported_for_parenthesized_lambda_expression_body_with_multiline_interpolated_string() => No_issue_is_reported_for("""
+        public void No_issue_is_reported_for_parenthesized_lambda_expression_body_with_multiline_interpolated_raw_string_concatenation() => No_issue_is_reported_for(""""
 
-                                                                                                                                                   using System;
+                                                                                                                                                                     using System;
 
-                                                                                                                                                   using NUnit.Framework;
+                                                                                                                                                                     using NUnit.Framework;
 
-                                                                                                                                                   namespace Bla
+                                                                                                                                                                     namespace Bla
+                                                                                                                                                                     {
+                                                                                                                                                                         public class TestMe
+                                                                                                                                                                         {
+                                                                                                                                                                             [Test]
+                                                                                                                                                                             public void DoSomething(string actual, string newSource)
+                                                                                                                                                                             {
+                                                                                                                                                                                 Assert.That(
+                                                                                                                                                                                         actual,
+                                                                                                                                                                                         Is.EqualTo(newSource),
+                                                                                                                                                                                         () => $"""Fix created unexpected document.
+                                                                                                                                                                     New document:
+                                                                                                                                                                     ################################################
+                                                                                                                                                                     {actual}
+                                                                                                                                                                     ################################################
+                                                                                                                                                                     """);
+                                                                                                                                                                             }
+                                                                                                                                                                         }
+                                                                                                                                                                     }
+
+                                                                                                                                                                     """");
+
+        [Test]
+        public void No_issue_is_reported_for_parenthesized_lambda_expression_body_with_multiline_raw_string_concatenation() => No_issue_is_reported_for(""""
+
+                                                                                                                                                        using System;
+
+                                                                                                                                                        using NUnit.Framework;
+
+                                                                                                                                                        namespace Bla
+                                                                                                                                                        {
+                                                                                                                                                            public class TestMe
+                                                                                                                                                            {
+                                                                                                                                                                [Test]
+                                                                                                                                                                public void DoSomething(string actual, string newSource)
+                                                                                                                                                                {
+                                                                                                                                                                    Assert.That(
+                                                                                                                                                                            actual,
+                                                                                                                                                                            Is.EqualTo(newSource),
+                                                                                                                                                                            () => """
+                                                                                                                                                                            Fix created unexpected document.
+                                                                                                                                                        New document:
+                                                                                                                                                        ################################################
+                                                                                                                                                        """ + actual + @"
+                                                                                                                                                        ################################################");
+                                                                                                                                                                }
+                                                                                                                                                            }
+                                                                                                                                                        }
+
+                                                                                                                                                        """");
+
+        [Test]
+        public void No_issue_is_reported_for_parenthesized_lambda_expression_body_with_multiline_verbatim_string_concatenation() => No_issue_is_reported_for("""
+
+                                                                                                                                                             using System;
+
+                                                                                                                                                             using NUnit.Framework;
+
+                                                                                                                                                             namespace Bla
+                                                                                                                                                             {
+                                                                                                                                                                 public class TestMe
+                                                                                                                                                                 {
+                                                                                                                                                                     [Test]
+                                                                                                                                                                     public void DoSomething(string actual, string newSource)
+                                                                                                                                                                     {
+                                                                                                                                                                         Assert.That(
+                                                                                                                                                                                 actual,
+                                                                                                                                                                                 Is.EqualTo(newSource),
+                                                                                                                                                                                 () => @"Fix created unexpected document.
+                                                                                                                                                             New document:
+                                                                                                                                                             ################################################
+                                                                                                                                                             " + actual + @"
+                                                                                                                                                             ################################################");
+                                                                                                                                                                     }
+                                                                                                                                                                 }
+                                                                                                                                                             }
+
+                                                                                                                                                             """);
+
+        [Test]
+        public void No_issue_is_reported_for_parenthesized_lambda_expression_body_with_multiline_verbatim_string() => No_issue_is_reported_for("""
+
+                                                                                                                                               using System;
+
+                                                                                                                                               using NUnit.Framework;
+
+                                                                                                                                               namespace Bla
+                                                                                                                                               {
+                                                                                                                                                   public class TestMe
                                                                                                                                                    {
-                                                                                                                                                       public class TestMe
+                                                                                                                                                       [Test]
+                                                                                                                                                       public void DoSomething(string actual, string newSource)
                                                                                                                                                        {
-                                                                                                                                                           [Test]
-                                                                                                                                                           public void DoSomething(string actual, string newSource)
-                                                                                                                                                           {
-                                                                                                                                                               Assert.That(
-                                                                                                                                                                       actual,
-                                                                                                                                                                       Is.EqualTo(newSource),
-                                                                                                                                                                       () => @"Fix created unexpected document.
-                                                                                                                                                   New document:
-                                                                                                                                                   ################################################
-                                                                                                                                                   ################################################");
+                                                                                                                                                           Assert.That(
+                                                                                                                                                                   actual,
+                                                                                                                                                                   Is.EqualTo(newSource),
+                                                                                                                                                                   () => @"Fix created unexpected document.
+                                                                                                                                               New document:
+                                                                                                                                               ################################################
+                                                                                                                                               ################################################");
                                                                                                                                                        }
                                                                                                                                                    }
+                                                                                                                                               }
 
-                                                                                                                                                   """);
+                                                                                                                                               """);
 
         [Test]
         public void An_issue_is_reported_for_simple_lambda_expression_body_that_spans_multiple_lines_if_line_break_is_before_arrow() => An_issue_is_reported_for(@"
