@@ -31,7 +31,7 @@ public class TestMe
         [TestCase("void")]
         [TestCase("Task")]
         [TestCase("Task<int>")]
-        public void No_issue_is_reported_for_correctly_documented_async_method_(string returnType) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_async_method_with_Asynchronously_in_summary_(string returnType) => No_issue_is_reported_for(@"
 using System.Threading.Tasks;
 
 public class TestMe
@@ -43,7 +43,7 @@ public class TestMe
 
         [TestCase("Task")]
         [TestCase("Task<int>")]
-        public void No_issue_is_reported_for_correctly_documented_non_async_Task_method_(string returnType) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Task_returning_method_with_Asynchronously_in_summary_(string returnType) => No_issue_is_reported_for(@"
 using System.Threading.Tasks;
 
 public class TestMe
@@ -56,7 +56,7 @@ public class TestMe
         [TestCase("void")]
         [TestCase("Task")]
         [TestCase("Task<int>")]
-        public void An_issue_is_reported_for_incorrectly_documented_async_method_(string returnType) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_async_method_without_Asynchronously_in_summary_(string returnType) => An_issue_is_reported_for(@"
 using System.Threading.Tasks;
 
 public class TestMe
@@ -68,7 +68,7 @@ public class TestMe
 
         [TestCase("Task")]
         [TestCase("Task<int>")]
-        public void An_issue_is_reported_for_incorrectly_documented_Task_method_(string returnType) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Task_returning_method_without_Asynchronously_in_summary_(string returnType) => An_issue_is_reported_for(@"
 using System.Threading.Tasks;
 
 public class TestMe
@@ -80,7 +80,7 @@ public class TestMe
 
         [TestCase("Task")]
         [TestCase("Task<int>")]
-        public void An_issue_is_reported_for_comment_with_see_cref_only_(string returnType) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Task_returning_method_with_only_see_cref_in_summary_(string returnType) => An_issue_is_reported_for(@"
 using System.Threading.Tasks;
 
 public class TestMe
@@ -94,7 +94,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_and_upper_case_text_adjusted()
+        public void Code_gets_fixed_by_prepending_Asynchronously_to_summary_on_single_line()
         {
             const string OriginalCode = """
 
@@ -120,7 +120,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_and_intended_upper_case_text_adjusted()
+        public void Code_gets_fixed_by_prepending_Asynchronously_to_summary_with_extra_spaces()
         {
             const string OriginalCode = """
 
@@ -146,7 +146,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_and_lower_case_text_kept()
+        public void Code_gets_fixed_by_prepending_Asynchronously_to_lowercase_summary()
         {
             const string OriginalCode = """
 
@@ -172,7 +172,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_and_seeCref_element_moved()
+        public void Code_gets_fixed_by_prepending_Asynchronously_to_summary_with_see_cref()
         {
             const string OriginalCode = """
 
@@ -198,7 +198,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_and_upper_case_text_adjusted_when_on_different_lines()
+        public void Code_gets_fixed_by_prepending_Asynchronously_to_multiline_summary()
         {
             const string OriginalCode = """
 
@@ -226,7 +226,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_and_seeCref_element_moved_when_on_different_lines()
+        public void Code_gets_fixed_by_prepending_Asynchronously_to_multiline_summary_with_see_cref()
         {
             const string OriginalCode = """
 
@@ -254,7 +254,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_and_upper_case_text_adjusted_when_infinite_and_on_different_lines()
+        public void Code_gets_fixed_by_prepending_Asynchronously_and_adjusting_verb_to_third_person()
         {
             const string OriginalCode = """
 

@@ -22,7 +22,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_without_parameters() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_documented_method_without_parameters() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -35,7 +35,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_without_see_cref_parameter_references() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -48,7 +48,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_([Values("see", "seealso")] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_see_cref_referencing_parameter_([Values("see", "seealso")] string tag) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -61,7 +61,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_for_tag_([Values("see", "seealso")] string tag)
+        public void Code_gets_fixed_by_replacing_see_cref_with_paramref_([Values("see", "seealso")] string tag)
         {
             var originalCode = @"
 public class TestMe
@@ -87,7 +87,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_multiple_tags_([Values("see", "seealso")] string tag)
+        public void Code_gets_fixed_by_replacing_multiple_see_cref_with_paramref_([Values("see", "seealso")] string tag)
         {
             var originalCode = @"
 public class TestMe

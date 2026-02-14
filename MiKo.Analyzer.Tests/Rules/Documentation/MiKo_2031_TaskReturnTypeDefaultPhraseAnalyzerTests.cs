@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2031_TaskReturnTypeDefaultPhraseAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_uncommented_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_method() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public Task DoSomething(object o) => null;
@@ -20,7 +20,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_uncommented_property() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_property() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public Task DoSomething { get; set; }
@@ -39,9 +39,9 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_method_that_returns_a_(
-                                                                [Values("returns", "value")] string xmlTag,
-                                                                [Values("Task<bool>", "Task<string>")] string returnType)
+        public void No_issue_is_reported_for_generic_Task_method_with_non_Task_documentation_(
+                                                                                          [Values("returns", "value")] string xmlTag,
+                                                                                          [Values("Task<bool>", "Task<string>")] string returnType)
             => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
@@ -72,7 +72,7 @@ public class TestMe
         [TestCase("WhenAny", "A <see cref=\"System.Threading.Tasks.Task{TResult}\" /> that represents the completion of one of the supplied tasks. Its <see cref=\"System.Threading.Tasks.Task{TResult}.Result\"/> is the task that completed first.")]
         [TestCase("WhenAny", "A <see cref=\"System.Threading.Tasks.Task{TResult}\"/> that represents the completion of one of the supplied tasks. Its <see cref=\"System.Threading.Tasks.Task{TResult}.Result\" /> is the task that completed first.")]
         [TestCase("WhenAny", "A <see cref=\"System.Threading.Tasks.Task{TResult}\"/> that represents the completion of one of the supplied tasks. Its <see cref=\"System.Threading.Tasks.Task{TResult}.Result\"/> is the task that completed first.")]
-        public void No_issue_is_reported_for_special_method_(string methodName, string comment)
+        public void No_issue_is_reported_for_special_Task_method_with_standard_phrase_(string methodName, string comment)
             => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
@@ -90,9 +90,9 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_Task_only_method_(
-                                                                               [Values("returns", "value")] string xmlTag,
-                                                                               [Values("task", "<see cref=\"Task\" />", "<see cref=\"Task\"/>")] string comment)
+        public void No_issue_is_reported_for_non_generic_Task_method_with_standard_phrase_(
+                                                                                       [Values("returns", "value")] string xmlTag,
+                                                                                       [Values("task", "<see cref=\"Task\" />", "<see cref=\"Task\"/>")] string comment)
             => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
@@ -110,7 +110,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_wrong_commented_Task_only_method_([Values("returns", "value")] string xmlTag, [Values("A whatever", "An whatever", "The whatever")] string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_non_generic_Task_method_with_non_standard_phrase_([Values("returns", "value")] string xmlTag, [Values("A whatever", "An whatever", "The whatever")] string comment) => An_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
 
@@ -127,10 +127,10 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_generic_Task_method_(
-                                                                                  [Values("returns", "value")] string xmlTag,
-                                                                                  [Values("task", "<see cref=\"Task{TResult}\" />", "<see cref=\"Task{TResult}\"/>", "<see cref=\"System.Threading.Tasks.Task{TResult}\" />", "<see cref=\"System.Threading.Tasks.Task{TResult}\"/>")] string task,
-                                                                                  [Values("<see cref=\"System.Threading.Tasks.Task{TResult}.Result\" />", "<see cref=\"System.Threading.Tasks.Task{TResult}.Result\"/>")] string result)
+        public void No_issue_is_reported_for_generic_Task_method_with_standard_phrase_(
+                                                                                   [Values("returns", "value")] string xmlTag,
+                                                                                   [Values("task", "<see cref=\"Task{TResult}\" />", "<see cref=\"Task{TResult}\"/>", "<see cref=\"System.Threading.Tasks.Task{TResult}\" />", "<see cref=\"System.Threading.Tasks.Task{TResult}\"/>")] string task,
+                                                                                   [Values("<see cref=\"System.Threading.Tasks.Task{TResult}.Result\" />", "<see cref=\"System.Threading.Tasks.Task{TResult}.Result\"/>")] string result)
             => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
@@ -148,7 +148,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_wrong_commented_generic_Task_method_([Values("returns", "value")] string xmlTag, [Values("A whatever", "An whatever", "The whatever")] string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_generic_Task_method_with_non_standard_phrase_([Values("returns", "value")] string xmlTag, [Values("A whatever", "An whatever", "The whatever")] string comment) => An_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
 
@@ -173,7 +173,7 @@ public class TestMe
         [TestCase("An awaitable Task.")]
         [TestCase("An awaitable task")]
         [TestCase("An awaitable Task")]
-        public void Code_gets_fixed_for_non_generic_method_(string originalText)
+        public void Code_gets_fixed_by_replacing_with_standard_phrase_for_non_generic_Task_(string originalText)
         {
             var originalCode = @"
 using System;
@@ -289,7 +289,7 @@ public class TestMe
         [TestCase(@"A task that represents the asynchronous operation; the task's Result contains the project.", @"the project.")]
         [TestCase(@"A task that represents the asynchronous operation; the Task's result contains the project.", @"the project.")]
         [TestCase(@"A task that represents the asynchronous operation; the Task's Result contains the project.", @"the project.")]
-        public void Code_gets_fixed_for_generic_method_(string originalText, string fixedText)
+        public void Code_gets_fixed_by_replacing_with_standard_phrase_for_generic_Task_(string originalText, string fixedText)
         {
             var originalCode = @"
 using System;
@@ -328,7 +328,7 @@ public class TestMe
         [TestCase("Task WhenAll()", "A task that represents the completion of all of the supplied tasks.")]
         [TestCase("Task WhenAny()", "A task that represents the completion of one of the supplied tasks. Its <see cref=\"Task{TResult}.Result\"/> is the task that completed first.")]
         [TestCase("Task<int> WhenAny()", "A task that represents the completion of one of the supplied tasks. Its <see cref=\"Task{TResult}.Result\"/> is the task that completed first.")]
-        public void Code_gets_fixed_for_special_method_(string specialMethod, string comment)
+        public void Code_gets_fixed_by_replacing_with_method_specific_standard_phrase_(string specialMethod, string comment)
         {
             var originalCode = @"
 using System;

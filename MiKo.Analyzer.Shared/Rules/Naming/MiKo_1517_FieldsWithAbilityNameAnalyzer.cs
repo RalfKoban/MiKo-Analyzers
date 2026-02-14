@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IFieldSymbol symbol)
         {
-            if (symbol.Type.IsBoolean())
+            if (symbol?.Type.IsBoolean() is true)
             {
                 var symbolName = GetPartToInspect(symbol.Name);
 

@@ -23,10 +23,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Field);
 
-        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.IsCommand();
+        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol?.IsCommand() is true;
 
         protected override bool ShallAnalyze(IMethodSymbol symbol)
         {
+            if (symbol is null)
+            {
+                // code seems to be obfuscated or contains no valid symbol, so ignore it silently
+                return false;
+            }
+
             if (symbol.AssociatedSymbol is IPropertySymbol)
             {
                 // ignore property getters or setters as they are already reported
@@ -53,9 +59,27 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return true;
         }
 
-        protected override bool ShallAnalyze(IPropertySymbol symbol) => symbol.IsIndexer is false && ShallAnalyze(symbol.Type) && symbol.ContainingType.IsTestClass() is false;
+        protected override bool ShallAnalyze(IPropertySymbol symbol)
+        {
+            if (symbol is null)
+            {
+                // code seems to be obfuscated or contains no valid symbol, so ignore it silently
+                return false;
+            }
 
-        protected override bool ShallAnalyze(IFieldSymbol symbol) => ShallAnalyze(symbol.Type) && symbol.ContainingType.IsTestClass() is false;
+            return symbol.IsIndexer is false && ShallAnalyze(symbol.Type) && symbol.ContainingType.IsTestClass() is false;
+        }
+
+        protected override bool ShallAnalyze(IFieldSymbol symbol)
+        {
+            if (symbol is null)
+            {
+                // code seems to be obfuscated or contains no valid symbol, so ignore it silently
+                return false;
+            }
+
+            return ShallAnalyze(symbol.Type) && symbol.ContainingType.IsTestClass() is false;
+        }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation) => AnalyzeName(symbol);
 

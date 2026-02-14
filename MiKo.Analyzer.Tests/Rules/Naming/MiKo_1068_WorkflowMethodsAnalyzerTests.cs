@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1068_WorkflowMethodsAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_methods_of_non_WorkFlow_class() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_Workflow_class() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething() { }
@@ -21,7 +21,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_methods_of_Workflow_class() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Workflow_class_with_Run_and_CanRun_methods() => No_issue_is_reported_for(@"
 public class Workflow
 {
     public void Run() { }
@@ -32,7 +32,7 @@ public class Workflow
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_methods_of_Workflow_interface() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Workflow_interface_with_Run_and_CanRun_methods() => No_issue_is_reported_for(@"
 public interface IWorkflow
 {
     void Run();
@@ -43,7 +43,7 @@ public interface IWorkflow
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_Run_method_of_Workflow_class() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Workflow_class_with_void_method_not_named_Run() => An_issue_is_reported_for(@"
 public class Workflow
 {
     public void DoSomething() { }
@@ -51,7 +51,7 @@ public class Workflow
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_CanRun_method_of_Workflow_class() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Workflow_class_with_boolean_method_not_named_CanRun() => An_issue_is_reported_for(@"
 public class Workflow
 {
     public bool Whatever() { }
@@ -59,7 +59,7 @@ public class Workflow
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_RunAsync_method_of_Workflow_class() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Workflow_class_with_Task_method_not_named_RunAsync() => An_issue_is_reported_for(@"
 public class Workflow
 {
     public async Task BlaAsync() { }
@@ -67,7 +67,7 @@ public class Workflow
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_CanRunAsync_method_of_Workflow_class() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Workflow_class_with_Task_bool_method_not_named_CanRunAsync() => An_issue_is_reported_for(@"
 public class Workflow
 {
     public async Task<bool> BlaAgain() { }

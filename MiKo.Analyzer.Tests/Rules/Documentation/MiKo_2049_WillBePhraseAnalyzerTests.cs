@@ -43,7 +43,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_items() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_documentation_without_will_phrases() => No_issue_is_reported_for(@"
 using System;
 
 /// <summary>Does something.</summary>
@@ -69,7 +69,7 @@ public class TestMe
 ");
 
         [TestCase("Something not willing to do anything.")]
-        public void No_issue_is_reported_for_specific_comment_(string phrase) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_willing_word_not_used_as_future_tense_(string phrase) => No_issue_is_reported_for(@"
 using System;
 
 /// <summary>" + phrase + @"</summary>
@@ -79,7 +79,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_incorrectly_documented_class_([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_class_containing_will_phrase_in_tag_([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
 using System;
 
 /// <" + tag + ">" + phrase + "</" + tag + @">
@@ -89,7 +89,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_incorrectly_documented_method_([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_containing_will_phrase_in_tag_([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -100,7 +100,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_incorrectly_documented_property_([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_property_containing_will_phrase_in_tag_([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -111,7 +111,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_incorrectly_documented_event_([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_event_containing_will_phrase_in_tag_([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -122,7 +122,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_incorrectly_documented_field_([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_field_containing_will_phrase_in_tag_([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -133,7 +133,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_incorrectly_documented_interface_property_([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_interface_property_containing_will_phrase_in_tag_([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
 using System;
 
 public interface ITestMe
@@ -144,7 +144,7 @@ public interface ITestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_incorrectly_documented_interface_indexer_([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_interface_indexer_containing_will_phrase_in_tag_([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
 using System;
 
 public interface ITestMe
@@ -156,7 +156,7 @@ public interface ITestMe
 
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [Test]
-        public void An_issue_gets_reported() => An_issue_is_reported_for(3, @"
+        public void An_issue_gets_reported_for_multiple_will_phrases_in_documentation() => An_issue_is_reported_for(3, @"
 using System;
 
 public interface ITestMe
@@ -216,7 +216,7 @@ public interface ITestMe
         [TestCase("The manager will not create any issues.", "The manager does not create any issues.")]
         [TestCase("The managers will not create any issues.", "The managers do not create any issues.")]
         [TestCase("The managers will be successful.", "The managers are successful.")]
-        public void Code_gets_fixed_(string originalPhrase, string fixedPhrase)
+        public void Code_gets_fixed_by_converting_future_tense_to_present_tense_(string originalPhrase, string fixedPhrase)
         {
             const string Template = @"
 using System;
@@ -232,7 +232,7 @@ public interface ITestMe
         }
 
         [TestCase("This will start", "This starts", @"The return value will be <see langword=""false""/>.", @"The return value is <see langword=""false""/>.")]
-        public void Code_gets_fixed_when_on_separate_lines_(string originalPhrase, string fixedPhrase, string originalReturn, string fixedReturn)
+        public void Code_gets_fixed_by_converting_multiple_will_phrases_to_present_tense_(string originalPhrase, string fixedPhrase, string originalReturn, string fixedReturn)
         {
             const string Template = @"
 using System;

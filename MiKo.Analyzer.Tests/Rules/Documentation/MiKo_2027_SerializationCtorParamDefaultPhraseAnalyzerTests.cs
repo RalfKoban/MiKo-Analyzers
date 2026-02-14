@@ -67,7 +67,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_ctor_that_has_correctly_documented_serialization_parameter() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_serialization_ctor_with_standard_parameter_phrases() => No_issue_is_reported_for(@"
 using System;
 using System.Runtime.Serialization;
 
@@ -86,7 +86,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_ctor_that_has_incorrectly_documented_SerializationInfo_parameter() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_serialization_ctor_with_non_standard_SerializationInfo_parameter_phrase() => An_issue_is_reported_for(@"
 using System;
 using System.Runtime.Serialization;
 
@@ -105,7 +105,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_ctor_that_has_incorrectly_documented_StreamingContext_parameter() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_serialization_ctor_with_non_standard_StreamingContext_parameter_phrase() => An_issue_is_reported_for(@"
 using System;
 using System.Runtime.Serialization;
 
@@ -124,7 +124,7 @@ namespace Bla
 ");
 
         [Test]
-        public void Code_gets_fixed_for_SerializationInfo()
+        public void Code_gets_fixed_by_replacing_with_standard_phrase_for_SerializationInfo()
         {
             const string OriginalCode = @"
 using System;
@@ -162,7 +162,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_StreamingContext()
+        public void Code_gets_fixed_by_replacing_with_standard_phrase_for_StreamingContext()
         {
             const string OriginalCode = @"
 using System;

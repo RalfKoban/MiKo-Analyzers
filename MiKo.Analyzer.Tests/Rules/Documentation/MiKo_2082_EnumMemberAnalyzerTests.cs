@@ -25,7 +25,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_uncommented_enum_member() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_enum_member() => No_issue_is_reported_for(@"
 using System;
 
 public enum TestMe
@@ -36,7 +36,7 @@ public enum TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_enum_member() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_enum_member_without_redundant_starting_phrase() => No_issue_is_reported_for(@"
 using System;
 
 public enum TestMe
@@ -54,7 +54,7 @@ public enum TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_empty_commented_enum_member() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_enum_member_with_empty_summary() => An_issue_is_reported_for(@"
 using System;
 
 public enum TestMe
@@ -72,7 +72,7 @@ public enum TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_enum_member_([Values("Defines", "Indicates", "Represents", "Specifies", "Enum")] string startingPhrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_enum_member_starting_with_redundant_phrase_([Values("Defines", "Indicates", "Represents", "Specifies", "Enum")] string startingPhrase) => An_issue_is_reported_for(@"
 using System;
 
 public enum TestMe
@@ -90,7 +90,7 @@ public enum TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_enum_member_that_starts_with_see_cref() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_enum_member_starting_with_see_cref() => An_issue_is_reported_for(@"
 using System;
 
 public enum TestMe
@@ -108,9 +108,9 @@ public enum TestMe
 ");
 
         [Test, Combinatorial]
-        public void Code_gets_fixed_for_incorrectly_commented_enum_member_(
-                                                                       [Values("Defines", "Indicates", "Represents", "Specifies", "Enum")] string startingWord,
-                                                                       [Values("", " that", ", that", " whether", ", whether", " for", ", for")] string continuation)
+        public void Code_gets_fixed_for_enum_member_starting_with_redundant_phrase_(
+                                                                                [Values("Defines", "Indicates", "Represents", "Specifies", "Enum")] string startingWord,
+                                                                                [Values("", " that", ", that", " whether", ", whether", " for", ", for")] string continuation)
         {
             const string Template = @"
 using System;
@@ -133,7 +133,7 @@ public enum TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_empty_commented_enum_member()
+        public void Code_gets_fixed_for_enum_member_with_empty_summary()
         {
             const string OriginalCode = @"
 using System;
@@ -156,7 +156,7 @@ public enum TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_special_phrase_of_enum_member()
+        public void Code_gets_fixed_for_enum_member_with_Enum_for_pattern()
         {
             const string OriginalCode = @"
 using System;
@@ -186,7 +186,7 @@ public enum TestMeKind
         }
 
         [Test]
-        public void Code_gets_fixed_for_special_phrase_of_enum_member_suffixed_with_Enum()
+        public void Code_gets_fixed_for_enum_member_with_Enum_for_pattern_when_member_is_suffixed_with_Enum()
         {
             const string OriginalCode = @"
 using System;
@@ -218,7 +218,7 @@ public enum TestMeKind
         [TestCase("TypeEnum")]
         [TestCase("TypesEnum")]
         [TestCase("KindsEnum")]
-        public void Code_gets_fixed_for_special_phrase_of_enum_member_suffixed_with_Enum_and_type_suffixed_with_(string suffix)
+        public void Code_gets_fixed_for_enum_member_with_Enum_for_pattern_when_type_is_suffixed_with_(string suffix)
         {
             var originalCode = @"
 using System;
@@ -256,7 +256,7 @@ public enum TestMe" + suffix + @"
         [TestCase("Completed")]
         [TestCase("Canceled")]
         [TestCase("Failed")]
-        public void Code_gets_fixed_for_special_phrase_of_enum_member_(string phrase1)
+        public void Code_gets_fixed_for_enum_member_with_Enum_for_pattern_for_state_(string phrase1)
         {
             var phrase2 = phrase1.ToLowerCaseAt(0);
 
@@ -287,9 +287,9 @@ public enum MessageType
         [TestCase("Warning", "a warning")]
         [TestCase("Error", "an error")]
         [TestCase("Exception", "an exception")]
-        public void Code_gets_fixed_for_special_phrase_of_enum_member_(string phrase1, string fixedPhrase2)
+        public void Code_gets_fixed_for_enum_member_with_Enum_for_pattern_for_message_(string phrase, string fixedPhrase)
         {
-            var phrase2 = phrase1.ToLowerCaseAt(0);
+            var phrase2 = phrase.ToLowerCaseAt(0);
 
             const string OriginalCode = @"
 public enum MessageType
@@ -311,11 +311,11 @@ public enum MessageType
 
 ";
 
-            VerifyCSharpFix(OriginalCode.Replace("#1#", phrase1).Replace("#2#", phrase2), FixedCode.Replace("#1#", phrase1).Replace("#2#", fixedPhrase2));
+            VerifyCSharpFix(OriginalCode.Replace("#1#", phrase).Replace("#2#", phrase2), FixedCode.Replace("#1#", phrase).Replace("#2#", fixedPhrase));
         }
 
         [Test]
-        public void Code_gets_fixed_for_special_plural_phrase_of_enum_member()
+        public void Code_gets_fixed_for_enum_member_with_Enum_for_pattern_for_plural()
         {
             const string OriginalCode = @"
 public enum ItemsType
