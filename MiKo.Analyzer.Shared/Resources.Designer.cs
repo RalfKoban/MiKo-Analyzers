@@ -13781,7 +13781,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test methods with more than 2 parameters are often combined tests and can be hard to read. To improve readability, split these tests into separate ones. This makes them easier to understand and maintain..
+        ///   Looks up a localized string similar to Test methods with more than 3 parameters are often combined tests and can be hard to read. To improve readability, split these tests into separate ones. This makes them easier to understand and maintain..
         /// </summary>
         internal static string MiKo_3122_Description {
             get {
@@ -13790,7 +13790,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Split into multiple tests so that you do not need more than 2 parameters.
+        ///   Looks up a localized string similar to Split into multiple tests so that you do not need more than 3 parameters.
         /// </summary>
         internal static string MiKo_3122_MessageFormat {
             get {
@@ -13799,7 +13799,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Limit test method parameters to 2 or fewer.
+        ///   Looks up a localized string similar to Limit test method parameters to 3 or fewer.
         /// </summary>
         internal static string MiKo_3122_Title {
             get {

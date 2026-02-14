@@ -4832,13 +4832,13 @@ This ensures precision in your tests and maintains clear expectations.</value>
     <value>Test concrete implementations instead of interfaces</value>
   </data>
   <data name="MiKo_3122_Description" xml:space="preserve">
-    <value>Test methods with more than 2 parameters are often combined tests and can be hard to read. To improve readability, split these tests into separate ones. This makes them easier to understand and maintain.</value>
+    <value>Test methods with more than 3 parameters are often combined tests and can be hard to read. To improve readability, split these tests into separate ones. This makes them easier to understand and maintain.</value>
   </data>
   <data name="MiKo_3122_MessageFormat" xml:space="preserve">
-    <value>Split into multiple tests so that you do not need more than 2 parameters</value>
+    <value>Split into multiple tests so that you do not need more than 3 parameters</value>
   </data>
   <data name="MiKo_3122_Title" xml:space="preserve">
-    <value>Limit test method parameters to 2 or fewer</value>
+    <value>Limit test method parameters to 3 or fewer</value>
   </data>
   <data name="MiKo_3123_CodeFixTitle" xml:space="preserve">
     <value>Fix catch block</value>
