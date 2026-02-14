@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     public sealed class MiKo_6043_LambdaExpressionBodiesAreOnSameLineAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_simple_lambda_body_that_spans_single_line() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_single_line_simple_lambda_body() => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -33,7 +33,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_simple_lambda_body_that_spans_multiple_lines() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_multi_line_simple_lambda_body() => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -55,7 +55,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_parenthesized_lambda_body_that_spans_single_line() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_single_line_parenthesized_lambda_body() => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -76,7 +76,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_parenthesized_lambda_body_that_spans_multiple_lines() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_multi_line_parenthesized_lambda_body() => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -99,7 +99,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_simple_lambda_expression_body_that_spans_single_line() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_single_line_simple_lambda_expression() => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -120,7 +120,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_simple_lambda_expression_body_that_contains_an_Initializer_expression_and_spans_multiple_line() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_multi_line_simple_lambda_expression_with_initializer() => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -146,7 +146,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_simple_lambda_expression_body_that_contains_a_nested_lambda_with_an_Initializer_expression_and_spans_multiple_line() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_multi_line_simple_lambda_expression_with_nested_lambda_containing_initializer() => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -172,7 +172,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_simple_lambda_expression_body_that_contains_a_deeply_nested_lambda_with_an_Initializer_expression_and_spans_multiple_line() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_multi_line_simple_lambda_expression_with_deeply_nested_lambda_containing_initializer() => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 
@@ -202,7 +202,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_simple_lambda_expression_body_that_contains_an_anonymous_Initializer_expression_and_spans_multiple_line() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_multi_line_simple_lambda_expression_with_anonymous_initializer() => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -228,7 +228,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_simple_lambda_expression_body_that_contains_a_nested_lambda_with_an_anonymous_Initializer_expression_and_spans_multiple_line() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_multi_line_simple_lambda_expression_with_nested_lambda_containing_anonymous_initializer() => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -254,7 +254,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_simple_lambda_expression_body_that_contains_a_deeply_nested_lambda_with_an_anonymous_Initializer_expression_and_spans_multiple_line() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_multi_line_simple_lambda_expression_with_deeply_nested_lambda_containing_anonymous_initializer() => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 
@@ -284,7 +284,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_parenthesized_lambda_expression_body_that_spans_single_line() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_single_line_parenthesized_lambda_expression() => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -305,7 +305,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_parenthesized_lambda_expression_body_that_spans_multiple_lines_and_contains_an_object_creation_with_initializer() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_multi_line_parenthesized_lambda_expression_with_object_initializer() => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -334,7 +334,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_parenthesized_lambda_expression_body_that_spans_multiple_lines_and_contains_an_object_creation_with_argumentList() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_multi_line_parenthesized_lambda_expression_with_object_argument_list() => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -362,7 +362,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_parenthesized_lambda_expression_body_with_logical_expressions_that_spans_multiple_line() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_multi_line_parenthesized_lambda_expression_with_logical_operators() => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -385,7 +385,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_parenthesized_lambda_expression_body_with_multiple_invocation_expressions_that_span_multiple_line_and_would_be_too_long_when_placed_on_same_line() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_multi_line_parenthesized_lambda_expression_with_chained_invocations_exceeding_line_length() => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -415,148 +415,163 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_parenthesized_lambda_expression_body_with_multiline_interpolated_string_concatenation() => No_issue_is_reported_for("""
+        public void No_issue_is_reported_for_multi_line_parenthesized_lambda_expression_with_multiline_interpolated_string()
+        {
+            No_issue_is_reported_for("""
 
-                                                                                                                                                                 using System;
+                                     using System;
 
-                                                                                                                                                                 using NUnit.Framework;
+                                     using NUnit.Framework;
 
-                                                                                                                                                                 namespace Bla
-                                                                                                                                                                 {
-                                                                                                                                                                     public class TestMe
-                                                                                                                                                                     {
-                                                                                                                                                                         [Test]
-                                                                                                                                                                         public void DoSomething(string actual, string newSource)
-                                                                                                                                                                         {
-                                                                                                                                                                             Assert.That(
-                                                                                                                                                                                     actual,
-                                                                                                                                                                                     Is.EqualTo(newSource),
-                                                                                                                                                                                     () => $@"Fix created unexpected document.
-                                                                                                                                                                 New document:
-                                                                                                                                                                 ################################################
-                                                                                                                                                                 {actual}
-                                                                                                                                                                 ################################################");
-                                                                                                                                                                         }
-                                                                                                                                                                     }
-                                                                                                                                                                 }
+                                     namespace Bla
+                                     {
+                                         public class TestMe
+                                         {
+                                             [Test]
+                                             public void DoSomething(string actual, string newSource)
+                                             {
+                                                 Assert.That(
+                                                         actual,
+                                                         Is.EqualTo(newSource),
+                                                         () => $@"Fix created unexpected document.
+                                     New document:
+                                     ################################################
+                                     {actual}
+                                     ################################################");
+                                             }
+                                         }
+                                     }
 
-                                                                                                                                                                 """);
-
-        [Test]
-        public void No_issue_is_reported_for_parenthesized_lambda_expression_body_with_multiline_interpolated_raw_string_concatenation() => No_issue_is_reported_for(""""
-
-                                                                                                                                                                     using System;
-
-                                                                                                                                                                     using NUnit.Framework;
-
-                                                                                                                                                                     namespace Bla
-                                                                                                                                                                     {
-                                                                                                                                                                         public class TestMe
-                                                                                                                                                                         {
-                                                                                                                                                                             [Test]
-                                                                                                                                                                             public void DoSomething(string actual, string newSource)
-                                                                                                                                                                             {
-                                                                                                                                                                                 Assert.That(
-                                                                                                                                                                                         actual,
-                                                                                                                                                                                         Is.EqualTo(newSource),
-                                                                                                                                                                                         () => $"""Fix created unexpected document.
-                                                                                                                                                                     New document:
-                                                                                                                                                                     ################################################
-                                                                                                                                                                     {actual}
-                                                                                                                                                                     ################################################
-                                                                                                                                                                     """);
-                                                                                                                                                                             }
-                                                                                                                                                                         }
-                                                                                                                                                                     }
-
-                                                                                                                                                                     """");
+                                     """);
+        }
 
         [Test]
-        public void No_issue_is_reported_for_parenthesized_lambda_expression_body_with_multiline_raw_string_concatenation() => No_issue_is_reported_for(""""
+        public void No_issue_is_reported_for_multi_line_parenthesized_lambda_expression_with_multiline_interpolated_raw_string()
+        {
+            No_issue_is_reported_for(""""
 
-                                                                                                                                                        using System;
+                                     using System;
 
-                                                                                                                                                        using NUnit.Framework;
+                                     using NUnit.Framework;
 
-                                                                                                                                                        namespace Bla
-                                                                                                                                                        {
-                                                                                                                                                            public class TestMe
-                                                                                                                                                            {
-                                                                                                                                                                [Test]
-                                                                                                                                                                public void DoSomething(string actual, string newSource)
-                                                                                                                                                                {
-                                                                                                                                                                    Assert.That(
-                                                                                                                                                                            actual,
-                                                                                                                                                                            Is.EqualTo(newSource),
-                                                                                                                                                                            () => """
-                                                                                                                                                                            Fix created unexpected document.
-                                                                                                                                                        New document:
-                                                                                                                                                        ################################################
-                                                                                                                                                        """ + actual + @"
-                                                                                                                                                        ################################################");
-                                                                                                                                                                }
-                                                                                                                                                            }
-                                                                                                                                                        }
+                                     namespace Bla
+                                     {
+                                         public class TestMe
+                                         {
+                                             [Test]
+                                             public void DoSomething(string actual, string newSource)
+                                             {
+                                                 Assert.That(
+                                                         actual,
+                                                         Is.EqualTo(newSource),
+                                                         () => $"""Fix created unexpected document.
+                                     New document:
+                                     ################################################
+                                     {actual}
+                                     ################################################
+                                     """);
+                                             }
+                                         }
+                                     }
 
-                                                                                                                                                        """");
-
-        [Test]
-        public void No_issue_is_reported_for_parenthesized_lambda_expression_body_with_multiline_verbatim_string_concatenation() => No_issue_is_reported_for("""
-
-                                                                                                                                                             using System;
-
-                                                                                                                                                             using NUnit.Framework;
-
-                                                                                                                                                             namespace Bla
-                                                                                                                                                             {
-                                                                                                                                                                 public class TestMe
-                                                                                                                                                                 {
-                                                                                                                                                                     [Test]
-                                                                                                                                                                     public void DoSomething(string actual, string newSource)
-                                                                                                                                                                     {
-                                                                                                                                                                         Assert.That(
-                                                                                                                                                                                 actual,
-                                                                                                                                                                                 Is.EqualTo(newSource),
-                                                                                                                                                                                 () => @"Fix created unexpected document.
-                                                                                                                                                             New document:
-                                                                                                                                                             ################################################
-                                                                                                                                                             " + actual + @"
-                                                                                                                                                             ################################################");
-                                                                                                                                                                     }
-                                                                                                                                                                 }
-                                                                                                                                                             }
-
-                                                                                                                                                             """);
+                                     """");
+        }
 
         [Test]
-        public void No_issue_is_reported_for_parenthesized_lambda_expression_body_with_multiline_verbatim_string() => No_issue_is_reported_for("""
+        public void No_issue_is_reported_for_multi_line_parenthesized_lambda_expression_with_multiline_raw_string_concatenation()
+        {
+            No_issue_is_reported_for(""""
 
-                                                                                                                                               using System;
+                                     using System;
 
-                                                                                                                                               using NUnit.Framework;
+                                     using NUnit.Framework;
 
-                                                                                                                                               namespace Bla
-                                                                                                                                               {
-                                                                                                                                                   public class TestMe
-                                                                                                                                                   {
-                                                                                                                                                       [Test]
-                                                                                                                                                       public void DoSomething(string actual, string newSource)
-                                                                                                                                                       {
-                                                                                                                                                           Assert.That(
-                                                                                                                                                                   actual,
-                                                                                                                                                                   Is.EqualTo(newSource),
-                                                                                                                                                                   () => @"Fix created unexpected document.
-                                                                                                                                               New document:
-                                                                                                                                               ################################################
-                                                                                                                                               ################################################");
-                                                                                                                                                       }
-                                                                                                                                                   }
-                                                                                                                                               }
+                                     namespace Bla
+                                     {
+                                         public class TestMe
+                                         {
+                                             [Test]
+                                             public void DoSomething(string actual, string newSource)
+                                             {
+                                                 Assert.That(
+                                                         actual,
+                                                         Is.EqualTo(newSource),
+                                                         () => """
+                                                         Fix created unexpected document.
+                                     New document:
+                                     ################################################
+                                     """ + actual + @"
+                                     ################################################");
+                                             }
+                                         }
+                                     }
 
-                                                                                                                                               """);
+                                     """");
+        }
 
         [Test]
-        public void An_issue_is_reported_for_simple_lambda_expression_body_that_spans_multiple_lines_if_line_break_is_before_arrow() => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_multi_line_parenthesized_lambda_expression_with_multiline_verbatim_string_concatenation()
+        {
+            No_issue_is_reported_for("""
+
+                                     using System;
+
+                                     using NUnit.Framework;
+
+                                     namespace Bla
+                                     {
+                                         public class TestMe
+                                         {
+                                             [Test]
+                                             public void DoSomething(string actual, string newSource)
+                                             {
+                                                 Assert.That(
+                                                         actual,
+                                                         Is.EqualTo(newSource),
+                                                         () => @"Fix created unexpected document.
+                                     New document:
+                                     ################################################
+                                     " + actual + @"
+                                     ################################################");
+                                             }
+                                         }
+                                     }
+
+                                     """);
+        }
+
+        [Test]
+        public void No_issue_is_reported_for_multi_line_parenthesized_lambda_expression_with_multiline_verbatim_string()
+        {
+            No_issue_is_reported_for("""
+
+                                     using System;
+
+                                     using NUnit.Framework;
+
+                                     namespace Bla
+                                     {
+                                         public class TestMe
+                                         {
+                                             [Test]
+                                             public void DoSomething(string actual, string newSource)
+                                             {
+                                                 Assert.That(
+                                                         actual,
+                                                         Is.EqualTo(newSource),
+                                                         () => @"Fix created unexpected document.
+                                     New document:
+                                     ################################################
+                                     ################################################");
+                                             }
+                                         }
+                                     }
+
+                                     """);
+        }
+
+        [Test]
+        public void An_issue_is_reported_for_simple_lambda_expression_with_line_break_before_arrow() => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -578,7 +593,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_simple_lambda_expression_body_that_spans_multiple_lines_if_line_break_is_after_arrow() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_simple_lambda_expression_with_line_break_after_arrow() => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -600,7 +615,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_parenthesized_lambda_expression_body_that_spans_multiple_lines_if_line_break_is_before_arrow() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_parenthesized_lambda_expression_with_line_break_before_arrow() => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -622,7 +637,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_parenthesized_lambda_expression_body_that_spans_multiple_lines_if_line_break_is_after_arrow() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_parenthesized_lambda_expression_with_line_break_after_arrow() => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -644,7 +659,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_parenthesized_multi_parameter_lambda_expression_body_that_spans_multiple_lines_if_line_break_is_after_arrow() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_parenthesized_multi_parameter_lambda_expression_with_line_break_after_arrow() => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -668,7 +683,7 @@ namespace Bla
 ");
 
         [Test]
-        public void Code_gets_fixed_for_simple_lambda_expression_body_that_spans_multiple_lines_if_line_break_is_before_arrow()
+        public void Code_gets_fixed_for_simple_lambda_expression_with_line_break_before_arrow()
         {
             const string OriginalCode = @"
 using System;
@@ -715,7 +730,7 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_simple_lambda_expression_body_that_spans_multiple_lines_if_line_break_is_after_arrow()
+        public void Code_gets_fixed_for_simple_lambda_expression_with_line_break_after_arrow()
         {
             const string OriginalCode = @"
 using System;
@@ -762,7 +777,7 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_parenthesized_lambda_expression_body_that_spans_multiple_lines_if_line_break_is_before_arrow()
+        public void Code_gets_fixed_for_parenthesized_lambda_expression_with_line_break_before_arrow()
         {
             const string OriginalCode = @"
 using System;
@@ -809,7 +824,7 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_parenthesized_lambda_expression_body_that_spans_multiple_lines_if_line_break_is_after_arrow()
+        public void Code_gets_fixed_for_parenthesized_lambda_expression_with_line_break_after_arrow()
         {
             const string OriginalCode = @"
 using System;
@@ -856,7 +871,7 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_parenthesized_2_parameter_lambda_expression_body_that_spans_multiple_lines_if_line_break_is_after_arrow()
+        public void Code_gets_fixed_for_parenthesized_multi_parameter_lambda_expression_with_line_break_after_arrow()
         {
             const string OriginalCode = @"
 using System;
@@ -905,7 +920,7 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_parenthesized_3_parameter_lambda_expression_body_that_spans_multiple_lines_if_line_break_is_after_arrow()
+        public void Code_gets_fixed_for_parenthesized_3_parameter_lambda_expression_with_line_break_after_arrow()
         {
             const string OriginalCode = @"
 using System;
@@ -956,7 +971,7 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_parenthesized_lambda_expression_body_with_invocation_that_spans_multiple_lines()
+        public void Code_gets_fixed_for_parenthesized_lambda_expression_with_multi_line_invocation()
         {
             const string OriginalCode = @"
 using System;
@@ -1007,7 +1022,7 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_parenthesized_lambda_expression_body_with_invocation_whose_parameters_span_multiple_lines()
+        public void Code_gets_fixed_for_parenthesized_lambda_expression_with_invocation_containing_long_parameter()
         {
             const string OriginalCode = @"
 using System;
@@ -1055,7 +1070,7 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_nested_lambda_expression_body_with_invocation_whose_parameters_span_multiple_lines()
+        public void Code_gets_fixed_for_nested_lambda_expression_with_multi_line_invocation()
         {
             const string OriginalCode = @"
 using System;
@@ -1104,7 +1119,7 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_parenthesized_lambda_expression_body_with_single_invocation_whose_parameters_span_multiple_lines()
+        public void Code_gets_fixed_for_parenthesized_lambda_expression_with_multi_line_invocation_in_argument_list()
         {
             const string OriginalCode = @"
 using System;
@@ -1156,7 +1171,7 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_simple_lambda_expression_body_with_single_invocation_whose_parameters_span_multiple_lines()
+        public void Code_gets_fixed_for_simple_lambda_expression_with_multi_line_invocation_in_argument_list()
         {
             const string OriginalCode = @"
 using System;
@@ -1209,7 +1224,7 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_simple_lambda_expression_body_with_single_object_creation_that_spans_multiple_lines()
+        public void Code_gets_fixed_for_simple_lambda_expression_with_empty_object_initializer()
         {
             const string OriginalCode = @"
 using System;
@@ -1261,7 +1276,7 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_parenthesized_lambda_expression_body_with_single_object_creation_that_spans_multiple_lines()
+        public void Code_gets_fixed_for_parenthesized_lambda_expression_with_empty_object_initializer()
         {
             const string OriginalCode = @"
 using System;
@@ -1313,7 +1328,7 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_simple_lambda_expression_body_with_single_anonymous_object_creation_that_spans_multiple_lines()
+        public void Code_gets_fixed_for_simple_lambda_expression_with_empty_anonymous_object_initializer()
         {
             const string OriginalCode = @"
 using System;
@@ -1365,7 +1380,7 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_parenthesized_lambda_expression_body_with_single_anonymous_object_creation_that_spans_multiple_lines()
+        public void Code_gets_fixed_for_parenthesized_lambda_expression_with_empty_anonymous_object_initializer()
         {
             const string OriginalCode = @"
 using System;
@@ -1417,7 +1432,7 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_parenthesized_lambda_expression_body_with_conditional_access_that_spans_multiple_lines()
+        public void Code_gets_fixed_for_parenthesized_lambda_expression_with_conditional_access_spanning_multiple_lines()
         {
             const string OriginalCode = @"
 using System;
