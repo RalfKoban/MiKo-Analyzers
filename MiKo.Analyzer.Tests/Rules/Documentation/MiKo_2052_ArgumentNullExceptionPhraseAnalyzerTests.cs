@@ -37,7 +37,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_throwing_an_ArgumentNullException() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_ArgumentNullException_with_standard_phrase_for_single_parameter() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -53,7 +53,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_throwing_an_ArgumentNullException_for_Nullable_struct() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_ArgumentNullException_with_standard_phrase_for_Nullable_struct() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -69,7 +69,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_throwing_an_ArgumentNullException_for_multiple_parameters() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_ArgumentNullException_with_standard_phrase_for_multiple_parameters() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -87,7 +87,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_throwing_an_ArgumentNullException() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_ArgumentNullException_with_non_standard_phrase() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -103,7 +103,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_throwing_an_ArgumentNullException_for_Nullable_struct() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_ArgumentNullException_with_non_standard_phrase_for_Nullable_struct() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -119,7 +119,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_throwing_an_ArgumentNullException_without_paramref_tags() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_ArgumentNullException_without_paramref_tags() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -135,7 +135,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_1st_parameter_throwing_an_ArgumentNullException_for_multiple_parameters() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_ArgumentNullException_with_non_standard_phrase_for_first_of_multiple_parameters() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -153,7 +153,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_2nd_parameter_throwing_an_ArgumentNullException_for_multiple_parameters() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_ArgumentNullException_with_non_standard_phrase_for_second_of_multiple_parameters() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -210,7 +210,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_property_throwing_an_ArgumentNullException() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_property_with_ArgumentNullException_with_standard_phrase() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -226,7 +226,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_property_throwing_an_ArgumentNullException() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_property_with_ArgumentNullException_with_non_standard_phrase() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -242,7 +242,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_property_throwing_an_ArgumentNullException_without_paramref_tags() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_property_with_ArgumentNullException_without_paramref_tags() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -258,7 +258,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_generic_type_that_is_a_class() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_generic_class_constrained_method_with_ArgumentNullException_with_standard_phrase() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -289,7 +289,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_generic_type_that_is_a_class() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_generic_class_constrained_method_with_ArgumentNullException_with_non_standard_phrase() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -329,7 +329,7 @@ public class TestMe
         [TestCase("System." + nameof(ArgumentNullException), @"If <paramref name=""o""/> is <see langword=""null""/>")]
         [TestCase("System." + nameof(ArgumentNullException), @"If the <paramref name=""o""/> is <see langword=""null""/>.")]
         [TestCase("System." + nameof(ArgumentNullException), @"The <paramref name=""o""/> is <see langword=""null""/>.")]
-        public void Code_gets_fixed_for_single_parameter_(string exceptionType, string text)
+        public void Code_gets_fixed_by_replacing_with_standard_phrase_for_single_parameter_(string exceptionType, string text)
         {
             var originalCode = @"
 using System;
@@ -365,7 +365,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_2_referenced_parameters()
+        public void Code_gets_fixed_by_replacing_with_standard_phrase_for_multiple_parameters()
         {
             const string OriginalCode = @"
 using System;
@@ -403,7 +403,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_ArgumentNullException_only_and_2_available_parameters_but_only_1_referenced_one()
+        public void Code_gets_fixed_by_replacing_with_standard_phrase_for_only_referenced_parameter_when_multiple_exceptions()
         {
             const string OriginalCode = @"
 using System;
@@ -445,7 +445,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_3_parameters_but_only_2_referenced_ones_variant_1()
+        public void Code_gets_fixed_by_replacing_with_standard_phrase_for_only_referenced_parameters_variant_1()
         {
             const string OriginalCode = @"
 using System;
@@ -483,7 +483,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_3_parameters_but_only_2_referenced_ones_variant_2()
+        public void Code_gets_fixed_by_replacing_with_standard_phrase_for_only_referenced_parameters_variant_2()
         {
             const string OriginalCode = @"
 using System;
@@ -521,7 +521,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_property()
+        public void Code_gets_fixed_by_replacing_with_standard_phrase_for_property_setter()
         {
             const string OriginalCode = @"
 using System;
@@ -557,7 +557,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_property_indexer()
+        public void Code_gets_fixed_by_replacing_with_standard_phrase_for_indexer()
         {
             const string OriginalCode = @"
 using System;
@@ -593,7 +593,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_empty_exception()
+        public void Code_gets_fixed_by_adding_standard_phrase_for_empty_ArgumentNullException()
         {
             const string OriginalCode = @"
 using System;
@@ -621,7 +621,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_empty_exception_on_for_method_with_multiple_parameters_and_additional_struct_parameter_set_to_default()
+        public void Code_gets_fixed_by_adding_standard_phrase_for_empty_ArgumentNullException_ignoring_struct_parameters()
         {
             const string OriginalCode = @"
 using System;

@@ -22,7 +22,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_documentation() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Dispose_method_with_standard_summary() => No_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -34,7 +34,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_documentation_with_para_tags() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Dispose_method_with_standard_summary_in_para_tags() => No_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -48,7 +48,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_documentation_with_parameter() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Dispose_method_with_standard_summary_and_parameter_documentation() => No_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -61,7 +61,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_documentation_with_parameter_and_para_tags() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Dispose_method_with_standard_documentation_in_para_tags() => No_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -80,7 +80,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_wrong_summary_documentation_without_parameter() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_parameterless_Dispose_method_with_non_standard_summary() => An_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -92,7 +92,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_wrong_summary_documentation_with_parameter() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Dispose_method_with_non_standard_summary() => An_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -109,7 +109,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_wrong_parameter_documentation() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Dispose_method_with_non_standard_parameter_documentation() => An_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -122,7 +122,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_empty_parameter_documentation() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Dispose_method_with_empty_parameter_documentation() => An_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -135,7 +135,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_missing_parameter_documentation() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Dispose_method_with_missing_parameter_documentation() => No_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -147,7 +147,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_for_method_without_parameter()
+        public void Code_gets_fixed_by_replacing_with_standard_summary_for_parameterless_Dispose_method()
         {
             const string OriginalCode = @"
 using System;
@@ -177,7 +177,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_method_with_parameter()
+        public void Code_gets_fixed_by_replacing_with_standard_documentation_for_Dispose_method_with_parameter()
         {
             const string OriginalCode = @"
 using System;

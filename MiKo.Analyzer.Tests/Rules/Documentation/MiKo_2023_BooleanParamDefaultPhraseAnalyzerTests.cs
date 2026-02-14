@@ -89,7 +89,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             """);
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_boolean_parameter() => No_issue_is_reported_for("""
+        public void No_issue_is_reported_for_boolean_parameter_with_standard_phrase() => No_issue_is_reported_for("""
 
             using System;
 
@@ -106,7 +106,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             """);
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_boolean_parameter_with_additional_info() => No_issue_is_reported_for("""
+        public void No_issue_is_reported_for_boolean_parameter_with_standard_phrase_and_additional_info() => No_issue_is_reported_for("""
 
             using System;
 
@@ -124,7 +124,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             """);
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_boolean_parameter_of_Dispose_method() => No_issue_is_reported_for("""
+        public void No_issue_is_reported_for_boolean_disposing_parameter_of_Dispose_method() => No_issue_is_reported_for("""
 
             using System;
 
@@ -153,7 +153,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         [TestCase("true to some condition, <c>false</c> otherwise.")]
         [TestCase("<value>true</value> to some condition")]
         [TestCase("true to some condition, <value>false</value> otherwise.")]
-        public void An_issue_is_reported_for_incorrectly_documented_boolean_parameter_(string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_boolean_parameter_with_non_standard_phrase_(string comment) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -167,7 +167,7 @@ public class TestMe
 
         [TestCase("Some", "some")]
         [TestCase("Tests the", "test the")]
-        public void Code_gets_fixed_on_same_line_(string textToFix, string fixedText)
+        public void Code_gets_fixed_by_replacing_with_standard_phrase_on_single_line_(string textToFix, string fixedText)
         {
             const string OriginalCode = """
 
@@ -203,7 +203,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_on_same_line_for_comment_with_ending_dot()
+        public void Code_gets_fixed_by_replacing_with_standard_phrase_removing_ending_dot()
         {
             const string OriginalCode = """
 
@@ -239,7 +239,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_on_different_line()
+        public void Code_gets_fixed_by_replacing_with_standard_phrase_on_separate_line()
         {
             const string OriginalCode = """
 
@@ -277,7 +277,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_text_with_ending_seeCref()
+        public void Code_gets_fixed_by_replacing_with_standard_phrase_preserving_ending_see_cref()
         {
             const string OriginalCode = """
 
@@ -315,7 +315,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_on_same_line_for_special_phrase_([ValueSource(nameof(IndicatePhrases))] string phrase)
+        public void Code_gets_fixed_by_converting_indicate_phrase_to_standard_phrase_([ValueSource(nameof(IndicatePhrases))] string phrase)
         {
             var originalCode = @"
 using System;
@@ -349,7 +349,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_on_same_line_for_Or_not_special_phrase()
+        public void Code_gets_fixed_by_converting_or_not_phrase_to_standard_phrase()
         {
             const string OriginalCode = """
 
@@ -385,7 +385,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_on_same_line_for_special_phrase_with_default_case_([ValueSource(nameof(DefaultCases))] string defaultCase)
+        public void Code_gets_fixed_by_converting_indicate_phrase_to_standard_phrase_preserving_default_case_([ValueSource(nameof(DefaultCases))] string defaultCase)
         {
             var originalCode = @"
 using System;
@@ -417,7 +417,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_on_same_line_for_phrase_with_default_case_([ValueSource(nameof(DefaultCases))] string defaultCase)
+        public void Code_gets_fixed_by_converting_true_false_phrase_to_standard_phrase_preserving_default_case_([ValueSource(nameof(DefaultCases))] string defaultCase)
         {
             var originalCode = @"
 using System;
@@ -449,7 +449,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_on_same_line_for_phrase_with_separate_line_for_default_case_([ValueSource(nameof(DefaultCases))] string defaultCase)
+        public void Code_gets_fixed_by_converting_multiline_true_false_phrase_to_standard_phrase_preserving_default_case_([ValueSource(nameof(DefaultCases))] string defaultCase)
         {
             var originalCode = @"
 using System;
@@ -482,7 +482,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_on_same_line_without_links_for_phrase_with_default_case_([ValueSource(nameof(DefaultCases))] string defaultCase)
+        public void Code_gets_fixed_by_converting_unformatted_true_false_phrase_to_standard_phrase_preserving_default_case_([ValueSource(nameof(DefaultCases))] string defaultCase)
         {
             var originalCode = @"
 using System;
@@ -514,7 +514,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_on_same_line_for_optional_parameter_phrase_([ValueSource(nameof(OptionalPhrases))] string phrase)
+        public void Code_gets_fixed_by_converting_optional_phrase_to_standard_phrase_([ValueSource(nameof(OptionalPhrases))] string phrase)
         {
             var originalCode = @"
 using System;
@@ -548,7 +548,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_on_same_line_for_true_phrase_([ValueSource(nameof(TruePhrases))] string phrase)
+        public void Code_gets_fixed_by_converting_true_phrase_to_standard_phrase_on_single_line_([ValueSource(nameof(TruePhrases))] string phrase)
         {
             var originalCode = @"
 using System;
@@ -582,7 +582,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_on_different_line_for_true_phrase_([ValueSource(nameof(TruePhrases))] string phrase)
+        public void Code_gets_fixed_by_converting_true_phrase_to_standard_phrase_on_separate_line_([ValueSource(nameof(TruePhrases))] string phrase)
         {
             var originalCode = @"
 using System;
@@ -618,7 +618,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_on_same_line_for_If_phrase_([ValueSource(nameof(ConditionalPhrases))] string phrase)
+        public void Code_gets_fixed_by_converting_conditional_phrase_to_standard_phrase_([ValueSource(nameof(ConditionalPhrases))] string phrase)
         {
             var originalCode = @"
 using System;
@@ -652,7 +652,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_on_same_line_for_If_Else_phrase_([ValueSource(nameof(ConditionalPhrases))] string phraseStart)
+        public void Code_gets_fixed_by_converting_conditional_phrase_with_else_to_standard_phrase_([ValueSource(nameof(ConditionalPhrases))] string phraseStart)
         {
             var originalCode = @"
 using System;
@@ -686,7 +686,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_on_same_line_for_If_Otherwise_phrase_([ValueSource(nameof(ConditionalPhrases))] string phraseStart)
+        public void Code_gets_fixed_by_converting_conditional_phrase_with_otherwise_to_standard_phrase_([ValueSource(nameof(ConditionalPhrases))] string phraseStart)
         {
             var originalCode = @"
 using System;
@@ -763,7 +763,7 @@ public class TestMe
         [TestCase("true to indicate whether the operation succeeded; otherwise false.", """<see langword="true"/> to indicate that the operation succeeded; otherwise, <see langword="false"/>.""")]
         [TestCase("true to indicate that the operation succeeded; otherwise, false.", """<see langword="true"/> to indicate that the operation succeeded; otherwise, <see langword="false"/>.""")]
         [TestCase("true to indicate whether the operation succeeded; otherwise, false.", """<see langword="true"/> to indicate that the operation succeeded; otherwise, <see langword="false"/>.""")]
-        public void Code_gets_fixed_on_same_line_for_phrase_(string originalPhrase, string fixedPhrase)
+        public void Code_gets_fixed_by_normalizing_various_phrases_(string originalPhrase, string fixedPhrase)
         {
             var originalCode = @"
 using System;
@@ -795,7 +795,7 @@ public class TestMe
 
         [Ignore("TODO: RKN Fix when you know how to fix it.")]
         [Test]
-        public void Code_gets_fixed_on_multi_line_for_phrase()
+        public void Code_gets_fixed_by_converting_multiline_true_false_descriptions()
         {
             const string OriginalCode = """
 
@@ -835,7 +835,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_on_mixed_multi_line_for_phrase()
+        public void Code_gets_fixed_by_converting_mixed_multiline_phrase()
         {
             const string OriginalCode = """
 
@@ -874,7 +874,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_on_same_line_for_empty_comment()
+        public void Code_gets_fixed_by_adding_standard_phrase_with_TODO_for_empty_parameter_on_single_line()
         {
             const string OriginalCode = """
 
@@ -908,7 +908,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_on_different_line_for_empty_comment()
+        public void Code_gets_fixed_by_adding_standard_phrase_with_TODO_for_empty_parameter_on_separate_lines()
         {
             const string OriginalCode = """
 
@@ -945,7 +945,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_on_primary_class_constructor()
+        public void Code_gets_fixed_for_primary_class_constructor()
         {
             const string OriginalCode = """
 
@@ -977,7 +977,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_on_primary_struct_constructor()
+        public void Code_gets_fixed_for_primary_struct_constructor()
         {
             const string OriginalCode = """
 
@@ -1009,7 +1009,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_on_primary_record_constructor()
+        public void Code_gets_fixed_for_primary_record_constructor()
         {
             const string OriginalCode = """
 
@@ -1087,7 +1087,7 @@ public class TestMe
         [TestCase("Whether or not something should be updated during anything.", """<see langword="true"/> to update something during anything; otherwise, <see langword="false"/>.""")]
         [TestCase("whether something should be updated during anything.", """<see langword="true"/> to update something during anything; otherwise, <see langword="false"/>.""")]
         [TestCase("Whether something should be updated during anything.", """<see langword="true"/> to update something during anything; otherwise, <see langword="false"/>.""")]
-        public void Code_gets_fixed_for_should_be_phrase(string originalPhrase, string fixedPhrase)
+        public void Code_gets_fixed_by_normalizing_should_phrases_(string originalPhrase, string fixedPhrase)
         {
             const string Template = """
 

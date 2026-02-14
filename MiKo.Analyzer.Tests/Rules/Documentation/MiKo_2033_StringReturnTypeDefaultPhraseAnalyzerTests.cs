@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] StringReturnValues = [.. StringOnlyReturnValues, .. StringTaskReturnValues];
 
         [Test]
-        public void No_issue_is_reported_for_uncommented_method_([ValueSource(nameof(StringReturnValues))] string returnType) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_method_([ValueSource(nameof(StringReturnValues))] string returnType) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public " + returnType + @" DoSomething(object o) => null;
@@ -39,7 +39,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_uncommented_property_([ValueSource(nameof(StringReturnValues))] string returnType) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_property_([ValueSource(nameof(StringReturnValues))] string returnType) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public " + returnType + @" DoSomething { get; set; }
@@ -47,9 +47,9 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_method_that_returns_a_(
-                                                                [Values("returns", "value")] string xmlTag,
-                                                                [Values("void", "int", "Task", "Task<int>", "Task<bool>")] string returnType)
+        public void No_issue_is_reported_for_method_with_return_type_(
+                                                                  [Values("returns", "value")] string xmlTag,
+                                                                  [Values("void", "int", "Task", "Task<int>", "Task<bool>")] string returnType)
             => No_issue_is_reported_for($$"""
 
                                           using System;
@@ -69,10 +69,10 @@ public class TestMe
                                           """);
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_String_only_method_(
-                                                                                 [Values("returns", "value")] string xmlTag,
-                                                                                 [Values("", " ")] string space,
-                                                                                 [ValueSource(nameof(StringOnlyReturnValues))] string returnType)
+        public void No_issue_is_reported_for_String_method_with_standard_phrase_(
+                                                                             [Values("returns", "value")] string xmlTag,
+                                                                             [Values("", " ")] string space,
+                                                                             [ValueSource(nameof(StringOnlyReturnValues))] string returnType)
             => No_issue_is_reported_for($$"""
 
                                           using System;
@@ -92,10 +92,10 @@ public class TestMe
                                           """);
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_consist_String_only_method_(
-                                                                                         [Values("returns", "value")] string xmlTag,
-                                                                                         [Values("", " ")] string space,
-                                                                                         [ValueSource(nameof(StringOnlyReturnValues))] string returnType)
+        public void No_issue_is_reported_for_String_method_with_standard_phrase_using_consists_(
+                                                                                            [Values("returns", "value")] string xmlTag,
+                                                                                            [Values("", " ")] string space,
+                                                                                            [ValueSource(nameof(StringOnlyReturnValues))] string returnType)
             => No_issue_is_reported_for($$"""
 
                                           using System;
@@ -115,10 +115,10 @@ public class TestMe
                                           """);
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_ToString_method_(
-                                                                              [Values("returns")] string xmlTag,
-                                                                              [Values("", " ")] string space,
-                                                                              [ValueSource(nameof(StringOnlyReturnValues))] string returnType)
+        public void No_issue_is_reported_for_ToString_method_with_standard_phrase_(
+                                                                               [Values("returns")] string xmlTag,
+                                                                               [Values("", " ")] string space,
+                                                                               [ValueSource(nameof(StringOnlyReturnValues))] string returnType)
             => No_issue_is_reported_for($$"""
 
                                           using System;
@@ -138,10 +138,10 @@ public class TestMe
                                           """);
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_String_Task_method_(
-                                                                                 [Values("returns", "value")] string xmlTag,
-                                                                                 [Values("", " ")] string space,
-                                                                                 [ValueSource(nameof(StringTaskReturnValues))] string returnType)
+        public void No_issue_is_reported_for_String_Task_method_with_standard_phrase_(
+                                                                                  [Values("returns", "value")] string xmlTag,
+                                                                                  [Values("", " ")] string space,
+                                                                                  [ValueSource(nameof(StringTaskReturnValues))] string returnType)
             => No_issue_is_reported_for($$"""
 
                                           using System;
@@ -161,7 +161,7 @@ public class TestMe
                                           """);
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_String_interned_method() => No_issue_is_reported_for("""
+        public void No_issue_is_reported_for_String_method_with_interned_phrase() => No_issue_is_reported_for("""
 
                                                                                                                       using System;
                                                                                                                       using System.Threading.Tasks;
@@ -180,10 +180,10 @@ public class TestMe
                                                                                                                       """);
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_wrong_commented_method_(
-                                                                 [Values("returns", "value")] string xmlTag,
-                                                                 [Values("A whatever", "An whatever", "The whatever")] string comment,
-                                                                 [ValueSource(nameof(StringReturnValues))] string returnType)
+        public void An_issue_is_reported_for_String_method_with_non_standard_phrase_(
+                                                                                 [Values("returns", "value")] string xmlTag,
+                                                                                 [Values("A whatever", "An whatever", "The whatever")] string comment,
+                                                                                 [ValueSource(nameof(StringReturnValues))] string returnType)
             => An_issue_is_reported_for($$"""
 
                                           using System;
@@ -203,7 +203,7 @@ public class TestMe
                                           """);
 
         [Test]
-        public void Code_gets_fixed_for_non_generic_method()
+        public void Code_gets_fixed_for_String_method()
         {
             const string OriginalCode = """
 
@@ -241,7 +241,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_non_generic_method_with_line_break()
+        public void Code_gets_fixed_for_String_method_with_multiline_comment()
         {
             const string OriginalCode = """
 
@@ -348,7 +348,7 @@ public class TestMe
         [TestCase("The single string which represents")]
         [TestCase("The single string with")]
         [TestCase("The string value with")]
-        public void Code_gets_fixed_for_non_generic_method_starting_with_(string phrase)
+        public void Code_gets_fixed_for_String_method_with_non_standard_starting_phrase_(string phrase)
         {
             var originalCode = @"
 using System;
@@ -400,7 +400,7 @@ public class TestMe
         [TestCase("A humanized concatenation of the strings", "the humanized concatenation of the strings")]
         [TestCase("value of something", "the value of something")]
         [TestCase("Value of something", "the value of something")]
-        public void Code_gets_fixed_for_non_generic_method_starting_and_continuing_with_(string phrase, string continuation)
+        public void Code_gets_fixed_for_String_method_with_special_phrase_(string phrase, string continuation)
         {
             var originalCode = @"
 using System;
@@ -434,7 +434,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_generic_method()
+        public void Code_gets_fixed_for_String_Task_method()
         {
             const string OriginalCode = """
 
@@ -474,7 +474,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_almost_correct_generic_method()
+        public void Code_gets_fixed_for_String_Task_method_with_almost_standard_phrase()
         {
             const string OriginalCode = """
 
@@ -516,7 +516,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_almost_correct_phrase()
+        public void Code_gets_fixed_for_String_Task_method_with_property_reference()
         {
             const string OriginalCode = """
 
@@ -616,7 +616,7 @@ public class TestMe
         }
 
         [Test(Description = "Reverse-ordered Bugfix for https://github.com/RalfKoban/MiKo-Analyzers/issues/366")]
-        public void Code_gets_fixed_for_issue_366_order_reversed()
+        public void Code_gets_fixed_for_issue_366_with_reversed_member_order()
         {
             const string OriginalCode = """
 
@@ -675,7 +675,7 @@ public class TestMe
 
         [TestCase("", Description = "Bugfix for https://github.com/RalfKoban/MiKo-Analyzers/issues/401")]
         [TestCase("some ", Description = "Bugfix for https://github.com/RalfKoban/MiKo-Analyzers/issues/401")]
-        public void Code_gets_fixed_for_non_generic_method_and_issue_401_when_phrase_is_almost_correct_(string phrase)
+        public void Code_gets_fixed_for_String_property_with_almost_standard_phrase_and_issue_401_(string phrase)
         {
             const string OriginalCode = """
 
@@ -717,7 +717,7 @@ public class TestMe
         }
 
         [Test(Description = "Bugfix for https://github.com/RalfKoban/MiKo-Analyzers/issues/401")]
-        public void Code_gets_fixed_for_non_generic_method_and_issue_401_when_complete_phrase_gets_added()
+        public void Code_gets_fixed_for_String_property_with_missing_phrase_and_issue_401()
         {
             const string OriginalCode = """
 
@@ -759,7 +759,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_generic_method_and_issue_401_when_phrase_is_almost_correct_variant_1()
+        public void Code_gets_fixed_for_String_Task_method_with_single_line_almost_standard_phrase_and_issue_401()
         {
             const string OriginalCode = """
 
@@ -799,7 +799,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_generic_method_and_issue_401_when_phrase_is_almost_correct_variant_2()
+        public void Code_gets_fixed_for_String_Task_method_with_multiline_almost_standard_phrase_and_issue_401()
         {
             const string OriginalCode = """
 
@@ -841,7 +841,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_non_generic_method_and_almost_correct_phrase_([Values("that returns", "which returns", "returning", "which contains")] string text)
+        public void Code_gets_fixed_for_String_property_with_almost_standard_phrase_([Values("that returns", "which returns", "returning", "which contains")] string text)
         {
             var originalCode = @"
 using System;
@@ -879,7 +879,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_non_generic_method_and_almost_correct_phrase_without_see_Cref_([Values("that returns", "which returns", "returning", "which contains", "that contains", "containing")] string text)
+        public void Code_gets_fixed_for_String_property_with_almost_standard_phrase_without_see_cref_([Values("that returns", "which returns", "returning", "which contains", "that contains", "containing")] string text)
         {
             var originalCode = @"
 using System;
@@ -917,7 +917,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_non_generic_method_and_almost_correct_phrase_with_see_Cref_([Values("that returns", "which returns", "returning", "which contains", "that contains", "containing")] string text)
+        public void Code_gets_fixed_for_String_property_with_almost_standard_phrase_and_multiple_see_cref_([Values("that returns", "which returns", "returning", "which contains", "that contains", "containing")] string text)
         {
             var originalCode = @"
 using System;
@@ -993,7 +993,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_phrase_The_string_result()
+        public void Code_gets_fixed_for_String_property_with_phrase_The_string_result()
         {
             const string OriginalCode = """
 

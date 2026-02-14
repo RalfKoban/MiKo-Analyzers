@@ -32,7 +32,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_multiple_type_parameter_constraint_clauses_on_same_lines() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_multiple_type_parameter_constraint_clauses_on_same_line() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething<T1, T2>() where T1 : class where T2 : class
@@ -41,7 +41,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_type_parameter_constraint_clause_properly_indented_on_different_line() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_type_parameter_constraint_clause_aligned_with_closing_parenthesis() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething<T>()
@@ -51,7 +51,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_multiple_type_parameter_constraint_clauses_properly_indented_on_different_lines() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_multiple_type_parameter_constraint_clauses_aligned_with_closing_parenthesis() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething<T1, T2>()
@@ -86,7 +86,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_local_function_with_multiple_type_parameter_constraint_clauses_on_same_lines() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_local_function_with_multiple_type_parameter_constraint_clauses_on_same_line() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -98,7 +98,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_local_function_with_type_parameter_constraint_clause_properly_indented_on_different_line() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_local_function_with_type_parameter_constraint_clause_aligned_with_closing_parenthesis() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -111,7 +111,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_local_function_with_multiple_type_parameter_constraint_clauses_properly_indented_on_different_lines() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_local_function_with_multiple_type_parameter_constraint_clauses_aligned_with_closing_parenthesis() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -139,14 +139,14 @@ public " + type + @" TestMe<T> where T : class
 ");
 
         [Test]
-        public void No_issue_is_reported_for_type_with_multiple_type_parameter_constraint_clauses_aligned_horizontally_([ValueSource(nameof(Types))] string type) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_type_with_multiple_type_parameter_constraint_clauses_on_same_line_([ValueSource(nameof(Types))] string type) => No_issue_is_reported_for(@"
 public " + type + @" TestMe<T1, T2, T3> where T1 : class where T2 : class where T3 : class
 {
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_type_parameter_constraint_clause_incorrectly_indented_to_left_on_different_line() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_type_parameter_constraint_clause_indented_too_far_left() => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething<T>()
@@ -156,7 +156,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_type_parameter_constraint_clause_incorrectly_indented_to_right_on_different_line() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_type_parameter_constraint_clause_indented_too_far_right() => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething<T>()
@@ -166,7 +166,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_multiple_type_parameter_constraint_clause_incorrectly_indented_to_left_on_different_lines() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_multiple_type_parameter_constraint_clauses_indented_too_far_left() => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething<T1, T2>()
@@ -177,7 +177,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_multiple_type_parameter_constraint_clause_incorrectly_indented_to_right_on_different_lines() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_multiple_type_parameter_constraint_clauses_indented_too_far_right() => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething<T1, T2>()
@@ -188,7 +188,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_local_function_with_type_parameter_constraint_clause_incorrectly_indented_to_left_on_different_line() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_local_function_with_type_parameter_constraint_clause_indented_too_far_left() => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -201,7 +201,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_local_function_with_type_parameter_constraint_clause_incorrectly_indented_to_right_on_different_line() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_local_function_with_type_parameter_constraint_clause_indented_too_far_right() => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -214,7 +214,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_local_function_with_multiple_type_parameter_constraint_clause_incorrectly_indented_to_left_on_different_lines() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_local_function_with_multiple_type_parameter_constraint_clauses_indented_too_far_left() => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -228,7 +228,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_local_function_with_multiple_type_parameter_constraint_clause_incorrectly_indented_to_right_on_different_lines() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_local_function_with_multiple_type_parameter_constraint_clauses_indented_too_far_right() => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -242,7 +242,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_type_with_type_parameter_constraint_clause_incorrectly_indented_to_left_on_different_line_([ValueSource(nameof(Types))] string type) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_type_with_type_parameter_constraint_clause_indented_too_far_left_([ValueSource(nameof(Types))] string type) => An_issue_is_reported_for(@"
 public " + type + @" TestMe<T>
     where T : class
 {
@@ -250,7 +250,7 @@ public " + type + @" TestMe<T>
 ");
 
         [Test]
-        public void An_issue_is_reported_for_type_with_type_parameter_constraint_clause_incorrectly_indented_to_right_on_different_line_([ValueSource(nameof(Types))] string type) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_type_with_type_parameter_constraint_clause_indented_too_far_right_([ValueSource(nameof(Types))] string type) => An_issue_is_reported_for(@"
 public " + type + @" TestMe<T>
                                     where T : class
 {
@@ -258,7 +258,7 @@ public " + type + @" TestMe<T>
 ");
 
         [Test]
-        public void An_issue_is_reported_for_type_with_multiple_type_parameter_constraint_clause_incorrectly_indented_to_left_on_different_lines_([ValueSource(nameof(Types))] string type) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_type_with_multiple_type_parameter_constraint_clauses_indented_too_far_left_([ValueSource(nameof(Types))] string type) => An_issue_is_reported_for(@"
 public " + type + @" TestMe<T1, T2>
     where T1 : class
     where T2 : class
@@ -267,7 +267,7 @@ public " + type + @" TestMe<T1, T2>
 ");
 
         [Test]
-        public void An_issue_is_reported_for_type_with_multiple_type_parameter_constraint_clause_incorrectly_indented_to_right_on_different_lines_([ValueSource(nameof(Types))] string type) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_type_with_multiple_type_parameter_constraint_clauses_indented_too_far_right_([ValueSource(nameof(Types))] string type) => An_issue_is_reported_for(@"
 public " + type + @" TestMe<T1, T2>
                                           where T1 : class
                                           where T2 : class
@@ -276,7 +276,7 @@ public " + type + @" TestMe<T1, T2>
 ");
 
         [Test]
-        public void Code_gets_fixed_for_method_with_type_parameter_constraint_clause_incorrectly_indented_to_left_on_different_line()
+        public void Code_gets_fixed_to_align_constraint_clause_with_closing_parenthesis_when_indented_too_far_left_for_method()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -300,7 +300,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_method_with_type_parameter_constraint_clause_incorrectly_indented_to_right_on_different_line()
+        public void Code_gets_fixed_to_align_constraint_clause_with_closing_parenthesis_when_indented_too_far_right_for_method()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -324,7 +324,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_method_with_multiple_type_parameter_constraint_clause_incorrectly_indented_to_left_on_different_lines()
+        public void Code_gets_fixed_to_align_first_constraint_clause_with_closing_parenthesis_when_indented_too_far_left_for_method()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -350,7 +350,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_method_with_multiple_type_parameter_constraint_clause_incorrectly_indented_to_right_on_different_lines()
+        public void Code_gets_fixed_to_align_first_constraint_clause_with_closing_parenthesis_when_indented_too_far_right_for_method()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -376,7 +376,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_local_function_with_type_parameter_constraint_clause_incorrectly_indented_to_left_on_different_line()
+        public void Code_gets_fixed_to_align_constraint_clause_with_closing_parenthesis_when_indented_too_far_left_for_local_function()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -406,7 +406,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_local_function_with_type_parameter_constraint_clause_incorrectly_indented_to_right_on_different_line()
+        public void Code_gets_fixed_to_align_constraint_clause_with_closing_parenthesis_when_indented_too_far_right_for_local_function()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -436,7 +436,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_local_function_with_multiple_type_parameter_constraint_clause_incorrectly_indented_to_left_on_different_lines()
+        public void Code_gets_fixed_to_align_first_constraint_clause_with_closing_parenthesis_when_indented_too_far_left_for_local_function()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -468,7 +468,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_local_function_with_multiple_type_parameter_constraint_clause_incorrectly_indented_to_right_on_different_lines()
+        public void Code_gets_fixed_to_align_first_constraint_clause_with_closing_parenthesis_when_indented_too_far_right_for_local_function()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -500,7 +500,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_class_with_type_parameter_constraint_clause_incorrectly_indented_to_left_on_different_line()
+        public void Code_gets_fixed_to_align_constraint_clause_with_closing_angle_bracket_when_indented_too_far_left_for_class()
         {
             const string OriginalCode = @"
 public class TestMe<T>
@@ -519,7 +519,7 @@ public class TestMe<T>
         }
 
         [Test]
-        public void Code_gets_fixed_for_class_with_type_parameter_constraint_clause_incorrectly_indented_to_right_on_different_line()
+        public void Code_gets_fixed_to_align_constraint_clause_with_closing_angle_bracket_when_indented_too_far_right_for_class()
         {
             const string OriginalCode = @"
 public class TestMe<T>
@@ -539,7 +539,7 @@ public class TestMe<T>
         }
 
         [Test]
-        public void Code_gets_fixed_for_class_with_multiple_type_parameter_constraint_clause_incorrectly_indented_to_left_on_different_lines()
+        public void Code_gets_fixed_to_align_first_constraint_clause_with_closing_angle_bracket_when_indented_too_far_left_for_class()
         {
             const string OriginalCode = @"
 public class TestMe<T1, T2>
@@ -560,7 +560,7 @@ public class TestMe<T1, T2>
         }
 
         [Test]
-        public void Code_gets_fixed_for_class_with_multiple_type_parameter_constraint_clause_incorrectly_indented_to_right_on_different_lines()
+        public void Code_gets_fixed_to_align_first_constraint_clause_with_closing_angle_bracket_when_indented_too_far_right_for_class()
         {
             const string OriginalCode = @"
 public class TestMe<T1, T2>
@@ -582,7 +582,7 @@ public class TestMe<T1, T2>
         }
 
         [Test]
-        public void Code_gets_fixed_for_interface_with_type_parameter_constraint_clause_incorrectly_indented_to_left_on_different_line()
+        public void Code_gets_fixed_to_align_constraint_clause_with_closing_angle_bracket_when_indented_too_far_left_for_interface()
         {
             const string OriginalCode = @"
 public interface TestMe<T>
@@ -601,7 +601,7 @@ public interface TestMe<T>
         }
 
         [Test]
-        public void Code_gets_fixed_for_interface_with_type_parameter_constraint_clause_incorrectly_indented_to_right_on_different_line()
+        public void Code_gets_fixed_to_align_constraint_clause_with_closing_angle_bracket_when_indented_too_far_right_for_interface()
         {
             const string OriginalCode = @"
 public interface TestMe<T>
@@ -621,7 +621,7 @@ public interface TestMe<T>
         }
 
         [Test]
-        public void Code_gets_fixed_for_interface_with_multiple_type_parameter_constraint_clause_incorrectly_indented_to_left_on_different_lines()
+        public void Code_gets_fixed_to_align_first_constraint_clause_with_closing_angle_bracket_when_indented_too_far_left_for_interface()
         {
             const string OriginalCode = @"
 public interface TestMe<T1, T2>
@@ -642,7 +642,7 @@ public interface TestMe<T1, T2>
         }
 
         [Test]
-        public void Code_gets_fixed_for_interface_with_multiple_type_parameter_constraint_clause_incorrectly_indented_to_right_on_different_lines()
+        public void Code_gets_fixed_to_align_first_constraint_clause_with_closing_angle_bracket_when_indented_too_far_right_for_interface()
         {
             const string OriginalCode = @"
 public interface TestMe<T1, T2>
@@ -664,7 +664,7 @@ public interface TestMe<T1, T2>
         }
 
         [Test]
-        public void Code_gets_fixed_for_record_with_type_parameter_constraint_clause_incorrectly_indented_to_left_on_different_line()
+        public void Code_gets_fixed_to_align_constraint_clause_with_closing_angle_bracket_when_indented_too_far_left_for_record()
         {
             const string OriginalCode = @"
 public record TestMe<T>
@@ -683,7 +683,7 @@ public record TestMe<T>
         }
 
         [Test]
-        public void Code_gets_fixed_for_record_with_type_parameter_constraint_clause_incorrectly_indented_to_right_on_different_line()
+        public void Code_gets_fixed_to_align_constraint_clause_with_closing_angle_bracket_when_indented_too_far_right_for_record()
         {
             const string OriginalCode = @"
 public record TestMe<T>
@@ -703,7 +703,7 @@ public record TestMe<T>
         }
 
         [Test]
-        public void Code_gets_fixed_for_record_with_multiple_type_parameter_constraint_clause_incorrectly_indented_to_left_on_different_lines()
+        public void Code_gets_fixed_to_align_first_constraint_clause_with_closing_angle_bracket_when_indented_too_far_left_for_record()
         {
             const string OriginalCode = @"
 public record TestMe<T1, T2>
@@ -724,7 +724,7 @@ public record TestMe<T1, T2>
         }
 
         [Test]
-        public void Code_gets_fixed_for_record_with_multiple_type_parameter_constraint_clause_incorrectly_indented_to_right_on_different_lines()
+        public void Code_gets_fixed_to_align_first_constraint_clause_with_closing_angle_bracket_when_indented_too_far_right_for_record()
         {
             const string OriginalCode = @"
 public record TestMe<T1, T2>
@@ -746,7 +746,7 @@ public record TestMe<T1, T2>
         }
 
         [Test]
-        public void Code_gets_fixed_for_struct_with_type_parameter_constraint_clause_incorrectly_indented_to_left_on_different_line()
+        public void Code_gets_fixed_to_align_constraint_clause_with_closing_angle_bracket_when_indented_too_far_left_for_struct()
         {
             const string OriginalCode = @"
 public struct TestMe<T>
@@ -765,7 +765,7 @@ public struct TestMe<T>
         }
 
         [Test]
-        public void Code_gets_fixed_for_struct_with_type_parameter_constraint_clause_incorrectly_indented_to_right_on_different_line()
+        public void Code_gets_fixed_to_align_constraint_clause_with_closing_angle_bracket_when_indented_too_far_right_for_struct()
         {
             const string OriginalCode = @"
 public struct TestMe<T>
@@ -785,7 +785,7 @@ public struct TestMe<T>
         }
 
         [Test]
-        public void Code_gets_fixed_for_struct_with_multiple_type_parameter_constraint_clause_incorrectly_indented_to_left_on_different_lines()
+        public void Code_gets_fixed_to_align_first_constraint_clause_with_closing_angle_bracket_when_indented_too_far_left_for_struct()
         {
             const string OriginalCode = @"
 public struct TestMe<T1, T2>
@@ -806,7 +806,7 @@ public struct TestMe<T1, T2>
         }
 
         [Test]
-        public void Code_gets_fixed_for_struct_with_multiple_type_parameter_constraint_clause_incorrectly_indented_to_right_on_different_lines()
+        public void Code_gets_fixed_to_align_first_constraint_clause_with_closing_angle_bracket_when_indented_too_far_right_for_struct()
         {
             const string OriginalCode = @"
 public struct TestMe<T1, T2>

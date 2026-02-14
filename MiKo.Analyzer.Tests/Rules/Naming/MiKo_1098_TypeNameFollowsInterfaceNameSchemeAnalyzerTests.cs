@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1098_TypeNameFollowsInterfaceNameSchemeAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_correctly_named_type_without_interface() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_type_without_interface() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -38,7 +38,7 @@ public class TestMe
         [TestCase(nameof(IDeserializationCallback))]
         [TestCase("IDragSource")]
         [TestCase("IDropTarget")]
-        public void No_issue_is_reported_for_correctly_named_type_with_(string interfaceName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_type_implementing_interface_(string interfaceName) => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -52,7 +52,7 @@ public abstract class TestMe : " + interfaceName + @"
 
         [TestCase("IValueConverter")]
         [TestCase("IMultiValueConverter")]
-        public void No_issue_is_reported_for_correctly_named_converter_type_with_(string interfaceName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_type_with_Converter_suffix_implementing_converter_interface_(string interfaceName) => No_issue_is_reported_for(@"
 using System;
 using System.Windows.Data;
 
@@ -62,7 +62,7 @@ public abstract class TestMeConverter : " + interfaceName + @"
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_type() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_type_name_matching_interface_name() => No_issue_is_reported_for(@"
 using System;
 
 public interface ITestCandidate
@@ -75,7 +75,7 @@ public abstract class TestCandidate : ITestCandidate
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_type_with_number_suffix() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_type_name_matching_interface_name_without_number_suffix() => No_issue_is_reported_for(@"
 using System;
 
 public interface ITestCandidate42
@@ -88,7 +88,7 @@ public abstract class TestCandidate : ITestCandidate42
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_type_with_Has_ability_interface() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_type_implementing_Has_ability_interface() => No_issue_is_reported_for(@"
 using System;
 
 public interface IHasSomeName
@@ -101,7 +101,7 @@ public abstract class TestMe : IHasSomeName
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_type_with_Provider_suffix() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_type_implementing_Provider_interface() => No_issue_is_reported_for(@"
 using System;
 
 public interface ISomeProvider
@@ -114,7 +114,7 @@ public abstract class TestMe : ISomeProvider
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_type_with_Extended_interface() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_type_name_matching_Extended_interface_without_Extended_prefix() => No_issue_is_reported_for(@"
 using System;
 
 public interface IExtendedTestMe
@@ -127,7 +127,7 @@ public abstract class TestMe : IExtendedTestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_command_type() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_type_with_Command_suffix_implementing_Command_interface() => No_issue_is_reported_for(@"
 using System;
 
 public interface ISomeCommand
@@ -140,7 +140,7 @@ public abstract class TestMeCommand : ISomeCommand
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_type() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_type_name_not_matching_interface_name() => An_issue_is_reported_for(@"
 using System;
 
 public interface ITestCandidate
@@ -153,7 +153,7 @@ public abstract class TestMe : ITestCandidate
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_type_for_HashTable() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_type_name_not_matching_HashTable_interface_name() => An_issue_is_reported_for(@"
 using System;
 
 public interface IHashTable
@@ -166,7 +166,7 @@ public abstract class TestMe : IHashTable
 ");
 
         [Test]
-        public void An_issue_is_reported_for_correctly_named_type_with_Extended_interface() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_type_name_not_matching_Extended_interface_without_matching_base_name() => An_issue_is_reported_for(@"
 using System;
 
 public interface IExtendedSomething

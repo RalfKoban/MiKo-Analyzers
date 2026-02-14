@@ -43,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         public static void PrepareTestEnvironment() => MiKo_2035_CodeFixProvider.LoadData();
 
         [Test]
-        public void No_issue_is_reported_for_uncommented_method_([ValueSource(nameof(ReturnTypes))] string returnType) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_method_([ValueSource(nameof(ReturnTypes))] string returnType) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public " + returnType + @" DoSomething(object o) => null;
@@ -51,7 +51,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_uncommented_property_([ValueSource(nameof(ReturnTypes))] string returnType) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_property_([ValueSource(nameof(ReturnTypes))] string returnType) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public " + returnType + @" DoSomething { get; set; }
@@ -59,7 +59,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_commented_method_returning_a_([Values("XmlNode", "XmlElement", "XmlDocument")] string returnType) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_commented_method_returning_XmlNode_type_([Values("XmlNode", "XmlElement", "XmlDocument")] string returnType) => No_issue_is_reported_for(@"
 using System.Xml;
 
 public class TestMe
@@ -72,9 +72,9 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_method_that_returns_a_(
-                                                                [Values("returns", "value")] string xmlTag,
-                                                                [Values("void", "int", "string", "Task", "Task<int>", "Task<bool>, Task<string>")] string returnType)
+        public void No_issue_is_reported_for_method_returning_non_enumerable_type_(
+                                                                               [Values("returns", "value")] string xmlTag,
+                                                                               [Values("void", "int", "string", "Task", "Task<int>", "Task<bool>, Task<string>")] string returnType)
             => No_issue_is_reported_for(@"
 using System;
 using System.Collections;
@@ -94,10 +94,10 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_Array_only_method_(
-                                                                                [Values("returns", "value")] string xmlTag,
-                                                                                [Values("int", "string")] string returnType,
-                                                                                [Values("An array of", "The array of")] string startingPhrase)
+        public void No_issue_is_reported_for_array_return_with_standard_phrase_(
+                                                                            [Values("returns", "value")] string xmlTag,
+                                                                            [Values("int", "string")] string returnType,
+                                                                            [Values("An array of", "The array of")] string startingPhrase)
             => No_issue_is_reported_for(@"
 using System;
 using System.Collections;
@@ -117,7 +117,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_Byte_array_only_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_byte_array_return_with_standard_phrase() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -133,9 +133,9 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_sequence_commented_Enumerable_only_method_(
-                                                                                              [Values("returns", "value")] string xmlTag,
-                                                                                              [Values("A sequence that contains", "A sequence of")] string startPhrase)
+        public void No_issue_is_reported_for_IEnumerable_return_with_sequence_phrase_(
+                                                                                  [Values("returns", "value")] string xmlTag,
+                                                                                  [Values("A sequence that contains", "A sequence of")] string startPhrase)
             => No_issue_is_reported_for(@"
 using System;
 using System.Collections;
@@ -154,10 +154,10 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_List_method_(
-                                                                          [Values("returns", "value")] string xmlTag,
-                                                                          [Values("A", "An")] string startingWord,
-                                                                          [Values("that contains", "containing")] string continuation)
+        public void No_issue_is_reported_for_List_return_with_see_cref_and_standard_phrase_(
+                                                                                        [Values("returns", "value")] string xmlTag,
+                                                                                        [Values("A", "An")] string startingWord,
+                                                                                        [Values("that contains", "containing")] string continuation)
             => No_issue_is_reported_for(@"
 using System;
 using System.Collections;
@@ -176,10 +176,10 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_List_of_method_(
-                                                                             [Values("returns", "value")] string xmlTag,
-                                                                             [Values("A", "An")] string startingWord,
-                                                                             [Values("that contains", "containing")] string continuation)
+        public void No_issue_is_reported_for_List_of_return_with_see_cref_and_standard_phrase_(
+                                                                                           [Values("returns", "value")] string xmlTag,
+                                                                                           [Values("A", "An")] string startingWord,
+                                                                                           [Values("that contains", "containing")] string continuation)
             => No_issue_is_reported_for(@"
 using System;
 using System.Collections;
@@ -198,7 +198,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_Enumerable_only_method_([Values("returns", "value")] string xmlTag)
+        public void No_issue_is_reported_for_IEnumerable_return_with_sequence_of_phrase_([Values("returns", "value")] string xmlTag)
             => No_issue_is_reported_for(@"
 using System;
 using System.Collections;
@@ -217,10 +217,10 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_Enumerable_method_(
-                                                                                [Values("returns", "value")] string xmlTag,
-                                                                                [Values("A", "An")] string startingWord,
-                                                                                [Values("that contains", "containing")] string continuation)
+        public void No_issue_is_reported_for_IEnumerable_return_with_see_cref_and_standard_phrase_(
+                                                                                               [Values("returns", "value")] string xmlTag,
+                                                                                               [Values("A", "An")] string startingWord,
+                                                                                               [Values("that contains", "containing")] string continuation)
             => No_issue_is_reported_for(@"
 using System;
 using System.Collections;
@@ -239,10 +239,10 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_Enumerable_of_method_(
-                                                                                   [Values("returns", "value")] string xmlTag,
-                                                                                   [Values("A", "An")] string startingWord,
-                                                                                   [Values("that contains", "containing")] string continuation)
+        public void No_issue_is_reported_for_IEnumerable_of_return_with_see_cref_and_standard_phrase_(
+                                                                                                  [Values("returns", "value")] string xmlTag,
+                                                                                                  [Values("A", "An")] string startingWord,
+                                                                                                  [Values("that contains", "containing")] string continuation)
             => No_issue_is_reported_for(@"
 using System;
 using System.Collections;
@@ -261,10 +261,10 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_Enumerable_Task_method_(
-                                                                                     [Values("returns", "value")] string xmlTag,
-                                                                                     [Values("", " ")] string space,
-                                                                                     [ValueSource(nameof(TaskReturnTypes))] string returnType)
+        public void No_issue_is_reported_for_Task_enumerable_return_with_standard_phrase_(
+                                                                                      [Values("returns", "value")] string xmlTag,
+                                                                                      [Values("", " ")] string space,
+                                                                                      [ValueSource(nameof(TaskReturnTypes))] string returnType)
             => No_issue_is_reported_for(@"
 using System;
 using System.Collections;
@@ -284,7 +284,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_Enumerable_Select_like_method_([Values("returns", "value")] string xmlTag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Select_like_method_with_standard_phrase_([Values("returns", "value")] string xmlTag) => No_issue_is_reported_for(@"
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -302,10 +302,10 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_wrong_commented_method_(
-                                                                 [Values("returns", "value")] string xmlTag,
-                                                                 [Values("A whatever", "An whatever", "The whatever")] string comment,
-                                                                 [ValueSource(nameof(ReturnTypes))] string returnType)
+        public void An_issue_is_reported_for_enumerable_return_with_non_standard_phrase_(
+                                                                                     [Values("returns", "value")] string xmlTag,
+                                                                                     [Values("A whatever", "An whatever", "The whatever")] string comment,
+                                                                                     [ValueSource(nameof(ReturnTypes))] string returnType)
             => An_issue_is_reported_for(@"
 using System;
 using System.Collections;
@@ -325,7 +325,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_for_array_type()
+        public void Code_gets_fixed_by_replacing_with_array_phrase_for_array_type()
         {
             const string OriginalCode = """
 
@@ -361,7 +361,7 @@ public class TestMe
         }
 
         [TestCase("The adjusted trivia array with proper whitespace indentation for comments", "An array of the adjusted trivia with proper whitespace indentation for comments")]
-        public void Code_gets_fixed_for_array_type_(string originalText, string fixedText)
+        public void Code_gets_fixed_by_normalizing_array_phrases_(string originalText, string fixedText)
         {
             const string Template = """
 
@@ -384,7 +384,7 @@ public class TestMe
         }
 
         [TestCase("The modified set after something", "A collection of elements from the original set after something")]
-        public void Code_gets_fixed_for_hashset_(string originalText, string fixedText)
+        public void Code_gets_fixed_by_replacing_with_collection_phrase_for_hashset_(string originalText, string fixedText)
         {
             const string Template = """
 
@@ -445,7 +445,7 @@ public class TestMe
         [TestCase(@"The array of <see cref=""byte""/>s which contains")]
         [TestCase(@"The array of")]
         [TestCase(@"The array with")]
-        public void Code_gets_fixed_for_byte_array_type_(string text)
+        public void Code_gets_fixed_by_replacing_with_byte_array_phrase_(string text)
         {
             var originalCode = @"
 public class TestMe
@@ -477,7 +477,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_non_generic_collection_([ValueSource(nameof(StartingPhrases))] string originalPhrase)
+        public void Code_gets_fixed_by_normalizing_collection_phrases_for_non_generic_collection_([ValueSource(nameof(StartingPhrases))] string originalPhrase)
         {
             const string Template = """
 
@@ -502,7 +502,7 @@ public class TestMe
 
         [TestCase("Some integers.", "A collection of some integers.")]
         [TestCase("The mapping information.", "A collection of the mapping information.")]
-        public void Code_gets_fixed_for_non_generic_collection_(string originalPhrase, string fixedPhrase)
+        public void Code_gets_fixed_by_replacing_with_collection_phrase_for_non_generic_collection_(string originalPhrase, string fixedPhrase)
         {
             const string Template = """
 
@@ -526,7 +526,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_generic_readonly_([Values("readonly", "read only", "read-only")] string modification, [Values("list", "collection")] string collection)
+        public void Code_gets_fixed_by_normalizing_readonly_phrases_for_generic_readonly_collection_([Values("readonly", "read only", "read-only")] string modification, [Values("list", "collection")] string collection)
         {
             const string Template = """
 
@@ -551,7 +551,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_generic_collection_([ValueSource(nameof(StartingPhrases))] string originalPhrase)
+        public void Code_gets_fixed_by_normalizing_collection_phrases_for_generic_collection_([ValueSource(nameof(StartingPhrases))] string originalPhrase)
         {
             const string Template = """
 
@@ -581,7 +581,7 @@ public class TestMe
         [TestCase("Get the integers.", "A collection of the integers.")]
         [TestCase("The List with the integers.", "A collection of the integers.")]
         [TestCase("A List with the integers.", "A collection of the integers.")]
-        public void Code_gets_fixed_for_generic_collection_(string originalPhrase, string fixedPhrase)
+        public void Code_gets_fixed_by_replacing_with_collection_phrase_for_generic_collection_(string originalPhrase, string fixedPhrase)
         {
             const string Template = """
 
@@ -607,7 +607,7 @@ public class TestMe
 
         [TestCase("Some integers.", "A collection of some integers.")]
         [TestCase("The mapping information.", "A collection of the mapping information.")]
-        public void Code_gets_fixed_for_generic_collection_on_same_line_(string originalPhrase, string fixedPhrase)
+        public void Code_gets_fixed_by_replacing_with_collection_phrase_for_generic_collection_on_same_line_(string originalPhrase, string fixedPhrase)
         {
             var originalCode = @"
 using System;
@@ -647,7 +647,7 @@ public class TestMe
         [TestCase("Some data", "A collection of my items that contains some data")]
         [TestCase("Gets the information.", "A collection of my items that contains the information.")]
         [TestCase("Get the information.", "A collection of my items that contains the information.")]
-        public void Code_gets_fixed_for_generic_collection_with_non_primitive_type_(string originalPhrase, string fixedPhrase)
+        public void Code_gets_fixed_by_replacing_with_collection_phrase_for_generic_collection_with_non_primitive_type_(string originalPhrase, string fixedPhrase)
         {
             const string Template = """
 
@@ -675,7 +675,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_non_generic_enumerable_([ValueSource(nameof(StartingPhrases))] string originalPhrase)
+        public void Code_gets_fixed_by_normalizing_sequence_phrases_for_non_generic_enumerable_([ValueSource(nameof(StartingPhrases))] string originalPhrase)
         {
             const string Template = """
 
@@ -705,7 +705,7 @@ public class TestMe
         [TestCase("A read-only list of attributes of the specified type.", "A sequence that contains attributes of the specified type.")]
         [TestCase("A separated syntax list of parameters accessible from the given context.", "A sequence that contains parameters accessible from the given context.")]
         [TestCase("An enumerable of strings that represents the text content without trivia.", "A sequence that contains the text content without trivia.")]
-        public void Code_gets_fixed_for_non_generic_enumerable_(string originalPhrase, string fixedPhrase)
+        public void Code_gets_fixed_by_replacing_with_sequence_phrase_for_non_generic_enumerable_(string originalPhrase, string fixedPhrase)
         {
             const string Template = """
 
@@ -729,7 +729,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_non_generic_enumerable_on_same_line_([ValueSource(nameof(StartingPhrases))] string originalPhrase)
+        public void Code_gets_fixed_by_normalizing_sequence_phrases_for_non_generic_enumerable_on_same_line_([ValueSource(nameof(StartingPhrases))] string originalPhrase)
         {
             var originalCode = @"
 using System;
@@ -771,7 +771,7 @@ public class TestMe
         [TestCase("A read-only list of attributes of the specified type.", "A sequence that contains attributes of the specified type.")]
         [TestCase("A separated syntax list of parameters accessible from the given context.", "A sequence that contains parameters accessible from the given context.")]
         [TestCase("An enumerable of strings that represents the text content without trivia.", "A sequence that contains the text content without trivia.")]
-        public void Code_gets_fixed_for_non_generic_enumerable_on_same_line_(string originalPhrase, string fixedPhrase)
+        public void Code_gets_fixed_by_replacing_with_sequence_phrase_for_non_generic_enumerable_on_same_line_(string originalPhrase, string fixedPhrase)
         {
             var originalCode = @"
 using System;
@@ -807,7 +807,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_generic_enumerable_([ValueSource(nameof(StartingPhrases))] string originalPhrase)
+        public void Code_gets_fixed_by_normalizing_sequence_phrases_for_generic_enumerable_([ValueSource(nameof(StartingPhrases))] string originalPhrase)
         {
             const string Template = """
 
@@ -833,7 +833,7 @@ public class TestMe
 
         [TestCase("Some integers.", "A sequence that contains some integers.")]
         [TestCase("The mapping information.", "A sequence that contains the mapping information.")]
-        public void Code_gets_fixed_for_generic_enumerable_with_primitive_type_(string originalPhrase, string fixedPhrase)
+        public void Code_gets_fixed_by_replacing_with_sequence_phrase_for_generic_enumerable_with_primitive_type_(string originalPhrase, string fixedPhrase)
         {
             const string Template = """
 
@@ -859,7 +859,7 @@ public class TestMe
 
         [TestCase("Some integers.", "A sequence that contains some integers.")]
         [TestCase("The mapping information.", "A sequence that contains the mapping information.")]
-        public void Code_gets_fixed_for_generic_enumerable_with_primitive_type_on_same_line_(string originalPhrase, string fixedPhrase)
+        public void Code_gets_fixed_by_replacing_with_sequence_phrase_for_generic_enumerable_with_primitive_type_on_same_line_(string originalPhrase, string fixedPhrase)
         {
             var originalCode = @"
 using System;
@@ -898,7 +898,7 @@ public class TestMe
 
         [TestCase("Some data", "A sequence that contains some data")]
         [TestCase("All ancestors of the specified type", "A sequence that contains all ancestors of the specified type")]
-        public void Code_gets_fixed_for_generic_enumerable_with_non_primitive_type_(string originalPhrase, string fixedPhrase)
+        public void Code_gets_fixed_by_replacing_with_sequence_phrase_for_generic_enumerable_with_non_primitive_type_(string originalPhrase, string fixedPhrase)
         {
             const string Template = """
 
@@ -927,7 +927,7 @@ public class TestMe
 
         [TestCase("Some data", "A sequence that contains some data")]
         [TestCase("All ancestors of the specified type", "A sequence that contains all ancestors of the specified type")]
-        public void Code_gets_fixed_for_generic_enumerable_with_generic_type_(string originalPhrase, string fixedPhrase)
+        public void Code_gets_fixed_by_replacing_with_sequence_phrase_for_generic_enumerable_with_generic_type_(string originalPhrase, string fixedPhrase)
         {
             const string Template = """
 
@@ -956,7 +956,7 @@ public class TestMe
 
         [TestCase("Some data", "A collection of my nodes that contains some data")]
         [TestCase("All ancestors of the specified type", "A collection of my nodes that contains all ancestors of the specified type")]
-        public void Code_gets_fixed_for_generic_collection_with_generic_closed_type_(string originalPhrase, string fixedPhrase)
+        public void Code_gets_fixed_by_replacing_with_collection_phrase_for_generic_collection_with_generic_closed_type_(string originalPhrase, string fixedPhrase)
         {
             const string Template = """
 
@@ -985,7 +985,7 @@ public class TestMe
 
         [TestCase("Some data", "A collection of some data")]
         [TestCase("All ancestors of the specified type", "A collection of all ancestors of the specified type")]
-        public void Code_gets_fixed_for_generic_collection_with_generic_open_type_(string originalPhrase, string fixedPhrase)
+        public void Code_gets_fixed_by_replacing_with_collection_phrase_for_generic_collection_with_generic_open_type_(string originalPhrase, string fixedPhrase)
         {
             const string Template = """
 
@@ -1016,7 +1016,7 @@ public class TestMe
         [TestCase("An awaitable task.", "")]
         [TestCase("An awaitable task", "")]
         [TestCase("A task that represents the asynchronous operation. The Result is something", "something")]
-        public void Code_gets_fixed_for_Task_with_generic_collection_(string originalText, string fixedText)
+        public void Code_gets_fixed_by_replacing_with_Task_collection_phrase_(string originalText, string fixedText)
         {
             var originalCode = @"
 using System;
@@ -1065,7 +1065,7 @@ public class TestMe
         [TestCase("An awaitable task.", "")]
         [TestCase("An awaitable task", "")]
         [TestCase("A task that represents the asynchronous operation. The Result is something", "something")]
-        public void Code_gets_fixed_for_Task_with_generic_collection_on_same_line_(string originalText, string fixedText)
+        public void Code_gets_fixed_by_replacing_with_Task_collection_phrase_on_same_line_(string originalText, string fixedText)
         {
             var originalCode = @"
 using System;
@@ -1106,7 +1106,7 @@ public class TestMe
 
         [TestCase("Some integers.", "some integers.")]
         [TestCase("A task that represents the asynchronous operation. The Result is something", "something")]
-        public void Code_gets_fixed_for_Task_with_array_(string originalText, string fixedText)
+        public void Code_gets_fixed_by_replacing_with_Task_array_phrase_(string originalText, string fixedText)
         {
             var originalCode = @"
 using System;
@@ -1149,7 +1149,7 @@ public class TestMe
 
         [TestCase("Some data.", "some data.")]
         [TestCase("A task that represents the asynchronous operation. The Result is something", "something")]
-        public void Code_gets_fixed_for_Task_with_byte_array_(string originalText, string fixedText)
+        public void Code_gets_fixed_by_replacing_with_Task_byte_array_phrase_(string originalText, string fixedText)
         {
             var originalCode = @"
 using System;
@@ -1191,7 +1191,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_generic_return_value_with_almost_correct_start_and_see_cref_XML_tag_([ValueSource(nameof(OfStartingPhrases))] string start)
+        public void Code_gets_fixed_by_normalizing_collection_of_phrases_with_see_cref_([ValueSource(nameof(OfStartingPhrases))] string start)
         {
             var originalCode = @"
 using System;
@@ -1231,7 +1231,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_generic_return_value_with_almost_correct_start_and_see_cref_XML_tag_on_same_line_([ValueSource(nameof(OfStartingPhrases))] string start)
+        public void Code_gets_fixed_by_normalizing_collection_of_phrases_with_see_cref_on_same_line_([ValueSource(nameof(OfStartingPhrases))] string start)
         {
             var originalCode = @"
 using System;
@@ -1269,7 +1269,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_collection_phrase_on_array()
+        public void Code_gets_fixed_by_replacing_collection_phrase_with_array_phrase_for_array()
         {
             const string OriginalCode = """
 

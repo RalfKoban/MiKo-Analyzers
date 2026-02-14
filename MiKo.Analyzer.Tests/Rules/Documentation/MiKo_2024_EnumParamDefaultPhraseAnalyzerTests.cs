@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                        ];
 
         [Test]
-        public void No_issue_is_reported_for_uncommented_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_method() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething(object o) { }
@@ -43,7 +43,7 @@ public class TestMe
         [TestCase("System.Boolean")]
         [TestCase(nameof(Boolean))]
         [TestCase(nameof(Object))]
-        public void No_issue_is_reported_for_method_with_(string type) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_non_enum_parameter_of_type_(string type) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -55,7 +55,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_out_parameter() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_out_enum_parameter() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -67,9 +67,9 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_correct_comment_(
-                                                                      [ValueSource(nameof(CorrectStartingPhrases))] string comment,
-                                                                      [Values("something", "something.")] string continuation)
+        public void No_issue_is_reported_for_enum_parameter_with_standard_phrase_(
+                                                                              [ValueSource(nameof(CorrectStartingPhrases))] string comment,
+                                                                              [Values("something", "something.")] string continuation)
             => No_issue_is_reported_for(@"
 using System;
 
@@ -82,7 +82,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_correct_bitmask_comment_([ValueSource(nameof(CorrectFlagsStartingPhrases))] string comment) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_flags_enum_parameter_with_standard_phrase_([ValueSource(nameof(CorrectFlagsStartingPhrases))] string comment) => No_issue_is_reported_for(@"
 using System;
 using System.Globalization;
 
@@ -95,9 +95,9 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_ctor_with_correct_comment_(
-                                                                    [ValueSource(nameof(CorrectStartingPhrases))] string comment,
-                                                                    [Values("something", "something.")] string continuation)
+        public void No_issue_is_reported_for_enum_parameter_in_ctor_with_standard_phrase_(
+                                                                                      [ValueSource(nameof(CorrectStartingPhrases))] string comment,
+                                                                                      [Values("something", "something.")] string continuation)
             => No_issue_is_reported_for(@"
 using System;
 
@@ -111,7 +111,7 @@ public class TestMe
 
         [TestCase("Unused")]
         [TestCase("Unused.")]
-        public void No_issue_is_reported_for_method_with_correct_unused_comment_(string comment) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_enum_parameter_documented_as_unused_(string comment) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -123,29 +123,29 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_correct_type_comment_(
-                                                                           [Values(
-                                                                               """A <see cref="StringComparison" /> value""",
-                                                                               """A <see cref="StringComparison"/> value""",
-                                                                               """A <see cref="System.StringComparison" /> value""",
-                                                                               """A <see cref="System.StringComparison"/> value""",
-                                                                               """An <see cref="StringComparison" /> value""",
-                                                                               """An <see cref="StringComparison"/> value""",
-                                                                               """An <see cref="System.StringComparison" /> value""",
-                                                                               """An <see cref="System.StringComparison"/> value""",
-                                                                               """One of the <see cref="StringComparison" /> enumeration members""",
-                                                                               """One of the <see cref="StringComparison" /> enumeration values""",
-                                                                               """One of the <see cref="StringComparison" /> members""",
-                                                                               """One of the <see cref="StringComparison" /> values""",
-                                                                               """One of the <see cref="StringComparison"/> enumeration members""",
-                                                                               """One of the <see cref="StringComparison"/> enumeration values""",
-                                                                               """One of the <see cref="StringComparison"/> members""",
-                                                                               """One of the <see cref="StringComparison"/> values""",
-                                                                               """The <see cref="StringComparison" /> value""",
-                                                                               """The <see cref="StringComparison"/> value""",
-                                                                               """The <see cref="System.StringComparison" /> value""",
-                                                                               """The <see cref="System.StringComparison"/> value""")] string comment,
-                                                                           [Values("that specifies", "specifying", "that defines", "defining")] string continuation)
+        public void No_issue_is_reported_for_enum_parameter_with_see_cref_and_continuation_(
+                                                                                        [Values(
+                                                                                            """A <see cref="StringComparison" /> value""",
+                                                                                            """A <see cref="StringComparison"/> value""",
+                                                                                            """A <see cref="System.StringComparison" /> value""",
+                                                                                            """A <see cref="System.StringComparison"/> value""",
+                                                                                            """An <see cref="StringComparison" /> value""",
+                                                                                            """An <see cref="StringComparison"/> value""",
+                                                                                            """An <see cref="System.StringComparison" /> value""",
+                                                                                            """An <see cref="System.StringComparison"/> value""",
+                                                                                            """One of the <see cref="StringComparison" /> enumeration members""",
+                                                                                            """One of the <see cref="StringComparison" /> enumeration values""",
+                                                                                            """One of the <see cref="StringComparison" /> members""",
+                                                                                            """One of the <see cref="StringComparison" /> values""",
+                                                                                            """One of the <see cref="StringComparison"/> enumeration members""",
+                                                                                            """One of the <see cref="StringComparison"/> enumeration values""",
+                                                                                            """One of the <see cref="StringComparison"/> members""",
+                                                                                            """One of the <see cref="StringComparison"/> values""",
+                                                                                            """The <see cref="StringComparison" /> value""",
+                                                                                            """The <see cref="StringComparison"/> value""",
+                                                                                            """The <see cref="System.StringComparison" /> value""",
+                                                                                            """The <see cref="System.StringComparison"/> value""")] string comment,
+                                                                                        [Values("that specifies", "specifying", "that defines", "defining")] string continuation)
             => No_issue_is_reported_for(@"
 using System;
 
@@ -161,7 +161,7 @@ public class TestMe
         [TestCase("Whatever.")]
         [TestCase("A bitwise combination of enumeration values that does something")]
         [TestCase("A bitwise combination of the enumeration values that does something")]
-        public void An_issue_is_reported_for_method_with_wrong_comment_phrase_(string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_enum_parameter_with_non_standard_phrase_(string comment) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -174,7 +174,7 @@ public class TestMe
 
         [TestCase("whatever.")]
         [TestCase("Whatever.")]
-        public void An_issue_is_reported_for_ctor_with_wrong_comment_phrase_(string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_enum_parameter_in_ctor_with_non_standard_phrase_(string comment) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -188,7 +188,7 @@ public class TestMe
         [TestCase("<summary />")]
         [TestCase("<inheritdoc />")]
         [TestCase("<exclude />")]
-        public void No_issue_is_reported_for_method_with_missing_documentation_(string xmlElement) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_missing_enum_parameter_documentation_(string xmlElement) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -199,7 +199,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_for_method()
+        public void Code_gets_fixed_by_prepending_standard_phrase_for_enum_parameter_in_method()
         {
             const string OriginalCode = @"
 using System;
@@ -228,7 +228,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_ctor()
+        public void Code_gets_fixed_by_prepending_standard_phrase_for_enum_parameter_in_ctor()
         {
             const string OriginalCode = @"
 using System;
@@ -257,7 +257,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_primary_class_ctor()
+        public void Code_gets_fixed_by_prepending_standard_phrase_for_enum_parameter_in_primary_class_ctor()
         {
             const string OriginalCode = @"
 using System;
@@ -284,7 +284,7 @@ public class TestMe(StringComparison o)
         }
 
         [Test]
-        public void Code_gets_fixed_for_primary_struct_ctor()
+        public void Code_gets_fixed_by_prepending_standard_phrase_for_enum_parameter_in_primary_struct_ctor()
         {
             const string OriginalCode = @"
 using System;
@@ -311,7 +311,7 @@ public struct TestMe(StringComparison o)
         }
 
         [Test]
-        public void Code_gets_fixed_for_primary_record_ctor()
+        public void Code_gets_fixed_by_prepending_standard_phrase_for_enum_parameter_in_primary_record_ctor()
         {
             const string OriginalCode = @"
 using System;
@@ -338,7 +338,7 @@ public record TestMe(StringComparison o)
         }
 
         [Test]
-        public void Code_gets_fixed_when_on_different_lines()
+        public void Code_gets_fixed_by_prepending_standard_phrase_on_separate_lines()
         {
             const string OriginalCode = @"
 using System;
@@ -369,7 +369,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_when_inside_para_tag()
+        public void Code_gets_fixed_by_prepending_standard_phrase_inside_para_tag()
         {
             const string OriginalCode = @"
 using System;
@@ -439,7 +439,7 @@ public class TestMe
         [TestCase("Enum that indicates")]
         [TestCase("enum which indicates")]
         [TestCase("Enum which indicates")]
-        public void Code_gets_fixed_for_phrase_(string originalPhrase)
+        public void Code_gets_fixed_by_normalizing_common_enum_phrases_(string originalPhrase)
         {
             var originalCode = @"
 using System;
@@ -470,7 +470,7 @@ public class TestMe
         }
 
         [TestCase("The minimum expected C# language version.", "the minimum expected C# language version.")]
-        public void Code_gets_fixed_for_phrase_(string originalPhrase, string fixedPhrase)
+        public void Code_gets_fixed_by_normalizing_and_lowercasing_continuation_(string originalPhrase, string fixedPhrase)
         {
             var originalCode = @"
 using System;
@@ -553,7 +553,7 @@ public class TestMe
         [TestCase("A", "specifies a")]
         [TestCase("An", "specifies an")]
         [TestCase("The", "specifies the")]
-        public void Code_gets_fixed_for_flags_phrase_(string originalPhrase, string fixedContinuation)
+        public void Code_gets_fixed_by_normalizing_flags_enum_phrases_(string originalPhrase, string fixedContinuation)
         {
             var originalCode = @"
 using System;
@@ -593,7 +593,7 @@ public class TestMe
         [TestCase("The flag to investigate for", "specifies the value to investigate for")]
         [TestCase("The value to investigate", "specifies the value to investigate")]
         [TestCase("The value to investigate for", "specifies the value to investigate for")]
-        public void Code_gets_fixed_for_complete_flags_phrase_(string originalPhrase, string fixedContinuation)
+        public void Code_gets_fixed_by_normalizing_complete_flags_enum_phrases_(string originalPhrase, string fixedContinuation)
         {
             var originalCode = @"
 using System;
