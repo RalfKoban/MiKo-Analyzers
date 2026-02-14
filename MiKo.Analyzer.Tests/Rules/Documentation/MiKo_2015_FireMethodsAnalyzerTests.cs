@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2015_FireMethodsAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_undocumented_items() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_class_method_property_event_and_field_without_documentation() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -28,7 +28,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_items() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_class_method_property_event_and_field_with_documentation_not_containing_fire_terms() => No_issue_is_reported_for(@"
 using System;
 
 /// <summary>Does something.</summary>
@@ -54,7 +54,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_class_([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_class_documentation_containing_fire_term_in_([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
 using System;
 
 /// <" + tag + ">Does fire.</" + tag + @">
@@ -64,7 +64,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_documentation_containing_fire_term_in_([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -75,7 +75,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_property_([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_property_documentation_containing_fire_term_in_([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -86,7 +86,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_event_([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_event_documentation_containing_fire_term_in_([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -97,7 +97,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_field_([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_field_documentation_containing_fire_term_in_([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -108,7 +108,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_for_exception()
+        public void Code_gets_fixed_to_replace_fire_terms_with_throw_for_exception_documentation_on_single_line()
         {
             const string OriginalCode = @"
 using System;
@@ -132,7 +132,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_exception_when_on_different_lines()
+        public void Code_gets_fixed_to_replace_fire_terms_with_throw_for_exception_documentation_on_multiple_lines()
         {
             const string OriginalCode = @"
 using System;
@@ -162,7 +162,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_event()
+        public void Code_gets_fixed_to_replace_fire_terms_with_raise_for_event_documentation_on_single_line()
         {
             const string OriginalCode = @"
 using System;
@@ -186,7 +186,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_event_when_on_different_lines()
+        public void Code_gets_fixed_to_replace_fire_terms_with_raise_for_event_documentation_on_multiple_lines()
         {
             const string OriginalCode = @"
 using System;

@@ -42,8 +42,6 @@ namespace MiKoSolutions.Analyzers
                                                                                                                   SymbolDisplayGenericsOptions.IncludeTypeParameters,
                                                                                                                   miscellaneousOptions: SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers);
 
-        private static readonly Func<SyntaxNode, bool> IsLocalFunctionContainer = IsLocalFunctionContainerCore;
-
         /// <summary>
         /// Gets all extension methods defined for the type.
         /// </summary>
@@ -222,7 +220,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A collection of local functions defined within the method.
         /// </returns>
-        internal static IReadOnlyList<LocalFunctionStatementSyntax> GetLocalFunctions(this IMethodSymbol value)
+        internal static LocalFunctionStatementSyntax[] GetLocalFunctions(this IMethodSymbol value)
         {
             if (value.IsAbstract)
             {
@@ -241,22 +239,31 @@ namespace MiKoSolutions.Analyzers
                 return Array.Empty<LocalFunctionStatementSyntax>();
             }
 
-            List<LocalFunctionStatementSyntax> functions = null;
+            return GetLocalFunctionsLocal(node) ?? Array.Empty<LocalFunctionStatementSyntax>();
 
-            foreach (var descendantNode in node.DescendantNodes(IsLocalFunctionContainer))
+            LocalFunctionStatementSyntax[] GetLocalFunctionsLocal(SyntaxNode n)
             {
-                if (descendantNode is LocalFunctionStatementSyntax function)
+                List<LocalFunctionStatementSyntax> result = null;
+
+                // ReSharper disable once LoopCanBePartlyConvertedToQuery
+                foreach (var descendant in n.DescendantNodes())
                 {
-                    if (functions is null)
+                    if (descendant.RawKind != (int)SyntaxKind.LocalFunctionStatement)
                     {
-                        functions = new List<LocalFunctionStatementSyntax>(1);
+                        // skip as we do not have a local function statement
+                        continue;
                     }
 
-                    functions.Add(function);
-                }
-            }
+                    if (result is null)
+                    {
+                        result = new List<LocalFunctionStatementSyntax>(1);
+                    }
 
-            return functions ?? (IReadOnlyList<LocalFunctionStatementSyntax>)Array.Empty<LocalFunctionStatementSyntax>();
+                    result.Add((LocalFunctionStatementSyntax)descendant);
+                }
+
+                return result?.ToArray();
+            }
         }
 
         /// <summary>
@@ -1219,7 +1226,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the type implements the specified interface; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool Implements<T>(this ITypeSymbol value) => Implements(value, typeof(T).FullName);
+        internal static bool Implements<T>(this ITypeSymbol value) => value.Implements(typeof(T).FullName);
 
         /// <summary>
         /// Determines whether a type implements an interface with the specified name.
@@ -1235,6 +1242,11 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static bool Implements(this ITypeSymbol value, string interfaceTypeName)
         {
+            if (value is null)
+            {
+                return false;
+            }
+
             switch (value.SpecialType)
             {
                 case SpecialType.System_Void:
@@ -1703,6 +1715,12 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static bool InheritsFrom(this ITypeSymbol value, string baseClassName, string baseClassFullQualifiedName)
         {
+            if (value is null)
+            {
+                // code seems to be obfuscated or contains no valid symbol, so ignore it silently
+                return false;
+            }
+
             switch (value.SpecialType)
             {
                 case SpecialType.System_Void:
@@ -2003,7 +2021,7 @@ namespace MiKoSolutions.Analyzers
         /// <see langword="true"/> if the type implements the <see cref="ICommand"/> interface; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsCommand(this ITypeSymbol value) => value.Implements<ICommand>();
+        internal static bool IsCommand(this ITypeSymbol value) => value.Implements<ICommand>() is true;
 
         /// <summary>
         /// Determines whether a symbol is a constructor.
@@ -2317,7 +2335,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the type inherits from <see cref="EventArgs"/>; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool IsEventArgs(this ITypeSymbol value) => value.TypeKind is TypeKind.Class
+        internal static bool IsEventArgs(this ITypeSymbol value) => value?.TypeKind is TypeKind.Class
                                                                  && value.SpecialType is SpecialType.None
                                                                  && value.InheritsFrom<EventArgs>();
 
@@ -2392,8 +2410,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the type inherits from Exception; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool IsException(this ITypeSymbol value) => value != null
-                                                                 && value.TypeKind is TypeKind.Class
+        internal static bool IsException(this ITypeSymbol value) => value?.TypeKind is TypeKind.Class
                                                                  && value.SpecialType is SpecialType.None
                                                                  && value.OriginalDefinition.InheritsFrom<Exception>();
 
@@ -3369,21 +3386,6 @@ namespace MiKoSolutions.Analyzers
             }
 
             return results;
-        }
-
-        private static bool IsLocalFunctionContainerCore(SyntaxNode node)
-        {
-            switch (node.RawKind)
-            {
-                case (int)SyntaxKind.Block: // 8792
-                case (int)SyntaxKind.LocalFunctionStatement: // 8830
-                case (int)SyntaxKind.MethodDeclaration: // 8875,
-                case (int)SyntaxKind.ConstructorDeclaration: // 8878
-                    return true;
-
-                default:
-                    return false;
-            }
         }
 
         private static bool IsEnumerable(in SpecialType type)

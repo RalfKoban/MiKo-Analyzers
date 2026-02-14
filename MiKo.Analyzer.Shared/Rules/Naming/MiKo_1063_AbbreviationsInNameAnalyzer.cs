@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                                                                                                      .WhereNotNull() // code seems to be obfuscated or contains no valid symbol, so ignore it silently
                                                                                                                                                                      .SelectMany(AnalyzeName);
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsExtern is false && base.ShallAnalyze(symbol);
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol?.IsExtern is false && base.ShallAnalyze(symbol);
 
         protected override bool ShallAnalyze(IParameterSymbol symbol)
         {

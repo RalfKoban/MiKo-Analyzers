@@ -33,7 +33,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_items() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_enum_members_without_boolean_phrases() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -63,7 +63,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_([ValueSource(nameof(BooleanPhrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_enum_method_with_boolean_indicating_phrase_([ValueSource(nameof(BooleanPhrases))] string phrase) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -78,7 +78,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_property_([ValueSource(nameof(BooleanPhrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_enum_property_with_boolean_indicating_phrase_([ValueSource(nameof(BooleanPhrases))] string phrase) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe

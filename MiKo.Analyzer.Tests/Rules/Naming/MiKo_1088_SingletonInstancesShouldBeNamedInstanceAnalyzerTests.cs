@@ -32,7 +32,7 @@ public struct TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_enum_class() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_enum() => No_issue_is_reported_for(@"
 
 public enum TestMe
 {
@@ -59,7 +59,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_type_without_properties_or_fields() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_class_without_properties_or_fields() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -69,7 +69,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_type_with_only_non_static_properties_and_fields() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_class_with_only_non_static_members() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public bool SomeProperty { get; set; }
@@ -79,7 +79,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_type_with_static_property_that_returns_some_other_type() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_static_property_returning_different_type() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public static bool SomeProperty { get; set; }
@@ -87,7 +87,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_type_with_static_field_that_is_of_some_other_type() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_static_field_of_different_type() => No_issue_is_reported_for(@"
 public class TestMe
 {
     private static int _someField;
@@ -95,7 +95,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_type_with_correctly_named_static_singleton_property_([Values("Instance", "Empty", "Default", "Zero")] string propertyName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_static_singleton_property_([Values("Instance", "Empty", "Default", "Zero")] string propertyName) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public static TestMe " + propertyName + @" { get; set; }
@@ -103,9 +103,9 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_type_with_correctly_named_static_singleton_field_(
-                                                                                           [ValueSource(nameof(FieldPrefixes))] string prefix,
-                                                                                           [Values("instance", "empty", "default", "zero", "Instance", "Empty", "Default", "Zero")] string fieldName)
+        public void No_issue_is_reported_for_static_singleton_field_(
+                                                                 [ValueSource(nameof(FieldPrefixes))] string prefix,
+                                                                 [Values("instance", "empty", "default", "zero", "Instance", "Empty", "Default", "Zero")] string fieldName)
             => No_issue_is_reported_for(@"
 public class TestMe
 {
@@ -114,7 +114,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_type_with_incorrectly_named_static_singleton_property() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_static_singleton_property_named_Singleton() => An_issue_is_reported_for(@"
 public class TestMe
 {
     public static TestMe Singleton { get; set; }
@@ -122,7 +122,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_type_with_incorrectly_named_static_singleton_field_([ValueSource(nameof(FieldPrefixes))] string prefix) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_static_singleton_field_named_singleton_([ValueSource(nameof(FieldPrefixes))] string prefix) => An_issue_is_reported_for(@"
 public class TestMe
 {
     public static TestMe " + prefix + @"singleton;

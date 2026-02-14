@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2021_ParamDefaultPhraseAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_uncommented_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_method() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething(object o) { }
@@ -26,7 +26,7 @@ public class TestMe
         [TestCase("System.StringComparison")]
         [TestCase(nameof(Boolean))]
         [TestCase(nameof(StringComparison))]
-        public void No_issue_is_reported_for_method_with_(string type) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_parameter_of_type_(string type) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -56,7 +56,7 @@ public class TestMe
         [TestCase("unused")]
         [TestCase("Unused")]
         [TestCase("Unused.")]
-        public void No_issue_is_reported_for_method_with_correct_comment_(string comment) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_parameter_starting_with_article_or_unused_(string comment) => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary />
@@ -66,7 +66,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_correct_comment_and_line_break_after_first_word_([Values("A", "An", "The")] string comment) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_parameter_with_article_followed_by_line_break_and_see_tag_([Values("A", "An", "The")] string comment) => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary />
@@ -84,7 +84,7 @@ public class TestMe
         [TestCase("<summary />")]
         [TestCase("<inheritdoc />")]
         [TestCase("<exclude />")]
-        public void No_issue_is_reported_for_method_with_missing_documentation_(string xmlElement) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_missing_parameter_documentation_(string xmlElement) => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// " + xmlElement + @"
@@ -94,7 +94,7 @@ public class TestMe
 
         [TestCase("whatever.")]
         [TestCase("Whatever.")]
-        public void An_issue_is_reported_for_method_with_wrong_comment_phrase_(string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_parameter_not_starting_with_article_(string comment) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary />
@@ -138,7 +138,7 @@ public class TestMe
         [TestCase("Reference to the", "The")]
         [TestCase("Reference to a", "The")]
         [TestCase("Reference to an", "The")]
-        public void Code_gets_fixed_for_parameter_with_(string originalStart, string fixedStart)
+        public void Code_gets_fixed_by_replacing_common_parameter_documentation_phrases_(string originalStart, string fixedStart)
         {
             const string Template = @"
 public class TestMe

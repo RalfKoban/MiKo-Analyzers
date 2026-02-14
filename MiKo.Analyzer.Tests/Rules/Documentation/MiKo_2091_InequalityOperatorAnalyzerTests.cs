@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2091_InequalityOperatorAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_undocumented_normal_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_method() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -44,7 +44,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_incorrectly_documented_equality_operator() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_equality_operator() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -58,7 +58,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_inequality_operator() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_inequality_operator_with_standard_documentation() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -72,7 +72,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_inequality_operator_with_full_qualified_name() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_inequality_operator_with_standard_documentation_using_full_qualified_name() => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -89,7 +89,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_inequality_operator_summary() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_inequality_operator_with_non_standard_summary() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -103,7 +103,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_inequality_operator_returnValue() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_inequality_operator_with_non_standard_returns_documentation() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -118,7 +118,7 @@ public class TestMe
 
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_inequality_operator_parameter() => An_issue_is_reported_for(2, @"
+        public void An_issue_is_reported_for_inequality_operator_with_non_standard_parameter_documentation() => An_issue_is_reported_for(2, @"
 using System;
 
 public class TestMe

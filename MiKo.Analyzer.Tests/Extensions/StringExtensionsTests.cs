@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase("abc42", ExpectedResult = "abc")]
         [TestCase("a1bc", ExpectedResult = "a1bc")]
         [TestCase("a1bc42", ExpectedResult = "a1bc")]
-        public static string WithoutNumberSuffix_works_(string input) => input.WithoutNumberSuffix();
+        public static string WithoutNumberSuffix_returns_text_without_number_suffix_(string input) => input.WithoutNumberSuffix();
 
         [TestCase("ab123", ExpectedResult = true)]
         [TestCase("ab1", ExpectedResult = true)]
@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase("a8b", ExpectedResult = false)]
         [TestCase("42ab", ExpectedResult = false)]
         [TestCase("1", ExpectedResult = true)]
-        public static bool EndsWithNumber_works_(string input) => input.EndsWithNumber();
+        public static bool EndsWithNumber_detects_number_as_suffix_(string input) => input.EndsWithNumber();
 
         [TestCase("ab123", ExpectedResult = false)]
         [TestCase("ab1", ExpectedResult = false)]
@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase("42ab", ExpectedResult = true)]
         [TestCase("1ab", ExpectedResult = true)]
         [TestCase("1", ExpectedResult = true)]
-        public static bool StartsWithNumber_works_(string input) => input.StartsWithNumber();
+        public static bool StartsWithNumber_detects_number_as_prefix_(string input) => input.StartsWithNumber();
 
         [TestCase("", ExpectedResult = false)]
         [TestCase("A", ExpectedResult = true)]
@@ -49,7 +49,7 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase("Aa", ExpectedResult = false)]
         [TestCase("aA", ExpectedResult = false)]
         [TestCase("AA", ExpectedResult = true)]
-        public static bool IsAllUpperCase_works_(string input) => input.AsSpan().IsAllUpperCase();
+        public static bool IsAllUpperCase_detects_text_being_all_upper_case_characters_(string input) => input.AsSpan().IsAllUpperCase();
 
         [Test]
         public static void SplitBy_splits_by_single_item_that_is_contained_multiple_times()
@@ -76,7 +76,7 @@ namespace MiKoSolutions.Analyzers.Extensions
         }
 
         [Test]
-        public static void HumanizedConcatenated_concatenates_correctly()
+        public static void HumanizedConcatenated_concatenates_texts()
         {
             Assert.Multiple(() =>
                                  {

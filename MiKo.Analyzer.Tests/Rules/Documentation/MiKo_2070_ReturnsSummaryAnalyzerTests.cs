@@ -54,7 +54,7 @@ public class TestMe : IEnumerable
 ");
 
         [Test]
-        public void No_issue_is_reported_for_empty_summary_of_documented_items() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_empty_summary() => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary></summary>
@@ -65,7 +65,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_items() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_summary_not_starting_with_Returns() => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -104,7 +104,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_documented_method_that_starts_with_see_cref() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_starting_with_see_cref() => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -117,7 +117,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_documented_property_that_starts_with_see_cref() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_property_starting_with_see_cref() => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -128,7 +128,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_([Values("Return", "Returns", "return", "returns")] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_summary_starting_with_Returns_([Values("Return", "Returns", "return", "returns")] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -141,7 +141,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_property_([Values("Return", "Returns", "return", "returns")] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_property_summary_starting_with_Returns_([Values("Return", "Returns", "return", "returns")] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -152,7 +152,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_for_non_boolean_property_summary()
+        public void Code_gets_fixed_by_replacing_Returns_with_Gets_for_non_boolean_property()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -184,7 +184,7 @@ public class TestMe
         [TestCase(@"Returns <see langword=""true""/> whether")]
         [TestCase(@"Returns <see langref=""true""/> if")]
         [TestCase(@"Returns <see langref=""true""/> whether")]
-        public void Code_gets_fixed_for_boolean_property_summary_(string startPhrase)
+        public void Code_gets_fixed_by_replacing_Returns_with_Gets_a_value_indicating_whether_for_boolean_property_(string startPhrase)
         {
             var originalCode = @"
 public class TestMe
@@ -220,7 +220,7 @@ public class TestMe
         [TestCase(@"Returns <see langword=""true""/> whether")]
         [TestCase(@"Returns <see langref=""true""/> if")]
         [TestCase(@"Returns <see langref=""true""/> whether")]
-        public void Code_gets_fixed_for_boolean_method_summary_(string startPhrase)
+        public void Code_gets_fixed_by_replacing_Returns_with_Determines_whether_for_boolean_method_(string startPhrase)
         {
             var originalCode = @"
 public class TestMe
@@ -251,7 +251,7 @@ public class TestMe
         [TestCase(@"Returns <see langword=""false""/> whether")]
         [TestCase(@"Returns <see langref=""false""/> if")]
         [TestCase(@"Returns <see langref=""false""/> whether")]
-        public void Code_gets_not_fixed_for_boolean_method_summary_starting_with_false_(string startPhrase)
+        public void Code_does_not_get_fixed_for_boolean_method_starting_with_Returns_false_(string startPhrase)
         {
             var originalCode = @"
 public class TestMe
@@ -283,7 +283,7 @@ public class TestMe
         [TestCase(@"Returns <see langword=""true""/> whether")]
         [TestCase(@"Returns <see langref=""true""/> if")]
         [TestCase(@"Returns <see langref=""true""/> whether")]
-        public void Code_gets_fixed_for_boolean_async_method_summary_(string startPhrase)
+        public void Code_gets_fixed_by_replacing_Returns_with_Asynchronously_determines_whether_for_boolean_async_method_(string startPhrase)
         {
             var originalCode = @"
 public class TestMe
@@ -309,7 +309,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_boolean_Task_method_summary()
+        public void Code_gets_fixed_by_replacing_Returns_with_Asynchronously_determines_whether_for_boolean_Task_method()
         {
             const string OriginalCode = @"
 using System.Threading.Tasks;
@@ -339,7 +339,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_non_boolean_method_summary()
+        public void Code_gets_fixed_by_replacing_Returns_with_Gets_for_non_boolean_method()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -365,7 +365,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_non_boolean_async_method_summary()
+        public void Code_gets_fixed_by_replacing_Asynchronously_returns_with_Asynchronously_gets_for_non_boolean_async_method()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -391,7 +391,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_non_boolean_Task_method_summary()
+        public void Code_gets_fixed_by_replacing_Returns_with_Asynchronously_gets_for_non_boolean_Task_method()
         {
             const string OriginalCode = @"
 using System.Threading.Tasks;
@@ -421,7 +421,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_and_space_before_link_is_kept()
+        public void Code_gets_fixed_and_preserves_spacing_before_see_cref()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -468,7 +468,7 @@ public class TestMe
         [TestCase(@", otherwise; <see langref=""false""/>")]
         [TestCase(@", otherwise, <see langref=""false""/>")]
         [TestCase(@", otherwise <see langref=""false""/>")]
-        public void Code_gets_fixed_for_ending_phrase_(string phrase)
+        public void Code_gets_fixed_by_removing_ending_phrase_(string phrase)
         {
             var originalCode = @"
 public class TestMe

@@ -63,7 +63,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("waltz", ExpectedResult = "waltzes")]
         [TestCase("wolf", ExpectedResult = "wolves")]
         [TestCase("woman", ExpectedResult = "women")]
-        public static string Creates_correct_plural_name_(string singularName) => Pluralizer.GetPluralName(singularName);
+        public static string Creates_matching_plural_name_(string singularName) => Pluralizer.GetPluralName(singularName);
 
         [TestCase("access", ExpectedResult = "accesses")]
         [TestCase("accesses", ExpectedResult = "accesses")]
@@ -83,7 +83,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("SyntaxTrivia", ExpectedResult = "SyntaxTrivia")]
         [TestCase("trivia", ExpectedResult = "trivia")]
         [TestCase("Trivia", ExpectedResult = "Trivia")]
-        public static string Makes_correct_plural_name_(string singularName) => Pluralizer.MakePluralName(singularName);
+        public static string Makes_matching_plural_name_(string singularName) => Pluralizer.MakePluralName(singularName);
 
         [TestCase("accesses", ExpectedResult = false)]
         [TestCase("Adoptors", ExpectedResult = true)]

@@ -33,7 +33,7 @@ public interface TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_event_on_class() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_event_with_summary_starting_with_Occurs() => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -44,7 +44,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_event_on_class_with_para_tags() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_event_with_summary_starting_with_Occurs_inside_para_tag() => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
