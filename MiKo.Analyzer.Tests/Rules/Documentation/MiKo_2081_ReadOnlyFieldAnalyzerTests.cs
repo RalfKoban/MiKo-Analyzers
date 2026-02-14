@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2081_ReadOnlyFieldAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_uncommented_field_with_visibility_([Values("protected", "public", "private", "internal")] string visibility) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_field_with_visibility_([Values("protected", "public", "private", "internal")] string visibility) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -22,7 +22,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_uncommented_readonly_field_with_visibility_([Values("protected", "public", "private", "internal")] string visibility) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_readonly_field_with_visibility_([Values("protected", "public", "private", "internal")] string visibility) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -32,20 +32,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_incorrectly_commented_readonly_field_with_visibility_([Values("private", "internal")] string visibility) => No_issue_is_reported_for(@"
-using System;
-
-public class TestMe
-{
-    /// <summary>
-    /// The field.
-    /// </summary>
-    " + visibility + @" readonly string m_field;
-}
-");
-
-        [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_readonly_field_with_visibility_([Values("protected", "public")] string visibility) => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_readonly_field_without_readonly_comment_with_visibility_([Values("private", "internal")] string visibility) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -58,7 +45,20 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_readonly_field_with_visibility_([Values("protected", "public")] string visibility) => No_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_readonly_field_without_readonly_comment_with_visibility_([Values("protected", "public")] string visibility) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// The field.
+    /// </summary>
+    " + visibility + @" readonly string m_field;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_readonly_field_with_readonly_comment_with_visibility_([Values("protected", "public")] string visibility) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -71,9 +71,9 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_incorrectly_commented_readonly_TestClass_field_with_visibility_(
-                                                                                                         [Values("protected", "public")] string visibility,
-                                                                                                         [ValueSource(nameof(TestFixtures))] string fixture)
+        public void No_issue_is_reported_for_readonly_field_in_test_class_with_visibility_(
+                                                                                       [Values("protected", "public")] string visibility,
+                                                                                       [ValueSource(nameof(TestFixtures))] string fixture)
             => No_issue_is_reported_for(@"
 using System;
 
@@ -88,7 +88,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed()
+        public void Code_gets_fixed_to_add_readonly_comment()
         {
             const string OriginalCode = @"
 /// <summary>

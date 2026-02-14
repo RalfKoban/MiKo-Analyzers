@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         [TestCase("nameof(x), \"some message\"")]
         [TestCase("\"x\", 42, \"some message\"")]
         [TestCase("nameof(x), 42, \"some message\"")]
-        public void No_issue_is_reported_for_correctly_thrown_ArgumentOutOfRangeException_(string parameters) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_ArgumentOutOfRangeException_with_valid_parameter_name_(string parameters) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -35,7 +35,7 @@ public class TestMe
         [TestCase("\"some message\", new Exception()")]
         [TestCase("\"some message\", 42, \"x\"")]
         [TestCase("\"some message\", 42, nameof(x)")]
-        public void An_issue_is_reported_for_incorrectly_thrown_ArgumentOutOfRangeException_(string parameters) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_ArgumentOutOfRangeException_with_missing_or_wrong_parameter_name_(string parameters) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -48,287 +48,296 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_thrown_ArgumentOutOfRangeException_with_no_parameters_on_property()
+        public void Code_gets_fixed_for_ArgumentOutOfRangeException_without_parameters_on_property()
         {
-            const string OriginalCode = @"
-using System;
+            const string OriginalCode = """
+                                        using System;
 
-public class TestMe
-{
-    public object Something
-    {
-        get => null;
-        set
-        {
-            if (value is null) throw new ArgumentOutOfRangeException();
-        }
-    }
-}
-";
+                                        public class TestMe
+                                        {
+                                            public object Something
+                                            {
+                                                get => null;
+                                                set
+                                                {
+                                                    if (value is null) throw new ArgumentOutOfRangeException();
+                                                }
+                                            }
+                                        }
+                                        """;
 
-            const string FixedCode = @"
-using System;
+            const string FixedCode = """
+                                     using System;
 
-public class TestMe
-{
-    public object Something
-    {
-        get => null;
-        set
-        {
-            if (value is null) throw new ArgumentOutOfRangeException(nameof(value), value, ""TODO"");
-        }
-    }
-}
-";
+                                     public class TestMe
+                                     {
+                                         public object Something
+                                         {
+                                             get => null;
+                                             set
+                                             {
+                                                 if (value is null) throw new ArgumentOutOfRangeException(nameof(value), value, "TODO");
+                                             }
+                                         }
+                                     }
+                                     """;
+
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_thrown_ArgumentOutOfRangeException_with_no_parameters_on_indexer_key()
+        public void Code_gets_fixed_for_ArgumentOutOfRangeException_without_parameters_on_indexer_key()
         {
-            const string OriginalCode = @"
-using System;
+            const string OriginalCode = """
+                                        using System;
 
-public class TestMe
-{
-    public object this[object key]
-    {
-        get => null;
-        set
-        {
-            if (key is null) throw new ArgumentOutOfRangeException();
-        }
-    }
-}
-";
+                                        public class TestMe
+                                        {
+                                            public object this[object key]
+                                            {
+                                                get => null;
+                                                set
+                                                {
+                                                    if (key is null) throw new ArgumentOutOfRangeException();
+                                                }
+                                            }
+                                        }
+                                        """;
 
-            const string FixedCode = @"
-using System;
+            const string FixedCode = """
+                                     using System;
 
-public class TestMe
-{
-    public object this[object key]
-    {
-        get => null;
-        set
-        {
-            if (key is null) throw new ArgumentOutOfRangeException(nameof(key), key, ""TODO"");
-        }
-    }
-}
-";
+                                     public class TestMe
+                                     {
+                                         public object this[object key]
+                                         {
+                                             get => null;
+                                             set
+                                             {
+                                                 if (key is null) throw new ArgumentOutOfRangeException(nameof(key), key, "TODO");
+                                             }
+                                         }
+                                     }
+                                     """;
+
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_thrown_ArgumentOutOfRangeException_with_no_parameters_on_indexer_value()
+        public void Code_gets_fixed_for_ArgumentOutOfRangeException_without_parameters_on_indexer_value()
         {
-            const string OriginalCode = @"
-using System;
+            const string OriginalCode = """
+                                        using System;
 
-public class TestMe
-{
-    public object this[object key]
-    {
-        get => null;
-        set
-        {
-            if (value is null) throw new ArgumentOutOfRangeException();
-        }
-    }
-}
-";
+                                        public class TestMe
+                                        {
+                                            public object this[object key]
+                                            {
+                                                get => null;
+                                                set
+                                                {
+                                                    if (value is null) throw new ArgumentOutOfRangeException();
+                                                }
+                                            }
+                                        }
+                                        """;
 
-            const string FixedCode = @"
-using System;
+            const string FixedCode = """
+                                     using System;
 
-public class TestMe
-{
-    public object this[object key]
-    {
-        get => null;
-        set
-        {
-            if (value is null) throw new ArgumentOutOfRangeException(nameof(value), value, ""TODO"");
-        }
-    }
-}
-";
+                                     public class TestMe
+                                     {
+                                         public object this[object key]
+                                         {
+                                             get => null;
+                                             set
+                                             {
+                                                 if (value is null) throw new ArgumentOutOfRangeException(nameof(value), value, "TODO");
+                                             }
+                                         }
+                                     }
+                                     """;
+
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_thrown_ArgumentOutOfRangeException_with_no_parameters_on_method_with_single_parameter()
+        public void Code_gets_fixed_for_ArgumentOutOfRangeException_without_parameters_on_method_with_single_parameter()
         {
-            const string OriginalCode = @"
-using System;
+            const string OriginalCode = """
+                                        using System;
 
-public class TestMe
-{
-    public void DoSomething(object x)
-    {
-        if (x is null) throw new ArgumentOutOfRangeException();
-    }
-}
-";
+                                        public class TestMe
+                                        {
+                                            public void DoSomething(object x)
+                                            {
+                                                if (x is null) throw new ArgumentOutOfRangeException();
+                                            }
+                                        }
+                                        """;
 
-            const string FixedCode = @"
-using System;
+            const string FixedCode = """
+                                     using System;
 
-public class TestMe
-{
-    public void DoSomething(object x)
-    {
-        if (x is null) throw new ArgumentOutOfRangeException(nameof(x), x, ""TODO"");
-    }
-}
-";
+                                     public class TestMe
+                                     {
+                                         public void DoSomething(object x)
+                                         {
+                                             if (x is null) throw new ArgumentOutOfRangeException(nameof(x), x, "TODO");
+                                         }
+                                     }
+                                     """;
+
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_thrown_ArgumentOutOfRangeException_with_no_parameters_on_method_with_multiple_parameters()
+        public void Code_gets_fixed_for_ArgumentOutOfRangeException_without_parameters_on_method_with_multiple_parameters()
         {
-            const string OriginalCode = @"
-using System;
+            const string OriginalCode = """
+                                        using System;
 
-public class TestMe
-{
-    public void DoSomething(object x, object y)
-    {
-        if (y is null) throw new ArgumentOutOfRangeException();
-    }
-}
-";
+                                        public class TestMe
+                                        {
+                                            public void DoSomething(object x, object y)
+                                            {
+                                                if (y is null) throw new ArgumentOutOfRangeException();
+                                            }
+                                        }
+                                        """;
 
-            const string FixedCode = @"
-using System;
+            const string FixedCode = """
+                                     using System;
 
-public class TestMe
-{
-    public void DoSomething(object x, object y)
-    {
-        if (y is null) throw new ArgumentOutOfRangeException(nameof(y), y, ""TODO"");
-    }
-}
-";
+                                     public class TestMe
+                                     {
+                                         public void DoSomething(object x, object y)
+                                         {
+                                             if (y is null) throw new ArgumentOutOfRangeException(nameof(y), y, "TODO");
+                                         }
+                                     }
+                                     """;
+
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_thrown_ArgumentOutOfRangeException_with_message_only_on_method_with_single_parameter()
+        public void Code_gets_fixed_for_ArgumentOutOfRangeException_with_message_only_on_method_with_single_parameter()
         {
-            const string OriginalCode = @"
-using System;
+            const string OriginalCode = """
+                                        using System;
 
-public class TestMe
-{
-    public void DoSomething(object x)
-    {
-        if (x is null) throw new ArgumentOutOfRangeException(""some message"");
-    }
-}
-";
+                                        public class TestMe
+                                        {
+                                            public void DoSomething(object x)
+                                            {
+                                                if (x is null) throw new ArgumentOutOfRangeException("some message");
+                                            }
+                                        }
+                                        """;
 
-            const string FixedCode = @"
-using System;
+            const string FixedCode = """
+                                     using System;
 
-public class TestMe
-{
-    public void DoSomething(object x)
-    {
-        if (x is null) throw new ArgumentOutOfRangeException(nameof(x), x, ""some message"");
-    }
-}
-";
+                                     public class TestMe
+                                     {
+                                         public void DoSomething(object x)
+                                         {
+                                             if (x is null) throw new ArgumentOutOfRangeException(nameof(x), x, "some message");
+                                         }
+                                     }
+                                     """;
+
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_thrown_ArgumentOutOfRangeException_with_message_only_on_method_with_multiple_parameters()
+        public void Code_gets_fixed_for_ArgumentOutOfRangeException_with_message_only_on_method_with_multiple_parameters()
         {
-            const string OriginalCode = @"
-using System;
+            const string OriginalCode = """
+                                        using System;
 
-public class TestMe
-{
-    public void DoSomething(object x, object y, object z)
-    {
-        if (y is null) throw new ArgumentOutOfRangeException(""some message"");
-    }
-}
-";
+                                        public class TestMe
+                                        {
+                                            public void DoSomething(object x, object y, object z)
+                                            {
+                                                if (y is null) throw new ArgumentOutOfRangeException("some message");
+                                            }
+                                        }
+                                        """;
 
-            const string FixedCode = @"
-using System;
+            const string FixedCode = """
+                                     using System;
 
-public class TestMe
-{
-    public void DoSomething(object x, object y, object z)
-    {
-        if (y is null) throw new ArgumentOutOfRangeException(nameof(y), y, ""some message"");
-    }
-}
-";
+                                     public class TestMe
+                                     {
+                                         public void DoSomething(object x, object y, object z)
+                                         {
+                                             if (y is null) throw new ArgumentOutOfRangeException(nameof(y), y, "some message");
+                                         }
+                                     }
+                                     """;
+
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_thrown_ArgumentOutOfRangeException_with_reversed_message_and_parameter_as_string()
+        public void Code_gets_fixed_for_ArgumentOutOfRangeException_with_swapped_message_and_parameter_name_as_string()
         {
-            const string OriginalCode = @"
-using System;
+            const string OriginalCode = """
+                                        using System;
 
-public class TestMe
-{
-    public void DoSomething(object x)
-    {
-        if (x is null) throw new ArgumentOutOfRangeException(""some message"", ""x"");
-    }
-}
-";
+                                        public class TestMe
+                                        {
+                                            public void DoSomething(object x)
+                                            {
+                                                if (x is null) throw new ArgumentOutOfRangeException("some message", "x");
+                                            }
+                                        }
+                                        """;
 
-            const string FixedCode = @"
-using System;
+            const string FixedCode = """
+                                     using System;
 
-public class TestMe
-{
-    public void DoSomething(object x)
-    {
-        if (x is null) throw new ArgumentOutOfRangeException(nameof(x), x, ""some message"");
-    }
-}
-";
+                                     public class TestMe
+                                     {
+                                         public void DoSomething(object x)
+                                         {
+                                             if (x is null) throw new ArgumentOutOfRangeException(nameof(x), x, "some message");
+                                         }
+                                     }
+                                     """;
+
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_thrown_ArgumentOutOfRangeException_with_reversed_message_and_parameter_as_nameof()
+        public void Code_gets_fixed_for_ArgumentOutOfRangeException_with_swapped_message_and_parameter_name_as_nameof()
         {
-            const string OriginalCode = @"
-using System;
+            const string OriginalCode = """
+                                        using System;
 
-public class TestMe
-{
-    public void DoSomething(object x)
-    {
-        if (x is null) throw new ArgumentOutOfRangeException(""some message"", nameof(x));
-    }
-}
-";
+                                        public class TestMe
+                                        {
+                                            public void DoSomething(object x)
+                                            {
+                                                if (x is null) throw new ArgumentOutOfRangeException("some message", nameof(x));
+                                            }
+                                        }
+                                        """;
 
-            const string FixedCode = @"
-using System;
+            const string FixedCode = """
+                                     using System;
 
-public class TestMe
-{
-    public void DoSomething(object x)
-    {
-        if (x is null) throw new ArgumentOutOfRangeException(nameof(x), x, ""some message"");
-    }
-}
-";
+                                     public class TestMe
+                                     {
+                                         public void DoSomething(object x)
+                                         {
+                                             if (x is null) throw new ArgumentOutOfRangeException(nameof(x), x, "some message");
+                                         }
+                                     }
+                                     """;
+
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
     }

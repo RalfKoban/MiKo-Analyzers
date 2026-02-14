@@ -25,12 +25,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                       ];
 
         [Test]
-        public void No_issue_is_reported_for_uncommented_class() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_class() => No_issue_is_reported_for(@"
 public sealed class TestMe { }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_term_in_commented_class_([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_documentation_using_unique_identifier_term_([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// The unique identifier something.
 /// </" + xmlTag + @">
@@ -38,7 +38,7 @@ public sealed class TestMe { }
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_Guid_in_code_tag_([Values("c", "code")] string xmlTag, [ValueSource(nameof(WrongGuids))] string wrongValue) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_code_tag_([Values("c", "code")] string xmlTag, [ValueSource(nameof(WrongGuids))] string wrongValue) => No_issue_is_reported_for(@"
 /// <summary>
 /// <" + xmlTag + @">
 /// The " + wrongValue.Trim() + @" something.
@@ -48,7 +48,7 @@ public sealed class TestMe { }
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_Guid_in_Xml_tag_([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(WrongGuids))] string wrongValue) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_documentation_in_xml_tag_([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(WrongGuids))] string wrongValue) => An_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// The " + wrongValue.Trim() + @" something.
 /// </" + xmlTag + @">
@@ -56,7 +56,7 @@ public sealed class TestMe { }
 ");
 
         [Test]
-        public void Code_gets_fixed_for_type_comment_with_([ValueSource(nameof(WrongGuids))] string wrongGuid)
+        public void Code_gets_fixed_for_type_documentation_with_([ValueSource(nameof(WrongGuids))] string wrongGuid)
         {
             const string Template = @"
 /// <summary>
@@ -72,7 +72,7 @@ public sealed class TestMe { }
         }
 
         [Test]
-        public void Code_gets_fixed_for_type_comment_ending_with_([ValueSource(nameof(WrongGuids))] string wrongGuid)
+        public void Code_gets_fixed_for_type_documentation_ending_with_([ValueSource(nameof(WrongGuids))] string wrongGuid)
         {
             const string Template = @"
 /// <summary>
@@ -88,7 +88,7 @@ public sealed class TestMe { }
         }
 
         [Test]
-        public void Code_gets_fixed_for_type_special_start_with_A_([ValueSource(nameof(WrongGuids))] string wrongGuid)
+        public void Code_gets_fixed_when_preceded_by_article_([ValueSource(nameof(WrongGuids))] string wrongGuid)
         {
             const string OriginalTemplate = @"
 /// <summary>
