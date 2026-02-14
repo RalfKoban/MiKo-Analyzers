@@ -25,12 +25,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                     ];
 
         [Test]
-        public void No_issue_is_reported_for_uncommented_class() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_class() => No_issue_is_reported_for(@"
 public sealed class TestMe { }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_term_in_commented_class_([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_documentation_using_identifier_term_([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// The identifier something.
 /// </" + xmlTag + @">
@@ -48,7 +48,7 @@ public sealed class TestMe { }
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_xml_tag_([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(WrongIds))] string id) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_documentation_in_xml_tag_([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(WrongIds))] string id) => An_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// The " + id.Trim() + @" something.
 /// </" + xmlTag + @">
@@ -56,7 +56,7 @@ public sealed class TestMe { }
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_ending_comment_in_xml_tag_([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(WrongIds))] string id) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_documentation_ending_in_xml_tag_([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(WrongIds))] string id) => An_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// The " + id.Trim() + @"
 /// </" + xmlTag + @">
@@ -64,7 +64,7 @@ public sealed class TestMe { }
 ");
 
         [Test]
-        public void Code_gets_fixed_for_type_comment_with_([ValueSource(nameof(WrongIds))] string wrongId)
+        public void Code_gets_fixed_for_type_documentation_([ValueSource(nameof(WrongIds))] string wrongId)
         {
             const string Template = @"
 /// <summary>
@@ -80,7 +80,7 @@ public sealed class TestMe { }
         }
 
         [Test]
-        public void Code_gets_fixed_for_type_comment_ending_with_([ValueSource(nameof(WrongIds))] string wrongId)
+        public void Code_gets_fixed_for_type_documentation_ending_([ValueSource(nameof(WrongIds))] string wrongId)
         {
             const string Template = @"
 /// <summary>
@@ -96,7 +96,7 @@ public sealed class TestMe { }
         }
 
         [Test]
-        public void Code_gets_fixed_for_type_special_start_with_A_([ValueSource(nameof(WrongIds))] string wrongId)
+        public void Code_gets_fixed_when_preceded_by_article_([ValueSource(nameof(WrongIds))] string wrongId)
         {
             const string OriginalTemplate = @"
 /// <summary>

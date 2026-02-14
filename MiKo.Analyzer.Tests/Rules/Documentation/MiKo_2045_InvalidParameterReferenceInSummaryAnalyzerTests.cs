@@ -22,7 +22,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_without_parameters() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_documented_method_without_parameters() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -35,7 +35,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_without_parameter_references_in_summary() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -49,7 +49,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_([Values("param", "paramref")] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_parameter_tag_in_summary_([Values("param", "paramref")] string tag) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -62,7 +62,7 @@ public class TestMe
 ");
 
         [Test]
-        public void A_single_issue_is_reported_for_incorrectly_documented_method() => An_issue_is_reported_for(@"
+        public void A_single_issue_is_reported_for_param_tag_in_summary() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -75,7 +75,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_documented_method_with_empty_([Values("param", "paramref")] string tag)
+        public void Code_gets_fixed_by_replacing_self_closing_tag_with_parameter_name_([Values("param", "paramref")] string tag)
         {
             const string Template = @"
 using System;
@@ -93,7 +93,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_documented_method_with_([Values("param", "paramref")] string tag)
+        public void Code_gets_fixed_by_replacing_tag_pair_with_parameter_name_([Values("param", "paramref")] string tag)
         {
             const string Template = @"
 using System;

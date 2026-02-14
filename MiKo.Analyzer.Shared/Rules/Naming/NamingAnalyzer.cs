@@ -191,7 +191,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return pluralName;
             }
 
-            if (originalName.EndsWith("Map") || originalName.EndsWith("Cache"))
+            if (originalName.EndsWith("Map", StringComparison.OrdinalIgnoreCase)
+             || originalName.EndsWith("Batch", StringComparison.OrdinalIgnoreCase)
+             || originalName.EndsWith("Cache", StringComparison.OrdinalIgnoreCase))
             {
                 singularName = originalName.ToString();
 
@@ -359,7 +361,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var localFunctions = symbol.GetLocalFunctions();
 
-            if (localFunctions.Count is 0)
+            if (localFunctions.Length is 0)
             {
                 return Array.Empty<Diagnostic>();
             }

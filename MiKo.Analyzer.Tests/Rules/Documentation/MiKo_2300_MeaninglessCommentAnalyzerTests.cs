@@ -99,7 +99,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         [Test]
         public void No_issue_is_reported_for_uncommented_method() => No_issue_is_reported_for(@"
-
 public class TestMe
 {
     public void DoSomething()
@@ -110,7 +109,6 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_separator_comment_([Values("", " ")] string gap, [Values("----", "****", "====", "####")] string comment) => No_issue_is_reported_for(@"
-
 public class TestMe
 {
     public void DoSomething()
@@ -121,8 +119,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_method() => No_issue_is_reported_for(@"
-
+        public void No_issue_is_reported_for_meaningful_comment() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -133,8 +130,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_method_with_line_break_where_second_comment_is_short_enough_to_trigger_an_issue() => No_issue_is_reported_for(@"
-
+        public void No_issue_is_reported_for_meaningful_multi_line_comment() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -146,8 +142,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_website_link_in_comment_([Values("http://", "https://")] string link) => No_issue_is_reported_for(@"
-
+        public void No_issue_is_reported_for_comment_with_website_link_([Values("http://", "https://")] string link) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -158,8 +153,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_incorrectly_commented_method_with_small_comment_but_escaped_Comments_([Values("", " ")] string gap, [ValueSource(nameof(Comments))] string comment) => No_issue_is_reported_for(@"
-
+        public void No_issue_is_reported_for_escaped_meaningless_comment_([Values("", " ")] string gap, [ValueSource(nameof(Comments))] string comment) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -171,7 +165,6 @@ public class TestMe
 
         [Test]
         public void No_issue_is_reported_for_empty_comment_([Values("", " ")] string gap) => No_issue_is_reported_for(@"
-
 public class TestMe
 {
     public void DoSomething()
@@ -182,8 +175,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_hex_number_in_comment_([Values("", " ")] string gap) => No_issue_is_reported_for(@"
-
+        public void No_issue_is_reported_for_comment_with_hex_number_([Values("", " ")] string gap) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -194,8 +186,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_allowed_text_in_comment_([Values("", " ")] string gap, [ValueSource(nameof(AllowedComments))] string comment) => No_issue_is_reported_for(@"
-
+        public void No_issue_is_reported_for_comment_with_special_text_([Values("", " ")] string gap, [ValueSource(nameof(AllowedComments))] string comment) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -206,21 +197,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_ReSharper_formatter_advice_comment_([Values("", " ")] string gap, [Values("@formatter:off", "@formatter:on")] string comment) => No_issue_is_reported_for(@"
-
-public class TestMe
-{
-    public void DoSomething()
-    {
-        //" + gap + comment + @"
-        int i = 0;
-    }
-}
-");
-
-        [Test, Combinatorial]
-        public void No_issue_is_reported_for_ReSharper_disabling_rule_comment_([Values("", " ")] string gap, [Values("ReSharper disable Something", "ReSharper restore Something")] string comment) => No_issue_is_reported_for(@"
-
+        public void No_issue_is_reported_for_comment_with_ReSharper_formatter_directive_([Values("", " ")] string gap, [Values("@formatter:off", "@formatter:on")] string comment) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -232,8 +209,19 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_commented_method_with_reason_in_comment_([ValueSource(nameof(Comments))] string comment, [Values("because", "reason")] string reason) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_comment_with_([Values("", " ")] string gap, [Values("ReSharper disable Something", "ReSharper restore Something")] string comment) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        //" + gap + comment + @"
+        int i = 0;
+    }
+}
+");
 
+        [Test, Combinatorial]
+        public void No_issue_is_reported_for_comment_with_reason_([ValueSource(nameof(Comments))] string comment, [Values("because", "reason")] string reason) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -244,8 +232,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_incorrectly_commented_method_with_small_comment_([Values("", " ")] string gap, [ValueSource(nameof(Comments))] string comment) => An_issue_is_reported_for(@"
-
+        public void An_issue_is_reported_for_too_short_comment_([Values("", " ")] string gap, [ValueSource(nameof(Comments))] string comment) => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -256,8 +243,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_incorrectly_commented_method_with_long_comment_([Values("", " ")] string gap, [ValueSource(nameof(Comments))] string comment) => An_issue_is_reported_for(@"
-
+        public void An_issue_is_reported_for_comment_without_context_([Values("", " ")] string gap, [ValueSource(nameof(Comments))] string comment) => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -268,8 +254,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_method_with_arrow_inside_comment_([Values("", " ")] string gap) => An_issue_is_reported_for(@"
-
+        public void An_issue_is_reported_for_comment_with_arrow_([Values("", " ")] string gap) => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -280,8 +265,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_incorrectly_commented_and_documented_method_with_small_comment_([Values("", " ")] string gap, [ValueSource(nameof(Comments))] string comment) => An_issue_is_reported_for(@"
-
+        public void An_issue_is_reported_for_too_short_comment_in_documented_method_([Values("", " ")] string gap, [ValueSource(nameof(Comments))] string comment) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -295,8 +279,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_incorrectly_commented_and_documented_method_with_long_comment_([Values("", " ")] string gap, [ValueSource(nameof(Comments))] string comment) => An_issue_is_reported_for(@"
-
+        public void An_issue_is_reported_for_comment_without_context_in_documented_method_([Values("", " ")] string gap, [ValueSource(nameof(Comments))] string comment) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -310,8 +293,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_and_documented_method_with_arrow_inside_comment_([Values("", " ")] string gap) => An_issue_is_reported_for(@"
-
+        public void An_issue_is_reported_for_comment_with_arrow_in_documented_method_([Values("", " ")] string gap) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -326,7 +308,6 @@ public class TestMe
 
         [Test]
         public void No_issue_is_reported_for_uncommented_field_within_region() => No_issue_is_reported_for(@"
-
 public class TestMe
 {
     #region Some region

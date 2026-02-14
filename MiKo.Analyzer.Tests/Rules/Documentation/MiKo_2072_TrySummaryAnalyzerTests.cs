@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2072_TrySummaryAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_undocumented_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_Try_method() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public bool TryDoSomething()
@@ -22,7 +22,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_empty_summary_of_documented_items() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_documented_method_with_empty_summary() => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary></summary>
@@ -33,7 +33,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Try_method_with_summary_that_does_not_start_with_Try_or_Tries() => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -46,7 +46,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_that_starts_documentation_with_see_cref() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Try_method_with_summary_starting_with_see_cref() => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -59,7 +59,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_Try_method_([Values("Try", "Tries")] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Try_method_with_summary_starting_with_phrase_([Values("Try", "Tries")] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -72,7 +72,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_async_Try_method_([Values("try", "tries")] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_async_Try_method_with_summary_containing_asynchronously_and_phrase_([Values("try", "tries")] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -85,7 +85,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_non_Try_method_([Values("Try", "Tries")] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_non_Try_method_with_summary_starting_with_phrase_([Values("Try", "Tries")] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -98,7 +98,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_([Values("Try to", "Tries to")] string startPhrase)
+        public void Code_gets_fixed_to_phrase_Attempts_to_instead_of_phrase_([Values("Try to", "Tries to")] string startPhrase)
         {
             var originalCode = @"
 public class TestMe
@@ -124,7 +124,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_Async()
+        public void Code_gets_fixed_to_replace_Asynchronously_tries_with_Asynchronously_attempts()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -150,7 +150,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_in_middle()
+        public void Code_gets_fixed_to_replace_multiple_occurrences_of_tries_with_attempts()
         {
             const string OriginalCode = @"
 public class TestMe

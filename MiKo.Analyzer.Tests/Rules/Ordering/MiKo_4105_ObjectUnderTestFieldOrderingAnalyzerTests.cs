@@ -119,8 +119,8 @@ public class TestMeTests
 
         [Test]
         public void No_issue_is_reported_for_a_test_class_with_the_field_coming_after_only_constant_fields_(
-                                                                                                   [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                                                   [ValueSource(nameof(Tests))] string test)
+                                                                                                        [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                        [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
 using NUnit.Framework;
 

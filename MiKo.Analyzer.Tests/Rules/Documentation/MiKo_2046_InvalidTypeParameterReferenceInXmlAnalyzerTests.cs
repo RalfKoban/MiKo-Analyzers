@@ -42,7 +42,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_summary_on_method_without_parameters() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_summary_on_non_generic_method() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -56,7 +56,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_summary_on_generic_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_summary_on_generic_method_without_type_parameter_reference() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -70,7 +70,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_summary_on_generic_method_with_see_tag() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_generic_method_with_see_langword_tag() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -87,7 +87,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_summary_on_non_generic_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_summary_on_method_in_generic_type_without_type_parameter_reference() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe<T> where T : class
@@ -101,7 +101,7 @@ public class TestMe<T> where T : class
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_summary_on_type() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_generic_type_with_typeparamref_tag() => No_issue_is_reported_for(@"
 using System;
 
 /// <summary>
@@ -115,7 +115,7 @@ public class TestMe<T> where T: class
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_summary_on_generic_method_([ValueSource(nameof(WrongTags))] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_generic_method_referencing_type_parameter_using_tag_([ValueSource(nameof(WrongTags))] string tag) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -129,7 +129,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_summary_on_non_generic_method_([ValueSource(nameof(WrongTags))] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_in_generic_type_referencing_type_parameter_in_summary_using_tag_([ValueSource(nameof(WrongTags))] string tag) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe<T> where T : class
@@ -143,7 +143,7 @@ public class TestMe<T> where T : class
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_returnValue_on_non_generic_method_([ValueSource(nameof(WrongTags))] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_in_generic_type_referencing_type_parameter_in_returns_using_tag_([ValueSource(nameof(WrongTags))] string tag) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe<T> where T : class
@@ -156,7 +156,7 @@ public class TestMe<T> where T : class
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_exception_on_non_generic_method_([ValueSource(nameof(WrongTags))] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_in_generic_type_referencing_type_parameter_in_exception_using_tag_([ValueSource(nameof(WrongTags))] string tag) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe<T> where T : class
@@ -169,7 +169,7 @@ public class TestMe<T> where T : class
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_summary_on_generic_type_([ValueSource(nameof(WrongTags))] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_generic_type_referencing_type_parameter_using_tag_([ValueSource(nameof(WrongTags))] string tag) => An_issue_is_reported_for(@"
 using System;
 
 /// <summary>
@@ -183,7 +183,7 @@ public class TestMe<T> where T: class
 ");
 
         [Test]
-        public void Code_gets_fixed_for_([ValueSource(nameof(WrongTags))] string tag)
+        public void Code_gets_fixed_by_replacing_tag_with_typeparamref_([ValueSource(nameof(WrongTags))] string tag)
         {
             const string Template = @"
 using System;

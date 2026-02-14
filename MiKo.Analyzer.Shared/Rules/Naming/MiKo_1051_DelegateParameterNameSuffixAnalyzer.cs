@@ -19,9 +19,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IParameterSymbol symbol)
         {
-            var type = symbol.Type;
+            var type = symbol?.Type;
 
-            switch (type.TypeKind)
+            switch (type?.TypeKind)
             {
                 case TypeKind.Delegate:
                     return true;

@@ -16,10 +16,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.IsFactory();
+        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol?.IsFactory() is true;
 
         protected override bool ShallAnalyze(IMethodSymbol symbol)
         {
+            if (symbol is null)
+            {
+                // code seems to be obfuscated or contains no valid symbol, so ignore it silently
+                return false;
+            }
+
             if (symbol.IsConstructor())
             {
                 return false;

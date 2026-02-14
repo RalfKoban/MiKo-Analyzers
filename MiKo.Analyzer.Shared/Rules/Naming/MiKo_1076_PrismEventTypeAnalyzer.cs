@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.IsPrismEvent();
+        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol?.IsPrismEvent() is true;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
         {

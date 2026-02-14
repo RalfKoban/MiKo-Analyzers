@@ -41,7 +41,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_non_Boolean_variable() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_boolean_variable() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -54,7 +54,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_Boolean_variable_with_correct_name_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_boolean_variable_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -68,7 +68,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_var_Boolean_variable_with_correct_name_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_var_boolean_variable_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -82,7 +82,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_Boolean_variable_with_incorrect_name_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_boolean_variable_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -96,7 +96,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_var_Boolean_variable_with_incorrect_name_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_var_boolean_variable_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -110,7 +110,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_variable_declaration_pattern_for_Boolean_variable_with_correct_name_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_variable_declaration_pattern_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -128,7 +128,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_variable_declaration_pattern_for_Boolean_variable_with_incorrect_name_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_variable_declaration_pattern_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 using System;
 using System.Threading;
 

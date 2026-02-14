@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] BooleanReturnValues = [.. BooleanOnlyReturnValues, .. BooleanTaskReturnValues];
 
         [Test]
-        public void No_issue_is_reported_for_uncommented_method_([ValueSource(nameof(BooleanReturnValues))] string returnType) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_method_([ValueSource(nameof(BooleanReturnValues))] string returnType) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public " + returnType + @" DoSomething(object o) => null;
@@ -41,7 +41,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_uncommented_property_([ValueSource(nameof(BooleanReturnValues))] string returnType) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_property_([ValueSource(nameof(BooleanReturnValues))] string returnType) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public " + returnType + @" DoSomething { get; set; }
@@ -49,9 +49,9 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_method_that_returns_a_(
-                                                                [Values("returns", "value")] string xmlTag,
-                                                                [Values("void", "int", "Task", "Task<int>", "Task<string>")] string returnType)
+        public void No_issue_is_reported_for_method_with_non_Boolean_return_type_(
+                                                                              [Values("returns", "value")] string xmlTag,
+                                                                              [Values("void", "int", "Task", "Task<int>", "Task<string>")] string returnType)
             => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
@@ -69,11 +69,11 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_Boolean_only_method_(
-                                                                                  [Values("returns", "value")] string xmlTag,
-                                                                                  [Values("<see langword=\"true\" />", "<see langword=\"true\"/>")] string trueValue,
-                                                                                  [Values("<see langword=\"false\" />", "<see langword=\"false\"/>")] string falseValue,
-                                                                                  [ValueSource(nameof(BooleanOnlyReturnValues))] string returnType)
+        public void No_issue_is_reported_for_Boolean_method_with_standard_phrase_(
+                                                                              [Values("returns", "value")] string xmlTag,
+                                                                              [Values("<see langword=\"true\" />", "<see langword=\"true\"/>")] string trueValue,
+                                                                              [Values("<see langword=\"false\" />", "<see langword=\"false\"/>")] string falseValue,
+                                                                              [ValueSource(nameof(BooleanOnlyReturnValues))] string returnType)
             => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
@@ -91,12 +91,12 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_Boolean_only_method_with_default_phrase_(
-                                                                                                      [Values("returns", "value")] string xmlTag,
-                                                                                                      [Values("<see langword=\"true\" />", "<see langword=\"true\"/>")] string trueValue,
-                                                                                                      [Values("<see langword=\"false\" />", "<see langword=\"false\"/>")] string falseValue,
-                                                                                                      [Values("<see langword=\"true\"/>", "<see langword=\"false\"/>")] string defaultValue,
-                                                                                                      [ValueSource(nameof(BooleanOnlyReturnValues))] string returnType)
+        public void No_issue_is_reported_for_Boolean_method_with_standard_phrase_including_default_(
+                                                                                                [Values("returns", "value")] string xmlTag,
+                                                                                                [Values("<see langword=\"true\" />", "<see langword=\"true\"/>")] string trueValue,
+                                                                                                [Values("<see langword=\"false\" />", "<see langword=\"false\"/>")] string falseValue,
+                                                                                                [Values("<see langword=\"true\"/>", "<see langword=\"false\"/>")] string defaultValue,
+                                                                                                [ValueSource(nameof(BooleanOnlyReturnValues))] string returnType)
             => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
@@ -114,11 +114,11 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_Boolean_only_method_with_line_break_(
-                                                                                                  [Values("returns", "value")] string xmlTag,
-                                                                                                  [Values("<see langword=\"true\" />", "<see langword=\"true\"/>")] string trueValue,
-                                                                                                  [Values("<see langword=\"false\" />", "<see langword=\"false\"/>")] string falseValue,
-                                                                                                  [ValueSource(nameof(BooleanOnlyReturnValues))] string returnType)
+        public void No_issue_is_reported_for_Boolean_method_with_standard_phrase_on_multiple_lines_(
+                                                                                                [Values("returns", "value")] string xmlTag,
+                                                                                                [Values("<see langword=\"true\" />", "<see langword=\"true\"/>")] string trueValue,
+                                                                                                [Values("<see langword=\"false\" />", "<see langword=\"false\"/>")] string falseValue,
+                                                                                                [ValueSource(nameof(BooleanOnlyReturnValues))] string returnType)
             => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
@@ -137,11 +137,11 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_Boolean_Task_method_(
-                                                                                  [Values("returns", "value")] string xmlTag,
-                                                                                  [Values("<see langword=\"true\" />", "<see langword=\"true\"/>")] string trueValue,
-                                                                                  [Values("<see langword=\"false\" />", "<see langword=\"false\"/>")] string falseValue,
-                                                                                  [ValueSource(nameof(BooleanTaskReturnValues))] string returnType)
+        public void No_issue_is_reported_for_Boolean_Task_method_with_standard_phrase_(
+                                                                                   [Values("returns", "value")] string xmlTag,
+                                                                                   [Values("<see langword=\"true\" />", "<see langword=\"true\"/>")] string trueValue,
+                                                                                   [Values("<see langword=\"false\" />", "<see langword=\"false\"/>")] string falseValue,
+                                                                                   [ValueSource(nameof(BooleanTaskReturnValues))] string returnType)
             => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
@@ -159,7 +159,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_Boolean_only_property_with_To_and_setter() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Boolean_property_with_setter_using_to_phrase() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -175,10 +175,10 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_wrong_commented_method_(
-                                                                 [Values("returns", "value")] string xmlTag,
-                                                                 [Values("A whatever", "An whatever", "The whatever")] string comment,
-                                                                 [ValueSource(nameof(BooleanReturnValues))] string returnType)
+        public void An_issue_is_reported_for_Boolean_method_with_non_standard_phrase_(
+                                                                                  [Values("returns", "value")] string xmlTag,
+                                                                                  [Values("A whatever", "An whatever", "The whatever")] string comment,
+                                                                                  [ValueSource(nameof(BooleanReturnValues))] string returnType)
             => An_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
@@ -196,7 +196,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_wrong_commented_method_with_starting_phrase_([ValueSource(nameof(SimpleStartingPhrases))] string comment)
+        public void An_issue_is_reported_for_Boolean_method_with_simple_starting_phrase_([ValueSource(nameof(SimpleStartingPhrases))] string comment)
             => An_issue_is_reported_for(@"
 using System;
 
@@ -213,7 +213,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_returns_tag_inside_summary_tag_and_wrong_commented_method_with_starting_phrase_([ValueSource(nameof(SimpleStartingPhrases))] string comment)
+        public void An_issue_is_reported_for_Boolean_method_with_returns_tag_inside_summary_tag_([ValueSource(nameof(SimpleStartingPhrases))] string comment)
             => An_issue_is_reported_for(@"
 using System;
 
@@ -238,7 +238,7 @@ public class TestMe
         [TestCase("In case that the stuff is done, True; else False.", "the stuff is done")]
         [TestCase("If <see langword=\"true\"/> calling method should return, otherwise not", "calling method should return")]
         [TestCase("<see langword=\"true\"/> in case that the stuff is done, in all other cases returns <see langword=\"false\"/>.", "the stuff is done")]
-        public void Code_gets_fixed_for_non_generic_method_(string comment, string fixedPhrase)
+        public void Code_gets_fixed_for_Boolean_method_(string comment, string fixedPhrase)
         {
             var originalCode = @"
 using System;
@@ -271,7 +271,7 @@ public class TestMe
         [TestCase(" Something . ", "something")]
         [TestCase("Something.", "something")]
         [TestCase("If the stuff is done, True; False else.", "the stuff is done")]
-        public void Code_gets_fixed_for_generic_method_(string comment, string fixedPhrase)
+        public void Code_gets_fixed_for_Boolean_Task_method_(string comment, string fixedPhrase)
         {
             var originalCode = @"
 using System;
@@ -343,7 +343,7 @@ public class TestMe
         [TestCase("true, if something, false else.")]
         [TestCase("true when something else false")]
         [TestCase("true when something else false.")]
-        public void Code_gets_fixed_for_almost_correct_comment_on_non_generic_method_(string comment)
+        public void Code_gets_fixed_for_Boolean_method_with_almost_standard_phrase_(string comment)
         {
             var originalCode = @"
 using System;
@@ -400,7 +400,7 @@ public class TestMe
         [TestCase("false in the other case.")]
         [TestCase("false in other cases.")]
         [TestCase("false in other case.")]
-        public void Code_gets_fixed_for_almost_correct_comment_with_trailing_other_cases_(string comment)
+        public void Code_gets_fixed_for_Boolean_method_with_trailing_other_cases_phrase_(string comment)
         {
             var originalCode = @"
 using System;
@@ -432,7 +432,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_multiline_comment_on_non_generic_method_variant_1()
+        public void Code_gets_fixed_for_Boolean_method_with_multiline_comment_split_at_comma()
         {
             const string OriginalCode = @"
 using System;
@@ -465,7 +465,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_multiline_comment_on_non_generic_method_variant_2()
+        public void Code_gets_fixed_for_Boolean_method_with_multiline_comment_starting_with_Will_return()
         {
             const string OriginalCode = @"
 using System;
@@ -499,7 +499,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_multiline_comment_on_non_generic_method_variant_3()
+        public void Code_gets_fixed_for_Boolean_method_with_multiline_comment_having_listed_conditions()
         {
             const string OriginalCode = @"
 using System;
@@ -539,7 +539,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_multiple_references_in_comment_on_non_generic_method()
+        public void Code_gets_fixed_for_Boolean_method_with_multiple_references()
         {
             const string OriginalCode = @"
 using System;
@@ -589,7 +589,7 @@ public class TestMe
         [TestCase(@"Returns a task that completes with a result of <see langword=""true""/> if something, returns <see langword=""false""/> otherwise.")]
         [TestCase(@"Returns a task that will complete with a result of <see langword=""true""/> if something, <see langword=""false""/> otherwise.")]
         [TestCase(@"Returns a task that will complete with a result of <see langword=""true""/> if something, returns <see langword=""false""/> otherwise.")]
-        public void Code_gets_fixed_for_almost_correct_comment_on_generic_method_(string comment)
+        public void Code_gets_fixed_for_Boolean_Task_method_with_almost_standard_phrase_(string comment)
         {
             var originalCode = @"
 using System;
@@ -639,7 +639,7 @@ public class TestMe
         [TestCase(@"Returns <see langref=""false""/> if something.")]
         [TestCase(@"Returns <see langword=""false""/> if something.")]
         [TestCase("false: if something, true: otherwise.")]
-        public void Code_gets_not_fixed_for_almost_correct_comment_on_non_generic_method_if_starting_with_false_(string comment)
+        public void Code_gets_not_fixed_for_Boolean_method_starting_with_false_(string comment)
         {
             var originalCode = @"
 using System;
@@ -662,7 +662,7 @@ public class TestMe
         [TestCase(@"A task that will complete with a result of <see langword=""false""/> if something, <see langword=""true""/> otherwise.")]
         [TestCase(@"Returns a task that will complete with a result of <see langword=""false""/> if something, <see langword=""true""/> otherwise.")]
         [TestCase(@"Returns a task that will complete with a result of <see langword=""false""/> if something, returns <see langword=""true""/> otherwise.")]
-        public void Code_gets_not_fixed_for_almost_correct_comment_on_generic_method_if_starting_with_false_(string comment)
+        public void Code_gets_not_fixed_for_Boolean_Task_method_starting_with_false_(string comment)
         {
             var originalCode = @"
 using System;
@@ -716,7 +716,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_fix_places_fix_after_starting_para_tag()
+        public void Code_fix_places_langword_after_starting_para_tag()
         {
             const string OriginalCode = @"
 using System;
@@ -754,7 +754,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_simple_starting_phrase_([ValueSource(nameof(SimpleStartingPhrases))] string comment)
+        public void Code_gets_fixed_for_Boolean_method_with_simple_starting_phrase_([ValueSource(nameof(SimpleStartingPhrases))] string comment)
         {
             var originalCode = @"
 using System;
@@ -784,7 +784,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_returns_tag_inside_summary_tag_([ValueSource(nameof(SimpleStartingPhrases))] string comment)
+        public void Code_gets_fixed_for_Boolean_method_with_returns_tag_inside_summary_tag_([ValueSource(nameof(SimpleStartingPhrases))] string comment)
         {
             var originalCode = @"
 using System;
@@ -825,7 +825,7 @@ public class TestMe
         [TestCase("True means")]
         [TestCase("True means that")]
         [TestCase("True of")] // typo
-        public void Code_gets_fixed_for_specific_starting_phrase_(string comment)
+        public void Code_gets_fixed_for_Boolean_method_with_specific_starting_phrase_(string comment)
         {
             var originalCode = @"
 using System;
@@ -855,7 +855,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_fix_recognizes_Otherwise_at_end_of_first_line_in_multi_line_comment_([Values("Otherwise ", "Otherwise")] string lastWordOnFirstLine)
+        public void Code_fix_recognizes_Otherwise_at_end_of_first_line_in_multiline_comment_([Values("Otherwise ", "Otherwise")] string lastWordOnFirstLine)
         {
             var originalCode = @"
 using System;

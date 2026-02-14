@@ -24,7 +24,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_documented_method_without_exception_docu() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_documented_method_without_exception_documentation() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -39,7 +39,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_documented_method_with_exception_docu_for_other_exception() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_exception_documentation_for_other_exception() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -55,7 +55,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_ObjectDisposedException_in_IDisposable_type() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe : IDisposable
@@ -73,7 +73,7 @@ public class TestMe : IDisposable
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_ObjectDisposedException_in_non_IDisposable_type() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -89,7 +89,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_Dispose_in_base_class() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_ObjectDisposedException_when_base_class_implements_IDisposable() => No_issue_is_reported_for(@"
 using System;
 
 public class Base : IDisposable
@@ -114,7 +114,7 @@ public class TestMe : Base
 ");
 
         [Test]
-        public void Code_gets_fixed()
+        public void Code_gets_fixed_by_removing_ObjectDisposedException_documentation()
         {
             const string OriginalCode = @"
 using System;

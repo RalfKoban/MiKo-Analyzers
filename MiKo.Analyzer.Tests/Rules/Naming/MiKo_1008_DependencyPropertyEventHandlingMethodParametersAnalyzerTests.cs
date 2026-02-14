@@ -38,7 +38,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_d_and_e_parameters() => No_issue_is_reported_for(@"
 namespace System.Windows
 {
     public struct DependencyPropertyChangedEventArgs
@@ -59,7 +59,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_local_function() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_local_function_with_d_and_e_parameters() => No_issue_is_reported_for(@"
 namespace System.Windows
 {
     public struct DependencyPropertyChangedEventArgs
@@ -83,7 +83,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_incorrectly_named_local_function_if_surrounding_method_is_event_handling_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_local_function_inside_event_handling_method() => No_issue_is_reported_for(@"
 namespace System.Windows
 {
     public struct DependencyPropertyChangedEventArgs
@@ -107,7 +107,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_DependencyObject_on_method() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_DependencyObject_parameter_named_s() => An_issue_is_reported_for(@"
 namespace System.Windows
 {
     public struct DependencyPropertyChangedEventArgs
@@ -128,7 +128,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_DependencyObject_on_overridden_method() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_overridden_method_with_DependencyObject_parameter_named_s() => An_issue_is_reported_for(@"
 namespace System.Windows
 {
     public struct DependencyPropertyChangedEventArgs
@@ -149,7 +149,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_DependencyObject_on_local_function() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_local_function_with_DependencyObject_parameter_named_s() => An_issue_is_reported_for(@"
 namespace System.Windows
 {
     public struct DependencyPropertyChangedEventArgs
@@ -173,7 +173,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_DependencyPropertyChangedEventArgs_on_method() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_DependencyPropertyChangedEventArgs_parameter_named_args() => An_issue_is_reported_for(@"
 namespace System.Windows
 {
     public struct DependencyPropertyChangedEventArgs
@@ -194,7 +194,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_DependencyPropertyChangedEventArgs_on_overridden_method() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_overridden_method_with_DependencyPropertyChangedEventArgs_parameter_named_args() => An_issue_is_reported_for(@"
 namespace System.Windows
 {
     public struct DependencyPropertyChangedEventArgs
@@ -214,7 +214,7 @@ namespace Bla
 }");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_DependencyPropertyChangedEventArgs_on_local_function() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_local_function_with_DependencyPropertyChangedEventArgs_parameter_named_args() => An_issue_is_reported_for(@"
 namespace System.Windows
 {
     public struct DependencyPropertyChangedEventArgs

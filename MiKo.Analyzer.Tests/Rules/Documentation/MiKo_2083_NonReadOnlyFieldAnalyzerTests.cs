@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] Visibilities = ["protected", "public", "private", "internal"];
 
         [Test]
-        public void No_issue_is_reported_for_uncommented_readonly_field_with_visibility_([ValueSource(nameof(Visibilities))] string visibility) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_readonly_field_with_visibility_([ValueSource(nameof(Visibilities))] string visibility) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -24,7 +24,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_uncommented_field_with_visibility_([ValueSource(nameof(Visibilities))] string visibility) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_non_readonly_field_with_visibility_([ValueSource(nameof(Visibilities))] string visibility) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -34,7 +34,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_readonly_field_with_visibility_([ValueSource(nameof(Visibilities))] string visibility) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_readonly_field_with_readonly_comment_with_visibility_([ValueSource(nameof(Visibilities))] string visibility) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -48,7 +48,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_field_with_visibility_([ValueSource(nameof(Visibilities))] string visibility) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_non_readonly_field_with_readonly_comment_with_visibility_([ValueSource(nameof(Visibilities))] string visibility) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -62,7 +62,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed()
+        public void Code_gets_fixed_to_remove_readonly_comment()
         {
             const string OriginalCode = @"
 /// <summary>

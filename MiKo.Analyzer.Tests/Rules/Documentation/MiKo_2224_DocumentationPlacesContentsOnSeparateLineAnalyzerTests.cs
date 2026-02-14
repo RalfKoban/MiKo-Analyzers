@@ -43,7 +43,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_empty_documented_method_when_start_and_end_tag_are_on_separate_lines_([ValueSource(nameof(Tags))] string tag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_empty_XML_tag_with_start_and_end_on_separate_lines_([ValueSource(nameof(Tags))] string tag) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -57,7 +57,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_empty_documented_method_when_start_and_end_tag_are_on_separate_lines_and_there_is_an_empty_line_in_between_([ValueSource(nameof(Tags))] string tag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_empty_XML_tag_with_start_and_end_on_separate_lines_and_empty_line_in_between_([ValueSource(nameof(Tags))] string tag) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -72,7 +72,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_([ValueSource(nameof(Tags))] string tag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_XML_tag_with_content_on_separate_line_([ValueSource(nameof(Tags))] string tag) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -91,7 +91,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_para_or_para() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_para_or_para() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -109,7 +109,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_empty_para_tag() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_empty_para_tag_on_separate_line() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -126,7 +126,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_empty_documented_method_when_start_and_end_tag_are_on_same_lines_([ValueSource(nameof(Tags))] string tag, [Values("", " ", "  ")] string gap) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_empty_XML_tag_with_start_and_end_on_same_line_([ValueSource(nameof(Tags))] string tag, [Values("", " ", "  ")] string gap) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -140,7 +140,7 @@ public class TestMe
 
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_with_text_([ValueSource(nameof(Tags))] string tag) => An_issue_is_reported_for(2, @"
+        public void An_issue_is_reported_for_XML_tag_with_text_on_same_line_as_start_and_end_tag_([ValueSource(nameof(Tags))] string tag) => An_issue_is_reported_for(2, @"
 using System;
 
 public class TestMe
@@ -154,7 +154,7 @@ public class TestMe
 
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_with_see_([ValueSource(nameof(Tags))] string tag) => An_issue_is_reported_for(2, @"
+        public void An_issue_is_reported_for_XML_tag_with_see_cref_on_same_line_as_start_and_end_tag_([ValueSource(nameof(Tags))] string tag) => An_issue_is_reported_for(2, @"
 using System;
 
 public class TestMe
@@ -167,7 +167,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_if_see_is_on_same_line_as_start_tag_([ValueSource(nameof(Tags))] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_XML_tag_with_see_cref_on_same_line_as_start_tag_([ValueSource(nameof(Tags))] string tag) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -181,7 +181,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_if_see_is_on_same_line_as_end_tag_([ValueSource(nameof(Tags))] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_XML_tag_with_see_cref_on_same_line_as_end_tag_([ValueSource(nameof(Tags))] string tag) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -195,7 +195,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_if_text_is_on_same_line_as_start_tag_([ValueSource(nameof(Tags))] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_XML_tag_with_text_on_same_line_as_start_tag_([ValueSource(nameof(Tags))] string tag) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -209,7 +209,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_if_text_is_on_same_line_as_end_tag_([ValueSource(nameof(Tags))] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_XML_tag_with_text_on_same_line_as_end_tag_([ValueSource(nameof(Tags))] string tag) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -224,7 +224,7 @@ public class TestMe
 
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_if_some_inner_XML_elements_are_on_same_line_as_start_tag_([ValueSource(nameof(Tags))] string tag) => An_issue_is_reported_for(2, @"
+        public void An_issue_is_reported_for_XML_tag_with_inner_XML_element_on_same_line_as_start_tag_([ValueSource(nameof(Tags))] string tag) => An_issue_is_reported_for(2, @"
 using System;
 
 public class TestMe
@@ -240,7 +240,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_if_some_inner_XML_elements_are_on_same_line_as_end_tag_([ValueSource(nameof(Tags))] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_XML_tag_with_inner_XML_element_on_same_line_as_end_tag_([ValueSource(nameof(Tags))] string tag) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -256,7 +256,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_if_some_XML_elements_are_on_same_line_([ValueSource(nameof(Tags))] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_XML_tag_end_on_same_line_as_next_XML_tag_start_([ValueSource(nameof(Tags))] string tag) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -274,7 +274,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_if_empty_para_tag_is_on_same_line_with_text_after_it() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_empty_para_tag_on_same_line_with_text_after_it() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -291,7 +291,7 @@ public class TestMe
 
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_if_empty_para_tag_is_on_same_line_with_XML_element_after_it() => An_issue_is_reported_for(2, @"
+        public void An_issue_is_reported_for_empty_para_tag_on_same_line_with_XML_element_after_it() => An_issue_is_reported_for(2, @"
 using System;
 
 public class TestMe
@@ -306,7 +306,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_if_empty_para_tag_is_on_same_line_with_text_before_it() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_empty_para_tag_on_same_line_with_text_before_it() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -323,7 +323,7 @@ public class TestMe
 
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_if_empty_para_tag_is_on_same_line_with_element_before_it() => An_issue_is_reported_for(2, @"
+        public void An_issue_is_reported_for_empty_para_tag_on_same_line_with_XML_element_before_it() => An_issue_is_reported_for(2, @"
 using System;
 
 public class TestMe
@@ -338,7 +338,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_if_empty_para_tag_is_on_same_line_with_another_empty_element() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_empty_para_tag_on_same_line_with_another_empty_para_tag() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -355,7 +355,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_documented_method_with_text()
+        public void Code_gets_fixed_to_place_text_on_separate_line_between_start_and_end_tag()
         {
             const string OriginalCode = @"
 using System;
@@ -387,7 +387,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_documented_method_if_text_is_on_same_line_as_start_tag()
+        public void Code_gets_fixed_to_place_text_on_separate_line_after_start_tag()
         {
             const string OriginalCode = @"
 using System;
@@ -420,7 +420,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_documented_method_if_text_is_on_same_line_as_end_tag()
+        public void Code_gets_fixed_to_place_text_on_separate_line_before_end_tag()
         {
             const string OriginalCode = @"
 using System;
@@ -453,7 +453,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_documented_method_with_see()
+        public void Code_gets_fixed_to_place_see_cref_on_separate_line_between_start_and_end_tag()
         {
             const string OriginalCode = @"
 using System;
@@ -485,7 +485,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_documented_method_if_see_is_on_same_line_as_start_tag()
+        public void Code_gets_fixed_to_place_see_cref_on_separate_line_after_start_tag()
         {
             const string OriginalCode = @"
 using System;
@@ -518,7 +518,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_documented_method_if_see_is_on_same_line_as_end_tag()
+        public void Code_gets_fixed_to_place_see_cref_on_separate_line_before_end_tag()
         {
             const string OriginalCode = @"
 using System;
@@ -551,7 +551,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_documented_method_if_empty_para_tag_is_on_same_line_with_text_after()
+        public void Code_gets_fixed_to_place_empty_para_tag_on_separate_line_from_text_after()
         {
             const string OriginalCode = @"
 using System;
@@ -588,7 +588,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_documented_method_if_empty_para_tag_is_on_line_with_text_before()
+        public void Code_gets_fixed_to_place_empty_para_tag_on_separate_line_from_text_before()
         {
             const string OriginalCode = @"
 using System;
@@ -625,7 +625,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_documented_method_if_empty_para_tag_is_on_line_with_text_before_and_after()
+        public void Code_gets_fixed_to_place_empty_para_tag_on_separate_line_from_text_before_and_after()
         {
             const string OriginalCode = @"
 using System;
@@ -661,7 +661,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_documented_method_if_empty_para_tag_is_on_line_as_start_tag()
+        public void Code_gets_fixed_to_place_empty_para_tag_on_separate_line_after_start_tag()
         {
             const string OriginalCode = @"
 using System;
@@ -696,7 +696,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_documented_method_if_empty_para_tag_is_on_line_as_end_tag()
+        public void Code_gets_fixed_to_place_empty_para_tag_on_separate_line_before_end_tag()
         {
             const string OriginalCode = @"
 using System;
@@ -731,7 +731,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_documented_method_if_empty_para_tag_is_on_line_as_another_empty_tag()
+        public void Code_gets_fixed_to_place_empty_para_tags_on_separate_lines()
         {
             const string OriginalCode = @"
 using System;
@@ -770,7 +770,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_incorrectly_documented_response()
+        public void Code_gets_fixed_to_place_response_content_on_separate_line()
         {
             const string OriginalCode = @"
 using System;

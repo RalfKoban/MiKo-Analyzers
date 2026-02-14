@@ -12,14 +12,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2013_EnumSummaryAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_class_without_documentation() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_class() => No_issue_is_reported_for(@"
 public class TestMe
 {
 }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_class_with_documentation() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_documented_class() => No_issue_is_reported_for(@"
 /// <summary>
 /// Some documentation.
 /// </summary>
@@ -29,14 +29,14 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_enum_without_documentation() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_enum() => No_issue_is_reported_for(@"
 public enum TestMe
 {
 }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_enum_with_correct_phrase() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_enum_with_standard_phrase() => No_issue_is_reported_for(@"
 /// <summary>
 /// Defines values that specify something.
 /// </summary>
@@ -46,7 +46,7 @@ public enum TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_enum_with_correct_phrase_in_para_tag() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_enum_with_standard_phrase_in_para_tag() => No_issue_is_reported_for(@"
 /// <summary>
 /// <para>
 /// Defines values that specify something.
@@ -58,7 +58,7 @@ public enum TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_enum_with_empty_phrase() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_enum_with_empty_summary() => An_issue_is_reported_for(@"
 /// <summary>
 ///
 /// </summary>
@@ -68,7 +68,7 @@ public enum TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_enum_with_wrong_phrase() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_enum_with_non_standard_phrase() => An_issue_is_reported_for(@"
 /// <summary>
 /// Some documentation.
 /// </summary>
@@ -78,7 +78,7 @@ public enum TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_enum_with_wrong_phrase_in_para_tag() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_enum_with_non_standard_phrase_in_para_tag() => An_issue_is_reported_for(@"
 /// <summary>
 /// <para>
 /// Defines something.
@@ -90,7 +90,7 @@ public enum TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_comment_with_see_cref_only() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_enum_with_only_see_cref_in_summary() => An_issue_is_reported_for(@"
 /// <summary>
 /// <see cref=""TestMe""/>
 /// </summary>
@@ -100,7 +100,7 @@ public enum TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed()
+        public void Code_gets_fixed_by_replacing_with_standard_phrase()
         {
             const string OriginalCode = @"
 /// <summary>
@@ -123,7 +123,7 @@ public enum TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_on_single_line()
+        public void Code_gets_fixed_by_replacing_summary_on_single_line_with_standard_phrase()
         {
             const string OriginalCode = @"
 /// <summary>Something to do.</summary>
@@ -144,7 +144,7 @@ public enum TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_with_multiline()
+        public void Code_gets_fixed_by_replacing_multiline_summary_with_standard_phrase()
         {
             const string OriginalCode = @"
 /// <summary>
@@ -169,7 +169,7 @@ public enum TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_with_no_spaces_after_slashes()
+        public void Code_gets_fixed_when_comment_has_no_spaces_after_slashes()
         {
             const string OriginalCode = @"
 ///<summary>
@@ -192,7 +192,7 @@ public enum TestMe
         }
 
         [Test]
-        public void Code_gets_fixed__when_on_same_line_with_no_spaces_after_slashes()
+        public void Code_gets_fixed_when_summary_on_single_line_has_no_spaces_after_slashes()
         {
             const string OriginalCode = @"
 ///<summary>Something to do.</summary>
@@ -213,7 +213,7 @@ public enum TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_with_multiline_but_no_spaces_after_slashes()
+        public void Code_gets_fixed_when_multiline_summary_has_no_spaces_after_slashes()
         {
             const string OriginalCode = @"
 ///<summary>
@@ -238,7 +238,7 @@ public enum TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_with_seecref_multiline()
+        public void Code_gets_fixed_by_prepending_standard_phrase_to_multiline_summary_with_see_cref()
         {
             const string OriginalCode = @"
 /// <summary>
@@ -265,7 +265,7 @@ public enum TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_with_seecref_on_single_line()
+        public void Code_gets_fixed_by_prepending_standard_phrase_to_single_line_summary_with_see_cref()
         {
             const string OriginalCode = @"
 /// <summary><see cref=""TestMe""/> Something to do.</summary>
@@ -307,7 +307,7 @@ public enum TestMe
         [TestCase("Specify")]
         [TestCase("Specified")]
         [TestCase("Specifies")]
-        public void Code_gets_fixed_for_almost_correct_documentation_(string firstWord)
+        public void Code_gets_fixed_by_normalizing_to_standard_phrase_(string firstWord)
         {
             var originalCode = @"
 /// <summary>
@@ -385,7 +385,7 @@ public enum TestMe
         [TestCase("Sets", "")]
         [TestCase("Gets or sets", "")]
         [TestCase("Gets or Sets", "")]
-        public void Code_gets_fixed_for_documentation_(string start, string fixedStart)
+        public void Code_gets_fixed_by_replacing_common_starting_phrases_(string start, string fixedStart)
         {
             var originalCode = @"
 /// <summary>
@@ -419,7 +419,7 @@ public enum TestMe
         [TestCase("Direction", "directions")]
         [TestCase("DirectionKind", "directions")]
         [TestCase("ReferenceTypes", "references")]
-        public void Code_gets_fixed_for_special_documentation_(string typeName, string fixedEnding)
+        public void Code_gets_fixed_by_generating_type_specific_phrase_for_enum_(string typeName, string fixedEnding)
         {
             var originalCode = @"
 /// <summary>
@@ -453,7 +453,7 @@ public enum " + typeName + @"
         [TestCase("Direction", "directions")]
         [TestCase("DirectionKind", "directions")]
         [TestCase("ReferenceTypes", "references")]
-        public void Code_gets_fixed_for_sentenced_with_special_documentation_(string typeName, string fixedEnding)
+        public void Code_gets_fixed_by_generating_type_specific_phrase_for_enum_with_sentence_(string typeName, string fixedEnding)
         {
             var originalCode = @"
 /// <summary>
@@ -479,7 +479,7 @@ public enum " + typeName + @"
         [TestCase("MessageKind", "messages")]
         [TestCase("MessageType", "messages")]
         [TestCase("MessageDef", "message definitions")]
-        public void Code_gets_fixed_for_sentenced_with_special_documentation_suffixed_with_Enum_(string typeName, string fixedEnding)
+        public void Code_gets_fixed_by_generating_type_specific_phrase_for_enum_with_Enum_suffix_(string typeName, string fixedEnding)
         {
             var originalCode = @"
 /// <summary>
@@ -504,7 +504,7 @@ public enum " + typeName + @"Enum
         [TestCase("StateOfText", "states of texts")]
         [TestCase("KindOfText", "kinds of texts")]
         [TestCase("TypeOfText", "kinds of texts")]
-        public void Code_gets_fixed_for_sentenced_with_special_documentation_prefixed_with_(string prefix, string fixedText)
+        public void Code_gets_fixed_by_generating_phrase_based_on_enum_name_pattern_(string prefix, string fixedText)
         {
             var originalCode = @"
 /// <summary>

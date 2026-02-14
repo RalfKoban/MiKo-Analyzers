@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation) => AnalyzeName(symbol);
 
-        protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.IsConst is false && base.ShallAnalyze(symbol);
+        protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol?.IsConst is false && base.ShallAnalyze(symbol);
 
         protected override bool ShallAnalyzeLocalFunctions(IMethodSymbol symbol) => true;
 
