@@ -318,7 +318,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static readonly string[] WrongWords = [.. BadPrefixes.Except(AllowedWords)];
 
         [Test]
-        public void No_issue_is_reported_for_properly_named_code() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_code_without_abbreviations() => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -346,7 +346,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_prefix_well_known_abbreviation_([Values("MEF", "ALT")] string abbreviation) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_well_known_abbreviation_as_prefix_([Values("MEF", "ALT")] string abbreviation) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -358,7 +358,7 @@ namespace Bla
 }");
 
         [Test]
-        public void No_issue_is_reported_for_postfix_well_known_abbreviation_([Values("MEF", "ALT")] string abbreviation) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_well_known_abbreviation_as_suffix_([Values("MEF", "ALT")] string abbreviation) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -370,7 +370,7 @@ namespace Bla
 }");
 
         [Test]
-        public void No_issue_is_reported_for_underscore_separated_prefix_well_known_abbreviation_([Values("MEF", "ALT")] string abbreviation) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_well_known_abbreviation_as_prefix_with_underscore_separator_([Values("MEF", "ALT")] string abbreviation) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -382,7 +382,7 @@ namespace Bla
 }");
 
         [Test]
-        public void No_issue_is_reported_for_underscore_separated_postfix_well_known_abbreviation_([Values("MEF", "ALT")] string abbreviation) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_well_known_abbreviation_as_suffix_with_underscore_separator_([Values("MEF", "ALT")] string abbreviation) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -394,7 +394,7 @@ namespace Bla
 }");
 
         [Test] // verifies that 'wParam' and 'lParam' which are used by Windows C++ API are not reported as abbreviations even though they actually are
-        public void No_issue_is_reported_for_special_parameters_wParam_and_lParam() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Windows_API_parameters_wParam_and_lParam() => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -406,7 +406,7 @@ namespace Bla
 }");
 
         [Test]
-        public void No_issue_is_reported_for_properly_named_method_([ValueSource(nameof(AllowedWords))] string methodName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_([ValueSource(nameof(AllowedWords))] string methodName) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -422,7 +422,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_properly_named_method_with_upper_case_suffix_([ValueSource(nameof(AllowedTerms))] string methodName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_upper_case_suffix_([ValueSource(nameof(AllowedTerms))] string methodName) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -438,7 +438,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_properly_named_method_with_lower_case_suffix_([ValueSource(nameof(AllowedTerms))] string methodName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_lower_case_suffix_([ValueSource(nameof(AllowedTerms))] string methodName) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -454,7 +454,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_properly_named_property_([ValueSource(nameof(AllowedWords))] string propertyName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_property_([ValueSource(nameof(AllowedWords))] string propertyName) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -467,7 +467,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_properly_named_variable_([ValueSource(nameof(AllowedWords))] string variableName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_variable_([ValueSource(nameof(AllowedWords))] string variableName) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -484,7 +484,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_variable_([ValueSource(nameof(WrongWords))] string variableName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_variable_([ValueSource(nameof(WrongWords))] string variableName) => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -501,7 +501,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_foreach_variable_([ValueSource(nameof(WrongWords))] string variableName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_foreach_variable_([ValueSource(nameof(WrongWords))] string variableName) => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -523,7 +523,7 @@ namespace Bla
         [TestCase("MaxVer", "MaximumVersion")]
         [TestCase("Cur", "Current")]
         [TestCase("Prev", "Previous")]
-        public void Code_gets_fixed_for_incorrectly_named_property_(string originalName, string fixedName)
+        public void Code_gets_fixed_for_property_by_expanding_abbreviation_(string originalName, string fixedName)
         {
             const string Template = @"
 using System;
@@ -545,7 +545,7 @@ namespace Bla
         [TestCase("appVar", "applicationVariable")]
         [TestCase("cur", "current")]
         [TestCase("prev", "previous")]
-        public void Code_gets_fixed_for_incorrectly_named_foreach_variable_(string originalName, string fixedName)
+        public void Code_gets_fixed_for_foreach_variable_by_expanding_abbreviation_(string originalName, string fixedName)
         {
             const string Template = @"
 using System;
@@ -570,7 +570,7 @@ namespace Bla
         [TestCase("config", "configuration")]
         [TestCase("cur", "current")]
         [TestCase("prev", "previous")]
-        public void Code_gets_fixed_for_incorrectly_named_field_(string originalName, string fixedName)
+        public void Code_gets_fixed_for_field_by_expanding_abbreviation_(string originalName, string fixedName)
         {
             const string Template = @"
 using System;
@@ -590,7 +590,7 @@ namespace Bla
         [TestCase("lang", "language")]
         [TestCase("decl", "declaration")]
         [TestCase("impl", "implementation")]
-        public void Code_gets_fixed_for_incorrectly_named_tuple_element_(string originalName, string fixedName)
+        public void Code_gets_fixed_for_tuple_element_by_expanding_abbreviation_(string originalName, string fixedName)
         {
             const string Template = @"
 using System;
@@ -612,7 +612,7 @@ namespace Bla
         [TestCase("lang", "language")]
         [TestCase("decl", "declaration")]
         [TestCase("impl", "implementation")]
-        public void Code_gets_fixed_for_incorrectly_named_deconstructed_simplified_variable_(string originalName, string fixedName)
+        public void Code_gets_fixed_for_deconstructed_simplified_variable_by_expanding_abbreviation_(string originalName, string fixedName)
         {
             const string Template = @"
 using System;
@@ -636,7 +636,7 @@ namespace Bla
         [TestCase("lang", "language")]
         [TestCase("decl", "declaration")]
         [TestCase("impl", "implementation")]
-        public void Code_gets_fixed_for_incorrectly_named_deconstructed_variable_(string originalName, string fixedName)
+        public void Code_gets_fixed_for_deconstructed_variable_by_expanding_abbreviation_(string originalName, string fixedName)
         {
             const string Template = @"
 using System;

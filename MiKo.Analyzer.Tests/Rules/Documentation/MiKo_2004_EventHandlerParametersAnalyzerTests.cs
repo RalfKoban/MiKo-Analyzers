@@ -40,7 +40,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_interitdoc_documented_event_handling_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_inheritdoc_documented_event_handling_method() => No_issue_is_reported_for(@"
 namespace Bla
 {
     public class MyEventArgs : System.EventArgs { }
@@ -68,7 +68,7 @@ namespace Bla
         [TestCase("The source of the event", "Unused")]
         [TestCase("<para>The source of the event.</para>", "<para>Unused.</para>")]
         [TestCase("<para>The source of the event</para>", "<para>Unused</para>")]
-        public void No_issue_is_reported_for_correctly_documented_event_handling_method_(string sender, string e) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_event_handling_method_with_standard_parameter_documentation_(string sender, string e) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -90,7 +90,7 @@ namespace Bla
         [TestCase("The source of the event.", "An <see cref=\"EventArgs\" /> that contains the event data.")]
         [TestCase("The source of the event.", "An <see cref='System.EventArgs' /> that contains the event data.")]
         [TestCase("The source of the event.", "An <see cref=\"System.EventArgs\" /> that contains the event data.")]
-        public void No_issue_is_reported_for_correctly_documented_event_handling_method_with_vocal_at_begin_(string sender, string e) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_event_handling_method_with_EventArgs_starting_with_vowel_(string sender, string e) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -108,7 +108,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_partly_documented_event_handling_method_with_missing_documentation_for_sender() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_event_handling_method_with_missing_sender_documentation() => No_issue_is_reported_for(@"
 public class MyEventArgs : System.EventArgs { }
 
 public class TestMe
@@ -122,7 +122,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_partly_documented_event_handling_method_with_missing_documentation_for_EventArgs() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_event_handling_method_with_missing_EventArgs_documentation() => No_issue_is_reported_for(@"
 public class MyEventArgs : System.EventArgs { }
 
 public class TestMe
@@ -136,7 +136,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_partly_documented_event_handling_method_with_missing_documentation_for_sender_and_EventArgs() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_event_handling_method_with_missing_parameter_documentation() => No_issue_is_reported_for(@"
 public class MyEventArgs : System.EventArgs { }
 
 public class TestMe
@@ -149,7 +149,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_if_sender_and_EventArgs_are_commented()
+        public void Code_gets_fixed_by_replacing_with_standard_parameter_documentation_for_both_parameters()
         {
             const string OriginalCode = @"
 using System;
@@ -185,7 +185,7 @@ class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_if_sender_and_EventArgs_are_commented_on_different_lines()
+        public void Code_gets_fixed_by_replacing_with_standard_parameter_documentation_for_both_parameters_on_separate_lines()
         {
             const string OriginalCode = @"
 using System;
@@ -225,7 +225,7 @@ class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_if_sender_is_not_commented_and_EventArgs_is_commented_incorrectly()
+        public void Code_gets_fixed_by_replacing_with_standard_EventArgs_documentation()
         {
             const string OriginalCode = @"
 using System;
@@ -259,7 +259,7 @@ class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_if_EventArgs_is_not_commented_and_sender_is_commented_incorrectly()
+        public void Code_gets_fixed_by_replacing_with_standard_sender_documentation()
         {
             const string OriginalCode = @"
 using System;

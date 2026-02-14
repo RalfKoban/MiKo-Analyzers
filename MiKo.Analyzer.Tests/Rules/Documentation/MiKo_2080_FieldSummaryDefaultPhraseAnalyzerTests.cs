@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         public static void PrepareTestEnvironment() => MiKo_2080_CodeFixProvider.LoadData();
 
         [Test]
-        public void No_issue_is_reported_for_uncommented_field() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_field() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -31,7 +31,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_field() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_field_starting_with_The() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -44,7 +44,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_enumerable_field() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_collection_field_starting_with_Contains() => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 
@@ -58,7 +58,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_boolean_field() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_boolean_field_starting_with_Indicates_whether() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -71,7 +71,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_Guid_field() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Guid_field_starting_with_unique_identifier_phrase() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -84,7 +84,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_const_field() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_const_field_starting_with_The() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -110,7 +110,7 @@ public enum TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_field_([Values("Bla bla.", "Contains something.", "Indicates whether something.")] string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_field_with_wrong_starting_phrase_([Values("Bla bla.", "Contains something.", "Indicates whether something.")] string comment) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -123,7 +123,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_enumerable_field_([Values("Bla bla", "Indicates whether something.")] string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_collection_field_with_wrong_starting_phrase_([Values("Bla bla", "Indicates whether something.")] string comment) => An_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 
@@ -137,7 +137,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_boolean_field_([Values("Bla bla", "The field", "Contains something.")] string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_boolean_field_with_wrong_starting_phrase_([Values("Bla bla", "The field", "Contains something.")] string comment) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -150,7 +150,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_DependencyProperty_field_summary_with_readonly_comment() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_DependencyProperty_field_with_readonly_comment() => No_issue_is_reported_for(@"
 using System.Windows;
 
 public class TestMe
@@ -165,20 +165,20 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_RoutedEvent_field_summary_with_readonly_comment() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_RoutedEvent_field_with_readonly_comment() => No_issue_is_reported_for(@"
 using System.Windows;
 
 public class TestMe
 {
     /// <summary>
-    /// Identifies the <see cref=""TouchUp""/> routed event.
+    /// Identifies the <see cref=""TouchUp""/> routed event. This field is read-only.
     /// </summary>
     public static readonly System.Windows.RoutedEvent TouchUpEvent;
 }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_constant_boolean_field() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_constant_boolean_field_starting_with_The() => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 
@@ -192,7 +192,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_field_that_starts_with_see_cref() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_field_starting_with_see_cref() => An_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 
@@ -206,9 +206,9 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_incorrectly_commented_constant_boolean_field_(
-                                                                                       [Values("Bla bla", "Indicates whether the field", "Contains something.")] string comment,
-                                                                                       [Values("bool")] string fieldType)
+        public void An_issue_is_reported_for_constant_boolean_field_with_wrong_starting_phrase_(
+                                                                                            [Values("Bla bla", "Indicates whether the field", "Contains something.")] string comment,
+                                                                                            [Values("bool")] string fieldType)
             => An_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
@@ -278,7 +278,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_non_constant_boolean_field_([ValueSource(nameof(WrongBooleanPhrases))] string originalComment)
+        public void Code_gets_fixed_for_non_constant_boolean_field_with_various_phrases_([ValueSource(nameof(WrongBooleanPhrases))] string originalComment)
         {
             const string Template = @"
 using System;
@@ -297,7 +297,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_nullable_non_constant_boolean_field_([ValueSource(nameof(WrongBooleanPhrases))] string originalComment)
+        public void Code_gets_fixed_for_nullable_boolean_field_with_various_phrases_([ValueSource(nameof(WrongBooleanPhrases))] string originalComment)
         {
             const string Template = @"
 using System;
@@ -482,7 +482,7 @@ public class TestMe
         [TestCase("This is a list for")]
         [TestCase("This is a list of")]
         [TestCase("This list holds")]
-        public void Code_gets_fixed_for_collection_field_(string originalComment)
+        public void Code_gets_fixed_for_collection_field_with_various_phrases_(string originalComment)
         {
             const string Template = @"
 using System;
@@ -508,7 +508,7 @@ public class TestMe
         [TestCase("List of all supersets", "Contains the supersets")]
         [TestCase("List of all sub-sets", "Contains the sub-sets")]
         [TestCase("List of all super-sets", "Contains the super-sets")]
-        public void Code_gets_fixed_for_collection_field_(string originalComment, string fixedComment)
+        public void Code_gets_fixed_for_collection_field_with_subset_superset_phrases_(string originalComment, string fixedComment)
         {
             const string Template = @"
 using System;
@@ -576,7 +576,7 @@ public class TestMe
         [TestCase("Holds an something", "The something")]
         [TestCase("Defines a something", "The something")]
         [TestCase("Use this something", "The something")]
-        public void Code_gets_fixed_for_normal_field_(string originalComment, string fixedComment)
+        public void Code_gets_fixed_for_field_(string originalComment, string fixedComment)
         {
             const string Template = @"
 using System;

@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly TestCaseData[] CodeFixData = [.. CreateCodeFixData().Take(TestLimit)];
 
         [Test]
-        public void No_issue_is_reported_for_undocumented_items() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_members() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -53,7 +53,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_documentation_on_class_([ValueSource(nameof(CorrectItems))] string term) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_class_summary_([ValueSource(nameof(CorrectItems))] string term) => No_issue_is_reported_for(@"
 /// <summary>
 /// Does something. " + term + @"
 /// </summary>
@@ -63,7 +63,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_documentation_on_method_([ValueSource(nameof(CorrectItems))] string term) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_summary_([ValueSource(nameof(CorrectItems))] string term) => No_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
@@ -74,7 +74,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_documentation_on_property_([ValueSource(nameof(CorrectItems))] string term) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_property_summary_([ValueSource(nameof(CorrectItems))] string term) => No_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
@@ -85,7 +85,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_documentation_on_event_([ValueSource(nameof(CorrectItems))] string term) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_event_summary_([ValueSource(nameof(CorrectItems))] string term) => No_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
@@ -96,7 +96,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_documentation_on_field_([ValueSource(nameof(CorrectItems))] string term) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_field_summary_([ValueSource(nameof(CorrectItems))] string term) => No_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
@@ -107,7 +107,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_valid_code_example_on_class_([ValueSource(nameof(Terms))] string term) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_class_with_example_section_containing_code_tag_with_keywords_([ValueSource(nameof(Terms))] string term) => No_issue_is_reported_for(@"
 /// <summary>
 /// Does something.
 /// </summary>
@@ -125,7 +125,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_valid_code_inside_remarks_section_on_class_([ValueSource(nameof(Terms))] string term) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_class_with_remarks_section_containing_code_tag_with_keywords_([ValueSource(nameof(Terms))] string term) => No_issue_is_reported_for(@"
 /// <summary>
 /// Does something.
 /// </summary>
@@ -145,7 +145,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_valid_text_inside_c_in_summary_on_class_([ValueSource(nameof(Terms))] string term) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_class_with_summary_containing_c_tag_with_keywords_in_larger_text_([ValueSource(nameof(Terms))] string term) => No_issue_is_reported_for(@"
 /// <summary>
 /// Does something with <c>some special text with " + term + @" here</c>.
 /// </summary>
@@ -155,7 +155,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_valid_but_special_text_inside_c_in_summary_on_class_([ValueSource(nameof(Terms))] string term) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_class_with_summary_containing_nested_c_tags_with_keywords_and_XML_entities_([ValueSource(nameof(Terms))] string term) => No_issue_is_reported_for(@"
 /// <summary>
 /// Does something with <c><c>&lt;value&gt;" + term + @"&lt;/value&gt;</c></c>.
 /// </summary>
@@ -165,7 +165,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrect_documentation_on_class_([ValueSource(nameof(WrongItemsWithCode))] string term) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_class_with_summary_containing_([ValueSource(nameof(WrongItemsWithCode))] string term) => An_issue_is_reported_for(@"
 /// <summary>
 /// Does something. " + term + @"
 /// </summary>
@@ -175,7 +175,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrect_documentation_on_method_([ValueSource(nameof(WrongItemsWithCode))] string term) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_summary_containing_([ValueSource(nameof(WrongItemsWithCode))] string term) => An_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
@@ -186,7 +186,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrect_documentation_on_method_returnValue_([ValueSource(nameof(WrongItemsWithCode))] string term) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_returns_section_([ValueSource(nameof(WrongItemsWithCode))] string term) => An_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
@@ -200,7 +200,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrect_documentation_on_property_([ValueSource(nameof(WrongItemsWithCode))] string term) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_property_summary_([ValueSource(nameof(WrongItemsWithCode))] string term) => An_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
@@ -211,7 +211,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrect_documentation_on_property_value_([ValueSource(nameof(WrongItemsWithCode))] string term) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_property_value_section_containing_([ValueSource(nameof(WrongItemsWithCode))] string term) => An_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
@@ -225,7 +225,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrect_documentation_on_event_([ValueSource(nameof(WrongItemsWithCode))] string term) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_event_summary_([ValueSource(nameof(WrongItemsWithCode))] string term) => An_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
@@ -236,7 +236,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrect_documentation_on_field_([ValueSource(nameof(WrongItemsWithCode))] string term) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_field_summary_([ValueSource(nameof(WrongItemsWithCode))] string term) => An_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
@@ -248,7 +248,7 @@ public sealed class TestMe
 
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [Test]
-        public void An_issue_is_reported_for_incorrect_documentation_on_parameter() => An_issue_is_reported_for(2, @"
+        public void An_issue_is_reported_for_parameter_documentation_with_True_and_False_as_plain_text() => An_issue_is_reported_for(2, @"
 public sealed class TestMe
 {
     /// <summary>
@@ -260,7 +260,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_wrong_example_on_class_([ValueSource(nameof(WrongItemsWithoutCode))] string term) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_class_example_section_containing_([ValueSource(nameof(WrongItemsWithoutCode))] string term) => An_issue_is_reported_for(@"
 /// <summary>
 /// Does something.
 /// </summary>
@@ -273,7 +273,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_in_summary_([ValueSource(nameof(CodeFixData))] TestCaseData data)
+        public void Code_gets_fixed_for_summary_by_wrapping_keywords_in_see_langword_tags_([ValueSource(nameof(CodeFixData))] TestCaseData data)
         {
             const string Template = @"
 /// <summary>
@@ -288,7 +288,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_in_combined_summary()
+        public void Code_gets_fixed_for_summary_containing_multiple_keywords_by_wrapping_each_in_see_langword_tags()
         {
             const string OriginalCode = @"
 /// <summary>
@@ -312,7 +312,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_wrong_documentation_on_parameter_([Values(":", ",", "")] string delimiter)
+        public void Code_gets_fixed_for_parameter_documentation_by_wrapping_True_and_False_in_see_langword_tags_([Values(":", ",", "")] string delimiter)
         {
             var originalCode = @"
 public sealed class TestMe
@@ -340,7 +340,7 @@ public sealed class TestMe
         }
 
         [Test]
-        public void CodeFix_keeps_space_after_see_comment()
+        public void Code_gets_fixed_by_preserving_space_after_existing_see_langword_tag()
         {
             const string OriginalCode = @"
 /// <returns><see langword=""true""/> if something, false else.</returns>
@@ -360,7 +360,7 @@ public class TestMe
         }
 
         [Test]
-        public void CodeFix_keeps_source_code_comment_untouched()
+        public void Code_gets_fixed_by_wrapping_keywords_outside_code_tag_while_preserving_code_content()
         {
             const string OriginalCode = @"
 /// <example>
@@ -394,7 +394,7 @@ public class TestMe
         }
 
         [Test]
-        public void CodeFix_keeps_other_text_inside_c_([ValueSource(nameof(Terms))] string term)
+        public void Code_gets_fixed_by_wrapping_keywords_outside_c_tag_while_preserving_c_tag_content_([ValueSource(nameof(Terms))] string term)
         {
             var originalCode = @"
 public sealed class TestMe

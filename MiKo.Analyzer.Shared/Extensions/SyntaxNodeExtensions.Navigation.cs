@@ -18,8 +18,6 @@ namespace MiKoSolutions.Analyzers
     /// </summary>
     internal static partial class SyntaxNodeExtensions
     {
-        private static readonly Func<SyntaxNode, bool> AlwaysDescendIntoChildren = _ => true;
-
         /// <summary>
         /// Gets all descendant nodes of the specified syntax node.
         /// </summary>
@@ -29,7 +27,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A sequence that contains all descendant nodes of the specified syntax node, or an empty collection if the syntax node is <see langword="null"/>.
         /// </returns>
-        internal static IEnumerable<SyntaxNode> AllDescendantNodes(this SyntaxNode value) => value?.DescendantNodes(AlwaysDescendIntoChildren, true) ?? Array.Empty<SyntaxNode>();
+        internal static IEnumerable<SyntaxNode> AllDescendantNodes(this SyntaxNode value) => value?.DescendantNodes(/* always descent */ descendIntoTrivia: true) ?? Array.Empty<SyntaxNode>();
 
         /// <summary>
         /// Gets all descendant nodes of the specified syntax node that are of type <typeparamref name="T"/>.
@@ -54,7 +52,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A sequence that contains all descendant nodes and tokens of the specified syntax node.
         /// </returns>
-        internal static IEnumerable<SyntaxNodeOrToken> AllDescendantNodesAndTokens(this SyntaxNode value) => value.DescendantNodesAndTokens(AlwaysDescendIntoChildren);
+        internal static IEnumerable<SyntaxNodeOrToken> AllDescendantNodesAndTokens(this SyntaxNode value) => value.DescendantNodesAndTokens(/* always descent */);
 
         /// <summary>
         /// Gets all ancestors of the specified syntax node that are of type <typeparamref name="T"/>.
@@ -174,7 +172,27 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// A sequence that contains all descendant nodes of the specified type and syntax kind.
         /// </returns>
-        internal static IEnumerable<T> DescendantNodes<T>(this SyntaxNode value, in SyntaxKind kind) where T : SyntaxNode => value.DescendantNodes().OfKind(kind).Cast<T>();
+        internal static IEnumerable<T> DescendantNodes<T>(this SyntaxNode value, in SyntaxKind kind) where T : SyntaxNode
+        {
+            List<T> results = null;
+
+            foreach (var node in value.DescendantNodes())
+            {
+                if (node.RawKind != (int)kind)
+                {
+                    continue;
+                }
+
+                if (results is null)
+                {
+                    results = new List<T>();
+                }
+
+                results.Add((T)node);
+            }
+
+            return results ?? Enumerable.Empty<T>();
+        }
 
         /// <summary>
         /// Gets all descendant nodes of the specified syntax node that are of type <typeparamref name="T"/> and satisfy the specified predicate.

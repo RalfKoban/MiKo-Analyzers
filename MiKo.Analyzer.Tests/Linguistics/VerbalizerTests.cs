@@ -110,7 +110,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("Stabilization", ExpectedResult = "Stabilize")]
         [TestCase("Subtraction", ExpectedResult = "Subtract")]
         [TestCase("Uninstallation", ExpectedResult = "Uninstall")]
-        public static string TryMakeVerb_finds_proper_verb_(string name)
+        public static string TryMakeVerb_finds_matching_verb_(string name)
         {
             Verbalizer.TryMakeVerb(name, out var result);
 
@@ -184,7 +184,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("export", ExpectedResult = "export")]
         [TestCase("exports", ExpectedResult = "export")]
         [TestCase("exporting", ExpectedResult = "export")]
-        public static string MakeInfiniteVerb_finds_proper_infinite_verb_(string name) => Verbalizer.MakeInfiniteVerb(name);
+        public static string MakeInfiniteVerb_finds_matching_infinite_verb_(string name) => Verbalizer.MakeInfiniteVerb(name);
 
         [TestCase("about", ExpectedResult = "about")]
         [TestCase("absent", ExpectedResult = "absent")]
@@ -234,7 +234,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("that", ExpectedResult = "that")]
         [TestCase("unit", ExpectedResult = "unit")]
         [TestCase("wept", ExpectedResult = "weep")]
-        public static string MakeInfiniteVerb_finds_proper_infinite_verb_if_verb_ends_with_t_(string name) => Verbalizer.MakeInfiniteVerb(name);
+        public static string MakeInfiniteVerb_finds_matching_infinite_verb_if_verb_ends_with_t_(string name) => Verbalizer.MakeInfiniteVerb(name);
 
         [TestCase("", ExpectedResult = "")]
         [TestCase("   ", ExpectedResult = "   ")]
@@ -272,7 +272,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("hid something", ExpectedResult = "hide something")]
         [TestCase("Hidden something", ExpectedResult = "Hide something")]
         [TestCase("hidden something", ExpectedResult = "hide something")]
-        public static string MakeFirstWordInfiniteVerb_finds_proper_infinite_verb_(string name) => Verbalizer.MakeFirstWordInfiniteVerb(name);
+        public static string MakeFirstWordInfiniteVerb_finds_matching_infinite_verb_(string name) => Verbalizer.MakeFirstWordInfiniteVerb(name);
 
         [TestCase("access", ExpectedResult = false)]
         [TestCase("accesses", ExpectedResult = true)]
@@ -394,7 +394,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("monitor", ExpectedResult = "monitors")]
         [TestCase("Monitored", ExpectedResult = "Monitors")]
         [TestCase("monitored", ExpectedResult = "monitors")]
-        public static string MakeThirdPersonSingularVerb_finds_proper_3rd_person_singular_verb_(string name) => Verbalizer.MakeThirdPersonSingularVerb(name);
+        public static string MakeThirdPersonSingularVerb_finds_matching_3rd_person_singular_verb_(string name) => Verbalizer.MakeThirdPersonSingularVerb(name);
 
         [TestCase("false", ExpectedResult = false)]
         [TestCase("true", ExpectedResult = false)]
@@ -478,7 +478,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("Something", ExpectedResult = "Something")]
         [TestCase("Anything", ExpectedResult = "Anything")]
         [TestCase("Everything", ExpectedResult = "Everything")]
-        public static string MakeGerundVerb_finds_proper_gerund_verb_(string name) => Verbalizer.MakeGerundVerb(name);
+        public static string MakeGerundVerb_finds_matching_gerund_verb_(string name) => Verbalizer.MakeGerundVerb(name);
 
         [TestCase("Canceled", ExpectedResult = true)]
         [TestCase("Cancel", ExpectedResult = false)]

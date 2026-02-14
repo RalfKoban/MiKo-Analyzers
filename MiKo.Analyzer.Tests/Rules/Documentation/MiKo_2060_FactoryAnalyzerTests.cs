@@ -53,7 +53,7 @@ public class TestMeFactory
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_factory_class() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_factory_class_with_standard_summary_phrase() => No_issue_is_reported_for(@"
 using System;
 
 /// <summary>
@@ -99,7 +99,7 @@ public class TestMeFactory
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_factory_method_([Values(" ", "")] string gap) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_factory_method_with_standard_summary_phrase_([Values(" ", "")] string gap) => No_issue_is_reported_for(@"
 using System;
 
 public class Whatever : IWhatever
@@ -120,7 +120,7 @@ public class TestMeFactory
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_factory_method_on_generic_type_([Values(" ", "")] string gap) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_factory_method_with_standard_summary_phrase_for_generic_type_([Values(" ", "")] string gap) => No_issue_is_reported_for(@"
 using System;
 
 public class Whatever<T> : IWhatever<T>
@@ -141,7 +141,7 @@ public class TestMeFactory
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_factory_method_on_generic_collection_type_([Values(" ", "")] string gap) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_factory_method_with_standard_summary_phrase_for_generic_collection_type_([Values(" ", "")] string gap) => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 
@@ -163,7 +163,7 @@ public class TestMeFactory
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_factory_method_on_string() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_factory_method_with_standard_summary_phrase_for_string() => No_issue_is_reported_for(@"
 public class TestMeFactory
 {
     /// <summary>
@@ -174,7 +174,7 @@ public class TestMeFactory
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_factory_method_on_generic_string_collection() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_factory_method_with_standard_summary_phrase_for_string_collection() => No_issue_is_reported_for(@"
 using System.Collections.Generic;
 
 public class TestMeFactory
@@ -187,7 +187,7 @@ public class TestMeFactory
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_factory_class() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_factory_class_with_non_standard_summary_phrase() => An_issue_is_reported_for(@"
 using System;
 
 /// <summary>
@@ -199,7 +199,7 @@ public class TestMeFactory
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_factory_method_([Values(" ", "")] string gap) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_factory_method_with_non_standard_summary_phrase_([Values(" ", "")] string gap) => An_issue_is_reported_for(@"
 using System;
 
 public class Whatever : IWhatever
@@ -220,7 +220,7 @@ public class TestMeFactory
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_factory_method_on_generic_type_([Values(" ", "")] string gap) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_factory_method_with_non_standard_summary_phrase_for_generic_type_([Values(" ", "")] string gap) => An_issue_is_reported_for(@"
 using System;
 
 public class Whatever<T> : IWhatever<T>
@@ -241,7 +241,7 @@ public class TestMeFactory
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_factory_method_on_generic_collection_type_([Values(" ", "")] string gap) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_factory_method_with_non_standard_summary_phrase_for_generic_collection_type_([Values(" ", "")] string gap) => An_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 
@@ -263,7 +263,7 @@ public class TestMeFactory
 ");
 
         [Test]
-        public void Code_gets_fixed_for_class_summary_([ValueSource(nameof(ClassSummaryStartingPhrases))] string summary)
+        public void Code_gets_fixed_by_replacing_with_standard_phrase_for_factory_class_summary_([ValueSource(nameof(ClassSummaryStartingPhrases))] string summary)
         {
             var originalCode = @"
 /// <summary>
@@ -289,7 +289,7 @@ public class TestMeFactory
         }
 
         [Test]
-        public void Code_gets_fixed_for_interface_summary_([ValueSource(nameof(InterfaceSummaryStartingPhrases))] string summary)
+        public void Code_gets_fixed_by_replacing_with_standard_phrase_for_factory_interface_summary_([ValueSource(nameof(InterfaceSummaryStartingPhrases))] string summary)
         {
             var originalCode = @"
 /// <summary>
@@ -327,7 +327,7 @@ public interface ITestMeFactory
         [TestCase("Used for creating a")]
         [TestCase("Used to create a")]
         [TestCase(@"Creates an <see cref=""string""/> with a")]
-        public void Code_gets_fixed_for_method_summary_(string summary)
+        public void Code_gets_fixed_by_replacing_with_standard_phrase_for_factory_method_summary_(string summary)
         {
             var originalCode = @"
 public class TestMeFactory
@@ -353,7 +353,7 @@ public class TestMeFactory
         }
 
         [Test]
-        public void Code_gets_fixed_for_specific_method_summary_that_continues_with_based_on()
+        public void Code_gets_fixed_by_replacing_based_on_with_default_values_for()
         {
             const string OriginalCode = @"
 public class TestMeFactory
@@ -382,7 +382,7 @@ public class TestMeFactory
         [TestCase("Create a factory")]
         [TestCase("Creates an instance of <see cref=\"string\"/>")]
         [TestCase("Create an instance of <see cref=\"string\"/>")]
-        public void Code_gets_fixed_for_specific_method_summary_that_continues_with_that_(string phrase)
+        public void Code_gets_fixed_by_replacing_continuation_that_with_default_values_that_(string phrase)
         {
             var originalCode = @"
 public class TestMeFactory
@@ -408,7 +408,7 @@ public class TestMeFactory
         }
 
         [Test]
-        public void Code_gets_fixed_for_collection_method_summary()
+        public void Code_gets_fixed_by_replacing_with_standard_phrase_for_collection_factory_method()
         {
             const string OriginalCode = @"
 using System;
@@ -468,7 +468,7 @@ internal interface IFactory
         }
 
         [Test]
-        public void Code_gets_fixed_for_almost_correct_method_summary_starting_phrase_([ValueSource(nameof(MethodStartingPhrases))] string summary, [Values("class", "type")] string type)
+        public void Code_gets_fixed_by_normalizing_almost_standard_factory_method_summary_([ValueSource(nameof(MethodStartingPhrases))] string summary, [Values("class", "type")] string type)
         {
             var originalCode = @"
 internal interface IFactory
@@ -494,7 +494,7 @@ internal interface IFactory
         }
 
         [Test]
-        public void Code_gets_fixed_for_almost_correct_interface_summary_starting_phrase_([ValueSource(nameof(MethodStartingPhrases))] string summary, [Values("class", "type")] string type)
+        public void Code_gets_fixed_by_normalizing_almost_standard_factory_interface_summary_([ValueSource(nameof(MethodStartingPhrases))] string summary, [Values("class", "type")] string type)
         {
             var originalCode = @"
 /// <summary>
@@ -597,13 +597,13 @@ internal interface IFactory
                                    "Represents methods",
                                    "Represents",
                                    //// "The class containing factory methods", // we do not test them to limit number of tests
-                                   //// "The class containing methods", // we do not test them to limit number of tests
+   //// "The class containing methods", // we do not test them to limit number of tests
                                    "The class contains factory methods",
                                    "The class contains methods",
                                    "The class provides factory methods",
                                    "The class provides methods",
                                    //// "The class providing factory methods", // we do not test them to limit number of tests
-                                   //// "The class providing methods", // we do not test them to limit number of tests
+   //// "The class providing methods", // we do not test them to limit number of tests
                                    "The class that contains factory methods",
                                    "The class that contains methods",
                                    "The class that provides factory methods",

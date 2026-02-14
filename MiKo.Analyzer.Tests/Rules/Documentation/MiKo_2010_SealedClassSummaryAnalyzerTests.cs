@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2010_SealedClassSummaryAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void Struct_is_not_reported() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_struct() => No_issue_is_reported_for(@"
 /// <summary>
 /// Something.
 /// </summary>
@@ -22,7 +22,7 @@ public struct TestMe
 ");
 
         [Test]
-        public void Unsealed_class_is_not_reported() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_unsealed_class() => No_issue_is_reported_for(@"
 /// <summary>
 /// Something.
 /// </summary>
@@ -32,7 +32,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Sealed_non_public_class_is_not_reported() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_public_sealed_class() => No_issue_is_reported_for(@"
 /// <summary>
 /// Something.
 /// </summary>
@@ -42,14 +42,14 @@ private sealed class TestMe
 ");
 
         [Test]
-        public void No_documentation_is_not_reported() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_sealed_class() => No_issue_is_reported_for(@"
 public sealed class TestMe
 {
 }
 ");
 
         [Test]
-        public void Correct_documentation_is_not_reported() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_sealed_class_with_inheritance_statement() => No_issue_is_reported_for(@"
 /// <summary>
 /// This class cannot be inherited.
 /// </summary>
@@ -59,7 +59,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Missing_documentation_is_reported() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_sealed_class_without_inheritance_statement() => An_issue_is_reported_for(@"
 /// <summary>
 /// Some documentation
 /// </summary>
@@ -69,7 +69,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Missing_documentation_is_not_reported_for_TestClass_([ValueSource(nameof(TestFixtures))] string fixture) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_sealed_test_class_without_inheritance_statement_([ValueSource(nameof(TestFixtures))] string fixture) => No_issue_is_reported_for(@"
 /// <summary>
 /// Some documentation
 /// </summary>
@@ -80,7 +80,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Wrong_placed_documentation_is_reported() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_sealed_class_with_misplaced_inheritance_statement() => An_issue_is_reported_for(@"
 /// <summary>
 /// This class cannot be inherited.
 /// Some documentation
@@ -91,7 +91,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_for_class()
+        public void Code_gets_fixed_by_adding_inheritance_statement_at_end_of_summary()
         {
             const string OriginalCode = @"
 /// <summary>
@@ -115,7 +115,7 @@ public sealed class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_record()
+        public void Code_gets_fixed_by_adding_inheritance_statement_at_end_of_summary_for_record()
         {
             const string OriginalCode = @"
 /// <summary>
@@ -139,7 +139,7 @@ public sealed record TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_with_wrong_placed_sealed_text()
+        public void Code_gets_fixed_by_moving_inheritance_statement_to_end_of_summary()
         {
             const string OriginalCode = @"
 /// <summary>
@@ -164,7 +164,7 @@ public sealed class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_with_wrong_placed_sealed_text_on_single_line()
+        public void Code_gets_fixed_by_moving_inheritance_statement_from_middle_of_line_to_end()
         {
             const string OriginalCode = @"
 /// <summary>
@@ -190,7 +190,7 @@ public sealed class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_with_wrong_placed_sealed_text_all_on_single_line()
+        public void Code_gets_fixed_by_extracting_and_moving_inheritance_statement_to_end()
         {
             const string OriginalCode = @"
 /// <summary>
