@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2002_EventArgsSummaryAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_uncommented_EventArgs() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_EventArgs_class_without_documentation() => No_issue_is_reported_for(@"
 using System;
 
 public class MyEventArgs : EventArgs
@@ -21,7 +21,7 @@ public class MyEventArgs : EventArgs
 ");
 
         [Test]
-        public void No_issue_is_reported_for_non_EventArgs() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_class_with_EventArgs_name_suffix_not_inheriting_from_EventArgs() => No_issue_is_reported_for(@"
 using System;
 
 /// <summary>
@@ -33,7 +33,7 @@ public class MyEventArgs // simply has event args indicator but does not inherit
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_unsealed_EventArgs() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_unsealed_EventArgs_class_with_summary_providing_data_for_specific_event() => No_issue_is_reported_for(@"
 using System;
 
 /// <summary>
@@ -45,7 +45,7 @@ public class MyEventArgs : EventArgs
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_sealed_EventArgs() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_sealed_EventArgs_class_with_summary_providing_data_for_specific_event_and_inheritance_restriction() => No_issue_is_reported_for(@"
 using System;
 
 /// <summary>
@@ -58,7 +58,7 @@ public sealed class MyEventArgs : EventArgs
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_multi_EventArgs() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_EventArgs_class_with_summary_providing_data_for_multiple_events() => No_issue_is_reported_for(@"
 using System;
 
 /// <summary>
@@ -72,7 +72,7 @@ public class MyEventArgs : EventArgs
         [TestCase("Does something.")]
         [TestCase("Provides some stuff for the event.")]
         [TestCase("Provides data for the event.")]
-        public void An_issue_is_reported_for_incorrectly_commented_EventArgs_(string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_EventArgs_class_with_summary_not_following_standard_phrase_(string comment) => An_issue_is_reported_for(@"
 using System;
 
 /// <summary>
@@ -84,7 +84,7 @@ public class MyEventArgs : EventArgs
 ");
 
         [Test]
-        public void Code_gets_fixed()
+        public void Code_gets_fixed_to_replace_summary_with_standard_provides_data_phrase_and_TODO_event_reference()
         {
             const string OriginalCode = @"
 using System;
@@ -112,7 +112,7 @@ public class MyEventArgs : EventArgs
         }
 
         [Test]
-        public void Code_gets_fixed_but_keeps_Remarks()
+        public void Code_gets_fixed_to_replace_summary_while_preserving_remarks_section()
         {
             const string OriginalCode = @"
 using System;
@@ -146,7 +146,7 @@ public class MyEventArgs : EventArgs
         }
 
         [Test]
-        public void Code_gets_fixed_for_comment_with_link_to_event()
+        public void Code_gets_fixed_to_replace_summary_phrase_while_extracting_and_preserving_event_reference()
         {
             const string OriginalCode = @"
 using System;

@@ -10,14 +10,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2005_EventArgsInDocumentationAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] IncorrectPhrases =
-                                                            [
-                                                                "This is an event arg comment.",
-                                                                "This is an event args comment.",
-                                                            ];
+        private static readonly string[] ProblematicPhrases =
+                                                              [
+                                                                  "This is an event arg comment.",
+                                                                  "This is an event args comment.",
+                                                              ];
 
         [Test]
-        public void No_issue_is_reported_for_non_commented_class() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_members() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public event EventHandler MyEvent;
@@ -31,7 +31,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_class() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_documentation_without_problematic_phrases() => No_issue_is_reported_for(@"
 /// <summary>
 /// This is a comment.
 /// </summary>
@@ -60,7 +60,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_class_commented_with_event_argument() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_full_spelling_event_argument() => No_issue_is_reported_for(@"
 /// <summary>
 /// This is an event argument comment.
 /// </summary>
@@ -70,7 +70,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_class_([ValueSource(nameof(IncorrectPhrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_class_with_abbreviated_phrase_([ValueSource(nameof(ProblematicPhrases))] string phrase) => An_issue_is_reported_for(@"
 /// <summary>
 /// " + phrase + @"
 /// </summary>
@@ -80,14 +80,14 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_class_without_leading_spaces_([ValueSource(nameof(IncorrectPhrases))] string phrase) => An_issue_is_reported_for(@"///<summary>" + phrase + @"</summary>
+        public void An_issue_is_reported_for_class_with_abbreviated_phrase_in_compact_format_([ValueSource(nameof(ProblematicPhrases))] string phrase) => An_issue_is_reported_for(@"///<summary>" + phrase + @"</summary>
 public class TestMe
 {
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_event_([ValueSource(nameof(IncorrectPhrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_event_with_abbreviated_phrase_([ValueSource(nameof(ProblematicPhrases))] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -98,7 +98,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_property_([ValueSource(nameof(IncorrectPhrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_property_with_abbreviated_phrase_([ValueSource(nameof(ProblematicPhrases))] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -109,7 +109,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_method_([ValueSource(nameof(IncorrectPhrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_abbreviated_phrase_([ValueSource(nameof(ProblematicPhrases))] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -120,7 +120,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_field_([ValueSource(nameof(IncorrectPhrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_field_with_abbreviated_phrase_([ValueSource(nameof(ProblematicPhrases))] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>

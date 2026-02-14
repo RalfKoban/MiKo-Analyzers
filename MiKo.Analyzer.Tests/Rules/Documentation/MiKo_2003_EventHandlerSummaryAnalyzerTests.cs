@@ -38,7 +38,7 @@ public class TestMe
 
         [TestCase("Handles the <see cref='MyEvent' /> event.")]
         [TestCase("<para>Handles the <see cref='MyEvent' /> event.</para>")]
-        public void No_issue_is_reported_for_correctly_documented_event_handling_method_(string comment) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_event_handling_method_with_summary_starting_with_(string comment) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -81,7 +81,7 @@ namespace Bla
         [TestCase("When the <see cref='MyEvent' /> event.")]
         [TestCase("when the <see cref='MyEvent' /> event.")]
         [TestCase("Raised when the <see cref='MyEvent' /> event.")]
-        public void An_issue_is_reported_for_incorrectly_documented_event_handling_method_(string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_event_handling_method_with_summary_starting_with_(string comment) => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla
