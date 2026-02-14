@@ -107,7 +107,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                       ];
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_namespace_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_namespace_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla" + name + @"
@@ -122,7 +122,7 @@ namespace Bla" + name + @"
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_type_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_type_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe" + name + @"
@@ -134,7 +134,7 @@ public class TestMe" + name + @"
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_method_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -162,7 +162,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_method_parameter_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_parameter_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -174,7 +174,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_property_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_property_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -184,7 +184,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_field_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_field_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -194,7 +194,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_event_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_event_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -204,7 +204,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_variable_with_correct_name_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_variable_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -217,7 +217,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_variable_declaration_pattern_with_correct_name_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_variable_declaration_pattern_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -235,7 +235,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_variable_in_foreach_loop_with_incorrect_name_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_foreach_variable_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -250,7 +250,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_correctly_named_namespace_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_namespace_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 using System;
 
 namespace Some" + name + @"
@@ -265,7 +265,7 @@ namespace Some" + name + @"
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_type_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_type_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe" + name + @"
@@ -277,7 +277,7 @@ public class TestMe" + name + @"
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_method_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -289,7 +289,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_correctly_named_method_parameter_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_parameter_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -301,7 +301,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_property_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_property_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -311,7 +311,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_field_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_field_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -321,7 +321,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_event_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_event_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -331,7 +331,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_variable_with_incorrect_name_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_variable_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -344,7 +344,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_variable_declaration_pattern_with_incorrect_name_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_variable_declaration_pattern_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -361,7 +361,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_variable_in_foreach_loop_with_incorrect_name_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_foreach_variable_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -376,7 +376,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_constant_with_incorrect_name_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_constant_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -387,7 +387,7 @@ public class TestMe
 
         [TestCase("CalculateLevenshteinDistanceOnly")]
         [TestCase("CalculateLevensteinDistanceOnly")]
-        public void No_issue_is_reported_for_method_(string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_special_method_(string name) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe

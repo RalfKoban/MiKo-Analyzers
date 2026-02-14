@@ -35,7 +35,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_throwing_an_ArgumentException_([Values("is", "does", "has", "contains")] string phrase) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_ArgumentException_starting_with_paramref_and_verb_([Values("is", "does", "has", "contains")] string phrase) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -51,7 +51,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_throwing_an_ArgumentException_for_multiple_parameters() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_ArgumentException_starting_with_paramref_and_verb_for_multiple_parameters() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -69,7 +69,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_throwing_an_ArgumentException() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_ArgumentException_not_starting_with_paramref() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -85,7 +85,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_throwing_an_ArgumentException_without_paramref_tags() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_ArgumentException_without_paramref_tags() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -101,7 +101,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_1st_parameter_throwing_an_ArgumentException_for_multiple_parameters() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_ArgumentException_not_starting_with_paramref_for_first_of_multiple_parameters() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -119,7 +119,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_2nd_parameter_throwing_an_ArgumentException_for_multiple_parameters() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_ArgumentException_not_starting_with_paramref_for_second_of_multiple_parameters() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -176,7 +176,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_property_throwing_an_ArgumentException() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_property_with_ArgumentException_starting_with_paramref_and_verb() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -192,7 +192,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_property_throwing_an_ArgumentException() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_property_with_ArgumentException_not_starting_with_paramref() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -208,7 +208,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_property_throwing_an_ArgumentException_without_paramref_tags() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_property_with_ArgumentException_without_paramref_tags() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -224,7 +224,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_if_an_ArgumentException_is_thrown_only_for_one_of_muliple_referenced_parameters() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_ArgumentException_comparing_multiple_parameters() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -240,7 +240,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_for_method()
+        public void Code_gets_fixed_by_replacing_with_paramref_starting_phrase_for_method()
         {
             const string OriginalCode = @"
 using System;
@@ -276,7 +276,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_property_indexer()
+        public void Code_gets_fixed_by_replacing_with_paramref_starting_phrase_for_indexer()
         {
             const string OriginalCode = @"
 using System;

@@ -84,7 +84,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             """);
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_exception() => No_issue_is_reported_for("""
+        public void No_issue_is_reported_for_exception_with_standard_documentation() => No_issue_is_reported_for("""
 
             using System;
             using System.Runtime.Serialization;
@@ -153,7 +153,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             """);
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_exception_type() => No_issue_is_reported_for("""
+        public void No_issue_is_reported_for_exception_type_with_standard_summary() => No_issue_is_reported_for("""
 
             using System;
             using System.Runtime.Serialization;
@@ -168,7 +168,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             """);
 
         [Test]
-        public void No_issue_is_reported_for_non_documented_exception_type() => No_issue_is_reported_for("""
+        public void No_issue_is_reported_for_undocumented_exception_type() => No_issue_is_reported_for("""
 
             using System;
             using System.Runtime.Serialization;
@@ -180,7 +180,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             """);
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_exception_ctor_without_params() => No_issue_is_reported_for("""
+        public void No_issue_is_reported_for_parameterless_exception_constructor_with_standard_documentation() => No_issue_is_reported_for("""
 
             using System;
             using System.Runtime.Serialization;
@@ -203,7 +203,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             """);
 
         [Test]
-        public void No_issue_is_reported_for_non_documented_exception_ctor_without_params() => No_issue_is_reported_for("""
+        public void No_issue_is_reported_for_undocumented_parameterless_exception_constructor() => No_issue_is_reported_for("""
 
             using System;
             using System.Runtime.Serialization;
@@ -218,7 +218,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             """);
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_but_missing_overloads_exception_ctor_without_params() => No_issue_is_reported_for("""
+        public void No_issue_is_reported_for_parameterless_exception_constructor_without_overloads() => No_issue_is_reported_for("""
 
             using System;
             using System.Runtime.Serialization;
@@ -236,7 +236,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             """);
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_exception_ctor_with_message_only_param() => No_issue_is_reported_for("""
+        public void No_issue_is_reported_for_message_only_exception_constructor_with_standard_documentation() => No_issue_is_reported_for("""
 
             using System;
             using System.Runtime.Serialization;
@@ -258,7 +258,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             """);
 
         [Test]
-        public void No_issue_is_reported_for_non_documented_exception_ctor_with_message_only_param() => No_issue_is_reported_for("""
+        public void No_issue_is_reported_for_undocumented_message_only_exception_constructor() => No_issue_is_reported_for("""
 
             using System;
             using System.Runtime.Serialization;
@@ -274,7 +274,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             """);
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_exception_ctor_with_message_and_exception_param() => No_issue_is_reported_for("""
+        public void No_issue_is_reported_for_message_and_inner_exception_constructor_with_standard_documentation() => No_issue_is_reported_for("""
 
             using System;
             using System.Runtime.Serialization;
@@ -300,7 +300,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             """);
 
         [Test]
-        public void No_issue_is_reported_for_non_documented_exception_ctor_with_message_and_exception_param() => No_issue_is_reported_for("""
+        public void No_issue_is_reported_for_undocumented_message_and_inner_exception_constructor() => No_issue_is_reported_for("""
 
             using System;
             using System.Runtime.Serialization;
@@ -315,7 +315,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             """);
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_exception_ctor_with_serialization_param() => No_issue_is_reported_for("""
+        public void No_issue_is_reported_for_serialization_constructor_with_standard_documentation() => No_issue_is_reported_for("""
 
             using System;
             using System.Runtime.Serialization;
@@ -343,7 +343,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             """);
 
         [Test]
-        public void No_issue_is_reported_for_non_documented_exception_ctor_with_serialization_param() => No_issue_is_reported_for("""
+        public void No_issue_is_reported_for_undocumented_serialization_constructor() => No_issue_is_reported_for("""
 
             using System;
             using System.Runtime.Serialization;
@@ -359,7 +359,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             """);
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_but_missing_remarks_exception_ctor_with_serialization_param() => No_issue_is_reported_for("""
+        public void No_issue_is_reported_for_serialization_constructor_without_remarks() => No_issue_is_reported_for("""
 
             using System;
             using System.Runtime.Serialization;
@@ -384,7 +384,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             """);
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_exception_type() => An_issue_is_reported_for("""
+        public void An_issue_is_reported_for_exception_type_with_non_standard_summary() => An_issue_is_reported_for("""
 
             using System;
             using System.Runtime.Serialization;
@@ -399,7 +399,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             """);
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_overloads_on_exception_ctor_without_params() => An_issue_is_reported_for("""
+        public void An_issue_is_reported_for_parameterless_exception_constructor_with_non_standard_overloads() => An_issue_is_reported_for("""
 
             using System;
             using System.Runtime.Serialization;
@@ -422,7 +422,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             """);
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_summary_of_exception_ctor_with_message_only_param() => An_issue_is_reported_for("""
+        public void An_issue_is_reported_for_message_only_exception_constructor_with_non_standard_summary() => An_issue_is_reported_for("""
 
             using System;
             using System.Runtime.Serialization;
@@ -444,7 +444,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             """);
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_message_param_of_exception_ctor_with_message_only_param() => An_issue_is_reported_for("""
+        public void An_issue_is_reported_for_message_only_exception_constructor_with_non_standard_message_param_documentation() => An_issue_is_reported_for("""
 
             using System;
             using System.Runtime.Serialization;
@@ -466,7 +466,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             """);
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_summary_of_exception_ctor_with_message_and_exception_param() => An_issue_is_reported_for("""
+        public void An_issue_is_reported_for_message_and_inner_exception_constructor_with_non_standard_summary() => An_issue_is_reported_for("""
 
             using System;
             using System.Runtime.Serialization;
@@ -492,7 +492,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             """);
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_message_param_of_exception_ctor_with_message_and_exception_param() => An_issue_is_reported_for("""
+        public void An_issue_is_reported_for_message_and_inner_exception_constructor_with_non_standard_message_param_documentation() => An_issue_is_reported_for("""
 
             using System;
             using System.Runtime.Serialization;
@@ -518,7 +518,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             """);
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_exception_param_of_exception_ctor_with_message_and_exception_param() => An_issue_is_reported_for("""
+        public void An_issue_is_reported_for_message_and_inner_exception_constructor_with_non_standard_inner_exception_param_documentation() => An_issue_is_reported_for("""
 
             using System;
             using System.Runtime.Serialization;
@@ -544,7 +544,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             """);
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_summary_of_exception_ctor_with_serialization_param() => An_issue_is_reported_for("""
+        public void An_issue_is_reported_for_serialization_constructor_with_non_standard_summary() => An_issue_is_reported_for("""
 
             using System;
             using System.Runtime.Serialization;
@@ -575,7 +575,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             """);
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_SerializationInfo_param_of_exception_ctor_with_serialization_param() => An_issue_is_reported_for("""
+        public void An_issue_is_reported_for_serialization_constructor_with_non_standard_info_param_documentation() => An_issue_is_reported_for("""
 
             using System;
             using System.Runtime.Serialization;
@@ -603,7 +603,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             """);
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_StreamingContext_param_of_exception_ctor_with_serialization_param() => An_issue_is_reported_for("""
+        public void An_issue_is_reported_for_serialization_constructor_with_non_standard_context_param_documentation() => An_issue_is_reported_for("""
 
             using System;
             using System.Runtime.Serialization;
@@ -631,7 +631,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             """);
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_remarks_on_exception_ctor_with_serialization_param() => An_issue_is_reported_for("""
+        public void An_issue_is_reported_for_serialization_constructor_with_non_standard_remarks() => An_issue_is_reported_for("""
 
             using System;
             using System.Runtime.Serialization;

@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                            ];
 
         [Test]
-        public void No_issue_is_reported_for_undocumented_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_Contains_method() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public bool Contains()
@@ -37,7 +37,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_documented_method_([ValueSource(nameof(MethodNames))] string methodName, [ValueSource(nameof(CorrectComments))] string comment)
+        public void No_issue_is_reported_for_documented_parameter_([ValueSource(nameof(MethodNames))] string methodName, [ValueSource(nameof(CorrectComments))] string comment)
             => No_issue_is_reported_for(@"
 public class TestMe
 {
@@ -54,7 +54,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_documented_method_with_multiple_parameters_([ValueSource(nameof(MethodNames))] string methodName, [ValueSource(nameof(CorrectComments))] string comment)
+        public void No_issue_is_reported_for_documented_parameter_on_method_with_multiple_parameters_([ValueSource(nameof(MethodNames))] string methodName, [ValueSource(nameof(CorrectComments))] string comment)
             => No_issue_is_reported_for(@"
 public class TestMe
 {
@@ -74,7 +74,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_documented_extension_method_([ValueSource(nameof(MethodNames))] string methodName, [ValueSource(nameof(CorrectComments))] string comment)
+        public void No_issue_is_reported_for_documented_parameter_on_extension_method_([ValueSource(nameof(MethodNames))] string methodName, [ValueSource(nameof(CorrectComments))] string comment)
             => No_issue_is_reported_for(@"
 public static class TestMe
 {
@@ -94,7 +94,7 @@ public static class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_incorrectly_documented_non_Contains_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_Contains_method() => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -110,7 +110,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_([ValueSource(nameof(MethodNames))] string methodName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_wrong_phrase_in_parameter_documentation_([ValueSource(nameof(MethodNames))] string methodName) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -126,7 +126,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_first_parameter_of_incorrectly_documented_method_([ValueSource(nameof(MethodNames))] string methodName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_wrong_phrase_in_parameter_documentation_on_method_with_multiple_parameters_([ValueSource(nameof(MethodNames))] string methodName) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -145,7 +145,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_second_parameter_of_incorrectly_documented_extension_method_([ValueSource(nameof(MethodNames))] string methodName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_wrong_phrase_in_parameter_documentation_on_extension_method_([ValueSource(nameof(MethodNames))] string methodName) => An_issue_is_reported_for(@"
 public static class TestMe
 {
     /// <summary>
@@ -164,9 +164,9 @@ public static class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_empty_parameter_on_method_(
-                                                                    [ValueSource(nameof(MethodNames))] string methodName,
-                                                                    [Values(@"<param name=""i""></param>", @"<param name=""i"">     </param>")] string parameter)
+        public void An_issue_is_reported_for_empty_parameter_documentation_(
+                                                                        [ValueSource(nameof(MethodNames))] string methodName,
+                                                                        [Values(@"<param name=""i""></param>", @"<param name=""i"">     </param>")] string parameter)
             => An_issue_is_reported_for(@"
 public class TestMe
 {
@@ -188,7 +188,7 @@ public class TestMe
         [TestCase("The value to check", "The value")]
         [TestCase("The value to check for", "The value")]
         [TestCase("The value to check if contained", "The value")]
-        public void Code_gets_fixed_for_simple_text(string originalStartingPhrase, string fixedStartingPhrase)
+        public void Code_gets_fixed_to_use_seek_(string originalStartingPhrase, string fixedStartingPhrase)
         {
             var originalCode = @"
 public class TestMe
@@ -224,7 +224,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_text_with_seeCref_and_ending_dot()
+        public void Code_gets_fixed_to_append_to_seek_when_ending_with_dot()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -260,7 +260,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_text_with_seeCref_without_ending_dot()
+        public void Code_gets_fixed_to_append_to_seek_when_not_ending_with_dot()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -296,7 +296,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_text_with_seeCref_on_same_line_without_ending_dot()
+        public void Code_gets_fixed_to_append_to_seek_when_on_same_line()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -328,7 +328,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_empty_text()
+        public void Code_gets_fixed_for_empty_parameter_documentation()
         {
             const string OriginalCode = @"
 public class TestMe

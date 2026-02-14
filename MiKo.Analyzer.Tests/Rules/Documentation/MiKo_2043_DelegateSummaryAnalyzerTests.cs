@@ -41,7 +41,7 @@ public delegate void TestMe();
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_delegate() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_delegate_with_standard_summary_phrase() => No_issue_is_reported_for(@"
 using System;
 
 /// <summary>
@@ -52,7 +52,7 @@ public delegate void TestMe();
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_delegate() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_delegate_with_non_standard_summary_phrase() => An_issue_is_reported_for(@"
 using System;
 
 /// <summary>
@@ -63,7 +63,7 @@ public delegate void TestMe();
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_delegate_with_see_cref() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_delegate_starting_with_see_cref() => An_issue_is_reported_for(@"
 using System;
 
 /// <summary>

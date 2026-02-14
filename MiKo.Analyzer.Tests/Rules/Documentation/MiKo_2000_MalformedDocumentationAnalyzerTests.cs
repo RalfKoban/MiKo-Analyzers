@@ -45,7 +45,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_XML_on_class() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_XML_on_class() => No_issue_is_reported_for(@"
 /// <summary>
 /// Something valid.
 /// </summary>
@@ -55,7 +55,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_XML_on_class_with_escaped_XML_entity_([Values("&amp;", "&lt;")] string entity) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_XML_on_class_with_escaped_XML_entity_([Values("&amp;", "&lt;")] string entity) => No_issue_is_reported_for(@"
 /// <summary>
 /// Something " + entity + @" valid.
 /// </summary>
@@ -65,7 +65,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_XML_on_class_with_escaped_XML_entity_without_spaces_([Values("&amp;", "&lt;")] string entity) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_XML_on_class_with_escaped_XML_entity_without_spaces_([Values("&amp;", "&lt;")] string entity) => No_issue_is_reported_for(@"
 /// <summary>
 /// Something" + entity + @"valid.
 /// </summary>
@@ -75,7 +75,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_XML_on_class_inside_c_tag_([Values("&amp;", "&lt;")] string entity) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_XML_on_class_inside_c_tag_([Values("&amp;", "&lt;")] string entity) => No_issue_is_reported_for(@"
 /// <summary>
 /// Something valid.
 /// <c>
@@ -88,7 +88,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_XML_on_class_inside_code_tag_([Values("&amp;", "&lt;")] string entity) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_XML_on_class_inside_code_tag_([Values("&amp;", "&lt;")] string entity) => No_issue_is_reported_for(@"
 /// <summary>
 /// Something valid.
 /// <code>
@@ -101,7 +101,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_XML_on_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_XML_on_method() => No_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
@@ -112,7 +112,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_XML_on_property() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_XML_on_property() => No_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
@@ -123,7 +123,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_XML_on_event() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_XML_on_event() => No_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
@@ -134,7 +134,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_XML_on_field() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_XML_on_field() => No_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>

@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2022_OutParamDefaultPhraseAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_uncommented_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_method() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething(out object o) { }
@@ -20,7 +20,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_non_out_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_without_out_parameter() => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary />
@@ -30,7 +30,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_correct_comment_phrase() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_out_parameter_with_standard_phrase_for_contains() => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary />
@@ -40,7 +40,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_correct_comment_phrase_for_bool() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_bool_out_parameter_with_standard_phrase_for_indicates() => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary />
@@ -57,7 +57,7 @@ public class TestMe
         [TestCase("On return, indicates something.")]
         [TestCase("On successful return, indicates something.")]
         [TestCase("")]
-        public void An_issue_is_reported_for_method_with_wrong_comment_phrase_(string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_out_parameter_with_non_standard_phrase_(string comment) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary />
@@ -70,7 +70,7 @@ public class TestMe
         [TestCase("On false, returns something.")]
         [TestCase("On successful return, contains something.")]
         [TestCase("")]
-        public void An_issue_is_reported_for_method_with_wrong_comment_phrase_on_bool_(string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_bool_out_parameter_with_non_standard_phrase_(string comment) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary />
@@ -82,7 +82,7 @@ public class TestMe
         [TestCase("<summary />")]
         [TestCase("<inheritdoc />")]
         [TestCase("<exclude />")]
-        public void No_issue_is_reported_for_method_with_missing_documentation_(string xmlElement) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_missing_out_parameter_documentation_(string xmlElement) => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// " + xmlElement + @"
@@ -273,7 +273,7 @@ public class TestMe
         [TestCase("Value that indicates the something.")]
         [TestCase("value which indicates the something.")]
         [TestCase("Value which indicates the something.")]
-        public void Code_gets_fixed_for_boolean_out_parameter_(string text)
+        public void Code_gets_fixed_by_replacing_with_standard_phrase_for_bool_out_parameter_(string text)
         {
             var originalCode = @"
 using System.Windows;
@@ -497,7 +497,7 @@ public class TestMe
         [TestCase("Will receive the object.")]
         [TestCase("will return the object.")]
         [TestCase("Will return the object.")]
-        public void Code_gets_fixed_for_out_parameter_(string text)
+        public void Code_gets_fixed_by_replacing_with_standard_phrase_for_out_parameter_(string text)
         {
             var originalCode = @"
 using System.Windows;
@@ -525,7 +525,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_empty_out_parameter_on_single_line()
+        public void Code_gets_fixed_by_adding_standard_phrase_with_TODO_for_empty_out_parameter_on_single_line()
         {
             const string OriginalCode = @"
 using System.Windows;
@@ -553,7 +553,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_empty_out_parameter_on_separate_lines()
+        public void Code_gets_fixed_by_adding_standard_phrase_with_TODO_for_empty_out_parameter_on_separate_lines()
         {
             const string OriginalCode = @"
 using System.Windows;

@@ -54,6 +54,6 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("University", ExpectedResult = "A ")]
         [TestCase("user", ExpectedResult = "A ")]
         [TestCase("User", ExpectedResult = "A ")]
-        public static string Provides_correct_indefinite_article_for_(string text) => ArticleProvider.GetArticleFor(text);
+        public static string Provides_matching_indefinite_article_for_(string text) => ArticleProvider.GetArticleFor(text);
     }
 }

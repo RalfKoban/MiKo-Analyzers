@@ -95,7 +95,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_non_Boolean_return_type() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_boolean_method() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -108,7 +108,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_property_with_non_Boolean_return_type() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_boolean_property() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -118,7 +118,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_test_method_with_Boolean_return_type_([ValueSource(nameof(WrongNames))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_boolean_test_method_([ValueSource(nameof(WrongNames))] string name) => No_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -134,7 +134,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_Boolean_return_type_and_correct_name_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_boolean_method_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -148,7 +148,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_property_with_Boolean_return_type_and_correct_name_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_boolean_property_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -159,7 +159,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_Boolean_return_type_and_incorrect_name_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_boolean_method_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -173,7 +173,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_property_with_Boolean_return_type_and_incorrect_name_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_boolean_property_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 using System;
 using System.Threading;
 

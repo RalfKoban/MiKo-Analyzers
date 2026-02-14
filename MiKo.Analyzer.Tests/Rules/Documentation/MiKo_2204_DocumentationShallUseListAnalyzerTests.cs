@@ -33,9 +33,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [Test]
-        public void An_issue_is_reported_for_Enumeration_in_Xml_tag_(
-                                                                 [ValueSource(nameof(XmlTags))] string xmlTag,
-                                                                 [ValueSource(nameof(EnumerationMarkers))] string marker)
+        public void An_issue_is_reported_for_enumeration_markers_in_xml_tag_(
+                                                                         [ValueSource(nameof(XmlTags))] string xmlTag,
+                                                                         [ValueSource(nameof(EnumerationMarkers))] string marker)
             => An_issue_is_reported_for(2, @"
 /// <" + xmlTag + @">
 /// " + marker + @" something.
@@ -46,7 +46,7 @@ public sealed class TestMe { }
 
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [Test]
-        public void An_issue_is_reported_for_dot_enumeration_in_comment_([ValueSource(nameof(MarkerBeginnings))] string markerBegin) => An_issue_is_reported_for(2, @"
+        public void An_issue_is_reported_for_asterisk_markers_in_documentation_([ValueSource(nameof(MarkerBeginnings))] string markerBegin) => An_issue_is_reported_for(2, @"
 /// <summary>
 /// The reason" + markerBegin + @"
 /// * It is something.
@@ -57,7 +57,7 @@ public sealed class TestMe { }
 
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [Test]
-        public void An_issue_is_reported_for_slash_enumeration_in_comment_([ValueSource(nameof(MarkerBeginnings))] string markerBegin) => An_issue_is_reported_for(2, @"
+        public void An_issue_is_reported_for_dash_markers_in_documentation_([ValueSource(nameof(MarkerBeginnings))] string markerBegin) => An_issue_is_reported_for(2, @"
 /// <summary>
 /// The reason" + markerBegin + @"
 /// - It is something.
@@ -67,12 +67,12 @@ public sealed class TestMe { }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_uncommented_class() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_class() => No_issue_is_reported_for(@"
 public sealed class TestMe { }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_normal_comment_in_XML_tag_([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_documentation_without_enumeration_markers_in_xml_tag_([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// The identifier for something.
 /// </" + xmlTag + @">
@@ -80,7 +80,7 @@ public sealed class TestMe { }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_comment_with_double_slash_in_XML_tag_([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_documentation_with_double_dash_in_xml_tag_([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// The identifier -- if available.
 /// </" + xmlTag + @">
@@ -88,7 +88,7 @@ public sealed class TestMe { }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_comment_with_slash_in_XML_tag_([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_documentation_with_single_dash_in_xml_tag_([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// The identifier - if available - for something.
 /// </" + xmlTag + @">
@@ -96,7 +96,7 @@ public sealed class TestMe { }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_comment_with_slash_and_see_langword_Null_in_XML_tag_([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_documentation_with_single_dash_and_see_langword_in_xml_tag_([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// The identifier - if not <see langword=""null""/> - for something.
 /// </" + xmlTag + @">
@@ -104,7 +104,7 @@ public sealed class TestMe { }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_comment_with_double_slash_and_see_langword_Null_in_XML_tag_([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_documentation_with_double_dash_and_see_langword_in_xml_tag_([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// The identifier -- if not <see langword=""null""/>.
 /// </" + xmlTag + @">
@@ -112,7 +112,7 @@ public sealed class TestMe { }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_comment_containing_similar_words_([Values("heuristic", "et cetera", "superb")] string word) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_documentation_containing_similar_words_([Values("heuristic", "et cetera", "superb")] string word) => No_issue_is_reported_for(@"
 /// <summary>
 /// The identifier " + word + @". Seems to be no problem.
 /// </summary>
@@ -120,7 +120,7 @@ public sealed class TestMe { }
 ");
 
         [Test]
-        public void Code_gets_fixed_with_multi_line_text_at_beginning_for_([ValueSource(nameof(Markers))] string marker)
+        public void Code_gets_fixed_with_preceding_multi_line_text_([ValueSource(nameof(Markers))] string marker)
         {
             var originalCode = @"
 /// <summary>
@@ -148,7 +148,7 @@ public sealed class TestMe { }
         }
 
         [Test]
-        public void Code_gets_fixed_with_single_line_text_at_beginning_for_([ValueSource(nameof(Markers))] string marker)
+        public void Code_gets_fixed_with_preceding_single_line_text_([ValueSource(nameof(Markers))] string marker)
         {
             var originalCode = @"
 /// <summary>
@@ -174,7 +174,7 @@ public sealed class TestMe { }
         }
 
         [Test]
-        public void Code_gets_fixed_with_multi_line_text_at_end_for_([ValueSource(nameof(Markers))] string marker)
+        public void Code_gets_fixed_with_following_multi_line_text_([ValueSource(nameof(Markers))] string marker)
         {
             var originalCode = @"
 /// <summary>
@@ -202,7 +202,7 @@ public sealed class TestMe { }
         }
 
         [Test]
-        public void Code_gets_fixed_with_single_line_text_at_end_for_([ValueSource(nameof(Markers))] string marker)
+        public void Code_gets_fixed_with_following_single_line_text_([ValueSource(nameof(Markers))] string marker)
         {
             var originalCode = @"
 /// <summary>

@@ -13,30 +13,34 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         private static readonly string[] CorrectNames =
                                                         [
-                                                            "map",
-                                                            "mapping",
+                                                            "actual",
                                                             "array",
+                                                            "batch",
                                                             "buffer",
+                                                            "cache",
                                                             "collection",
                                                             "dictionary",
+                                                            "expected",
+                                                            "gateways",
                                                             "items",
                                                             "list",
+                                                            "map",
+                                                            "mapping",
                                                             "queue",
                                                             "result",
                                                             "results",
                                                             "set",
+                                                            "someBatch",
+                                                            "someCache",
+                                                            "someMap",
+                                                            "someTrivia",
                                                             "source",
                                                             "stack",
+                                                            "textTokens",
+                                                            "trivia",
                                                             "typesUnderTest",
                                                             "variablesRead",
                                                             "variablesWritten",
-                                                            "gateways",
-                                                            "someTrivia",
-                                                            "textTokens",
-                                                            "trivia",
-                                                            "someMap",
-                                                            "actual",
-                                                            "expected",
                                                         ];
 
         private static readonly string[] WrongNames =
@@ -101,7 +105,7 @@ public class TestMe
         [TestCase("XmlNode node")]
         [TestCase("XNode myNode")]
         [TestCase("XNode node")]
-        public void No_issue_is_reported_for_method_with_variable_(string variable) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_variable_(string variable) => No_issue_is_reported_for(@"
 using System;
 using System.Xml;
 using System.Xml.Linq;
@@ -116,7 +120,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_non_Collection_variable() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_collection_variable() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -129,7 +133,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_Collection_variable_with_correct_name_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_collection_variable_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -143,7 +147,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_Collection_variable_with_correct_name_and_additional_suffix_([ValueSource(nameof(CorrectNamesWithSuffixes))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_collection_variable_with_suffix_([ValueSource(nameof(CorrectNamesWithSuffixes))] string name) => No_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -157,7 +161,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_var_Collection_variable_with_correct_name() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_var_collection_variable_with_plural_name() => No_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -171,7 +175,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_byte_array_for_hash() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_byte_array_named_hash() => No_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -189,7 +193,7 @@ public class TestMe
         [TestCase("IQueryable<int> query")]
         [TestCase("IOrderedQueryable query")]
         [TestCase("IOrderedQueryable<int> query")]
-        public void No_issue_is_reported_for_method_with_(string variable) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Linq_variable_(string variable) => No_issue_is_reported_for(@"
 using System.Linq;
 
 public class TestMe
@@ -202,7 +206,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_variable_of_specific_type_with_number_at_the_end() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_variable_of_enumerable_type_with_number_suffix_matching_type_name() => No_issue_is_reported_for(@"
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -221,7 +225,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_Collection_variable_with_incorrect_name_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_collection_variable_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -235,7 +239,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_Collection_variable_with_incorrect_name_with_suffix_([ValueSource(nameof(WrongNamesWithSuffixes))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_collection_variable_with_suffix_([ValueSource(nameof(WrongNamesWithSuffixes))] string name) => An_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -249,7 +253,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_var_Collection_variable_with_incorrect_name_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_var_collection_variable_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -263,7 +267,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_variable_declaration_pattern_for_Collection_variable_with_correct_name() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_variable_declaration_pattern_with_plural_name() => No_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -281,7 +285,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_variable_declaration_pattern_for_Collection_variable_with_incorrect_name() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_variable_declaration_pattern_with_singular_name() => An_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -314,7 +318,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_strange_ref_usage() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_ref_var_with_conditional_reference() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -327,7 +331,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_XML_node() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_XmlNode_variable() => No_issue_is_reported_for(@"
 using System;
 using System.Xml;
 
@@ -343,7 +347,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_XML_Linq_node() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_XNode_variable() => No_issue_is_reported_for(@"
 using System;
 using System.Xml;
 using System.Xml.Linq;
@@ -361,7 +365,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_document_node() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_variable_of_enumerable_type_named_after_type() => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 
@@ -379,7 +383,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_document_variable_in_foreach() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_foreach_variable_of_enumerable_type_named_after_type() => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 
@@ -399,7 +403,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_IGrouping_node() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_IGrouping_variable() => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -430,7 +434,7 @@ public class TestMe
         [TestCase("allElementReferenceNodeList", "allElements")]
         [TestCase("elementNodeList", "elements")]
         [TestCase("elementReferenceNodeList", "elements")]
-        public void Code_gets_fixed_for_variable_(string originalName, string fixedName)
+        public void Code_gets_fixed_by_pluralizing_variable_name_(string originalName, string fixedName)
         {
             const string Template = @"
 using System;
@@ -448,7 +452,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_variable_declaration_pattern()
+        public void Code_gets_fixed_by_pluralizing_variable_declaration_pattern_name()
         {
             const string OriginalCode = @"
 using System;

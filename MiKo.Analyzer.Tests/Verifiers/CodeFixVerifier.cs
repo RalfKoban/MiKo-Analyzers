@@ -200,9 +200,9 @@ New document:
                 var actual = GetStringFromDocument(document);
 
                 Assert.That(
-                            actual,
-                            Is.EqualTo(newSource),
-                            () => @"Fix created unexpected document.
+                        actual,
+                        Is.EqualTo(newSource),
+                        () => @"Fix created unexpected document.
 New document:
 ################################################
 " + actual + @"
