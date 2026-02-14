@@ -25,7 +25,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_documented_items_without_code() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_summary_without_code_tag() => No_issue_is_reported_for(@"
 using System;
 
 /// <summary>
@@ -51,7 +51,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_documented_items_with_correct_example_docu() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_code_tag_in_example_section() => No_issue_is_reported_for(@"
 using System;
 
 /// <summary>
@@ -101,7 +101,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_wrong_documented_summary_on_type() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_code_tag_in_type_summary() => An_issue_is_reported_for(@"
 using System;
 
 /// <summary>
@@ -116,7 +116,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_wrong_documented_summary_on_method() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_code_tag_in_method_summary() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -132,7 +132,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_wrong_documented_summary_on_property() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_code_tag_in_property_summary() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -148,7 +148,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_wrong_documented_summary_on_event() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_code_tag_in_event_summary() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe

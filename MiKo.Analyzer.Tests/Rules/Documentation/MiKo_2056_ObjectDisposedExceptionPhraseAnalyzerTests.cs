@@ -24,7 +24,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_documented_method_without_exception_docu() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_documented_method_without_exception_documentation() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -39,7 +39,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_documented_method_with_exception_docu_for_other_exception() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_documented_method_with_other_exception_type() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -55,7 +55,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_ObjectDisposedException_with_standard_disposed_phrase() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -71,7 +71,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_para_tag() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_ObjectDisposedException_with_standard_disposed_phrase_inside_para_tag() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -91,7 +91,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_ObjectDisposedException_with_non_standard_phrase() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -107,7 +107,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_with_para_tags() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_ObjectDisposedException_with_non_standard_phrase_inside_para_tags() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -123,7 +123,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_Close_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_ObjectDisposedException_with_standard_closed_phrase_when_Close_method_exists() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -143,7 +143,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_Close_method_in_base_class() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_ObjectDisposedException_with_standard_closed_phrase_when_Close_method_exists_in_base_class() => No_issue_is_reported_for(@"
 using System;
 
 public class Base
@@ -166,7 +166,7 @@ public class TestMe : Base
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_with_Close_method() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_ObjectDisposedException_with_non_standard_phrase_when_Close_method_exists() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -186,7 +186,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_for_fully_qualified_exception()
+        public void Code_gets_fixed_by_replacing_with_standard_disposed_phrase_for_fully_qualified_exception()
         {
             const string OriginalCode = @"
 using System;
@@ -221,7 +221,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_named_exception()
+        public void Code_gets_fixed_by_replacing_with_standard_disposed_phrase()
         {
             const string OriginalCode = @"
 using System;
@@ -256,7 +256,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_exception_with_Close_method()
+        public void Code_gets_fixed_by_replacing_with_standard_closed_phrase_when_Close_method_exists()
         {
             const string OriginalCode = @"
 using System;

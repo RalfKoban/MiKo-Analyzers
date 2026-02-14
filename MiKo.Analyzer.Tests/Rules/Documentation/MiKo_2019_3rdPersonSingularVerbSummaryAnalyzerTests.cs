@@ -76,7 +76,7 @@ public class TestMeException : System.Exception
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_class() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_class_with_3rd_person_singular_verb_documentation() => No_issue_is_reported_for(@"
 using System;
 
 using Bla
@@ -196,7 +196,7 @@ using Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_class_([Values("Provide", "This are")] string start) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_class_with_non_3rd_person_singular_verb_documentation_([Values("Provide", "This are")] string start) => An_issue_is_reported_for(@"
 using System;
 
 /// <summary>
@@ -208,7 +208,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_class_in_para_tag_([Values("Provide", "This are")] string start) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_class_with_non_3rd_person_singular_verb_in_para_tag_([Values("Provide", "This are")] string start) => An_issue_is_reported_for(@"
 using System;
 
 /// <summary>
@@ -222,7 +222,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_([Values("Perform", "Miss", "Mixs", "Buzzs", "Enrichs", "This are")] string verb) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_non_3rd_person_singular_verb_documentation_([Values("Perform", "Miss", "Mixs", "Buzzs", "Enrichs", "This are")] string verb) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -235,7 +235,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_async_method() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_async_method_with_non_3rd_person_singular_verb_documentation() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -248,7 +248,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_property() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_property_with_non_3rd_person_singular_verb_documentation() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -261,7 +261,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_starting_with_term_([Values("Recursively")] string term) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_3rd_person_verb_after_adverb_([Values("Recursively")] string term) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -274,7 +274,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_private_class_with_see_cref_as_second_word() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_private_class_with_see_cref_as_second_word_and_3rd_person_verb() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -288,7 +288,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_private_class_with_see_cref_as_second_word() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_private_class_with_see_cref_as_second_word_and_non_3rd_person_verb() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe

@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2011_UnsealedClassSummaryAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void Struct_is_not_reported() => No_issue_is_reported_for("""
+        public void No_issue_is_reported_for_struct() => No_issue_is_reported_for("""
 
                                                                          /// <summary>
                                                                          /// Something.
@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                          """);
 
         [Test]
-        public void Sealed_public_class_is_not_reported() => No_issue_is_reported_for("""
+        public void No_issue_is_reported_for_sealed_public_class() => No_issue_is_reported_for("""
 
                                                                                       /// <summary>
                                                                                       /// This class cannot be inherited.
@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                       """);
 
         [Test]
-        public void Sealed_non_public_class_is_not_reported() => No_issue_is_reported_for("""
+        public void No_issue_is_reported_for_sealed_non_public_class() => No_issue_is_reported_for("""
 
                                                                                           /// <summary>
                                                                                           /// Something.
@@ -48,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                           """);
 
         [Test]
-        public void No_documentation_is_not_reported() => No_issue_is_reported_for("""
+        public void No_issue_is_reported_for_undocumented_class() => No_issue_is_reported_for("""
 
                                                                                    public sealed class TestMe
                                                                                    {
@@ -57,7 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                    """);
 
         [Test]
-        public void Correct_documentation_is_not_reported() => No_issue_is_reported_for("""
+        public void No_issue_is_reported_for_unsealed_class_without_inheritance_statement() => No_issue_is_reported_for("""
 
                                                                                         /// <summary>
                                                                                         /// Something.
@@ -69,7 +69,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                         """);
 
         [Test]
-        public void Wrong_start_placed_documentation_is_reported() => An_issue_is_reported_for("""
+        public void An_issue_is_reported_for_unsealed_class_with_inheritance_statement_at_start() => An_issue_is_reported_for("""
 
                                                                                                /// <summary>
                                                                                                /// This class cannot be inherited.
@@ -82,7 +82,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                """);
 
         [Test]
-        public void Wrong_end_placed_documentation_is_reported() => An_issue_is_reported_for("""
+        public void An_issue_is_reported_for_unsealed_class_with_inheritance_statement_at_end() => An_issue_is_reported_for("""
 
                                                                                              /// <summary>
                                                                                              /// Something.
@@ -95,7 +95,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                              """);
 
         [Test]
-        public void Wrong_documentation_is_not_reported_for_TestClass_([ValueSource(nameof(TestFixtures))] string fixture) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_unsealed_test_class_with_inheritance_statement_([ValueSource(nameof(TestFixtures))] string fixture) => No_issue_is_reported_for(@"
 /// <summary>
 /// Some documentation
 /// This class cannot be inherited.
@@ -107,7 +107,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Malformed_documentation_is_reported() => An_issue_is_reported_for("""
+        public void An_issue_is_reported_for_unsealed_class_with_inheritance_statement_after_incomplete_sentence() => An_issue_is_reported_for("""
 
                                                                                       /// <summary>
                                                                                       /// Saves & Loads the relevant layout inforamtion of the ribbon within <see cref="XmlRibbonLayout"/>
@@ -120,7 +120,7 @@ public class TestMe
                                                                                       """);
 
         [Test]
-        public void Code_gets_fixed_for_class()
+        public void Code_gets_fixed_by_removing_inheritance_statement_from_end_of_summary()
         {
             const string OriginalCode = """
 
@@ -148,7 +148,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_record()
+        public void Code_gets_fixed_by_removing_inheritance_statement_from_end_of_summary_for_record()
         {
             const string OriginalCode = """
 
@@ -176,7 +176,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_with_wrong_placed_sealed_text()
+        public void Code_gets_fixed_by_removing_inheritance_statement_from_start_of_summary()
         {
             const string OriginalCode = """
 
@@ -204,7 +204,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_with_wrong_placed_sealed_text_on_single_line()
+        public void Code_gets_fixed_by_removing_inheritance_statement_from_middle_of_line()
         {
             const string OriginalCode = """
 
@@ -233,7 +233,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_with_wrong_placed_sealed_text_all_on_single_line()
+        public void Code_gets_fixed_by_extracting_and_removing_inheritance_statement_from_single_line()
         {
             const string OriginalCode = """
 
@@ -260,7 +260,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_malformed_documentation()
+        public void Code_gets_fixed_by_removing_inheritance_statement_after_incomplete_sentence()
         {
             const string OriginalCode = """
 

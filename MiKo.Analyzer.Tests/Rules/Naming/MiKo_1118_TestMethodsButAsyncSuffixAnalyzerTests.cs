@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1118_TestMethodsButAsyncSuffixAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_correctly_named_non_async_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_async_method_without_Async_suffix() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -22,7 +22,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_non_async_local_function() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_async_local_function_without_Async_suffix() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -34,7 +34,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_async_void_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_async_void_method_with_Async_suffix() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -44,7 +44,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_async_void_local_function() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_async_void_local_function_with_Async_suffix() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -57,7 +57,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_Task_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Task_returning_method_with_Async_suffix() => No_issue_is_reported_for(@"
 using System.Threading.Tasks;
 
 public class TestMe
@@ -67,7 +67,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_Task_local_function() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Task_returning_local_function_with_Async_suffix() => No_issue_is_reported_for(@"
 using System.Threading.Tasks;
 
 public class TestMe
@@ -80,7 +80,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_incorrectly_named_non_async_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_async_method_with_Async_suffix_outside_test_class() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -90,9 +90,9 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_test_method_with_correct_name_(
-                                                                        [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                        [ValueSource(nameof(Tests))] string test)
+        public void No_issue_is_reported_for_test_method_without_Async_suffix_(
+                                                                           [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                           [ValueSource(nameof(Tests))] string test)
         => No_issue_is_reported_for(@"
 [" + fixture + @"]
 public class TestMe
@@ -103,10 +103,10 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_test_method_with_incorrect_name_(
-                                                                          [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                          [ValueSource(nameof(Tests))] string test,
-                                                                          [Values("DoSomethingAsync", "Do_something_async", "DoSomethingAsync_", "Do_something_async_")] string methodName)
+        public void An_issue_is_reported_for_test_method_with_Async_suffix_(
+                                                                        [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                        [ValueSource(nameof(Tests))] string test,
+                                                                        [Values("DoSomethingAsync", "Do_something_async", "DoSomethingAsync_", "Do_something_async_")] string methodName)
         => An_issue_is_reported_for(@"
 [" + fixture + @"]
 public class TestMe
@@ -120,7 +120,7 @@ public class TestMe
         [TestCase("DoSomethingAsync_", "DoSomething_")]
         [TestCase("Do_something_async", "Do_something")]
         [TestCase("Do_something_async_", "Do_something_")]
-        public void Code_gets_fixed_for_method_(string originalName, string fixedName)
+        public void Code_gets_fixed_by_removing_Async_suffix_from_method_name_(string originalName, string fixedName)
         {
             const string Template = @"
 
@@ -138,9 +138,9 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_lower_case_method_(
-                                                       [ValueSource(nameof(TestFixtures))] string fixture,
-                                                       [ValueSource(nameof(Tests))] string test)
+        public void Code_gets_fixed_by_removing_async_suffix_from_snake_case_method_name_(
+                                                                                      [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                      [ValueSource(nameof(Tests))] string test)
         {
             var template = @"
 [" + fixture + @"]

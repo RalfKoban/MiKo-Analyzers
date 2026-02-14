@@ -40,7 +40,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_readwrite_property_([ValueSource(nameof(ValidPhrasesForReadWrite))] string phrase) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_readwrite_Command_property_with_standard_summary_([ValueSource(nameof(ValidPhrasesForReadWrite))] string phrase) => No_issue_is_reported_for(@"
 using System.Windows.Input;
 
 public class TestMe
@@ -53,7 +53,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_readonly_property_([ValueSource(nameof(ValidPhrasesForReadOnly))] string phrase) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_readonly_Command_property_with_standard_summary_([ValueSource(nameof(ValidPhrasesForReadOnly))] string phrase) => No_issue_is_reported_for(@"
 using System.Windows.Input;
 
 public class TestMe
@@ -66,7 +66,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_writeonly_property_([ValueSource(nameof(ValidPhrasesForWriteOnly))] string phrase) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_writeonly_Command_property_with_standard_summary_([ValueSource(nameof(ValidPhrasesForWriteOnly))] string phrase) => No_issue_is_reported_for(@"
 using System.Windows.Input;
 
 public class TestMe
@@ -79,7 +79,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_readwrite_property() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_readwrite_Command_property_with_non_standard_summary() => An_issue_is_reported_for(@"
 using System.Windows.Input;
 
 public class TestMe
@@ -92,7 +92,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_readonly_property() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_readonly_Command_property_with_non_standard_summary() => An_issue_is_reported_for(@"
 using System.Windows.Input;
 
 public class TestMe
@@ -105,7 +105,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_writeonly_property() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_writeonly_Command_property_with_non_standard_summary() => An_issue_is_reported_for(@"
 using System.Windows.Input;
 
 public class TestMe
@@ -118,7 +118,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_for_readonly_arrow_Command_property()
+        public void Code_gets_fixed_by_replacing_with_standard_summary_for_readonly_arrow_Command_property()
         {
             const string OriginalCode = @"
 using System.Windows.Input;
@@ -148,7 +148,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_readonly_Command_property()
+        public void Code_gets_fixed_by_replacing_with_standard_summary_for_readonly_Command_property()
         {
             const string OriginalCode = @"
 using System.Windows.Input;
@@ -178,7 +178,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_writeonly_Command_property()
+        public void Code_gets_fixed_by_replacing_with_standard_summary_for_writeonly_Command_property()
         {
             const string OriginalCode = @"
 using System.Windows.Input;
@@ -208,7 +208,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_readwrite_Command_property()
+        public void Code_gets_fixed_by_replacing_with_standard_summary_for_readwrite_Command_property()
         {
             const string OriginalCode = @"
 using System.Windows.Input;

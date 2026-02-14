@@ -37,7 +37,7 @@ public interface ITestMe : ICommand
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_class() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_command_class_with_standard_summary() => No_issue_is_reported_for(@"
 using System;
 using System.Windows.Input;
 
@@ -55,7 +55,7 @@ public class TestMe : ICommand
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_interface() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_ICommand_interface_with_standard_summary() => No_issue_is_reported_for(@"
 using System;
 using System.Windows.Input;
 
@@ -68,7 +68,7 @@ public interface ITestMe : ICommand
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_class() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_command_class_with_non_standard_summary() => An_issue_is_reported_for(@"
 using System;
 using System.Windows.Input;
 
@@ -100,7 +100,7 @@ public class TestMe : ICommand
         [TestCase("Interface for a command in")]
         [TestCase("Interface for a command that can do")]
         [TestCase("Interface for a command which can do")]
-        public void An_issue_is_reported_for_incorrectly_documented_interface_(string text) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_ICommand_interface_with_non_standard_summary_(string text) => An_issue_is_reported_for(@"
 using System;
 using System.Windows.Input;
 
@@ -113,7 +113,7 @@ public interface ITestMe : ICommand
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_class_with_see_cref() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_command_class_with_only_see_cref_in_summary() => An_issue_is_reported_for(@"
 using System;
 using System.Windows.Input;
 
@@ -223,7 +223,7 @@ public class TestMe : ICommand
         [TestCase("This command is used to execute", "execute")]
         [TestCase("Tries to execute", "execute")]
         [TestCase("Wrapper for", "wrap")]
-        public void Code_gets_fixed_(string originalComment, string fixedComment)
+        public void Code_gets_fixed_by_normalizing_to_standard_command_summary_(string originalComment, string fixedComment)
         {
             const string Template = @"
 using System;
