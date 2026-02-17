@@ -2002,15 +2002,26 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether a field declaration has the readonly modifier.
+        /// Determines whether a field declaration has the 'readonly' modifier.
         /// </summary>
         /// <param name="value">
         /// The field declaration to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the field declaration has the readonly modifier; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the field declaration has the 'readonly' modifier; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool IsReadOnly(this FieldDeclarationSyntax value) => value.Modifiers.Any(SyntaxKind.ReadOnlyKeyword);
+
+        /// <summary>
+        /// Determines whether a field declaration has the 'static' modifier.
+        /// </summary>
+        /// <param name="value">
+        /// The field declaration to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the field declaration has the 'static' modifier; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsStatic(this FieldDeclarationSyntax value) => value.Modifiers.Any(SyntaxKind.StaticKeyword);
 
         /// <summary>
         /// Determines whether a syntax node spans multiple lines.
