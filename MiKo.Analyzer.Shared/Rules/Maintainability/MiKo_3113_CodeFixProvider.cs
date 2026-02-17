@@ -34,6 +34,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return root.WithUsing(Constants.Names.DefaultNUnitNamespace);
         }
 
+        private static SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax)
+        {
+            if (syntax is ExpressionStatementSyntax statement)
+            {
+                return Convert(document, statement);
+            }
+
+            return syntax;
+        }
+
         private static ExpressionStatementSyntax Convert(Document document, ExpressionStatementSyntax statement)
         {
             var shouldNode = statement.GetFluentAssertionShouldNode();

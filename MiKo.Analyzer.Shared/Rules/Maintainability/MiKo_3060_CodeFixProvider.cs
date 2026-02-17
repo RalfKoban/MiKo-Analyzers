@@ -16,9 +16,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ExpressionStatementSyntax>().FirstOrDefault();
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => null; // we want to remove the syntax
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        {
+            // we want to remove the syntax
+            return null;
+        }
 
         protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
+        {
+            var updatedRoot = GetUpdatedSyntaxRoot(root);
+
+            return updatedRoot;
+        }
+
+        private static SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root)
         {
             if (root.DescendantNodes<IdentifierNameSyntax>().None(_ => IsDebugOrTrace(_.GetName())))
             {

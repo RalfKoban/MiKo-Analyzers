@@ -18,6 +18,25 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
+            SyntaxNode updatedSyntax = GetUpdatedSyntax(syntax);
+
+            return updatedSyntax;
+        }
+
+        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
+        {
+            if (syntax is MethodDeclarationSyntax method && method.ExpressionBody != null)
+            {
+                var updatedSyntaxRoot = GetUpdatedSyntaxRoot(root, method);
+
+                return updatedSyntaxRoot;
+            }
+
+            return base.GetUpdatedSyntaxRoot(document, root, syntax, annotationOfSyntax, issue);
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
+        {
             if (syntax is MethodDeclarationSyntax method && method.Body is BlockSyntax body)
             {
                 var returnStatements = body.DescendantNodes<ReturnStatementSyntax>(_ => _.ReturnsCompletedTask());
@@ -29,27 +48,22 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return syntax;
         }
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
+        private static SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root, MethodDeclarationSyntax method)
         {
-            if (syntax is MethodDeclarationSyntax method && method.ExpressionBody != null)
+            var siblings = method.Siblings();
+
+            var nodesToUpdate = new List<SyntaxNode>(2);
+
+            if (siblings.Count > 1 && method.Equals(siblings[0]))
             {
-                var siblings = method.Siblings();
-
-                var nodesToUpdate = new List<SyntaxNode>(2);
-
-                if (siblings.Count > 1 && method.Equals(siblings[0]))
-                {
-                    nodesToUpdate.Add(siblings[1]);
-                }
-
-                nodesToUpdate.Add(method);
-
-                var updatedRoot = root.ReplaceNodes(nodesToUpdate, (original, rewritten) => original == method ? null : rewritten.WithoutLeadingEndOfLine());
-
-                return updatedRoot;
+                nodesToUpdate.Add(siblings[1]);
             }
 
-            return base.GetUpdatedSyntaxRoot(document, root, syntax, annotationOfSyntax, issue);
+            nodesToUpdate.Add(method);
+
+            var updatedRoot = root.ReplaceNodes(nodesToUpdate, (original, rewritten) => original == method ? null : rewritten.WithoutLeadingEndOfLine());
+
+            return updatedRoot;
         }
     }
 }

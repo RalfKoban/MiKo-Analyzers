@@ -18,6 +18,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
+            var updatedSyntax = GetUpdatedSyntax(syntax);
+
+            return updatedSyntax;
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
+        {
             if (syntax is ParameterSyntax parameter && parameter.Type is GenericNameSyntax generic)
             {
                 return parameter.WithType(GenericName("Func", generic.TypeArgumentList.AddArguments(PredefinedType(SyntaxKind.BoolKeyword))));

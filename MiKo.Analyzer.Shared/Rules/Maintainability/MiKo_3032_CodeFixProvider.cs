@@ -19,6 +19,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
+            var updatedSyntax = GetUpdatedSyntax(syntax, issue);
+
+            return updatedSyntax;
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax, Diagnostic issue)
+        {
             var expression = NameOf(issue);
 
             if (issue.Properties.ContainsKey(Constants.AnalyzerCodeFixSharedData.GetPropertyName))

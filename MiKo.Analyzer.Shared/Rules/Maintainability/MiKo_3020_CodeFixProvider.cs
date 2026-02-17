@@ -16,6 +16,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<InvocationExpressionSyntax>().FirstOrDefault();
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => Member(nameof(Task), nameof(Task.CompletedTask));
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        {
+            var updatedSyntax = GetUpdatedSyntax();
+
+            return updatedSyntax;
+        }
+
+        private static MemberAccessExpressionSyntax GetUpdatedSyntax() => Member(nameof(Task), nameof(Task.CompletedTask));
     }
 }

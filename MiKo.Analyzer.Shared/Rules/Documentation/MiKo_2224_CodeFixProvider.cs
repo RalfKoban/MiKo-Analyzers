@@ -29,32 +29,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            switch (syntax)
-            {
-                case XmlEmptyElementSyntax _:
-                    return syntax;
+            var updatedSyntax = GetUpdatedSyntax(syntax, issue);
 
-                case XmlElementSyntax element:
-                {
-                    var startTag = element.StartTag;
-
-                    if (issue.Location == startTag.GetLocation())
-                    {
-                        return GetUpdatedSyntax(startTag);
-                    }
-
-                    var endTag = element.EndTag;
-
-                    if (issue.Location == endTag.GetLocation())
-                    {
-                        return GetUpdatedSyntax(endTag);
-                    }
-
-                    break;
-                }
-            }
-
-            return base.GetUpdatedSyntax(document, syntax, issue);
+            return updatedSyntax;
         }
 
         protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
@@ -99,6 +76,36 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return syntax;
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax, Diagnostic issue)
+        {
+            switch (syntax)
+            {
+                case XmlEmptyElementSyntax _:
+                    return syntax;
+
+                case XmlElementSyntax element:
+                {
+                    var startTag = element.StartTag;
+
+                    if (issue.Location == startTag.GetLocation())
+                    {
+                        return GetUpdatedSyntax(startTag);
+                    }
+
+                    var endTag = element.EndTag;
+
+                    if (issue.Location == endTag.GetLocation())
+                    {
+                        return GetUpdatedSyntax(endTag);
+                    }
+
+                    break;
+                }
+            }
+
+            return null;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿#if VS2022
+
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
@@ -18,6 +19,13 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
+            var updatedSyntax = GetUpdatedSyntax(syntax);
+
+            return updatedSyntax;
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
+        {
             if (syntax is RecursivePatternSyntax pattern && pattern.PropertyPatternClause != null)
             {
                 return pattern.PlacedOnSameLine();
@@ -27,4 +35,5 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         }
     }
 }
+
 #endif

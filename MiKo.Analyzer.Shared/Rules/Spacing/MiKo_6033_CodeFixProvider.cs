@@ -17,6 +17,13 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
+            var updatedSyntax = GetUpdatedSyntax(syntax, issue);
+
+            return updatedSyntax;
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax, Diagnostic issue)
+        {
             if (syntax is BlockSyntax block && block.Parent is SwitchSectionSyntax)
             {
                 var spaces = GetProposedSpaces(issue);

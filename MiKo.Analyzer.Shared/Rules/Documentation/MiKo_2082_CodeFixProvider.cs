@@ -31,6 +31,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
+            var updatedSyntax = GetUpdatedSyntax(syntax);
+
+            return updatedSyntax;
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
+        {
             var comment = (XmlElementSyntax)syntax;
 
             var contents = comment.Content;
@@ -107,7 +114,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordAdjustment.StartUpperCase | FirstWordAdjustment.KeepSingleLeadingSpace);
         }
 
-//// ncrunch: rdi off
+        //// ncrunch: rdi off
 
         private static IEnumerable<string> CreateReplacementMapKeys()
         {

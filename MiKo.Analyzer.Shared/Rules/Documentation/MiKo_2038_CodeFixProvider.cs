@@ -64,9 +64,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return syntax;
         }
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => GetUpdatedSyntax(syntax);
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        {
+            var updatedSyntax = GetUpdatedSyntax(syntax);
 
-//// ncrunch: rdi off
+            return updatedSyntax;
+        }
+
+        //// ncrunch: rdi off
 
         private static HashSet<string> CreateCommandStartingPhrases()
         {

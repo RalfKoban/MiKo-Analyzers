@@ -17,6 +17,13 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
+            var updatedSyntax = GetUpdatedSyntax(syntax);
+
+            return updatedSyntax;
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
+        {
             if (syntax is InvocationExpressionSyntax invocation)
             {
                 return invocation.WithArgumentList(invocation.ArgumentList.PlacedOnSameLine())
@@ -28,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         }
 
         private static ExpressionSyntax PlacedOnSameLine(ExpressionSyntax expression) => expression is MemberAccessExpressionSyntax maes
-                                                                                         ? maes.WithName(maes.Name.PlacedOnSameLine())
-                                                                                         : expression;
+                                                                                             ? maes.WithName(maes.Name.PlacedOnSameLine())
+                                                                                             : expression;
     }
 }

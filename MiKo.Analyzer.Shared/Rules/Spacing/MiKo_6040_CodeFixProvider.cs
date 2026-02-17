@@ -19,11 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 switch (node)
                 {
                     case MemberAccessExpressionSyntax _:
-                        return node;
-
                     case MemberBindingExpressionSyntax _:
-                        return node;
-
                     case ConditionalAccessExpressionSyntax _:
                         return node;
                 }
@@ -33,6 +29,20 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         }
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        {
+            var updatedSyntax = GetUpdatedSyntax(syntax, issue);
+
+            return updatedSyntax;
+        }
+
+        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
+        {
+            var updatedSyntaxRoot = GetUpdatedSyntaxRoot(root, syntax, issue);
+
+            return updatedSyntaxRoot;
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax, Diagnostic issue)
         {
             switch (syntax)
             {
@@ -62,7 +72,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
         }
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
+        private static SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root, SyntaxNode syntax, Diagnostic issue)
         {
             // adjust the invocations
             switch (syntax)

@@ -35,6 +35,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
+            var updatedSyntax = GetUpdatedSyntax(syntax);
+
+            return updatedSyntax;
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
+        {
             var preparedComment = PrepareComment((XmlElementSyntax)syntax);
 
             var fixedComment = CommentStartingWith(preparedComment, Constants.Comments.EventSummaryStartingPhrase);

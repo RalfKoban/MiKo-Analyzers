@@ -18,27 +18,34 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
+            var updatedSyntax = GetUpdatedSyntax(syntax);
+
+            return updatedSyntax;
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
+        {
             if (syntax is SwitchExpressionSyntax switchExpression)
             {
                 var arms = switchExpression.Arms;
 
                 var updatedArms = arms.GetWithSeparators()
                                       .Select(item =>
-                                                     {
-                                                         if (item.IsNode)
-                                                         {
-                                                             var node = item.AsNode();
+                                              {
+                                                  if (item.IsNode)
+                                                  {
+                                                      var node = item.AsNode();
 
-                                                             return node.PlacedOnSameLine().WithLeadingTriviaFrom(node).WithEndOfLine();
-                                                         }
+                                                      return node.PlacedOnSameLine().WithLeadingTriviaFrom(node).WithEndOfLine();
+                                                  }
 
-                                                         if (item.IsToken)
-                                                         {
-                                                             return item.AsToken().WithoutLeadingTrivia();
-                                                         }
+                                                  if (item.IsToken)
+                                                  {
+                                                      return item.AsToken().WithoutLeadingTrivia();
+                                                  }
 
-                                                         return item;
-                                                     });
+                                                  return item;
+                                              });
 
                 var spaces = switchExpression.SwitchKeyword.GetPositionWithinEndLine();
 

@@ -18,6 +18,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
+            var updatedSyntax = GetUpdatedSyntax(syntax, issue);
+
+            return updatedSyntax;
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax, Diagnostic issue)
+        {
             if (syntax is EnumMemberDeclarationSyntax member)
             {
                 var isFlags = bool.Parse(issue.Properties[Constants.AnalyzerCodeFixSharedData.IsFlagged]);

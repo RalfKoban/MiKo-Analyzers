@@ -12,14 +12,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            if (syntax != null)
-            {
-                var name = syntax.GetReferencedName();
+            var updatedSyntax = GetUpdatedSyntax(syntax);
 
-                return TypeParamRef(name);
+            return updatedSyntax;
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
+        {
+            if (syntax is null)
+            {
+                return null;
             }
 
-            return null;
+            var name = syntax.GetReferencedName();
+
+            return TypeParamRef(name);
         }
     }
 }

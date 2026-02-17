@@ -13,7 +13,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            return GetUpdatedSyntaxWithFixedText(syntax, _ => _.AsCachedBuilder().ReplaceAllWithProbe(Constants.Comments.NotContractionReplacementMap.AsSpan()).ToStringAndRelease());
+            var updatedSyntax = GetUpdatedSyntax(syntax);
+
+            return updatedSyntax;
         }
+
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax) => GetUpdatedSyntaxWithFixedText(syntax, _ => _.AsCachedBuilder().ReplaceAllWithProbe(Constants.Comments.NotContractionReplacementMap.AsSpan()).ToStringAndRelease());
     }
 }

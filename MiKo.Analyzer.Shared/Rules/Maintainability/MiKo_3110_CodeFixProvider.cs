@@ -18,6 +18,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
+            var updatedSyntax = GetUpdatedSyntax(syntax, issue);
+
+            return updatedSyntax;
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax, Diagnostic issue)
+        {
             var original = (ExpressionStatementSyntax)syntax;
 
             if (original.Expression is InvocationExpressionSyntax invocation && invocation.Expression is MemberAccessExpressionSyntax maes && maes.Expression is IdentifierNameSyntax type)

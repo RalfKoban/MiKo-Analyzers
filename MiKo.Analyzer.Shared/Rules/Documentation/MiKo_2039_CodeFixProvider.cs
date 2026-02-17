@@ -32,9 +32,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return CommentStartingWith(comment, Parts[0], SeeLangword("static"), Parts[1]);
         }
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => GetUpdatedSyntax((XmlElementSyntax)syntax);
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        {
+            var updatedSyntax = GetUpdatedSyntax((XmlElementSyntax)syntax);
 
-//// ncrunch: rdi off
+            return updatedSyntax;
+        }
+
+        //// ncrunch: rdi off
 
         private static HashSet<string> CreateReplacementMapKeys()
         {

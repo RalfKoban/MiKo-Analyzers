@@ -18,6 +18,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
+            var updatedSyntax = GetUpdatedSyntax(syntax);
+
+            return updatedSyntax;
+        }
+
+        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue) => root.WithUsing("System.Runtime.CompilerServices");
+
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
+        {
             var parameter = (ParameterSyntax)syntax;
 
             var name = SyntaxFactory.ParseName("CallerMemberName");
@@ -27,7 +36,5 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return parameter.WithAttributeLists(attributeList.ToSyntaxList())
                             .WithDefault(SyntaxFactory.EqualsValueClause(NullLiteral()));
         }
-
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue) => root.WithUsing("System.Runtime.CompilerServices");
     }
 }

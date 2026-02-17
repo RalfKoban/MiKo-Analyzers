@@ -49,24 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            var comment = (XmlElementSyntax)syntax;
-
-            foreach (var ancestor in comment.Ancestors())
-            {
-                switch (ancestor)
-                {
-                    case MethodDeclarationSyntax m:
-                        return Comment(document, comment, m);
-
-                    case PropertyDeclarationSyntax p:
-                        return Comment(document, comment, p);
-
-                    default:
-                        continue;
-                }
-            }
-
-            return comment;
+            return GetUpdatedSyntax(document, syntax);
         }
 
         protected abstract XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, string memberName, TypeSyntax returnType);
@@ -168,5 +151,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private XmlElementSyntax Comment(Document document, XmlElementSyntax comment, string memberName, TypeSyntax returnType) => returnType is GenericNameSyntax genericReturnType
                                                                                                                                    ? GenericComment(document, comment, memberName, genericReturnType)
                                                                                                                                    : NonGenericComment(document, comment, memberName, returnType);
+
+        private SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax)
+        {
+            var comment = (XmlElementSyntax)syntax;
+
+            foreach (var ancestor in comment.Ancestors())
+            {
+                switch (ancestor)
+                {
+                    case MethodDeclarationSyntax m:
+                        return Comment(document, comment, m);
+
+                    case PropertyDeclarationSyntax p:
+                        return Comment(document, comment, p);
+
+                    default:
+                        continue;
+                }
+            }
+
+            return comment;
+        }
     }
 }

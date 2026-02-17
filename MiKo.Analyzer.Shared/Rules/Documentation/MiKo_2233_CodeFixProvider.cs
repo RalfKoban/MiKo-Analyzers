@@ -13,13 +13,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
+            var updatedSyntax = GetUpdatedSyntax(syntax);
+
+            return updatedSyntax;
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
+        {
             switch (syntax)
             {
                 case XmlEmptyElementSyntax element: return GetUpdatedSyntax(element);
                 case XmlElementStartTagSyntax start: return GetUpdatedSyntax(start);
                 case XmlElementEndTagSyntax end: return GetUpdatedSyntax(end);
                 default:
-                    return base.GetUpdatedSyntax(document, syntax, issue);
+                    return null;
             }
         }
 

@@ -13,15 +13,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            if (syntax != null)
-            {
-                var cref = syntax.GetCref();
-                var name = cref.GetCrefType().GetName();
+            var updatedSyntax = GetUpdatedSyntax(syntax);
 
-                return SyntaxFactory.XmlParamRefElement(name);
+            return updatedSyntax;
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
+        {
+            if (syntax is null)
+            {
+                return null;
             }
 
-            return null;
+            var cref = syntax.GetCref();
+            var name = cref.GetCrefType().GetName();
+
+            return SyntaxFactory.XmlParamRefElement(name);
         }
     }
 }

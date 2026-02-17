@@ -51,6 +51,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
+            var updatedSyntax = GetUpdatedSyntax(syntax, issue);
+
+            return updatedSyntax;
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax, Diagnostic issue)
+        {
             if (syntax is MemberDeclarationSyntax member)
             {
                 var foundCommentTags = issue.Properties[Constants.AnalyzerCodeFixSharedData.CommentTags].Split('|');

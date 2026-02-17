@@ -18,6 +18,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, Constants.Comments.EventArgsSummaryStartingPhrase, cref, " event.");
         }
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => GetUpdatedSyntax((XmlElementSyntax)syntax);
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        {
+            var updatedSyntax = GetUpdatedSyntax((XmlElementSyntax)syntax);
+
+            return updatedSyntax;
+        }
     }
 }

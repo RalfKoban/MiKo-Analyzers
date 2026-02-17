@@ -14,6 +14,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
+            var updatedSyntax = GetUpdatedSyntax(syntax);
+
+            return updatedSyntax;
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
+        {
             switch (syntax)
             {
                 case BinaryExpressionSyntax binary:
@@ -27,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                            : FalseLiteral();
 
                 default:
-                    return base.GetUpdatedSyntax(document, syntax, issue);
+                    return null;
             }
         }
     }

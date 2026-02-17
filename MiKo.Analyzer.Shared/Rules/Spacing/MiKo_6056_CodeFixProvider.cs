@@ -60,12 +60,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            if (syntax is CollectionExpressionSyntax expression)
-            {
-                return GetUpdatedSyntax(expression, issue);
-            }
+            var updatedSyntax = GetUpdatedSyntax(syntax, issue);
 
-            return syntax;
+            return updatedSyntax;
         }
 
         protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
@@ -85,6 +82,16 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
 
             return base.GetUpdatedSyntaxRoot(document, root, syntax, annotationOfSyntax, issue);
+        }
+
+        private SyntaxNode GetUpdatedSyntax(SyntaxNode syntax, Diagnostic issue)
+        {
+            if (syntax is CollectionExpressionSyntax expression)
+            {
+                return GetUpdatedSyntax(expression, issue);
+            }
+
+            return syntax;
         }
 
         private CollectionExpressionSyntax GetUpdatedSyntax(CollectionExpressionSyntax expression, Diagnostic issue)

@@ -17,6 +17,20 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
+            var updatedSyntax = GetUpdatedSyntax(syntax, issue);
+
+            return updatedSyntax;
+        }
+
+        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
+        {
+            var updatedSyntaxRoot = GetUpdatedSyntaxRoot(root, syntax);
+
+            return updatedSyntaxRoot;
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax, Diagnostic issue)
+        {
             if (syntax is ArgumentSyntax argument)
             {
                 var spaces = GetProposedSpaces(issue);
@@ -31,7 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return syntax;
         }
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
+        private static SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root, SyntaxNode syntax)
         {
             if (syntax is ArgumentSyntax argument && argument.Parent is ArgumentListSyntax list)
             {

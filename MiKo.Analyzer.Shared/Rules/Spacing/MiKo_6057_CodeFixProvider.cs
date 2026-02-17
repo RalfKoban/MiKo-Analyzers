@@ -15,36 +15,46 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<TypeParameterConstraintClauseSyntax>().First();
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => syntax;
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        {
+            return syntax;
+        }
 
         protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
         {
             if (syntax is TypeParameterConstraintClauseSyntax node)
             {
-                var spaces = GetProposedSpaces(issue);
+                var updatedSyntaxRoot = GetUpdatedSyntaxRoot(root, node, issue);
 
-                var clauses = node.GetConstraintClauses();
-
-                return root.ReplaceNodes(
-                                     clauses,
-                                     (original, rewritten) =>
-                                                             {
-                                                                 var updated = rewritten;
-
-                                                                 var updatedConstraints = updated.Constraints.Select(_ => _.WithTrailingNewLine()).ToSeparatedSyntaxList();
-
-                                                                 updated = updated.WithConstraints(updatedConstraints);
-
-                                                                 if (clauses.IndexOf(original) > 0)
-                                                                 {
-                                                                     updated = updated.WithWhereKeyword(original.WhereKeyword.WithLeadingSpaces(spaces));
-                                                                 }
-
-                                                                 return updated;
-                                                             });
+                return updatedSyntaxRoot;
             }
 
             return base.GetUpdatedSyntaxRoot(document, root, syntax, annotationOfSyntax, issue);
+        }
+
+        private static SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root, TypeParameterConstraintClauseSyntax node, Diagnostic issue)
+        {
+            var spaces = GetProposedSpaces(issue);
+
+            var clauses = node.GetConstraintClauses();
+
+            return root.ReplaceNodes(
+                                     clauses,
+                                     (original, rewritten) =>
+                                     {
+                                         var updated = rewritten;
+
+                                         var updatedConstraints = updated.Constraints.Select(_ => _.WithTrailingNewLine()).ToSeparatedSyntaxList();
+
+                                         updated = updated.WithConstraints(updatedConstraints);
+
+                                         if (clauses.IndexOf(original) > 0)
+                                         {
+                                             updated = updated.WithWhereKeyword(original.WhereKeyword.WithLeadingSpaces(spaces));
+                                         }
+
+                                         return updated;
+                                     });
         }
     }
 }

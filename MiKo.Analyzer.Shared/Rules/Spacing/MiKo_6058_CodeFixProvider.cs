@@ -17,6 +17,13 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
+            var updatedSyntax = GetUpdatedSyntax(syntax, issue);
+
+            return updatedSyntax;
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax, Diagnostic issue)
+        {
             if (syntax is TypeParameterConstraintClauseSyntax node)
             {
                 var spaces = GetProposedSpaces(issue);
@@ -24,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 return node.WithLeadingSpaces(spaces);
             }
 
-            return base.GetUpdatedSyntax(document, syntax, issue);
+            return null;
         }
     }
 }

@@ -30,6 +30,19 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
+            var updatedSyntax = GetUpdatedSyntax(syntax, issue);
+
+            return updatedSyntax;
+        }
+
+        private static PrefixUnaryExpressionSyntax GetUpdatedSyntax(PrefixUnaryExpressionSyntax unary) => unary.WithOperatorToken(unary.OperatorToken.WithoutTrailingTrivia())
+                                                                                                               .WithOperand(unary.Operand.WithoutLeadingTrivia());
+
+        private static PostfixUnaryExpressionSyntax GetUpdatedSyntax(PostfixUnaryExpressionSyntax unary) => unary.WithOperand(unary.Operand.WithoutTrailingTrivia())
+                                                                                                                 .WithOperatorToken(unary.OperatorToken.WithoutLeadingTrivia());
+
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax, Diagnostic issue)
+        {
             switch (syntax)
             {
                 case BinaryExpressionSyntax binary: return GetUpdatedSyntax(binary, issue);
@@ -39,12 +52,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             return syntax;
         }
-
-        private static PrefixUnaryExpressionSyntax GetUpdatedSyntax(PrefixUnaryExpressionSyntax unary) => unary.WithOperatorToken(unary.OperatorToken.WithoutTrailingTrivia())
-                                                                                                               .WithOperand(unary.Operand.WithoutLeadingTrivia());
-
-        private static PostfixUnaryExpressionSyntax GetUpdatedSyntax(PostfixUnaryExpressionSyntax unary) => unary.WithOperand(unary.Operand.WithoutTrailingTrivia())
-                                                                                                                 .WithOperatorToken(unary.OperatorToken.WithoutLeadingTrivia());
 
         private static BinaryExpressionSyntax GetUpdatedSyntax(BinaryExpressionSyntax binary, Diagnostic issue)
         {

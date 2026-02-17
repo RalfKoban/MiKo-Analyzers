@@ -17,6 +17,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
+            var updatedSyntax = GetUpdatedSyntax(syntax);
+
+            return updatedSyntax;
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
+        {
             if (syntax is MemberAccessExpressionSyntax node && node.TryGetMoqTypes(out var types))
             {
                 return Invocation("Mock", "Of", types).WithTriviaFrom(node);

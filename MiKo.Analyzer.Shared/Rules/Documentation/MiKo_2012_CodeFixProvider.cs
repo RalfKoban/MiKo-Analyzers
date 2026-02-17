@@ -108,7 +108,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return GetUpdatedSyntax(comment, FirstWordAdjustment.StartLowerCase);
         }
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => GetUpdatedSyntax((XmlElementSyntax)syntax);
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        {
+            var updatedSyntax = GetUpdatedSyntax((XmlElementSyntax)syntax);
+
+            return updatedSyntax;
+        }
 
         private static XmlElementSyntax GetUpdatedSyntax(XmlElementSyntax comment, in FirstWordAdjustment startAdjustment)
         {

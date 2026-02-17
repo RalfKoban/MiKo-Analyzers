@@ -59,7 +59,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
             }
 
-            return base.GetUpdatedSyntax(document, syntax, issue);
+            return null;
         }
 
         private static ExpressionSyntax GetUpdatedCondition(ExpressionSyntax expression, string name, in SyntaxKind expressionKind, LiteralExpressionSyntax literal, Document document)

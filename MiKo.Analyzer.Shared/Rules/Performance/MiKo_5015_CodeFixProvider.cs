@@ -15,6 +15,11 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<InvocationExpressionSyntax>().FirstOrDefault();
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => syntax.FirstDescendant<LiteralExpressionSyntax>();
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        {
+            var updatedSyntax = syntax.FirstDescendant<LiteralExpressionSyntax>();
+
+            return updatedSyntax;
+        }
     }
 }

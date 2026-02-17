@@ -38,6 +38,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
+            var updatedSyntax = GetUpdatedSyntaxCore(document, syntax, issue);
+
+            return updatedSyntax;
+        }
+
+        protected abstract XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, in int index, Diagnostic issue);
+
+        private SyntaxNode GetUpdatedSyntaxCore(Document document, SyntaxNode syntax, Diagnostic issue)
+        {
             if (syntax is XmlElementSyntax parameterCommentSyntax)
             {
                 var parameters = parameterCommentSyntax.GetParameters();
@@ -70,7 +79,5 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return syntax;
         }
-
-        protected abstract XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, in int index, Diagnostic issue);
     }
 }

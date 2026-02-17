@@ -21,6 +21,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
+            var updatedSyntax = GetUpdatedSyntax(syntax);
+
+            return updatedSyntax;
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
+        {
             if (syntax is XmlElementSyntax summary)
             {
                 var preparedComment = MiKo_2019_CodeFixProvider.GetUpdatedSyntax(summary) as XmlElementSyntax ?? summary;

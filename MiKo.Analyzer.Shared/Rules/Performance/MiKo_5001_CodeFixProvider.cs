@@ -24,6 +24,31 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
+            var updatedSyntax = GetUpdatedSyntax(syntax);
+
+            return updatedSyntax;
+        }
+
+        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
+        {
+            var parent = syntax.Parent;
+
+            if (parent is null)
+            {
+                // should not happen
+                return root;
+            }
+
+            if (syntax is IfStatementSyntax insertedIf)
+            {
+                return GetWithMergedIfStatements(root, insertedIf, annotationOfSyntax, parent);
+            }
+
+            return root;
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
+        {
             if (syntax is ExpressionStatementSyntax statement)
             {
                 var lambda = statement.FirstDescendant<LambdaExpressionSyntax>();
@@ -43,24 +68,6 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             }
 
             return syntax;
-        }
-
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
-        {
-            var parent = syntax.Parent;
-
-            if (parent is null)
-            {
-                // should not happen
-                return root;
-            }
-
-            if (syntax is IfStatementSyntax insertedIf)
-            {
-                return GetWithMergedIfStatements(root, insertedIf, annotationOfSyntax, parent);
-            }
-
-            return root;
         }
 
         private static IfStatementSyntax CreateIfStatement(ExpressionStatementSyntax statement) => CreateIfStatement(statement.Expression).WithTriviaFrom(statement);

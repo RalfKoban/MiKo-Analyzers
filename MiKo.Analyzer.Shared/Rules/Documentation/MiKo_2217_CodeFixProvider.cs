@@ -22,8 +22,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var listType = attribute.GetListType();
 
                 if (listType is null // no list type specified
-                || string.Equals(listType, Constants.XmlTag.ListType.Bullet, StringComparison.OrdinalIgnoreCase)
-                || string.Equals(listType, Constants.XmlTag.ListType.Number, StringComparison.OrdinalIgnoreCase))
+                 || string.Equals(listType, Constants.XmlTag.ListType.Bullet, StringComparison.OrdinalIgnoreCase)
+                 || string.Equals(listType, Constants.XmlTag.ListType.Number, StringComparison.OrdinalIgnoreCase))
                 {
                     return GetUpdatedSyntaxForBulletOrNumber(syntax, node);
                 }
