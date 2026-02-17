@@ -24,8 +24,6 @@ namespace MiKoSolutions.Analyzers
     /// </summary>
     internal static class StringExtensions
     {
-        private const int QuickSubstringProbeLengthThreshold = 4;
-
         private const int DifferenceBetweenUpperAndLowerCaseAscii = 0x20; // valid for Roman ASCII characters ('A' ... 'Z')
 
         private const string NumberRegexPattern = @"
@@ -41,17 +39,19 @@ namespace MiKoSolutions.Analyzers
                                                        (?!\w)                     # no word character after
                                                    ";
 
+        private const int QuickSubstringProbeLengthThreshold = 4;
+
         private static readonly char[] GenericTypeArgumentSeparator = { ',' };
 
         private static readonly TimeSpan RegexTimeout = 250.Milliseconds();
 
         private static readonly Regex HyperlinkRegex = new Regex(@"(www|ftp:|ftps:|http:|https:)+[^\s]+[\w]", RegexOptions.Compiled, RegexTimeout);
 
-        private static readonly Regex PascalCasingRegex = new Regex("[a-z]+[A-Z]+", RegexOptions.Compiled, RegexTimeout);
-
         private static readonly Regex NumberRegex = new Regex(NumberRegexPattern, RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace, RegexTimeout);
 
         private static readonly Regex OnlyNumberRegex = new Regex("^" + NumberRegexPattern + "$", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace, RegexTimeout);
+
+        private static readonly Regex PascalCasingRegex = new Regex("[a-z]+[A-Z]+", RegexOptions.Compiled, RegexTimeout);
 
         /// <summary>
         /// Adjusts the first word of the value according to the specified adjustment options.
@@ -290,40 +290,6 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="ReadOnlySpan{T}"/> contains no elements that satisfy the specified condition.
-        /// </summary>
-        /// <typeparam name="T">
-        /// The type of elements in the span.
-        /// </typeparam>
-        /// <param name="source">
-        /// The span to evaluate.
-        /// </param>
-        /// <param name="predicate">
-        /// The condition to test each element against.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if no elements satisfy the condition; otherwise, <see langword="false"/>.
-        /// </returns>
-        /// <seealso cref="Any{T}"/>
-        public static bool None<T>(this in ReadOnlySpan<T> source, Func<T, bool> predicate)
-        {
-            var sourceLength = source.Length;
-
-            if (sourceLength > 0)
-            {
-                for (var index = 0; index < sourceLength; index++)
-                {
-                    if (predicate(source[index]))
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
-
-        /// <summary>
         /// Creates a cached <see cref="StringBuilder"/> initialized with the specified <see cref="string"/>.
         /// </summary>
         /// <param name="value">
@@ -334,6 +300,29 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static StringBuilder AsCachedBuilder(this string value) => StringBuilderCache.Acquire(value.Length).Append(value);
+
+        /// <summary>
+        /// Converts a character span to an interpolated <see cref="string"/> text syntax node.
+        /// </summary>
+        /// <param name="value">
+        /// The span of characters to convert.
+        /// </param>
+        /// <returns>
+        /// An interpolated <see cref="string"/> text syntax node.
+        /// </returns>
+        public static InterpolatedStringTextSyntax AsInterpolatedString(this in ReadOnlySpan<char> value) => value.ToString().AsInterpolatedString();
+
+        /// <summary>
+        /// Converts a <see cref="string"/> to an interpolated <see cref="string"/> text syntax node.
+        /// </summary>
+        /// <param name="value">
+        /// The <see cref="string"/> to convert.
+        /// </param>
+        /// <returns>
+        /// An interpolated <see cref="string"/> text syntax node.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static InterpolatedStringTextSyntax AsInterpolatedString(this string value) => SyntaxFactory.InterpolatedStringText(value.AsToken(SyntaxKind.InterpolatedStringTextToken));
 
         /// <summary>
         /// Converts the <see cref="string"/> to a <see cref="SyntaxToken"/> with the specified kind.
@@ -358,29 +347,6 @@ namespace MiKoSolutions.Analyzers
 
             return SyntaxFactory.Token(default, kind, source, source, default);
         }
-
-        /// <summary>
-        /// Converts a character span to an interpolated <see cref="string"/> text syntax node.
-        /// </summary>
-        /// <param name="value">
-        /// The span of characters to convert.
-        /// </param>
-        /// <returns>
-        /// An interpolated <see cref="string"/> text syntax node.
-        /// </returns>
-        public static InterpolatedStringTextSyntax AsInterpolatedString(this in ReadOnlySpan<char> value) => value.ToString().AsInterpolatedString();
-
-        /// <summary>
-        /// Converts a <see cref="string"/> to an interpolated <see cref="string"/> text syntax node.
-        /// </summary>
-        /// <param name="value">
-        /// The <see cref="string"/> to convert.
-        /// </param>
-        /// <returns>
-        /// An interpolated <see cref="string"/> text syntax node.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static InterpolatedStringTextSyntax AsInterpolatedString(this string value) => SyntaxFactory.InterpolatedStringText(value.AsToken(SyntaxKind.InterpolatedStringTextToken));
 
         /// <summary>
         /// Converts a <see cref="string"/> to a type syntax node.
@@ -2102,97 +2068,6 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets the second word from the <see cref="string"/>.
-        /// </summary>
-        /// <param name="value">
-        /// The <see cref="string"/> to process.
-        /// </param>
-        /// <returns>
-        /// A <see cref="string"/> that contains the second word from the <see cref="string"/>.
-        /// </returns>
-        public static string SecondWord(this string value) => SecondWord(value.AsSpan()).ToString();
-
-        /// <summary>
-        /// Gets the second word from the span of characters.
-        /// </summary>
-        /// <param name="value">
-        /// The span of characters to process.
-        /// </param>
-        /// <returns>
-        /// The second word from the span.
-        /// </returns>
-        public static ReadOnlySpan<char> SecondWord(this in ReadOnlySpan<char> value) => value.WithoutFirstWord().FirstWord();
-
-        /// <summary>
-        /// Gets the third word from the <see cref="string"/>.
-        /// </summary>
-        /// <param name="value">
-        /// The <see cref="string"/> to process.
-        /// </param>
-        /// <returns>
-        /// A <see cref="string"/> that contains the third word from the <see cref="string"/>.
-        /// </returns>
-        public static string ThirdWord(this string value) => ThirdWord(value.AsSpan()).ToString();
-
-        /// <summary>
-        /// Gets the third word from the span of characters.
-        /// </summary>
-        /// <param name="value">
-        /// The span of characters to process.
-        /// </param>
-        /// <returns>
-        /// The third word from the span.
-        /// </returns>
-        public static ReadOnlySpan<char> ThirdWord(this in ReadOnlySpan<char> value) => value.WithoutFirstWord().WithoutFirstWord().FirstWord();
-
-        /// <summary>
-        /// Gets the last word from the <see cref="string"/>.
-        /// </summary>
-        /// <param name="value">
-        /// The <see cref="string"/> to process.
-        /// </param>
-        /// <returns>
-        /// A <see cref="string"/> that contains the last word from the <see cref="string"/>.
-        /// </returns>
-        public static string LastWord(this string value)
-        {
-            if (value.IsNullOrEmpty())
-            {
-                return value;
-            }
-
-            var span = value.AsSpan();
-            var word = LastWord(span);
-
-            return word != span
-                   ? word.ToString()
-                   : value;
-        }
-
-        /// <summary>
-        /// Gets the last word from the span of characters.
-        /// </summary>
-        /// <param name="value">
-        /// The span of characters to process.
-        /// </param>
-        /// <returns>
-        /// The last word from the span.
-        /// </returns>
-        public static ReadOnlySpan<char> LastWord(this in ReadOnlySpan<char> value)
-        {
-            var text = value.TrimEnd();
-
-            var lastSpace = text.LastIndexOfAny(Constants.WhiteSpaceCharacters) + 1;
-
-            if (lastSpace <= 0)
-            {
-                return text;
-            }
-
-            return text.Slice(lastSpace);
-        }
-
-        /// <summary>
         /// Formats a <see cref="string"/> by replacing the format item with the symbol.
         /// </summary>
         /// <param name="format">
@@ -2393,6 +2268,22 @@ namespace MiKoSolutions.Analyzers
         public static ReadOnlySpan<char> GetPartAfterLastDot(this in ReadOnlySpan<char> value) => value.Slice(value.LastIndexOf('.') + 1);
 
         /// <summary>
+        /// Determines whether the <see cref="string"/> has characters (is not <see langword="null"/> or empty).
+        /// </summary>
+        /// <param name="value">
+        /// The <see cref="string"/> to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the <see cref="string"/> has characters; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool HasCharacters(this string value)
+        {
+            // Perf: As this method is invoked several million times, we directly use 'string.IsNullOrEmpty(value)' here instead of our own extension method helper
+            return string.IsNullOrEmpty(value) is false;
+        }
+
+        /// <summary>
         /// Determines whether the <see cref="string"/> has a collection marker suffix.
         /// </summary>
         /// <param name="value">
@@ -2431,22 +2322,6 @@ namespace MiKoSolutions.Analyzers
             }
 
             return hasMarker;
-        }
-
-        /// <summary>
-        /// Determines whether the <see cref="string"/> has characters (is not <see langword="null"/> or empty).
-        /// </summary>
-        /// <param name="value">
-        /// The <see cref="string"/> to check.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the <see cref="string"/> has characters; otherwise, <see langword="false"/>.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool HasCharacters(this string value)
-        {
-            // Perf: As this method is invoked several million times, we directly use 'string.IsNullOrEmpty(value)' here instead of our own extension method helper
-            return string.IsNullOrEmpty(value) is false;
         }
 
         /// <summary>
@@ -2690,45 +2565,6 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets the index of the last occurrence of the specified phrases in the <see cref="string"/>.
-        /// </summary>
-        /// <param name="value">
-        /// The <see cref="string"/> to search in.
-        /// </param>
-        /// <param name="phrases">
-        /// The phrases to search for.
-        /// </param>
-        /// <param name="comparison">
-        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
-        /// The default is <see cref="StringComparison.Ordinal"/>.
-        /// </param>
-        /// <returns>
-        /// The index of the last occurrence of any phrase, or <c>-1</c> if none are found.
-        /// </returns>
-        public static int LastIndexOfAny(this string value, in ReadOnlySpan<string> phrases, in StringComparison comparison = StringComparison.Ordinal)
-        {
-            if (value is null)
-            {
-                return -1;
-            }
-
-            if (value.Length > 0)
-            {
-                for (int i = 0, length = phrases.Length; i < length; i++)
-                {
-                    var index = value.LastIndexOf(phrases[i], comparison);
-
-                    if (index > -1)
-                    {
-                        return index;
-                    }
-                }
-            }
-
-            return -1;
-        }
-
-        /// <summary>
         /// Determines whether the <see cref="string"/> is an acronym (contains only uppercase letters).
         /// </summary>
         /// <param name="value">
@@ -2739,6 +2575,48 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsAcronym(this string value) => value.HasCharacters() && value.None(_ => _.IsLowerCaseLetter());
+
+        /// <summary>
+        /// Determines whether all characters in the <see cref="string"/> are uppercase.
+        /// </summary>
+        /// <param name="value">
+        /// The <see cref="string"/> to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if all characters in the <see cref="string"/> are uppercase; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsAllUpperCase(this string value) => value.AsSpan().IsAllUpperCase();
+
+        /// <summary>
+        /// Determines whether all characters in the span are uppercase.
+        /// </summary>
+        /// <param name="value">
+        /// The span of characters to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if all characters in the span are uppercase; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsAllUpperCase(this in ReadOnlySpan<char> value)
+        {
+            var valueLength = value.Length;
+
+            if (valueLength > 0)
+            {
+                for (var i = 0; i < valueLength; i++)
+                {
+                    if (value[i].IsUpperCase() is false)
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// Determines whether the <see cref="string"/> is a hyperlink.
@@ -3020,48 +2898,6 @@ namespace MiKoSolutions.Analyzers
         public static bool IsSingleWord(this in ReadOnlySpan<char> value) => value.HasWhitespaces() is false;
 
         /// <summary>
-        /// Determines whether all characters in the <see cref="string"/> are uppercase.
-        /// </summary>
-        /// <param name="value">
-        /// The <see cref="string"/> to check.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if all characters in the <see cref="string"/> are uppercase; otherwise, <see langword="false"/>.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsAllUpperCase(this string value) => value.AsSpan().IsAllUpperCase();
-
-        /// <summary>
-        /// Determines whether all characters in the span are uppercase.
-        /// </summary>
-        /// <param name="value">
-        /// The span of characters to check.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if all characters in the span are uppercase; otherwise, <see langword="false"/>.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsAllUpperCase(this in ReadOnlySpan<char> value)
-        {
-            var valueLength = value.Length;
-
-            if (valueLength > 0)
-            {
-                for (var i = 0; i < valueLength; i++)
-                {
-                    if (value[i].IsUpperCase() is false)
-                    {
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
         /// Determines whether the character is uppercase.
         /// </summary>
         /// <param name="value">
@@ -3134,6 +2970,148 @@ namespace MiKoSolutions.Analyzers
                     return false;
             }
         }
+
+        /// <summary>
+        /// Gets the index of the last occurrence of the specified phrases in the <see cref="string"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The <see cref="string"/> to search in.
+        /// </param>
+        /// <param name="phrases">
+        /// The phrases to search for.
+        /// </param>
+        /// <param name="comparison">
+        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
+        /// The default is <see cref="StringComparison.Ordinal"/>.
+        /// </param>
+        /// <returns>
+        /// The index of the last occurrence of any phrase, or <c>-1</c> if none are found.
+        /// </returns>
+        public static int LastIndexOfAny(this string value, in ReadOnlySpan<string> phrases, in StringComparison comparison = StringComparison.Ordinal)
+        {
+            if (value is null)
+            {
+                return -1;
+            }
+
+            if (value.Length > 0)
+            {
+                for (int i = 0, length = phrases.Length; i < length; i++)
+                {
+                    var index = value.LastIndexOf(phrases[i], comparison);
+
+                    if (index > -1)
+                    {
+                        return index;
+                    }
+                }
+            }
+
+            return -1;
+        }
+
+        /// <summary>
+        /// Gets the last word from the <see cref="string"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The <see cref="string"/> to process.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the last word from the <see cref="string"/>.
+        /// </returns>
+        public static string LastWord(this string value)
+        {
+            if (value.IsNullOrEmpty())
+            {
+                return value;
+            }
+
+            var span = value.AsSpan();
+            var word = LastWord(span);
+
+            return word != span
+                   ? word.ToString()
+                   : value;
+        }
+
+        /// <summary>
+        /// Gets the last word from the span of characters.
+        /// </summary>
+        /// <param name="value">
+        /// The span of characters to process.
+        /// </param>
+        /// <returns>
+        /// The last word from the span.
+        /// </returns>
+        public static ReadOnlySpan<char> LastWord(this in ReadOnlySpan<char> value)
+        {
+            var text = value.TrimEnd();
+
+            var lastSpace = text.LastIndexOfAny(Constants.WhiteSpaceCharacters) + 1;
+
+            if (lastSpace <= 0)
+            {
+                return text;
+            }
+
+            return text.Slice(lastSpace);
+        }
+
+        /// <summary>
+        /// Determines whether the specified <see cref="ReadOnlySpan{T}"/> contains no elements that satisfy the specified condition.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of elements in the span.
+        /// </typeparam>
+        /// <param name="source">
+        /// The span to evaluate.
+        /// </param>
+        /// <param name="predicate">
+        /// The condition to test each element against.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if no elements satisfy the condition; otherwise, <see langword="false"/>.
+        /// </returns>
+        /// <seealso cref="Any{T}"/>
+        public static bool None<T>(this in ReadOnlySpan<T> source, Func<T, bool> predicate)
+        {
+            var sourceLength = source.Length;
+
+            if (sourceLength > 0)
+            {
+                for (var index = 0; index < sourceLength; index++)
+                {
+                    if (predicate(source[index]))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Gets the second word from the <see cref="string"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The <see cref="string"/> to process.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the second word from the <see cref="string"/>.
+        /// </returns>
+        public static string SecondWord(this string value) => SecondWord(value.AsSpan()).ToString();
+
+        /// <summary>
+        /// Gets the second word from the span of characters.
+        /// </summary>
+        /// <param name="value">
+        /// The span of characters to process.
+        /// </param>
+        /// <returns>
+        /// The second word from the span.
+        /// </returns>
+        public static ReadOnlySpan<char> SecondWord(this in ReadOnlySpan<char> value) => value.WithoutFirstWord().FirstWord();
 
         /// <summary>
         /// Determines whether the <see cref="string"/> starts with the specified character.
@@ -3392,6 +3370,28 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string SurroundedWithDoubleQuote(this string value) => value?.SurroundedWith('\"');
+
+        /// <summary>
+        /// Gets the third word from the <see cref="string"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The <see cref="string"/> to process.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the third word from the <see cref="string"/>.
+        /// </returns>
+        public static string ThirdWord(this string value) => ThirdWord(value.AsSpan()).ToString();
+
+        /// <summary>
+        /// Gets the third word from the span of characters.
+        /// </summary>
+        /// <param name="value">
+        /// The span of characters to process.
+        /// </param>
+        /// <returns>
+        /// The third word from the span.
+        /// </returns>
+        public static ReadOnlySpan<char> ThirdWord(this in ReadOnlySpan<char> value) => value.WithoutFirstWord().WithoutFirstWord().FirstWord();
 
 #pragma warning disable CA1308
         /// <summary>
@@ -3975,44 +3975,87 @@ namespace MiKoSolutions.Analyzers
         public static WordsReadOnlySpanEnumerator WordsAsSpan(this in ReadOnlySpan<char> value, in WordBoundary boundary = WordBoundary.UpperCaseCharacters) => new WordsReadOnlySpanEnumerator(value, boundary);
 
         /// <summary>
-        /// Removes consecutive suffixes from the given span of characters.
+        /// Finds all indices of a string in a <see cref="string"/> using case-insensitive comparison.
         /// </summary>
         /// <param name="value">
-        /// The span of characters to process.
+        /// The <see cref="string"/> to search in.
         /// </param>
-        /// <param name="suffixes">
-        /// The collection of suffixes to remove.
+        /// <param name="finding">
+        /// The <see cref="string"/> to search for.
         /// </param>
         /// <returns>
-        /// A span of characters with the specified suffixes removed.
+        /// An array of integer indices where the substring was found, or an empty array if not found.
         /// </returns>
-        private static ReadOnlySpan<char> RemoveSuffixes(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> suffixes)
+        private static int[] AllIndicesNonOrdinal(string value, string finding)
         {
-            if (value.Length <= 0)
+            int[] indices = null;
+
+            for (int index = 0, findingLength = finding.Length; ; index += findingLength)
             {
-                return ReadOnlySpan<char>.Empty;
-            }
+                index = value.IndexOf(finding, index, StringComparison.OrdinalIgnoreCase);
 
-            var slice = value;
-
-            for (int index = 0, suffixesLength = suffixes.Length; index < suffixesLength; index++)
-            {
-                var suffix = suffixes[index].AsSpan();
-
-                if (slice.EndsWith(suffix))
+                if (index is -1)
                 {
-                    var length = slice.Length - suffix.Length;
-
-                    if (length <= 0)
-                    {
-                        return ReadOnlySpan<char>.Empty;
-                    }
-
-                    slice = slice.Slice(0, length);
+                    // nothing more to find
+                    break;
                 }
+
+                if (indices is null)
+                {
+                    indices = new int[1];
+                }
+                else
+                {
+                    Array.Resize(ref indices, indices.Length + 1);
+                }
+
+                indices[indices.Length - 1] = index;
             }
 
-            return slice;
+            return indices ?? Array.Empty<int>();
+        }
+
+        /// <summary>
+        /// Finds all indices of a substring in a span using ordinal comparison.
+        /// </summary>
+        /// <param name="span">
+        /// The span of characters to search in.
+        /// </param>
+        /// <param name="other">
+        /// The span of characters to search for.
+        /// </param>
+        /// <returns>
+        /// An array of integer indices where the substring was found, or an empty array if not found.
+        /// </returns>
+        private static int[] AllIndicesOrdinal(in ReadOnlySpan<char> span, in ReadOnlySpan<char> other)
+        {
+            int[] indices = null;
+
+            for (int index = 0, otherLength = other.Length; ; index += otherLength)
+            {
+                var newIndex = span.Slice(index).IndexOf(other); // performs ordinal comparison
+
+                if (newIndex is -1)
+                {
+                    // nothing more to find
+                    break;
+                }
+
+                index += newIndex;
+
+                if (indices is null)
+                {
+                    indices = new int[1];
+                }
+                else
+                {
+                    Array.Resize(ref indices, indices.Length + 1);
+                }
+
+                indices[indices.Length - 1] = index;
+            }
+
+            return indices ?? Array.Empty<int>();
         }
 
         /// <summary>
@@ -4042,31 +4085,79 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new <see cref="string"/> with the character at the specified index converted to uppercase.
+        /// Determines whether a character is a lowercase ASCII letter.
         /// </summary>
-        /// <param name="source">
-        /// The span of characters to process.
-        /// </param>
-        /// <param name="index">
-        /// The zero-based index of the character to convert to uppercase.
+        /// <param name="value">
+        /// The character to check.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the original value with the character at the specified index converted to uppercase.
+        /// <see langword="true"/> if the character is a lowercase ASCII letter; otherwise, <see langword="false"/>.
         /// </returns>
-        private static string MakeUpperCaseAt(this in ReadOnlySpan<char> source, in int index)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool IsAsciiLetterLower(this in char value) => IsAsciiLetterLower((int)value); // notice that we need just one compare per char
+
+        /// <summary>
+        /// Determines whether a character code represents a lowercase ASCII letter.
+        /// </summary>
+        /// <param name="value">
+        /// The character code to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the character code represents a lowercase ASCII letter; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool IsAsciiLetterLower(this in int value) => (uint)(value - 'a') <= 'z' - 'a'; // notice that we need just one compare per char
+
+        /// <summary>
+        /// Determines whether a character is an uppercase ASCII letter.
+        /// </summary>
+        /// <param name="value">
+        /// The character to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the character is an uppercase ASCII letter; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool IsAsciiLetterUpper(this in char value) => IsAsciiLetterUpper((int)value); // notice that we need just one compare per char
+
+        /// <summary>
+        /// Determines whether a character code represents an uppercase ASCII letter.
+        /// </summary>
+        /// <param name="value">
+        /// The character code to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the character code represents an uppercase ASCII letter; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool IsAsciiLetterUpper(this in int value) => (uint)(value - 'A') <= 'Z' - 'A'; // notice that we need just one compare per char
+
+        /// <summary>
+        /// Determines whether a character is uppercase using a custom switch-based approach.
+        /// </summary>
+        /// <param name="value">
+        /// The character to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the character is uppercase; otherwise, <see langword="false"/>.
+        /// </returns>
+        private static bool IsUpperCaseWithSwitch(in char value)
         {
-            unsafe
+            switch (value)
             {
-                var length = source.Length;
+                case '[':
+                case ']':
+                case '\\':
+                case Constants.Underscore:
+                    return false;
 
-                var buffer = stackalloc char[length];
-                var bufferSpan = new Span<char>(buffer, length);
+                case 'Ö':
+                case 'Ä':
+                case 'Ü':
+                    return true;
 
-                source.CopyTo(bufferSpan);
-
-                buffer[index] = buffer[index].ToUpperCase();
-
-                return new string(buffer, 0, length);
+                default:
+                    return char.IsUpper(value);
             }
         }
 
@@ -4100,6 +4191,35 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Creates a new <see cref="string"/> with the character at the specified index converted to uppercase.
+        /// </summary>
+        /// <param name="source">
+        /// The span of characters to process.
+        /// </param>
+        /// <param name="index">
+        /// The zero-based index of the character to convert to uppercase.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the original value with the character at the specified index converted to uppercase.
+        /// </returns>
+        private static string MakeUpperCaseAt(this in ReadOnlySpan<char> source, in int index)
+        {
+            unsafe
+            {
+                var length = source.Length;
+
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
+
+                source.CopyTo(bufferSpan);
+
+                buffer[index] = buffer[index].ToUpperCase();
+
+                return new string(buffer, 0, length);
+            }
+        }
+
+        /// <summary>
         /// Performs a quick check to determine if one span might contain the other span.
         /// </summary>
         /// <param name="value">
@@ -4124,6 +4244,41 @@ namespace MiKoSolutions.Analyzers
             }
 
             return QuickStartSubstringProbe(value, other, comparison);
+        }
+
+        /// <summary>
+        /// Compares two characters at a specific index, ignoring case differences.
+        /// </summary>
+        /// <param name="a">
+        /// The pointer to the first span of characters.
+        /// </param>
+        /// <param name="b">
+        /// The pointer to the second span of characters.
+        /// </param>
+        /// <param name="index">
+        /// The index at which to compare the characters.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the characters differ; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static unsafe bool QuickDiff(in char* a, in char* b, in int index)
+        {
+            int charA = *(a + index);
+
+            if ((uint)(charA - 'a') <= 'z' - 'a')
+            {
+                charA -= DifferenceBetweenUpperAndLowerCaseAscii;
+            }
+
+            int charB = *(b + index);
+
+            if ((uint)(charB - 'a') <= 'z' - 'a') // see 'IsAsciiLetterLower', inlined for performance reasons
+            {
+                charB -= DifferenceBetweenUpperAndLowerCaseAscii;
+            }
+
+            return charA != charB;
         }
 
         /// <summary>
@@ -4256,199 +4411,44 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Compares two characters at a specific index, ignoring case differences.
+        /// Removes consecutive suffixes from the given span of characters.
         /// </summary>
-        /// <param name="a">
-        /// The pointer to the first span of characters.
+        /// <param name="value">
+        /// The span of characters to process.
         /// </param>
-        /// <param name="b">
-        /// The pointer to the second span of characters.
-        /// </param>
-        /// <param name="index">
-        /// The index at which to compare the characters.
+        /// <param name="suffixes">
+        /// The collection of suffixes to remove.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the characters differ; otherwise, <see langword="false"/>.
+        /// A span of characters with the specified suffixes removed.
         /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static unsafe bool QuickDiff(in char* a, in char* b, in int index)
+        private static ReadOnlySpan<char> RemoveSuffixes(this in ReadOnlySpan<char> value, in ReadOnlySpan<string> suffixes)
         {
-            int charA = *(a + index);
-
-            if ((uint)(charA - 'a') <= 'z' - 'a')
+            if (value.Length <= 0)
             {
-                charA -= DifferenceBetweenUpperAndLowerCaseAscii;
+                return ReadOnlySpan<char>.Empty;
             }
 
-            int charB = *(b + index);
+            var slice = value;
 
-            if ((uint)(charB - 'a') <= 'z' - 'a') // see 'IsAsciiLetterLower', inlined for performance reasons
+            for (int index = 0, suffixesLength = suffixes.Length; index < suffixesLength; index++)
             {
-                charB -= DifferenceBetweenUpperAndLowerCaseAscii;
+                var suffix = suffixes[index].AsSpan();
+
+                if (slice.EndsWith(suffix))
+                {
+                    var length = slice.Length - suffix.Length;
+
+                    if (length <= 0)
+                    {
+                        return ReadOnlySpan<char>.Empty;
+                    }
+
+                    slice = slice.Slice(0, length);
+                }
             }
 
-            return charA != charB;
+            return slice;
         }
-
-        /// <summary>
-        /// Determines whether a character is uppercase using a custom switch-based approach.
-        /// </summary>
-        /// <param name="value">
-        /// The character to check.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the character is uppercase; otherwise, <see langword="false"/>.
-        /// </returns>
-        private static bool IsUpperCaseWithSwitch(in char value)
-        {
-            switch (value)
-            {
-                case '[':
-                case ']':
-                case '\\':
-                case Constants.Underscore:
-                    return false;
-
-                case 'Ö':
-                case 'Ä':
-                case 'Ü':
-                    return true;
-
-                default:
-                    return char.IsUpper(value);
-            }
-        }
-
-        /// <summary>
-        /// Finds all indices of a substring in a span using ordinal comparison.
-        /// </summary>
-        /// <param name="span">
-        /// The span of characters to search in.
-        /// </param>
-        /// <param name="other">
-        /// The span of characters to search for.
-        /// </param>
-        /// <returns>
-        /// An array of integer indices where the substring was found, or an empty array if not found.
-        /// </returns>
-        private static int[] AllIndicesOrdinal(in ReadOnlySpan<char> span, in ReadOnlySpan<char> other)
-        {
-            int[] indices = null;
-
-            for (int index = 0, otherLength = other.Length; ; index += otherLength)
-            {
-                var newIndex = span.Slice(index).IndexOf(other); // performs ordinal comparison
-
-                if (newIndex is -1)
-                {
-                    // nothing more to find
-                    break;
-                }
-
-                index += newIndex;
-
-                if (indices is null)
-                {
-                    indices = new int[1];
-                }
-                else
-                {
-                    Array.Resize(ref indices, indices.Length + 1);
-                }
-
-                indices[indices.Length - 1] = index;
-            }
-
-            return indices ?? Array.Empty<int>();
-        }
-
-        /// <summary>
-        /// Finds all indices of a string in a <see cref="string"/> using case-insensitive comparison.
-        /// </summary>
-        /// <param name="value">
-        /// The <see cref="string"/> to search in.
-        /// </param>
-        /// <param name="finding">
-        /// The <see cref="string"/> to search for.
-        /// </param>
-        /// <returns>
-        /// An array of integer indices where the substring was found, or an empty array if not found.
-        /// </returns>
-        private static int[] AllIndicesNonOrdinal(string value, string finding)
-        {
-            int[] indices = null;
-
-            for (int index = 0, findingLength = finding.Length; ; index += findingLength)
-            {
-                index = value.IndexOf(finding, index, StringComparison.OrdinalIgnoreCase);
-
-                if (index is -1)
-                {
-                    // nothing more to find
-                    break;
-                }
-
-                if (indices is null)
-                {
-                    indices = new int[1];
-                }
-                else
-                {
-                    Array.Resize(ref indices, indices.Length + 1);
-                }
-
-                indices[indices.Length - 1] = index;
-            }
-
-            return indices ?? Array.Empty<int>();
-        }
-
-        /// <summary>
-        /// Determines whether a character is a lowercase ASCII letter.
-        /// </summary>
-        /// <param name="value">
-        /// The character to check.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the character is a lowercase ASCII letter; otherwise, <see langword="false"/>.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool IsAsciiLetterLower(this in char value) => IsAsciiLetterLower((int)value); // notice that we need just one compare per char
-
-        /// <summary>
-        /// Determines whether a character code represents a lowercase ASCII letter.
-        /// </summary>
-        /// <param name="value">
-        /// The character code to check.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the character code represents a lowercase ASCII letter; otherwise, <see langword="false"/>.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool IsAsciiLetterLower(this in int value) => (uint)(value - 'a') <= 'z' - 'a'; // notice that we need just one compare per char
-
-        /// <summary>
-        /// Determines whether a character is an uppercase ASCII letter.
-        /// </summary>
-        /// <param name="value">
-        /// The character to check.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the character is an uppercase ASCII letter; otherwise, <see langword="false"/>.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool IsAsciiLetterUpper(this in char value) => IsAsciiLetterUpper((int)value); // notice that we need just one compare per char
-
-        /// <summary>
-        /// Determines whether a character code represents an uppercase ASCII letter.
-        /// </summary>
-        /// <param name="value">
-        /// The character code to check.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the character code represents an uppercase ASCII letter; otherwise, <see langword="false"/>.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool IsAsciiLetterUpper(this in int value) => (uint)(value - 'A') <= 'Z' - 'A'; // notice that we need just one compare per char
     }
 }
