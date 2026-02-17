@@ -1086,24 +1086,6 @@ namespace MiKoSolutions.Analyzers
         public static bool Contains(this in ReadOnlySpan<char> value, in ReadOnlySpan<char> finding) => value.IndexOf(finding) >= 0;
 
         /// <summary>
-        /// Determines whether the span of characters contains the specified sequence of characters.
-        /// </summary>
-        /// <param name="value">
-        /// The span of characters to search in.
-        /// </param>
-        /// <param name="finding">
-        /// The sequence of characters to seek.
-        /// </param>
-        /// <param name="comparison">
-        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the sequence is found; otherwise, <see langword="false"/>.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Contains(this in ReadOnlySpan<char> value, in ReadOnlySpan<char> finding, in StringComparison comparison) => value.IndexOf(finding, comparison) >= 0;
-
-        /// <summary>
         /// Determines whether the span of characters contains the specified substring.
         /// </summary>
         /// <param name="value">
@@ -1125,6 +1107,24 @@ namespace MiKoSolutions.Analyzers
 
             return value.Contains(finding.AsSpan());
         }
+
+        /// <summary>
+        /// Determines whether the span of characters contains the specified sequence of characters.
+        /// </summary>
+        /// <param name="value">
+        /// The span of characters to search in.
+        /// </param>
+        /// <param name="finding">
+        /// The sequence of characters to seek.
+        /// </param>
+        /// <param name="comparison">
+        /// One of the enumeration members that specifies the <see cref="string"/> comparison method to use.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the sequence is found; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool Contains(this in ReadOnlySpan<char> value, in ReadOnlySpan<char> finding, in StringComparison comparison) => value.IndexOf(finding, comparison) >= 0;
 
         /// <summary>
         /// Determines whether the span of characters contains the specified substring using the given <see cref="string"/> comparison.
