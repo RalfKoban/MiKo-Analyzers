@@ -2190,7 +2190,6 @@ namespace MiKoSolutions.Analyzers
             {
                 var indexAfterGenericStart = genericIndexStart + 1;
 
-                var namePart = value.Slice(0, genericIndexStart).GetPartAfterLastDot().ToString();
                 var genericParts = value.Slice(indexAfterGenericStart, genericIndexEnd - indexAfterGenericStart)
                                         .SplitBy(GenericTypeArgumentSeparator, StringSplitOptions.RemoveEmptyEntries);
                 var count = genericParts.Count();
@@ -2198,17 +2197,28 @@ namespace MiKoSolutions.Analyzers
                 if (count > 0)
                 {
                     var i = 0;
+                    var namePart = value.Slice(0, genericIndexStart).GetPartAfterLastDot().ToString();
 
-                    var genericNameParts = new string[count];
+                    var sb = StringBuilderCache.Acquire(value.Length);
+
+                    sb.Append(namePart)
+                      .Append('<');
 
                     foreach (ReadOnlySpan<char> part in genericParts)
                     {
-                        genericNameParts[i++] = part.GetPartAfterLastDot().ToString();
+                        sb.Append(part.GetPartAfterLastDot().ToString());
+
+                        i++;
+
+                        if (i < count)
+                        {
+                            sb.Append(',');
+                        }
                     }
 
-                    var genericPart = string.Join(",", genericNameParts);
+                    sb.Append('>');
 
-                    return string.Concat(namePart, "<", genericPart, ">");
+                    return sb.ToStringAndRelease();
                 }
             }
 
