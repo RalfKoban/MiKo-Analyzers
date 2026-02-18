@@ -192,6 +192,24 @@ namespace Bla
 ");
 
         [Test]
+        public void An_issue_is_reported_for_type_named_Testable_and_test_class_with_starting_with_wrong_prefix_([ValueSource(nameof(TestFixtures))]string fixture) => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public class Testable
+    {
+    }
+
+    [" + fixture + @"]
+    public class TestMeTests
+    {
+        private Testable ObjectUnderTest { get; set; }
+
+        public void DoSomething() { }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_type_starting_with_Testable_and_test_class_with_starting_with_wrong_prefix_([ValueSource(nameof(TestFixtures))]string fixture) => An_issue_is_reported_for(@"
 namespace Bla
 {

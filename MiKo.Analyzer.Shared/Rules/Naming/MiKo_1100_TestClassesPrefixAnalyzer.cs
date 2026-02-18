@@ -87,6 +87,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 typeName = typeName.Slice(TestablePrefix.Length);
             }
 
+            if (typeName.Length is 0)
+            {
+                return false;
+            }
+
             return testClass.Name.AsSpan().StartsWith(typeName, StringComparison.Ordinal);
         }
 
