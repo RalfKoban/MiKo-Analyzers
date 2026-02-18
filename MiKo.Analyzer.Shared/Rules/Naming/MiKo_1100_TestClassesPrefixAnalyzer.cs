@@ -76,7 +76,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return typeUnderTest.Name;
         }
 
-        private static bool TestClassStartsWithName(ITypeSymbol testClass, string typeUnderTestName) => testClass.Name.StartsWith(typeUnderTestName, StringComparison.Ordinal);
+        private static bool TestClassStartsWithName(ITypeSymbol testClass, string typeUnderTestName)
+        {
+            const string TestablePrefix = "Testable";
+
+            var typeName = typeUnderTestName.AsSpan();
+
+            if (typeName.StartsWith(TestablePrefix, StringComparison.Ordinal))
+            {
+                typeName = typeName.Slice(TestablePrefix.Length);
+            }
+
+            return testClass.Name.AsSpan().StartsWith(typeName, StringComparison.Ordinal);
+        }
 
         private static bool TestClassIsNamedAfterCreatedTypeUnderTest(ITypeSymbol testClass)
         {
