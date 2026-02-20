@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -336,21 +338,24 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         }
 
         /// <summary>
-        /// Inverts the specified condition expression.
+        /// Asynchronously inverts the specified condition expression.
         /// </summary>
-        /// <param name="document">
-        /// The document containing the condition.
-        /// </param>
         /// <param name="condition">
         /// The condition expression to invert.
         /// </param>
+        /// <param name="document">
+        /// The document containing the condition.
+        /// </param>
+        /// <param name="cancellationToken">
+        /// The token to monitor for cancellation requests.
+        /// </param>
         /// <returns>
-        /// The expression syntax node representing the inverted condition.
+        /// A task that represents the asynchronous operation. The value of the <see cref="Task{TResult}.Result"/> parameter contains the expression syntax node representing the inverted condition.
         /// </returns>
         /// <remarks>
         /// For example, <c>a == b</c> becomes <c>a != b</c>, <c>!x</c> becomes <c>x</c>, and <c>!a || !b</c> becomes <c>a &amp;&amp; b</c>.
         /// </remarks>
-        protected static ExpressionSyntax InvertCondition(Document document, ExpressionSyntax condition)
+        protected static async Task<ExpressionSyntax> InvertConditionAsync(ExpressionSyntax condition, Document document, CancellationToken cancellationToken)
         {
             switch (condition)
             {
@@ -358,10 +363,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return InvertCondition(prefixed);
 
                 case BinaryExpressionSyntax binary:
-                    return InvertCondition(document, binary);
+                    return await InvertConditionAsync(binary, document, cancellationToken).ConfigureAwait(false);
 
-                case IsPatternExpressionSyntax patternExpression:
-                    return InvertCondition(document, patternExpression);
+                case IsPatternExpressionSyntax expression:
+                    return await InvertConditionAsync(expression, document, cancellationToken).ConfigureAwait(false);
 
                 default:
                     return IsFalsePattern(condition);
@@ -726,7 +731,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return operand;
         }
 
-        private static ExpressionSyntax InvertCondition(Document document, BinaryExpressionSyntax condition)
+        private static async Task<ExpressionSyntax> InvertConditionAsync(BinaryExpressionSyntax condition, Document document, CancellationToken cancellationToken)
         {
             if (condition.Right.IsKind(SyntaxKind.NullLiteralExpression) && condition.OperatorToken.IsKind(SyntaxKind.ExclamationEqualsToken))
             {
@@ -742,12 +747,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 case SyntaxKind.LogicalAndExpression:
                 {
-                    return SyntaxFactory.BinaryExpression(SyntaxKind.LogicalOrExpression, InvertCondition(document, condition.Left), InvertCondition(document, condition.Right));
+                    var invertedLeft = await InvertConditionAsync(condition.Left, document, cancellationToken).ConfigureAwait(false);
+                    var invertedRight = await InvertConditionAsync(condition.Right, document, cancellationToken).ConfigureAwait(false);
+
+                    return SyntaxFactory.BinaryExpression(SyntaxKind.LogicalOrExpression, invertedLeft, invertedRight);
                 }
 
                 case SyntaxKind.LogicalOrExpression:
                 {
-                    return SyntaxFactory.BinaryExpression(SyntaxKind.LogicalAndExpression, InvertCondition(document, condition.Left), InvertCondition(document, condition.Right));
+                    var invertedLeft = await InvertConditionAsync(condition.Left, document, cancellationToken).ConfigureAwait(false);
+                    var invertedRight = await InvertConditionAsync(condition.Right, document, cancellationToken).ConfigureAwait(false);
+
+                    return SyntaxFactory.BinaryExpression(SyntaxKind.LogicalAndExpression, invertedLeft, invertedRight);
                 }
 
                 default:
@@ -757,7 +768,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static ExpressionSyntax InvertCondition(Document document, IsPatternExpressionSyntax condition)
+        private static async Task<ExpressionSyntax> InvertConditionAsync(IsPatternExpressionSyntax condition, Document document, CancellationToken cancellationToken)
         {
             switch (condition.Pattern)
             {
@@ -778,7 +789,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         case SyntaxKind.FalseLiteralExpression:
                         case SyntaxKind.TrueLiteralExpression:
                         {
-                            if (condition.IsNullable(document))
+                            var isNullable = await condition.IsNullableAsync(document, cancellationToken).ConfigureAwait(false);
+
+                            if (isNullable)
                             {
                                 return document.HasMinimumCSharpVersion(LanguageVersion.CSharp9)
                                        ? UnaryNot(condition)
@@ -800,7 +813,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         {
                             var expression = condition.Expression;
 
-                            var type = expression.GetTypeSymbol(document);
+                            var type = await expression.GetTypeSymbolAsync(document, cancellationToken).ConfigureAwait(false);
 
                             if (type.IsNullable() is false)
                             {

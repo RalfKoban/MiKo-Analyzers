@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -20,16 +22,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public static void LoadData() => GC.KeepAlive(MappedData.Value);
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
-            var updatedSyntax = GetUpdatedSyntax(syntax, issue);
+            SyntaxNode updatedSyntax = GetUpdatedSyntax((XmlElementSyntax)syntax, issue);
 
-            return updatedSyntax;
+            return Task.FromResult(updatedSyntax);
         }
 
-        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax, Diagnostic issue)
+        private static XmlElementSyntax GetUpdatedSyntax(XmlElementSyntax comment, Diagnostic issue)
         {
-            var comment = (XmlElementSyntax)syntax;
             var phrase = GetStartingPhraseProposal(issue);
 
             var data = MappedData.Value;

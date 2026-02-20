@@ -573,15 +573,25 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static ISymbol GetEnclosingSymbol(this SyntaxNode value, SemanticModel semanticModel)
         {
-            switch (value)
+            while (true)
             {
-                case FieldDeclarationSyntax f: return semanticModel.GetDeclaredSymbol(f);
-                case MethodDeclarationSyntax s: return semanticModel.GetDeclaredSymbol(s);
-                case PropertyDeclarationSyntax p: return semanticModel.GetDeclaredSymbol(p);
-                case ConstructorDeclarationSyntax c: return semanticModel.GetDeclaredSymbol(c);
-                case EventDeclarationSyntax e: return semanticModel.GetDeclaredSymbol(e);
-                default:
-                    return semanticModel.GetEnclosingSymbol(value.GetLocation().SourceSpan.Start);
+                switch (value)
+                {
+                    case null: return null;
+                    case FieldDeclarationSyntax f: return semanticModel.GetDeclaredSymbol(f);
+                    case MethodDeclarationSyntax s: return semanticModel.GetDeclaredSymbol(s);
+                    case PropertyDeclarationSyntax p: return semanticModel.GetDeclaredSymbol(p);
+                    case ConstructorDeclarationSyntax c: return semanticModel.GetDeclaredSymbol(c);
+                    case EventDeclarationSyntax e: return semanticModel.GetDeclaredSymbol(e);
+                    case DocumentationCommentTriviaSyntax d:
+                    {
+                        value = d.ParentTrivia.Token.Parent;
+
+                        continue;
+                    }
+
+                    default: return semanticModel.GetEnclosingSymbol(value.GetLocation().SourceSpan.Start);
+                }
             }
         }
 

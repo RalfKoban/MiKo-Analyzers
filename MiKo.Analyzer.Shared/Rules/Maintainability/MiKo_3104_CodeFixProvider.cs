@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -18,17 +20,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return syntaxNodes.OfType<MethodDeclarationSyntax>().First();
         }
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
-            var updatedSyntax = GetUpdatedSyntax(syntax);
+            SyntaxNode updatedSyntax = GetUpdatedSyntax((MethodDeclarationSyntax)syntax);
 
-            return updatedSyntax;
+            return Task.FromResult(updatedSyntax);
         }
 
-        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
+        private static MethodDeclarationSyntax GetUpdatedSyntax(MethodDeclarationSyntax method)
         {
-            var method = (MethodDeclarationSyntax)syntax;
-
             foreach (var attributeList in method.AttributeLists)
             {
                 foreach (var attribute in attributeList.Attributes)

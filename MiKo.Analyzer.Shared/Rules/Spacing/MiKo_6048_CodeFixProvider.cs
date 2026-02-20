@@ -1,4 +1,6 @@
 ﻿using System.Composition;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -11,14 +13,14 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     {
         public override string FixableDiagnosticId => "MiKo_6048";
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
             var updatedSyntax = GetUpdatedSyntax(syntax);
 
-            return updatedSyntax;
+            return Task.FromResult(updatedSyntax);
         }
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
+        protected override async Task<SyntaxNode> GetUpdatedSyntaxRootAsync(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue, CancellationToken cancellationToken)
         {
             switch (syntax.Parent)
             {
@@ -59,7 +61,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 }
             }
 
-            return base.GetUpdatedSyntaxRoot(document, root, syntax, annotationOfSyntax, issue);
+            return await base.GetUpdatedSyntaxRootAsync(document, root, syntax, annotationOfSyntax, issue, cancellationToken).ConfigureAwait(false);
         }
 
         private static T GetUpdatedSyntax<T>(T syntax) where T : SyntaxNode

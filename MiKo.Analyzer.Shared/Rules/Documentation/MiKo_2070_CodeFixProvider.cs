@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Composition;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
@@ -20,17 +21,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => "MiKo_2070";
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
-            var updatedSyntax = GetUpdatedSyntax(syntax);
+            SyntaxNode updatedSyntax = GetUpdatedSyntax((XmlElementSyntax)syntax);
 
-            return updatedSyntax;
+            return Task.FromResult(updatedSyntax);
         }
 
-        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
+        private static XmlElementSyntax GetUpdatedSyntax(XmlElementSyntax summary)
         {
-            var summary = (XmlElementSyntax)syntax;
-
             if (summary.Content.Count > 0 && CommentCanBeFixed(summary))
             {
                 summary = AdjustBeginning(summary);

@@ -1,4 +1,6 @@
 ﻿using System.Composition;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -16,18 +18,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => "MiKo_2037";
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
-            var updatedSyntax = GetUpdatedSyntax(syntax);
+            SyntaxNode updatedSyntax = GetUpdatedSyntax((XmlElementSyntax)syntax);
 
-            return updatedSyntax;
+            return Task.FromResult(updatedSyntax);
         }
 
-        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
+        private static XmlElementSyntax GetUpdatedSyntax(XmlElementSyntax element)
         {
-            var element = (XmlElementSyntax)syntax;
-
-            var property = syntax.FirstAncestorOrSelf<PropertyDeclarationSyntax>();
+            var property = element.FirstAncestorOrSelf<PropertyDeclarationSyntax>();
             var commentParts = GetCommentParts(property);
 
             return CommentStartingWith(element, commentParts[0], SeeCref("ICommand"), commentParts[1]);

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -15,40 +17,35 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<XmlElementSyntax>().FirstOrDefault();
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
-            var updatedSyntax = GetUpdatedSyntax(syntax, issue);
+            SyntaxNode updatedSyntax = GetUpdatedSyntax((XmlElementSyntax)syntax, issue);
 
-            return updatedSyntax;
+            return Task.FromResult(updatedSyntax);
         }
 
-        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax, Diagnostic issue)
+        private static XmlElementSyntax GetUpdatedSyntax(XmlElementSyntax element, Diagnostic issue)
         {
-            if (syntax is XmlElementSyntax element)
+            XmlTextSyntax startText;
+            XmlTextSyntax endText;
+
+            if (element.StartTag.IsOnSameLineAs(element.EndTag))
             {
-                XmlTextSyntax startText;
-                XmlTextSyntax endText;
+                startText = XmlText(" " + Constants.Comments.DefaultStartingPhrase);
 
-                if (element.StartTag.IsOnSameLineAs(element.EndTag))
-                {
-                    startText = XmlText(" " + Constants.Comments.DefaultStartingPhrase);
+                // no trailing '///' to add because the text is located on the same line
+                endText = XmlText(".");
+            }
+            else
+            {
+                startText = XmlText(Constants.Comments.DefaultStartingPhrase);
 
-                    // no trailing '///' to add because the text is located on the same line
-                    endText = XmlText(".");
-                }
-                else
-                {
-                    startText = XmlText(Constants.Comments.DefaultStartingPhrase);
-
-                    endText = XmlText(".").WithTrailingXmlComment();
-                }
-
-                var reference = GetDefaultValueReference(issue);
-
-                return element.AddContent(startText, reference, endText);
+                endText = XmlText(".").WithTrailingXmlComment();
             }
 
-            return null;
+            var reference = GetDefaultValueReference(issue);
+
+            return element.AddContent(startText, reference, endText);
         }
 
         private static XmlNodeSyntax GetDefaultValueReference(Diagnostic issue)

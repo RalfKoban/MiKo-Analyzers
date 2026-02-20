@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -22,29 +24,18 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ExpressionStatementSyntax>().FirstOrDefault();
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
             var updatedSyntax = GetUpdatedSyntax(syntax);
 
-            return updatedSyntax;
+            return Task.FromResult(updatedSyntax);
         }
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
+        protected override Task<SyntaxNode> GetUpdatedSyntaxRootAsync(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue, CancellationToken cancellationToken)
         {
-            var parent = syntax.Parent;
+            var updatedSyntax = GetUpdatedSyntaxRoot(root, syntax, annotationOfSyntax);
 
-            if (parent is null)
-            {
-                // should not happen
-                return root;
-            }
-
-            if (syntax is IfStatementSyntax insertedIf)
-            {
-                return GetWithMergedIfStatements(root, insertedIf, annotationOfSyntax, parent);
-            }
-
-            return root;
+            return Task.FromResult(updatedSyntax);
         }
 
         private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
@@ -68,6 +59,24 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             }
 
             return syntax;
+        }
+
+        private static SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax)
+        {
+            var parent = syntax.Parent;
+
+            if (parent is null)
+            {
+                // should not happen
+                return root;
+            }
+
+            if (syntax is IfStatementSyntax insertedIf)
+            {
+                return GetWithMergedIfStatements(root, insertedIf, annotationOfSyntax, parent);
+            }
+
+            return root;
         }
 
         private static IfStatementSyntax CreateIfStatement(ExpressionStatementSyntax statement) => CreateIfStatement(statement.Expression).WithTriviaFrom(statement);

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -16,11 +18,11 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<SwitchExpressionSyntax>().FirstOrDefault();
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
             var updatedSyntax = GetUpdatedSyntax(syntax);
 
-            return updatedSyntax;
+            return Task.FromResult(updatedSyntax);
         }
 
         private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
@@ -31,21 +33,21 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                 var updatedArms = arms.GetWithSeparators()
                                       .Select(item =>
-                                              {
-                                                  if (item.IsNode)
-                                                  {
-                                                      var node = item.AsNode();
+                                                     {
+                                                         if (item.IsNode)
+                                                         {
+                                                             var node = item.AsNode();
 
-                                                      return node.PlacedOnSameLine().WithLeadingTriviaFrom(node).WithEndOfLine();
-                                                  }
+                                                             return node.PlacedOnSameLine().WithLeadingTriviaFrom(node).WithEndOfLine();
+                                                         }
 
-                                                  if (item.IsToken)
-                                                  {
-                                                      return item.AsToken().WithoutLeadingTrivia();
-                                                  }
+                                                         if (item.IsToken)
+                                                         {
+                                                             return item.AsToken().WithoutLeadingTrivia();
+                                                         }
 
-                                                  return item;
-                                              });
+                                                         return item;
+                                                     });
 
                 var spaces = switchExpression.SwitchKeyword.GetPositionWithinEndLine();
 

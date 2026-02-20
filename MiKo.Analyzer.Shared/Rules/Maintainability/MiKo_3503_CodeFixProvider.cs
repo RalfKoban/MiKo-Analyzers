@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -18,12 +20,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ReturnStatementSyntax>().FirstOrDefault();
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
-            return syntax;
+            return Task.FromResult(syntax);
         }
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
+        protected override Task<SyntaxNode> GetUpdatedSyntaxRootAsync(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue, CancellationToken cancellationToken)
+        {
+            var updatedSyntax = GetUpdatedSyntaxRoot(root, syntax);
+
+            return Task.FromResult(updatedSyntax);
+        }
+
+        private static SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root, SyntaxNode syntax)
         {
             if (syntax is ReturnStatementSyntax returnStatement
              && returnStatement.PreviousSibling() is TryStatementSyntax tryStatement
@@ -45,34 +54,36 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     }
                 }
 
-                return root.ReplaceNodes(
-                                     nodesToAdjust,
-                                     (original, rewritten) =>
-                                                             {
-                                                                 if (rewritten == returnStatement)
-                                                                 {
-                                                                     return null; // remove the return statement
-                                                                 }
+                var updatedRoot = root.ReplaceNodes(
+                                                nodesToAdjust,
+                                                (original, rewritten) =>
+                                                                        {
+                                                                            if (rewritten == returnStatement)
+                                                                            {
+                                                                                return null; // remove the return statement
+                                                                            }
 
-                                                                 if (rewritten == localDeclarationStatement)
-                                                                 {
-                                                                     return null; // remove the variable declaration statement
-                                                                 }
+                                                                            if (rewritten == localDeclarationStatement)
+                                                                            {
+                                                                                return null; // remove the variable declaration statement
+                                                                            }
 
-                                                                 switch (rewritten)
-                                                                 {
-                                                                     case TryStatementSyntax statement:
-                                                                         // move the statements inside the try block
-                                                                         return statement.WithBlock(UpdateBlock(statement.Block, localDeclarationStatement, returnStatement));
+                                                                            switch (rewritten)
+                                                                            {
+                                                                                case TryStatementSyntax statement:
+                                                                                    // move the statements inside the try block
+                                                                                    return statement.WithBlock(UpdateBlock(statement.Block, localDeclarationStatement, returnStatement));
 
-                                                                     case CatchClauseSyntax catchClause:
-                                                                         // move the statements inside the catch block
-                                                                         return catchClause.WithBlock(UpdateBlock(catchClause.Block, localDeclarationStatement, returnStatement));
+                                                                                case CatchClauseSyntax catchClause:
+                                                                                    // move the statements inside the catch block
+                                                                                    return catchClause.WithBlock(UpdateBlock(catchClause.Block, localDeclarationStatement, returnStatement));
 
-                                                                     default:
-                                                                         return rewritten;
-                                                                 }
-                                                             });
+                                                                                default:
+                                                                                    return rewritten;
+                                                                            }
+                                                                        });
+
+                return updatedRoot;
             }
 
             return null;

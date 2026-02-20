@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -36,16 +38,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return null;
         }
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
-            var updatedSyntax = GetUpdatedSyntaxCore(document, syntax, issue);
+            var updatedSyntax = GetUpdatedSyntax(document, syntax, issue);
 
-            return updatedSyntax;
+            return Task.FromResult(updatedSyntax);
         }
 
         protected abstract XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, in int index, Diagnostic issue);
 
-        private SyntaxNode GetUpdatedSyntaxCore(Document document, SyntaxNode syntax, Diagnostic issue)
+        private SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
             if (syntax is XmlElementSyntax parameterCommentSyntax)
             {

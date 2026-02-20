@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -17,41 +19,40 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ExpressionStatementSyntax>().FirstOrDefault();
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected override async Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
+            SyntaxNode updatedSyntax = syntax;
+
             if (syntax is ExpressionStatementSyntax statement)
             {
-                return Convert(document, statement);
+                updatedSyntax = await ConvertAsync(statement, document, cancellationToken).ConfigureAwait(false);
             }
 
-            return syntax;
+            return updatedSyntax;
         }
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
+        protected override Task<SyntaxNode> GetUpdatedSyntaxRootAsync(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue, CancellationToken cancellationToken)
+        {
+            var updatedSyntaxRoot = GetUpdatedSyntaxRoot(root);
+
+            return Task.FromResult(updatedSyntaxRoot);
+        }
+
+        private static SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root)
         {
             // only remove assertions if there are no more diagnostics
             // return root.WithUsing(Constants.Names.DefaultNUnitNamespace).WithoutUsing(Constants.FluentAssertions.Namespace);
             return root.WithUsing(Constants.Names.DefaultNUnitNamespace);
         }
 
-        private static SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax)
-        {
-            if (syntax is ExpressionStatementSyntax statement)
-            {
-                return Convert(document, statement);
-            }
-
-            return syntax;
-        }
-
-        private static ExpressionStatementSyntax Convert(Document document, ExpressionStatementSyntax statement)
+        private static async Task<ExpressionStatementSyntax> ConvertAsync(ExpressionStatementSyntax statement, Document document, CancellationToken cancellationToken)
         {
             var shouldNode = statement.GetFluentAssertionShouldNode();
             var shouldName = shouldNode.GetName();
 
             var assertThat = shouldName is Constants.FluentAssertions.ShouldBeEquivalentTo
                              ? ConvertShouldBeEquivalentTo(shouldNode)
-                             : ConvertShould(document, shouldNode);
+                             : await ConvertShouldAsync(shouldNode, document, cancellationToken).ConfigureAwait(false);
 
             if (assertThat is null)
             {
@@ -80,7 +81,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return AssertThat(expression, Is("EquivalentTo", arguments[0]), arguments, removeNameColon: true);
         }
 
-        private static InvocationExpressionSyntax ConvertShould(Document document, MemberAccessExpressionSyntax shouldNode)
+        private static async Task<InvocationExpressionSyntax> ConvertShouldAsync(MemberAccessExpressionSyntax shouldNode, Document document, CancellationToken cancellationToken)
         {
             var originalExpression = shouldNode.Expression;
 
@@ -98,8 +99,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "BeNull": return AssertThat(expression, Is("Null"), arguments, 0, removeNameColon: true);
                 case "NotBeNull": return AssertThat(expression, Is("Not", "Null"), arguments, 0, removeNameColon: true);
 
-                case "BeEmpty": return ConvertBeEmpty(document, originalExpression, expression, arguments);
-                case "NotBeEmpty": return ConvertNotBeEmpty(document, originalExpression, expression, arguments);
+                case "BeEmpty": return await ConvertBeEmptyAsync(originalExpression, expression, arguments, document, cancellationToken).ConfigureAwait(false);
+                case "NotBeEmpty": return await ConvertNotBeEmptyAsync(originalExpression, expression, arguments, document, cancellationToken).ConfigureAwait(false);
 
                 case "BeNullOrEmpty": return AssertThat(expression, Is("Null", "Or", "Empty"), arguments, 0, removeNameColon: true);
                 case "NotBeNullOrEmpty": return AssertThat(expression, Is("Not", "Null", "And", "Not", "Empty"), arguments, 0, removeNameColon: true);
@@ -109,8 +110,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 case "Equal": return AssertThat(expression, Is("EqualTo", arguments[0]), arguments, removeNameColon: true);
 
-                case "BeEquivalentTo": return ConvertBeEquivalentTo(document, expression, arguments);
-                case "NotBeEquivalentTo": return ConvertNotBeEquivalentTo(document, expression, arguments);
+                case "BeEquivalentTo": return await ConvertBeEquivalentToAsync(expression, arguments, document, cancellationToken).ConfigureAwait(false);
+                case "NotBeEquivalentTo": return await ConvertNotBeEquivalentToAsync(expression, arguments, document, cancellationToken).ConfigureAwait(false);
 
                 case "BeGreaterThan": return AssertThat(expression, Is("GreaterThan", arguments[0]), arguments, removeNameColon: true);
                 case "BeGreaterOrEqualTo":
@@ -160,13 +161,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "NotEndWith": return AssertThat(expression, Does("Not", "EndWith", arguments[0]), arguments, removeNameColon: true);
                 case "NotEndWithEquivalentOf": return AssertThat(expression, Does("Not", "EndWith", arguments[0], "IgnoreCase"), arguments, removeNameColon: true);
 
-                case "Contain" when arguments[0].Expression is SimpleLambdaExpressionSyntax: return AssertThatHasMatches("Some", document, originalExpression, expression, arguments);
-                case "Contain": return ConvertContain(document, expression, arguments);
+                case "Contain" when arguments[0].Expression is SimpleLambdaExpressionSyntax: return await AssertThatHasMatchesAsync("Some", originalExpression, expression, arguments, document, cancellationToken).ConfigureAwait(false);
+                case "Contain": return await ConvertContainAsync(expression, arguments, document, cancellationToken).ConfigureAwait(false);
 
-                case "OnlyContain": return AssertThatHasMatches("All", document, originalExpression, expression, arguments);
-                case "ContainSingle" when arguments.Count > 0: return AssertThatHasMatches("One", document, originalExpression, expression, arguments);
+                case "OnlyContain": return await AssertThatHasMatchesAsync("All", originalExpression, expression, arguments, document, cancellationToken).ConfigureAwait(false);
+                case "ContainSingle" when arguments.Count > 0: return await AssertThatHasMatchesAsync("One", originalExpression, expression, arguments, document, cancellationToken).ConfigureAwait(false);
                 case "ContainSingle": return AssertThat(expression, Has("Exactly", Argument(Literal(1)), "Items"), arguments, removeNameColon: true);
-                case "NotContain" when arguments[0].Expression is SimpleLambdaExpressionSyntax: return AssertThatHasMatches("None", document, originalExpression, expression, arguments);
+                case "NotContain" when arguments[0].Expression is SimpleLambdaExpressionSyntax: return await AssertThatHasMatchesAsync("None", originalExpression, expression, arguments, document, cancellationToken).ConfigureAwait(false);
                 case "NotContain": return AssertThat(expression, Does("Not", "Contain", arguments[0]), arguments, removeNameColon: true);
                 case "NotContainEquivalentOf": return AssertThat(expression, Does("Not", "Contain", arguments[0], "IgnoreCase"), arguments, removeNameColon: true);
 
@@ -191,14 +192,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static InvocationExpressionSyntax AssertThatHasMatches(string match, Document document, ExpressionSyntax originalExpression, ExpressionSyntax expression, in SeparatedSyntaxList<ArgumentSyntax> arguments)
+        private static async Task<InvocationExpressionSyntax> AssertThatHasMatchesAsync(
+                                                                                    string match,
+                                                                                    ExpressionSyntax originalExpression,
+                                                                                    ExpressionSyntax expression,
+                                                                                    SeparatedSyntaxList<ArgumentSyntax> arguments,
+                                                                                    Document document,
+                                                                                    CancellationToken cancellationToken)
         {
             var argument = arguments[0];
 
             if (argument.Expression is SimpleLambdaExpressionSyntax)
             {
                 // we need to find out the type
-                var type = originalExpression.GetTypeSymbol(document);
+                var type = await originalExpression.GetTypeSymbolAsync(document, cancellationToken).ConfigureAwait(false);
 
                 if (type != null && type.TryGetGenericArguments(out var genericArguments))
                 {
@@ -260,9 +267,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return AssertThat(expression, Is("Not", "EqualTo", argument), arguments, removeNameColon: true);
         }
 
-        private static InvocationExpressionSyntax ConvertBeEmpty(Document document, ExpressionSyntax originalExpression, ExpressionSyntax expression, in SeparatedSyntaxList<ArgumentSyntax> arguments)
+        private static async Task<InvocationExpressionSyntax> ConvertBeEmptyAsync(
+                                                                              ExpressionSyntax originalExpression,
+                                                                              ExpressionSyntax expression,
+                                                                              SeparatedSyntaxList<ArgumentSyntax> arguments,
+                                                                              Document document,
+                                                                              CancellationToken cancellationToken)
         {
-            var type = originalExpression.GetTypeSymbol(document);
+            var type = await originalExpression.GetTypeSymbolAsync(document, cancellationToken).ConfigureAwait(false);
 
             if (type != null && type.IsGuid())
             {
@@ -272,9 +284,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return AssertThat(expression, Is("Empty"), arguments, 0, removeNameColon: true);
         }
 
-        private static InvocationExpressionSyntax ConvertNotBeEmpty(Document document, ExpressionSyntax originalExpression, ExpressionSyntax expression, in SeparatedSyntaxList<ArgumentSyntax> arguments)
+        private static async Task<InvocationExpressionSyntax> ConvertNotBeEmptyAsync(
+                                                                                 ExpressionSyntax originalExpression,
+                                                                                 ExpressionSyntax expression,
+                                                                                 SeparatedSyntaxList<ArgumentSyntax> arguments,
+                                                                                 Document document,
+                                                                                 CancellationToken cancellationToken)
         {
-            var type = originalExpression.GetTypeSymbol(document);
+            var type = await originalExpression.GetTypeSymbolAsync(document, cancellationToken).ConfigureAwait(false);
 
             if (type != null && type.IsGuid())
             {
@@ -284,7 +301,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return AssertThat(expression, Is("Not", "Empty"), arguments, 0, removeNameColon: true);
         }
 
-        private static InvocationExpressionSyntax ConvertBeEquivalentTo(Document document, ExpressionSyntax expression, in SeparatedSyntaxList<ArgumentSyntax> arguments)
+        private static async Task<InvocationExpressionSyntax> ConvertBeEquivalentToAsync(ExpressionSyntax expression, SeparatedSyntaxList<ArgumentSyntax> arguments, Document document, CancellationToken cancellationToken)
         {
             var count = arguments.Count;
 
@@ -295,7 +312,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var argument = arguments[0];
 
-            var type = argument.GetTypeSymbol(document);
+            var type = await argument.GetTypeSymbolAsync(document, cancellationToken).ConfigureAwait(false);
 
             if (type != null)
             {
@@ -316,7 +333,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return AssertThat(expression, Is("EquivalentTo", GetAsArray(arguments)), arguments, count, removeNameColon: true);
         }
 
-        private static InvocationExpressionSyntax ConvertNotBeEquivalentTo(Document document, ExpressionSyntax expression, in SeparatedSyntaxList<ArgumentSyntax> arguments)
+        private static async Task<InvocationExpressionSyntax> ConvertNotBeEquivalentToAsync(ExpressionSyntax expression, SeparatedSyntaxList<ArgumentSyntax> arguments, Document document, CancellationToken cancellationToken)
         {
             var count = arguments.Count;
 
@@ -327,7 +344,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var argument = arguments[0];
 
-            var type = argument.GetTypeSymbol(document);
+            var type = await argument.GetTypeSymbolAsync(document, cancellationToken).ConfigureAwait(false);
 
             if (type != null)
             {
@@ -348,11 +365,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return AssertThat(expression, Is("Not", "EquivalentTo", GetAsArray(arguments)), arguments, count, removeNameColon: true);
         }
 
-        private static InvocationExpressionSyntax ConvertContain(Document document, ExpressionSyntax expression, in SeparatedSyntaxList<ArgumentSyntax> arguments)
+        private static async Task<InvocationExpressionSyntax> ConvertContainAsync(ExpressionSyntax expression, SeparatedSyntaxList<ArgumentSyntax> arguments, Document document, CancellationToken cancellationToken)
         {
             var argument = arguments[0];
 
-            var type = argument.GetTypeSymbol(document);
+            var type = await argument.GetTypeSymbolAsync(document, cancellationToken).ConfigureAwait(false);
 
             if (type != null && type.IsEnumerable())
             {

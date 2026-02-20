@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -29,29 +31,31 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return null;
         }
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
-            return syntax;
+            return Task.FromResult(syntax);
         }
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
+        protected override async Task<SyntaxNode> GetUpdatedSyntaxRootAsync(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue, CancellationToken cancellationToken)
         {
             switch (syntax)
             {
                 case IfStatementSyntax ifStatement:
-                    return GetUpdatedSyntaxRootForIfStatement(document, root, ifStatement);
+                    return await GetUpdatedSyntaxRootForIfStatementAsync(root, ifStatement, document, cancellationToken).ConfigureAwait(false);
 
                 case ConditionalExpressionSyntax conditional:
-                    return GetUpdatedSyntaxRootForConditional(document, root, conditional);
+                    return await GetUpdatedSyntaxRootForConditionalAsync(root, conditional, document, cancellationToken).ConfigureAwait(false);
 
                 default:
                     return root;
             }
         }
 
-        private static SyntaxNode GetUpdatedSyntaxRootForIfStatement(Document document, SyntaxNode root, IfStatementSyntax syntax)
+        private static async Task<SyntaxNode> GetUpdatedSyntaxRootForIfStatementAsync(SyntaxNode root, IfStatementSyntax syntax, Document document, CancellationToken cancellationToken)
         {
-            var newIf = syntax.WithCondition(GetUpdatedCondition(document, syntax.Condition));
+            var updatedCondition = await GetUpdatedConditionAsync(syntax.Condition, document, cancellationToken).ConfigureAwait(false);
+
+            var newIf = syntax.WithCondition(updatedCondition);
 
             var elsePart = syntax.Else?.Statement;
 
@@ -88,9 +92,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return null;
         }
 
-        private static SyntaxNode GetUpdatedSyntaxRootForConditional(Document document, SyntaxNode root, ConditionalExpressionSyntax syntax)
+        private static async Task<SyntaxNode> GetUpdatedSyntaxRootForConditionalAsync(SyntaxNode root, ConditionalExpressionSyntax syntax, Document document, CancellationToken cancellationToken)
         {
-            var newCondition = GetUpdatedCondition(document, syntax.Condition);
+            var newCondition = await GetUpdatedConditionAsync(syntax.Condition, document, cancellationToken).ConfigureAwait(false);
 
             var returnPoint = syntax.FirstAncestor<SyntaxNode>(IsReturnPoint);
 
@@ -142,11 +146,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return root.ReplaceNode(returnPoint, newReturnPoint);
         }
 
-        private static ExpressionSyntax GetUpdatedCondition(Document document, ExpressionSyntax condition)
+        private static async Task<ExpressionSyntax> GetUpdatedConditionAsync(ExpressionSyntax condition, Document document, CancellationToken cancellationToken)
         {
             var newCondition = condition.WithoutParenthesis();
 
-            return InvertCondition(document, newCondition).WithTriviaFrom(condition);
+            var inverted = await InvertConditionAsync(newCondition, document, cancellationToken).ConfigureAwait(false);
+
+            return inverted.WithTriviaFrom(condition);
         }
 
         private static bool IsReturnPoint(SyntaxNode node)

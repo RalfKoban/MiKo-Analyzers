@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -20,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<InvocationExpressionSyntax>().FirstOrDefault();
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected override async Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
             var original = (InvocationExpressionSyntax)syntax;
 
@@ -44,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         var args = original.ArgumentList.Arguments;
 
-                        var fixedSyntax = UpdatedSyntax(document, maes, args, typeName);
+                        var fixedSyntax = await UpdatedSyntaxAsync(maes, args, typeName, document, cancellationToken).ConfigureAwait(false);
 
                         if (fixedSyntax != null)
                         {
@@ -60,9 +62,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return original;
         }
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue) => root.WithoutUsing("NUnit.Framework.Legacy"); // remove unused "using NUnit.Framework.Legacy;"
+        protected override Task<SyntaxNode> GetUpdatedSyntaxRootAsync(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue, CancellationToken cancellationToken)
+        {
+            var updatedSyncRoot = GetUpdatedSyntaxRoot(root);
 
-        private static InvocationExpressionSyntax UpdatedSyntax(Document document, MemberAccessExpressionSyntax syntax, in SeparatedSyntaxList<ArgumentSyntax> args, string typeName)
+            return Task.FromResult(updatedSyncRoot);
+        }
+
+        private static SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root) => root.WithoutUsing("NUnit.Framework.Legacy"); // remove unused "using NUnit.Framework.Legacy;"
+
+        private static async Task<InvocationExpressionSyntax> UpdatedSyntaxAsync(MemberAccessExpressionSyntax syntax, SeparatedSyntaxList<ArgumentSyntax> args, string typeName, Document document, CancellationToken cancellationToken)
         {
             var methodName = syntax.GetName();
 
@@ -71,14 +80,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "AllItemsAreInstancesOfType": return FixAllItemsAreInstancesOfType(args, syntax.Name);
                 case "AllItemsAreNotNull": return FixAllItemsAreNotNull(args);
                 case "AllItemsAreUnique": return FixAllItemsAreUnique(args);
-                case "AreEqual": return FixAreEqual(document, args);
+                case "AreEqual": return await FixAreEqualAsync(args, document, cancellationToken).ConfigureAwait(false);
                 case "AreEqualIgnoringCase": return FixAreEqualIgnoringCase(args);
                 case "AreEquivalent": return FixAreEquivalent(args);
-                case "AreNotEqual": return FixAreNotEqual(document, args);
+                case "AreNotEqual": return await FixAreNotEqualAsync(args, document, cancellationToken).ConfigureAwait(false);
                 case "AreNotEqualIgnoringCase": return FixAreNotEqualIgnoringCase(args);
                 case "AreNotEquivalent": return FixAreNotEquivalent(args);
-                case "AreNotSame": return FixAreNotSame(document, args);
-                case "AreSame": return FixAreSame(document, args);
+                case "AreNotSame": return await FixAreNotSameAsync(args, document, cancellationToken).ConfigureAwait(false);
+                case "AreSame": return await FixAreSameAsync(args, document, cancellationToken).ConfigureAwait(false);
                 case "Contains": return FixContains(typeName, args);
                 case "DoesNotContain": return FixDoesNotContain(args, typeName);
                 case "DoesNotMatch": return FixStringAssertDoesNotMatch(args);
@@ -131,11 +140,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static InvocationExpressionSyntax FixAllItemsAreUnique(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Unique"), args, 1);
 
-        private static InvocationExpressionSyntax FixAreEqual(Document document, in SeparatedSyntaxList<ArgumentSyntax> args) => FixAreEqualOrSame(document, args, "EqualTo");
+        private static Task<InvocationExpressionSyntax> FixAreEqualAsync(SeparatedSyntaxList<ArgumentSyntax> args, Document document, CancellationToken cancellationToken)
+        {
+            return FixAreEqualOrSameAsync(args, "EqualTo", document, cancellationToken);
+        }
 
         private static InvocationExpressionSyntax FixAreEqualIgnoringCase(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("EqualTo", args[0], "IgnoreCase"), args);
 
-        private static InvocationExpressionSyntax FixAreEqualOrSame(Document document, in SeparatedSyntaxList<ArgumentSyntax> args, string call)
+        private static async Task<InvocationExpressionSyntax> FixAreEqualOrSameAsync(SeparatedSyntaxList<ArgumentSyntax> args, string call, Document document, CancellationToken cancellationToken)
         {
             var arg0 = args[0];
             var arg1 = args[1];
@@ -143,8 +155,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             switch (arg0.Expression.Kind())
             {
                 // constants & enums
-                case SyntaxKind.SimpleMemberAccessExpression when arg0.IsEnum(document): return AssertThat(arg1, Is(call, arg0), args);
-                case SyntaxKind.IdentifierName when arg0.IsConst(document) || IsExpected(arg0): return AssertThat(arg1, Is(call, arg0), args);
+                case SyntaxKind.SimpleMemberAccessExpression when await arg0.IsEnumAsync(document, cancellationToken).ConfigureAwait(false): return AssertThat(arg1, Is(call, arg0), args);
+                case SyntaxKind.IdentifierName when await arg0.IsConstAsync(document, cancellationToken).ConfigureAwait(false) || IsExpected(arg0): return AssertThat(arg1, Is(call, arg0), args);
                 case SyntaxKind.IdentifierName when IsActual(arg0): return AssertThat(arg0, Is(call, arg1), args);
 
                 // literals
@@ -172,8 +184,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             switch (arg1.Expression.Kind())
             {
                 // constants & enums
-                case SyntaxKind.SimpleMemberAccessExpression when arg1.IsEnum(document): return AssertThat(arg0, Is(call, arg1), args);
-                case SyntaxKind.IdentifierName when arg1.IsConst(document) || IsExpected(arg1): return AssertThat(arg0, Is(call, arg1), args);
+                case SyntaxKind.SimpleMemberAccessExpression when await arg1.IsEnumAsync(document, cancellationToken).ConfigureAwait(false): return AssertThat(arg0, Is(call, arg1), args);
+                case SyntaxKind.IdentifierName when await arg1.IsConstAsync(document, cancellationToken).ConfigureAwait(false) || IsExpected(arg1): return AssertThat(arg0, Is(call, arg1), args);
                 case SyntaxKind.IdentifierName when IsActual(arg1): return AssertThat(arg1, Is(call, arg0), args);
 
                 // literals
@@ -203,11 +215,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static InvocationExpressionSyntax FixAreEquivalent(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("EquivalentTo", args[0]), args);
 
-        private static InvocationExpressionSyntax FixAreNotEqual(Document document, in SeparatedSyntaxList<ArgumentSyntax> args) => FixAreNotEqualOrSame(document, args, "EqualTo");
+        private static Task<InvocationExpressionSyntax> FixAreNotEqualAsync(in SeparatedSyntaxList<ArgumentSyntax> args, Document document, CancellationToken cancellationToken)
+        {
+            return FixAreNotEqualOrSameAsync(args, "EqualTo", document, cancellationToken);
+        }
 
         private static InvocationExpressionSyntax FixAreNotEqualIgnoringCase(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("Not", "EqualTo", args[0], "IgnoreCase"), args);
 
-        private static InvocationExpressionSyntax FixAreNotEqualOrSame(Document document, in SeparatedSyntaxList<ArgumentSyntax> args, string call)
+        private static async Task<InvocationExpressionSyntax> FixAreNotEqualOrSameAsync(SeparatedSyntaxList<ArgumentSyntax> args, string call, Document document, CancellationToken cancellationToken)
         {
             var arg0 = args[0];
             var arg1 = args[1];
@@ -215,8 +230,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             switch (arg0.Expression.Kind())
             {
                 // constants & enums
-                case SyntaxKind.SimpleMemberAccessExpression when arg0.IsEnum(document): return AssertThat(arg1, Is("Not", call, arg0), args);
-                case SyntaxKind.IdentifierName when arg0.IsConst(document) || IsExpected(arg0): return AssertThat(arg1, Is("Not", call, arg0), args);
+                case SyntaxKind.SimpleMemberAccessExpression when await arg0.IsEnumAsync(document, cancellationToken).ConfigureAwait(false): return AssertThat(arg1, Is("Not", call, arg0), args);
+                case SyntaxKind.IdentifierName when await arg0.IsConstAsync(document, cancellationToken).ConfigureAwait(false) || IsExpected(arg0): return AssertThat(arg1, Is("Not", call, arg0), args);
                 case SyntaxKind.IdentifierName when IsActual(arg0): return AssertThat(arg0, Is("Not", call, arg1), args);
 
                 // literals
@@ -230,8 +245,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             switch (arg1.Expression.Kind())
             {
                 // constants & enums
-                case SyntaxKind.SimpleMemberAccessExpression when arg1.IsEnum(document): return AssertThat(arg0, Is("Not", call, arg1), args);
-                case SyntaxKind.IdentifierName when arg1.IsConst(document) || IsExpected(arg1): return AssertThat(arg0, Is("Not", call, arg1), args);
+                case SyntaxKind.SimpleMemberAccessExpression when await arg1.IsEnumAsync(document, cancellationToken).ConfigureAwait(false): return AssertThat(arg0, Is("Not", call, arg1), args);
+                case SyntaxKind.IdentifierName when await arg1.IsConstAsync(document, cancellationToken).ConfigureAwait(false) || IsExpected(arg1): return AssertThat(arg0, Is("Not", call, arg1), args);
                 case SyntaxKind.IdentifierName when IsActual(arg1): return AssertThat(arg1, Is("Not", call, arg0), args);
 
                 // literals
@@ -247,9 +262,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static InvocationExpressionSyntax FixAreNotEquivalent(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("Not", "EquivalentTo", args[0]), args);
 
-        private static InvocationExpressionSyntax FixAreNotSame(Document document, in SeparatedSyntaxList<ArgumentSyntax> args) => FixAreNotEqualOrSame(document, args, "SameAs");
+        private static Task<InvocationExpressionSyntax> FixAreNotSameAsync(SeparatedSyntaxList<ArgumentSyntax> args, Document document, CancellationToken cancellationToken)
+        {
+            return FixAreNotEqualOrSameAsync(args, "SameAs", document, cancellationToken);
+        }
 
-        private static InvocationExpressionSyntax FixAreSame(Document document, in SeparatedSyntaxList<ArgumentSyntax> args) => FixAreEqualOrSame(document, args, "SameAs");
+        private static Task<InvocationExpressionSyntax> FixAreSameAsync(SeparatedSyntaxList<ArgumentSyntax> args, Document document, CancellationToken cancellationToken)
+        {
+            return FixAreEqualOrSameAsync(args, "SameAs", document, cancellationToken);
+        }
 
         private static InvocationExpressionSyntax FixCollectionAssertContains(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Does("Contain", args[1]), args);
 
@@ -257,7 +278,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static InvocationExpressionSyntax FixContains(string typeName, in SeparatedSyntaxList<ArgumentSyntax> args) => typeName is "CollectionAssert" ? FixCollectionAssertContains(args) : FixStringAssertContains(args);
 
-        private static InvocationExpressionSyntax FixDoesNotContain(in SeparatedSyntaxList<ArgumentSyntax> args, string typeName) => typeName is "CollectionAssert" ? FixCollectionAssertDoesNotContain(args) : FixStringAssertDoesNotContain(args);
+        private static InvocationExpressionSyntax FixDoesNotContain(in SeparatedSyntaxList<ArgumentSyntax> args, string typeName)
+        {
+            return typeName is "CollectionAssert"
+                   ? FixCollectionAssertDoesNotContain(args)
+                   : FixStringAssertDoesNotContain(args);
+        }
 
         private static InvocationExpressionSyntax FixDoesNotEndWith(in SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("Not", "EndWith", args[0]), args);
 
