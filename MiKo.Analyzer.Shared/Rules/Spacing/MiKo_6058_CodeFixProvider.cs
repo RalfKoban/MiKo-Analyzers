@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -15,16 +17,18 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<TypeParameterConstraintClauseSyntax>().First();
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
-            if (syntax is TypeParameterConstraintClauseSyntax node)
-            {
-                var spaces = GetProposedSpaces(issue);
+            SyntaxNode updatedSyntax = GetUpdatedSyntax((TypeParameterConstraintClauseSyntax)syntax, issue);
 
-                return node.WithLeadingSpaces(spaces);
-            }
+            return Task.FromResult(updatedSyntax);
+        }
 
-            return base.GetUpdatedSyntax(document, syntax, issue);
+        private static TypeParameterConstraintClauseSyntax GetUpdatedSyntax(TypeParameterConstraintClauseSyntax node, Diagnostic issue)
+        {
+            var spaces = GetProposedSpaces(issue);
+
+            return node.WithLeadingSpaces(spaces);
         }
     }
 }

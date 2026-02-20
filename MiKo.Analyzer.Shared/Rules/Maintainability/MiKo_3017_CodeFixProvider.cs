@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Composition;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -16,11 +18,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override ArgumentListSyntax GetUpdatedArgumentListSyntax(ObjectCreationExpressionSyntax syntax) => syntax.ArgumentList; // there might be multiple nodes to replace, hence return original and do replacement in GetUpdatedSyntaxRoot
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
+        protected override async Task<SyntaxNode> GetUpdatedSyntaxRootAsync(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue, CancellationToken cancellationToken)
         {
             var o = (ObjectCreationExpressionSyntax)syntax;
 
-            var problematicNode = o.GetExceptionSwallowingNode(() => document.GetSemanticModel());
+            var semanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
+
+            var problematicNode = o.GetExceptionSwallowingNode(() => semanticModel);
 
             var replacements = CreateReplacements(o.ArgumentList, problematicNode);
 

@@ -51,7 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.FirstOrDefault(IsMethodKind);
 
-        protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => throw new NotSupportedException("This code fix provider does not modify the syntax");
+        protected sealed override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken) => throw new NotSupportedException("This code fix provider does not modify the syntax");
 
         private static string GetNewName(Diagnostic issue, ISymbol symbol) => issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.BetterName, out var betterName) ? betterName : symbol.Name;
 

@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] Phrases = CreatePhrases().ToHashSet().ToArray();
 //// ncrunch: rdi default
 
-        protected static XmlElementSyntax GetFixedExceptionCommentForArgumentNullException(Document document, XmlElementSyntax exceptionComment)
+        protected static XmlElementSyntax GetFixedExceptionCommentForArgumentNullException(XmlElementSyntax exceptionComment, ISymbol symbol)
         {
             var parameters = exceptionComment.GetParameterNames();
 
@@ -26,43 +26,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return exceptionComment.WithContent(ParameterIsNull(parameters[0])); // seems like we have only a single parameter, so place it on a single line
 
                 default:
-                    return exceptionComment.WithContent(ParameterIsNull(GetParameterNames())); // more than 1 parameter, so pick the referenced ones
-            }
+                    var parameterNames = GetParameterNames(parameters, exceptionComment, symbol);
 
-            string[] GetParameterNames()
-            {
-                var comment = exceptionComment.ToString();
-
-                var ps = parameters.Where(_ => comment.ContainsAny(GetParameterReferences(_).ToArray(), StringComparison.OrdinalIgnoreCase)).ToArray();
-
-                if (ps.Length != 0)
-                {
-                    return ps;
-                }
-
-                // seems none is referenced, so pick up all parameters
-                switch (exceptionComment.FirstAncestor<MemberDeclarationSyntax>())
-                {
-                    case BaseMethodDeclarationSyntax method:
-                    {
-                        var symbol = method.GetSymbol(document);
-
-                        if (symbol is IMethodSymbol methodSymbol)
-                        {
-                            return methodSymbol.Parameters.Where(_ => _.Type.IsValueType is false).ToArray(_ => _.Name);
-                        }
-
-                        return method.ParameterList.Parameters.ToArray(_ => _.Identifier.ValueText);
-                    }
-
-                    case BasePropertyDeclarationSyntax _:
-                    {
-                        return new[] { Constants.Names.DefaultPropertyParameterName };
-                    }
-
-                    default:
-                        return Array.Empty<string>();
-                }
+                    return exceptionComment.WithContent(ParameterIsNull(parameterNames)); // more than 1 parameter, so pick the referenced ones
             }
         }
 
@@ -137,6 +103,40 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         protected virtual DocumentationCommentTriviaSyntax FixExceptionComment(SyntaxNode syntax, XmlElementSyntax exception, DocumentationCommentTriviaSyntax comment, Diagnostic issue) => null;
+
+        private static string[] GetParameterNames(string[] parameters, XmlElementSyntax exceptionComment, ISymbol symbol)
+        {
+            var comment = exceptionComment.ToString();
+
+            var ps = parameters.Where(_ => comment.ContainsAny(GetParameterReferences(_).ToArray(), StringComparison.OrdinalIgnoreCase)).ToArray();
+
+            if (ps.Length != 0)
+            {
+                return ps;
+            }
+
+            // seems none is referenced, so pick up all parameters
+            switch (exceptionComment.FirstAncestor<MemberDeclarationSyntax>())
+            {
+                case BaseMethodDeclarationSyntax method:
+                {
+                    if (symbol is IMethodSymbol methodSymbol)
+                    {
+                        return methodSymbol.Parameters.Where(_ => _.Type.IsValueType is false).ToArray(_ => _.Name);
+                    }
+
+                    return method.ParameterList.Parameters.ToArray(_ => _.Identifier.ValueText);
+                }
+
+                case BasePropertyDeclarationSyntax _:
+                {
+                    return new[] { Constants.Names.DefaultPropertyParameterName };
+                }
+
+                default:
+                    return Array.Empty<string>();
+            }
+        }
 
         private static IEnumerable<string> GetParameterReferences(string parameterName)
         {

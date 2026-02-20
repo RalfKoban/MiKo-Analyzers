@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -15,17 +17,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<LiteralExpressionSyntax>().FirstOrDefault();
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected override async Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
             var literal = (LiteralExpressionSyntax)syntax;
-            var type = FindRelatedType(document, literal);
+
+            var type = await FindRelatedTypeAsync(literal, document, cancellationToken).ConfigureAwait(false);
 
             return type is null
                    ? NameOf(literal)
                    : NameOf(type, literal);
         }
 
-        private static ITypeSymbol FindRelatedType(Document document, LiteralExpressionSyntax syntax)
+        private static async Task<ITypeSymbol> FindRelatedTypeAsync(LiteralExpressionSyntax syntax, Document document, CancellationToken cancellationToken)
         {
             var identifierName = syntax.Token.ValueText;
 
@@ -34,7 +37,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (ifStatement != null)
             {
                 // search if block
-                return FindRelatedType(document, ifStatement.Statement, identifierName) ?? FindRelatedType(document, ifStatement.Else, identifierName);
+                return await FindRelatedTypeAsync(ifStatement.Statement, identifierName, document, cancellationToken).ConfigureAwait(false)
+                    ?? await FindRelatedTypeAsync(ifStatement.Else, identifierName, document, cancellationToken).ConfigureAwait(false);
             }
 
             var switchStatement = syntax.GetEnclosing<SwitchStatementSyntax>();
@@ -42,19 +46,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (switchStatement != null)
             {
                 // search switch block
-                return FindRelatedType(document, switchStatement, identifierName);
+                return await FindRelatedTypeAsync(switchStatement, identifierName, document, cancellationToken).ConfigureAwait(false);
             }
 
             return null;
         }
 
-        private static ITypeSymbol FindRelatedType(Document document, SyntaxNode syntax, string identifierName)
+        private static async Task<ITypeSymbol> FindRelatedTypeAsync(SyntaxNode syntax, string identifierName, Document document, CancellationToken cancellationToken)
         {
             var identifier = syntax?.FirstDescendant<IdentifierNameSyntax>(_ => _.GetName() == identifierName);
 
             if (identifier?.Parent is MemberAccessExpressionSyntax maes)
             {
-                return maes.GetTypeSymbol(document);
+                return await maes.GetTypeSymbolAsync(document, cancellationToken).ConfigureAwait(false);
             }
 
             // try to find type

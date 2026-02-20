@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Composition;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -18,7 +20,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => "MiKo_2034";
 
-        protected override XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, string memberName, GenericNameSyntax returnType)
+        protected override Task<SyntaxNode> GenericCommentAsync(XmlElementSyntax comment, string memberName, GenericNameSyntax returnType, Document document, CancellationToken cancellationToken)
+        {
+            SyntaxNode updatedComment = GenericComment(comment);
+
+            return Task.FromResult(updatedComment);
+        }
+
+        protected override Task<SyntaxNode> NonGenericCommentAsync(XmlElementSyntax comment, string memberName, TypeSyntax returnType, Document document, CancellationToken cancellationToken)
+        {
+            SyntaxNode updatedComment = NonGenericComment(comment);
+
+            return Task.FromResult(updatedComment);
+        }
+
+        private static XmlElementSyntax GenericComment(XmlElementSyntax comment)
         {
             var commentStart = Parts[0];
             var commentEnd = Parts[1];
@@ -31,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, commentStart, SeeCrefTaskResult(), commentEnd, RemoveStartingWord(comment));
         }
 
-        protected override XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, string memberName, TypeSyntax returnType)
+        private static XmlElementSyntax NonGenericComment(XmlElementSyntax comment)
         {
             var text = Constants.Comments.EnumReturnTypeStartingPhrase[0];
 

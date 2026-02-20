@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -16,10 +17,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool IsApplicable(in ImmutableArray<Diagnostic> issues) => base.IsApplicable(issues) is false;
 
-        protected override IEnumerable<XmlNodeSyntax> GetDefaultComment(Document document, TypeSyntax returnType)
+        protected override async Task<XmlNodeSyntax[]> GetDefaultCommentAsync(TypeSyntax returnType, Document document, CancellationToken cancellationToken)
         {
-            var symbol = returnType.GetSymbol(document);
+            var symbol = await returnType.GetSymbolAsync(document, cancellationToken).ConfigureAwait(false);
 
+            return GetDefaultComment(symbol, returnType);
+        }
+
+        private static XmlNodeSyntax[] GetDefaultComment(ISymbol symbol, TypeSyntax returnType)
+        {
             if (symbol is INamedTypeSymbol typeSymbol && typeSymbol.IsEnum())
             {
                 var defaultValue = typeSymbol.GetFields()[0];
