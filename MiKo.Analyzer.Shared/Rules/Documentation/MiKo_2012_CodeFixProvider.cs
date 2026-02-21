@@ -83,7 +83,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                     {
                                                         new Pair("##SEALED##", Constants.Comments.SealedClassPhrase),
                                                         new Pair("##READONLY##", Constants.Comments.FieldIsReadOnly),
-                                                        new Pair("Represents a Represents a ", "Represents a "),
                                                     };
 
         private static readonly string[] CleanupMapKeys = GetTermsForQuickLookup(CleanupMap);
