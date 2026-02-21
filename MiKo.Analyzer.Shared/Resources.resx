@@ -5530,6 +5530,18 @@ This organization ensures clarity and makes the code easier to find, understand 
   <data name="MiKo_5017_Title" xml:space="preserve">
     <value>Make fields or variables assigned with string literals constant</value>
   </data>
+  <data name="MiKo_5018_CodeFixTitle" xml:space="preserve">
+    <value>Move value comparison before reference comparison</value>
+  </data>
+  <data name="MiKo_5018_Description" xml:space="preserve">
+    <value>Place value comparisons before reference comparisons. Simple value comparisons are faster than complex reference comparisons, like those involving collections. This approach improves performance.</value>
+  </data>
+  <data name="MiKo_5018_MessageFormat" xml:space="preserve">
+    <value>Place value comparison before reference comparison</value>
+  </data>
+  <data name="MiKo_5018_Title" xml:space="preserve">
+    <value>Perform value comparisons before reference comparisons</value>
+  </data>
   <data name="MiKo_5019_CodeFixTitle" xml:space="preserve">
     <value>Add [in] modifier</value>
   </data>
