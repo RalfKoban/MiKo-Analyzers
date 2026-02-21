@@ -8,6 +8,8 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 
+using MiKoSolutions.Analyzers;
+
 using NUnit.Framework;
 
 //// ncrunch: rdi off
@@ -187,7 +189,7 @@ namespace TestHelper
         /// <returns>
         /// An array of Diagnostics that surfaced in the source code, sorted by Location.
         /// </returns>
-        protected Diagnostic[] GetDiagnostics(string source, in LanguageVersion languageVersion) => GetDiagnostics([source], languageVersion);
+        protected Diagnostic[] GetDiagnostics(string source, in LanguageVersion languageVersion) => GetDiagnostics([StringCache.Intern(source)], languageVersion);
 
         /// <summary>
         /// General method that gets a collection of actual diagnostics found in the source after the analyzer is run,

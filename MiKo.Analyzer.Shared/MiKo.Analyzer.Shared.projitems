@@ -628,6 +628,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\StatementSurroundedByBlankLinesAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\SurroundedByBlankLinesAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)StringBuilderCache.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StringCache.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SyntaxNodeCollector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SyntaxNodeCollector{T}.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TypeNames.cs" />
