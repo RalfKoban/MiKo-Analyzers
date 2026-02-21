@@ -783,6 +783,36 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new Pair("The helper Interface for", "Supports");
             yield return new Pair("The helper interface for", "Supports");
 
+            // services
+            yield return new Pair("A service ", "Represents a service ");
+            yield return new Pair("A Service ", "Represents a service ");
+            yield return new Pair("A service implementation ", "Represents a service ");
+            yield return new Pair("A Service implementation ", "Represents a service ");
+            yield return new Pair("A service implementation used ", "Represents a service ");
+            yield return new Pair("A Service implementation used ", "Represents a service ");
+            yield return new Pair("A service used ", "Represents a service ");
+            yield return new Pair("A Service used ", "Represents a service ");
+            yield return new Pair("Interface for a service ", "Represents a service ");
+            yield return new Pair("Interface for a service used ", "Represents a service ");
+            yield return new Pair("Interface for service ", "Represents a service ");
+            yield return new Pair("Interface for service used ", "Represents a service ");
+            yield return new Pair("Interface for services ", "Represents a service ");
+            yield return new Pair("Interface for services used ", "Represents a service ");
+            yield return new Pair("Interface for the service ", "Represents a service ");
+            yield return new Pair("Interface for the service used ", "Represents a service ");
+            yield return new Pair("Service ", "Represents a service ");
+            yield return new Pair("Service implementation ", "Represents a service ");
+            yield return new Pair("Service implementation used ", "Represents a service ");
+            yield return new Pair("Service used ", "Represents a service ");
+            yield return new Pair("The service ", "Represents a service ");
+            yield return new Pair("The Service ", "Represents a service ");
+            yield return new Pair("The service implementation ", "Represents a service ");
+            yield return new Pair("The Service implementation ", "Represents a service ");
+            yield return new Pair("The service implementation used ", "Represents a service ");
+            yield return new Pair("The Service implementation used ", "Represents a service ");
+            yield return new Pair("The service used ", "Represents a service ");
+            yield return new Pair("The Service used ", "Represents a service ");
+
             foreach (var phrase in CreatePhrases(verbs, thirdPersonVerbs, gerundVerbs))
             {
                 yield return phrase;
