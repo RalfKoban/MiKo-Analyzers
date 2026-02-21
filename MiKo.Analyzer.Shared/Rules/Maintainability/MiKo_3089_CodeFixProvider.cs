@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -16,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<IfStatementSyntax>().FirstOrDefault();
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected override async Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
             if (syntax is IfStatementSyntax statement && statement.Condition is IsPatternExpressionSyntax p)
             {
@@ -46,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         {
                             var expressionKind = useIsNotPattern ? SyntaxKind.NotEqualsExpression : SyntaxKind.EqualsExpression;
 
-                            var updatedCondition = GetUpdatedCondition(p.Expression, subPattern.NameColon.GetName(), expressionKind, literal, document);
+                            var updatedCondition = await GetUpdatedConditionAsync(p.Expression, subPattern.NameColon.GetName(), expressionKind, literal, document, cancellationToken).ConfigureAwait(false);
 
                             if (useIsNotPattern && updatedCondition is IsPatternExpressionSyntax up)
                             {
@@ -59,12 +61,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
             }
 
-            return base.GetUpdatedSyntax(document, syntax, issue);
+            return null;
         }
 
-        private static ExpressionSyntax GetUpdatedCondition(ExpressionSyntax expression, string name, in SyntaxKind expressionKind, LiteralExpressionSyntax literal, Document document)
+        private static async Task<ExpressionSyntax> GetUpdatedConditionAsync(ExpressionSyntax expression, string name, SyntaxKind expressionKind, LiteralExpressionSyntax literal, Document document, CancellationToken cancellationToken)
         {
-            var operand = GetUpdatedExpression(expression, name, document);
+            var operand = await GetUpdatedExpressionAsync(expression, name, document, cancellationToken).ConfigureAwait(false);
 
             switch (literal.Kind())
             {
@@ -76,9 +78,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static ExpressionSyntax GetUpdatedExpression(ExpressionSyntax expression, string name, Document document)
+        private static async Task<ExpressionSyntax> GetUpdatedExpressionAsync(ExpressionSyntax expression, string name, Document document, CancellationToken cancellationToken)
         {
-            if (expression.IsNullable(document))
+            var isNullable = await expression.IsNullableAsync(document, cancellationToken).ConfigureAwait(false);
+
+            if (isNullable)
             {
                 return ConditionalAccess(expression, name);
             }

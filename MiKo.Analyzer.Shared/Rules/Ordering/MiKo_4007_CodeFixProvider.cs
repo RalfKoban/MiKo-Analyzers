@@ -1,4 +1,6 @@
 ﻿using System.Composition;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -11,6 +13,12 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
     {
         public override string FixableDiagnosticId => "MiKo_4007";
 
-        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic issue) => PlaceFirst<MethodDeclarationSyntax>(syntax, typeSyntax); // place before all other methods
+        protected override Task<SyntaxNode> GetUpdatedTypeSyntaxAsync(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic issue, CancellationToken cancellationToken)
+        {
+            // place before all other methods
+            var updatedSyntax = PlaceFirst<MethodDeclarationSyntax>(syntax, typeSyntax);
+
+            return Task.FromResult(updatedSyntax);
+        }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
@@ -56,16 +57,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public static void LoadData() => GC.KeepAlive(MappedData.Value);
 
-        protected override XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, string memberName, GenericNameSyntax returnType)
+        protected override Task<SyntaxNode> GenericCommentAsync(XmlElementSyntax comment, string memberName, GenericNameSyntax returnType, Document document, CancellationToken cancellationToken)
         {
             var preparedComment = PrepareComment(comment);
 
             var updatedComment = GenericComment(preparedComment, returnType);
 
-            return CleanupComment(updatedComment);
+            var cleanedComment = CleanupComment(updatedComment);
+
+            return Task.FromResult<SyntaxNode>(cleanedComment);
         }
 
-        protected override XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, string memberName, TypeSyntax returnType)
+        protected override Task<SyntaxNode> NonGenericCommentAsync(XmlElementSyntax comment, string memberName, TypeSyntax returnType, Document document, CancellationToken cancellationToken)
         {
             XmlElementSyntax preparedComment = returnType is ArrayTypeSyntax arrayType
                                                ? PrepareArrayComment(comment, arrayType)
@@ -73,7 +76,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var updatedComment = NonGenericComment(preparedComment, returnType);
 
-            return CleanupComment(updatedComment);
+            var cleanedComment = CleanupComment(updatedComment);
+
+            return Task.FromResult<SyntaxNode>(cleanedComment);
         }
 
         private static XmlElementSyntax PrepareComment(XmlElementSyntax comment)

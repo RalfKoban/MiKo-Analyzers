@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -16,7 +18,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override XmlTextSyntax GetUpdatedSyntax(Document document, XmlTextSyntax syntax, Diagnostic issue) => syntax;
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
+        protected override Task<SyntaxNode> GetUpdatedSyntaxRootAsync(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue, CancellationToken cancellationToken)
+        {
+            var updatedSyntax = GetUpdatedSyntaxRoot(root, syntax, issue);
+
+            return Task.FromResult(updatedSyntax);
+        }
+
+        private static SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root, SyntaxNode syntax, Diagnostic issue)
         {
             if (syntax is XmlTextSyntax xmlText && issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.TextReplacementKey, out var replacement) && replacement != null)
             {
@@ -61,7 +70,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return root.ReplaceNode(xmlText, newNodes);
             }
 
-            return base.GetUpdatedSyntaxRoot(document, root, syntax, annotationOfSyntax, issue);
+            return null;
         }
     }
 }

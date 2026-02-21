@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -15,21 +17,37 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<FieldDeclarationSyntax>().FirstOrDefault();
 
-        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic issue)
+        protected override Task<SyntaxNode> GetUpdatedTypeSyntaxAsync(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic issue, CancellationToken cancellationToken)
         {
-            if (typeSyntax.ChildNodes<FieldDeclarationSyntax>().Any(_ => _.IsConst()))
+            var updatedSyntax = GetUpdatedTypeSyntax(typeSyntax, syntax);
+
+            return Task.FromResult(updatedSyntax);
+        }
+
+        private static SyntaxNode GetUpdatedTypeSyntax(BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax)
+        {
+            if (syntax is FieldDeclarationSyntax field)
             {
-                var modifiedType = typeSyntax.RemoveNodeAndAdjustOpenCloseBraces(syntax);
+                var fields = typeSyntax.ChildNodes<FieldDeclarationSyntax>().ToList();
 
-                var field = modifiedType.ChildNodes<FieldDeclarationSyntax>().SkipWhile(_ => _.IsConst()).FirstOrDefault();
-
-                if (field is null)
+                if (fields.Any(_ => _.IsConst()))
                 {
-                    // cannot happen as this would mean that the field is the only non-constant field and should not have been reported at all
-                    return modifiedType.InsertNodeAfter(modifiedType.ChildNodes<FieldDeclarationSyntax>().Last(), syntax);
+                    var modifiedType = typeSyntax.RemoveNodeAndAdjustOpenCloseBraces(field);
+                    var nonConstField = modifiedType.ChildNodes<FieldDeclarationSyntax>().SkipWhile(_ => _.IsConst()).First();
+
+                    return modifiedType.InsertNodeBefore(nonConstField, field);
                 }
 
-                return modifiedType.InsertNodeBefore(field, syntax);
+                if (field.IsStatic() && field.IsReadOnly() is false)
+                {
+                    if (fields.Any(_ => _.IsStatic() && _.IsReadOnly()))
+                    {
+                        var modifiedType = typeSyntax.RemoveNodeAndAdjustOpenCloseBraces(field);
+                        var nonStaticReadOnlyField = modifiedType.ChildNodes<FieldDeclarationSyntax>().SkipWhile(_ => _.IsStatic() && _.IsReadOnly()).First();
+
+                        return modifiedType.InsertNodeBefore(nonStaticReadOnlyField, field);
+                    }
+                }
             }
 
             return PlaceFirst<FieldDeclarationSyntax>(syntax, typeSyntax);

@@ -1,4 +1,6 @@
 ﻿using System.Composition;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -12,12 +14,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => "MiKo_2216";
 
-        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic issue)
+        protected override Task<DocumentationCommentTriviaSyntax> GetUpdatedSyntaxAsync(DocumentationCommentTriviaSyntax syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
-            var node = syntax.FindNode(issue.Location.SourceSpan, true, true);
+            var updatedSyntax = GetUpdatedSyntax(syntax, issue);
 
-            // TODO RKN: use this for bulk replace: return syntax.ReplaceNodes(elements, (original, rewritten) => GetUpdatedSyntax(rewritten));
-            return syntax.ReplaceNode(node, GetUpdatedSyntax(node));
+            return Task.FromResult(updatedSyntax);
         }
 
         private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
@@ -33,6 +34,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 default:
                     return syntax;
             }
+        }
+
+        private static DocumentationCommentTriviaSyntax GetUpdatedSyntax(DocumentationCommentTriviaSyntax syntax, Diagnostic issue)
+        {
+            var node = syntax.FindNode(issue.Location.SourceSpan, true, true);
+
+            // TODO RKN: use this for bulk replace: return syntax.ReplaceNodes(elements, (original, rewritten) => GetUpdatedSyntax(rewritten));
+            return syntax.ReplaceNode(node, GetUpdatedSyntax(node));
         }
     }
 }

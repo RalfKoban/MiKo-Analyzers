@@ -46,6 +46,57 @@ namespace MiKoSolutions.Analyzers
         private static readonly string[] Nulls = { "null", "Null", "NULL" };
 
         /// <summary>
+        /// Finds the first syntax node in the hierarchy that has leading comment trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to start searching from.
+        /// </param>
+        /// <returns>
+        /// The first <see cref="SyntaxNode"/> that has leading comment trivia, or <see langword="null"/> if no such node is found.
+        /// </returns>
+        internal static SyntaxNode FindSyntaxNodeWithLeadingComment(this SyntaxNode value)
+        {
+            while (true)
+            {
+                if (value is null)
+                {
+                    return null;
+                }
+
+                var list = value.GetLeadingTrivia();
+
+                // keep in local variable to avoid multiple requests (see Roslyn implementation)
+                var count = list.Count;
+
+                if (count > 0)
+                {
+                    for (var index = 0; index < count; index++)
+                    {
+                        var trivia = list[index];
+
+                        if (trivia.IsComment())
+                        {
+                            return value;
+                        }
+                    }
+                }
+
+                value = value.FirstChild();
+            }
+        }
+
+        /// <summary>
+        /// Gets all comment trivia from both leading and trailing trivia of a syntax node.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to get the comment trivia from.
+        /// </param>
+        /// <returns>
+        /// An array of <see cref="SyntaxTrivia"/> that represents all comment trivia found in the leading and trailing trivia of the syntax node.
+        /// </returns>
+        internal static SyntaxTrivia[] GetComment(this SyntaxNode value) => value.GetLeadingTrivia().Concat(value.GetTrailingTrivia()).Where(_ => _.IsComment()).ToArray();
+
+        /// <summary>
         /// Gets the location of the contents within an XML element, excluding whitespace-only text at the beginning and end.
         /// </summary>
         /// <param name="value">
@@ -160,74 +211,176 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets the name attribute from an XML element or empty element syntax node.
+        /// Gets the cref attribute from an XML element or empty element syntax node.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to get the name attribute from.
+        /// The syntax node to get the cref attribute from.
         /// </param>
         /// <returns>
-        /// The <see cref="XmlTextAttributeSyntax"/> that represents the name attribute, or <see langword="null"/> if the syntax node is not an XML element or has no name attribute.
+        /// The <see cref="XmlCrefAttributeSyntax"/> representing the cref attribute, or <see langword="null"/> if no cref attribute is found or the syntax node is not an XML element.
         /// </returns>
-        internal static XmlTextAttributeSyntax GetNameAttribute(this SyntaxNode value)
+        internal static XmlCrefAttributeSyntax GetCref(this SyntaxNode value)
         {
             switch (value)
             {
-                case XmlElementSyntax e: return e.GetAttributes<XmlTextAttributeSyntax>().FirstOrDefault(_ => _.GetName() is Constants.XmlTag.Attribute.Name);
-                case XmlEmptyElementSyntax ee: return ee.Attributes.OfType<XmlTextAttributeSyntax>().FirstOrDefault(_ => _.GetName() is Constants.XmlTag.Attribute.Name);
+                case XmlEmptyElementSyntax e: return e.Attributes.GetCref();
+                case XmlElementSyntax e: return e.StartTag.Attributes.GetCref();
                 default: return null;
             }
         }
 
         /// <summary>
-        /// Gets all comment trivia from both leading and trailing trivia of a syntax node.
+        /// Gets the cref attribute from an XML element or empty element syntax node with the specified name.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to get the comment trivia from.
+        /// The syntax node to get the cref attribute from.
+        /// </param>
+        /// <param name="name">
+        /// The name of the XML element to match.
         /// </param>
         /// <returns>
-        /// An array of <see cref="SyntaxTrivia"/> that represents all comment trivia found in the leading and trailing trivia of the syntax node.
+        /// The <see cref="XmlCrefAttributeSyntax"/> representing the cref attribute, or <see langword="null"/> if no cref attribute is found or the syntax node does not match the specified name.
         /// </returns>
-        internal static SyntaxTrivia[] GetComment(this SyntaxNode value) => value.GetLeadingTrivia().Concat(value.GetTrailingTrivia()).Where(_ => _.IsComment()).ToArray();
-
-        /// <summary>
-        /// Finds the first syntax node in the hierarchy that has leading comment trivia.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax node to start searching from.
-        /// </param>
-        /// <returns>
-        /// The first <see cref="SyntaxNode"/> that has leading comment trivia, or <see langword="null"/> if no such node is found.
-        /// </returns>
-        internal static SyntaxNode FindSyntaxNodeWithLeadingComment(this SyntaxNode value)
+        internal static XmlCrefAttributeSyntax GetCref(this SyntaxNode value, string name)
         {
-            while (true)
+            switch (value)
             {
-                if (value is null)
-                {
-                    return null;
-                }
-
-                var list = value.GetLeadingTrivia();
-
-                // keep in local variable to avoid multiple requests (see Roslyn implementation)
-                var count = list.Count;
-
-                if (count > 0)
-                {
-                    for (var index = 0; index < count; index++)
-                    {
-                        var trivia = list[index];
-
-                        if (trivia.IsComment())
-                        {
-                            return value;
-                        }
-                    }
-                }
-
-                value = value.FirstChild();
+                case XmlEmptyElementSyntax e when e.GetName() == name: return e.Attributes.GetCref();
+                case XmlElementSyntax e when e.GetName() == name: return e.StartTag.Attributes.GetCref();
+                default: return null;
             }
         }
+
+        /// <summary>
+        /// Gets the type syntax from an XML cref attribute.
+        /// </summary>
+        /// <param name="value">
+        /// The XML cref attribute to get the type from.
+        /// </param>
+        /// <returns>
+        /// The <see cref="TypeSyntax"/> representing the type referenced by the cref attribute, or <see langword="null"/> if no type is found.
+        /// </returns>
+        internal static TypeSyntax GetCrefType(this XmlCrefAttributeSyntax value)
+        {
+            if (value != null)
+            {
+                switch (value.Cref)
+                {
+                    case NameMemberCrefSyntax n: return n.Name;
+                    case QualifiedCrefSyntax q when q.Member is NameMemberCrefSyntax n: return n.Name;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the documentation comment trivia syntax from a syntax node.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to get the documentation comment trivia syntax from.
+        /// </param>
+        /// <param name="kind">
+        /// One of the enumeration members that specifies the kind of documentation comment trivia syntax to get.
+        /// The default is <see cref="SyntaxKind.SingleLineDocumentationCommentTrivia"/>.
+        /// </param>
+        /// <returns>
+        /// An array of <see cref="DocumentationCommentTriviaSyntax"/> that represents the documentation comment trivia syntax, or an empty array if none is found.
+        /// </returns>
+        internal static DocumentationCommentTriviaSyntax[] GetDocumentationCommentTriviaSyntax(this SyntaxNode value, in SyntaxKind kind = SyntaxKind.SingleLineDocumentationCommentTrivia)
+        {
+            var token = value.FindStructuredTriviaToken();
+
+            if (token.HasStructuredTrivia)
+            {
+                var comment = token.GetDocumentationCommentTriviaSyntax(kind);
+
+                if (comment != null)
+                {
+                    return comment;
+                }
+            }
+
+            return Array.Empty<DocumentationCommentTriviaSyntax>();
+        }
+
+        /// <summary>
+        /// Gets only those XML elements that are empty (have NO content) and match the given tag out of the documentation syntax.
+        /// </summary>
+        /// <param name="value">
+        /// The documentation syntax.
+        /// </param>
+        /// <param name="tag">
+        /// The tag of the XML elements to consider.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="XmlEmptyElementSyntax"/> representing empty XML elements (with no content) that match the given tag.
+        /// </returns>
+        /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,ISet{string})"/>
+        /// <seealso cref="GetXmlSyntax(SyntaxNode,string)"/>
+        /// <seealso cref="GetXmlSyntax(SyntaxNode,ISet{string})"/>
+        internal static IEnumerable<XmlEmptyElementSyntax> GetEmptyXmlSyntax(this SyntaxNode value, string tag)
+        {
+            // we have to delve into the trivia to find the XML syntax nodes
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var element in value.AllDescendantNodes<XmlEmptyElementSyntax>())
+            {
+                if (element.GetName() == tag)
+                {
+                    yield return element;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets only those XML elements that are empty (have NO content) and match the given tag out of the list of syntax nodes.
+        /// </summary>
+        /// <param name="value">
+        /// The starting point of the XML elements to consider.
+        /// </param>
+        /// <param name="tags">
+        /// The tags of the XML elements to consider.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="XmlEmptyElementSyntax"/> representing empty XML elements (with no content) that match the given tag.
+        /// </returns>
+        /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,string)"/>
+        /// <seealso cref="GetXmlSyntax(SyntaxNode,string)"/>
+        /// <seealso cref="GetXmlSyntax(SyntaxNode,ISet{string})"/>
+        internal static IEnumerable<XmlEmptyElementSyntax> GetEmptyXmlSyntax(this SyntaxNode value, ISet<string> tags)
+        {
+            // we have to delve into the trivia to find the XML syntax nodes
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var element in value.AllDescendantNodes<XmlEmptyElementSyntax>())
+            {
+                if (tags.Contains(element.GetName()))
+                {
+                    yield return element;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets all example XML elements from documentation comment trivia syntax.
+        /// </summary>
+        /// <param name="value">
+        /// The documentation comment trivia syntax to get the example XML elements from.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="XmlElementSyntax"/> that represents the example XML elements.
+        /// </returns>
+        internal static IReadOnlyList<XmlElementSyntax> GetExampleXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Example);
+
+        /// <summary>
+        /// Gets all exception XML elements from documentation comment trivia syntax.
+        /// </summary>
+        /// <param name="value">
+        /// The documentation comment trivia syntax to get the exception XML elements from.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="XmlElementSyntax"/> that represents the exception XML elements.
+        /// </returns>
+        internal static IReadOnlyList<XmlElementSyntax> GetExceptionXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Exception);
 
         /// <summary>
         /// Gets all leading comment trivia from a syntax node as text strings.
@@ -282,6 +435,25 @@ namespace MiKoSolutions.Analyzers
         internal static string GetListType(this XmlTextAttributeSyntax value) => value.GetTextWithoutTrivia();
 
         /// <summary>
+        /// Gets the name attribute from an XML element or empty element syntax node.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to get the name attribute from.
+        /// </param>
+        /// <returns>
+        /// The <see cref="XmlTextAttributeSyntax"/> that represents the name attribute, or <see langword="null"/> if the syntax node is not an XML element or has no name attribute.
+        /// </returns>
+        internal static XmlTextAttributeSyntax GetNameAttribute(this SyntaxNode value)
+        {
+            switch (value)
+            {
+                case XmlElementSyntax e: return e.GetAttributes<XmlTextAttributeSyntax>().FirstOrDefault(_ => _.GetName() is Constants.XmlTag.Attribute.Name);
+                case XmlEmptyElementSyntax ee: return ee.Attributes.OfType<XmlTextAttributeSyntax>().FirstOrDefault(_ => _.GetName() is Constants.XmlTag.Attribute.Name);
+                default: return null;
+            }
+        }
+
+        /// <summary>
         /// Gets the parameters from the containing member declaration of an XML element.
         /// </summary>
         /// <param name="value">
@@ -320,49 +492,60 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether a syntax node has documentation comment trivia syntax.
+        /// Gets all remarks XML elements from documentation comment trivia syntax.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check for the documentation comment trivia.
+        /// The documentation comment trivia syntax to get the remarks XML elements from.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the syntax node has documentation comment trivia syntax; otherwise, <see langword="false"/>.
+        /// A collection of <see cref="XmlElementSyntax"/> that represents the remarks XML elements.
         /// </returns>
-        internal static bool HasDocumentationCommentTriviaSyntax(this SyntaxNode value)
-        {
-            var token = value.FindStructuredTriviaToken();
-
-            return token.HasStructuredTrivia && token.HasDocumentationCommentTriviaSyntax();
-        }
+        internal static IReadOnlyList<XmlElementSyntax> GetRemarksXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Remarks);
 
         /// <summary>
-        /// Gets the documentation comment trivia syntax from a syntax node.
+        /// Gets all returns XML elements from documentation comment trivia syntax.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to get the documentation comment trivia syntax from.
-        /// </param>
-        /// <param name="kind">
-        /// One of the enumeration members that specifies the kind of documentation comment trivia syntax to get.
-        /// The default is <see cref="SyntaxKind.SingleLineDocumentationCommentTrivia"/>.
+        /// The documentation comment trivia syntax to get the returns XML elements from.
         /// </param>
         /// <returns>
-        /// An array of <see cref="DocumentationCommentTriviaSyntax"/> that represents the documentation comment trivia syntax, or an empty array if none is found.
+        /// A collection of <see cref="XmlElementSyntax"/> that represents the returns XML elements.
         /// </returns>
-        internal static DocumentationCommentTriviaSyntax[] GetDocumentationCommentTriviaSyntax(this SyntaxNode value, in SyntaxKind kind = SyntaxKind.SingleLineDocumentationCommentTrivia)
+        internal static IReadOnlyList<XmlElementSyntax> GetReturnsXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Returns);
+
+        /// <summary>
+        /// Gets all summary XML elements from documentation comment trivia syntax.
+        /// </summary>
+        /// <param name="value">
+        /// The documentation comment trivia syntax to get the summary XML elements from.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="XmlElementSyntax"/> that represents the summary XML elements.
+        /// </returns>
+        internal static IReadOnlyList<XmlElementSyntax> GetSummaryXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Summary);
+
+        /// <summary>
+        /// Gets all summary XML nodes matching the specified tags from documentation comment trivia syntax.
+        /// </summary>
+        /// <param name="value">
+        /// The documentation comment trivia syntax to get the summary XML nodes from.
+        /// </param>
+        /// <param name="tags">
+        /// The set of tags to match within summary XML elements.
+        /// </param>
+        /// <returns>
+        /// A sequence that contains <see cref="XmlNodeSyntax"/> that represents the summary XML nodes matching the specified tags.
+        /// </returns>
+        internal static IEnumerable<XmlNodeSyntax> GetSummaryXmls(this DocumentationCommentTriviaSyntax value, ISet<string> tags)
         {
-            var token = value.FindStructuredTriviaToken();
+            var summaryXmls = value.GetSummaryXmls();
 
-            if (token.HasStructuredTrivia)
+            if (summaryXmls.Count is 0)
             {
-                var comment = token.GetDocumentationCommentTriviaSyntax(kind);
-
-                if (comment != null)
-                {
-                    return comment;
-                }
+                return Array.Empty<XmlNodeSyntax>();
             }
 
-            return Array.Empty<DocumentationCommentTriviaSyntax>();
+            return GetSummaryXmlsCore(summaryXmls, tags);
         }
 
         /// <summary>
@@ -612,85 +795,6 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets all example XML elements from documentation comment trivia syntax.
-        /// </summary>
-        /// <param name="value">
-        /// The documentation comment trivia syntax to get the example XML elements from.
-        /// </param>
-        /// <returns>
-        /// A collection of <see cref="XmlElementSyntax"/> that represents the example XML elements.
-        /// </returns>
-        internal static IReadOnlyList<XmlElementSyntax> GetExampleXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Example);
-
-        /// <summary>
-        /// Gets all exception XML elements from documentation comment trivia syntax.
-        /// </summary>
-        /// <param name="value">
-        /// The documentation comment trivia syntax to get the exception XML elements from.
-        /// </param>
-        /// <returns>
-        /// A collection of <see cref="XmlElementSyntax"/> that represents the exception XML elements.
-        /// </returns>
-        internal static IReadOnlyList<XmlElementSyntax> GetExceptionXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Exception);
-
-        /// <summary>
-        /// Gets all summary XML elements from documentation comment trivia syntax.
-        /// </summary>
-        /// <param name="value">
-        /// The documentation comment trivia syntax to get the summary XML elements from.
-        /// </param>
-        /// <returns>
-        /// A collection of <see cref="XmlElementSyntax"/> that represents the summary XML elements.
-        /// </returns>
-        internal static IReadOnlyList<XmlElementSyntax> GetSummaryXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Summary);
-
-        /// <summary>
-        /// Gets all summary XML nodes matching the specified tags from documentation comment trivia syntax.
-        /// </summary>
-        /// <param name="value">
-        /// The documentation comment trivia syntax to get the summary XML nodes from.
-        /// </param>
-        /// <param name="tags">
-        /// The set of tags to match within summary XML elements.
-        /// </param>
-        /// <returns>
-        /// A sequence that contains <see cref="XmlNodeSyntax"/> that represents the summary XML nodes matching the specified tags.
-        /// </returns>
-        internal static IEnumerable<XmlNodeSyntax> GetSummaryXmls(this DocumentationCommentTriviaSyntax value, ISet<string> tags)
-        {
-            var summaryXmls = value.GetSummaryXmls();
-
-            if (summaryXmls.Count is 0)
-            {
-                return Array.Empty<XmlNodeSyntax>();
-            }
-
-            return GetSummaryXmlsCore(summaryXmls, tags);
-        }
-
-        /// <summary>
-        /// Gets all remarks XML elements from documentation comment trivia syntax.
-        /// </summary>
-        /// <param name="value">
-        /// The documentation comment trivia syntax to get the remarks XML elements from.
-        /// </param>
-        /// <returns>
-        /// A collection of <see cref="XmlElementSyntax"/> that represents the remarks XML elements.
-        /// </returns>
-        internal static IReadOnlyList<XmlElementSyntax> GetRemarksXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Remarks);
-
-        /// <summary>
-        /// Gets all returns XML elements from documentation comment trivia syntax.
-        /// </summary>
-        /// <param name="value">
-        /// The documentation comment trivia syntax to get the returns XML elements from.
-        /// </param>
-        /// <returns>
-        /// A collection of <see cref="XmlElementSyntax"/> that represents the returns XML elements.
-        /// </returns>
-        internal static IReadOnlyList<XmlElementSyntax> GetReturnsXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Returns);
-
-        /// <summary>
         /// Gets all value XML elements from documentation comment trivia syntax.
         /// </summary>
         /// <param name="value">
@@ -773,126 +877,6 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets only those XML elements that are empty (have NO content) and match the given tag out of the documentation syntax.
-        /// </summary>
-        /// <param name="value">
-        /// The documentation syntax.
-        /// </param>
-        /// <param name="tag">
-        /// The tag of the XML elements to consider.
-        /// </param>
-        /// <returns>
-        /// A collection of <see cref="XmlEmptyElementSyntax"/> representing empty XML elements (with no content) that match the given tag.
-        /// </returns>
-        /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,ISet{string})"/>
-        /// <seealso cref="GetXmlSyntax(SyntaxNode,string)"/>
-        /// <seealso cref="GetXmlSyntax(SyntaxNode,ISet{string})"/>
-        internal static IEnumerable<XmlEmptyElementSyntax> GetEmptyXmlSyntax(this SyntaxNode value, string tag)
-        {
-            // we have to delve into the trivia to find the XML syntax nodes
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            foreach (var element in value.AllDescendantNodes<XmlEmptyElementSyntax>())
-            {
-                if (element.GetName() == tag)
-                {
-                    yield return element;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets only those XML elements that are empty (have NO content) and match the given tag out of the list of syntax nodes.
-        /// </summary>
-        /// <param name="value">
-        /// The starting point of the XML elements to consider.
-        /// </param>
-        /// <param name="tags">
-        /// The tags of the XML elements to consider.
-        /// </param>
-        /// <returns>
-        /// A collection of <see cref="XmlEmptyElementSyntax"/> representing empty XML elements (with no content) that match the given tag.
-        /// </returns>
-        /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,string)"/>
-        /// <seealso cref="GetXmlSyntax(SyntaxNode,string)"/>
-        /// <seealso cref="GetXmlSyntax(SyntaxNode,ISet{string})"/>
-        internal static IEnumerable<XmlEmptyElementSyntax> GetEmptyXmlSyntax(this SyntaxNode value, ISet<string> tags)
-        {
-            // we have to delve into the trivia to find the XML syntax nodes
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            foreach (var element in value.AllDescendantNodes<XmlEmptyElementSyntax>())
-            {
-                if (tags.Contains(element.GetName()))
-                {
-                    yield return element;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets the cref attribute from an XML element or empty element syntax node.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax node to get the cref attribute from.
-        /// </param>
-        /// <returns>
-        /// The <see cref="XmlCrefAttributeSyntax"/> representing the cref attribute, or <see langword="null"/> if no cref attribute is found or the syntax node is not an XML element.
-        /// </returns>
-        internal static XmlCrefAttributeSyntax GetCref(this SyntaxNode value)
-        {
-            switch (value)
-            {
-                case XmlEmptyElementSyntax e: return e.Attributes.GetCref();
-                case XmlElementSyntax e: return e.StartTag.Attributes.GetCref();
-                default: return null;
-            }
-        }
-
-        /// <summary>
-        /// Gets the cref attribute from an XML element or empty element syntax node with the specified name.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax node to get the cref attribute from.
-        /// </param>
-        /// <param name="name">
-        /// The name of the XML element to match.
-        /// </param>
-        /// <returns>
-        /// The <see cref="XmlCrefAttributeSyntax"/> representing the cref attribute, or <see langword="null"/> if no cref attribute is found or the syntax node does not match the specified name.
-        /// </returns>
-        internal static XmlCrefAttributeSyntax GetCref(this SyntaxNode value, string name)
-        {
-            switch (value)
-            {
-                case XmlEmptyElementSyntax e when e.GetName() == name: return e.Attributes.GetCref();
-                case XmlElementSyntax e when e.GetName() == name: return e.StartTag.Attributes.GetCref();
-                default: return null;
-            }
-        }
-
-        /// <summary>
-        /// Gets the type syntax from an XML cref attribute.
-        /// </summary>
-        /// <param name="value">
-        /// The XML cref attribute to get the type from.
-        /// </param>
-        /// <returns>
-        /// The <see cref="TypeSyntax"/> representing the type referenced by the cref attribute, or <see langword="null"/> if no type is found.
-        /// </returns>
-        internal static TypeSyntax GetCrefType(this XmlCrefAttributeSyntax value)
-        {
-            if (value != null)
-            {
-                switch (value.Cref)
-                {
-                    case NameMemberCrefSyntax n: return n.Name;
-                    case QualifiedCrefSyntax q when q.Member is NameMemberCrefSyntax n: return n.Name;
-                }
-            }
-
-            return null;
-        }
-
-        /// <summary>
         /// Determines whether a syntax node has comment trivia in either leading or trailing trivia.
         /// </summary>
         /// <param name="value">
@@ -902,6 +886,22 @@ namespace MiKoSolutions.Analyzers
         /// <see langword="true"/> if the syntax node has comment trivia in leading or trailing trivia; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool HasComment(this SyntaxNode value) => value.HasLeadingComment() || value.HasTrailingComment();
+
+        /// <summary>
+        /// Determines whether a syntax node has documentation comment trivia syntax.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to check for the documentation comment trivia.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the syntax node has documentation comment trivia syntax; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool HasDocumentationCommentTriviaSyntax(this SyntaxNode value)
+        {
+            var token = value.FindStructuredTriviaToken();
+
+            return token.HasStructuredTrivia && token.HasDocumentationCommentTriviaSyntax();
+        }
 
         /// <summary>
         /// Determines whether a syntax node has leading comment trivia.
@@ -926,43 +926,6 @@ namespace MiKoSolutions.Analyzers
         internal static bool HasTrailingComment(this SyntaxNode value) => value != null && value.GetTrailingTrivia().HasComment();
 
         /// <summary>
-        /// Determines whether a syntax node represents a wrong boolean tag.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax node to check for the wrong boolean tag.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the syntax node represents a wrong boolean tag; otherwise, <see langword="false"/>.
-        /// </returns>
-        /// <remarks>
-        /// Incorrect tags include <c>&lt;c&gt;</c>, <c>&lt;b&gt;</c>, <c>&lt;value&gt;</c> or <c>&lt;code&gt;</c> containing boolean values.
-        /// The correct format is <c>&lt;see langword="true"/&gt;</c> or <c>&lt;see langword="false"/&gt;</c>.
-        /// </remarks>
-        internal static bool IsWrongBooleanTag(this SyntaxNode value) => value.IsCBool() || value.IsBBool() || value.IsValueBool() || value.IsCodeBool();
-
-        /// <summary>
-        /// Determines whether a syntax node represents a wrong <see langword="null"/> tag.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax node to check for the wrong <see langword="null"/> tag.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the syntax node represents a wrong <see langword="null"/> tag; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool IsWrongNullTag(this SyntaxNode value) => value.IsCNull() || value.IsBNull() || value.IsValueNull() || value.IsCodeNull();
-
-        /// <summary>
-        /// Determines whether a syntax node represents a boolean tag.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax node to check for the boolean tag.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the syntax node represents a boolean tag; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool IsBooleanTag(this SyntaxNode value) => value.IsSeeLangwordBool() || value.IsWrongBooleanTag();
-
-        /// <summary>
         /// Determines whether a syntax node represents a <c>&lt;b&gt;true&lt;/b&gt;</c> or <c>&lt;b&gt;false&lt;/b&gt;</c> tag.
         /// </summary>
         /// <param name="value">
@@ -985,26 +948,15 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsBNull(this SyntaxNode value) => value.Is("b", Nulls);
 
         /// <summary>
-        /// Determines whether a syntax node represents a <c>&lt;c&gt;true&lt;/c&gt;</c> or <c>&lt;c&gt;false&lt;/c&gt;</c> tag.
+        /// Determines whether a syntax node represents a boolean tag.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check for the <c>&lt;c&gt;true&lt;/c&gt;</c> or <c>&lt;c&gt;false&lt;/c&gt;</c> tag.
+        /// The syntax node to check for the boolean tag.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the syntax node represents a <c>&lt;c&gt;true&lt;/c&gt;</c> or <c>&lt;c&gt;false&lt;/c&gt;</c> tag; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the syntax node represents a boolean tag; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool IsCBool(this SyntaxNode value) => value.Is(Constants.XmlTag.C, Booleans);
-
-        /// <summary>
-        /// Determines whether a syntax node represents a <c>&lt;c&gt;null&lt;/c&gt;</c> tag.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax node to check for the <c>&lt;c&gt;null&lt;/c&gt;</c> tag.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the syntax node represents a <c>&lt;c&gt;null&lt;/c&gt;</c> tag; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool IsCNull(this SyntaxNode value) => value.Is(Constants.XmlTag.C, Nulls);
+        internal static bool IsBooleanTag(this SyntaxNode value) => value.IsSeeLangwordBool() || value.IsWrongBooleanTag();
 
         /// <summary>
         /// Determines whether a syntax node represents a <c>&lt;c&gt;…&lt;/c&gt;</c> tag.
@@ -1029,26 +981,26 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsC(this XmlElementSyntax value) => value.GetName() is Constants.XmlTag.C;
 
         /// <summary>
-        /// Determines whether a syntax node represents a <c>&lt;code&gt;true&lt;/code&gt;</c> or <c>&lt;code&gt;false&lt;/code&gt;</c> tag.
+        /// Determines whether a syntax node represents a <c>&lt;c&gt;true&lt;/c&gt;</c> or <c>&lt;c&gt;false&lt;/c&gt;</c> tag.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check for the <c>&lt;code&gt;true&lt;/code&gt;</c> or <c>&lt;code&gt;false&lt;/code&gt;</c> tag.
+        /// The syntax node to check for the <c>&lt;c&gt;true&lt;/c&gt;</c> or <c>&lt;c&gt;false&lt;/c&gt;</c> tag.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the syntax node represents a <c>&lt;code&gt;true&lt;/code&gt;</c> or <c>&lt;code&gt;false&lt;/code&gt;</c> tag; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the syntax node represents a <c>&lt;c&gt;true&lt;/c&gt;</c> or <c>&lt;c&gt;false&lt;/c&gt;</c> tag; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool IsCodeBool(this SyntaxNode value) => value.Is(Constants.XmlTag.Code, Booleans);
+        internal static bool IsCBool(this SyntaxNode value) => value.Is(Constants.XmlTag.C, Booleans);
 
         /// <summary>
-        /// Determines whether a syntax node represents a <c>&lt;code&gt;null&lt;/code&gt;</c> tag.
+        /// Determines whether a syntax node represents a <c>&lt;c&gt;null&lt;/c&gt;</c> tag.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check for the <c>&lt;code&gt;null&lt;/code&gt;</c> tag.
+        /// The syntax node to check for the <c>&lt;c&gt;null&lt;/c&gt;</c> tag.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the syntax node represents a <c>&lt;code&gt;null&lt;/code&gt;</c> tag; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the syntax node represents a <c>&lt;c&gt;null&lt;/c&gt;</c> tag; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool IsCodeNull(this SyntaxNode value) => value.Is(Constants.XmlTag.Code, Nulls);
+        internal static bool IsCNull(this SyntaxNode value) => value.Is(Constants.XmlTag.C, Nulls);
 
         /// <summary>
         /// Determines whether a syntax node represents a <c>&lt;code&gt;…&lt;/code&gt;</c> tag.
@@ -1073,6 +1025,28 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsCode(this XmlElementSyntax value) => value.GetName() is Constants.XmlTag.Code;
 
         /// <summary>
+        /// Determines whether a syntax node represents a <c>&lt;code&gt;true&lt;/code&gt;</c> or <c>&lt;code&gt;false&lt;/code&gt;</c> tag.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to check for the <c>&lt;code&gt;true&lt;/code&gt;</c> or <c>&lt;code&gt;false&lt;/code&gt;</c> tag.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the syntax node represents a <c>&lt;code&gt;true&lt;/code&gt;</c> or <c>&lt;code&gt;false&lt;/code&gt;</c> tag; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsCodeBool(this SyntaxNode value) => value.Is(Constants.XmlTag.Code, Booleans);
+
+        /// <summary>
+        /// Determines whether a syntax node represents a <c>&lt;code&gt;null&lt;/code&gt;</c> tag.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to check for the <c>&lt;code&gt;null&lt;/code&gt;</c> tag.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the syntax node represents a <c>&lt;code&gt;null&lt;/code&gt;</c> tag; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsCodeNull(this SyntaxNode value) => value.Is(Constants.XmlTag.Code, Nulls);
+
+        /// <summary>
         /// Determines whether an XML element syntax represents an <c>&lt;exception… /&gt;</c> tag.
         /// </summary>
         /// <param name="value">
@@ -1082,20 +1056,6 @@ namespace MiKoSolutions.Analyzers
         /// <see langword="true"/> if the XML element syntax represents an <c>&lt;exception… /&gt;</c> tag; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool IsException(this XmlElementSyntax value) => value.GetName() is Constants.XmlTag.Exception;
-
-        /// <summary>
-        /// Determines whether an XML element syntax represents an exception comment for the specified exception type.
-        /// </summary>
-        /// <typeparam name="T">
-        /// The exception type to check for.
-        /// </typeparam>
-        /// <param name="value">
-        /// The XML element syntax to check for exception comment.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the XML element syntax represents an exception comment for the specified exception type; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool IsExceptionCommentFor<T>(this XmlElementSyntax value) where T : Exception => IsExceptionComment(value, typeof(T));
 
         /// <summary>
         /// Determines whether an XML element syntax represents an exception comment for the specified exception type.
@@ -1124,38 +1084,18 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether a syntax node represents XML text that contains only whitespace characters.
+        /// Determines whether an XML element syntax represents an exception comment for the specified exception type.
         /// </summary>
+        /// <typeparam name="T">
+        /// The exception type to check for.
+        /// </typeparam>
         /// <param name="value">
-        /// The syntax node to check for the whitespace-only XML text.
+        /// The XML element syntax to check for exception comment.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the syntax node represents XML text that contains only whitespace characters; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the XML element syntax represents an exception comment for the specified exception type; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool IsWhiteSpaceOnlyText(this SyntaxNode value) => value is XmlTextSyntax text && text.IsWhiteSpaceOnlyText();
-
-        /// <summary>
-        /// Determines whether an XML text syntax contains only whitespace characters.
-        /// </summary>
-        /// <param name="value">
-        /// The XML text syntax to check for whitespace-only content.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the XML text syntax contains only whitespace characters; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool IsWhiteSpaceOnlyText(this XmlTextSyntax value)
-        {
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            foreach (var text in value.GetTextWithoutTriviaLazy())
-            {
-                if (text.IsNullOrWhiteSpace() is false)
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
+        internal static bool IsExceptionCommentFor<T>(this XmlElementSyntax value) where T : Exception => IsExceptionComment(value, typeof(T));
 
         /// <summary>
         /// Determines whether a syntax node represents a <c>&lt;para/&gt;</c> XML tag.
@@ -1167,6 +1107,62 @@ namespace MiKoSolutions.Analyzers
         /// <see langword="true"/> if the syntax node represents a <c>&lt;para/&gt;</c> XML tag ; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool IsPara(this SyntaxNode value) => value.IsXmlTag(Constants.XmlTag.Para);
+
+        /// <summary>
+        /// Determines whether an XML empty element syntax represents a <c>&lt;see… /&gt;</c> tag with the specified attribute names.
+        /// </summary>
+        /// <param name="value">
+        /// The XML empty element syntax to check for <c>&lt;see… /&gt;</c> tag.
+        /// </param>
+        /// <param name="attributeNames">
+        /// The set of attribute names to match.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the XML empty element syntax represents a <c>&lt;see… /&gt;</c> tag with the specified attribute names; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsSee(this XmlEmptyElementSyntax value, HashSet<string> attributeNames) => value.IsEmpty(Constants.XmlTag.See, attributeNames);
+
+        /// <summary>
+        /// Determines whether an XML element syntax represents a <c>&lt;see… /&gt;</c> tag with the specified attribute names.
+        /// </summary>
+        /// <param name="value">
+        /// The XML element syntax to check for <c>&lt;see… /&gt;</c> tag.
+        /// </param>
+        /// <param name="attributeNames">
+        /// The set of attribute names to match.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the XML element syntax represents a <c>&lt;see… /&gt;</c> tag with the specified attribute names; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsSee(this XmlElementSyntax value, HashSet<string> attributeNames) => value.IsNonEmpty(Constants.XmlTag.See, attributeNames);
+
+        /// <summary>
+        /// Determines whether an XML empty element syntax represents a <c>&lt;seealso… /&gt;</c> tag with the specified attribute names.
+        /// </summary>
+        /// <param name="value">
+        /// The XML empty element syntax to check for <c>&lt;seealso… /&gt;</c> tag.
+        /// </param>
+        /// <param name="attributeNames">
+        /// The set of attribute names to match.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the XML empty element syntax represents a <c>&lt;seealso… /&gt;</c> tag with the specified attribute names; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsSeeAlso(this XmlEmptyElementSyntax value, HashSet<string> attributeNames) => value.IsEmpty(Constants.XmlTag.SeeAlso, attributeNames);
+
+        /// <summary>
+        /// Determines whether an XML element syntax represents a <c>&lt;seealso… /&gt;</c> tag with the specified attribute names.
+        /// </summary>
+        /// <param name="value">
+        /// The XML element syntax to check for <c>&lt;seealso… /&gt;</c> tag.
+        /// </param>
+        /// <param name="attributeNames">
+        /// The set of attribute names to match.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the XML element syntax represents a <c>&lt;seealso… /&gt;</c> tag with the specified attribute names; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsSeeAlso(this XmlElementSyntax value, HashSet<string> attributeNames) => value.IsNonEmpty(Constants.XmlTag.SeeAlso, attributeNames);
 
         /// <summary>
         /// Determines whether a syntax node represents a <c>&lt;see langword… /&gt;</c> or an (invalid) <c>&lt;see langref… /&gt;</c> XML tag.
@@ -1240,62 +1236,6 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether an XML empty element syntax represents a <c>&lt;see… /&gt;</c> tag with the specified attribute names.
-        /// </summary>
-        /// <param name="value">
-        /// The XML empty element syntax to check for <c>&lt;see… /&gt;</c> tag.
-        /// </param>
-        /// <param name="attributeNames">
-        /// The set of attribute names to match.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the XML empty element syntax represents a <c>&lt;see… /&gt;</c> tag with the specified attribute names; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool IsSee(this XmlEmptyElementSyntax value, HashSet<string> attributeNames) => value.IsEmpty(Constants.XmlTag.See, attributeNames);
-
-        /// <summary>
-        /// Determines whether an XML element syntax represents a <c>&lt;see… /&gt;</c> tag with the specified attribute names.
-        /// </summary>
-        /// <param name="value">
-        /// The XML element syntax to check for <c>&lt;see… /&gt;</c> tag.
-        /// </param>
-        /// <param name="attributeNames">
-        /// The set of attribute names to match.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the XML element syntax represents a <c>&lt;see… /&gt;</c> tag with the specified attribute names; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool IsSee(this XmlElementSyntax value, HashSet<string> attributeNames) => value.IsNonEmpty(Constants.XmlTag.See, attributeNames);
-
-        /// <summary>
-        /// Determines whether an XML empty element syntax represents a <c>&lt;seealso… /&gt;</c> tag with the specified attribute names.
-        /// </summary>
-        /// <param name="value">
-        /// The XML empty element syntax to check for <c>&lt;seealso… /&gt;</c> tag.
-        /// </param>
-        /// <param name="attributeNames">
-        /// The set of attribute names to match.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the XML empty element syntax represents a <c>&lt;seealso… /&gt;</c> tag with the specified attribute names; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool IsSeeAlso(this XmlEmptyElementSyntax value, HashSet<string> attributeNames) => value.IsEmpty(Constants.XmlTag.SeeAlso, attributeNames);
-
-        /// <summary>
-        /// Determines whether an XML element syntax represents a <c>&lt;seealso… /&gt;</c> tag with the specified attribute names.
-        /// </summary>
-        /// <param name="value">
-        /// The XML element syntax to check for <c>&lt;seealso… /&gt;</c> tag.
-        /// </param>
-        /// <param name="attributeNames">
-        /// The set of attribute names to match.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the XML element syntax represents a <c>&lt;seealso… /&gt;</c> tag with the specified attribute names; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool IsSeeAlso(this XmlElementSyntax value, HashSet<string> attributeNames) => value.IsNonEmpty(Constants.XmlTag.SeeAlso, attributeNames);
-
-        /// <summary>
         /// Determines whether a syntax node represents a <c>&lt;value&gt;true&lt;/value&gt;</c> or <c>&lt;value&gt;false&lt;/value&gt;</c> tag.
         /// </summary>
         /// <param name="value">
@@ -1316,6 +1256,66 @@ namespace MiKoSolutions.Analyzers
         /// <see langword="true"/> if the syntax node represents a <c>&lt;value&gt;null&lt;/value&gt;</c> tag; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool IsValueNull(this SyntaxNode value) => value.Is(Constants.XmlTag.Value, Nulls);
+
+        /// <summary>
+        /// Determines whether a syntax node represents XML text that contains only whitespace characters.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to check for the whitespace-only XML text.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the syntax node represents XML text that contains only whitespace characters; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsWhiteSpaceOnlyText(this SyntaxNode value) => value is XmlTextSyntax text && text.IsWhiteSpaceOnlyText();
+
+        /// <summary>
+        /// Determines whether an XML text syntax contains only whitespace characters.
+        /// </summary>
+        /// <param name="value">
+        /// The XML text syntax to check for whitespace-only content.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the XML text syntax contains only whitespace characters; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsWhiteSpaceOnlyText(this XmlTextSyntax value)
+        {
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var text in value.GetTextWithoutTriviaLazy())
+            {
+                if (text.IsNullOrWhiteSpace() is false)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Determines whether a syntax node represents a wrong boolean tag.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to check for the wrong boolean tag.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the syntax node represents a wrong boolean tag; otherwise, <see langword="false"/>.
+        /// </returns>
+        /// <remarks>
+        /// Incorrect tags include <c>&lt;c&gt;</c>, <c>&lt;b&gt;</c>, <c>&lt;value&gt;</c> or <c>&lt;code&gt;</c> containing boolean values.
+        /// The correct format is <c>&lt;see langword="true"/&gt;</c> or <c>&lt;see langword="false"/&gt;</c>.
+        /// </remarks>
+        internal static bool IsWrongBooleanTag(this SyntaxNode value) => value.IsCBool() || value.IsBBool() || value.IsValueBool() || value.IsCodeBool();
+
+        /// <summary>
+        /// Determines whether a syntax node represents a wrong <see langword="null"/> tag.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to check for the wrong <see langword="null"/> tag.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the syntax node represents a wrong <see langword="null"/> tag; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsWrongNullTag(this SyntaxNode value) => value.IsCNull() || value.IsBNull() || value.IsValueNull() || value.IsCodeNull();
 
         /// <summary>
         /// Determines whether a syntax node represents an XML element or empty element.
@@ -1362,6 +1362,64 @@ namespace MiKoSolutions.Analyzers
                 default:
                     return false;
             }
+        }
+
+        /// <summary>
+        /// Creates a new XML text syntax from the specified XML text syntax with the first occurrence of a specified phrase replaced with a replacement <see cref="string"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The XML text syntax to replace text in.
+        /// </param>
+        /// <param name="phrase">
+        /// The phrase to search for and replace.
+        /// </param>
+        /// <param name="replacement">
+        /// The <see cref="string"/> to replace the first occurrence of the phrase with.
+        /// </param>
+        /// <returns>
+        /// A new <see cref="XmlTextSyntax"/> with the first occurrence of the phrase replaced with the replacement <see cref="string"/>, or the original syntax if no replacement was made.
+        /// </returns>
+        internal static XmlTextSyntax ReplaceFirstText(this XmlTextSyntax value, string phrase, string replacement)
+        {
+            var textTokens = value.TextTokens;
+
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var textTokensCount = textTokens.Count;
+
+            if (textTokensCount is 0)
+            {
+                return value;
+            }
+
+            var map = new Dictionary<SyntaxToken, SyntaxToken>(1);
+
+            for (var i = 0; i < textTokensCount; i++)
+            {
+                var token = textTokens[i];
+
+                if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                {
+                    continue;
+                }
+
+                var text = token.ValueText;
+
+                var index = text.IndexOf(phrase, StringComparison.Ordinal);
+
+                if (index > -1)
+                {
+                    var result = text.AsSpan(0, index).ConcatenatedWith(replacement, text.AsSpan(index + phrase.Length));
+
+                    map[token] = token.WithText(result);
+                }
+            }
+
+            if (map.Count is 0)
+            {
+                return value;
+            }
+
+            return value.ReplaceTokens(map.Keys, (original, rewritten) => map[original]);
         }
 
         /// <summary>
@@ -1494,64 +1552,6 @@ namespace MiKoSolutions.Analyzers
                 else
                 {
                     StringBuilderCache.Release(result);
-                }
-            }
-
-            if (map.Count is 0)
-            {
-                return value;
-            }
-
-            return value.ReplaceTokens(map.Keys, (original, rewritten) => map[original]);
-        }
-
-        /// <summary>
-        /// Creates a new XML text syntax from the specified XML text syntax with the first occurrence of a specified phrase replaced with a replacement <see cref="string"/>.
-        /// </summary>
-        /// <param name="value">
-        /// The XML text syntax to replace text in.
-        /// </param>
-        /// <param name="phrase">
-        /// The phrase to search for and replace.
-        /// </param>
-        /// <param name="replacement">
-        /// The <see cref="string"/> to replace the first occurrence of the phrase with.
-        /// </param>
-        /// <returns>
-        /// A new <see cref="XmlTextSyntax"/> with the first occurrence of the phrase replaced with the replacement <see cref="string"/>, or the original syntax if no replacement was made.
-        /// </returns>
-        internal static XmlTextSyntax ReplaceFirstText(this XmlTextSyntax value, string phrase, string replacement)
-        {
-            var textTokens = value.TextTokens;
-
-            // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var textTokensCount = textTokens.Count;
-
-            if (textTokensCount is 0)
-            {
-                return value;
-            }
-
-            var map = new Dictionary<SyntaxToken, SyntaxToken>(1);
-
-            for (var i = 0; i < textTokensCount; i++)
-            {
-                var token = textTokens[i];
-
-                if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
-                {
-                    continue;
-                }
-
-                var text = token.ValueText;
-
-                var index = text.IndexOf(phrase, StringComparison.Ordinal);
-
-                if (index > -1)
-                {
-                    var result = text.AsSpan(0, index).ConcatenatedWith(replacement, text.AsSpan(index + phrase.Length));
-
-                    map[token] = token.WithText(result);
                 }
             }
 
@@ -1755,6 +1755,81 @@ namespace MiKoSolutions.Analyzers
                 }
 
                 return newTokens.AsXmlText();
+            }
+
+            return value;
+        }
+
+        /// <summary>
+        /// Creates a new syntax list from the specified XML element's content without the specified starting texts.
+        /// </summary>
+        /// <param name="value">
+        /// The XML element syntax to remove starting texts from.
+        /// </param>
+        /// <param name="startTexts">
+        /// The collection of texts to check for and remove from the beginning of the XML element's content.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="XmlNodeSyntax"/> with the first matching starting text removed, or the original syntax list if none of the texts were found at the beginning.
+        /// </returns>
+        internal static SyntaxList<XmlNodeSyntax> WithoutStartText(this XmlElementSyntax value, in ReadOnlySpan<string> startTexts) => value.Content.WithoutStartText(startTexts);
+
+        /// <summary>
+        /// Creates a new XML text syntax from the specified XML text syntax without the specified starting texts.
+        /// </summary>
+        /// <param name="value">
+        /// The XML text syntax to remove starting texts from.
+        /// </param>
+        /// <param name="startTexts">
+        /// The collection of texts to check for and remove from the beginning of the XML text syntax.
+        /// </param>
+        /// <returns>
+        /// A new <see cref="XmlTextSyntax"/> with the first matching starting text removed (after trimming leading whitespace), or the original syntax if none of the texts were found at the beginning.
+        /// </returns>
+        internal static XmlTextSyntax WithoutStartText(this XmlTextSyntax value, in ReadOnlySpan<string> startTexts)
+        {
+            if (startTexts.Length is 0)
+            {
+                return value;
+            }
+
+            var tokens = value.TextTokens;
+
+            if (tokens.Count is 0)
+            {
+                return value;
+            }
+
+            var textTokens = tokens.ToList();
+
+            for (int i = 0, count = textTokens.Count; i < count; i++)
+            {
+                var token = textTokens[i];
+
+                // ignore trivia such as " /// "
+                if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                {
+                    continue;
+                }
+
+                var originalText = token.Text.AsSpan().TrimStart();
+
+                if (originalText.IsNullOrWhiteSpace())
+                {
+                    continue;
+                }
+
+                foreach (var startText in startTexts)
+                {
+                    if (originalText.StartsWith(startText))
+                    {
+                        var modifiedText = originalText.Slice(startText.Length);
+
+                        textTokens[i] = token.WithText(modifiedText);
+
+                        return textTokens.AsXmlText();
+                    }
+                }
             }
 
             return value;
@@ -2048,81 +2123,6 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new syntax list from the specified XML element's content without the specified starting texts.
-        /// </summary>
-        /// <param name="value">
-        /// The XML element syntax to remove starting texts from.
-        /// </param>
-        /// <param name="startTexts">
-        /// The collection of texts to check for and remove from the beginning of the XML element's content.
-        /// </param>
-        /// <returns>
-        /// A collection of <see cref="XmlNodeSyntax"/> with the first matching starting text removed, or the original syntax list if none of the texts were found at the beginning.
-        /// </returns>
-        internal static SyntaxList<XmlNodeSyntax> WithoutStartText(this XmlElementSyntax value, in ReadOnlySpan<string> startTexts) => value.Content.WithoutStartText(startTexts);
-
-        /// <summary>
-        /// Creates a new XML text syntax from the specified XML text syntax without the specified starting texts.
-        /// </summary>
-        /// <param name="value">
-        /// The XML text syntax to remove starting texts from.
-        /// </param>
-        /// <param name="startTexts">
-        /// The collection of texts to check for and remove from the beginning of the XML text syntax.
-        /// </param>
-        /// <returns>
-        /// A new <see cref="XmlTextSyntax"/> with the first matching starting text removed (after trimming leading whitespace), or the original syntax if none of the texts were found at the beginning.
-        /// </returns>
-        internal static XmlTextSyntax WithoutStartText(this XmlTextSyntax value, in ReadOnlySpan<string> startTexts)
-        {
-            if (startTexts.Length is 0)
-            {
-                return value;
-            }
-
-            var tokens = value.TextTokens;
-
-            if (tokens.Count is 0)
-            {
-                return value;
-            }
-
-            var textTokens = tokens.ToList();
-
-            for (int i = 0, count = textTokens.Count; i < count; i++)
-            {
-                var token = textTokens[i];
-
-                // ignore trivia such as " /// "
-                if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
-                {
-                    continue;
-                }
-
-                var originalText = token.Text.AsSpan().TrimStart();
-
-                if (originalText.IsNullOrWhiteSpace())
-                {
-                    continue;
-                }
-
-                foreach (var startText in startTexts)
-                {
-                    if (originalText.StartsWith(startText))
-                    {
-                        var modifiedText = originalText.Slice(startText.Length);
-
-                        textTokens[i] = token.WithText(modifiedText);
-
-                        return textTokens.AsXmlText();
-                    }
-                }
-            }
-
-            return value;
-        }
-
-        /// <summary>
         /// Creates a new syntax list from the specified XML element's content with the starting text added or replaced and the first word adjusted according to the specified adjustment.
         /// </summary>
         /// <param name="value">
@@ -2232,6 +2232,58 @@ namespace MiKoSolutions.Analyzers
         /// A new syntax node with trailing XML comment trivia added.
         /// </returns>
         internal static T WithTrailingXmlComment<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(XmlCommentStart);
+
+        /// <summary>
+        /// Finds the first token with structured trivia in a syntax node's hierarchy.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to search for structured trivia token.
+        /// </param>
+        /// <returns>
+        /// A <see cref="SyntaxToken"/> that has structured trivia, or the default token if no such token is found.
+        /// </returns>
+        private static SyntaxToken FindStructuredTriviaToken(this SyntaxNode value)
+        {
+            if (value != null)
+            {
+                if (value.HasStructuredTrivia)
+                {
+                    var children = value.ChildNodesAndTokens();
+
+                    var count = children.Count;
+
+                    if (count > 0)
+                    {
+                        for (var index = 0; index < count; index++)
+                        {
+                            var child = children[index];
+
+                            if (child.IsToken)
+                            {
+                                var childToken = child.AsToken();
+
+                                if (childToken.HasStructuredTrivia)
+                                {
+                                    return childToken;
+                                }
+
+                                // no structure, so maybe it is the first descendant token to use
+                                break;
+                            }
+                        }
+                    }
+
+                    var token = value.FirstDescendantToken();
+
+                    if (token.HasStructuredTrivia)
+                    {
+                        return token;
+                    }
+                }
+            }
+
+            return default;
+        }
 
         /// <summary>
         /// Gets all summary XML nodes matching the specified tags from a collection of summary XML elements.
@@ -2349,58 +2401,6 @@ namespace MiKoSolutions.Analyzers
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// Finds the first token with structured trivia in a syntax node's hierarchy.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax node to search for structured trivia token.
-        /// </param>
-        /// <returns>
-        /// A <see cref="SyntaxToken"/> that has structured trivia, or the default token if no such token is found.
-        /// </returns>
-        private static SyntaxToken FindStructuredTriviaToken(this SyntaxNode value)
-        {
-            if (value != null)
-            {
-                if (value.HasStructuredTrivia)
-                {
-                    var children = value.ChildNodesAndTokens();
-
-                    var count = children.Count;
-
-                    if (count > 0)
-                    {
-                        for (var index = 0; index < count; index++)
-                        {
-                            var child = children[index];
-
-                            if (child.IsToken)
-                            {
-                                var childToken = child.AsToken();
-
-                                if (childToken.HasStructuredTrivia)
-                                {
-                                    return childToken;
-                                }
-
-                                // no structure, so maybe it is the first descendant token to use
-                                break;
-                            }
-                        }
-                    }
-
-                    var token = value.FirstDescendantToken();
-
-                    if (token.HasStructuredTrivia)
-                    {
-                        return token;
-                    }
-                }
-            }
-
-            return default;
         }
     }
 }

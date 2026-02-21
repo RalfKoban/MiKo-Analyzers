@@ -1,4 +1,6 @@
 ﻿using System.Composition;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -15,6 +17,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => Resources.MiKo_2048_CodeFixTitle.FormatWith(Phrase);
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => CommentStartingWith((XmlElementSyntax)syntax, Phrase);
+        protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
+        {
+            SyntaxNode updatedSyntax = GetUpdatedSyntax((XmlElementSyntax)syntax);
+
+            return Task.FromResult(updatedSyntax);
+        }
+
+        private static XmlElementSyntax GetUpdatedSyntax(XmlElementSyntax syntax) => CommentStartingWith(syntax, Phrase);
     }
 }

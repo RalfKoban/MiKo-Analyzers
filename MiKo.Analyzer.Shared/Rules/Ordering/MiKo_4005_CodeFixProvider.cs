@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -13,26 +15,26 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
     {
         public override string FixableDiagnosticId => "MiKo_4005";
 
-        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic issue)
+        protected override async Task<SyntaxNode> GetUpdatedTypeSyntaxAsync(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic issue, CancellationToken cancellationToken)
         {
             switch (typeSyntax)
             {
-                case ClassDeclarationSyntax c: return c.WithBaseList(UpdatedBaseList(document, c.BaseList, c.Identifier));
-                case RecordDeclarationSyntax r: return r.WithBaseList(UpdatedBaseList(document, r.BaseList, r.Identifier));
-                case StructDeclarationSyntax s: return s.WithBaseList(UpdatedBaseList(document, s.BaseList, s.Identifier));
+                case ClassDeclarationSyntax c: return c.WithBaseList(await UpdatedBaseListAsync(c.BaseList, c.Identifier, document, cancellationToken).ConfigureAwait(false));
+                case RecordDeclarationSyntax r: return r.WithBaseList(await UpdatedBaseListAsync(r.BaseList, r.Identifier, document, cancellationToken).ConfigureAwait(false));
+                case StructDeclarationSyntax s: return s.WithBaseList(await UpdatedBaseListAsync(s.BaseList, s.Identifier, document, cancellationToken).ConfigureAwait(false));
 
                 default:
                     return typeSyntax;
             }
         }
 
-        private static BaseListSyntax UpdatedBaseList(Document document, BaseListSyntax baseList, in SyntaxToken identifier)
+        private static async Task<BaseListSyntax> UpdatedBaseListAsync(BaseListSyntax baseList, SyntaxToken identifier, Document document, CancellationToken cancellationToken)
         {
             var interfaceName = "I" + identifier.ValueText.GetNameOnlyPart();
 
             var baseType = baseList.Types.First();
 
-            var type = baseType.GetTypeSymbol(document);
+            var type = await baseType.GetTypeSymbolAsync(document, cancellationToken).ConfigureAwait(false);
 
             var types = new List<BaseTypeSyntax>();
 

@@ -22,5 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             context.RegisterSyntaxNodeAction(AnalyzeVariableDesignation, SyntaxKind.SingleVariableDesignation);
             context.RegisterSyntaxNodeAction(AnalyzeVariableDesignation, SyntaxKind.ParenthesizedVariableDesignation);
         }
+
+        protected override bool ShallAnalyze(ITypeSymbol symbol) => base.ShallAnalyze(symbol) || symbol?.TypeKind is TypeKind.Array; // accept analysis of arrays
     }
 }
