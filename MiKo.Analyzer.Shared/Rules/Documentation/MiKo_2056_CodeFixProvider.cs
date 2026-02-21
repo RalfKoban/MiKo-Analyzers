@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Composition;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -12,7 +14,28 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => "MiKo_2056";
 
-        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic issue)
+        protected override Task<DocumentationCommentTriviaSyntax> GetUpdatedSyntaxAsync(DocumentationCommentTriviaSyntax syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
+        {
+            var updatedSyntax = GetUpdatedSyntax(syntax, issue);
+
+            return Task.FromResult(updatedSyntax);
+        }
+
+        protected override DocumentationCommentTriviaSyntax FixExceptionComment(SyntaxNode syntax, XmlElementSyntax exception, DocumentationCommentTriviaSyntax comment, Diagnostic issue)
+        {
+            if (exception.IsExceptionCommentFor<ObjectDisposedException>())
+            {
+                var phrase = GetPhraseProposal(issue);
+
+                var exceptionComment = CommentEndingWith(exception, phrase);
+
+                return comment.ReplaceNode(exception, exceptionComment);
+            }
+
+            return null;
+        }
+
+        private DocumentationCommentTriviaSyntax GetUpdatedSyntax(DocumentationCommentTriviaSyntax syntax, Diagnostic issue)
         {
             foreach (var ancestor in syntax.AncestorsAndSelf())
             {
@@ -25,20 +48,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         return FixComment(ancestor, syntax, issue);
                     }
                 }
-            }
-
-            return null;
-        }
-
-        protected override DocumentationCommentTriviaSyntax FixExceptionComment(SyntaxNode syntax, XmlElementSyntax exception, DocumentationCommentTriviaSyntax comment, Diagnostic issue)
-        {
-            if (exception.IsExceptionCommentFor<ObjectDisposedException>())
-            {
-                var phrase = GetPhraseProposal(issue);
-
-                var exceptionComment = CommentEndingWith(exception, phrase);
-
-                return comment.ReplaceNode(exception, exceptionComment);
             }
 
             return null;

@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -27,7 +29,58 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return null;
         }
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
+        {
+            var updatedSyntax = GetUpdatedSyntax(syntax, issue);
+
+            return Task.FromResult(updatedSyntax);
+        }
+
+        protected override async Task<SyntaxNode> GetUpdatedSyntaxRootAsync(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue, CancellationToken cancellationToken)
+        {
+            if (syntax is XmlEmptyElementSyntax element)
+            {
+                var properties = issue.Properties;
+
+                var nodes = new List<SyntaxNode> { syntax };
+
+                if (properties.ContainsKey(Constants.AnalyzerCodeFixSharedData.AddSpaceBefore))
+                {
+                    nodes.Insert(0, NewLineXmlText());
+                }
+
+                if (properties.ContainsKey(Constants.AnalyzerCodeFixSharedData.AddSpaceAfter))
+                {
+                    nodes.Add(NewLineXmlText());
+                }
+
+                return root.ReplaceNode(element, nodes);
+            }
+
+            return await base.GetUpdatedSyntaxRootAsync(document, root, syntax, annotationOfSyntax, issue, cancellationToken).ConfigureAwait(false);
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(XmlElementStartTagSyntax syntax)
+        {
+            if (syntax.Parent is XmlElementSyntax element)
+            {
+                return element.WithContent(element.Content.Insert(0, NewLineXmlText()));
+            }
+
+            return syntax;
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(XmlElementEndTagSyntax syntax)
+        {
+            if (syntax.Parent is XmlElementSyntax element)
+            {
+                return element.WithContent(element.Content.Add(NewLineXmlText()));
+            }
+
+            return syntax;
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax, Diagnostic issue)
         {
             switch (syntax)
             {
@@ -54,51 +107,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            return base.GetUpdatedSyntax(document, syntax, issue);
-        }
-
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
-        {
-            if (syntax is XmlEmptyElementSyntax element)
-            {
-                var properties = issue.Properties;
-
-                var nodes = new List<SyntaxNode> { syntax };
-
-                if (properties.ContainsKey(Constants.AnalyzerCodeFixSharedData.AddSpaceBefore))
-                {
-                    nodes.Insert(0, NewLineXmlText());
-                }
-
-                if (properties.ContainsKey(Constants.AnalyzerCodeFixSharedData.AddSpaceAfter))
-                {
-                    nodes.Add(NewLineXmlText());
-                }
-
-                return root.ReplaceNode(element, nodes);
-            }
-
-            return base.GetUpdatedSyntaxRoot(document, root, syntax, annotationOfSyntax, issue);
-        }
-
-        private static SyntaxNode GetUpdatedSyntax(XmlElementStartTagSyntax syntax)
-        {
-            if (syntax.Parent is XmlElementSyntax element)
-            {
-                return element.WithContent(element.Content.Insert(0, NewLineXmlText()));
-            }
-
-            return syntax;
-        }
-
-        private static SyntaxNode GetUpdatedSyntax(XmlElementEndTagSyntax syntax)
-        {
-            if (syntax.Parent is XmlElementSyntax element)
-            {
-                return element.WithContent(element.Content.Add(NewLineXmlText()));
-            }
-
-            return syntax;
+            return null;
         }
     }
 }

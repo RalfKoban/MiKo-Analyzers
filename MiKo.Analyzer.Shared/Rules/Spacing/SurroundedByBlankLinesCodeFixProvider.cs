@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -22,7 +24,14 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return null;
         }
 
-        protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected sealed override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
+        {
+            var updatedSyntax = GetUpdatedSyntax(syntax, issue);
+
+            return Task.FromResult(updatedSyntax);
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax, Diagnostic issue)
         {
             var result = syntax;
 

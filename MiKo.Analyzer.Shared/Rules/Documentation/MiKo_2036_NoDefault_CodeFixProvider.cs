@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -16,7 +17,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool IsApplicable(in ImmutableArray<Diagnostic> issues) => issues.Any();
 
-        protected override IEnumerable<XmlNodeSyntax> GetDefaultComment(Document document, TypeSyntax returnType)
+        protected override Task<XmlNodeSyntax[]> GetDefaultCommentAsync(TypeSyntax returnType, Document document, CancellationToken cancellationToken)
+        {
+            var defaultComment = GetDefaultComment();
+
+            return Task.FromResult(defaultComment);
+        }
+
+        private static XmlNodeSyntax[] GetDefaultComment()
         {
             return new XmlNodeSyntax[] { XmlText(Constants.Comments.NoDefaultPhrase) };
         }

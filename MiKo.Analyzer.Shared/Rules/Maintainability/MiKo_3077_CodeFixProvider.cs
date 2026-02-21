@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -16,9 +18,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<PropertyDeclarationSyntax>().FirstOrDefault();
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => syntax;
+        protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(syntax);
+        }
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
+        protected override async Task<SyntaxNode> GetUpdatedSyntaxRootAsync(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue, CancellationToken cancellationToken)
         {
             var propertySyntax = (PropertyDeclarationSyntax)syntax;
 
@@ -28,7 +33,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (accessors?.Count is 2 && accessors.Value[0].Body is null && accessors.Value[0].ExpressionBody is null && accessors.Value[1].Body is null && accessors.Value[1].ExpressionBody is null)
             {
                 // append a semicolon to the end
-                var initializer = CreateInitializer(document, propertySyntax.Type);
+                var initializer = await CreateInitializerAsync(propertySyntax.Type, document, cancellationToken).ConfigureAwait(false);
+
                 var updatedNode = propertySyntax.WithInitializer(initializer).WithSemicolonToken();
 
                 return root.ReplaceNode(propertySyntax, updatedNode);
@@ -51,7 +57,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         {
                             if (variable.GetName() == identifierName)
                             {
-                                var initializer = CreateInitializer(document, declaration.Type);
+                                var initializer = await CreateInitializerAsync(declaration.Type, document, cancellationToken).ConfigureAwait(false);
+
                                 var updatedNode = variable.WithInitializer(initializer);
 
                                 return root.ReplaceNode(variable, updatedNode);
@@ -64,9 +71,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return root;
         }
 
-        private static EqualsValueClauseSyntax CreateInitializer(Document document, TypeSyntax typeSyntax)
+        private static async Task<EqualsValueClauseSyntax> CreateInitializerAsync(TypeSyntax typeSyntax, Document document, CancellationToken cancellationToken)
         {
-            var type = typeSyntax.GetTypeSymbol(document);
+            var type = await typeSyntax.GetTypeSymbolAsync(document, cancellationToken).ConfigureAwait(false);
 
             var memberAccess = Member(type.Name, type.GetFields()[0].Name);
 

@@ -26,7 +26,7 @@ namespace Bla
 ");
 
         [Test] // currently, we do not know how to rename such variable 'reference'
-        public void No_issue_is_reported_for_variable_named_reference() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_typed_variable_named_reference() => No_issue_is_reported_for(@"
 namespace Bla
 {
     public class TestMe
@@ -34,6 +34,48 @@ namespace Bla
         private void DoSomething()
         {
             int reference = 42;
+        }
+    }
+}
+");
+
+        [Test] // currently, we do not know how to rename such variable 'reference'
+        public void No_issue_is_reported_for_var_variable_named_reference() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        private void DoSomething()
+        {
+            var reference = 42;
+        }
+    }
+}
+");
+
+        [Test] // currently, we do not know how to rename such variable 'references'
+        public void No_issue_is_reported_for_typed_variable_named_references() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        private void DoSomething()
+        {
+            int[] references = [42, 0815];
+        }
+    }
+}
+");
+
+        [Test] // currently, we do not know how to rename such variable 'references'
+        public void No_issue_is_reported_for_var_variable_named_references() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        private void DoSomething()
+        {
+            var references = new[] { 42, 0815 };
         }
     }
 }

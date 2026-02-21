@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -108,7 +110,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return GetUpdatedSyntax(comment, FirstWordAdjustment.StartLowerCase);
         }
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => GetUpdatedSyntax((XmlElementSyntax)syntax);
+        protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
+        {
+            var updatedSyntax = GetUpdatedSyntax((XmlElementSyntax)syntax);
+
+            return Task.FromResult(updatedSyntax);
+        }
 
         private static XmlElementSyntax GetUpdatedSyntax(XmlElementSyntax comment, in FirstWordAdjustment startAdjustment)
         {
@@ -775,6 +782,36 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new Pair("The helper inferface for", "Supports");
             yield return new Pair("The helper Interface for", "Supports");
             yield return new Pair("The helper interface for", "Supports");
+
+            // services
+            yield return new Pair("A service ", "Represents a service ");
+            yield return new Pair("A Service ", "Represents a service ");
+            yield return new Pair("A service implementation ", "Represents a service ");
+            yield return new Pair("A Service implementation ", "Represents a service ");
+            yield return new Pair("A service implementation used ", "Represents a service ");
+            yield return new Pair("A Service implementation used ", "Represents a service ");
+            yield return new Pair("A service used ", "Represents a service ");
+            yield return new Pair("A Service used ", "Represents a service ");
+            yield return new Pair("Interface for a service ", "Represents a service ");
+            yield return new Pair("Interface for a service used ", "Represents a service ");
+            yield return new Pair("Interface for service ", "Represents a service ");
+            yield return new Pair("Interface for service used ", "Represents a service ");
+            yield return new Pair("Interface for services ", "Represents a service ");
+            yield return new Pair("Interface for services used ", "Represents a service ");
+            yield return new Pair("Interface for the service ", "Represents a service ");
+            yield return new Pair("Interface for the service used ", "Represents a service ");
+            yield return new Pair("Service ", "Represents a service ");
+            yield return new Pair("Service implementation ", "Represents a service ");
+            yield return new Pair("Service implementation used ", "Represents a service ");
+            yield return new Pair("Service used ", "Represents a service ");
+            yield return new Pair("The service ", "Represents a service ");
+            yield return new Pair("The Service ", "Represents a service ");
+            yield return new Pair("The service implementation ", "Represents a service ");
+            yield return new Pair("The Service implementation ", "Represents a service ");
+            yield return new Pair("The service implementation used ", "Represents a service ");
+            yield return new Pair("The Service implementation used ", "Represents a service ");
+            yield return new Pair("The service used ", "Represents a service ");
+            yield return new Pair("The Service used ", "Represents a service ");
 
             foreach (var phrase in CreatePhrases(verbs, thirdPersonVerbs, gerundVerbs))
             {

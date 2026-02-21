@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -36,9 +38,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ConditionalExpressionSyntax>().FirstOrDefault();
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => syntax;
+        protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(syntax);
+        }
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
+        protected override async Task<SyntaxNode> GetUpdatedSyntaxRootAsync(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue, CancellationToken cancellationToken)
         {
             // detect if we are an arrow
             if (syntax is ConditionalExpressionSyntax conditional)
@@ -46,9 +51,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 switch (conditional.Parent)
                 {
                     case ArrowExpressionClauseSyntax clause: return UpdateArrowExpressionClause(root, conditional, clause);
-                    case ArgumentSyntax argument: return UpdateArgument(document, root, conditional, argument);
-                    case AssignmentExpressionSyntax assignment: return UpdateAssignment(document, root, conditional, assignment);
-                    case EqualsValueClauseSyntax clause: return UpdateEqualsValueClause(document, root, conditional, clause);
+                    case ArgumentSyntax argument: return await UpdateArgumentAsync(root, conditional, argument, document, cancellationToken).ConfigureAwait(false);
+                    case AssignmentExpressionSyntax assignment: return await UpdateAssignmentAsync(root, conditional, assignment, document, cancellationToken).ConfigureAwait(false);
+                    case EqualsValueClauseSyntax clause: return await UpdateEqualsValueClauseAsync(root, conditional, clause, document, cancellationToken).ConfigureAwait(false);
                     case ParenthesizedExpressionSyntax parenthesized: return UpdateParenthesized(root, conditional, parenthesized);
                     case ReturnStatementSyntax statement: return UpdateReturn(root, conditional, statement);
                     case ThrowStatementSyntax statement: return UpdateThrow(root, conditional, statement);
@@ -58,11 +63,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return root;
         }
 
-        private static SyntaxNode UpdateArgument(Document document, SyntaxNode root, ConditionalExpressionSyntax conditional, ArgumentSyntax argument)
+        private static async Task<SyntaxNode> UpdateArgumentAsync(SyntaxNode root, ConditionalExpressionSyntax conditional, ArgumentSyntax argument, Document document, CancellationToken cancellationToken)
         {
             if (argument.Parent is ArgumentListSyntax argumentList && argumentList.Parent is InvocationExpressionSyntax invocation)
             {
-                var symbol = invocation.GetSymbol(document);
+                var symbol = await invocation.GetSymbolAsync(document, cancellationToken).ConfigureAwait(false);
 
                 if (symbol is IMethodSymbol methodSymbol)
                 {
@@ -149,7 +154,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return root.ReplaceNode(accessor, updatedAccessor);
         }
 
-        private static SyntaxNode UpdateAssignment(Document document, SyntaxNode root, ConditionalExpressionSyntax conditional, AssignmentExpressionSyntax assignment)
+        private static async Task<SyntaxNode> UpdateAssignmentAsync(SyntaxNode root, ConditionalExpressionSyntax conditional, AssignmentExpressionSyntax assignment, Document document, CancellationToken cancellationToken)
         {
             switch (assignment.Parent)
             {
@@ -157,17 +162,24 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return UpdateArrowExpressionClause(root, conditional, assignment, accessor);
 
                 case ExpressionStatementSyntax expression:
-                    return UpdateExpressionStatement(document, root, conditional, assignment, expression);
+                    return await UpdateExpressionStatementAsync(root, conditional, assignment, expression, document, cancellationToken).ConfigureAwait(false);
 
                 case InitializerExpressionSyntax initializer:
-                    return UpdateInitializer(document, root, conditional, assignment, initializer);
+                    return await UpdateInitializerAsync(root, conditional, assignment, initializer, document, cancellationToken).ConfigureAwait(false);
 
                 default:
                     return root;
             }
         }
 
-        private static SyntaxNode UpdateDeclarationExpression(Document document, SyntaxNode root, ConditionalExpressionSyntax conditional, AssignmentExpressionSyntax assignment, DeclarationExpressionSyntax declaration, ExpressionStatementSyntax expression)
+        private static async Task<SyntaxNode> UpdateDeclarationExpressionAsync(
+                                                                           SyntaxNode root,
+                                                                           ConditionalExpressionSyntax conditional,
+                                                                           AssignmentExpressionSyntax assignment,
+                                                                           DeclarationExpressionSyntax declaration,
+                                                                           ExpressionStatementSyntax expression,
+                                                                           Document document,
+                                                                           CancellationToken cancellationToken)
         {
             var designations = new List<SingleVariableDesignationSyntax>();
             CollectSingleVariableDesignations(declaration.Designation, designations);
@@ -177,7 +189,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var ifStatement = ConvertToIfStatement(conditional, trueCase => AssignmentStatement(updatedAssignment, trueCase), falseCase => AssignmentStatement(updatedAssignment, falseCase));
 
-            var updatedNodes = new List<SyntaxNode>(designations.Select(ConvertToLocalDeclarationStatement)) { ifStatement };
+            var updatedNodes = new List<SyntaxNode>();
+
+            foreach (var designation in designations)
+            {
+                var updated = await ConvertToLocalDeclarationStatementAsync(designation, declaration, document, cancellationToken).ConfigureAwait(false);
+
+                updatedNodes.Add(updated);
+            }
+
+            updatedNodes.Add(ifStatement);
 
             return root.ReplaceNode(expression, updatedNodes);
 
@@ -203,24 +224,24 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     }
                 }
             }
-
-            LocalDeclarationStatementSyntax ConvertToLocalDeclarationStatement(SingleVariableDesignationSyntax variable)
-            {
-                var typeSyntax = GetTypeSyntax(variable, document);
-
-                var updatedDeclarator = SyntaxFactory.VariableDeclarator(variable.Identifier).WithLeadingTriviaFrom(declaration);
-                var updatedDeclaration = SyntaxFactory.VariableDeclaration(typeSyntax, updatedDeclarator.ToSeparatedSyntaxList()).WithLeadingTriviaFrom(declaration);
-                var updatedLocalDeclaration = SyntaxFactory.LocalDeclarationStatement(updatedDeclaration).WithLeadingTriviaFrom(declaration);
-
-                return updatedLocalDeclaration;
-            }
         }
 
-        private static SyntaxNode UpdateEqualsValueClause(Document document, SyntaxNode root, ConditionalExpressionSyntax conditional, EqualsValueClauseSyntax clause)
+        private static async Task<LocalDeclarationStatementSyntax> ConvertToLocalDeclarationStatementAsync(SingleVariableDesignationSyntax variable, DeclarationExpressionSyntax declaration, Document document, CancellationToken cancellationToken)
+        {
+            var typeSyntax = await GetTypeSyntaxAsync(variable, document, cancellationToken).ConfigureAwait(false);
+
+            var updatedDeclarator = SyntaxFactory.VariableDeclarator(variable.Identifier).WithLeadingTriviaFrom(declaration);
+            var updatedDeclaration = SyntaxFactory.VariableDeclaration(typeSyntax, updatedDeclarator.ToSeparatedSyntaxList()).WithLeadingTriviaFrom(declaration);
+            var updatedLocalDeclaration = SyntaxFactory.LocalDeclarationStatement(updatedDeclaration).WithLeadingTriviaFrom(declaration);
+
+            return updatedLocalDeclaration;
+        }
+
+        private static async Task<SyntaxNode> UpdateEqualsValueClauseAsync(SyntaxNode root, ConditionalExpressionSyntax conditional, EqualsValueClauseSyntax clause, Document document, CancellationToken cancellationToken)
         {
             if (clause.Parent is VariableDeclaratorSyntax declarator && declarator.Parent is VariableDeclarationSyntax declaration && declaration.Parent is LocalDeclarationStatementSyntax localDeclaration)
             {
-                var typeSyntax = GetTypeSyntax(declaration, document);
+                var typeSyntax = await GetTypeSyntaxAsync(declaration, document, cancellationToken).ConfigureAwait(false);
 
                 var updatedDeclarator = SyntaxFactory.VariableDeclarator(declarator.Identifier).WithLeadingTriviaFrom(declarator);
                 var updatedDeclaration = SyntaxFactory.VariableDeclaration(typeSyntax, updatedDeclarator.ToSeparatedSyntaxList()).WithLeadingTriviaFrom(declaration);
@@ -234,11 +255,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return root;
         }
 
-        private static SyntaxNode UpdateExpressionStatement(Document document, SyntaxNode root, ConditionalExpressionSyntax conditional, AssignmentExpressionSyntax assignment, ExpressionStatementSyntax expression)
+        private static async Task<SyntaxNode> UpdateExpressionStatementAsync(
+                                                                         SyntaxNode root,
+                                                                         ConditionalExpressionSyntax conditional,
+                                                                         AssignmentExpressionSyntax assignment,
+                                                                         ExpressionStatementSyntax expression,
+                                                                         Document document,
+                                                                         CancellationToken cancellationToken)
         {
             if (assignment.Left is DeclarationExpressionSyntax declaration)
             {
-                return UpdateDeclarationExpression(document, root, conditional, assignment, declaration, expression);
+                return await UpdateDeclarationExpressionAsync(root, conditional, assignment, declaration, expression, document, cancellationToken).ConfigureAwait(false);
             }
 
             var ifStatement = ConvertToIfStatement(conditional, trueCase => AssignmentStatement(assignment, trueCase), falseCase => AssignmentStatement(assignment, falseCase));
@@ -246,11 +273,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return root.ReplaceNode(expression, ifStatement.WithTriviaFrom(expression));
         }
 
-        private static SyntaxNode UpdateInitializer(Document document, SyntaxNode root, ConditionalExpressionSyntax conditional, AssignmentExpressionSyntax assignment, InitializerExpressionSyntax initializer)
+        private static async Task<SyntaxNode> UpdateInitializerAsync(SyntaxNode root, ConditionalExpressionSyntax conditional, AssignmentExpressionSyntax assignment, InitializerExpressionSyntax initializer, Document document, CancellationToken cancellationToken)
         {
             var expression = assignment.Right;
 
-            var typeSyntax = GetTypeSyntax(expression.GetTypeSymbol(document));
+            var typeSymbol = await expression.GetTypeSymbolAsync(document, cancellationToken).ConfigureAwait(false);
+
+            var typeSyntax = GetTypeSyntax(typeSymbol);
             var variableName = assignment.Left.GetName().ToLowerCaseAt(0);
 
             var localDeclaration = LocalVariable(typeSyntax, variableName, out var declarator).WithLeadingTriviaFrom(initializer).WithLeadingEmptyLine();
@@ -434,13 +463,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return name.AsTypeSyntax();
         }
 
-        private static TypeSyntax GetTypeSyntax(VariableDeclarationSyntax declaration, Document document)
+        private static async Task<TypeSyntax> GetTypeSyntaxAsync(VariableDeclarationSyntax declaration, Document document, CancellationToken cancellationToken)
         {
             var declarationType = declaration.Type;
 
             if (declarationType is IdentifierNameSyntax identifier && identifier.Identifier.ValueText is "var")
             {
-                var updatedType = GetTypeSyntax(declarationType.GetTypeSymbol(document));
+                ITypeSymbol typeSymbol = await declarationType.GetTypeSymbolAsync(document, cancellationToken).ConfigureAwait(false);
+
+                var updatedType = GetTypeSyntax(typeSymbol);
 
                 return updatedType.WithTriviaFrom(declarationType);
             }
@@ -448,9 +479,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return declarationType;
         }
 
-        private static TypeSyntax GetTypeSyntax(VariableDesignationSyntax designation, Document document)
+        private static async Task<TypeSyntax> GetTypeSyntaxAsync(VariableDesignationSyntax designation, Document document, CancellationToken cancellationToken)
         {
-            var updatedType = GetTypeSyntax(designation.GetTypeSymbol(document));
+            var typeSymbol = await designation.GetTypeSymbolAsync(document, cancellationToken).ConfigureAwait(false);
+
+            var updatedType = GetTypeSyntax(typeSymbol);
 
             return updatedType.WithTriviaFrom(designation);
         }

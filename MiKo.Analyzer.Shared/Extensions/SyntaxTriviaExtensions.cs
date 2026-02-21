@@ -19,6 +19,30 @@ namespace MiKoSolutions.Analyzers
     internal static class SyntaxTriviaExtensions
     {
         /// <summary>
+        /// Gets the ending line number of a syntax trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia to get the ending line for.
+        /// </param>
+        /// <returns>
+        /// An integer representing the ending line number.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static int GetEndingLine(this in SyntaxTrivia value) => value.GetLocation().GetEndingLine();
+
+        /// <summary>
+        /// Gets the ending position of a syntax trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia to get the ending position for.
+        /// </param>
+        /// <returns>
+        /// A line position representing the ending position.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static LinePosition GetEndPosition(this in SyntaxTrivia value) => value.GetLocation().GetEndPosition();
+
+        /// <summary>
         /// Gets the line span information for a syntax trivia.
         /// </summary>
         /// <param name="value">
@@ -55,18 +79,6 @@ namespace MiKoSolutions.Analyzers
         internal static int GetStartingLine(this in SyntaxTrivia value) => value.GetLocation().GetStartingLine();
 
         /// <summary>
-        /// Gets the ending line number of a syntax trivia.
-        /// </summary>
-        /// <param name="value">
-        /// The trivia to get the ending line for.
-        /// </param>
-        /// <returns>
-        /// An integer representing the ending line number.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static int GetEndingLine(this in SyntaxTrivia value) => value.GetLocation().GetEndingLine();
-
-        /// <summary>
         /// Gets the starting position of a syntax trivia.
         /// </summary>
         /// <param name="value">
@@ -77,158 +89,6 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static LinePosition GetStartPosition(this in SyntaxTrivia value) => value.GetLocation().GetStartPosition();
-
-        /// <summary>
-        /// Gets the ending position of a syntax trivia.
-        /// </summary>
-        /// <param name="value">
-        /// The trivia to get the ending position for.
-        /// </param>
-        /// <returns>
-        /// A line position representing the ending position.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static LinePosition GetEndPosition(this in SyntaxTrivia value) => value.GetLocation().GetEndPosition();
-
-        /// <summary>
-        /// Determines whether the trivia is an end of line trivia.
-        /// </summary>
-        /// <param name="value">
-        /// The trivia to examine.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the trivia is an end of line trivia; otherwise, <see langword="false"/>.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsEndOfLine(this in SyntaxTrivia value) => value.IsKind(SyntaxKind.EndOfLineTrivia);
-
-        /// <summary>
-        /// Determines whether the trivia is a comment trivia.
-        /// </summary>
-        /// <param name="value">
-        /// The trivia to examine.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the trivia is a single line or multi-line comment; otherwise, <see langword="false"/>.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsComment(this in SyntaxTrivia value)
-        {
-            // we use 'RawKind' for performance reasons as most likely, we have single line comments
-            // (SyntaxKind.MultiLineCommentTrivia is 1 higher than SyntaxKind.SingleLineCommentTrivia, so we include both)
-            return (uint)(value.RawKind - (int)SyntaxKind.SingleLineCommentTrivia) <= 1;
-        }
-
-        /// <summary>
-        /// Determines whether the trivia is a multi-line comment.
-        /// </summary>
-        /// <param name="value">
-        /// The trivia to examine.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the trivia is a multi-line comment; otherwise, <see langword="false"/>.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsMultiLineComment(this in SyntaxTrivia value) => value.IsKind(SyntaxKind.MultiLineCommentTrivia);
-
-        /// <summary>
-        /// Determines whether the trivia is a single line comment.
-        /// </summary>
-        /// <param name="value">
-        /// The trivia to examine.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the trivia is a single line comment; otherwise, <see langword="false"/>.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsSingleLineComment(this in SyntaxTrivia value) => value.IsKind(SyntaxKind.SingleLineCommentTrivia);
-
-        /// <summary>
-        /// Determines whether the trivia spans multiple lines.
-        /// </summary>
-        /// <param name="value">
-        /// The trivia to examine.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the trivia spans multiple lines; otherwise, <see langword="false"/>.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsSpanningMultipleLines(this in SyntaxTrivia value) => value.Token.IsSpanningMultipleLines();
-
-        /// <summary>
-        /// Determines whether the trivia is a whitespace.
-        /// </summary>
-        /// <param name="value">
-        /// The trivia to examine.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the trivia is a whitespace; otherwise, <see langword="false"/>.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsWhiteSpace(this in SyntaxTrivia value) => value.IsKind(SyntaxKind.WhitespaceTrivia);
-
-        /// <summary>
-        /// Determines whether the trivia is of the specified syntax kind.
-        /// </summary>
-        /// <param name="value">
-        /// The trivia to examine.
-        /// </param>
-        /// <param name="kind">
-        /// One of the enumeration members that specifies the syntax kind to check for.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the trivia is of the specified kind; otherwise, <see langword="false"/>.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsKind(this in SyntaxTrivia value, in SyntaxKind kind) => value.RawKind == (int)kind;
-
-        /// <summary>
-        /// Determines whether the trivia is of the specified syntax kinds.
-        /// </summary>
-        /// <param name="value">
-        /// The trivia to examine.
-        /// </param>
-        /// <param name="kinds">
-        /// The set of syntax kinds to check for.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the trivia is of the specified kinds; otherwise, <see langword="false"/>.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsAnyKind(this in SyntaxTrivia value, ISet<SyntaxKind> kinds) => kinds.Contains(value.Kind());
-
-        /// <summary>
-        /// Determines whether the trivia is of the specified syntax kinds.
-        /// </summary>
-        /// <param name="value">
-        /// The trivia to examine.
-        /// </param>
-        /// <param name="kinds">
-        /// The span of syntax kinds to check for.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the trivia is of the specified kinds; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool IsAnyKind(this in SyntaxTrivia value, in ReadOnlySpan<SyntaxKind> kinds)
-        {
-            var valueKind = value.Kind();
-
-            // for performance reasons we use indexing instead of an enumerator
-            var length = kinds.Length;
-
-            if (length > 0)
-            {
-                for (var index = 0; index < length; index++)
-                {
-                    if (kinds[index] == valueKind)
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
 
         /// <summary>
         /// Gets XML text tokens from an XML element.
@@ -315,6 +175,146 @@ namespace MiKoSolutions.Analyzers
 
             return (IReadOnlyList<SyntaxToken>)result ?? Array.Empty<SyntaxToken>();
         }
+
+        /// <summary>
+        /// Determines whether the trivia is of the specified syntax kinds.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia to examine.
+        /// </param>
+        /// <param name="kinds">
+        /// The set of syntax kinds to check for.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the trivia is of the specified kinds; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool IsAnyKind(this in SyntaxTrivia value, ISet<SyntaxKind> kinds) => kinds.Contains(value.Kind());
+
+        /// <summary>
+        /// Determines whether the trivia is of the specified syntax kinds.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia to examine.
+        /// </param>
+        /// <param name="kinds">
+        /// The span of syntax kinds to check for.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the trivia is of the specified kinds; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsAnyKind(this in SyntaxTrivia value, in ReadOnlySpan<SyntaxKind> kinds)
+        {
+            var valueKind = value.Kind();
+
+            // for performance reasons we use indexing instead of an enumerator
+            var length = kinds.Length;
+
+            if (length > 0)
+            {
+                for (var index = 0; index < length; index++)
+                {
+                    if (kinds[index] == valueKind)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Determines whether the trivia is a comment trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia to examine.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the trivia is a single line or multi-line comment; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool IsComment(this in SyntaxTrivia value)
+        {
+            // we use 'RawKind' for performance reasons as most likely, we have single line comments
+            // (SyntaxKind.MultiLineCommentTrivia is 1 higher than SyntaxKind.SingleLineCommentTrivia, so we include both)
+            return (uint)(value.RawKind - (int)SyntaxKind.SingleLineCommentTrivia) <= 1;
+        }
+
+        /// <summary>
+        /// Determines whether the trivia is an end of line trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia to examine.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the trivia is an end of line trivia; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool IsEndOfLine(this in SyntaxTrivia value) => value.IsKind(SyntaxKind.EndOfLineTrivia);
+
+        /// <summary>
+        /// Determines whether the trivia is of the specified syntax kind.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia to examine.
+        /// </param>
+        /// <param name="kind">
+        /// One of the enumeration members that specifies the syntax kind to check for.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the trivia is of the specified kind; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool IsKind(this in SyntaxTrivia value, in SyntaxKind kind) => value.RawKind == (int)kind;
+
+        /// <summary>
+        /// Determines whether the trivia is a multi-line comment.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia to examine.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the trivia is a multi-line comment; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool IsMultiLineComment(this in SyntaxTrivia value) => value.IsKind(SyntaxKind.MultiLineCommentTrivia);
+
+        /// <summary>
+        /// Determines whether the trivia is a single line comment.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia to examine.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the trivia is a single line comment; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool IsSingleLineComment(this in SyntaxTrivia value) => value.IsKind(SyntaxKind.SingleLineCommentTrivia);
+
+        /// <summary>
+        /// Determines whether the trivia spans multiple lines.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia to examine.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the trivia spans multiple lines; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool IsSpanningMultipleLines(this in SyntaxTrivia value) => value.Token.IsSpanningMultipleLines();
+
+        /// <summary>
+        /// Determines whether the trivia is a whitespace.
+        /// </summary>
+        /// <param name="value">
+        /// The trivia to examine.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the trivia is a whitespace; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool IsWhiteSpace(this in SyntaxTrivia value) => value.IsKind(SyntaxKind.WhitespaceTrivia);
 
         /// <summary>
         /// Gets the next sibling trivia of the specified trivia.
@@ -435,40 +435,6 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Collects XML text tokens from a collection of XML elements.
-        /// </summary>
-        /// <param name="elements">
-        /// The collection of XML elements to get tokens from.
-        /// </param>
-        /// <param name="results">
-        /// The collection to fill with syntax tokens from all XML elements.
-        /// </param>
-        private static void CollectXmlTextTokens(IEnumerable<XmlElementSyntax> elements, ref List<SyntaxToken> results)
-        {
-            foreach (var element in elements)
-            {
-                CollectXmlTextTokens(element, ref results);
-            }
-        }
-
-        /// <summary>
-        /// Collects XML text tokens from an XML element.
-        /// </summary>
-        /// <param name="element">
-        /// The XML element to get tokens from.
-        /// </param>
-        /// <param name="results">
-        /// The collection to fill with syntax tokens from the XML element.
-        /// </param>
-        private static void CollectXmlTextTokens(XmlElementSyntax element, ref List<SyntaxToken> results)
-        {
-            foreach (var node in element.ChildNodes<XmlTextSyntax>())
-            {
-                CollectSyntaxTokens(node, ref results);
-            }
-        }
-
-        /// <summary>
         /// Collects XML text tokens from an XML text.
         /// </summary>
         /// <param name="value">
@@ -510,6 +476,40 @@ namespace MiKoSolutions.Analyzers
 
                     results.Add(token);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Collects XML text tokens from a collection of XML elements.
+        /// </summary>
+        /// <param name="elements">
+        /// The collection of XML elements to get tokens from.
+        /// </param>
+        /// <param name="results">
+        /// The collection to fill with syntax tokens from all XML elements.
+        /// </param>
+        private static void CollectXmlTextTokens(IEnumerable<XmlElementSyntax> elements, ref List<SyntaxToken> results)
+        {
+            foreach (var element in elements)
+            {
+                CollectXmlTextTokens(element, ref results);
+            }
+        }
+
+        /// <summary>
+        /// Collects XML text tokens from an XML element.
+        /// </summary>
+        /// <param name="element">
+        /// The XML element to get tokens from.
+        /// </param>
+        /// <param name="results">
+        /// The collection to fill with syntax tokens from the XML element.
+        /// </param>
+        private static void CollectXmlTextTokens(XmlElementSyntax element, ref List<SyntaxToken> results)
+        {
+            foreach (var node in element.ChildNodes<XmlTextSyntax>())
+            {
+                CollectSyntaxTokens(node, ref results);
             }
         }
     }

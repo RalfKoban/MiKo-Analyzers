@@ -31,7 +31,7 @@
 
   <ItemGroup>
     <PackageReference Include="JetBrains.Profiler.Api" Version="1.4.11" />
-    <PackageReference Include="log4net" Version="3.2.0" />
+    <PackageReference Include="log4net" Version="3.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.3.9" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="5.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
@@ -42,7 +42,7 @@
 
   <!-- Required by NCrunch on remote machines as those machines do not have the package installed -->
   <ItemGroup Condition="'$(NCrunch)' != '1'">
-    <PackageReference Include="coverlet.collector" Version="6.0.4">
+    <PackageReference Include="coverlet.collector" Version="8.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
