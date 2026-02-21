@@ -1,5 +1,7 @@
 ﻿using System.Composition;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -13,13 +15,15 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
     {
         public override string FixableDiagnosticId => "MiKo_4008";
 
-        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic issue)
+        protected override Task<SyntaxNode> GetUpdatedTypeSyntaxAsync(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic issue, CancellationToken cancellationToken)
         {
             var modifiedType = typeSyntax.RemoveNodeAndAdjustOpenCloseBraces(syntax);
             var method = modifiedType.ChildNodes<MethodDeclarationSyntax>().Last(_ => _.GetName() == nameof(Equals) && _.Modifiers.Any(SyntaxKind.PublicKeyword));
 
             // place after equals method
-            return modifiedType.InsertNodeAfter(method, syntax);
+            var result = modifiedType.InsertNodeAfter(method, syntax);
+
+            return Task.FromResult<SyntaxNode>(result);
         }
     }
 }

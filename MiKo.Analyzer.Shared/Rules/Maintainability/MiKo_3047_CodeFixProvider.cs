@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -15,6 +17,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<LiteralExpressionSyntax>().FirstOrDefault();
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => NameOf((LiteralExpressionSyntax)syntax);
+        protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
+        {
+            SyntaxNode updatedSyntax = GetUpdatedSyntax((LiteralExpressionSyntax)syntax);
+
+            return Task.FromResult(updatedSyntax);
+        }
+
+        private static InvocationExpressionSyntax GetUpdatedSyntax(LiteralExpressionSyntax syntax) => NameOf(syntax);
     }
 }

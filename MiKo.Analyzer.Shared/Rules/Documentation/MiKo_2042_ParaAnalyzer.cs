@@ -39,6 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             }
 
                             results.Add(Issue(node));
+
                             break;
                         }
                     }

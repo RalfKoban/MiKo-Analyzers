@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -15,23 +17,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected sealed override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.First(_ => _.IsKind(m_syntaxKind));
 
-        protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected sealed override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
-            var binary = (BinaryExpressionSyntax)syntax;
+            SyntaxNode updatedSyntax = GetUpdatedSyntax((BinaryExpressionSyntax)syntax);
 
-            var operand = binary.Left;
-            var expression = binary.Right;
-
-            if (SwapSides(operand, expression))
-            {
-                var temp = operand;
-
-                operand = expression.WithTriviaFrom(operand);
-                expression = temp.WithTriviaFrom(expression)
-                                 .WithoutTrailingSpaces();
-            }
-
-            return GetUpdatedPatternSyntax(operand, expression);
+            return Task.FromResult(updatedSyntax);
         }
 
         protected virtual IsPatternExpressionSyntax GetUpdatedPatternSyntax(ExpressionSyntax operand, ExpressionSyntax expression) => IsPattern(operand, expression);
@@ -70,6 +60,23 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             return false;
+        }
+
+        private IsPatternExpressionSyntax GetUpdatedSyntax(BinaryExpressionSyntax binary)
+        {
+            var operand = binary.Left;
+            var expression = binary.Right;
+
+            if (SwapSides(operand, expression))
+            {
+                var temp = operand;
+
+                operand = expression.WithTriviaFrom(operand);
+                expression = temp.WithTriviaFrom(expression)
+                                 .WithoutTrailingSpaces();
+            }
+
+            return GetUpdatedPatternSyntax(operand, expression);
         }
     }
 }

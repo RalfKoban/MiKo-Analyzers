@@ -26,6 +26,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     var identifier = identifiers[index];
                     var name = identifier.ValueText;
 
+                    if (name is "reference" || name is "references")
+                    {
+                        // currently, we cannot rename them
+                        continue;
+                    }
+
                     if (name.Contains("Reference", StringComparison.OrdinalIgnoreCase))
                     {
                         var betterName = FindBetterName(name);

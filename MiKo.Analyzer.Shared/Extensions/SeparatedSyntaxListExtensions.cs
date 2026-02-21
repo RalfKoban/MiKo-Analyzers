@@ -18,6 +18,30 @@ namespace MiKoSolutions.Analyzers
     internal static class SeparatedSyntaxListExtensions
     {
         /// <summary>
+        /// Adds all elements from the specified collection to the <see cref="HashSet{T}"/>.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of elements in the set.
+        /// </typeparam>
+        /// <param name="set">
+        /// The set to which the elements are added.
+        /// </param>
+        /// <param name="values">
+        /// The collection of elements to add.
+        /// </param>
+        internal static void AddRange<T>(this HashSet<T> set, IEnumerable<T> values)
+        {
+            switch (values)
+            {
+                case IReadOnlyCollection<T> rc when rc.Count is 0:
+                case ICollection<T> c when c.Count is 0:
+                    return;
+            }
+
+            set.UnionWith(values);
+        }
+
+        /// <summary>
         /// Determines whether all elements in the <see cref="SeparatedSyntaxList{T}"/> satisfy the specified condition.
         /// </summary>
         /// <typeparam name="T">
@@ -83,30 +107,6 @@ namespace MiKoSolutions.Analyzers
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// Adds all elements from the specified collection to the <see cref="HashSet{T}"/>.
-        /// </summary>
-        /// <typeparam name="T">
-        /// The type of elements in the set.
-        /// </typeparam>
-        /// <param name="set">
-        /// The set to which the elements are added.
-        /// </param>
-        /// <param name="values">
-        /// The collection of elements to add.
-        /// </param>
-        internal static void AddRange<T>(this HashSet<T> set, IEnumerable<T> values)
-        {
-            switch (values)
-            {
-                case IReadOnlyCollection<T> rc when rc.Count is 0:
-                case ICollection<T> c when c.Count is 0:
-                    return;
-            }
-
-            set.UnionWith(values);
         }
 
         /// <summary>
@@ -299,56 +299,6 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<string> GetNames(this in SeparatedSyntaxList<VariableDeclaratorSyntax> value) => value.Select(_ => _.GetName());
 
         /// <summary>
-        /// Determines whether the specified <see cref="SeparatedSyntaxList{T}"/> contains no elements.
-        /// </summary>
-        /// <typeparam name="T">
-        /// The type of syntax nodes in the list.
-        /// </typeparam>
-        /// <param name="source">
-        /// The separated list of syntax nodes to evaluate.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the list contains no elements; otherwise, <see langword="false"/>.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool None<T>(this in SeparatedSyntaxList<T> source) where T : SyntaxNode => source.Count is 0;
-
-        /// <summary>
-        /// Determines whether the specified <see cref="SeparatedSyntaxList{T}"/> contains no elements of the specified kind.
-        /// </summary>
-        /// <typeparam name="T">
-        /// The type of syntax nodes in the list.
-        /// </typeparam>
-        /// <param name="source">
-        /// The separated list of syntax nodes to evaluate.
-        /// </param>
-        /// <param name="kind">
-        /// One of the enumeration members that specifies the kind of syntax node to check for.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the list contains no elements of the specified kind; otherwise, <see langword="false"/>.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool None<T>(this in SeparatedSyntaxList<T> source, in SyntaxKind kind) where T : SyntaxNode => source.IndexOf(kind) is -1;
-
-        /// <summary>
-        /// Determines whether the specified <see cref="SeparatedSyntaxList{T}"/> contains no elements that satisfy the specified condition.
-        /// </summary>
-        /// <typeparam name="T">
-        /// The type of syntax nodes in the list.
-        /// </typeparam>
-        /// <param name="source">
-        /// The separated list of syntax nodes to evaluate.
-        /// </param>
-        /// <param name="predicate">
-        /// The condition to test each element against.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if no elements satisfy the condition; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool None<T>(this in SeparatedSyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode => source.All(_ => predicate(_) is false);
-
-        /// <summary>
         /// Finds the last element in the <see cref="SeparatedSyntaxList{T}"/> that satisfies the specified condition.
         /// </summary>
         /// <typeparam name="T">
@@ -412,6 +362,56 @@ namespace MiKoSolutions.Analyzers
 
             return null;
         }
+
+        /// <summary>
+        /// Determines whether the specified <see cref="SeparatedSyntaxList{T}"/> contains no elements.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of syntax nodes in the list.
+        /// </typeparam>
+        /// <param name="source">
+        /// The separated list of syntax nodes to evaluate.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the list contains no elements; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool None<T>(this in SeparatedSyntaxList<T> source) where T : SyntaxNode => source.Count is 0;
+
+        /// <summary>
+        /// Determines whether the specified <see cref="SeparatedSyntaxList{T}"/> contains no elements of the specified kind.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of syntax nodes in the list.
+        /// </typeparam>
+        /// <param name="source">
+        /// The separated list of syntax nodes to evaluate.
+        /// </param>
+        /// <param name="kind">
+        /// One of the enumeration members that specifies the kind of syntax node to check for.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the list contains no elements of the specified kind; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool None<T>(this in SeparatedSyntaxList<T> source, in SyntaxKind kind) where T : SyntaxNode => source.IndexOf(kind) is -1;
+
+        /// <summary>
+        /// Determines whether the specified <see cref="SeparatedSyntaxList{T}"/> contains no elements that satisfy the specified condition.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of syntax nodes in the list.
+        /// </typeparam>
+        /// <param name="source">
+        /// The separated list of syntax nodes to evaluate.
+        /// </param>
+        /// <param name="predicate">
+        /// The condition to test each element against.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if no elements satisfy the condition; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool None<T>(this in SeparatedSyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode => source.All(_ => predicate(_) is false);
 
         /// <summary>
         /// Filters the elements in the <see cref="SeparatedSyntaxList{T}"/> to return only those of the specified syntax kind.

@@ -64,19 +64,19 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_test_class_with_wrong_prefix_([ValueSource(nameof(TestFixtures))] string fixture) => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_type_starting_with_Testable_and_test_class_with_starting_with_correct_prefix_([ValueSource(nameof(TestFixtures))]string fixture) => No_issue_is_reported_for(@"
 namespace Bla
 {
-    public class TestMe
+    public class TestableTestMe
     {
     }
 
     [" + fixture + @"]
-    public class WhateverTests
+    public class TestMeTests
     {
-        private TestMe ObjectUnderTest { get; set; }
+        private TestableTestMe ObjectUnderTest { get; set; }
 
-        private void DoSomething() { }
+        public void DoSomething() { }
     }
 }
 ");
@@ -139,6 +139,95 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_test_class_if_factory_method_returns_concrete_type_but_has_base_type_as_return_type_([ValueSource(nameof(TestFixtures))]string fixture) => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class BaseTestMe
+    {
+    }
+}
+
+namespace Bla.Blubb
+{
+    public class TestMe : BaseTestMe
+    {
+    }
+
+    [" + fixture + @"]
+    public class TestMeTests
+    {
+        private BaseTestMe CreateObjectUnderTest() => new TestMe();
+
+        private BaseTestMe GetObjectUnderTest() => new TestMe();
+
+        private BaseTestMe CreateTestCandidate()
+        {
+            return new TestMe();
+        }
+
+        private BaseTestMe GetTestCandidate()
+        {
+            return new TestMe();
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_test_class_with_wrong_prefix_([ValueSource(nameof(TestFixtures))] string fixture) => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+    }
+
+    [" + fixture + @"]
+    public class WhateverTests
+    {
+        private TestMe ObjectUnderTest { get; set; }
+
+        private void DoSomething() { }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_type_named_Testable_and_test_class_with_starting_with_wrong_prefix_([ValueSource(nameof(TestFixtures))]string fixture) => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public class Testable
+    {
+    }
+
+    [" + fixture + @"]
+    public class TestMeTests
+    {
+        private Testable ObjectUnderTest { get; set; }
+
+        public void DoSomething() { }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_type_starting_with_Testable_and_test_class_with_starting_with_wrong_prefix_([ValueSource(nameof(TestFixtures))]string fixture) => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestableTestMe
+    {
+    }
+
+    [" + fixture + @"]
+    public class WhateverTests
+    {
+        private TestableTestMe ObjectUnderTest { get; set; }
+
+        public void DoSomething() { }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_test_class_of_generic_type_with_wrong_prefix_([ValueSource(nameof(TestFixtures))] string fixture) => An_issue_is_reported_for(@"
 namespace Bla
 {
@@ -170,41 +259,6 @@ namespace Bla
         private T ObjectUnderTest { get; set; }
 
         public void DoSomething() { }
-    }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_test_class_if_factory_method_returns_concrete_type_but_has_base_type_as_return_type_([ValueSource(nameof(TestFixtures))]string fixture) => No_issue_is_reported_for(@"
-namespace Bla
-{
-    public class BaseTestMe
-    {
-    }
-}
-
-namespace Bla.Blubb
-{
-    public class TestMe : BaseTestMe
-    {
-    }
-
-    [" + fixture + @"]
-    public class TestMeTests
-    {
-        private BaseTestMe CreateObjectUnderTest() => new TestMe();
-
-        private BaseTestMe GetObjectUnderTest() => new TestMe();
-
-        private BaseTestMe CreateTestCandidate()
-        {
-            return new TestMe();
-        }
-
-        private BaseTestMe GetTestCandidate()
-        {
-            return new TestMe();
-        }
     }
 }
 ");

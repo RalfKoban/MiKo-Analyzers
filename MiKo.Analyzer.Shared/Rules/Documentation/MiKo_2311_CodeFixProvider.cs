@@ -1,4 +1,6 @@
 ﻿using System.Composition;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -13,9 +15,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override SyntaxTrivia ComputeReplacementTrivia(in SyntaxTrivia original, in SyntaxTrivia rewritten) => rewritten;
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, in SyntaxTrivia trivia, Diagnostic issue)
+        protected override Task<SyntaxNode> GetUpdatedSyntaxRootAsync(Document document, SyntaxNode root, in SyntaxTrivia trivia, Diagnostic issue, CancellationToken cancellationToken)
         {
-            return root.ReplaceTrivia(new[] { trivia }, (original, rewritten) => SyntaxFactory.ElasticCarriageReturnLineFeed);
+            var updatedSyntax = GetUpdatedSyntaxRoot(root, trivia);
+
+            return Task.FromResult(updatedSyntax);
         }
+
+        private static SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root, in SyntaxTrivia trivia) => root.ReplaceTrivia(new[] { trivia }, (original, rewritten) => SyntaxFactory.ElasticCarriageReturnLineFeed);
     }
 }
