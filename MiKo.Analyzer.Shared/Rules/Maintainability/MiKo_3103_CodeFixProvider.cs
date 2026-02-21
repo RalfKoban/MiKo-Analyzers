@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Composition;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -39,7 +41,22 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return null;
         }
 
-        protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected sealed override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
+        {
+            var updatedSyntax = GetUpdatedSyntax(syntax);
+
+            return Task.FromResult(updatedSyntax);
+        }
+
+        protected virtual Guid CreateGuid() => System.Guid.NewGuid();
+
+        private static bool IsToStringCall(SyntaxNode node) => node is MemberAccessExpressionSyntax m
+                                                            && m.IsKind(SyntaxKind.SimpleMemberAccessExpression)
+                                                            && m.GetName() == nameof(ToString);
+
+        private static InvocationExpressionSyntax GuidParse(ExpressionSyntax literal) => Invocation(nameof(System.Guid), nameof(System.Guid.Parse), Argument(literal));
+
+        private SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
         {
             switch (syntax)
             {
@@ -66,14 +83,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return null;
             }
         }
-
-        protected virtual Guid CreateGuid() => System.Guid.NewGuid();
-
-        private static bool IsToStringCall(SyntaxNode node) => node is MemberAccessExpressionSyntax m
-                                                               && m.IsKind(SyntaxKind.SimpleMemberAccessExpression)
-                                                               && m.GetName() == nameof(ToString);
-
-        private static InvocationExpressionSyntax GuidParse(ExpressionSyntax literal) => Invocation(nameof(System.Guid), nameof(System.Guid.Parse), Argument(literal));
 
         private LiteralExpressionSyntax Guid(string format = DefaultFormat)
         {

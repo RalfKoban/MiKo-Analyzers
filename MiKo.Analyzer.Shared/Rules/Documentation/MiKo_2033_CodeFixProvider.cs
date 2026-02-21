@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -66,7 +68,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => "MiKo_2033";
 
-        protected override XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, string memberName, GenericNameSyntax returnType)
+        protected override Task<SyntaxNode> GenericCommentAsync(XmlElementSyntax comment, string memberName, GenericNameSyntax returnType, Document document, CancellationToken cancellationToken)
+        {
+            SyntaxNode updatedComment = GenericComment(comment);
+
+            return Task.FromResult(updatedComment);
+        }
+
+        protected override Task<SyntaxNode> NonGenericCommentAsync(XmlElementSyntax comment, string memberName, TypeSyntax returnType, Document document, CancellationToken cancellationToken)
+        {
+            SyntaxNode updatedComment = NonGenericComment(comment, memberName);
+
+            return Task.FromResult(updatedComment);
+        }
+
+        private static XmlElementSyntax GenericComment(XmlElementSyntax comment)
         {
             var content = comment.Content;
 
@@ -121,7 +137,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, TaskParts[0], SeeCrefTaskResult(), TaskParts[1], SeeCref("string"), TaskParts[2], comment.Content.ToArray());
         }
 
-        protected override XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, string memberName, TypeSyntax returnType)
+        private static XmlElementSyntax NonGenericComment(XmlElementSyntax comment, string memberName)
         {
             if (memberName == nameof(ToString))
             {

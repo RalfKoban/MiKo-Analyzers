@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -25,21 +26,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return false;
         }
 
-        protected override XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, string memberName, TypeSyntax returnType) => WithDefaultComment(document, comment, returnType);
-
-        protected override XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, string memberName, GenericNameSyntax returnType) => WithDefaultComment(document, comment, returnType);
-
-        protected abstract IEnumerable<XmlNodeSyntax> GetDefaultComment(Document document, TypeSyntax returnType);
-
-        private XmlElementSyntax WithDefaultComment(Document document, XmlElementSyntax comment, TypeSyntax returnType)
+        protected override Task<SyntaxNode> NonGenericCommentAsync(XmlElementSyntax comment, string memberName, TypeSyntax returnType, Document document, CancellationToken cancellationToken)
         {
-            var texts = GetDefaultComment(document, returnType);
+            return WithDefaultCommentAsync(comment, returnType, document, cancellationToken);
+        }
 
-            var newContent = comment.Content
-                                    .AddRange(texts)
-                                    .Add(XmlText().WithLeadingXmlComment());
+        protected override Task<SyntaxNode> GenericCommentAsync(XmlElementSyntax comment, string memberName, GenericNameSyntax returnType, Document document, CancellationToken cancellationToken)
+        {
+            return WithDefaultCommentAsync(comment, returnType, document, cancellationToken);
+        }
 
-            return comment.WithContent(newContent);
+        protected abstract Task<XmlNodeSyntax[]> GetDefaultCommentAsync(TypeSyntax returnType, Document document, CancellationToken cancellationToken);
+
+        private async Task<SyntaxNode> WithDefaultCommentAsync(XmlElementSyntax comment, TypeSyntax returnType, Document document, CancellationToken cancellationToken)
+        {
+            var texts = await GetDefaultCommentAsync(returnType, document, cancellationToken).ConfigureAwait(false);
+
+            var updatedContent = comment.Content
+                                        .AddRange(texts)
+                                        .Add(XmlText().WithLeadingXmlComment());
+
+            return comment.WithContent(updatedContent);
         }
     }
 }

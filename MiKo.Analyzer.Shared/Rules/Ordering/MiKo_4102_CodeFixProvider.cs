@@ -1,5 +1,7 @@
 ﻿using System.Composition;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -12,19 +14,24 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
     {
         public override string FixableDiagnosticId => "MiKo_4102";
 
-        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic issue)
+        protected override Task<SyntaxNode> GetUpdatedTypeSyntaxAsync(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic issue, CancellationToken cancellationToken)
         {
-            var method = (MethodDeclarationSyntax)syntax;
+            SyntaxNode updatedSyntax = GetUpdatedTypeSyntax(typeSyntax, (MethodDeclarationSyntax)syntax);
 
+            return Task.FromResult(updatedSyntax);
+        }
+
+        private static BaseTypeDeclarationSyntax GetUpdatedTypeSyntax(BaseTypeDeclarationSyntax typeSyntax, MethodDeclarationSyntax method)
+        {
             var modifiedType = typeSyntax.RemoveNodeAndAdjustOpenCloseBraces(method);
 
             var otherMethods = modifiedType.ChildNodes<MethodDeclarationSyntax>().ToList();
 
             var precedingNode = otherMethods.Find(_ => _.IsTestSetUpMethod())
-                             ?? otherMethods.Find(_ => _.IsTestOneTimeTearDownMethod())
-                             ?? otherMethods.Find(_ => _.IsTestOneTimeSetUpMethod())
-                             ?? otherMethods.Find(_ => _.IsTestAssemblyWideTearDownMethod())
-                             ?? otherMethods.Find(_ => _.IsTestAssemblyWideSetUpMethod());
+                                ?? otherMethods.Find(_ => _.IsTestOneTimeTearDownMethod())
+                                ?? otherMethods.Find(_ => _.IsTestOneTimeSetUpMethod())
+                                ?? otherMethods.Find(_ => _.IsTestAssemblyWideTearDownMethod())
+                                ?? otherMethods.Find(_ => _.IsTestAssemblyWideSetUpMethod());
 
             if (precedingNode is null)
             {

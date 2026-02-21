@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -22,7 +24,21 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ExpressionStatementSyntax>().FirstOrDefault();
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
+        {
+            var updatedSyntax = GetUpdatedSyntax(syntax);
+
+            return Task.FromResult(updatedSyntax);
+        }
+
+        protected override Task<SyntaxNode> GetUpdatedSyntaxRootAsync(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue, CancellationToken cancellationToken)
+        {
+            var updatedSyntax = GetUpdatedSyntaxRoot(root, syntax, annotationOfSyntax);
+
+            return Task.FromResult(updatedSyntax);
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
         {
             if (syntax is ExpressionStatementSyntax statement)
             {
@@ -45,7 +61,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             return syntax;
         }
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
+        private static SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax)
         {
             var parent = syntax.Parent;
 
