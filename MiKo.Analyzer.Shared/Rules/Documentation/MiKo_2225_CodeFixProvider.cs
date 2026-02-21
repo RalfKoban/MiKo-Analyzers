@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -15,16 +17,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<XmlElementSyntax>().FirstOrDefault();
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
-            if (syntax is XmlElementSyntax element && element.Content.FirstOrDefault() is XmlTextSyntax text)
+            SyntaxNode updatedSyntax = GetUpdatedSyntax((XmlElementSyntax)syntax);
+
+            return Task.FromResult(updatedSyntax);
+        }
+
+        private static XmlElementSyntax GetUpdatedSyntax(XmlElementSyntax element)
+        {
+            if (element?.Content.FirstOrDefault() is XmlTextSyntax text)
             {
                 var code = text.GetTextTrimmed();
 
                 return element.WithContent(XmlText(code));
             }
 
-            return base.GetUpdatedSyntax(document, syntax, issue);
+            return null;
         }
     }
 }

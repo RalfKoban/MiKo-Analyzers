@@ -14,6 +14,26 @@ namespace MiKoSolutions.Analyzers
     internal static class LocationExtensions
     {
         /// <summary>
+        /// Determines whether this location contains another location.
+        /// </summary>
+        /// <param name="value">
+        /// The location to check from.
+        /// </param>
+        /// <param name="other">
+        /// The location to seek.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the specified location contains the other location; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool Contains(this Location value, Location other)
+        {
+            var valueSpan = value.SourceSpan;
+            var otherSpan = other.SourceSpan;
+
+            return valueSpan.Start <= otherSpan.Start && otherSpan.End <= valueSpan.End;
+        }
+
+        /// <summary>
         /// Gets the enclosing symbol of type <typeparamref name="T"/> for the specified location.
         /// </summary>
         /// <typeparam name="T">
@@ -36,16 +56,16 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets the start position of the location.
+        /// Gets the ending line number of the location.
         /// </summary>
         /// <param name="value">
         /// The location to examine.
         /// </param>
         /// <returns>
-        /// The start position as a <see cref="LinePosition"/>.
+        /// The ending line number (zero-based).
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static LinePosition GetStartPosition(this Location value) => value.GetLineSpan().StartLinePosition;
+        internal static int GetEndingLine(this Location value) => value.GetEndPosition().Line;
 
         /// <summary>
         /// Gets the end position of the location.
@@ -60,18 +80,6 @@ namespace MiKoSolutions.Analyzers
         internal static LinePosition GetEndPosition(this Location value) => value.GetLineSpan().EndLinePosition;
 
         /// <summary>
-        /// Gets the character position within the start line of the location.
-        /// </summary>
-        /// <param name="value">
-        /// The location to examine.
-        /// </param>
-        /// <returns>
-        /// The character position within the start line.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static int GetPositionWithinStartLine(this Location value) => value.GetStartPosition().Character;
-
-        /// <summary>
         /// Gets the character position within the end line of the location.
         /// </summary>
         /// <param name="value">
@@ -82,6 +90,18 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static int GetPositionWithinEndLine(this Location value) => value.GetEndPosition().Character;
+
+        /// <summary>
+        /// Gets the character position within the start line of the location.
+        /// </summary>
+        /// <param name="value">
+        /// The location to examine.
+        /// </param>
+        /// <returns>
+        /// The character position within the start line.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static int GetPositionWithinStartLine(this Location value) => value.GetStartPosition().Character;
 
         /// <summary>
         /// Gets the starting line number of the location.
@@ -96,16 +116,58 @@ namespace MiKoSolutions.Analyzers
         internal static int GetStartingLine(this Location value) => value.GetStartPosition().Line;
 
         /// <summary>
-        /// Gets the ending line number of the location.
+        /// Gets the start position of the location.
         /// </summary>
         /// <param name="value">
         /// The location to examine.
         /// </param>
         /// <returns>
-        /// The ending line number (zero-based).
+        /// The start position as a <see cref="LinePosition"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static int GetEndingLine(this Location value) => value.GetEndPosition().Line;
+        internal static LinePosition GetStartPosition(this Location value) => value.GetLineSpan().StartLinePosition;
+
+        /// <summary>
+        /// Gets the complete word surrounding the location.
+        /// </summary>
+        /// <param name="value">
+        /// The location to examine.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the complete word surrounding the location, or <see langword="null"/> if the location does not have a source tree or the surrounding word cannot be determined.
+        /// </returns>
+        internal static string GetSurroundingWord(this Location value)
+        {
+            var tree = value.SourceTree;
+
+            if (tree is null)
+            {
+                return null;
+            }
+
+            var sourceText = tree.GetText();
+            var text = sourceText.ToString(TextSpan.FromBounds(0, value.SourceSpan.End));
+
+            var lastIndexOfFirstSpace = text.LastIndexOfAny(Constants.WhiteSpaceCharacters);
+
+            if (lastIndexOfFirstSpace is -1)
+            {
+                return null;
+            }
+
+            var followUpText = sourceText.GetSubText(value.SourceSpan.End).ToString();
+
+            var firstIndexOfNextSpace = followUpText.StartsWith('<') // seems like the comment finished
+                                        ? 0
+                                        : followUpText.IndexOfAny(Constants.WhiteSpaceCharacters);
+
+            if (firstIndexOfNextSpace is -1)
+            {
+                return null;
+            }
+
+            return sourceText.ToString(TextSpan.FromBounds(lastIndexOfFirstSpace + 1, text.Length + firstIndexOfNextSpace));
+        }
 
         /// <summary>
         /// Gets the text content at the specified location.
@@ -159,68 +221,6 @@ namespace MiKoSolutions.Analyzers
             var start = value.SourceSpan.Start + startOffset;
 
             return tree.GetText().ToString(TextSpan.FromBounds(start, start + length));
-        }
-
-        /// <summary>
-        /// Gets the complete word surrounding the location.
-        /// </summary>
-        /// <param name="value">
-        /// The location to examine.
-        /// </param>
-        /// <returns>
-        /// A <see cref="string"/> that contains the complete word surrounding the location, or <see langword="null"/> if the location does not have a source tree or the surrounding word cannot be determined.
-        /// </returns>
-        internal static string GetSurroundingWord(this Location value)
-        {
-            var tree = value.SourceTree;
-
-            if (tree is null)
-            {
-                return null;
-            }
-
-            var sourceText = tree.GetText();
-            var text = sourceText.ToString(TextSpan.FromBounds(0, value.SourceSpan.End));
-
-            var lastIndexOfFirstSpace = text.LastIndexOfAny(Constants.WhiteSpaceCharacters);
-
-            if (lastIndexOfFirstSpace is -1)
-            {
-                return null;
-            }
-
-            var followUpText = sourceText.GetSubText(value.SourceSpan.End).ToString();
-
-            var firstIndexOfNextSpace = followUpText.StartsWith('<') // seems like the comment finished
-                                        ? 0
-                                        : followUpText.IndexOfAny(Constants.WhiteSpaceCharacters);
-
-            if (firstIndexOfNextSpace is -1)
-            {
-                return null;
-            }
-
-            return sourceText.ToString(TextSpan.FromBounds(lastIndexOfFirstSpace + 1, text.Length + firstIndexOfNextSpace));
-        }
-
-        /// <summary>
-        /// Determines whether this location contains another location.
-        /// </summary>
-        /// <param name="value">
-        /// The location to check from.
-        /// </param>
-        /// <param name="other">
-        /// The location to seek.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the specified location contains the other location; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool Contains(this Location value, Location other)
-        {
-            var valueSpan = value.SourceSpan;
-            var otherSpan = other.SourceSpan;
-
-            return valueSpan.Start <= otherSpan.Start && otherSpan.End <= valueSpan.End;
         }
 
         /// <summary>

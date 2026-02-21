@@ -608,6 +608,116 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Gets a <see cref="string"/> where all leading and trailing whitespace characters are removed.
+        /// </summary>
+        /// <param name="value">
+        /// The original text.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the text where all leading and trailing whitespace characters are removed.
+        /// </returns>
+        public static string Trim(this StringBuilder value)
+        {
+            var length = value.Length;
+
+            if (length is 0)
+            {
+                return string.Empty;
+            }
+
+            var start = value.CountLeadingWhitespaces();
+            var end = value.CountTrailingWhitespaces(start);
+
+            return value.ToString(start, length - start - end);
+        }
+
+        /// <summary>
+        /// Gets a <see cref="string"/> where all trailing whitespace characters are removed.
+        /// </summary>
+        /// <param name="value">
+        /// The original text.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the text where all trailing whitespace characters are removed.
+        /// </returns>
+        public static string TrimEnd(this StringBuilder value)
+        {
+            var length = value.Length;
+
+            if (length is 0)
+            {
+                return string.Empty;
+            }
+
+            var end = value.CountTrailingWhitespaces();
+
+            return value.ToString(0, length - end);
+        }
+
+        /// <summary>
+        /// Gets a <see cref="StringBuilder"/> where all trailing occurrences of the specified characters are removed.
+        /// </summary>
+        /// <param name="value">
+        /// The original text.
+        /// </param>
+        /// <param name="characters">
+        /// The characters to remove from the end.
+        /// </param>
+        /// <returns>
+        /// A <see cref="StringBuilder"/> where all trailing occurrences of the specified characters are removed.
+        /// </returns>
+        public static StringBuilder TrimEnd(this StringBuilder value, char[] characters)
+        {
+            for (int index = 0, length = characters.Length; index < length; index++)
+            {
+                var i = value.Length - 1;
+
+                if (i >= 0 && value[i] == characters[index])
+                {
+                    value.Remove(i, 1);
+                }
+            }
+
+            return value;
+        }
+
+        /// <summary>
+        /// Gets a <see cref="StringBuilder"/> where the specified number of characters are removed from the end.
+        /// </summary>
+        /// <param name="value">
+        /// The original text.
+        /// </param>
+        /// <param name="count">
+        /// The number of characters to remove from the end.
+        /// </param>
+        /// <returns>
+        /// A <see cref="StringBuilder"/> where the specified number of characters are removed from the end.
+        /// </returns>
+        public static StringBuilder TrimEndBy(this StringBuilder value, in int count)
+        {
+            if (count is 0)
+            {
+                return value;
+            }
+
+            if (count < 0)
+            {
+                Throw.ArgumentOutOfRange(nameof(count), count, "Should be greater than zero.");
+            }
+
+            var length = value.Length;
+
+            if (count > length)
+            {
+                Throw.ArgumentOutOfRange(nameof(count), count, $"Should be less than {length}.");
+            }
+
+            value.Length = length - count;
+
+            return value;
+        }
+
+        /// <summary>
         /// Gets a <see cref="StringBuilder"/> where all leading and trailing whitespace characters are removed.
         /// </summary>
         /// <param name="value">
@@ -642,27 +752,31 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets a <see cref="string"/> where all leading and trailing whitespace characters are removed.
+        /// Gets a <see cref="StringBuilder"/> where all trailing whitespace characters are removed.
         /// </summary>
         /// <param name="value">
         /// The original text.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> that contains the text where all leading and trailing whitespace characters are removed.
+        /// A <see cref="StringBuilder"/> where all trailing whitespace characters are removed.
         /// </returns>
-        public static string Trim(this StringBuilder value)
+        public static StringBuilder TrimmedEnd(this StringBuilder value)
         {
             var length = value.Length;
 
             if (length is 0)
             {
-                return string.Empty;
+                return value;
             }
 
-            var start = value.CountLeadingWhitespaces();
-            var end = value.CountTrailingWhitespaces(start);
+            var end = value.CountTrailingWhitespaces();
 
-            return value.ToString(start, length - start - end);
+            if (end is 0)
+            {
+                return value;
+            }
+
+            return value.TrimEndBy(end);
         }
 
         /// <summary>
@@ -771,142 +885,6 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets a <see cref="string"/> where all trailing whitespace characters are removed.
-        /// </summary>
-        /// <param name="value">
-        /// The original text.
-        /// </param>
-        /// <returns>
-        /// A <see cref="string"/> that contains the text where all trailing whitespace characters are removed.
-        /// </returns>
-        public static string TrimEnd(this StringBuilder value)
-        {
-            var length = value.Length;
-
-            if (length is 0)
-            {
-                return string.Empty;
-            }
-
-            var end = value.CountTrailingWhitespaces();
-
-            return value.ToString(0, length - end);
-        }
-
-        /// <summary>
-        /// Gets a <see cref="StringBuilder"/> where all trailing occurrences of the specified characters are removed.
-        /// </summary>
-        /// <param name="value">
-        /// The original text.
-        /// </param>
-        /// <param name="characters">
-        /// The characters to remove from the end.
-        /// </param>
-        /// <returns>
-        /// A <see cref="StringBuilder"/> where all trailing occurrences of the specified characters are removed.
-        /// </returns>
-        public static StringBuilder TrimEnd(this StringBuilder value, char[] characters)
-        {
-            for (int index = 0, length = characters.Length; index < length; index++)
-            {
-                var i = value.Length - 1;
-
-                if (i >= 0 && value[i] == characters[index])
-                {
-                    value.Remove(i, 1);
-                }
-            }
-
-            return value;
-        }
-
-        /// <summary>
-        /// Gets a <see cref="StringBuilder"/> where the specified number of characters are removed from the end.
-        /// </summary>
-        /// <param name="value">
-        /// The original text.
-        /// </param>
-        /// <param name="count">
-        /// The number of characters to remove from the end.
-        /// </param>
-        /// <returns>
-        /// A <see cref="StringBuilder"/> where the specified number of characters are removed from the end.
-        /// </returns>
-        public static StringBuilder TrimEndBy(this StringBuilder value, in int count)
-        {
-            if (count is 0)
-            {
-                return value;
-            }
-
-            if (count < 0)
-            {
-                Throw.ArgumentOutOfRange(nameof(count), count, "Should be greater than zero.");
-            }
-
-            var length = value.Length;
-
-            if (count > length)
-            {
-                Throw.ArgumentOutOfRange(nameof(count), count, $"Should be less than {length}.");
-            }
-
-            value.Length = length - count;
-
-            return value;
-        }
-
-        /// <summary>
-        /// Gets a <see cref="StringBuilder"/> where all trailing whitespace characters are removed.
-        /// </summary>
-        /// <param name="value">
-        /// The original text.
-        /// </param>
-        /// <returns>
-        /// A <see cref="StringBuilder"/> where all trailing whitespace characters are removed.
-        /// </returns>
-        public static StringBuilder TrimmedEnd(this StringBuilder value)
-        {
-            var length = value.Length;
-
-            if (length is 0)
-            {
-                return value;
-            }
-
-            var end = value.CountTrailingWhitespaces();
-
-            if (end is 0)
-            {
-                return value;
-            }
-
-            return value.TrimEndBy(end);
-        }
-
-        /// <summary>
-        /// Gets a <see cref="StringBuilder"/> where multiple consecutive whitespace characters are replaced with a single whitespace character.
-        /// </summary>
-        /// <param name="value">
-        /// The original text.
-        /// </param>
-        /// <returns>
-        /// A <see cref="StringBuilder"/> where multiple consecutive whitespace characters are replaced with a single whitespace character.
-        /// </returns>
-        public static StringBuilder WithoutMultipleWhiteSpaces(this StringBuilder value) => value.ReplaceAllWithProbe(Constants.Comments.MultiWhitespaceStrings, Constants.Comments.SingleWhitespaceString);
-
-        /// <summary>
-        /// Gets a <see cref="StringBuilder"/> where all new line characters are removed.
-        /// </summary>
-        /// <param name="value">
-        /// The original text.
-        /// </param>
-        /// <returns>
-        /// A <see cref="StringBuilder"/> where all new line characters are removed.
-        /// </returns>
-        public static StringBuilder WithoutNewLines(this StringBuilder value) => value.Without('\r', '\n');
-
-        /// <summary>
         /// Gets a <see cref="StringBuilder"/> where all occurrences of the specified character are removed.
         /// </summary>
         /// <param name="value">
@@ -990,6 +968,51 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Gets a <see cref="StringBuilder"/> where all abbreviations are replaced with their expanded forms.
+        /// </summary>
+        /// <param name="value">
+        /// The original text.
+        /// </param>
+        /// <returns>
+        /// A <see cref="StringBuilder"/> where all abbreviations are replaced with their expanded forms.
+        /// </returns>
+        public static StringBuilder WithoutAbbreviations(this StringBuilder value) => AbbreviationFinder.FindAndReplaceAllAbbreviations(value);
+
+        /// <summary>
+        /// Gets a <see cref="StringBuilder"/> where multiple consecutive whitespace characters are replaced with a single whitespace character.
+        /// </summary>
+        /// <param name="value">
+        /// The original text.
+        /// </param>
+        /// <returns>
+        /// A <see cref="StringBuilder"/> where multiple consecutive whitespace characters are replaced with a single whitespace character.
+        /// </returns>
+        public static StringBuilder WithoutMultipleWhiteSpaces(this StringBuilder value) => value.ReplaceAllWithProbe(Constants.Comments.MultiWhitespaceStrings, Constants.Comments.SingleWhitespaceString);
+
+        /// <summary>
+        /// Gets a <see cref="StringBuilder"/> where all new line characters are removed.
+        /// </summary>
+        /// <param name="value">
+        /// The original text.
+        /// </param>
+        /// <returns>
+        /// A <see cref="StringBuilder"/> where all new line characters are removed.
+        /// </returns>
+        public static StringBuilder WithoutNewLines(this StringBuilder value) => value.Without('\r', '\n');
+
+        /// <summary>
+        /// Gets a <see cref="StringBuilder"/> where all paragraph tags are removed.
+        /// </summary>
+        /// <param name="value">
+        /// The original text.
+        /// </param>
+        /// <returns>
+        /// A <see cref="StringBuilder"/> where all paragraph tags are removed.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static StringBuilder WithoutParaTags(this StringBuilder value) => value.Without(Constants.ParaTags);
+
+        /// <summary>
         /// Gets a <see cref="StringBuilder"/> where leading occurrences of the specified phrases are removed.
         /// </summary>
         /// <param name="value">
@@ -1024,27 +1047,68 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets a <see cref="StringBuilder"/> where all abbreviations are replaced with their expanded forms.
+        /// Counts the number of leading whitespace characters in the text.
         /// </summary>
         /// <param name="value">
-        /// The original text.
+        /// The text to check.
+        /// </param>
+        /// <param name="start">
+        /// The zero-based starting position to begin counting.
+        /// The default is <c>0</c>.
         /// </param>
         /// <returns>
-        /// A <see cref="StringBuilder"/> where all abbreviations are replaced with their expanded forms.
+        /// The number of leading whitespace characters in the text.
         /// </returns>
-        public static StringBuilder WithoutAbbreviations(this StringBuilder value) => AbbreviationFinder.FindAndReplaceAllAbbreviations(value);
+        private static int CountLeadingWhitespaces(this StringBuilder value, int start = 0)
+        {
+            var whitespaces = 0;
+
+            for (var valueLength = value.Length; start < valueLength; start++)
+            {
+                if (value[start].IsWhiteSpace())
+                {
+                    whitespaces++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return whitespaces;
+        }
 
         /// <summary>
-        /// Gets a <see cref="StringBuilder"/> where all paragraph tags are removed.
+        /// Counts the number of trailing whitespace characters in the text.
         /// </summary>
         /// <param name="value">
-        /// The original text.
+        /// The text to check.
+        /// </param>
+        /// <param name="start">
+        /// The zero-based position up to which trailing whitespaces are counted (counts backwards from the end).
+        /// The default is <c>0</c>.
         /// </param>
         /// <returns>
-        /// A <see cref="StringBuilder"/> where all paragraph tags are removed.
+        /// The number of trailing whitespace characters in the text.
         /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static StringBuilder WithoutParaTags(this StringBuilder value) => value.Without(Constants.ParaTags);
+        private static int CountTrailingWhitespaces(this StringBuilder value, in int start = 0)
+        {
+            var whitespaces = 0;
+
+            for (var i = value.Length - 1; i >= start; i--)
+            {
+                if (value[i].IsWhiteSpace())
+                {
+                    whitespaces++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return whitespaces;
+        }
 
         /// <summary>
         /// Gets the text as a rented character array from the shared pool.
@@ -1080,6 +1144,120 @@ namespace MiKoSolutions.Analyzers
             value.CopyTo(0, text, 0, size);
 
             return text.AsSpan(0, size); // use the length of the string builder as the rented array itself may be longer than the requested size, thus leading to unexpected behavior
+        }
+
+        /// <summary>
+        /// Finds the first occurrence of the specified character in the text.
+        /// </summary>
+        /// <param name="value">
+        /// The text to search.
+        /// </param>
+        /// <param name="c">
+        /// The character to search for.
+        /// </param>
+        /// <param name="start">
+        /// The zero-based starting position to begin searching.
+        /// The default is <c>0</c>.
+        /// </param>
+        /// <returns>
+        /// The zero-based index of the first occurrence of the specified character, or <c>-1</c> if it is not found.
+        /// </returns>
+        private static int IndexOf(this StringBuilder value, in char c, in int start = 0)
+        {
+            for (int index = start, length = value.Length; index < length; index++)
+            {
+                if (value[index] == c)
+                {
+                    return index;
+                }
+            }
+
+            return -1;
+        }
+
+        /// <summary>
+        /// Finds the first occurrence of either of the specified characters in the text.
+        /// </summary>
+        /// <param name="value">
+        /// The text to search.
+        /// </param>
+        /// <param name="c1">
+        /// The first character to search for.
+        /// </param>
+        /// <param name="c2">
+        /// The second character to search for.
+        /// </param>
+        /// <param name="start">
+        /// The zero-based starting position to begin searching.
+        /// The default is <c>0</c>.
+        /// </param>
+        /// <returns>
+        /// The zero-based index of the first occurrence of either specified character, or <c>-1</c> if neither is found.
+        /// </returns>
+        private static int IndexOf(this StringBuilder value, in char c1, in char c2, in int start = 0)
+        {
+            for (int index = start, length = value.Length; index < length; index++)
+            {
+                var c = value[index];
+
+                if (c == c1 || c == c2)
+                {
+                    return index;
+                }
+            }
+
+            return -1;
+        }
+
+        /// <summary>
+        /// Converts the first word in the text to its infinite verb form.
+        /// </summary>
+        /// <param name="value">
+        /// The text to modify.
+        /// </param>
+        private static void MakeInfinite(this StringBuilder value)
+        {
+            var word = FirstWord(value, out var whitespacesBefore);
+
+            value.Remove(whitespacesBefore, word.Length);
+
+            var infiniteWord = Verbalizer.MakeInfiniteVerb(word);
+
+            value.Insert(whitespacesBefore, infiniteWord);
+        }
+
+        /// <summary>
+        /// Converts the first word in the text to its plural form.
+        /// </summary>
+        /// <param name="value">
+        /// The text to modify.
+        /// </param>
+        private static void MakePlural(this StringBuilder value)
+        {
+            var word = FirstWord(value, out var whitespacesBefore);
+
+            value.Remove(whitespacesBefore, word.Length);
+
+            var pluralWord = Pluralizer.MakePluralName(word);
+
+            value.Insert(whitespacesBefore, pluralWord);
+        }
+
+        /// <summary>
+        /// Converts the first word in the text to its third person singular verb form.
+        /// </summary>
+        /// <param name="value">
+        /// The text to modify.
+        /// </param>
+        private static void MakeThirdPersonSingular(this StringBuilder value)
+        {
+            var word = FirstWord(value, out var whitespacesBefore);
+
+            value.Remove(whitespacesBefore, word.Length);
+
+            var pluralWord = Verbalizer.MakeThirdPersonSingularVerb(word);
+
+            value.Insert(whitespacesBefore, pluralWord);
         }
 
         /// <summary>
@@ -1151,70 +1329,6 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Counts the number of leading whitespace characters in the text.
-        /// </summary>
-        /// <param name="value">
-        /// The text to check.
-        /// </param>
-        /// <param name="start">
-        /// The zero-based starting position to begin counting.
-        /// The default is <c>0</c>.
-        /// </param>
-        /// <returns>
-        /// The number of leading whitespace characters in the text.
-        /// </returns>
-        private static int CountLeadingWhitespaces(this StringBuilder value, int start = 0)
-        {
-            var whitespaces = 0;
-
-            for (var valueLength = value.Length; start < valueLength; start++)
-            {
-                if (value[start].IsWhiteSpace())
-                {
-                    whitespaces++;
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            return whitespaces;
-        }
-
-        /// <summary>
-        /// Counts the number of trailing whitespace characters in the text.
-        /// </summary>
-        /// <param name="value">
-        /// The text to check.
-        /// </param>
-        /// <param name="start">
-        /// The zero-based position up to which trailing whitespaces are counted (counts backwards from the end).
-        /// The default is <c>0</c>.
-        /// </param>
-        /// <returns>
-        /// The number of trailing whitespace characters in the text.
-        /// </returns>
-        private static int CountTrailingWhitespaces(this StringBuilder value, in int start = 0)
-        {
-            var whitespaces = 0;
-
-            for (var i = value.Length - 1; i >= start; i--)
-            {
-                if (value[i].IsWhiteSpace())
-                {
-                    whitespaces++;
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            return whitespaces;
-        }
-
-        /// <summary>
         /// Converts the first non-whitespace character in the text to lower-case.
         /// </summary>
         /// <param name="value">
@@ -1269,57 +1383,6 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Converts the first word in the text to its infinite verb form.
-        /// </summary>
-        /// <param name="value">
-        /// The text to modify.
-        /// </param>
-        private static void MakeInfinite(this StringBuilder value)
-        {
-            var word = FirstWord(value, out var whitespacesBefore);
-
-            value.Remove(whitespacesBefore, word.Length);
-
-            var infiniteWord = Verbalizer.MakeInfiniteVerb(word);
-
-            value.Insert(whitespacesBefore, infiniteWord);
-        }
-
-        /// <summary>
-        /// Converts the first word in the text to its plural form.
-        /// </summary>
-        /// <param name="value">
-        /// The text to modify.
-        /// </param>
-        private static void MakePlural(this StringBuilder value)
-        {
-            var word = FirstWord(value, out var whitespacesBefore);
-
-            value.Remove(whitespacesBefore, word.Length);
-
-            var pluralWord = Pluralizer.MakePluralName(word);
-
-            value.Insert(whitespacesBefore, pluralWord);
-        }
-
-        /// <summary>
-        /// Converts the first word in the text to its third person singular verb form.
-        /// </summary>
-        /// <param name="value">
-        /// The text to modify.
-        /// </param>
-        private static void MakeThirdPersonSingular(this StringBuilder value)
-        {
-            var word = FirstWord(value, out var whitespacesBefore);
-
-            value.Remove(whitespacesBefore, word.Length);
-
-            var pluralWord = Verbalizer.MakeThirdPersonSingularVerb(word);
-
-            value.Insert(whitespacesBefore, pluralWord);
-        }
-
-        /// <summary>
         /// Trims the leading spaces in the text to the specified count.
         /// </summary>
         /// <param name="value">
@@ -1339,69 +1402,6 @@ namespace MiKoSolutions.Analyzers
                     value.Remove(count, whitespaces - count);
                 }
             }
-        }
-
-        /// <summary>
-        /// Finds the first occurrence of the specified character in the text.
-        /// </summary>
-        /// <param name="value">
-        /// The text to search.
-        /// </param>
-        /// <param name="c">
-        /// The character to search for.
-        /// </param>
-        /// <param name="start">
-        /// The zero-based starting position to begin searching.
-        /// The default is <c>0</c>.
-        /// </param>
-        /// <returns>
-        /// The zero-based index of the first occurrence of the specified character, or <c>-1</c> if it is not found.
-        /// </returns>
-        private static int IndexOf(this StringBuilder value, in char c, in int start = 0)
-        {
-            for (int index = start, length = value.Length; index < length; index++)
-            {
-                if (value[index] == c)
-                {
-                    return index;
-                }
-            }
-
-            return -1;
-        }
-
-        /// <summary>
-        /// Finds the first occurrence of either of the specified characters in the text.
-        /// </summary>
-        /// <param name="value">
-        /// The text to search.
-        /// </param>
-        /// <param name="c1">
-        /// The first character to search for.
-        /// </param>
-        /// <param name="c2">
-        /// The second character to search for.
-        /// </param>
-        /// <param name="start">
-        /// The zero-based starting position to begin searching.
-        /// The default is <c>0</c>.
-        /// </param>
-        /// <returns>
-        /// The zero-based index of the first occurrence of either specified character, or <c>-1</c> if neither is found.
-        /// </returns>
-        private static int IndexOf(this StringBuilder value, in char c1, in char c2, in int start = 0)
-        {
-            for (int index = start, length = value.Length; index < length; index++)
-            {
-                var c = value[index];
-
-                if (c == c1 || c == c2)
-                {
-                    return index;
-                }
-            }
-
-            return -1;
         }
     }
 }

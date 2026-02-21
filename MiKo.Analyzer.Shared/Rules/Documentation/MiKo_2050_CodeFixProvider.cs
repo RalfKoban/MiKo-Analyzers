@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -29,7 +31,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => "MiKo_2050";
 
-        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic issue)
+        protected override Task<DocumentationCommentTriviaSyntax> GetUpdatedSyntaxAsync(DocumentationCommentTriviaSyntax syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
+        {
+            var updatedSyntax = GetUpdatedSyntax(syntax);
+
+            return Task.FromResult(updatedSyntax);
+        }
+
+        private static DocumentationCommentTriviaSyntax GetUpdatedSyntax(DocumentationCommentTriviaSyntax syntax)
         {
             var ctor = syntax.FirstAncestorOrSelf<ConstructorDeclarationSyntax>();
 
@@ -85,9 +94,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 case 2 when parameters[0].Type.IsSerializationInfo() && parameters[1].Type.IsStreamingContext():
                     return FixSerializationParamCtor(type, parameters[0], parameters[1]);
-            }
 
-            return FixParameterlessCtor(type);
+                default:
+                    return FixParameterlessCtor(type);
+            }
         }
 
         private static DocumentationCommentTriviaSyntax FixParameterlessCtor(TypeSyntax type)

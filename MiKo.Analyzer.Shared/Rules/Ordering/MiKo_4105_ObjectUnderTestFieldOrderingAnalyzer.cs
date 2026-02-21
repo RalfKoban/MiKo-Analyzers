@@ -27,12 +27,29 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                    : AnalyzeTestType(symbol, field);
         }
 
+        private static IFieldSymbol GetFirstRemainingField(IFieldSymbol field, IEnumerable<IFieldSymbol> fields)
+        {
+            IEnumerable<IFieldSymbol> remainingFields = fields.SkipWhile(_ => _.IsConst);
+
+            if (field.IsStatic is false)
+            {
+                remainingFields = remainingFields.SkipWhile(_ => _.IsStatic);
+            }
+
+            if (field.IsReadOnly is false)
+            {
+                remainingFields = remainingFields.SkipWhile(_ => _.IsReadOnly);
+            }
+
+            return remainingFields.FirstOrDefault();
+        }
+
         private Diagnostic[] AnalyzeTestType(INamedTypeSymbol symbol, IFieldSymbol field)
         {
             var path = field.GetLineSpan().Path;
 
             var fields = GetFieldsOrderedByLocation(symbol, path);
-            var firstField = fields.SkipWhile(_ => _.IsConst).First();
+            var firstField = GetFirstRemainingField(field, fields);
 
             return ReferenceEquals(field, firstField)
                    ? Array.Empty<Diagnostic>()

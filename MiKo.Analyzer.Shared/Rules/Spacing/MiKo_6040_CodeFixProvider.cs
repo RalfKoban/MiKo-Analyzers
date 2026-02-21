@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -19,11 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 switch (node)
                 {
                     case MemberAccessExpressionSyntax _:
-                        return node;
-
                     case MemberBindingExpressionSyntax _:
-                        return node;
-
                     case ConditionalAccessExpressionSyntax _:
                         return node;
                 }
@@ -32,7 +30,21 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return null;
         }
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
+        {
+            var updatedSyntax = GetUpdatedSyntax(syntax, issue);
+
+            return Task.FromResult(updatedSyntax);
+        }
+
+        protected override Task<SyntaxNode> GetUpdatedSyntaxRootAsync(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue, CancellationToken cancellationToken)
+        {
+            var updatedSyntaxRoot = GetUpdatedSyntaxRoot(root, syntax, issue);
+
+            return Task.FromResult(updatedSyntaxRoot);
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax, Diagnostic issue)
         {
             switch (syntax)
             {
@@ -62,7 +74,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
         }
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
+        private static SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root, SyntaxNode syntax, Diagnostic issue)
         {
             // adjust the invocations
             switch (syntax)

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -30,9 +32,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected sealed override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<XmlTextSyntax>().FirstOrDefault();
 
-        protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => syntax is XmlTextSyntax text
-                                                                                                                         ? GetUpdatedSyntax(document, text, issue)
-                                                                                                                         : syntax;
+        protected sealed override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
+        {
+            var updatedSyntax = syntax is XmlTextSyntax text
+                                ? GetUpdatedSyntax(document, text, issue)
+                                : syntax;
+
+            return Task.FromResult(updatedSyntax);
+        }
 
         protected abstract XmlTextSyntax GetUpdatedSyntax(Document document, XmlTextSyntax syntax, Diagnostic issue);
     }

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -30,13 +32,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return null;
         }
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected override async Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
             switch (syntax)
             {
                 case ClassDeclarationSyntax classDeclaration:
                 {
-                    var keyword = MakeStatic(document, classDeclaration)
+                    var makeStatic = await MakeStaticAsync(classDeclaration, document, cancellationToken).ConfigureAwait(false);
+
+                    var keyword = makeStatic
                                   ? SyntaxKind.StaticKeyword
                                   : SyntaxKind.SealedKeyword;
 
@@ -55,9 +59,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static bool MakeStatic(Document document, ClassDeclarationSyntax syntax)
+        private static async Task<bool> MakeStaticAsync(ClassDeclarationSyntax syntax, Document document, CancellationToken cancellationToken)
         {
-            var type = syntax.GetTypeSymbol(document);
+            var type = await syntax.GetTypeSymbolAsync(document, cancellationToken).ConfigureAwait(false);
 
             // Inspect members, if all are static, then make it static, else make it sealed
             if (type.BaseType is null || type.BaseType.IsObject())

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -15,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<IfStatementSyntax>().FirstOrDefault();
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected override async Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
             if (syntax is IfStatementSyntax ifStatement && ifStatement.Else is ElseClauseSyntax elseClause)
             {
@@ -24,7 +26,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var condition = ifStatement.Condition;
                 var ifCloseParenthesis = ifStatement.CloseParenToken;
 
-                var newIfStatement = ifStatement.WithCondition(InvertCondition(document, condition).WithTriviaFrom(condition)).WithStatement(elseClause.Statement);
+                var invertedCondition = await InvertConditionAsync(condition, document, cancellationToken).ConfigureAwait(false);
+
+                var newIfStatement = ifStatement.WithCondition(invertedCondition.WithTriviaFrom(condition)).WithStatement(elseClause.Statement);
                 var newElseClause = elseClause.WithStatement(ifStatement.Statement);
 
                 if (elseKeyword.HasTrailingComment())
