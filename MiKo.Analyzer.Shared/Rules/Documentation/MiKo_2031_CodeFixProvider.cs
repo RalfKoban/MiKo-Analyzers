@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Composition;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
@@ -31,22 +32,33 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => "MiKo_2031";
 
-        protected override SyntaxNode Comment(Document document, XmlElementSyntax comment, MethodDeclarationSyntax method)
+        protected override Task<SyntaxNode> CommentAsync(XmlElementSyntax comment, MethodDeclarationSyntax method, Document document, CancellationToken cancellationToken)
         {
-            return HandleSpecialMethod(comment, method) ?? base.Comment(document, comment, method);
+            SyntaxNode updatedComment = HandleSpecialMethod(comment, method);
+
+            if (updatedComment != null)
+            {
+                return Task.FromResult(updatedComment);
+            }
+
+            return base.CommentAsync(comment, method, document, cancellationToken);
         }
 
-        protected override XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, string memberName, GenericNameSyntax returnType)
+        protected override Task<SyntaxNode> GenericCommentAsync(XmlElementSyntax comment, string memberName, GenericNameSyntax returnType, Document document, CancellationToken cancellationToken)
         {
             comment = PrepareGenericComment(comment);
 
             // we have to replace the XmlText if it is part of the first item of context
-            return Comment(comment, Parts[0], SeeCrefTaskResult(), Parts[1], comment.Content);
+            SyntaxNode updatedComment = Comment(comment, Parts[0], SeeCrefTaskResult(), Parts[1], comment.Content);
+
+            return Task.FromResult(updatedComment);
         }
 
-        protected override XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, string memberName, TypeSyntax returnType)
+        protected override Task<SyntaxNode> NonGenericCommentAsync(XmlElementSyntax comment, string memberName, TypeSyntax returnType, Document document, CancellationToken cancellationToken)
         {
-            return Comment(comment, Constants.Comments.NonGenericTaskReturnTypePhrase);
+            SyntaxNode updatedComment = Comment(comment, Constants.Comments.NonGenericTaskReturnTypePhrase);
+
+            return Task.FromResult(updatedComment);
         }
 
         private static XmlElementSyntax HandleSpecialMethod(XmlElementSyntax comment, MethodDeclarationSyntax method)

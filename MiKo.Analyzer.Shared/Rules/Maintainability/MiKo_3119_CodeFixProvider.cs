@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -16,7 +18,26 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<MethodDeclarationSyntax>().FirstOrDefault();
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
+        {
+            SyntaxNode updatedSyntax = GetUpdatedSyntax(syntax);
+
+            return Task.FromResult(updatedSyntax);
+        }
+
+        protected override Task<SyntaxNode> GetUpdatedSyntaxRootAsync(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue, CancellationToken cancellationToken)
+        {
+            SyntaxNode updatedSyntaxRoot = null;
+
+            if (syntax is MethodDeclarationSyntax method && method.ExpressionBody != null)
+            {
+                updatedSyntaxRoot = GetUpdatedSyntaxRoot(root, method);
+            }
+
+            return Task.FromResult(updatedSyntaxRoot);
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
         {
             if (syntax is MethodDeclarationSyntax method && method.Body is BlockSyntax body)
             {
@@ -29,27 +50,22 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return syntax;
         }
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
+        private static SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root, MethodDeclarationSyntax method)
         {
-            if (syntax is MethodDeclarationSyntax method && method.ExpressionBody != null)
+            var siblings = method.Siblings();
+
+            var nodesToUpdate = new List<SyntaxNode>(2);
+
+            if (siblings.Count > 1 && method.Equals(siblings[0]))
             {
-                var siblings = method.Siblings();
-
-                var nodesToUpdate = new List<SyntaxNode>(2);
-
-                if (siblings.Count > 1 && method.Equals(siblings[0]))
-                {
-                    nodesToUpdate.Add(siblings[1]);
-                }
-
-                nodesToUpdate.Add(method);
-
-                var updatedRoot = root.ReplaceNodes(nodesToUpdate, (original, rewritten) => original == method ? null : rewritten.WithoutLeadingEndOfLine());
-
-                return updatedRoot;
+                nodesToUpdate.Add(siblings[1]);
             }
 
-            return base.GetUpdatedSyntaxRoot(document, root, syntax, annotationOfSyntax, issue);
+            nodesToUpdate.Add(method);
+
+            var updatedRoot = root.ReplaceNodes(nodesToUpdate, (original, rewritten) => original == method ? null : rewritten.WithoutLeadingEndOfLine());
+
+            return updatedRoot;
         }
     }
 }

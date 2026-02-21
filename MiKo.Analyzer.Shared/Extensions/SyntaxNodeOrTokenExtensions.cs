@@ -12,6 +12,28 @@ namespace MiKoSolutions.Analyzers
     internal static class SyntaxNodeOrTokenExtensions
     {
         /// <summary>
+        /// Gets the line number where the syntax node or token ends.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node or token to get the ending line for.
+        /// </param>
+        /// <returns>
+        /// The zero-based line number where the syntax node or token ends.
+        /// </returns>
+        internal static int GetEndingLine(this in SyntaxNodeOrToken value) => value.GetLocation().GetEndingLine();
+
+        /// <summary>
+        /// Gets the ending position of the syntax node or token.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node or token to get the ending position for.
+        /// </param>
+        /// <returns>
+        /// The line position where the syntax node or token ends.
+        /// </returns>
+        internal static LinePosition GetEndPosition(this in SyntaxNodeOrToken value) => value.GetLocation().GetEndPosition();
+
+        /// <summary>
         /// Gets the position within the starting line where the syntax node or token begins.
         /// </summary>
         /// <param name="value">
@@ -34,17 +56,6 @@ namespace MiKoSolutions.Analyzers
         internal static int GetStartingLine(this in SyntaxNodeOrToken value) => value.GetLocation().GetStartingLine();
 
         /// <summary>
-        /// Gets the line number where the syntax node or token ends.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax node or token to get the ending line for.
-        /// </param>
-        /// <returns>
-        /// The zero-based line number where the syntax node or token ends.
-        /// </returns>
-        internal static int GetEndingLine(this in SyntaxNodeOrToken value) => value.GetLocation().GetEndingLine();
-
-        /// <summary>
         /// Gets the starting position of the syntax node or token.
         /// </summary>
         /// <param name="value">
@@ -54,16 +65,5 @@ namespace MiKoSolutions.Analyzers
         /// The line position where the syntax node or token begins.
         /// </returns>
         internal static LinePosition GetStartPosition(this in SyntaxNodeOrToken value) => value.GetLocation().GetStartPosition();
-
-        /// <summary>
-        /// Gets the ending position of the syntax node or token.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax node or token to get the ending position for.
-        /// </param>
-        /// <returns>
-        /// The line position where the syntax node or token ends.
-        /// </returns>
-        internal static LinePosition GetEndPosition(this in SyntaxNodeOrToken value) => value.GetLocation().GetEndPosition();
     }
 }

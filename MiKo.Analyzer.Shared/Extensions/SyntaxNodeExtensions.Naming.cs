@@ -59,24 +59,6 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets the identifier name from the property expression of the specified <see cref="PropertyDeclarationSyntax"/>.
-        /// </summary>
-        /// <param name="value">
-        /// The property declaration syntax.
-        /// </param>
-        /// <returns>
-        /// A <see cref="string"/> that contains the identifier name; or <see langword="null"/> if no name is found.
-        /// </returns>
-        internal static string GetIdentifierNameFromPropertyExpression(this PropertyDeclarationSyntax value)
-        {
-            var expression = value.GetPropertyExpression();
-
-            return expression is IdentifierNameSyntax identifier
-                   ? identifier.GetName()
-                   : null;
-        }
-
-        /// <summary>
         /// Gets the identifier name from the specified <see cref="ArgumentSyntax"/>.
         /// </summary>
         /// <param name="value">
@@ -108,6 +90,24 @@ namespace MiKoSolutions.Analyzers
         /// A <see cref="string"/> that contains the identifier name; or <see langword="null"/> if no name is found.
         /// </returns>
         internal static string GetIdentifierName(this InvocationExpressionSyntax value) => value.GetIdentifierExpression().GetName();
+
+        /// <summary>
+        /// Gets the identifier name from the property expression of the specified <see cref="PropertyDeclarationSyntax"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The property declaration syntax.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the identifier name; or <see langword="null"/> if no name is found.
+        /// </returns>
+        internal static string GetIdentifierNameFromPropertyExpression(this PropertyDeclarationSyntax value)
+        {
+            var expression = value.GetPropertyExpression();
+
+            return expression is IdentifierNameSyntax identifier
+                   ? identifier.GetName()
+                   : null;
+        }
 
         /// <summary>
         /// Gets the name of the method that contains the specified <see cref="ParameterSyntax"/>.
@@ -812,6 +812,46 @@ namespace MiKoSolutions.Analyzers
         internal static string GetName(this XmlNameSyntax value) => value?.LocalName.ValueText;
 
         /// <summary>
+        /// Gets the name-only part of the specified <see cref="TypeSyntax"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The type syntax.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the name-only part of the type as a <see cref="string"/>; or the <see cref="string.Empty"/> string ("") if no name is found.
+        /// </returns>
+        internal static string GetNameOnlyPart(this TypeSyntax value) => value?.ToString().GetNameOnlyPart();
+
+        /// <summary>
+        /// Gets the name-only part of the specified <see cref="TypeSyntax"/>, excluding any generic type information.
+        /// </summary>
+        /// <param name="value">
+        /// The type syntax.
+        /// </param>
+        /// <returns>
+        /// A <see cref="string"/> that contains the name-only part of the type without generic information; or the <see cref="string.Empty"/> string ("") if no name is found.
+        /// </returns>
+        internal static string GetNameOnlyPartWithoutGeneric(this TypeSyntax value)
+        {
+            var type = GetNameLocal();
+
+            return type.GetNameOnlyPart();
+
+            ReadOnlySpan<char> GetNameLocal()
+            {
+                switch (value)
+                {
+                    case GenericNameSyntax generic: return generic.GetName().AsSpan();
+                    case SimpleNameSyntax simple: return simple.GetName().AsSpan();
+                    default:
+                        return value is null
+                               ? ReadOnlySpan<char>.Empty
+                               : value.ToString().AsSpan();
+                }
+            }
+        }
+
+        /// <summary>
         /// Gets the names of the specified <see cref="BaseFieldDeclarationSyntax"/> variables.
         /// </summary>
         /// <param name="value">
@@ -854,46 +894,6 @@ namespace MiKoSolutions.Analyzers
             }
 
             return names.ToArray();
-        }
-
-        /// <summary>
-        /// Gets the name-only part of the specified <see cref="TypeSyntax"/>.
-        /// </summary>
-        /// <param name="value">
-        /// The type syntax.
-        /// </param>
-        /// <returns>
-        /// A <see cref="string"/> that contains the name-only part of the type as a <see cref="string"/>; or the <see cref="string.Empty"/> string ("") if no name is found.
-        /// </returns>
-        internal static string GetNameOnlyPart(this TypeSyntax value) => value?.ToString().GetNameOnlyPart();
-
-        /// <summary>
-        /// Gets the name-only part of the specified <see cref="TypeSyntax"/>, excluding any generic type information.
-        /// </summary>
-        /// <param name="value">
-        /// The type syntax.
-        /// </param>
-        /// <returns>
-        /// A <see cref="string"/> that contains the name-only part of the type without generic information; or the <see cref="string.Empty"/> string ("") if no name is found.
-        /// </returns>
-        internal static string GetNameOnlyPartWithoutGeneric(this TypeSyntax value)
-        {
-            var type = GetNameLocal();
-
-            return type.GetNameOnlyPart();
-
-            ReadOnlySpan<char> GetNameLocal()
-            {
-                switch (value)
-                {
-                    case GenericNameSyntax generic: return generic.GetName().AsSpan();
-                    case SimpleNameSyntax simple: return simple.GetName().AsSpan();
-                    default:
-                        return value is null
-                               ? ReadOnlySpan<char>.Empty
-                               : value.ToString().AsSpan();
-                }
-            }
         }
 
         /// <summary>

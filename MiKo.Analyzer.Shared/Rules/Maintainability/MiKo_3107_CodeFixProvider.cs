@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -19,11 +21,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return syntaxNodes.OfType<InvocationExpressionSyntax>().First();
         }
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected override async Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
             var invocation = (InvocationExpressionSyntax)syntax;
 
-            return ReplacementFor(document, invocation).WithTriviaFrom(invocation);
+            var replacement = await ReplacementForAsync(invocation, document, cancellationToken).ConfigureAwait(false);
+
+            return replacement.WithTriviaFrom(invocation);
         }
 
         private static SyntaxNode ReplacementFor(PredefinedTypeSyntax type)
@@ -43,17 +47,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static SyntaxNode ReplacementFor(Document document, InvocationExpressionSyntax invocation)
+        private static async Task<SyntaxNode> ReplacementForAsync(InvocationExpressionSyntax invocation, Document document, CancellationToken cancellationToken)
         {
             if (invocation.Expression is MemberAccessExpressionSyntax maes && maes.Name is GenericNameSyntax generic)
             {
-                return ReplacementFor(document, generic.TypeArgumentList.Arguments.First());
+                return await ReplacementForAsync(generic.TypeArgumentList.Arguments.First(), document, cancellationToken).ConfigureAwait(false);
             }
 
             return NullLiteral();
         }
 
-        private static SyntaxNode ReplacementFor(Document document, TypeSyntax typeSyntax)
+        private static async Task<SyntaxNode> ReplacementForAsync(TypeSyntax typeSyntax, Document document, CancellationToken cancellationToken)
         {
             if (typeSyntax is PredefinedTypeSyntax predefined)
             {
@@ -61,7 +65,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             // it might be a struct or an an enum, so let's check that
-            var type = typeSyntax.GetTypeSymbol(document);
+            var type = await typeSyntax.GetTypeSymbolAsync(document, cancellationToken).ConfigureAwait(false);
 
             if (type.IsValueType)
             {

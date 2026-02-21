@@ -200,6 +200,29 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Retrieves the <see cref="XmlCrefAttributeSyntax"/> from the specified <see cref="SyntaxList{T}"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The list of attributes to search.
+        /// </param>
+        /// <returns>
+        /// The <see cref="XmlCrefAttributeSyntax"/> if found; otherwise, <see langword="null"/>.
+        /// </returns>
+        internal static XmlCrefAttributeSyntax GetCref(this in SyntaxList<XmlAttributeSyntax> value)
+        {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            for (int index = 0, count = value.Count; index < count; index++)
+            {
+                if (value[index] is XmlCrefAttributeSyntax a)
+                {
+                    return a;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Finds the last element in the <see cref="SyntaxList{T}"/> that satisfies the specified condition.
         /// </summary>
         /// <typeparam name="T">
@@ -844,6 +867,28 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Gets a <see cref="SyntaxList{T}"/> with the specified start texts removed from the first element.
+        /// </summary>
+        /// <param name="values">
+        /// The list whose first element is to be adjusted.
+        /// </param>
+        /// <param name="startTexts">
+        /// The start texts to be removed.
+        /// </param>
+        /// <returns>
+        /// A collection of XML node syntaxes with the start texts removed from the first element, or the original list if no such text is present.
+        /// </returns>
+        internal static SyntaxList<XmlNodeSyntax> WithoutStartText(this in SyntaxList<XmlNodeSyntax> values, in ReadOnlySpan<string> startTexts)
+        {
+            if (values.Count > 0 && values[0] is XmlTextSyntax textSyntax)
+            {
+                return values.Replace(textSyntax, textSyntax.WithoutStartText(startTexts));
+            }
+
+            return values;
+        }
+
+        /// <summary>
         /// Gets a <see cref="SyntaxList{T}"/> with all occurrences of the specified text removed from XML text elements.
         /// </summary>
         /// <param name="values">
@@ -986,28 +1031,6 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets a <see cref="SyntaxList{T}"/> with the specified start texts removed from the first element.
-        /// </summary>
-        /// <param name="values">
-        /// The list whose first element is to be adjusted.
-        /// </param>
-        /// <param name="startTexts">
-        /// The start texts to be removed.
-        /// </param>
-        /// <returns>
-        /// A collection of XML node syntaxes with the start texts removed from the first element, or the original list if no such text is present.
-        /// </returns>
-        internal static SyntaxList<XmlNodeSyntax> WithoutStartText(this in SyntaxList<XmlNodeSyntax> values, in ReadOnlySpan<string> startTexts)
-        {
-            if (values.Count > 0 && values[0] is XmlTextSyntax textSyntax)
-            {
-                return values.Replace(textSyntax, textSyntax.WithoutStartText(startTexts));
-            }
-
-            return values;
-        }
-
-        /// <summary>
         /// Gets a <see cref="SyntaxList{T}"/> with the specified text prepended to the first element.
         /// </summary>
         /// <param name="values">
@@ -1045,28 +1068,5 @@ namespace MiKoSolutions.Analyzers
         /// A collection of XML node syntaxes with the last element having a trailing XML comment.
         /// </returns>
         internal static SyntaxList<XmlNodeSyntax> WithTrailingXmlComment(this in SyntaxList<XmlNodeSyntax> values) => values.Replace(values.Last(), values.Last().WithoutTrailingTrivia().WithTrailingXmlComment());
-
-        /// <summary>
-        /// Retrieves the <see cref="XmlCrefAttributeSyntax"/> from the specified <see cref="SyntaxList{T}"/>.
-        /// </summary>
-        /// <param name="value">
-        /// The list of attributes to search.
-        /// </param>
-        /// <returns>
-        /// The <see cref="XmlCrefAttributeSyntax"/> if found; otherwise, <see langword="null"/>.
-        /// </returns>
-        internal static XmlCrefAttributeSyntax GetCref(this in SyntaxList<XmlAttributeSyntax> value)
-        {
-            // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            for (int index = 0, count = value.Count; index < count; index++)
-            {
-                if (value[index] is XmlCrefAttributeSyntax a)
-                {
-                    return a;
-                }
-            }
-
-            return null;
-        }
     }
 }

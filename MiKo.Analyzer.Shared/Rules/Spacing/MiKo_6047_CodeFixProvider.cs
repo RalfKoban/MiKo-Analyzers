@@ -1,4 +1,6 @@
 ﻿using System.Composition;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -12,21 +14,23 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     {
         public override string FixableDiagnosticId => "MiKo_6047";
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
-            if (syntax is SwitchExpressionSyntax expression)
-            {
-                var spaces = GetProposedSpaces(issue);
-                var armSpaces = spaces + Constants.Indentation;
+            SyntaxNode updatedSyntax = GetUpdatedSyntax((SwitchExpressionSyntax)syntax, issue);
 
-                return expression.WithOpenBraceToken(expression.OpenBraceToken.WithLeadingSpaces(spaces))
-                                 .WithArms(SyntaxFactory.SeparatedList(
-                                                                   expression.Arms.Select(_ => _.WithLeadingSpaces(armSpaces)),
-                                                                   expression.Arms.GetSeparators()))
-                                 .WithCloseBraceToken(expression.CloseBraceToken.WithLeadingSpaces(spaces));
-            }
+            return Task.FromResult(updatedSyntax);
+        }
 
-            return syntax;
+        private static SwitchExpressionSyntax GetUpdatedSyntax(SwitchExpressionSyntax expression, Diagnostic issue)
+        {
+            var spaces = GetProposedSpaces(issue);
+            var armSpaces = spaces + Constants.Indentation;
+
+            return expression.WithOpenBraceToken(expression.OpenBraceToken.WithLeadingSpaces(spaces))
+                             .WithArms(SyntaxFactory.SeparatedList(
+                                                               expression.Arms.Select(_ => _.WithLeadingSpaces(armSpaces)),
+                                                               expression.Arms.GetSeparators()))
+                             .WithCloseBraceToken(expression.CloseBraceToken.WithLeadingSpaces(spaces));
         }
     }
 }

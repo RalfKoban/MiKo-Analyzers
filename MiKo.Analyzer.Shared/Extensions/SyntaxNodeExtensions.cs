@@ -91,6 +91,40 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Gets attributes of a specific type from an XML element.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of XML attribute to retrieve.
+        /// </typeparam>
+        /// <param name="value">
+        /// The XML element to get attributes from.
+        /// </param>
+        /// <returns>
+        /// A collection of attributes of the specified type.
+        /// </returns>
+        internal static IReadOnlyList<T> GetAttributes<T>(this XmlElementSyntax value) where T : XmlAttributeSyntax
+        {
+            return value?.StartTag.Attributes.OfType<XmlAttributeSyntax, T>() ?? Array.Empty<T>();
+        }
+
+        /// <summary>
+        /// Gets attributes of a specific type from an XML empty element.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of XML attribute to retrieve.
+        /// </typeparam>
+        /// <param name="value">
+        /// The XML empty element to get attributes from.
+        /// </param>
+        /// <returns>
+        /// A collection of attributes of the specified type.
+        /// </returns>
+        internal static IReadOnlyList<T> GetAttributes<T>(this XmlEmptyElementSyntax value) where T : XmlAttributeSyntax
+        {
+            return value?.Attributes.OfType<XmlAttributeSyntax, T>() ?? Array.Empty<T>();
+        }
+
+        /// <summary>
         /// Gets the constraint clauses associated with the specified type parameter constraint clause.
         /// </summary>
         /// <param name="value">
@@ -116,31 +150,70 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets the reference token for a type parameter constraint.
+        /// Gets the syntax node that swallows an exception.
         /// </summary>
         /// <param name="value">
-        /// The type parameter constraint clause to get the reference token for.
+        /// The object creation expression to analyze.
+        /// </param>
+        /// <param name="semanticModelCallback">
+        /// A callback that provides the semantic model for analysis.
         /// </param>
         /// <returns>
-        /// The syntax token that represents the reference for the constraint.
+        /// The syntax node that swallows an exception, or <see langword="null"/> if none exists.
         /// </returns>
-        internal static SyntaxToken GetTypeParameterConstraintReferenceToken(this TypeParameterConstraintClauseSyntax value)
+        internal static SyntaxNode GetExceptionSwallowingNode(this ObjectCreationExpressionSyntax value, Func<SemanticModel> semanticModelCallback)
         {
-            switch (value.Parent)
+            var catchClause = value.FirstAncestorOrSelf<CatchClauseSyntax>();
+
+            if (catchClause != null)
             {
-//// ReSharper disable PossibleNullReferenceException Cannot be null as there is already a type parameter constraint
-                case ClassDeclarationSyntax c: return c.TypeParameterList.GreaterThanToken;
-                case InterfaceDeclarationSyntax i: return i.TypeParameterList.GreaterThanToken;
-                case RecordDeclarationSyntax r: return r.TypeParameterList.GreaterThanToken;
-                case StructDeclarationSyntax s: return s.TypeParameterList.GreaterThanToken;
-//// ReSharper restore PossibleNullReferenceException
-
-                case MethodDeclarationSyntax b: return b.ParameterList.CloseParenToken;
-                case LocalFunctionStatementSyntax f: return f.ParameterList.CloseParenToken;
-
-                default:
-                    return default;
+                // we found an exception inside a catch block that does not get the caught exception as inner exception
+                return catchClause;
             }
+
+            // inspect any 'if' or 'switch' or 'else if' to see if there is an exception involved
+            var expression = value.GetRelatedCondition()?.FirstDescendant<ExpressionSyntax>(_ => _.GetTypeSymbol(semanticModelCallback())?.IsException() is true);
+
+            if (expression != null)
+            {
+                return expression;
+            }
+
+            // inspect method arguments
+            var parameter = value.GetEnclosing<MethodDeclarationSyntax>()?.ParameterList.Parameters.FirstOrDefault(_ => _.Type.IsException());
+
+            return parameter;
+        }
+
+        /// <summary>
+        /// Gets the Fluent Assertions "Should" node from an expression statement.
+        /// </summary>
+        /// <param name="value">
+        /// The expression statement to search in.
+        /// </param>
+        /// <returns>
+        /// The member access expression that represents a Fluent Assertions "Should" call, or <see langword="null"/> if none exists.
+        /// </returns>
+        internal static MemberAccessExpressionSyntax GetFluentAssertionShouldNode(this ExpressionStatementSyntax value)
+        {
+            var nodes = value.DescendantNodes<MemberAccessExpressionSyntax>(SyntaxKind.SimpleMemberAccessExpression);
+
+            foreach (var node in nodes)
+            {
+                var name = node.GetName();
+
+                switch (name)
+                {
+                    // we might have a lambda expression, so the given statement might not be the correct ancestor statement of the 'Should()' node, hence we have to determine whether it's the specific statement that has an issue
+                    case Constants.FluentAssertions.Should when node.FirstAncestor<ExpressionStatementSyntax>() == value:
+                        return node;
+
+                    case Constants.FluentAssertions.ShouldBeEquivalentTo when node.FirstAncestor<ExpressionStatementSyntax>() == value:
+                        return node;
+                }
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -155,15 +228,55 @@ namespace MiKoSolutions.Analyzers
         internal static AccessorDeclarationSyntax GetGetter(this PropertyDeclarationSyntax value) => value?.AccessorList?.FirstChild<AccessorDeclarationSyntax>(SyntaxKind.GetAccessorDeclaration);
 
         /// <summary>
-        /// Gets the set accessor of a property declaration.
+        /// Gets the identifier expression from an expression syntax.
         /// </summary>
         /// <param name="value">
-        /// The property declaration to get the accessor from.
+        /// The expression to extract the identifier from.
         /// </param>
         /// <returns>
-        /// The set accessor declaration, or <see langword="null"/> if there is none.
+        /// The identifier expression, or <see langword="null"/> if none exists.
         /// </returns>
-        internal static AccessorDeclarationSyntax GetSetter(this PropertyDeclarationSyntax value) => value?.AccessorList?.FirstChild<AccessorDeclarationSyntax>(SyntaxKind.SetAccessorDeclaration);
+        internal static ExpressionSyntax GetIdentifierExpression(this ExpressionSyntax value)
+        {
+            switch (value)
+            {
+                case InvocationExpressionSyntax invocation:
+                    return invocation.GetIdentifierExpression();
+
+                case IdentifierNameSyntax identifier:
+                    return identifier;
+
+                case MemberAccessExpressionSyntax maes:
+                    return maes.Expression;
+
+                default:
+                    return null;
+            }
+        }
+
+        /// <summary>
+        /// Gets the identifier expression from an invocation expression syntax.
+        /// </summary>
+        /// <param name="value">
+        /// The invocation expression to extract the identifier from.
+        /// </param>
+        /// <returns>
+        /// The identifier expression, or <see langword="null"/> if none exists.
+        /// </returns>
+        internal static ExpressionSyntax GetIdentifierExpression(this InvocationExpressionSyntax value)
+        {
+            switch (value?.Expression)
+            {
+                case MemberAccessExpressionSyntax maes:
+                    return maes.Expression;
+
+                case MemberBindingExpressionSyntax mbes: // find parent conditional access expression as that contains the identifier
+                    return mbes.FirstAncestor<ConditionalAccessExpressionSyntax>()?.Expression;
+
+                default:
+                    return null;
+            }
+        }
 
         /// <summary>
         /// Gets the line span for a syntax node.
@@ -231,6 +344,30 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Gets the related condition for a syntax node.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to get the related condition for.
+        /// </param>
+        /// <returns>
+        /// The related condition expression, or <see langword="null"/> if none exists.
+        /// </returns>
+        internal static ExpressionSyntax GetRelatedCondition(this SyntaxNode value)
+        {
+            var coalesceExpression = value.FirstAncestorOrSelf<BinaryExpressionSyntax>(_ => _.IsKind(SyntaxKind.CoalesceExpression));
+
+            if (coalesceExpression != null)
+            {
+                return coalesceExpression;
+            }
+
+            // most probably it's a if/else, but it might be a switch statement as well
+            var condition = value.GetRelatedIfStatement()?.Condition ?? value.GetEnclosing<SwitchStatementSyntax>()?.Expression;
+
+            return condition;
+        }
+
+        /// <summary>
         /// Gets the related if statement for a syntax node.
         /// </summary>
         /// <param name="value">
@@ -256,227 +393,6 @@ namespace MiKoSolutions.Analyzers
             }
 
             return ifStatement;
-        }
-
-        /// <summary>
-        /// Gets the related condition for a syntax node.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax node to get the related condition for.
-        /// </param>
-        /// <returns>
-        /// The related condition expression, or <see langword="null"/> if none exists.
-        /// </returns>
-        internal static ExpressionSyntax GetRelatedCondition(this SyntaxNode value)
-        {
-            var coalesceExpression = value.FirstAncestorOrSelf<BinaryExpressionSyntax>(_ => _.IsKind(SyntaxKind.CoalesceExpression));
-
-            if (coalesceExpression != null)
-            {
-                return coalesceExpression;
-            }
-
-            // most probably it's a if/else, but it might be a switch statement as well
-            var condition = value.GetRelatedIfStatement()?.Condition ?? value.GetEnclosing<SwitchStatementSyntax>()?.Expression;
-
-            return condition;
-        }
-
-        /// <summary>
-        /// Gets the syntax node that swallows an exception.
-        /// </summary>
-        /// <param name="value">
-        /// The object creation expression to analyze.
-        /// </param>
-        /// <param name="semanticModelCallback">
-        /// A callback that provides the semantic model for analysis.
-        /// </param>
-        /// <returns>
-        /// The syntax node that swallows an exception, or <see langword="null"/> if none exists.
-        /// </returns>
-        internal static SyntaxNode GetExceptionSwallowingNode(this ObjectCreationExpressionSyntax value, Func<SemanticModel> semanticModelCallback)
-        {
-            var catchClause = value.FirstAncestorOrSelf<CatchClauseSyntax>();
-
-            if (catchClause != null)
-            {
-                // we found an exception inside a catch block that does not get the caught exception as inner exception
-                return catchClause;
-            }
-
-            // inspect any 'if' or 'switch' or 'else if' to see if there is an exception involved
-            var expression = value.GetRelatedCondition()?.FirstDescendant<ExpressionSyntax>(_ => _.GetTypeSymbol(semanticModelCallback())?.IsException() is true);
-
-            if (expression != null)
-            {
-                return expression;
-            }
-
-            // inspect method arguments
-            var parameter = value.GetEnclosing<MethodDeclarationSyntax>()?.ParameterList.Parameters.FirstOrDefault(_ => _.Type.IsException());
-
-            return parameter;
-        }
-
-        /// <summary>
-        /// Gets the parameter that is used in an object creation expression.
-        /// </summary>
-        /// <param name="value">
-        /// The object creation expression to analyze.
-        /// </param>
-        /// <returns>
-        /// The parameter that is used, or <see langword="null"/> if none is used.
-        /// </returns>
-        internal static ParameterSyntax GetUsedParameter(this ObjectCreationExpressionSyntax value)
-        {
-            var parameters = CollectParameters(value);
-
-            if (parameters.Any())
-            {
-                // there might be multiple parameters, so we have to find out which parameter is meant
-                var condition = GetRelatedCondition(value);
-
-                if (condition is null)
-                {
-                    // nothing found
-                    return null;
-                }
-
-                var identifiers = condition.DescendantNodesAndSelf().OfType<IdentifierNameSyntax>().ToHashSet(_ => _.GetName());
-
-                return parameters.FirstOrDefault(_ => identifiers.Contains(_.GetName()));
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// Gets attributes of a specific type from an XML element.
-        /// </summary>
-        /// <typeparam name="T">
-        /// The type of XML attribute to retrieve.
-        /// </typeparam>
-        /// <param name="value">
-        /// The XML element to get attributes from.
-        /// </param>
-        /// <returns>
-        /// A collection of attributes of the specified type.
-        /// </returns>
-        internal static IReadOnlyList<T> GetAttributes<T>(this XmlElementSyntax value) where T : XmlAttributeSyntax
-        {
-            return value?.StartTag.Attributes.OfType<XmlAttributeSyntax, T>() ?? Array.Empty<T>();
-        }
-
-        /// <summary>
-        /// Gets attributes of a specific type from an XML empty element.
-        /// </summary>
-        /// <typeparam name="T">
-        /// The type of XML attribute to retrieve.
-        /// </typeparam>
-        /// <param name="value">
-        /// The XML empty element to get attributes from.
-        /// </param>
-        /// <returns>
-        /// A collection of attributes of the specified type.
-        /// </returns>
-        internal static IReadOnlyList<T> GetAttributes<T>(this XmlEmptyElementSyntax value) where T : XmlAttributeSyntax
-        {
-            return value?.Attributes.OfType<XmlAttributeSyntax, T>() ?? Array.Empty<T>();
-        }
-
-        /// <summary>
-        /// Gets the identifier expression from an expression syntax.
-        /// </summary>
-        /// <param name="value">
-        /// The expression to extract the identifier from.
-        /// </param>
-        /// <returns>
-        /// The identifier expression, or <see langword="null"/> if none exists.
-        /// </returns>
-        internal static ExpressionSyntax GetIdentifierExpression(this ExpressionSyntax value)
-        {
-            switch (value)
-            {
-                case InvocationExpressionSyntax invocation:
-                    return invocation.GetIdentifierExpression();
-
-                case IdentifierNameSyntax identifier:
-                    return identifier;
-
-                case MemberAccessExpressionSyntax maes:
-                    return maes.Expression;
-
-                default:
-                    return null;
-            }
-        }
-
-        /// <summary>
-        /// Gets the identifier expression from an invocation expression syntax.
-        /// </summary>
-        /// <param name="value">
-        /// The invocation expression to extract the identifier from.
-        /// </param>
-        /// <returns>
-        /// The identifier expression, or <see langword="null"/> if none exists.
-        /// </returns>
-        internal static ExpressionSyntax GetIdentifierExpression(this InvocationExpressionSyntax value)
-        {
-            switch (value?.Expression)
-            {
-                case MemberAccessExpressionSyntax maes:
-                    return maes.Expression;
-
-                case MemberBindingExpressionSyntax mbes: // find parent conditional access expression as that contains the identifier
-                    return mbes.FirstAncestor<ConditionalAccessExpressionSyntax>()?.Expression;
-
-                default:
-                    return null;
-            }
-        }
-
-        /// <summary>
-        /// Gets the type arguments from a member access expression.
-        /// </summary>
-        /// <param name="value">
-        /// The member access expression to extract types from.
-        /// </param>
-        /// <returns>
-        /// An array of type syntax nodes representing the type arguments.
-        /// </returns>
-        internal static TypeSyntax[] GetTypes(this MemberAccessExpressionSyntax value)
-        {
-            if (value.Name is GenericNameSyntax generic)
-            {
-                return generic.TypeArgumentList.Arguments.ToArray();
-            }
-
-            return Array.Empty<TypeSyntax>();
-        }
-
-        /// <summary>
-        /// Gets the type arguments from an invocation expression.
-        /// </summary>
-        /// <param name="value">
-        /// The invocation expression to extract types from.
-        /// </param>
-        /// <returns>
-        /// An array of type syntax nodes representing the type arguments.
-        /// </returns>
-        internal static TypeSyntax[] GetTypes(this InvocationExpressionSyntax value)
-        {
-            var types = new List<TypeSyntax>();
-
-            var expression = value.Expression;
-
-            while (expression is MemberAccessExpressionSyntax maes)
-            {
-                types.AddRange(maes.GetTypes());
-
-                expression = maes.Expression;
-            }
-
-            return types.ToArray();
         }
 
         /// <summary>
@@ -525,6 +441,17 @@ namespace MiKoSolutions.Analyzers
                     return default;
             }
         }
+
+        /// <summary>
+        /// Gets the set accessor of a property declaration.
+        /// </summary>
+        /// <param name="value">
+        /// The property declaration to get the accessor from.
+        /// </param>
+        /// <returns>
+        /// The set accessor declaration, or <see langword="null"/> if there is none.
+        /// </returns>
+        internal static AccessorDeclarationSyntax GetSetter(this PropertyDeclarationSyntax value) => value?.AccessorList?.FirstChild<AccessorDeclarationSyntax>(SyntaxKind.SetAccessorDeclaration);
 
         /// <summary>
         /// Gets the symbol associated with a syntax node.
@@ -603,6 +530,78 @@ namespace MiKoSolutions.Analyzers
 #else
             return symbol as IMethodSymbol;
 #endif
+        }
+
+        /// <summary>
+        /// Gets the reference token for a type parameter constraint.
+        /// </summary>
+        /// <param name="value">
+        /// The type parameter constraint clause to get the reference token for.
+        /// </param>
+        /// <returns>
+        /// The syntax token that represents the reference for the constraint.
+        /// </returns>
+        internal static SyntaxToken GetTypeParameterConstraintReferenceToken(this TypeParameterConstraintClauseSyntax value)
+        {
+            switch (value.Parent)
+            {
+//// ReSharper disable PossibleNullReferenceException Cannot be null as there is already a type parameter constraint
+                case ClassDeclarationSyntax c: return c.TypeParameterList.GreaterThanToken;
+                case InterfaceDeclarationSyntax i: return i.TypeParameterList.GreaterThanToken;
+                case RecordDeclarationSyntax r: return r.TypeParameterList.GreaterThanToken;
+                case StructDeclarationSyntax s: return s.TypeParameterList.GreaterThanToken;
+//// ReSharper restore PossibleNullReferenceException
+
+                case MethodDeclarationSyntax b: return b.ParameterList.CloseParenToken;
+                case LocalFunctionStatementSyntax f: return f.ParameterList.CloseParenToken;
+
+                default:
+                    return default;
+            }
+        }
+
+        /// <summary>
+        /// Gets the type arguments from a member access expression.
+        /// </summary>
+        /// <param name="value">
+        /// The member access expression to extract types from.
+        /// </param>
+        /// <returns>
+        /// An array of type syntax nodes representing the type arguments.
+        /// </returns>
+        internal static TypeSyntax[] GetTypes(this MemberAccessExpressionSyntax value)
+        {
+            if (value.Name is GenericNameSyntax generic)
+            {
+                return generic.TypeArgumentList.Arguments.ToArray();
+            }
+
+            return Array.Empty<TypeSyntax>();
+        }
+
+        /// <summary>
+        /// Gets the type arguments from an invocation expression.
+        /// </summary>
+        /// <param name="value">
+        /// The invocation expression to extract types from.
+        /// </param>
+        /// <returns>
+        /// An array of type syntax nodes representing the type arguments.
+        /// </returns>
+        internal static TypeSyntax[] GetTypes(this InvocationExpressionSyntax value)
+        {
+            var types = new List<TypeSyntax>();
+
+            var expression = value.Expression;
+
+            while (expression is MemberAccessExpressionSyntax maes)
+            {
+                types.AddRange(maes.GetTypes());
+
+                expression = maes.Expression;
+            }
+
+            return types.ToArray();
         }
 
         /// <summary>
@@ -818,6 +817,52 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Gets the parameter that is used in an object creation expression.
+        /// </summary>
+        /// <param name="value">
+        /// The object creation expression to analyze.
+        /// </param>
+        /// <returns>
+        /// The parameter that is used, or <see langword="null"/> if none is used.
+        /// </returns>
+        internal static ParameterSyntax GetUsedParameter(this ObjectCreationExpressionSyntax value)
+        {
+            var parameters = CollectParameters(value);
+
+            if (parameters.Any())
+            {
+                // there might be multiple parameters, so we have to find out which parameter is meant
+                var condition = GetRelatedCondition(value);
+
+                if (condition is null)
+                {
+                    // nothing found
+                    return null;
+                }
+
+                var identifiers = condition.DescendantNodesAndSelf().OfType<IdentifierNameSyntax>().ToHashSet(_ => _.GetName());
+
+                return parameters.FirstOrDefault(_ => identifiers.Contains(_.GetName()));
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Determines whether a syntax node has a LINQ extension method.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to check.
+        /// </param>
+        /// <param name="semanticModel">
+        /// The semantic model to use for analysis.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the syntax node has any LINQ extension methods; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool HasLinqExtensionMethod(this SyntaxNode value, SemanticModel semanticModel) => value.LinqExtensionMethods(semanticModel).Any();
+
+        /// <summary>
         /// Determines whether the syntax tree has a minimum C# language version.
         /// </summary>
         /// <param name="value">
@@ -836,20 +881,6 @@ namespace MiKoSolutions.Analyzers
             // ignore the latest versions (or above)
             return languageVersion >= expectedVersion && expectedVersion < LanguageVersion.LatestMajor;
         }
-
-        /// <summary>
-        /// Determines whether a syntax node has a LINQ extension method.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax node to check.
-        /// </param>
-        /// <param name="semanticModel">
-        /// The semantic model to use for analysis.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the syntax node has any LINQ extension methods; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool HasLinqExtensionMethod(this SyntaxNode value, SemanticModel semanticModel) => value.LinqExtensionMethods(semanticModel).Any();
 
 #if VS2022
 
@@ -887,6 +918,17 @@ namespace MiKoSolutions.Analyzers
         /// <see langword="true"/> if the record declaration has a primary constructor; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool HasPrimaryConstructor(this RecordDeclarationSyntax value) => value.ParameterList != null;
+
+        /// <summary>
+        /// Determines whether a syntax node has a region directive.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the syntax node has a region directive; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool HasRegionDirective(this SyntaxNode value) => value != null && value.HasStructuredTrivia && value.GetLeadingTrivia().Any(SyntaxKind.RegionDirectiveTrivia);
 
         /// <summary>
         /// Determines whether an arrow expression clause is part of a method that returns a value.
@@ -971,19 +1013,41 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether a syntax node is of the specified syntax kind.
+        /// Determines whether a method declaration has the abstract modifier.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
-        /// </param>
-        /// <param name="kind">
-        /// One of the enumeration members that specifies the syntax kind to check for.
+        /// The method declaration to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the syntax node is of the specified kind; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the method declaration has the abstract modifier; otherwise, <see langword="false"/>.
         /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsKind(this SyntaxNode value, in SyntaxKind kind) => value?.RawKind == (int)kind;
+        internal static bool IsAbstract(this MethodDeclarationSyntax value) => value.Modifiers.Any(SyntaxKind.AbstractKeyword);
+
+        /// <summary>
+        /// Determines whether an expression syntax accesses an object under test.
+        /// </summary>
+        /// <param name="value">
+        /// The expression syntax to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the expression accesses an object under test; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsAccessOnObjectUnderTest(this ExpressionSyntax value)
+        {
+            if (value is MemberAccessExpressionSyntax mae)
+            {
+                switch (mae.Expression)
+                {
+                    case IdentifierNameSyntax ins when Constants.Names.ObjectUnderTestNames.Contains(ins.GetName()):
+                    case InvocationExpressionSyntax i when i.IsInvocationOnObjectUnderTest():
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// Determines whether a syntax node is of the specified syntax kinds.
@@ -1035,6 +1099,46 @@ namespace MiKoSolutions.Analyzers
 
             return false;
         }
+
+        /// <summary>
+        /// Determines whether a statement is an assignment of the specified identifier.
+        /// </summary>
+        /// <param name="value">
+        /// The statement to check.
+        /// </param>
+        /// <param name="identifierName">
+        /// The name of the identifier to check for.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the statement is an assignment of the specified identifier; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsAssignmentOf(this StatementSyntax value, string identifierName) => value is ExpressionStatementSyntax e
+                                                                                               && e.Expression is AssignmentExpressionSyntax a
+                                                                                               && a.IsKind(SyntaxKind.SimpleAssignmentExpression)
+                                                                                               && a.Left is IdentifierNameSyntax i
+                                                                                               && i.GetName() == identifierName;
+
+        /// <summary>
+        /// Determines whether a base property declaration has the async modifier.
+        /// </summary>
+        /// <param name="value">
+        /// The base property declaration to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the property declaration has the async modifier; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsAsync(this BasePropertyDeclarationSyntax value) => value.Modifiers.Any(SyntaxKind.AsyncKeyword);
+
+        /// <summary>
+        /// Determines whether a method declaration has the async modifier.
+        /// </summary>
+        /// <param name="value">
+        /// The method declaration to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the method declaration has the async modifier; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsAsync(this MethodDeclarationSyntax value) => value.Modifiers.Any(SyntaxKind.AsyncKeyword);
 
         /// <summary>
         /// Determines whether a type syntax represents a boolean type.
@@ -1091,270 +1195,49 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether a type syntax represents a <see cref="Guid"/> type.
+        /// Determines whether an if statement contains a call to the specified method.
         /// </summary>
         /// <param name="value">
-        /// The type syntax to check.
+        /// The if statement to check.
+        /// </param>
+        /// <param name="methodName">
+        /// The name of the method to check for.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the type syntax represents a <see cref="Guid"/> type; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the if statement contains a call to the specified method; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool IsGuid(this TypeSyntax value)
+        internal static bool IsCallTo(this IfStatementSyntax value, string methodName)
         {
-            switch (value?.ToString())
-            {
-                case nameof(Guid):
-                case nameof(Guid) + "?":
-                case nameof(System) + "." + nameof(Guid):
-                case nameof(System) + "." + nameof(Guid) + "?":
-                    return true;
+            var ifExpression = value.FirstChild<MemberAccessExpressionSyntax>();
 
-                default:
-                    return false;
+            if (ifExpression.IsCallTo(methodName))
+            {
+                return true;
             }
-        }
 
-        /// <summary>
-        /// Determines whether a syntax node is inside any of the specified syntax kinds.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax node to check.
-        /// </param>
-        /// <param name="kinds">
-        /// A set of syntax kinds to check for.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the syntax node is inside any of the specified kinds; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool IsInside(this SyntaxNode value, ISet<SyntaxKind> kinds)
-        {
-            foreach (var ancestor in value.Ancestors())
+            var binaryExpression = value.FirstChild<BinaryExpressionSyntax>();
+
+            if (binaryExpression.IsBinaryCallTo(methodName))
             {
-                var kind = ancestor.Kind();
-
-                if (kinds.Contains(kind))
-                {
-                    return true;
-                }
-
-                switch (kind)
-                {
-                    case SyntaxKind.MethodDeclaration:
-                    case SyntaxKind.IndexerDeclaration:
-                    case SyntaxKind.ConstructorDeclaration:
-                    case SyntaxKind.PropertyDeclaration:
-                    case SyntaxKind.EventDeclaration:
-                    case SyntaxKind.EventFieldDeclaration:
-                    case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.StructDeclaration:
-                    case SyntaxKind.RecordDeclaration:
-                    case SyntaxKind.InterfaceDeclaration:
-                        return false;
-                }
+                return true;
             }
 
             return false;
         }
 
         /// <summary>
-        /// Determines whether an expression syntax represents a nameof expression.
+        /// Determines whether an expression syntax is a call to the specified method.
         /// </summary>
         /// <param name="value">
         /// The expression syntax to check.
         /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the expression represents a nameof expression; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool IsNameOf(this ExpressionSyntax value)
-        {
-            switch (value)
-            {
-                case IdentifierNameSyntax identifier:
-                    return identifier.IsNameOf();
-
-                case InvocationExpressionSyntax invocation:
-                    return invocation.IsNameOf();
-
-                default:
-                    return false;
-            }
-        }
-
-        /// <summary>
-        /// Determines whether an identifier name syntax represents a nameof keyword.
-        /// </summary>
-        /// <param name="value">
-        /// The identifier name syntax to check.
+        /// <param name="methodName">
+        /// The name of the method to check for.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the identifier represents a nameof keyword; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the expression is a call to the specified method; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool IsNameOf(this IdentifierNameSyntax value) => value.GetName() is "nameof";
-
-        /// <summary>
-        /// Determines whether an invocation expression syntax represents a nameof expression.
-        /// </summary>
-        /// <param name="value">
-        /// The invocation expression syntax to check.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the invocation represents a nameof expression; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool IsNameOf(this InvocationExpressionSyntax value) => value.Expression.IsNameOf();
-
-        /// <summary>
-        /// Determines whether a syntax node is the only node inside a region.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax node to check.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the node is the only one inside a region; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool IsOnlyNodeInsideRegion(this SyntaxNode value)
-        {
-            if (value.TryGetRegionDirective(out var regionTrivia))
-            {
-                var relatedDirectives = regionTrivia.GetRelatedDirectives();
-
-                if (relatedDirectives.Count is 2)
-                {
-                    var endRegionTrivia = relatedDirectives[1];
-
-                    var otherSyntaxNode = endRegionTrivia.ParentTrivia.Token.Parent;
-
-                    if (otherSyntaxNode != null)
-                    {
-                        if (otherSyntaxNode.IsEquivalentTo(value.NextSibling()))
-                        {
-                            return true;
-                        }
-
-                        if (otherSyntaxNode.IsEquivalentTo(value.Parent))
-                        {
-                            // seems like same type
-                            return true;
-                        }
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Determines whether an invocation expression is a Moq <c>It.Is</c> condition matcher.
-        /// </summary>
-        /// <param name="value">
-        /// The invocation expression to check.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the expression is a Moq <c>It.Is</c> condition matcher; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool IsMoqItIsConditionMatcher(this InvocationExpressionSyntax value) => value.Expression is MemberAccessExpressionSyntax maes
-                                                                                              && maes.IsKind(SyntaxKind.SimpleMemberAccessExpression)
-                                                                                              && maes.Expression is IdentifierNameSyntax invokedType
-                                                                                              && invokedType.GetName() is Constants.Moq.ConditionMatcher.It
-                                                                                              && maes.GetName() is Constants.Moq.ConditionMatcher.Is;
-
-        /// <summary>
-        /// Determines whether a member access expression is inside a Moq call.
-        /// </summary>
-        /// <param name="value">
-        /// The member access expression to check.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the expression is inside a Moq call; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool IsInsideMoqCall(this MemberAccessExpressionSyntax value)
-        {
-            if (value.Parent is InvocationExpressionSyntax i && i.Parent is LambdaExpressionSyntax lambda)
-            {
-                return IsMoqCall(lambda);
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Determines whether a lambda expression is a Moq call.
-        /// </summary>
-        /// <param name="value">
-        /// The lambda expression to check.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the lambda expression is a Moq call; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool IsMoqCall(this LambdaExpressionSyntax value)
-        {
-            if (value.Parent is ArgumentSyntax a && a.Parent?.Parent is InvocationExpressionSyntax i && i.Expression is MemberAccessExpressionSyntax m)
-            {
-                switch (m.GetName())
-                {
-                    case Constants.Moq.Setup:
-                    case Constants.Moq.SetupGet:
-                    case Constants.Moq.SetupSet:
-                    case Constants.Moq.SetupSequence:
-                    case Constants.Moq.Verify:
-                    case Constants.Moq.VerifyGet:
-                    case Constants.Moq.VerifySet:
-                    case Constants.Moq.Of when m.Expression is IdentifierNameSyntax ins && ins.GetName() is Constants.Moq.Mock:
-                    {
-                        // here we assume that we have a Moq call
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Attempts to get Moq types from a member access expression.
-        /// </summary>
-        /// <param name="value">
-        /// The member access expression to analyze.
-        /// </param>
-        /// <param name="result">
-        /// On successful return, contains the array of type syntax nodes if found; otherwise, <see langword="null"/>.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if Moq types were found; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool TryGetMoqTypes(this MemberAccessExpressionSyntax value, out TypeSyntax[] result)
-        {
-            result = null;
-
-            if (value.GetName() is Constants.Moq.Object)
-            {
-                var expression = value.Expression.WithoutParenthesis(); // let's see if we can fix it in case we remove the surrounding parenthesis
-
-                if (expression is ObjectCreationExpressionSyntax o && o.Type.GetNameOnlyPartWithoutGeneric() is Constants.Moq.Mock && o.Type is GenericNameSyntax genericName)
-                {
-                    result = genericName.TypeArgumentList.Arguments.ToArray();
-                }
-            }
-
-            return result != null;
-        }
-
-        /// <summary>
-        /// Determines whether a statement is an assignment of the specified identifier.
-        /// </summary>
-        /// <param name="value">
-        /// The statement to check.
-        /// </param>
-        /// <param name="identifierName">
-        /// The name of the identifier to check for.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the statement is an assignment of the specified identifier; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool IsAssignmentOf(this StatementSyntax value, string identifierName) => value is ExpressionStatementSyntax e
-                                                                                               && e.Expression is AssignmentExpressionSyntax a
-                                                                                               && a.IsKind(SyntaxKind.SimpleAssignmentExpression)
-                                                                                               && a.Left is IdentifierNameSyntax i
-                                                                                               && i.GetName() == identifierName;
+        internal static bool IsCallTo(this ExpressionSyntax value, string methodName) => value is MemberAccessExpressionSyntax m && m.Name.ToString() == methodName;
 
         /// <summary>
         /// Determines whether a type syntax represents a command type.
@@ -1685,6 +1568,34 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Determines whether a syntax node is a field variable declaration with any of the specified identifier names.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to check.
+        /// </param>
+        /// <param name="identifierNames">
+        /// The set of identifier names to check for.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the node is a field variable declaration with any of the specified identifier names; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsFieldVariableDeclaration(this SyntaxNode value, ISet<string> identifierNames) => value is FieldDeclarationSyntax f && f.Declaration.Variables.Any(__ => identifierNames.Contains(__.Identifier.ValueText));
+
+        /// <summary>
+        /// Determines whether a syntax node is a field variable declaration with the specified identifier name.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to check.
+        /// </param>
+        /// <param name="identifierName">
+        /// The identifier name to check for.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the node is a field variable declaration with the specified identifier name; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsFieldVariableDeclaration(this SyntaxNode value, string identifierName) => value is FieldDeclarationSyntax f && f.Declaration.Variables.Any(__ => __.Identifier.ValueText == identifierName);
+
+        /// <summary>
         /// Determines whether a type declaration is generated.
         /// </summary>
         /// <param name="value">
@@ -1694,6 +1605,72 @@ namespace MiKoSolutions.Analyzers
         /// <see langword="true"/> if the type declaration is generated; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool IsGenerated(this TypeDeclarationSyntax value) => value.HasAttributeName(Constants.Names.GeneratedAttributeNames);
+
+        /// <summary>
+        /// Determines whether a type syntax represents a <see cref="Guid"/> type.
+        /// </summary>
+        /// <param name="value">
+        /// The type syntax to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type syntax represents a <see cref="Guid"/> type; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsGuid(this TypeSyntax value)
+        {
+            switch (value?.ToString())
+            {
+                case nameof(Guid):
+                case nameof(Guid) + "?":
+                case nameof(System) + "." + nameof(Guid):
+                case nameof(System) + "." + nameof(Guid) + "?":
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Determines whether a syntax node is inside any of the specified syntax kinds.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to check.
+        /// </param>
+        /// <param name="kinds">
+        /// A set of syntax kinds to check for.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the syntax node is inside any of the specified kinds; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsInside(this SyntaxNode value, ISet<SyntaxKind> kinds)
+        {
+            foreach (var ancestor in value.Ancestors())
+            {
+                var kind = ancestor.Kind();
+
+                if (kinds.Contains(kind))
+                {
+                    return true;
+                }
+
+                switch (kind)
+                {
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.IndexerDeclaration:
+                    case SyntaxKind.ConstructorDeclaration:
+                    case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.EventDeclaration:
+                    case SyntaxKind.EventFieldDeclaration:
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.StructDeclaration:
+                    case SyntaxKind.RecordDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
+                        return false;
+                }
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// Determines whether a syntax node is inside an if statement with a call to the specified method.
@@ -1749,49 +1726,34 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether an if statement contains a call to the specified method.
+        /// Determines whether a member access expression is inside a Moq call.
         /// </summary>
         /// <param name="value">
-        /// The if statement to check.
-        /// </param>
-        /// <param name="methodName">
-        /// The name of the method to check for.
+        /// The member access expression to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the if statement contains a call to the specified method; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the expression is inside a Moq call; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool IsCallTo(this IfStatementSyntax value, string methodName)
+        internal static bool IsInsideMoqCall(this MemberAccessExpressionSyntax value)
         {
-            var ifExpression = value.FirstChild<MemberAccessExpressionSyntax>();
-
-            if (ifExpression.IsCallTo(methodName))
+            if (value.Parent is InvocationExpressionSyntax i && i.Parent is LambdaExpressionSyntax lambda)
             {
-                return true;
-            }
-
-            var binaryExpression = value.FirstChild<BinaryExpressionSyntax>();
-
-            if (binaryExpression.IsBinaryCallTo(methodName))
-            {
-                return true;
+                return IsMoqCall(lambda);
             }
 
             return false;
         }
 
         /// <summary>
-        /// Determines whether an expression syntax is a call to the specified method.
+        /// Determines whether a syntax node is inside a test class.
         /// </summary>
         /// <param name="value">
-        /// The expression syntax to check.
-        /// </param>
-        /// <param name="methodName">
-        /// The name of the method to check for.
+        /// The syntax node to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the expression is a call to the specified method; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the node is inside a test class; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool IsCallTo(this ExpressionSyntax value, string methodName) => value is MemberAccessExpressionSyntax m && m.Name.ToString() == methodName;
+        internal static bool IsInsideTestClass(this SyntaxNode value) => value.Ancestors<ClassDeclarationSyntax>().Any(_ => _.IsTestClass());
 
         /// <summary>
         /// Determines whether an expression statement is an invocation on an object under test.
@@ -1827,63 +1789,19 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsInvocationOnObjectUnderTest(this InvocationExpressionSyntax value) => value.Expression.IsAccessOnObjectUnderTest();
 
         /// <summary>
-        /// Determines whether a method declaration has the abstract modifier.
+        /// Determines whether a syntax node is of the specified syntax kind.
         /// </summary>
         /// <param name="value">
-        /// The method declaration to check.
+        /// The syntax node to check.
+        /// </param>
+        /// <param name="kind">
+        /// One of the enumeration members that specifies the syntax kind to check for.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the method declaration has the abstract modifier; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the syntax node is of the specified kind; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool IsAbstract(this MethodDeclarationSyntax value) => value.Modifiers.Any(SyntaxKind.AbstractKeyword);
-
-        /// <summary>
-        /// Determines whether an expression syntax accesses an object under test.
-        /// </summary>
-        /// <param name="value">
-        /// The expression syntax to check.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the expression accesses an object under test; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool IsAccessOnObjectUnderTest(this ExpressionSyntax value)
-        {
-            if (value is MemberAccessExpressionSyntax mae)
-            {
-                switch (mae.Expression)
-                {
-                    case IdentifierNameSyntax ins when Constants.Names.ObjectUnderTestNames.Contains(ins.GetName()):
-                    case InvocationExpressionSyntax i when i.IsInvocationOnObjectUnderTest():
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Determines whether a base property declaration has the async modifier.
-        /// </summary>
-        /// <param name="value">
-        /// The base property declaration to check.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the property declaration has the async modifier; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool IsAsync(this BasePropertyDeclarationSyntax value) => value.Modifiers.Any(SyntaxKind.AsyncKeyword);
-
-        /// <summary>
-        /// Determines whether a method declaration has the async modifier.
-        /// </summary>
-        /// <param name="value">
-        /// The method declaration to check.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the method declaration has the async modifier; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool IsAsync(this MethodDeclarationSyntax value) => value.Modifiers.Any(SyntaxKind.AsyncKeyword);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool IsKind(this SyntaxNode value, in SyntaxKind kind) => value?.RawKind == (int)kind;
 
         /// <summary>
         /// Determines whether a syntax node is a local variable declaration with any of the specified identifier names.
@@ -1914,32 +1832,165 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsLocalVariableDeclaration(this SyntaxNode value, string identifierName) => value is LocalDeclarationStatementSyntax l && l.Declaration.Variables.Any(__ => __.Identifier.ValueText == identifierName);
 
         /// <summary>
-        /// Determines whether a syntax node is a field variable declaration with any of the specified identifier names.
+        /// Determines whether a lambda expression is a Moq call.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
-        /// </param>
-        /// <param name="identifierNames">
-        /// The set of identifier names to check for.
+        /// The lambda expression to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the node is a field variable declaration with any of the specified identifier names; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the lambda expression is a Moq call; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool IsFieldVariableDeclaration(this SyntaxNode value, ISet<string> identifierNames) => value is FieldDeclarationSyntax f && f.Declaration.Variables.Any(__ => identifierNames.Contains(__.Identifier.ValueText));
+        internal static bool IsMoqCall(this LambdaExpressionSyntax value)
+        {
+            if (value.Parent is ArgumentSyntax a && a.Parent?.Parent is InvocationExpressionSyntax i && i.Expression is MemberAccessExpressionSyntax m)
+            {
+                switch (m.GetName())
+                {
+                    case Constants.Moq.Setup:
+                    case Constants.Moq.SetupGet:
+                    case Constants.Moq.SetupSet:
+                    case Constants.Moq.SetupSequence:
+                    case Constants.Moq.Verify:
+                    case Constants.Moq.VerifyGet:
+                    case Constants.Moq.VerifySet:
+                    case Constants.Moq.Of when m.Expression is IdentifierNameSyntax ins && ins.GetName() is Constants.Moq.Mock:
+                    {
+                        // here we assume that we have a Moq call
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
 
         /// <summary>
-        /// Determines whether a syntax node is a field variable declaration with the specified identifier name.
+        /// Determines whether an invocation expression is a Moq <c>It.Is</c> condition matcher.
+        /// </summary>
+        /// <param name="value">
+        /// The invocation expression to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the expression is a Moq <c>It.Is</c> condition matcher; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsMoqItIsConditionMatcher(this InvocationExpressionSyntax value) => value.Expression is MemberAccessExpressionSyntax maes
+                                                                                              && maes.IsKind(SyntaxKind.SimpleMemberAccessExpression)
+                                                                                              && maes.Expression is IdentifierNameSyntax invokedType
+                                                                                              && invokedType.GetName() is Constants.Moq.ConditionMatcher.It
+                                                                                              && maes.GetName() is Constants.Moq.ConditionMatcher.Is;
+
+        /// <summary>
+        /// Determines whether an expression syntax represents a nameof expression.
+        /// </summary>
+        /// <param name="value">
+        /// The expression syntax to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the expression represents a nameof expression; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsNameOf(this ExpressionSyntax value)
+        {
+            switch (value)
+            {
+                case IdentifierNameSyntax identifier:
+                    return identifier.IsNameOf();
+
+                case InvocationExpressionSyntax invocation:
+                    return invocation.IsNameOf();
+
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Determines whether an identifier name syntax represents a nameof keyword.
+        /// </summary>
+        /// <param name="value">
+        /// The identifier name syntax to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the identifier represents a nameof keyword; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsNameOf(this IdentifierNameSyntax value) => value.GetName() is "nameof";
+
+        /// <summary>
+        /// Determines whether an invocation expression syntax represents a nameof expression.
+        /// </summary>
+        /// <param name="value">
+        /// The invocation expression syntax to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the invocation represents a nameof expression; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsNameOf(this InvocationExpressionSyntax value) => value.Expression.IsNameOf();
+
+        /// <summary>
+        /// Determines whether a type syntax represents an object type.
+        /// </summary>
+        /// <param name="value">
+        /// The type syntax to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type syntax represents an object type; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsObject(this TypeSyntax value)
+        {
+            if (value is PredefinedTypeSyntax predefined)
+            {
+                return predefined.Keyword.IsKind(SyntaxKind.ObjectKeyword);
+            }
+
+            switch (value.ToString())
+            {
+                case nameof(Object):
+                case nameof(System) + "." + nameof(Object):
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Determines whether a syntax node is the only node inside a region.
         /// </summary>
         /// <param name="value">
         /// The syntax node to check.
         /// </param>
-        /// <param name="identifierName">
-        /// The identifier name to check for.
-        /// </param>
         /// <returns>
-        /// <see langword="true"/> if the node is a field variable declaration with the specified identifier name; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the node is the only one inside a region; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool IsFieldVariableDeclaration(this SyntaxNode value, string identifierName) => value is FieldDeclarationSyntax f && f.Declaration.Variables.Any(__ => __.Identifier.ValueText == identifierName);
+        internal static bool IsOnlyNodeInsideRegion(this SyntaxNode value)
+        {
+            if (value.TryGetRegionDirective(out var regionTrivia))
+            {
+                var relatedDirectives = regionTrivia.GetRelatedDirectives();
+
+                if (relatedDirectives.Count is 2)
+                {
+                    var endRegionTrivia = relatedDirectives[1];
+
+                    var otherSyntaxNode = endRegionTrivia.ParentTrivia.Token.Parent;
+
+                    if (otherSyntaxNode != null)
+                    {
+                        if (otherSyntaxNode.IsEquivalentTo(value.NextSibling()))
+                        {
+                            return true;
+                        }
+
+                        if (otherSyntaxNode.IsEquivalentTo(value.Parent))
+                        {
+                            // seems like same type
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// Determines whether an identifier name syntax represents a parameter in its enclosing method.
@@ -2002,34 +2053,15 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether a field declaration has the readonly modifier.
+        /// Determines whether a field declaration has the <see langword="readonly"/> modifier.
         /// </summary>
         /// <param name="value">
         /// The field declaration to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the field declaration has the readonly modifier; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the field declaration has the <see langword="readonly"/> modifier; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool IsReadOnly(this FieldDeclarationSyntax value) => value.Modifiers.Any(SyntaxKind.ReadOnlyKeyword);
-
-        /// <summary>
-        /// Determines whether a syntax node spans multiple lines.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax node to check.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the syntax node spans multiple lines; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool IsSpanningMultipleLines(this SyntaxNode value)
-        {
-            var lineSpan = value.GetLineSpan();
-
-            var startingLine = lineSpan.StartLinePosition.Line;
-            var endingLine = lineSpan.EndLinePosition.Line;
-
-            return startingLine != endingLine;
-        }
 
         /// <summary>
         /// Determines whether a type syntax represents a <see cref="SerializationInfo"/> type.
@@ -2051,6 +2083,36 @@ namespace MiKoSolutions.Analyzers
 
             return s == nameof(SerializationInfo) || s == TypeNames.SerializationInfo;
         }
+
+        /// <summary>
+        /// Determines whether a syntax node spans multiple lines.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the syntax node spans multiple lines; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsSpanningMultipleLines(this SyntaxNode value)
+        {
+            var lineSpan = value.GetLineSpan();
+
+            var startingLine = lineSpan.StartLinePosition.Line;
+            var endingLine = lineSpan.EndLinePosition.Line;
+
+            return startingLine != endingLine;
+        }
+
+        /// <summary>
+        /// Determines whether a field declaration has the <see langword="static"/> modifier.
+        /// </summary>
+        /// <param name="value">
+        /// The field declaration to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the field declaration has the <see langword="static"/> modifier; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsStatic(this FieldDeclarationSyntax value) => value.Modifiers.Any(SyntaxKind.StaticKeyword);
 
         /// <summary>
         /// Determines whether a type syntax represents a <see cref="StreamingContext"/> type.
@@ -2155,39 +2217,6 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether an argument syntax represents a <see cref="string"/> literal.
-        /// </summary>
-        /// <param name="value">
-        /// The argument syntax to check.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the argument represents a <see cref="string"/> literal; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool IsStringLiteral(this ArgumentSyntax value) => value?.Expression.IsStringLiteral() is true;
-
-        /// <summary>
-        /// Determines whether an expression syntax represents a <see cref="string"/> literal.
-        /// </summary>
-        /// <param name="value">
-        /// The expression syntax to check.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the expression represents a <see cref="string"/> literal; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool IsStringLiteral(this ExpressionSyntax value)
-        {
-            switch (value?.Kind())
-            {
-                case SyntaxKind.StringLiteralExpression:
-                case SyntaxKind.InterpolatedStringExpression:
-                    return true;
-
-                default:
-                    return false;
-            }
-        }
-
-        /// <summary>
         /// Determines whether an expression syntax represents a <see cref="string"/> concatenation.
         /// </summary>
         /// <param name="value">
@@ -2244,6 +2273,39 @@ namespace MiKoSolutions.Analyzers
                                                                                    && maes.GetName() == nameof(string.Format);
 
         /// <summary>
+        /// Determines whether an argument syntax represents a <see cref="string"/> literal.
+        /// </summary>
+        /// <param name="value">
+        /// The argument syntax to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the argument represents a <see cref="string"/> literal; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsStringLiteral(this ArgumentSyntax value) => value?.Expression.IsStringLiteral() is true;
+
+        /// <summary>
+        /// Determines whether an expression syntax represents a <see cref="string"/> literal.
+        /// </summary>
+        /// <param name="value">
+        /// The expression syntax to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the expression represents a <see cref="string"/> literal; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsStringLiteral(this ExpressionSyntax value)
+        {
+            switch (value?.Kind())
+            {
+                case SyntaxKind.StringLiteralExpression:
+                case SyntaxKind.InterpolatedStringExpression:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
         /// Determines whether an expression syntax represents a struct or enum value.
         /// </summary>
         /// <param name="value">
@@ -2271,42 +2333,26 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether a type syntax represents an object type.
+        /// Determines whether a method is an assembly-wide test setup method.
         /// </summary>
         /// <param name="value">
-        /// The type syntax to check.
+        /// The method to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the type syntax represents an object type; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the method is an assembly-wide test setup method; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool IsObject(this TypeSyntax value)
-        {
-            if (value is PredefinedTypeSyntax predefined)
-            {
-                return predefined.Keyword.IsKind(SyntaxKind.ObjectKeyword);
-            }
-
-            switch (value.ToString())
-            {
-                case nameof(Object):
-                case nameof(System) + "." + nameof(Object):
-                    return true;
-
-                default:
-                    return false;
-            }
-        }
+        internal static bool IsTestAssemblyWideSetUpMethod(this MethodDeclarationSyntax value) => value.HasAttributeName(Constants.Names.TestAssemblyWideSetupAttributeNames);
 
         /// <summary>
-        /// Determines whether a syntax node is inside a test class.
+        /// Determines whether a method is an assembly-wide test tear down method.
         /// </summary>
         /// <param name="value">
-        /// The syntax node to check.
+        /// The method to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the node is inside a test class; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the method is an assembly-wide test tear down method; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool IsInsideTestClass(this SyntaxNode value) => value.Ancestors<ClassDeclarationSyntax>().Any(_ => _.IsTestClass());
+        internal static bool IsTestAssemblyWideTearDownMethod(this MethodDeclarationSyntax value) => value.HasAttributeName(Constants.Names.TestAssemblyWideTearDownAttributeNames);
 
         /// <summary>
         /// Determines whether a base type declaration represents a test class.
@@ -2331,26 +2377,15 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsTestClass(this ClassDeclarationSyntax value) => value.HasAttributeName(Constants.Names.TestClassAttributeNames);
 
         /// <summary>
-        /// Determines whether a method is an assembly-wide test setup method.
+        /// Determines whether a method declaration represents a test method.
         /// </summary>
         /// <param name="value">
-        /// The method to check.
+        /// The method declaration to check.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the method is an assembly-wide test setup method; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the method declaration represents a test method; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool IsTestAssemblyWideSetUpMethod(this MethodDeclarationSyntax value) => value.HasAttributeName(Constants.Names.TestAssemblyWideSetupAttributeNames);
-
-        /// <summary>
-        /// Determines whether a method is an assembly-wide test tear down method.
-        /// </summary>
-        /// <param name="value">
-        /// The method to check.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the method is an assembly-wide test tear down method; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool IsTestAssemblyWideTearDownMethod(this MethodDeclarationSyntax value) => value.HasAttributeName(Constants.Names.TestAssemblyWideTearDownAttributeNames);
+        internal static bool IsTestMethod(this MethodDeclarationSyntax value) => value.HasAttributeName(Constants.Names.TestMethodAttributeNames);
 
         /// <summary>
         /// Determines whether a method declaration represents a test one-time setup method.
@@ -2395,17 +2430,6 @@ namespace MiKoSolutions.Analyzers
         /// <see langword="true"/> if the method declaration represents a test tear down method; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool IsTestTearDownMethod(this MethodDeclarationSyntax value) => value.HasAttributeName(Constants.Names.TestTearDownAttributeNames);
-
-        /// <summary>
-        /// Determines whether a method declaration represents a test method.
-        /// </summary>
-        /// <param name="value">
-        /// The method declaration to check.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the method declaration represents a test method; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool IsTestMethod(this MethodDeclarationSyntax value) => value.HasAttributeName(Constants.Names.TestMethodAttributeNames);
 
         /// <summary>
         /// Determines whether a method declaration represents a type under test creation method.
@@ -2455,23 +2479,6 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<InvocationExpressionSyntax> LinqExtensionMethods(this SyntaxNode value, SemanticModel semanticModel) => value.DescendantNodes<InvocationExpressionSyntax>(_ => IsLinqExtensionMethod(_, semanticModel));
 
         /// <summary>
-        /// Removes a specific trivia from a syntax node.
-        /// </summary>
-        /// <typeparam name="T">
-        /// The type of the syntax node.
-        /// </typeparam>
-        /// <param name="value">
-        /// The syntax node to modify.
-        /// </param>
-        /// <param name="trivia">
-        /// The trivia to remove.
-        /// </param>
-        /// <returns>
-        /// A new syntax node with the specified trivia removed.
-        /// </returns>
-        internal static T RemoveTrivia<T>(this T value, in SyntaxTrivia trivia) where T : SyntaxNode => value.ReplaceTrivia(trivia, SyntaxFactory.ElasticMarker);
-
-        /// <summary>
         /// Removes a node from a base type declaration and adjusts the open and close braces.
         /// </summary>
         /// <param name="value">
@@ -2513,6 +2520,44 @@ namespace MiKoSolutions.Analyzers
                         .WithOpenBraceToken(openBraceToken);
         }
 
+        /// <summary>
+        /// Removes a specific trivia from a syntax node.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the syntax node.
+        /// </typeparam>
+        /// <param name="value">
+        /// The syntax node to modify.
+        /// </param>
+        /// <param name="trivia">
+        /// The trivia to remove.
+        /// </param>
+        /// <returns>
+        /// A new syntax node with the specified trivia removed.
+        /// </returns>
+        internal static T RemoveTrivia<T>(this T value, in SyntaxTrivia trivia) where T : SyntaxNode => value.ReplaceTrivia(trivia, SyntaxFactory.ElasticMarker);
+
+        /// <summary>
+        /// Replaces multiple nodes in a syntax tree with computed replacement nodes.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the root syntax node.
+        /// </typeparam>
+        /// <typeparam name="TNode">
+        /// The type of the syntax nodes to replace.
+        /// </typeparam>
+        /// <param name="value">
+        /// The root syntax node containing the nodes to replace.
+        /// </param>
+        /// <param name="nodes">
+        /// The nodes to replace.
+        /// </param>
+        /// <param name="computeReplacementNodes">
+        /// A callback that computes the replacement nodes for each node to be replaced.
+        /// </param>
+        /// <returns>
+        /// A new syntax tree with all specified nodes replaced by their computed replacements.
+        /// </returns>
         internal static T ReplaceNodes<T, TNode>(this T value, IEnumerable<TNode> nodes, Func<TNode, IEnumerable<SyntaxNode>> computeReplacementNodes)
                                                                                                                                                   where T : SyntaxNode
                                                                                                                                                   where TNode : SyntaxNode
@@ -2544,6 +2589,17 @@ namespace MiKoSolutions.Analyzers
 
             return result;
         }
+
+        /// <summary>
+        /// Determines whether a return statement returns a completed task.
+        /// </summary>
+        /// <param name="value">
+        /// The return statement to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the return statement returns a completed task; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool ReturnsCompletedTask(this ReturnStatementSyntax value) => value.Expression is MemberAccessExpressionSyntax maes && maes.Expression.GetName() == nameof(Task) && maes.GetName() == nameof(Task.CompletedTask);
 
         /// <summary>
         /// Determines whether an if statement returns immediately.
@@ -2590,17 +2646,6 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether a return statement returns a completed task.
-        /// </summary>
-        /// <param name="value">
-        /// The return statement to check.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the return statement returns a completed task; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool ReturnsCompletedTask(this ReturnStatementSyntax value) => value.Expression is MemberAccessExpressionSyntax maes && maes.Expression.GetName() == nameof(Task) && maes.GetName() == nameof(Task.CompletedTask);
-
-        /// <summary>
         /// Determines whether a syntax node throws a specific exception type.
         /// </summary>
         /// <typeparam name="T">
@@ -2626,15 +2671,44 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether a syntax node has a region directive.
+        /// Gets a cleaned-up <see cref="string"/> representation of an expression syntax.
         /// </summary>
-        /// <param name="value">
-        /// The syntax node to check.
+        /// <param name="source">
+        /// The expression syntax to get a <see cref="string"/> representation for.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the syntax node has a region directive; otherwise, <see langword="false"/>.
+        /// A cleaned-up <see cref="string"/> representation of the expression.
         /// </returns>
-        internal static bool HasRegionDirective(this SyntaxNode value) => value != null && value.HasStructuredTrivia && value.GetLeadingTrivia().Any(SyntaxKind.RegionDirectiveTrivia);
+        internal static string ToCleanedUpString(this ExpressionSyntax source) => source?.ToString().Without(Constants.WhiteSpaces);
+
+        /// <summary>
+        /// Attempts to get Moq types from a member access expression.
+        /// </summary>
+        /// <param name="value">
+        /// The member access expression to analyze.
+        /// </param>
+        /// <param name="result">
+        /// On successful return, contains the array of type syntax nodes if found; otherwise, <see langword="null"/>.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if Moq types were found; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool TryGetMoqTypes(this MemberAccessExpressionSyntax value, out TypeSyntax[] result)
+        {
+            result = null;
+
+            if (value.GetName() is Constants.Moq.Object)
+            {
+                var expression = value.Expression.WithoutParenthesis(); // let's see if we can fix it in case we remove the surrounding parenthesis
+
+                if (expression is ObjectCreationExpressionSyntax o && o.Type.GetNameOnlyPartWithoutGeneric() is Constants.Moq.Mock && o.Type is GenericNameSyntax genericName)
+                {
+                    result = genericName.TypeArgumentList.Arguments.ToArray();
+                }
+            }
+
+            return result != null;
+        }
 
         /// <summary>
         /// Attempts to get the region directive from a syntax node.
@@ -2679,15 +2753,44 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets a cleaned-up <see cref="string"/> representation of an expression syntax.
+        /// Creates a new member declaration with an additional modifier.
         /// </summary>
-        /// <param name="source">
-        /// The expression syntax to get a <see cref="string"/> representation for.
+        /// <typeparam name="T">
+        /// The type of the member declaration.
+        /// </typeparam>
+        /// <param name="value">
+        /// The member declaration to modify.
+        /// </param>
+        /// <param name="keyword">
+        /// One of the enumeration members that specifies the syntax kind of the modifier to add.
         /// </param>
         /// <returns>
-        /// A cleaned-up <see cref="string"/> representation of the expression.
+        /// A new member declaration with the additional modifier.
         /// </returns>
-        internal static string ToCleanedUpString(this ExpressionSyntax source) => source?.ToString().Without(Constants.WhiteSpaces);
+        internal static T WithAdditionalModifier<T>(this T value, in SyntaxKind keyword) where T : MemberDeclarationSyntax
+        {
+            var modifiers = value.Modifiers;
+            var position = modifiers.IndexOf(SyntaxKind.PartialKeyword);
+
+            var syntaxToken = keyword.AsToken();
+
+            if (modifiers.Count is 0)
+            {
+                var commentedChild = value.FirstChildToken();
+
+                // remove comment from previous first child
+                value = value.ReplaceToken(commentedChild, commentedChild.WithLeadingSpace());
+
+                // add comment to new first child
+                syntaxToken = syntaxToken.WithLeadingTriviaFrom(commentedChild);
+            }
+
+            var newModifiers = position > -1
+                               ? value.Modifiers.Insert(position, syntaxToken)
+                               : value.Modifiers.Add(syntaxToken);
+
+            return (T)value.WithModifiers(newModifiers);
+        }
 
         /// <summary>
         /// Adds an annotation to a syntax node.
@@ -2792,46 +2895,6 @@ namespace MiKoSolutions.Analyzers
         internal static SyntaxNode WithModifiers(this FieldDeclarationSyntax value, params SyntaxKind[] modifiers) => value.WithModifiers((IEnumerable<SyntaxKind>)modifiers);
 
         /// <summary>
-        /// Creates a new member declaration with an additional modifier.
-        /// </summary>
-        /// <typeparam name="T">
-        /// The type of the member declaration.
-        /// </typeparam>
-        /// <param name="value">
-        /// The member declaration to modify.
-        /// </param>
-        /// <param name="keyword">
-        /// One of the enumeration members that specifies the syntax kind of the modifier to add.
-        /// </param>
-        /// <returns>
-        /// A new member declaration with the additional modifier.
-        /// </returns>
-        internal static T WithAdditionalModifier<T>(this T value, in SyntaxKind keyword) where T : MemberDeclarationSyntax
-        {
-            var modifiers = value.Modifiers;
-            var position = modifiers.IndexOf(SyntaxKind.PartialKeyword);
-
-            var syntaxToken = keyword.AsToken();
-
-            if (modifiers.Count is 0)
-            {
-                var commentedChild = value.FirstChildToken();
-
-                // remove comment from previous first child
-                value = value.ReplaceToken(commentedChild, commentedChild.WithLeadingSpace());
-
-                // add comment to new first child
-                syntaxToken = syntaxToken.WithLeadingTriviaFrom(commentedChild);
-            }
-
-            var newModifiers = position > -1
-                               ? value.Modifiers.Insert(position, syntaxToken)
-                               : value.Modifiers.Add(syntaxToken);
-
-            return (T)value.WithModifiers(newModifiers);
-        }
-
-        /// <summary>
         /// Removes a node from a syntax tree.
         /// </summary>
         /// <typeparam name="T">
@@ -2931,6 +2994,27 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Removes a using directive for the specified namespace from a syntax node.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to remove the using directive from.
+        /// </param>
+        /// <param name="usingNamespace">
+        /// The namespace to remove the using directive for.
+        /// </param>
+        /// <returns>
+        /// A new syntax node with the using directive removed.
+        /// </returns>
+        internal static SyntaxNode WithoutUsing(this SyntaxNode value, string usingNamespace)
+        {
+            var root = value.SyntaxTree.GetRoot();
+
+            return root.DescendantNodes<UsingDirectiveSyntax>(_ => _.Name?.ToFullString() == usingNamespace)
+                       .Select(root.Without)
+                       .FirstOrDefault();
+        }
+
+        /// <summary>
         /// Adds a using directive for the specified namespace to a syntax node.
         /// </summary>
         /// <param name="value">
@@ -2987,58 +3071,6 @@ namespace MiKoSolutions.Analyzers
             }
 
             return value.InsertNodeAfter(usings[usingsCount - 1], directive);
-        }
-
-        /// <summary>
-        /// Removes a using directive for the specified namespace from a syntax node.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax node to remove the using directive from.
-        /// </param>
-        /// <param name="usingNamespace">
-        /// The namespace to remove the using directive for.
-        /// </param>
-        /// <returns>
-        /// A new syntax node with the using directive removed.
-        /// </returns>
-        internal static SyntaxNode WithoutUsing(this SyntaxNode value, string usingNamespace)
-        {
-            var root = value.SyntaxTree.GetRoot();
-
-            return root.DescendantNodes<UsingDirectiveSyntax>(_ => _.Name?.ToFullString() == usingNamespace)
-                       .Select(root.Without)
-                       .FirstOrDefault();
-        }
-
-        /// <summary>
-        /// Gets the Fluent Assertions "Should" node from an expression statement.
-        /// </summary>
-        /// <param name="value">
-        /// The expression statement to search in.
-        /// </param>
-        /// <returns>
-        /// The member access expression that represents a Fluent Assertions "Should" call, or <see langword="null"/> if none exists.
-        /// </returns>
-        internal static MemberAccessExpressionSyntax GetFluentAssertionShouldNode(this ExpressionStatementSyntax value)
-        {
-            var nodes = value.DescendantNodes<MemberAccessExpressionSyntax>(SyntaxKind.SimpleMemberAccessExpression);
-
-            foreach (var node in nodes)
-            {
-                var name = node.GetName();
-
-                switch (name)
-                {
-                    // we might have a lambda expression, so the given statement might not be the correct ancestor statement of the 'Should()' node, hence we have to determine whether it's the specific statement that has an issue
-                    case Constants.FluentAssertions.Should when node.FirstAncestor<ExpressionStatementSyntax>() == value:
-                        return node;
-
-                    case Constants.FluentAssertions.ShouldBeEquivalentTo when node.FirstAncestor<ExpressionStatementSyntax>() == value:
-                        return node;
-                }
-            }
-
-            return null;
         }
 
         /// <summary>
