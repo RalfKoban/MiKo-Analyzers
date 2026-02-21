@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Composition;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -29,10 +31,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => "MiKo_2082";
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
-            var comment = (XmlElementSyntax)syntax;
+            SyntaxNode updatedSyntax = GetUpdatedSyntax((XmlElementSyntax)syntax);
 
+            return Task.FromResult(updatedSyntax);
+        }
+
+        private static XmlElementSyntax GetUpdatedSyntax(XmlElementSyntax comment)
+        {
             var contents = comment.Content;
 
             if (contents.Count is 1 && contents[0] is XmlTextSyntax txt)
@@ -107,7 +114,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordAdjustment.StartUpperCase | FirstWordAdjustment.KeepSingleLeadingSpace);
         }
 
-//// ncrunch: rdi off
+        //// ncrunch: rdi off
 
         private static IEnumerable<string> CreateReplacementMapKeys()
         {

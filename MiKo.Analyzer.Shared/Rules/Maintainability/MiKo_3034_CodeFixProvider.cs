@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -16,10 +18,22 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ParameterSyntax>().FirstOrDefault();
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
-            var parameter = (ParameterSyntax)syntax;
+            SyntaxNode updatedSyntax = GetUpdatedSyntax((ParameterSyntax)syntax);
 
+            return Task.FromResult(updatedSyntax);
+        }
+
+        protected override Task<SyntaxNode> GetUpdatedSyntaxRootAsync(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue, CancellationToken cancellationToken)
+        {
+            var updatedSyntax = GetUpdatedSyntaxRoot(root);
+
+            return Task.FromResult(updatedSyntax);
+        }
+
+        private static ParameterSyntax GetUpdatedSyntax(ParameterSyntax parameter)
+        {
             var name = SyntaxFactory.ParseName("CallerMemberName");
             var attribute = SyntaxFactory.Attribute(name);
             var attributeList = SyntaxFactory.AttributeList(attribute.ToSeparatedSyntaxList());
@@ -28,6 +42,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                             .WithDefault(SyntaxFactory.EqualsValueClause(NullLiteral()));
         }
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue) => root.WithUsing("System.Runtime.CompilerServices");
+        private static SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root) => root.WithUsing("System.Runtime.CompilerServices");
     }
 }

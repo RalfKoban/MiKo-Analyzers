@@ -1,5 +1,7 @@
 ﻿using System.Composition;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -14,19 +16,20 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         public override string FixableDiagnosticId => "MiKo_4004";
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
+        protected override async Task<SyntaxNode> GetUpdatedSyntaxRootAsync(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue, CancellationToken cancellationToken)
         {
             var typeSyntax = syntax.FirstAncestorOrSelf<BaseTypeDeclarationSyntax>();
 
-            var updatedTypeSyntax = GetUpdatedTypeSyntax(document, typeSyntax, syntax, issue);
+            var updatedTypeSyntax = await GetUpdatedTypeSyntaxAsync(document, typeSyntax, syntax, issue, cancellationToken).ConfigureAwait(false);
 
             return root.ReplaceNode(typeSyntax, updatedTypeSyntax);
         }
 
-        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic issue)
+        protected override async Task<SyntaxNode> GetUpdatedTypeSyntaxAsync(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic issue, CancellationToken cancellationToken)
         {
             var disposeMethod = (MethodDeclarationSyntax)syntax;
-            var targetMethod = FindTargetMethod(document, typeSyntax, disposeMethod);
+
+            var targetMethod = await FindTargetMethodAsync(typeSyntax, disposeMethod, document, cancellationToken).ConfigureAwait(false);
 
             var disposeAnnotation = new SyntaxAnnotation(DisposeAnnotationKind);
             var targetAnnotation = new SyntaxAnnotation(TargetAnnotationKind);
@@ -58,10 +61,10 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             return MoveRegionsWithDisposeAnnotation(modifiedType.InsertNodeBefore(annotatedTargetMethod, annotatedDisposeMethod), disposeMethod);
         }
 
-        private static MethodDeclarationSyntax FindTargetMethod(Document document, BaseTypeDeclarationSyntax typeSyntax, MethodDeclarationSyntax disposeMethod)
+        private static async Task<MethodDeclarationSyntax> FindTargetMethodAsync(BaseTypeDeclarationSyntax typeSyntax, MethodDeclarationSyntax disposeMethod, Document document, CancellationToken cancellationToken)
         {
-            var methodSymbol = (IMethodSymbol)disposeMethod.GetSymbol(document);
-            var typeSymbol = (INamedTypeSymbol)typeSyntax.GetSymbol(document);
+            var methodSymbol = (IMethodSymbol)await disposeMethod.GetSymbolAsync(document, cancellationToken).ConfigureAwait(false);
+            var typeSymbol = (INamedTypeSymbol)await typeSyntax.GetSymbolAsync(document, cancellationToken).ConfigureAwait(false);
 
             var methods = typeSymbol.GetMethods(MethodKind.Ordinary).Except(methodSymbol);
             var method = methods.FirstOrDefault(_ => _.DeclaredAccessibility == methodSymbol.DeclaredAccessibility && _.IsStatic is false);

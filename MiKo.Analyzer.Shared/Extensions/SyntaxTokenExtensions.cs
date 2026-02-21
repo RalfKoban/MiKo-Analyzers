@@ -33,21 +33,6 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<T> Ancestors<T>(this in SyntaxToken value) where T : SyntaxNode => value.Parent.Ancestors<T>();
 
         /// <summary>
-        /// Determines whether the token is of the specified kind.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax token to check.
-        /// </param>
-        /// <param name="kind">
-        /// One of the enumeration members that specifies the syntax kind to compare with.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the token is of the specified kind; otherwise, <see langword="false"/>.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsKind(this in SyntaxToken value, in SyntaxKind kind) => value.RawKind == (int)kind;
-
-        /// <summary>
         /// Creates a syntax token from the specified syntax kind.
         /// </summary>
         /// <param name="value">
@@ -57,6 +42,73 @@ namespace MiKoSolutions.Analyzers
         /// A new syntax token of the specified kind.
         /// </returns>
         internal static SyntaxToken AsToken(this SyntaxKind value) => SyntaxFactory.Token(value);
+
+        /// <summary>
+        /// Gets all comments associated with the syntax token.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to get comments from.
+        /// </param>
+        /// <returns>
+        /// An array of comment trivia.
+        /// </returns>
+        internal static SyntaxTrivia[] GetComment(this in SyntaxToken value) => value.GetAllTrivia().Where(_ => _.IsComment()).ToArray();
+
+        /// <summary>
+        /// Gets the documentation comment trivia syntax for the syntax token.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to get the documentation comment from.
+        /// </param>
+        /// <param name="kind">
+        /// One of the enumeration members that specifies the kind of documentation comment to get.
+        /// Defaults to <see cref="SyntaxKind.SingleLineDocumentationCommentTrivia"/>.
+        /// </param>
+        /// <returns>
+        /// An array of documentation comment trivia syntax nodes.
+        /// </returns>
+        internal static DocumentationCommentTriviaSyntax[] GetDocumentationCommentTriviaSyntax(this in SyntaxToken value, in SyntaxKind kind = SyntaxKind.SingleLineDocumentationCommentTrivia)
+        {
+            var leadingTrivia = value.LeadingTrivia;
+            var count = leadingTrivia.Count;
+
+            // Perf: quick check to avoid costly loop
+            if (count >= 2)
+            {
+                var trivia = leadingTrivia[count is 4 ? 2 : 1];
+
+                if (trivia.IsKind(kind) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
+                {
+                    return new[] { syntax };
+                }
+            }
+
+            DocumentationCommentTriviaSyntax[] results = null;
+
+            for (int index = 0, resultsIndex = 0; index < count; index++)
+            {
+                var trivia = leadingTrivia[index];
+
+                if (trivia.IsKind(kind) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
+                {
+                    if (results is null)
+                    {
+                        results = new DocumentationCommentTriviaSyntax[1];
+                    }
+                    else
+                    {
+                        // seems we have more separate comments, so increase by one
+                        Array.Resize(ref results, results.Length + 1);
+                    }
+
+                    results[resultsIndex] = syntax;
+
+                    resultsIndex++;
+                }
+            }
+
+            return results ?? Array.Empty<DocumentationCommentTriviaSyntax>();
+        }
 
         /// <summary>
         /// Gets the first enclosing node of the specified type containing the syntax token.
@@ -73,6 +125,30 @@ namespace MiKoSolutions.Analyzers
         internal static T GetEnclosing<T>(this in SyntaxToken value) where T : SyntaxNode => value.Parent.GetEnclosing<T>();
 
         /// <summary>
+        /// Gets the ending line number of the syntax token.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to get the line for.
+        /// </param>
+        /// <returns>
+        /// The line number where the token ends.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static int GetEndingLine(this in SyntaxToken value) => value.GetLocation().GetEndingLine();
+
+        /// <summary>
+        /// Gets the end position of the syntax token.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to get the position for.
+        /// </param>
+        /// <returns>
+        /// The line position at the end of the token.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static LinePosition GetEndPosition(this in SyntaxToken value) => value.GetLocation().GetEndPosition();
+
+        /// <summary>
         /// Gets the line span for the syntax token.
         /// </summary>
         /// <param name="value">
@@ -83,30 +159,6 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static FileLinePositionSpan GetLineSpan(this in SyntaxToken value) => value.GetLocation().GetLineSpan();
-
-        /// <summary>
-        /// Gets the position within the start line of the syntax token.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax token to get the position for.
-        /// </param>
-        /// <returns>
-        /// The position within the start line of the token.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static int GetPositionWithinStartLine(this in SyntaxToken value) => value.GetLocation().GetPositionWithinStartLine();
-
-        /// <summary>
-        /// Gets the position within the end line of the syntax token.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax token to get the position for.
-        /// </param>
-        /// <returns>
-        /// The position within the end line of the token.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static int GetPositionWithinEndLine(this in SyntaxToken value) => value.GetLocation().GetPositionWithinEndLine();
 
         /// <summary>
         /// Gets the position after the end of the syntax token.
@@ -125,28 +177,28 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets the start position of the syntax token.
+        /// Gets the position within the end line of the syntax token.
         /// </summary>
         /// <param name="value">
         /// The syntax token to get the position for.
         /// </param>
         /// <returns>
-        /// The line position at the start of the token.
+        /// The position within the end line of the token.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static LinePosition GetStartPosition(this in SyntaxToken value) => value.GetLocation().GetStartPosition();
+        internal static int GetPositionWithinEndLine(this in SyntaxToken value) => value.GetLocation().GetPositionWithinEndLine();
 
         /// <summary>
-        /// Gets the end position of the syntax token.
+        /// Gets the position within the start line of the syntax token.
         /// </summary>
         /// <param name="value">
         /// The syntax token to get the position for.
         /// </param>
         /// <returns>
-        /// The line position at the end of the token.
+        /// The position within the start line of the token.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static LinePosition GetEndPosition(this in SyntaxToken value) => value.GetLocation().GetEndPosition();
+        internal static int GetPositionWithinStartLine(this in SyntaxToken value) => value.GetLocation().GetPositionWithinStartLine();
 
         /// <summary>
         /// Gets the starting line number of the syntax token.
@@ -161,16 +213,16 @@ namespace MiKoSolutions.Analyzers
         internal static int GetStartingLine(this in SyntaxToken value) => value.GetLocation().GetStartingLine();
 
         /// <summary>
-        /// Gets the ending line number of the syntax token.
+        /// Gets the start position of the syntax token.
         /// </summary>
         /// <param name="value">
-        /// The syntax token to get the line for.
+        /// The syntax token to get the position for.
         /// </param>
         /// <returns>
-        /// The line number where the token ends.
+        /// The line position at the start of the token.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static int GetEndingLine(this in SyntaxToken value) => value.GetLocation().GetEndingLine();
+        internal static LinePosition GetStartPosition(this in SyntaxToken value) => value.GetLocation().GetStartPosition();
 
         /// <summary>
         /// Gets the symbol associated with the syntax token from the specified compilation.
@@ -233,6 +285,17 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Determines whether the syntax token has any comments.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the token has any comments; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool HasComment(this in SyntaxToken value) => value.HasLeadingComment() || value.HasTrailingComment();
+
+        /// <summary>
         /// Determines whether the syntax token has a documentation comment trivia.
         /// </summary>
         /// <param name="value">
@@ -265,84 +328,6 @@ namespace MiKoSolutions.Analyzers
 
             return false;
         }
-
-        /// <summary>
-        /// Gets the documentation comment trivia syntax for the syntax token.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax token to get the documentation comment from.
-        /// </param>
-        /// <param name="kind">
-        /// One of the enumeration members that specifies the kind of documentation comment to get.
-        /// Defaults to <see cref="SyntaxKind.SingleLineDocumentationCommentTrivia"/>.
-        /// </param>
-        /// <returns>
-        /// An array of documentation comment trivia syntax nodes.
-        /// </returns>
-        internal static DocumentationCommentTriviaSyntax[] GetDocumentationCommentTriviaSyntax(this in SyntaxToken value, in SyntaxKind kind = SyntaxKind.SingleLineDocumentationCommentTrivia)
-        {
-            var leadingTrivia = value.LeadingTrivia;
-            var count = leadingTrivia.Count;
-
-            // Perf: quick check to avoid costly loop
-            if (count >= 2)
-            {
-                var trivia = leadingTrivia[count is 4 ? 2 : 1];
-
-                if (trivia.IsKind(kind) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
-                {
-                    return new[] { syntax };
-                }
-            }
-
-            DocumentationCommentTriviaSyntax[] results = null;
-
-            for (int index = 0, resultsIndex = 0; index < count; index++)
-            {
-                var trivia = leadingTrivia[index];
-
-                if (trivia.IsKind(kind) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
-                {
-                    if (results is null)
-                    {
-                        results = new DocumentationCommentTriviaSyntax[1];
-                    }
-                    else
-                    {
-                        // seems we have more separate comments, so increase by one
-                        Array.Resize(ref results, results.Length + 1);
-                    }
-
-                    results[resultsIndex] = syntax;
-
-                    resultsIndex++;
-                }
-            }
-
-            return results ?? Array.Empty<DocumentationCommentTriviaSyntax>();
-        }
-
-        /// <summary>
-        /// Gets all comments associated with the syntax token.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax token to get comments from.
-        /// </param>
-        /// <returns>
-        /// An array of comment trivia.
-        /// </returns>
-        internal static SyntaxTrivia[] GetComment(this in SyntaxToken value) => value.GetAllTrivia().Where(_ => _.IsComment()).ToArray();
-
-        /// <summary>
-        /// Determines whether the syntax token has any comments.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax token to check.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the token has any comments; otherwise, <see langword="false"/>.
-        /// </returns>
-        internal static bool HasComment(this in SyntaxToken value) => value.HasLeadingComment() || value.HasTrailingComment();
 
         /// <summary>
         /// Determines whether the syntax token has any leading comments.
@@ -379,18 +364,6 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool HasTrailingEndOfLine(this in SyntaxToken value) => value.TrailingTrivia.HasEndOfLine();
-
-        /// <summary>
-        /// Determines whether the syntax token is the default value.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax token to check.
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if the token is the default value; otherwise, <see langword="false"/>.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsDefaultValue(this in SyntaxToken value) => value.IsKind(SyntaxKind.None);
 
         /// <summary>
         /// Determines whether the syntax token is any of the specified kinds.
@@ -433,6 +406,33 @@ namespace MiKoSolutions.Analyzers
 
             return false;
         }
+
+        /// <summary>
+        /// Determines whether the syntax token is the default value.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the token is the default value; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool IsDefaultValue(this in SyntaxToken value) => value.IsKind(SyntaxKind.None);
+
+        /// <summary>
+        /// Determines whether the token is of the specified kind.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to check.
+        /// </param>
+        /// <param name="kind">
+        /// One of the enumeration members that specifies the syntax kind to compare with.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the token is of the specified kind; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool IsKind(this in SyntaxToken value, in SyntaxKind kind) => value.RawKind == (int)kind;
 
         /// <summary>
         /// Determines whether the syntax token is located at the specified location.
@@ -606,81 +606,48 @@ namespace MiKoSolutions.Analyzers
         internal static SyntaxTokenList ToTokenList(this IEnumerable<SyntaxKind> source) => source.Select(_ => _.AsToken()).ToTokenList();
 
         /// <summary>
-        /// Creates a new syntax token with an end of line added as trailing trivia.
+        /// Creates a new syntax token with additional spaces as leading trivia.
         /// </summary>
         /// <param name="value">
         /// The syntax token to modify.
         /// </param>
-        /// <returns>
-        /// A new syntax token with an end of line added as trailing trivia.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static SyntaxToken WithEndOfLine(this in SyntaxToken value) => value.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
-
-        /// <summary>
-        /// Creates a new syntax token with a leading empty line.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax token to modify.
+        /// <param name="additionalSpaces">
+        /// The number of additional spaces to add.
         /// </param>
         /// <returns>
-        /// A new syntax token with a leading empty line.
+        /// A new syntax token with additional spaces as leading trivia.
         /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static SyntaxToken WithLeadingEmptyLine(this in SyntaxToken value) => value.WithLeadingEmptyLines(1);
-
-        /// <summary>
-        /// Creates a new syntax token with the specified number of leading empty lines.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax token to modify.
-        /// </param>
-        /// <param name="lines">
-        /// The number of empty lines to add.
-        /// </param>
-        /// <returns>
-        /// A new syntax token with the specified number of leading empty lines.
-        /// </returns>
-        internal static SyntaxToken WithLeadingEmptyLines(this in SyntaxToken value, in int lines)
+        internal static SyntaxToken WithAdditionalLeadingSpaces(this in SyntaxToken value, in int additionalSpaces)
         {
-            var trivia = value.LeadingTrivia;
+            var currentSpaces = value.GetPositionWithinStartLine();
 
-            // remove existing empty lines
-            var emptyLineIndices = new Stack<int>();
+            // the spaces might get negative, so ensure that they are at least zero
+            var spaces = Math.Max(0, currentSpaces + additionalSpaces);
 
-            for (int index = 0, count = trivia.Count; index < count; index++)
-            {
-                if (trivia[index].IsEndOfLine())
-                {
-                    emptyLineIndices.Push(index);
-                }
-            }
-
-            foreach (var index in emptyLineIndices)
-            {
-                trivia = trivia.RemoveAt(index);
-            }
-
-            // add new lines
-            for (var i = 0; i < lines; i++)
-            {
-                trivia = trivia.Insert(0, SyntaxFactory.CarriageReturnLineFeed); // do not use elastic one to prevent formatting it away again
-            }
-
-            return value.WithLeadingTrivia(trivia);
+            return value.WithLeadingSpaces(spaces);
         }
 
         /// <summary>
-        /// Creates a new syntax token with an end of line added as leading trivia.
+        /// Creates a new syntax token with additional spaces at the end of its leading trivia.
         /// </summary>
         /// <param name="value">
         /// The syntax token to modify.
         /// </param>
+        /// <param name="additionalSpaces">
+        /// The number of additional spaces to add.
+        /// </param>
         /// <returns>
-        /// A new syntax token with an end of line added as leading trivia.
+        /// A new syntax token with additional spaces at the end of its leading trivia.
         /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static SyntaxToken WithLeadingEndOfLine(this in SyntaxToken value) => value.WithLeadingTrivia(SyntaxFactory.CarriageReturnLineFeed); // do not use elastic one to prevent formatting it away again
+        internal static SyntaxToken WithAdditionalLeadingSpacesAtEnd(this in SyntaxToken value, in int additionalSpaces)
+        {
+            if (additionalSpaces is 0)
+            {
+                return value;
+            }
+
+            return value.WithAdditionalLeadingTrivia(WhiteSpaces(additionalSpaces));
+        }
 
         /// <summary>
         /// Creates a new syntax token with additional leading trivia.
@@ -770,6 +737,95 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
+        /// Creates a new syntax token with an end of line added as trailing trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to modify.
+        /// </param>
+        /// <returns>
+        /// A new syntax token with an end of line added as trailing trivia.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static SyntaxToken WithEndOfLine(this in SyntaxToken value) => value.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
+
+        /// <summary>
+        /// Creates a new syntax token with a space as both leading and trailing trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to modify.
+        /// </param>
+        /// <returns>
+        /// A new syntax token with a space as leading and trailing trivia.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static SyntaxToken WithLeadingAndTrailingSpace(this in SyntaxToken value) => value.WithLeadingSpace().WithTrailingSpace();
+
+        /// <summary>
+        /// Creates a new syntax token with a leading empty line.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to modify.
+        /// </param>
+        /// <returns>
+        /// A new syntax token with a leading empty line.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static SyntaxToken WithLeadingEmptyLine(this in SyntaxToken value) => value.WithLeadingEmptyLines(1);
+
+        /// <summary>
+        /// Creates a new syntax token with the specified number of leading empty lines.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to modify.
+        /// </param>
+        /// <param name="lines">
+        /// The number of empty lines to add.
+        /// </param>
+        /// <returns>
+        /// A new syntax token with the specified number of leading empty lines.
+        /// </returns>
+        internal static SyntaxToken WithLeadingEmptyLines(this in SyntaxToken value, in int lines)
+        {
+            var trivia = value.LeadingTrivia;
+
+            // remove existing empty lines
+            var emptyLineIndices = new Stack<int>();
+
+            for (int index = 0, count = trivia.Count; index < count; index++)
+            {
+                if (trivia[index].IsEndOfLine())
+                {
+                    emptyLineIndices.Push(index);
+                }
+            }
+
+            foreach (var index in emptyLineIndices)
+            {
+                trivia = trivia.RemoveAt(index);
+            }
+
+            // add new lines
+            for (var i = 0; i < lines; i++)
+            {
+                trivia = trivia.Insert(0, SyntaxFactory.CarriageReturnLineFeed); // do not use elastic one to prevent formatting it away again
+            }
+
+            return value.WithLeadingTrivia(trivia);
+        }
+
+        /// <summary>
+        /// Creates a new syntax token with an end of line added as leading trivia.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to modify.
+        /// </param>
+        /// <returns>
+        /// A new syntax token with an end of line added as leading trivia.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static SyntaxToken WithLeadingEndOfLine(this in SyntaxToken value) => value.WithLeadingTrivia(SyntaxFactory.CarriageReturnLineFeed); // do not use elastic one to prevent formatting it away again
+
+        /// <summary>
         /// Creates a new syntax token with a single space as leading trivia.
         /// </summary>
         /// <param name="value">
@@ -836,116 +892,6 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new syntax token with additional spaces as leading trivia.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax token to modify.
-        /// </param>
-        /// <param name="additionalSpaces">
-        /// The number of additional spaces to add.
-        /// </param>
-        /// <returns>
-        /// A new syntax token with additional spaces as leading trivia.
-        /// </returns>
-        internal static SyntaxToken WithAdditionalLeadingSpaces(this in SyntaxToken value, in int additionalSpaces)
-        {
-            var currentSpaces = value.GetPositionWithinStartLine();
-
-            // the spaces might get negative, so ensure that they are at least zero
-            var spaces = Math.Max(0, currentSpaces + additionalSpaces);
-
-            return value.WithLeadingSpaces(spaces);
-        }
-
-        /// <summary>
-        /// Creates a new syntax token with additional spaces at the end of its leading trivia.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax token to modify.
-        /// </param>
-        /// <param name="additionalSpaces">
-        /// The number of additional spaces to add.
-        /// </param>
-        /// <returns>
-        /// A new syntax token with additional spaces at the end of its leading trivia.
-        /// </returns>
-        internal static SyntaxToken WithAdditionalLeadingSpacesAtEnd(this in SyntaxToken value, in int additionalSpaces)
-        {
-            if (additionalSpaces is 0)
-            {
-                return value;
-            }
-
-            return value.WithAdditionalLeadingTrivia(WhiteSpaces(additionalSpaces));
-        }
-
-        /// <summary>
-        /// Creates a new syntax token with a space as both leading and trailing trivia.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax token to modify.
-        /// </param>
-        /// <returns>
-        /// A new syntax token with a space as leading and trailing trivia.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static SyntaxToken WithLeadingAndTrailingSpace(this in SyntaxToken value) => value.WithLeadingSpace().WithTrailingSpace();
-
-        /// <summary>
-        /// Creates a new syntax token with an XML comment start as leading trivia.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax token to modify.
-        /// </param>
-        /// <returns>
-        /// A new syntax token with an XML comment start as leading trivia.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static SyntaxToken WithLeadingXmlComment(this in SyntaxToken value) => value.WithLeadingTrivia(SyntaxNodeExtensions.XmlCommentStart);
-
-        /// <summary>
-        /// Creates a new syntax token with an XML comment exterior as leading trivia.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax token to modify.
-        /// </param>
-        /// <returns>
-        /// A new syntax token with an XML comment exterior as leading trivia.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static SyntaxToken WithLeadingXmlCommentExterior(this in SyntaxToken value) => value.WithLeadingTrivia(SyntaxNodeExtensions.XmlCommentExterior);
-
-        /// <summary>
-        /// Creates a new syntax token with trivia from the specified node.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax token to modify.
-        /// </param>
-        /// <param name="node">
-        /// The node to get the trivia from.
-        /// </param>
-        /// <returns>
-        /// A new syntax token with leading and trailing trivia from the specified node.
-        /// </returns>
-        internal static SyntaxToken WithTriviaFrom(this in SyntaxToken value, SyntaxNode node) => value.WithLeadingTriviaFrom(node)
-                                                                                                       .WithTrailingTriviaFrom(node);
-
-        /// <summary>
-        /// Creates a new syntax token with trivia from another token.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax token to modify.
-        /// </param>
-        /// <param name="token">
-        /// The token to get the trivia from.
-        /// </param>
-        /// <returns>
-        /// A new syntax token with leading and trailing trivia from the specified token.
-        /// </returns>
-        internal static SyntaxToken WithTriviaFrom(this in SyntaxToken value, in SyntaxToken token) => value.WithLeadingTriviaFrom(token)
-                                                                                                            .WithTrailingTriviaFrom(token);
-
-        /// <summary>
         /// Creates a new syntax token with leading trivia from a syntax node.
         /// </summary>
         /// <param name="value">
@@ -988,46 +934,28 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Creates a new syntax token with trailing trivia from a syntax node.
+        /// Creates a new syntax token with an XML comment start as leading trivia.
         /// </summary>
         /// <param name="value">
         /// The syntax token to modify.
         /// </param>
-        /// <param name="node">
-        /// The node to get the trailing trivia from.
-        /// </param>
         /// <returns>
-        /// A new syntax token with trailing trivia from the specified node.
+        /// A new syntax token with an XML comment start as leading trivia.
         /// </returns>
-        internal static SyntaxToken WithTrailingTriviaFrom(this in SyntaxToken value, SyntaxNode node)
-        {
-            var trivia = node.GetTrailingTrivia();
-
-            return trivia.Count > 0
-                   ? value.WithTrailingTrivia(trivia)
-                   : value;
-        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static SyntaxToken WithLeadingXmlComment(this in SyntaxToken value) => value.WithLeadingTrivia(SyntaxNodeExtensions.XmlCommentStart);
 
         /// <summary>
-        /// Creates a new syntax token with trailing trivia from another token.
+        /// Creates a new syntax token with an XML comment exterior as leading trivia.
         /// </summary>
         /// <param name="value">
         /// The syntax token to modify.
         /// </param>
-        /// <param name="token">
-        /// The token to get the trailing trivia from.
-        /// </param>
         /// <returns>
-        /// A new syntax token with trailing trivia from the specified token.
+        /// A new syntax token with an XML comment exterior as leading trivia.
         /// </returns>
-        internal static SyntaxToken WithTrailingTriviaFrom(this in SyntaxToken value, in SyntaxToken token)
-        {
-            var trivia = token.TrailingTrivia;
-
-            return trivia.Count > 0
-                   ? value.WithTrailingTrivia(trivia)
-                   : value;
-        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static SyntaxToken WithLeadingXmlCommentExterior(this in SyntaxToken value) => value.WithLeadingTrivia(SyntaxNodeExtensions.XmlCommentExterior);
 
         /// <summary>
         /// Creates a new syntax token without leading trivia.
@@ -1129,6 +1057,48 @@ namespace MiKoSolutions.Analyzers
         internal static SyntaxToken WithTrailingSpace(this in SyntaxToken value) => value.WithTrailingTrivia(SyntaxFactory.Space); // use non-elastic one to prevent formatting to be done automatically
 
         /// <summary>
+        /// Creates a new syntax token with trailing trivia from a syntax node.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to modify.
+        /// </param>
+        /// <param name="node">
+        /// The node to get the trailing trivia from.
+        /// </param>
+        /// <returns>
+        /// A new syntax token with trailing trivia from the specified node.
+        /// </returns>
+        internal static SyntaxToken WithTrailingTriviaFrom(this in SyntaxToken value, SyntaxNode node)
+        {
+            var trivia = node.GetTrailingTrivia();
+
+            return trivia.Count > 0
+                   ? value.WithTrailingTrivia(trivia)
+                   : value;
+        }
+
+        /// <summary>
+        /// Creates a new syntax token with trailing trivia from another token.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to modify.
+        /// </param>
+        /// <param name="token">
+        /// The token to get the trailing trivia from.
+        /// </param>
+        /// <returns>
+        /// A new syntax token with trailing trivia from the specified token.
+        /// </returns>
+        internal static SyntaxToken WithTrailingTriviaFrom(this in SyntaxToken value, in SyntaxToken token)
+        {
+            var trivia = token.TrailingTrivia;
+
+            return trivia.Count > 0
+                   ? value.WithTrailingTrivia(trivia)
+                   : value;
+        }
+
+        /// <summary>
         /// Creates a new syntax token with a trailing XML comment.
         /// </summary>
         /// <param name="value">
@@ -1139,6 +1109,36 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxToken WithTrailingXmlComment(this in SyntaxToken value) => value.WithTrailingTrivia(SyntaxNodeExtensions.XmlCommentStart);
+
+        /// <summary>
+        /// Creates a new syntax token with trivia from the specified node.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to modify.
+        /// </param>
+        /// <param name="node">
+        /// The node to get the trivia from.
+        /// </param>
+        /// <returns>
+        /// A new syntax token with leading and trailing trivia from the specified node.
+        /// </returns>
+        internal static SyntaxToken WithTriviaFrom(this in SyntaxToken value, SyntaxNode node) => value.WithLeadingTriviaFrom(node)
+                                                                                                       .WithTrailingTriviaFrom(node);
+
+        /// <summary>
+        /// Creates a new syntax token with trivia from another token.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax token to modify.
+        /// </param>
+        /// <param name="token">
+        /// The token to get the trivia from.
+        /// </param>
+        /// <returns>
+        /// A new syntax token with leading and trailing trivia from the specified token.
+        /// </returns>
+        internal static SyntaxToken WithTriviaFrom(this in SyntaxToken value, in SyntaxToken token) => value.WithLeadingTriviaFrom(token)
+                                                                                                            .WithTrailingTriviaFrom(token);
 
         /// <summary>
         /// Creates a new syntax token with the specified number of white spaces.

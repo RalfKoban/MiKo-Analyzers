@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -26,23 +28,23 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return invocation;
         }
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected override async Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
             if (syntax is PrefixUnaryExpressionSyntax unary)
             {
-                var updatedSyntax = GetUpdatedSyntax(document, unary.Operand);
+                var updatedSyntax = await GetUpdatedSyntaxAsync(unary.Operand, document, cancellationToken).ConfigureAwait(false);
 
                 return updatedSyntax is null ? null : IsFalsePattern(updatedSyntax).WithTriviaFrom(unary);
             }
 
-            return GetUpdatedSyntax(document, syntax);
+            return await GetUpdatedSyntaxAsync(syntax, document, cancellationToken).ConfigureAwait(false);
         }
 
-        private static IsPatternExpressionSyntax GetUpdatedSyntax(Document document, SyntaxNode syntax)
+        private static async Task<IsPatternExpressionSyntax> GetUpdatedSyntaxAsync(SyntaxNode syntax, Document document, CancellationToken cancellationToken)
         {
             if (syntax is InvocationExpressionSyntax invocation && invocation.Expression is MemberAccessExpressionSyntax maes)
             {
-                var updatedSyntax = GetUpdatedSyntax(document, maes.Expression, invocation.ArgumentList.Arguments);
+                var updatedSyntax = await GetUpdatedSyntaxAsync(maes.Expression, invocation.ArgumentList.Arguments, document, cancellationToken).ConfigureAwait(false);
 
                 if (updatedSyntax != null)
                 {
@@ -53,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return null;
         }
 
-        private static IsPatternExpressionSyntax GetUpdatedSyntax(Document document, ExpressionSyntax expression, in SeparatedSyntaxList<ArgumentSyntax> arguments)
+        private static async Task<IsPatternExpressionSyntax> GetUpdatedSyntaxAsync(ExpressionSyntax expression, SeparatedSyntaxList<ArgumentSyntax> arguments, Document document, CancellationToken cancellationToken)
         {
             var argument = arguments[0];
             var argumentExpression = argument.Expression;
@@ -78,7 +80,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return IsPattern(argumentExpression, expression);
             }
 
-            if (argument.IsConst(document))
+            var isConst = await argument.IsConstAsync(document, cancellationToken).ConfigureAwait(false);
+
+            if (isConst)
             {
                 return IsPattern(expression, argumentExpression);
             }
