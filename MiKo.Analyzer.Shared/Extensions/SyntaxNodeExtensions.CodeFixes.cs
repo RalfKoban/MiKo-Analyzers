@@ -79,25 +79,6 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets the <see cref="SemanticModel"/> for the specified <see cref="Document"/>.
-        /// </summary>
-        /// <param name="value">
-        /// The document to retrieve the semantic model for.
-        /// </param>
-        /// <returns>
-        /// The semantic model for the document.
-        /// </returns>
-        internal static SemanticModel GetSemanticModel(this Document value)
-        {
-            if (value.TryGetSemanticModel(out var result))
-            {
-                return result;
-            }
-
-            return value.GetSemanticModelAsync(CancellationToken.None).GetAwaiter().GetResult();
-        }
-
-        /// <summary>
         /// Asynchronously gets the symbol represented by the specified <see cref="SyntaxNode"/> in the context of the given <see cref="Document"/>.
         /// </summary>
         /// <param name="value">
@@ -133,21 +114,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Gets the symbol represented by the specified <see cref="SyntaxNode"/> in the context of the given <see cref="Document"/>.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax node to get the symbol for.
-        /// </param>
-        /// <param name="document">
-        /// The document that contains the syntax node.
-        /// </param>
-        /// <returns>
-        /// The symbol for the syntax node, or <see langword="null"/> if no symbol is found.
-        /// </returns>
-        internal static ISymbol GetSymbol(this SyntaxNode value, Document document) => value.GetSymbolAsync(document, CancellationToken.None).GetAwaiter().GetResult();
-
-        /// <summary>
-        /// Gets the symbol represented by the specified <see cref="InvocationExpressionSyntax"/> in the context of the given <see cref="Document"/>.
+        /// Asynchronously gets the symbol represented by the specified <see cref="InvocationExpressionSyntax"/> in the context of the given <see cref="Document"/>.
         /// </summary>
         /// <param name="value">
         /// The invocation expression syntax to get the symbol for.
@@ -155,13 +122,16 @@ namespace MiKoSolutions.Analyzers
         /// <param name="document">
         /// The document that contains the syntax node.
         /// </param>
+        /// <param name="cancellationToken">
+        /// The token to monitor for cancellation requests.
+        /// </param>
         /// <returns>
-        /// The symbol for the invocation expression, or <see langword="null"/> if no symbol is found.
+        /// A task that represents the asynchronous operation. The value of the <see cref="Task{TResult}.Result"/> parameter contains the symbol for the invocation expression, or <see langword="null"/> if no symbol is found.
         /// </returns>
-        internal static ISymbol GetSymbol(this InvocationExpressionSyntax value, Document document) => value.GetSymbol(document.GetSemanticModel());
+        internal static async Task<ISymbol> GetSymbolAsync(this InvocationExpressionSyntax value, Document document, CancellationToken cancellationToken) => value.GetSymbol(await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false));
 
         /// <summary>
-        /// Gets the type symbol for the specified <see cref="ArgumentSyntax"/> in the context of the given <see cref="Document"/>.
+        /// Asynchronously gets the type symbol for the specified <see cref="ArgumentSyntax"/> in the context of the given <see cref="Document"/>.
         /// </summary>
         /// <param name="value">
         /// The argument syntax to get the type symbol for.
@@ -169,13 +139,19 @@ namespace MiKoSolutions.Analyzers
         /// <param name="document">
         /// The document that contains the argument syntax.
         /// </param>
+        /// <param name="cancellationToken">
+        /// The token to monitor for cancellation requests.
+        /// </param>
         /// <returns>
-        /// The type symbol for the argument, or <see langword="null"/> if no type is found.
+        /// A task that represents the asynchronous operation. The value of the <see cref="Task{TResult}.Result"/> parameter contains the type symbol for the argument, or <see langword="null"/> if no type is found.
         /// </returns>
-        internal static ITypeSymbol GetTypeSymbol(this ArgumentSyntax value, Document document) => value?.GetTypeSymbol(GetSemanticModel(document));
+        internal static async Task<ITypeSymbol> GetTypeSymbolAsync(this ArgumentSyntax value, Document document, CancellationToken cancellationToken)
+        {
+            return value?.GetTypeSymbol(await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false));
+        }
 
         /// <summary>
-        /// Gets the type symbol for the specified <see cref="ExpressionSyntax"/> in the context of the given <see cref="Document"/>.
+        /// Asynchronously gets the type symbol for the specified <see cref="ExpressionSyntax"/> in the context of the given <see cref="Document"/>.
         /// </summary>
         /// <param name="value">
         /// The expression syntax to get the type symbol for.
@@ -183,24 +159,28 @@ namespace MiKoSolutions.Analyzers
         /// <param name="document">
         /// The document that contains the expression syntax.
         /// </param>
+        /// <param name="cancellationToken">
+        /// The token to monitor for cancellation requests.
+        /// </param>
         /// <returns>
-        /// The type symbol for the expression, or <see langword="null"/> if no type is found.
+        /// A task that represents the asynchronous operation. The value of the <see cref="Task{TResult}.Result"/> parameter contains the type symbol for the expression, or <see langword="null"/> if no type is found.
         /// </returns>
-        internal static ITypeSymbol GetTypeSymbol(this ExpressionSyntax value, Document document)
+        internal static async Task<ITypeSymbol> GetTypeSymbolAsync(this ExpressionSyntax value, Document document, CancellationToken cancellationToken)
         {
             if (value is null)
             {
                 return null;
             }
 
-            var semanticModel = GetSemanticModel(document);
-            var typeInfo = semanticModel.GetTypeInfo(value);
+            var semanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
+
+            var typeInfo = semanticModel.GetTypeInfo(value, cancellationToken);
 
             return typeInfo.Type;
         }
 
         /// <summary>
-        /// Gets the type symbol for the specified <see cref="MemberAccessExpressionSyntax"/> in the context of the given <see cref="Document"/>.
+        /// Asynchronously gets the type symbol for the specified <see cref="MemberAccessExpressionSyntax"/> in the context of the given <see cref="Document"/>.
         /// </summary>
         /// <param name="value">
         /// The member access expression syntax to get the type symbol for.
@@ -208,13 +188,19 @@ namespace MiKoSolutions.Analyzers
         /// <param name="document">
         /// The document that contains the member access expression syntax.
         /// </param>
+        /// <param name="cancellationToken">
+        /// The token to monitor for cancellation requests.
+        /// </param>
         /// <returns>
-        /// The type symbol for the member access expression, or <see langword="null"/> if no type is found.
+        /// A task that represents the asynchronous operation. The value of the <see cref="Task{TResult}.Result"/> parameter contains the type symbol for the member access expression, or <see langword="null"/> if no type is found.
         /// </returns>
-        internal static ITypeSymbol GetTypeSymbol(this MemberAccessExpressionSyntax value, Document document) => value?.GetTypeSymbol(GetSemanticModel(document));
+        internal static async Task<ITypeSymbol> GetTypeSymbolAsync(this MemberAccessExpressionSyntax value, Document document, CancellationToken cancellationToken)
+        {
+            return value?.GetTypeSymbol(await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false));
+        }
 
         /// <summary>
-        /// Gets the type symbol for the specified <see cref="BaseTypeSyntax"/> in the context of the given <see cref="Document"/>.
+        /// Asynchronously gets the type symbol for the specified <see cref="BaseTypeSyntax"/> in the context of the given <see cref="Document"/>.
         /// </summary>
         /// <param name="value">
         /// The base type syntax to get the type symbol for.
@@ -222,13 +208,16 @@ namespace MiKoSolutions.Analyzers
         /// <param name="document">
         /// The document that contains the base type syntax.
         /// </param>
+        /// <param name="cancellationToken">
+        /// The token to monitor for cancellation requests.
+        /// </param>
         /// <returns>
-        /// The type symbol for the base type, or <see langword="null"/> if no type is found.
+        /// A task that represents the asynchronous operation. The value of the <see cref="Task{TResult}.Result"/> parameter contains the type symbol for the base type, or <see langword="null"/> if no type is found.
         /// </returns>
-        internal static ITypeSymbol GetTypeSymbol(this BaseTypeSyntax value, Document document) => value?.GetTypeSymbol(GetSemanticModel(document));
+        internal static async Task<ITypeSymbol> GetTypeSymbolAsync(this BaseTypeSyntax value, Document document, CancellationToken cancellationToken) => value?.GetTypeSymbol(await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false));
 
         /// <summary>
-        /// Gets the type symbol for the specified <see cref="ClassDeclarationSyntax"/> in the context of the given <see cref="Document"/>.
+        /// Asynchronously gets the type symbol for the specified <see cref="ClassDeclarationSyntax"/> in the context of the given <see cref="Document"/>.
         /// </summary>
         /// <param name="value">
         /// The class declaration syntax to get the type symbol for.
@@ -236,13 +225,16 @@ namespace MiKoSolutions.Analyzers
         /// <param name="document">
         /// The document that contains the class declaration syntax.
         /// </param>
+        /// <param name="cancellationToken">
+        /// The token to monitor for cancellation requests.
+        /// </param>
         /// <returns>
-        /// The type symbol for the class declaration, or <see langword="null"/> if no type is found.
+        /// A task that represents the asynchronous operation. The value of the <see cref="Task{TResult}.Result"/> parameter contains the type symbol for the class declaration, or <see langword="null"/> if no type is found.
         /// </returns>
-        internal static ITypeSymbol GetTypeSymbol(this ClassDeclarationSyntax value, Document document) => value?.GetTypeSymbol(GetSemanticModel(document));
+        internal static async Task<ITypeSymbol> GetTypeSymbolAsync(this ClassDeclarationSyntax value, Document document, CancellationToken cancellationToken) => value?.GetTypeSymbol(await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false));
 
         /// <summary>
-        /// Gets the type symbol for the specified <see cref="RecordDeclarationSyntax"/> in the context of the given <see cref="Document"/>.
+        /// Asynchronously gets the type symbol for the specified <see cref="RecordDeclarationSyntax"/> in the context of the given <see cref="Document"/>.
         /// </summary>
         /// <param name="value">
         /// The record declaration syntax to get the type symbol for.
@@ -250,13 +242,16 @@ namespace MiKoSolutions.Analyzers
         /// <param name="document">
         /// The document that contains the record declaration syntax.
         /// </param>
+        /// <param name="cancellationToken">
+        /// The token to monitor for cancellation requests.
+        /// </param>
         /// <returns>
-        /// The type symbol for the record declaration, or <see langword="null"/> if no type is found.
+        /// A task that represents the asynchronous operation. The value of the <see cref="Task{TResult}.Result"/> parameter contains the type symbol for the record declaration, or <see langword="null"/> if no type is found.
         /// </returns>
-        internal static ITypeSymbol GetTypeSymbol(this RecordDeclarationSyntax value, Document document) => value?.GetTypeSymbol(GetSemanticModel(document));
+        internal static async Task<ITypeSymbol> GetTypeSymbolAsync(this RecordDeclarationSyntax value, Document document, CancellationToken cancellationToken) => value?.GetTypeSymbol(await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false));
 
         /// <summary>
-        /// Gets the type symbol for the specified <see cref="VariableDeclarationSyntax"/> in the context of the given <see cref="Document"/>.
+        /// Asynchronously gets the type symbol for the specified <see cref="VariableDeclarationSyntax"/> in the context of the given <see cref="Document"/>.
         /// </summary>
         /// <param name="value">
         /// The variable declaration syntax to get the type symbol for.
@@ -264,13 +259,16 @@ namespace MiKoSolutions.Analyzers
         /// <param name="document">
         /// The document that contains the variable declaration syntax.
         /// </param>
+        /// <param name="cancellationToken">
+        /// The token to monitor for cancellation requests.
+        /// </param>
         /// <returns>
-        /// The type symbol for the variable declaration, or <see langword="null"/> if no type is found.
+        /// A task that represents the asynchronous operation. The value of the <see cref="Task{TResult}.Result"/> parameter contains the type symbol for the variable declaration, or <see langword="null"/> if no type is found.
         /// </returns>
-        internal static ITypeSymbol GetTypeSymbol(this VariableDeclarationSyntax value, Document document) => value?.GetTypeSymbol(GetSemanticModel(document));
+        internal static async Task<ITypeSymbol> GetTypeSymbolAsync(this VariableDeclarationSyntax value, Document document, CancellationToken cancellationToken) => value?.GetTypeSymbol(await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false));
 
         /// <summary>
-        /// Gets the type symbol for the specified <see cref="VariableDesignationSyntax"/> in the context of the given <see cref="Document"/>.
+        /// Asynchronously gets the type symbol for the specified <see cref="VariableDesignationSyntax"/> in the context of the given <see cref="Document"/>.
         /// </summary>
         /// <param name="value">
         /// The variable designation syntax to get the type symbol for.
@@ -278,13 +276,16 @@ namespace MiKoSolutions.Analyzers
         /// <param name="document">
         /// The document that contains the variable designation syntax.
         /// </param>
+        /// <param name="cancellationToken">
+        /// The token to monitor for cancellation requests.
+        /// </param>
         /// <returns>
-        /// The type symbol for the variable designation, or <see langword="null"/> if no type is found.
+        /// A task that represents the asynchronous operation. The value of the <see cref="Task{TResult}.Result"/> parameter contains the type symbol for the variable designation, or <see langword="null"/> if no type is found.
         /// </returns>
-        internal static ITypeSymbol GetTypeSymbol(this VariableDesignationSyntax value, Document document) => value?.GetTypeSymbol(GetSemanticModel(document));
+        internal static async Task<ITypeSymbol> GetTypeSymbolAsync(this VariableDesignationSyntax value, Document document, CancellationToken cancellationToken) => value?.GetTypeSymbol(await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false));
 
         /// <summary>
-        /// Gets the type symbol for the specified <see cref="TypeSyntax"/> in the context of the given <see cref="Document"/>.
+        /// Asynchronously gets the type symbol for the specified <see cref="TypeSyntax"/> in the context of the given <see cref="Document"/>.
         /// </summary>
         /// <param name="value">
         /// The type syntax to get the type symbol for.
@@ -292,10 +293,16 @@ namespace MiKoSolutions.Analyzers
         /// <param name="document">
         /// The document that contains the type syntax.
         /// </param>
+        /// <param name="cancellationToken">
+        /// The token to monitor for cancellation requests.
+        /// </param>
         /// <returns>
-        /// The type symbol for the type syntax, or <see langword="null"/> if no type is found.
+        /// A task that represents the asynchronous operation. The value of the <see cref="Task{TResult}.Result"/> parameter contains the type symbol for the type syntax, or <see langword="null"/> if no type is found.
         /// </returns>
-        internal static ITypeSymbol GetTypeSymbol(this TypeSyntax value, Document document) => value?.GetTypeSymbol(GetSemanticModel(document));
+        internal static async Task<ITypeSymbol> GetTypeSymbolAsync(this TypeSyntax value, Document document, CancellationToken cancellationToken)
+        {
+            return value?.GetTypeSymbol(await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false));
+        }
 
         /// <summary>
         /// Determines whether the specified <see cref="Document"/> has at least the given C# language version.
@@ -312,7 +319,7 @@ namespace MiKoSolutions.Analyzers
         internal static bool HasMinimumCSharpVersion(this Document value, LanguageVersion wantedVersion) => value.TryGetSyntaxTree(out var syntaxTree) && syntaxTree.HasMinimumCSharpVersion(wantedVersion);
 
         /// <summary>
-        /// Determines whether the specified <see cref="ArgumentSyntax"/> represents a constant value in the context of the given <see cref="Document"/>.
+        /// Asynchronously determines whether the specified <see cref="ArgumentSyntax"/> represents a constant value in the context of the given <see cref="Document"/>.
         /// </summary>
         /// <param name="value">
         /// The argument syntax to check.
@@ -320,14 +327,18 @@ namespace MiKoSolutions.Analyzers
         /// <param name="document">
         /// The document that contains the argument syntax.
         /// </param>
+        /// <param name="cancellationToken">
+        /// The token to monitor for cancellation requests.
+        /// </param>
         /// <returns>
-        /// <see langword="true"/> if the argument is a constant; otherwise, <see langword="false"/>.
+        /// A task that completes with a result of <see langword="true"/> if the argument is a constant, otherwise with a result of <see langword="false"/>.
         /// </returns>
-        internal static bool IsConst(this ArgumentSyntax value, Document document)
+        internal static async Task<bool> IsConstAsync(this ArgumentSyntax value, Document document, CancellationToken cancellationToken)
         {
             var identifierName = value.Expression.GetName();
 
-            var semanticModel = document.GetSemanticModel();
+            var semanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
+
             var method = value.GetEnclosingMethod(semanticModel);
             var containingType = method.FindContainingType();
 
@@ -363,7 +374,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="ExpressionSyntax"/> represents a nullable type in the context of the given <see cref="Document"/>.
+        /// Asynchronously determines whether the specified <see cref="ExpressionSyntax"/> represents a nullable type in the context of the given <see cref="Document"/>.
         /// </summary>
         /// <param name="value">
         /// The expression syntax to check.
@@ -371,13 +382,16 @@ namespace MiKoSolutions.Analyzers
         /// <param name="document">
         /// The document that contains the expression syntax.
         /// </param>
+        /// <param name="cancellationToken">
+        /// The token to monitor for cancellation requests.
+        /// </param>
         /// <returns>
-        /// <see langword="true"/> if the expression syntax is nullable; otherwise, <see langword="false"/>.
+        /// A task that completes with a result of <see langword="true"/> if the expression syntax is nullable, otherwise with a result of <see langword="false"/>.
         /// </returns>
-        internal static bool IsNullable(this ExpressionSyntax value, Document document) => value.GetSymbol(document) is ITypeSymbol typeSymbol && typeSymbol.IsNullable();
+        internal static async Task<bool> IsNullableAsync(this ExpressionSyntax value, Document document, CancellationToken cancellationToken) => await value.GetSymbolAsync(document, cancellationToken).ConfigureAwait(false) is ITypeSymbol typeSymbol && typeSymbol.IsNullable();
 
         /// <summary>
-        /// Determines whether the specified <see cref="IsPatternExpressionSyntax"/> represents a nullable type in the context of the given <see cref="Document"/>.
+        /// Asynchronously determines whether the specified <see cref="IsPatternExpressionSyntax"/> represents a nullable type in the context of the given <see cref="Document"/>.
         /// </summary>
         /// <param name="value">
         /// The pattern expression syntax to check.
@@ -385,13 +399,16 @@ namespace MiKoSolutions.Analyzers
         /// <param name="document">
         /// The document that contains the pattern expression syntax.
         /// </param>
+        /// <param name="cancellationToken">
+        /// The token to monitor for cancellation requests.
+        /// </param>
         /// <returns>
-        /// <see langword="true"/> if the pattern is nullable; otherwise, <see langword="false"/>.
+        /// A task that completes with a result of <see langword="true"/> if the pattern is nullable, otherwise with a result of <see langword="false"/>.
         /// </returns>
-        internal static bool IsNullable(this IsPatternExpressionSyntax value, Document document) => value.Expression.IsNullable(document);
+        internal static Task<bool> IsNullableAsync(this IsPatternExpressionSyntax value, Document document, CancellationToken cancellationToken) => value.Expression.IsNullableAsync(document, cancellationToken);
 
         /// <summary>
-        /// Determines whether the specified <see cref="ArgumentSyntax"/> represents an enum value in the context of the given <see cref="Document"/>.
+        /// Asynchronously determines whether the specified <see cref="ArgumentSyntax"/> represents an enum value in the context of the given <see cref="Document"/>.
         /// </summary>
         /// <param name="value">
         /// The argument syntax to check.
@@ -399,14 +416,19 @@ namespace MiKoSolutions.Analyzers
         /// <param name="document">
         /// The document that contains the argument syntax.
         /// </param>
+        /// <param name="cancellationToken">
+        /// The token to monitor for cancellation requests.
+        /// </param>
         /// <returns>
-        /// <see langword="true"/> if the argument is an enum; otherwise, <see langword="false"/>.
+        /// A task that completes with a result of <see langword="true"/> if the argument is an enum, otherwise with a result of <see langword="false"/>.
         /// </returns>
-        internal static bool IsEnum(this ArgumentSyntax value, Document document)
+        internal static async Task<bool> IsEnumAsync(this ArgumentSyntax value, Document document, CancellationToken cancellationToken)
         {
             var expression = (MemberAccessExpressionSyntax)value.Expression;
 
-            if (expression.Expression.GetSymbol(document) is ITypeSymbol type)
+            var symbol = await expression.Expression.GetSymbolAsync(document, cancellationToken).ConfigureAwait(false);
+
+            if (symbol is ITypeSymbol type)
             {
                 return type.IsEnum();
             }

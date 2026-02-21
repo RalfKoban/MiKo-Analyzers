@@ -142,6 +142,104 @@ public class TestMeTests
 ");
 
         [Test]
+        public void No_issue_is_reported_for_a_test_class_with_the_field_coming_after_static_fields_(
+                                                                                                 [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                 [ValueSource(nameof(Tests))] string test)
+            => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+public class TestMe
+{
+}
+
+[" + fixture + @"]
+public class TestMeTests
+{
+    private static int SomeId = 42;
+
+    private TestMe _objectUnderTest;
+
+    [" + test + @"]
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_a_test_class_with_the_field_coming_after_static_readonly_fields_(
+                                                                                                          [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                          [ValueSource(nameof(Tests))] string test)
+            => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+public class TestMe
+{
+}
+
+[" + fixture + @"]
+public class TestMeTests
+{
+    private static readonly int SomeId = 42;
+
+    private TestMe _objectUnderTest;
+
+    [" + test + @"]
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_a_test_class_with_the_static_field_coming_after_a_static_readonly_field_(
+                                                                                                                  [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                                  [ValueSource(nameof(Tests))] string test)
+            => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+public class TestMe
+{
+}
+
+[" + fixture + @"]
+public class TestMeTests
+{
+    private static readonly int _someField;
+    private static TestMe _objectUnderTest;
+
+    [" + test + @"]
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_a_test_class_with_the_static_field_as_non_first_field_(
+                                                                                                [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                                [ValueSource(nameof(Tests))] string test)
+            => An_issue_is_reported_for(@"
+using NUnit.Framework;
+
+public class TestMe
+{
+}
+
+[" + fixture + @"]
+public class TestMeTests
+{
+    private static int _someField;
+    private static TestMe _objectUnderTest;
+
+    [" + test + @"]
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_a_test_class_with_the_field_as_non_first_field_(
                                                                                          [ValueSource(nameof(TestFixtures))] string fixture,
                                                                                          [ValueSource(nameof(Tests))] string test)
@@ -350,7 +448,7 @@ public class TestMeTests
         }
 
         [Test]
-        public void Code_gets_fixed_for_field_as_middle_field_with_additional_constant_fields()
+        public void Code_gets_fixed_for_field_as_middle_field_with_additional_constant_field()
         {
             const string OriginalCode = @"
 using NUnit.Framework;
@@ -387,6 +485,148 @@ public class TestMeTests
     private TestMe _objectUnderTest;
     private int _someField1;
     private int _someField2;
+
+    [Test]
+    public void DoSomething()
+    {
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_static_field_as_middle_field_with_additional_constant_field()
+        {
+            const string OriginalCode = @"
+using NUnit.Framework;
+
+public class TestMe
+{
+}
+
+[TestFixture]
+public class TestMeTests
+{
+    private const int SomeId = 42;
+    private static int _someField1;
+    private static TestMe _objectUnderTest;
+    private static int _someField2;
+
+    [Test]
+    public void DoSomething()
+    {
+    }
+}";
+
+            const string FixedCode = @"
+using NUnit.Framework;
+
+public class TestMe
+{
+}
+
+[TestFixture]
+public class TestMeTests
+{
+    private const int SomeId = 42;
+    private static TestMe _objectUnderTest;
+    private static int _someField1;
+    private static int _someField2;
+
+    [Test]
+    public void DoSomething()
+    {
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_static_field_as_middle_field_with_additional_static_readonly_field()
+        {
+            const string OriginalCode = @"
+using NUnit.Framework;
+
+public class TestMe
+{
+}
+
+[TestFixture]
+public class TestMeTests
+{
+    private static readonly int SomeId = 42;
+    private static int _someField1;
+    private static TestMe _objectUnderTest;
+    private static int _someField2;
+
+    [Test]
+    public void DoSomething()
+    {
+    }
+}";
+
+            const string FixedCode = @"
+using NUnit.Framework;
+
+public class TestMe
+{
+}
+
+[TestFixture]
+public class TestMeTests
+{
+    private static readonly int SomeId = 42;
+    private static TestMe _objectUnderTest;
+    private static int _someField1;
+    private static int _someField2;
+
+    [Test]
+    public void DoSomething()
+    {
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_static_field_as_last_field()
+        {
+            const string OriginalCode = @"
+using NUnit.Framework;
+
+public class TestMe
+{
+}
+
+[TestFixture]
+public class TestMeTests
+{
+    private static int _someField1;
+    private static int _someField2;
+    private static TestMe _objectUnderTest;
+
+    [Test]
+    public void DoSomething()
+    {
+    }
+}";
+
+            const string FixedCode = @"
+using NUnit.Framework;
+
+public class TestMe
+{
+}
+
+[TestFixture]
+public class TestMeTests
+{
+    private static TestMe _objectUnderTest;
+    private static int _someField1;
+    private static int _someField2;
 
     [Test]
     public void DoSomething()

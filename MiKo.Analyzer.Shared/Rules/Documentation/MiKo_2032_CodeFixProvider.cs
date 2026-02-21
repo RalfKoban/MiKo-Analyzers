@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Composition;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -180,13 +182,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
 //// ncrunch: rdi default
 
-        protected override XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, string memberName, GenericNameSyntax returnType) => CommentCanBeFixed(comment)
-                                                                                                                                                            ? Comment(comment, GenericStartParts, GenericEndParts)
-                                                                                                                                                            : comment;
+        protected override Task<SyntaxNode> GenericCommentAsync(XmlElementSyntax comment, string memberName, GenericNameSyntax returnType, Document document, CancellationToken cancellationToken)
+        {
+            SyntaxNode updatedComment = CommentCanBeFixed(comment)
+                                        ? Comment(comment, GenericStartParts, GenericEndParts)
+                                        : comment;
 
-        protected override XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, string memberName, TypeSyntax returnType) => CommentCanBeFixed(comment)
-                                                                                                                                                        ? Comment(comment, NonGenericStartParts, NonGenericEndParts)
-                                                                                                                                                        : comment;
+            return Task.FromResult(updatedComment);
+        }
+
+        protected override Task<SyntaxNode> NonGenericCommentAsync(XmlElementSyntax comment, string memberName, TypeSyntax returnType, Document document, CancellationToken cancellationToken)
+        {
+            SyntaxNode updatedComment = CommentCanBeFixed(comment)
+                                        ? Comment(comment, NonGenericStartParts, NonGenericEndParts)
+                                        : comment;
+
+            return Task.FromResult(updatedComment);
+        }
 
         // introduced as workaround for issue #399
         private static bool CommentCanBeFixed(XmlElementSyntax syntax)

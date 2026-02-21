@@ -32,14 +32,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static string FindBetterName(string name)
         {
+            const string Original = "original";
+
             var builder = name.AsCachedBuilder()
-                              .Insert(0, "original")
+                              .Insert(0, Original)
                               .Without("toCopy")
                               .Without("ToCopy");
 
-            if (builder.Length > 8)
+            if (builder.Length > Original.Length)
             {
-                builder.ToUpperCaseAt(8);
+                builder.ToUpperCaseAt(Original.Length);
             }
 
             return builder.ToStringAndRelease();

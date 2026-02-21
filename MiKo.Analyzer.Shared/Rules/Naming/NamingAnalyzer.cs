@@ -150,11 +150,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var found = PluralNamesCache.GetOrAdd(
                                               originalName,
                                               _ =>
-                                                   {
-                                                       var plural = FindPluralName(_.AsSpan(), out var singular);
+                                                  {
+                                                      var plural = FindPluralName(_.AsSpan(), out var singular);
 
-                                                       return new Pair(plural, singular);
-                                                   });
+                                                      return new Pair(plural, singular);
+                                                  });
 
             singularName = found.Value;
 

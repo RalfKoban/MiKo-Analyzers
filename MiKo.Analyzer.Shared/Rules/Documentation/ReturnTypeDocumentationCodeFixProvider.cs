@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
@@ -47,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return null;
         }
 
-        protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected sealed override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
             var comment = (XmlElementSyntax)syntax;
 
@@ -56,27 +57,33 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 switch (ancestor)
                 {
                     case MethodDeclarationSyntax m:
-                        return Comment(document, comment, m);
+                        return CommentAsync(comment, m, document, cancellationToken);
 
                     case PropertyDeclarationSyntax p:
-                        return Comment(document, comment, p);
+                        return CommentAsync(comment, p, document, cancellationToken);
 
                     default:
                         continue;
                 }
             }
 
-            return comment;
+            return Task.FromResult(syntax);
         }
 
-        protected abstract XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, string memberName, TypeSyntax returnType);
+        protected abstract Task<SyntaxNode> NonGenericCommentAsync(XmlElementSyntax comment, string memberName, TypeSyntax returnType, Document document, CancellationToken cancellationToken);
 
-        protected abstract XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, string memberName, GenericNameSyntax returnType);
+        protected abstract Task<SyntaxNode> GenericCommentAsync(XmlElementSyntax comment, string memberName, GenericNameSyntax returnType, Document document, CancellationToken cancellationToken);
 
-        protected virtual SyntaxNode Comment(Document document, XmlElementSyntax comment, MethodDeclarationSyntax method) => Comment(document, comment, method.GetName(), method.ReturnType);
+        protected virtual Task<SyntaxNode> CommentAsync(XmlElementSyntax comment, MethodDeclarationSyntax method, Document document, CancellationToken cancellationToken)
+        {
+            return CommentAsync(comment, method.GetName(), method.ReturnType, document, cancellationToken);
+        }
 
 #pragma warning disable CA1716
-        protected virtual SyntaxNode Comment(Document document, XmlElementSyntax comment, PropertyDeclarationSyntax property) => Comment(document, comment, property.GetName(), property.Type);
+        protected virtual Task<SyntaxNode> CommentAsync(XmlElementSyntax comment, PropertyDeclarationSyntax property, Document document, CancellationToken cancellationToken)
+        {
+            return CommentAsync(comment, property.GetName(), property.Type, document, cancellationToken);
+        }
 #pragma warning restore CA1716
 
 //// ncrunch: rdi off
@@ -165,8 +172,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 //// ncrunch: rdi default
 
-        private XmlElementSyntax Comment(Document document, XmlElementSyntax comment, string memberName, TypeSyntax returnType) => returnType is GenericNameSyntax genericReturnType
-                                                                                                                                   ? GenericComment(document, comment, memberName, genericReturnType)
-                                                                                                                                   : NonGenericComment(document, comment, memberName, returnType);
+        private Task<SyntaxNode> CommentAsync(XmlElementSyntax comment, string memberName, TypeSyntax returnType, Document document, CancellationToken cancellationToken)
+        {
+            return returnType is GenericNameSyntax genericReturnType
+                   ? GenericCommentAsync(comment, memberName, genericReturnType, document, cancellationToken)
+                   : NonGenericCommentAsync(comment, memberName, returnType, document, cancellationToken);
+        }
     }
 }

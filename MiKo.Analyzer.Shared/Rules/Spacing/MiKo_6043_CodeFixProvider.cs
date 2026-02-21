@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -29,17 +31,11 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return null;
         }
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
-            switch (syntax)
-            {
-                case ParenthesizedLambdaExpressionSyntax p: return GetUpdatedSyntax(p);
-                case SimpleLambdaExpressionSyntax s: return GetUpdatedSyntax(s);
+            var updatedSyntax = GetUpdatedSyntax(syntax);
 
-                default:
-                    // we cannot fix it
-                    return syntax;
-            }
+            return Task.FromResult(updatedSyntax);
         }
 
         private static GenericNameSyntax GetUpdatedSyntax(GenericNameSyntax syntax) => syntax.WithIdentifier(syntax.Identifier)
@@ -92,6 +88,19 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         }
 
         private static SyntaxToken GetUpdatedSyntax(in SyntaxToken token) => token.WithSurroundingSpace();
+
+        private SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
+        {
+            switch (syntax)
+            {
+                case ParenthesizedLambdaExpressionSyntax p: return GetUpdatedSyntax(p);
+                case SimpleLambdaExpressionSyntax s: return GetUpdatedSyntax(s);
+
+                default:
+                    // we cannot fix it
+                    return syntax;
+            }
+        }
 
         private AnonymousObjectCreationExpressionSyntax GetUpdatedSyntax(AnonymousObjectCreationExpressionSyntax syntax)
         {

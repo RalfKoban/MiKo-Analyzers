@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -39,7 +41,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected sealed override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ObjectCreationExpressionSyntax>().FirstOrDefault();
 
-        protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => GetUpdatedSyntax((ObjectCreationExpressionSyntax)syntax);
+        protected sealed override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
+        {
+            var result = GetUpdatedSyntax((ObjectCreationExpressionSyntax)syntax);
+
+            return Task.FromResult<SyntaxNode>(result);
+        }
 
         protected virtual TypeSyntax GetUpdatedSyntaxType(ObjectCreationExpressionSyntax syntax) => syntax.Type;
 

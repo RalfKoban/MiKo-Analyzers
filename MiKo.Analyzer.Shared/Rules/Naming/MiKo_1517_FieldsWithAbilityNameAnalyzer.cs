@@ -38,8 +38,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
         }
 
-        private static ReadOnlySpan<char> GetPartToInspect(string name, in int start = 0) => name.EndsWith("Condition", StringComparison.Ordinal)
-                                                                                             ? name.AsSpan(start, name.Length - start - 9)
-                                                                                             : name.AsSpan(start);
+        private static ReadOnlySpan<char> GetPartToInspect(string name, in int start = 0)
+        {
+            const string Condition = "Condition";
+
+            return name.EndsWith(Condition, StringComparison.Ordinal)
+                   ? name.AsSpan(start, name.Length - start - Condition.Length)
+                   : name.AsSpan(start);
+        }
     }
 }

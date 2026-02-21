@@ -69,6 +69,35 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<T> Ancestors<T>(this SyntaxNode value) where T : SyntaxNode => value.Ancestors().OfType<T>(); // value.AncestorsAndSelf().OfType<T>();
 
         /// <summary>
+        /// Gets all ancestors of the specified syntax node that are of type <typeparamref name="T"/> and are within a documentation comment.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of XML nodes to return.
+        /// </typeparam>
+        /// <param name="value">
+        /// The syntax node whose ancestors to retrieve.
+        /// </param>
+        /// <returns>
+        /// A sequence that contains all ancestors of the specified type that are within the documentation comment scope.
+        /// </returns>
+        internal static IEnumerable<T> AncestorsWithinDocumentation<T>(this SyntaxNode value) where T : XmlNodeSyntax
+        {
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
+            foreach (var ancestor in value.Ancestors())
+            {
+                if (ancestor is T t)
+                {
+                    yield return t;
+                }
+
+                if (ancestor is DocumentationCommentTriviaSyntax)
+                {
+                    yield break;
+                }
+            }
+        }
+
+        /// <summary>
         /// Gets all ancestors of the specified syntax node that are of type <typeparamref name="T"/> and are within the scope of a method, local function, or property.
         /// </summary>
         /// <typeparam name="T">
@@ -96,35 +125,6 @@ namespace MiKoSolutions.Analyzers
                     case LocalFunctionStatementSyntax _: // found the surrounding local function
                     case BasePropertyDeclarationSyntax _: // found the surrounding property, so we already skipped the getters or setters
                         yield break;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets all ancestors of the specified syntax node that are of type <typeparamref name="T"/> and are within a documentation comment.
-        /// </summary>
-        /// <typeparam name="T">
-        /// The type of XML nodes to return.
-        /// </typeparam>
-        /// <param name="value">
-        /// The syntax node whose ancestors to retrieve.
-        /// </param>
-        /// <returns>
-        /// A sequence that contains all ancestors of the specified type that are within the documentation comment scope.
-        /// </returns>
-        internal static IEnumerable<T> AncestorsWithinDocumentation<T>(this SyntaxNode value) where T : XmlNodeSyntax
-        {
-            // ReSharper disable once LoopCanBePartlyConvertedToQuery
-            foreach (var ancestor in value.Ancestors())
-            {
-                if (ancestor is T t)
-                {
-                    yield return t;
-                }
-
-                if (ancestor is DocumentationCommentTriviaSyntax)
-                {
-                    yield break;
                 }
             }
         }
@@ -445,20 +445,6 @@ namespace MiKoSolutions.Analyzers
         internal static SyntaxToken FirstDescendantToken(this SyntaxNode value, in SyntaxKind kind) => value.DescendantTokens().OfKind(kind).First();
 
         /// <summary>
-        /// Gets the last child node of the specified syntax node that is of type <typeparamref name="T"/>.
-        /// </summary>
-        /// <typeparam name="T">
-        /// The type of node to return.
-        /// </typeparam>
-        /// <param name="value">
-        /// The syntax node whose last child of the specified type to retrieve.
-        /// </param>
-        /// <returns>
-        /// The last child node of the specified type, or <see langword="null"/> if no such child exists.
-        /// </returns>
-        internal static T LastChild<T>(this SyntaxNode value) where T : SyntaxNode => value.ChildNodes<T>().LastOrDefault();
-
-        /// <summary>
         /// Gets the nearest enclosing node of type <typeparamref name="T"/> that contains the specified syntax node.
         /// </summary>
         /// <typeparam name="T">
@@ -587,16 +573,76 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static ISymbol GetEnclosingSymbol(this SyntaxNode value, SemanticModel semanticModel)
         {
-            switch (value)
+            while (true)
             {
-                case FieldDeclarationSyntax f: return semanticModel.GetDeclaredSymbol(f);
-                case MethodDeclarationSyntax s: return semanticModel.GetDeclaredSymbol(s);
-                case PropertyDeclarationSyntax p: return semanticModel.GetDeclaredSymbol(p);
-                case ConstructorDeclarationSyntax c: return semanticModel.GetDeclaredSymbol(c);
-                case EventDeclarationSyntax e: return semanticModel.GetDeclaredSymbol(e);
-                default:
-                    return semanticModel.GetEnclosingSymbol(value.GetLocation().SourceSpan.Start);
+                switch (value)
+                {
+                    case null: return null;
+                    case FieldDeclarationSyntax f: return semanticModel.GetDeclaredSymbol(f);
+                    case MethodDeclarationSyntax s: return semanticModel.GetDeclaredSymbol(s);
+                    case PropertyDeclarationSyntax p: return semanticModel.GetDeclaredSymbol(p);
+                    case ConstructorDeclarationSyntax c: return semanticModel.GetDeclaredSymbol(c);
+                    case EventDeclarationSyntax e: return semanticModel.GetDeclaredSymbol(e);
+                    case DocumentationCommentTriviaSyntax d:
+                    {
+                        value = d.ParentTrivia.Token.Parent;
+
+                        continue;
+                    }
+
+                    default: return semanticModel.GetEnclosingSymbol(value.GetLocation().SourceSpan.Start);
+                }
             }
+        }
+
+        /// <summary>
+        /// Gets the last child node of the specified syntax node that is of type <typeparamref name="T"/>.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of node to return.
+        /// </typeparam>
+        /// <param name="value">
+        /// The syntax node whose last child of the specified type to retrieve.
+        /// </param>
+        /// <returns>
+        /// The last child node of the specified type, or <see langword="null"/> if no such child exists.
+        /// </returns>
+        internal static T LastChild<T>(this SyntaxNode value) where T : SyntaxNode => value.ChildNodes<T>().LastOrDefault();
+
+        /// <summary>
+        /// Gets the next sibling node of the specified syntax node.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node whose next sibling to retrieve.
+        /// </param>
+        /// <returns>
+        /// The next sibling node, or <see langword="null"/> if no next sibling exists.
+        /// </returns>
+        internal static SyntaxNode NextSibling(this SyntaxNode value)
+        {
+            var parent = value?.Parent;
+
+            if (parent is null)
+            {
+                return null;
+            }
+
+            using (var enumerator = parent.ChildNodes().GetEnumerator())
+            {
+                while (enumerator.MoveNext())
+                {
+                    if (enumerator.Current == value)
+                    {
+                        var nextSibling = enumerator.MoveNext()
+                                          ? enumerator.Current
+                                          : null;
+
+                        return nextSibling;
+                    }
+                }
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -663,42 +709,6 @@ namespace MiKoSolutions.Analyzers
             }
 
             return default;
-        }
-
-        /// <summary>
-        /// Gets the next sibling node of the specified syntax node.
-        /// </summary>
-        /// <param name="value">
-        /// The syntax node whose next sibling to retrieve.
-        /// </param>
-        /// <returns>
-        /// The next sibling node, or <see langword="null"/> if no next sibling exists.
-        /// </returns>
-        internal static SyntaxNode NextSibling(this SyntaxNode value)
-        {
-            var parent = value?.Parent;
-
-            if (parent is null)
-            {
-                return null;
-            }
-
-            using (var enumerator = parent.ChildNodes().GetEnumerator())
-            {
-                while (enumerator.MoveNext())
-                {
-                    if (enumerator.Current == value)
-                    {
-                        var nextSibling = enumerator.MoveNext()
-                                          ? enumerator.Current
-                                          : null;
-
-                        return nextSibling;
-                    }
-                }
-            }
-
-            return null;
         }
 
         /// <summary>
