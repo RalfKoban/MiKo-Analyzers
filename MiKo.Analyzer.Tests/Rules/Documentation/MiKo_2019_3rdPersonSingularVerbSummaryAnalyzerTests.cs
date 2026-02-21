@@ -979,6 +979,37 @@ public interface TestMe
             VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
         }
 
+        [TestCase("A service implementation to do", "Represents a service to do")]
+        [TestCase("A service to do", "Represents a service to do")]
+        [TestCase("Interface for a service that checks", "Represents a service that checks")]
+        [TestCase("Interface for service that checks", "Represents a service that checks")]
+        [TestCase("Interface for services that check", "Represents a service that check")]
+        [TestCase("Interface for the service that checks", "Represents a service that checks")]
+        [TestCase("Service for doing", "Represents a service for doing")]
+        [TestCase("Service implementation to do", "Represents a service to do")]
+        [TestCase("Service that does", "Represents a service that does")]
+        [TestCase("Service to do", "Represents a service to do")]
+        [TestCase("Service used for doing", "Represents a service for doing")]
+        [TestCase("Service used to do", "Represents a service to do")]
+        [TestCase("Service which does", "Represents a service which does")]
+        [TestCase("The service implementation to do", "Represents a service to do")]
+        [TestCase("The service to do", "Represents a service to do")]
+        public void Code_gets_fixed_for_service_type_text_(string originalText, string fixedText)
+        {
+            const string Template = @"
+using System;
+
+/// <summary>
+/// ### stuff
+/// </summary>
+public static class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
+        }
+
         protected override string GetDiagnosticId() => MiKo_2019_3rdPersonSingularVerbSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2019_3rdPersonSingularVerbSummaryAnalyzer();
