@@ -67,6 +67,25 @@ public class TestMe
 }");
 
         [Test]
+        public void No_issue_is_reported_for_type_check_with_property_matching_as_if_condition() => No_issue_is_reported_for(@"
+using System;
+
+public interface ISomeInterface
+{
+    bool SomeValue { get; set; }
+}
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        if (o is ISomeInterface { SomeValue: true })
+        {
+        }
+    }
+}");
+
+        [Test]
         public void An_issue_is_reported_for_numeric_single_property_matching_as_if_condition() => An_issue_is_reported_for(@"
 using System;
 
