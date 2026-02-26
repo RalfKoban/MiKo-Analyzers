@@ -686,8 +686,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
         {
             if (findings.Length > 0)
             {
-                return value.ReplaceAllWithProbe(findings)
-                            .ReplaceAllWithProbe(Cleanups);
+                value.ReplaceAllWithProbe(findings);
+                value.ReplaceAllWithProbe(Cleanups);
             }
 
             return value;
