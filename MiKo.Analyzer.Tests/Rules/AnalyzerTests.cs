@@ -26,9 +26,10 @@ namespace MiKoSolutions.Analyzers.Rules
         private static readonly Analyzer[] AllAnalyzers = CreateAllAnalyzers();
         private static readonly CodeFixProvider[] AllCodeFixProviders = CreateAllCodeFixProviders();
 
+        // [Timeout(1 * 60 * 60 * 1000)] // 1h
         [Ignore("Shall be run manually")]
         [Explicit]
-        [TestCase("TODO"), Timeout(1 * 60 * 60 * 1000)] // 1h
+        [TestCase("TODO")]
         public static void Performance_(string path)
         {
 //// ncrunch: no coverage start
@@ -218,7 +219,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         [Ignore("Shall be run manually")]
         [Explicit]
-        [TestCase(@"<TODO>\MiKo.Analyzer.Tests\", "*Tests.cs"), Timeout(60 * 1000)]
+        [TestCase(@"<TODO>\MiKo.Analyzer.Tests\", "*Tests.cs")]
         public static void Files_are_RDI_excluded_(string path, string searchPattern)
         {
             const string NcrunchRdiMarker = "//// ncrunch: rdi off";
