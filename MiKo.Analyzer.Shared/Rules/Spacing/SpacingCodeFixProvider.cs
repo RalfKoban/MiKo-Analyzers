@@ -161,7 +161,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return updatedSyntax.WithLeadingSpaces(spaces);
         }
 
-#if VS2022
+#if VS2022 || VS2026
 
         protected CollectionExpressionSyntax GetUpdatedSyntax(CollectionExpressionSyntax syntax, in int spaces)
         {

@@ -85,7 +85,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             var expression = clause.Value;
 
-#if VS2022
+#if VS2022 || VS2026
             // TODO RKN: Update for SyntaxKind.CollectionExpression after switching to Roslyn 4.7.0
             if (expression is CollectionExpressionSyntax collectionExpression)
             {
