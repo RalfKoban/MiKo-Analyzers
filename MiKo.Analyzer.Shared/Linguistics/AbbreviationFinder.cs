@@ -477,7 +477,140 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                             nameof(EventArgs),
                                                         };
 
-        private static readonly ConcurrentDictionary<string, Pair[]> AlreadyFoundAbbreviations = new ConcurrentDictionary<string, Pair[]>(StringComparer.Ordinal);
+        private static readonly ConcurrentDictionary<string, Pair[]> AlreadyFoundAbbreviationsCache = new ConcurrentDictionary<string, Pair[]>(StringComparer.Ordinal);
+
+        private static readonly ConcurrentDictionary<string, string> AlreadyReplacedAbbreviationsCache = new ConcurrentDictionary<string, string>(StringComparer.Ordinal);
+
+        private static readonly Pair[] Cleanups =
+                                                  {
+                                                      new Pair("agerag", "ag"), // 'man' within 'manager' / 'manage' / 'managing'
+                                                      new Pair("alculateulat", "alculat"), // 'calc' within 'calculate' / 'calculation'
+                                                      new Pair("alueue", "alue"), // 'val' within 'value'
+                                                      new Pair("arametereter", "arameter"), // 'param' within 'parameter'
+                                                      new Pair("arametermeter", "arameter"), // 'para' within 'parameter'
+                                                      new Pair("ariableiable", "ariable"), // 'var' within 'variable'
+                                                      new Pair("asynchronization", "async"), // 'sync' within 'asynchronization'
+                                                      new Pair("ationate", "ate"), // 'reloc' within 'relocate'
+                                                      new Pair("ationati", "ati"), // 'reloc' within 'relocation' / 'relocating'
+                                                      new Pair("aximumi", "axi"), // 'max' within 'maximum'
+                                                      new Pair("aximumimum", "aximum"), // 'max' within 'maximum'
+                                                      new Pair("dentificationi", "denti"), // 'ident' within 'identification' / 'identifier' / 'identify' / identity'
+                                                      new Pair("dopoint", "dopt"), // 'pt' within 'adopt'
+                                                      new Pair("eclarationar", "eclar"), // 'decl' within 'declaration' / 'declare' / 'declaring'
+                                                      new Pair("ecordord", "ecord"), // 'rec' within 'record'
+                                                      new Pair("ecordtangl", "ectangl"), // 'rec' within 'rectangle'
+                                                      new Pair("ecryptement", "ecrement"), // 'decr' within 'decrement'
+                                                      new Pair("ecryptypt", "ecrypt"), // 'decr' within 'decrypt'
+                                                      new Pair("ectangleangl", "ectangl"), // 'rect' within 'rectangle'
+                                                      new Pair("ectect", "ect"), // 'obj' within 'object'
+                                                      new Pair("eferencea", "efa"), // 'ref' within 'refactor'
+                                                      new Pair("eferencee", "efe"), // 'ref' within 'refers' / 'reference'
+                                                      new Pair("eferencer", "efr"), // 'ref' within 'refresh'
+                                                      new Pair("efinitionin", "efin"), // 'def' within 'define' / 'definition'
+                                                      new Pair("elativeat", "elat"), // 'rel' within 'relate' / 'relating'
+                                                      new Pair("elativeativ", "elativ"), // 'rel' within 'relative'
+                                                      new Pair("emanticantic", "emantic"), // 'sem' within 'semantic'
+                                                      new Pair("ependentend", "epend"), // 'dep' within 'dependent' / 'dependency'
+                                                      new Pair("epositoriesitor", "epositor"), // 'repos' within 'repositories'
+                                                      new Pair("epositorysitor", "epositor"), // 'repo' within 'repository'
+                                                      new Pair("equaluenc", "equenc"), // 'eq' within 'sequence'
+                                                      new Pair("equaluir", "equir"), // 'eq' within 'require'
+                                                      new Pair("equentialuen", "equen"), // 'seq' within 'sequence' / 'sequential'
+                                                      new Pair("erationeration", "eration"), // 'op' within 'operation'
+                                                      new Pair("ercentageent", "ercent"), // 'perc' within 'percent' / 'percentae'
+                                                      new Pair("erformanceorm", "erform"), // 'perf' within 'perform' / 'performance'
+                                                      new Pair("ersionsion", "ersion"), // 'ver' within 'version'
+                                                      new Pair("erticalical", "ertical"), // 'vert' within 'vertical'
+                                                      new Pair("ertificateificate", "ertificate"), // 'cert' within 'certificate'
+                                                      new Pair("escriptionription", "escription"), // 'desc' within 'description'
+                                                      new Pair("esponseon", "espon"), // 'resp' within 'response' / 'responding'
+                                                      new Pair("estinationination", "estination"), // 'dest' within 'destination'
+                                                      new Pair("estoreor", "estor"), // 'rest' within 'restore' / 'restoring' / 'restoration'
+                                                      new Pair("esultpon", "espon"), // 'res' within 'response' / 'responding' / 'respond' / 'responsible'
+                                                      new Pair("esulttor", "estor"), // 'res' within 'restore' / 'restoring' / 'restoration'
+                                                      new Pair("gthgth", "gth"), // 'len' within 'length'
+                                                      new Pair("iagnosticnos", "iagnos"), // 'diag' within 'diagnosis' / 'diagnostics'
+                                                      new Pair("iagnosticram", "iagram"), // 'diag' within 'diagram'
+                                                      new Pair("ibraryrar", "ibrar"), // 'lib' within 'library' / 'libraries'
+                                                      new Pair("icalical", "ical"), // 'phys' within 'physical'
+                                                      new Pair("ictionaryionar", "ictionar"), // 'dict' within 'dictionary' / 'dictionaries'
+                                                      new Pair("ictionarytionar", "ictionar"), // 'dic' within 'dictionary' / 'dictionaries'
+                                                      new Pair("itedit", "ited"), // 'ed' within 'edited'
+                                                      new Pair("ifferencee", "iffe"), // 'diff' within 'differ' / 'difference' / 'differences' / 'differencing'
+                                                      new Pair("ifferencei", "iffi"), // 'diff' within 'diffing'
+                                                      new Pair("igationigation", "igation"), // 'nav' within 'navigation'
+                                                      new Pair("inimumi", "ini"), // 'min' within 'minimum'
+                                                      new Pair("inimumimum", "inimum"), // 'min' within 'minimum'
+                                                      new Pair("ionion", "ion"), // 'sess' within 'session'
+                                                      new Pair("irecordt", "irect"), // 'rec' within 'direct' / 'directory' / 'directories'
+                                                      new Pair("irectangle", "irect"), // 'rect' within 'direct' / 'directory' / 'directories'
+                                                      new Pair("irectoryector", "irector"), // 'dir' within 'directory' / 'directories'
+                                                      new Pair("iresult", "ires"), // 'res' within 'fires' / 'hires'
+                                                      new Pair("itionition", "ition"), // 'pos' within 'position'
+                                                      new Pair("itit", "it"), // 'ed' within 'edit'
+                                                      new Pair("ivisionid", "ivid"), // 'div' within 'divide' / 'dividing'
+                                                      new Pair("ivisionision", "ivision"), // 'div' within 'division'
+                                                      new Pair("lausibilitybilit", "lausibilit"), // 'plausi' within 'plausibility' / 'plausibilities'
+                                                      new Pair("lternativeernative", "lternative"), // 'alt' within 'alternative'
+                                                      new Pair("mentationment", "ment"), // 'docu' within 'document'
+                                                      new Pair("mentationmentation", "mentation"), // 'doc' within 'documentation'
+                                                      new Pair("mentct", "ct"), // 'ele' within 'select'
+                                                      new Pair("mentect", "ct"), // 'el' within 'select'
+                                                      new Pair("mentement", "ment"), // 'el' within 'element'
+                                                      new Pair("mentent", "ment"), // 'elem' within 'element'
+                                                      new Pair("mentment", "ment"), // 'ele' within 'element'
+                                                      new Pair("mplementationement", "mplement"), // 'impl' within 'implementation'
+                                                      new Pair("mplementationlement", "mplement"), // 'imp' within 'implement'
+                                                      new Pair("mplementationr", "mpr"), // 'imp' within 'impress'
+                                                      new Pair("ncryptypt", "ncrypt"), // 'encr' within 'encrypt'
+                                                      new Pair("nitializeialize", "nitialize"), // 'init' within 'initialize'
+                                                      new Pair("ntaxtax", "ntax"), // 'syn' within 'syntax'
+                                                      new Pair("nvironmentironment", "nvironment"), // 'env' within 'environment'
+                                                      new Pair("nvironmentment", "nvironment"), // 'environ' within 'environment'
+                                                      new Pair("olumeum", "olum"), // 'vol' within 'volume'
+                                                      new Pair("ompatibleibilit", "ompatibilit"), // 'comp' within 'compatibility' / 'compatibilities'
+                                                      new Pair("ompatibleible", "ompatible"), // 'comp' within 'compatible'
+                                                      new Pair("ompileatible", "ompatible"), // 'comp' within 'compatible'
+                                                      new Pair("ompileile", "ompile"), // 'comp' within 'compile'
+                                                      new Pair("onfigurationigur", "onfigur"), // 'conf' within 'configuration' / 'configure'
+                                                      new Pair("onfigurationur", "onfigur"), // 'config' within 'configuration' / 'configure'
+                                                      new Pair("onnectionect", "onnect"), // 'conn' within 'connection' / 'connect'
+                                                      new Pair("ousous", "ous"), // 'sync' within 'asynchronous'
+                                                      new Pair("oversion", "over"), // 'ver' within 'hover'
+                                                      new Pair("Oversion", "Over"), // 'ver' within 'Over'
+                                                      new Pair("pecificationif", "pecif"), // 'spec' within 'specific' / 'specification' / 'specific'
+                                                      new Pair("pplicationlication", "pplication"), // 'app' within 'application'
+                                                      new Pair("umentument", "ument"), // 'doc' within 'document'
+                                                      new Pair("qualual", "qual"), // 'eq' within 'equal'
+                                                      new Pair("questuest", "quest"), // 'req' within 'request'
+                                                      new Pair("reviousious", "revious"), // 'prev' within 'previous'
+                                                      new Pair("rgumentument", "rgument"), // 'arg' within 'argument' / 'arguments'
+                                                      new Pair("rocessedur", "rocedur"), // 'proc' within 'procedure'
+                                                      new Pair("rocessess", "rocess"), // 'proc' within 'process' / 'processes'
+                                                      new Pair("ropertyert", "ropert"), // 'prop' within 'property' / 'properties'
+                                                      new Pair("rrayay", "rray"), // 'arr' within 'array'
+                                                      new Pair("rroror", "rror"), // 'err' within 'error'
+                                                      new Pair("specificationt", "spect"), // 'spec' within 'aspect'
+                                                      new Pair("ssemanticb", "ssemb"), // 'sem' within 'assembly'
+                                                      new Pair("ssociationiation", "ssociation"), // 'assoc' within 'association'
+                                                      new Pair("stemtem", "stem"), // 'sys' within 'system'
+                                                      new Pair("synchronizationhronous", "synchronous"), // 'sync' within 'asynchronous'
+                                                      new Pair("thodod", "thod"), // 'meth' within 'method'
+                                                      new Pair("tilityit", "tilit"), // 'util' within 'utility' / 'utilities'
+                                                      new Pair("ttributeibute", "ttribute"), // 'attr' within 'attribute'
+                                                      new Pair("uageuage", "uage"), // 'lang' within 'language'
+                                                      new Pair("ultult", "ult"), // 'res' within 'result'
+                                                      new Pair("umberber", "umber"), // 'num' within 'number'
+                                                      new Pair("urrentrency", "urrency"), // 'cur' within 'currency' / 'concurrency'
+                                                      new Pair("urrentrent", "urrent"), // 'cur' within 'current'
+                                                      new Pair("uthorizationent", "uthent"), // 'auth' within 'authenticate' / 'authentication'
+                                                      new Pair("uthorizationori", "uthori"), // 'auth' within 'authorization' / 'authorize'
+                                                      new Pair("xecuteu", "xecu"), // 'exec' within 'execute' / 'executing' / executable' / 'execution'
+                                                      new Pair("xtensionen", "xten"), // 'ext' within 'extension' / 'extensions'
+                                                      new Pair("xtensioner", "xter"), // 'ext' within 'exterior' / 'extern'
+                                                      new Pair("ynchronizationhroniz", "ynchroniz"), // 'sync' within 'synchronize'
+                                                      new Pair("yntaxc", "ync"), // 'syn' within 'sync' / 'async'
+                                                  };
 
         /// <summary>
         /// Finds all abbreviations contained in the specified text.
@@ -501,7 +634,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
             }
 
             // cache findings as they will not change
-            return AlreadyFoundAbbreviations.GetOrAdd(value, FindCore);
+            return AlreadyFoundAbbreviationsCache.GetOrAdd(value, FindCore);
         }
 
         /// <summary>
@@ -518,12 +651,23 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// </returns>
         internal static string ReplaceAllAbbreviations(string value, in ReadOnlySpan<Pair> findings)
         {
-            if (findings.Length > 0)
+            if (findings.Length is 0)
             {
-                return ReplaceAllAbbreviations(value.AsCachedBuilder(), findings).ToStringAndRelease();
+                return value;
             }
 
-            return value;
+            // let's see if we have cached the result and use that (as the findings should not differ here anymore)
+            // note that we do not need a synchronization here between 'TryGetValue' and 'AddOrUpdate' as the replaced value should be the same (even when the replacement is done a second time)
+            if (AlreadyReplacedAbbreviationsCache.TryGetValue(value, out var replacedValue))
+            {
+                return replacedValue;
+            }
+
+            var builder = value.AsCachedBuilder();
+
+            ReplaceAllAbbreviations(builder, findings);
+
+            return AlreadyReplacedAbbreviationsCache.AddOrUpdate(value, builder.ToStringAndRelease(), (key, presentValue) => presentValue);
         }
 
         /// <summary>
@@ -542,7 +686,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
         {
             if (findings.Length > 0)
             {
-                return value.ReplaceAllWithProbe(findings);
+                return value.ReplaceAllWithProbe(findings)
+                            .ReplaceAllWithProbe(Cleanups);
             }
 
             return value;
@@ -559,9 +704,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// </returns>
         internal static string FindAndReplaceAllAbbreviations(string value)
         {
-            var findings = Find(value);
-
-            return ReplaceAllAbbreviations(value, findings);
+            return AlreadyReplacedAbbreviationsCache.GetOrAdd(value, _ => ReplaceAllAbbreviations(_, Find(_)));
         }
 
         /// <summary>
