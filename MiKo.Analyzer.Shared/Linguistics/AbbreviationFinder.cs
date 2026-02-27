@@ -814,7 +814,15 @@ namespace MiKoSolutions.Analyzers.Linguistics
             {
                 var pair = MidTerms[index];
 
-                if (MidTermHasIssue(pair.Key.AsSpan(), textSpan))
+                var key = pair.Key.AsSpan();
+
+                // do a quick check on the hot path, as most times (~99.8%) there is no issue
+                if (textSpan.Contains(key, StringComparison.Ordinal) is false)
+                {
+                    continue;
+                }
+
+                if (MidTermHasIssue(key, textSpan))
                 {
                     results.Add(pair);
                 }
@@ -908,12 +916,6 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// </returns>
         private static bool MidTermHasIssue(in ReadOnlySpan<char> key, in ReadOnlySpan<char> value)
         {
-            // do a quick check on the hot path, as most times (~99.8%) there is no issue
-            if (value.Contains(key, StringComparison.Ordinal) is false)
-            {
-                return false;
-            }
-
             var keyLength = key.Length;
             var valueLength = value.Length;
             var keyStartsUpperCase = key[0].IsUpperCase();
