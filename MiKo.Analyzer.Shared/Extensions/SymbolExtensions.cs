@@ -42,6 +42,95 @@ namespace MiKoSolutions.Analyzers
                                                                                                                   SymbolDisplayGenericsOptions.IncludeTypeParameters,
                                                                                                                   miscellaneousOptions: SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers);
 
+        private static readonly HashSet<int> DoNotDelveIntoChildrenSet = new HashSet<int>
+                                                                             {
+                                                                                 (int)SyntaxKind.ArrayType,
+                                                                                 (int)SyntaxKind.AttributeList,
+                                                                                 (int)SyntaxKind.CasePatternSwitchLabel,
+                                                                                 (int)SyntaxKind.CaseSwitchLabel,
+                                                                                 (int)SyntaxKind.ExpressionStatement,
+                                                                                 (int)SyntaxKind.GenericName,
+                                                                                 (int)SyntaxKind.IdentifierName,
+                                                                                 (int)SyntaxKind.IsPatternExpression,
+                                                                                 (int)SyntaxKind.ParameterList,
+                                                                                 (int)SyntaxKind.PredefinedType,
+                                                                                 (int)SyntaxKind.TypeParameterConstraintClause,
+                                                                                 (int)SyntaxKind.TypeParameterList,
+
+                                                                                 //// initializers
+                                                                                 (int)SyntaxKind.ArrayInitializerExpression,
+                                                                                 (int)SyntaxKind.CollectionInitializerExpression,
+                                                                                 (int)SyntaxKind.ObjectInitializerExpression,
+                                                                                 (int)SyntaxKind.WithInitializerExpression,
+
+                                                                                 //// creations
+                                                                                 (int)SyntaxKind.ObjectCreationExpression,
+                                                                                 (int)SyntaxKind.AnonymousObjectCreationExpression,
+                                                                                 (int)SyntaxKind.ArrayCreationExpression,
+                                                                                 (int)SyntaxKind.ImplicitArrayCreationExpression,
+
+                                                                                 //// binary expressions (start)
+#if VS2022
+                                                                                 (int)SyntaxKind.UnsignedRightShiftExpression,
+#endif
+                                                                                 (int)SyntaxKind.AddExpression,
+                                                                                 (int)SyntaxKind.AsExpression,
+                                                                                 (int)SyntaxKind.BitwiseAndExpression,
+                                                                                 (int)SyntaxKind.BitwiseOrExpression,
+                                                                                 (int)SyntaxKind.CoalesceExpression,
+                                                                                 (int)SyntaxKind.DivideExpression,
+                                                                                 (int)SyntaxKind.EqualsExpression,
+                                                                                 (int)SyntaxKind.ExclusiveOrExpression,
+                                                                                 (int)SyntaxKind.GreaterThanExpression,
+                                                                                 (int)SyntaxKind.GreaterThanOrEqualExpression,
+                                                                                 (int)SyntaxKind.IsExpression,
+                                                                                 (int)SyntaxKind.LeftShiftExpression,
+                                                                                 (int)SyntaxKind.LessThanExpression,
+                                                                                 (int)SyntaxKind.LessThanOrEqualExpression,
+                                                                                 (int)SyntaxKind.LogicalAndExpression,
+                                                                                 (int)SyntaxKind.LogicalOrExpression,
+                                                                                 (int)SyntaxKind.ModuloExpression,
+                                                                                 (int)SyntaxKind.MultiplyExpression,
+                                                                                 (int)SyntaxKind.NotEqualsExpression,
+                                                                                 (int)SyntaxKind.RightShiftExpression,
+                                                                                 (int)SyntaxKind.SubtractExpression,
+                                                                                 //// binary expressions (end)
+
+                                                                                 //// literal expressions (start)
+#if VS2022
+                                                                                 (int)SyntaxKind.Utf8StringLiteralExpression,
+#endif
+                                                                                 (int)SyntaxKind.ArgListExpression,
+                                                                                 (int)SyntaxKind.CharacterLiteralExpression,
+                                                                                 (int)SyntaxKind.DefaultLiteralExpression,
+                                                                                 (int)SyntaxKind.FalseLiteralExpression,
+                                                                                 (int)SyntaxKind.NullLiteralExpression,
+                                                                                 (int)SyntaxKind.NumericLiteralExpression,
+                                                                                 (int)SyntaxKind.StringLiteralExpression,
+                                                                                 (int)SyntaxKind.TrueLiteralExpression,
+                                                                                 //// literal expressions (end)
+
+                                                                                 (int)SyntaxKind.InterpolatedStringExpression,
+
+                                                                                 //// PostfixUnaryExpressionSyntax (start)
+                                                                                 (int)SyntaxKind.PostDecrementExpression,
+                                                                                 (int)SyntaxKind.PostIncrementExpression,
+                                                                                 (int)SyntaxKind.SuppressNullableWarningExpression,
+                                                                                 //// PostfixUnaryExpressionSyntax (end)
+
+                                                                                 //// PrefixUnaryExpressionSyntax (start)
+                                                                                 (int)SyntaxKind.AddressOfExpression,
+                                                                                 (int)SyntaxKind.BitwiseNotExpression,
+                                                                                 (int)SyntaxKind.IndexExpression,
+                                                                                 (int)SyntaxKind.LogicalNotExpression,
+                                                                                 (int)SyntaxKind.PointerIndirectionExpression,
+                                                                                 (int)SyntaxKind.PreDecrementExpression,
+                                                                                 (int)SyntaxKind.PreIncrementExpression,
+                                                                                 (int)SyntaxKind.UnaryMinusExpression,
+                                                                                 (int)SyntaxKind.UnaryPlusExpression,
+                                                                                 //// PrefixUnaryExpressionSyntax (end)
+                                                                             };
+
         /// <summary>
         /// Determines whether any base type of a type satisfies the specified condition.
         /// </summary>
@@ -439,21 +528,31 @@ namespace MiKoSolutions.Analyzers
                 return Array.Empty<LocalFunctionStatementSyntax>();
             }
 
-            var node = value.GetSyntaxNodeInSource();
-
-            if (node is null)
+            if (value.GetSyntaxNodeInSource() is BaseMethodDeclarationSyntax node)
             {
-                return Array.Empty<LocalFunctionStatementSyntax>();
+                var localFunctions = GetLocalFunctionsLocal(node);
+
+                if (localFunctions != null)
+                {
+                    return localFunctions;
+                }
             }
 
-            return GetLocalFunctionsLocal(node) ?? Array.Empty<LocalFunctionStatementSyntax>();
+            return Array.Empty<LocalFunctionStatementSyntax>();
 
-            LocalFunctionStatementSyntax[] GetLocalFunctionsLocal(SyntaxNode n)
+            LocalFunctionStatementSyntax[] GetLocalFunctionsLocal(BaseMethodDeclarationSyntax declaration)
             {
+                var body = declaration.Body;
+
+                if (body is null)
+                {
+                    return null;
+                }
+
                 List<LocalFunctionStatementSyntax> result = null;
 
                 // ReSharper disable once LoopCanBePartlyConvertedToQuery
-                foreach (var descendant in n.DescendantNodes())
+                foreach (var descendant in body.DescendantNodes(DelveIntoChild))
                 {
                     if (descendant.RawKind != (int)SyntaxKind.LocalFunctionStatement)
                     {
@@ -3279,6 +3378,8 @@ namespace MiKoSolutions.Analyzers
 
             return result != null;
         }
+
+        private static bool DelveIntoChild(SyntaxNode node) => DoNotDelveIntoChildrenSet.Contains(node.RawKind) is false;
 
         private static List<T> GetNamedSymbols<T>(IReadOnlyList<T> symbols) where T : ISymbol
         {
