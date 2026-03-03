@@ -445,7 +445,7 @@ The following tables lists all the 536 rules that are currently provided by the 
 |[MiKo_3119](/Documentation/MiKo_3119.md)|Do not return only completed task in test methods|&#x2713;|&#x2713;|
 |[MiKo_3120](/Documentation/MiKo_3120.md)|Use direct values instead of 'It.Is&lt;&gt;(...)' condition matcher to verify exact values in Moq mocks|&#x2713;|&#x2713;|
 |[MiKo_3121](/Documentation/MiKo_3121.md)|Test concrete implementations instead of interfaces|&#x2713;|\-|
-|[MiKo_3122](/Documentation/MiKo_3122.md)|Limit test method parameters to 2 or fewer|&#x2713;|\-|
+|[MiKo_3122](/Documentation/MiKo_3122.md)|Limit test method parameters to 3 or fewer|&#x2713;|\-|
 |[MiKo_3123](/Documentation/MiKo_3123.md)|Do not catch exceptions in test methods|&#x2713;|&#x2713;|
 |[MiKo_3124](/Documentation/MiKo_3124.md)|Do not use assertions in finally blocks in test methods|&#x2713;|&#x2713;|
 |[MiKo_3201](/Documentation/MiKo_3201.md)|Invert if statements in short methods|&#x2713;|&#x2713;|
