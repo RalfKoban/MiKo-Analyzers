@@ -70,7 +70,7 @@ namespace MiKoSolutions.Analyzers
                                                                                  (int)SyntaxKind.ImplicitArrayCreationExpression,
 
                                                                                  //// binary expressions (start)
-#if VS2022
+#if VS2022 || VS2026
                                                                                  (int)SyntaxKind.UnsignedRightShiftExpression,
 #endif
                                                                                  (int)SyntaxKind.AddExpression,
@@ -97,7 +97,7 @@ namespace MiKoSolutions.Analyzers
                                                                                  //// binary expressions (end)
 
                                                                                  //// literal expressions (start)
-#if VS2022
+#if VS2022 || VS2026
                                                                                  (int)SyntaxKind.Utf8StringLiteralExpression,
 #endif
                                                                                  (int)SyntaxKind.ArgListExpression,
@@ -2867,7 +2867,7 @@ namespace MiKoSolutions.Analyzers
             {
                 switch (value.GetSyntax())
                 {
-#if VS2022
+#if VS2022 || VS2026
                     case ClassDeclarationSyntax c: return c.HasPrimaryConstructor();
                     case StructDeclarationSyntax s: return s.HasPrimaryConstructor();
 #endif
