@@ -22,7 +22,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var pattern = p.Pattern is UnaryPatternSyntax u ? u.Pattern : p.Pattern;
 
-                if (pattern is RecursivePatternSyntax r && r.PropertyPatternClause is PropertyPatternClauseSyntax clause)
+                if (pattern is RecursivePatternSyntax r
+                 && r.Type is null // we want to ignore type casts as we cannot simplify them to only a usage of a single property
+                 && r.PropertyPatternClause is PropertyPatternClauseSyntax clause)
                 {
                     var subPatterns = clause.Subpatterns;
 
