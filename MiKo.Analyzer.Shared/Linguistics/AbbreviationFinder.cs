@@ -36,6 +36,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("cmb", "comboBox"),
                                                       new Pair("cmd", "command"),
                                                       new Pair("coll", "collection"),
+                                                      new Pair("comm", "communication"),
                                                       new Pair("comp", "compile"),
                                                       new Pair("compat", "compatible"),
                                                       new Pair("conf", "configuration"),
@@ -97,9 +98,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("ident", "identification"),
                                                       new Pair("idents", "identifications"),
                                                       new Pair("idx", "index"),
+                                                      new Pair("idxs", "indices"),
                                                       new Pair("imp", "implementation"),
                                                       new Pair("impl", "implementation"),
                                                       new Pair("init", "initialize"),
+                                                      new Pair("intf", "interface"),
                                                       new Pair("itf", "interface"),
                                                       new Pair("kvp", "pair"),
                                                       new Pair("lang", "language"),
@@ -189,6 +192,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("utils", "utilities"),
                                                       new Pair("val", "value"),
                                                       new Pair("var", "variable"),
+                                                      new Pair("vars", "variables"),
                                                       new Pair("ver", "version"),
                                                       new Pair("vert", "vertical"),
                                                       new Pair("vol", "volume"),
@@ -224,6 +228,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Cmb", "ComboBox"),
                                                           new Pair("Cmd", "Command"),
                                                           new Pair("Coll", "Collection"),
+                                                          new Pair("Comm", "Communication"),
                                                           new Pair("Comp", "Compile"),
                                                           new Pair("Compat", "Compatibility"),
                                                           new Pair("Conf", "Configuration"),
@@ -290,9 +295,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Ident", "Identification"),
                                                           new Pair("Idents", "Identifications"),
                                                           new Pair("Idx", "Index"),
+                                                          new Pair("Idxs", "Indices"),
                                                           new Pair("Imp", "Implementation"),
                                                           new Pair("Impl", "Implementation"),
                                                           new Pair("Init", "Initialize"),
+                                                          new Pair("Intf", "Interface"),
                                                           new Pair("Itf", "Interface"),
                                                           new Pair("Lang", "Language"),
                                                           new Pair("Lbl", "Label"),
@@ -379,6 +386,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Utils", "Utilities"),
                                                           new Pair("Val", "Value"),
                                                           new Pair("Var", "Variable"),
+                                                          new Pair("Vars", "Variables"),
                                                           new Pair("Ver", "Version"),
                                                           new Pair("Vert", "Vertical"),
                                                           new Pair("Vm", "ViewModel"),
@@ -579,6 +587,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("nvironmentment", "nvironment"), // 'environ' within 'environment'
                                                       new Pair("ollectionect", "ollect"), // 'coll' within 'collect' / 'collection'
                                                       new Pair("olumeum", "olum"), // 'vol' within 'volume'
+                                                      new Pair("ommunicationunicat", "ommunicat"), // 'comm' within 'communicate' / 'communication'
                                                       new Pair("ompatibleibilit", "ompatibilit"), // 'comp' within 'compatibility' / 'compatibilities'
                                                       new Pair("ompatibleible", "ompatible"), // 'comp' within 'compatible'
                                                       new Pair("ompileatible", "ompatible"), // 'comp' within 'compatible'
