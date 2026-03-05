@@ -67,6 +67,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("diffs", "differences"),
                                                       new Pair("dir", "directory"),
                                                       new Pair("dirs", "directories"),
+                                                      new Pair("dist", "distance"),
                                                       new Pair("div", "division"),
                                                       new Pair("dlg", "dialog"),
                                                       new Pair("dlgt", "delegate"),
@@ -93,6 +94,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("frm", "form"),
                                                       new Pair("fwd", "forwarded"),
                                                       new Pair("hdls", "headless"),
+                                                      new Pair("his", "history"),
+                                                      new Pair("hist", "history"),
                                                       new Pair("hlp", "help"),
                                                       new Pair("horz", "horizontal"),
                                                       new Pair("ident", "identification"),
@@ -260,6 +263,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Diffs", "Differences"),
                                                           new Pair("Dir", "Directory"),
                                                           new Pair("Dirs", "Directories"),
+                                                          new Pair("Dist", "Distance"),
                                                           new Pair("Div", "Division"),
                                                           new Pair("Dlg", "Dialog"),
                                                           new Pair("Dlgt", "Delegate"),
@@ -290,6 +294,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Frm", "Form"),
                                                           new Pair("Fwd", "Forwarded"),
                                                           new Pair("Hdls", "Headless"),
+                                                          new Pair("His", "History"),
+                                                          new Pair("Hist", "History"),
                                                           new Pair("Hlp", "Help"),
                                                           new Pair("Horz", "Horizontal"),
                                                           new Pair("Ident", "Identification"),
@@ -330,6 +336,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Para", "Parameter"),
                                                           new Pair("Param", "Parameter"),
                                                           new Pair("Params", "Parameters"),
+                                                          new Pair("Passwd", "Password"),
                                                           new Pair("Perc", "Percentage"),
                                                           new Pair("Perf", "Performance"),
                                                           new Pair("Phys", "Physical"),
@@ -342,12 +349,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Prop", "Property"),
                                                           new Pair("Props", "Properties"),
                                                           new Pair("Prot", "Protected"),
+                                                          new Pair("Pswd", "Password"),
                                                           new Pair("Pt", "Point"),
                                                           new Pair("Pts", "Points"),
                                                           new Pair("Pw", "Password"),
                                                           new Pair("Pwd", "Password"),
-                                                          new Pair("Pswd", "Password"),
-                                                          new Pair("Passwd", "Password"),
                                                           new Pair("Qty", "Quantity"),
                                                           new Pair("Rec", "Record"),
                                                           new Pair("Rect", "Rectangle"),
@@ -362,6 +368,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Resp", "Response"),
                                                           new Pair("Rest", "Restore"),
                                                           new Pair("Rgn", "Region"),
+                                                          new Pair("Sel", "Selection"),
                                                           new Pair("Sem", "Semantic"),
                                                           new Pair("Seq", "Sequential"),
                                                           new Pair("Sess", "Session"),
@@ -527,6 +534,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("efinitionin", "efin"), // 'def' within 'define' / 'definition'
                                                       new Pair("elativeat", "elat"), // 'rel' within 'relate' / 'relating'
                                                       new Pair("elativeativ", "elativ"), // 'rel' within 'relative'
+                                                      new Pair("electionect", "elect"), // 'Sel' within 'Select'
                                                       new Pair("emanticantic", "emantic"), // 'sem' within 'semantic'
                                                       new Pair("ependentend", "epend"), // 'dep' within 'dependent' / 'dependency'
                                                       new Pair("epositoriesitor", "epositor"), // 'repos' within 'repositories'
@@ -553,7 +561,6 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("icalical", "ical"), // 'phys' within 'physical'
                                                       new Pair("ictionaryionar", "ictionar"), // 'dict' within 'dictionary' / 'dictionaries'
                                                       new Pair("ictionarytionar", "ictionar"), // 'dic' within 'dictionary' / 'dictionaries'
-                                                      new Pair("itedit", "ited"), // 'ed' within 'edited'
                                                       new Pair("ifferencee", "iffe"), // 'diff' within 'differ' / 'difference' / 'differences' / 'differencing'
                                                       new Pair("ifferencei", "iffi"), // 'diff' within 'diffing'
                                                       new Pair("igationigation", "igation"), // 'nav' within 'navigation'
@@ -564,6 +571,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("irectangle", "irect"), // 'rect' within 'direct' / 'directory' / 'directories'
                                                       new Pair("irectoryector", "irector"), // 'dir' within 'directory' / 'directories'
                                                       new Pair("iresult", "ires"), // 'res' within 'fires' / 'hires'
+                                                      new Pair("istanceanc", "istanc"), // 'dist' within 'distance'
+                                                      new Pair("istoryor", "istor"), // 'hist' within 'history' / 'histories'
+                                                      new Pair("istorytor", "istor"), // 'his' within 'history' / 'histories'
+                                                      new Pair("itedit", "ited"), // 'ed' within 'edited'
                                                       new Pair("itionition", "ition"), // 'pos' within 'position'
                                                       new Pair("itit", "it"), // 'ed' within 'edit'
                                                       new Pair("ivisionid", "ivid"), // 'div' within 'divide' / 'dividing'
@@ -600,15 +611,14 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("Oversion", "Over"), // 'ver' within 'Over'
                                                       new Pair("pecificationif", "pecif"), // 'spec' within 'specific' / 'specification' / 'specific'
                                                       new Pair("pplicationlication", "pplication"), // 'app' within 'application'
-                                                      new Pair("umentument", "ument"), // 'doc' within 'document'
                                                       new Pair("qualual", "qual"), // 'eq' within 'equal'
                                                       new Pair("questuest", "quest"), // 'req' within 'request'
                                                       new Pair("reviousious", "revious"), // 'prev' within 'previous'
                                                       new Pair("rgumentument", "rgument"), // 'arg' within 'argument' / 'arguments'
                                                       new Pair("rocessedur", "rocedur"), // 'proc' within 'procedure'
                                                       new Pair("rocessess", "rocess"), // 'proc' within 'process' / 'processes'
-                                                      new Pair("rotectedect", "rotect"), // 'prot' within 'protect' / 'protection'
                                                       new Pair("ropertyert", "ropert"), // 'prop' within 'property' / 'properties'
+                                                      new Pair("rotectedect", "rotect"), // 'prot' within 'protect' / 'protection'
                                                       new Pair("rrayay", "rray"), // 'arr' within 'array'
                                                       new Pair("rroror", "rror"), // 'err' within 'error'
                                                       new Pair("specificationt", "spect"), // 'spec' within 'aspect'
@@ -622,6 +632,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("uageuage", "uage"), // 'lang' within 'language'
                                                       new Pair("ultult", "ult"), // 'res' within 'result'
                                                       new Pair("umberber", "umber"), // 'num' within 'number'
+                                                      new Pair("umentument", "ument"), // 'doc' within 'document'
                                                       new Pair("urrentrency", "urrency"), // 'cur' within 'currency' / 'concurrency'
                                                       new Pair("urrentrent", "urrent"), // 'cur' within 'current'
                                                       new Pair("uthorizationent", "uthent"), // 'auth' within 'authenticate' / 'authentication'
