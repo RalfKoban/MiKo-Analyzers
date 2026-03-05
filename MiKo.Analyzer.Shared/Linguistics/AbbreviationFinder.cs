@@ -27,6 +27,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("auth", "authorization"),
                                                       new Pair("btn", "button"),
                                                       new Pair("calc", "calculate"),
+                                                      new Pair("calib", "calibration"),
                                                       new Pair("cb", "checkBox"),
                                                       new Pair("cert", "certificate"),
                                                       new Pair("cfg", "configuration"),
@@ -34,6 +35,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("cls", "class"),
                                                       new Pair("cmb", "comboBox"),
                                                       new Pair("cmd", "command"),
+                                                      new Pair("coll", "collection"),
+                                                      new Pair("comm", "communication"),
                                                       new Pair("comp", "compile"),
                                                       new Pair("compat", "compatible"),
                                                       new Pair("conf", "configuration"),
@@ -83,6 +86,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("environ", "environment"),
                                                       new Pair("eq", "equal"),
                                                       new Pair("err", "error"),
+                                                      new Pair("eval", "evaluation"),
                                                       new Pair("exec", "execute"),
                                                       new Pair("ext", "extension"),
                                                       new Pair("fnc", "function"),
@@ -94,9 +98,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("ident", "identification"),
                                                       new Pair("idents", "identifications"),
                                                       new Pair("idx", "index"),
+                                                      new Pair("idxs", "indices"),
                                                       new Pair("imp", "implementation"),
                                                       new Pair("impl", "implementation"),
                                                       new Pair("init", "initialize"),
+                                                      new Pair("intf", "interface"),
                                                       new Pair("itf", "interface"),
                                                       new Pair("kvp", "pair"),
                                                       new Pair("lang", "language"),
@@ -128,6 +134,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("para", "parameter"),
                                                       new Pair("param", "parameter"),
                                                       new Pair("params", "parameters"),
+                                                      new Pair("passwd", "password"),
                                                       new Pair("perc", "percentage"),
                                                       new Pair("perf", "performance"),
                                                       new Pair("phys", "physical"),
@@ -139,12 +146,12 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("procs", "processes"),
                                                       new Pair("prop", "property"),
                                                       new Pair("props", "properties"),
+                                                      new Pair("prot", "protected"),
+                                                      new Pair("pswd", "password"),
                                                       new Pair("pt", "point"),
                                                       new Pair("pts", "points"),
                                                       new Pair("pw", "password"),
                                                       new Pair("pwd", "password"),
-                                                      new Pair("pswd", "password"),
-                                                      new Pair("passwd", "password"),
                                                       new Pair("qty", "quantity"),
                                                       new Pair("rec", "record"),
                                                       new Pair("rect", "rectangle"),
@@ -185,6 +192,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("utils", "utilities"),
                                                       new Pair("val", "value"),
                                                       new Pair("var", "variable"),
+                                                      new Pair("vars", "variables"),
                                                       new Pair("ver", "version"),
                                                       new Pair("vert", "vertical"),
                                                       new Pair("vol", "volume"),
@@ -207,7 +215,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("BL", "BusinessLogic"),
                                                           new Pair("Btn", "Button"),
                                                           new Pair("Btns", "Buttons"),
-                                                          new Pair("Calc", "Calculate"),
+                                                          new Pair("Calc", "Calculation"),
+                                                          new Pair("Calib", "Calibration"),
                                                           new Pair("Cb", "CheckBox"),
                                                           new Pair("Cert", "Certificate"),
                                                           new Pair("Certs", "Certificates"),
@@ -218,6 +227,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Cls", "Class"),
                                                           new Pair("Cmb", "ComboBox"),
                                                           new Pair("Cmd", "Command"),
+                                                          new Pair("Coll", "Collection"),
+                                                          new Pair("Comm", "Communication"),
                                                           new Pair("Comp", "Compile"),
                                                           new Pair("Compat", "Compatibility"),
                                                           new Pair("Conf", "Configuration"),
@@ -272,6 +283,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Environ", "Environment"),
                                                           new Pair("Eq", "Equal"),
                                                           new Pair("Err", "Error"),
+                                                          new Pair("Eval", "Evaluation"),
                                                           new Pair("Exec", "Execute"),
                                                           new Pair("Ext", "Extension"),
                                                           new Pair("Fnc", "Function"),
@@ -283,9 +295,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Ident", "Identification"),
                                                           new Pair("Idents", "Identifications"),
                                                           new Pair("Idx", "Index"),
+                                                          new Pair("Idxs", "Indices"),
                                                           new Pair("Imp", "Implementation"),
                                                           new Pair("Impl", "Implementation"),
                                                           new Pair("Init", "Initialize"),
+                                                          new Pair("Intf", "Interface"),
                                                           new Pair("Itf", "Interface"),
                                                           new Pair("Lang", "Language"),
                                                           new Pair("Lbl", "Label"),
@@ -327,6 +341,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Procs", "Processes"),
                                                           new Pair("Prop", "Property"),
                                                           new Pair("Props", "Properties"),
+                                                          new Pair("Prot", "Protected"),
                                                           new Pair("Pt", "Point"),
                                                           new Pair("Pts", "Points"),
                                                           new Pair("Pw", "Password"),
@@ -371,6 +386,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Utils", "Utilities"),
                                                           new Pair("Val", "Value"),
                                                           new Pair("Var", "Variable"),
+                                                          new Pair("Vars", "Variables"),
                                                           new Pair("Ver", "Version"),
                                                           new Pair("Vert", "Vertical"),
                                                           new Pair("Vm", "ViewModel"),
@@ -384,6 +400,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly Pair[] OnlyPostFixes =
                                                        {
+                                                           new Pair("Prot", "Protection"),
                                                            new Pair("Seq", "Sequence"),
                                                        };
 
@@ -485,6 +502,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                   {
                                                       new Pair("agerag", "ag"), // 'man' within 'manager' / 'manage' / 'managing'
                                                       new Pair("alculateulat", "alculat"), // 'calc' within 'calculate' / 'calculation'
+                                                      new Pair("alibrationrat", "alibrat"), // 'calib' within 'calibrate' / 'calibration'
                                                       new Pair("alueue", "alue"), // 'val' within 'value'
                                                       new Pair("arametereter", "arameter"), // 'param' within 'parameter'
                                                       new Pair("arametermeter", "arameter"), // 'para' within 'parameter'
@@ -567,7 +585,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("ntaxtax", "ntax"), // 'syn' within 'syntax'
                                                       new Pair("nvironmentironment", "nvironment"), // 'env' within 'environment'
                                                       new Pair("nvironmentment", "nvironment"), // 'environ' within 'environment'
+                                                      new Pair("ollectionect", "ollect"), // 'coll' within 'collect' / 'collection'
                                                       new Pair("olumeum", "olum"), // 'vol' within 'volume'
+                                                      new Pair("ommunicationunicat", "ommunicat"), // 'comm' within 'communicate' / 'communication'
                                                       new Pair("ompatibleibilit", "ompatibilit"), // 'comp' within 'compatibility' / 'compatibilities'
                                                       new Pair("ompatibleible", "ompatible"), // 'comp' within 'compatible'
                                                       new Pair("ompileatible", "ompatible"), // 'comp' within 'compatible'
@@ -587,6 +607,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("rgumentument", "rgument"), // 'arg' within 'argument' / 'arguments'
                                                       new Pair("rocessedur", "rocedur"), // 'proc' within 'procedure'
                                                       new Pair("rocessess", "rocess"), // 'proc' within 'process' / 'processes'
+                                                      new Pair("rotectedect", "rotect"), // 'prot' within 'protect' / 'protection'
                                                       new Pair("ropertyert", "ropert"), // 'prop' within 'property' / 'properties'
                                                       new Pair("rrayay", "rray"), // 'arr' within 'array'
                                                       new Pair("rroror", "rror"), // 'err' within 'error'
@@ -605,6 +626,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("urrentrent", "urrent"), // 'cur' within 'current'
                                                       new Pair("uthorizationent", "uthent"), // 'auth' within 'authenticate' / 'authentication'
                                                       new Pair("uthorizationori", "uthori"), // 'auth' within 'authorization' / 'authorize'
+                                                      new Pair("valuationuat", "valuat"), // 'eval' within 'evaluate' / 'evaluation'
                                                       new Pair("xecuteu", "xecu"), // 'exec' within 'execute' / 'executing' / executable' / 'execution'
                                                       new Pair("xtensionen", "xten"), // 'ext' within 'extension' / 'extensions'
                                                       new Pair("xtensioner", "xter"), // 'ext' within 'exterior' / 'extern'
