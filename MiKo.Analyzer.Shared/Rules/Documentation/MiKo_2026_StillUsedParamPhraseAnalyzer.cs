@@ -122,14 +122,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             var parameters = methodSymbol.Parameters;
-            var parametersLength = parameters.Length;
 
-            if (parametersLength <= 0)
-            {
-                yield break;
-            }
-
-            for (var index = 0; index < parametersLength; index++)
+            for (int index = 0, length = parameters.Length; index < length; index++)
             {
                 var parameter = parameters[index];
                 var parameterName = parameter.Name;
