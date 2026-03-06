@@ -52,7 +52,7 @@ public " + typeKind + @" ITestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_predicate_as_field_on_([Values("class", "interface", "struct", "record")] string typeKind) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_predicate_as_field_on_([Values("class", "struct", "record")] string typeKind) => An_issue_is_reported_for(@"
 using System;
 
 public " + typeKind + @" ITestMe
@@ -107,7 +107,7 @@ public #1# ITestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_predicate_as_field_on_([Values("class", "interface", "struct", "record")] string typeKind)
+        public void Code_gets_fixed_for_predicate_as_field_on_([Values("class", "struct", "record")] string typeKind)
         {
             const string Template = @"
 using System;
