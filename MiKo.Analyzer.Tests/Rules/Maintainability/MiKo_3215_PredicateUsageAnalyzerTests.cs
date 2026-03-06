@@ -92,6 +92,21 @@ public #1# ITestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_predicate_as_indexer_on_([Values("class", "interface", "struct", "record")] string typeKind)
+        {
+            const string Template = @"
+using System;
+
+public #1# ITestMe
+{
+    #2# this[int i] { get; set; }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("#1#", typeKind).Replace("#2#", "Predicate<int>"), Template.Replace("#1#", typeKind).Replace("#2#", "Func<int, bool>"));
+        }
+
+        [Test]
         public void Code_gets_fixed_for_predicate_as_field_on_([Values("class", "interface", "struct", "record")] string typeKind)
         {
             const string Template = @"

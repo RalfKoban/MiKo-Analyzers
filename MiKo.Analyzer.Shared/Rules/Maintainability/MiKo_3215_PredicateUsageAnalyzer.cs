@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (IsPredicate(symbol.Type, out ITypeSymbol genericType))
             {
-                yield return Issue(symbol.GetSyntax<PropertyDeclarationSyntax>().Type, genericType.Name);
+                yield return Issue(symbol.GetSyntax<BasePropertyDeclarationSyntax>().Type, genericType.Name);
             }
         }
 

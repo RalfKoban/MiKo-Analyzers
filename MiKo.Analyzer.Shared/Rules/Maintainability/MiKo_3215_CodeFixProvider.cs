@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 switch (syntaxNode)
                 {
                     case ParameterSyntax _:
-                    case PropertyDeclarationSyntax _:
+                    case BasePropertyDeclarationSyntax _:
                     case FieldDeclarationSyntax _:
                         return syntaxNode;
 
@@ -48,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case ParameterSyntax parameter when parameter.Type is GenericNameSyntax generic:
                     return parameter.WithType(GetTypeSyntax(generic));
 
-                case PropertyDeclarationSyntax property when property.Type is GenericNameSyntax generic:
+                case BasePropertyDeclarationSyntax property when property.Type is GenericNameSyntax generic:
                     return property.WithType(GetTypeSyntax(generic));
 
                 case FieldDeclarationSyntax field when field.Declaration.Type is GenericNameSyntax generic:
