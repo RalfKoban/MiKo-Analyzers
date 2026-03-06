@@ -42,6 +42,26 @@ public interface ITestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_predicate_as_property_on_([Values("class", "interface", "struct", "record")] string typeKind) => An_issue_is_reported_for(@"
+using System;
+
+public " + typeKind + @" ITestMe
+{
+    Predicate<int> Predicate { get; set; }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_predicate_as_field_on_([Values("class", "interface", "struct", "record")] string typeKind) => An_issue_is_reported_for(@"
+using System;
+
+public " + typeKind + @" ITestMe
+{
+    Predicate<int> _predicate;
+}
+");
+
+        [Test]
         public void Code_gets_fixed_for_predicate()
         {
             const string Template = @"
@@ -54,6 +74,36 @@ public interface ITestMe
 ";
 
             VerifyCSharpFix(Template.Replace("###", "Predicate<int>"), Template.Replace("###", "Func<int, bool>"));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_predicate_as_property_on_([Values("class", "interface", "struct", "record")] string typeKind)
+        {
+            const string Template = @"
+using System;
+
+public #1# ITestMe
+{
+    #2# Predicate { get; set; }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("#1#", typeKind).Replace("#2#", "Predicate<int>"), Template.Replace("#1#", typeKind).Replace("#2#", "Func<int, bool>"));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_predicate_as_field_on_([Values("class", "interface", "struct", "record")] string typeKind)
+        {
+            const string Template = @"
+using System;
+
+public #1# ITestMe
+{
+    #2# _predicate;
+}
+";
+
+            VerifyCSharpFix(Template.Replace("#1#", typeKind).Replace("#2#", "Predicate<int>"), Template.Replace("#1#", typeKind).Replace("#2#", "Func<int, bool>"));
         }
 
         protected override string GetDiagnosticId() => MiKo_3215_PredicateUsageAnalyzer.Id;
