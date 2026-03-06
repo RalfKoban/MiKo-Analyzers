@@ -19,7 +19,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Property, SymbolKind.Field);
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.MethodKind is MethodKind.Ordinary && symbol.IsInterfaceImplementation() is false;
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol)
+                                                                   && (symbol.MethodKind is MethodKind.Ordinary || symbol.MethodKind is MethodKind.Constructor)
+                                                                   && symbol.IsInterfaceImplementation() is false;
 
         protected override bool ShallAnalyze(IPropertySymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsInterfaceImplementation() is false;
 

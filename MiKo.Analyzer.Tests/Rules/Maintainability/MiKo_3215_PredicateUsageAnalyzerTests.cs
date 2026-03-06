@@ -22,6 +22,26 @@ public interface ITestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_delegate_type_as_method_parameter_([Values("Action", "Action<bool>", "Func<bool>", "Func<int, bool>")] string type) => No_issue_is_reported_for(@"
+using System;
+
+public interface ITestMe
+{
+    void DoSomething(" + type + @" parameter);
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_delegate_type_as_constructor_parameter_([Values("Action", "Action<bool>", "Func<bool>", "Func<int, bool>")] string type) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    TestMe(" + type + @" parameter) { }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_delegate_type_([Values("Action", "Action<bool>", "Func<bool>", "Func<int, bool>")] string type) => No_issue_is_reported_for(@"
 using System;
 
@@ -32,7 +52,37 @@ public interface ITestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_predicate() => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_delegate_type_as_property_([Values("Action", "Action<bool>", "Func<bool>", "Func<int, bool>")] string type) => No_issue_is_reported_for(@"
+using System;
+
+public interface ITestMe
+{
+    " + type + @" Predicate { get; set; }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_delegate_type_as_field_([Values("Action", "Action<bool>", "Func<bool>", "Func<int, bool>")] string type) => No_issue_is_reported_for(@"
+using System;
+
+public class ITestMe
+{
+    " + type + @" _predicate;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_predicate_as_constructor_parameter() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    TestMe(Predicate<int> parameter) { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_predicate_as_method_parameter() => An_issue_is_reported_for(@"
 using System;
 
 public interface ITestMe
@@ -62,7 +112,7 @@ public " + typeKind + @" ITestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_for_predicate()
+        public void Code_gets_fixed_for_predicate_as_method_parameter()
         {
             const string Template = @"
 using System;
@@ -70,6 +120,21 @@ using System;
 public interface ITestMe
 {
     void DoSomething(### parameter);
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", "Predicate<int>"), Template.Replace("###", "Func<int, bool>"));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_predicate_as_constructor_parameter()
+        {
+            const string Template = @"
+using System;
+
+public class TestMe
+{
+    TestMe(### parameter) { }
 }
 ";
 
