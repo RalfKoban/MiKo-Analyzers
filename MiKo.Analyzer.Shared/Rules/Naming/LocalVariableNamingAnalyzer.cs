@@ -21,6 +21,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             context.RegisterSyntaxNodeAction(AnalyzeTupleExpression, SyntaxKind.TupleExpression);
             context.RegisterSyntaxNodeAction(AnalyzeVariableDesignation, SyntaxKind.SingleVariableDesignation);
             context.RegisterSyntaxNodeAction(AnalyzeVariableDesignation, SyntaxKind.ParenthesizedVariableDesignation);
+
+            context.RegisterSyntaxNodeAction(AnalyzeUsingStatement, SyntaxKind.UsingStatement);
         }
 
         protected override bool ShallAnalyze(ITypeSymbol symbol) => base.ShallAnalyze(symbol) || symbol?.TypeKind is TypeKind.Array; // accept analysis of arrays
