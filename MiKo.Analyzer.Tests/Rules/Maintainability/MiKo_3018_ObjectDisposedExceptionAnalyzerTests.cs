@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                        "protected internal",
                                                                    ];
 
-        private static readonly string[] Visibilities = [.. ProblematicVisibilities, "private "];
+        private static readonly string[] Visibilities = [.. ProblematicVisibilities, "private"];
 
         [Test]
         public void No_issue_is_reported_for_interface() => No_issue_is_reported_for(@"
