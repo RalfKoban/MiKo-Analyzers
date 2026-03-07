@@ -315,7 +315,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 foreach (var begin in containerStartupPhrases)
                 {
-                    keys.Add(begin + " for the list of ");
                     keys.Add(begin + " for the array of ");
                     keys.Add(begin + " for the collection of ");
                     keys.Add(begin + " for the dictionary of ");
