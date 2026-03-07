@@ -1060,6 +1060,37 @@ namespace Bla
             VerifyCSharpFix(Template.Replace("###", originalName), Template.Replace("###", fixedName));
         }
 
+        [TestCase("lang", "language")]
+        [TestCase("decl", "declaration")]
+        [TestCase("impl", "implementation")]
+        public void Code_gets_fixed_for_using_variable_by_expanding_abbreviation_(string originalName, string fixedName)
+        {
+            const string Template = @"
+using System;
+
+namespace Bla
+{
+    public class Disposable : IDisposable
+    {
+        public static IDisposable Create() => new Disposable();
+
+        public void Dispose() { }
+    }
+
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            using (var ### = Disposable.Create())
+            {
+            }
+        }
+    }
+}";
+
+            VerifyCSharpFix(Template.Replace("###", originalName), Template.Replace("###", fixedName));
+        }
+
         protected override string GetDiagnosticId() => MiKo_1063_AbbreviationsInNameAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1063_AbbreviationsInNameAnalyzer();
