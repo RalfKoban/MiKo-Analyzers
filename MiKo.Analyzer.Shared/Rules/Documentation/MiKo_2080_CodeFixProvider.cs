@@ -310,6 +310,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     keys.Add(begin + " that is storing ");
                     keys.Add(begin + " which is storing ");
                 }
+
+                var containerStartupPhrases = new[] { "Container", "A container", "A Container", "The container", "The Container" };
+
+                foreach (var begin in containerStartupPhrases)
+                {
+                    keys.Add(begin + " for the array of ");
+                    keys.Add(begin + " for the collection of ");
+                    keys.Add(begin + " for the dictionary of ");
+                    keys.Add(begin + " for the list of ");
+                    keys.Add(begin + " for the queue of ");
+                    keys.Add(begin + " for the set of ");
+                    keys.Add(begin + " for the stack of ");
+                }
             }
 
             private static void FillSpecialCollectionReplacementPairs(List<Pair> results)
