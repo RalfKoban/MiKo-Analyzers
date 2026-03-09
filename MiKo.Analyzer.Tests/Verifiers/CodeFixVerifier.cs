@@ -98,7 +98,15 @@ namespace TestHelper
         /// </param>
         protected void VerifyCSharpFix(string oldSource, string newSource, in LanguageVersion languageVersion = LanguageVersion.Default, int? codeFixIndex = null, in bool allowNewCompilerDiagnostics = false, in bool assertResult = true)
         {
-            VerifyFix(GetObjectUnderTest(), GetCSharpCodeFixProvider(), oldSource, newSource, languageVersion, codeFixIndex, allowNewCompilerDiagnostics, assertResult);
+            VerifyFix(
+                  GetObjectUnderTest(),
+                  GetCSharpCodeFixProvider(),
+                  oldSource.ReplaceLineEndings(), // ensure that we always have the same line endings during the tests, to be safe when attempting to fix code (and we have received the code from GIT with different line endings)
+                  newSource.ReplaceLineEndings(), // ensure that we always have the same line endings during the tests, to be safe when attempting to fix code (and we have received the code from GIT with different line endings)
+                  languageVersion,
+                  codeFixIndex,
+                  allowNewCompilerDiagnostics,
+                  assertResult);
         }
 
         /// <summary>
