@@ -122,7 +122,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var triviaToAnalyze = FindTriviaToAnalyze(node);
 
-            if (triviaToAnalyze.Count is 0)
+            if (triviaToAnalyze.Length is 0)
             {
                 return Array.Empty<Diagnostic>();
             }
@@ -136,7 +136,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var triviaToAnalyze = FindTriviaToAnalyze(node);
 
-            if (triviaToAnalyze.Count is 0)
+            if (triviaToAnalyze.Length is 0)
             {
                 return Array.Empty<Diagnostic>();
             }
@@ -150,7 +150,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var triviaToAnalyze = FindTriviaToAnalyze(node);
 
-            if (triviaToAnalyze.Count is 0)
+            if (triviaToAnalyze.Length is 0)
             {
                 return Array.Empty<Diagnostic>();
             }
@@ -160,9 +160,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return AnalyzeCommentTrivia(name, triviaToAnalyze, semanticModel);
         }
 
-        private IEnumerable<Diagnostic> AnalyzeCommentTrivia(string name, IReadOnlyList<SyntaxTrivia> triviaToAnalyze, SemanticModel semanticModel)
+        private IEnumerable<Diagnostic> AnalyzeCommentTrivia(string name, SyntaxTrivia[] triviaToAnalyze, SemanticModel semanticModel)
         {
-            for (int index = 0, count = triviaToAnalyze.Count; index < count; index++)
+            for (int index = 0, count = triviaToAnalyze.Length; index < count; index++)
             {
                 var trivia = triviaToAnalyze[index];
 
@@ -178,7 +178,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private IReadOnlyList<SyntaxTrivia> FindTriviaToAnalyze(SyntaxNode node)
+        private SyntaxTrivia[] FindTriviaToAnalyze(SyntaxNode node)
         {
             var span = node.FullSpan;
 
@@ -215,7 +215,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            return triviaToAnalyze ?? (IReadOnlyList<SyntaxTrivia>)Array.Empty<SyntaxTrivia>();
+            // most times we do not have trivia, so it's acceptable to return a new array
+            return triviaToAnalyze?.ToArray() ?? Array.Empty<SyntaxTrivia>();
         }
     }
 }

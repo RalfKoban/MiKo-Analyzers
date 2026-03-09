@@ -543,8 +543,21 @@ namespace Bla
         [TestCase("auth", "authorization", "authorizing")]
         [TestCase("calc", "calculate", "calculate")]
         [TestCase("calc", "calculate", "calculation")]
+        [TestCase("calib", "calibration", "calibrate")]
+        [TestCase("calib", "calibration", "calibrating")]
+        [TestCase("calib", "calibration", "calibration")]
+        [TestCase("calib", "calibration", "calibrations")]
         [TestCase("cert", "certificate", "certificate")]
         [TestCase("cert", "certificate", "certificates")]
+        [TestCase("coll", "collection", "collect")]
+        [TestCase("coll", "collection", "collected")]
+        [TestCase("coll", "collection", "collecting")]
+        [TestCase("coll", "collection", "collection")]
+        [TestCase("coll", "collection", "collections")]
+        [TestCase("comm", "communication", "communicate")]
+        [TestCase("comm", "communication", "communication")]
+        [TestCase("Comm", "Communication", "Communicate")]
+        [TestCase("Comm", "Communication", "Communication")]
         [TestCase("comp", "compile", "compatible")]
         [TestCase("comp", "compile", "compile")]
         [TestCase("comp", "compile", "compiles")]
@@ -596,6 +609,8 @@ namespace Bla
         [TestCase("diff", "difference", "diffing")]
         [TestCase("dir", "directory", "directories")]
         [TestCase("dir", "directory", "directory")]
+        [TestCase("dist", "distance", "distance")]
+        [TestCase("Dist", "Distance", "Distance")]
         [TestCase("div", "division", "divide")]
         [TestCase("div", "division", "dividing")]
         [TestCase("div", "division", "division")]
@@ -620,6 +635,10 @@ namespace Bla
         [TestCase("eq", "equal", "require")]
         [TestCase("eq", "equal", "sequence")]
         [TestCase("err", "error", "error")]
+        [TestCase("eval", "evaluation", "evaluate")]
+        [TestCase("eval", "evaluation", "evaluating")]
+        [TestCase("eval", "evaluation", "evaluation")]
+        [TestCase("eval", "evaluation", "evaluations")]
         [TestCase("exec", "execute", "executable")]
         [TestCase("exec", "execute", "execute")]
         [TestCase("exec", "execute", "executing")]
@@ -629,6 +648,12 @@ namespace Bla
         [TestCase("ext", "extension", "extension")]
         [TestCase("ext", "extension", "exterior")]
         [TestCase("ext", "extension", "extern")]
+        [TestCase("his", "history", "history")]
+        [TestCase("his", "history", "histories")]
+        [TestCase("hist", "history", "history")]
+        [TestCase("hist", "history", "histories")]
+        [TestCase("Hist", "History", "History")]
+        [TestCase("Hist", "History", "Histories")]
         [TestCase("horz", "horizontal", "horizontal")]
         [TestCase("ident", "identification", "identification")]
         [TestCase("ident", "identification", "identifier")]
@@ -684,6 +709,16 @@ namespace Bla
         [TestCase("proc", "process", "processes")]
         [TestCase("prop", "property", "properties")]
         [TestCase("prop", "property", "property")]
+        [TestCase("prot", "protected", "protect")]
+        [TestCase("prot", "protected", "protected")]
+        [TestCase("prot", "protected", "protects")]
+        [TestCase("prot", "protected", "protection")]
+        [TestCase("prot", "protected", "protections")]
+        [TestCase("Prot", "Protected", "Protect")]
+        [TestCase("Prot", "Protected", "Protected")]
+        [TestCase("Prot", "Protected", "Protects")]
+        [TestCase("Prot", "Protected", "Protection")]
+        [TestCase("Prot", "Protected", "Protections")]
         [TestCase("pt", "point", "adopt")]
         [TestCase("pts", "points", "adopts")]
         [TestCase("rec", "record", "direct")]
@@ -730,15 +765,24 @@ namespace Bla
         [TestCase("rest", "restore", "restoration")]
         [TestCase("rest", "restore", "restore")]
         [TestCase("rest", "restore", "restoring")]
+        [TestCase("Sel", "Selection", "Select")]
+        [TestCase("Sel", "Selection", "Selects")]
+        [TestCase("Sel", "Selection", "Selected")]
+        [TestCase("Sel", "Selection", "Selection")]
+        [TestCase("Sel", "Selection", "Selections")]
         [TestCase("sem", "semantic", "assemble")]
         [TestCase("sem", "semantic", "assembler")]
         [TestCase("sem", "semantic", "assembling")]
         [TestCase("sem", "semantic", "assembly")]
         [TestCase("sem", "semantic", "semantic")]
-        [TestCase("seq", "sequential", "sequence")] // TODO RKN: What about upper case endings 'Sequence' ?
-        [TestCase("seq", "sequential", "sequences")] // TODO RKN: What about upper case endings 'Sequence' ?
-        [TestCase("seq", "sequential", "sequencing")] // TODO RKN: What about upper case endings 'Sequence' ?
-        [TestCase("seq", "sequential", "sequential")] // TODO RKN: What about upper case endings 'Sequence' ?
+        [TestCase("seq", "sequential", "sequence")]
+        [TestCase("seq", "sequential", "sequences")]
+        [TestCase("seq", "sequential", "sequencing")]
+        [TestCase("seq", "sequential", "sequential")]
+        [TestCase("Seq", "Sequential", "Sequence")]
+        [TestCase("Seq", "Sequential", "Sequences")]
+        [TestCase("Seq", "Sequential", "Sequencing")]
+        [TestCase("Seq", "Sequential", "Sequential")]
         [TestCase("sess", "session", "session")]
         [TestCase("spec", "specification", "aspect")]
         [TestCase("spec", "specification", "specific")]
@@ -1007,6 +1051,37 @@ namespace Bla
         public void DoSomething()
         {
             if (Data is { State: var ### } state)
+            {
+            }
+        }
+    }
+}";
+
+            VerifyCSharpFix(Template.Replace("###", originalName), Template.Replace("###", fixedName));
+        }
+
+        [TestCase("lang", "language")]
+        [TestCase("decl", "declaration")]
+        [TestCase("impl", "implementation")]
+        public void Code_gets_fixed_for_using_variable_by_expanding_abbreviation_(string originalName, string fixedName)
+        {
+            const string Template = @"
+using System;
+
+namespace Bla
+{
+    public class Disposable : IDisposable
+    {
+        public static IDisposable Create() => new Disposable();
+
+        public void Dispose() { }
+    }
+
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            using (var ### = Disposable.Create())
             {
             }
         }

@@ -65,8 +65,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             switch (syntax)
             {
-                case AccessorDeclarationSyntax ads: return ads.Keyword.GetLocation();
-                case ArrowExpressionClauseSyntax aecs: return aecs.ArrowToken.GetLocation();
+                case AccessorDeclarationSyntax a: return a.Keyword.GetLocation();
+                case ArrowExpressionClauseSyntax a: return a.ArrowToken.GetLocation();
                 case IndexerDeclarationSyntax i: return i.ThisKeyword.GetLocation();
                 case MethodDeclarationSyntax m: return m.Identifier.GetLocation();
                 default: return syntax.GetLocation();
@@ -95,7 +95,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         if (methods is null)
                         {
-                            methods = symbol.ContainingType.GetMembersIncludingInherited<IMethodSymbol>().ToLookup(_ => _.Name);
+                            methods = symbol.ContainingType.GetMembersIncludingInherited<IMethodSymbol>()
+                                                           .Where(_ => _.Locations.Any(__ => __.IsInSource))
+                                                           .ToLookup(_ => _.Name);
                         }
 
                         if (methods.Contains(name) && methods[name].Any(DirectlyThrowsObjectDisposedException))
@@ -109,7 +111,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return false;
         }
 
-        private static bool DirectlyThrowsObjectDisposedException(IMethodSymbol symbol) => symbol.GetSyntax().DescendantNodes().Any(ThrowsObjectDisposedException);
+        private static bool DirectlyThrowsObjectDisposedException(IMethodSymbol symbol) => symbol.GetSyntax().DescendantNodes().Any(ThrowsObjectDisposedException) is true;
 
         private static bool AlwaysThrows<T1, T2>(SyntaxNode syntax)
                                                                where T1 : Exception

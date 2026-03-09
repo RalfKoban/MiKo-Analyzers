@@ -825,7 +825,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 
         /// <summary>
-        /// Analyzes a foreach statement.
+        /// Analyzes a <see langword="foreach"/> statement.
         /// </summary>
         /// <param name="context">
         /// The syntax node analysis context.
@@ -846,7 +846,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 
         /// <summary>
-        /// Analyzes a for statement.
+        /// Analyzes a <see langword="for"/> statement.
         /// </summary>
         /// <param name="context">
         /// The syntax node analysis context.
@@ -854,23 +854,21 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected virtual void AnalyzeForStatement(SyntaxNodeAnalysisContext context)
         {
             var node = (ForStatementSyntax)context.Node;
-            var variableDeclaration = node.Declaration;
 
-            if (variableDeclaration is null)
-            {
-                // ignore variables that are not set
-                return;
-            }
+            AnalyzeVariableDeclaration(node.Declaration, context);
+        }
 
-            var semanticModel = context.SemanticModel;
-            var type = variableDeclaration.GetTypeSymbol(semanticModel);
+        /// <summary>
+        /// Analyzes a <see langword="using"/> statement.
+        /// </summary>
+        /// <param name="context">
+        /// The syntax node analysis context.
+        /// </param>
+        protected virtual void AnalyzeUsingStatement(SyntaxNodeAnalysisContext context)
+        {
+            var node = (UsingStatementSyntax)context.Node;
 
-            if (ShallAnalyze(type))
-            {
-                var issues = AnalyzeIdentifiers(semanticModel, type, variableDeclaration.Variables.ToArray(_ => _.Identifier));
-
-                ReportDiagnostics(context, issues);
-            }
+            AnalyzeVariableDeclaration(node.Declaration, context);
         }
 
         /// <summary>
@@ -987,6 +985,25 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 default:
                     return Array.Empty<Diagnostic>();
+            }
+        }
+
+        private void AnalyzeVariableDeclaration(VariableDeclarationSyntax variableDeclaration, in SyntaxNodeAnalysisContext context)
+        {
+            if (variableDeclaration is null)
+            {
+                // ignore variables that are not set
+                return;
+            }
+
+            var semanticModel = context.SemanticModel;
+            var type = variableDeclaration.GetTypeSymbol(semanticModel);
+
+            if (ShallAnalyze(type))
+            {
+                var issues = AnalyzeIdentifiers(semanticModel, type, variableDeclaration.Variables.ToArray(_ => _.Identifier));
+
+                ReportDiagnostics(context, issues);
             }
         }
     }
