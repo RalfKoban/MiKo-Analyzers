@@ -99,9 +99,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var method = (MethodDeclarationSyntax)context.Node;
 
             var parameters = method.ParameterList.Parameters;
+
+            if (parameters.Count is 0)
+            {
+                return;
+            }
+
             var methodBody = method.Body ?? (SyntaxNode)method.ExpressionBody?.Expression;
 
-            Analyze(context, methodBody, parameters, method.GetName());
+            if (methodBody != null)
+            {
+                Analyze(context, methodBody, parameters, method.GetName());
+            }
         }
 
         private void AnalyzeConstructor(SyntaxNodeAnalysisContext context)
@@ -109,23 +118,22 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var ctor = (ConstructorDeclarationSyntax)context.Node;
 
             var parameters = ctor.ParameterList.Parameters;
-            var methodBody = ctor.Body ?? (SyntaxNode)ctor.ExpressionBody?.Expression;
-
-            Analyze(context, methodBody, parameters);
-        }
-
-        private void Analyze(in SyntaxNodeAnalysisContext context, SyntaxNode methodBody, in SeparatedSyntaxList<ParameterSyntax> parameters, string methodName = null)
-        {
-            if (methodBody is null)
-            {
-                return;
-            }
 
             if (parameters.Count is 0)
             {
                 return;
             }
 
+            var methodBody = ctor.Body ?? (SyntaxNode)ctor.ExpressionBody?.Expression;
+
+            if (methodBody != null)
+            {
+                Analyze(context, methodBody, parameters);
+            }
+        }
+
+        private void Analyze(in SyntaxNodeAnalysisContext context, SyntaxNode methodBody, in SeparatedSyntaxList<ParameterSyntax> parameters, string methodName = null)
+        {
             var methodSymbol = context.GetEnclosingMethod();
 
             if (CanBeIgnored(methodSymbol))
