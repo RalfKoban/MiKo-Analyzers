@@ -28,6 +28,12 @@ public sealed class TestMe { }
 ");
 
         [Test]
+        public void No_issue_is_reported_for_number_in_filterpriority() => No_issue_is_reported_for(@"
+/// <filterpriority>2</filterpriority>
+public sealed class TestMe { }
+");
+
+        [Test]
         public void No_issue_is_reported_for_number_in_c_in_([ValueSource(nameof(XmlTags))] string tag) => No_issue_is_reported_for(@"
 /// <" + tag + @">
 /// This is some text for <c>-1</c>. Just to be sure.
