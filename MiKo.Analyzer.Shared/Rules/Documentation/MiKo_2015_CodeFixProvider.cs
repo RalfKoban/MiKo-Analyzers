@@ -75,7 +75,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var commentTriviaSyntax = syntax.FirstAncestor<DocumentationCommentTriviaSyntax>();
 
-            switch (commentTriviaSyntax.ParentTrivia.Token.Parent)
+            switch (commentTriviaSyntax?.ParentTrivia.Token.Parent)
             {
                 case EventDeclarationSyntax _:
                 case EventFieldDeclarationSyntax _:
