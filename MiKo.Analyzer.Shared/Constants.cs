@@ -1128,6 +1128,7 @@ namespace MiKoSolutions.Analyzers
             internal const string Description = "description";
             internal const string Example = "example";
             internal const string Exception = "exception";
+            internal const string FilterPriority = "filterpriority";
             internal const string Include = "include";
             internal const string Inheritdoc = "inheritdoc";
             internal const string Item = "item";

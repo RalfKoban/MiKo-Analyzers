@@ -967,7 +967,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a <c>&lt;c&gt;…&lt;/c&gt;</c> tag; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool IsC(this SyntaxNode value) => value is XmlElementSyntax xes && xes.IsC();
+        internal static bool IsC(this SyntaxNode value) => value is XmlElementSyntax e && e.IsC();
 
         /// <summary>
         /// Determines whether a syntax node represents a <c>&lt;c&gt;…&lt;/c&gt;</c> tag.
@@ -1011,7 +1011,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the syntax node represents a <c>&lt;code&gt;…&lt;/code&gt;</c> tag; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool IsCode(this SyntaxNode value) => value is XmlElementSyntax xes && xes.IsCode();
+        internal static bool IsCode(this SyntaxNode value) => value is XmlElementSyntax e && e.IsCode();
 
         /// <summary>
         /// Determines whether an XML element syntax represents a <c>&lt;code&gt;…&lt;/code&gt;</c> tag.
@@ -1096,6 +1096,28 @@ namespace MiKoSolutions.Analyzers
         /// <see langword="true"/> if the XML element syntax represents an exception comment for the specified exception type; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool IsExceptionCommentFor<T>(this XmlElementSyntax value) where T : Exception => IsExceptionComment(value, typeof(T));
+
+        /// <summary>
+        /// Determines whether a syntax node represents a <c>&lt;filterpriority&gt;…&lt;/filterpriority&gt;</c> tag.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to check for the <c>&lt;filterpriority&gt;…&lt;/filterpriority&gt;</c> tag.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the syntax node represents a <c>&lt;filterpriority&gt;…&lt;/filterpriority&gt;</c> tag; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsFilterPriority(this SyntaxNode value) => value is XmlElementSyntax e && e.IsFilterPriority();
+
+        /// <summary>
+        /// Determines whether a syntax node represents a <c>&lt;filterpriority&gt;…&lt;/filterpriority&gt;</c> tag.
+        /// </summary>
+        /// <param name="value">
+        /// The syntax node to check for the <c>&lt;filterpriority&gt;…&lt;/filterpriority&gt;</c> tag.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the syntax node represents a <c>&lt;filterpriority&gt;…&lt;/filterpriority&gt;</c> tag; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsFilterPriority(this XmlElementSyntax value) => value.GetName() is Constants.XmlTag.FilterPriority;
 
         /// <summary>
         /// Determines whether a syntax node represents a <c>&lt;para/&gt;</c> XML tag.
@@ -1356,7 +1378,7 @@ namespace MiKoSolutions.Analyzers
             switch (value)
             {
                 case XmlEmptyElementSyntax xees when xees.GetName() == tagName:
-                case XmlElementSyntax xes when xes.GetName() == tagName:
+                case XmlElementSyntax e when e.GetName() == tagName:
                     return true;
 
                 default:
@@ -1582,12 +1604,12 @@ namespace MiKoSolutions.Analyzers
         {
             switch (value)
             {
-                case XmlElementSyntax xes:
+                case XmlElementSyntax e:
                 {
-                    var newAttributes = xes.StartTag.Attributes.Add(attribute);
-                    var newStartTag = xes.StartTag.WithAttributes(newAttributes);
+                    var newAttributes = e.StartTag.Attributes.Add(attribute);
+                    var newStartTag = e.StartTag.WithAttributes(newAttributes);
 
-                    return xes.ReplaceNode(xes.StartTag, newStartTag) as T;
+                    return e.ReplaceNode(e.StartTag, newStartTag) as T;
                 }
 
                 case XmlEmptyElementSyntax xees:
