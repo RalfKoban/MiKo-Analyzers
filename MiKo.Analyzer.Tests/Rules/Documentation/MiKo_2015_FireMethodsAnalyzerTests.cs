@@ -108,7 +108,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_to_replace_fire_terms_with_throw_for_exception_documentation_on_single_line()
+        public void Code_gets_fixed_to_replace_fire_terms_with_throw_for_exception_documentation_on_method_on_single_line()
         {
             const string OriginalCode = @"
 using System;
@@ -132,7 +132,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_to_replace_fire_terms_with_throw_for_exception_documentation_on_multiple_lines()
+        public void Code_gets_fixed_to_replace_fire_terms_with_throw_for_exception_documentation_on_method_on_multiple_lines()
         {
             const string OriginalCode = @"
 using System;
@@ -162,7 +162,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_to_replace_fire_terms_with_raise_for_event_documentation_on_single_line()
+        public void Code_gets_fixed_to_replace_fire_terms_with_raise_for_event_documentation_on_method_on_single_line()
         {
             const string OriginalCode = @"
 using System;
@@ -186,7 +186,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_to_replace_fire_terms_with_raise_for_event_documentation_on_multiple_lines()
+        public void Code_gets_fixed_to_replace_fire_terms_with_raise_for_event_documentation_on_method_on_multiple_lines()
         {
             const string OriginalCode = @"
 using System;
@@ -213,6 +213,36 @@ public class TestMe
 }";
 
             VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_to_replace_fire_terms_with_Occurs_for_event_documentation_on_multiple_lines_(
+                                                                                                            [Values("Fire", "Fired", "Fires", "Firing", "fire", "fired", "fires", "firing")] string start,
+                                                                                                            [Values("when", "if")] string condition)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// " + start + " " + condition + @" something happens.
+    /// </summary>
+    public event EventHandler MyEvent;
+}";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Occurs when something happens.
+    /// </summary>
+    public event EventHandler MyEvent;
+}";
+
+            VerifyCSharpFix(originalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2015_FireMethodsAnalyzer.Id;
