@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -149,6 +150,24 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", original), Template.Replace("###", "Occurs when"));
         }
 
+        [Test]
+        public void Code_gets_fixed_for_Occurs_phrase_(
+                                                   [Values("Occur", "occur", "occurs", "Occured", "Occurred", "occured", "occurred", "Occuring", "Occurring", "occuring", "occurring")] string original,
+                                                   [Values("if", "when")] string condition)
+        {
+            const string Template = @"
+public class TestMe
+{
+    /// <summary>
+    /// ### something.
+    /// </summary>
+    public event EventHandler MyEvent;
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", original + " " + condition), Template.Replace("###", "Occurs when"));
+        }
+
         protected override string GetDiagnosticId() => MiKo_2001_EventSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2001_EventSummaryAnalyzer();
@@ -156,6 +175,7 @@ public class TestMe
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2001_CodeFixProvider();
 
         // ReSharper disable once ReturnTypeCanBeEnumerable.Local Violates CA1859
+        [ExcludeFromCodeCoverage]
         private static HashSet<string> CreatePhrases()
         {
             string[] starts = ["Event", "This event", "The event", "An event", "A event"];

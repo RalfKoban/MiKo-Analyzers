@@ -38,7 +38,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                                                         new Pair("Occurs invoked ", "Occurs "),
 
-                                                        // special case
+                                                        // special cases
+                                                        new Pair("Occurs occur ", "Occurs "),
+                                                        new Pair("Occurs occurs ", "Occurs "),
+                                                        new Pair("Occurs occured ", "Occurs "),
+                                                        new Pair("Occurs occurred ", "Occurs "),
+                                                        new Pair("Occurs occuring ", "Occurs "),
+                                                        new Pair("Occurs occurring ", "Occurs "),
                                                         new Pair("Occurs that ", "Occurs when "),
                                                         new Pair("Occurs if ", "Occurs when "),
                                                     };
