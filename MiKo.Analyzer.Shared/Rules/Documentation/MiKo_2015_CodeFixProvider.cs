@@ -15,13 +15,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                  new Pair("fired", "occurs when"),
                                                                  new Pair("fires", "occurs when"),
                                                                  new Pair("firing", "occurs when"),
-                                                                 new Pair("fire ", "occurs when "),
+                                                                 new Pair("fire", "occurs when"),
                                                                  new Pair("Fired", "Occurs when"),
                                                                  new Pair("Fires", "Occurs when"),
                                                                  new Pair("Firing", "Occurs when"),
-                                                                 new Pair("Fire ", "Occurs when "),
+                                                                 new Pair("Fire", "Occurs when"),
                                                                  new Pair("when if", "when"),
                                                                  new Pair("when when", "when"),
+                                                                 new Pair("occurs whenwall", "firewall"), // fix 'firewall'
+                                                                 new Pair("Occurs whenwall", "Firewall"), // fix 'Firewall'
                                                              };
 
         private static readonly Pair[] RaiseReplacementMap =
@@ -29,11 +31,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                  new Pair("fired", "raised"),
                                                                  new Pair("fires", "raises"),
                                                                  new Pair("firing", "raising"),
-                                                                 new Pair("fire ", "raise "),
+                                                                 new Pair("fire", "raise"),
                                                                  new Pair("Fired", "Raised"),
                                                                  new Pair("Fires", "Raises"),
                                                                  new Pair("Firing", "Raising"),
-                                                                 new Pair("Fire ", "Raise "),
+                                                                 new Pair("Fire", "Raise"),
+                                                                 new Pair("raisewall", "firewall"), // fix 'firewall'
+                                                                 new Pair("Raisewall", "Firewall"), // fix 'Firewall'
                                                              };
 
         private static readonly Pair[] ThrowReplacementMap =
@@ -41,11 +45,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                  new Pair("fired", "thrown"),
                                                                  new Pair("fires", "throws"),
                                                                  new Pair("firing", "throwing"),
-                                                                 new Pair("fire ", "throw "),
+                                                                 new Pair("fire", "throw"),
                                                                  new Pair("Fired", "Thrown"),
                                                                  new Pair("Fires", "Throws"),
                                                                  new Pair("Firing", "Throwing"),
-                                                                 new Pair("Fire ", "Throw "),
+                                                                 new Pair("Fire", "Throw"),
+                                                                 new Pair("throwwall", "firewall"), // fix 'firewall'
+                                                                 new Pair("Throwwall", "Firewall"), // fix 'Firewall'
                                                              };
 
         public override string FixableDiagnosticId => "MiKo_2015";

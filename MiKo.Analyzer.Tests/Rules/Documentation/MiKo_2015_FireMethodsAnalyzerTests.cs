@@ -115,7 +115,7 @@ using System;
 
 public class TestMe
 {
-    /// <summary>Fires a new exception. The code is firing or will fire the fired exception.</summary>
+    /// <summary>Fires a new exception. The code is firing or will fire the fired exception. Does really fire. Yes, it does fire</summary>
     public void DoSomething() { }
 }";
 
@@ -124,7 +124,7 @@ using System;
 
 public class TestMe
 {
-    /// <summary>Throws a new exception. The code is throwing or will throw the thrown exception.</summary>
+    /// <summary>Throws a new exception. The code is throwing or will throw the thrown exception. Does really throw. Yes, it does throw</summary>
     public void DoSomething() { }
 }";
 
@@ -169,7 +169,7 @@ using System;
 
 public class TestMe
 {
-    /// <summary>Fires a new event. The code is firing or will fire the fired event.</summary>
+    /// <summary>Fires a new event. The code is firing or will fire the fired event. Does really fire. Yes, it does fire</summary>
     public void DoSomething() { }
 }";
 
@@ -178,7 +178,7 @@ using System;
 
 public class TestMe
 {
-    /// <summary>Raises a new event. The code is raising or will raise the raised event.</summary>
+    /// <summary>Raises a new event. The code is raising or will raise the raised event. Does really raise. Yes, it does raise</summary>
     public void DoSomething() { }
 }";
 
