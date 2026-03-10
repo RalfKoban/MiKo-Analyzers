@@ -216,9 +216,91 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_to_replace_fire_terms_with_Occurs_for_event_documentation_on_multiple_lines_(
-                                                                                                            [Values("Fire", "Fired", "Fires", "Firing", "fire", "fired", "fires", "firing")] string start,
-                                                                                                            [Values("when", "if")] string condition)
+        public void Code_gets_fixed_to_replace_fire_terms_with_Occurs_for_lower_case_event_documentation_on_single_line_(
+                                                                                                                     [Values("fire", "fired", "fires", "firing")] string start,
+                                                                                                                     [Values("when", "if")] string condition)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>" + start + " " + condition + @" something happens.</summary>
+    public event EventHandler MyEvent;
+}";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>occurs when something happens.</summary>
+    public event EventHandler MyEvent;
+}";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_to_replace_fire_terms_with_Occurs_for_upper_case_event_documentation_on_single_line_(
+                                                                                                                     [Values("Fire", "Fired", "Fires", "Firing")] string start,
+                                                                                                                     [Values("when", "if")] string condition)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>" + start + " " + condition + @" something happens.</summary>
+    public event EventHandler MyEvent;
+}";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>Occurs when something happens.</summary>
+    public event EventHandler MyEvent;
+}";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_to_replace_fire_terms_with_Occurs_for_lower_case_event_documentation_on_multiple_lines_(
+                                                                                                                        [Values("fire", "fired", "fires", "firing")] string start,
+                                                                                                                        [Values("when", "if")] string condition)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// " + start + " " + condition + @" something happens.
+    /// </summary>
+    public event EventHandler MyEvent;
+}";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// occurs when something happens.
+    /// </summary>
+    public event EventHandler MyEvent;
+}";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_to_replace_fire_terms_with_Occurs_for_upper_case_event_documentation_on_multiple_lines_(
+                                                                                                                        [Values("Fire", "Fired", "Fires", "Firing")] string start,
+                                                                                                                        [Values("when", "if")] string condition)
         {
             var originalCode = @"
 using System;
