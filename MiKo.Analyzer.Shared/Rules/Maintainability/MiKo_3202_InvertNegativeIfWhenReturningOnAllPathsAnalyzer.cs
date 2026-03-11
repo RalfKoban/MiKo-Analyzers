@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (node.ReturnsImmediately())
             {
                 return node.Else?.ReturnsImmediately()
-                    ?? node.NextSibling() is ReturnStatementSyntax; // happens in case we do not have an else clause
+                    ?? (node.NextSibling() is ReturnStatementSyntax); // happens in case we do not have an else clause
             }
 
             return false;
