@@ -996,11 +996,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
             for (int index = 0, length = Endings.Length; index < length; index++)
             {
                 var pair = Endings[index];
-                var key = pair.Key;
 
-                if (span.EndsWith(key))
+                if (span.EndsWith(pair.Key))
                 {
-                    result = span.Slice(0, span.Length - key.Length).ConcatenatedWith(pair.Value);
+                    result = span.Slice(0, span.Length - pair.Key.Length).ConcatenatedWith(pair.Value);
 
                     return result.Equals(value, StringComparison.Ordinal) is false;
                 }
