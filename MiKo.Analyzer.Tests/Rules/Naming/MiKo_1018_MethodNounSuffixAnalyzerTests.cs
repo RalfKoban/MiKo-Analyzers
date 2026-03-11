@@ -18,6 +18,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                 "AddDocumentation",
                                                                 "Adopt",
                                                                 "AnalyzeDeclaration",
+                                                                "ApplyConfiguration",
+                                                                "ArrangeInformation",
+                                                                "AssertConfiguration",
                                                                 "BuildConfiguration",
                                                                 "CalculateLocation",
                                                                 "CancelOperation",
@@ -63,6 +66,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                 "Manipulate",
                                                                 "MirrorSelection",
                                                                 "ModifySelection",
+                                                                "MoveSelection",
                                                                 "OnTriggerSelection",
                                                                 "OpenConnection",
                                                                 "ParseIdentification",
@@ -70,6 +74,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                 "PopAnnotation",
                                                                 "PrepareConnection",
                                                                 "PromptForAuthentication",
+                                                                "PropagateInformation",
                                                                 "PushAnnotation",
                                                                 "QueryDocumentation",
                                                                 "ReadConfiguration",
@@ -132,7 +137,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly string[] InvalidMethodNames =
                                                               [
-                                                                  "ApplyComparison",
+                                                                  "Comparison",
                                                                   "Configuration",
                                                                   "DoComparison",
                                                                   "ExecuteManipulation",

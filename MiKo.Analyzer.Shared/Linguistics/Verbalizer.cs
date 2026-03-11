@@ -173,6 +173,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                      new Pair("ization", "ize"),
                                                      new Pair("vocation", "voke"),
                                                      new Pair("ation", "ate"),
+                                                     new Pair("duction", "duce"),
                                                      new Pair("ction", "ct"),
                                                      new Pair("ption", "pt"),
                                                      new Pair("rison", "re"),
@@ -186,6 +187,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                    "Activate",
                                                                    "Add",
                                                                    "Analyze",
+                                                                   "Apply",
+                                                                   "Arrange",
+                                                                   "Assert",
                                                                    "Build",
                                                                    "Calculate",
                                                                    "Can",
@@ -221,6 +225,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                    "Log",
                                                                    "Mirror",
                                                                    "Modify",
+                                                                   "Move",
                                                                    "NavigateTo",
                                                                    "On",
                                                                    "Open",
@@ -229,6 +234,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                    "Pop",
                                                                    "Prepare",
                                                                    "PromptFor",
+                                                                   "Propagate",
                                                                    "Push",
                                                                    "Query",
                                                                    "Read",
@@ -990,11 +996,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
             for (int index = 0, length = Endings.Length; index < length; index++)
             {
                 var pair = Endings[index];
-                var key = pair.Key;
 
-                if (span.EndsWith(key))
+                if (span.EndsWith(pair.Key))
                 {
-                    result = span.Slice(0, span.Length - key.Length).ConcatenatedWith(pair.Value);
+                    result = span.Slice(0, span.Length - pair.Key.Length).ConcatenatedWith(pair.Value);
 
                     return result.Equals(value, StringComparison.Ordinal) is false;
                 }
