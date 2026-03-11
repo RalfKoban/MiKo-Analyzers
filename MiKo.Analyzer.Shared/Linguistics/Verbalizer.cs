@@ -177,7 +177,6 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                      new Pair("ption", "pt"),
                                                      new Pair("rison", "re"),
                                                      new Pair("sis", "ze"),
-                                                     new Pair("ustration", "ustrate"),
                                                  };
 
         private static readonly string[] IsAre = { "is", "are" };
