@@ -172,6 +172,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                      new Pair("isation", "ise"),
                                                      new Pair("ization", "ize"),
                                                      new Pair("vocation", "voke"),
+                                                     new Pair("fication", "fy"),
                                                      new Pair("ation", "ate"),
                                                      new Pair("duction", "duce"),
                                                      new Pair("ction", "ct"),
@@ -184,6 +185,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly string[] StartingPhrases = new[]
                                                                {
+                                                                   "Abort",
                                                                    "Activate",
                                                                    "Add",
                                                                    "Analyze",

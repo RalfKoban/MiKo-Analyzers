@@ -127,6 +127,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("msg", "message"),
                                                       new Pair("msgs", "messages"),
                                                       new Pair("nav", "navigation"),
+                                                      new Pair("navig", "navigation"),
                                                       new Pair("num", "number"),
                                                       new Pair("nums", "numbers"),
                                                       new Pair("obj", "object"),
@@ -325,6 +326,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Mnu", "MenuItem"),
                                                           new Pair("Msg", "Message"),
                                                           new Pair("Nav", "Navigation"),
+                                                          new Pair("Navig", "Navigation"),
                                                           new Pair("Ns", "Namespace"),
                                                           new Pair("Num", "Number"),
                                                           new Pair("Obj", "Object"),
@@ -563,7 +565,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("ictionarytionar", "ictionar"), // 'dic' within 'dictionary' / 'dictionaries'
                                                       new Pair("ifferencee", "iffe"), // 'diff' within 'differ' / 'difference' / 'differences' / 'differencing'
                                                       new Pair("ifferencei", "iffi"), // 'diff' within 'diffing'
-                                                      new Pair("igationigation", "igation"), // 'nav' within 'navigation'
+                                                      new Pair("igationigat", "igat"), // 'nav' within 'naviage' / 'navigation'
                                                       new Pair("inimumi", "ini"), // 'min' within 'minimum'
                                                       new Pair("inimumimum", "inimum"), // 'min' within 'minimum'
                                                       new Pair("ionion", "ion"), // 'sess' within 'session'
