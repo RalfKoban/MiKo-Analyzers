@@ -2272,7 +2272,6 @@ namespace MiKoSolutions.Analyzers
             }
 
             return Array.Empty<string>();
-
         }
 
         /// <summary>
