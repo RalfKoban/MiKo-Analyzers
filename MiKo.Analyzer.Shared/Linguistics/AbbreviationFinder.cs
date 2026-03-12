@@ -565,7 +565,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("ictionarytionar", "ictionar"), // 'dic' within 'dictionary' / 'dictionaries'
                                                       new Pair("ifferencee", "iffe"), // 'diff' within 'differ' / 'difference' / 'differences' / 'differencing'
                                                       new Pair("ifferencei", "iffi"), // 'diff' within 'diffing'
-                                                      new Pair("igationigat", "igat"), // 'nav' within 'naviage' / 'navigation'
+                                                      new Pair("igationigat", "igat"), // 'nav' within 'navigate' / 'navigation'
                                                       new Pair("inimumi", "ini"), // 'min' within 'minimum'
                                                       new Pair("inimumimum", "inimum"), // 'min' within 'minimum'
                                                       new Pair("ionion", "ion"), // 'sess' within 'session'
