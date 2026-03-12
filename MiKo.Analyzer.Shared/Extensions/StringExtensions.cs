@@ -2267,7 +2267,7 @@ namespace MiKoSolutions.Analyzers
             }
             catch (RegexMatchTimeoutException)
             {
-                // it took to long, so we assume we do not have a number here
+                // it took too long, so we assume we do not have a number here
                 // (although that is not correct, it is sufficient for now as the regex might not time out next time)
             }
 
@@ -2854,7 +2854,7 @@ namespace MiKoSolutions.Analyzers
                 }
                 catch (RegexMatchTimeoutException)
                 {
-                    // it took to long, so we assume we do not have a number here
+                    // it took too long, so we assume we do not have a number here
                     // (although that is not correct, it is sufficient for now as the regex might not time out next time)
                     return false;
                 }
@@ -2878,7 +2878,7 @@ namespace MiKoSolutions.Analyzers
             }
             catch (RegexMatchTimeoutException)
             {
-                // it took to long, so we assume we do not have a pascal casing here
+                // it took too long, so we assume we do not have a pascal casing here
                 // (although that is not correct, it is sufficient for now as the regex might not time out next time)
                 return false;
             }
