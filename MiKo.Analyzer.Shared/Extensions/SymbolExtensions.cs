@@ -2200,19 +2200,38 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsDependencyPropertyKey(this ITypeSymbol value) => value.Name is Constants.DependencyPropertyKey.TypeName || value.Name is Constants.DependencyPropertyKey.FullyQualifiedTypeName;
 
         /// <summary>
-        /// Determines whether a type implements <see cref="IDisposable"/>.
+        /// Determines whether a type implements <see cref="IDisposable"/> or <see cref="IAsyncDisposable"/>.
         /// </summary>
         /// <param name="value">
         /// The type to inspect.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the type implements <see cref="IDisposable"/>; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the type implements <see cref="IDisposable"/> or <see cref="IAsyncDisposable"/>; otherwise, <see langword="false"/>.
         /// </returns>
         internal static bool IsDisposable(this ITypeSymbol value)
         {
             var interfaces = value.AllInterfaces;
 
-            return interfaces.Length > 0 && interfaces.Any(_ => _.SpecialType is SpecialType.System_IDisposable);
+            if (interfaces.Length > 0)
+            {
+                // ReSharper disable once ForCanBeConvertedToForeach
+                for (var index = 0; index < interfaces.Length; index++)
+                {
+                    var i = interfaces[index];
+
+                    if (i.SpecialType is SpecialType.System_IDisposable)
+                    {
+                        return true;
+                    }
+
+                    if (i.Name is "IAsyncDisposable")
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         /// <summary>

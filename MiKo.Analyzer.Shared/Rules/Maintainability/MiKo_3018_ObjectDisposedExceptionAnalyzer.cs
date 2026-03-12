@@ -40,9 +40,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     case MethodKind.EventAdd:
                     case MethodKind.EventRemove:
                         return true;
+                }
+
+                switch (symbol.Name)
+                {
+                    case "Dispose":
+                    case "DisposeCore":
+                    case "DisposeAsync":
+                    case "DisposeCoreAsync":
+                        return false; // dispose methods are allowed to NOT throw ObjectDisposedExceptions
 
                     default:
-                        return symbol.Name != nameof(IDisposable.Dispose); // dispose methods are allowed to NOT throw ObjectDisposedExceptions
+                        return true;
                 }
             }
 
