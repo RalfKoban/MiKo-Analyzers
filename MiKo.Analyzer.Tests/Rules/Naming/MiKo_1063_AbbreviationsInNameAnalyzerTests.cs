@@ -618,6 +618,7 @@ namespace Bla
         [TestCase("doc", "document", "documentation")]
         [TestCase("docu", "documentation", "document")]
         [TestCase("docu", "documentation", "documentation")]
+        [TestCase("dyn", "dynamic", "dynamic")]
         [TestCase("ed", "edit", "edit")]
         [TestCase("ed", "edit", "edited")]
         [TestCase("ed", "edit", "editing")]
