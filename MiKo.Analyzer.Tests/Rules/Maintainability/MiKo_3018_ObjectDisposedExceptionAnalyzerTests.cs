@@ -138,7 +138,7 @@ public class TestMe : IAsyncDisposable
 ");
 
         [Test]
-        public void No_issue_is_reported_for_async_disposable_type_that_does_not_throw_ObjectDisposedException_in_DisposeCoreAsync_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_async_disposable_type_that_does_not_throw_ObjectDisposedException_in_DisposeCoreAsync_method_that_is_([ValueSource(nameof(Visibilities))] string visibility) => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
 
@@ -148,7 +148,7 @@ public class TestMe : IAsyncDisposable
 
     public ValueTask DisposeAsync() => DisposeCoreAsync();
 
-    private ValueTask DisposeCoreAsync()
+    " + visibility + @" ValueTask DisposeCoreAsync()
     {
         _isDisposed = true;
         return default;
