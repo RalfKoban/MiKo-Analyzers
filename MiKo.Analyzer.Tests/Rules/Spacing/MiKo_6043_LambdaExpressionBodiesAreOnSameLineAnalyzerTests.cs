@@ -1447,7 +1447,7 @@ namespace Bla
                                                     ?.ToString());
         }
 
-        private static string DoSomethingCore(Func<int, string> callback, bool flag)
+        private static string DoSomethingCore(Func<int, string> callback)
         {
             return callback(42);
         }
@@ -1467,7 +1467,7 @@ namespace Bla
             return DoSomethingCore((someValue) => someValue?.ToString());
         }
 
-        private static string DoSomethingCore(Func<int, string> callback, bool flag)
+        private static string DoSomethingCore(Func<int, string> callback)
         {
             return callback(42);
         }
@@ -1495,7 +1495,7 @@ namespace Bla
                                   );
         }
 
-        private static string DoSomethingCore(Func<int, string> callback, bool flag)
+        private static string DoSomethingCore(Func<int, string> callback)
         {
             return callback(42);
         }
@@ -1515,7 +1515,7 @@ namespace Bla
             return DoSomethingCore(someValue => someValue?.ToString());
         }
 
-        private static string DoSomethingCore(Func<int, string> callback, bool flag)
+        private static string DoSomethingCore(Func<int, string> callback)
         {
             return callback(42);
         }
@@ -1543,7 +1543,7 @@ namespace Bla
                                   );
         }
 
-        private static string DoSomethingCore(Func<int, string> callback, bool flag)
+        private static string DoSomethingCore(Func<int, string> callback)
         {
             return callback(42);
         }
@@ -1563,7 +1563,7 @@ namespace Bla
             return DoSomethingCore((someValue) => someValue?.ToString());
         }
 
-        private static string DoSomethingCore(Func<int, string> callback, bool flag)
+        private static string DoSomethingCore(Func<int, string> callback)
         {
             return callback(42);
         }
