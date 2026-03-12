@@ -14,8 +14,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2070_CodeFixProvider)), Shared]
     public sealed class MiKo_2070_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
-        private static readonly string[] BeginningConditions = { "true", "if", "whether" };
-        private static readonly string[] MiddleConditions = { "if", "whether" };
+        private static readonly string[] BeginningConditions = { "true", "if", "whether", "only if", "only whether" };
+        private static readonly string[] MiddleConditions = { "if", "whether", "only if", "only whether" };
 
         private static readonly string[] TrailingSentenceMarkers = Constants.TrailingSentenceMarkers.SelectMany(marker => new[] { marker + ".", marker + " ." }).ToArray();
 
