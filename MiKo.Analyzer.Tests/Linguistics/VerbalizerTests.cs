@@ -107,6 +107,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("Location", ExpectedResult = "Locate")]
         [TestCase("Manipulation", ExpectedResult = "Manipulate")]
         [TestCase("Operation", ExpectedResult = "Operate")]
+        [TestCase("Reduction", ExpectedResult = "Reduce")]
         [TestCase("Registration", ExpectedResult = "Register")]
         [TestCase("Revocation", ExpectedResult = "Revoke")]
         [TestCase("Stabilization", ExpectedResult = "Stabilize")]
