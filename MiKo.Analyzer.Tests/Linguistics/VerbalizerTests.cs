@@ -106,6 +106,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("IsRelevantFunction", ExpectedResult = "IsRelevantFunction")]
         [TestCase("Location", ExpectedResult = "Locate")]
         [TestCase("Manipulation", ExpectedResult = "Manipulate")]
+        [TestCase("Modification", ExpectedResult = "Modify")]
         [TestCase("Operation", ExpectedResult = "Operate")]
         [TestCase("Reduction", ExpectedResult = "Reduce")]
         [TestCase("Registration", ExpectedResult = "Register")]
