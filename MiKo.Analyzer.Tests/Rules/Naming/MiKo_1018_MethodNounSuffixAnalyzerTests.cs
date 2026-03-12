@@ -13,6 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         private static readonly string[] ValidMethodNames =
                                                             [
+                                                                "AbortCommunication",
                                                                 "Act",
                                                                 "ActivateSelection",
                                                                 "AddDocumentation",
