@@ -78,6 +78,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("docus", "documentations"),
                                                       new Pair("dst", "destination"),
                                                       new Pair("dto", string.Empty),
+                                                      new Pair("dyn", "dynamic"),
                                                       new Pair("ed", "edit"),
                                                       new Pair("el", "element"),
                                                       new Pair("ele", "element"),
@@ -277,6 +278,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Dst", "Destination"),
                                                           new Pair("Dto", string.Empty),
                                                           new Pair("DTO", string.Empty),
+                                                          new Pair("Dyn", "Dynamic"),
                                                           new Pair("Ed", "Edit"),
                                                           new Pair("Ef", "EntityFramework"),
                                                           new Pair("EF", "EntityFramework"),
@@ -644,6 +646,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("xtensionen", "xten"), // 'ext' within 'extension' / 'extensions'
                                                       new Pair("xtensioner", "xter"), // 'ext' within 'exterior' / 'extern'
                                                       new Pair("ynchronizationhroniz", "ynchroniz"), // 'sync' within 'synchronize'
+                                                      new Pair("ynamicamic", "ynamic"), // 'dyn' within 'dynamic'
                                                       new Pair("yntaxc", "ync"), // 'syn' within 'sync' / 'async'
                                                   };
 
