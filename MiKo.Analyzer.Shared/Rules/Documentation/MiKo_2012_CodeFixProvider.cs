@@ -295,6 +295,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                             .Append(remainingText.ToLowerCaseAt(0))
                                             .ReplaceAllWithProbe(GetSetReplacementPhrases, " ");
 
+            builder.ReplaceWithProbe(" only if ", " if ");
+            builder.ReplaceWithProbe(" only when ", " when ");
             builder.ReplaceWithProbe("  ", " ");
             builder.ReplaceWithProbe("indicating describes ", "indicating ");
             builder.ReplaceWithProbe("indicating describe ", "indicating ");
@@ -378,10 +380,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             builder.ReplaceWithProbe(" tRUE if ", " whether ");
             builder.ReplaceWithProbe(" true when ", " whether ");
             builder.ReplaceWithProbe(" tRUE when ", " whether ");
-            builder.ReplaceWithProbe(" true only if ", " whether ");
-            builder.ReplaceWithProbe(" tRUE only if ", " whether ");
-            builder.ReplaceWithProbe(" true only when ", " whether ");
-            builder.ReplaceWithProbe(" tRUE only when ", " whether ");
             builder.ReplaceWithProbe(" when set to true then ", " whether ");
             builder.ReplaceWithProbe(" when set to true, then ", " whether ");
             builder.ReplaceWithProbe(" when set to True then ", " whether ");
