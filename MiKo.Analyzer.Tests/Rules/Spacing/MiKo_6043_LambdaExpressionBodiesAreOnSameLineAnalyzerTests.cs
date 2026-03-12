@@ -1479,7 +1479,7 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_simple_lambda_expression_with_conditional_access_and_closing_brace_both_on_separate_lines()
+        public void Code_gets_fixed_for_simple_lambda_expression_with_conditional_access_and_closing_parenthesis_both_on_separate_lines()
         {
             const string OriginalCode = @"
 using System;
@@ -1527,7 +1527,7 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_parenthesized_lambda_expression_with_conditional_access_and_closing_brace_both_on_separate_lines()
+        public void Code_gets_fixed_for_parenthesized_lambda_expression_with_conditional_access_and_closing_parenthesis_both_on_separate_lines()
         {
             const string OriginalCode = @"
 using System;
