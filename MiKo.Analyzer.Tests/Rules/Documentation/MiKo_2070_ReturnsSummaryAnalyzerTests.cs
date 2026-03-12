@@ -240,7 +240,7 @@ public class TestMe
 public class TestMe
 {
     /// <summary>
-    /// " + startPhrase + @" something.
+    /// " + startPhrase + @" something is the only one.
     /// </summary>
     public bool DoSomething() => true;
 }
@@ -250,7 +250,7 @@ public class TestMe
 public class TestMe
 {
     /// <summary>
-    /// Determines whether something.
+    /// Determines whether something is the only one.
     /// </summary>
     public bool DoSomething() => true;
 }
