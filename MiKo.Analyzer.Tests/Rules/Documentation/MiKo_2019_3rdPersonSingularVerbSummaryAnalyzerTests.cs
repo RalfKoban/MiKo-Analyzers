@@ -720,6 +720,7 @@ public class TestMe
         [TestCase("TRUE if")]
         [TestCase("true when")]
         [TestCase("True when")]
+        [TestCase("TRUE when")]
         [TestCase("true only if")]
         [TestCase("True only if")]
         [TestCase("TRUE only if")]
@@ -732,6 +733,12 @@ public class TestMe
         [TestCase("When set to true, then")]
         [TestCase("When set to True, then")]
         [TestCase("When set to TRUE, then")]
+        [TestCase("Only when set to true then")]
+        [TestCase("Only when set to True then")]
+        [TestCase("Only when set to TRUE then")]
+        [TestCase("Only when set to true, then")]
+        [TestCase("Only when set to True, then")]
+        [TestCase("Only when set to TRUE, then")]
         public void Code_gets_fixed_for_boolean_property_text_(string originalText)
         {
             const string Template = @"

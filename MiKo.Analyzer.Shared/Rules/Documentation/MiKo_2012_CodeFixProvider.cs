@@ -388,6 +388,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             builder.ReplaceWithProbe(" when set to True, then ", " whether ");
             builder.ReplaceWithProbe(" when set to TRUE then ", " whether ");
             builder.ReplaceWithProbe(" when set to TRUE, then ", " whether ");
+            builder.ReplaceWithProbe(" only whether ", " whether ");
             builder.ReplaceWithProbe("  ", " ");
 
             var replacedFixedText = builder.ToStringAndRelease();
