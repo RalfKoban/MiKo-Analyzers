@@ -129,7 +129,11 @@ public class TestMe : IAsyncDisposable
 {
     private bool _isDisposed;
 
-    public ValueTask DisposeAsync() => _isDisposed = true;
+    public ValueTask DisposeAsync()
+    {
+        _isDisposed = true;
+        return default;
+    }
 }
 ");
 
@@ -144,7 +148,11 @@ public class TestMe : IAsyncDisposable
 
     public ValueTask DisposeAsync() => DisposeCoreAsync();
 
-    private ValueTask DisposeCoreAsync() => _isDisposed = true;
+    private ValueTask DisposeCoreAsync()
+    {
+        _isDisposed = true;
+        return default;
+    }
 }
 ");
 
