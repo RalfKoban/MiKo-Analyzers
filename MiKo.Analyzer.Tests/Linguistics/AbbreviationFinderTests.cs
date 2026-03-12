@@ -23,6 +23,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("cert", ExpectedResult = "certificate")]
         [TestCase("chk", ExpectedResult = "checkBox")]
         [TestCase("cls", ExpectedResult = "class")]
+        [TestCase("cm", ExpectedResult = "contextMenu")]
         [TestCase("cmb", ExpectedResult = "comboBox")]
         [TestCase("cmd", ExpectedResult = "command")]
         [TestCase("coll", ExpectedResult = "collection")]
@@ -188,6 +189,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("vars", ExpectedResult = "variables")]
         [TestCase("ver", ExpectedResult = "version")]
         [TestCase("vert", ExpectedResult = "vertical")]
+        [TestCase("vm", ExpectedResult = "viewModel")]
+        [TestCase("vms", ExpectedResult = "viewModels")]
         [TestCase("vol", ExpectedResult = "volume")]
         public static string Finds_prefix_abbreviation_in_(string value)
         {
@@ -223,6 +226,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("Cli", ExpectedResult = "CommandLineInterface")]
         [TestCase("CLI", ExpectedResult = "CommandLineInterface")]
         [TestCase("Cls", ExpectedResult = "Class")]
+        [TestCase("Cm", ExpectedResult = "ContextMenu")]
         [TestCase("Cmb", ExpectedResult = "ComboBox")]
         [TestCase("Cmd", ExpectedResult = "Command")]
         [TestCase("Coll", ExpectedResult = "Collection")]
@@ -421,6 +425,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("cfgSomeName", ExpectedResult = "configurationSomeName")]
         [TestCase("chkSomeName", ExpectedResult = "checkBoxSomeName")]
         [TestCase("clsSomeName", ExpectedResult = "classSomeName")]
+        [TestCase("cmSomeName", ExpectedResult = "contextMenuSomeName")]
         [TestCase("cmbSomeName", ExpectedResult = "comboBoxSomeName")]
         [TestCase("cmdSomeName", ExpectedResult = "commandSomeName")]
         [TestCase("collSomeName", ExpectedResult = "collectionSomeName")]
@@ -576,6 +581,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("varsSomeName", ExpectedResult = "variablesSomeName")]
         [TestCase("verSomeName", ExpectedResult = "versionSomeName")]
         [TestCase("vertSomeName", ExpectedResult = "verticalSomeName")]
+        [TestCase("vmSomeName", ExpectedResult = "viewModelSomeName")]
+        [TestCase("vmsSomeName", ExpectedResult = "viewModelsSomeName")]
         [TestCase("volSomeName", ExpectedResult = "volumeSomeName")]
         public static string Finds_prefix_abbreviations_and_fixes_them_in_(string value) => AbbreviationFinder.FindAndReplaceAllAbbreviations(value);
 
@@ -606,6 +613,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("someCliName", ExpectedResult = "someCommandLineInterfaceName")]
         [TestCase("someCLIName", ExpectedResult = "someCommandLineInterfaceName")]
         [TestCase("someClsName", ExpectedResult = "someClassName")]
+        [TestCase("someCmName", ExpectedResult = "someContextMenuName")]
         [TestCase("someCmbName", ExpectedResult = "someComboBoxName")]
         [TestCase("someCmdName", ExpectedResult = "someCommandName")]
         [TestCase("someCollName", ExpectedResult = "someCollectionName")]
@@ -795,6 +803,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("someNameCli", ExpectedResult = "someNameCommandLineInterface")]
         [TestCase("someNameCLI", ExpectedResult = "someNameCommandLineInterface")]
         [TestCase("someNameCls", ExpectedResult = "someNameClass")]
+        [TestCase("someNameCm", ExpectedResult = "someNameContextMenu")]
         [TestCase("someNameCmb", ExpectedResult = "someNameComboBox")]
         [TestCase("someNameCmd", ExpectedResult = "someNameCommand")]
         [TestCase("someNameColl", ExpectedResult = "someNameCollection")]

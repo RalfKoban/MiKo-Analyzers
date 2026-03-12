@@ -33,6 +33,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("cfg", "configuration"),
                                                       new Pair("chk", "checkBox"),
                                                       new Pair("cls", "class"),
+                                                      new Pair("cm", "contextMenu"),
                                                       new Pair("cmb", "comboBox"),
                                                       new Pair("cmd", "command"),
                                                       new Pair("coll", "collection"),
@@ -200,6 +201,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("vars", "variables"),
                                                       new Pair("ver", "version"),
                                                       new Pair("vert", "vertical"),
+                                                      new Pair("vm", "viewModel"),
+                                                      new Pair("vms", "viewModels"),
                                                       new Pair("vol", "volume"),
                                                   };
 
@@ -230,6 +233,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Cli", "CommandLineInterface"),
                                                           new Pair("CLI", "CommandLineInterface"),
                                                           new Pair("Cls", "Class"),
+                                                          new Pair("Cm", "ContextMenu"),
                                                           new Pair("Cmb", "ComboBox"),
                                                           new Pair("Cmd", "Command"),
                                                           new Pair("Coll", "Collection"),
