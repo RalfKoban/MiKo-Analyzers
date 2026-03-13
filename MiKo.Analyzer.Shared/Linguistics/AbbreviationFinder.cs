@@ -36,6 +36,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("cm", "contextMenu"),
                                                       new Pair("cmb", "comboBox"),
                                                       new Pair("cmd", "command"),
+                                                      new Pair("cmp", "comparison"),
                                                       new Pair("coll", "collection"),
                                                       new Pair("comm", "communication"),
                                                       new Pair("comp", "compile"),
@@ -44,6 +45,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("config", "configuration"),
                                                       new Pair("configs", "configurations"),
                                                       new Pair("conn", "connection"),
+                                                      new Pair("conns", "connections"),
+                                                      new Pair("conv", "conversion"),
                                                       new Pair("ctg", "category"),
                                                       new Pair("ctl", "control"),
                                                       new Pair("ctlg", "catalog"),
@@ -233,9 +236,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Cli", "CommandLineInterface"),
                                                           new Pair("CLI", "CommandLineInterface"),
                                                           new Pair("Cls", "Class"),
-                                                          new Pair("Cm", "ContextMenu"),
                                                           new Pair("Cmb", "ComboBox"),
                                                           new Pair("Cmd", "Command"),
+                                                          new Pair("Cmp", "Comparison"),
                                                           new Pair("Coll", "Collection"),
                                                           new Pair("Comm", "Communication"),
                                                           new Pair("Comp", "Compile"),
@@ -245,6 +248,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Configs", "Configurations"),
                                                           new Pair("Conn", "Connection"),
                                                           new Pair("Conns", "Connections"),
+                                                          new Pair("Conv", "Conversion"),
                                                           new Pair("Ctg", "Category"),
                                                           new Pair("Ctl", "Control"),
                                                           new Pair("Ctlg", "Catalog"),
@@ -553,7 +557,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("erationeration", "eration"), // 'op' within 'operation'
                                                       new Pair("ercentageent", "ercent"), // 'perc' within 'percent' / 'percentae'
                                                       new Pair("erformanceorm", "erform"), // 'perf' within 'perform' / 'performance'
+                                                      new Pair("ersionersion", "ersion"), // 'Conv' within 'Conversion'
+                                                      new Pair("ersionert", "ert"), // 'Conv' within 'Convert'
                                                       new Pair("ersionsion", "ersion"), // 'ver' within 'version'
+                                                      new Pair("ersiontical", "ertical"), // 'ver' within 'vertical'
                                                       new Pair("erticalical", "ertical"), // 'vert' within 'vertical'
                                                       new Pair("ertificateificate", "ertificate"), // 'cert' within 'certificate'
                                                       new Pair("escriptionription", "escription"), // 'desc' within 'description'
@@ -614,6 +621,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("onfigurationigur", "onfigur"), // 'conf' within 'configuration' / 'configure'
                                                       new Pair("onfigurationur", "onfigur"), // 'config' within 'configuration' / 'configure'
                                                       new Pair("onnectionect", "onnect"), // 'conn' within 'connection' / 'connect'
+                                                      new Pair("onversionsation", "onversation"), // 'ver' within 'conversation'
+                                                      new Pair("onversiont", "onvert"), // 'ver' within 'convert'
+                                                      new Pair("onvertical", "onvert"), // 'vert' within 'convert'
                                                       new Pair("ousous", "ous"), // 'sync' within 'asynchronous'
                                                       new Pair("oversion", "over"), // 'ver' within 'hover'
                                                       new Pair("Oversion", "Over"), // 'ver' within 'Over'
@@ -649,8 +659,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("xecuteu", "xecu"), // 'exec' within 'execute' / 'executing' / executable' / 'execution'
                                                       new Pair("xtensionen", "xten"), // 'ext' within 'extension' / 'extensions'
                                                       new Pair("xtensioner", "xter"), // 'ext' within 'exterior' / 'extern'
-                                                      new Pair("ynchronizationhroniz", "ynchroniz"), // 'sync' within 'synchronize'
                                                       new Pair("ynamicamic", "ynamic"), // 'dyn' within 'dynamic'
+                                                      new Pair("ynchronizationhroniz", "ynchroniz"), // 'sync' within 'synchronize'
                                                       new Pair("yntaxc", "ync"), // 'syn' within 'sync' / 'async'
                                                   };
 
