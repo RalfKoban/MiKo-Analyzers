@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 
 ## Available Rules
 
-The following tables lists all the 537 rules that are currently provided by the analyzer.
+The following tables list all the 537 rules that are currently provided by the analyzer.
 
 ### Metrics
 
