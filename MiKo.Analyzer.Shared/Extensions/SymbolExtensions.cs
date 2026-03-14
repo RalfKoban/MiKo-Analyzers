@@ -2110,6 +2110,33 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsConstructor(this IMethodSymbol value) => value.MethodKind is MethodKind.Constructor;
 
         /// <summary>
+        /// Determines whether a type is a delegate type.
+        /// </summary>
+        /// <param name="value">
+        /// The type to inspect.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the type is a delegate type; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool IsDelegate(this ITypeSymbol value)
+        {
+            switch (value?.TypeKind)
+            {
+                case TypeKind.Delegate:
+                    return true;
+
+                case TypeKind.Class when value.IsRecord:
+                    return false;
+
+                case TypeKind.Class:
+                    return value.ToString() == TypeNames.Delegate;
+
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
         /// Determines whether a type inherits from <see href="https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencyobject">DependencyObject</see>.
         /// </summary>
         /// <param name="value">

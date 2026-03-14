@@ -43,12 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var character = methodName[i];
 
-                if (character.IsUpperCase())
-                {
-                    break;
-                }
-
-                if (character.IsNumber())
+                if (character.IsUpperCaseOrNumber())
                 {
                     break;
                 }

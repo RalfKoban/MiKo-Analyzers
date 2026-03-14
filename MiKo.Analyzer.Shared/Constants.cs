@@ -1215,6 +1215,10 @@ namespace MiKoSolutions.Analyzers
         internal static class Names
         {
 #pragma warning disable SA1303 // Const field names should begin with upper-case letter
+            internal const string callback = "callback";
+#pragma warning restore SA1303 // Const field names should begin with upper-case letter
+            internal const string Callback = "Callback";
+#pragma warning disable SA1303 // Const field names should begin with upper-case letter
             internal const string command = "command";
 #pragma warning restore SA1303 // Const field names should begin with upper-case letter
             internal const string Command = "Command";
