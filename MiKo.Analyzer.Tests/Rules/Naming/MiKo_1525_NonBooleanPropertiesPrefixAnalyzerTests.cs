@@ -26,6 +26,19 @@ namespace Bla
 }
 ");
 
+        [TestCase("Canada")]
+        [TestCase("HashCode")]
+        [TestCase("Island")]
+        public void No_issue_is_reported_for_non_boolean_property_named_(string name) => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public object " + name + @" { get; set; }
+    }
+}
+");
+
         [TestCase("AreSelected")]
         [TestCase("CanGoOnline")]
         [TestCase("ContainsStuff")]
