@@ -23,9 +23,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (symbolName.Length > Prefix.Length && symbolName.StartsWith(Prefix, StringComparison.Ordinal))
             {
-                var betterNameProposal = CreateBetterNameProposal(symbolName.Substring(Prefix.Length));
+                var betterName = symbolName.Substring(Prefix.Length);
 
-                return new[] { Issue(symbol, betterNameProposal) };
+                return new[] { Issue(symbol, CreateBetterNameProposal(betterName)) };
             }
 
             return Array.Empty<Diagnostic>();

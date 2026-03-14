@@ -7,33 +7,28 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_1053_DelegateFieldNameSuffixAnalyzer : NamingAnalyzer
+    public sealed class MiKo_1526_DelegatePropertyNameSuffixAnalyzer : NamingAnalyzer
     {
-        public const string Id = "MiKo_1053";
-
-        private static readonly string[] WrongNames = { "Action", "Delegate", "Func" };
+        public const string Id = "MiKo_1526";
 
         private static readonly string[] WrongSuffixes =
                                                          {
-                                                             "action",
-                                                             "delegate",
-                                                             "func",
                                                              "Action",
                                                              "Delegate",
                                                              "Func",
                                                          };
 
-        public MiKo_1053_DelegateFieldNameSuffixAnalyzer() : base(Id, SymbolKind.Field)
+        public MiKo_1526_DelegatePropertyNameSuffixAnalyzer() : base(Id, SymbolKind.Property)
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation)
+        protected override IEnumerable<Diagnostic> AnalyzeName(IPropertySymbol symbol, Compilation compilation)
         {
             if (symbol.Type.IsDelegate())
             {
                 var symbolName = symbol.Name.AsSpan();
 
-                if (symbolName.EndsWithAny(WrongNames, StringComparison.OrdinalIgnoreCase))
+                if (symbolName.EndsWith(Constants.Names.Callback) is false)
                 {
                     var betterName = FindBetterName(symbolName);
 
@@ -48,12 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var nameWithoutSuffix = symbolName.WithoutSuffixes(WrongSuffixes);
 
-            if (symbolName.Length > nameWithoutSuffix.Length && nameWithoutSuffix.Length > 0 && symbolName[nameWithoutSuffix.Length].IsUpperCase())
-            {
-                return nameWithoutSuffix.ConcatenatedWith(Constants.Names.Callback);
-            }
-
-            return Constants.Names.callback;
+            return nameWithoutSuffix.ConcatenatedWith(Constants.Names.Callback);
         }
     }
 }
