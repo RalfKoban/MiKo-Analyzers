@@ -48,12 +48,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var nameWithoutSuffix = symbolName.WithoutSuffixes(WrongSuffixes);
 
-            if (symbolName.Length > nameWithoutSuffix.Length && nameWithoutSuffix.Length > 0 && symbolName[nameWithoutSuffix.Length].IsUpperCase())
-            {
-                return nameWithoutSuffix.ConcatenatedWith(Constants.Names.Callback);
-            }
+            var suffix = symbolName.Length > nameWithoutSuffix.Length && nameWithoutSuffix.Length > 0 && symbolName[nameWithoutSuffix.Length].IsUpperCase()
+                         ? Constants.Names.Callback
+                         : Constants.Names.callback;
 
-            return Constants.Names.callback;
+            return nameWithoutSuffix.ConcatenatedWith(suffix);
         }
     }
 }
