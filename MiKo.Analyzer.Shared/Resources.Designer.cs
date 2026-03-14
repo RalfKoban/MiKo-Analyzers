@@ -5524,6 +5524,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Avoid naming properties that do not return a boolean value with the prefixes &apos;Is&apos;, &apos;Can&apos;, &apos;Has&apos;, or &apos;Contains&apos;. These prefixes strongly suggest that the property returns &apos;true&apos; or &apos;false&apos;, so using them on non-boolean properties is confusing and misleading. Choose a name that does not lead readers to expect a boolean result when the property returns something else..
+        /// </summary>
+        internal static string MiKo_1525_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1525_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not prefix non-boolean property with boolean-style prefix &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1525_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1525_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not prefix non-boolean properties with boolean indicators.
+        /// </summary>
+        internal static string MiKo_1525_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1525_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fix malformed XML.
         /// </summary>
         internal static string MiKo_2000_CodeFixTitle {

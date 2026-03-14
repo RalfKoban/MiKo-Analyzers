@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 
 ## Available Rules
 
-The following tables list all the 537 rules that are currently provided by the analyzer.
+The following tables list all the 538 rules that are currently provided by the analyzer.
 
 ### Metrics
 
@@ -189,6 +189,7 @@ The following tables list all the 537 rules that are currently provided by the a
 |[MiKo_1522](/Documentation/MiKo_1522.md)|Do not start void methods with 'Get'|&#x2713;|\-|
 |[MiKo_1523](/Documentation/MiKo_1523.md)|Do not name methods 'Helper'|&#x2713;|\-|
 |[MiKo_1524](/Documentation/MiKo_1524.md)|Do not prefix methods with 'Sub_'|&#x2713;|&#x2713;|
+|[MiKo_1525](/Documentation/MiKo_1525.md)|Do not prefix non-boolean properties with boolean indicators|&#x2713;|\-|
 
 ### Documentation
 

@@ -2974,6 +2974,18 @@ namespace MiKoSolutions.Analyzers
         public static bool IsUpperCaseLetter(this in char value) => value.IsUpperCase() && value.IsLetter();
 
         /// <summary>
+        /// Determines whether the character is in uppercase or a number.
+        /// </summary>
+        /// <param name="value">
+        /// The character to check.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the character is in uppercase or a number; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsUpperCaseOrNumber(this in char value) => value.IsUpperCase() || value.IsNumber();
+
+        /// <summary>
         /// Determines whether the character is a white-space character.
         /// </summary>
         /// <param name="value">
