@@ -806,7 +806,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     {
                         var afterIndex = index + Async.Length;
 
-                        if (afterIndex < s.Length && s[afterIndex].IsUpperCase())
+                        if (afterIndex < s.Length && s[afterIndex].IsUpperCaseOrNumber())
                         {
                             sb.Remove(index, Async.Length);
                         }
@@ -894,7 +894,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// <see langword="true"/> if the character is uppercase or an underscore; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool IndicatesNewWord(in char c) => c.IsUpperCase() || c is Constants.Underscore;
+        private static bool IndicatesNewWord(in char c) => c.IsUpperCaseOrNumber() || c is Constants.Underscore;
 
         /// <summary>
         /// Determines whether the specified key represents the complete text.

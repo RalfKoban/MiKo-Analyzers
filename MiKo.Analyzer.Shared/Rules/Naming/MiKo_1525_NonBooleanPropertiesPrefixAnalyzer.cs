@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             foreach (var prefix in Prefixes)
             {
-                if (symbolName.Length > prefix.Length && symbolName[prefix.Length].IsUpperCase() && symbolName.StartsWith(prefix.AsSpan()))
+                if (symbolName.Length > prefix.Length && symbolName[prefix.Length].IsUpperCaseOrNumber() && symbolName.StartsWith(prefix.AsSpan()))
                 {
                     return new[] { Issue(symbol, prefix) };
                 }

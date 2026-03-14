@@ -15,6 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("ContainsStuff")]
         [TestCase("HasIcon")]
         [TestCase("IsSelected")]
+        [TestCase("Is2D")]
         public void No_issue_is_reported_for_boolean_property_named_(string name) => No_issue_is_reported_for(@"
 namespace Bla
 {
@@ -30,6 +31,7 @@ namespace Bla
         [TestCase("ContainsStuff")]
         [TestCase("HasIcon")]
         [TestCase("IsSelected")]
+        [TestCase("Is2D")]
         public void An_issue_is_reported_for_non_boolean_property_named_(string name) => An_issue_is_reported_for(@"
 namespace Bla
 {
