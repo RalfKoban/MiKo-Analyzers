@@ -39,8 +39,6 @@ using System;
 public class TestMe
 {
     public " + type + @" SomeCallback { get; set; }
-    {
-    }
 }
 ");
 
