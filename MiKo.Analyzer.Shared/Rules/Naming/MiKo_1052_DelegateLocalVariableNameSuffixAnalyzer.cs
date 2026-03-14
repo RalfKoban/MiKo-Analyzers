@@ -21,6 +21,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers) => AnalyzeIdentifiers(identifiers);
 
         private IEnumerable<Diagnostic> AnalyzeIdentifiers(IEnumerable<SyntaxToken> identifiers) => identifiers.Where(_ => _.ValueText.EndsWithAny(WrongNames, StringComparison.OrdinalIgnoreCase) && _.ValueText.EndsWith("ransaction", StringComparison.OrdinalIgnoreCase) is false)
-                                                                                                               .Select(_ => Issue(_, CreateBetterNameProposal("callback")));
+                                                                                                               .Select(_ => Issue(_, CreateBetterNameProposal(Constants.Names.callback)));
     }
 }

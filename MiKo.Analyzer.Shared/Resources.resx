@@ -2007,6 +2007,18 @@ Using action‑oriented, descriptive names that communicate intent and effect ma
   <data name="MiKo_1525_Title" xml:space="preserve">
     <value>Do not prefix non-boolean properties with boolean indicators</value>
   </data>
+  <data name="MiKo_1526_CodeFixTitle" xml:space="preserve">
+    <value>Append 'Callback' to property name</value>
+  </data>
+  <data name="MiKo_1526_Description" xml:space="preserve">
+    <value>Properties that hold a delegate type act as callbacks. Their names should reflect that role by ending with the 'Callback' suffix.</value>
+  </data>
+  <data name="MiKo_1526_MessageFormat" xml:space="preserve">
+    <value>Append 'Callback' to property name</value>
+  </data>
+  <data name="MiKo_1526_Title" xml:space="preserve">
+    <value>Suffix delegate properties with 'Callback'</value>
+  </data>
   <data name="MiKo_2000_CodeFixTitle" xml:space="preserve">
     <value>Fix malformed XML</value>
   </data>

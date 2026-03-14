@@ -5551,6 +5551,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Append &apos;Callback&apos; to property name.
+        /// </summary>
+        internal static string MiKo_1526_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1526_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Properties that hold a delegate type act as callbacks. Their names should reflect that role by ending with the &apos;Callback&apos; suffix..
+        /// </summary>
+        internal static string MiKo_1526_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1526_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Append &apos;Callback&apos; to property name.
+        /// </summary>
+        internal static string MiKo_1526_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1526_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Suffix delegate properties with &apos;Callback&apos;.
+        /// </summary>
+        internal static string MiKo_1526_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1526_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fix malformed XML.
         /// </summary>
         internal static string MiKo_2000_CodeFixTitle {
