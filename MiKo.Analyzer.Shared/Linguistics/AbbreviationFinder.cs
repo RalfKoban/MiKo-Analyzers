@@ -882,7 +882,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             return results.Count is 0 ? Array.Empty<Pair>() : results.ToArray();
         }
-//// ncrunch: rdi default
+        //// ncrunch: rdi default
 
         /// <summary>
         /// Determines whether the specified character indicates the start of a new word.
@@ -891,7 +891,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// The character to inspect.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the character is uppercase or an underscore; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the character is an uppercase letter, a digit, or an underscore; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool IndicatesNewWord(in char c) => c.IsUpperCaseOrNumber() || c is Constants.Underscore;
