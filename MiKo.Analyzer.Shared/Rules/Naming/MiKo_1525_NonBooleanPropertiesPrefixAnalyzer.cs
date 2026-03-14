@@ -7,13 +7,13 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_1525_NonBooleanMethodsPrefixAnalyzer : NamingAnalyzer
+    public sealed class MiKo_1525_NonBooleanPropertiesPrefixAnalyzer : NamingAnalyzer
     {
         public const string Id = "MiKo_1525";
 
         private static readonly string[] Prefixes = { "Is", "Are", "Can", "Has", "Contains" };
 
-        public MiKo_1525_NonBooleanMethodsPrefixAnalyzer() : base(Id, SymbolKind.Property)
+        public MiKo_1525_NonBooleanPropertiesPrefixAnalyzer() : base(Id, SymbolKind.Property)
         {
         }
 

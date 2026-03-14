@@ -524,7 +524,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1522_VoidGetMethodAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1523_HelperMethodAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1524_SubMethodAnalyzer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1525_NonBooleanMethodsPrefixAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1525_NonBooleanPropertiesPrefixAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\NamespaceNamingAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\NamingAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\NamingLengthAnalyzer.cs" />

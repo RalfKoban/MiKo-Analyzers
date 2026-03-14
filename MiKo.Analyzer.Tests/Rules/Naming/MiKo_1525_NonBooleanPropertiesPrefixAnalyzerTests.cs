@@ -8,7 +8,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
-    public sealed class MiKo_1525_NonBooleanMethodsPrefixAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_1525_NonBooleanPropertiesPrefixAnalyzerTests : CodeFixVerifier
     {
         [TestCase("AreSelected")]
         [TestCase("CanGoOnline")]
@@ -40,8 +40,8 @@ namespace Bla
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_1525_NonBooleanMethodsPrefixAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_1525_NonBooleanPropertiesPrefixAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1525_NonBooleanMethodsPrefixAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1525_NonBooleanPropertiesPrefixAnalyzer();
     }
 }
