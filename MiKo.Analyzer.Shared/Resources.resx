@@ -1986,6 +1986,18 @@ Using action‑oriented, descriptive names that communicate intent and effect ma
   <data name="MiKo_1523_Title" xml:space="preserve">
     <value>Do not name methods 'Helper'</value>
   </data>
+  <data name="MiKo_1524_CodeFixTitle" xml:space="preserve">
+    <value>Remove 'Sub_' prefix from method name</value>
+  </data>
+  <data name="MiKo_1524_Description" xml:space="preserve">
+    <value>Avoid naming methods with the 'Sub_' prefix. This prefix does not add useful information because any method can call any other method. Use clear and descriptive method names instead.</value>
+  </data>
+  <data name="MiKo_1524_MessageFormat" xml:space="preserve">
+    <value>Remove 'Sub_' prefix from method name</value>
+  </data>
+  <data name="MiKo_1524_Title" xml:space="preserve">
+    <value>Do not prefix methods with 'Sub_'</value>
+  </data>
   <data name="MiKo_2000_CodeFixTitle" xml:space="preserve">
     <value>Fix malformed XML</value>
   </data>

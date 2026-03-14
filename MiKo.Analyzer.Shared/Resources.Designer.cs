@@ -5488,6 +5488,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;Sub_&apos; prefix from method name.
+        /// </summary>
+        internal static string MiKo_1524_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1524_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avoid naming methods with the &apos;Sub_&apos; prefix. This prefix does not add useful information because any method can call any other method. Use clear and descriptive method names instead..
+        /// </summary>
+        internal static string MiKo_1524_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1524_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;Sub_&apos; prefix from method name.
+        /// </summary>
+        internal static string MiKo_1524_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1524_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not prefix methods with &apos;Sub_&apos;.
+        /// </summary>
+        internal static string MiKo_1524_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1524_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fix malformed XML.
         /// </summary>
         internal static string MiKo_2000_CodeFixTitle {
