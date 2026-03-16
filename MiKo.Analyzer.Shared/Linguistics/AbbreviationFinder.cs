@@ -176,6 +176,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("rest", "restore"),
                                                       new Pair("rgn", "region"),
                                                       new Pair("sem", "semantic"),
+                                                      new Pair("sep", "separator"),
+                                                      new Pair("sepa", "separator"),
                                                       new Pair("seq", "sequential"),
                                                       new Pair("sess", "session"),
                                                       new Pair("spec", "specification"),
@@ -382,6 +384,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Rgn", "Region"),
                                                           new Pair("Sel", "Selection"),
                                                           new Pair("Sem", "Semantic"),
+                                                          new Pair("Sep", "Separator"),
+                                                          new Pair("Sepa", "Separator"),
                                                           new Pair("Seq", "Sequential"),
                                                           new Pair("Sess", "Session"),
                                                           new Pair("Spec", "Specification"),
@@ -548,6 +552,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("elativeativ", "elativ"), // 'rel' within 'relative'
                                                       new Pair("electionect", "elect"), // 'Sel' within 'Select'
                                                       new Pair("emanticantic", "emantic"), // 'sem' within 'semantic'
+                                                      new Pair("eparatorarat", "eparat"), // 'sep' within 'separate'
+                                                      new Pair("eparatorrat", "eparat"), // 'sepa' within 'separate'
+                                                      new Pair("eparatortember", "eptember"), // 'sep' within 'september'
                                                       new Pair("ependentend", "epend"), // 'dep' within 'dependent' / 'dependency'
                                                       new Pair("epositoriesitor", "epositor"), // 'repos' within 'repositories'
                                                       new Pair("epositorysitor", "epositor"), // 'repo' within 'repository'
