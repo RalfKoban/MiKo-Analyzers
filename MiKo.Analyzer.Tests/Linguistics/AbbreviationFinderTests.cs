@@ -992,6 +992,12 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("someNameVol", ExpectedResult = "someNameVolume")]
         public static string Finds_postfix_abbreviations_and_fixes_them_in_(string value) => AbbreviationFinder.FindAndReplaceAllAbbreviations(value);
 
+        [TestCase("sepMysepaSepStuff",  ExpectedResult = "separatorMyseparatorSeparatorStuff")]
+        [TestCase("sepaMysepSepStuff",  ExpectedResult = "separatorMyseparatorSeparatorStuff", Ignore = "Currently not fixed but very unlikely")]
+        [TestCase("sepMySepSepaStuff", ExpectedResult = "separatorMySeparatorSeparatorStuff")]
+        [TestCase("sepaMySepSepaStuff", ExpectedResult = "separatorMySeparatorSeparatorStuff")]
+        public static string Finds_strange_combinations_and_fixes_them_in_(string value) => AbbreviationFinder.FindAndReplaceAllAbbreviations(value);
+
         [TestCase("args")]
         [TestCase("EventArgs")]
         [TestCase("MyEventArgs")]
