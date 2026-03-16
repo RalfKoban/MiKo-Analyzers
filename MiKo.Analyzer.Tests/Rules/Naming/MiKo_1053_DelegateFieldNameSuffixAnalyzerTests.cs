@@ -97,8 +97,8 @@ public class TestMe
 
         [Test]
         public void Code_gets_fixed_on_field_with_short_name_(
-                                         [ValueSource(nameof(FieldPrefixes))] string prefix,
-                                         [ValueSource(nameof(WrongDelegateNames))] string name)
+                                                          [ValueSource(nameof(FieldPrefixes))] string prefix,
+                                                          [ValueSource(nameof(WrongDelegateNames))] string name)
         {
             const string Template = """
                                     using System;
@@ -118,8 +118,8 @@ public class TestMe
 
         [Test]
         public void Code_gets_fixed_on_field_(
-                                         [ValueSource(nameof(FieldPrefixes))] string prefix,
-                                         [ValueSource(nameof(WrongDelegateNames))] string name)
+                                          [ValueSource(nameof(FieldPrefixes))] string prefix,
+                                          [ValueSource(nameof(WrongDelegateNames))] string name)
         {
             const string Template = """
                                     using System;

@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override bool ShallAnalyze(IParameterSymbol symbol) => symbol?.Type.IsDelegate() is true;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol, Compilation compilation) => symbol.Name.EndsWithAny(WrongNames, StringComparison.OrdinalIgnoreCase)
-                                                                                                                        ? new[] { Issue(symbol, CreateBetterNameProposal(Constants.Names.callback)) }
-                                                                                                                        : Array.Empty<Diagnostic>();
+                                                                                                                    ? new[] { Issue(symbol, CreateBetterNameProposal(Constants.Names.callback)) }
+                                                                                                                    : Array.Empty<Diagnostic>();
     }
 }
