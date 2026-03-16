@@ -18322,5 +18322,41 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6071_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        internal static string MiKo_6072_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6072_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround base calls with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow..
+        /// </summary>
+        internal static string MiKo_6072_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6072_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround base call with a blank line.
+        /// </summary>
+        internal static string MiKo_6072_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6072_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround base calls with blank lines.
+        /// </summary>
+        internal static string MiKo_6072_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6072_Title", resourceCulture);
+            }
+        }
     }
 }
