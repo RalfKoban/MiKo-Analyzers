@@ -186,6 +186,154 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_non_invocation_base_member_access() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMeBase
+    {
+        public int Value { get; }
+    }
+
+    public class TestMe : TestMeBase
+    {
+        public void DoSomething()
+        {
+            var x = base.Value;
+            DoSomethingElse();
+        }
+
+        private void DoSomethingElse()
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_base_invocation_in_variable_assignment() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMeBase
+    {
+        public int GetValue()
+        {
+            return 42;
+        }
+    }
+
+    public class TestMe : TestMeBase
+    {
+        public void DoSomething()
+        {
+            var x = base.GetValue();
+            DoSomethingElse();
+        }
+
+        private void DoSomethingElse()
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_base_invocation_as_method_argument() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMeBase
+    {
+        public int GetValue()
+        {
+            return 42;
+        }
+    }
+
+    public class TestMe : TestMeBase
+    {
+        public void DoSomething()
+        {
+            DoSomethingElse(base.GetValue());
+            DoAnything();
+        }
+
+        private void DoSomethingElse()
+        {
+        }
+
+        private void DoAnything()
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_base_member_access_as_right_hand_side_of_coalesce_operator() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMeBase
+    {
+        public int GetValue()
+        {
+            return 42;
+        }
+    }
+
+    public class TestMe : TestMeBase
+    {
+        private Func<int> _callback;
+
+        public void DoSomething()
+        {
+            _callback = _callback ?? base.GetValue;
+            DoAnything();
+        }
+
+        private void DoSomethingElse()
+        {
+        }
+
+        private void DoAnything()
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_base_invocation_as_coalesce_assignment_call() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMeBase
+    {
+        public int GetValue()
+        {
+            return 42;
+        }
+    }
+
+    public class TestMe : TestMeBase
+    {
+        private Func<int> _callback;
+
+        public void DoSomething()
+        {
+            _callback ??= base.GetValue;
+            DoAnything();
+        }
+
+        private void DoSomethingElse()
+        {
+        }
+
+        private void DoAnything()
+        {
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_base_statement_without_blank_line_before() => An_issue_is_reported_for(@"
 namespace Bla
 {
@@ -259,6 +407,33 @@ namespace Bla
             DoSomethingElse();
             base.DoSomething();
             DoSomethingElse();
+        }
+
+        private void DoSomethingElse()
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_base_invocation_in_return_statement() => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMeBase
+    {
+        public virtual int GetValue()
+        {
+            return 42;
+        }
+    }
+
+    public class TestMe : TestMeBase
+    {
+        public override int GetValue()
+        {
+            DoSomethingElse();
+            return base.GetValue();
         }
 
         private void DoSomethingElse()
@@ -399,7 +574,7 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_base_statement_without_blank_line_before_or_after()
+        public void Code_gets_fixed_for_base_statement_without_blank_line_before_and_after()
         {
             const string OriginalCode = """
 
@@ -449,6 +624,69 @@ namespace Bla
                                                  base.DoSomething();
 
                                                  DoSomethingElse();
+                                             }
+
+                                             private void DoSomethingElse()
+                                             {
+                                             }
+                                         }
+                                     }
+
+                                     """;
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_base_invocation_in_return_statement()
+        {
+            const string OriginalCode = """
+
+                                        namespace Bla
+                                        {
+                                            public class TestMeBase
+                                            {
+                                                public virtual int GetValue()
+                                                {
+                                                    return 42;
+                                                }
+                                            }
+
+                                            public class TestMe : TestMeBase
+                                            {
+                                                public override int GetValue()
+                                                {
+                                                    DoSomethingElse();
+                                                    return base.GetValue();
+                                                }
+
+                                                private void DoSomethingElse()
+                                                {
+                                                }
+                                            }
+                                        }
+
+                                        """;
+
+            const string FixedCode = """
+
+                                     namespace Bla
+                                     {
+                                         public class TestMeBase
+                                         {
+                                             public virtual int GetValue()
+                                             {
+                                                 return 42;
+                                             }
+                                         }
+
+                                         public class TestMe : TestMeBase
+                                         {
+                                             public override int GetValue()
+                                             {
+                                                 DoSomethingElse();
+
+                                                 return base.GetValue();
                                              }
 
                                              private void DoSomethingElse()

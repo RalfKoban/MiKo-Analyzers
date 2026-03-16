@@ -15,6 +15,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override bool IsCall(ITypeSymbol type) => false;
 
-        protected override bool IsCall(MemberAccessExpressionSyntax syntax, SemanticModel semanticModel) => syntax.Expression is BaseExpressionSyntax;
+        protected override bool IsCall(MemberAccessExpressionSyntax syntax, SemanticModel semanticModel) => syntax.Expression is BaseExpressionSyntax
+                                                                                                         && syntax.Parent is InvocationExpressionSyntax invocation
+                                                                                                         && invocation.Expression == syntax
+                                                                                                         && invocation.Parent is StatementSyntax;
     }
 }
