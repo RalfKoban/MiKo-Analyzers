@@ -144,9 +144,9 @@ namespace Bla
     {
         public override void DoSomething()
         {
-            DoSomethingElse();
-
             base.DoSomething();
+
+            DoSomethingElse();
         }
 
         private void DoSomethingElse()
@@ -242,7 +242,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_base_statement_without_blank_line_before_or_after() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_base_statement_without_blank_line_before_and_after() => An_issue_is_reported_for(@"
 namespace Bla
 {
     public class TestMeBase
