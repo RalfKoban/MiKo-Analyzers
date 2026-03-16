@@ -103,6 +103,49 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_parenthesized_lambda_expressions_in_unit_test() => No_issue_is_reported_for(@"
+using System;
+using NUnit.Framework;
+
+public class TestMe
+{
+    [OneTimeSetUp]
+    public void PrepareTestEnvironment()
+    {
+        Console.CancelKeyPress += (sender, args) => OnCancelKeyPress(sender, args);
+    }
+
+    [OneTimeTearDown]
+    public void CleanupTestEnvironment()
+    {
+        Console.CancelKeyPress -= (sender, args) => OnCancelKeyPress(sender, args);
+    }
+
+    [SetUp]
+    public void PrepareTest()
+    {
+        Console.CancelKeyPress += (sender, args) => OnCancelKeyPress(sender, args);
+    }
+
+    [TearDown]
+    public void CleanupTest()
+    {
+        Console.CancelKeyPress -= (sender, args) => OnCancelKeyPress(sender, args);
+    }
+
+    [Test]
+    public void DoSomething()
+    {
+        Console.CancelKeyPress -= (sender, args) => OnCancelKeyPress(sender, args);
+    }
+
+    private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_differences_in_add_and_remove() => An_issue_is_reported_for(@"
 using System;
 
@@ -215,40 +258,20 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_parenthesized_lambda_expressions_in_unit_test() => No_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_differences_in_add_and_remove_when_add_is_in_a_loop() => An_issue_is_reported_for(@"
 using System;
-using NUnit.Framework;
 
 public class TestMe
 {
-    [OneTimeSetUp]
-    public void PrepareTestEnvironment()
-    {
-        Console.CancelKeyPress += (sender, args) => OnCancelKeyPress(sender, args);
-    }
-
-    [OneTimeTearDown]
-    public void CleanupTestEnvironment()
-    {
-        Console.CancelKeyPress -= (sender, args) => OnCancelKeyPress(sender, args);
-    }
-
-    [SetUp]
-    public void PrepareTest()
-    {
-        Console.CancelKeyPress += (sender, args) => OnCancelKeyPress(sender, args);
-    }
-
-    [TearDown]
-    public void CleanupTest()
-    {
-        Console.CancelKeyPress -= (sender, args) => OnCancelKeyPress(sender, args);
-    }
-
-    [Test]
     public void DoSomething()
     {
-        Console.CancelKeyPress -= (sender, args) => OnCancelKeyPress(sender, args);
+        foreach (var i in [1, 2, 3])
+        {
+            Console.CancelKeyPress += OnCancelKeyPress;
+        }
+
+        Console.CancelKeyPress -= OnCancelKeyPress;
+        Console.CancelKeyPress -= OnCancelKeyPress;
     }
 
     private void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
