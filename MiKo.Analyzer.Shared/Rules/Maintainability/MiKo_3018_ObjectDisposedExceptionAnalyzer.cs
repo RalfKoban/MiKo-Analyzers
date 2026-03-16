@@ -82,7 +82,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static bool ThrowsObjectDisposedException(SyntaxNode node) => node.Throws<ObjectDisposedException>();
+        private static bool ThrowsObjectDisposedException(SyntaxNode syntax) => syntax.Throws<ObjectDisposedException>();
 
         private static bool ThrowsObjectDisposedException(SyntaxNode syntax, ISymbol symbol)
         {
@@ -104,9 +104,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         if (methods is null)
                         {
-                            methods = symbol.ContainingType.GetMembersIncludingInherited<IMethodSymbol>()
-                                                           .Where(_ => _.Locations.Any(__ => __.IsInSource))
-                                                           .ToLookup(_ => _.Name);
+                            methods = symbol.ContainingType
+                                            .GetMembersIncludingInherited<IMethodSymbol>()
+                                            .Where(_ => _.Locations.Any(__ => __.IsInSource))
+                                            .ToLookup(_ => _.Name);
                         }
 
                         if (methods.Contains(name) && methods[name].Any(DirectlyThrowsObjectDisposedException))
