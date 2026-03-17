@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
@@ -19,11 +20,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override Task<SyntaxNode> GetUpdatedSyntaxAsync(SyntaxNode syntax, Diagnostic issue, Document document, CancellationToken cancellationToken)
         {
-            SyntaxNode updatedSyntax = GetUpdatedSyntax((LiteralExpressionSyntax)syntax);
+            var updatedSyntax = GetUpdatedSyntax((LiteralExpressionSyntax)syntax);
 
             return Task.FromResult(updatedSyntax);
         }
 
-        private static InvocationExpressionSyntax GetUpdatedSyntax(LiteralExpressionSyntax syntax) => NameOf(syntax);
+        private static SyntaxNode GetUpdatedSyntax(LiteralExpressionSyntax syntax)
+        {
+            if (syntax.Token.ValueText.Length is 0)
+            {
+                // seems like the empty string, so we will not convert it to 'nameof'
+                return Member(PredefinedType(SyntaxKind.StringKeyword), nameof(string.Empty));
+            }
+
+            return NameOf(syntax);
+        }
     }
 }

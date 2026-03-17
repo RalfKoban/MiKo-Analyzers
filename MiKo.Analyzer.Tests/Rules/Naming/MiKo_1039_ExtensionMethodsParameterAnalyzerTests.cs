@@ -72,7 +72,7 @@ public static class TestMeExtensions
         [Test, Combinatorial]
         public void An_issue_is_reported_for_extension_method_with_incorrect_parameter_name_(
                                                                                          [ValueSource(nameof(ConversionMethodPrefixes))] string prefix,
-                                                                                         [Values("Something", "")] string methodName,
+                                                                                         [Values("Something", "2D", "")] string methodName,
                                                                                          [ValueSource(nameof(WrongConversionParameterNames))] string name)
             => An_issue_is_reported_for(@"
 public static class TestMeExtensions

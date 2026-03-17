@@ -63,7 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     return true;
                 }
 
-                if (methodName.Length > prefix.Length && methodName[prefix.Length].IsUpperCase())
+                if (methodName.Length > prefix.Length && methodName[prefix.Length].IsUpperCaseOrNumber())
                 {
                     return true;
                 }
