@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -102,7 +103,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_for_event_phrase_([ValueSource(nameof(StartingPhrases))] string originalComment, [Values("after", "before", "when", "for")] string condition)
+        public void Code_gets_fixed_for_event_phrase_([ValueSource(nameof(StartingPhrases))] string originalComment, [Values("after", "before", "for")] string condition)
         {
             const string Template = @"
 public class TestMe
@@ -118,7 +119,23 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_([Values("When", "Indicates that", "Invoked if", "Invoked when")] string original)
+        public void Code_gets_fixed_for_event_phrase_condition_([ValueSource(nameof(StartingPhrases))] string originalComment, [Values("if", "when")] string condition)
+        {
+            const string Template = @"
+public class TestMe
+{
+    /// <summary>
+    /// ### something.
+    /// </summary>
+    public event EventHandler MyEvent;
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalComment + " " + condition), Template.Replace("###", "Occurs when"));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_([Values("When", "Indicates that")] string original)
         {
             const string Template = @"
 public class TestMe
@@ -133,6 +150,24 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", original), Template.Replace("###", "Occurs when"));
         }
 
+        [Test]
+        public void Code_gets_fixed_for_Occurs_phrase_(
+                                                   [Values("Occur", "occur", "occurs", "Occured", "Occurred", "occured", "occurred", "Occuring", "Occurring", "occuring", "occurring")] string original,
+                                                   [Values("if", "when")] string condition)
+        {
+            const string Template = @"
+public class TestMe
+{
+    /// <summary>
+    /// ### something.
+    /// </summary>
+    public event EventHandler MyEvent;
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", original + " " + condition), Template.Replace("###", "Occurs when"));
+        }
+
         protected override string GetDiagnosticId() => MiKo_2001_EventSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2001_EventSummaryAnalyzer();
@@ -140,6 +175,7 @@ public class TestMe
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2001_CodeFixProvider();
 
         // ReSharper disable once ReturnTypeCanBeEnumerable.Local Violates CA1859
+        [ExcludeFromCodeCoverage]
         private static HashSet<string> CreatePhrases()
         {
             string[] starts = ["Event", "This event", "The event", "An event", "A event"];
@@ -207,6 +243,36 @@ public class TestMe
                     results.Add(string.Concat(start, " ", verb));
                 }
             }
+
+            results.Add("Fire");
+            results.Add("Fired");
+            results.Add("Fires");
+            results.Add("Firing");
+            results.Add("fire");
+            results.Add("fired");
+            results.Add("fires");
+            results.Add("firing");
+
+            results.Add("Raise");
+            results.Add("Raised");
+            results.Add("Raises");
+            results.Add("Raising");
+            results.Add("raise");
+            results.Add("raised");
+            results.Add("raises");
+            results.Add("raising");
+
+            results.Add("Trigger");
+            results.Add("Triggered");
+            results.Add("Triggers");
+            results.Add("Triggering");
+            results.Add("trigger");
+            results.Add("triggered");
+            results.Add("triggers");
+            results.Add("triggering");
+
+            results.Add("Invoked");
+            results.Add("invoked");
 
             return results;
         }

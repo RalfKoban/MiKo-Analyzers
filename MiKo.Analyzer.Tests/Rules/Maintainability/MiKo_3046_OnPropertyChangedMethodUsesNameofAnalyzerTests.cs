@@ -72,47 +72,101 @@ namespace Bla
         [Test]
         public void Code_gets_fixed_for_([ValueSource(nameof(MethodNames))] string methodName)
         {
-            var originalCode = @"
-using System;
+            const string OriginalCode = """
 
-namespace Bla
-{
-    public class TestMe
-    {
-        public string MyProperty { get; set; }
+                                        using System;
 
-        private void DoSomething()
-        {
-            " + methodName + @"(""MyProperty"");
+                                        namespace Bla
+                                        {
+                                            public class TestMe
+                                            {
+                                                public string MyProperty { get; set; }
+
+                                                private void DoSomething()
+                                                {
+                                                    ###("MyProperty");
+                                                }
+
+                                                private void ###(string name)
+                                                { }
+                                            }
+                                        }
+
+                                        """;
+
+            const string FixedCode = """
+
+                                     using System;
+
+                                     namespace Bla
+                                     {
+                                         public class TestMe
+                                         {
+                                             public string MyProperty { get; set; }
+
+                                             private void DoSomething()
+                                             {
+                                                 ###(nameof(MyProperty));
+                                             }
+
+                                             private void ###(string name)
+                                             { }
+                                         }
+                                     }
+
+                                     """;
+
+            VerifyCSharpFix(OriginalCode.Replace("###", methodName), FixedCode.Replace("###", methodName));
         }
 
-        private void " + methodName + @"(string name)
-        { }
-    }
-}
-";
-
-            var fixedCode = @"
-using System;
-
-namespace Bla
-{
-    public class TestMe
-    {
-        public string MyProperty { get; set; }
-
-        private void DoSomething()
+        [Test]
+        public void Code_gets_fixed_for_empty_string_at_([ValueSource(nameof(MethodNames))] string methodName)
         {
-            " + methodName + @"(nameof(MyProperty));
-        }
+            const string OriginalCode = """
 
-        private void " + methodName + @"(string name)
-        { }
-    }
-}
-";
+                                        using System;
 
-            VerifyCSharpFix(originalCode, fixedCode);
+                                        namespace Bla
+                                        {
+                                            public class TestMe
+                                            {
+                                                public string MyProperty { get; set; }
+
+                                                private void DoSomething()
+                                                {
+                                                    ###("");
+                                                }
+
+                                                private void ###(string name)
+                                                { }
+                                            }
+                                        }
+
+                                        """;
+
+            const string FixedCode = """
+
+                                     using System;
+
+                                     namespace Bla
+                                     {
+                                         public class TestMe
+                                         {
+                                             public string MyProperty { get; set; }
+
+                                             private void DoSomething()
+                                             {
+                                                 ###(string.Empty);
+                                             }
+
+                                             private void ###(string name)
+                                             { }
+                                         }
+                                     }
+
+                                     """;
+
+            VerifyCSharpFix(OriginalCode.Replace("###", methodName), FixedCode.Replace("###", methodName));
         }
 
         protected override string GetDiagnosticId() => MiKo_3046_OnPropertyChangedMethodUsesNameofAnalyzer.Id;
