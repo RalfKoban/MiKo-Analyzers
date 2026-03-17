@@ -916,7 +916,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             return results.Count is 0 ? Array.Empty<Pair>() : results.ToArray();
         }
-        //// ncrunch: rdi default
+
+//// ncrunch: rdi default
 
         /// <summary>
         /// Determines whether the specified character indicates the start of a new word.
