@@ -169,7 +169,7 @@ namespace Bla
 
     public class TestMe : TestMeBase
     {
-        public void DoSomething()
+        public override void DoSomething()
         {
             DoSomethingElse();
 
@@ -196,7 +196,7 @@ namespace Bla
 
     public class TestMe : TestMeBase
     {
-        public void DoSomething()
+        public override void DoSomething()
         {
             var x = base.Value;
             DoSomethingElse();
@@ -223,7 +223,7 @@ namespace Bla
 
     public class TestMe : TestMeBase
     {
-        public void DoSomething()
+        public override void DoSomething()
         {
             var x = base.GetValue();
             DoSomethingElse();
@@ -250,7 +250,7 @@ namespace Bla
 
     public class TestMe : TestMeBase
     {
-        public void DoSomething()
+        public override void DoSomething()
         {
             DoSomethingElse(base.GetValue());
             DoAnything();
@@ -283,7 +283,7 @@ namespace Bla
     {
         private Func<int> _callback;
 
-        public void DoSomething()
+        public override void DoSomething()
         {
             _callback = _callback ?? base.GetValue;
             DoAnything();
@@ -316,7 +316,7 @@ namespace Bla
     {
         private Func<int> _callback;
 
-        public void DoSomething()
+        public override void DoSomething()
         {
             _callback ??= base.GetValue;
             DoAnything();
@@ -346,7 +346,7 @@ namespace Bla
 
     public class TestMe : TestMeBase
     {
-        public void DoSomething()
+        public override void DoSomething()
         {
             DoSomethingElse();
             base.DoSomething();
@@ -374,7 +374,7 @@ namespace Bla
 
     public class TestMe : TestMeBase
     {
-        public void DoSomething()
+        public override void DoSomething()
         {
             DoSomethingElse();
 
@@ -402,7 +402,7 @@ namespace Bla
 
     public class TestMe : TestMeBase
     {
-        public void DoSomething()
+        public override void DoSomething()
         {
             DoSomethingElse();
             base.DoSomething();
@@ -459,7 +459,7 @@ namespace Bla
 
                                             public class TestMe : TestMeBase
                                             {
-                                                public void DoSomething()
+                                                public override void DoSomething()
                                                 {
                                                     DoSomethingElse();
                                                     base.DoSomething();
@@ -488,7 +488,7 @@ namespace Bla
 
                                             public class TestMe : TestMeBase
                                             {
-                                                public void DoSomething()
+                                                public override void DoSomething()
                                                 {
                                                     DoSomethingElse();
 
@@ -524,7 +524,7 @@ namespace Bla
 
                                             public class TestMe : TestMeBase
                                             {
-                                                public void DoSomething()
+                                                public override void DoSomething()
                                                 {
                                                     DoSomethingElse();
 
@@ -553,7 +553,7 @@ namespace Bla
 
                                          public class TestMe : TestMeBase
                                          {
-                                             public void DoSomething()
+                                             public override void DoSomething()
                                              {
                                                  DoSomethingElse();
 
@@ -589,7 +589,7 @@ namespace Bla
 
                                             public class TestMe : TestMeBase
                                             {
-                                                public void DoSomething()
+                                                public override void DoSomething()
                                                 {
                                                     DoSomethingElse();
                                                     base.DoSomething();
@@ -617,11 +617,217 @@ namespace Bla
 
                                          public class TestMe : TestMeBase
                                          {
-                                             public void DoSomething()
+                                             public override void DoSomething()
                                              {
                                                  DoSomethingElse();
 
                                                  base.DoSomething();
+
+                                                 DoSomethingElse();
+                                             }
+
+                                             private void DoSomethingElse()
+                                             {
+                                             }
+                                         }
+                                     }
+
+                                     """;
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_multiline_base_statement_without_blank_line_before()
+        {
+            const string OriginalCode = """
+
+                                        namespace Bla
+                                        {
+                                            public class TestMeBase
+                                            {
+                                                public virtual void DoSomething(int x, int y)
+                                                {
+                                                }
+                                            }
+
+                                            public class TestMe : TestMeBase
+                                            {
+                                                public override void DoSomething(int x, int y)
+                                                {
+                                                    DoSomethingElse();
+                                                    base.DoSomething(
+                                                                    42,
+                                                                    0815);
+
+                                                    DoSomethingElse();
+                                                }
+
+                                                private void DoSomethingElse()
+                                                {
+                                                }
+                                            }
+                                        }
+
+                                        """;
+
+            const string FixedCode = """
+
+                                        namespace Bla
+                                        {
+                                            public class TestMeBase
+                                            {
+                                                public virtual void DoSomething(int x, int y)
+                                                {
+                                                }
+                                            }
+
+                                            public class TestMe : TestMeBase
+                                            {
+                                                public override void DoSomething(int x, int y)
+                                                {
+                                                    DoSomethingElse();
+
+                                                    base.DoSomething(
+                                                                    42,
+                                                                    0815);
+
+                                                    DoSomethingElse();
+                                                }
+
+                                                private void DoSomethingElse()
+                                                {
+                                                }
+                                            }
+                                        }
+
+                                        """;
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_multiline_base_statement_without_blank_line_after()
+        {
+            const string OriginalCode = """
+
+                                        namespace Bla
+                                        {
+                                            public class TestMeBase
+                                            {
+                                                public virtual void DoSomething(int x, int y)
+                                                {
+                                                }
+                                            }
+
+                                            public class TestMe : TestMeBase
+                                            {
+                                                public override void DoSomething(int x, int y)
+                                                {
+                                                    DoSomethingElse();
+
+                                                    base.DoSomething(
+                                                                    42,
+                                                                    0815);
+                                                    DoSomethingElse();
+                                                }
+
+                                                private void DoSomethingElse()
+                                                {
+                                                }
+                                            }
+                                        }
+
+                                        """;
+
+            const string FixedCode = """
+
+                                     namespace Bla
+                                     {
+                                         public class TestMeBase
+                                         {
+                                             public virtual void DoSomething(int x, int y)
+                                             {
+                                             }
+                                         }
+
+                                         public class TestMe : TestMeBase
+                                         {
+                                             public override void DoSomething(int x, int y)
+                                             {
+                                                 DoSomethingElse();
+
+                                                 base.DoSomething(
+                                                                 42,
+                                                                 0815);
+
+                                                 DoSomethingElse();
+                                             }
+
+                                             private void DoSomethingElse()
+                                             {
+                                             }
+                                         }
+                                     }
+
+                                     """;
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_multiline_base_statement_without_blank_line_before_and_after()
+        {
+            const string OriginalCode = """
+
+                                        namespace Bla
+                                        {
+                                            public class TestMeBase
+                                            {
+                                                public virtual void DoSomething(int x, int y)
+                                                {
+                                                }
+                                            }
+
+                                            public class TestMe : TestMeBase
+                                            {
+                                                public override void DoSomething(int x, int y)
+                                                {
+                                                    DoSomethingElse();
+                                                    base.DoSomething(
+                                                                    42,
+                                                                    0815);
+                                                    DoSomethingElse();
+                                                }
+
+                                                private void DoSomethingElse()
+                                                {
+                                                }
+                                            }
+                                        }
+
+                                        """;
+
+            const string FixedCode = """
+
+                                     namespace Bla
+                                     {
+                                         public class TestMeBase
+                                         {
+                                             public virtual void DoSomething(int x, int y)
+                                             {
+                                             }
+                                         }
+
+                                         public class TestMe : TestMeBase
+                                         {
+                                             public override void DoSomething(int x, int y)
+                                             {
+                                                 DoSomethingElse();
+
+                                                 base.DoSomething(
+                                                                 42,
+                                                                 0815);
 
                                                  DoSomethingElse();
                                              }
