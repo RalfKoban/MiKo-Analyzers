@@ -97,7 +97,7 @@ public class TestMe
 {
     public void DoSomething(bool flag1, bool flag2, bool flag3)
     {
-        if (flag 3 &&
+        if (flag3 &&
             (flag1 || flag2))
             return;
     }
@@ -128,7 +128,7 @@ public class TestMe
 {
     public void DoSomething(bool flag1, bool flag2, bool flag3)
     {
-        if (flag 3 && (flag1
+        if (flag3 && (flag1
                      || flag2))
             return;
     }
@@ -178,7 +178,7 @@ public class TestMe
 {
     public void DoSomething(bool flag1, bool flag2, bool flag3)
     {
-        if (flag 3 && (flag1
+        if (flag3 && (flag1
                      || flag2))
             return;
     }
@@ -191,7 +191,7 @@ public class TestMe
 {
     public void DoSomething(bool flag1, bool flag2, bool flag3)
     {
-        if (flag 3 && (flag1 || flag2))
+        if (flag3 && (flag1 || flag2))
             return;
     }
 }

@@ -61,10 +61,33 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             for (var i = 0; i < textTokensCount; i++)
             {
-                var locations = GetAllLocations(textTokens[i], ForbiddenPhrases, StringComparison.OrdinalIgnoreCase);
+                var textToken = textTokens[i];
+                var locations = GetAllLocations(textToken, ForbiddenPhrases, StringComparison.OrdinalIgnoreCase, 1, 1);
                 var locationsCount = locations.Count;
 
-                if (locationsCount > 0)
+                if (locationsCount is 0)
+                {
+                    // not found, so maybe it starts with that word
+                    for (int index = 0, length = ForbiddenWords.Length; index < length; index++)
+                    {
+                        var forbiddenWord = ForbiddenWords[index];
+
+                        if (text.StartsWith(forbiddenWord, StringComparison.OrdinalIgnoreCase))
+                        {
+                            if (issues is null)
+                            {
+                                issues = new List<Diagnostic>(1);
+                            }
+
+                            var location = GetFirstLocation(textToken, forbiddenWord, StringComparison.OrdinalIgnoreCase);
+
+                            issues.Add(Issue(symbol.Name, location, AllowedWordsForRule, ForbiddenWordsForRule));
+
+                            break;
+                        }
+                    }
+                }
+                else
                 {
                     if (issues is null)
                     {
