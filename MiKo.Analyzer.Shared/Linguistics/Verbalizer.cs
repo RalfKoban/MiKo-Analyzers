@@ -163,7 +163,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                      new Pair("rmation", "rm"),
                                                      new Pair("allation", "all"),
                                                      new Pair("ellation", "el"),
-                                                     new Pair("stration", "ster"),
+                                                     new Pair("istration", "ister"),
                                                      new Pair("eration", "erate"),
                                                      new Pair("iration", "ire"),
                                                      new Pair("uration", "ure"),
@@ -172,7 +172,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                      new Pair("isation", "ise"),
                                                      new Pair("ization", "ize"),
                                                      new Pair("vocation", "voke"),
+                                                     new Pair("fication", "fy"),
                                                      new Pair("ation", "ate"),
+                                                     new Pair("duction", "duce"),
                                                      new Pair("ction", "ct"),
                                                      new Pair("ption", "pt"),
                                                      new Pair("rison", "re"),
@@ -183,11 +185,18 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly string[] StartingPhrases = new[]
                                                                {
+                                                                   "Abort",
+                                                                   "Activate",
                                                                    "Add",
                                                                    "Analyze",
+                                                                   "Apply",
+                                                                   "Arrange",
+                                                                   "Assert",
+                                                                   "Build",
                                                                    "Calculate",
                                                                    "Can",
                                                                    "Cancel",
+                                                                   "Change",
                                                                    "Clear",
                                                                    "Clone",
                                                                    "Close",
@@ -195,6 +204,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                    "CompileTimeValidate",
                                                                    "Continue",
                                                                    "Create",
+                                                                   "Deactivate",
+                                                                   "Debug",
                                                                    "Delay",
                                                                    "Delete",
                                                                    "Deregister",
@@ -202,32 +213,41 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                    "Ensure",
                                                                    "Find",
                                                                    "Free",
+                                                                   "Generate",
                                                                    "Get",
                                                                    "get_",
                                                                    "Handle",
                                                                    "Has",
+                                                                   "Init",
+                                                                   "Initialize",
                                                                    "Invert",
                                                                    "Is",
                                                                    "JumpTo",
                                                                    "Load",
                                                                    "Log",
+                                                                   "Mirror",
+                                                                   "Modify",
+                                                                   "Move",
                                                                    "NavigateTo",
+                                                                   "On",
                                                                    "Open",
                                                                    "Parse",
                                                                    "Pause",
                                                                    "Pop",
                                                                    "Prepare",
                                                                    "PromptFor",
+                                                                   "Propagate",
                                                                    "Push",
                                                                    "Query",
                                                                    "Read",
+                                                                   "Rebuild",
                                                                    "Record",
                                                                    "Recover",
                                                                    "Redo",
                                                                    "Refresh",
                                                                    "Register",
-                                                                   "Reload",
                                                                    "Release",
+                                                                   "Reload",
                                                                    "Remove",
                                                                    "Replace",
                                                                    "Report",
@@ -251,10 +271,12 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                    "Stop",
                                                                    "Store",
                                                                    "Subscribe",
+                                                                   "Subtract",
                                                                    "Suspend",
                                                                    "To",
                                                                    "Trace",
                                                                    "Translate",
+                                                                   "Trigger",
                                                                    "Try",
                                                                    "Undo",
                                                                    "Unlock",
@@ -976,11 +998,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
             for (int index = 0, length = Endings.Length; index < length; index++)
             {
                 var pair = Endings[index];
-                var key = pair.Key;
 
-                if (span.EndsWith(key))
+                if (span.EndsWith(pair.Key))
                 {
-                    result = span.Slice(0, span.Length - key.Length).ConcatenatedWith(pair.Value);
+                    result = span.Slice(0, span.Length - pair.Key.Length).ConcatenatedWith(pair.Value);
 
                     return result.Equals(value, StringComparison.Ordinal) is false;
                 }

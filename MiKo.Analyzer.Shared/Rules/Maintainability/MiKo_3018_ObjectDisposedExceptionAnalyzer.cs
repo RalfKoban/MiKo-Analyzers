@@ -40,9 +40,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     case MethodKind.EventAdd:
                     case MethodKind.EventRemove:
                         return true;
+                }
+
+                switch (symbol.Name)
+                {
+                    case "Dispose":
+                    case "DisposeCore":
+                    case "DisposeAsync":
+                    case "DisposeCoreAsync":
+                        return false; // dispose methods are allowed to NOT throw ObjectDisposedExceptions
 
                     default:
-                        return symbol.Name != nameof(IDisposable.Dispose); // dispose methods are allowed to NOT throw ObjectDisposedExceptions
+                        return true;
                 }
             }
 
@@ -73,7 +82,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static bool ThrowsObjectDisposedException(SyntaxNode node) => node.Throws<ObjectDisposedException>();
+        private static bool ThrowsObjectDisposedException(SyntaxNode syntax) => syntax.Throws<ObjectDisposedException>();
 
         private static bool ThrowsObjectDisposedException(SyntaxNode syntax, ISymbol symbol)
         {
@@ -95,9 +104,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         if (methods is null)
                         {
-                            methods = symbol.ContainingType.GetMembersIncludingInherited<IMethodSymbol>()
-                                                           .Where(_ => _.Locations.Any(__ => __.IsInSource))
-                                                           .ToLookup(_ => _.Name);
+                            methods = symbol.ContainingType
+                                            .GetMembersIncludingInherited<IMethodSymbol>()
+                                            .Where(_ => _.Locations.Any(__ => __.IsInSource))
+                                            .ToLookup(_ => _.Name);
                         }
 
                         if (methods.Contains(name) && methods[name].Any(DirectlyThrowsObjectDisposedException))

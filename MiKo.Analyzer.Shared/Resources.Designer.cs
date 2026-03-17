@@ -5488,6 +5488,105 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;Sub_&apos; prefix from method name.
+        /// </summary>
+        internal static string MiKo_1524_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1524_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avoid naming methods with the &apos;Sub_&apos; prefix. This prefix does not add useful information because any method can call any other method. Use clear and descriptive method names instead..
+        /// </summary>
+        internal static string MiKo_1524_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1524_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;Sub_&apos; prefix from method name.
+        /// </summary>
+        internal static string MiKo_1524_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1524_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not prefix methods with &apos;Sub_&apos;.
+        /// </summary>
+        internal static string MiKo_1524_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1524_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avoid naming properties that do not return a boolean value with the prefixes &apos;Is&apos;, &apos;Can&apos;, &apos;Has&apos;, or &apos;Contains&apos;. These prefixes strongly suggest that the property returns &apos;true&apos; or &apos;false&apos;, so using them on non-boolean properties is confusing and misleading. Choose a name that does not lead readers to expect a boolean result when the property returns something else..
+        /// </summary>
+        internal static string MiKo_1525_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1525_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not prefix non-boolean property with boolean-style prefix &apos;{1}&apos;.
+        /// </summary>
+        internal static string MiKo_1525_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1525_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not prefix non-boolean properties with boolean indicators.
+        /// </summary>
+        internal static string MiKo_1525_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1525_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Append &apos;Callback&apos; to property name.
+        /// </summary>
+        internal static string MiKo_1526_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1526_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Properties that hold a delegate type act as callbacks. Their names should reflect that role by ending with the &apos;Callback&apos; suffix..
+        /// </summary>
+        internal static string MiKo_1526_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1526_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Append &apos;Callback&apos; to property name.
+        /// </summary>
+        internal static string MiKo_1526_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1526_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Suffix delegate properties with &apos;Callback&apos;.
+        /// </summary>
+        internal static string MiKo_1526_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1526_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fix malformed XML.
         /// </summary>
         internal static string MiKo_2000_CodeFixTitle {
@@ -18257,6 +18356,42 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_6071_Title {
             get {
                 return ResourceManager.GetString("MiKo_6071_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        internal static string MiKo_6072_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6072_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround base calls with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow..
+        /// </summary>
+        internal static string MiKo_6072_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6072_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround base call with a blank line.
+        /// </summary>
+        internal static string MiKo_6072_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6072_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround base calls with blank lines.
+        /// </summary>
+        internal static string MiKo_6072_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6072_Title", resourceCulture);
             }
         }
     }

@@ -237,6 +237,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Naming", "1. Naming", "{
 		Documentation\MiKo_1521.md = Documentation\MiKo_1521.md
 		Documentation\MiKo_1522.md = Documentation\MiKo_1522.md
 		Documentation\MiKo_1523.md = Documentation\MiKo_1523.md
+		Documentation\MiKo_1524.md = Documentation\MiKo_1524.md
+		Documentation\MiKo_1525.md = Documentation\MiKo_1525.md
+		Documentation\MiKo_1526.md = Documentation\MiKo_1526.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. Documentation", "2. Documentation", "{572678B8-C70C-4E91-BE64-E688D7959CA6}"
@@ -632,6 +635,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "6. Spacing", "6. Spacing", 
 		Documentation\MiKo_6068.md = Documentation\MiKo_6068.md
 		Documentation\MiKo_6070.md = Documentation\MiKo_6070.md
 		Documentation\MiKo_6071.md = Documentation\MiKo_6071.md
+		Documentation\MiKo_6072.md = Documentation\MiKo_6072.md
 	EndProjectSection
 EndProject
 Global
