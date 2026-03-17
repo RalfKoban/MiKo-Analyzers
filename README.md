@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 
 ## Available Rules
 
-The following tables lists all the 536 rules that are currently provided by the analyzer.
+The following tables list all the 540 rules that are currently provided by the analyzer.
 
 ### Metrics
 
@@ -188,6 +188,9 @@ The following tables lists all the 536 rules that are currently provided by the 
 |[MiKo_1521](/Documentation/MiKo_1521.md)|Do not prefix or suffix parameters with 'toCopy'|&#x2713;|&#x2713;|
 |[MiKo_1522](/Documentation/MiKo_1522.md)|Do not start void methods with 'Get'|&#x2713;|\-|
 |[MiKo_1523](/Documentation/MiKo_1523.md)|Do not name methods 'Helper'|&#x2713;|\-|
+|[MiKo_1524](/Documentation/MiKo_1524.md)|Do not prefix methods with 'Sub_'|&#x2713;|&#x2713;|
+|[MiKo_1525](/Documentation/MiKo_1525.md)|Do not prefix non-boolean properties with boolean indicators|&#x2713;|\-|
+|[MiKo_1526](/Documentation/MiKo_1526.md)|Suffix delegate properties with 'Callback'|&#x2713;|&#x2713;|
 
 ### Documentation
 
@@ -587,3 +590,4 @@ The following tables lists all the 536 rules that are currently provided by the 
 |[MiKo_6068](/Documentation/MiKo_6068.md)|Place property patterns inside 'if' conditions on same line|&#x2713;|&#x2713;|
 |[MiKo_6070](/Documentation/MiKo_6070.md)|Surround Console statements with blank lines|&#x2713;|&#x2713;|
 |[MiKo_6071](/Documentation/MiKo_6071.md)|Surround local using statements with blank lines|&#x2713;|&#x2713;|
+|[MiKo_6072](/Documentation/MiKo_6072.md)|Surround base class calls with blank lines|&#x2713;|&#x2713;|

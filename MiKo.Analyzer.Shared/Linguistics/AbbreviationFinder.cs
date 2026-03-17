@@ -33,8 +33,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("cfg", "configuration"),
                                                       new Pair("chk", "checkBox"),
                                                       new Pair("cls", "class"),
+                                                      new Pair("cm", "contextMenu"),
                                                       new Pair("cmb", "comboBox"),
                                                       new Pair("cmd", "command"),
+                                                      new Pair("cmp", "comparison"),
                                                       new Pair("coll", "collection"),
                                                       new Pair("comm", "communication"),
                                                       new Pair("comp", "compile"),
@@ -43,6 +45,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("config", "configuration"),
                                                       new Pair("configs", "configurations"),
                                                       new Pair("conn", "connection"),
+                                                      new Pair("conns", "connections"),
+                                                      new Pair("conv", "conversion"),
                                                       new Pair("ctg", "category"),
                                                       new Pair("ctl", "control"),
                                                       new Pair("ctlg", "catalog"),
@@ -78,6 +82,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("docus", "documentations"),
                                                       new Pair("dst", "destination"),
                                                       new Pair("dto", string.Empty),
+                                                      new Pair("dyn", "dynamic"),
                                                       new Pair("ed", "edit"),
                                                       new Pair("el", "element"),
                                                       new Pair("ele", "element"),
@@ -127,6 +132,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("msg", "message"),
                                                       new Pair("msgs", "messages"),
                                                       new Pair("nav", "navigation"),
+                                                      new Pair("navig", "navigation"),
                                                       new Pair("num", "number"),
                                                       new Pair("nums", "numbers"),
                                                       new Pair("obj", "object"),
@@ -170,6 +176,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("rest", "restore"),
                                                       new Pair("rgn", "region"),
                                                       new Pair("sem", "semantic"),
+                                                      new Pair("sep", "separator"),
+                                                      new Pair("sepa", "separator"),
                                                       new Pair("seq", "sequential"),
                                                       new Pair("sess", "session"),
                                                       new Pair("spec", "specification"),
@@ -198,6 +206,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("vars", "variables"),
                                                       new Pair("ver", "version"),
                                                       new Pair("vert", "vertical"),
+                                                      new Pair("vm", "viewModel"),
+                                                      new Pair("vms", "viewModels"),
                                                       new Pair("vol", "volume"),
                                                   };
 
@@ -230,6 +240,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Cls", "Class"),
                                                           new Pair("Cmb", "ComboBox"),
                                                           new Pair("Cmd", "Command"),
+                                                          new Pair("Cmp", "Comparison"),
                                                           new Pair("Coll", "Collection"),
                                                           new Pair("Comm", "Communication"),
                                                           new Pair("Comp", "Compile"),
@@ -239,6 +250,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Configs", "Configurations"),
                                                           new Pair("Conn", "Connection"),
                                                           new Pair("Conns", "Connections"),
+                                                          new Pair("Conv", "Conversion"),
                                                           new Pair("Ctg", "Category"),
                                                           new Pair("Ctl", "Control"),
                                                           new Pair("Ctlg", "Catalog"),
@@ -276,6 +288,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Dst", "Destination"),
                                                           new Pair("Dto", string.Empty),
                                                           new Pair("DTO", string.Empty),
+                                                          new Pair("Dyn", "Dynamic"),
                                                           new Pair("Ed", "Edit"),
                                                           new Pair("Ef", "EntityFramework"),
                                                           new Pair("EF", "EntityFramework"),
@@ -325,6 +338,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Mnu", "MenuItem"),
                                                           new Pair("Msg", "Message"),
                                                           new Pair("Nav", "Navigation"),
+                                                          new Pair("Navig", "Navigation"),
                                                           new Pair("Ns", "Namespace"),
                                                           new Pair("Num", "Number"),
                                                           new Pair("Obj", "Object"),
@@ -370,6 +384,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                           new Pair("Rgn", "Region"),
                                                           new Pair("Sel", "Selection"),
                                                           new Pair("Sem", "Semantic"),
+                                                          new Pair("Sep", "Separator"),
+                                                          new Pair("Sepa", "Separator"),
                                                           new Pair("Seq", "Sequential"),
                                                           new Pair("Sess", "Session"),
                                                           new Pair("Spec", "Specification"),
@@ -519,7 +535,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("ationati", "ati"), // 'reloc' within 'relocation' / 'relocating'
                                                       new Pair("aximumi", "axi"), // 'max' within 'maximum'
                                                       new Pair("aximumimum", "aximum"), // 'max' within 'maximum'
-                                                      new Pair("dentificationi", "denti"), // 'ident' within 'identification' / 'identifier' / 'identify' / identity'
+                                                      new Pair("dentificationi", "denti"), // 'ident' within 'identification' / 'identifier' / 'identify' / 'identity'
                                                       new Pair("dopoint", "dopt"), // 'pt' within 'adopt'
                                                       new Pair("eclarationar", "eclar"), // 'decl' within 'declaration' / 'declare' / 'declaring'
                                                       new Pair("ecordord", "ecord"), // 'rec' within 'record'
@@ -536,6 +552,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("elativeativ", "elativ"), // 'rel' within 'relative'
                                                       new Pair("electionect", "elect"), // 'Sel' within 'Select'
                                                       new Pair("emanticantic", "emantic"), // 'sem' within 'semantic'
+                                                      new Pair("eparatora", "eparator"), // combination of 'sep' and 'sepa'
+                                                      new Pair("eparatorarat", "eparat"), // 'sep' within 'separate'
+                                                      new Pair("eparatorrat", "eparat"), // 'sepa' within 'separate'
+                                                      new Pair("eparatortember", "eptember"), // 'sep' within 'september'
                                                       new Pair("ependentend", "epend"), // 'dep' within 'dependent' / 'dependency'
                                                       new Pair("epositoriesitor", "epositor"), // 'repos' within 'repositories'
                                                       new Pair("epositorysitor", "epositor"), // 'repo' within 'repository'
@@ -545,7 +565,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("erationeration", "eration"), // 'op' within 'operation'
                                                       new Pair("ercentageent", "ercent"), // 'perc' within 'percent' / 'percentae'
                                                       new Pair("erformanceorm", "erform"), // 'perf' within 'perform' / 'performance'
+                                                      new Pair("ersionersion", "ersion"), // 'Conv' within 'Conversion'
+                                                      new Pair("ersionert", "ert"), // 'Conv' within 'Convert'
                                                       new Pair("ersionsion", "ersion"), // 'ver' within 'version'
+                                                      new Pair("ersiontical", "ertical"), // 'ver' within 'vertical'
                                                       new Pair("erticalical", "ertical"), // 'vert' within 'vertical'
                                                       new Pair("ertificateificate", "ertificate"), // 'cert' within 'certificate'
                                                       new Pair("escriptionription", "escription"), // 'desc' within 'description'
@@ -563,7 +586,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("ictionarytionar", "ictionar"), // 'dic' within 'dictionary' / 'dictionaries'
                                                       new Pair("ifferencee", "iffe"), // 'diff' within 'differ' / 'difference' / 'differences' / 'differencing'
                                                       new Pair("ifferencei", "iffi"), // 'diff' within 'diffing'
-                                                      new Pair("igationigation", "igation"), // 'nav' within 'navigation'
+                                                      new Pair("igationigat", "igat"), // 'nav' within 'navigate' / 'navigation'
                                                       new Pair("inimumi", "ini"), // 'min' within 'minimum'
                                                       new Pair("inimumimum", "inimum"), // 'min' within 'minimum'
                                                       new Pair("ionion", "ion"), // 'sess' within 'session'
@@ -606,6 +629,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("onfigurationigur", "onfigur"), // 'conf' within 'configuration' / 'configure'
                                                       new Pair("onfigurationur", "onfigur"), // 'config' within 'configuration' / 'configure'
                                                       new Pair("onnectionect", "onnect"), // 'conn' within 'connection' / 'connect'
+                                                      new Pair("onversionsation", "onversation"), // 'ver' within 'conversation'
+                                                      new Pair("onversiont", "onvert"), // 'ver' within 'convert'
+                                                      new Pair("onvertical", "onvert"), // 'vert' within 'convert'
                                                       new Pair("ousous", "ous"), // 'sync' within 'asynchronous'
                                                       new Pair("oversion", "over"), // 'ver' within 'hover'
                                                       new Pair("Oversion", "Over"), // 'ver' within 'Over'
@@ -641,6 +667,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                       new Pair("xecuteu", "xecu"), // 'exec' within 'execute' / 'executing' / executable' / 'execution'
                                                       new Pair("xtensionen", "xten"), // 'ext' within 'extension' / 'extensions'
                                                       new Pair("xtensioner", "xter"), // 'ext' within 'exterior' / 'extern'
+                                                      new Pair("ynamicamic", "ynamic"), // 'dyn' within 'dynamic'
                                                       new Pair("ynchronizationhroniz", "ynchroniz"), // 'sync' within 'synchronize'
                                                       new Pair("yntaxc", "ync"), // 'syn' within 'sync' / 'async'
                                                   };
@@ -787,7 +814,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     {
                         var afterIndex = index + Async.Length;
 
-                        if (afterIndex < s.Length && s[afterIndex].IsUpperCase())
+                        if (afterIndex < s.Length && s[afterIndex].IsUpperCaseOrNumber())
                         {
                             sb.Remove(index, Async.Length);
                         }
@@ -863,7 +890,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             return results.Count is 0 ? Array.Empty<Pair>() : results.ToArray();
         }
-//// ncrunch: rdi default
+        //// ncrunch: rdi default
 
         /// <summary>
         /// Determines whether the specified character indicates the start of a new word.
@@ -872,10 +899,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// The character to inspect.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if the character is uppercase or an underscore; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the character is an uppercase letter, a digit, or an underscore; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool IndicatesNewWord(in char c) => c.IsUpperCase() || c is Constants.Underscore;
+        private static bool IndicatesNewWord(in char c) => c.IsUpperCaseOrNumber() || c is Constants.Underscore;
 
         /// <summary>
         /// Determines whether the specified key represents the complete text.

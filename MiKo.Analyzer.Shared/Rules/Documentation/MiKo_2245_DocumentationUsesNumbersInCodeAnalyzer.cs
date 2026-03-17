@@ -23,24 +23,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var xmlText in comment.DescendantNodes<XmlTextSyntax>())
             {
+                if (xmlText.Parent is XmlElementSyntax parent)
+                {
+                    if (parent.IsCode() || parent.IsC() || parent.IsFilterPriority())
+                    {
+                        continue;
+                    }
+                }
+
                 var textTokens = xmlText.TextTokens;
 
                 // keep in local variable to avoid multiple requests (see Roslyn implementation)
                 var textTokensCount = textTokens.Count;
 
                 if (textTokensCount is 0)
-                {
-                    continue;
-                }
-
-                var parent = xmlText.Parent;
-
-                if (parent.IsCode())
-                {
-                    continue;
-                }
-
-                if (parent.IsC())
                 {
                     continue;
                 }

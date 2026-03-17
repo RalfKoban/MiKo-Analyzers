@@ -108,14 +108,14 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_to_replace_fire_terms_with_throw_for_exception_documentation_on_single_line()
+        public void Code_gets_fixed_to_replace_fire_terms_with_throw_for_exception_documentation_on_method_on_single_line()
         {
             const string OriginalCode = @"
 using System;
 
 public class TestMe
 {
-    /// <summary>Fires a new exception. The code is firing or will fire the fired exception.</summary>
+    /// <summary>Fires a new exception. The code is firing or will fire the fired exception. Does really fire. Yes, it does fire</summary>
     public void DoSomething() { }
 }";
 
@@ -124,7 +124,7 @@ using System;
 
 public class TestMe
 {
-    /// <summary>Throws a new exception. The code is throwing or will throw the thrown exception.</summary>
+    /// <summary>Throws a new exception. The code is throwing or will throw the thrown exception. Does really throw. Yes, it does throw</summary>
     public void DoSomething() { }
 }";
 
@@ -132,7 +132,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_to_replace_fire_terms_with_throw_for_exception_documentation_on_multiple_lines()
+        public void Code_gets_fixed_to_replace_fire_terms_with_throw_for_exception_documentation_on_method_on_multiple_lines()
         {
             const string OriginalCode = @"
 using System;
@@ -162,14 +162,14 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_to_replace_fire_terms_with_raise_for_event_documentation_on_single_line()
+        public void Code_gets_fixed_to_replace_fire_terms_with_raise_for_event_documentation_on_method_on_single_line()
         {
             const string OriginalCode = @"
 using System;
 
 public class TestMe
 {
-    /// <summary>Fires a new event. The code is firing or will fire the fired event.</summary>
+    /// <summary>Fires a new event. The code is firing or will fire the fired event. Does really fire. Yes, it does fire</summary>
     public void DoSomething() { }
 }";
 
@@ -178,7 +178,7 @@ using System;
 
 public class TestMe
 {
-    /// <summary>Raises a new event. The code is raising or will raise the raised event.</summary>
+    /// <summary>Raises a new event. The code is raising or will raise the raised event. Does really raise. Yes, it does raise</summary>
     public void DoSomething() { }
 }";
 
@@ -186,7 +186,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_to_replace_fire_terms_with_raise_for_event_documentation_on_multiple_lines()
+        public void Code_gets_fixed_to_replace_fire_terms_with_raise_for_event_documentation_on_method_on_multiple_lines()
         {
             const string OriginalCode = @"
 using System;
@@ -213,6 +213,118 @@ public class TestMe
 }";
 
             VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_to_replace_fire_terms_with_Occurs_for_lower_case_event_documentation_on_single_line_(
+                                                                                                                     [Values("fire", "fired", "fires", "firing")] string start,
+                                                                                                                     [Values("when", "if")] string condition)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>" + start + " " + condition + @" something happens.</summary>
+    public event EventHandler MyEvent;
+}";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>occurs when something happens.</summary>
+    public event EventHandler MyEvent;
+}";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_to_replace_fire_terms_with_Occurs_for_upper_case_event_documentation_on_single_line_(
+                                                                                                                     [Values("Fire", "Fired", "Fires", "Firing")] string start,
+                                                                                                                     [Values("when", "if")] string condition)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>" + start + " " + condition + @" something happens.</summary>
+    public event EventHandler MyEvent;
+}";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>Occurs when something happens.</summary>
+    public event EventHandler MyEvent;
+}";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_to_replace_fire_terms_with_Occurs_for_lower_case_event_documentation_on_multiple_lines_(
+                                                                                                                        [Values("fire", "fired", "fires", "firing")] string start,
+                                                                                                                        [Values("when", "if")] string condition)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// " + start + " " + condition + @" something happens.
+    /// </summary>
+    public event EventHandler MyEvent;
+}";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// occurs when something happens.
+    /// </summary>
+    public event EventHandler MyEvent;
+}";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_to_replace_fire_terms_with_Occurs_for_upper_case_event_documentation_on_multiple_lines_(
+                                                                                                                        [Values("Fire", "Fired", "Fires", "Firing")] string start,
+                                                                                                                        [Values("when", "if")] string condition)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// " + start + " " + condition + @" something happens.
+    /// </summary>
+    public event EventHandler MyEvent;
+}";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Occurs when something happens.
+    /// </summary>
+    public event EventHandler MyEvent;
+}";
+
+            VerifyCSharpFix(originalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2015_FireMethodsAnalyzer.Id;

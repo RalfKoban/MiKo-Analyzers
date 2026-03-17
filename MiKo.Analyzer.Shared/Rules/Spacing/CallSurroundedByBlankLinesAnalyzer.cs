@@ -111,7 +111,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private Diagnostic AnalyzeSimpleMemberAccessExpression(in SyntaxList<StatementSyntax> statements, MemberAccessExpressionSyntax call, SemanticModel semanticModel)
         {
-            var callLineSpan = call.GetLineSpan();
+            // we need to use the statement here instead of the member access expression as it could be part of an invocation with parameters that span multiple lines
+            // (and in such case we want to detect the blank lines after the complete statement)
+            var callLineSpan = call.FirstAncestorOrSelf<StatementSyntax>().GetLineSpan();
 
             var noBlankLinesBefore = statements.Where(_ => HasNoBlankLinesBefore(callLineSpan, _))
                                                .Any(_ => IsAlsoCall(_, semanticModel) is false);

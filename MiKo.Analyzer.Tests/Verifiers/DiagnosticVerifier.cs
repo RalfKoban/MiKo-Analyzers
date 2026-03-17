@@ -84,7 +84,7 @@ namespace TestHelper
             // performance optimization to avoid the string creation for the message in case we do not have any issue and therefore do not need to report anything
             if (results.Length > 0)
             {
-                Assert.That(results, Is.Empty, message ?? Environment.NewLine + string.Join(Environment.NewLine, results.Select(_ => _.Location + ":" + _)));
+                Assert.That(results, Is.Empty, message ?? (Environment.NewLine + string.Join(Environment.NewLine, results.Select(_ => _.Location + ":" + _))));
             }
         }
 
