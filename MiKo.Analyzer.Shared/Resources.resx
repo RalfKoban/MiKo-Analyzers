@@ -6356,4 +6356,16 @@ This style avoids dangling operators, aligns with common C# style guides and too
   <data name="MiKo_6071_Title" xml:space="preserve">
     <value>Surround local using statements with blank lines</value>
   </data>
+  <data name="MiKo_6072_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_6072_Description" xml:space="preserve">
+    <value>Surround calls to the base class with blank lines to visually separate them from other code. This improves readability and makes the code easier to follow.</value>
+  </data>
+  <data name="MiKo_6072_MessageFormat" xml:space="preserve">
+    <value>Surround call to base class with a blank line</value>
+  </data>
+  <data name="MiKo_6072_Title" xml:space="preserve">
+    <value>Surround base class calls with blank lines</value>
+  </data>
 </root>
