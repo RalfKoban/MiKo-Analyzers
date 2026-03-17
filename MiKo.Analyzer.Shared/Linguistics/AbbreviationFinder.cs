@@ -866,7 +866,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 {
                     results.Add(pair);
 
-                    // dos not make sense to loop further
+                    // does not make sense to look further
                     break;
                 }
                 else
@@ -875,7 +875,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     {
                         results.Add(pair);
 
-                        // dos not make sense to loop further
+                        // does not make sense to look further
                         break;
                     }
                 }
@@ -891,7 +891,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 {
                     results.Add(pair);
 
-                    // dos not make sense to loop further
+                    // does not make sense to look further
                     break;
                 }
             }
